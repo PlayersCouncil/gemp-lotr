@@ -109,6 +109,45 @@ describe('AutoZoomComponent', () => {
     expect(zoom.hidden).toBe(true);
   });
 
+  it('does not zoom the card still under the mouse when the card information closes', () => {
+    const { zoom, step } = render();
+    const info = TestBed.inject(CardInfoService);
+    hover.enter({}, card('1_12'), box);
+    info.show(card('1_12'));
+    step(HOVER_DELAY_MS);
+    info.close();
+    step(HOVER_DELAY_MS);
+    expect(zoom.hidden).toBe(true);
+  });
+
+  it('zooms again once the mouse comes onto a card after the card information closes', () => {
+    const { zoom, step } = render();
+    const info = TestBed.inject(CardInfoService);
+    info.show(card('1_12'));
+    step();
+    info.close();
+    step();
+    hover.enter({}, card('1_13'), box);
+    step(HOVER_DELAY_MS);
+    expect(zoom.hidden).toBe(false);
+  });
+
+  it('shows in the top layer, above modal dialogs, while a card is zoomed', () => {
+    const { zoom, step } = render();
+    let open = false;
+    const showPopover = vi.fn(() => (open = true));
+    const hidePopover = vi.fn(() => (open = false));
+    Object.assign(zoom, { showPopover, hidePopover, matches: () => open });
+    const source = {};
+    hover.enter(source, card('1_12'), box);
+    step(HOVER_DELAY_MS);
+    expect(zoom.getAttribute('popover')).toBe('manual');
+    expect(showPopover).toHaveBeenCalledOnce();
+    hover.leave(source);
+    step();
+    expect(hidePopover).toHaveBeenCalledOnce();
+  });
+
   it("draws the card's overlay over it", () => {
     const { zoom, step } = render();
     hover.enter({}, { ...card('1_12'), overlayImage: 'https://example.com/modifier.jpg' }, box);

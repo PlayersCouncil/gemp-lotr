@@ -81,9 +81,13 @@ const GESTURES = {
     await withShift(page, () => click(page, target));
     await pause(page, 500);
   },
+  // Both presses at one point (the first may close or replace what was under the mouse), as quickly as a person does
   doubleClick: async (page, target) => {
-    await click(page, target);
-    await click(page, target);
+    const { x, y } = await moveTo(page, target);
+    await page.mouse.click(x, y);
+    await page.waitForTimeout(120);
+    await page.mouse.down({ clickCount: 2 });
+    await page.mouse.up({ clickCount: 2 });
     await pause(page, 800);
   },
   focus: async (page, target) => {
@@ -144,6 +148,12 @@ const GESTURES = {
   eachOption: async (page, target) => {
     const values = await target.locator('option').evaluateAll((options) => options.map((o) => o.value));
     for (const value of values) {
+      // Choosing one can change the list: the lists themselves are compared after each step
+      const available = await target.evaluate(
+        (select, wanted) => [...select.options].some((option) => option.value === wanted && !option.disabled),
+        value,
+      );
+      if (!available) continue;
       await target.selectOption(value, { timeout: 5000 });
       await pause(page, 300);
     }
@@ -486,7 +496,7 @@ export async function coverageGaps(open) {
       lists[which] = await page.evaluate(listControls, {
         interactive: INTERACTIVE[which],
         named: namedControls(which),
-        cardsOf: which === 'legacy' ? '.card, #card-image-content' : '.gd-card, .gd-card-info__card',
+        cardsOf: which === 'legacy' ? '.card, #card-image-content, #previewImage' : '.gd-card, .gd-card-info__card',
         cultureOf: which === 'legacy' ? '#culture-buttons' : '.gd-cultures',
       });
       await close();

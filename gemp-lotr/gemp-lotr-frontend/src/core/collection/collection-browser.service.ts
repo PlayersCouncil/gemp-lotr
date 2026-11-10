@@ -96,13 +96,20 @@ export class CollectionBrowser {
     this.load();
   }
 
+  /** While a page is loading the buttons are disabled, so the second click of a double click does nothing. */
   previousPage(): void {
+    if (this.previousDisabled()) {
+      return;
+    }
     this.disableNavigation();
     this.start.update((start) => start - this.count());
     this.load();
   }
 
   nextPage(): void {
+    if (this.nextDisabled()) {
+      return;
+    }
     this.disableNavigation();
     this.start.update((start) => start + this.count());
     this.load();

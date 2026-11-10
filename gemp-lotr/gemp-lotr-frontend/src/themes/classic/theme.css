@@ -475,11 +475,11 @@ a:visited {
 }
 
 /* 95% of the page's 12px, then 90% for the table text and jQuery UI's 70% for button text */
-/* The legacy reset buttons didn't react to the mouse */
-.gd-filter__resets .gd-button:enabled:hover {
-  border-color: #666;
+/* The legacy reset buttons looked the same under the mouse and with the focus, which only added the browser's ring */
+.gd-filter__resets .gd-button:is(:enabled:hover, :focus-visible) {
+  border-color: #444;
   background: var(--classic-default-bg);
-  color: #ccc;
+  color: #eee;
 }
 
 .gd-filter__resets .gd-button {
@@ -532,6 +532,12 @@ a:visited {
 }
 
 .gd-culture[data-active] {
+  border-color: #26b3f7;
+  background: var(--classic-active-bg);
+}
+
+/* A selected culture keeps its look with the keyboard focus */
+.gd-culture[data-active]:has(.gd-culture__input:focus-visible) {
   border-color: #26b3f7;
   background: var(--classic-active-bg);
 }
@@ -953,6 +959,14 @@ button.gd-slot__label:focus-visible {
   left: var(--gd-zoom-left);
   top: var(--gd-zoom-top);
   z-index: 1099;
+  /* It is a popover: without the browser's own look for those */
+  right: auto;
+  bottom: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
   width: var(--gd-zoom-width);
   height: var(--gd-zoom-height);
   pointer-events: none;
@@ -1256,6 +1270,22 @@ button.gd-slot__label:focus-visible {
   background: linear-gradient(#555, #555) 6.92px 2.95px / calc(100% - 15.84px) 2px no-repeat;
 }
 
+/*
+ * Without a wiki link (a pack) the legacy card sat 5px lower, so the whole slider showed: its two edges and, left of the
+ * handle, its filled part (range: "min", from 0.4 to 1)
+ */
+.gd-card-info:not(:has(.gd-card-info__wiki)) .gd-card-info__zoom {
+  background:
+    linear-gradient(#757575, #757575) 6.92px 3.95px /
+      calc((100% - 15.84px) * (var(--gd-card-info-zoom, 0.5) - 0.4) / 0.6) 5px no-repeat,
+    linear-gradient(#555, #555) 6.92px 2.95px / calc(100% - 15.84px) 1px no-repeat,
+    linear-gradient(#555, #555) 6.92px 8.95px / calc(100% - 15.84px) 1px no-repeat;
+}
+
+.gd-card-info:not(:has(.gd-card-info__wiki)) .gd-card-info__card {
+  margin-top: 5px;
+}
+
 .gd-card-info__zoom::-webkit-slider-runnable-track {
   height: 17.84px;
   border: 0;
@@ -1533,6 +1563,10 @@ button.gd-slot__label:focus-visible {
   border-color: #0b93d5;
   background: var(--classic-hover-bg);
   color: #fff;
+}
+
+/* The browser's ring only after the keyboard: opened with the mouse, the first button has none */
+.gd-dialog .gd-button:focus:not(:focus-visible) {
   outline: none;
 }
 

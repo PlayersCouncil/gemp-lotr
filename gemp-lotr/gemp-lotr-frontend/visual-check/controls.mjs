@@ -141,7 +141,7 @@ export const CONTROLS = {
     angular: '.gd-card-info__close',
   },
   cardInfoWiki: { legacy: '.card-info-footer a', angular: '.gd-card-info__wiki' },
-  selectionChoice: { legacy: '.cardToSelect .actionArea', angular: '.gd-shown-cards .gd-card' },
+  selectionChoice: { legacy: '.cardToSelect .actionArea', angular: '[data-dialog="selection"] .gd-card' },
   importText: { legacy: '#deckImport', angular: '.gd-import__text' },
   importButton: {
     legacy: '.ui-dialog button[title="Import"]',

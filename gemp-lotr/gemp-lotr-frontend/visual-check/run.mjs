@@ -6,7 +6,7 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { chromium } from 'playwright';
 import { CONTROLS } from './controls.mjs';
-import { acceptedFor, withoutLegacyBugs } from './accepted.mjs';
+import { acceptedBehaviour, acceptedFor, withoutLegacyBugs } from './accepted.mjs';
 import { MY_CARDS } from './local-server/seed.mjs';
 import {
   compareRequests,
@@ -430,6 +430,8 @@ async function topUpCollection() {
   const context = await browser.newContext({ storageState: session });
   try {
     const server = `${options.server}/gemp-lotr-server`;
+    // What an earlier scenario opened and didn't show: it would open a dialog over this scenario's first steps
+    await context.request.get(`${server}/delivery/packContents`);
     const answer = await context.request.get(`${server}/collection/permanent`, {
       params: { filter: '', start: 0, count: 1000 },
     });
@@ -551,12 +553,15 @@ async function check(scenario, size) {
   for (const e of legacy.errors.filter((text) => /^(Scenario failed|Could not reach)/.test(text))) {
     problems.push(`Legacy page: ${e}`);
   }
-  if (options.matrix && problems.length === 0) {
+  const differences = problems.filter((problem) => !acceptedBehaviour(scenario.name, problem));
+  if (options.matrix && differences.length === 0) {
     // A long list of scenarios: only the ones that differ keep their pictures
     for (const file of Object.values(files)) fs.rmSync(path.join(outDir, file), { force: true });
   }
-  const result = { scenario, size, files, pixels, problems, stepImages, steps: count, legacy, angular };
-  console.log(`${problems.length ? 'DIFF' : 'ok  '} ${base}${problems.length ? ': ' + problems.join('; ') : ''}`);
+  const result = { scenario, size, files, pixels, problems: differences, stepImages, steps: count, legacy, angular };
+  console.log(
+    `${differences.length ? 'DIFF' : 'ok  '} ${base}${differences.length ? ': ' + differences.join('; ') : ''}`,
+  );
   return result;
 }
 

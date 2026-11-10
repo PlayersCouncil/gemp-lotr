@@ -1400,6 +1400,14 @@ button.gd-slot__label:hover .gd-slot__hint {
   left: var(--gd-zoom-left);
   top: var(--gd-zoom-top);
   z-index: 1099;
+  /* It is a popover: without the browser's own look for those */
+  right: auto;
+  bottom: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
   width: var(--gd-zoom-width);
   height: var(--gd-zoom-height);
   border-radius: 4.5%;

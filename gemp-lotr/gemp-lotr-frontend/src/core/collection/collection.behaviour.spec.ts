@@ -119,6 +119,16 @@ describe('the collection', () => {
     answer(req, 30);
   });
 
+  it('ignores the second click of a double click on the arrows while the page loads', () => {
+    answer(start());
+    service.nextPage();
+    service.nextPage();
+    const requests = pending();
+    expect(requests.length).toBe(1);
+    expect(params(requests[0]).start).toBe('12');
+    answer(requests[0], 30);
+  });
+
   it('starts from the first page with the new page size', () => {
     answer(start());
     service.nextPage();

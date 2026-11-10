@@ -183,6 +183,72 @@ describe('DeckbuilderPageComponent', () => {
     expect(el.dataset['collection']).toBe('open');
   });
 
+  describe('pressing the toggle with the mouse', () => {
+    async function pressable() {
+      const { fixture, el } = await render();
+      const separator = el.querySelector<HTMLElement>('.gd-page__separator')!;
+      const toggle = el.querySelector<HTMLButtonElement>('.gd-page__toggle')!;
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ right: 1440 } as DOMRect);
+      vi.spyOn(separator, 'getBoundingClientRect').mockReturnValue({ left: 1030 } as DOMRect);
+      const pointer = (target: HTMLElement, type: string, x: number, timeStamp = 0) => {
+        const event = new MouseEvent(type, { clientX: x, button: 0, bubbles: true, cancelable: true });
+        Object.assign(event, { pointerId: 1 });
+        Object.defineProperty(event, 'timeStamp', { value: timeStamp });
+        target.dispatchEvent(event);
+      };
+      const press = async (timeStamp: number) => {
+        pointer(toggle, 'pointerdown', 1035, timeStamp);
+        pointer(separator, 'pointerup', 1035, timeStamp);
+        await fixture.whenStable();
+      };
+      return { fixture, el, separator, toggle, pointer, press };
+    }
+
+    it('toggles once the button is released, if the pointer did not move', async () => {
+      const { el, press } = await pressable();
+      await press(1000);
+      expect(el.dataset['collection']).toBe('closed');
+      await press(2000);
+      expect(el.dataset['collection']).toBe('open');
+    });
+
+    it('ignores the second press of a double click, while the legacy pane was still sliding', async () => {
+      const { el, press } = await pressable();
+      await press(1000);
+      await press(1120);
+      expect(el.dataset['collection']).toBe('closed');
+      await press(1400);
+      expect(el.dataset['collection']).toBe('open');
+    });
+
+    it('drags the separator when the pointer moves, without toggling', async () => {
+      const { fixture, el, separator, toggle, pointer } = await pressable();
+      pointer(toggle, 'pointerdown', 1035);
+      await fixture.whenStable();
+      expect(separator.hasAttribute('data-dragging')).toBe(false);
+      pointer(separator, 'pointermove', 975);
+      await fixture.whenStable();
+      expect(separator.hasAttribute('data-dragging')).toBe(true);
+      expect(el.querySelector('.gd-page__drag-preview')).not.toBeNull();
+      pointer(separator, 'pointerup', 975);
+      await fixture.whenStable();
+      expect(separator.hasAttribute('data-dragging')).toBe(false);
+      expect(el.dataset['collection']).toBe('open');
+    });
+
+    it('does not drag a closed collection, but still opens it', async () => {
+      const { fixture, el, separator, toggle, pointer, press } = await pressable();
+      await press(1000);
+      pointer(toggle, 'pointerdown', 1035, 2000);
+      pointer(separator, 'pointermove', 975, 2000);
+      await fixture.whenStable();
+      expect(separator.hasAttribute('data-dragging')).toBe(false);
+      pointer(separator, 'pointerup', 1035, 2000);
+      await fixture.whenStable();
+      expect(el.dataset['collection']).toBe('open');
+    });
+  });
+
   it('resizes the collection with the arrow keys, and Enter closes it', async () => {
     const { fixture, el, separator } = await render();
     const collection = el.querySelector<HTMLElement>('.gd-page__collection')!;

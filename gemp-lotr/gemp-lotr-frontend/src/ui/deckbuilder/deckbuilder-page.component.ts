@@ -21,6 +21,9 @@ export const RESIZE_STEP = 10;
 /** The pane a theme that shows one pane at a time (phones) shows: the tab bar's choice. */
 export type PagePane = 'deck' | 'collection';
 
+/** How long the legacy pane took to slide open or closed (jQuery's "normal" speed). */
+const TOGGLE_SLIDE_MS = 400;
+
 /**
  * The deck builder page frame: the deck (left), the collection (right) and the separator between them, which resizes
  * the collection by dragging or with the arrow keys and closes or opens it with its toggle. The page only records the width asked for; the theme keeps it within its limits.
@@ -78,7 +81,7 @@ export type PagePane = 'deck' | 'collection';
         [attr.aria-expanded]="collectionOpen()"
         [attr.aria-label]="collectionOpen() ? 'Close the collection' : 'Open the collection'"
         [title]="collectionOpen() ? 'Close' : 'Open'"
-        (click)="toggleCollection()"
+        (click)="toggleWithKeys($event)"
       ></button>
     </div>
     @if (dragWidth() !== null) {
@@ -127,6 +130,7 @@ export class DeckbuilderPageComponent {
   protected readonly dragWidth = signal<number | null>(null);
   private readonly dragPreview = viewChild<ElementRef<HTMLElement>>('dragPreview');
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private lastPointerToggle = -Infinity;
 
   constructor() {
     inject(DeckStartup).init();
@@ -145,14 +149,38 @@ export class DeckbuilderPageComponent {
     this.collectionOpen.update((open) => !open);
   }
 
-  /** Dragging the separator: a preview of it follows the pointer, and the panes resize on release (as on the legacy page). */
+  /** Enter or Space on the toggle: a press of the mouse or a finger is handled with the drag (resizeDrag). */
+  protected toggleWithKeys(event: MouseEvent): void {
+    if (event.detail === 0) {
+      this.toggleCollection();
+    }
+  }
+
+  /** The legacy pane was still sliding for this long, and ignored a second click (the second of a double click). */
+  private toggleWithPointer(time: number): void {
+    if (time - this.lastPointerToggle >= TOGGLE_SLIDE_MS) {
+      this.lastPointerToggle = time;
+      this.toggleCollection();
+    }
+  }
+
+  /**
+   * Dragging the separator: a preview of it follows the pointer, and the panes resize on release (as on the legacy
+   * page). It can also be dragged by its toggle, which is pressed like a button if the pointer doesn't move.
+   */
   protected readonly resizeDrag = (event: PointerEvent): DragHandlers | null => {
-    if (!this.collectionOpen() || (event.target as Element).closest('.gd-page__toggle')) {
+    const onToggle = (event.target as Element).closest('.gd-page__toggle') !== null;
+    const open = this.collectionOpen();
+    if (!open && !onToggle) {
       return null;
     }
     const separator = event.currentTarget as HTMLElement;
     const page = this.host;
-    this.dragging.set(true);
+    const pressedAt = event.clientX;
+    let moved = false;
+    if (!onToggle) {
+      this.dragging.set(true);
+    }
     // Where on the separator it was grabbed stays under the pointer
     const grabbedAt = event.clientX - separator.getBoundingClientRect().left;
     const finish = () => {
@@ -161,10 +189,18 @@ export class DeckbuilderPageComponent {
     };
     return {
       move: (e) => {
+        if (!open || (onToggle && !moved && e.clientX === pressedAt)) {
+          return;
+        }
+        moved = true;
+        this.dragging.set(true);
         const right = page.getBoundingClientRect().right;
         this.dragWidth.set(Math.round(right - (e.clientX - grabbedAt) - separator.offsetWidth));
       },
-      end: () => {
+      end: (e) => {
+        if (onToggle && !moved) {
+          this.toggleWithPointer(e.timeStamp);
+        }
         // The preview is where the theme allowed it: the width kept is what it shows, so the next drag or key press
         // starts from there
         const preview = this.dragPreview()?.nativeElement.getBoundingClientRect();

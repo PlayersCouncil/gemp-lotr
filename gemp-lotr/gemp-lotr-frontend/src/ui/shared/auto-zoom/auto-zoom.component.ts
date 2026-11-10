@@ -1,6 +1,18 @@
 import { siteImage } from '../../../core/platform/app-paths';
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, DestroyRef, effect, inject, linkedSignal, signal, untracked } from '@angular/core';
+import {
+  afterRenderEffect,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  linkedSignal,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { stripBlueprintId } from '../../../core/cards/card-blueprint';
 import { cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
@@ -26,14 +38,16 @@ const NO_ZOOM = new Set(['-1_1', '-1_2']);
  * DOM contract: `div.gd-zoom` (`aria-hidden`, `hidden` when nothing is zoomed) with `--gd-zoom-left`, `--gd-zoom-top`,
  * `--gd-zoom-width` and `--gd-zoom-height` (px: where it goes, and its size), `data-orientation`, `data-flipped`
  * (back) and `data-foil`, holding `img.gd-zoom__image`, then `img.gd-zoom__overlay` and `img.gd-zoom__foil` when
- * they apply. The theme positions it (fixed) and draws its frame.
+ * they apply. The theme positions it (fixed) and draws its frame. It is a popover, so that it shows above modal dialogs.
  */
 @Component({
   selector: 'gd-auto-zoom',
   host: { style: 'display: contents' },
   template: `
     <div
+      #panel
       class="gd-zoom"
+      popover="manual"
       aria-hidden="true"
       [hidden]="!zoom()"
       [attr.data-orientation]="zoom()?.data?.horizontal ? 'horizontal' : 'vertical'"
@@ -63,6 +77,7 @@ export class AutoZoomComponent {
   private readonly images = inject(CardImageService);
   private readonly info = inject(CardInfoService);
   private readonly window = inject(DOCUMENT).defaultView;
+  private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
 
   /** The hovered card being shown large. */
   private readonly shown = signal<HoveredCard | null>(null);
@@ -103,10 +118,37 @@ export class AutoZoomComponent {
       this.abortCooldownTimer();
     });
 
+    // Only the mouse coming onto a card starts a zoom: a card it was already on stays as it is when the zoom becomes
+    // allowed again (the card information closed by keyboard, the magnifier turned on), as on the legacy page
+    let previous: HoveredCard | null = null;
     effect(() => {
       const hovered = this.hover.hovered();
       const allowed = this.setting.available && this.setting.enabled() && this.info.card() === null;
-      untracked(() => (hovered && allowed ? this.cardEntered(hovered) : this.cardLeft(hovered === null)));
+      untracked(() => {
+        const entered = hovered !== previous;
+        previous = hovered;
+        if (!hovered || !allowed) {
+          this.cardLeft(hovered === null);
+        } else if (entered) {
+          this.cardEntered(hovered);
+        }
+      });
+    });
+
+    // In the browser's top layer, or a modal dialog would cover it
+    afterRenderEffect(() => {
+      const panel = this.panel().nativeElement;
+      const showing = this.zoom() !== null;
+      // jsdom has no popovers
+      if (typeof panel.showPopover !== 'function') {
+        return;
+      }
+      const open = panel.matches(':popover-open');
+      if (showing && !open) {
+        panel.showPopover();
+      } else if (!showing && open) {
+        panel.hidePopover();
+      }
     });
 
     let presses = this.hover.presses();

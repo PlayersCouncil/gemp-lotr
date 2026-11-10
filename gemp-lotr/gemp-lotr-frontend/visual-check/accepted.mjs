@@ -64,7 +64,68 @@ export const ACCEPTED = [
     maxPixels: 60000,
     reason: 'A site 1px off at some window sizes and steps (legacy floating-point rounding)',
   },
+  {
+    scenarios: [
+      /--(newDeck|saveDeck|renameDeck|copyDeck|importDeck|library|deckList|notes|dialogClose)--(enter|space|tap)$/,
+    ],
+    selector: '.gd-toolbar',
+    margin: 2,
+    maxPixels: 1500,
+    reason: 'After the keyboard or a tap a legacy toolbar button stayed highlighted; the Angular one does not',
+  },
+  {
+    scenarios: [/--(nextPage|previousPage)--tap$/],
+    selector: '.gd-pager',
+    margin: 2,
+    maxPixels: 1000,
+    reason: 'After a tap a legacy pager button stayed highlighted; the Angular one does not',
+  },
+  {
+    scenarios: [/--library--/],
+    selector: 'dialog[open] h2',
+    margin: 3,
+    maxPixels: 1400,
+    reason: 'Opened after the deck list, the legacy library dialog kept the title "Your Saved Decks"',
+  },
 ];
+
+/**
+ * Behaviour the owner has accepted being different, which a limited area can't describe. A scenario listed without
+ * `problem` isn't compared at all, so each of those is exactly the gesture that was decided on.
+ */
+const ACCEPTED_BEHAVIOUR = [
+  {
+    reason: 'The Angular page can reach the slots and the toggle by keyboard, so its Tab order has more stops',
+    scenarios: [
+      /--keyboard--tabOrder$/,
+      /--(ringBearerSlot|ringSlot|sitesSlot|toggleCollection)--(focus|enter|space)$/,
+    ],
+  },
+  {
+    reason: "Space on a dialog's close button closes it on the Angular page; on the legacy page it did nothing",
+    scenarios: [/--(dialogClose|cardInfoClose)--space$/],
+  },
+  {
+    reason: 'Opened after the deck list, the legacy library dialog kept the title "Your Saved Decks"',
+    scenarios: [/--library--/],
+    problem: /dialogTitles: legacy .*Your Saved Decks.*Angular .*Library Decks/,
+  },
+  {
+    reason: 'Turning the hover zoom off by keyboard closes an open zoom on the Angular page; the legacy one stayed',
+    scenarios: [/--autoZoom--(enter|space)$/],
+  },
+  {
+    reason: 'Dragging the Card Information slider follows the mouse; the legacy one jumped to the smallest size',
+    scenarios: [/--cardInfoZoom--dragSideways$/],
+  },
+];
+
+export function acceptedBehaviour(scenario, problem) {
+  const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
+  return ACCEPTED_BEHAVIOUR.some(
+    (entry) => entry.scenarios.some(applies) && (!entry.problem || entry.problem.test(problem)),
+  );
+}
 
 /**
  * Bugs of the legacy page the owner has accepted not copying: what it sent or saved is rewritten to what it should have
