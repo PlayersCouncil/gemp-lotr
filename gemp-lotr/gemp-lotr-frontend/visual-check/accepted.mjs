@@ -170,6 +170,13 @@ const ACCEPTED_BEHAVIOUR = [
     scenarios: [/^deckList--deckRename--yes$/],
     problem: /focus: legacy "deckRename", Angular null/,
   },
+  {
+    reason:
+      'Card Information opened from a selection pack takes the focus; on the legacy page it stayed on the "Choose one" dialog behind it',
+    scenarios: [/^selection--selectionChoice--(rightClick|shiftClick|dragUp)$/],
+    problem:
+      /^(step 1|end): (focus: legacy "a dialog", Angular "cardInfoZoom"|dialogTitles: legacy .*"Choose one".*Angular .*"Card Information".*)$/,
+  },
 ];
 
 export function acceptedBehaviour(scenario, problem) {
