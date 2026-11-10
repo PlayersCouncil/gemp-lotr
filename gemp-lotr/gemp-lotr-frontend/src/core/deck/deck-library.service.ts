@@ -31,10 +31,25 @@ export class DeckLibraryService {
   readonly importRound = signal(0);
   readonly notesOpen = signal(false);
 
-  /** As in the legacy page, the list opens whatever the player answered to the save prompt. */
+  /** The deck list was asked for and hasn't arrived yet. */
+  private openingDeckList = false;
+
+  /**
+   * As in the legacy page, the list opens whatever the player answered to the save prompt. Asking again before it
+   * arrives (the second click of a double click) does nothing: the server is asked once.
+   */
   async openDeckList(): Promise<void> {
-    await this.saver.savePrompt();
-    this.loadDeckList();
+    if (this.openingDeckList) {
+      return;
+    }
+    this.openingDeckList = true;
+    try {
+      await this.saver.savePrompt();
+    } catch (error) {
+      this.openingDeckList = false;
+      throw error;
+    }
+    this.loadDeckList(() => (this.openingDeckList = false));
   }
 
   async openLibrary(): Promise<void> {
@@ -101,10 +116,16 @@ export class DeckLibraryService {
     });
   }
 
-  private loadDeckList(): void {
+  private loadDeckList(answered?: () => void): void {
     this.lifetime.read(this.api.listDecks(), {
-      next: (decks) => this.deckList.set({ kind: 'decks', decks }),
-      error: (error: unknown) => this.notifier.tell(errorMessage(error)),
+      next: (decks) => {
+        answered?.();
+        this.deckList.set({ kind: 'decks', decks });
+      },
+      error: (error: unknown) => {
+        answered?.();
+        this.notifier.tell(errorMessage(error));
+      },
     });
   }
 }

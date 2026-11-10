@@ -8,7 +8,36 @@
 
 const SLIDER_RING = 'Slider handle focus ring: Chrome drew the legacy ring itself, CSS can only approximate its shape';
 
+// Where two entries cover the same pixel of a scenario, the first one counts it: the narrower entries come first.
 export const ACCEPTED = [
+  {
+    scenarios: [/^(myCards--item-\d+|selection--selectionChoice)--(rightClick|shiftClick|dragUp)$/],
+    selector: '.gd-card-info__zoom',
+    margin: 8,
+    maxPixels: 1250,
+    reason: 'Card Information of a pack: the slider, which the legacy page drew in full only there',
+  },
+  {
+    scenarios: [/--pageSize--arrows$/],
+    selector: '.gd-pager__size',
+    margin: 8,
+    maxPixels: 600,
+    reason: `${SLIDER_RING} (moved by the keyboard, the ring differs more)`,
+  },
+  {
+    scenarios: ['zoom', 'zoom-next-card-shift', /--ringBearerCard--(hover|leave|hoverThenShift)$/],
+    selector: '.gd-zoom',
+    margin: 4,
+    maxPixels: 150,
+    reason: 'The hover zoom shows above dialogs on the Angular page, which leaves a faint 1px line in its picture',
+  },
+  {
+    scenarios: [/^cardInfo--cardInfoWiki--focus$/],
+    selector: '.gd-card-info__wiki',
+    margin: 8,
+    maxPixels: 2000,
+    reason: "The wiki link's keyboard focus ring is as wide as the dialog; the legacy one was as wide as the text",
+  },
   {
     scenarios: [
       'card-info',
@@ -117,6 +146,29 @@ const ACCEPTED_BEHAVIOUR = [
   {
     reason: 'Dragging the Card Information slider follows the mouse; the legacy one jumped to the smallest size',
     scenarios: [/--cardInfoZoom--dragSideways$/],
+  },
+  {
+    reason: 'Home on the Card Information slider leaves the dialog where it is; the legacy one moved it off centre',
+    scenarios: [/^cardInfo--cardInfoZoom--arrows$/],
+    problem: /^step 4: \d+ pixels differ/,
+  },
+  {
+    reason: 'Dragging up from a site in the deck opens Card Information without a hover zoom left behind it',
+    scenarios: [/--siteCards--dragUp$/],
+  },
+  {
+    reason:
+      'Card Information opened by touch: focus is on its close button; on the legacy page it was on the wiki link',
+    scenarios: [/^cardInfo--(cardInfoCard|cardInfoClose)--tap$/],
+  },
+  {
+    reason: "A double click on a dialog's close button leaves focus on Game Text; the legacy page left it nowhere",
+    scenarios: [/--dialogClose--doubleClick$/],
+  },
+  {
+    reason: 'After renaming a deck in the deck list focus is on nothing; the legacy page kept it on the rename button',
+    scenarios: [/^deckList--deckRename--yes$/],
+    problem: /focus: legacy "deckRename", Angular null/,
   },
 ];
 

@@ -76,6 +76,24 @@ describe('DeckLibraryService', () => {
     expect(service.deckList()?.kind).toBe('decks');
   });
 
+  it('asks the server once when the deck list is asked for twice before it arrives', async () => {
+    await service.openDeckList();
+    await service.openDeckList();
+    take('/deck/list').flush(readServerResponse('deck-list.xml'));
+    backend.expectNone((req) => req.url.endsWith('/deck/list'));
+    expect(service.deckList()?.kind).toBe('decks');
+  });
+
+  it('asks the server again once the deck list has arrived, or failed', async () => {
+    await service.openDeckList();
+    take('/deck/list').flush('', { status: 500, statusText: 'Server Error' });
+    await service.openDeckList();
+    take('/deck/list').flush(readServerResponse('deck-list.xml'));
+    await service.openDeckList();
+    take('/deck/list').flush(readServerResponse('deck-list.xml'));
+    expect(service.deckList()?.kind).toBe('decks');
+  });
+
   it("saves first when the player chooses to, asking for the new deck's name", async () => {
     editing.addFromCollection('1_12', 'FREE_PEOPLE');
     answers.push(true, 'Saved deck');
