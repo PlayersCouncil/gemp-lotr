@@ -1,5 +1,11 @@
 import { GempFormat, League } from '../api/models';
-import { hallFormatOptions, limitedFormatOptions, optionIndexOf, rtmdFormatOptions } from './format-options';
+import {
+  hallFormatOptions,
+  INITIAL_FORMAT_OPTION,
+  limitedFormatOptions,
+  optionIndexOf,
+  rtmdFormatOptions,
+} from './format-options';
 
 const format = (name: string, order: number, hall = true): GempFormat => ({
   code: name,
@@ -68,6 +74,21 @@ describe('format options', () => {
       disabled: false,
       rtmd: true,
     });
+  });
+
+  it('shows Anything Goes, a format that can be chosen, before the formats arrive (as deckBuild.html did)', () => {
+    expect(INITIAL_FORMAT_OPTION).toEqual({
+      value: 'rev_tow_sta',
+      label: 'Anything Goes',
+      collectionType: null,
+      disabled: false,
+      rtmd: false,
+    });
+  });
+
+  it('selects the first option when only it has the value', () => {
+    const options = [...hallFormatOptions({ a: format('A', 0), b: format('B', 1) }), ...limitedFormatOptions([])];
+    expect(optionIndexOf(options, 'a')).toBe(0);
   });
 
   it('selects the first option with a value, or the first option', () => {

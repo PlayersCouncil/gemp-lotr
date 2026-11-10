@@ -55,7 +55,13 @@ describe('PacksService', () => {
     take('/delivery/packContents').flush(readServerResponse('pack-delivery.xml'));
     expect(packs.deliveries().size).toBeGreaterThan(0);
     const [name, cards] = [...packs.deliveries().entries()][0];
-    expect(cards.length).toBeGreaterThan(0);
+    // pack-delivery.xml: a pack, then two cards, in the order the server gave them
+    expect(name).toBe('permanent');
+    expect(cards).toEqual([
+      { blueprintId: 'FotR - Booster', count: 2, pack: true },
+      { blueprintId: '1_12', count: 1, pack: false },
+      { blueprintId: '1_13*', count: 1, pack: false },
+    ]);
     packs.closeDelivery(name);
     expect(packs.deliveries().has(name)).toBe(false);
   });

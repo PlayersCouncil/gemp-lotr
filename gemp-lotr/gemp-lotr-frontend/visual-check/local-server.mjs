@@ -8,6 +8,7 @@
 //   npm run check:local -- --keep           leaves the server up afterwards (npm run check:local:down stops it)
 //   npm run check:local -- --skip-build     uses the Angular build of the previous run
 //   npm run check:selftest                  proves the check catches bugs: see injections.mjs
+//   npm run check:legacy-decks              decks saved by the legacy page keep working: see legacy-decks.mjs
 //
 // Any other option goes to run.mjs. See README.md.
 import { spawn, spawnSync } from 'node:child_process';
@@ -52,12 +53,13 @@ function buildAngular() {
   });
 }
 
-function runCheck(args, user, password) {
+function runCheck(args, user, password, script = 'run.mjs') {
   return new Promise((resolve) => {
-    const child = spawn(process.execPath, [path.join(HERE, 'run.mjs'), '--server', SERVER, ...args], {
+    const child = spawn(process.execPath, [path.join(HERE, script), '--server', SERVER, ...args], {
       cwd: HERE,
       stdio: 'inherit',
-      env: { ...process.env, GEMP_USER: user, GEMP_PASSWORD: password },
+      // The compose variables too, for a script that reaches the database (legacy-decks.mjs)
+      env: { ...composeEnv, GEMP_USER: user, GEMP_PASSWORD: password },
     });
     child.on('exit', (code) => resolve(code ?? 1));
   });
@@ -118,9 +120,10 @@ async function main() {
   const keep = args.includes('--keep');
   const skipBuild = args.includes('--skip-build');
   const selfTest = args.includes('--selftest');
-  const checkArgs = args.filter((arg) => !['--keep', '--skip-build', '--selftest'].includes(arg));
+  const legacyDecks = args.includes('--legacy-decks');
+  const checkArgs = args.filter((arg) => !['--keep', '--skip-build', '--selftest', '--legacy-decks'].includes(arg));
   // Apart from the report of a check against another server
-  if (!checkArgs.some((arg) => arg === '--out' || arg.startsWith('--out='))) {
+  if (!legacyDecks && !checkArgs.some((arg) => arg === '--out' || arg.startsWith('--out='))) {
     checkArgs.push('--out', 'report-local');
   }
 
@@ -141,6 +144,9 @@ async function main() {
     await seedTestData(SERVER, password);
     if (selfTest) {
       return runSelfTest(player.name, password) === 0 ? 0 : 1;
+    }
+    if (legacyDecks) {
+      return await runCheck(checkArgs, player.name, password, 'legacy-decks.mjs');
     }
     return await runCheck(checkArgs, player.name, password);
   } catch (error) {

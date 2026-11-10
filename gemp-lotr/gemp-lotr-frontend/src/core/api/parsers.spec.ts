@@ -104,6 +104,36 @@ describe('server response parsers', () => {
       // A card without side or group (the set 404 placeholder)
       expect(page.items[5]).toMatchObject({ side: null, group: null });
     });
+
+    const xml = (body: string) => new DOMParser().parseFromString(body, 'application/xml');
+
+    it('keeps each group the deck builder places cards by, and no other', () => {
+      const groups = ['ring', 'site', 'map', 'ringBearer', 'fp', 'shadow', 'other', ''];
+      const page = parseCollectionPage(
+        xml(
+          `<collection count="8">${groups.map((g) => `<card blueprintId="1_1" count="1" group="${g}"/>`).join('')}</collection>`,
+        ),
+      );
+      expect(page.items.map((item) => (item.kind === 'card' ? item.group : 'pack'))).toEqual([
+        'ring',
+        'site',
+        'map',
+        'ringBearer',
+        'fp',
+        'shadow',
+        null,
+        null,
+      ]);
+    });
+
+    it('counts nothing where the server gives no count', () => {
+      const page = parseCollectionPage(
+        xml('<collection><card blueprintId="1_1"/><pack blueprintId="P"/></collection>'),
+      );
+      expect(page.total).toBe(0);
+      expect(page.items.map((item) => item.count)).toEqual([0, 0]);
+      expect(parseCollectionPage(xml('<other/>'))).toEqual({ total: 0, items: [] });
+    });
   });
 
   it('parseCollectionTypes reads the limited collections', () => {

@@ -28,18 +28,8 @@ const SETS = [
   600,
 ];
 const CARD_NUMBERS = [
-  ...range(1, 20),
-  39,
-  43,
-  44,
-  ...range(46, 50),
-  ...range(55, 73),
-  85,
-  87,
-  94,
-  96,
-  97,
-  ...range(109, 151),
+  // Every number up to 151, so each remade errata and the 10 and 100 boundaries of the image names are compared
+  ...range(0, 151),
   162,
   178,
   182,
@@ -73,6 +63,10 @@ function sampleBlueprintIds(legacy: LegacyCardScripts): string[] {
         ids.add(marker === 'T*' ? `${setNo}_${cardNo}T*` : `${setNo}_${cardNo}${marker}`);
       }
     }
+  }
+  // Odd IDs: markers right after the "_", no set or card number, no "_"
+  for (const odd of ['1_*', '1_^', '1_T', '_1', '_', '404_', '404', '404_x', 'x_1', '1_x', '01_01', '1_1**', '1_1^*']) {
+    ids.add(odd);
   }
   return [...ids];
 }

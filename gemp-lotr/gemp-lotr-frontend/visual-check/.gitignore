@@ -6,3 +6,5 @@
 /report-selftest
 /report-matrix
 /report-rerun
+/report-mutation
+/report-legacy-decks

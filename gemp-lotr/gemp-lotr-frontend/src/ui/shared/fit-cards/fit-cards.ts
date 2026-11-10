@@ -84,9 +84,41 @@ export interface CardFitResult {
   height: number;
   /**
    * The space (px, whole) above the rows the height was chosen for when they are centred in the box: the legacy
-   * groups put their rows there (with `rows`, the rows tried, which the cards may not all fill). 0 when they don't fit.
+   * groups put their rows there (with `rows`, the rows tried, which the cards may not all fill, and -1 where the
+   * legacy rounding gave that). Otherwise 0 when they don't fit.
    */
   offset: number;
+}
+
+/**
+ * The width that decides whether a card still fits in its row: the card's width and a fifth of each copy behind it,
+ * not rounded (as the legacy groups compared them).
+ */
+function wrapWidth(card: FitCard, rowHeight: number): number {
+  return (
+    widthForLongSide(card.horizontal, rowHeight) +
+    (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, rowHeight), 0) * BEHIND_SHOWN
+  );
+}
+
+/** Where each card's stack goes with `rows` fit: its row, and its left edge in that row (px). One entry per card. */
+export function rowLayout(
+  cards: readonly FitCard[],
+  rowHeight: number,
+  width: number,
+  gap: number,
+): { row: number; x: number }[] {
+  let x = 0;
+  let row = 0;
+  return cards.map((card) => {
+    if (x > 0 && x + wrapWidth(card, rowHeight) > width) {
+      row++;
+      x = 0;
+    }
+    const at = { row, x };
+    x += stackWidth(card, rowHeight) + gap;
+    return at;
+  });
 }
 
 /**
@@ -95,24 +127,17 @@ export interface CardFitResult {
  */
 export function rowSnaps(cards: readonly FitCard[], rowHeight: number, width: number, gap: number): number[] {
   const step = rowHeight + gap;
-  let x = 0;
-  let row = 0;
-  return cards.map((card) => {
-    const share =
-      widthForLongSide(card.horizontal, rowHeight) +
-      (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, rowHeight), 0) * BEHIND_SHOWN;
-    if (x > 0 && x + share > width) {
-      row++;
-      x = 0;
-    }
-    x += stackWidth(card, rowHeight) + gap;
-    return Math.floor(row * step) - row * step;
-  });
+  return rowLayout(cards, rowHeight, width, gap).map(({ row }) => Math.floor(row * step) - row * step);
 }
 
 /** The row height (fitCardHeight) and where the rows start. */
 export function fitCards(input: FitCardsInput): CardFitResult {
   const { height, rows } = fitRows(input);
+  if (input.fit === 'rows') {
+    // As the legacy groups computed it, in the same order: rows that exactly fill the box come out a hair taller in
+    // floating point, and then start a pixel above it, as they did there
+    return { height, offset: Math.floor((input.height - height * rows - input.gap * (rows - 1)) / 2) };
+  }
   const used = rows * height + (rows - 1) * input.gap;
   return { height, offset: Math.max(0, Math.floor((input.height - used) / 2)) };
 }
@@ -209,10 +234,7 @@ function rowsFitHeight({ width, height, cards, gap }: FitCardsInput, max: number
     let x = 0;
     for (const card of cards) {
       const w = stackWidth(card, rowHeight);
-      const share =
-        widthForLongSide(card.horizontal, rowHeight) +
-        (card.behind ?? []).reduce((sum, landscape) => sum + widthForLongSide(landscape, rowHeight), 0) * BEHIND_SHOWN;
-      if (x + share > width) {
+      if (x + wrapWidth(card, rowHeight) > width) {
         x = 0;
       }
       x += w;

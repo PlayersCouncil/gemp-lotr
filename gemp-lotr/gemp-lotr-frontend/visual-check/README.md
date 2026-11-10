@@ -90,12 +90,17 @@ at a time, and each must be reported in the way it should be, and not be reporte
 ## All of it, and reading the results
 
 `npm run check:all` runs everything in order on throwaway copies: the frontend's lint, types, formatting and unit tests
-(`npm run verify` in the frontend), the Java server's build and web tests (`check:server-build`, which never replaces the
+(`npm run verify` in the frontend), 200 generated sessions on the legacy page and the Angular page side by side
+(`npm run test:parity` in the frontend, see its README), the decks saved by the legacy page (`check:legacy-decks`), the
+Java server's build and web tests (`check:server-build`, which never replaces the
 jar a running server uses), the self-test, the comparison, the control-and-gesture matrix and the deploy test. `--quick`
 leaves out the matrix.
 
 `npm run check:matrix` tests every control against every gesture it can get, in each state it appears in (`matrix.mjs`),
 and lists what is really on both pages: a control with no test, or on one page only, fails it.
+
+`npm run check:mutation` (not part of `check:all`, about an hour) is mutation testing of the deck builder's logic; see
+the frontend README.
 
 `npm run inspect -- summary <report>` groups a report's differences by cause, `where <report> <name>` says where on the
 screen one is, and `crop <report> <name> x y w h [zoom]` makes one picture of the same area of both pages.
@@ -114,6 +119,19 @@ server isn't touched, and a rebuild elsewhere can't change the page during a run
 every other option goes to `run.mjs`.
 
 Both this and `check:deploy` below use `gemp-lotr-async/target/web.jar`; set `CHECK_WEB_JAR` to test another server build.
+
+## Decks saved by the legacy page
+
+`npm run check:legacy-decks` proves that decks saved with the legacy deck builder keep working in the Angular one, on the
+throwaway server (`legacy-decks.mjs`). It makes the decks a live database holds: through the server's save as the
+legacy page sent them (every kind of format, a map, errata and foils, names and notes with markup, quotes, line breaks
+and other alphabets, the "null" notes it saved, notes escaped once and twice as it left them when it saved a deck
+again), a Race to Mount Doom deck made on the legacy page itself, and straight into the database what only an older
+server wrote (a format that no longer exists, a deck without contents). Then, for every deck: what the legacy page
+shows, what the Angular page shows (deck name, format, every card, stats, notes), saving it on the Angular page must
+leave what the server stores exactly as it was, and the legacy page must show it as before. The legacy page showed
+notes one level of escaping deeper than the server stored them; the Angular page shows them as stored. Report:
+`report-legacy-decks/results.json`.
 
 ## Deploying a frontend change
 

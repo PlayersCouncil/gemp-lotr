@@ -18,8 +18,10 @@ const quick = process.argv.includes('--quick');
 const npm = (cwd, ...args) => ({ cwd, args });
 const PARTS = [
   ['Frontend: lint, types, formatting, unit tests', npm(FRONTEND, 'run', 'verify')],
+  ['The legacy page and the Angular page side by side, 200 generated sessions', npm(FRONTEND, 'run', 'test:parity')],
   ['Server: build and web tests', npm(VISUAL_CHECK, 'run', 'check:server-build')],
   ['The check catches deliberate bugs', npm(VISUAL_CHECK, 'run', 'check:selftest')],
+  ['Decks saved by the legacy page keep working', npm(VISUAL_CHECK, 'run', 'check:legacy-decks')],
   ['Comparison with the legacy page, every scenario', npm(VISUAL_CHECK, 'run', 'check:local', '--', '--mutating')],
   ...(quick ? [] : [['Every control against every gesture', npm(VISUAL_CHECK, 'run', 'check:matrix')]]),
   ['Deploying with git pull', npm(VISUAL_CHECK, 'run', 'check:deploy')],

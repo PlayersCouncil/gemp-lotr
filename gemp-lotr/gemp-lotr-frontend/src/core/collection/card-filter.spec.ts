@@ -61,6 +61,12 @@ describe('buildFilterString', () => {
     ).toBe('format:rev_tow_sta sort:name product:pack twilightCompare:GREATER_THAN twilight:3 cardType:-THE_ONE_RING');
   });
 
+  it('leaves out a name of spaces only', () => {
+    expect(buildFilterString(fields({ name: '   ' }), context())).toBe(
+      'format:rev_tow_sta sort:name cardType:-THE_ONE_RING',
+    );
+  });
+
   it('needs both the comparison and the number', () => {
     expect(buildFilterString(fields({ vitalityCompare: 'EQUALS' }), context())).toBe(
       'format:rev_tow_sta sort:name cardType:-THE_ONE_RING',

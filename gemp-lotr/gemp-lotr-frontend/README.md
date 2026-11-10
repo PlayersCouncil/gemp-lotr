@@ -85,7 +85,8 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/platform/`                    | The browser, behind services: cookies, the page's query string, image preloading, opening links, and `ThemeService` (see Themes below).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `src/themes/<name>/`                    | A theme's CSS (`theme.css`); its images and other files go in `public/themes/<name>/`. See Themes below.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `src/ui/`                               | The view (see "The UI and its DOM contract" below): `ui/app/` (the app shell, see One app below), `ui/deckbuilder/` (the page component `DeckbuilderPageComponent`, element `<deckbuilder-app>`, the route `deckbuilder`; the page frame, the deck side, the collection filter and cards, the dialogs) and `ui/shared/` (what any page can use: the card and its hover reporting, the card information, the hover zoom, `fitCards`, the dialog, the notifier; `ui-boundary.spec.ts` keeps it free of any one page). Markup and interaction only; the themes draw it. `ui-boundary.spec.ts` checks it imports only core and ui and has no styles. |
-| `src/testing/`                          | Test helpers and `server-responses/`, real server responses the parser tests run against.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `src/testing/`                          | Test helpers and `server-responses/`, real server responses the parser tests run against. `parity/` runs the legacy page and the Angular page side by side (see below).                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `src/parity/`                           | Specs that run the legacy `deckBuild.html` (unchanged, in jsdom) and the Angular page against the same fake server, and compare them after every gesture.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 The deck builder's state is provided by its page (`provideDeckbuilderState`), so it is created when the page opens and destroyed when it closes. `PageLifetime` decides what happens to work still running then: reads are cancelled, writes finish but their answers are ignored.
 
@@ -202,6 +203,38 @@ npm test -- --watch=false --coverage   # once, as Maven runs them
 npm run lint                # ESLint, also part of the Maven build
 npm run build               # both theme bundles: theme-classic.css, theme-modern.css
 ```
+
+### The legacy page side by side, in the unit tests
+
+`src/parity/` runs the legacy deck builder itself (`deckBuild.html` and its scripts, unchanged) in jsdom next to the
+Angular page, each against its own `FakeGempServer` (`src/testing/parity/`), with clocks the test moves. The same
+gestures go to both through the selectors of `visual-check/controls.mjs`, and after each one the test compares what
+each page asked its server, shows (deck name, filter fields, cards in each place, dialogs and messages, disabled
+buttons, hidden cultures) and left saved.
+
+- `generated-sessions.parity.spec.ts`: sessions of 25 gestures chosen at random from what the legacy page shows (filters,
+  cultures, paging, formats, collections, cards, slots, toolbar, every dialog). 10 run with the unit tests; `npm run
+test:parity` runs 200 (part of `check:all`). A failure names its seed: `PARITY_SEED=<seed> PARITY_SESSIONS=1 npm run
+test:parity` repeats it.
+- `legacy-functions.parity.spec.ts`: the legacy page's own functions called on generated inputs next to their ports:
+  the filter string, the decklist clean-up, the deck stats HTML as the browser shows it, and where a card group puts its
+  cards (`NormalCardGroup` against `fitCards` and `rowLayout`), and the Block and Set lists. 500 of each with the unit tests (fewer groups and lists), 10,000 in
+  `test:parity` (`PARITY_CASES`).
+- `server-answers.parity.spec.ts`: every error message the legacy page had, the generic one for the rest, and opening
+  boosters and selection packs.
+- `differences.parity.spec.ts`: where the Angular page differs on purpose (fixed legacy bugs), or the difference waits for
+  a decision. Each shows what both pages do, and the generated sessions stay away from exactly these.
+- `startup.parity.spec.ts`: every list's options as the page opens.
+
+### Mutation testing
+
+`npm run check:mutation` in `visual-check` changes one thing at a time in the deck builder's logic (a comparison, a
+condition, a constant, a message) and runs the unit tests of that file; a change no test notices is listed in
+`visual-check/report-mutation/survivors.md`. It works on copies in `visual-check/.local-server/mutation/`, so the
+`frontend` container never rebuilds from a mutated file. `--files <part of a path>` limits it, `--with-parity` adds
+`src/parity`.
+
+### The visual check
 
 `visual-check/` is a Playwright check, separate from the Maven build (see `visual-check/README.md`):
 

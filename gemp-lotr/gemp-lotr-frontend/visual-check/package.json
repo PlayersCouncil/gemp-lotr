@@ -13,7 +13,9 @@
     "check:deploy": "node deploy-test.mjs",
     "check:server-build": "node tools/build-server.mjs",
     "check:all": "node tools/check-all.mjs",
-    "inspect": "node tools/inspect.mjs"
+    "inspect": "node tools/inspect.mjs",
+    "check:mutation": "node tools/mutation.mjs",
+    "check:legacy-decks": "node local-server.mjs --legacy-decks"
   },
   "devDependencies": {
     "playwright": "1.64.1",
