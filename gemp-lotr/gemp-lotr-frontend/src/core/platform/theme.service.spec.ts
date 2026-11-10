@@ -150,7 +150,7 @@ describe('ThemeService', () => {
       await starting;
       expect(themes.theme()).toBe('modern');
       expect(jar.get(THEME_COOKIE)).toBe('modern');
-      expect(written[0]).toMatch(new RegExp(`^${THEME_COOKIE}=modern; expires=.*; path=/gemp-lotr$`));
+      expect(written[0]).toMatch(new RegExp(`^${THEME_COOKIE}=modern; expires=.*; path=/gemp-lotr; SameSite=Lax$`));
     });
 
     it('ignores, and does not remember, an unknown ?theme= or cookie value', async () => {

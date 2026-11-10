@@ -82,7 +82,9 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
           </div>
         }
         @if (slot.slot === 'map') {
-          <a class="gd-slot__link" href="https://wiki.lotrtcgpc.net/wiki/Map" target="_blank">See here for details.</a>
+          <a class="gd-slot__link" href="https://wiki.lotrtcgpc.net/wiki/Map" target="_blank" rel="noopener noreferrer"
+            >See here for details.</a
+          >
         }
         @if (slot.slot === 'sites') {
           <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- only hears clicks bubbling up from its card buttons -->

@@ -44,7 +44,7 @@ describe('AutoZoomSetting', () => {
     const zoom = setting();
     zoom.toggle();
     expect(zoom.enabled()).toBe(false);
-    expect(written[0]).toMatch(new RegExp(`^${COOKIE}=false; expires=.*; path=/gemp-lotr$`));
+    expect(written[0]).toMatch(new RegExp(`^${COOKIE}=false; expires=.*; path=/gemp-lotr; SameSite=Lax$`));
     zoom.toggle();
     expect(written[1]).toMatch(new RegExp(`^${COOKIE}=true;`));
   });

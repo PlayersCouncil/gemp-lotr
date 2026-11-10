@@ -102,7 +102,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
           <span class="gd-card-info__flip"></span>
         </div>
         @if (v.wikiUrl) {
-          <a class="gd-card-info__wiki" [href]="v.wikiUrl" target="_blank">Go to Wiki Page</a>
+          <a class="gd-card-info__wiki" [href]="v.wikiUrl" target="_blank" rel="noopener noreferrer">Go to Wiki Page</a>
         }
       }
     </dialog>

@@ -19,8 +19,8 @@ export function readCookie(cookies: string, name: string): string | null {
   return null;
 }
 
-/** saveToCookie: kept for 365 days. */
+/** saveToCookie: kept for 365 days. Settings only, so they aren't sent with requests coming from other sites. */
 export function writeCookie(document: Document, name: string, value: string, now = new Date()): void {
   const expires = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=${LEGACY_COOKIE_PATH}`;
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=${LEGACY_COOKIE_PATH}; SameSite=Lax`;
 }

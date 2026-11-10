@@ -274,7 +274,7 @@ describe('CardInfoComponent', () => {
     // The release ended outside the slider: the click lands on the dialog
     await click('dialog');
     expect(info.isOpen()).toBe(true);
-    expect(cookies[0]).toMatch(new RegExp(`^${ZOOM_COOKIE}=0\\.9; expires=.*; path=/gemp-lotr$`));
+    expect(cookies[0]).toMatch(new RegExp(`^${ZOOM_COOKIE}=0\\.9; expires=.*; path=/gemp-lotr; SameSite=Lax$`));
     expect(dialog.style.getPropertyValue('--gd-card-info-zoom')).toBe('0.9');
     // The slide ends a moment later
     await new Promise((resolve) => setTimeout(resolve, 5));

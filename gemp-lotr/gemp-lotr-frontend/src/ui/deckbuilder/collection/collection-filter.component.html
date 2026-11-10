@@ -81,7 +81,7 @@
   </div>
   <div class="gd-filter__advanced">
     <p class="gd-filter__advanced-title">
-      Advanced filters (<a [href]="wikiSearch" target="_blank">See more on the Wiki.</a>)
+      Advanced filters (<a [href]="wikiSearch" target="_blank" rel="noopener noreferrer">See more on the Wiki.</a>)
     </p>
     @for (field of advancedFields; track fieldName(field)) {
       <ng-container *ngTemplateOutlet="fieldTemplate; context: { $implicit: field }" />
