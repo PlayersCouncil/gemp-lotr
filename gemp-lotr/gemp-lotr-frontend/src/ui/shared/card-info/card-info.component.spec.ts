@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { CardView } from '../../../core/cards/card-view';
-import { ThemeService } from '../../../core/platform/theme.service';
+import { THEME_BEHAVIOUR, ThemeService } from '../../../core/platform/theme.service';
 import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { CardInfoComponent, ZOOM_COOKIE } from './card-info.component';
 
@@ -222,6 +222,7 @@ describe('CardInfoComponent', () => {
     }
 
     it('is not modal in the classic theme', async () => {
+      vi.spyOn(TestBed.inject(ThemeService), 'behaviour').mockReturnValue(THEME_BEHAVIOUR.classic);
       await open(false);
       expect(show).toHaveBeenCalledOnce();
       expect(showModal).not.toHaveBeenCalled();

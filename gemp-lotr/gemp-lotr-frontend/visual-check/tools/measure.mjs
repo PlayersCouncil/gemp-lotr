@@ -3,12 +3,14 @@
 // another browser. Both pages run against the stub server (stub-server.mjs), with no login.
 //
 //   npm run measure -- [--browser firefox] [--size 1366x768] [--build .local-server/ng/browser] [--click <control>]...
-//                      <selector>...
+//                      [--theme classic|modern] [--screenshot <dir>] [--scheme dark|light] <selector>...
 //
 // --build: the Angular build to serve (default: the server's web root, ng/); .local-server/ng/browser is the one of the
 // last check:local. --click: a control of controls.mjs (e.g. deckList) clicked on each page first, key:<key> pressed, or
 // drag:<control>:<dx> dragged sideways as pane-resized does (from 3px into it, 100px down, in 10 steps), or
 // select:<control>:<value> chosen in a list, in order.
+// --theme: the Angular page's (default classic, the legacy look). --screenshot: also saves both pages, after the clicks,
+// as <dir>/legacy-<size>.png and angular-<theme>-<size>.png. --scheme: the colour scheme the device prefers.
 // Each selector is looked up on both pages, so a selector of one page alone shows only there.
 import { parseArgs } from 'node:util';
 import { chromium, firefox, webkit } from 'playwright';
@@ -20,6 +22,9 @@ const { values: options, positionals: selectors } = parseArgs({
     size: { type: 'string', default: '1366x768' },
     build: { type: 'string' },
     click: { type: 'string', multiple: true, default: [] },
+    theme: { type: 'string', default: 'classic' },
+    screenshot: { type: 'string' },
+    scheme: { type: 'string', default: 'dark' },
   },
 });
 if (options.build) process.env.CHECK_NG_BUILD = options.build;
@@ -27,14 +32,14 @@ const { routeToStub, STUB_ORIGIN } = await import('../stub-server.mjs');
 const { CONTROLS } = await import('../controls.mjs');
 
 const type = { chromium, firefox, webkit }[options.browser];
-if (!type || !selectors.length) {
+if (!type || (!selectors.length && !options.screenshot)) {
   console.error(
-    'Usage: npm run measure -- [--browser chromium|firefox|webkit] [--size WxH] [--build dir] <selector>...',
+    'Usage: npm run measure -- [--browser chromium|firefox|webkit] [--size WxH] [--build dir] [--theme name] [--screenshot dir] [--scheme dark|light] <selector>...',
   );
   process.exit(2);
 }
 const [width, height] = options.size.split('x').map(Number);
-const PAGES = { legacy: '/gemp-lotr/deckBuild.html', angular: '/gemp-lotr/ng/deckbuilder/?theme=classic' };
+const PAGES = { legacy: '/gemp-lotr/deckBuild.html', angular: `/gemp-lotr/ng/deckbuilder/?theme=${options.theme}` };
 
 /** Runs in the page: each match's box (rounded to 0.01px), font, padding and border. */
 function measure(selector) {
@@ -50,7 +55,7 @@ function measure(selector) {
 
 const browser = await type.launch();
 for (const [which, pagePath] of Object.entries(PAGES)) {
-  const context = await browser.newContext({ viewport: { width, height } });
+  const context = await browser.newContext({ viewport: { width, height }, colorScheme: options.scheme });
   const log = [];
   await routeToStub(context, log);
   const page = await context.newPage();
@@ -77,6 +82,10 @@ for (const [which, pagePath] of Object.entries(PAGES)) {
       await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
     }
     await page.waitForTimeout(800);
+  }
+  if (options.screenshot) {
+    const name = `${which}${which === 'angular' ? `-${options.theme}` : ''}-${options.size}.png`;
+    await page.screenshot({ path: `${options.screenshot}/${name}` });
   }
   console.log(`=== ${which} (${options.browser} ${options.size})`);
   for (const selector of selectors) {

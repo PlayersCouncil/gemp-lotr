@@ -98,21 +98,21 @@ describe('DeckToolbarComponent', () => {
     const picker = el.querySelector<HTMLButtonElement>('button.gd-button.gd-toolbar__theme')!;
     expect(el.lastElementChild).toBe(picker);
     expect(picker.dataset['action']).toBe('theme');
-    expect(picker.title).toBe('Switch to the Modern theme');
-    expect(picker.getAttribute('aria-label')).toBe(picker.title);
-
-    picker.click();
-    await fixture.whenStable();
-    expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('modern');
-    expect(themes.behaviour().cardInfoModal).toBe(true);
     expect(picker.title).toBe('Switch to the Classic theme');
-    expect(el.querySelector('.gd-toolbar__deck-name')!.textContent).toBe('*My deck - modified');
+    expect(picker.getAttribute('aria-label')).toBe(picker.title);
 
     picker.click();
     await fixture.whenStable();
     expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
     expect(themes.behaviour().cardInfoModal).toBe(false);
     expect(picker.title).toBe('Switch to the Modern theme');
+    expect(el.querySelector('.gd-toolbar__deck-name')!.textContent).toBe('*My deck - modified');
+
+    picker.click();
+    await fixture.whenStable();
+    expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('modern');
+    expect(themes.behaviour().cardInfoModal).toBe(true);
+    expect(picker.title).toBe('Switch to the Classic theme');
   });
 
   it('runs the deck actions', async () => {

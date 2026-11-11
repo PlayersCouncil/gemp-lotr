@@ -33,13 +33,15 @@ export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Cla
  */
 export const THEME_PICKER = new InjectionToken<boolean>('THEME_PICKER', { providedIn: 'root', factory: () => true });
 
-/** Computers get the legacy look. */
-const DEFAULT_THEME: ThemeName = 'classic';
-/** Phones and tablets (see isMobileDevice): the legacy look too, until the redesign is approved. */
-const MOBILE_THEME: ThemeName = 'classic';
+/** Every player lands on the modern look, on every device, until they choose another (owner, 2026-11-11). */
+const DEFAULT_THEME: ThemeName = 'modern';
 
-/** Remembers the player's choice on this device (path /gemp-lotr, like the legacy settings cookies). */
-export const THEME_COOKIE = 'gempTheme';
+/**
+ * Remembers the player's choice on this device (path /gemp-lotr, like the legacy settings cookies). The deck builder's
+ * own cookie: the rest of the site's looks are chosen apart from it. Replaces `gempTheme`, which is no longer read, so
+ * everyone starts on the modern look.
+ */
+export const THEME_COOKIE = 'gempDeckbuilderTheme';
 
 /** Set on <html>: it picks the theme's values in src/styles/themes.css. */
 export const THEME_ATTRIBUTE = 'data-theme';
@@ -48,30 +50,15 @@ function isThemeName(value: unknown): value is ThemeName {
   return typeof value === 'string' && (THEMES as readonly string[]).includes(value);
 }
 
-/**
- * A phone or tablet: a touch screen as the main input, and no side longer than a small laptop's. The same rule as
- * the legacy mobile pages (js/gemp-022/mobileView.js, GempView.isMobileDevice).
- */
-export function isMobileDevice(window: Window | null): boolean {
-  if (!window) {
-    return false;
-  }
-  const coarse = typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
-  // Not every browser environment has a screen
-  const screen = window.screen as Screen | undefined;
-  const shortSide = Math.min(screen?.width ?? Infinity, screen?.height ?? Infinity);
-  return coarse && shortSide < 1100;
-}
-
-/** The theme to use: the address (?theme=), then the remembered choice, then the device. Unknown names are ignored. */
-export function resolveTheme(fromQuery: string | null, fromCookie: string | null, mobile: boolean): ThemeName {
+/** The theme to use: the address (?theme=), then the remembered choice, then modern. Unknown names are ignored. */
+export function resolveTheme(fromQuery: string | null, fromCookie: string | null): ThemeName {
   if (isThemeName(fromQuery)) {
     return fromQuery;
   }
   if (isThemeName(fromCookie)) {
     return fromCookie;
   }
-  return mobile ? MOBILE_THEME : DEFAULT_THEME;
+  return DEFAULT_THEME;
 }
 
 /**
@@ -94,7 +81,7 @@ export class ThemeService {
     if (isThemeName(fromQuery)) {
       this.remember(fromQuery);
     }
-    this.apply(resolveTheme(fromQuery, readCookie(this.document.cookie, THEME_COOKIE), this.mobileDevice()));
+    this.apply(resolveTheme(fromQuery, readCookie(this.document.cookie, THEME_COOKIE)));
   }
 
   /** The player's choice: remembered and applied. Unknown names are ignored. */
@@ -113,9 +100,5 @@ export class ThemeService {
 
   private remember(theme: ThemeName): void {
     writeCookie(this.document, THEME_COOKIE, theme);
-  }
-
-  private mobileDevice(): boolean {
-    return isMobileDevice(this.document.defaultView);
   }
 }

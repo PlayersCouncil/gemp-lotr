@@ -57,6 +57,12 @@
   --theme-field-disabled-bg: #888;
   --theme-field-radius: 8px;
 
+  /* The theme button: bright red in every theme, so players notice it (owner, 2026-11-11) */
+  --theme-attention-bg: #e0161e;
+  --theme-attention-hover-bg: #b80f16;
+  --theme-attention-border: #ff5a5f;
+  --theme-attention-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+
   --theme-link-visited: #bf6b04;
   --theme-modified: orange;
   --theme-error: red;
@@ -78,7 +84,7 @@
   --theme-scroll-right: url('/gemp-lotr/ng/themes/classic/scroll-button-right.png');
 }
 
-/* modern: flat colours and the system font, dark or light as the device prefers */
+/* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11) */
 :root[data-theme='modern'] {
   color-scheme: dark;
   --theme-font-text: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
@@ -86,24 +92,24 @@
   --theme-font-widget: var(--theme-font-text);
   --theme-font-control: var(--theme-font-text);
 
-  --theme-page-bg: #0e1015;
+  --theme-page-bg: #202124;
   --theme-text: #e7e9ee;
-  --theme-pane-border: #2a2f3a;
-  --theme-separator: #3a4150;
-  --theme-separator-toggle: #6c7484;
+  --theme-pane-border: #3c3e44;
+  --theme-separator: #4b4e55;
+  --theme-separator-toggle: #7c7f87;
 
   --theme-widget-text: #e7e9ee;
-  --theme-widget-border: #3a4150;
+  --theme-widget-border: #4b4e55;
   --theme-hover-border: #6e8bff;
   --theme-active-border: #869dff;
-  --theme-content-border: #2a2f3a;
-  --theme-header-border: #2a2f3a;
-  --theme-content-bg: #161920;
-  --theme-default-bg: #1d2129;
-  --theme-hover-bg: #262b35;
+  --theme-content-border: #3c3e44;
+  --theme-header-border: #3c3e44;
+  --theme-content-bg: #28292d;
+  --theme-default-bg: #303236;
+  --theme-hover-bg: #3a3c41;
   --theme-active-bg: rgb(110 139 255 / 0.16);
-  --theme-header-bg: #1d2129;
-  --theme-backdrop: rgb(6 8 12 / 0.6);
+  --theme-header-bg: #303236;
+  --theme-backdrop: rgb(12 12 14 / 0.6);
   --theme-radius: 6px;
   --theme-radius-box: 10px;
 
@@ -111,16 +117,16 @@
   --theme-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
   --theme-icons-active: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
 
-  --theme-focus-ring-inner: #0e1015;
+  --theme-focus-ring-inner: #202124;
   --theme-focus-ring-outer: #8fa6ff;
   --theme-slider-fill: #6e8bff;
 
-  --theme-field-bg: #0b0d11;
-  --theme-field-hover-bg: #262b35;
-  --theme-field-border-light: #3a4150;
-  --theme-field-border-dark: #3a4150;
-  --theme-field-disabled-text: #6c7484;
-  --theme-field-disabled-bg: #262b35;
+  --theme-field-bg: #1a1b1e;
+  --theme-field-hover-bg: #3a3c41;
+  --theme-field-border-light: #4b4e55;
+  --theme-field-border-dark: #4b4e55;
+  --theme-field-disabled-text: #7c7f87;
+  --theme-field-disabled-bg: #3a3c41;
   --theme-field-radius: 6px;
 
   --theme-link-visited: #869dff;
@@ -130,63 +136,11 @@
   --theme-warning: #f2c14e;
   --theme-culture-icon-filter: invert(1) brightness(0.95);
 
-  --theme-scrollbar-thumb: #3a4150;
-  --theme-scrollbar-track: #161920;
-  --theme-scrollbar-button: #161920;
+  --theme-scrollbar-thumb: #4b4e55;
+  --theme-scrollbar-track: #28292d;
+  --theme-scrollbar-button: #28292d;
   --theme-scroll-up: none;
   --theme-scroll-down: none;
   --theme-scroll-left: none;
   --theme-scroll-right: none;
-}
-
-@media (prefers-color-scheme: light) {
-  :root[data-theme='modern'] {
-    color-scheme: light;
-    --theme-page-bg: #eef0f4;
-    --theme-text: #1b1f2a;
-    --theme-pane-border: #d8dce4;
-    --theme-separator: #c3c9d4;
-    --theme-separator-toggle: #8a92a1;
-
-    --theme-widget-text: #1b1f2a;
-    --theme-widget-border: #c3c9d4;
-    --theme-hover-border: #3b5bdb;
-    --theme-active-border: #2f4cc4;
-    --theme-content-border: #d8dce4;
-    --theme-header-border: #d8dce4;
-    --theme-content-bg: #fff;
-    --theme-default-bg: #f4f5f8;
-    --theme-hover-bg: #e7eaf0;
-    --theme-active-bg: rgb(59 91 219 / 0.12);
-    --theme-header-bg: #f4f5f8;
-    --theme-backdrop: rgb(20 24 34 / 0.35);
-
-    --theme-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
-    --theme-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
-    --theme-icons-active: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
-
-    --theme-focus-ring-inner: #eef0f4;
-    --theme-focus-ring-outer: #3b5bdb;
-    --theme-slider-fill: #3b5bdb;
-
-    --theme-field-bg: #fff;
-    --theme-field-hover-bg: #e7eaf0;
-    --theme-field-border-light: #c3c9d4;
-    --theme-field-border-dark: #c3c9d4;
-    --theme-field-disabled-text: #8a92a1;
-    --theme-field-disabled-bg: #e3e6ec;
-
-    --theme-link-visited: #2f4cc4;
-    --theme-modified: #c26a00;
-    --theme-error: #d63a3a;
-    --theme-valid: #1f9d63;
-    --theme-warning: #a86b00;
-    --theme-culture-icon-filter: none;
-    /* The other icons are white: drawn dark */
-    --theme-other-icon-filter: invert(1);
-
-    --theme-scrollbar-thumb: #c3c9d4;
-    --theme-scrollbar-track: #eef0f4;
-    --theme-scrollbar-button: #eef0f4;
-  }
 }

@@ -143,6 +143,22 @@ select:hover {
   order: 1;
 }
 
+/* Bright red in every theme, so players notice they can switch (owner, 2026-11-11); the icon white on it */
+.gd-button.gd-toolbar__theme {
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-bg);
+}
+
+.gd-button.gd-toolbar__theme:is(:enabled:hover, :focus, :enabled:active) {
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-hover-bg);
+}
+
+.gd-toolbar__theme::before,
+.gd-toolbar__theme:is(:enabled:hover, :focus, :enabled:active)::before {
+  background-image: var(--theme-attention-icons);
+}
+
 /* #editingDeck */
 .gd-toolbar__deck-name {
   flex-grow: 1;

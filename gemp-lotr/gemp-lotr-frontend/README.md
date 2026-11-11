@@ -128,18 +128,18 @@ The look is split in two:
   draws the controls the page puts in it, so its rules all start at `.gd-dialog`.
 - **The themes** (`src/styles/themes.css`): values only (colours, fonts, backgrounds, borders, radii, the icon sprite,
   scrollbar images). `classic` (the legacy page's look) is on `:root`; `modern` (flat colours and the system font, dark
-  or light as the device prefers) overrides it on `:root[data-theme='modern']`. Images go in `public/themes/<name>/`,
+  gray on every device) overrides it on `:root[data-theme='modern']`. Images go in `public/themes/<name>/`,
   served as `/gemp-lotr/ng/themes/<name>/...` and referred to by that absolute path.
 
 `ThemeService` (`src/core/platform/theme.service.ts`) picks the theme and sets `<html data-theme="...">`:
 
 1. `?theme=classic` or `?theme=modern` in the address, which is also remembered;
-2. otherwise the `gempTheme` cookie (the player's choice, made in the toolbar's theme picker);
-3. otherwise `classic`, on every device for now. Phones and tablets (a coarse pointer and a screen whose short side is
-   under 1100px, the rule of the legacy `mobileView.js`) have their own default, `MOBILE_THEME`, for when that changes.
+2. otherwise the `gempDeckbuilderTheme` cookie (the player's choice, made in the toolbar's theme picker): the deck
+   builder's own, apart from the rest of the site. The older `gempTheme` cookie is no longer read;
+3. otherwise `modern`, on every device.
 
 Players switch between the themes at any time with the toolbar's theme picker (`button.gd-toolbar__theme`, the
-lightbulb, drawn after the deck's name so nothing the legacy page had moves): it switches to the next theme, which its
+lightbulb on bright red in every theme, `--theme-attention-*`, so players notice it; drawn after the deck's name so nothing the legacy page had moves): it switches to the next theme, which its
 title names. The choice is remembered on the device (the cookie). It is shown while `THEME_PICKER` (`theme.service.ts`)
 is true, as the owner decided; the legacy page had no picker, so the visual check leaves its area out (`EXCLUDED_AREAS` in `accepted.mjs`). With the
 token's factory set to `() => false` it is gone, and a theme is chosen only with `?theme=`. With more than two themes
