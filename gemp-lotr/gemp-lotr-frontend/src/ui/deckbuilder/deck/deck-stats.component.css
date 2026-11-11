@@ -25,3 +25,10 @@
 [data-tone='warning'] {
   color: var(--theme-warning);
 }
+
+/* The compact layout: in the flow, under the piles */
+:host-context([data-layout='compact']) {
+  position: static;
+  width: auto;
+  min-height: 0;
+}

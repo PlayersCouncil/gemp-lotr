@@ -45,3 +45,23 @@
 .gd-collection__cards > .gd-card[data-orientation='horizontal'] {
   margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px));
 }
+
+/* The compact layout: the cards at one size (fitCards' none: the largest), wrapping; the collection pane scrolls */
+:host-context([data-layout='compact']) {
+  flex: none;
+  height: auto;
+  margin: 8px 0 0;
+}
+
+:host-context([data-layout='compact']) .gd-collection__cards {
+  --gd-card-fit: none;
+  --gd-card-max-height: 120px;
+  min-height: 80px;
+  overflow: visible;
+}
+
+@media (min-width: 600px) {
+  :host-context([data-layout='compact']) .gd-collection__cards {
+    --gd-card-max-height: 160px;
+  }
+}

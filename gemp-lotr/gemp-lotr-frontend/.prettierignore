@@ -12,6 +12,7 @@ visual-check/report*
 # Captured server responses, kept byte-for-byte
 src/testing/server-responses/*.html
 src/testing/server-responses/*.xml
+src/testing/server-responses/*.json
 
 # Lockfiles
 package-lock.json

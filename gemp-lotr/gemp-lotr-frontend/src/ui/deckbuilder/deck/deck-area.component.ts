@@ -209,10 +209,16 @@ export class DeckAreaComponent {
     }
   }
 
-  /** Clicking a site removes it and, as on the legacy page (whose sites box saw the click too), shows the sites. */
+  /**
+   * Clicking a site removes it and, as on the legacy page (whose sites box saw the click too), shows the sites. The
+   * strip of the compact layout takes the pointer (it scrolls): a press on it beside the sites selects them, as the slot
+   * does.
+   */
   protected siteClicked(event: MouseEvent): void {
     if (cardElementOf(event.target)) {
       this.editing.slotClicked('sites');
+    } else {
+      this.select('sites');
     }
   }
 }

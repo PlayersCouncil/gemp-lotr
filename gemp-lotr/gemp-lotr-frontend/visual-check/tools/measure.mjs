@@ -8,7 +8,7 @@
 // --build: the Angular build to serve (default: the server's web root, ng/); .local-server/ng/browser is the one of the
 // last check:local. --click: a control of controls.mjs (e.g. deckList) clicked on each page first, key:<key> pressed, or
 // drag:<control>:<dx> dragged sideways as pane-resized does (from 3px into it, 100px down, in 10 steps), or
-// select:<control>:<value> chosen in a list, in order.
+// select:<control>:<value> chosen in a list, or css:<selector> clicked (on a page that has it), in order.
 // --theme: the Angular page's (default classic, the legacy look). --screenshot: also saves both pages, after the clicks,
 // as <dir>/legacy-<size>.png and angular-<theme>-<size>.png. --scheme: the colour scheme the device prefers.
 // Each selector is looked up on both pages, so a selector of one page alone shows only there.
@@ -64,6 +64,9 @@ for (const [which, pagePath] of Object.entries(PAGES)) {
   for (const name of options.click) {
     if (name.startsWith('key:')) {
       await page.keyboard.press(name.slice(4));
+    } else if (name.startsWith('css:')) {
+      const target = page.locator(name.slice(4)).first();
+      if (await target.count()) await target.click();
     } else if (name.startsWith('select:')) {
       const [, control, value] = name.split(':');
       await page.selectOption(CONTROLS[control][which], value);

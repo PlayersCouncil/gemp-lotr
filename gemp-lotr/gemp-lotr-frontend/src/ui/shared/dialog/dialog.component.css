@@ -220,3 +220,18 @@
   inset: 0;
   margin: auto;
 }
+
+/*
+ * The compact layout (the modern theme on a portrait or narrow screen): a dialog is at most the window's size less 8px
+ * all round, and centred in it until moved
+ */
+[data-layout='compact'] .gd-dialog {
+  box-sizing: border-box;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100dvh - 16px);
+}
+
+[data-layout='compact'] .gd-dialog:not([data-placed]) {
+  inset: 0;
+  margin: auto;
+}

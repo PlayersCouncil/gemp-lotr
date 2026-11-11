@@ -1,11 +1,15 @@
+import { DOCUMENT } from '@angular/common';
 import { ApplicationRef, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { DeckStartup } from '../../core/deck/deck-startup.service';
 import { provideDeckbuilderState } from '../../core/deckbuilder-state';
 import { PacksService } from '../../core/packs/packs.service';
+import { CompactLayout } from '../../core/platform/compact-layout.service';
+import { readCookie, writeCookie } from '../../core/platform/cookies';
 import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
 import { CardInfoComponent } from '../shared/card-info/card-info.component';
 import { CollectionFilterComponent } from './collection/collection-filter.component';
 import { CollectionGridComponent } from './collection/collection-grid.component';
+import { CollectionMenuComponent } from './collection/collection-menu.component';
 import { DeckAreaComponent } from './deck/deck-area.component';
 import { DeckListDialogComponent } from './dialogs/deck-list-dialog.component';
 import { ImportDialogComponent } from './dialogs/import-dialog.component';
@@ -17,6 +21,25 @@ import { DragHandlers, PointerDragDirective } from '../shared/pointer-drag/point
 
 /** Arrow keys on the resizer move it by this much (px). */
 export const RESIZE_STEP = 10;
+
+/** In the compact layout: the deck's share of the page's height (%), at first, at least and at most. */
+export const SPLIT_DEFAULT = 50;
+export const SPLIT_MIN = 15;
+export const SPLIT_MAX = 85;
+/** Arrow keys on the resizer move the split by this much (%) in the compact layout. */
+export const SPLIT_STEP = 5;
+/** Remembers the split on this device: the deck builder's own setting. */
+export const SPLIT_COOKIE = 'gempDeckbuilderSplit';
+
+function clampSplit(share: number): number {
+  return Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(share * 10) / 10));
+}
+
+/** The remembered split, or the default when there is none (or it isn't a number). */
+export function readSplit(cookies: string): number {
+  const share = Number.parseFloat(readCookie(cookies, SPLIT_COOKIE) ?? '');
+  return Number.isFinite(share) ? clampSplit(share) : SPLIT_DEFAULT;
+}
 
 /** How long the legacy pane took to slide open or closed (jQuery's "normal" speed). */
 const TOGGLE_SLIDE_MS = 400;
@@ -30,6 +53,12 @@ const TOGGLE_SLIDE_MS = 400;
  * `section.gd-page__deck`, `div.gd-page__separator` (`role=separator`, `data-dragging` while dragged) holding
  * `button.gd-page__toggle` (`aria-expanded`), `section.gd-page__collection` holding the filter and the cards; then the dialogs (deck list and library, import, notes, selection pack, new items), the card information, the hover zoom
  * and the notifier's dialog.
+ *
+ * In the compact layout (CompactLayout: the modern theme on a portrait or narrow screen) the page has
+ * `data-layout=compact` and `--gd-split` (the deck's share of its height, 0 to 1): the deck is above, the collection
+ * below, and the separator (`aria-orientation=horizontal`, with `aria-valuenow` = the share in %, and no toggle) moves
+ * the split by dragging or with the Up and Down keys. The split is remembered on the device (SPLIT_COOKIE). The
+ * collection is always shown, with its bar (`gd-collection-menu`) above the filter.
  */
 @Component({
   selector: 'deckbuilder-app',
@@ -41,6 +70,7 @@ const TOGGLE_SLIDE_MS = 400;
     DeckAreaComponent,
     CollectionFilterComponent,
     CollectionGridComponent,
+    CollectionMenuComponent,
     CardInfoComponent,
     AutoZoomComponent,
     DeckListDialogComponent,
@@ -52,6 +82,8 @@ const TOGGLE_SLIDE_MS = 400;
   host: {
     class: 'gd-page',
     '[attr.data-collection]': "collectionOpen() ? 'open' : 'closed'",
+    '[attr.data-layout]': "compact() ? 'compact' : null",
+    '[style.--gd-split]': 'compact() ? split() / 100 : null',
     '[style.--gd-collection-width]': "collectionWidth() === null ? null : collectionWidth() + 'px'",
     '[style.--gd-drag-width]': "dragWidth() === null ? null : dragWidth() + 'px'",
   },
@@ -60,28 +92,36 @@ const TOGGLE_SLIDE_MS = 400;
     <div
       class="gd-page__separator"
       role="separator"
-      aria-orientation="vertical"
+      [attr.aria-orientation]="compact() ? 'horizontal' : 'vertical'"
       aria-label="Resize the collection"
-      [attr.title]="collectionOpen() ? 'Resize' : null"
+      [attr.aria-valuenow]="compact() ? split() : null"
+      [attr.aria-valuemin]="compact() ? splitMin : null"
+      [attr.aria-valuemax]="compact() ? splitMax : null"
+      [attr.title]="collectionOpen() || compact() ? 'Resize' : null"
       tabindex="0"
       [attr.data-dragging]="dragging() ? '' : null"
       [gdPointerDrag]="resizeDrag"
       (keydown)="resizeWithKeys($event)"
     >
-      <button
-        type="button"
-        class="gd-page__toggle"
-        gdNoPressFocus
-        [attr.aria-expanded]="collectionOpen()"
-        [attr.aria-label]="collectionOpen() ? 'Close the collection' : 'Open the collection'"
-        [title]="collectionOpen() ? 'Close' : 'Open'"
-        (click)="toggleWithKeys($event)"
-      ></button>
+      @if (!compact()) {
+        <button
+          type="button"
+          class="gd-page__toggle"
+          gdNoPressFocus
+          [attr.aria-expanded]="collectionOpen()"
+          [attr.aria-label]="collectionOpen() ? 'Close the collection' : 'Open the collection'"
+          [title]="collectionOpen() ? 'Close' : 'Open'"
+          (click)="toggleWithKeys($event)"
+        ></button>
+      }
     </div>
     @if (dragWidth() !== null) {
       <div #dragPreview class="gd-page__drag-preview" aria-hidden="true" title="Resize"></div>
     }
-    <section class="gd-page__collection" aria-label="Collection" [hidden]="!collectionOpen()">
+    <section class="gd-page__collection" aria-label="Collection" [hidden]="!collectionOpen() && !compact()">
+      @if (compact()) {
+        <gd-collection-menu />
+      }
       <gd-collection-filter />
       <gd-collection-grid />
     </section>
@@ -104,6 +144,12 @@ export class DeckbuilderPageComponent {
   private readonly dragPreview = viewChild<ElementRef<HTMLElement>>('dragPreview');
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly app = inject(ApplicationRef);
+  private readonly document = inject(DOCUMENT);
+  protected readonly compact = inject(CompactLayout).active;
+  /** The compact layout's split: the deck's share of the page's height, in %. */
+  protected readonly split = signal(readSplit(this.document.cookie));
+  protected readonly splitMin = SPLIT_MIN;
+  protected readonly splitMax = SPLIT_MAX;
   private lastPointerToggle = -Infinity;
 
   constructor() {
@@ -135,6 +181,9 @@ export class DeckbuilderPageComponent {
    * page). It can also be dragged by its toggle, which is pressed like a button if the pointer doesn't move.
    */
   protected readonly resizeDrag = (event: PointerEvent): DragHandlers | null => {
+    if (this.compact()) {
+      return this.splitDrag(event);
+    }
     const onToggle = (event.target as Element).closest('.gd-page__toggle') !== null;
     const open = this.collectionOpen();
     if (!open && !onToggle) {
@@ -185,9 +234,52 @@ export class DeckbuilderPageComponent {
     };
   };
 
-  /** Left makes the collection wider, Right narrower; Enter opens or closes it. */
+  /** The compact layout's separator follows the pointer, and the split is remembered when it is let go. */
+  private splitDrag(event: PointerEvent): DragHandlers {
+    const separator = event.currentTarget as HTMLElement;
+    // Where on the separator it was grabbed stays under the pointer
+    const grabbedAt = event.clientY - separator.getBoundingClientRect().top;
+    this.dragging.set(true);
+    const follow = (e: PointerEvent) => {
+      const page = this.host.getBoundingClientRect();
+      const room = page.height - separator.offsetHeight;
+      if (room > 0) {
+        this.split.set(clampSplit(((e.clientY - grabbedAt - page.top) / room) * 100));
+      }
+    };
+    const finish = () => {
+      this.dragging.set(false);
+      this.rememberSplit();
+    };
+    return {
+      move: follow,
+      end: (e) => {
+        follow(e);
+        finish();
+      },
+      cancel: finish,
+    };
+  }
+
+  private rememberSplit(): void {
+    writeCookie(this.document, SPLIT_COOKIE, String(this.split()));
+  }
+
+  /**
+   * Left makes the collection wider, Right narrower; Enter opens or closes it. In the compact layout Up makes the deck
+   * smaller, Down larger.
+   */
   protected resizeWithKeys(event: KeyboardEvent): void {
     if (event.target !== event.currentTarget) {
+      return;
+    }
+    if (this.compact()) {
+      const step = event.key === 'ArrowUp' ? -SPLIT_STEP : event.key === 'ArrowDown' ? SPLIT_STEP : 0;
+      if (step) {
+        event.preventDefault();
+        this.split.update((share) => clampSplit(share + step));
+        this.rememberSplit();
+      }
       return;
     }
     if (event.key === 'Enter') {

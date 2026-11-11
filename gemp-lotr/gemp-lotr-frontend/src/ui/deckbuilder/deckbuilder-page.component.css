@@ -83,3 +83,49 @@
   container-type: size;
   overflow: hidden;
 }
+
+/*
+ * The compact layout (the modern theme on a portrait or narrow screen): the deck above, the collection below, each
+ * scrolling on its own, and the separator between them moving the split (--gd-split, the deck's share)
+ */
+:host([data-layout='compact']) {
+  grid-template-columns: 100%;
+  grid-template-rows: minmax(0, calc((100% - 16px) * var(--gd-split, 0.5))) 16px minmax(0, 1fr);
+}
+
+:host([data-layout='compact']) .gd-page__deck {
+  container-type: normal;
+  padding: 0 8px 8px;
+  border: 0;
+  overflow: hidden auto;
+}
+
+:host([data-layout='compact']) .gd-page__collection {
+  display: flex;
+  padding: 6px 8px 8px;
+  border: 0;
+  overflow: hidden auto;
+}
+
+/* Dragged with a finger too: the page doesn't scroll instead */
+:host([data-layout='compact']) .gd-page__separator {
+  display: grid;
+  place-items: center;
+  border-block: 1px solid var(--theme-pane-border);
+  background: var(--theme-default-bg);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+/* The grip */
+:host([data-layout='compact']) .gd-page__separator::after {
+  content: '';
+  width: 48px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--theme-separator-toggle);
+}
+
+:host([data-layout='compact']) .gd-page__separator:is(:focus-visible, [data-dragging]) {
+  background: var(--theme-hover-bg);
+}

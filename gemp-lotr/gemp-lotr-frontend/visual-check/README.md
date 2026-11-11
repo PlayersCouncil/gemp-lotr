@@ -105,8 +105,10 @@ the frontend README.
 `npm run inspect -- summary <report>` groups a report's differences by cause, `where <report> <name>` says where on the
 screen one is, and `crop <report> <name> x y w h [zoom]` makes one picture of the same area of both pages. `npm run measure -- [--browser firefox] [--build .local-server/ng/browser] <selector>...` loads
 both pages against the stub server and prints where the matching elements are, with their font, padding, border and colours,
-after the steps of `--click` (a control clicked, `key:<key>`, `select:<control>:<value>` or `drag:<control>:<dx>`):
-for finding why the pages differ, e.g. in another browser.
+after the steps of `--click` (a control clicked, `key:<key>`, `select:<control>:<value>`, `drag:<control>:<dx>` or
+`css:<selector>`, clicked on a page that has it): for finding why the pages differ, e.g. in another browser.
+`--theme modern` loads the Angular page in that theme, and `--screenshot <dir>` saves both pages (e.g. `--size 390x844`
+for a phone, where the modern theme has its compact layout).
 
 ## On a throwaway server, without a login
 

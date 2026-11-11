@@ -7,7 +7,9 @@ import { DeckLibraryService } from '../../../core/deck/deck-library.service';
 import { DeckChanges } from '../../../core/deck/deck-changes.service';
 import { DeckDraft } from '../../../core/deck/deck-draft.service';
 import { DeckSaver } from '../../../core/deck/deck-saver.service';
+import { signal } from '@angular/core';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
+import { CompactLayout } from '../../../core/platform/compact-layout.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { THEME_ATTRIBUTE, THEME_PICKER, ThemeService } from '../../../core/platform/theme.service';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
@@ -184,5 +186,56 @@ describe('DeckToolbarComponent', () => {
     collection.value = collection.options[1].value;
     collection.dispatchEvent(new Event('change'));
     expect(selectCollection).toHaveBeenCalledWith(collection.options[1].value);
+  });
+
+  describe('in the compact layout', () => {
+    // The modern theme on a portrait or narrow screen
+    beforeEach(() => Object.defineProperty(TestBed.inject(CompactLayout), 'active', { value: signal(true) }));
+
+    it('has only the deck menu and the name; the menu has every control, named, the theme first', async () => {
+      draft.deckName.set('My deck');
+      draft.markModified(true);
+      const { el } = await render();
+      expect(Array.from(el.children).map((child) => child.localName + '.' + child.className)).toEqual([
+        'gd-drawer.',
+        'span.gd-toolbar__deck-name',
+      ]);
+      expect(el.querySelector('.gd-toolbar__deck-name')!.textContent).toBe('*My deck - modified');
+      const burger = el.querySelector<HTMLButtonElement>('button.gd-burger')!;
+      expect(burger.getAttribute('aria-label')).toBe('Deck menu');
+      const menu = el.querySelector<HTMLElement>('dialog.gd-drawer[data-drawer="deck"]')!;
+      const items = Array.from(menu.querySelectorAll<HTMLButtonElement>('button.gd-button.gd-menu__item'));
+      expect(items.map((b) => [b.dataset['action'], b.textContent!.trim()])).toEqual([
+        ['theme', 'Switch to the Classic theme'],
+        ['new', 'New deck'],
+        ['save', 'Save deck'],
+        ['rename', 'Rename deck'],
+        ['copy', 'Copy deck to new'],
+        ['import', 'Import Deck'],
+        ['library', 'Open Library'],
+        ['deck-list', 'Deck list'],
+        ['convert-errata', 'Convert to PC Errata'],
+        ['notes', 'Add/Edit Notes'],
+        ['auto-zoom', 'Auto-zoom cards on hover'],
+      ]);
+      expect(items[0].classList).toContain('gd-toolbar__theme');
+      expect(menu.querySelector('label.gd-menu__field select.gd-toolbar__format')).not.toBeNull();
+      expect(el.querySelector('select.gd-toolbar__collection')).toBeNull();
+    });
+
+    it('runs a menu item and closes the menu', async () => {
+      const newDeck = vi.spyOn(saver, 'newDeck').mockResolvedValue(undefined);
+      const { fixture, el } = await render();
+      el.querySelector<HTMLButtonElement>('button.gd-burger')!.click();
+      await fixture.whenStable();
+      const menu = el.querySelector<HTMLDialogElement>('dialog.gd-drawer')!;
+      expect(menu.open).toBe(true);
+      expect(el.querySelector('button.gd-burger')!.getAttribute('aria-expanded')).toBe('true');
+      menu.querySelector<HTMLButtonElement>('[data-action="new"]')!.click();
+      await fixture.whenStable();
+      expect(newDeck).toHaveBeenCalledOnce();
+      expect(menu.open).toBe(false);
+      expect(el.querySelector('button.gd-burger')!.getAttribute('aria-expanded')).toBe('false');
+    });
   });
 });

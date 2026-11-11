@@ -165,6 +165,11 @@ describe('DeckAreaComponent', () => {
     collection.setField('cardType', '');
     slot('sites').querySelector<HTMLButtonElement>('.gd-slot__label')!.click();
     expect(collection.fields().cardType).toBe('SITE');
+    // The compact layout's strip takes the pointer: a press on it beside the sites selects them too
+    collection.setField('cardType', '');
+    slot('sites').querySelector<HTMLElement>('.gd-slot__cards')!.click();
+    expect(collection.fields().cardType).toBe('SITE');
+    expect(draft.deck().sites.length).toBe(1);
   });
 
   it('renders the stats from data, toned', async () => {

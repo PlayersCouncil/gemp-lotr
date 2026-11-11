@@ -1,0 +1,56 @@
+/* The burger button: three bars in the text colour */
+.gd-burger {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+  color: var(--theme-text);
+  cursor: pointer;
+}
+
+.gd-burger::before {
+  content: '';
+  width: 18px;
+  height: 14px;
+  background:
+    linear-gradient(currentColor 0 0) top / 100% 2px no-repeat,
+    linear-gradient(currentColor 0 0) center / 100% 2px no-repeat,
+    linear-gradient(currentColor 0 0) bottom / 100% 2px no-repeat;
+}
+
+.gd-burger:hover,
+.gd-burger:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
+/* The panel: the window's full height at its left edge */
+.gd-drawer {
+  box-sizing: border-box;
+  width: min(85vw, 320px);
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 12px;
+  border: 0;
+  border-right: 1px solid var(--theme-widget-border);
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+  overflow-y: auto;
+}
+
+.gd-drawer[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gd-drawer::backdrop {
+  background: var(--theme-backdrop);
+}

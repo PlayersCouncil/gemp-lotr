@@ -234,3 +234,111 @@ button.gd-slot__label:focus-visible {
 .gd-stack {
   top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
 }
+
+/*
+ * The compact layout (the modern theme on a portrait or narrow screen): in the flow, one under the other, and the deck
+ * pane scrolls. The toolbar, then the one-card slots side by side (Ring-bearer, Ring, and the Map or Race when the
+ * format has them), the sites in a strip that scrolls sideways, the Free Peoples and the Shadow piles (their cards at
+ * one size, wrapping), and the stats.
+ */
+:host-context([data-layout='compact']) {
+  --slot-h: clamp(110px, 32vw, 210px);
+  --site-w: 130px;
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+}
+
+:host-context([data-layout='compact']) gd-deck-toolbar,
+:host-context([data-layout='compact']) gd-deck-stats {
+  flex: 0 0 100%;
+}
+
+:host-context([data-layout='compact']) .gd-slot {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  height: var(--slot-h);
+}
+
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] {
+  flex-basis: 100%;
+  height: calc(round(down, calc(var(--site-w) * 350 / 490), 1px) + 44px);
+}
+
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] .gd-slot__hint {
+  top: 20%;
+}
+
+/* The strip: it scrolls, so it takes the pointer; a press beside the sites still selects them (siteClicked) */
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] .gd-slot__cards {
+  --gd-card-height: var(--site-w);
+  container-type: normal;
+  inset: 22px 4px 4px 4px;
+  flex-direction: row;
+  gap: 5px;
+  padding: 0 0 6px;
+  overflow: auto hidden;
+  pointer-events: auto;
+}
+
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] .gd-card {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: none;
+}
+
+/* Each pile is named, with its number of cards, and grows with them */
+:host-context([data-layout='compact']) .gd-pile {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: 0 0 100%;
+  width: auto;
+  height: auto;
+  min-height: 70px;
+  padding-top: 22px;
+}
+
+:host-context([data-layout='compact']) .gd-pile::before {
+  content: attr(aria-label) ' (' attr(data-count) ')';
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 13px;
+}
+
+/* At one size (fitCards' none: the largest), wrapping */
+:host-context([data-layout='compact']) .gd-pile__cards {
+  --gd-card-fit: none;
+  --gd-card-max-height: 110px;
+  position: relative;
+  inset: auto;
+  padding: 2px 4px 4px 4px;
+}
+
+@media (min-width: 600px) {
+  :host-context([data-layout='compact']) .gd-pile__cards {
+    --gd-card-max-height: 150px;
+  }
+}
+
+/* The one-card slots' cards under the slot's title */
+:host-context([data-layout='compact']) .gd-slot:not([data-slot='sites']) .gd-slot__cards {
+  inset: 20px 4px 4px 4px;
+}
+
+/* A slot with cards: its hint (and the Map's link) would show beside them, the slots being wider than the cards */
+:host-context([data-layout='compact']) .gd-slot:not([data-count='0']) :is(.gd-slot__hint, .gd-slot__more) {
+  visibility: hidden;
+}
+
+:host-context([data-layout='compact']) .gd-slot:not([data-count='0']) .gd-slot__link {
+  visibility: hidden;
+}

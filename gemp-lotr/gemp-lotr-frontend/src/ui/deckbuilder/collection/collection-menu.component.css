@@ -1,0 +1,27 @@
+/* The collection's bar in the compact layout */
+:host {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+}
+
+.gd-menu__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.gd-menu__field select {
+  box-sizing: border-box;
+  width: 100%;
+  height: 36px;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+  background-color: var(--theme-field-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-control);
+  font-size: 15px;
+}

@@ -5,9 +5,11 @@ import { DeckDraft } from '../../core/deck/deck-draft.service';
 import { DeckOpener } from '../../core/deck/deck-opener.service';
 import { DeckSaver } from '../../core/deck/deck-saver.service';
 import { PacksService } from '../../core/packs/packs.service';
+import { signal } from '@angular/core';
+import { CompactLayout } from '../../core/platform/compact-layout.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
-import { DeckbuilderPageComponent, RESIZE_STEP } from './deckbuilder-page.component';
+import { DeckbuilderPageComponent, readSplit, RESIZE_STEP, SPLIT_COOKIE } from './deckbuilder-page.component';
 
 const COLLECTIONS = '<collections><collection format="fotr_block" name="Sealed" type="s1"/></collections>';
 
@@ -311,5 +313,104 @@ describe('DeckbuilderPageComponent', () => {
     await fixture.whenStable();
     expect(el.querySelector('.gd-page__drag-preview')).toBeNull();
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe('');
+  });
+
+  describe('the compact layout (the modern theme on a portrait or narrow screen)', () => {
+    let written: string[];
+
+    beforeEach(() => {
+      TestBed.overrideProvider(CompactLayout, { useValue: { active: signal(true) } });
+      written = [];
+      vi.spyOn(document, 'cookie', 'set').mockImplementation((cookie: string) => void written.push(cookie));
+    });
+
+    afterEach(() => vi.restoreAllMocks());
+
+    /** The page 816px high from the top of the window, its separator 16px high and at 400px. */
+    function placed(el: HTMLElement, separator: HTMLElement) {
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ top: 0, height: 816 } as DOMRect);
+      vi.spyOn(separator, 'getBoundingClientRect').mockReturnValue({ top: 400 } as DOMRect);
+      Object.defineProperty(separator, 'offsetHeight', { value: 16 });
+      return (type: string, y: number) => {
+        const event = new MouseEvent(type, { clientY: y, button: 0, bubbles: true, cancelable: true });
+        Object.assign(event, { pointerId: 1 });
+        separator.dispatchEvent(event);
+      };
+    }
+
+    it('stacks the deck above the collection, half and half, with the collection always shown and its bar', async () => {
+      const { el, separator } = await render();
+      expect(el.dataset['layout']).toBe('compact');
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.5');
+      expect(separator.getAttribute('aria-orientation')).toBe('horizontal');
+      expect(separator.getAttribute('aria-valuenow')).toBe('50');
+      expect(el.querySelector('.gd-page__toggle')).toBeNull();
+      const collection = el.querySelector<HTMLElement>('.gd-page__collection')!;
+      expect(collection.hidden).toBe(false);
+      expect(collection.firstElementChild!.matches('gd-collection-menu.gd-collection-bar')).toBe(true);
+    });
+
+    it('moves the split with the dragged separator, within its limits, and remembers it when let go', async () => {
+      const { fixture, el, separator } = await render();
+      const pointer = placed(el, separator);
+      pointer('pointerdown', 400);
+      pointer('pointermove', 200);
+      await fixture.whenStable();
+      expect(separator.hasAttribute('data-dragging')).toBe(true);
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.25');
+      expect(written).toEqual([]);
+      pointer('pointermove', 0);
+      await fixture.whenStable();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.15');
+      pointer('pointerup', 600);
+      await fixture.whenStable();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.75');
+      expect(separator.hasAttribute('data-dragging')).toBe(false);
+      expect(written).toHaveLength(1);
+      expect(written[0]).toMatch(new RegExp(`^${SPLIT_COOKIE}=75; expires=.*; path=/gemp-lotr; SameSite=Lax$`));
+    });
+
+    it('moves the split with Up and Down, and remembers it', async () => {
+      const { fixture, el, separator } = await render();
+      const key = (k: string) => separator.dispatchEvent(new KeyboardEvent('keydown', { key: k, cancelable: true }));
+      key('ArrowDown');
+      await fixture.whenStable();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.55');
+      key('ArrowUp');
+      key('ArrowUp');
+      await fixture.whenStable();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.45');
+      expect(written.at(-1)).toMatch(new RegExp(`^${SPLIT_COOKIE}=45;`));
+      // Enter doesn't close the collection, Left and Right do nothing
+      key('Enter');
+      key('ArrowLeft');
+      await fixture.whenStable();
+      expect(el.dataset['collection']).toBe('open');
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.45');
+    });
+
+    it('starts from the remembered split', async () => {
+      vi.spyOn(document, 'cookie', 'get').mockReturnValue(`other=1; ${SPLIT_COOKIE}=30`);
+      const { el } = await render();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.3');
+    });
+
+    it('reads a remembered split within its limits, and ignores one that is not a number', () => {
+      expect(readSplit(`${SPLIT_COOKIE}=30`)).toBe(30);
+      expect(readSplit(`${SPLIT_COOKIE}=99`)).toBe(85);
+      expect(readSplit(`${SPLIT_COOKIE}=5`)).toBe(15);
+      expect(readSplit(`${SPLIT_COOKIE}=half`)).toBe(50);
+      expect(readSplit('')).toBe(50);
+    });
+  });
+
+  it('is not compact in the classic layout: no data-layout, the toggle and a vertical separator', async () => {
+    const { el, separator } = await render();
+    expect(el.hasAttribute('data-layout')).toBe(false);
+    expect(el.style.getPropertyValue('--gd-split')).toBe('');
+    expect(separator.getAttribute('aria-orientation')).toBe('vertical');
+    expect(separator.hasAttribute('aria-valuenow')).toBe(false);
+    expect(el.querySelector('.gd-page__toggle')).not.toBeNull();
+    expect(el.querySelector('gd-collection-menu')).toBeNull();
   });
 });
