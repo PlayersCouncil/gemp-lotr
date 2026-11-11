@@ -57,6 +57,20 @@
   --theme-field-disabled-bg: #888;
   --theme-field-radius: 8px;
 
+  /*
+   * Font metrics: the sizes the legacy page's fonts gave some boxes. Classic leaves them to its fonts (auto, normal),
+   * as the legacy page did; a theme with other fonts pins them, so its font moves nothing on a computer
+   */
+  --theme-metrics-filter-label-1: auto;
+  --theme-metrics-filter-label-2: auto;
+  --theme-metrics-filter-label-size: 80%;
+  --theme-metrics-filter-label-gap: 6px;
+  --theme-metrics-filter-label-line: normal;
+  --theme-metrics-filter-title-line: normal;
+  --theme-metrics-stats-line: normal;
+  --theme-metrics-widget-line: normal;
+  --theme-metrics-hint-line: normal;
+
   /* The theme button: bright red in every theme, so players notice it (owner, 2026-11-11) */
   --theme-attention-bg: #e0161e;
   --theme-attention-hover-bg: #b80f16;
@@ -91,6 +105,17 @@
   --theme-font-page: var(--theme-font-text);
   --theme-font-widget: var(--theme-font-text);
   --theme-font-control: var(--theme-font-text);
+
+  /* The legacy page's sizes in Chromium (its filter's label columns, its lines), which this font would change */
+  --theme-metrics-filter-label-1: 91.39px;
+  --theme-metrics-filter-label-2: 62.16px;
+  --theme-metrics-filter-label-size: 74%;
+  --theme-metrics-filter-label-gap: 1px;
+  --theme-metrics-filter-label-line: 11px;
+  --theme-metrics-filter-title-line: 12px;
+  --theme-metrics-stats-line: 15px;
+  --theme-metrics-widget-line: 15px;
+  --theme-metrics-hint-line: 1.15;
 
   --theme-page-bg: #202124;
   --theme-text: #e7e9ee;

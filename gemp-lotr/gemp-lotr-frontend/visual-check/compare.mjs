@@ -2,7 +2,7 @@
 // dialogs and the state of the page that a screenshot doesn't show.
 import { PNG } from 'pngjs';
 import { withAcceptedLink } from './accepted.mjs';
-import { CONTROLS } from './controls.mjs';
+import { CONTROLS, GEOMETRY } from './controls.mjs';
 
 /** The controls with one selector each, for the page's state (the ones that take arguments are compared by scenarios). */
 export function fixedControls(which) {
@@ -206,4 +206,66 @@ export function compareScreens(bufferA, bufferB, areas, withImage) {
     }
   }
   return { outside, areas: counts, image: image && PNG.sync.write(image) };
+}
+
+/**
+ * Where each control is (run.mjs --geometry): the box of every visible match of its selector, top to bottom and left
+ * to right, at most 40. Runs in the page; the same on both, so its results can be compared.
+ */
+export function readBoxes(controls) {
+  const boxes = {};
+  for (const [name, selector] of Object.entries(controls)) {
+    const found = [];
+    for (const el of document.querySelectorAll(selector.replace(/:visible/g, ''))) {
+      const box = el.getBoundingClientRect();
+      if (box.width > 0 && box.height > 0 && getComputedStyle(el).visibility !== 'hidden') {
+        found.push([box.x, box.y, box.width, box.height].map((n) => Math.round(n * 10) / 10));
+      }
+    }
+    if (found.length) {
+      // In reading order: the pages may hold the same boxes in another order in their markup
+      boxes[name] = found.sort((a, b) => a[1] - b[1] || a[0] - b[0]).slice(0, 40);
+    }
+  }
+  return boxes;
+}
+
+/**
+ * What differs in where the controls are: a control on one page only, a different number of matches, or a match whose
+ * position or size differs by more than `margin` px (the room the themes' fonts need), one line per control.
+ */
+export function compareBoxes(legacy, angular, margin, skip = () => false) {
+  const differences = [];
+  const show = (box) => (box ? `${box[0]},${box[1]} ${box[2]}x${box[3]}` : 'none');
+  // What GEOMETRY compares of a box
+  const part = {
+    centre: ([x, y, w, h]) => [x + w / 2, y + h / 2],
+    start: ([x, y, , h]) => [x, y, h],
+    last: (box) => box,
+  };
+  for (const name of new Set([...Object.keys(legacy), ...Object.keys(angular)])) {
+    if (skip(name)) continue;
+    const by = GEOMETRY[name]?.by;
+    let a = legacy[name] ?? [];
+    let b = angular[name] ?? [];
+    if (by === 'last') {
+      a = a.slice(-1);
+      b = b.slice(-1);
+    }
+    const parts = (box) => (by ? part[by](box) : box);
+    if (a.length !== b.length) {
+      differences.push(`geometry ${name}: ${a.length} shown on the legacy page, ${b.length} on the Angular page`);
+      continue;
+    }
+    const off = a.findIndex((box, i) => {
+      const other = parts(b[i]);
+      return parts(box).some((n, k) => Math.abs(n - other[k]) > margin);
+    });
+    if (off >= 0) {
+      differences.push(
+        `geometry ${name}${a.length > 1 ? ` #${off + 1}` : ''}: legacy ${show(a[off])}, Angular ${show(b[off])}`,
+      );
+    }
+  }
+  return differences;
 }

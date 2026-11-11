@@ -5,6 +5,7 @@
  * its long side, rounded by 5%.
  */
 .gd-card-info {
+  line-height: var(--theme-metrics-widget-line);
   --long-exact: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100vh - 75px), calc(100vw - 425px));
   --long: round(down, var(--long-exact), 1px);
   --short: round(down, calc(var(--long-exact) * 745 / 1039), 1px);

@@ -98,16 +98,17 @@ export const SCENARIOS = [
   },
   {
     name: 'theme-switch-back',
-    note: 'Angular only: the theme picker pressed twice (to Modern, back to Classic) leaves the page exactly as it was',
+    note: 'Angular only: the theme picker pressed twice (to the other theme and back) leaves the page exactly as it was',
     run: async (page, $, which) => {
       if (which === 'angular') {
         // With the keyboard, so the mouse stays where it is on both pages
         const picker = page.locator(ANGULAR_ONLY.themePicker);
+        const start = await page.evaluate(() => document.documentElement.dataset.theme);
         await picker.press('Enter');
-        await page.waitForFunction(() => document.documentElement.dataset.theme === 'modern');
+        await page.waitForFunction((theme) => document.documentElement.dataset.theme !== theme, start);
         await page.waitForTimeout(500);
         await picker.press('Enter');
-        await page.waitForFunction(() => document.documentElement.dataset.theme === 'classic');
+        await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme, start);
         // The legacy page has no picker to keep the focus
         await picker.blur();
       }

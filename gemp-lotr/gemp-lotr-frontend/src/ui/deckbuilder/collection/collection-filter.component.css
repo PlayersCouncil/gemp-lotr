@@ -130,7 +130,8 @@
    * Each column as wide as its widest content, as the legacy table sized them; where the pane is too narrow for that,
    * the columns shrink and their labels wrap, as in the table
    */
-  grid-template-columns: repeat(4, auto);
+  /* The label columns as wide as their labels, unless the theme pins them (font metrics) */
+  grid-template-columns: var(--theme-metrics-filter-label-1) auto var(--theme-metrics-filter-label-2) auto;
   align-items: center;
   column-gap: 2px;
   row-gap: 2px;
@@ -146,10 +147,11 @@
 
 .gd-field__label {
   /* The cell's 1px padding on both sides, and .filterLabel's 5px on the right */
-  padding: 1px 6px 1px 1px;
+  padding: 1px var(--theme-metrics-filter-label-gap) 1px 1px;
   color: var(--theme-text);
   font-weight: bolder;
-  font-size: 80%;
+  font-size: var(--theme-metrics-filter-label-size);
+  line-height: var(--theme-metrics-filter-label-line);
 }
 
 .gd-field__control {
@@ -211,6 +213,7 @@
   color: var(--theme-text);
   text-align: center;
   font-size: 90%;
+  line-height: var(--theme-metrics-filter-title-line);
 }
 
 .gd-filter__resets {
@@ -349,6 +352,7 @@
 :host([data-part]) .gd-field__label {
   padding: 0;
   font-size: 13px;
+  line-height: normal;
 }
 
 :host([data-part]) .gd-field__control,
@@ -422,6 +426,7 @@
   padding: 8px 0 0;
   text-align: left;
   font-size: 13px;
+  line-height: normal;
 }
 
 :host([data-part='menu']) .gd-filter__resets {

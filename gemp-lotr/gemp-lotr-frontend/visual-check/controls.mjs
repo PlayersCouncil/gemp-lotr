@@ -160,3 +160,23 @@ export const ANGULAR_ONLY = {
   /** The toolbar's theme picker (THEME_PICKER): a button that switches to the next theme */
   themePicker: '.gd-toolbar__theme',
 };
+
+/**
+ * How run.mjs --geometry compares a control whose selectors pick different parts of it on the two pages (found by
+ * comparing the classic theme, which matches the legacy page pixel for pixel): `centre` (where its middle is), `start`
+ * (its left, top and height) or `last` (the last match only, in reading order). Every other control is compared box for box.
+ */
+export const GEOMETRY = {
+  pageSize: { by: 'centre', reason: 'The legacy selector is the bar, the Angular one the range input lying over it' },
+  cardInfoZoom: {
+    by: 'centre',
+    reason: 'The legacy selector is the bar, the Angular one the range input lying over it',
+  },
+  cardInfoCard: { by: 'centre', reason: 'The legacy selector is the clickable area inside the card frame' },
+  cardInfoWiki: { by: 'centre', reason: "The legacy selector is the link's text, the Angular one the link's box" },
+  filterWiki: { by: 'centre', reason: "A link in a line of text: as wide as its text, in each theme's font" },
+  mapLink: { by: 'centre', reason: "A link in a line of text: as wide as its text, in each theme's font" },
+  dialogTitles: { by: 'start', reason: "A title: as wide as its text, in each theme's font" },
+  deckName: { by: 'start', reason: 'The theme picker (Angular only) takes 30px of the space after the name' },
+  separator: { by: 'last', reason: "While dragged, the legacy selector also finds the bar's preview, left of the bar" },
+};

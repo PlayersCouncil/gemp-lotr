@@ -12,3 +12,5 @@
 /report-firefox-stubbed
 /report-chromium-stubbed
 /report-rerun-matrix
+/report-local-modern
+/report-geometry

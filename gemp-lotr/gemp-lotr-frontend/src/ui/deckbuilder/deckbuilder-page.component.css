@@ -129,3 +129,20 @@
 :host([data-layout='compact']) .gd-page__separator:is(:focus-visible, [data-dragging]) {
   background: var(--theme-hover-bg);
 }
+
+/* Side by side (a landscape screen): the deck left, the collection right, the separator between them dragged sideways */
+:host([data-split='columns']) {
+  grid-template-columns: minmax(0, calc((100% - 16px) * var(--gd-split, 0.5))) 16px minmax(0, 1fr);
+  grid-template-rows: 100%;
+}
+
+:host([data-split='columns']) .gd-page__separator {
+  border-block: 0;
+  border-inline: 1px solid var(--theme-pane-border);
+  cursor: ew-resize;
+}
+
+:host([data-split='columns']) .gd-page__separator::after {
+  width: 4px;
+  height: 48px;
+}

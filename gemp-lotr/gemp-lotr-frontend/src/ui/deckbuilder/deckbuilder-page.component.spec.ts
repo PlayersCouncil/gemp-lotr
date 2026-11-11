@@ -5,7 +5,7 @@ import { DeckDraft } from '../../core/deck/deck-draft.service';
 import { DeckOpener } from '../../core/deck/deck-opener.service';
 import { DeckSaver } from '../../core/deck/deck-saver.service';
 import { PacksService } from '../../core/packs/packs.service';
-import { signal } from '@angular/core';
+import { signal, WritableSignal } from '@angular/core';
 import { CompactLayout } from '../../core/platform/compact-layout.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
@@ -317,9 +317,11 @@ describe('DeckbuilderPageComponent', () => {
 
   describe('the compact layout (the modern theme on a portrait or narrow screen)', () => {
     let written: string[];
+    let sideBySide: WritableSignal<boolean>;
 
     beforeEach(() => {
-      TestBed.overrideProvider(CompactLayout, { useValue: { active: signal(true) } });
+      sideBySide = signal(false);
+      TestBed.overrideProvider(CompactLayout, { useValue: { active: signal(true), sideBySide } });
       written = [];
       vi.spyOn(document, 'cookie', 'set').mockImplementation((cookie: string) => void written.push(cookie));
     });
@@ -341,6 +343,7 @@ describe('DeckbuilderPageComponent', () => {
     it('stacks the deck above the collection, half and half, with the collection always shown and its bar', async () => {
       const { el, separator } = await render();
       expect(el.dataset['layout']).toBe('compact');
+      expect(el.dataset['split']).toBe('rows');
       expect(el.style.getPropertyValue('--gd-split')).toBe('0.5');
       expect(separator.getAttribute('aria-orientation')).toBe('horizontal');
       expect(separator.getAttribute('aria-valuenow')).toBe('50');
@@ -387,6 +390,29 @@ describe('DeckbuilderPageComponent', () => {
       await fixture.whenStable();
       expect(el.dataset['collection']).toBe('open');
       expect(el.style.getPropertyValue('--gd-split')).toBe('0.45');
+    });
+
+    it('on a landscape screen: the halves side by side, the separator dragged sideways and moved with Left and Right', async () => {
+      sideBySide.set(true);
+      const { fixture, el, separator } = await render();
+      expect(el.dataset['split']).toBe('columns');
+      expect(separator.getAttribute('aria-orientation')).toBe('vertical');
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ left: 0, width: 816 } as DOMRect);
+      vi.spyOn(separator, 'getBoundingClientRect').mockReturnValue({ left: 400 } as DOMRect);
+      Object.defineProperty(separator, 'offsetWidth', { value: 16 });
+      const pointer = (type: string, x: number) => {
+        const event = new MouseEvent(type, { clientX: x, button: 0, bubbles: true, cancelable: true });
+        Object.assign(event, { pointerId: 1 });
+        separator.dispatchEvent(event);
+      };
+      pointer('pointerdown', 400);
+      pointer('pointerup', 200);
+      await fixture.whenStable();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.25');
+      separator.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true }));
+      separator.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      await fixture.whenStable();
+      expect(el.style.getPropertyValue('--gd-split')).toBe('0.3');
     });
 
     it('starts from the remembered split', async () => {

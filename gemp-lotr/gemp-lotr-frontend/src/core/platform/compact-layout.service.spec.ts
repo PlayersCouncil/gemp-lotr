@@ -1,15 +1,31 @@
 import { TestBed } from '@angular/core/testing';
-import { COMPACT_QUERY, CompactLayout } from './compact-layout.service';
+import { COMPACT_QUERY, CompactLayout, SIDE_BY_SIDE_QUERY } from './compact-layout.service';
 import { PAGE_QUERY_STRING } from './page-location';
 import { ThemeService } from './theme.service';
 
+interface Query {
+  matches: boolean;
+  onchange: ((event: { matches: boolean }) => void) | null;
+}
+
 describe('CompactLayout', () => {
-  /** A screen that matches COMPACT_QUERY or not; `turn` changes it, as turning the device does. */
-  function screen(matches: boolean) {
-    const query = { matches, onchange: null as ((event: { matches: boolean }) => void) | null };
-    const matchMedia = vi.fn(() => query);
+  /**
+   * A screen that matches COMPACT_QUERY or not, and is landscape or not; `turn` changes them, as turning the device
+   * does.
+   */
+  function screen(matches: boolean, landscape = false) {
+    const queries = new Map<string, Query>([
+      [COMPACT_QUERY, { matches, onchange: null }],
+      [SIDE_BY_SIDE_QUERY, { matches: landscape, onchange: null }],
+    ]);
+    const matchMedia = vi.fn((media: string) => queries.get(media)!);
     Object.defineProperty(window, 'matchMedia', { value: matchMedia, configurable: true, writable: true });
-    return { matchMedia, turn: (now: boolean) => query.onchange?.({ matches: now }) };
+    const set = (media: string, now: boolean) => queries.get(media)!.onchange?.({ matches: now });
+    return {
+      matchMedia,
+      turn: (now: boolean) => set(COMPACT_QUERY, now),
+      rotate: (now: boolean) => set(SIDE_BY_SIDE_QUERY, now),
+    };
   }
 
   function layout(theme: 'classic' | 'modern') {
@@ -47,5 +63,16 @@ describe('CompactLayout', () => {
   it('is not compact on a wide screen, or without matchMedia', () => {
     screen(false);
     expect(layout('modern').active()).toBe(false);
+  });
+
+  it('puts the halves side by side on a landscape screen, only in the compact layout', () => {
+    const { rotate, turn } = screen(true, true);
+    const compact = layout('modern');
+    expect(compact.sideBySide()).toBe(true);
+    rotate(false);
+    expect(compact.sideBySide()).toBe(false);
+    rotate(true);
+    turn(false);
+    expect(compact.sideBySide()).toBe(false);
   });
 });

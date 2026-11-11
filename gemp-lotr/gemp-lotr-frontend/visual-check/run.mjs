@@ -9,12 +9,14 @@ import { CONTROLS } from './controls.mjs';
 import { acceptedBehaviour, acceptedFor, withoutLegacyBugs } from './accepted.mjs';
 import { MY_CARDS } from './local-server/seed.mjs';
 import {
+  compareBoxes,
   compareRequests,
   compareStats,
   compareScreens,
   compareStates,
   fixedControls,
   MOUSE_TRACKER,
+  readBoxes,
   readPageState,
 } from './compare.mjs';
 import { INJECTIONS } from './injections.mjs';
@@ -45,6 +47,10 @@ const { values: options } = parseArgs({
     matrix: { type: 'boolean', default: false },
     // With --matrix: only the scenarios whose name contains this
     filter: { type: 'string' },
+    // Compares where the controls are and how large (within --margin px) instead of the pixels: for a theme that
+    // looks different but should be laid out as the legacy page (the modern theme on a computer)
+    geometry: { type: 'boolean', default: false },
+    margin: { type: 'string', default: '8' },
   },
 });
 
@@ -75,6 +81,9 @@ const scenarios = allScenarios.filter((s) =>
   only ? only.has(s.name) : (!s.mutating || options.mutating) && (!options.filter || s.name.includes(options.filter)),
 );
 const tolerance = Number(options.tolerance);
+/** Controls --geometry leaves out (none yet: the theme picker isn't in CONTROLS, ANGULAR_ONLY). */
+const GEOMETRY_SKIPPED = new Set();
+const geometrySkipped = (name) => GEOMETRY_SKIPPED.has(name);
 const outDir = path.resolve(options.out);
 fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
@@ -358,9 +367,10 @@ async function captureOnce(which, scenario, size, file, answers) {
 
   const snapshot = async ({ screen }) => {
     const state = await page.evaluate(readPageState, controls);
+    const boxes = options.geometry ? await page.evaluate(readBoxes, controls) : null;
     const areas = which === 'angular' ? await page.evaluate(readAreas, [...accepted, STATS_AREA]) : [];
     const shot = screen ? await page.screenshot() : null;
-    steps.push({ state, areas, shot, requests, dialogs });
+    steps.push({ state, areas, shot, boxes, requests, dialogs });
     requests = [];
     dialogs = [];
   };
@@ -496,7 +506,10 @@ function compareStep(legacy, angular, areas, accepted, label, last) {
   const problems = [];
   const add = (text) => problems.push(`${label}: ${text}`);
   let pixels = null;
-  if (legacy.shot && angular.shot) {
+  if (options.geometry) {
+    // The excluded areas (what the legacy page has nothing like) are left out here too
+    for (const line of compareBoxes(legacy.boxes, angular.boxes, Number(options.margin), geometrySkipped)) add(line);
+  } else if (legacy.shot && angular.shot) {
     const screens = compareScreens(legacy.shot, angular.shot, areas, false);
     pixels = screens.outside + screens.areas.reduce((sum, count) => sum + count, 0);
     if (screens.outside > tolerance) add(`${screens.outside} pixels differ`);
@@ -512,6 +525,20 @@ function compareStep(legacy, angular, areas, accepted, label, last) {
   }
   for (const line of compareStates(legacy.state, angular.state, last)) add(line);
   return { problems, pixels };
+}
+
+/** The same difference in several steps, once: "on load, step 1, end: ..." (a layout difference lasts). */
+function mergeSteps(problems) {
+  const steps = new Map();
+  for (const problem of problems) {
+    const at = problem.indexOf(': ');
+    const [label, text] =
+      at > 0 && /^(on load|step \d+|end)$/.test(problem.slice(0, at))
+        ? [problem.slice(0, at), problem.slice(at + 2)]
+        : [null, problem];
+    steps.set(text, [...(steps.get(text) ?? []), ...(label ? [label] : [])]);
+  }
+  return [...steps].map(([text, labels]) => (labels.length ? `${labels.join(', ')}: ${text}` : text));
 }
 
 async function check(scenario, size) {
@@ -594,7 +621,9 @@ async function check(scenario, size) {
   for (const e of legacy.errors.filter((text) => /^(Scenario failed|Could not reach)/.test(text))) {
     problems.push(`Legacy page: ${e}`);
   }
-  const differences = problems.filter((problem) => !acceptedBehaviour(scenario.name, problem));
+  const differences = mergeSteps(
+    problems.filter((problem) => !acceptedBehaviour(scenario.name, problem, options.theme)),
+  );
   if (options.matrix && differences.length === 0) {
     // A long list of scenarios: only the ones that differ keep their pictures
     for (const file of Object.values(files)) fs.rmSync(path.join(outDir, file), { force: true });

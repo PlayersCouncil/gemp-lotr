@@ -55,9 +55,9 @@ const TOGGLE_SLIDE_MS = 400;
  * and the notifier's dialog.
  *
  * In the compact layout (CompactLayout: the modern theme on a portrait or narrow screen) the page has
- * `data-layout=compact` and `--gd-split` (the deck's share of its height, 0 to 1): the deck is above, the collection
- * below, and the separator (`aria-orientation=horizontal`, with `aria-valuenow` = the share in %, and no toggle) moves
- * the split by dragging or with the Up and Down keys. The split is remembered on the device (SPLIT_COOKIE). The
+ * `data-layout=compact`, `data-split` (rows, or columns on a landscape screen) and `--gd-split` (the deck's share,
+ * 0 to 1): the deck is above the collection (or left of it), and the separator (`aria-orientation` horizontal for rows,
+ * with `aria-valuenow` = the share in %, and no toggle) moves the split by dragging or with the arrow keys. The split is remembered on the device (SPLIT_COOKIE). The
  * collection is always shown, with its bar (`gd-collection-menu`: the menu and the filter's parts) instead of the filter.
  */
 @Component({
@@ -83,6 +83,7 @@ const TOGGLE_SLIDE_MS = 400;
     class: 'gd-page',
     '[attr.data-collection]': "collectionOpen() ? 'open' : 'closed'",
     '[attr.data-layout]': "compact() ? 'compact' : null",
+    '[attr.data-split]': "sideBySide() ? 'columns' : compact() ? 'rows' : null",
     '[style.--gd-split]': 'compact() ? split() / 100 : null',
     '[style.--gd-collection-width]': "collectionWidth() === null ? null : collectionWidth() + 'px'",
     '[style.--gd-drag-width]': "dragWidth() === null ? null : dragWidth() + 'px'",
@@ -92,7 +93,7 @@ const TOGGLE_SLIDE_MS = 400;
     <div
       class="gd-page__separator"
       role="separator"
-      [attr.aria-orientation]="compact() ? 'horizontal' : 'vertical'"
+      [attr.aria-orientation]="compact() && !sideBySide() ? 'horizontal' : 'vertical'"
       aria-label="Resize the collection"
       [attr.aria-valuenow]="compact() ? split() : null"
       [attr.aria-valuemin]="compact() ? splitMin : null"
@@ -147,6 +148,7 @@ export class DeckbuilderPageComponent {
   private readonly app = inject(ApplicationRef);
   private readonly document = inject(DOCUMENT);
   protected readonly compact = inject(CompactLayout).active;
+  protected readonly sideBySide = inject(CompactLayout).sideBySide;
   /** The compact layout's split: the deck's share of the page's height, in %. */
   protected readonly split = signal(readSplit(this.document.cookie));
   protected readonly splitMin = SPLIT_MIN;
@@ -235,17 +237,23 @@ export class DeckbuilderPageComponent {
     };
   };
 
-  /** The compact layout's separator follows the pointer, and the split is remembered when it is let go. */
+  /**
+   * The compact layout's separator follows the pointer (up and down, or sideways when the halves are side by side), and
+   * the split is remembered when it is let go.
+   */
   private splitDrag(event: PointerEvent): DragHandlers {
     const separator = event.currentTarget as HTMLElement;
+    const across = this.sideBySide();
+    const at = (e: PointerEvent) => (across ? e.clientX : e.clientY);
+    const start = (box: DOMRect) => (across ? box.left : box.top);
     // Where on the separator it was grabbed stays under the pointer
-    const grabbedAt = event.clientY - separator.getBoundingClientRect().top;
+    const grabbedAt = at(event) - start(separator.getBoundingClientRect());
     this.dragging.set(true);
     const follow = (e: PointerEvent) => {
       const page = this.host.getBoundingClientRect();
-      const room = page.height - separator.offsetHeight;
+      const room = across ? page.width - separator.offsetWidth : page.height - separator.offsetHeight;
       if (room > 0) {
-        this.split.set(clampSplit(((e.clientY - grabbedAt - page.top) / room) * 100));
+        this.split.set(clampSplit(((at(e) - grabbedAt - start(page)) / room) * 100));
       }
     };
     const finish = () => {
@@ -268,14 +276,15 @@ export class DeckbuilderPageComponent {
 
   /**
    * Left makes the collection wider, Right narrower; Enter opens or closes it. In the compact layout Up makes the deck
-   * smaller, Down larger.
+   * smaller, Down larger (Left and Right, when the halves are side by side).
    */
   protected resizeWithKeys(event: KeyboardEvent): void {
     if (event.target !== event.currentTarget) {
       return;
     }
     if (this.compact()) {
-      const step = event.key === 'ArrowUp' ? -SPLIT_STEP : event.key === 'ArrowDown' ? SPLIT_STEP : 0;
+      const [less, more] = this.sideBySide() ? ['ArrowLeft', 'ArrowRight'] : ['ArrowUp', 'ArrowDown'];
+      const step = event.key === less ? -SPLIT_STEP : event.key === more ? SPLIT_STEP : 0;
       if (step) {
         event.preventDefault();
         this.split.update((share) => clampSplit(share + step));

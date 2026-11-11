@@ -5,6 +5,7 @@
 //   scenarios  which scenarios it applies to: names, or patterns for the generated ones of matrix.mjs
 //   sizes      which window sizes (default: all)
 //   browsers   which browsers (CHECK_BROWSER; default: all)
+//   themes     which themes of the Angular page (run.mjs --theme; default: all; behaviours only)
 //   corner     only the bottom right corner of the area, this many px square (before `margin`)
 //   reason     what differs and why it is accepted
 
@@ -217,6 +218,21 @@ export const ACCEPTED = [
  */
 const ACCEPTED_BEHAVIOUR = [
   {
+    reason:
+      'Modern: closing a dialog gives the focus back to what opened it (THEME_BEHAVIOUR.dialogsReturnFocus); the legacy page left it nowhere (accepted 2026-11-11)',
+    themes: ['modern'],
+    scenarios: [/./],
+    problem: /focus: legacy null, Angular "/,
+  },
+  {
+    reason:
+      'Modern: Card Information is modal (THEME_BEHAVIOUR.cardInfoModal), so a press on the page behind it closes it; the legacy one stayed open (accepted 2026-11-11)',
+    themes: ['modern'],
+    scenarios: ['card-info-close-drag'],
+    problem:
+      /(cardInfo\w*|dialogTitles|dialogClose): (1 shown on the legacy page, 0 on the Angular page|legacy \{.*\}, Angular null)|focus: legacy "cardInfo\w*", Angular null/,
+  },
+  {
     reason: 'The Angular page can reach the slots and the toggle by keyboard, so its Tab order has more stops',
     scenarios: [
       /--keyboard--tabOrder$/,
@@ -272,10 +288,13 @@ const ACCEPTED_BEHAVIOUR = [
   },
 ];
 
-export function acceptedBehaviour(scenario, problem) {
+export function acceptedBehaviour(scenario, problem, theme = 'classic') {
   const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
   return ACCEPTED_BEHAVIOUR.some(
-    (entry) => entry.scenarios.some(applies) && (!entry.problem || entry.problem.test(problem)),
+    (entry) =>
+      (!entry.themes || entry.themes.includes(theme)) &&
+      entry.scenarios.some(applies) &&
+      (!entry.problem || entry.problem.test(problem)),
   );
 }
 

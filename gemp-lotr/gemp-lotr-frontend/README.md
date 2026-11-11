@@ -164,9 +164,18 @@ are on `:root` alone.
 
 A change of layout is a change to a component's stylesheet, for every theme.
 
+### Font metrics
+
+A theme with other fonts than the legacy page's would move things on a computer (wider filter labels, taller lines).
+So the few sizes that came from the legacy fonts are theme values, `--theme-metrics-*` in `themes.css`: classic leaves
+them to its fonts (`auto`, `normal`), as the legacy page did, and modern pins them to the legacy page's sizes in
+Chromium (the filter's label columns, the label, title, stats and dialog line heights). `npm run check:stubbed --
+--theme=modern --geometry` (visual-check) checks that modern is laid out as the legacy page on a computer.
+
 ### The compact layout (phones and tablets)
 
-The modern theme stacks the page on a portrait screen up to a tablet's width, or on any screen narrower than 826px
+The modern theme stacks the page on a portrait screen up to a tablet's width, on any screen narrower than 826px, or on
+one lower than 501px (a phone held sideways, where the halves are side by side: `data-split=columns`)
 (`COMPACT_QUERY` in `src/core/platform/compact-layout.service.ts`; `CompactLayout.active`). The classic theme never
 does: it stays the legacy page. The theme also sets the page's viewport (`THEME_VIEWPORT`): modern lays out at the
 device's width, classic has no viewport tag, as the legacy page (phones show it zoomed out). The page then has

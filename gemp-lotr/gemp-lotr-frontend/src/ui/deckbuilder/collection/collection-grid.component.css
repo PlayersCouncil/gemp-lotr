@@ -78,3 +78,10 @@
     --gd-card-max-height: 200px;
   }
 }
+
+/* A low screen (a phone held sideways): cards no higher than about a third of it */
+@media (max-height: 500px) {
+  :host-context([data-layout='compact']) .gd-collection__cards {
+    --gd-card-max-height: 130px;
+  }
+}

@@ -7,6 +7,7 @@
  * ("center", kept inside the window); moved by the title bar (data-placed) and resized from the corner.
  */
 .gd-dialog {
+  line-height: var(--theme-metrics-widget-line);
   --dialog-width: 300px;
   /* The height it is centred for; dialogs of the content's height are centred for their least height */
   --dialog-height: 150px;

@@ -83,7 +83,7 @@
   background: none;
   color: inherit;
   font: inherit;
-  line-height: normal;
+  line-height: var(--theme-metrics-hint-line);
   text-align: center;
   cursor: default;
 }
@@ -126,7 +126,7 @@ button.gd-slot__label:focus-visible {
   inset: 0;
   display: flex;
   flex-direction: column;
-  line-height: normal;
+  line-height: var(--theme-metrics-hint-line);
   text-align: center;
   visibility: hidden;
   pointer-events: none;
@@ -347,4 +347,16 @@ button.gd-slot__label:focus-visible {
 
 :host-context([data-layout='compact']) .gd-slot:not([data-count='0']) .gd-slot__link {
   visibility: hidden;
+}
+
+/* A low screen (a phone held sideways): the slots, the sites and the piles' cards no higher than about a third of it */
+@media (max-height: 500px) {
+  :host-context([data-layout='compact']) {
+    --slot-h: 150px;
+    --site-w: 140px;
+  }
+
+  :host-context([data-layout='compact']) .gd-pile__cards {
+    --gd-card-max-height: 120px;
+  }
 }

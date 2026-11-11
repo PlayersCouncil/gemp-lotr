@@ -36,6 +36,20 @@ const PARTS = [
   ['The check catches deliberate bugs', npm(VISUAL_CHECK, 'run', 'check:selftest')],
   ['Decks saved by the legacy page keep working', npm(VISUAL_CHECK, 'run', 'check:legacy-decks')],
   ['Comparison with the legacy page, every scenario', npm(VISUAL_CHECK, 'run', 'check:local', '--', '--mutating')],
+  [
+    'The modern theme laid out as the legacy page on a computer',
+    npm(
+      VISUAL_CHECK,
+      'run',
+      'check:local',
+      '--',
+      '--mutating',
+      '--theme=modern',
+      '--geometry',
+      '--out',
+      'report-local-modern',
+    ),
+  ],
   ...(quick ? [] : [['Every control against every gesture', npm(VISUAL_CHECK, 'run', 'check:matrix')]]),
   ['Deploying with git pull', npm(VISUAL_CHECK, 'run', 'check:deploy')],
 ];
