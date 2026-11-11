@@ -58,6 +58,7 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
  */
 @Component({
   selector: 'gd-deck',
+  styleUrl: './deck-area.component.css',
   imports: [CardComponent, FitCardsDirective, NoPressFocusDirective, DeckToolbarComponent, DeckStatsComponent],
   host: { class: 'gd-deck' },
   template: `

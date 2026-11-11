@@ -1,0 +1,47 @@
+/* The collection's cards (NormalCardGroup) */
+
+:host {
+  display: flex;
+  /* layoutUI: the group is the pane's height minus 400px, however tall the filter is (the pane then scrolls) */
+  flex: 0 0 auto;
+  height: max(0px, calc(100% - 398px));
+  /* layoutUI: the group is the pane's width minus 10px; the pane's padding doesn't add to how far it scrolls */
+  margin: 0 8px -10px 0;
+}
+
+.gd-collection__cards {
+  --gd-card-max-height: 200px;
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  box-sizing: border-box;
+  flex: 1 1 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  /*
+   * The cards start 3px in from the box's edge, as the legacy group did; its area was 472px high in a 480px box, and
+   * wider than the box (the cards wrap a little sooner here)
+   */
+  padding: 2px 4px 4px 2px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  background: var(--theme-content-bg);
+  overflow: hidden;
+}
+
+/*
+ * NormalCardGroup's rows: as high as the row height, which can have a fraction (a card is a whole number of px), and
+ * centred as the rows it sized them for (moved, not laid out, so the box's size doesn't change)
+ */
+.gd-collection__cards > .gd-card {
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
+}
+
+.gd-collection__cards > .gd-card {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
+}
+
+.gd-collection__cards > .gd-card[data-orientation='horizontal'] {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px));
+}

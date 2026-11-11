@@ -29,6 +29,7 @@ function group(cards: CardView[]): ShownGroup {
  */
 @Component({
   selector: 'gd-pack-dialogs',
+  styleUrl: './pack-dialogs.component.css',
   imports: [DialogComponent, CardComponent, FitCardsDirective],
   host: { style: 'display: contents' },
   template: `

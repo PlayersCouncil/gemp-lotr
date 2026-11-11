@@ -10,6 +10,7 @@ import { DeckStatsRefresher } from '../../../core/deck/deck-stats-refresher.serv
  */
 @Component({
   selector: 'gd-deck-stats',
+  styleUrl: './deck-stats.component.css',
   host: { class: 'gd-stats', 'aria-live': 'polite' },
   template: `
     @for (line of deckStats.stats().lines; track $index) {

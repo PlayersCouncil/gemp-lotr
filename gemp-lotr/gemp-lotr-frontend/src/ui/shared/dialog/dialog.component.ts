@@ -10,6 +10,7 @@ import {
   signal,
   untracked,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DragHandlers, PointerDragDirective } from '../pointer-drag/pointer-drag.directive';
 import { ThemeService } from '../../../core/platform/theme.service';
@@ -35,9 +36,9 @@ export class DialogLayers {
 /**
  * A dialog: a native `<dialog>` with a title bar (title and close button), the content, and optional actions below.
  * `open` shows it (modal by default, or not, with `[modal]="false"`) and hides it; it closes itself on the close
- * button and on Escape, and then emits `closed` (the owner sets `open` back). Dragging the title bar moves it; a theme
- * may let the player resize it (CSS `resize`), and pressing it anywhere first pins it where it is, so a resize grows it
- * right and down. Opening it again puts it back where the theme places it (centred, normally). It focuses an
+ * button and on Escape, and then emits `closed` (the owner sets `open` back). Dragging the title bar moves it; its styles
+ * let the player resize it (CSS `resize`), and pressing it anywhere first pins it where it is, so a resize grows it
+ * right and down. Opening it again puts it back where its styles place it (centred, normally). It focuses an
  * `autofocus` control when it opens, else its content's first control, else its actions' first.
  *
  * Projected content: the content (the owner renders it only while open, if it should start afresh each time), and an
@@ -51,6 +52,9 @@ export class DialogLayers {
  */
 @Component({
   selector: 'gd-dialog',
+  styleUrl: './dialog.component.css',
+  // Not scoped: it also styles what the page puts in the dialog (its rules all start at .gd-dialog)
+  encapsulation: ViewEncapsulation.None,
   imports: [PointerDragDirective],
   host: { style: 'display: contents' },
   template: `

@@ -115,7 +115,6 @@ describe('DeckbuilderPageComponent', () => {
       'gd-page__deck',
       'gd-page__separator',
       'gd-page__collection',
-      'gd-page__tabs',
       'gd-deck-list-dialog',
       'gd-import-dialog',
       'gd-notes-dialog',
@@ -131,34 +130,6 @@ describe('DeckbuilderPageComponent', () => {
     expect(el.querySelector('gd-card-info dialog.gd-card-info')).not.toBeNull();
     expect(el.querySelector('.gd-page__separator[role="separator"] > button.gd-page__toggle')).not.toBeNull();
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe('');
-  });
-
-  it('chooses the pane with the tab bar; the collection tab also opens the collection', async () => {
-    const { fixture, el } = await render();
-    expect(el.dataset['pane']).toBe('deck');
-    const tabs = Array.from(
-      el.querySelectorAll<HTMLButtonElement>('.gd-page__tabs[role="tablist"] > button.gd-page__tab'),
-    );
-    expect(tabs.map((tab) => [tab.dataset['pane'], tab.getAttribute('role'), tab.textContent!.trim()])).toEqual([
-      ['deck', 'tab', 'Deck'],
-      ['collection', 'tab', 'Collection'],
-    ]);
-    expect(tabs.map((tab) => tab.getAttribute('aria-selected'))).toEqual(['true', 'false']);
-    expect(el.querySelector(`#${tabs[1].getAttribute('aria-controls')}`)).toBe(
-      el.querySelector('.gd-page__collection'),
-    );
-    el.querySelector<HTMLButtonElement>('.gd-page__toggle')!.click();
-    await fixture.whenStable();
-    expect(el.dataset['collection']).toBe('closed');
-    tabs[1].click();
-    await fixture.whenStable();
-    expect(el.dataset['pane']).toBe('collection');
-    expect(el.dataset['collection']).toBe('open');
-    expect(tabs.map((tab) => tab.getAttribute('aria-selected'))).toEqual(['false', 'true']);
-    tabs[0].click();
-    await fixture.whenStable();
-    expect(el.dataset['pane']).toBe('deck');
-    expect(el.dataset['collection']).toBe('open');
   });
 
   it('starts the deck builder: formats, collection and deck list are asked for', async () => {

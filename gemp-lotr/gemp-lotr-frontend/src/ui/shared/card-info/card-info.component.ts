@@ -50,6 +50,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
  */
 @Component({
   selector: 'gd-card-info',
+  styleUrl: './card-info.component.css',
   imports: [DocumentPressDirective],
   host: { style: 'display: contents' },
   template: `
@@ -71,7 +72,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
           <button type="button" class="gd-card-info__close" aria-label="Close" (click)="info.close()"></button>
         </header>
         <input
-          class="gd-card-info__zoom"
+          class="gd-card-info__zoom gd-slider"
           type="range"
           autofocus
           aria-label="Card size"

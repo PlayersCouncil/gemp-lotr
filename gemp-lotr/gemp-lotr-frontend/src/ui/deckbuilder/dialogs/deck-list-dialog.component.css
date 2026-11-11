@@ -1,0 +1,41 @@
+/* The deck list and the library */
+
+.gd-deck-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* An icon in a text button: the icon is the button's text */
+.gd-button[data-action]:empty::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-image: var(--theme-icons);
+  background-repeat: no-repeat;
+}
+
+.gd-button[data-action]:empty:is(:hover, :focus)::before {
+  background-image: var(--theme-icons-hover);
+}
+
+.gd-button[data-action='open']::before {
+  background-position: -16px -96px;
+}
+
+.gd-button[data-action='rename']::before {
+  background-position: -64px -112px;
+}
+
+.gd-button[data-action='share']::before {
+  background-position: -32px -80px;
+}
+
+.gd-button[data-action='delete']::before {
+  background-position: -176px -96px;
+}
+
+.gd-button[data-action='deck-list']::before {
+  background-position: -160px -128px;
+}

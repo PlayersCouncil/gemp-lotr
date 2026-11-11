@@ -1,0 +1,153 @@
+/* The deck toolbar (#manageDecks) */
+
+:host {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  display: flex;
+  width: var(--pane-w);
+  height: 23px;
+  color: var(--theme-text);
+  font-size: 21.6px;
+}
+
+.gd-toolbar__deck-actions {
+  display: contents;
+}
+
+/* The toolbar's jQuery UI buttons also stayed highlighted after a click, until the focus moved on */
+.gd-button:focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+/* Pressed wins over focused, as for the other buttons */
+.gd-button:enabled:active {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-button {
+  flex: none;
+  width: 27.97px;
+  height: 23px;
+  /* jQuery UI's .1em between buttons */
+  margin-right: 2.376px;
+  padding: 0;
+}
+
+.gd-button::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  background: var(--theme-icons) no-repeat;
+  /* Moved in layout, not with a transform: a fractional transform would blur the icon */
+  position: relative;
+  top: 0.8px;
+}
+
+.gd-button:enabled:hover::before,
+.gd-button:focus::before {
+  background-image: var(--theme-icons-hover);
+}
+
+.gd-button:enabled:active::before {
+  background-image: var(--theme-icons-active);
+}
+
+.gd-button[data-action='new']::before {
+  background-position: -32px -96px;
+}
+.gd-button[data-action='save']::before {
+  background-position: -96px -112px;
+}
+.gd-button[data-action='rename']::before {
+  background-position: -64px -112px;
+}
+.gd-button[data-action='copy']::before {
+  background-position: -176px -128px;
+}
+.gd-button[data-action='import']::before {
+  background-position: -224px -48px;
+}
+.gd-button[data-action='library']::before {
+  background-position: -224px -96px;
+}
+.gd-button[data-action='deck-list']::before {
+  background-position: -112px -96px;
+}
+.gd-button[data-action='convert-errata']::before {
+  background-position: -112px -80px;
+}
+.gd-button[data-action='notes']::before {
+  background-position: -16px -128px;
+}
+.gd-button[data-action='auto-zoom']::before {
+  background-position: -32px -192px;
+}
+.gd-button[data-action='theme']::before {
+  background-position: -128px -128px;
+}
+.gd-button[data-action='auto-zoom'][aria-pressed='true']::before {
+  background-position: -160px -112px;
+}
+
+.gd-button[data-action='auto-zoom'] {
+  width: 27px;
+}
+
+.gd-button[data-action='auto-zoom']::before {
+  margin: 0 0 0 3.2px;
+  top: 2.25px;
+}
+
+select {
+  box-sizing: border-box;
+  height: 23px;
+  padding: 3px;
+  border: 1px solid var(--theme-field-border-light);
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+  background-color: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: 13.3333px var(--theme-font-control);
+}
+
+select:hover {
+  background-color: var(--theme-field-hover-bg);
+}
+
+.gd-toolbar__format {
+  width: 200px;
+}
+
+.gd-toolbar__collection {
+  width: 100px;
+}
+
+.gd-button[data-action='auto-zoom'] {
+  order: 2;
+}
+
+.gd-toolbar__collection {
+  order: 3;
+}
+
+/* Not on the legacy page: in the space after the deck's name, so nothing the legacy page had moves */
+.gd-toolbar__theme {
+  order: 1;
+}
+
+/* #editingDeck */
+.gd-toolbar__deck-name {
+  flex-grow: 1;
+  padding-left: 3px;
+}
+
+.gd-toolbar__deck-name[data-modified] {
+  color: var(--theme-modified);
+}

@@ -17,6 +17,7 @@ import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
  */
 @Component({
   selector: 'gd-collection-grid',
+  styleUrl: './collection-grid.component.css',
   imports: [CardComponent, FitCardsDirective],
   host: { class: 'gd-collection' },
   template: `

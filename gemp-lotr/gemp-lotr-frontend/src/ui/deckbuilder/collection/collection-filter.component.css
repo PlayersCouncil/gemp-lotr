@@ -1,0 +1,298 @@
+/* The collection filter (CardFilter.buildUi) */
+
+:host {
+  /* The fields and the reset buttons are as wide as the legacy filter table; the pager and cultures span the pane */
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+.gd-pager,
+.gd-cultures {
+  grid-column: 1 / -1;
+}
+
+.gd-pager {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/*
+ * The bar is drawn here, and the range input lies over it. The handle stays inside the bar, so that it never covers the
+ * arrow buttons (the legacy handle reached past both ends and did); the slider's starting value stays where it was.
+ */
+.gd-pager__track {
+  position: relative;
+  flex-grow: 1;
+  height: 10.56px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+}
+
+.gd-pager__track:has(.gd-pager__size:disabled) {
+  opacity: 0.35;
+}
+
+.gd-pager__size {
+  position: absolute;
+  left: -1px;
+  top: -3.95px;
+  width: 100%;
+  height: 17.84px;
+}
+
+.gd-pager__size::-webkit-slider-runnable-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-pager__size::-moz-range-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-pager__size::-webkit-slider-thumb {
+  width: 17.84px;
+  height: 17.84px;
+  margin-top: 0;
+}
+
+.gd-pager__size::-moz-range-thumb {
+  width: 17.84px;
+  height: 17.84px;
+}
+
+.gd-pager__size:enabled:hover::-webkit-slider-thumb {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
+.gd-pager__size:enabled:active::-webkit-slider-thumb {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-pager__size:focus::-webkit-slider-thumb {
+  border-color: var(--theme-focus-ring-inner);
+  background: var(--theme-hover-bg);
+  box-shadow:
+    0 0 0 1px var(--theme-focus-ring-inner),
+    0 0 0 2px var(--theme-focus-ring-outer);
+}
+
+.gd-pager__size:focus::-moz-range-thumb {
+  border-color: var(--theme-focus-ring-inner);
+  background: var(--theme-hover-bg);
+  box-shadow:
+    0 0 0 1px var(--theme-focus-ring-inner),
+    0 0 0 2px var(--theme-focus-ring-outer);
+}
+
+/* Pressing the handle didn't draw the ring yet */
+.gd-pager__size:active::-webkit-slider-thumb {
+  box-shadow: none;
+}
+
+.gd-pager__size:active::-moz-range-thumb {
+  box-shadow: none;
+}
+
+/* jQuery UI's button: a right margin of 0.1em at 13.2px */
+.gd-pager .gd-button {
+  width: 25px;
+  height: 31.19px;
+  margin-right: 1.32px;
+  padding: 0;
+}
+
+/* Where jQuery UI's padding left the icon */
+.gd-pager .gd-button::before {
+  margin-left: 2.59px;
+}
+
+/* The legacy filter table: label, control, label, control; 2px cell spacing and 1px cell padding */
+.gd-filter__fields {
+  display: grid;
+  /* The first column is set by its widest label, "Game Text contains:", as the table rounded it */
+  grid-template-columns: 91.4px repeat(3, max-content);
+  align-items: center;
+  column-gap: 2px;
+  row-gap: 2px;
+  padding: 2px;
+  justify-content: start;
+}
+
+.gd-filter__basic,
+.gd-filter__advanced,
+.gd-field {
+  display: contents;
+}
+
+.gd-field__label {
+  /* The cell's 1px padding on both sides, and .filterLabel's 5px on the right */
+  padding: 1px 6px 1px 1px;
+  color: var(--theme-text);
+  font-weight: bolder;
+  font-size: 80%;
+}
+
+.gd-field__control {
+  display: flex;
+  align-items: center;
+  padding: 1px;
+}
+
+.gd-field[data-wide] .gd-field__control {
+  grid-column: span 3;
+}
+
+.gd-field select,
+.gd-field input {
+  font-size: 80%;
+  padding-right: 5px;
+  color: var(--theme-text);
+  background-color: var(--theme-field-bg);
+}
+
+.gd-field select {
+  max-width: 100px;
+  padding: 3px 5px 3px 3px;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+}
+
+.gd-field select:hover {
+  background-color: var(--theme-field-hover-bg);
+}
+
+.gd-field input {
+  margin: 2px;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+}
+
+.gd-field input[type='text'] {
+  width: 250px;
+  max-width: 230px;
+}
+
+.gd-field input[type='number'] {
+  width: 35px;
+}
+
+.gd-field select:disabled,
+.gd-field input:disabled {
+  color: var(--theme-field-disabled-text);
+  background-color: var(--theme-field-disabled-bg);
+}
+
+.gd-filter__advanced-title {
+  grid-column: 1 / -1;
+  margin: 0;
+  /* .cardFilterText's 5px on top, and the table cell's 1px */
+  padding: 6px 0 1px;
+  color: var(--theme-text);
+  text-align: center;
+  font-size: 90%;
+}
+
+.gd-filter__resets {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: 175.77px 175.75px;
+  gap: 6.01px;
+  margin: 0 0 0 6px;
+  padding-top: 9px;
+}
+
+/* 95% of the page's 12px, then 90% for the table text and jQuery UI's 70% for button text */
+/* The legacy reset buttons looked the same under the mouse and with the focus, which only added the browser's ring */
+.gd-filter__resets .gd-button:is(:enabled:hover, :focus-visible) {
+  border-color: var(--theme-widget-border);
+  background: var(--theme-default-bg);
+  color: var(--theme-widget-text);
+}
+
+.gd-filter__resets .gd-button {
+  height: 19px;
+  padding: 0;
+  font-size: 7.182px;
+  line-height: 1.4;
+}
+
+/* The culture toggles: a jQuery UI buttonset */
+.gd-cultures {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  margin-right: 7px;
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+}
+
+.gd-cultures__group {
+  display: flex;
+}
+
+.gd-culture {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.2em;
+  margin-right: -0.2em;
+  /* .ui-button-text's padding, at its 70% font size */
+  padding: 1.85px 2.77px;
+  border: 1px solid var(--theme-widget-border);
+  background: var(--theme-default-bg);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.gd-cultures__group:first-child .gd-culture:first-child {
+  border-radius: var(--theme-radius) 0 0 var(--theme-radius);
+}
+
+.gd-cultures__group:last-child .gd-culture:last-child {
+  border-radius: 0 var(--theme-radius) var(--theme-radius) 0;
+}
+
+.gd-culture:hover,
+.gd-culture:has(.gd-culture__input:focus-visible) {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
+.gd-culture[data-active] {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+/* A selected culture keeps its look with the keyboard focus */
+.gd-culture[data-active]:has(.gd-culture__input:focus-visible) {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-culture__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.gd-culture__icon {
+  height: 20px;
+}
+
+.gd-culture[data-icon-kind='culture'] .gd-culture__icon {
+  filter: var(--theme-culture-icon-filter);
+}
+
+.gd-culture[data-icon-kind='other'] .gd-culture__icon {
+  filter: var(--theme-other-icon-filter);
+}

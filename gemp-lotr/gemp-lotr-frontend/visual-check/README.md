@@ -81,7 +81,7 @@ Every `pause` of a scenario is a step. After the page loads, after each step and
 
 Scenarios with `timing: true` depend on timers, so between steps they only compare what doesn't need waiting for.
 
-`accepted.mjs` lists the differences the owner has accepted, each limited to one area of the page and a number of pixels.
+`accepted.mjs` lists the differences the owner has accepted, each limited to one area of the page and a number of pixels, and the areas left out of every comparison (`EXCLUDED_AREAS`: what the legacy page had nothing like, such as the theme picker).
 Everything else fails, so a clean run means no difference nobody has decided on.
 
 `npm run check:selftest` proves the check itself works: `injections.mjs` puts deliberate bugs into the Angular page, one

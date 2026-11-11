@@ -9,7 +9,7 @@ import { DeckDraft } from '../../../core/deck/deck-draft.service';
 import { DeckSaver } from '../../../core/deck/deck-saver.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
-import { ThemeService } from '../../../core/platform/theme.service';
+import { THEME_ATTRIBUTE, THEME_PICKER, ThemeService } from '../../../core/platform/theme.service';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { DeckToolbarComponent } from './deck-toolbar.component';
 
@@ -17,8 +17,11 @@ describe('DeckToolbarComponent', () => {
   let draft: DeckDraft;
   let changes: DeckChanges;
   let saver: DeckSaver;
+  /** THEME_PICKER, read when the toolbar is created */
+  let themePicker: boolean;
 
   beforeEach(() => {
+    themePicker = true;
     TestBed.configureTestingModule({
       providers: [
         ...provideDeckbuilderState(),
@@ -26,6 +29,7 @@ describe('DeckToolbarComponent', () => {
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
+        { provide: THEME_PICKER, useFactory: () => themePicker },
       ],
     });
     draft = TestBed.inject(DeckDraft);
@@ -36,6 +40,8 @@ describe('DeckToolbarComponent', () => {
   });
 
   afterEach(() => TestBed.inject(HttpTestingController).match(() => true));
+
+  afterEach(() => document.documentElement.removeAttribute(THEME_ATTRIBUTE));
 
   async function render() {
     const fixture = TestBed.createComponent(DeckToolbarComponent);
@@ -71,11 +77,42 @@ describe('DeckToolbarComponent', () => {
       'gd-toolbar__deck-name',
       'gd-button',
       'gd-toolbar__collection',
-      'gd-toolbar__theme',
+      'gd-button gd-toolbar__theme',
     ]);
     expect(el.querySelector('.gd-toolbar__deck-name')!.textContent).toBe('New deck');
-    const theme = el.querySelector<HTMLSelectElement>('select.gd-toolbar__theme')!;
-    expect(Array.from(theme.options).map((o) => o.value)).toEqual(['classic', 'modern']);
+  });
+
+  it('has no theme picker when THEME_PICKER is off', async () => {
+    themePicker = false;
+    const { el } = await render();
+    expect(el.querySelector('.gd-toolbar__theme')).toBeNull();
+    expect(el.lastElementChild!.className).toBe('gd-toolbar__collection');
+  });
+
+  it('lets players switch themes at any time, keeping the deck being edited', async () => {
+    const themes = TestBed.inject(ThemeService);
+    themes.init();
+    draft.deckName.set('My deck');
+    draft.markModified(true);
+    const { fixture, el } = await render();
+    const picker = el.querySelector<HTMLButtonElement>('button.gd-button.gd-toolbar__theme')!;
+    expect(el.lastElementChild).toBe(picker);
+    expect(picker.dataset['action']).toBe('theme');
+    expect(picker.title).toBe('Switch to the Modern theme');
+    expect(picker.getAttribute('aria-label')).toBe(picker.title);
+
+    picker.click();
+    await fixture.whenStable();
+    expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('modern');
+    expect(themes.behaviour().cardInfoModal).toBe(true);
+    expect(picker.title).toBe('Switch to the Classic theme');
+    expect(el.querySelector('.gd-toolbar__deck-name')!.textContent).toBe('*My deck - modified');
+
+    picker.click();
+    await fixture.whenStable();
+    expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
+    expect(themes.behaviour().cardInfoModal).toBe(false);
+    expect(picker.title).toBe('Switch to the Modern theme');
   });
 
   it('runs the deck actions', async () => {
@@ -134,7 +171,7 @@ describe('DeckToolbarComponent', () => {
     expect(el.querySelector('[data-action="auto-zoom"]')).toBeNull();
   });
 
-  it('selects the format, the collection and the theme', async () => {
+  it('selects the format and the collection', async () => {
     const { el } = await render();
     const selectFormat = vi.spyOn(changes, 'selectFormat');
     const format = el.querySelector<HTMLSelectElement>('.gd-toolbar__format')!;
@@ -147,11 +184,5 @@ describe('DeckToolbarComponent', () => {
     collection.value = collection.options[1].value;
     collection.dispatchEvent(new Event('change'));
     expect(selectCollection).toHaveBeenCalledWith(collection.options[1].value);
-
-    const select = vi.spyOn(TestBed.inject(ThemeService), 'select').mockResolvedValue();
-    const theme = el.querySelector<HTMLSelectElement>('.gd-toolbar__theme')!;
-    theme.value = 'modern';
-    theme.dispatchEvent(new Event('change'));
-    expect(select).toHaveBeenCalledWith('modern');
   });
 });

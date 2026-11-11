@@ -13,7 +13,7 @@
 //   timing     depends on timers (the hover zoom): between steps only the page's state is read, nothing is waited for
 //   note       why the scenario exists, shown in the report
 
-import { CONTROLS } from './controls.mjs';
+import { ANGULAR_ONLY, CONTROLS } from './controls.mjs';
 
 /** The selectors of one page: `$.nextPage`, `$.culture('ELVEN')`, ... (see controls.mjs). */
 export function selectors(which) {
@@ -95,6 +95,24 @@ export const SCENARIOS = [
     name: 'start',
     note: 'The page as it opens: empty deck, stats, first collection page',
     run: async () => {},
+  },
+  {
+    name: 'theme-switch-back',
+    note: 'Angular only: the theme picker pressed twice (to Modern, back to Classic) leaves the page exactly as it was',
+    run: async (page, $, which) => {
+      if (which === 'angular') {
+        // With the keyboard, so the mouse stays where it is on both pages
+        const picker = page.locator(ANGULAR_ONLY.themePicker);
+        await picker.press('Enter');
+        await page.waitForFunction(() => document.documentElement.dataset.theme === 'modern');
+        await page.waitForTimeout(500);
+        await picker.press('Enter');
+        await page.waitForFunction(() => document.documentElement.dataset.theme === 'classic');
+        // The legacy page has no picker to keep the focus
+        await picker.blur();
+      }
+      await pause(page);
+    },
   },
   {
     name: 'culture-buttons',

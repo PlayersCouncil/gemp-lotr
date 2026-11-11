@@ -12,6 +12,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
  */
 @Component({
   selector: 'gd-import-dialog',
+  styleUrl: './import-dialog.component.css',
   imports: [DialogComponent],
   host: { style: 'display: contents' },
   template: `

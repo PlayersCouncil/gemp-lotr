@@ -1,0 +1,227 @@
+/*
+ * The deck side (GempLotrDeckBuildingUI.layoutUI), positioned as layoutUI did, from the pane's padding box: the pane's
+ * content size (pane-w x pane-h) gives a toolbar row, five slot rows beside a sites column at most 250px wide, and the
+ * draw deck with the stats under it. Each slot box is drawn 2px larger than its place (the legacy content-box
+ * borders); its cards keep 3px inside the place.
+ */
+:host {
+  /* the container units measure the pane's content box */
+  --pane-w: 100cqw;
+  --pane-h: 100cqh;
+  --deck-h: calc(var(--pane-h) - 28px);
+  --row: round(down, calc((var(--deck-h) - 30px) / 5), 1px);
+  --sites-w: min(round(down, calc(var(--deck-h) * 1.5 / 5), 1px), 250px);
+  --half: round(down, calc((var(--sites-w) - 5px) / 2), 1px);
+  --right-half: round(down, calc((var(--sites-w) + 15px) / 2), 1px);
+  --draw-left: calc(10px + var(--sites-w));
+  --draw-w: calc(var(--pane-w) - var(--sites-w) - 10px);
+  --draw-h: calc(var(--deck-h) - 60px);
+  /* the Map and Race row, when the format has either */
+  --special-rows: 0;
+  position: absolute;
+  inset: 0;
+  color: var(--theme-text);
+  font-family: var(--theme-font-text);
+  font-size: 12px;
+}
+
+:host:has(.gd-slot[data-slot='map']:not([hidden]), .gd-slot[data-slot='race']:not([hidden])) {
+  --special-rows: 1;
+}
+
+.gd-slot,
+.gd-pile {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  background: var(--theme-content-bg);
+}
+
+.gd-slot[data-slot='ring-bearer'],
+.gd-slot[data-slot='map'] {
+  left: 5px;
+  width: calc(var(--half) + 2px);
+  height: calc(var(--row) + 2px);
+}
+
+.gd-slot[data-slot='ring'],
+.gd-slot[data-slot='race'] {
+  left: var(--right-half);
+  width: calc(var(--half) + 2px);
+  height: calc(var(--row) + 2px);
+}
+
+.gd-slot[data-slot='ring-bearer'],
+.gd-slot[data-slot='ring'] {
+  top: 33px;
+}
+
+.gd-slot[data-slot='map'],
+.gd-slot[data-slot='race'] {
+  top: calc(33px + var(--row));
+}
+
+.gd-slot[data-slot='sites'] {
+  left: 5px;
+  top: calc(38px + (1 + var(--special-rows)) * var(--row));
+  width: calc(var(--sites-w) + 2px);
+  height: calc(var(--deck-h) - (1 + var(--special-rows)) * var(--row) - 8px);
+}
+
+/* The whole box selects for the slot; the cards are drawn over it */
+.gd-slot__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--theme-radius-box);
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  text-align: center;
+  cursor: default;
+}
+
+button.gd-slot__label:focus-visible {
+  outline: 2px solid var(--theme-hover-border);
+  outline-offset: -2px;
+}
+
+.gd-slot__title,
+.gd-slot__hint {
+  display: block;
+}
+
+/* .helper-text */
+.gd-slot__hint {
+  position: relative;
+  top: 40%;
+  padding: 10px;
+  font-size: calc(0.3rem + 0.75vh);
+  transform: translateY(-50%);
+}
+
+.gd-slot[data-slot='sites'] .gd-slot__hint {
+  top: 10%;
+}
+
+/* The legacy hint held the link, two lines further down: the text is centred together with those lines */
+.gd-slot[data-slot='map'] .gd-slot__hint {
+  padding-bottom: calc(10px + 2lh);
+}
+
+/* Under the Map's hint, after a blank line, as the legacy hint's own link */
+.gd-slot__link {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(40% + 15px + 1lh);
+  color: var(--theme-text);
+  font-size: calc(0.3rem + 0.75vh);
+  font-style: italic;
+  text-align: center;
+}
+
+/* The page's colour for a visited link, as before this rule */
+.gd-slot__link:visited {
+  color: var(--theme-link-visited);
+}
+
+.gd-slot__cards,
+.gd-pile__cards {
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  position: absolute;
+  /* CardGroup.setBounds: 3px in from the place, which is 1px in from the box */
+  inset: 2px 4px 4px 2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  pointer-events: none;
+}
+
+.gd-slot__cards {
+  --gd-card-max-height: 497px;
+}
+
+.gd-slot__cards > .gd-card,
+.gd-stack > .gd-card {
+  pointer-events: auto;
+}
+
+/*
+ * VerticalBarGroup: the sites at the column's full width, one under the other below a 20px title gap, 5px apart or
+ * squeezed together so the last one ends at the bottom.
+ */
+.gd-slot[data-slot='sites'] .gd-slot__cards {
+  --gd-card-height: 100cqw;
+  --site-h: round(down, calc(100cqw * 350 / 490), 1px);
+  --n: var(--gd-slot-count, 1);
+  container-type: size;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: normal;
+  gap: 0;
+  padding-top: 20px;
+}
+
+/* VerticalBarGroup rounded each card's position down; the browser would round a fractional one to the nearest */
+.gd-slot[data-slot='sites'] .gd-card {
+  top: -0.51px;
+}
+
+.gd-slot[data-slot='sites'] .gd-card {
+  flex: none;
+}
+
+.gd-slot[data-slot='sites'] .gd-card + .gd-card {
+  /* 100cqh is the height left under the 20px title gap. Down to a layout unit, or the error adds up over the column */
+  margin-top: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / (var(--n) - 1)), 0.015625px);
+}
+
+.gd-pile {
+  left: var(--draw-left);
+  width: calc(var(--draw-w) + 2px);
+  height: calc(var(--draw-h) / 2 + 2px);
+}
+
+.gd-pile[data-side='free-peoples'] {
+  top: 33px;
+}
+
+.gd-pile[data-side='shadow'] {
+  top: calc(33px + var(--draw-h) / 2);
+}
+
+.gd-pile__cards {
+  --gd-card-max-height: 200px;
+}
+
+/* NormalCardGroup rows are as high as the row height */
+.gd-stack {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: var(--gd-card-height);
+}
+
+/* Each copy behind shows a fifth of its width (rounded down) */
+.gd-stack > .gd-card[data-role='copy'] {
+  margin-right: calc(round(down, calc(var(--gd-card-width) / 5), 1px) - var(--gd-card-width));
+}
+
+/*
+ * NormalCardGroup's rows: as high as the row height, which can have a fraction (a card is a whole number of px), and
+ * centred as the rows it sized them for (moved, not laid out, so the box's size doesn't change)
+ */
+.gd-slot__cards > .gd-card,
+.gd-stack {
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
+}

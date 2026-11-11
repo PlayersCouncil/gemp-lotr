@@ -16,6 +16,7 @@ const TITLES = { alert: 'Message', confirm: 'Please confirm', prompt: 'Please en
  */
 @Component({
   selector: 'gd-notifier',
+  styleUrl: './notifier-dialog.component.css',
   imports: [DialogComponent],
   host: { style: 'display: contents' },
   template: `

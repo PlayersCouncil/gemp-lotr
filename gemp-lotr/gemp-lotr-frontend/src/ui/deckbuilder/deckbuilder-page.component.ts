@@ -18,27 +18,22 @@ import { DragHandlers, PointerDragDirective } from '../shared/pointer-drag/point
 /** Arrow keys on the resizer move it by this much (px). */
 export const RESIZE_STEP = 10;
 
-/** The pane a theme that shows one pane at a time (phones) shows: the tab bar's choice. */
-export type PagePane = 'deck' | 'collection';
-
 /** How long the legacy pane took to slide open or closed (jQuery's "normal" speed). */
 const TOGGLE_SLIDE_MS = 400;
 
 /**
  * The deck builder page frame: the deck (left), the collection (right) and the separator between them, which resizes
- * the collection by dragging or with the arrow keys and closes or opens it with its toggle. The page only records the width asked for; the theme keeps it within its limits.
+ * the collection by dragging or with the arrow keys and closes or opens it with its toggle. The page only records the
+ * width asked for; its styles keep it within the limits.
  *
  * DOM contract: `.gd-page` with `data-collection` (open, closed) and `--gd-collection-width` (px, once resized);
- * `data-pane` (deck, collection: the tab bar's choice, for themes that show one pane at a time);
  * `section.gd-page__deck`, `div.gd-page__separator` (`role=separator`, `data-dragging` while dragged) holding
- * `button.gd-page__toggle` (`aria-expanded`), `section.gd-page__collection` holding the filter and the cards, and
- * `div.gd-page__tabs` (`role=tablist`) with a `button.gd-page__tab` (`role=tab`, `data-pane`, `aria-selected`) per pane;
- * then
- * the dialogs (deck list and library, import, notes, selection pack, new items), the card information, the hover zoom
+ * `button.gd-page__toggle` (`aria-expanded`), `section.gd-page__collection` holding the filter and the cards; then the dialogs (deck list and library, import, notes, selection pack, new items), the card information, the hover zoom
  * and the notifier's dialog.
  */
 @Component({
   selector: 'deckbuilder-app',
+  styleUrl: './deckbuilder-page.component.css',
   providers: provideDeckbuilderState(),
   imports: [
     PointerDragDirective,
@@ -57,12 +52,11 @@ const TOGGLE_SLIDE_MS = 400;
   host: {
     class: 'gd-page',
     '[attr.data-collection]': "collectionOpen() ? 'open' : 'closed'",
-    '[attr.data-pane]': 'pane()',
     '[style.--gd-collection-width]': "collectionWidth() === null ? null : collectionWidth() + 'px'",
     '[style.--gd-drag-width]': "dragWidth() === null ? null : dragWidth() + 'px'",
   },
   template: `
-    <section class="gd-page__deck" id="gd-pane-deck" aria-label="Deck"><gd-deck /></section>
+    <section class="gd-page__deck" aria-label="Deck"><gd-deck /></section>
     <div
       class="gd-page__separator"
       role="separator"
@@ -87,25 +81,10 @@ const TOGGLE_SLIDE_MS = 400;
     @if (dragWidth() !== null) {
       <div #dragPreview class="gd-page__drag-preview" aria-hidden="true" title="Resize"></div>
     }
-    <section class="gd-page__collection" id="gd-pane-collection" aria-label="Collection" [hidden]="!collectionOpen()">
+    <section class="gd-page__collection" aria-label="Collection" [hidden]="!collectionOpen()">
       <gd-collection-filter />
       <gd-collection-grid />
     </section>
-    <div class="gd-page__tabs" role="tablist" aria-label="Show">
-      @for (tab of tabs; track tab.pane) {
-        <button
-          type="button"
-          role="tab"
-          class="gd-page__tab"
-          [attr.data-pane]="tab.pane"
-          [attr.aria-controls]="'gd-pane-' + tab.pane"
-          [attr.aria-selected]="pane() === tab.pane"
-          (click)="showPane(tab.pane)"
-        >
-          {{ tab.label }}
-        </button>
-      }
-    </div>
     <gd-deck-list-dialog />
     <gd-import-dialog />
     <gd-notes-dialog />
@@ -116,14 +95,8 @@ const TOGGLE_SLIDE_MS = 400;
   `,
 })
 export class DeckbuilderPageComponent {
-  protected readonly tabs: readonly { pane: PagePane; label: string }[] = [
-    { pane: 'deck', label: 'Deck' },
-    { pane: 'collection', label: 'Collection' },
-  ];
-  /** The pane chosen in the tab bar, for themes that show one pane at a time. */
-  protected readonly pane = signal<PagePane>('deck');
   protected readonly collectionOpen = signal(true);
-  /** The collection's width as last dragged to, or null for the theme's default. */
+  /** The collection's width as last dragged to, or null for the default (its styles'). */
   protected readonly collectionWidth = signal<number | null>(null);
   protected readonly dragging = signal(false);
   /** Where the drag would leave the collection's width, while the separator is being dragged. */
@@ -135,14 +108,6 @@ export class DeckbuilderPageComponent {
   constructor() {
     inject(DeckStartup).init();
     inject(PacksService).start();
-  }
-
-  /** Choosing the collection's tab also opens the collection, in case the separator closed it. */
-  protected showPane(pane: PagePane): void {
-    this.pane.set(pane);
-    if (pane === 'collection') {
-      this.collectionOpen.set(true);
-    }
   }
 
   protected toggleCollection(): void {
@@ -201,7 +166,7 @@ export class DeckbuilderPageComponent {
         if (onToggle && !moved) {
           this.toggleWithPointer(e.timeStamp);
         }
-        // The preview is where the theme allowed it: the width kept is what it shows, so the next drag or key press
+        // The preview is where the styles allowed it: the width kept is what it shows, so the next drag or key press
         // starts from there
         const preview = this.dragPreview()?.nativeElement.getBoundingClientRect();
         if (preview) {

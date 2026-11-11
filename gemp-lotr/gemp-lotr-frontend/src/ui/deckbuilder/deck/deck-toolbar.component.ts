@@ -7,7 +7,7 @@ import { DeckFormatSelection } from '../../../core/deck/deck-format-selection.se
 import { DeckOpener } from '../../../core/deck/deck-opener.service';
 import { DeckSaver } from '../../../core/deck/deck-saver.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
-import { THEME_LABELS, THEMES, ThemeService } from '../../../core/platform/theme.service';
+import { THEME_LABELS, THEME_PICKER, THEMES, ThemeService } from '../../../core/platform/theme.service';
 
 /** A deck button: what it does (`data-action`, which the theme draws an icon for) and its name. */
 interface ToolbarAction {
@@ -25,10 +25,12 @@ interface ToolbarAction {
  * `aria-label` name it), `select.gd-toolbar__format`, `button.gd-button[data-action=notes]`, `.gd-toolbar__deck-name`
  * (`data-modified` while it has unsaved changes, with the legacy "*name - modified" text), then
  * `button.gd-button[data-action=auto-zoom]` (`aria-pressed`; absent on touch devices), `select.gd-toolbar__collection`
- * and `select.gd-toolbar__theme`.
+ * and, when players may switch themes (THEME_PICKER, on), `button.gd-button.gd-toolbar__theme[data-action=theme]`
+ * (drawn after the deck's name): it switches to the next theme, which its `title` and `aria-label` name.
  */
 @Component({
   selector: 'gd-deck-toolbar',
+  styleUrl: './deck-toolbar.component.css',
   host: { class: 'gd-toolbar', role: 'toolbar', 'aria-label': 'Deck' },
   template: `
     <div class="gd-toolbar__deck-actions">
@@ -84,11 +86,16 @@ interface ToolbarAction {
         </option>
       }
     </select>
-    <select class="gd-toolbar__theme" aria-label="Theme" title="Theme" (change)="selectTheme($event)">
-      @for (option of themes; track option.name) {
-        <option [value]="option.name" [selected]="option.name === theme.theme()">{{ option.label }}</option>
-      }
-    </select>
+    @if (themePicker) {
+      <button
+        type="button"
+        class="gd-button gd-toolbar__theme"
+        data-action="theme"
+        [title]="nextThemeLabel()"
+        [attr.aria-label]="nextThemeLabel()"
+        (click)="theme.select(nextTheme())"
+      ></button>
+    }
   `,
 })
 export class DeckToolbarComponent {
@@ -100,6 +107,7 @@ export class DeckToolbarComponent {
   protected readonly library = inject(DeckLibraryService);
   protected readonly zoom = inject(AutoZoomSetting);
   protected readonly theme = inject(ThemeService);
+  protected readonly themePicker = inject(THEME_PICKER);
   private readonly collection = inject(CollectionBrowser);
 
   protected readonly actions: readonly ToolbarAction[] = [
@@ -119,7 +127,11 @@ export class DeckToolbarComponent {
   });
   protected readonly collectionType = this.collection.collectionType;
   protected readonly collections = computed(() => [...BASE_COLLECTION_TYPES, ...this.collection.limitedCollections()]);
-  protected readonly themes = THEMES.map((name) => ({ name, label: THEME_LABELS[name] }));
+  /** The theme the picker switches to: the next one, after the last the first. */
+  protected readonly nextTheme = computed(
+    () => THEMES[(THEMES.indexOf(this.theme.theme()) + 1) % THEMES.length] ?? THEMES[0],
+  );
+  protected readonly nextThemeLabel = computed(() => `Switch to the ${THEME_LABELS[this.nextTheme()]} theme`);
 
   protected selectFormat(event: Event): void {
     this.changes.selectFormat((event.target as HTMLSelectElement).selectedIndex);
@@ -127,9 +139,5 @@ export class DeckToolbarComponent {
 
   protected selectCollection(event: Event): void {
     this.collection.selectCollectionType((event.target as HTMLSelectElement).value);
-  }
-
-  protected selectTheme(event: Event): void {
-    void this.theme.select((event.target as HTMLSelectElement).value);
   }
 }

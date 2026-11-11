@@ -8,8 +8,38 @@
 
 const SLIDER_RING = 'Slider handle focus ring: Chrome drew the legacy ring itself, CSS can only approximate its shape';
 
+/**
+ * Areas of the Angular page left out of every comparison: what the legacy page had nothing like (by the selector, grown
+ * by `margin` px). Only the owner adds to it. A pixel there never counts, in any scenario or window size.
+ */
+export const EXCLUDED_AREAS = [
+  {
+    selector: '.gd-toolbar__theme',
+    margin: 2,
+    reason:
+      'The theme picker (a toolbar button): not on the legacy page; placed after the deck name, so nothing else moves',
+  },
+];
+
 // Where two entries cover the same pixel of a scenario, the first one counts it: the narrower entries come first.
 export const ACCEPTED = [
+  {
+    scenarios: ['open-library-deck', 'save-rename-copy', 'import-decklist'],
+    sizes: ['1280x800'],
+    selector: '.gd-toolbar',
+    margin: 2,
+    maxPixels: 3500,
+    reason:
+      'The theme toggle takes 30px of a toolbar a long deck name already fills: the format list is squeezed that much more',
+  },
+  {
+    scenarios: ['pane-resized'],
+    sizes: ['1280x800'],
+    selector: '.gd-toolbar',
+    margin: 10,
+    maxPixels: 3500,
+    reason: 'The same squeeze in a narrowed deck pane, where the squeezed lists reach about 10px past the toolbar',
+  },
   {
     scenarios: [/^(myCards--item-\d+|selection--selectionChoice)--(rightClick|shiftClick|dragUp)$/],
     selector: '.gd-card-info__zoom',
@@ -187,6 +217,18 @@ export function acceptedBehaviour(scenario, problem) {
 }
 
 /**
+ * Controls only the Angular page has, which the owner has accepted (by their name in controls.mjs, ANGULAR_ONLY). The
+ * coverage check lets them be on the Angular page alone; their area is left out of the comparison (EXCLUDED_AREAS).
+ */
+export const ACCEPTED_ANGULAR_ONLY = [
+  {
+    control: 'themePicker',
+    reason:
+      'Players switch between the classic and the modern theme (decided 2026-11-10); the legacy page had one look',
+  },
+];
+
+/**
  * Bugs of the legacy page the owner has accepted not copying: what it sent or saved is rewritten to what it should have
  * been, before comparing. Each is limited to exactly that text.
  */
@@ -218,7 +260,11 @@ export function withoutLegacyBugs(text, kind) {
   return LEGACY_BUGS.reduce((result, bug) => result.replace(bug[kind][0], bug[kind][1]), text);
 }
 
+/** The areas with their limits for one scenario at one size: the excluded areas first (no limit), then ACCEPTED's. */
 export function acceptedFor(scenario, sizeLabel) {
   const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
-  return ACCEPTED.filter((entry) => entry.scenarios.some(applies) && (!entry.sizes || entry.sizes.includes(sizeLabel)));
+  return [
+    ...EXCLUDED_AREAS.map((area) => ({ ...area, maxPixels: Infinity })),
+    ...ACCEPTED.filter((entry) => entry.scenarios.some(applies) && (!entry.sizes || entry.sizes.includes(sizeLabel))),
+  ];
 }

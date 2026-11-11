@@ -1,0 +1,85 @@
+/* The page frame (jquery.layout): the deck, the 6px resizer and the collection */
+
+/* Not fixed: that would put the page on a layer of its own, and everything above it would lose subpixel text */
+:host {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  /* east__minSize 410, east__maxSize 50% of what the 6px resizer leaves */
+  grid-template-columns: minmax(0, 1fr) 6px clamp(410px, var(--gd-collection-width, 410px), calc((100% - 6px) / 2));
+  grid-template-rows: 100%;
+}
+
+:host([data-collection='closed']) {
+  grid-template-columns: minmax(0, 1fr) 6px 0;
+}
+
+.gd-page__deck,
+.gd-page__collection {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--theme-pane-border);
+  background: var(--theme-page-bg);
+  overflow: auto;
+}
+
+.gd-page__separator {
+  position: relative;
+  background: var(--theme-separator);
+  cursor: e-resize;
+}
+
+:host([data-collection='closed']) .gd-page__separator {
+  cursor: pointer;
+}
+
+/* The copy of the bar that follows the mouse; the panes resize when it is dropped. Within the collection's limits */
+.gd-page__drag-preview {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: clamp(410px, var(--gd-drag-width), calc((100% - 6px) / 2));
+  z-index: 10000;
+  width: 6px;
+  background: var(--theme-separator);
+  cursor: e-resize;
+}
+
+.gd-page__toggle {
+  position: absolute;
+  left: 0;
+  top: calc(50% - 25px);
+  width: 6px;
+  height: 50px;
+  padding: 0;
+  border: 0;
+  background: var(--theme-separator-toggle);
+  cursor: pointer;
+}
+
+.gd-page__collection {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Narrower than the collection's minimum beside a deck: the legacy page hid the collection */
+@media (max-width: 825px) {
+  :host {
+    grid-template-columns: minmax(0, 1fr) 6px 0;
+  }
+  .gd-page__collection {
+    display: none;
+  }
+}
+
+/*
+ * The deck is positioned as layoutUI did, from the pane's padding box (see the deck area). The deck stats reach past
+ * the pane without making it scrollable, as on the legacy page. A scrollable pane would also get its own compositor
+ * layer, and dialogs above it would lose subpixel text.
+ */
+.gd-page__deck {
+  position: relative;
+  container-type: size;
+  overflow: hidden;
+}

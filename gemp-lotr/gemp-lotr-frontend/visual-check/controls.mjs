@@ -150,3 +150,13 @@ export const CONTROLS = {
   cardInfoZoom: { legacy: '#card-info-slider', angular: '.gd-card-info__zoom' },
   cardInfoCard: { legacy: '#card-image-content .actionArea', angular: '.gd-card-info__card' },
 };
+
+/**
+ * Controls only the Angular page has (the legacy page had nothing like them), by their Angular selector. They are not
+ * in CONTROLS, which every step compares on both pages; the coverage check knows them by these names, and fails on
+ * one that accepted.mjs (ACCEPTED_ANGULAR_ONLY) doesn't list.
+ */
+export const ANGULAR_ONLY = {
+  /** The toolbar's theme picker (THEME_PICKER): a button that switches to the next theme */
+  themePicker: '.gd-toolbar__theme',
+};

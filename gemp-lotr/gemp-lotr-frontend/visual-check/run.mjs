@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { chromium } from 'playwright';
+import { launchBrowser } from './browser.mjs';
 import { CONTROLS } from './controls.mjs';
 import { acceptedBehaviour, acceptedFor, withoutLegacyBugs } from './accepted.mjs';
 import { MY_CARDS } from './local-server/seed.mjs';
@@ -79,7 +79,7 @@ const outDir = path.resolve(options.out);
 fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
-const browser = await chromium.launch();
+const browser = await launchBrowser();
 
 /**
  * Logs in once; every page then uses that session. (Logging the same player in several times at once can hang the

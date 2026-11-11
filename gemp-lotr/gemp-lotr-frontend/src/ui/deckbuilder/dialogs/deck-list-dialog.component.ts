@@ -21,6 +21,7 @@ interface EntryAction {
  */
 @Component({
   selector: 'gd-deck-list-dialog',
+  styleUrl: './deck-list-dialog.component.css',
   imports: [DialogComponent],
   host: { style: 'display: contents' },
   template: `

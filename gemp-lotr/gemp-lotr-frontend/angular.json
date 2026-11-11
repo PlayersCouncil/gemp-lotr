@@ -25,18 +25,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              {
-                "input": "src/themes/classic/theme.css",
-                "bundleName": "theme-classic",
-                "inject": false
-              },
-              {
-                "input": "src/themes/modern/theme.css",
-                "bundleName": "theme-modern",
-                "inject": false
-              }
-            ],
+            "styles": ["src/styles/themes.css", "src/styles/base.css", "src/styles/controls.css"],
             "outputPath": {
               "base": "../gemp-lotr-async/src/main/web/ng",
               "browser": ""

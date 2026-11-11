@@ -5,10 +5,6 @@ import {
   resolveTheme,
   THEME_ATTRIBUTE,
   THEME_COOKIE,
-  THEME_LINK_ATTRIBUTE,
-  THEME_LOAD_TIMEOUT_MS,
-  THEME_VIEWPORT_ATTRIBUTE,
-  THEME_VIEWPORTS,
   ThemeService,
   THEME_BEHAVIOUR,
 } from './theme.service';
@@ -38,20 +34,6 @@ function fakeDevice(coarsePointer: boolean, width: number, height: number): void
   vi.spyOn(window.screen, 'height', 'get').mockReturnValue(height);
 }
 
-const themeLinks = () => Array.from(document.head.querySelectorAll<HTMLLinkElement>(`link[${THEME_LINK_ATTRIBUTE}]`));
-const loadLink = (theme: string, event = 'load') =>
-  document.head.querySelector(`link[${THEME_LINK_ATTRIBUTE}="${theme}"]`)!.dispatchEvent(new Event(event));
-
-/** Whether a promise has settled, without waiting for it. */
-async function settled(promise: Promise<unknown>): Promise<boolean> {
-  let done = false;
-  void promise.then(() => (done = true));
-  for (let i = 0; i < 5; i++) {
-    await Promise.resolve();
-  }
-  return done;
-}
-
 describe('ThemeService', () => {
   function service(queryString = ''): ThemeService {
     TestBed.configureTestingModule({ providers: [{ provide: PAGE_QUERY_STRING, useValue: queryString }] });
@@ -66,12 +48,8 @@ describe('ThemeService', () => {
   beforeEach(() => fakeDevice(false, 1920, 1080));
 
   afterEach(() => {
-    themeLinks().forEach((link) => link.remove());
-    document.head.querySelectorAll(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`).forEach((meta) => meta.remove());
-    document.head.querySelectorAll('base').forEach((base) => base.remove());
     document.documentElement.removeAttribute(THEME_ATTRIBUTE);
     vi.restoreAllMocks();
-    vi.useRealTimers();
   });
 
   describe('resolveTheme', () => {
@@ -111,164 +89,73 @@ describe('ThemeService', () => {
   });
 
   describe('init', () => {
-    it('uses the classic theme on a computer, and remembers nothing', async () => {
+    it('uses the classic theme on a computer, and remembers nothing', () => {
       const { written } = fakeCookies();
       const themes = service();
-      const starting = themes.init();
-      loadLink('classic');
-      await starting;
+      themes.init();
       expect(themes.theme()).toBe('classic');
       expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
       expect(written).toEqual([]);
     });
 
-    it('uses the classic theme on a phone or tablet too, until the redesign', async () => {
+    it('uses the classic theme on a phone or tablet too, until the redesign', () => {
       fakeCookies();
       fakeDevice(true, 820, 1180);
       const themes = service();
-      const starting = themes.init();
-      loadLink('classic');
-      await starting;
+      themes.init();
       expect(themes.theme()).toBe('classic');
     });
 
-    it('prefers the remembered choice to the device', async () => {
+    it('prefers the remembered choice to the device', () => {
       fakeCookies({ [THEME_COOKIE]: 'classic' });
       fakeDevice(true, 390, 844);
       const themes = service();
-      const starting = themes.init();
-      loadLink('classic');
-      await starting;
+      themes.init();
       expect(themes.theme()).toBe('classic');
     });
 
-    it('prefers ?theme= to the cookie, and remembers it', async () => {
+    it('prefers ?theme= to the cookie, and remembers it', () => {
       const { jar, written } = fakeCookies({ [THEME_COOKIE]: 'classic' });
       const themes = service('?participantId=bob&theme=modern');
-      const starting = themes.init();
-      loadLink('modern');
-      await starting;
+      themes.init();
       expect(themes.theme()).toBe('modern');
       expect(jar.get(THEME_COOKIE)).toBe('modern');
       expect(written[0]).toMatch(new RegExp(`^${THEME_COOKIE}=modern; expires=.*; path=/gemp-lotr; SameSite=Lax$`));
     });
 
-    it('ignores, and does not remember, an unknown ?theme= or cookie value', async () => {
+    it('ignores, and does not remember, an unknown ?theme= or cookie value', () => {
       const { written } = fakeCookies({ [THEME_COOKIE]: 'retro' });
       const themes = service('?theme=neon');
-      const starting = themes.init();
-      loadLink('classic');
-      await starting;
+      themes.init();
       expect(themes.theme()).toBe('classic');
       expect(written).toEqual([]);
-    });
-
-    it("waits for the theme's stylesheet before the page is drawn (no unstyled flash)", async () => {
-      fakeCookies();
-      const starting = service().init();
-      expect(await settled(starting)).toBe(false);
-      expect(document.documentElement.hasAttribute(THEME_ATTRIBUTE)).toBe(false);
-      loadLink('classic');
-      expect(await settled(starting)).toBe(true);
-    });
-
-    it('shows the page anyway when the stylesheet fails or never loads', async () => {
-      fakeCookies();
-      const failing = service().init();
-      loadLink('classic', 'error');
-      expect(await settled(failing)).toBe(true);
-
-      themeLinks().forEach((link) => link.remove());
-      document.head.querySelectorAll(`meta[${THEME_VIEWPORT_ATTRIBUTE}]`).forEach((meta) => meta.remove());
-      TestBed.resetTestingModule();
-      vi.useFakeTimers();
-      const hanging = service().init();
-      expect(await settled(hanging)).toBe(false);
-      vi.advanceTimersByTime(THEME_LOAD_TIMEOUT_MS);
-      expect(await settled(hanging)).toBe(true);
-    });
-
-    it("links the app's theme-<name>.css, relative to the <base href> it is served under", async () => {
-      fakeCookies();
-      const base = document.createElement('base');
-      base.href = 'http://localhost/gemp-lotr/ng/';
-      document.head.prepend(base);
-      const starting = service().init();
-      loadLink('classic');
-      await starting;
-      const [link] = themeLinks();
-      expect(link.rel).toBe('stylesheet');
-      expect(link.href).toBe('http://localhost/gemp-lotr/ng/theme-classic.css');
     });
   });
 
   describe('select', () => {
-    async function started(): Promise<ThemeService> {
+    function started(): ThemeService {
       fakeCookies();
       const themes = service();
-      const starting = themes.init();
-      loadLink('classic');
-      await starting;
+      themes.init();
       return themes;
     }
 
-    it('loads the new stylesheet before removing the old one, then remembers the choice', async () => {
-      const themes = await started();
-      const switching = themes.select('modern');
-      expect(themeLinks().map((link) => link.getAttribute(THEME_LINK_ATTRIBUTE))).toEqual(['classic', 'modern']);
-      expect(themes.theme()).toBe('classic');
-      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
-      loadLink('modern');
-      await switching;
-      expect(themeLinks().map((link) => link.getAttribute(THEME_LINK_ATTRIBUTE))).toEqual(['modern']);
+    it('switches the theme and remembers the choice', () => {
+      const themes = started();
+      themes.select('modern');
       expect(themes.theme()).toBe('modern');
       expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('modern');
       expect(document.cookie).toContain(`${THEME_COOKIE}=modern`);
+      themes.select('classic');
+      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
     });
 
-    it('lets the last choice win when an earlier one loads later', async () => {
-      const themes = await started();
-      const toModern = themes.select('modern');
-      const backToClassic = themes.select('classic');
-      loadLink('modern');
-      await toModern;
-      expect(themes.theme()).toBe('classic');
-      document.head.querySelectorAll(`link[${THEME_LINK_ATTRIBUTE}="classic"]`).forEach((link) => {
-        link.dispatchEvent(new Event('load'));
-      });
-      await backToClassic;
-      expect(themeLinks().map((link) => link.getAttribute(THEME_LINK_ATTRIBUTE))).toEqual(['classic']);
-      expect(themes.theme()).toBe('classic');
-    });
-
-    it('keeps the stylesheet when the theme is already in use', async () => {
-      const themes = await started();
-      const [link] = themeLinks();
-      await themes.select('classic');
-      expect(themeLinks()).toEqual([link]);
-    });
-
-    it("sets the theme's viewport: the device's width for modern, the default for classic", async () => {
-      const viewports = () =>
-        Array.from(document.head.querySelectorAll<HTMLMetaElement>('meta[name="viewport"]')).map((m) => m.content);
-      const themes = await started();
-      expect(viewports()).toEqual([]);
-      const switching = themes.select('modern');
-      loadLink('modern');
-      await switching;
-      expect(viewports()).toEqual([THEME_VIEWPORTS.modern]);
-      const back = themes.select('classic');
-      loadLink('classic');
-      await back;
-      expect(viewports()).toEqual([]);
-    });
-
-    it('ignores unknown names', async () => {
-      const themes = await started();
+    it('ignores unknown names', () => {
+      const themes = started();
       const before = document.cookie;
-      await themes.select('neon');
+      themes.select('neon');
       expect(themes.theme()).toBe('classic');
-      expect(themeLinks()).toHaveLength(1);
+      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
       expect(document.cookie).toBe(before);
     });
   });

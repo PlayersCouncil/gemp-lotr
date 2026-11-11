@@ -25,6 +25,12 @@ export const INJECTIONS = {
     expect: /end: \d+ pixels differ/,
     apply: css('.gd-card-info__wiki { margin-left: 8px; }'),
   },
+  'beside-excluded-area': {
+    what: 'A change just outside an area left out of the comparison (the theme picker and its 2px margin)',
+    scenario: 'start',
+    expect: /end: \d+ pixels differ/,
+    apply: css('.gd-toolbar__theme { box-shadow: 0 0 0 5px #f00; }'),
+  },
   'accepted-area-over-limit': {
     what: 'A bigger change inside an accepted area',
     scenario: 'state-dialog-close-hover',

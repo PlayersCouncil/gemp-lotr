@@ -15,7 +15,7 @@
     "test:parity": "PARITY_SESSIONS=200 PARITY_CASES=10000 ng test --watch=false --include \"src/parity/**/*.spec.ts\"",
     "lint": "ng lint",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
-    "format:check": "prettier --check \"src/core/**/*.ts\" \"src/ui/**/*.ts\" \"src/testing/*.ts\" \"visual-check/**/*.mjs\" README.md visual-check/README.md",
+    "format:check": "prettier --check \"src/core/**/*.ts\" \"src/ui/**/*.ts\" \"src/testing/**/*.ts\" \"src/parity/**/*.ts\" \"src/styles/*.css\" \"src/ui/**/*.css\" \"visual-check/**/*.mjs\" README.md visual-check/README.md",
     "verify": "npm run lint && npm run typecheck && npm run format:check && npm test -- --watch=false"
   },
   "private": true,

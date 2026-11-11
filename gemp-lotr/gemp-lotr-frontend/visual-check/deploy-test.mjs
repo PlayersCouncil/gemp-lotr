@@ -12,7 +12,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { launchBrowser } from './browser.mjs';
 import { playersSql, TEST_PLAYERS, waitForLogin } from './local-server/seed.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -278,7 +278,7 @@ async function main() {
     compose('up', '--detach', 'db', 'app');
     await waitForLogin(SERVER, player.name, password);
 
-    browser = await chromium.launch();
+    browser = await launchBrowser();
     const context = await browser.newContext({ viewport: { width: 1366, height: 768 } });
     const login = await context.request.post(`${SERVER}/gemp-lotr-server/login`, {
       form: { login: player.name, password },

@@ -95,7 +95,7 @@ describe('CollectionFilterComponent', () => {
       expect(cultures[0].querySelector<HTMLImageElement>('img.gd-culture__icon')!.src).toContain('dwarven.svg');
     });
 
-    it('has no visual styles of its own', async () => {
+    it('has no inline styles', async () => {
       const { el } = await render();
       expect(el.querySelectorAll('[style]').length).toBe(0);
     });

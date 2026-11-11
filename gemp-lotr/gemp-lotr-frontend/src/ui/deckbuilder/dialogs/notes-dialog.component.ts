@@ -11,6 +11,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
  */
 @Component({
   selector: 'gd-notes-dialog',
+  styleUrl: './notes-dialog.component.css',
   imports: [DialogComponent],
   host: { style: 'display: contents' },
   template: `

@@ -2,7 +2,8 @@
 // the manifest below lists is generated into scenarios, which run.mjs compares like any other. run.mjs also lists what
 // is really on both pages in each state (`crawl`) and fails on anything that has no test here, or is only on one page.
 
-import { CONTROLS } from './controls.mjs';
+import { ACCEPTED_ANGULAR_ONLY } from './accepted.mjs';
+import { ANGULAR_ONLY, CONTROLS } from './controls.mjs';
 import { FIXTURE_DECK, pause } from './scenarios.mjs';
 
 const CULTURES = [
@@ -453,10 +454,14 @@ function namedControls(which) {
     'selectionPacks',
     'deckListItem',
   ];
-  return Object.entries(CONTROLS)
+  const both = Object.entries(CONTROLS)
     .filter(([name, control]) => typeof control !== 'function' && !groups.includes(name))
     .map(([name, control]) => [name, control[which]]);
+  return which === 'angular' ? [...both, ...Object.entries(ANGULAR_ONLY)] : both;
 }
+
+/** The Angular-only controls the owner has accepted (accepted.mjs). */
+const ACCEPTED_ONLY_ON_ANGULAR = new Set(ACCEPTED_ANGULAR_ONLY.map(({ control }) => control));
 
 /**
  * What is really on the page in each state, on both pages, against the manifest. `open(which, state)` gives a page in
@@ -506,6 +511,8 @@ export async function coverageGaps(open) {
       for (const control of lists[which]) {
         if (control.startsWith('unnamed')) {
           gaps.push(`${state}: ${which} page has a control with no name in controls.mjs: ${control}`);
+        } else if (which === 'angular' && ACCEPTED_ONLY_ON_ANGULAR.has(control)) {
+          // On the Angular page alone, as accepted: tested by its own scenario (theme-switch-back) and the unit tests
         } else if (!lists[other].includes(control) && !control.startsWith('a ')) {
           gaps.push(`${state}: ${control} is only on the ${which} page`);
         } else if (control === 'a card' && CARD_STATES.has(state)) {

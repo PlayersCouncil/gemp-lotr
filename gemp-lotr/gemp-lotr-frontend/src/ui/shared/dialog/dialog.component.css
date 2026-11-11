@@ -1,0 +1,221 @@
+/*
+ * A dialog (jQuery UI dialog, dark-hive). Not scoped to this component: it also draws the controls the page puts in a
+ * dialog (its buttons, fields and text areas), so every rule starts at .gd-dialog.
+ *
+ * Sized with the jQuery UI options: `width` and `height` are the dialog's content box (the title bar and the content
+ * share the height), with .2em padding and a 1px border around. Centred in the window, as jQuery UI positioned them
+ * ("center", kept inside the window); moved by the title bar (data-placed) and resized from the corner.
+ */
+.gd-dialog {
+  --dialog-width: 300px;
+  /* The height it is centred for; dialogs of the content's height are centred for their least height */
+  --dialog-height: 150px;
+  /* The outer size, where it is known: jQuery UI centred the whole-pixel box (offsetWidth, offsetHeight) */
+  --dialog-outer-width: round(calc(var(--dialog-width) + 0.4em + 2px), 1px);
+  position: absolute;
+  inset: 0;
+  z-index: calc(1000 + var(--gd-dialog-layer, 0));
+  box-sizing: content-box;
+  width: var(--dialog-width);
+  height: fit-content;
+  min-width: calc(150px - 0.4em - 2px);
+  min-height: 150px;
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0.2em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+  overflow: hidden;
+  resize: both;
+}
+
+.gd-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Placed at whole pixels, as jQuery UI did: half the free space around the whole-pixel box, rounded */
+.gd-dialog:not([data-placed]) {
+  inset: auto;
+  left: round(calc((100vw - var(--dialog-outer-width)) / 2), 1px);
+  top: max(
+    0px,
+    round(calc((100vh - round(calc(var(--dialog-centred-height, var(--dialog-height)) + 0.4em + 2px), 1px)) / 2), 1px)
+  );
+  margin: 0;
+}
+
+/* .ui-widget's form controls */
+.gd-dialog :is(input, select, textarea) {
+  font-family: var(--theme-font-widget);
+  font-size: 1em;
+}
+
+/* hall.css's text fields */
+.gd-dialog :is(textarea, input) {
+  margin: 2px;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+  background-color: var(--theme-field-bg);
+  color: var(--theme-text);
+}
+
+.gd-dialog[data-placed] {
+  inset: auto;
+  left: var(--gd-dialog-left);
+  top: var(--gd-dialog-top);
+  margin: 0;
+}
+
+.gd-dialog:focus {
+  outline: none;
+}
+
+/* The modal overlay. Not fixed: that would put the dialog on a layer of its own, without subpixel text */
+.gd-dialog::backdrop {
+  position: absolute;
+  background: var(--theme-backdrop);
+}
+
+/* The resize grip (.ui-resizable-se: the grip icon in the corner) */
+.gd-dialog::-webkit-resizer {
+  background: var(--theme-icons) -82px -226px no-repeat;
+}
+
+.gd-dialog__header {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0.4em 1em;
+  border: 1px solid var(--theme-header-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-header-bg);
+  cursor: move;
+}
+
+.gd-dialog__title {
+  margin: 0.1em 16px 0.1em 0;
+  overflow: hidden;
+  font-size: 1em;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.gd-dialog__close {
+  position: absolute;
+  right: 0.3em;
+  top: 50%;
+  box-sizing: content-box;
+  width: 19px;
+  height: 18px;
+  margin-top: -11px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--theme-radius);
+  background: none;
+  cursor: pointer;
+}
+
+.gd-dialog__close::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: var(--theme-icons-hover) -96px -128px no-repeat;
+}
+
+/* .ui-state-hover: a 1px border, which moves the icon */
+.gd-dialog__close:hover,
+.gd-dialog__close:focus {
+  margin-top: -10px;
+  border: 1px solid var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  outline: none;
+}
+
+.gd-dialog__body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.5em 1em;
+  overflow: auto;
+}
+
+/* jQuery UI focused the first button when a dialog opened, and its buttons drew focus like hover */
+.gd-dialog .gd-button:focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+/* The browser's ring only after the keyboard: opened with the mouse, the first button has none */
+.gd-dialog .gd-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/*
+ * A jQuery UI text button (.ui-button-text-only): .2em .3em of padding, then the text at 70% (deckBuild.css) with
+ * .2em .3em of its own
+ */
+.gd-dialog .gd-button {
+  margin-right: 1.32px;
+  padding: calc(2.64px + 1.848px) calc(3.96px + 2.772px);
+  font-size: 9.24px;
+  line-height: 1.4;
+  vertical-align: baseline;
+}
+
+/* Deck list, library and notes: 700 x 400 */
+.gd-dialog:is([data-dialog='deck-list'], [data-dialog='library'], [data-dialog='notes']) {
+  --dialog-width: 700px;
+  --dialog-height: 400px;
+  /* jQuery UI's height option, less the fraction it lost to the title bar */
+  height: calc(var(--dialog-height) - 0.39px);
+}
+
+/* Import: opened before it had content, so placed as a 150px high dialog (its minimum), then grown downwards */
+.gd-dialog[data-dialog='import'] {
+  --dialog-height: 150px;
+}
+
+/* Notes (.notesDialog) */
+.gd-dialog[data-dialog='notes'] .gd-dialog__body {
+  display: flex;
+}
+
+/* Selection pack and new items: 80% of the window the first time (openSizeDialog) */
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) {
+  --dialog-width: round(down, 80vw, 0.01px);
+  --dialog-height: round(down, 80vh, 0.01px);
+  /* The height it really gets (below): a whole pixel can depend on those 0.39px */
+  --dialog-centred-height: calc(var(--dialog-height) - 0.39px);
+  height: calc(var(--dialog-height) - 0.39px);
+}
+
+/*
+ * The cards (a NormalCardGroup over the content: from 5px in from its padding box's top left, as large as the
+ * content box)
+ */
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) .gd-dialog__body {
+  display: flex;
+  padding: 5px calc(2em - 5px) calc(1em - 5px) 5px;
+  overflow: hidden;
+}
+
+/* The notifier: the browser's alert, confirm and prompt had no jQuery UI look; drawn as a dialog */
+.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']) {
+  --dialog-width: 400px;
+  min-height: 0;
+  resize: none;
+}
+
+.gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']):not([data-placed]) {
+  inset: 0;
+  margin: auto;
+}

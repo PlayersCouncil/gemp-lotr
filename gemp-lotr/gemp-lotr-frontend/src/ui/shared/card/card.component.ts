@@ -22,12 +22,12 @@ export const DRAG_UP_FOR_INFO = 20;
  * DOM contract: `button.gd-card` with `data-role` (card, pack, selection, placeholder), `data-orientation`
  * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply; inside,
  * `img.gd-card__image`, then `.gd-card__errata`, `img.gd-card__foil`, `img.gd-card__overlay` and `.gd-card__count`
- * when they apply, and always `.gd-card__info`: an ⓘ spot (part of the button, not a button of its own) that a theme
- * may show; a click on it shows the details instead of using the card. The theme sizes it (with `--gd-card-height` from fitCards) and draws the border and layers.
+ * when they apply. Its group sizes it with `--gd-card-height` (from fitCards); it draws its border and layers.
  */
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector -- a real <button>, so a card is focusable and clickable
   selector: 'button[gdCard]',
+  styleUrl: './card.component.css',
   host: {
     type: 'button',
     class: 'gd-card',
@@ -62,7 +62,6 @@ export const DRAG_UP_FOR_INFO = 20;
     @if (card().count !== null) {
       <span class="gd-card__count">{{ card().count }}</span>
     }
-    <span class="gd-card__info" aria-hidden="true" title="Card details"></span>
   `,
 })
 export class CardComponent {
@@ -80,11 +79,6 @@ export class CardComponent {
   } | null = null;
   /** The details were just shown by a gesture: the click that ends it does nothing else. */
   private swallowClick = false;
-  /**
-   * The press started on the ⓘ spot. Kept from the press, since a mouse press captures the pointer and its click then
-   * targets the card itself.
-   */
-  private pressOnInfo = false;
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -100,14 +94,12 @@ export class CardComponent {
   }
 
   protected onClick(event: MouseEvent): void {
-    const onInfo = this.pressOnInfo || isInfoSpot(event.target);
-    this.pressOnInfo = false;
     if (this.swallowClick) {
       this.swallowClick = false;
       event.preventDefault();
       return;
     }
-    if (event.shiftKey || onInfo) {
+    if (event.shiftKey) {
       this.info.show(this.card());
     } else {
       this.actions.activate(this.card().ref);
@@ -151,7 +143,6 @@ export class CardComponent {
   protected onPointerDown(event: PointerEvent): void {
     this.cancelPress();
     this.swallowClick = false;
-    this.pressOnInfo = isInfoSpot(event.target);
     if (event.pointerType === 'mouse') {
       this.hover.press();
     }
@@ -196,7 +187,7 @@ export class CardComponent {
     this.press = null;
   }
 
-  /** A card the theme puts on whole pixels (nudging it by a fraction): the zoom is placed from those. */
+  /** A card its group puts on whole pixels (nudging it by a fraction): the zoom is placed from those. */
   private snap(edge: number): number {
     return this.card().wholePixels ? Math.round(edge) : edge;
   }
@@ -206,10 +197,6 @@ export class CardComponent {
     this.swallowClick = true;
     this.info.show(this.card());
   }
-}
-
-function isInfoSpot(target: EventTarget | null): boolean {
-  return target instanceof Element && target.closest('.gd-card__info') !== null;
 }
 
 /** The card an event happened on, for other components that need to tell (the class is this component's own). */

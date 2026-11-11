@@ -1,0 +1,7 @@
+/*
+ * The textarea alone on its line, with no space below it for the text's descenders: the legacy page's doctype (limited
+ * quirks mode) left that space out, and its dialog was this high
+ */
+.gd-import__text {
+  vertical-align: top;
+}

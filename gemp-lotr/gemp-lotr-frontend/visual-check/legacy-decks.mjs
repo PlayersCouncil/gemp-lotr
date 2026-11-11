@@ -17,7 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { chromium } from 'playwright';
+import { launchBrowser } from './browser.mjs';
 import { CONTROLS } from './controls.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -244,7 +244,7 @@ const escapedOnce = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').
 
 async function main() {
   await restartApp();
-  const browser = await chromium.launch();
+  const browser = await launchBrowser();
   const context = await browser.newContext({ viewport: { width: 1366, height: 768 } });
   const login = await context.request.post(`${API}/login`, { form: { login: user, password } });
   if (!login.ok()) {

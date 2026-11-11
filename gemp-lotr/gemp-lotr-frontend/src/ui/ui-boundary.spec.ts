@@ -2,21 +2,34 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
 
 /**
- * src/ui holds semantic markup and interaction: it builds on core only, and it has no visual CSS: the themes
- * (src/themes) draw everything.
+ * src/ui holds the components: markup, interaction and each component's own stylesheet. It builds on core only. The
+ * themes are values only (src/styles/themes.css), which every stylesheet draws with.
  */
 const SRC_DIR = resolve(process.cwd(), 'src');
 const UI_DIR = join(SRC_DIR, 'ui');
+const STYLES_DIR = join(SRC_DIR, 'styles');
 
-function sourceFiles(dir: string): string[] {
+function filesIn(dir: string, pattern: RegExp): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
     if (statSync(path).isDirectory()) {
-      return sourceFiles(path);
+      return filesIn(path, pattern);
     }
-    return /\.(ts|html)$/.test(path) && !path.endsWith('.spec.ts') ? [path] : [];
+    return pattern.test(path) && !path.endsWith('.spec.ts') ? [path] : [];
   });
 }
+
+const sourceFiles = (dir: string) => filesIn(dir, /\.(ts|html)$/);
+
+/** A colour named in CSS, not taken from the theme: hex, a colour function or a colour keyword. */
+const NAMED_COLOUR =
+  /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(|:[^;]*\b(?:red|green|yellow|orange|blue|white|black|gr[ae]y)\b/gi;
+/** The cards' own black frame and copy count: part of the card art, the same in every theme. */
+const CARD_ART = new Set([
+  'ui/shared/card/card.component.css',
+  'ui/shared/auto-zoom/auto-zoom.component.css',
+  'ui/shared/card-info/card-info.component.css',
+]);
 
 describe('ui boundary', () => {
   const files = sourceFiles(UI_DIR).map((file) => ({
@@ -72,15 +85,30 @@ describe('ui boundary', () => {
     expect(tied).toEqual([]);
   });
 
-  it('has no component styles, and no inline styles but `display: contents`', () => {
+  it('styles a component with its own stylesheet (styleUrl), and nothing inline but `display: contents`', () => {
     const styled = files.flatMap(({ name, source }) => [
-      ...[...source.matchAll(/\bstyles\s*:|styleUrls?\s*:/g)].map((match) => `${name}: ${match[0]}`),
+      ...[...source.matchAll(/\bstyles\s*:|styleUrls\s*:/g)].map((match) => `${name}: ${match[0]}`),
       ...[...source.matchAll(/\bstyle="([^"]*)"|style:\s*'([^']*)'/g)]
         .filter((match) => (match[1] ?? match[2]).trim() !== 'display: contents')
         .map((match) => `${name}: ${match[0]}`),
       ...[...source.matchAll(/\[style\.(?!--)[\w-]+/g)].map((match) => `${name}: ${match[0]}`),
     ]);
     expect(styled).toEqual([]);
+    const withStyles = files.filter(({ source }) => /\bstyleUrl\s*:/.test(source)).map(({ name }) => name);
+    expect(withStyles.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it("draws with the theme values: no colours named outside src/styles/themes.css, but the cards' black and white", () => {
+    const stylesheets = [...filesIn(UI_DIR, /\.css$/), ...filesIn(STYLES_DIR, /\.css$/)]
+      .map((file) => ({ name: relative(SRC_DIR, file).split(sep).join('/'), source: readFileSync(file, 'utf8') }))
+      .filter(({ name }) => name !== 'styles/themes.css');
+    expect(stylesheets.length).toBeGreaterThanOrEqual(10);
+    const named = stylesheets.flatMap(({ name, source }) =>
+      [...source.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(NAMED_COLOUR)]
+        .filter((match) => !(CARD_ART.has(name) && /^#(000|fff)$/i.test(match[0])))
+        .map((match) => `${name}: ${match[0]}`),
+    );
+    expect(named).toEqual([]);
   });
 
   it("never uses the browser's alert, confirm or prompt (the Notifier asks the player)", () => {

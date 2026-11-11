@@ -42,6 +42,7 @@ const NO_ZOOM = new Set(['-1_1', '-1_2']);
  */
 @Component({
   selector: 'gd-auto-zoom',
+  styleUrl: './auto-zoom.component.css',
   host: { style: 'display: contents' },
   template: `
     <div

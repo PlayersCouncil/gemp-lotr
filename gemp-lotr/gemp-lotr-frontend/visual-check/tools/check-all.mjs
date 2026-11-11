@@ -3,6 +3,9 @@
 //
 //   npm run check:all                 (about an hour)
 //   npm run check:all -- --quick      without the control-and-gesture matrix
+//   npm run check:all -- --browser firefox
+//                                     the parts that use a browser, in Firefox (or webkit); the reports of
+//                                     the Chromium run are replaced
 //
 // Each part runs even if an earlier one failed; the summary at the end says which did.
 import { spawnSync } from 'node:child_process';
@@ -14,11 +17,21 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const VISUAL_CHECK = path.resolve(HERE, '..');
 const FRONTEND = path.resolve(VISUAL_CHECK, '..');
 const quick = process.argv.includes('--quick');
+const browserAt = process.argv.indexOf('--browser');
+const browser = browserAt === -1 ? null : process.argv[browserAt + 1];
 
 const npm = (cwd, ...args) => ({ cwd, args });
 const PARTS = [
-  ['Frontend: lint, types, formatting, unit tests', npm(FRONTEND, 'run', 'verify')],
-  ['The legacy page and the Angular page side by side, 200 generated sessions', npm(FRONTEND, 'run', 'test:parity')],
+  // In jsdom, not in a browser
+  ...(browser
+    ? []
+    : [
+        ['Frontend: lint, types, formatting, unit tests', npm(FRONTEND, 'run', 'verify')],
+        [
+          'The legacy page and the Angular page side by side, 200 generated sessions',
+          npm(FRONTEND, 'run', 'test:parity'),
+        ],
+      ]),
   ['Server: build and web tests', npm(VISUAL_CHECK, 'run', 'check:server-build')],
   ['The check catches deliberate bugs', npm(VISUAL_CHECK, 'run', 'check:selftest')],
   ['Decks saved by the legacy page keep working', npm(VISUAL_CHECK, 'run', 'check:legacy-decks')],
@@ -33,12 +46,12 @@ const results = PARTS.map(([name, { cwd, args }]) => {
   const { status } = spawnSync('npm', args, {
     cwd,
     stdio: 'inherit',
-    env: { ...process.env, CHECK_WEB_JAR: BUILT_JAR },
+    env: { ...process.env, CHECK_WEB_JAR: BUILT_JAR, ...(browser ? { CHECK_BROWSER: browser } : {}) },
   });
   return { name, ok: status === 0, minutes: Math.round((Date.now() - started) / 60000) };
 });
 
-console.log('\n=== Summary');
+console.log(`\n=== Summary${browser ? ` (${browser})` : ''}`);
 for (const { name, ok, minutes } of results) {
   console.log(`${ok ? 'pass' : 'FAIL'}  ${name} (${minutes} min)`);
 }

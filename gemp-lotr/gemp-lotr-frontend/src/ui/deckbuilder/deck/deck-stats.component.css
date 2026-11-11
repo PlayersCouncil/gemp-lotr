@@ -1,0 +1,27 @@
+/* The deck stats (#statsDiv), under the draw deck */
+
+:host {
+  position: absolute;
+  left: var(--draw-left);
+  top: calc(var(--deck-h) - 22px);
+  display: block;
+  width: var(--draw-w);
+  min-height: 70px;
+  line-height: 15px;
+}
+
+.gd-stats__line {
+  min-height: 15px;
+}
+
+[data-tone='error'] {
+  color: var(--theme-error);
+}
+
+[data-tone='valid'] {
+  color: var(--theme-valid);
+}
+
+[data-tone='warning'] {
+  color: var(--theme-warning);
+}

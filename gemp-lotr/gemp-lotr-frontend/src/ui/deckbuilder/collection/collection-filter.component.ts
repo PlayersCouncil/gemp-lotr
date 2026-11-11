@@ -95,6 +95,7 @@ export class FieldRowTemplate {
  */
 @Component({
   selector: 'gd-collection-filter',
+  styleUrl: './collection-filter.component.css',
   imports: [NgTemplateOutlet, FormField, FieldRowTemplate],
   host: { class: 'gd-filter' },
   templateUrl: './collection-filter.component.html',
