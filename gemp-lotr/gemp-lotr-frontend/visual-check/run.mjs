@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { launchBrowser } from './browser.mjs';
+import { BROWSER_NAME, launchBrowser } from './browser.mjs';
 import { CONTROLS } from './controls.mjs';
 import { acceptedBehaviour, acceptedFor, withoutLegacyBugs } from './accepted.mjs';
 import { MY_CARDS } from './local-server/seed.mjs';
@@ -34,7 +34,7 @@ const { values: options } = parseArgs({
     mutating: { type: 'boolean', default: false },
     // No server and no login: both pages run against stub-server.mjs, with placeholder card art
     stubbed: { type: 'boolean', default: false },
-    workers: { type: 'string', default: '4' },
+    workers: { type: 'string', default: BROWSER_NAME === 'firefox' ? '1' : '4' },
     // Pixels allowed to differ by more than 2 colour levels (anti-aliasing of rounded corners and SVG edges varies by
     // a few pixels between two loads of the same page)
     tolerance: { type: 'string', default: '60' },
@@ -80,6 +80,11 @@ fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
 const browser = await launchBrowser();
+/**
+ * Firefox keeps one mouse capture for the whole browser: two pages dragging at once take it from each other, so a drag
+ * on one page stops or never starts. There each page is captured alone (and --workers defaults to 1).
+ */
+const ONE_PAGE_AT_A_TIME = BROWSER_NAME === 'firefox';
 
 /**
  * Logs in once; every page then uses that session. (Logging the same player in several times at once can hang the
@@ -130,6 +135,15 @@ async function settle(page, pending, quiet = 700, max = 15000) {
     .waitForFunction(() => Array.from(document.images).every((img) => img.complete), null, {
       timeout: 15000,
     })
+    .catch(() => undefined);
+  // ...and decoded: Firefox could show a loaded image a moment later
+  await page
+    .evaluate(() =>
+      Promise.race([
+        Promise.all(Array.from(document.images).map((img) => img.decode().catch(() => undefined))),
+        new Promise((resolve) => setTimeout(resolve, 5000)),
+      ]),
+    )
     .catch(() => undefined);
 }
 
@@ -220,13 +234,14 @@ if (options.inject && !injection) {
 /** The deck stats come from a request sent on a timer, so between steps they can be a moment behind: not compared then. */
 const STATS_AREA = { selector: '.gd-stats', margin: 2, maxPixels: Infinity };
 
-/** Runs in the page: where each accepted area is at the moment. */
+/** Runs in the page: where each accepted area is at the moment (only its bottom right `corner` px, if it has one). */
 function readAreas(entries) {
-  return entries.map(({ selector, margin }) => {
+  return entries.map(({ selector, margin, corner }) => {
     const box = document.querySelector(selector)?.getBoundingClientRect();
-    return box
-      ? { left: box.left - margin, top: box.top - margin, right: box.right + margin, bottom: box.bottom + margin }
-      : null;
+    if (!box) return null;
+    const left = corner ? box.right - corner : box.left;
+    const top = corner ? box.bottom - corner : box.top;
+    return { left: left - margin, top: top - margin, right: box.right + margin, bottom: box.bottom + margin };
   });
 }
 
@@ -266,7 +281,24 @@ async function replayAnswers(page, answers) {
   });
 }
 
+/**
+ * One page through a scenario, started again in a fresh browser if the page's load doesn't finish in time: under load
+ * Firefox sometimes never finished loading the legacy page, which stopped the whole run. Only the load is retried;
+ * nothing has happened on the page yet, and what it then shows is compared as ever.
+ */
 async function capture(which, scenario, size, file, answers) {
+  try {
+    return await captureOnce(which, scenario, size, file, answers);
+  } catch (error) {
+    if (!error.pageLoad) throw error;
+    console.warn(`retry ${scenario.name}-${size.label} (${which}): the page didn't finish loading in time`);
+    // What the first load recorded of the server's answers, for the Angular page to be given back
+    if (which === 'legacy') answers?.clear();
+    return captureOnce(which, scenario, size, file, answers);
+  }
+}
+
+async function captureOnce(which, scenario, size, file, answers) {
   const pagePath = which === 'legacy' ? options.legacy : angularPath;
   const context = await browser.newContext({
     viewport: { width: size.width, height: size.height },
@@ -352,7 +384,13 @@ async function capture(which, scenario, size, file, answers) {
     if (which === 'legacy') recordAnswers(page, answers);
     else await replayAnswers(page, answers);
   }
-  await page.goto(options.server + pagePath);
+  try {
+    await page.goto(options.server + pagePath);
+  } catch (error) {
+    await context.close();
+    if (error.name === 'TimeoutError') error.pageLoad = true;
+    throw error;
+  }
   await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
   await settle(page, pending);
   const stopAnswering = which === 'angular' ? answerNotifier(page) : async () => {};
@@ -510,6 +548,9 @@ async function check(scenario, size) {
         `what the server holds differs: legacy ...${around(legacyJson)}..., Angular ...${around(angularJson)}...`,
       );
     }
+  } else if (ONE_PAGE_AT_A_TIME) {
+    legacy = await capture('legacy', scenario, size, legacyFile);
+    angular = await capture('angular', scenario, size, angularFile);
   } else {
     [legacy, angular] = await Promise.all([
       capture('legacy', scenario, size, legacyFile),

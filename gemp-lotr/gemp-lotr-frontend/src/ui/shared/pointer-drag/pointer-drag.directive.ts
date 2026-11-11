@@ -51,6 +51,9 @@ export class PointerDragDirective {
       handler(e);
     };
     const listeners: [string, (e: PointerEvent) => void][] = [
+      // Firefox still starts selecting text with the mouse after a cancelled pointerdown (Chromium doesn't), as the
+      // legacy page's drags did not
+      ['mousedown', (e) => e.preventDefault()],
       ['pointermove', (e) => handlers.move(e)],
       ['pointerup', finishWith(handlers.end)],
       ['pointercancel', finishWith(handlers.cancel ?? handlers.end)],

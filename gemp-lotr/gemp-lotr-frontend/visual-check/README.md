@@ -1,7 +1,7 @@
 # Deck builder visual check
 
 Compares the Angular deck builder (`/gemp-lotr/ng/deckbuilder/`) with the legacy one (`/gemp-lotr/deckBuild.html`) in a
-real browser (Chromium, via Playwright). Every scenario in `scenarios.mjs` runs on a fresh copy of each page. That
+real browser (Chromium via Playwright, or another one that `CHECK_BROWSER` names: `firefox`, `webkit`). Every scenario in `scenarios.mjs` runs on a fresh copy of each page. In Firefox the two pages run one after the other, and one scenario at a time by default: Firefox keeps one mouse capture for the whole browser, so two pages dragging at once stop each other's drags. With `--stubbed` the card pictures are placeholders, so a picture the outside server didn't send in time can't make a difference. That
 covers the collection filters and paging, building a deck, formats, every dialog, card information and the hover
 zoom, at several window sizes. Both pages must then:
 
@@ -81,7 +81,7 @@ Every `pause` of a scenario is a step. After the page loads, after each step and
 
 Scenarios with `timing: true` depend on timers, so between steps they only compare what doesn't need waiting for.
 
-`accepted.mjs` lists the differences the owner has accepted, each limited to one area of the page and a number of pixels, and the areas left out of every comparison (`EXCLUDED_AREAS`: what the legacy page had nothing like, such as the theme picker).
+`accepted.mjs` lists the differences the owner has accepted, each limited to one area of the page and a number of pixels, and the areas left out of every comparison (`EXCLUDED_AREAS`: what the legacy page had nothing like, such as the theme picker). An accepted difference can be limited to some window sizes (`sizes`), to some browsers (`browsers`, as `CHECK_BROWSER` names them) and to the bottom right corner of its area (`corner`, in px).
 Everything else fails, so a clean run means no difference nobody has decided on.
 
 `npm run check:selftest` proves the check itself works: `injections.mjs` puts deliberate bugs into the Angular page, one
@@ -103,7 +103,10 @@ and lists what is really on both pages: a control with no test, or on one page o
 the frontend README.
 
 `npm run inspect -- summary <report>` groups a report's differences by cause, `where <report> <name>` says where on the
-screen one is, and `crop <report> <name> x y w h [zoom]` makes one picture of the same area of both pages.
+screen one is, and `crop <report> <name> x y w h [zoom]` makes one picture of the same area of both pages. `npm run measure -- [--browser firefox] [--build .local-server/ng/browser] <selector>...` loads
+both pages against the stub server and prints where the matching elements are, with their font, padding, border and colours,
+after the steps of `--click` (a control clicked, `key:<key>`, `select:<control>:<value>` or `drag:<control>:<dx>`):
+for finding why the pages differ, e.g. in another browser.
 
 ## On a throwaway server, without a login
 

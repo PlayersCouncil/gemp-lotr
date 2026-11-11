@@ -10,7 +10,8 @@ import { FIXTURE_DECK } from './scenarios.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FRONTEND = path.resolve(HERE, '..');
 const WEB = path.resolve(FRONTEND, '../gemp-lotr-async/src/main/web');
-const BUILD = path.join(WEB, 'ng');
+// The Angular build: the one served by the server's web root, or another one (CHECK_NG_BUILD, e.g. .local-server/ng)
+const BUILD = process.env.CHECK_NG_BUILD ? path.resolve(process.env.CHECK_NG_BUILD) : path.join(WEB, 'ng');
 const RESPONSES = path.join(FRONTEND, 'src/testing/server-responses');
 export const STUB_ORIGIN = 'http://gemp.test';
 

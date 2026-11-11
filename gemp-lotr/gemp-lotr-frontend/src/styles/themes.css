@@ -7,9 +7,11 @@
  * (MIT licensed, like the legacy copy in css/dark-hive) and hall.css's scroll buttons.
  */
 :root {
-  --theme-font-text: 'Times New Roman', serif;
+  /* Generic names, as the legacy page used the browser's defaults: each browser picks its own (Chromium Times New Roman
+   * and Arial, Firefox its serif and sans-serif); jQuery UI named Verdana for its widgets */
+  --theme-font-text: serif;
   --theme-font-widget: Verdana, Arial, sans-serif;
-  --theme-font-control: Arial, sans-serif;
+  --theme-font-control: sans-serif;
 
   --theme-page-bg: #000;
   --theme-text: #fff;

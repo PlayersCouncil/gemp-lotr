@@ -270,6 +270,31 @@ describe('DeckbuilderPageComponent', () => {
     expect(el.style.getPropertyValue('--gd-collection-width')).toBe('700px');
   });
 
+  it('keeps a quick drag released before the page was drawn again', async () => {
+    const { fixture, el, separator } = await render();
+    vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ right: 1440 } as DOMRect);
+    vi.spyOn(separator, 'getBoundingClientRect').mockReturnValue({ left: 1030 } as DOMRect);
+    // The preview is drawn where the drag put it (jsdom has no layout)
+    const box = HTMLElement.prototype.getBoundingClientRect;
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+      return this.classList.contains('gd-page__drag-preview')
+        ? ({ right: 1440 - parseInt(el.style.getPropertyValue('--gd-drag-width')) } as DOMRect)
+        : box.call(this);
+    });
+    const pointer = (type: string, x: number) => {
+      const event = new MouseEvent(type, { clientX: x, button: 0, bubbles: true, cancelable: true });
+      Object.assign(event, { pointerId: 1 });
+      separator.dispatchEvent(event);
+    };
+    // As Firefox delivers a fast drag: all of it before the next change detection
+    pointer('pointerdown', 1030);
+    pointer('pointermove', 950);
+    pointer('pointerup', 900);
+    await fixture.whenStable();
+    expect(el.style.getPropertyValue('--gd-collection-width')).toBe('540px');
+    expect(el.querySelector('.gd-page__drag-preview')).toBeNull();
+  });
+
   it('leaves the collection as it was when a drag is cancelled', async () => {
     const { fixture, el, separator } = await render();
     vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({ right: 1440 } as DOMRect);

@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+// Where things are on the legacy page and the Angular page, and in which font: for finding why they differ, e.g. in
+// another browser. Both pages run against the stub server (stub-server.mjs), with no login.
+//
+//   npm run measure -- [--browser firefox] [--size 1366x768] [--build .local-server/ng/browser] [--click <control>]...
+//                      <selector>...
+//
+// --build: the Angular build to serve (default: the server's web root, ng/); .local-server/ng/browser is the one of the
+// last check:local. --click: a control of controls.mjs (e.g. deckList) clicked on each page first, key:<key> pressed, or
+// drag:<control>:<dx> dragged sideways as pane-resized does (from 3px into it, 100px down, in 10 steps), or
+// select:<control>:<value> chosen in a list, in order.
+// Each selector is looked up on both pages, so a selector of one page alone shows only there.
+import { parseArgs } from 'node:util';
+import { chromium, firefox, webkit } from 'playwright';
+
+const { values: options, positionals: selectors } = parseArgs({
+  allowPositionals: true,
+  options: {
+    browser: { type: 'string', default: process.env.CHECK_BROWSER || 'chromium' },
+    size: { type: 'string', default: '1366x768' },
+    build: { type: 'string' },
+    click: { type: 'string', multiple: true, default: [] },
+  },
+});
+if (options.build) process.env.CHECK_NG_BUILD = options.build;
+const { routeToStub, STUB_ORIGIN } = await import('../stub-server.mjs');
+const { CONTROLS } = await import('../controls.mjs');
+
+const type = { chromium, firefox, webkit }[options.browser];
+if (!type || !selectors.length) {
+  console.error(
+    'Usage: npm run measure -- [--browser chromium|firefox|webkit] [--size WxH] [--build dir] <selector>...',
+  );
+  process.exit(2);
+}
+const [width, height] = options.size.split('x').map(Number);
+const PAGES = { legacy: '/gemp-lotr/deckBuild.html', angular: '/gemp-lotr/ng/deckbuilder/?theme=classic' };
+
+/** Runs in the page: each match's box (rounded to 0.01px), font, padding and border. */
+function measure(selector) {
+  return [...document.querySelectorAll(selector)].slice(0, 20).map((element) => {
+    const box = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    const r = (n) => Math.round(n * 100) / 100;
+    const text = (element.textContent ?? '').trim().replace(/\s+/g, ' ').slice(0, 30);
+    const edges = `padding ${style.padding} border ${style.borderWidth} ${style.boxSizing} color ${style.color} bg ${style.backgroundColor}`;
+    return `x ${r(box.x)} y ${r(box.y)} w ${r(box.width)} h ${r(box.height)}  ${style.fontFamily} ${style.fontSize}/${style.lineHeight}  ${edges}  ${text}`;
+  });
+}
+
+const browser = await type.launch();
+for (const [which, pagePath] of Object.entries(PAGES)) {
+  const context = await browser.newContext({ viewport: { width, height } });
+  const log = [];
+  await routeToStub(context, log);
+  const page = await context.newPage();
+  await page.goto(STUB_ORIGIN + pagePath, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(500);
+  for (const name of options.click) {
+    if (name.startsWith('key:')) {
+      await page.keyboard.press(name.slice(4));
+    } else if (name.startsWith('select:')) {
+      const [, control, value] = name.split(':');
+      await page.selectOption(CONTROLS[control][which], value);
+    } else if (name.startsWith('drag:')) {
+      const [, control, dx] = name.split(':');
+      const box = await page.locator(CONTROLS[control][which]).first().boundingBox();
+      await page.mouse.move(box.x + 3, box.y + 100);
+      await page.mouse.down();
+      await page.mouse.move(box.x + 3 + Number(dx), box.y + 100, { steps: 10 });
+      await page.mouse.up();
+    } else {
+      const selector = CONTROLS[name]?.[which];
+      if (!selector) throw new Error(`No control ${name} in controls.mjs`);
+      // A gesture of the check (matrix.mjs) presses where the control is, whatever is over it
+      const box = await page.locator(selector).first().boundingBox();
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    }
+    await page.waitForTimeout(800);
+  }
+  console.log(`=== ${which} (${options.browser} ${options.size})`);
+  for (const selector of selectors) {
+    const found = await page.evaluate(measure, selector);
+    if (found.length) console.log(`${selector}\n  ${found.join('\n  ')}`);
+  }
+  await context.close();
+}
+await browser.close();

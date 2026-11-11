@@ -16,7 +16,8 @@ interface EntryAction {
  *
  * DOM contract: a modal `gd-dialog` with `data-dialog` = deck-list or library, holding `ul.gd-deck-list` with an
  * `li.gd-deck-list__item` per deck: a `button.gd-button` per action (`data-action` = open, rename, share, delete for
- * saved decks; open, deck-list for the library; `title` and `aria-label` name it), then `.gd-deck-list__name` with
+ * saved decks; open, deck-list for the library; `title` and `aria-label` name it) holding its
+ * `.gd-deck-list__icon`, then `.gd-deck-list__name` with
  * `b.gd-deck-list__format` ("[format]") and the name.
  */
 @Component({
@@ -42,7 +43,9 @@ interface EntryAction {
                 [title]="button.label"
                 [attr.aria-label]="button.label + ': ' + entry.name"
                 (click)="button.run(entry)"
-              ></button>
+              >
+                <span class="gd-deck-list__icon"></span>
+              </button>
             }
             <span class="gd-deck-list__name"
               ><b class="gd-deck-list__format">[{{ entry.formatName }}]</b> - {{ entry.name }}</span

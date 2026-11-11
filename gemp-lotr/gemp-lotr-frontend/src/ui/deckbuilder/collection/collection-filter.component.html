@@ -91,9 +91,11 @@
 
 <div class="gd-filter__resets">
   <button type="button" class="gd-button" data-action="reset-advanced" (click)="query.resetAdvanced()">
-    Reset advanced filters only
+    <span class="gd-button__text">Reset advanced filters only</span>
   </button>
-  <button type="button" class="gd-button" data-action="reset-all" (click)="query.resetAll()">Reset all filters</button>
+  <button type="button" class="gd-button" data-action="reset-all" (click)="query.resetAll()">
+    <span class="gd-button__text">Reset all filters</span>
+  </button>
 </div>
 
 <div class="gd-cultures" role="group" aria-label="Cultures">
@@ -114,7 +116,7 @@
             [attr.aria-label]="culture.code"
             (change)="query.toggleCulture(culture.code)"
           />
-          <img class="gd-culture__icon" [src]="culture.image" alt="" />
+          <span class="gd-culture__face"><img class="gd-culture__icon" [src]="culture.image" alt="" /></span>
         </label>
       }
     </div>

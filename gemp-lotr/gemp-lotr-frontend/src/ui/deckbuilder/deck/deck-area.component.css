@@ -111,21 +111,31 @@ button.gd-slot__label:focus-visible {
   top: 10%;
 }
 
-/* The legacy hint held the link, two lines further down: the text is centred together with those lines */
-.gd-slot[data-slot='map'] .gd-slot__hint {
-  padding-bottom: calc(10px + 2lh);
+/*
+ * The legacy Map hint held its link, after a blank line: the label's hint keeps room for them (unseen), and the link is
+ * shown in the same place by a copy of the label over it, unseen but for the link. So the link wraps, and the hint is
+ * centred with it, as each browser lays out the legacy hint.
+ */
+.gd-slot__room {
+  visibility: hidden;
 }
 
-/* Under the Map's hint, after a blank line, as the legacy hint's own link */
-.gd-slot__link {
+/* Laid out as .gd-slot__label */
+.gd-slot__more {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(40% + 15px + 1lh);
-  color: var(--theme-text);
-  font-size: calc(0.3rem + 0.75vh);
-  font-style: italic;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: normal;
   text-align: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gd-slot__link {
+  color: var(--theme-text);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 /* The page's colour for a visited link, as before this rule */
@@ -172,18 +182,17 @@ button.gd-slot__label:focus-visible {
   padding-top: 20px;
 }
 
-/* VerticalBarGroup rounded each card's position down; the browser would round a fractional one to the nearest */
+/*
+ * Each card where VerticalBarGroup put it: 20px, then the cards before it and their gaps (100cqh is the height left
+ * under the title gap; one site has no gap), rounded down to a whole pixel as it did, so no browser rounds a fraction
+ * its own way. The gap down to 1/64px first: VerticalBarGroup added the gaps up one by one, which left its sum a hair
+ * under a whole pixel where the exact one is on it
+ */
 .gd-slot[data-slot='sites'] .gd-card {
-  top: -0.51px;
-}
-
-.gd-slot[data-slot='sites'] .gd-card {
-  flex: none;
-}
-
-.gd-slot[data-slot='sites'] .gd-card + .gd-card {
-  /* 100cqh is the height left under the 20px title gap. Down to a layout unit, or the error adds up over the column */
-  margin-top: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / (var(--n) - 1)), 0.015625px);
+  --gap: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / max(var(--n) - 1, 1)), 0.015625px);
+  position: absolute;
+  left: 0;
+  top: round(down, 20px + var(--gd-site-index, 0) * (var(--site-h) + var(--gap)), 1px);
 }
 
 .gd-pile {

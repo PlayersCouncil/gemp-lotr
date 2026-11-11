@@ -3,7 +3,7 @@
 :host {
   /* The fields and the reset buttons are as wide as the legacy filter table; the pager and cultures span the pane */
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr);
 }
 
 .gd-pager,
@@ -70,7 +70,17 @@
   background: var(--theme-hover-bg);
 }
 
+.gd-pager__size:enabled:hover::-moz-range-thumb {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
 .gd-pager__size:enabled:active::-webkit-slider-thumb {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-pager__size:enabled:active::-moz-range-thumb {
   border-color: var(--theme-active-border);
   background: var(--theme-active-bg);
 }
@@ -116,8 +126,11 @@
 /* The legacy filter table: label, control, label, control; 2px cell spacing and 1px cell padding */
 .gd-filter__fields {
   display: grid;
-  /* The first column is set by its widest label, "Game Text contains:", as the table rounded it */
-  grid-template-columns: 91.4px repeat(3, max-content);
+  /*
+   * Each column as wide as its widest content, as the legacy table sized them; where the pane is too narrow for that,
+   * the columns shrink and their labels wrap, as in the table
+   */
+  grid-template-columns: repeat(4, auto);
   align-items: center;
   column-gap: 2px;
   row-gap: 2px;
@@ -203,13 +216,19 @@
 .gd-filter__resets {
   grid-column: 1;
   display: grid;
-  grid-template-columns: 175.77px 175.75px;
-  gap: 6.01px;
-  margin: 0 0 0 6px;
+  /*
+   * The legacy row: a table cell (2px spacing, 1px padding) holding a flex row (2px gap) of two buttons that share its
+   * width, each with 3px on the left and jQuery UI's .1em of the button's font (95% of this one) on the right. The
+   * table's width, which the browser's fonts set, decides theirs.
+   */
+  grid-template-columns: 1fr 1fr;
+  gap: calc(5px + 0.095em);
+  margin: 0 calc(3px + 0.095em) 0 6px;
   padding-top: 9px;
+  /* The table text: 90% of the page's 12px */
+  font-size: 90%;
 }
 
-/* 95% of the page's 12px, then 90% for the table text and jQuery UI's 70% for button text */
 /* The legacy reset buttons looked the same under the mouse and with the focus, which only added the browser's ring */
 .gd-filter__resets .gd-button:is(:enabled:hover, :focus-visible) {
   border-color: var(--theme-widget-border);
@@ -220,7 +239,17 @@
 .gd-filter__resets .gd-button {
   height: 19px;
   padding: 0;
-  font-size: 7.182px;
+  /*
+   * 95% of the table text, then jQuery UI's 70% for the text inside: in steps, as on the legacy page, since the browser
+   * rounds each (Firefox to 1/64px)
+   */
+  font-size: 95%;
+}
+
+/* .ui-button-text: a block, so the line is only as high as its own font's */
+.gd-button__text {
+  display: block;
+  font-size: 70%;
   line-height: 1.4;
 }
 
@@ -244,11 +273,16 @@
   align-items: center;
   margin-left: 0.2em;
   margin-right: -0.2em;
-  /* .ui-button-text's padding, at its 70% font size */
-  padding: 1.85px 2.77px;
   border: 1px solid var(--theme-widget-border);
   background: var(--theme-default-bg);
   cursor: pointer;
+}
+
+/* .ui-button-text: 70% of the button's font, which the browser rounds (Firefox to 9.25px), and its padding in that */
+.gd-culture__face {
+  display: flex;
+  padding: 0.2em 0.3em;
+  font-size: 70%;
   line-height: 1.4;
 }
 

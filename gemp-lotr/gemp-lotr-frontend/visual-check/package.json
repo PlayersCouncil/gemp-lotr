@@ -14,6 +14,7 @@
     "check:server-build": "node tools/build-server.mjs",
     "check:all": "node tools/check-all.mjs",
     "inspect": "node tools/inspect.mjs",
+    "measure": "node tools/measure.mjs",
     "check:mutation": "node tools/mutation.mjs",
     "check:legacy-decks": "node local-server.mjs --legacy-decks"
   },

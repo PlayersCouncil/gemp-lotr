@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { ApplicationRef, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { DeckStartup } from '../../core/deck/deck-startup.service';
 import { provideDeckbuilderState } from '../../core/deckbuilder-state';
 import { PacksService } from '../../core/packs/packs.service';
@@ -103,6 +103,7 @@ export class DeckbuilderPageComponent {
   protected readonly dragWidth = signal<number | null>(null);
   private readonly dragPreview = viewChild<ElementRef<HTMLElement>>('dragPreview');
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly app = inject(ApplicationRef);
   private lastPointerToggle = -Infinity;
 
   constructor() {
@@ -152,19 +153,25 @@ export class DeckbuilderPageComponent {
       this.dragging.set(false);
       this.dragWidth.set(null);
     };
+    const follow = (e: PointerEvent) => {
+      if (!open || (onToggle && !moved && e.clientX === pressedAt)) {
+        return;
+      }
+      moved = true;
+      this.dragging.set(true);
+      const right = page.getBoundingClientRect().right;
+      this.dragWidth.set(Math.round(right - (e.clientX - grabbedAt) - separator.offsetWidth));
+    };
     return {
-      move: (e) => {
-        if (!open || (onToggle && !moved && e.clientX === pressedAt)) {
-          return;
-        }
-        moved = true;
-        this.dragging.set(true);
-        const right = page.getBoundingClientRect().right;
-        this.dragWidth.set(Math.round(right - (e.clientX - grabbedAt) - separator.offsetWidth));
-      },
+      move: follow,
       end: (e) => {
         if (onToggle && !moved) {
           this.toggleWithPointer(e.timeStamp);
+        } else if (moved) {
+          // Released where it was last moved to, also when the page wasn't drawn since (a quick flick): the preview is
+          // drawn now (with the page's own styles, which a change detection of this component alone leaves out)
+          follow(e);
+          this.app.tick();
         }
         // The preview is where the styles allowed it: the width kept is what it shows, so the next drag or key press
         // starts from there

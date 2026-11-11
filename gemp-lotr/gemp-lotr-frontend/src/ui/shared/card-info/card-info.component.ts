@@ -82,7 +82,8 @@ function isMetaSiteModifier(blueprintId: string): boolean {
           [step]="zoomStep"
           [value]="zoom()"
           (input)="setZoom($event)"
-          (pointerdown)="sliding = true"
+          (pointerdown)="slideStarted($event)"
+          (pointermove)="slideMoved($event)"
           (pointerup)="slideStopped()"
           (pointercancel)="slideStopped()"
         />
@@ -123,6 +124,8 @@ export class CardInfoComponent {
   protected readonly zoom = signal(this.readZoom());
   /** The size slider is being used: the click that ends it doesn't close the dialog (CardInfoDialog.mouseUp). */
   protected sliding = false;
+  /** Where the slider was pressed, and the value the press gave it, until the pointer moves. */
+  private press: { x: number; value: number | null } | null = null;
 
   protected readonly view = computed(() => {
     const card = this.info.card();
@@ -165,15 +168,40 @@ export class CardInfoComponent {
   }
 
   protected setZoom(event: Event): void {
-    const value = parseFloat((event.target as HTMLInputElement).value);
+    const input = event.target as HTMLInputElement;
+    const value = parseFloat(input.value);
+    if (this.press) {
+      // The press resized the card, so the dialog moved under the pointer; Firefox then reads the value again where
+      // the pointer is on the moved slider. Chromium, and the legacy slider, keep the press's value until it moves.
+      if (this.press.value !== null && value !== this.press.value) {
+        input.value = `${this.press.value}`;
+        return;
+      }
+      this.press.value = value;
+    }
     if (Number.isFinite(value)) {
       writeCookie(this.document, ZOOM_COOKIE, `${value}`);
       this.zoom.set(value);
     }
   }
 
+  protected slideStarted(event: PointerEvent): void {
+    this.sliding = true;
+    this.press = { x: event.clientX, value: null };
+  }
+
+  protected slideMoved(event: PointerEvent): void {
+    if (this.press && event.clientX !== this.press.x) {
+      this.press = null;
+    }
+  }
+
   protected slideStopped(): void {
-    setTimeout(() => (this.sliding = false), 1);
+    // Firefox reads the value again after the release (an input event after pointerup)
+    setTimeout(() => {
+      this.press = null;
+      this.sliding = false;
+    }, 1);
   }
 
   /** Pressing on the dialog's content leaves the focus where it is, as on the legacy dialog. */

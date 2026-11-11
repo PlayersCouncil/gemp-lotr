@@ -6,36 +6,55 @@
   list-style: none;
 }
 
-/* An icon in a text button: the icon is the button's text */
-.gd-button[data-action]:empty::before {
+/*
+ * An icon button: a jQuery UI text button whose text is the icon. The button has .2em .3em of padding at the dialog's
+ * font, and its text (.ui-button-text) 70% of that font with .2em .3em of its own: two elements, as there, since the
+ * browser rounds each (Firefox to 1/60px)
+ */
+.gd-deck-list__item .gd-button {
+  padding: 0.2em 0.3em;
+  font-size: inherit;
+  line-height: normal;
+}
+
+.gd-deck-list__icon {
+  display: block;
+  padding: 0.2em 0.3em;
+  font-size: 70%;
+  line-height: 1.4;
+}
+
+/* .ui-icon: a block that hides its overflow, so it gives the button no baseline */
+.gd-deck-list__icon::before {
   content: '';
   display: block;
+  overflow: hidden;
   width: 16px;
   height: 16px;
   background-image: var(--theme-icons);
   background-repeat: no-repeat;
 }
 
-.gd-button[data-action]:empty:is(:hover, :focus)::before {
+.gd-button:is(:hover, :focus) .gd-deck-list__icon::before {
   background-image: var(--theme-icons-hover);
 }
 
-.gd-button[data-action='open']::before {
+.gd-button[data-action='open'] .gd-deck-list__icon::before {
   background-position: -16px -96px;
 }
 
-.gd-button[data-action='rename']::before {
+.gd-button[data-action='rename'] .gd-deck-list__icon::before {
   background-position: -64px -112px;
 }
 
-.gd-button[data-action='share']::before {
+.gd-button[data-action='share'] .gd-deck-list__icon::before {
   background-position: -32px -80px;
 }
 
-.gd-button[data-action='delete']::before {
+.gd-button[data-action='delete'] .gd-deck-list__icon::before {
   background-position: -176px -96px;
 }
 
-.gd-button[data-action='deck-list']::before {
+.gd-button[data-action='deck-list'] .gd-deck-list__icon::before {
   background-position: -160px -128px;
 }

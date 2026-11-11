@@ -7,11 +7,11 @@
   display: block;
   width: var(--draw-w);
   min-height: 70px;
-  line-height: 15px;
 }
 
+/* The font's normal line height, as the legacy lines (an empty line is as high as a full one) */
 .gd-stats__line {
-  min-height: 15px;
+  min-height: 1lh;
 }
 
 [data-tone='error'] {

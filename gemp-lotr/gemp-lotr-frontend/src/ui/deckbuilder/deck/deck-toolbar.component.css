@@ -108,13 +108,14 @@ select {
   box-sizing: border-box;
   height: 23px;
   padding: 3px;
-  border: 1px solid var(--theme-field-border-light);
+  /* Only the colours: the width and style stay the browser's own (Chromium 1px, Firefox 2px), as on the legacy page */
   border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
     var(--theme-field-border-light);
   border-radius: var(--theme-field-radius);
   background-color: var(--theme-field-bg);
   color: var(--theme-text);
-  font: 13.3333px var(--theme-font-control);
+  /* Only the family: the size stays the browser's own for a select (Chromium 13.3333px, Firefox 13.3281px) */
+  font-family: var(--theme-font-control);
 }
 
 select:hover {

@@ -8,3 +8,7 @@
 /report-rerun
 /report-mutation
 /report-legacy-decks
+/report-firefox
+/report-firefox-stubbed
+/report-chromium-stubbed
+/report-rerun-matrix

@@ -4,7 +4,11 @@
 //
 //   scenarios  which scenarios it applies to: names, or patterns for the generated ones of matrix.mjs
 //   sizes      which window sizes (default: all)
+//   browsers   which browsers (CHECK_BROWSER; default: all)
+//   corner     only the bottom right corner of the area, this many px square (before `margin`)
 //   reason     what differs and why it is accepted
+
+import { BROWSER_NAME } from './browser.mjs';
 
 const SLIDER_RING = 'Slider handle focus ring: Chrome drew the legacy ring itself, CSS can only approximate its shape';
 
@@ -24,6 +28,15 @@ export const EXCLUDED_AREAS = [
 // Where two entries cover the same pixel of a scenario, the first one counts it: the narrower entries come first.
 export const ACCEPTED = [
   {
+    scenarios: [/./],
+    browsers: ['firefox'],
+    selector: 'dialog[open]',
+    corner: 16,
+    margin: 2,
+    maxPixels: 150,
+    reason: 'Firefox draws its own resize grip in the corner of a dialog, which CSS cannot style (accepted 2026-11-11)',
+  },
+  {
     scenarios: ['open-library-deck', 'save-rename-copy', 'import-decklist'],
     sizes: ['1280x800'],
     selector: '.gd-toolbar',
@@ -31,6 +44,35 @@ export const ACCEPTED = [
     maxPixels: 3500,
     reason:
       'The theme toggle takes 30px of a toolbar a long deck name already fills: the format list is squeezed that much more',
+  },
+  {
+    scenarios: ['deck-add-remove', 'deck-ring-bearer-ring', 'deck-sites', 'deck-full', 'format-movie', 'notes-escape'],
+    sizes: ['1280x800'],
+    browsers: ['firefox'],
+    selector: '.gd-toolbar',
+    margin: 2,
+    maxPixels: 3500,
+    reason:
+      'The same squeeze in Firefox, whose serif is wider: a shorter deck name already fills the toolbar (accepted 2026-11-11)',
+  },
+  {
+    scenarios: ['pane-resized'],
+    sizes: ['1280x800', '1366x768'],
+    browsers: ['firefox'],
+    selector: '.gd-toolbar',
+    margin: 20,
+    maxPixels: 3500,
+    reason:
+      'The same squeeze in a narrowed deck pane in Firefox, also at 1366x768; its wider deck name reaches about 20px past the toolbar (accepted 2026-11-11)',
+  },
+  {
+    scenarios: ['selection-pack'],
+    browsers: ['firefox'],
+    selector: '[data-dialog="selection"]',
+    margin: 2,
+    maxPixels: 120000,
+    reason:
+      "The legacy page's choices are 1px smaller in Firefox (210x294 against 211x295): its jQuery 1.6 sizing starts from whole-pixel heights, which Firefox rounds just under (accepted 2026-11-11)",
   },
   {
     scenarios: ['pane-resized'],
@@ -67,6 +109,27 @@ export const ACCEPTED = [
     margin: 8,
     maxPixels: 2000,
     reason: "The wiki link's keyboard focus ring is as wide as the dialog; the legacy one was as wide as the text",
+  },
+  {
+    scenarios: [
+      'card-info',
+      'card-info-zoom-flip',
+      'card-info-close-drag',
+      /^cardInfo--|--(rightClick|shiftClick|dragUp)$/,
+    ],
+    browsers: ['firefox'],
+    selector: '.gd-card-info__zoom',
+    margin: 8,
+    maxPixels: 350,
+    reason: `${SLIDER_RING}; Firefox draws its own ring less like it (accepted 2026-11-11)`,
+  },
+  {
+    scenarios: ['state-slider-focus', /--pageSize--/],
+    browsers: ['firefox'],
+    selector: '.gd-pager__size',
+    margin: 8,
+    maxPixels: 350,
+    reason: `${SLIDER_RING}; Firefox draws its own ring less like it (accepted 2026-11-11)`,
   },
   {
     scenarios: [
@@ -265,6 +328,11 @@ export function acceptedFor(scenario, sizeLabel) {
   const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
   return [
     ...EXCLUDED_AREAS.map((area) => ({ ...area, maxPixels: Infinity })),
-    ...ACCEPTED.filter((entry) => entry.scenarios.some(applies) && (!entry.sizes || entry.sizes.includes(sizeLabel))),
+    ...ACCEPTED.filter(
+      (entry) =>
+        entry.scenarios.some(applies) &&
+        (!entry.sizes || entry.sizes.includes(sizeLabel)) &&
+        (!entry.browsers || entry.browsers.includes(BROWSER_NAME)),
+    ),
   ];
 }

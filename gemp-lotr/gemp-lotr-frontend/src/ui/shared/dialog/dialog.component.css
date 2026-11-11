@@ -160,13 +160,14 @@
 }
 
 /*
- * A jQuery UI text button (.ui-button-text-only): .2em .3em of padding, then the text at 70% (deckBuild.css) with
- * .2em .3em of its own
+ * A jQuery UI text button (.ui-button-text-only): .2em .3em of padding at the dialog's 13.2px, then the text at 70%
+ * (deckBuild.css) with .2em .3em of its own. The 70% and that padding in em, so each browser rounds them as it did
+ * there (Firefox's 70% is 9.25px)
  */
 .gd-dialog .gd-button {
   margin-right: 1.32px;
-  padding: calc(2.64px + 1.848px) calc(3.96px + 2.772px);
-  font-size: 9.24px;
+  padding: calc(2.64px + 0.2em) calc(3.96px + 0.3em);
+  font-size: 70%;
   line-height: 1.4;
   vertical-align: baseline;
 }

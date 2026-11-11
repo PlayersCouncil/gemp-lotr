@@ -88,10 +88,11 @@ export class FieldRowTemplate {
  * - `.gd-filter__fields` with `.gd-filter__basic` and `.gd-filter__advanced` (whose `.gd-filter__advanced-title`
  *   links the wiki search); each field a `label.gd-field` (`data-field`, `data-kind` = select, text or numeric,
  *   `data-wide` for the wide ones) holding `.gd-field__label` and `.gd-field__control` with the native control(s);
- * - `.gd-filter__resets` with two `button.gd-button` (`data-action` = reset-advanced, reset-all);
+ * - `.gd-filter__resets` with two `button.gd-button` (`data-action` = reset-advanced, reset-all), their text in
+ *   `.gd-button__text`;
  * - `.gd-cultures`, groups `.gd-cultures__group` (`data-group`, hidden when the format doesn't use them) of
  *   `label.gd-culture` (`data-culture`, `data-active`, `data-icon-kind` = culture or other) holding a visually hidden
- *   `input[type=checkbox].gd-culture__input` and `img.gd-culture__icon`.
+ *   `input[type=checkbox].gd-culture__input` and `.gd-culture__face` > `img.gd-culture__icon`.
  */
 @Component({
   selector: 'gd-collection-filter',

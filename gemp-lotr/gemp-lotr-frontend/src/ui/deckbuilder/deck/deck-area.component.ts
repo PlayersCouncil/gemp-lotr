@@ -48,8 +48,8 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
  * - `gd-deck-toolbar.gd-toolbar`;
  * - `section.gd-slot` per slot (`data-slot` = ring-bearer, ring, map, race, sites; `hidden` when the format has none;
  *   `data-count` = cards in it) holding `.gd-slot__label` (a `button` for the slots that select; the race one is a
- *   `div`) with `.gd-slot__title` and `.gd-slot__hint`, the Map's `a.gd-slot__link`, then `.gd-slot__cards` (the
- *   fitCards box of the Ring-bearer, Ring, Map and Race; for the sites, `--gd-slot-count` = number of sites) with a
+ *   `div`) with `.gd-slot__title` and `.gd-slot__hint`, the Map's `.gd-slot__more` (the label again, unseen) holding `a.gd-slot__link`, then `.gd-slot__cards` (the
+ *   fitCards box of the Ring-bearer, Ring, Map and Race; for the sites, `--gd-slot-count` = number of sites, and `--gd-site-index` on each) with a
  *   `button.gd-card` per card;
  * - `section.gd-pile` per draw deck side (`data-side` = free-peoples, shadow; `data-count` = cards in it, copies
  *   included) holding `.gd-pile__cards` (the fitCards box) with a `.gd-stack` per card: its other copies first
@@ -74,7 +74,14 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
         @if (slot.selectable) {
           <button type="button" class="gd-slot__label" gdNoPressFocus (click)="select(slot.slot)">
             <span class="gd-slot__title">{{ slot.title }}</span>
-            <span class="gd-slot__hint">{{ slot.hint }}</span>
+            <span class="gd-slot__hint"
+              >{{ slot.hint
+              }}<span class="gd-slot__room" aria-hidden="true">
+                @if (slot.slot === 'map') {
+                  <br /><br /><i>See here for details.</i>
+                }
+              </span></span
+            >
           </button>
         } @else {
           <div class="gd-slot__label">
@@ -83,15 +90,28 @@ function slotView(view: Omit<SlotView, 'fit'>): SlotView {
           </div>
         }
         @if (slot.slot === 'map') {
-          <a class="gd-slot__link" href="https://wiki.lotrtcgpc.net/wiki/Map" target="_blank" rel="noopener noreferrer"
-            >See here for details.</a
-          >
+          <!-- The label once more, unseen but for the link: the link wraps and sits as in the legacy hint -->
+          <div class="gd-slot__more">
+            <span class="gd-slot__title" aria-hidden="true">{{ slot.title }}</span>
+            <span class="gd-slot__hint"
+              ><span aria-hidden="true">{{ slot.hint }}<br /><br /></span
+              ><i
+                ><a
+                  class="gd-slot__link"
+                  href="https://wiki.lotrtcgpc.net/wiki/Map"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >See here for details.</a
+                ></i
+              ></span
+            >
+          </div>
         }
         @if (slot.slot === 'sites') {
           <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- only hears clicks bubbling up from its card buttons -->
           <div class="gd-slot__cards" [style.--gd-slot-count]="slot.cards.length" (click)="siteClicked($event)">
-            @for (card of slot.cards; track cardKey(card)) {
-              <button [gdCard]="card"></button>
+            @for (card of slot.cards; track cardKey(card); let index = $index) {
+              <button [gdCard]="card" [style.--gd-site-index]="index"></button>
             }
           </div>
         } @else {

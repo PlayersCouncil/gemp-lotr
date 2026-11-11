@@ -109,7 +109,17 @@
   background: var(--theme-hover-bg);
 }
 
+.gd-card-info__zoom:hover::-moz-range-thumb {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
 .gd-card-info__zoom:active::-webkit-slider-thumb {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-card-info__zoom:active::-moz-range-thumb {
   border-color: var(--theme-active-border);
   background: var(--theme-active-bg);
 }

@@ -281,4 +281,34 @@ describe('CardInfoComponent', () => {
     await click('dialog');
     expect(info.isOpen()).toBe(false);
   });
+
+  it('keeps the size a press gave it, until the pointer moves (Firefox reads it again where the moved slider is)', async () => {
+    const { fixture, dialog } = await render();
+    info.show(CARD);
+    await fixture.whenStable();
+    const zoom = dialog.querySelector<HTMLInputElement>('.gd-card-info__zoom')!;
+    const pointer = (type: string, x: number) => {
+      const event = new MouseEvent(type, { clientX: x, bubbles: true });
+      zoom.dispatchEvent(event);
+    };
+    const input = (value: string) => {
+      zoom.value = value;
+      zoom.dispatchEvent(new Event('input'));
+    };
+    pointer('pointerdown', 800);
+    input('0.9');
+    pointer('pointerup', 800);
+    input('0.8');
+    await fixture.whenStable();
+    expect(dialog.style.getPropertyValue('--gd-card-info-zoom')).toBe('0.9');
+    expect(zoom.value).toBe('0.9');
+    // Once the press is over, or the pointer moved, the slider follows again
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    pointer('pointerdown', 800);
+    input('0.6');
+    pointer('pointermove', 700);
+    input('0.5');
+    await fixture.whenStable();
+    expect(dialog.style.getPropertyValue('--gd-card-info-zoom')).toBe('0.5');
+  });
 });
