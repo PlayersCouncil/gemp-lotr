@@ -5,6 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { BlockFilter } from '../../../core/api/models';
 import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { CollectionQuery } from '../../../core/collection/collection-query.service';
+import { FilterPins } from '../../../core/collection/filter-pins';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { CollectionFilterComponent } from './collection-filter.component';
@@ -34,8 +35,11 @@ describe('CollectionFilterComponent', () => {
 
   afterEach(() => TestBed.inject(HttpTestingController).match(() => true));
 
-  async function render() {
+  async function render(part?: 'pane' | 'menu') {
     const fixture = TestBed.createComponent(CollectionFilterComponent);
+    if (part) {
+      fixture.componentRef.setInput('part', part);
+    }
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
     const field = <T extends HTMLElement = HTMLSelectElement>(name: string, control = 'select') =>
@@ -270,5 +274,94 @@ describe('CollectionFilterComponent', () => {
     collection.updateFormat('hobbit', BLOCKS.slice(1));
     await fixture.whenStable();
     expect(el.querySelector<HTMLElement>('[data-group="culture_hobbit"]')!.hidden).toBe(false);
+  });
+
+  describe("the compact layout's parts", () => {
+    const fields = (el: HTMLElement) =>
+      Array.from(el.querySelectorAll<HTMLElement>('.gd-field')).map((field) => field.dataset['field']);
+
+    beforeEach(() => vi.spyOn(document, 'cookie', 'set').mockImplementation(() => undefined));
+
+    it('shows all of it, with no data-part, by default', async () => {
+      const { el } = await render();
+      expect(el.hasAttribute('data-part')).toBe(false);
+      expect(fields(el)).toHaveLength(19);
+      expect(el.querySelector('.gd-filter__pins')).toBeNull();
+      expect(el.querySelector<HTMLInputElement>('.gd-field[data-field="name"] input')!.placeholder).toBe('');
+    });
+
+    it('pane: the card name, the filters kept shown and the pager', async () => {
+      TestBed.inject(FilterPins).toggle('side');
+      const { el, field } = await render('pane');
+      expect(el.dataset['part']).toBe('pane');
+      expect(fields(el)).toEqual(['side', 'name']);
+      expect(field<HTMLInputElement>('name', 'input').placeholder).toBe('Card name');
+      expect(el.querySelector('.gd-pager')).not.toBeNull();
+      expect(el.querySelector('.gd-filter__advanced-title')).toBeNull();
+      expect(el.querySelector('.gd-filter__resets')).toBeNull();
+      expect(el.querySelector('.gd-cultures')).toBeNull();
+      expect(el.querySelector('.gd-filter__pins')).toBeNull();
+    });
+
+    it('menu: the other filters, the cultures, the resets and the choice of filters kept shown', async () => {
+      TestBed.inject(FilterPins).toggle('side');
+      const { el } = await render('menu');
+      expect(el.dataset['part']).toBe('menu');
+      expect(fields(el)).not.toContain('name');
+      expect(fields(el)).not.toContain('side');
+      expect(fields(el)).toHaveLength(17);
+      expect(el.querySelector('.gd-pager')).toBeNull();
+      expect(el.querySelector('.gd-filter__advanced-title')).not.toBeNull();
+      expect(el.querySelector('.gd-filter__resets')).not.toBeNull();
+      expect(el.querySelector('.gd-cultures')).not.toBeNull();
+      const pins = Array.from(el.querySelectorAll<HTMLElement>('fieldset.gd-filter__pins > label.gd-pin'));
+      expect(pins.map((pin) => [pin.dataset['pin'], pin.textContent!.trim()])).toEqual([
+        ['product', 'Product'],
+        ['rarity', 'Rarity'],
+        ['block', 'Block'],
+        ['set', 'Set'],
+        ['side', 'Side'],
+        ['sort', 'Sort by'],
+        ['cardType', 'Card Type'],
+        ['gametext', 'Game Text contains'],
+        ['keyword', 'Keyword'],
+        ['phase', 'Phase'],
+        ['race', 'Race'],
+        ['itemClass', 'Item Class'],
+        ['twilight', 'Twilight'],
+        ['siteNumber', 'Site Number'],
+        ['strength', 'Strength'],
+        ['signet', 'Signet'],
+        ['vitality', 'Vitality'],
+        ['resistance', 'Resistance'],
+        ['cultures', 'Cultures'],
+      ]);
+      expect(pins.map((pin) => pin.querySelector('input')!.checked)).toEqual(
+        pins.map((pin) => pin.dataset['pin'] === 'side'),
+      );
+    });
+
+    it('moves a filter between the menu and the pane when it is kept shown or not', async () => {
+      const pane = await render('pane');
+      const menu = await render('menu');
+      const keep = menu.el.querySelector<HTMLInputElement>('.gd-pin[data-pin="cultures"] input')!;
+      keep.click();
+      await pane.fixture.whenStable();
+      await menu.fixture.whenStable();
+      expect(pane.el.querySelector('.gd-cultures')).not.toBeNull();
+      expect(menu.el.querySelector('.gd-cultures')).toBeNull();
+      expect(TestBed.inject(FilterPins).isPinned('cultures')).toBe(true);
+      menu.el.querySelector<HTMLInputElement>('.gd-pin[data-pin="cultures"] input')!.click();
+      await pane.fixture.whenStable();
+      expect(pane.el.querySelector('.gd-cultures')).toBeNull();
+    });
+
+    it('sets the query from either part', async () => {
+      const { field } = await render('menu');
+      const select = field('cardType');
+      select.value = 'COMPANION';
+      select.dispatchEvent(new Event('change'));
+      expect(collection.fields().cardType).toBe('COMPANION');
+    });
   });
 });

@@ -1,6 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { PAGE_QUERY_STRING } from './page-location';
-import { resolveTheme, THEME_ATTRIBUTE, THEME_COOKIE, ThemeService, THEME_BEHAVIOUR } from './theme.service';
+import {
+  resolveTheme,
+  THEME_ATTRIBUTE,
+  THEME_BEHAVIOUR,
+  THEME_COOKIE,
+  THEME_VIEWPORT,
+  ThemeService,
+} from './theme.service';
 
 /** document.cookie, kept in memory: the tests' page isn't under /gemp-lotr, where the cookie is written. */
 function fakeCookies(initial: Record<string, string> = {}) {
@@ -119,5 +126,19 @@ describe('ThemeService', () => {
   it('says how each theme behaves', () => {
     expect(THEME_BEHAVIOUR.classic).toEqual({ cardInfoModal: false, dialogsReturnFocus: false });
     expect(THEME_BEHAVIOUR.modern).toEqual({ cardInfoModal: true, dialogsReturnFocus: true });
+  });
+
+  it('lays modern out at the device width, and classic as the legacy page (no viewport)', () => {
+    const viewport = () => document.head.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    vi.spyOn(document, 'cookie', 'set').mockImplementation(() => undefined);
+    const themes = service();
+    themes.init();
+    expect(viewport()!.content).toBe('width=device-width, initial-scale=1');
+    themes.select('classic');
+    expect(viewport()).toBeNull();
+    themes.select('modern');
+    expect(document.head.querySelectorAll('meta[name="viewport"]')).toHaveLength(1);
+    expect(viewport()!.content).toBe(THEME_VIEWPORT.modern);
+    viewport()!.remove();
   });
 });

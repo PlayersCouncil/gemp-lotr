@@ -54,3 +54,23 @@
 .gd-drawer::backdrop {
   background: var(--theme-backdrop);
 }
+
+/* What the menu holds that matters (e.g. filters set in it) */
+.gd-burger {
+  position: relative;
+}
+
+.gd-burger__badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: 9px;
+  background: var(--theme-attention-bg);
+  color: var(--theme-text);
+  font: 700 11px/18px var(--theme-font-control);
+  text-align: center;
+}

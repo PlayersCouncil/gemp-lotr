@@ -8,9 +8,13 @@
 // --build: the Angular build to serve (default: the server's web root, ng/); .local-server/ng/browser is the one of the
 // last check:local. --click: a control of controls.mjs (e.g. deckList) clicked on each page first, key:<key> pressed, or
 // drag:<control>:<dx> dragged sideways as pane-resized does (from 3px into it, 100px down, in 10 steps), or
-// select:<control>:<value> chosen in a list, or css:<selector> clicked (on a page that has it), in order.
+// select:<control>:<value> chosen in a list, css:<selector> clicked (on a page that has it) or rightclick:<selector>
+// (a card's details, as a long press; also only on a page that has it) or hold:<selector> (a long press: Chromium with
+// --touch), in order.
 // --theme: the Angular page's (default classic, the legacy look). --screenshot: also saves both pages, after the clicks,
 // as <dir>/legacy-<size>.png and angular-<theme>-<size>.png. --scheme: the colour scheme the device prefers.
+// --touch: a phone (touch screen, mobile viewport): the steps tap instead of clicking. --requests <text>: prints the
+// requests to the stub whose address has that text (e.g. collection), after the steps.
 // Each selector is looked up on both pages, so a selector of one page alone shows only there.
 import { parseArgs } from 'node:util';
 import { chromium, firefox, webkit } from 'playwright';
@@ -25,6 +29,8 @@ const { values: options, positionals: selectors } = parseArgs({
     theme: { type: 'string', default: 'classic' },
     screenshot: { type: 'string' },
     scheme: { type: 'string', default: 'dark' },
+    touch: { type: 'boolean', default: false },
+    requests: { type: 'string' },
   },
 });
 if (options.build) process.env.CHECK_NG_BUILD = options.build;
@@ -55,7 +61,15 @@ function measure(selector) {
 
 const browser = await type.launch();
 for (const [which, pagePath] of Object.entries(PAGES)) {
-  const context = await browser.newContext({ viewport: { width, height }, colorScheme: options.scheme });
+  const context = await browser.newContext({
+    viewport: { width, height },
+    colorScheme: options.scheme,
+    ...(options.touch ? { hasTouch: true, isMobile: options.browser !== 'firefox' } : {}),
+  });
+  const requests = [];
+  context.on('request', (request) => {
+    if (options.requests && request.url().includes(options.requests)) requests.push(decodeURIComponent(request.url()));
+  });
   const log = [];
   await routeToStub(context, log);
   const page = await context.newPage();
@@ -64,12 +78,29 @@ for (const [which, pagePath] of Object.entries(PAGES)) {
   for (const name of options.click) {
     if (name.startsWith('key:')) {
       await page.keyboard.press(name.slice(4));
+    } else if (name.startsWith('hold:')) {
+      // A finger held still on it for 700ms (Chromium's touch input), on a page that has it
+      const target = page.locator(name.slice(5)).first();
+      if (await target.count()) {
+        const box = await target.boundingBox();
+        const point = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        const cdp = await context.newCDPSession(page);
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+        await page.waitForTimeout(700);
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      }
+    } else if (name.startsWith('rightclick:')) {
+      // Asks for a card's details, as a long press on a touch screen does
+      const target = page.locator(name.slice(11)).first();
+      if (await target.count()) await target.click({ button: 'right' });
     } else if (name.startsWith('css:')) {
       const target = page.locator(name.slice(4)).first();
-      if (await target.count()) await target.click();
+      if (await target.count()) await (options.touch ? target.tap() : target.click());
     } else if (name.startsWith('select:')) {
       const [, control, value] = name.split(':');
-      await page.selectOption(CONTROLS[control][which], value);
+      const list = page.locator(CONTROLS[control][which]).first();
+      if (await list.isVisible()) await list.selectOption(value);
+      else console.log(`(${which}: ${control} is not shown, not chosen)`);
     } else if (name.startsWith('drag:')) {
       const [, control, dx] = name.split(':');
       const box = await page.locator(CONTROLS[control][which]).first().boundingBox();
@@ -82,7 +113,8 @@ for (const [which, pagePath] of Object.entries(PAGES)) {
       if (!selector) throw new Error(`No control ${name} in controls.mjs`);
       // A gesture of the check (matrix.mjs) presses where the control is, whatever is over it
       const box = await page.locator(selector).first().boundingBox();
-      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
+      await (options.touch ? page.touchscreen.tap(x, y) : page.mouse.click(x, y));
     }
     await page.waitForTimeout(800);
   }
@@ -91,6 +123,7 @@ for (const [which, pagePath] of Object.entries(PAGES)) {
     await page.screenshot({ path: `${options.screenshot}/${name}` });
   }
   console.log(`=== ${which} (${options.browser} ${options.size})`);
+  for (const request of requests) console.log(`  request ${request}`);
   for (const selector of selectors) {
     const found = await page.evaluate(measure, selector);
     if (found.length) console.log(`${selector}\n  ${found.join('\n  ')}`);

@@ -58,7 +58,7 @@ const TOGGLE_SLIDE_MS = 400;
  * `data-layout=compact` and `--gd-split` (the deck's share of its height, 0 to 1): the deck is above, the collection
  * below, and the separator (`aria-orientation=horizontal`, with `aria-valuenow` = the share in %, and no toggle) moves
  * the split by dragging or with the Up and Down keys. The split is remembered on the device (SPLIT_COOKIE). The
- * collection is always shown, with its bar (`gd-collection-menu`) above the filter.
+ * collection is always shown, with its bar (`gd-collection-menu`: the menu and the filter's parts) instead of the filter.
  */
 @Component({
   selector: 'deckbuilder-app',
@@ -121,8 +121,9 @@ const TOGGLE_SLIDE_MS = 400;
     <section class="gd-page__collection" aria-label="Collection" [hidden]="!collectionOpen() && !compact()">
       @if (compact()) {
         <gd-collection-menu />
+      } @else {
+        <gd-collection-filter />
       }
-      <gd-collection-filter />
       <gd-collection-grid />
     </section>
     <gd-deck-list-dialog />

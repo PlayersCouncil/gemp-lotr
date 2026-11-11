@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DrawerComponent } from './drawer.component';
 
 @Component({
   imports: [DrawerComponent],
   template: `
-    <gd-drawer name="test" label="Test menu">
+    <gd-drawer name="test" label="Test menu" [badge]="badge()" [note]="note()">
       <button type="button" class="item" (click)="ran = ran + 1">Item</button>
       <select class="list">
         <option>One</option>
@@ -15,6 +15,8 @@ import { DrawerComponent } from './drawer.component';
 })
 class HostComponent {
   ran = 0;
+  readonly badge = signal(0);
+  readonly note = signal('');
 }
 
 describe('DrawerComponent', () => {
@@ -75,5 +77,15 @@ describe('DrawerComponent', () => {
     panel.dispatchEvent(new Event('close'));
     await fixture.whenStable();
     expect(burger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('shows a number on the button, which its name explains, when it is not 0', async () => {
+    const { fixture, burger } = await render();
+    expect(burger.querySelector('.gd-burger__badge')).toBeNull();
+    fixture.componentInstance.badge.set(2);
+    fixture.componentInstance.note.set('2 filters set');
+    await fixture.whenStable();
+    expect(burger.querySelector('.gd-burger__badge')!.textContent).toBe('2');
+    expect(burger.getAttribute('aria-label')).toBe('Test menu, 2 filters set');
   });
 });

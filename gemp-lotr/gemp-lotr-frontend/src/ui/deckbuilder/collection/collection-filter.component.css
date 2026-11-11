@@ -330,3 +330,143 @@
 .gd-culture[data-icon-kind='other'] .gd-culture__icon {
   filter: var(--theme-other-icon-filter);
 }
+
+/*
+ * The compact layout's parts (data-part): each field a row, its name then its control at the full width, and the
+ * controls large enough for a finger (16px text, which phones don't zoom into)
+ */
+:host([data-part]) .gd-filter__fields {
+  display: contents;
+}
+
+:host([data-part]) .gd-field {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+:host([data-part]) .gd-field__label {
+  padding: 0;
+  font-size: 13px;
+}
+
+:host([data-part]) .gd-field__control,
+:host([data-part]) .gd-field[data-wide] .gd-field__control {
+  grid-column: auto;
+  gap: 6px;
+  padding: 0;
+}
+
+:host([data-part]) .gd-field :is(select, input) {
+  box-sizing: border-box;
+  height: 36px;
+  margin: 0;
+  font-size: 16px;
+}
+
+:host([data-part]) .gd-field :is(select, input[type='text']) {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+}
+
+:host([data-part]) .gd-field input[type='number'] {
+  flex: none;
+  width: 64px;
+}
+
+/* The pane part: in the collection's bar (a grid), the card name beside the menu's button, the rest under them */
+:host([data-part='pane']) {
+  display: contents;
+}
+
+:host([data-part='pane']) :is(.gd-field, .gd-pager, .gd-cultures) {
+  grid-column: 1 / -1;
+}
+
+:host([data-part='pane']) .gd-field[data-field='name'] {
+  grid-area: 1 / 2;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Named by its placeholder and, for assistive technology, by its label */
+:host([data-part='pane']) .gd-field[data-field='name'] .gd-field__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:host([data-part='pane']) .gd-pager .gd-button {
+  width: 36px;
+  height: 36px;
+}
+
+:host([data-part='pane']) .gd-pager .gd-button::before {
+  margin: auto;
+}
+
+/* The menu part: in the menu, one under the other */
+:host([data-part='menu']) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+:host([data-part='menu']) .gd-filter__advanced-title {
+  padding: 8px 0 0;
+  text-align: left;
+  font-size: 13px;
+}
+
+:host([data-part='menu']) .gd-filter__resets {
+  margin: 4px 0 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+:host([data-part='menu']) .gd-filter__resets .gd-button {
+  height: 36px;
+}
+
+:host([data-part='menu']) .gd-filter__resets .gd-button__text {
+  font-size: 100%;
+}
+
+:host([data-part]) .gd-cultures {
+  margin: 0;
+}
+
+.gd-filter__pins {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+  margin: 8px 0 0;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  font-size: 14px;
+}
+
+.gd-filter__pins legend {
+  padding: 0 4px;
+  font-size: 13px;
+}
+
+.gd-pin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.gd-pin input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}

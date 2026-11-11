@@ -46,6 +46,22 @@
   --info-height: calc(var(--card-height) + 69.61px);
 }
 
+/*
+ * The compact layout (the modern theme on a portrait or narrow screen): the card as large as the window allows, its
+ * width the window's less 50px (the legacy room beside it, 425px, is more than a phone has)
+ */
+:host-context([data-layout='compact']) .gd-card-info {
+  --long-exact: min(
+    calc(var(--gd-card-info-zoom, 0.5) * 1039px),
+    calc(100dvh - 95px),
+    calc((100vw - 50px) * 1039 / 745)
+  );
+}
+
+:host-context([data-layout='compact']) .gd-card-info:has(.gd-card-info__card[data-orientation='horizontal']) {
+  --long-exact: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100dvh - 95px), calc(100vw - 50px));
+}
+
 /* The legacy dialog didn't dim the page */
 .gd-card-info::backdrop {
   background: transparent;

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, Directive, inject, linkedSignal } from '@angular/core';
+import { Component, Directive, inject, input, linkedSignal } from '@angular/core';
 import { disabled, form, FormField, maxLength } from '@angular/forms/signals';
 import {
   CollectionBrowser,
@@ -9,6 +9,7 @@ import {
 } from '../../../core/collection/collection-browser.service';
 import { CollectionQuery, FilterFieldName } from '../../../core/collection/collection-query.service';
 import { CULTURE_GROUPS } from '../../../core/collection/filter-cultures';
+import { FilterPins, PINNABLE_FILTERS, PinnableFilter } from '../../../core/collection/filter-pins';
 import { NUMERIC_FILTERS, NumericFilter } from '../../../core/collection/filter-fields';
 import {
   CARD_TYPE_OPTIONS,
@@ -53,6 +54,13 @@ interface NumericField {
 
 type Field = SelectField | TextInputField | NumericField;
 
+/**
+ * What a filter shows: `all` of it (the page's filter); in the compact layout, the `pane` part above the cards (the
+ * card name, the filters kept shown and the pager) or the `menu` part (the other filters, the reset buttons and the
+ * choice of the filters kept shown).
+ */
+export type FilterPart = 'all' | 'pane' | 'menu';
+
 /** What can't filter packs: every field but the Product and the name. */
 const FIELDS_OFF_FOR_PACKS: readonly TextField[] = [
   'rarity',
@@ -93,16 +101,25 @@ export class FieldRowTemplate {
  * - `.gd-cultures`, groups `.gd-cultures__group` (`data-group`, hidden when the format doesn't use them) of
  *   `label.gd-culture` (`data-culture`, `data-active`, `data-icon-kind` = culture or other) holding a visually hidden
  *   `input[type=checkbox].gd-culture__input` and `.gd-culture__face` > `img.gd-culture__icon`.
+ *
+ * With `part` (FilterPart) other than `all`, the host has `data-part` and shows only that part: `pane` has the card
+ * name (`placeholder` "Card name"), the filters kept shown (FilterPins) and the pager; `menu` has the others, the
+ * advanced title, the resets and `fieldset.gd-filter__pins` with a `label.gd-pin` (`data-pin` = the filter) holding an
+ * `input[type=checkbox]` per filter that can be kept shown. The cultures go where their filter is.
  */
 @Component({
   selector: 'gd-collection-filter',
   styleUrl: './collection-filter.component.css',
   imports: [NgTemplateOutlet, FormField, FieldRowTemplate],
-  host: { class: 'gd-filter' },
+  host: { class: 'gd-filter', '[attr.data-part]': "part() === 'all' ? null : part()" },
   templateUrl: './collection-filter.component.html',
 })
 export class CollectionFilterComponent {
+  /** Which part of the filter this one shows. */
+  readonly part = input<FilterPart>('all');
+
   protected readonly query = inject(CollectionQuery);
+  protected readonly pins = inject(FilterPins);
   protected readonly browser = inject(CollectionBrowser);
 
   protected readonly pageSize = { min: PAGE_SIZE_MIN, max: PAGE_SIZE_MAX, start: PAGE_SIZE_SLIDER_START };
@@ -150,6 +167,27 @@ export class CollectionFilterComponent {
     maxLength(path.name, 100);
     maxLength(path.gametext, 100);
   });
+
+  /** The filters a player can keep shown, with their names. */
+  protected readonly pinOptions: readonly { name: PinnableFilter; label: string }[] = PINNABLE_FILTERS.map((name) => {
+    const field = [...this.basicFields, ...this.advancedFields].find((f) => this.fieldName(f) === name);
+    return { name, label: field ? field.label.replace(':', '').replace(/\u00a0/g, ' ') : 'Cultures' };
+  });
+
+  /** Whether this part shows the field: the card name is in the pane; the others where FilterPins put them. */
+  protected shows(name: string): boolean {
+    const part = this.part();
+    if (part === 'all') {
+      return true;
+    }
+    const inPane = name === 'name' || this.pins.isPinned(name as PinnableFilter);
+    return inPane === (part === 'pane');
+  }
+
+  /** A field's name; in a part of the compact layout it may wrap (the legacy table kept some on one line). */
+  protected labelOf(field: Field): string {
+    return this.part() === 'all' ? field.label : field.label.replace(/\u00a0/g, ' ');
+  }
 
   protected isWide(field: Field): boolean {
     return field.kind === 'text' || (field.kind === 'select' && field.wide === true);

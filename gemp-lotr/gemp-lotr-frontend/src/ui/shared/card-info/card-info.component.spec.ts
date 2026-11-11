@@ -170,8 +170,27 @@ describe('CardInfoComponent', () => {
       await fixture.whenStable();
       card.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       expect(info.isOpen()).toBe(true);
+      card.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
       card.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       card.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(info.isOpen()).toBe(false);
+    });
+
+    it('keeps it open after a long press, for the context menu and the click that end it, also on the dialog', async () => {
+      const { fixture } = await renderWithCard();
+      info.showDragged(CARD);
+      await fixture.whenStable();
+      const dialog = document.querySelector<HTMLElement>('dialog.gd-card-info')!;
+      // A touch screen sends its mouse events once the finger is lifted: the dialog may now be under it
+      const menu = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
+      dialog.dispatchEvent(menu);
+      expect(menu.defaultPrevented).toBe(true);
+      dialog.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      dialog.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+      expect(info.isOpen()).toBe(true);
+      // The next tap on it closes it, as before
+      dialog.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }));
+      dialog.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
       expect(info.isOpen()).toBe(false);
     });
 

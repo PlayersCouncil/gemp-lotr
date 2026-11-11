@@ -242,8 +242,8 @@ button.gd-slot__label:focus-visible {
  * one size, wrapping), and the stats.
  */
 :host-context([data-layout='compact']) {
-  --slot-h: clamp(110px, 32vw, 210px);
-  --site-w: 130px;
+  --slot-h: clamp(150px, 46vw, 260px);
+  --site-w: 160px;
   position: static;
   display: flex;
   flex-wrap: wrap;
@@ -317,15 +317,21 @@ button.gd-slot__label:focus-visible {
 /* At one size (fitCards' none: the largest), wrapping */
 :host-context([data-layout='compact']) .gd-pile__cards {
   --gd-card-fit: none;
-  --gd-card-max-height: 110px;
+  --gd-card-max-height: 130px;
   position: relative;
   inset: auto;
   padding: 2px 4px 4px 4px;
 }
 
+@media (min-width: 375px) {
+  :host-context([data-layout='compact']) .gd-pile__cards {
+    --gd-card-max-height: 140px;
+  }
+}
+
 @media (min-width: 600px) {
   :host-context([data-layout='compact']) .gd-pile__cards {
-    --gd-card-max-height: 150px;
+    --gd-card-max-height: 180px;
   }
 }
 

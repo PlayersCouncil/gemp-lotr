@@ -5,7 +5,10 @@ import { CardView } from './card-view';
 @Injectable()
 export class CardInfoService {
   readonly card = signal<CardView | null>(null);
-  /** Shown by dragging a card up: the click that ends that drag doesn't close it. */
+  /**
+   * Shown by a gesture (dragging a card up, or a long press on a touch screen): the click that ends it, and the context
+   * menu a touch browser sends for a long press, don't close it.
+   */
   private dragRelease = false;
 
   isOpen(): boolean {
@@ -21,7 +24,12 @@ export class CardInfoService {
     this.card.set(card);
   }
 
-  /** Whether this click is the one ending a drag up (it counts only once). */
+  /** Whether the gesture that showed it hasn't ended yet. */
+  awaitsDragRelease(): boolean {
+    return this.dragRelease;
+  }
+
+  /** Whether this click is the one ending the gesture (it counts only once). */
   takeDragRelease(): boolean {
     const release = this.dragRelease;
     this.dragRelease = false;

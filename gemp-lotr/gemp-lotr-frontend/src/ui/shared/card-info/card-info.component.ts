@@ -217,7 +217,11 @@ export class CardInfoComponent {
   }
 
   protected documentPress(event: MouseEvent): void {
-    if (event.type === 'mousedown') {
+    if (event.type === 'pointerdown') {
+      // A new press, so the gesture that showed the dialog is over (a touch screen's mousedown comes only after the
+      // finger is lifted, just before the click that ends a long press)
+      this.info.forgetDragRelease();
+    } else if (event.type === 'mousedown') {
       this.pressStarted(event);
     } else {
       this.pressedAnywhere(event);
@@ -227,7 +231,13 @@ export class CardInfoComponent {
   /** A click or right-click anywhere, which onClick doesn't get. */
   private pressedAnywhere(event: MouseEvent): void {
     const target = event.target as Element;
-    if (event.type === 'click' && this.info.takeDragRelease()) {
+    if (this.info.awaitsDragRelease()) {
+      // The end of the gesture that showed it: wherever it lands (on the dialog now over the card, too), it does nothing
+      if (event.type === 'click') {
+        this.info.takeDragRelease();
+        event.stopPropagation();
+      }
+      event.preventDefault();
       return;
     }
     if (!this.info.isOpen() || target.closest('a')) {
@@ -249,7 +259,6 @@ export class CardInfoComponent {
 
   /** A press on a card behind the dialog leaves the focus on its slider, as the legacy page's press on a card did. */
   private pressStarted(event: MouseEvent): void {
-    this.info.forgetDragRelease();
     if (this.info.isOpen() && cardElementOf(event.target)) {
       event.preventDefault();
     }

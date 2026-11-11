@@ -195,7 +195,8 @@ export class CardComponent {
   private longPress(): void {
     this.press = null;
     this.swallowClick = true;
-    this.info.show(this.card());
+    // The click that ends the press may land on the dialog, which may now be over the card
+    this.info.showDragged(this.card());
   }
 }
 

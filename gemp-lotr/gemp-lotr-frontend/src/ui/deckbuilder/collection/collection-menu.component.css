@@ -1,6 +1,7 @@
-/* The collection's bar in the compact layout */
+/* The collection's bar in the compact layout: the menu's button and the card name, then the filters kept shown */
 :host {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   padding-bottom: 6px;
@@ -23,5 +24,5 @@
   background-color: var(--theme-field-bg);
   color: var(--theme-text);
   font-family: var(--theme-font-control);
-  font-size: 15px;
+  font-size: 16px;
 }

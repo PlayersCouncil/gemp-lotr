@@ -23,6 +23,15 @@ export const THEME_BEHAVIOUR: Readonly<Record<ThemeName, ThemeBehaviour>> = {
   modern: { cardInfoModal: true, dialogsReturnFocus: true },
 };
 
+/**
+ * The page's `<meta name="viewport">` in each theme. Modern lays out at the device's width (its compact layout is
+ * for phones and tablets); classic has none, as the legacy page: phones show it as a desktop page, zoomed out.
+ */
+export const THEME_VIEWPORT: Readonly<Record<ThemeName, string | null>> = {
+  classic: null,
+  modern: 'width=device-width, initial-scale=1',
+};
+
 /** Shown in the theme picker. */
 export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Classic', modern: 'Modern' };
 
@@ -62,7 +71,7 @@ export function resolveTheme(fromQuery: string | null, fromCookie: string | null
 }
 
 /**
- * Chooses the theme. `init()` runs before the app starts (an app initializer), so the page is drawn in its theme from
+ * Chooses the theme, and the page's viewport for it (THEME_VIEWPORT). `init()` runs before the app starts (an app initializer), so the page is drawn in its theme from
  * the start; `select()` switches at runtime. Only the values change: the app's state (the deck being edited, the
  * collection page) stays as it is.
  */
@@ -95,7 +104,22 @@ export class ThemeService {
 
   private apply(theme: ThemeName): void {
     this.document.documentElement.setAttribute(THEME_ATTRIBUTE, theme);
+    this.setViewport(THEME_VIEWPORT[theme]);
     this.current.set(theme);
+  }
+
+  private setViewport(content: string | null): void {
+    let meta = this.document.head.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (content === null) {
+      meta?.remove();
+      return;
+    }
+    if (!meta) {
+      meta = this.document.createElement('meta');
+      meta.name = 'viewport';
+      this.document.head.append(meta);
+    }
+    meta.content = content;
   }
 
   private remember(theme: ThemeName): void {

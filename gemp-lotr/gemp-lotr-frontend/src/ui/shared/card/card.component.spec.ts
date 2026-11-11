@@ -136,14 +136,16 @@ describe('CardComponent', () => {
       vi.useFakeTimers();
       el.dispatchEvent(pointer('pointerdown', { pointerType: 'touch', x: 50, y: 50 }));
       vi.advanceTimersByTime(LONG_PRESS_MS - 1);
-      expect(actions.showInfo).not.toHaveBeenCalled();
+      expect(actions.showDraggedInfo).not.toHaveBeenCalled();
       vi.advanceTimersByTime(1);
-      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
+      // As a gesture: the release mustn't close it, wherever it lands (the dialog may now be over the card)
+      expect(actions.showDraggedInfo).toHaveBeenCalledWith(CARD);
       el.dispatchEvent(pointer('pointerup', { pointerType: 'touch', x: 50, y: 50 }));
       const contextMenu = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
       el.dispatchEvent(contextMenu);
       el.click();
-      expect(actions.showInfo).toHaveBeenCalledTimes(1);
+      expect(actions.showDraggedInfo).toHaveBeenCalledTimes(1);
+      expect(actions.showInfo).not.toHaveBeenCalled();
       expect(actions.activate).not.toHaveBeenCalled();
       // The next tap is a normal one again
       el.dispatchEvent(pointer('pointerdown', { pointerType: 'touch' }));
