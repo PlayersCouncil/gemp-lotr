@@ -1,0 +1,52 @@
+{
+  "name": "deckbuilder",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "card-data": "node scripts/extract-card-data.mjs",
+    "prestart": "npm run card-data",
+    "start": "ng serve",
+    "prebuild": "npm run card-data",
+    "build": "ng build",
+    "prewatch": "npm run card-data",
+    "watch": "ng build --watch --configuration development",
+    "pretest": "npm run card-data",
+    "test": "ng test",
+    "test:parity": "PARITY_SESSIONS=200 PARITY_CASES=10000 ng test --watch=false --include \"src/parity/**/*.spec.ts\"",
+    "lint": "ng lint",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
+    "format:check": "prettier --check \"src/core/**/*.ts\" \"src/ui/**/*.ts\" \"src/testing/**/*.ts\" \"src/parity/**/*.ts\" \"src/styles/*.css\" \"src/ui/**/*.css\" \"visual-check/**/*.mjs\" README.md visual-check/README.md",
+    "verify": "npm run lint && npm run typecheck && npm run format:check && npm test -- --watch=false"
+  },
+  "private": true,
+  "packageManager": "npm@11.19.0",
+  "dependencies": {
+    "@angular/common": "^22.2.0",
+    "@angular/compiler": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.2.5",
+    "@angular/cli": "^22.2.5",
+    "@angular/compiler-cli": "^22.2.0",
+    "@eslint/js": "^10.0.1",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^24.19.2",
+    "@vitest/coverage-v8": "^5.1.0",
+    "angular-eslint": "22.6.0",
+    "eslint": "^10.12.0",
+    "jsdom": "^31.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^5.0.0"
+  },
+  "overrides": {
+    "minimatch": "^11.0.5"
+  }
+}

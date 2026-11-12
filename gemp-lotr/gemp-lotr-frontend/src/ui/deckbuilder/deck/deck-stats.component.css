@@ -1,0 +1,35 @@
+/* The deck stats (#statsDiv), under the draw deck */
+
+:host {
+  position: absolute;
+  left: var(--draw-left);
+  top: calc(var(--deck-h) - 22px);
+  display: block;
+  width: var(--draw-w);
+  min-height: 70px;
+  line-height: var(--theme-metrics-stats-line);
+}
+
+/* The font's normal line height, as the legacy lines (an empty line is as high as a full one) */
+.gd-stats__line {
+  min-height: 1lh;
+}
+
+[data-tone='error'] {
+  color: var(--theme-error);
+}
+
+[data-tone='valid'] {
+  color: var(--theme-valid);
+}
+
+[data-tone='warning'] {
+  color: var(--theme-warning);
+}
+
+/* The compact layout: in the flow, under the piles */
+:host-context([data-layout='compact']) {
+  position: static;
+  width: auto;
+  min-height: 0;
+}
