@@ -1,0 +1,182 @@
+// The same control on each page, as { legacy, angular } selectors: the legacy page's element IDs and classes, and the
+// Angular page's DOM contract (the `.gd-*` markup and its data-* state, see the frontend README). Shared by run.mjs
+// (through scenarios.mjs). `which` is 'legacy' or 'angular'.
+
+/** A field of the collection filter, by its `data-field`: its select or text input (numeric: its comparison select). */
+const field = (legacy, name, control = 'select') => ({
+  legacy,
+  angular: `.gd-field[data-field="${name}"] ${control}`,
+});
+/** The value input of a numeric filter field. */
+const numericValue = (legacy, name) => ({
+  legacy,
+  angular: `.gd-field[data-field="${name}"] input[type=number]`,
+});
+const toolbar = (legacy, action) => ({ legacy, angular: `.gd-toolbar [data-action="${action}"]` });
+const slot = (name) => `.gd-slot[data-slot="${name}"]`;
+
+export const CONTROLS = {
+  // --- Collection pane ---
+  nextPage: { legacy: '#nextPage', angular: '.gd-pager__next' },
+  previousPage: { legacy: '#previousPage', angular: '.gd-pager__previous' },
+  /** The page size: the legacy jQuery UI slider, the Angular range input. */
+  pageSize: { legacy: '#countSlider', angular: '.gd-pager__size' },
+  side: field('#sideSelect', 'side'),
+  product: field('#productSelect', 'product'),
+  rarity: field('#raritySelect', 'rarity'),
+  keyword: field('#keywordSelect', 'keyword'),
+  phase: field('#phaseSelect', 'phase'),
+  race: field('#raceSelect', 'race'),
+  itemClass: field('#itemClassSelect', 'itemClass'),
+  signet: field('#signetSelect', 'signet'),
+  gametext: field('#gametextInput', 'gametext', 'input'),
+  siteNumberCompare: field('#siteNumberCompareSelect', 'siteNumber'),
+  siteNumberValue: numericValue('#siteNumberValueInput', 'siteNumber'),
+  vitalityCompare: field('#vitalityCompareSelect', 'vitality'),
+  vitalityValue: numericValue('#vitalityValueInput', 'vitality'),
+  resistanceCompare: field('#resistanceCompareSelect', 'resistance'),
+  resistanceValue: numericValue('#resistanceValueInput', 'resistance'),
+  filterWiki: { legacy: 'a[href*="CardSearch"]', angular: 'a[href*="CardSearch"]' },
+  block: field('#blockSelect', 'block'),
+  set: field('#setSelect', 'set'),
+  sort: field('#sortSelect', 'sort'),
+  cardType: field('#cardTypeSelect', 'cardType'),
+  name: field('#nameInput', 'name', 'input'),
+  twilightCompare: field('#twilightCompareSelect', 'twilight'),
+  twilightValue: numericValue('#twilightValueInput', 'twilight'),
+  strengthCompare: field('#strengthCompareSelect', 'strength'),
+  strengthValue: numericValue('#strengthValueInput', 'strength'),
+  resetAdvanced: {
+    legacy: '#resetAdvancedFiltersButton',
+    angular: '.gd-filter__resets [data-action="reset-advanced"]',
+  },
+  resetAll: {
+    legacy: '#resetAllFiltersButton',
+    angular: '.gd-filter__resets [data-action="reset-all"]',
+  },
+  /** A culture button, by its code (ELVEN, SHIRE, ...). */
+  culture: (code) => ({ legacy: `#label${code}`, angular: `.gd-culture[data-culture="${code}"]` }),
+  /** The checkbox behind a culture button (it takes the keyboard focus). */
+  cultureInput: (code) => ({
+    legacy: `#${code}`,
+    angular: `.gd-culture[data-culture="${code}"] .gd-culture__input`,
+  }),
+  /** The pane that scrolls the filter and the collection. */
+  collectionPane: { legacy: '#collectionDiv', angular: '.gd-page__collection' },
+  /** Every item of the collection (packs first). */
+  firstCard: {
+    legacy: '#collection-display .card .actionArea',
+    angular: '.gd-collection .gd-card',
+  },
+  /** The collection's cards only (no packs or selection packs). */
+  collectionCards: {
+    legacy: '.cardInCollection .actionArea',
+    angular: '.gd-collection .gd-card[data-role="card"]',
+  },
+  /** Selection packs only. */
+  selectionPacks: {
+    legacy: '.selectionInCollection .actionArea',
+    angular: '.gd-collection .gd-card[data-role="selection"]',
+  },
+  /** The bar between the deck and the collection (drag to resize), and its toggle. */
+  separator: { legacy: '.ui-layout-resizer-east', angular: '.gd-page__separator' },
+  toggleCollection: { legacy: '.ui-layout-toggler-east', angular: '.gd-page__toggle' },
+
+  // --- Toolbar ---
+  newDeck: toolbar('#newDeckBut', 'new'),
+  convertErrata: toolbar('#convertErrataBut', 'convert-errata'),
+  deckList: toolbar('#deckListBut', 'deck-list'),
+  library: toolbar('#libraryListBut', 'library'),
+  importDeck: toolbar('#importDeckBut', 'import'),
+  notes: toolbar('#notesBut', 'notes'),
+  saveDeck: toolbar('#saveDeckBut', 'save'),
+  renameDeck: toolbar('#renameDeckBut', 'rename'),
+  copyDeck: toolbar('#copyDeckBut', 'copy'),
+  autoZoom: toolbar('#auto-zoom-toggle', 'auto-zoom'),
+  format: { legacy: '#formatSelect', angular: 'select.gd-toolbar__format' },
+  collection: { legacy: '#collectionSelect', angular: 'select.gd-toolbar__collection' },
+
+  deckName: { legacy: '#editingDeck', angular: '.gd-toolbar__deck-name' },
+  stats: { legacy: '#deckStats', angular: '.gd-stats' },
+  /** The title of the frontmost open dialog. */
+  dialogTitles: { legacy: '.ui-dialog:not([style*="display: none"]) .ui-dialog-title', angular: 'dialog[open] h2' },
+
+  // --- Deck ---
+  ringBearerSlot: { legacy: '#rb-content', angular: `${slot('ring-bearer')} .gd-slot__label` },
+  ringSlot: { legacy: '#ring-content', angular: `${slot('ring')} .gd-slot__label` },
+  mapSlot: { legacy: '#map-content', angular: `${slot('map')} .gd-slot__label` },
+  sitesSlot: { legacy: '#sites-content', angular: `${slot('sites')} .gd-slot__label` },
+  mapLink: { legacy: '#map-content a', angular: `${slot('map')} .gd-slot__link` },
+  ringBearerCard: {
+    legacy: '#ringBearerDiv .cardInDeck .actionArea',
+    angular: `${slot('ring-bearer')} .gd-card`,
+  },
+  ringCard: { legacy: '#ringDiv .cardInDeck .actionArea', angular: `${slot('ring')} .gd-card` },
+  drawCard: {
+    legacy: '#decksRegion .cardInDeck .actionArea',
+    angular: '.gd-pile .gd-card:not([data-role="copy"])',
+  },
+  siteCards: { legacy: '#sitesDiv .cardInDeck .actionArea', angular: `${slot('sites')} .gd-card` },
+  /** A card by its image, in the deck's piles or in the collection. */
+  deckCard: (image) => ({
+    legacy: `#decksRegion .card:has(img[src*="${image}"]) .actionArea`,
+    angular: `.gd-pile .gd-card:not([data-role="copy"]):has(img[src*="${image}"])`,
+  }),
+
+  // --- Dialogs ---
+  /** The close button of the open dialog (legacy dialogs stay in the page while closed, hence :visible). */
+  dialogClose: {
+    legacy: '.ui-dialog-titlebar-close:visible',
+    angular: 'dialog[open] :is(.gd-dialog__close, .gd-card-info__close)',
+  },
+  deckListItem: { legacy: '.deckItem', angular: '.gd-deck-list__item' },
+  openDeck: { legacy: 'button[title="Open deck"]', angular: '[data-action="open"]' },
+  deckRename: { legacy: '.deckItem button[title="Rename deck"]', angular: '[data-action="rename"]:not(.gd-toolbar *)' },
+  deckShare: { legacy: '.deckItem button[title="Share deck list"]', angular: '[data-action="share"]' },
+  deckDelete: { legacy: '.deckItem button[title="Delete deck"]', angular: '[data-action="delete"]' },
+  libraryShow: { legacy: '.deckItem button[title="Deck list"]', angular: '.gd-deck-list [data-action="deck-list"]' },
+  notesText: { legacy: '.notesText', angular: '.gd-notes__text' },
+  cardInfoClose: {
+    legacy: '.ui-dialog:has(#card-info-outer) .ui-dialog-titlebar-close',
+    angular: '.gd-card-info__close',
+  },
+  cardInfoWiki: { legacy: '.card-info-footer a', angular: '.gd-card-info__wiki' },
+  selectionChoice: { legacy: '.cardToSelect .actionArea', angular: '[data-dialog="selection"] .gd-card' },
+  importText: { legacy: '#deckImport', angular: '.gd-import__text' },
+  importButton: {
+    legacy: '.ui-dialog button[title="Import"]',
+    angular: '.gd-import [data-action="import"]',
+  },
+  cardInfoZoom: { legacy: '#card-info-slider', angular: '.gd-card-info__zoom' },
+  cardInfoCard: { legacy: '#card-image-content .actionArea', angular: '.gd-card-info__card' },
+};
+
+/**
+ * Controls only the Angular page has (the legacy page had nothing like them), by their Angular selector. They are not
+ * in CONTROLS, which every step compares on both pages; the coverage check knows them by these names, and fails on
+ * one that accepted.mjs (ACCEPTED_ANGULAR_ONLY) doesn't list.
+ */
+export const ANGULAR_ONLY = {
+  /** The toolbar's theme picker (THEME_PICKER): a button that switches to the next theme */
+  themePicker: '.gd-toolbar__theme',
+};
+
+/**
+ * How run.mjs --geometry compares a control whose selectors pick different parts of it on the two pages (found by
+ * comparing the classic theme, which matches the legacy page pixel for pixel): `centre` (where its middle is), `start`
+ * (its left, top and height) or `last` (the last match only, in reading order). Every other control is compared box for box.
+ */
+export const GEOMETRY = {
+  pageSize: { by: 'centre', reason: 'The legacy selector is the bar, the Angular one the range input lying over it' },
+  cardInfoZoom: {
+    by: 'centre',
+    reason: 'The legacy selector is the bar, the Angular one the range input lying over it',
+  },
+  cardInfoCard: { by: 'centre', reason: 'The legacy selector is the clickable area inside the card frame' },
+  cardInfoWiki: { by: 'centre', reason: "The legacy selector is the link's text, the Angular one the link's box" },
+  filterWiki: { by: 'centre', reason: "A link in a line of text: as wide as its text, in each theme's font" },
+  mapLink: { by: 'centre', reason: "A link in a line of text: as wide as its text, in each theme's font" },
+  dialogTitles: { by: 'start', reason: "A title: as wide as its text, in each theme's font" },
+  deckName: { by: 'start', reason: 'The theme picker (Angular only) takes 30px of the space after the name' },
+  separator: { by: 'last', reason: "While dragged, the legacy selector also finds the bar's preview, left of the bar" },
+};

@@ -1,0 +1,406 @@
+// Differences from the legacy page that the owner has accepted. Only the owner adds to
+// this list: anything not in it fails the check. An entry allows at most `maxPixels` differing pixels inside the area of
+// `selector` (the Angular page's, grown by `margin` px); every other pixel still counts towards the normal tolerance.
+//
+//   scenarios  which scenarios it applies to: names, or patterns for the generated ones of matrix.mjs
+//   sizes      which window sizes (default: all)
+//   browsers   which browsers (CHECK_BROWSER; default: all)
+//   themes     which themes of the Angular page (run.mjs --theme; default: all; behaviours only)
+//   corner     only the bottom right corner of the area, this many px square (before `margin`)
+//   reason     what differs and why it is accepted
+
+import { BROWSER_NAME } from './browser.mjs';
+
+const SLIDER_RING = 'Slider handle focus ring: Chrome drew the legacy ring itself, CSS can only approximate its shape';
+
+/**
+ * Areas of the Angular page left out of every comparison: what the legacy page had nothing like (by the selector, grown
+ * by `margin` px). Only the owner adds to it. A pixel there never counts, in any scenario or window size.
+ */
+export const EXCLUDED_AREAS = [
+  {
+    selector: '.gd-toolbar__theme',
+    margin: 2,
+    reason:
+      'The theme picker (a toolbar button): not on the legacy page; placed after the deck name, so nothing else moves',
+  },
+];
+
+// Where two entries cover the same pixel of a scenario, the first one counts it: the narrower entries come first.
+export const ACCEPTED = [
+  {
+    scenarios: [/./],
+    browsers: ['firefox'],
+    selector: 'dialog[open]',
+    corner: 16,
+    margin: 2,
+    maxPixels: 150,
+    reason: 'Firefox draws its own resize grip in the corner of a dialog, which CSS cannot style (accepted 2026-11-11)',
+  },
+  {
+    scenarios: ['open-library-deck', 'save-rename-copy', 'import-decklist'],
+    sizes: ['1280x800'],
+    selector: '.gd-toolbar',
+    margin: 2,
+    maxPixels: 3500,
+    reason:
+      'The theme toggle takes 30px of a toolbar a long deck name already fills: the format list is squeezed that much more',
+  },
+  {
+    scenarios: ['deck-add-remove', 'deck-ring-bearer-ring', 'deck-sites', 'deck-full', 'format-movie', 'notes-escape'],
+    sizes: ['1280x800'],
+    browsers: ['firefox'],
+    selector: '.gd-toolbar',
+    margin: 2,
+    maxPixels: 3500,
+    reason:
+      'The same squeeze in Firefox, whose serif is wider: a shorter deck name already fills the toolbar (accepted 2026-11-11)',
+  },
+  {
+    scenarios: ['pane-resized'],
+    sizes: ['1280x800', '1366x768'],
+    browsers: ['firefox'],
+    selector: '.gd-toolbar',
+    margin: 20,
+    maxPixels: 3500,
+    reason:
+      'The same squeeze in a narrowed deck pane in Firefox, also at 1366x768; its wider deck name reaches about 20px past the toolbar (accepted 2026-11-11)',
+  },
+  {
+    scenarios: ['selection-pack'],
+    browsers: ['firefox'],
+    selector: '[data-dialog="selection"]',
+    margin: 2,
+    maxPixels: 120000,
+    reason:
+      "The legacy page's choices are 1px smaller in Firefox (210x294 against 211x295): its jQuery 1.6 sizing starts from whole-pixel heights, which Firefox rounds just under (accepted 2026-11-11)",
+  },
+  {
+    scenarios: ['pane-resized'],
+    sizes: ['1280x800'],
+    selector: '.gd-toolbar',
+    margin: 10,
+    maxPixels: 3500,
+    reason: 'The same squeeze in a narrowed deck pane, where the squeezed lists reach about 10px past the toolbar',
+  },
+  {
+    scenarios: [/^(myCards--item-\d+|selection--selectionChoice)--(rightClick|shiftClick|dragUp)$/],
+    selector: '.gd-card-info__zoom',
+    margin: 8,
+    maxPixels: 1250,
+    reason: 'Card Information of a pack: the slider, which the legacy page drew in full only there',
+  },
+  {
+    scenarios: [/--pageSize--arrows$/],
+    selector: '.gd-pager__size',
+    margin: 8,
+    maxPixels: 600,
+    reason: `${SLIDER_RING} (moved by the keyboard, the ring differs more)`,
+  },
+  {
+    scenarios: ['zoom', 'zoom-next-card-shift', /--ringBearerCard--(hover|leave|hoverThenShift)$/],
+    selector: '.gd-zoom',
+    margin: 4,
+    maxPixels: 150,
+    reason: 'The hover zoom shows above dialogs on the Angular page, which leaves a faint 1px line in its picture',
+  },
+  {
+    scenarios: [/^cardInfo--cardInfoWiki--focus$/],
+    selector: '.gd-card-info__wiki',
+    margin: 8,
+    maxPixels: 2000,
+    reason: "The wiki link's keyboard focus ring is as wide as the dialog; the legacy one was as wide as the text",
+  },
+  {
+    scenarios: [
+      'card-info',
+      'card-info-zoom-flip',
+      'card-info-close-drag',
+      /^cardInfo--|--(rightClick|shiftClick|dragUp)$/,
+    ],
+    browsers: ['firefox'],
+    selector: '.gd-card-info__zoom',
+    margin: 8,
+    maxPixels: 350,
+    reason: `${SLIDER_RING}; Firefox draws its own ring less like it (accepted 2026-11-11)`,
+  },
+  {
+    scenarios: ['state-slider-focus', /--pageSize--/],
+    browsers: ['firefox'],
+    selector: '.gd-pager__size',
+    margin: 8,
+    maxPixels: 350,
+    reason: `${SLIDER_RING}; Firefox draws its own ring less like it (accepted 2026-11-11)`,
+  },
+  {
+    scenarios: [
+      'card-info',
+      'card-info-zoom-flip',
+      'card-info-close-drag',
+      /^cardInfo--|--(rightClick|shiftClick|dragUp)$/,
+    ],
+    selector: '.gd-card-info__zoom',
+    margin: 8,
+    maxPixels: 180,
+    reason: SLIDER_RING,
+  },
+  {
+    scenarios: ['state-slider-focus', /--pageSize--/],
+    selector: '.gd-pager__size',
+    margin: 8,
+    maxPixels: 180,
+    reason: SLIDER_RING,
+  },
+  {
+    scenarios: ['page-size-slider', /--pageSize--/],
+    selector: '.gd-pager',
+    margin: 8,
+    maxPixels: 480,
+    reason: 'Requested by the owner: the page size handle stays inside its bar and never covers the arrow buttons',
+  },
+  {
+    scenarios: ['state-button-focus', /--(focus|enter|space)$/],
+    selector: '.gd-toolbar .gd-button:focus',
+    margin: 4,
+    maxPixels: 250,
+    reason: 'Toolbar button keyboard focus ring, 1px shorter',
+  },
+  {
+    scenarios: ['state-dialog-close-hover', 'state-dialog-close-focus', /--(hover|focus|enter|space|press)$/],
+    selector: 'dialog[open] .gd-dialog__close:is(:hover, :focus)',
+    margin: 4,
+    maxPixels: 80,
+    reason: 'Corners and icon of the dialog close button',
+  },
+  {
+    scenarios: ['zoom-deck-site'],
+    sizes: ['1920x1080'],
+    selector: '.gd-zoom',
+    margin: 4,
+    maxPixels: 100,
+    reason: 'Small remainder of the hover zoom',
+  },
+  {
+    scenarios: ['deck-sites'],
+    selector: '.gd-slot[data-slot="sites"] .gd-slot__cards',
+    margin: 3,
+    maxPixels: 60000,
+    reason: 'A site 1px off at some window sizes and steps (legacy floating-point rounding)',
+  },
+  {
+    scenarios: [
+      /--(newDeck|saveDeck|renameDeck|copyDeck|importDeck|library|deckList|notes|dialogClose)--(enter|space|tap)$/,
+    ],
+    selector: '.gd-toolbar',
+    margin: 2,
+    maxPixels: 1500,
+    reason: 'After the keyboard or a tap a legacy toolbar button stayed highlighted; the Angular one does not',
+  },
+  {
+    scenarios: [/--(nextPage|previousPage)--tap$/],
+    selector: '.gd-pager',
+    margin: 2,
+    maxPixels: 1000,
+    reason: 'After a tap a legacy pager button stayed highlighted; the Angular one does not',
+  },
+  {
+    scenarios: [/--library--/],
+    selector: 'dialog[open] h2',
+    margin: 3,
+    maxPixels: 1400,
+    reason: 'Opened after the deck list, the legacy library dialog kept the title "Your Saved Decks"',
+  },
+];
+
+/**
+ * Behaviour the owner has accepted being different, which a limited area can't describe. A scenario listed without
+ * `problem` isn't compared at all, so each of those is exactly the gesture that was decided on. `themes`: only in those
+ * themes; `devices`: only in those checks ('computer', or 'phone': run.mjs --phone, phone.mjs).
+ */
+const ACCEPTED_BEHAVIOUR = [
+  {
+    reason:
+      "Phone: the second tap of a double tap is dropped when it lands on another control than the first (SecondTapGuard): a menu item's menu closed (Rename, Save: asked once), or the card tapped left the deck (the slot or the next site under the finger isn't pressed). The legacy page's second click pressed what was there (owner: fix it, 2026-11-12)",
+    devices: ['phone'],
+    scenarios: [
+      /^(empty|deck)--(renameDeck|saveDeck)--doubleTap$/,
+      /^deck--(ringBearerCard|ringCard|siteCards)--doubleTap$/,
+    ],
+  },
+  {
+    reason:
+      'A double tap (or double click) on Next page moves one page: the Angular page disables Next while the page loads; the legacy one only drew it disabled, so its second click moved a second page (owner: keep, 2026-11-12)',
+    scenarios: [/^empty--nextPage--double(Tap|Click)$/],
+    problem:
+      /^step 1: request, (legacy only: GET \/collection\/\w+ \["[^"]*start=24"\]|Angular only: GET \/collection\/\w+ \["[^"]*start=12"\])$/,
+  },
+  {
+    reason:
+      'Phone: a double tap on a pack opens one (data-tap-once, SecondTapGuard); the legacy page opened one, two or three depending on timing (owner: one pack, 2026-11-12). The Angular page must ask once',
+    devices: ['phone'],
+    scenarios: ['myCards--item-1--doubleTap'],
+    problem:
+      /^step 1: request, (legacy only: (GET \/delivery\/packContents|POST \/collection\/permanent) |Angular only: (GET \/delivery\/packContents \[""\]|POST \/collection\/permanent \["pack=[^"]*"\])$)/,
+  },
+  {
+    reason:
+      'Phone: a long press in Card Information (on the card or its close button) leaves it open; a right click there closed the legacy one (accepted 2026-11-12)',
+    devices: ['phone'],
+    scenarios: [/^cardInfo--(cardInfoCard|cardInfoClose)--longPress$/],
+    problem: /(cardInfo\w*|dialogTitles|dialogClose): legacy null, Angular \{/,
+  },
+  {
+    reason:
+      "Phone: a long press on a selection pack's choice shows that card's Card Information, to look before choosing; a right click there did nothing on the legacy page (accepted 2026-11-12)",
+    devices: ['phone'],
+    scenarios: ['selection--selectionChoice--longPress'],
+    problem:
+      /dialogTitles: legacy \{"disabled":false,"text":"Choose one"\}, Angular \{"disabled":false,"text":"Card Information"\}/,
+  },
+  {
+    reason:
+      'Modern: closing a dialog gives the focus back to what opened it (THEME_BEHAVIOUR.dialogsReturnFocus); the legacy page left it nowhere (accepted 2026-11-11)',
+    themes: ['modern'],
+    scenarios: [/./],
+    problem: /focus: legacy null, Angular "/,
+  },
+  {
+    reason:
+      "Modern on a computer: in a toolbar short of room (the deck pane narrowed, or a long deck name, at 1280x800) the theme button's 30px, which the legacy page didn't have, can't shrink, so the auto-zoom button and the collection list sit further right and the list is squeezed differently (accepted 2026-11-12)",
+    themes: ['modern'],
+    scenarios: ['pane-resized', 'open-library-deck'],
+    problem:
+      /^(step \d+|step \d+, end|end): geometry (autoZoom|collection): legacy [\d.]+,6 [\d.]+x23, Angular [\d.]+,6 [\d.]+x23$/,
+  },
+  {
+    reason:
+      'Modern: Card Information is modal (THEME_BEHAVIOUR.cardInfoModal), so a press on the page behind it closes it; the legacy one stayed open (accepted 2026-11-11)',
+    themes: ['modern'],
+    scenarios: ['card-info-close-drag'],
+    problem:
+      /(cardInfo\w*|dialogTitles|dialogClose): (1 shown on the legacy page, 0 on the Angular page|legacy \{.*\}, Angular null)|focus: legacy "cardInfo\w*", Angular null/,
+  },
+  {
+    reason: 'The Angular page can reach the slots and the toggle by keyboard, so its Tab order has more stops',
+    scenarios: [
+      /--keyboard--tabOrder$/,
+      /--(ringBearerSlot|ringSlot|sitesSlot|toggleCollection)--(focus|enter|space)$/,
+    ],
+  },
+  {
+    reason: "Space on a dialog's close button closes it on the Angular page; on the legacy page it did nothing",
+    scenarios: [/--(dialogClose|cardInfoClose)--space$/],
+  },
+  {
+    reason: 'Opened after the deck list, the legacy library dialog kept the title "Your Saved Decks"',
+    scenarios: [/--library--/],
+    problem: /dialogTitles: legacy .*Your Saved Decks.*Angular .*Library Decks/,
+  },
+  {
+    reason: 'Turning the hover zoom off by keyboard closes an open zoom on the Angular page; the legacy one stayed',
+    scenarios: [/--autoZoom--(enter|space)$/],
+  },
+  {
+    reason: 'Dragging the Card Information slider follows the mouse; the legacy one jumped to the smallest size',
+    scenarios: [/--cardInfoZoom--dragSideways$/],
+  },
+  {
+    reason: 'Home on the Card Information slider leaves the dialog where it is; the legacy one moved it off centre',
+    scenarios: [/^cardInfo--cardInfoZoom--arrows$/],
+    problem: /^step 4: \d+ pixels differ/,
+  },
+  {
+    reason: 'Dragging up from a site in the deck opens Card Information without a hover zoom left behind it',
+    scenarios: [/--siteCards--dragUp$/],
+  },
+  {
+    reason:
+      'Card Information opened by touch: focus is on its close button; on the legacy page it was on the wiki link',
+    scenarios: [/^cardInfo--(cardInfoCard|cardInfoClose)--tap$/],
+  },
+  {
+    reason: "A double click on a dialog's close button leaves focus on Game Text; the legacy page left it nowhere",
+    scenarios: [/--dialogClose--doubleClick$/],
+  },
+  {
+    reason: 'After renaming a deck in the deck list focus is on nothing; the legacy page kept it on the rename button',
+    scenarios: [/^deckList--deckRename--yes$/],
+    problem: /focus: legacy "deckRename", Angular null/,
+  },
+  {
+    reason:
+      'Card Information opened from a selection pack takes the focus; on the legacy page it stayed on the "Choose one" dialog behind it',
+    scenarios: [/^selection--selectionChoice--(rightClick|shiftClick|dragUp)$/],
+    problem:
+      /^(step 1|end): (focus: legacy "a dialog", Angular "cardInfoZoom"|dialogTitles: legacy .*"Choose one".*Angular .*"Card Information".*)$/,
+  },
+];
+
+export function acceptedBehaviour(scenario, problem, theme = 'classic', device = 'computer') {
+  const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
+  return ACCEPTED_BEHAVIOUR.some(
+    (entry) =>
+      (!entry.themes || entry.themes.includes(theme)) &&
+      (!entry.devices || entry.devices.includes(device)) &&
+      entry.scenarios.some(applies) &&
+      (!entry.problem || entry.problem.test(problem)),
+  );
+}
+
+/**
+ * Controls only the Angular page has, which the owner has accepted (by their name in controls.mjs, ANGULAR_ONLY). The
+ * coverage check lets them be on the Angular page alone; their area is left out of the comparison (EXCLUDED_AREAS).
+ */
+export const ACCEPTED_ANGULAR_ONLY = [
+  {
+    control: 'themePicker',
+    reason:
+      'Players switch between the classic and the modern theme (decided 2026-11-10); the legacy page had one look',
+  },
+];
+
+/**
+ * Bugs of the legacy page the owner has accepted not copying: what it sent or saved is rewritten to what it should have
+ * been, before comparing. Each is limited to exactly that text.
+ */
+export const LEGACY_BUGS = [
+  {
+    reason: 'A new deck without notes: the legacy page sent and saved the word "null" as its notes',
+    request: [/(^|&)notes=null(?=&|$)/g, '$1notes='],
+    saved: [/<notes>null<\/notes>/g, '<notes/>'],
+  },
+];
+
+/** Links the owner has accepted being different: the legacy address is rewritten before comparing. */
+const ACCEPTED_LINKS = [
+  {
+    reason: 'The wiki links use https on the Angular page',
+    from: /^http:\/\/wiki\.lotrtcgpc\.net\//,
+    to: 'https://wiki.lotrtcgpc.net/',
+  },
+];
+
+/** A legacy control's state, with an accepted change of its link applied. */
+export function withAcceptedLink(control) {
+  return control?.href
+    ? { ...control, href: ACCEPTED_LINKS.reduce((href, link) => href.replace(link.from, link.to), control.href) }
+    : control;
+}
+
+export function withoutLegacyBugs(text, kind) {
+  return LEGACY_BUGS.reduce((result, bug) => result.replace(bug[kind][0], bug[kind][1]), text);
+}
+
+/** The areas with their limits for one scenario at one size: the excluded areas first (no limit), then ACCEPTED's. */
+export function acceptedFor(scenario, sizeLabel) {
+  const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
+  return [
+    ...EXCLUDED_AREAS.map((area) => ({ ...area, maxPixels: Infinity })),
+    ...ACCEPTED.filter(
+      (entry) =>
+        entry.scenarios.some(applies) &&
+        (!entry.sizes || entry.sizes.includes(sizeLabel)) &&
+        (!entry.browsers || entry.browsers.includes(BROWSER_NAME)),
+    ),
+  ];
+}

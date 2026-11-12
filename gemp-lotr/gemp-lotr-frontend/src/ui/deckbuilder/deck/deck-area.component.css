@@ -1,0 +1,362 @@
+/*
+ * The deck side (GempLotrDeckBuildingUI.layoutUI), positioned as layoutUI did, from the pane's padding box: the pane's
+ * content size (pane-w x pane-h) gives a toolbar row, five slot rows beside a sites column at most 250px wide, and the
+ * draw deck with the stats under it. Each slot box is drawn 2px larger than its place (the legacy content-box
+ * borders); its cards keep 3px inside the place.
+ */
+:host {
+  /* the container units measure the pane's content box */
+  --pane-w: 100cqw;
+  --pane-h: 100cqh;
+  --deck-h: calc(var(--pane-h) - 28px);
+  --row: round(down, calc((var(--deck-h) - 30px) / 5), 1px);
+  --sites-w: min(round(down, calc(var(--deck-h) * 1.5 / 5), 1px), 250px);
+  --half: round(down, calc((var(--sites-w) - 5px) / 2), 1px);
+  --right-half: round(down, calc((var(--sites-w) + 15px) / 2), 1px);
+  --draw-left: calc(10px + var(--sites-w));
+  --draw-w: calc(var(--pane-w) - var(--sites-w) - 10px);
+  --draw-h: calc(var(--deck-h) - 60px);
+  /* the Map and Race row, when the format has either */
+  --special-rows: 0;
+  position: absolute;
+  inset: 0;
+  color: var(--theme-text);
+  font-family: var(--theme-font-text);
+  font-size: 12px;
+}
+
+:host:has(.gd-slot[data-slot='map']:not([hidden]), .gd-slot[data-slot='race']:not([hidden])) {
+  --special-rows: 1;
+}
+
+.gd-slot,
+.gd-pile {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  background: var(--theme-content-bg);
+}
+
+.gd-slot[data-slot='ring-bearer'],
+.gd-slot[data-slot='map'] {
+  left: 5px;
+  width: calc(var(--half) + 2px);
+  height: calc(var(--row) + 2px);
+}
+
+.gd-slot[data-slot='ring'],
+.gd-slot[data-slot='race'] {
+  left: var(--right-half);
+  width: calc(var(--half) + 2px);
+  height: calc(var(--row) + 2px);
+}
+
+.gd-slot[data-slot='ring-bearer'],
+.gd-slot[data-slot='ring'] {
+  top: 33px;
+}
+
+.gd-slot[data-slot='map'],
+.gd-slot[data-slot='race'] {
+  top: calc(33px + var(--row));
+}
+
+.gd-slot[data-slot='sites'] {
+  left: 5px;
+  top: calc(38px + (1 + var(--special-rows)) * var(--row));
+  width: calc(var(--sites-w) + 2px);
+  height: calc(var(--deck-h) - (1 + var(--special-rows)) * var(--row) - 8px);
+}
+
+/* The whole box selects for the slot; the cards are drawn over it */
+.gd-slot__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--theme-radius-box);
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: var(--theme-metrics-hint-line);
+  text-align: center;
+  cursor: default;
+}
+
+button.gd-slot__label:focus-visible {
+  outline: 2px solid var(--theme-hover-border);
+  outline-offset: -2px;
+}
+
+.gd-slot__title,
+.gd-slot__hint {
+  display: block;
+}
+
+/* .helper-text */
+.gd-slot__hint {
+  position: relative;
+  top: 40%;
+  padding: 10px;
+  font-size: calc(0.3rem + 0.75vh);
+  transform: translateY(-50%);
+}
+
+.gd-slot[data-slot='sites'] .gd-slot__hint {
+  top: 10%;
+}
+
+/*
+ * The legacy Map hint held its link, after a blank line: the label's hint keeps room for them (unseen), and the link is
+ * shown in the same place by a copy of the label over it, unseen but for the link. So the link wraps, and the hint is
+ * centred with it, as each browser lays out the legacy hint.
+ */
+.gd-slot__room {
+  visibility: hidden;
+}
+
+/* Laid out as .gd-slot__label */
+.gd-slot__more {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: var(--theme-metrics-hint-line);
+  text-align: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gd-slot__link {
+  color: var(--theme-text);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* The page's colour for a visited link, as before this rule */
+.gd-slot__link:visited {
+  color: var(--theme-link-visited);
+}
+
+.gd-slot__cards,
+.gd-pile__cards {
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  position: absolute;
+  /* CardGroup.setBounds: 3px in from the place, which is 1px in from the box */
+  inset: 2px 4px 4px 2px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  pointer-events: none;
+}
+
+.gd-slot__cards {
+  --gd-card-max-height: 497px;
+}
+
+.gd-slot__cards > .gd-card,
+.gd-stack > .gd-card {
+  pointer-events: auto;
+}
+
+/*
+ * VerticalBarGroup: the sites at the column's full width, one under the other below a 20px title gap, 5px apart or
+ * squeezed together so the last one ends at the bottom.
+ */
+.gd-slot[data-slot='sites'] .gd-slot__cards {
+  --gd-card-height: 100cqw;
+  --site-h: round(down, calc(100cqw * 350 / 490), 1px);
+  --n: var(--gd-slot-count, 1);
+  container-type: size;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: normal;
+  gap: 0;
+  padding-top: 20px;
+}
+
+/*
+ * Each card where VerticalBarGroup put it: 20px, then the cards before it and their gaps (100cqh is the height left
+ * under the title gap; one site has no gap), rounded down to a whole pixel as it did, so no browser rounds a fraction
+ * its own way. The gap down to 1/64px first: VerticalBarGroup added the gaps up one by one, which left its sum a hair
+ * under a whole pixel where the exact one is on it
+ */
+.gd-slot[data-slot='sites'] .gd-card {
+  --gap: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / max(var(--n) - 1, 1)), 0.015625px);
+  position: absolute;
+  left: 0;
+  top: round(down, 20px + var(--gd-site-index, 0) * (var(--site-h) + var(--gap)), 1px);
+}
+
+.gd-pile {
+  left: var(--draw-left);
+  width: calc(var(--draw-w) + 2px);
+  height: calc(var(--draw-h) / 2 + 2px);
+}
+
+.gd-pile[data-side='free-peoples'] {
+  top: 33px;
+}
+
+.gd-pile[data-side='shadow'] {
+  top: calc(33px + var(--draw-h) / 2);
+}
+
+.gd-pile__cards {
+  --gd-card-max-height: 200px;
+}
+
+/* NormalCardGroup rows are as high as the row height */
+.gd-stack {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  height: var(--gd-card-height);
+}
+
+/* Each copy behind shows a fifth of its width (rounded down) */
+.gd-stack > .gd-card[data-role='copy'] {
+  margin-right: calc(round(down, calc(var(--gd-card-width) / 5), 1px) - var(--gd-card-width));
+}
+
+/*
+ * NormalCardGroup's rows: as high as the row height, which can have a fraction (a card is a whole number of px), and
+ * centred as the rows it sized them for (moved, not laid out, so the box's size doesn't change)
+ */
+.gd-slot__cards > .gd-card,
+.gd-stack {
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
+}
+
+/*
+ * The compact layout (the modern theme on a portrait or narrow screen): in the flow, one under the other, and the deck
+ * pane scrolls. The toolbar, then the one-card slots side by side (Ring-bearer, Ring, and the Map or Race when the
+ * format has them), the sites in a strip that scrolls sideways, the Free Peoples and the Shadow piles (their cards at
+ * one size, wrapping), and the stats.
+ */
+:host-context([data-layout='compact']) {
+  --slot-h: clamp(150px, 46vw, 260px);
+  --site-w: 160px;
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+}
+
+:host-context([data-layout='compact']) gd-deck-toolbar,
+:host-context([data-layout='compact']) gd-deck-stats {
+  flex: 0 0 100%;
+}
+
+:host-context([data-layout='compact']) .gd-slot {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  height: var(--slot-h);
+}
+
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] {
+  flex-basis: 100%;
+  height: calc(round(down, calc(var(--site-w) * 350 / 490), 1px) + 44px);
+}
+
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] .gd-slot__hint {
+  top: 20%;
+}
+
+/* The strip: it scrolls, so it takes the pointer; a press beside the sites still selects them (siteClicked) */
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] .gd-slot__cards {
+  --gd-card-height: var(--site-w);
+  container-type: normal;
+  inset: 22px 4px 4px 4px;
+  flex-direction: row;
+  gap: 5px;
+  padding: 0 0 6px;
+  overflow: auto hidden;
+  pointer-events: auto;
+}
+
+:host-context([data-layout='compact']) .gd-slot[data-slot='sites'] .gd-card {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: none;
+}
+
+/* Each pile is named, with its number of cards, and grows with them */
+:host-context([data-layout='compact']) .gd-pile {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: 0 0 100%;
+  width: auto;
+  height: auto;
+  min-height: 70px;
+  padding-top: 22px;
+}
+
+:host-context([data-layout='compact']) .gd-pile::before {
+  content: attr(aria-label) ' (' attr(data-count) ')';
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 13px;
+}
+
+/* At one size (fitCards' none: the largest), wrapping */
+:host-context([data-layout='compact']) .gd-pile__cards {
+  --gd-card-fit: none;
+  --gd-card-max-height: 130px;
+  position: relative;
+  inset: auto;
+  padding: 2px 4px 4px 4px;
+}
+
+@media (min-width: 375px) {
+  :host-context([data-layout='compact']) .gd-pile__cards {
+    --gd-card-max-height: 140px;
+  }
+}
+
+@media (min-width: 600px) {
+  :host-context([data-layout='compact']) .gd-pile__cards {
+    --gd-card-max-height: 180px;
+  }
+}
+
+/* The one-card slots' cards under the slot's title */
+:host-context([data-layout='compact']) .gd-slot:not([data-slot='sites']) .gd-slot__cards {
+  inset: 20px 4px 4px 4px;
+}
+
+/* A slot with cards: its hint (and the Map's link) would show beside them, the slots being wider than the cards */
+:host-context([data-layout='compact']) .gd-slot:not([data-count='0']) :is(.gd-slot__hint, .gd-slot__more) {
+  visibility: hidden;
+}
+
+:host-context([data-layout='compact']) .gd-slot:not([data-count='0']) .gd-slot__link {
+  visibility: hidden;
+}
+
+/* A low screen (a phone held sideways): the slots, the sites and the piles' cards no higher than about a third of it */
+@media (max-height: 500px) {
+  :host-context([data-layout='compact']) {
+    --slot-h: 150px;
+    --site-w: 140px;
+  }
+
+  :host-context([data-layout='compact']) .gd-pile__cards {
+    --gd-card-max-height: 120px;
+  }
+}
