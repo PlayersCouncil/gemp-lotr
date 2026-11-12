@@ -1,0 +1,22 @@
+/* The cards of a selection pack or of new items, laid out like the collection's (NormalCardGroup) */
+
+.gd-shown-cards {
+  --gd-card-max-height: 497px;
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+}
+
+.gd-shown-cards > .gd-card {
+  top: var(--gd-card-offset, 0px);
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
+}
+
+.gd-shown-cards > .gd-card[data-orientation='horizontal'] {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px));
+}
