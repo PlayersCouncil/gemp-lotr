@@ -2,6 +2,7 @@ import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalE
 import { provideRouter } from '@angular/router';
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { Notifier } from '../../core/notifier/notifier';
+import { SecondTapGuard } from '../../core/platform/second-tap-guard';
 import { ThemeService } from '../../core/platform/theme.service';
 import { WindowNotifier } from '../shared/notifier/window-notifier';
 import { APP_ROUTES } from './app.routes';
@@ -18,5 +19,7 @@ export const appConfig: ApplicationConfig = {
     { provide: Notifier, useExisting: WindowNotifier },
     // Nothing is drawn until the theme's stylesheet has loaded, so the page never shows unstyled
     provideAppInitializer(() => inject(ThemeService).init()),
+    // A double tap's second tap doesn't press what a menu or dialog the first one closed or opened uncovered
+    provideAppInitializer(() => inject(SecondTapGuard).start()),
   ],
 };

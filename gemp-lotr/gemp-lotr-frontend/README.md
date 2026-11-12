@@ -178,7 +178,13 @@ The modern theme stacks the page on a portrait screen up to a tablet's width, on
 one lower than 501px (a phone held sideways, where the halves are side by side: `data-split=columns`)
 (`COMPACT_QUERY` in `src/core/platform/compact-layout.service.ts`; `CompactLayout.active`). The classic theme never
 does: it stays the legacy page. The theme also sets the page's viewport (`THEME_VIEWPORT`): modern lays out at the
-device's width, classic has no viewport tag, as the legacy page (phones show it zoomed out). The page then has
+device's width, classic has no viewport tag, as the legacy page (phones show it zoomed out). Switched to classic from
+modern, the tag can't simply go: a phone would keep the device's width and the classic page would run off the screen, so
+it gets what having none gives (`defaultViewport`: 980px wide, or the screen's width if wider, zoomed out to fit,
+following the device as it turns). On a touch screen, modern drops the second tap of a double tap when it lands on
+another control than the first (`SecondTapGuard`, `THEME_BEHAVIOUR.guardSecondTap`): the first tap closed a menu or a
+dialog, or opened one, and what is under the finger isn't what the player tapped. A pack (`data-tap-once`) opens once
+for a double tap. The page then has
 `data-layout=compact`, and the components' stylesheets lay out for it
 under `:host-context([data-layout='compact'])` (the dialogs under `[data-layout='compact'] .gd-dialog`):
 
@@ -190,7 +196,9 @@ under `:host-context([data-layout='compact'])` (the dialogs under `[data-layout=
   in a strip that scrolls sideways; the Free Peoples and Shadow piles, named and counted, their cards at one size;
   the stats;
 - the collection: a bar with the collection menu's button and the card name, the filters kept shown and the pager
-  under them, then the cards at one size. The collection menu holds the collection list, the other filters, the reset
+  under them, then the cards at one size. The pager's slider sets that size there (`CardSize`, 50 to 200% of the
+  layout's own, remembered in the `gempDeckbuilderCardSize` cookie), not the number of cards on a page: a phone's cards
+  keep their size and the pane scrolls. The collection menu holds the collection list, the other filters, the reset
   buttons and "Always show": a box per filter that keeps it shown in the bar (`FilterPins`, remembered in the
   `gempDeckbuilderFilters` cookie; none at first). Its button shows how many filters in it narrow the cards. The bar
   and the menu each have a part of the filter (`gd-collection-filter` with `part` = pane or menu), so a filter moves

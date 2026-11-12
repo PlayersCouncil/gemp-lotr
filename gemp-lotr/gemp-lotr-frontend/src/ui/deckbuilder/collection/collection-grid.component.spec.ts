@@ -1,7 +1,12 @@
 import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
 import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { CardSize } from '../../../core/collection/card-size';
+import { CompactLayout } from '../../../core/platform/compact-layout.service';
+import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 import { DeckbuilderActions } from '../../../core/actions/deckbuilder-actions.service';
 import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { DeckEditing } from '../../../core/deck/deck-editing.service';
@@ -12,16 +17,16 @@ import { CollectionGridComponent } from './collection-grid.component';
 describe('CollectionGridComponent', () => {
   let collection: CollectionBrowser;
 
+  const providers = () => [
+    ...provideDeckbuilderState(),
+    provideGempHttp(),
+    provideHttpClientTesting(),
+    provideFakeNotifier(),
+    { provide: PAGE_QUERY_STRING, useValue: '' },
+  ];
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        ...provideDeckbuilderState(),
-        provideGempHttp(),
-        provideHttpClientTesting(),
-        provideFakeNotifier(),
-        { provide: PAGE_QUERY_STRING, useValue: '' },
-      ],
-    });
+    TestBed.configureTestingModule({ providers: providers() });
     collection = TestBed.inject(CollectionBrowser);
   });
 
@@ -53,6 +58,21 @@ describe('CollectionGridComponent', () => {
     expect(cards.map((c) => c.querySelector('.gd-card__count')!.textContent)).toEqual(['2', '1', '2', '1']);
     expect(cards.map((c) => c.hasAttribute('data-borderless'))).toEqual([true, true, false, false]);
     expect(cards[2].querySelector('img')!.src).toBe('https://i.lotrtcgpc.net/decipher/LOTR01001.jpg');
+  });
+
+  it("scales the cards by the player's card size in the compact layout only", async () => {
+    const compact = signal(false);
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [...providers(), { provide: CompactLayout, useValue: { active: compact } }],
+    });
+    TestBed.inject(CardSize).set(150);
+    const { fixture } = await render();
+    const fit = fixture.debugElement.query(By.directive(FitCardsDirective)).injector.get(FitCardsDirective);
+    expect(fit.gdFitCardsScale()).toBe(1);
+    compact.set(true);
+    await fixture.whenStable();
+    expect(fit.gdFitCardsScale()).toBe(1.5);
   });
 
   it('uses a card through DeckbuilderActions, with the legacy role on its CardRef', async () => {

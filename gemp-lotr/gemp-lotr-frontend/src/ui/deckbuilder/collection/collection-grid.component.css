@@ -49,6 +49,7 @@
 /*
  * The compact layout: the cards at one size (fitCards' none: the largest), wrapping, the collection pane scrolling.
  * Three upright cards across a phone (two at most on the narrowest), five on a tablet; rows as high as their cards.
+ * The player scales that size with the pager's slider (CardSize, gdFitCardsScale).
  */
 :host-context([data-layout='compact']) {
   flex: none;

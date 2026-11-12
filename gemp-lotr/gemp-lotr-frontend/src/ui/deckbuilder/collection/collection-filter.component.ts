@@ -7,6 +7,7 @@ import {
   PAGE_SIZE_MIN,
   PAGE_SIZE_SLIDER_START,
 } from '../../../core/collection/collection-browser.service';
+import { CARD_SIZE_MAX, CARD_SIZE_MIN, CARD_SIZE_STEP, CardSize } from '../../../core/collection/card-size';
 import { CollectionQuery, FilterFieldName } from '../../../core/collection/collection-query.service';
 import { CULTURE_GROUPS } from '../../../core/collection/filter-cultures';
 import { FilterPins, PINNABLE_FILTERS, PinnableFilter } from '../../../core/collection/filter-pins';
@@ -103,9 +104,10 @@ export class FieldRowTemplate {
  *   `input[type=checkbox].gd-culture__input` and `.gd-culture__face` > `img.gd-culture__icon`.
  *
  * With `part` (FilterPart) other than `all`, the host has `data-part` and shows only that part: `pane` has the card
- * name (`placeholder` "Card name"), the filters kept shown (FilterPins) and the pager; `menu` has the others, the
- * advanced title, the resets and `fieldset.gd-filter__pins` with a `label.gd-pin` (`data-pin` = the filter) holding an
- * `input[type=checkbox]` per filter that can be kept shown. The cultures go where their filter is.
+ * name (`placeholder` "Card name"), the filters kept shown (FilterPins) and the pager, whose slider sets the card size
+ * there (CardSize; `data-sets=card-size`, `aria-label` "Card size") instead of the number of cards on a page; `menu`
+ * has the others, the advanced title, the resets and `fieldset.gd-filter__pins` with a `label.gd-pin` (`data-pin` = the
+ * filter) holding an `input[type=checkbox]` per filter that can be kept shown. The cultures go where their filter is.
  */
 @Component({
   selector: 'gd-collection-filter',
@@ -122,6 +124,8 @@ export class CollectionFilterComponent {
   protected readonly pins = inject(FilterPins);
   protected readonly browser = inject(CollectionBrowser);
 
+  protected readonly cardSize = inject(CardSize);
+  protected readonly cardSizes = { min: CARD_SIZE_MIN, max: CARD_SIZE_MAX, step: CARD_SIZE_STEP };
   protected readonly pageSize = { min: PAGE_SIZE_MIN, max: PAGE_SIZE_MAX, start: PAGE_SIZE_SLIDER_START };
   protected readonly cultureGroups = CULTURE_GROUPS;
   protected readonly compareOptions = COMPARE_OPTIONS;
@@ -219,6 +223,10 @@ export class CollectionFilterComponent {
 
   protected setPageSize(event: Event): void {
     this.browser.setPageSize(Number((event.target as HTMLInputElement).value));
+  }
+
+  protected setCardSize(event: Event): void {
+    this.cardSize.set(Number((event.target as HTMLInputElement).value));
   }
 
   protected isCultureActive(code: string): boolean {

@@ -5,6 +5,7 @@ import { CollectionBrowser } from './collection/collection-browser.service';
 import { CollectionCounts } from './collection/collection-counts.service';
 import { CollectionQuery } from './collection/collection-query.service';
 import { FilterPins } from './collection/filter-pins';
+import { CardSize } from './collection/card-size';
 import { DeckChanges } from './deck/deck-changes.service';
 import { DeckDraft } from './deck/deck-draft.service';
 import { DeckEditing } from './deck/deck-editing.service';
@@ -42,6 +43,7 @@ export function provideDeckbuilderState(): Provider[] {
     CollectionQuery,
     CollectionCounts,
     FilterPins,
+    CardSize,
     FormatsService,
     PackDeliveryService,
     PacksService,

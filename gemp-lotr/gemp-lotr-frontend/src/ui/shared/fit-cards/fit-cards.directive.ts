@@ -25,7 +25,7 @@ const CARD_SNAP_PROPERTY = '--gd-card-snap';
  * centred, as the legacy groups placed them). The theme decides the rest, through custom properties
  * on the box: `--gd-card-max-height` (largest row height, default 200px), `--gd-card-gap` (space between cards, default
  * 5px) and `--gd-card-fit` (`contain`, the default; `rows`, the classic layout; or `none` for always the largest and
- * scrolling). Read again when the theme changes.
+ * scrolling). Read again when the theme changes. `gdFitCardsScale` scales the largest row height (default 1).
  *
  * Usage: `<div class="gd-collection__cards" [gdFitCards]="cards">` with one FitCard per card in the box (whether it
  * is landscape, and the copies drawn behind it).
@@ -34,6 +34,8 @@ const CARD_SNAP_PROPERTY = '--gd-card-snap';
 export class FitCardsDirective {
   /** One entry per card (or stack of copies) in the box. */
   readonly gdFitCards = input.required<readonly FitCard[]>();
+  /** Scales the theme's largest row height (`--gd-card-max-height`): a card size the player chose. */
+  readonly gdFitCardsScale = input(1);
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
@@ -63,6 +65,7 @@ export class FitCardsDirective {
   private apply(): void {
     const size = this.size();
     const cards = this.gdFitCards();
+    const scale = this.gdFitCardsScale();
     // Another theme may set other sizes
     this.theme();
     if (!size || !this.window) {
@@ -76,7 +79,7 @@ export class FitCardsDirective {
       height: size.height,
       cards,
       gap,
-      maxHeight: parsePx(style.getPropertyValue('--gd-card-max-height'), 200),
+      maxHeight: parsePx(style.getPropertyValue('--gd-card-max-height'), 200) * scale,
       fit,
     });
     this.host.style.setProperty(CARD_HEIGHT_PROPERTY, `${height}px`);

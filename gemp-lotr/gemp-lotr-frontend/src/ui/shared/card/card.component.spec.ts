@@ -77,7 +77,7 @@ describe('CardComponent', () => {
       expect(el.querySelector<HTMLImageElement>('img.gd-card__image')!.src).toBe(CARD.imageUrl);
       expect(el.querySelector('.gd-card__count')!.textContent).toBe('3');
       expect(el.getAttribute('aria-label')).toBe('1_2 (3)');
-      for (const attribute of ['data-errata', 'data-foil', 'data-borderless']) {
+      for (const attribute of ['data-errata', 'data-foil', 'data-borderless', 'data-tap-once']) {
         expect(el.hasAttribute(attribute), attribute).toBe(false);
       }
       expect(el.querySelector('.gd-card__errata, .gd-card__foil, .gd-card__overlay')).toBeNull();
@@ -100,6 +100,8 @@ describe('CardComponent', () => {
       expect(el.hasAttribute('data-errata')).toBe(true);
       expect(el.hasAttribute('data-foil')).toBe(true);
       expect(el.hasAttribute('data-borderless')).toBe(true);
+      // A double tap opens one pack (SecondTapGuard)
+      expect(el.hasAttribute('data-tap-once')).toBe(true);
       expect(el.querySelector('.gd-card__errata')).not.toBeNull();
       expect(el.querySelector<HTMLImageElement>('.gd-card__foil')!.src).toContain('holo.jpg');
       expect(el.querySelector<HTMLImageElement>('.gd-card__overlay')!.src).toBe('https://example.com/modifier.jpg');

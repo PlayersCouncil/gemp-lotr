@@ -70,6 +70,7 @@
   --theme-metrics-stats-line: normal;
   --theme-metrics-widget-line: normal;
   --theme-metrics-hint-line: normal;
+  --theme-metrics-deck-name-size: 1em;
 
   /* The theme button: bright red in every theme, so players notice it (owner, 2026-11-11) */
   --theme-attention-bg: #e0161e;
@@ -116,6 +117,8 @@
   --theme-metrics-stats-line: 15px;
   --theme-metrics-widget-line: 15px;
   --theme-metrics-hint-line: 1.15;
+  /* The deck's name: this font is about 12% wider than the legacy Times New Roman, so a long name took more room */
+  --theme-metrics-deck-name-size: 0.89em;
 
   --theme-page-bg: #202124;
   --theme-text: #e7e9ee;

@@ -96,11 +96,29 @@ at a time, and each must be reported in the way it should be, and not be reporte
 (`npm run test:parity` in the frontend, see its README), the decks saved by the legacy page (`check:legacy-decks`), the
 Java server's build and web tests (`check:server-build`, which never replaces the
 jar a running server uses), the self-test, the comparison, the modern theme's layout on a computer (`--theme=modern --geometry`, report in
-`report-local-modern`), the control-and-gesture matrix and the deploy test. `--quick`
-leaves out the matrix.
+`report-local-modern`), the control-and-gesture matrix, the modern theme on a phone (`check:phone`, in Chromium only) and
+the deploy test. `--quick` leaves out the matrix and the phone.
 
 `npm run check:matrix` tests every control against every gesture it can get, in each state it appears in (`matrix.mjs`),
 and lists what is really on both pages: a control with no test, or on one page only, fails it.
+
+`npm run check:phone` is the modern theme on a phone (390x844, a touch screen), where it has its compact layout
+(`phone.mjs`):
+
+- every control against every touch gesture (tap, double tap, long press, swipe, typing, each choice of a list, a
+  slider moved), in each state it appears in, on the Angular page on the phone, and the same gesture made with the mouse
+  on the legacy page on a computer (a tap is a click, a long press a right click, a swipe the mouse wheel). The layouts
+  differ, so the screens aren't compared, nor the focus or the mouse: what the pages ask the server, their browser
+  dialogs, the state of their controls (values, lists, what is disabled, the deck's name and stats, the open dialog) and
+  the decks saved must be the same. A control in one of the compact layout's menus is reached as a player would, by
+  opening the menu first;
+- what only the compact layout has, with what must happen written out (`COMPACT_SCENARIOS`): its two menus, the
+  filters kept shown, the theme in the menu, the split dragged with a finger and remembered, the pager's slider as the
+  card size (the separator, the toggle and that slider aren't compared with the legacy page), long presses, a phone held
+  sideways, a tablet, and switching themes on each device, turned or resized before and after (each switched page must
+  match one freshly loaded in that theme);
+- what is on the phone page in each state, with each menu open, against what is tested: a control with no test fails
+  it.
 
 `npm run check:mutation` (not part of `check:all`, about an hour) is mutation testing of the deck builder's logic; see
 the frontend README.

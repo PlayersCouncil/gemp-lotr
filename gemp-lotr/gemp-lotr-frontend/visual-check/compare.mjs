@@ -20,9 +20,21 @@ export const MOUSE_TRACKER = () => {
   window.addEventListener('pointermove', (e) => (window.__mouse = { x: e.clientX, y: e.clientY }), true);
 };
 
-/** The state of the page a screenshot doesn't show. Runs in the page; the same on both, so its results can be compared. */
-export function readPageState(controls) {
+/**
+ * The state of the page a screenshot doesn't show. Runs in the page; the same on both, so its results can be compared.
+ * `menus`: where controls kept in a closed menu are (the compact layout's), read as if shown.
+ */
+export function readPageState({ controls, menus = null }) {
   function visible(el) {
+    const menu = menus ? el.closest(menus) : null;
+    if (menu) {
+      // Shown when the menu opens: nothing between it and the menu is hidden
+      for (let node = el; node !== menu; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+      }
+      return true;
+    }
     const box = el.getBoundingClientRect();
     return box.width > 0 && box.height > 0 && getComputedStyle(el).visibility !== 'hidden';
   }
@@ -92,8 +104,11 @@ export function readPageState(controls) {
   return state;
 }
 
-/** What differs between the two pages' state, one line per thing. */
-export function compareStates(legacy, angular, last) {
+/**
+ * What differs between the two pages' state, one line per thing. `touch`: the Angular page was used with a finger,
+ * which moves neither the focus nor a mouse as the legacy page's mouse does.
+ */
+export function compareStates(legacy, angular, last, touch = false) {
   const differences = [];
   const note = (what, a, b) => {
     if (JSON.stringify(a ?? null) !== JSON.stringify(b ?? null)) {
@@ -101,9 +116,9 @@ export function compareStates(legacy, angular, last) {
       differences.push(`${what}: legacy ${show(a)}, Angular ${show(b)}`);
     }
   };
-  note('focus', legacy.focus, angular.focus);
+  if (!touch) note('focus', legacy.focus, angular.focus);
   // The browser reports the mouse's first position at a moment of its own
-  if (legacy.mouse && angular.mouse) {
+  if (!touch && legacy.mouse && angular.mouse) {
     note(`cursor (over ${legacy.under} / ${angular.under})`, legacy.cursor, angular.cursor);
     note('tooltip', legacy.tooltip, angular.tooltip);
   }

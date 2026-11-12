@@ -250,9 +250,9 @@ export async function openBothPages(options: BothPagesOptions = {}): Promise<Bot
   );
 
   /**
-   * A legacy bug the Angular page doesn't copy (fixed in Phase 4 of the port, trymarz/gemp-lotr-private#26): a culture
-   * pressed while its group showed stayed pressed, and kept filtering, after a format hid the group. The legacy page
-   * tried to release it and failed; here it is released for it, so the two pages go on from the same state.
+   * A legacy bug the Angular page doesn't copy: a culture pressed while its group showed stayed pressed, and kept
+   * filtering, after a format hid the group. The legacy page tried to release it and failed; here it is released for
+   * it, so the two pages go on from the same state.
    */
   const releaseHiddenCultures = async () => {
     const pressedAndHidden = CULTURES.filter((code) => {

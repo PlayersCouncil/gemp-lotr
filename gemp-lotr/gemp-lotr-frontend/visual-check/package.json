@@ -9,6 +9,7 @@
     "check:local": "node local-server.mjs",
     "check:local:down": "node local-server.mjs down",
     "check:matrix": "node local-server.mjs --matrix --mutating --sizes 1366x768 --tolerance 80 --out report-matrix",
+    "check:phone": "node local-server.mjs --phone --mutating --sizes 390x844 --out report-phone",
     "check:selftest": "node local-server.mjs --selftest",
     "check:deploy": "node deploy-test.mjs",
     "check:server-build": "node tools/build-server.mjs",
@@ -16,7 +17,8 @@
     "inspect": "node tools/inspect.mjs",
     "measure": "node tools/measure.mjs",
     "check:mutation": "node tools/mutation.mjs",
-    "check:legacy-decks": "node local-server.mjs --legacy-decks"
+    "check:legacy-decks": "node local-server.mjs --legacy-decks",
+    "tunnel": "node tools/tunnel.mjs"
   },
   "devDependencies": {
     "playwright": "1.64.1",

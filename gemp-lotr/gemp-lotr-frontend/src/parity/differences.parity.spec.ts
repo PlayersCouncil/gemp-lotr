@@ -33,7 +33,7 @@ describe('parity with the legacy page: the known differences', () => {
   const savedNotes = (saved: string, deck: string) =>
     (JSON.parse(saved) as [string, { notes: string }][]).find(([name]) => name === deck)?.[1].notes;
 
-  describe('legacy bugs the Angular page deliberately does not copy (trymarz/gemp-lotr-private#26)', () => {
+  describe('legacy bugs the Angular page deliberately does not copy', () => {
     it('a culture stops filtering once a format hides its button', async () => {
       await open({ releaseHiddenCultures: false });
       await pages.both((page) => page.press(CONTROLS.culture('MEN')));

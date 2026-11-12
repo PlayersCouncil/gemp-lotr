@@ -2,6 +2,7 @@ import { provideDeckbuilderState } from '../../../core/deckbuilder-state';
 import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { CardSize } from '../../../core/collection/card-size';
 import { BlockFilter } from '../../../core/api/models';
 import { CollectionBrowser } from '../../../core/collection/collection-browser.service';
 import { CollectionQuery } from '../../../core/collection/collection-query.service';
@@ -301,6 +302,20 @@ describe('CollectionFilterComponent', () => {
       expect(el.querySelector('.gd-filter__resets')).toBeNull();
       expect(el.querySelector('.gd-cultures')).toBeNull();
       expect(el.querySelector('.gd-filter__pins')).toBeNull();
+    });
+
+    it("pane: the pager's slider sets the card size (remembered), not the number of cards on a page", async () => {
+      const size = vi.spyOn(browser, 'setPageSize');
+      const { el } = await render('pane');
+      const slider = el.querySelector<HTMLInputElement>('.gd-pager__size')!;
+      expect(slider.getAttribute('aria-label')).toBe('Card size');
+      expect(slider.dataset['sets']).toBe('card-size');
+      expect([slider.min, slider.max, slider.step, slider.value]).toEqual(['50', '200', '10', '100']);
+      expect(slider.disabled).toBe(false);
+      slider.value = '150';
+      slider.dispatchEvent(new Event('input'));
+      expect(TestBed.inject(CardSize).percent()).toBe(150);
+      expect(size).not.toHaveBeenCalled();
     });
 
     it('menu: the other filters, the cultures, the resets and the choice of filters kept shown', async () => {

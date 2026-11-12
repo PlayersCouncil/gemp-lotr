@@ -29,9 +29,10 @@ class FakeResizeObserver {
 
 @Component({
   imports: [FitCardsDirective],
-  template: `<div class="box" [gdFitCards]="cards()"></div>`,
+  template: `<div class="box" [gdFitCards]="cards()" [gdFitCardsScale]="scale()"></div>`,
 })
 class Host {
+  readonly scale = signal(1);
   readonly cards = signal<readonly FitCard[]>(Array.from({ length: 12 }, () => ({ horizontal: false })));
 }
 
@@ -92,6 +93,18 @@ describe('FitCardsDirective', () => {
     observer.resize(1000, 472);
     await fixture.whenStable();
     expect(cardHeight(box)).toBe('90px');
+  });
+
+  it('scales the largest row height by gdFitCardsScale, and sizes again when it changes', async () => {
+    properties['--gd-card-fit'] = 'none';
+    properties['--gd-card-max-height'] = '150px';
+    const { fixture, box, observer } = await render();
+    observer.resize(372, 472);
+    await fixture.whenStable();
+    expect(cardHeight(box)).toBe('150px');
+    fixture.componentInstance.scale.set(1.5);
+    await fixture.whenStable();
+    expect(cardHeight(box)).toBe('225px');
   });
 
   it('sizes again when the cards change', async () => {

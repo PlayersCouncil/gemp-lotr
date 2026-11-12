@@ -5,7 +5,8 @@
 //
 //   npm run check:local -- --mutating
 //   npm run check:local -- --only start,deck-list --sizes 1366x768
-//   npm run check:local -- --keep           leaves the server up afterwards (npm run check:local:down stops it)
+//   npm run check:local -- --keep           leaves the server up afterwards, its login in .local-server/login.json
+//                                           (npm run check:local:down stops it)
 //   npm run check:local -- --skip-build     uses the Angular build of the previous run
 //   npm run check:selftest                  proves the check catches bugs: see injections.mjs
 //   npm run check:legacy-decks              decks saved by the legacy page keep working: see legacy-decks.mjs
@@ -42,6 +43,7 @@ function compose(...args) {
 function stopServer() {
   // A first run has no state folder yet, and compose needs the variables either way
   fs.mkdirSync(STATE_DIR, { recursive: true });
+  fs.rmSync(path.join(STATE_DIR, 'login.json'), { force: true });
   compose('down', '--volumes', '--remove-orphans');
 }
 
@@ -70,10 +72,18 @@ function runCheck(args, user, password, script = 'run.mjs') {
  * Returns the number of bugs that went unnoticed.
  */
 function runSelfTest(user, password) {
-  const check = (extra) =>
+  const check = (phone, extra) =>
     spawnSync(
       process.execPath,
-      [path.join(HERE, 'run.mjs'), '--server', SERVER, '--sizes', '1366x768', '--out', 'report-selftest', ...extra],
+      [
+        path.join(HERE, 'run.mjs'),
+        '--server',
+        SERVER,
+        ...(phone ? ['--phone', '--sizes', '390x844'] : ['--sizes', '1366x768']),
+        '--out',
+        'report-selftest',
+        ...extra,
+      ],
       {
         cwd: HERE,
         encoding: 'utf8',
@@ -81,15 +91,22 @@ function runSelfTest(user, password) {
         env: { ...process.env, GEMP_USER: user, GEMP_PASSWORD: password },
       },
     ).stdout;
-  const scenarios = [...new Set(Object.values(INJECTIONS).map((injection) => injection.scenario))];
-  console.log(`Without any bug (${scenarios.length} scenarios)...`);
-  const clean = check(['--only', scenarios.join(',')]);
-  const lineOf = (output, scenario) => output.split('\n').find((line) => line.includes(` ${scenario}-1366x768`)) ?? '';
+  const label = (injection) => (injection.phone ? '390x844' : '1366x768');
+  const clean = { false: '', true: '' };
+  for (const phone of [false, true]) {
+    const injections = Object.values(INJECTIONS).filter((injection) => Boolean(injection.phone) === phone);
+    const scenarios = [...new Set(injections.map((injection) => injection.scenario))];
+    console.log(`Without any bug (${scenarios.length} scenarios${phone ? ', on a phone' : ''})...`);
+    clean[phone] = check(phone, ['--only', scenarios.join(',')]);
+  }
+  const lineOf = (output, injection) =>
+    output.split('\n').find((line) => line.includes(` ${injection.scenario}-${label(injection)}`)) ?? '';
 
   let missed = 0;
   for (const [name, injection] of Object.entries(INJECTIONS)) {
-    const line = lineOf(check(['--only', injection.scenario, '--inject', name]), injection.scenario);
-    const before = lineOf(clean, injection.scenario);
+    const phone = Boolean(injection.phone);
+    const line = lineOf(check(phone, ['--only', injection.scenario, '--inject', name]), injection);
+    const before = lineOf(clean[phone], injection);
     const caught = injection.expect.test(line) && !injection.expect.test(before);
     if (!caught) {
       missed++;
@@ -142,6 +159,13 @@ async function main() {
     await waitForLogin(SERVER, player.name, password);
     console.log('Adding the test data...');
     await seedTestData(SERVER, password);
+    if (keep) {
+      // For trying things on the kept server by hand (the folder is not committed); removed when it stops
+      fs.writeFileSync(
+        path.join(STATE_DIR, 'login.json'),
+        JSON.stringify({ server: SERVER, user: player.name, password }),
+      );
+    }
     if (selfTest) {
       return runSelfTest(player.name, password) === 0 ? 0 : 1;
     }

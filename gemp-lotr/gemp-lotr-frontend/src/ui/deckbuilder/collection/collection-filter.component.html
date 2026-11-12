@@ -58,16 +58,30 @@
       (click)="browser.previousPage()"
     ></button>
     <div class="gd-pager__track">
-      <input
-        class="gd-pager__size gd-slider"
-        type="range"
-        aria-label="Cards per page"
-        [min]="pageSize.min"
-        [max]="pageSize.max"
-        [value]="pageSize.start"
-        [disabled]="browser.sliderDisabled()"
-        (input)="setPageSize($event)"
-      />
+      @if (part() === 'pane') {
+        <input
+          class="gd-pager__size gd-slider"
+          type="range"
+          aria-label="Card size"
+          data-sets="card-size"
+          [min]="cardSizes.min"
+          [max]="cardSizes.max"
+          [step]="cardSizes.step"
+          [value]="cardSize.percent()"
+          (input)="setCardSize($event)"
+        />
+      } @else {
+        <input
+          class="gd-pager__size gd-slider"
+          type="range"
+          aria-label="Cards per page"
+          [min]="pageSize.min"
+          [max]="pageSize.max"
+          [value]="pageSize.start"
+          [disabled]="browser.sliderDisabled()"
+          (input)="setPageSize($event)"
+        />
+      }
     </div>
     <button
       type="button"

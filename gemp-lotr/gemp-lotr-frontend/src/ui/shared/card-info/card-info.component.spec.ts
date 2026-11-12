@@ -256,6 +256,7 @@ describe('CardInfoComponent', () => {
       vi.spyOn(TestBed.inject(ThemeService), 'behaviour').mockReturnValue({
         cardInfoModal: true,
         dialogsReturnFocus: true,
+        guardSecondTap: true,
       });
       await open(false);
       expect(showModal).toHaveBeenCalledOnce();

@@ -1,4 +1,4 @@
-// Differences from the legacy page that the owner has accepted (trymarz/gemp-lotr-private#26). Only the owner adds to
+// Differences from the legacy page that the owner has accepted. Only the owner adds to
 // this list: anything not in it fails the check. An entry allows at most `maxPixels` differing pixels inside the area of
 // `selector` (the Angular page's, grown by `margin` px); every other pixel still counts towards the normal tolerance.
 //
@@ -214,15 +214,63 @@ export const ACCEPTED = [
 
 /**
  * Behaviour the owner has accepted being different, which a limited area can't describe. A scenario listed without
- * `problem` isn't compared at all, so each of those is exactly the gesture that was decided on.
+ * `problem` isn't compared at all, so each of those is exactly the gesture that was decided on. `themes`: only in those
+ * themes; `devices`: only in those checks ('computer', or 'phone': run.mjs --phone, phone.mjs).
  */
 const ACCEPTED_BEHAVIOUR = [
+  {
+    reason:
+      "Phone: the second tap of a double tap is dropped when it lands on another control than the first (SecondTapGuard): a menu item's menu closed (Rename, Save: asked once), or the card tapped left the deck (the slot or the next site under the finger isn't pressed). The legacy page's second click pressed what was there (owner: fix it, 2026-11-12)",
+    devices: ['phone'],
+    scenarios: [
+      /^(empty|deck)--(renameDeck|saveDeck)--doubleTap$/,
+      /^deck--(ringBearerCard|ringCard|siteCards)--doubleTap$/,
+    ],
+  },
+  {
+    reason:
+      'A double tap (or double click) on Next page moves one page: the Angular page disables Next while the page loads; the legacy one only drew it disabled, so its second click moved a second page (owner: keep, 2026-11-12)',
+    scenarios: [/^empty--nextPage--double(Tap|Click)$/],
+    problem:
+      /^step 1: request, (legacy only: GET \/collection\/\w+ \["[^"]*start=24"\]|Angular only: GET \/collection\/\w+ \["[^"]*start=12"\])$/,
+  },
+  {
+    reason:
+      'Phone: a double tap on a pack opens one (data-tap-once, SecondTapGuard); the legacy page opened one, two or three depending on timing (owner: one pack, 2026-11-12). The Angular page must ask once',
+    devices: ['phone'],
+    scenarios: ['myCards--item-1--doubleTap'],
+    problem:
+      /^step 1: request, (legacy only: (GET \/delivery\/packContents|POST \/collection\/permanent) |Angular only: (GET \/delivery\/packContents \[""\]|POST \/collection\/permanent \["pack=[^"]*"\])$)/,
+  },
+  {
+    reason:
+      'Phone: a long press in Card Information (on the card or its close button) leaves it open; a right click there closed the legacy one (accepted 2026-11-12)',
+    devices: ['phone'],
+    scenarios: [/^cardInfo--(cardInfoCard|cardInfoClose)--longPress$/],
+    problem: /(cardInfo\w*|dialogTitles|dialogClose): legacy null, Angular \{/,
+  },
+  {
+    reason:
+      "Phone: a long press on a selection pack's choice shows that card's Card Information, to look before choosing; a right click there did nothing on the legacy page (accepted 2026-11-12)",
+    devices: ['phone'],
+    scenarios: ['selection--selectionChoice--longPress'],
+    problem:
+      /dialogTitles: legacy \{"disabled":false,"text":"Choose one"\}, Angular \{"disabled":false,"text":"Card Information"\}/,
+  },
   {
     reason:
       'Modern: closing a dialog gives the focus back to what opened it (THEME_BEHAVIOUR.dialogsReturnFocus); the legacy page left it nowhere (accepted 2026-11-11)',
     themes: ['modern'],
     scenarios: [/./],
     problem: /focus: legacy null, Angular "/,
+  },
+  {
+    reason:
+      "Modern on a computer: in a toolbar short of room (the deck pane narrowed, or a long deck name, at 1280x800) the theme button's 30px, which the legacy page didn't have, can't shrink, so the auto-zoom button and the collection list sit further right and the list is squeezed differently (accepted 2026-11-12)",
+    themes: ['modern'],
+    scenarios: ['pane-resized', 'open-library-deck'],
+    problem:
+      /^(step \d+|step \d+, end|end): geometry (autoZoom|collection): legacy [\d.]+,6 [\d.]+x23, Angular [\d.]+,6 [\d.]+x23$/,
   },
   {
     reason:
@@ -288,11 +336,12 @@ const ACCEPTED_BEHAVIOUR = [
   },
 ];
 
-export function acceptedBehaviour(scenario, problem, theme = 'classic') {
+export function acceptedBehaviour(scenario, problem, theme = 'classic', device = 'computer') {
   const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
   return ACCEPTED_BEHAVIOUR.some(
     (entry) =>
       (!entry.themes || entry.themes.includes(theme)) &&
+      (!entry.devices || entry.devices.includes(device)) &&
       entry.scenarios.some(applies) &&
       (!entry.problem || entry.problem.test(problem)),
   );

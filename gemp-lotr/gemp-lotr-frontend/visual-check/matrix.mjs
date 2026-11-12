@@ -55,7 +55,7 @@ const withShift = async (page, action) => {
   await page.keyboard.up('Shift');
 };
 
-const GESTURES = {
+export const GESTURES = {
   hover: async (page, target) => {
     await moveTo(page, target);
     await pause(page, 700);
@@ -167,7 +167,7 @@ const GESTURES = {
 };
 
 /** What can be done to each kind of control. A gesture left out has its reason in NOT_APPLICABLE. */
-const KINDS = {
+export const KINDS = {
   button: ['hover', 'leave', 'press', 'rightClick', 'shiftClick', 'doubleClick', 'focus', 'enter', 'space'],
   select: ['hover', 'focus', 'rightClick', 'eachOption'],
   text: ['hover', 'press', 'focus', 'type', 'escape'],
@@ -187,7 +187,14 @@ const waitForPage = async (page, ms = 1200) => {
   await page.settleNow();
 };
 
+/**
+ * Makes a control reachable before a setup step uses it: on a phone (run.mjs --phone) the Angular page keeps some in a
+ * menu, which this opens (phone.mjs `reach`); elsewhere it does nothing.
+ */
+const reach = async (page, selector) => page.reach?.(selector);
+
 const openDeckList = async (page, $) => {
+  await reach(page, $.deckList);
   await page.click($.deckList);
   await waitForPage(page);
 };
@@ -203,33 +210,41 @@ export const STATES = {
     await waitForPage(page, 300);
   },
   myCards: async (page, $) => {
+    await reach(page, $.collection);
     await page.selectOption($.collection, 'permanent');
     await waitForPage(page, 1500);
   },
   closed: async (page, $) => {
+    await reach(page, $.toggleCollection);
     await page.click($.toggleCollection);
     await waitForPage(page, 500);
   },
   deckList: openDeckList,
   library: async (page, $) => {
+    await reach(page, $.library);
     await page.click($.library);
     await waitForPage(page);
   },
   importDialog: async (page, $) => {
+    await reach(page, $.importDeck);
     await page.click($.importDeck);
     await waitForPage(page, 500);
   },
   notes: async (page, $) => {
+    await reach(page, $.notes);
     await page.click($.notes);
     await waitForPage(page, 500);
   },
   cardInfo: async (page, $) => {
+    await reach(page, $.firstCard);
     await page.locator($.firstCard).first().click({ button: 'right' });
     await waitForPage(page, 500);
   },
   selection: async (page, $) => {
+    await reach(page, $.collection);
     await page.selectOption($.collection, 'permanent');
     await waitForPage(page, 1500);
+    await reach(page, $.selectionPacks);
     await page.locator($.selectionPacks).first().click();
     await waitForPage(page, 1000);
   },
@@ -328,7 +343,7 @@ export const MANIFEST = [
 ];
 
 /** Saying yes to what the toolbar and the deck list ask: these change the saved decks. */
-const ANSWERED = [
+export const ANSWERED = [
   { control: 'saveDeck', state: 'empty', answers: ['Matrix deck'] },
   { control: 'newDeck', state: 'deck', answers: [true] },
   { control: 'renameDeck', state: 'deck', answers: ['Matrix renamed'] },
@@ -340,7 +355,7 @@ const ANSWERED = [
 
 /** Using these really opens a pack: run one at a time, and the random contents are replayed to the second page. */
 const USE_GESTURES = new Set(['press', 'doubleClick', 'tap', 'enter', 'space']);
-const opensPack = (state, control, gesture) =>
+export const opensPack = (state, control, gesture) =>
   USE_GESTURES.has(gesture) &&
   (['item 0', 'item 1'].includes(control) ? state === 'myCards' : control === 'selectionChoice');
 
@@ -407,7 +422,7 @@ export function matrixScenarios() {
 }
 
 /** What can be used on each page. */
-const INTERACTIVE = {
+export const INTERACTIVE = {
   legacy:
     'button, a[href], input:not([type=hidden]), select, textarea, .ui-slider-handle, .actionArea, ' +
     '.ui-layout-resizer, .ui-layout-toggler, .ui-dialog-titlebar-close, .card-group, #culture-buttons label',
@@ -415,7 +430,7 @@ const INTERACTIVE = {
 };
 
 /** Runs in the page: the controls it has now, each with the name controls.mjs gives it, or a description if none. */
-function listControls({ interactive, named, cardsOf, cultureOf }) {
+export function listControls({ interactive, named, cardsOf, cultureOf }) {
   const visible = (el) => {
     const box = el.getBoundingClientRect();
     return box.width > 0 && box.height > 0 && getComputedStyle(el).visibility !== 'hidden';
@@ -534,7 +549,7 @@ export async function coverageGaps(open) {
  * Controls present in a state but tested in another, where they behave the same: the toolbar and the filter are tested
  * with no dialog open (a modal dialog covers them) and with the deck open or not.
  */
-const OUT_OF_STATE = new Set(
+export const OUT_OF_STATE = new Set(
   ['deck', 'myCards', 'closed', 'deckList', 'library', 'importDialog', 'notes', 'cardInfo', 'selection'].flatMap(
     (state) =>
       MANIFEST.filter((entry) => entry.states.includes('empty')).map(

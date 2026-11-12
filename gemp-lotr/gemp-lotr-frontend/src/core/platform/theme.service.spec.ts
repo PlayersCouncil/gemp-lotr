@@ -5,6 +5,7 @@ import {
   THEME_ATTRIBUTE,
   THEME_BEHAVIOUR,
   THEME_COOKIE,
+  defaultViewport,
   THEME_VIEWPORT,
   ThemeService,
 } from './theme.service';
@@ -124,21 +125,45 @@ describe('ThemeService', () => {
   });
 
   it('says how each theme behaves', () => {
-    expect(THEME_BEHAVIOUR.classic).toEqual({ cardInfoModal: false, dialogsReturnFocus: false });
-    expect(THEME_BEHAVIOUR.modern).toEqual({ cardInfoModal: true, dialogsReturnFocus: true });
+    expect(THEME_BEHAVIOUR.classic).toEqual({
+      cardInfoModal: false,
+      dialogsReturnFocus: false,
+      guardSecondTap: false,
+    });
+    expect(THEME_BEHAVIOUR.modern).toEqual({ cardInfoModal: true, dialogsReturnFocus: true, guardSecondTap: true });
   });
 
-  it('lays modern out at the device width, and classic as the legacy page (no viewport)', () => {
+  it('lays modern out at the device width, and classic as the legacy page (no viewport, or its default after modern)', () => {
     const viewport = () => document.head.querySelector<HTMLMetaElement>('meta[name="viewport"]');
     vi.spyOn(document, 'cookie', 'set').mockImplementation(() => undefined);
     const themes = service();
     themes.init();
     expect(viewport()!.content).toBe('width=device-width, initial-scale=1');
+    Object.defineProperty(window, 'visualViewport', { value: { width: 390, scale: 1 }, configurable: true });
     themes.select('classic');
-    expect(viewport()).toBeNull();
+    // A phone would keep the device's width if it were removed: the default a page without one gets instead
+    expect(viewport()!.content).toBe(defaultViewport(390));
+    // ...fitting the screen as the device turns
+    Object.defineProperty(window, 'visualViewport', { value: { width: 844, scale: 1 }, configurable: true });
+    window.dispatchEvent(new Event('resize'));
+    expect(viewport()!.content).toBe(defaultViewport(844));
     themes.select('modern');
+    window.dispatchEvent(new Event('resize'));
     expect(document.head.querySelectorAll('meta[name="viewport"]')).toHaveLength(1);
     expect(viewport()!.content).toBe(THEME_VIEWPORT.modern);
     viewport()!.remove();
+    Reflect.deleteProperty(window, 'visualViewport');
+  });
+
+  it('gives a page that had a viewport what one without gets: 980px wide or the screen, zoomed out to fit', () => {
+    expect(defaultViewport(390)).toBe(`width=980, initial-scale=${390 / 980}`);
+    expect(defaultViewport(844)).toBe(`width=980, initial-scale=${844 / 980}`);
+    expect(defaultViewport(1180)).toBe('width=1180, initial-scale=1');
+  });
+
+  it('opens classic with no viewport, as the legacy page', () => {
+    vi.spyOn(document, 'cookie', 'set').mockImplementation(() => undefined);
+    service('?theme=classic').init();
+    expect(document.head.querySelector('meta[name="viewport"]')).toBeNull();
   });
 });

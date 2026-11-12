@@ -1,5 +1,6 @@
 // Deliberate bugs put into the Angular page (`--inject <name>`), to prove the check would catch that kind of bug. Run by
 // `npm run check:selftest`: each must be reported, in the way `expect` says, on a scenario that is otherwise clean.
+// `phone`: a scenario of the phone check (run.mjs --phone, phone.mjs), on a 390x844 phone.
 
 const css = (rules) => (page) =>
   page.addInitScript((text) => {
@@ -115,6 +116,64 @@ export const INJECTIONS = {
           const button = document.querySelector('.gd-pager__previous');
           if (button) button.disabled = false;
         }, 50),
+      ),
+    ),
+  },
+  'phone-menu-stays-open': {
+    what: 'A compact layout menu that never closes',
+    phone: true,
+    scenario: 'compact-deck-menu',
+    expect: /Scenario failed: a tap beside the menu did not close it/,
+    apply: script(() => {
+      const close = HTMLDialogElement.prototype.close;
+      HTMLDialogElement.prototype.close = function (...args) {
+        if (!this.classList.contains('gd-drawer')) close.apply(this, args);
+      };
+    }),
+  },
+  'phone-switch-viewport-removed': {
+    what: 'Switching to classic on a phone takes the viewport away (the phone keeps its width: the collection runs off)',
+    phone: true,
+    scenario: 'theme-switch--phoneSideways--from-modern',
+    expect: /width is 844, a freshly loaded page has 980/,
+    apply: script(() => {
+      const content = Object.getOwnPropertyDescriptor(HTMLMetaElement.prototype, 'content');
+      Object.defineProperty(HTMLMetaElement.prototype, 'content', {
+        ...content,
+        set(value) {
+          if (this.name === 'viewport' && !value.includes('device-width')) this.remove();
+          else content.set.call(this, value);
+        },
+      });
+    }),
+  },
+  'phone-menu-list-ignored': {
+    what: "A list in a compact layout menu whose choice isn't used",
+    phone: true,
+    scenario: 'empty--collection--eachOption',
+    expect: /request, legacy only/,
+    apply: script(() =>
+      addEventListener(
+        'change',
+        (event) => {
+          if (event.target.closest?.('dialog.gd-drawer')) event.stopImmediatePropagation();
+        },
+        true,
+      ),
+    ),
+  },
+  'phone-card-size-ignored': {
+    what: "A card size slider whose moves don't reach the cards",
+    phone: true,
+    scenario: 'compact-card-size',
+    expect: /cards [\d.]+px high became/,
+    apply: script(() =>
+      addEventListener(
+        'input',
+        (event) => {
+          if (event.target.matches?.('[data-sets="card-size"]')) event.stopImmediatePropagation();
+        },
+        true,
       ),
     ),
   },

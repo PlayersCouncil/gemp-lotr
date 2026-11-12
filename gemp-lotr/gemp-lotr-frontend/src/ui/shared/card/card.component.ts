@@ -20,7 +20,8 @@ export const DRAG_UP_FOR_INFO = 20;
  * provideCardInteractions.
  *
  * DOM contract: `button.gd-card` with `data-role` (card, pack, selection, placeholder), `data-orientation`
- * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply; inside,
+ * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply, `data-tap-once` on a pack
+ * (a double tap opens one: SecondTapGuard); inside,
  * `img.gd-card__image`, then `.gd-card__errata`, `img.gd-card__foil`, `img.gd-card__overlay` and `.gd-card__count`
  * when they apply. Its group sizes it with `--gd-card-height` (from fitCards); it draws its border and layers.
  */
@@ -36,6 +37,7 @@ export const DRAG_UP_FOR_INFO = 20;
     '[attr.data-errata]': "card().errata ? '' : null",
     '[attr.data-foil]': "card().foilImage ? '' : null",
     '[attr.data-borderless]': "card().border ? null : ''",
+    '[attr.data-tap-once]': "card().role === 'pack' ? '' : null",
     '[attr.aria-label]': 'label()',
     '(click)': 'onClick($event)',
     '(contextmenu)': 'onContextMenu($event)',

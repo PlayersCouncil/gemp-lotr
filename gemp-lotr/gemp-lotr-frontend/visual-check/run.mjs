@@ -21,6 +21,16 @@ import {
 } from './compare.mjs';
 import { INJECTIONS } from './injections.mjs';
 import { coverageGaps, matrixScenarios } from './matrix.mjs';
+import {
+  closeMenu,
+  COMPACT_SCENARIOS,
+  COMPARED_ELSEWHERE,
+  LEGACY_CONTEXT,
+  PHONE_CONTEXT,
+  phoneCoverageGaps,
+  phoneScenarios,
+  reach,
+} from './phone.mjs';
 import { FIXTURE_DECK, SCENARIOS, selectors } from './scenarios.mjs';
 import { routeToStub, STUB_ORIGIN } from './stub-server.mjs';
 
@@ -51,9 +61,18 @@ const { values: options } = parseArgs({
     // looks different but should be laid out as the legacy page (the modern theme on a computer)
     geometry: { type: 'boolean', default: false },
     margin: { type: 'string', default: '8' },
+    // The modern theme on a phone (phone.mjs): --sizes are the phone's; the legacy page runs on a computer
+    phone: { type: 'boolean', default: false },
   },
 });
 
+if (options.phone) {
+  if (BROWSER_NAME !== 'chromium') {
+    console.error('--phone needs Chromium: its touch input holds and moves a finger.');
+    process.exit(2);
+  }
+  options.theme = 'modern';
+}
 if (!['classic', 'modern'].includes(options.theme)) {
   console.error(`Unknown theme ${options.theme}: use --theme=classic or --theme=modern.`);
   process.exit(2);
@@ -76,7 +95,11 @@ const sizes = options.sizes.split(',').map((s) => {
   return { width, height, label: s };
 });
 const only = options.only ? new Set(options.only.split(',')) : null;
-const allScenarios = options.matrix ? matrixScenarios() : SCENARIOS;
+const allScenarios = options.phone
+  ? [...COMPACT_SCENARIOS, ...phoneScenarios()]
+  : options.matrix
+    ? matrixScenarios()
+    : SCENARIOS;
 const scenarios = allScenarios.filter((s) =>
   only ? only.has(s.name) : (!s.mutating || options.mutating) && (!options.filter || s.name.includes(options.filter)),
 );
@@ -307,18 +330,36 @@ async function capture(which, scenario, size, file, answers) {
   }
 }
 
+/** The Angular page's address, in the theme a scenario starts in (`startTheme`) if it has one. */
+function angularPathFor(scenario) {
+  if (!scenario.startTheme) return angularPath;
+  const address = new URL(angularPath, 'http://server');
+  address.searchParams.set('theme', scenario.startTheme);
+  return address.pathname + address.search;
+}
+
 async function captureOnce(which, scenario, size, file, answers) {
-  const pagePath = which === 'legacy' ? options.legacy : angularPath;
+  const pagePath = which === 'legacy' ? options.legacy : angularPathFor(scenario);
+  const phone = options.phone && which === 'angular';
   const context = await browser.newContext({
     viewport: { width: size.width, height: size.height },
     storageState: session,
     hasTouch: scenario.hasTouch ?? false,
+    // A scenario's own device (phone.mjs: a computer, a phone held sideways, a tablet, ...)
+    ...(options.phone
+      ? phone
+        ? { ...PHONE_CONTEXT, viewport: scenario.size ?? size, ...scenario.device }
+        : LEGACY_CONTEXT
+      : {}),
   });
   const page = await context.newPage();
   const pending = new Set();
   const errors = [];
   const accepted = acceptedFor(scenario.name, size.label);
-  const controls = fixedControls(which);
+  // On a phone the separator and the toggle work differently: phone.mjs tests them on their own
+  const controls = options.phone
+    ? Object.fromEntries(Object.entries(fixedControls(which)).filter(([name]) => !COMPARED_ELSEWHERE.has(name)))
+    : fixedControls(which);
   const steps = [];
   const entries = new Map();
   let requests = [];
@@ -366,7 +407,7 @@ async function captureOnce(which, scenario, size, file, answers) {
   });
 
   const snapshot = async ({ screen }) => {
-    const state = await page.evaluate(readPageState, controls);
+    const state = await page.evaluate(readPageState, { controls, menus: phone ? 'dialog.gd-drawer' : null });
     const boxes = options.geometry ? await page.evaluate(readBoxes, controls) : null;
     const areas = which === 'angular' ? await page.evaluate(readAreas, [...accepted, STATS_AREA]) : [];
     const shot = screen ? await page.screenshot() : null;
@@ -405,9 +446,17 @@ async function captureOnce(which, scenario, size, file, answers) {
   await settle(page, pending);
   const stopAnswering = which === 'angular' ? answerNotifier(page) : async () => {};
   page.settleNow = () => settle(page, pending, 400);
+  if (phone) {
+    page.reach = (target) => reach(page, target);
+    // Where a theme switch that doesn't look as a fresh load keeps both pictures
+    page.switchShots = outDir;
+    page.scenarioName = scenario.name;
+  }
   if (scenario.setup) {
     try {
       await scenario.setup(page, selectors(which), which);
+      // A menu the setup opened is closed again: each scenario starts with none open
+      if (phone) await closeMenu(page);
     } catch (error) {
       errors.push(`Could not reach the state: ${error.message.split('\n')[0]}`);
     }
@@ -421,7 +470,8 @@ async function captureOnce(which, scenario, size, file, answers) {
   }
   await settle(page, pending);
   await stopAnswering();
-  if (!scenario.keepMouse) {
+  // A finger leaves nothing behind to move away
+  if (!scenario.keepMouse && !phone) {
     await page.mouse.move(1, 1);
     await page.waitForTimeout(300);
   }
@@ -472,9 +522,9 @@ async function resetAccount() {
   }
 }
 
-/** The matrix opens packs: back to the seeded number of each (the throwaway server only). */
+/** The matrix and the phone check open packs: back to the seeded number of each (the throwaway server only). */
 async function topUpCollection() {
-  if (!options.matrix) return;
+  if (!options.matrix && !options.phone) return;
   const context = await browser.newContext({ storageState: session });
   try {
     const server = `${options.server}/gemp-lotr-server`;
@@ -506,9 +556,13 @@ function compareStep(legacy, angular, areas, accepted, label, last) {
   const problems = [];
   const add = (text) => problems.push(`${label}: ${text}`);
   let pixels = null;
-  if (options.geometry) {
-    // The excluded areas (what the legacy page has nothing like) are left out here too
-    for (const line of compareBoxes(legacy.boxes, angular.boxes, Number(options.margin), geometrySkipped)) add(line);
+  if (options.phone) {
+    // Different layouts: what the controls hold and do is compared below
+  } else if (options.geometry) {
+    // The excluded areas (what the legacy page has nothing like) are left out here too, and the stats box before the
+    // end, as the stats area is for the pixels (STATS_AREA): its lines can be a request behind
+    const skipped = (name) => geometrySkipped(name) || (!last && name === 'stats');
+    for (const line of compareBoxes(legacy.boxes, angular.boxes, Number(options.margin), skipped)) add(line);
   } else if (legacy.shot && angular.shot) {
     const screens = compareScreens(legacy.shot, angular.shot, areas, false);
     pixels = screens.outside + screens.areas.reduce((sum, count) => sum + count, 0);
@@ -523,7 +577,7 @@ function compareStep(legacy, angular, areas, accepted, label, last) {
   if (JSON.stringify(legacy.dialogs) !== JSON.stringify(angular.dialogs)) {
     add(`browser dialogs: legacy ${JSON.stringify(legacy.dialogs)}, Angular ${JSON.stringify(angular.dialogs)}`);
   }
-  for (const line of compareStates(legacy.state, angular.state, last)) add(line);
+  for (const line of compareStates(legacy.state, angular.state, last, options.phone)) add(line);
   return { problems, pixels };
 }
 
@@ -553,7 +607,11 @@ async function check(scenario, size) {
   let legacy;
   let angular;
   const problems = [];
-  if (scenario.mutating && !options.stubbed) {
+  if (scenario.angularOnly) {
+    // The compact layout's own scenarios (phone.mjs): what must happen is written in them
+    angular = await capture('angular', scenario, size, angularFile);
+    legacy = { steps: angular.steps, errors: [] };
+  } else if (scenario.mutating && !options.stubbed) {
     // One after the other, from the same saved decks: both change the same account
     const answers = new Map();
     await resetAccount();
@@ -591,7 +649,7 @@ async function check(scenario, size) {
   if (legacy.steps.length !== angular.steps.length) {
     problems.push(`the legacy page took ${legacy.steps.length} steps, the Angular page ${angular.steps.length}`);
   }
-  const count = Math.min(legacy.steps.length, angular.steps.length);
+  const count = scenario.angularOnly ? 0 : Math.min(legacy.steps.length, angular.steps.length);
   for (let i = 0; i < count; i++) {
     const last = i === count - 1;
     const label = last ? 'end' : i === 0 ? 'on load' : `step ${i}`;
@@ -603,7 +661,8 @@ async function check(scenario, size) {
     const step = compareStep(a, b, stepAreas, stepAccepted, label, last);
     problems.push(...step.problems);
     if (last) pixels = step.pixels;
-    if (a.shot && b.shot && (last || step.problems.length)) {
+    // On a phone the screens differ in size and layout: no picture of their differences
+    if (a.shot && b.shot && (last || step.problems.length) && !options.phone) {
       const { image } = compareScreens(a.shot, b.shot, b.areas, true);
       if (last) {
         fs.writeFileSync(path.join(outDir, files.diff), image);
@@ -616,15 +675,17 @@ async function check(scenario, size) {
       }
     }
   }
-  problems.push(...compareStats(legacy.steps, angular.steps));
+  if (!scenario.angularOnly) problems.push(...compareStats(legacy.steps, angular.steps));
   for (const e of angular.errors) problems.push(`Angular page: ${e}`);
   for (const e of legacy.errors.filter((text) => /^(Scenario failed|Could not reach)/.test(text))) {
     problems.push(`Legacy page: ${e}`);
   }
   const differences = mergeSteps(
-    problems.filter((problem) => !acceptedBehaviour(scenario.name, problem, options.theme)),
+    problems.filter(
+      (problem) => !acceptedBehaviour(scenario.name, problem, options.theme, options.phone ? 'phone' : 'computer'),
+    ),
   );
-  if (options.matrix && differences.length === 0) {
+  if ((options.matrix || options.phone) && differences.length === 0) {
     // A long list of scenarios: only the ones that differ keep their pictures
     for (const file of Object.values(files)) fs.rmSync(path.join(outDir, file), { force: true });
   }
@@ -651,6 +712,29 @@ function findCoverageGaps() {
     await page.waitForSelector(CONTROLS.firstCard[which], { timeout: 20000 }).catch(() => undefined);
     await settle(page, pending);
     await setup(page, selectors(which), which);
+    await settle(page, pending);
+    return { page, close: () => context.close() };
+  });
+}
+
+/** What is on the Angular page on a phone in each state, against what phone.mjs tests. */
+function findPhoneCoverageGaps() {
+  return phoneCoverageGaps(async (setup) => {
+    const context = await browser.newContext({ ...PHONE_CONTEXT, viewport: sizes[0], storageState: session });
+    const page = await context.newPage();
+    const pending = new Set();
+    page.on('request', (request) => pending.add(request));
+    page.on('requestfinished', (request) => pending.delete(request));
+    page.on('requestfailed', (request) => pending.delete(request));
+    page.on('dialog', (dialog) => void dialog.dismiss());
+    page.settleNow = () => settle(page, pending, 400);
+    page.reach = (target) => reach(page, target);
+    await deliverCollectionsInOrder(page);
+    await page.goto(options.server + angularPath);
+    await page.waitForSelector(CONTROLS.firstCard.angular, { timeout: 20000 }).catch(() => undefined);
+    await settle(page, pending);
+    await setup(page, selectors('angular'), 'angular');
+    await closeMenu(page);
     await settle(page, pending);
     return { page, close: () => context.close() };
   });
@@ -709,7 +793,7 @@ function writeReport(results, gaps = []) {
       gaps,
     }),
   );
-  const rows = (options.matrix ? failed : results)
+  const rows = (options.matrix || options.phone ? failed : results)
     .map((r) => {
       const status = r.problems.length
         ? `<b class="bad">differs</b><br>${r.problems.map(escape).join('<br>')}`
@@ -763,14 +847,17 @@ try {
     (a, b) =>
       scenarios.indexOf(a.scenario) - scenarios.indexOf(b.scenario) || sizes.indexOf(a.size) - sizes.indexOf(b.size),
   );
-  const gaps = options.matrix && !options.filter ? await findCoverageGaps() : [];
+  const gaps =
+    (options.matrix || options.phone) && !options.filter && !only
+      ? await (options.phone ? findPhoneCoverageGaps() : findCoverageGaps())
+      : [];
   for (const gap of gaps) console.log(`GAP  ${gap}`);
   const loginProblems = options.stubbed ? [] : await findLoginProblems();
   for (const problem of loginProblems) console.log(`LOGIN not logged in: ${problem}`);
   writeReport(results, gaps);
   const failed = results.filter((r) => r.problems.length).length;
   console.log(
-    `\n${results.length} checks, ${failed} differ${options.matrix ? `, ${gaps.length} not tested` : ''}. Report: ${path.join(outDir, 'index.html')}`,
+    `\n${results.length} checks, ${failed} differ${options.matrix || options.phone ? `, ${gaps.length} not tested` : ''}. Report: ${path.join(outDir, 'index.html')}`,
   );
   process.exitCode = failed || gaps.length || loginProblems.length ? 1 : 0;
 } finally {

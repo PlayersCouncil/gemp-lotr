@@ -16,11 +16,16 @@ export interface ThemeBehaviour {
   cardInfoModal: boolean;
   /** Closing a dialog gives the focus back to what had it (the legacy page left it nowhere). */
   dialogsReturnFocus: boolean;
+  /**
+   * On a touch screen, the second tap of a double tap does nothing if it lands on another control than the first (a
+   * menu or dialog the first tap closed or opened moved what is under the finger): SecondTapGuard.
+   */
+  guardSecondTap: boolean;
 }
 
 export const THEME_BEHAVIOUR: Readonly<Record<ThemeName, ThemeBehaviour>> = {
-  classic: { cardInfoModal: false, dialogsReturnFocus: false },
-  modern: { cardInfoModal: true, dialogsReturnFocus: true },
+  classic: { cardInfoModal: false, dialogsReturnFocus: false, guardSecondTap: false },
+  modern: { cardInfoModal: true, dialogsReturnFocus: true, guardSecondTap: true },
 };
 
 /**
@@ -31,6 +36,21 @@ export const THEME_VIEWPORT: Readonly<Record<ThemeName, string | null>> = {
   classic: null,
   modern: 'width=device-width, initial-scale=1',
 };
+
+/** The width phones lay a page with no viewport out at, unless the screen is wider (then the screen's). */
+export const NO_VIEWPORT_WIDTH = 980;
+
+/**
+ * What a page with no viewport gets on a screen `screenWidth` px wide: the default width (or the screen's, if wider),
+ * zoomed out to fit. Set when a theme with none follows one that had one: taking the viewport away doesn't give the
+ * browser's default back (a phone keeps the device's width and zoom, and the classic layout runs off the screen).
+ */
+export function defaultViewport(screenWidth: number): string {
+  const width = Math.max(NO_VIEWPORT_WIDTH, Math.round(screenWidth));
+  // Exactly the zoom that fits it: a rounded one draws the page a fraction larger or smaller than one loaded so
+  const scale = screenWidth / width;
+  return `width=${width}, initial-scale=${scale}`;
+}
 
 /** Shown in the theme picker. */
 export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Classic', modern: 'Modern' };
@@ -83,6 +103,8 @@ export class ThemeService {
 
   readonly theme = this.current.asReadonly();
   readonly behaviour = computed(() => THEME_BEHAVIOUR[this.current()]);
+  /** Keeps the default viewport (defaultViewport) fitting the screen as the device turns, while it is set. */
+  private followScreen: (() => void) | null = null;
 
   /** Resolves the theme and applies it. A `?theme=` in the address is remembered, as a choice. */
   init(): void {
@@ -110,8 +132,26 @@ export class ThemeService {
 
   private setViewport(content: string | null): void {
     let meta = this.document.head.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    const window = this.document.defaultView;
+    if (this.followScreen) {
+      window?.removeEventListener('resize', this.followScreen);
+      this.followScreen = null;
+    }
     if (content === null) {
-      meta?.remove();
+      // A page loaded with none keeps none; one that had one gets what having none gives (defaultViewport)
+      if (meta && window?.visualViewport) {
+        const kept = meta;
+        const fit = () => {
+          // The screen's width in CSS px, whatever the zoom
+          const viewport = window.visualViewport;
+          if (viewport) {
+            kept.content = defaultViewport(viewport.width * viewport.scale);
+          }
+        };
+        fit();
+        this.followScreen = fit;
+        window.addEventListener('resize', fit);
+      }
       return;
     }
     if (!meta) {
