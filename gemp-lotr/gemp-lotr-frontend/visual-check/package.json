@@ -18,6 +18,9 @@
     "measure": "node tools/measure.mjs",
     "check:mutation": "node tools/mutation.mjs",
     "check:legacy-decks": "node local-server.mjs --legacy-decks",
+    "check:game": "node game/local.mjs",
+    "check:game:down": "node game/local.mjs down",
+    "check:game:selftest": "node game/local.mjs --selftest",
     "tunnel": "node tools/tunnel.mjs"
   },
   "devDependencies": {

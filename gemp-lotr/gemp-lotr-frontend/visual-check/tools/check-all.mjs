@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-// Everything that proves the deck builder and its deployment, in order, on throwaway copies and containers:
+// Everything that proves the deck builder, the game screen and their deployment, in order, on throwaway copies and
+// containers:
 //
 //   npm run check:all                 (about an hour)
-//   npm run check:all -- --quick      without the control-and-gesture matrix and the phone
+//   npm run check:all -- --quick      without the control-and-gesture matrix, the phone and the game scenarios
 //   npm run check:all -- --browser firefox
 //                                     the parts that use a browser, in Firefox (or webkit); the reports of
 //                                     the Chromium run are replaced
@@ -54,6 +55,9 @@ const PARTS = [
   // Chromium's touch input holds and moves a finger
   ...(quick || browser ? [] : [['The modern theme on a phone', npm(VISUAL_CHECK, 'run', 'check:phone')]]),
   ['Deploying with git pull', npm(VISUAL_CHECK, 'run', 'check:deploy')],
+  // The game screen (game/README.md): seeded games played on two pages
+  ['Game screen: the check catches deliberate bugs', npm(VISUAL_CHECK, 'run', 'check:game:selftest')],
+  ...(quick ? [] : [['Game screen: every scenario on both pages', npm(VISUAL_CHECK, 'run', 'check:game')]]),
 ];
 
 const results = PARTS.map(([name, { cwd, args }]) => {

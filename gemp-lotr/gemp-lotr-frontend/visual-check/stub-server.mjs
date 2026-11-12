@@ -62,7 +62,7 @@ function collectionXml(url) {
 }
 
 /** A card-sized placeholder with the image's name, so cards can be told apart. */
-function placeholder(url) {
+export function placeholder(url) {
   const name = decodeURIComponent(url.pathname.split('/').pop());
   let hash = 0;
   for (const c of name) hash = (hash * 31 + c.charCodeAt(0)) >>> 0;

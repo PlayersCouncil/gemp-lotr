@@ -18,6 +18,9 @@ redesign brings them back.
 It writes `report/index.html` (screenshots of both pages and the differences in red) and exits with 1 if anything
 differs. It is not part of the Maven build: run it by hand after changing the deck builder or the legacy files it uses.
 
+The game screen (`game.html` and its Angular port) has a check of its own in this folder: see `game/README.md`
+(`npm run check:game`, `npm run check:game:selftest`).
+
 ## Running it
 
 Needs a running Gemp server that serves the current build of the Angular page (rebuild with Maven or `ng build`, then

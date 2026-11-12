@@ -12,6 +12,7 @@ import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.hall.GameTimer;
+import com.gempukku.lotro.logic.GameSeed;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -222,19 +223,21 @@ public class LotroGameMediator {
 
                 sb.append("<b>Affecting card:</b>");
                 Collection<Modifier> modifiers = _lotroGame.getModifiersQuerying().getModifiersAffecting(_lotroGame, card);
+                List<String> modifierLines = new ArrayList<>();
                 for (Modifier modifier : modifiers) {
                     PhysicalCard source = modifier.getSource();
                     if (source != null) {
-                        sb.append("<br><b>")
-                                .append(GameUtils.getCardLink(source))
-                                .append(":</b> ")
-                                .append(modifier.getText(_lotroGame, card));
+                        modifierLines.add("<br><b>" + GameUtils.getCardLink(source) + ":</b> "
+                                + modifier.getText(_lotroGame, card));
                     }
                     else {
-                        sb.append("<br><b><i>System</i>:</b> ")
-                                .append(modifier.getText(_lotroGame, card));
+                        modifierLines.add("<br><b><i>System</i>:</b> " + modifier.getText(_lotroGame, card));
                     }
                 }
+                // Seeded test servers: the same game shows the same list, whatever the modifiers' hash order
+                if (GameSeed.isSeeded())
+                    Collections.sort(modifierLines);
+                modifierLines.forEach(sb::append);
                 if (modifiers.size() == 0) {
                     sb.append("<br><i>nothing</i>");
                 }

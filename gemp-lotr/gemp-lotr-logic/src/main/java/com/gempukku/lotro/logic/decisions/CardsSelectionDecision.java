@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.decisions;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.logic.GameSeed;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ public abstract class CardsSelectionDecision extends AbstractAwaitingDecision {
 
     public CardsSelectionDecision(int id, String text, Collection<? extends PhysicalCard> physicalCards, int minimum, int maximum) {
         super(id, text, AwaitingDecisionType.CARD_SELECTION);
-        _physicalCards = new LinkedList<PhysicalCard>(physicalCards);
+        _physicalCards = new LinkedList<PhysicalCard>(GameSeed.stableOrder(physicalCards));
         _minimum = minimum;
         _maximum = maximum;
         setParam("min", String.valueOf(minimum));
