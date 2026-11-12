@@ -21,6 +21,7 @@
     "check:game": "node game/local.mjs",
     "check:game:down": "node game/local.mjs down",
     "check:game:selftest": "node game/local.mjs --selftest",
+    "check:game:record": "node game/local.mjs --record --sizes 1366x768",
     "tunnel": "node tools/tunnel.mjs"
   },
   "devDependencies": {

@@ -15,10 +15,20 @@ import { parseArgs } from 'node:util';
 import { launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { placeholder } from '../stub-server.mjs';
-import { actionMenuPoint, animating, ANGULAR_CONTRACT, cardPoint, LEGACY, readGameState } from './controls.mjs';
+import {
+  actionMenuPoint,
+  animating,
+  ANGULAR_CONTRACT,
+  cardPoint,
+  LEGACY,
+  readGameState,
+  readLegacyModel,
+} from './controls.mjs';
 import { GAME_INJECTIONS } from './injections.mjs';
 import { MAX_WORKERS, pairOf } from './players.mjs';
-import { endGame, foeAnswer, Foe, parseGameXml, readDecision, startGame } from './protocol.mjs';
+import { session } from '../local-server/seed.mjs';
+import { coveredBy, gaps as coverageGaps } from './coverage.mjs';
+import { endGame, foeAnswer, Foe, parseGameXml, readDecision, replayIdOf, startGame } from './protocol.mjs';
 import { GAME_SCENARIOS } from './scenarios.mjs';
 
 const { values: options } = parseArgs({
@@ -38,6 +48,9 @@ const { values: options } = parseArgs({
     'real-images': { type: 'boolean', default: false },
     // Prints every decision the player gets and every answer sent
     verbose: { type: 'boolean', default: false },
+    // Saves what page A and the server said to each other, and the game the page held after each step, as test data
+    // for the jsdom tests (src/testing/game-recordings, see game/README.md); page B isn't run
+    record: { type: 'boolean', default: false },
   },
 });
 
@@ -84,7 +97,7 @@ function settingsCookies(server) {
 function watchTraffic(page, participant, gameId) {
   // Decision ids are reused, so a decision is known by its place among the events: `answeredUpTo` is the place of the
   // last one the page answered
-  const traffic = { participant, events: [], answeredUpTo: -1, requests: [], ended: false, pending: 0 };
+  const traffic = { participant, events: [], answeredUpTo: -1, requests: [], ended: false, pending: 0, exchanges: [] };
   const lastDecisionIndex = () =>
     traffic.events.findLastIndex((event) => event.type === 'D' && event.participantId === participant);
   page.on('request', (request) => {
@@ -112,6 +125,9 @@ function watchTraffic(page, participant, gameId) {
   const done = async (response) => {
     traffic.pending = Math.max(0, traffic.pending - 1);
     const url = new URL(response.url());
+    if (options.record && url.pathname.startsWith('/gemp-lotr-server/') && !url.pathname.includes('/chat/')) {
+      traffic.exchanges.push(await exchangeOf(response, gameId));
+    }
     if (!url.pathname.startsWith(`/gemp-lotr-server/game/${gameId}`) || url.pathname.endsWith('/cardInfo')) return;
     const text = await response.text().catch(() => '');
     const { events } = parseGameXml(text);
@@ -138,10 +154,32 @@ function watchTraffic(page, participant, gameId) {
   return traffic;
 }
 
+/**
+ * One request and its answer as the recording keeps it: the address with the game's id as <id>, the parameters
+ * without the participant, the channel number and jQuery's cache buster (they depend on the run), and the answer.
+ */
+async function exchangeOf(response, gameId) {
+  const request = response.request();
+  const url = new URL(request.url());
+  const params = Object.fromEntries(
+    [...new URLSearchParams(url.search), ...new URLSearchParams(request.postData() ?? '')]
+      .filter(([name]) => !['participantId', 'channelNumber', '_'].includes(name))
+      .sort(([a], [b]) => a.localeCompare(b)),
+  );
+  return {
+    method: request.method(),
+    path: url.pathname.replace('/gemp-lotr-server', '').replace(`/game/${gameId}`, '/game/<id>'),
+    params,
+    status: response.status(),
+    contentType: response.headers()['content-type'] ?? '',
+    body: await response.text().catch(() => ''),
+  };
+}
+
 /** Waits until nothing moves: no request but the long poll, no animation, no change to the page for `quiet` ms. */
-async function settle(page, kind, traffic, foe, quiet = 500, max = 20000) {
+async function settle(page, kind, traffic, bots, quiet = 500, max = 20000) {
   const start = Date.now();
-  await foe.idle();
+  await idle(bots);
   await page.evaluate(() => {
     window.__changed = Date.now();
     new MutationObserver(() => (window.__changed = Date.now())).observe(document.body, {
@@ -157,7 +195,7 @@ async function settle(page, kind, traffic, foe, quiet = 500, max = 20000) {
       [animating.toString(), kind],
     );
     // The long poll is always open: one request may be outstanding
-    if (!moving && traffic.pending <= 1 && Date.now() - changed >= quiet && !foe.busy) break;
+    if (!moving && traffic.pending <= 1 && Date.now() - changed >= quiet && !bots.some((bot) => bot.busy)) break;
     await sleep(100);
   }
   await page
@@ -171,7 +209,7 @@ function inPage(page, fn, arg) {
 }
 
 /** The gestures a step is made of, on one kind of page. */
-function gestures(page, kind) {
+function gestures(page, kind, used) {
   const select = kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT;
   const locator = (selector) => page.locator(selector).filter({ visible: true }).last();
   /** Where a card can be reached; a decision's dialog may still be opening, so it waits a moment for the card. */
@@ -183,20 +221,41 @@ function gestures(page, kind) {
     }
     return point ?? {};
   };
+  const reach = async (id) => {
+    const point = await pointOf(id);
+    if (!point.x) {
+      throw new Error(`card ${id} can't be reached${point.blocked ? `: ${point.blocked} lies over it` : ''}`);
+    }
+    return point;
+  };
+  const decisionButton = (label) => locator(select.decisionButton(label));
   return {
     pointOf,
-    async clickCard(id, button = 'left') {
-      // A decision's dialog may still be opening
-      const point = await pointOf(id);
-      if (!point.x)
-        throw new Error(`card ${id} can't be clicked${point.blocked ? `: ${point.blocked} lies over it` : ''}`);
+    async clickCard(id, { button = 'left', shift = false } = {}) {
+      // As a person would: the legacy page ignores a second tap on the same card within 200 ms (a bounce)
+      // (counted from when the last click happened: reaching a card can wait for its dialog)
+      const point = await reach(id);
+      const last = page.lastCardClick;
+      if (last?.id === id) await sleep(Math.max(0, 250 - (Date.now() - last.at)));
+      if (shift) await page.keyboard.down('Shift');
       await page.mouse.click(point.x, point.y, { button });
+      page.lastCardClick = { id, at: Date.now() };
+      if (shift) await page.keyboard.up('Shift');
+    },
+    /** A card pressed, moved by (dx, dy) in steps, and released: up opens its information, sideways moves it. */
+    async dragCard(id, dx, dy) {
+      const point = await reach(id);
+      await page.mouse.move(point.x, point.y);
+      await page.mouse.down();
+      for (let i = 1; i <= 10; i++) await page.mouse.move(point.x + (dx * i) / 10, point.y + (dy * i) / 10);
+      await page.mouse.up();
     },
     async clickButton(label) {
-      await locator(kind === 'legacy' ? select.decisionButton(label) : ANGULAR_CONTRACT.decisionButton(label)).click();
+      used.add(label === 'OK' ? 'OK button' : label);
+      await decisionButton(label).click();
     },
     hasButton: (label) =>
-      locator(kind === 'legacy' ? select.decisionButton(label) : ANGULAR_CONTRACT.decisionButton(label))
+      decisionButton(label)
         .count()
         .then((n) => n > 0),
     async integer(value) {
@@ -204,7 +263,10 @@ function gestures(page, kind) {
         // The legacy field is a spinner (jquery.spinnercontrol): its arrows change the number shown
         const shown = Number(await locator('.SpinnerControl .ValueDisplay').textContent());
         const arrow = locator(value > shown ? '.SpinnerControl .RightButton' : '.SpinnerControl .LeftButton');
-        for (let i = 0; i < Math.abs(value - shown); i++) await arrow.click();
+        for (let i = 0; i < Math.abs(value - shown); i++) {
+          used.add('bid spinner');
+          await arrow.click();
+        }
       } else {
         await locator(select.integerInput).fill(String(value));
       }
@@ -213,41 +275,35 @@ function gestures(page, kind) {
     async choice(decision, index) {
       const choices = await locator(select.choiceSelect).count();
       if (choices > 0) {
+        used.add('choice list');
         await locator(select.choiceSelect).selectOption(String(index));
         await this.clickButton('OK');
       } else if (kind === 'legacy') {
+        used.add('choice button');
         // Two answers or fewer: a button each, in order, in the small dialog
         await page.locator('.ui-dialog:visible .ui-dialog-content button').nth(index).click();
       } else {
+        used.add('choice button');
         await locator(ANGULAR_CONTRACT.choiceButton(index)).click();
       }
     },
     async actionMenu(actionId) {
       const point = await inPage(page, actionMenuPoint, { kind, actionId });
-      if (point) await page.mouse.click(point.x, point.y);
+      if (point) {
+        used.add('action menu');
+        await page.mouse.click(point.x, point.y);
+      }
       return Boolean(point);
     },
-    async tab(name) {
-      await locator(select.tab(name)).click();
-    },
-    async pile(name, playerIndex) {
-      await locator(select.pile(name, playerIndex)).click();
-    },
-    async statsToggle(playerIndex) {
-      await locator(select.statsToggle(playerIndex)).click();
-    },
-    async setting(name) {
-      await locator(select.setting(name)).click();
-    },
-    /** A button of the box at the bottom left (concede, cancel), by its legacy id. */
-    async button(name) {
-      await locator(kind === 'legacy' ? `#${name}` : `[data-button="${name}"]`).click();
+    async click(selector, name) {
+      used.add(name);
+      await locator(selector).click();
     },
   };
 }
 
 /** The answer the player gives when a step says `auto`: the same policy as the opponent's, made with gestures. */
-async function answerByPolicy(act, decision) {
+async function answerByPolicy(act, decision, traffic, used) {
   const value = foeAnswer(decision);
   switch (decision.type) {
     case 'INTEGER':
@@ -255,15 +311,25 @@ async function answerByPolicy(act, decision) {
     case 'MULTIPLE_CHOICE':
       return act.choice(decision, Number(value));
     case 'ACTION_CHOICE':
-      return pickCards(act, decision, [0]);
+      return pickCards(act, decision, [0], traffic, used);
+    case 'ASSIGN_MINIONS':
+      // Done with nothing assigned: the browser asks to confirm when there are minions
+      return act.clickButton('Done');
     default:
-      return pickCards(act, decision, value ? value.split(',').map((id) => decision.values.cardId.indexOf(id)) : []);
+      return pickCards(
+        act,
+        decision,
+        value ? value.split(',').map((id) => decision.values.cardId.indexOf(id)) : [],
+        traffic,
+        used,
+      );
   }
 }
 
 /** Clicks the decision's cards by their place in its list, then Done if the decision is still waiting. */
-async function pickCards(act, decision, indexes, traffic) {
+async function pickCards(act, decision, indexes, traffic, used) {
   for (const index of indexes) {
+    used.add('card click');
     await act.clickCard(decision.values.cardId[index]);
     await sleep(150);
   }
@@ -275,8 +341,9 @@ async function pickCards(act, decision, indexes, traffic) {
 }
 
 /** One step of a scenario on a page: what it does, by the decision waiting for the player. */
-async function doStep(page, kind, step, traffic) {
-  const act = gestures(page, kind);
+async function doStep(page, kind, step, traffic, used) {
+  const act = gestures(page, kind, used);
+  const select = kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT;
   const decision = traffic.decision();
   const needs = (what) => {
     if (!decision) throw new Error(`step ${JSON.stringify(step)}: no decision is waiting for ${what}`);
@@ -292,23 +359,49 @@ async function doStep(page, kind, step, traffic) {
     if (index < 0) throw new Error(`no choice "${step.choice}" in ${JSON.stringify(d.values.results)}`);
     return act.choice(d, index);
   }
-  if ('pick' in step) return pickCards(act, needs('cards'), step.pick, traffic);
-  if (step.pass) return pickCards(act, needs('a pass'), [], traffic);
+  if ('pick' in step) {
+    const d = needs('cards');
+    if (step.then) {
+      // Each card, then the way to finish: a button (Done) or a key (Escape)
+      for (const index of step.pick) {
+        used.add('card click');
+        await act.clickCard(d.values.cardId[index]);
+        await sleep(200);
+      }
+      if (step.then === 'Escape') {
+        used.add('Escape');
+        return page.keyboard.press('Escape');
+      }
+      return act.clickButton(step.then);
+    }
+    return pickCards(act, d, step.pick, traffic, used);
+  }
+  if (step.pass) return pickCards(act, needs('a pass'), [], traffic, used);
   if (step.done) return act.clickButton('Done');
+  if ('press' in step) return act.clickButton(step.press);
   if ('assign' in step) {
     // A minion, then the character it goes to (both by their place in the decision's lists)
     const d = needs('an assignment');
     const [minion, character] = step.assign;
+    used.add('assign minion');
     await act.clickCard(d.values.minions[minion]);
     await sleep(250);
     return act.clickCard(d.values.freeCharacters[character]);
+  }
+  if ('unassign' in step) {
+    // The minion clicked, then clicked again
+    const d = needs('an assignment');
+    used.add('unassign minion');
+    await act.clickCard(d.values.minions[step.unassign]);
+    await sleep(250);
+    return act.clickCard(d.values.minions[step.unassign]);
   }
   if ('play' in step) {
     const d = needs('an action');
     const index = d.values.actionText.findIndex((text) => step.play.test(text));
     if (index < 0) throw new Error(`no action ${step.play} in ${JSON.stringify(d.values.actionText)}`);
-    const cardId = d.values.cardId[index];
-    await act.clickCard(cardId);
+    used.add('card click');
+    await act.clickCard(d.values.cardId[index]);
     await sleep(300);
     // A card with several actions opens a menu of them
     if (!traffic.answered(d)) await act.actionMenu(d.values.actionId[index]);
@@ -318,19 +411,23 @@ async function doStep(page, kind, step, traffic) {
     for (let count = 0; count < step.auto; count++) {
       const d = traffic.decision();
       if (!d || (step.until && step.until.test(d.text))) return;
-      await answerByPolicy(act, d);
+      await answerByPolicy(act, d, traffic, used);
       await waitForNextDecision(traffic, d);
     }
     return;
   }
-  if ('cardInfo' in step) return act.clickCard(cardIdOf(traffic, step.cardInfo), 'right');
-  if ('tab' in step) return act.tab(step.tab);
-  if ('pile' in step) return act.pile(step.pile, step.player ?? 0);
-  if ('stats' in step) return act.statsToggle(step.stats);
-  if ('setting' in step) return act.setting(step.setting);
-  if ('key' in step) return page.keyboard.press(step.key);
-  if ('click' in step) return page.mouse.click(5, 5);
-  if ('button' in step) return act.button(step.button);
+  if ('cardInfo' in step) {
+    const id = cardIdOf(traffic, step.cardInfo);
+    const by = step.by ?? 'right click';
+    used.add(`card info: ${by}`);
+    if (by === 'shift click') return act.clickCard(id, { shift: true });
+    if (by === 'drag up') return act.dragCard(id, 0, -40);
+    return act.clickCard(id, { button: 'right' });
+  }
+  if ('drag' in step) {
+    used.add('drag to reorder');
+    return act.dragCard(cardIdOf(traffic, step.drag), step.by, 0);
+  }
   if ('hover' in step) {
     const point = await act.pointOf(cardIdOf(traffic, step.hover));
     if (!point.x) {
@@ -338,10 +435,72 @@ async function doStep(page, kind, step, traffic) {
         `card ${JSON.stringify(step.hover)} can't be hovered${point.blocked ? `: ${point.blocked} lies over it` : ''}`,
       );
     }
+    used.add('hover zoom');
     await page.mouse.move(point.x, point.y);
     return sleep(1200);
   }
+  if ('tab' in step) return act.click(select.tab(step.tab), `tab ${step.tab}`);
+  if ('pile' in step) {
+    const name = step.pile === 'deck' ? 'pile deck after the game' : `pile ${step.pile}`;
+    return act.click(select.pile(step.pile, step.player ?? 0), name);
+  }
+  if ('stats' in step) return act.click(select.statsToggle(step.stats), 'counters +');
+  if ('setting' in step) {
+    const name = step.setting.startsWith('autoPass') ? 'setting autoPass' : `setting ${step.setting}`;
+    if ('value' in step) {
+      used.add(name);
+      return page.locator(select.setting(step.setting)).selectOption(step.value);
+    }
+    return act.click(select.setting(step.setting), name);
+  }
+  if ('slider' in step) {
+    // Its handle focused by a click, then a key
+    await act.click(select.sliderHandle(step.slider), `setting ${step.slider}`);
+    return page.keyboard.press(step.key ?? 'ArrowRight');
+  }
+  if ('timerAlert' in step) {
+    used.add('setting timer alerts');
+    const field = page.locator(select.timerAlertField(step.timerAlert)).first();
+    await field.fill(String(step.value));
+    return field.press('Tab');
+  }
+  if ('toggle' in step)
+    return act.click(select.toggle(step.toggle), step.toggle === 'auto-zoom' ? 'auto-zoom toggle' : 'timer mute');
+  if ('chat' in step) {
+    used.add('chat message');
+    const input = page.locator(select.chatInput).first();
+    await input.fill(step.chat);
+    return input.press('Enter');
+  }
+  if ('replay' in step) {
+    await act.click(select.replay(step.replay), `replay ${step.replay}`);
+    if (step.replay === 'play') return waitForReplay(page, kind);
+    return;
+  }
+  if ('key' in step) {
+    if (step.key === 'Escape') used.add('Escape');
+    return page.keyboard.press(step.key);
+  }
+  if ('click' in step) {
+    used.add('card info closed');
+    return page.mouse.click(5, 5);
+  }
+  if ('button' in step) {
+    return act.click(select.button(step.button), step.button === 'concedeGame' ? 'concede' : 'request cancel');
+  }
   throw new Error(`unknown step ${JSON.stringify(step)}`);
+}
+
+/** Waits until a replay has played its last event (at most 2 minutes). */
+async function waitForReplay(page, kind) {
+  await page.waitForFunction(
+    (kind) =>
+      kind === 'legacy'
+        ? window.ui?.replayGameEvents != null && window.ui.replayGameEventNextIndex >= window.ui.replayGameEvents.length
+        : document.querySelector('[data-replay-done]') !== null,
+    kind,
+    { timeout: 120000 },
+  );
 }
 
 /**
@@ -357,7 +516,7 @@ function cardIdOf(traffic, which) {
     .filter(
       (event) =>
         event.type === 'PCIP' &&
-        event.blueprintId === which.blueprint &&
+        (!which.blueprint || event.blueprintId === which.blueprint) &&
         owned(event) &&
         (!which.zone || event.zone === which.zone),
     )
@@ -377,22 +536,33 @@ async function waitForNextDecision(traffic, answered, max = 30000) {
   throw new Error(`no decision came after "${answered.text}"`);
 }
 
-/** Plays a scenario on one kind of page: a snapshot after the page loads and after each step that isn't `quiet`. */
+/**
+ * Plays a scenario on one kind of page: a snapshot after the page loads and after each step that isn't `quiet`.
+ * `scenario.mode`: 'player' (the default: the player in the browser, the opponent over HTTP), 'spectator' (both sides
+ * over HTTP, a third player watches in the browser) or 'replay' (both sides over HTTP, then the player concedes and
+ * opens the game's replay in the browser). In the last two, `scenario.answers` is how many answers both sides give.
+ */
 async function play(kind, scenario, size, pair, label) {
+  const mode = scenario.mode ?? 'player';
+  const used = new Set(mode === 'player' ? [] : [mode]);
   let game;
   try {
     game = await startGame(options.server, pair, password);
   } catch (error) {
-    return { snapshots: [], errors: [], problems: [`${label}: ${error.message}`] };
+    return { snapshots: [], errors: [], problems: [`${label}: ${error.message}`], used, events: [] };
   }
   const context = await browser.newContext({ viewport: { width: size.width, height: size.height } });
   const page = await context.newPage();
   const errors = [];
   const dialogs = [];
   const snapshots = [];
-  let foe;
+  const recorded = [];
+  const gestures = [];
+  let bots = [];
+  let traffic;
   try {
-    const cookie = game.player.cookie.split('; ').map((pairText) => {
+    const viewer = mode === 'spectator' ? await session(options.server, pair.watcher, password) : game.player;
+    const cookie = viewer.cookie.split('; ').map((pairText) => {
       const [name, ...value] = pairText.split('=');
       return { name, value: value.join('='), domain: new URL(options.server).hostname, path: '/' };
     });
@@ -436,22 +606,56 @@ async function play(kind, scenario, size, pair, label) {
     });
     page.on('pageerror', (error) => errors.push(error.message));
     page.on('dialog', async (dialog) => {
+      if (dialog.type() === 'confirm') used.add('browser confirm');
       dialogs.push(`${dialog.type()}: ${dialog.message()}`);
       await dialog.accept();
     });
-    const traffic = watchTraffic(page, pair.player, game.gameId);
-    foe = new Foe(game, pair.foe, scenario.foe ?? [], () => traffic.decision() === null);
-    if (options.verbose) foe.log = console.log;
+    traffic = watchTraffic(page, mode === 'spectator' ? pair.watcher : pair.player, game.gameId);
+    // Each joins the game only after the one before has (protocol.mjs Foe.ready), the page last
+    if (mode === 'player') {
+      // `foeAnswers`: the opponent stops answering after that many (it then waits, and the page polls)
+      const budget = scenario.foeAnswers ? { left: scenario.foeAnswers } : null;
+      bots = [new Foe(game, pair.foe, scenario.foe ?? [], () => traffic.decision() === null, { budget })];
+      await bots[0].ready;
+    } else {
+      // Both sides over HTTP, the player first when both are asked, with a shared number of answers
+      const budget = { left: scenario.answers ?? 20 };
+      const player = new Foe(game, pair.player, scenario.playerRules ?? [], () => true, {
+        session: game.player,
+        budget,
+      });
+      await player.ready;
+      bots = [player, new Foe(game, pair.foe, scenario.foe ?? [], () => !player.waiting, { budget })];
+      await bots[1].ready;
+    }
+    if (options.verbose) bots.forEach((bot) => (bot.log = console.log));
     if (label === 'B' && injection?.apply) await injection.apply(page, kind);
 
     const pagePath = kind === 'legacy' ? options.legacy : options.angular;
-    await page.goto(`${options.server}${pagePath}?gameId=${encodeURIComponent(game.gameId)}`);
+    let query = `gameId=${encodeURIComponent(game.gameId)}`;
+    if (mode === 'replay') {
+      await idle(bots);
+      bots.forEach((bot) => bot.stop());
+      await endGame(game);
+      // As the game history links it: the server takes the "$" as it is
+      query = `replayId=${await replayIdOf(game, pair.player)}`;
+    }
+    await page.goto(`${options.server}${pagePath}?${query}`);
     const masks = (kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT).masks;
     // The mouse leaves the page before each snapshot (no hover state), except after a step that rests it on something
     const snapshot = async (name, keepMouse = false) => {
       if (!keepMouse) await page.mouse.move(1, 1);
-      await settle(page, kind, traffic, foe);
+      await settle(page, kind, traffic, bots);
       if (label === 'B' && injection?.afterSettle) await injection.afterSettle(page, kind);
+      if (options.record) {
+        recorded.push({
+          name,
+          exchanges: traffic.exchanges.length,
+          // Gestures since the last snapshot that sent nothing but change the game the page holds
+          gestures: gestures.splice(0),
+          model: await inPage(page, readLegacyModel, null),
+        });
+      }
       snapshots.push({
         name,
         screen: await page.screenshot({ mask: masks.map((selector) => page.locator(selector)), maskColor: '#ff00ff' }),
@@ -460,27 +664,78 @@ async function play(kind, scenario, size, pair, label) {
         dialogs: dialogs.splice(0),
       });
     };
-    await waitForFirst(traffic);
+    if (mode === 'replay') {
+      await page.waitForFunction(() => window.ui?.replayGameEvents != null, null, { timeout: 20000 });
+    } else {
+      await waitForFirst(traffic);
+    }
     await snapshot('start');
     for (const [index, step] of scenario.steps.entries()) {
       const before = traffic.decision();
-      await doStep(page, kind, step, traffic);
+      // Assignments stay in the page until Done: the recording keeps them, with how many exchanges came before
+      if ('assign' in step && before) {
+        const [minion, character] = step.assign;
+        gestures.push({
+          after: traffic.exchanges.length,
+          assign: [before.values.minions[minion], before.values.freeCharacters[character]],
+        });
+      }
+      if ('unassign' in step && before) {
+        gestures.push({ after: traffic.exchanges.length, unassign: before.values.minions[step.unassign] });
+      }
+      await doStep(page, kind, step, traffic, used);
       if (before && !('auto' in step) && isAnswer(step)) await waitForNextDecision(traffic, before);
       if (!step.quiet) await snapshot(step.name ?? `step ${index + 1}`, 'hover' in step);
     }
     if (scenario.steps.at(-1)?.quiet) await snapshot('end');
-    return { snapshots, errors, problems: foe.problems };
+    // A replay reads /replay, which the jsdom tests don't serve (they play games)
+    if (options.record && mode !== 'replay') writeRecording(scenario, traffic, recorded, size);
+    return { snapshots, errors, problems: bots.flatMap((bot) => bot.problems), used, events: traffic.events };
   } catch (error) {
-    return { snapshots, errors, problems: [...(foe?.problems ?? []), `${label}: ${error.message.split('\n')[0]}`] };
+    return {
+      snapshots,
+      errors,
+      problems: [...bots.flatMap((bot) => bot.problems), `${label}: ${error.message.split('\n')[0]}`],
+      used,
+      events: traffic?.events ?? [],
+    };
   } finally {
-    foe?.stop();
+    bots.forEach((bot) => bot.stop());
     await endGame(game);
     await context.unrouteAll({ behavior: 'ignoreErrors' });
     await context.close();
   }
 }
 
-const isAnswer = (step) => ['integer', 'choice', 'pick', 'pass', 'done', 'play'].some((key) => key in step);
+/** Waits until every bot has nothing to answer and no answer on the way. */
+async function idle(bots) {
+  for (let round = 0; round < 3; round++) {
+    for (const bot of bots) await bot.idle();
+  }
+}
+
+const RECORDINGS = path.resolve(import.meta.dirname, '../../src/testing/game-recordings');
+
+/** The test data of the jsdom tests: one file per scenario (game/README.md "Recordings"). */
+function writeRecording(scenario, traffic, steps, size) {
+  fs.mkdirSync(RECORDINGS, { recursive: true });
+  const recording = {
+    scenario: scenario.name,
+    note: scenario.note ?? '',
+    participant: traffic.participant,
+    mode: scenario.mode ?? 'player',
+    size: size.label,
+    exchanges: traffic.exchanges,
+    steps,
+  };
+  fs.writeFileSync(path.join(RECORDINGS, `${scenario.name}.json`), `${JSON.stringify(recording, null, 1)}\n`);
+}
+
+/** Whether a step answers the decision (then the next one is waited for). A `pick` with `then` only says so itself. */
+const isAnswer = (step) =>
+  step.wait !== false &&
+  (step.answers ||
+    (!('then' in step) && ['integer', 'choice', 'pick', 'pass', 'done', 'play'].some((key) => key in step)));
 
 async function waitForFirst(traffic, max = 20000) {
   const start = Date.now();
@@ -531,9 +786,24 @@ function compareRuns(a, b, base) {
   return { problems, pixels, images };
 }
 
+/** What page A used and was sent, over every scenario (coverage.mjs). */
+const covered = new Set();
+
 async function check(scenario, size, worker) {
   const pair = pairOf(worker);
   const a = await play(pageA, scenario, size, pair, 'A');
+  for (const key of coveredBy(a.events, a.used)) covered.add(key);
+  if (options.record) {
+    const problems = [...a.problems, ...a.errors.map((error) => `page error: ${error}`)];
+    if (scenario.mode === 'replay') {
+      console.log(`skipped  ${scenario.name}: a replay isn't recorded (the jsdom tests play games)`);
+      return { scenario, size, problems: [], pixels: 0, images: [] };
+    }
+    console.log(
+      `${problems.length ? 'FAILED ' : 'recorded'} ${scenario.name}${problems.length ? `: ${problems.join(' | ')}` : ''}`,
+    );
+    return { scenario, size, problems, pixels: 0, images: [] };
+  }
   const b = await play(pageB, scenario, size, pair, 'B');
   const name = `${scenario.name}-${size.label}`;
   const result = { scenario, size, ...compareRuns(a, b, name) };
@@ -560,11 +830,12 @@ async function runAll(jobs, workers) {
 const escape = (text) =>
   String(text).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
-function writeReport(results) {
+function writeReport(results, gaps) {
   fs.writeFileSync(
     path.join(outDir, 'results.json'),
     JSON.stringify({
       checks: results.map((r) => ({ name: `${r.scenario.name}-${r.size.label}`, problems: r.problems })),
+      gaps,
     }),
   );
   const rows = results
@@ -592,6 +863,7 @@ img{width:320px}tr.bad{background:#fee}.bad{color:#b00}</style>
 <p>${escape(options.server)}: A = <code>${escape(pageA)}</code>, B = <code>${escape(pageB)}</code>${injection ? `, injected into B: <code>${escape(options.inject)}</code>` : ''};
 ${results.length} checks, <b>${results.filter((r) => r.problems.length).length} differ</b> (tolerance ${tolerance} px).
 Clocks and chat times are masked in magenta.</p>
+${gaps.length ? `<h2>Not covered (${gaps.length})</h2><ul>${gaps.map((gap) => `<li>${escape(gap)}</li>`).join('')}</ul>` : ''}
 <table><tr><th>Scenario</th><th>Result</th><th>Steps</th><th>Last step (A)</th></tr>
 ${rows}</table>`,
   );
@@ -604,10 +876,14 @@ try {
     (a, b) =>
       scenarios.indexOf(a.scenario) - scenarios.indexOf(b.scenario) || sizes.indexOf(a.size) - sizes.indexOf(b.size),
   );
-  writeReport(results);
+  // Only a run of every scenario says what is covered
+  const gaps = only || injection || options.record ? [] : coverageGaps(covered);
+  for (const gap of gaps) console.log(`GAP  ${gap}`);
+  writeReport(results, gaps);
   const failed = results.filter((r) => r.problems.length).length;
-  console.log(`\n${results.length} checks, ${failed} differ. Report: ${path.join(outDir, 'index.html')}`);
-  process.exitCode = failed ? 1 : 0;
+  const notCovered = only || injection || options.record ? '' : `, ${gaps.length} not covered`;
+  console.log(`\n${results.length} checks, ${failed} differ${notCovered}. Report: ${path.join(outDir, 'index.html')}`);
+  process.exitCode = failed || gaps.length ? 1 : 0;
 } finally {
   await browser.close();
 }

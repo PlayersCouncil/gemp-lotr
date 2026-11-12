@@ -29,6 +29,7 @@ npm run check:game -- --only opening --sizes 1366x768 --verbose
 npm run check:game -- --keep                        leaves the server up (port 17201), login in .local-server/game/
 npm run check:game:down                             stops it
 npm run check:game:selftest                         each deliberate bug of injections.mjs must be reported
+npm run check:game:record                           records every scenario for the jsdom tests (see "Recordings")
 ```
 
 `local.mjs` starts a throwaway server of its own (`../local-server/compose.yml` under the project name
@@ -39,10 +40,20 @@ removes everything again. Neither the development server nor the deck builder's 
 Options of `run.mjs` (passed through `local.mjs`): `--only`, `--sizes`, `--workers` (at most 4, one pair of players
 each), `--tolerance`, `--out` (default `report-game`), `--pages` (default `legacy,legacy`), `--legacy` and `--angular`
 (the pages' paths), `--inject <name>` (a bug of `injections.mjs` in page B), `--real-images` (card pictures from the
-image server instead of placeholders), `--verbose` (every decision and answer of both players).
+image server instead of placeholders), `--verbose` (every decision and answer of both players), `--record` (see
+"Recordings").
 
 The report is `report-game/index.html`: each scenario with its steps, both screenshots of each and the differences in
-red.
+red, and what no scenario covers.
+
+## Coverage
+
+`coverage.mjs` lists what the scenarios must cover together: every kind of game event and decision the server sends
+(read from `GameEvent.java` and `AwaitingDecisionType.java`), every zone a card can be shown in (`Zone.java`), and every
+gesture and control of the game page (`GAME_CONTROLS`: the decision buttons, card gestures, tabs, each setting, the
+piles, Escape, the spectator and replay modes and the replay's buttons). A run of every scenario records what page A
+was sent and what the check used, and fails on anything left (`GAP` lines and the report). `NOT_EXPECTED` lists only
+what can't happen, each with its reason (cards in the void are never sent to a page; event `CM` is never created).
 
 ## How both pages get the same game
 
@@ -58,6 +69,15 @@ red.
   dialog's buttons, the action menu, right clicks, keys. A step ends when the next decision for the player arrived,
   the opponent has nothing to answer, no request but the long poll is open, nothing animates and the page hasn't
   changed for 500 ms.
+- **The modes.** In `spectator` scenarios both sides are played over HTTP and a third player watches in the browser; in
+  `replay` scenarios both sides are played over HTTP, the player concedes, and the browser opens the game's replay
+  (`game.html?replayId=<player>$<recording>`, from `GET /gameHistory`). Both stop after `answers` answers in all, so
+  the game stops at the same point every time.
+- **One at a time.** The players (the bots, then the page) join a game one after the other, and the check waits until
+  the game can be read first: the server changes a game's listeners under its read lock
+  (`LotroGameMediator.signupUserForGame`), so two players joining at the same moment can fail with HTTP 500 (a
+  `ConcurrentModificationException`; a server bug, not changed). Two clicks on the same card are at least 250 ms apart,
+  as the legacy page ignores a second tap within 200 ms (its touch-bounce guard).
 - **The same pair** of players plays a scenario's game on both pages, so the names on the screens are the same. The
   game's own chat room is named after the game ("Welcome to room: Game12"), so the check shows both pages the same
   name, `Game#`. The legacy chat marks a message naming the player only once it knows the player (`GET /player`): the
@@ -67,26 +87,53 @@ red.
 - Not compared: the page's title (the legacy page flashes it on a timer while a decision waits), the clocks and the
   chat's times (masked).
 
+## Recordings
+
+`npm run check:game:record` (`run.mjs --record`) plays every scenario on page A only and saves what the page and the
+server said to each other, with the game the page held after each step (`controls.mjs` `readLegacyModel`) and the
+gestures that send nothing (assignments), in `../src/testing/game-recordings/<scenario>.json` (replays aren't recorded).
+They are test data of the frontend: `src/parity/game` plays each one back on the unchanged legacy game page in jsdom
+(`src/testing/game`: `FakeGameServer`, `openLegacyGamePage`, `playUntil`), which must send exactly the recorded
+requests through the check's gestures and hold the same game after every step. The Angular game page will be tested
+the same way from G1 on. Record again after changing a scenario, the test deck or the server.
+
 ## Scenarios
 
 `scenarios.mjs` explains each kind of step. The test deck (`players.mjs`) is Fellowship Block, Dwarves and Elves with
 Moria orcs, the same for both players.
 
-| Scenario               | What it does                                                                                                |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `start`                | The page as it opens: the bid                                                                               |
-| `opening`              | Bid (the spinner), starting fellowship (a card in the dialog, then Done), no mulligan                       |
-| `fellowship-play`      | A companion played, a possession played and put on its bearer, a card's action, moving                      |
-| `minions-and-skirmish` | The opponent plays a minion; it is assigned to Frodo, the skirmish chosen, its action passed, Frodo's wound |
-| `minions-unassigned`   | Done with a minion unassigned: the browser's confirmation                                                   |
-| `shadow-turn`          | The player's shadow phase: a minion played, the phase passed, reconcile                                     |
-| `card-info`            | Card information with the server's modifiers (right click), closed by a click, another card                 |
-| `hover-zoom`           | The hover zoom on a card in play and on a site                                                              |
-| `tabs`                 | Settings, options, players and chat at the bottom left                                                      |
-| `piles`                | Both players' other counters, the adventure deck and a dead pile                                            |
-| `concede`              | Conceding from the options tab ends the game                                                                |
+| Scenario                         | What it does                                                                                                |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `start`                          | The page as it opens: the bid                                                                               |
+| `opening`                        | Bid (the spinner), starting fellowship (a card in the dialog, then Done), no mulligan                       |
+| `fellowship-play`                | A companion played, a possession played and put on its bearer, a card's action, moving                      |
+| `minions-and-skirmish`           | The opponent plays a minion; it is assigned to Frodo, the skirmish chosen, its action passed, Frodo's wound |
+| `minions-unassigned`             | Done with a minion unassigned: the browser's confirmation                                                   |
+| `skirmish-event`                 | A minion assigned, unassigned and assigned again; Axe Strike played in the skirmish                         |
+| `shadow-turn`                    | The player's shadow phase: a minion played, the phase passed, reconcile                                     |
+| `reconcile-discard`              | Without auto-accept: a card chosen in reconcile, Reset choice, chosen again and discarded; the discard pile |
+| `settings`                       | Every setting changed; a bid of 1, choices from lists, Clear selection, Done, Escape; a chat message        |
+| `card-info`                      | Card information with the server's modifiers (right click), closed by a click, another card                 |
+| `card-gestures`                  | Card information by shift click and by dragging up; a card of the hand dragged to another place             |
+| `hover-zoom`                     | The hover zoom on a card in play and on a site                                                              |
+| `tabs`                           | Settings, options, players and chat at the bottom left                                                      |
+| `piles`                          | Both players' other counters; the adventure deck, dead, discard and removed piles                           |
+| `concede`                        | Cancel and concede while a decision waits (see below)                                                       |
+| `concede-while-opponent-decides` | The page polls: cancel (the server's warning), concede, the feedback dialog, the deck after the game        |
+| `spectator`                      | A third player watches a game both sides play over HTTP                                                     |
+| `replay`                         | The replay of a short game: slower, faster, played to the end                                               |
 
-Result on 2026-11-12, both pages `game.html`: 33 of 33 checks the same (11 scenarios at 3 window sizes, about 4
-minutes), twice in a row; the self-test catches 6 of 6 deliberate bugs.
+Legacy behaviour the scenarios show: the page doesn't poll while a decision waits for the player, and conceding has no
+answer handler, so after conceding with a decision open the page never learns the game ended (`concede`); the server
+answers a cancel request with a warning, "You can't cancel this game", even when the opponent may still agree.
+
+Not covered yet (the check reports them): a card moved in play (MCIP: a possession transferred), flipped (FCIP: the
+Players Council's hinder), added to or removed from a skirmish (ATS, RFS), tokens removed (RT: healing), a choice of
+required responses (ACTION_CHOICE), cards stacked, dead or removed from the game, and a card with several actions (its
+menu). They need cards the test deck doesn't have.
+
+Result on 2026-11-12, both pages `game.html`: 54 of 54 checks the same (18 scenarios at 3 window sizes, about 9
+minutes), 10 items not covered (so the run fails until they are); the 17 recordings replay in jsdom; the self-test
+catches 6 of 6 deliberate bugs.
 
 Masks are drawn over everything, so a clock under an open dialog also hides that part of the dialog.

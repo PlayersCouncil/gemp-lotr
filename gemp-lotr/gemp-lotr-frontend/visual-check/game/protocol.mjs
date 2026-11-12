@@ -99,6 +99,7 @@ export async function startGame(server, pair, password) {
     const tables = await tablesOf(player);
     const game = tables.find((table) => table.id === tableId && table.gameId);
     if (game) {
+      await untilStarted(player, game.gameId);
       return { gameId: game.gameId, player, foe };
     }
     await sleep(200);
@@ -111,6 +112,24 @@ async function tablesOf(who) {
   return [...hall.matchAll(/<table\b([^>]*)>/g)].map(([, text]) => attributes(text));
 }
 
+/**
+ * The hall shows the game's id a moment before the game can be read: until then its state answers an error (seen: 500).
+ * Neither the page nor the bots may ask before.
+ */
+async function untilStarted(player, gameId) {
+  let last = '';
+  for (let attempt = 0; attempt < 50; attempt++) {
+    try {
+      await player.get(`/game/${gameId}`);
+      return;
+    } catch (error) {
+      last = error.message;
+      await sleep(200);
+    }
+  }
+  throw new Error(`game ${gameId} did not start: ${last}`);
+}
+
 /** A run that stopped half way can leave a table waiting or a game going: the player leaves or concedes them. */
 async function clearTables(who, name) {
   for (const table of await tablesOf(who)) {
@@ -121,6 +140,20 @@ async function clearTables(who, name) {
       await who.post(`/hall/${table.id}/leave`, {}).catch(() => undefined);
     }
   }
+}
+
+/**
+ * The replay of a finished game: its `replayId` for game.html, `<player>$<recording id>`, from the player's game
+ * history (the newest game first).
+ */
+export async function replayIdOf(game, player) {
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const history = await (await game.player.get('/gameHistory?start=0&count=5')).text();
+    const recording = history.match(/gameRecordingId="([^"]+)"/)?.[1];
+    if (recording) return `${player}$${recording}`;
+    await sleep(200);
+  }
+  throw new Error(`no replay in the game history of ${player}`);
 }
 
 /** Ends the game for both: the player concedes (a finished game answers 409/410, which is fine). */
@@ -168,11 +201,26 @@ export class Foe {
    * `mayAnswer()` says whether to answer now. The check lets the player in the browser answer first: when both are
    * asked at once (bids, starting fellowships, mulligans), the server's order depends on who answered first.
    */
-  constructor(game, participant, rules = [], mayAnswer = () => true) {
+  /**
+   * `session`: whose side it plays (the opponent's by default). `budget`: answers shared by the bots of a game that both
+   * sides play over HTTP (spectator and replay scenarios), `{ left: n }`: once none are left, it answers no more, so the
+   * game stops at the same point every time.
+   */
+  constructor(game, participant, rules = [], mayAnswer = () => true, { session = game.foe, budget = null } = {}) {
     this.game = game;
     this.participant = participant;
     this.rules = rules;
     this.mayAnswer = mayAnswer;
+    this.session = session;
+    this.budget = budget;
+    /** Whether a decision waits for it. */
+    this.waiting = false;
+    /**
+     * Resolves once its first request (it joins the game) is answered. Players must join one at a time: the server
+     * changes the game's listeners under its read lock (LotroGameMediator.signupUserForGame), so two joining at once
+     * can fail with a ConcurrentModificationException (HTTP 500).
+     */
+    this.ready = new Promise((resolve) => (this.joined = resolve));
     this.stopped = false;
     this.busy = true;
     this.answers = [];
@@ -182,13 +230,18 @@ export class Foe {
 
   async request(fields) {
     const url = `/game/${this.game.gameId}`;
-    const response = fields ? await this.game.foe.post(url, fields) : await this.game.foe.get(url);
+    const response = fields ? await this.session.post(url, fields) : await this.session.get(url);
     return parseGameXml(await response.text());
   }
 
   async run() {
     try {
-      let answer = await this.request(null);
+      let answer;
+      try {
+        answer = await this.request(null);
+      } finally {
+        this.joined();
+      }
       let cn = answer.cn;
       let events = answer.events;
       while (!this.stopped) {
@@ -196,6 +249,13 @@ export class Foe {
           break;
         }
         const decision = pendingDecision(events, this.participant);
+        this.waiting = Boolean(decision);
+        if (decision && this.budget && this.budget.left <= 0) {
+          // Out of answers: it waits here for good
+          this.busy = false;
+          await sleep(100);
+          continue;
+        }
         if (decision && !this.mayAnswer()) {
           this.busy = false;
           await sleep(100);
@@ -204,6 +264,7 @@ export class Foe {
         if (decision) {
           this.busy = true;
           const value = foeAnswer(decision, this.rules);
+          if (this.budget) this.budget.left--;
           this.answers.push(`${decision.text} => ${value}`);
           this.log?.(`  ${this.participant} answers "${decision.text}" (${decision.type}) = ${value}`);
           answer = await this.request({ channelNumber: cn, decisionId: decision.id, decisionValue: value });

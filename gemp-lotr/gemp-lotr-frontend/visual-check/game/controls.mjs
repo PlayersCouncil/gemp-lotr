@@ -17,6 +17,12 @@ export const ANGULAR_CONTRACT = {
   pile: (name, playerIndex) => `[data-pile="${name}"][data-player-index="${playerIndex}"]`,
   statsToggle: (playerIndex) => `[data-stats-toggle="${playerIndex}"]`,
   setting: (name) => `[data-setting="${name}"]`,
+  sliderHandle: (name) => `[data-setting="${name}"]`,
+  timerAlertField: (field) => `[data-timer-alert="${field}"]`,
+  toggle: (name) => `[data-toggle="${name}"]`,
+  chatInput: '[data-chat-input]',
+  replay: (name) => `[data-replay="${name}"]`,
+  button: (name) => `[data-button="${name}"]`,
   // Changes over time on its own: left out of the screenshots
   masks: ['[data-clock]', '[data-chat-time]'],
 };
@@ -34,6 +40,12 @@ export const LEGACY = {
   pile: (name, playerIndex) => `#${name}${playerIndex}`,
   statsToggle: (playerIndex) => `#showStats${playerIndex} .slimButton`,
   setting: (name) => `#${name}`,
+  sliderHandle: (name) => `#${name} .ui-slider-handle`,
+  timerAlertField: (field) => `#timerAlertSettings .${field}`,
+  toggle: (name) => ({ 'auto-zoom': '#auto-zoom-toggle', 'timer-mute': '#timer-mute-toggle' })[name],
+  chatInput: '#chatBox .chatTalk',
+  replay: (name) => ({ play: '#replayButton', slower: '#slowerButton', faster: '#fasterButton' })[name],
+  button: (name) => `#${name}`,
   masks: ['.gameClock', '.decisionClock', '#chatBox .timestamp'],
 };
 
@@ -162,4 +174,36 @@ export function animating({ kind }) {
     return $(':animated').length > 0 || ($('#main').queue && $('#main').queue().length > 0);
   }
   return document.getAnimations().some((animation) => animation.playState === 'running');
+}
+
+/**
+ * The game the legacy page holds, read without layout so that a browser and jsdom read it the same: the texts of the
+ * game state panel and the decision, and every card element with its data. For the recordings (run.mjs --record) and
+ * the jsdom tests that replay them (src/parity/game).
+ */
+export function readLegacyModel() {
+  const $ = window.$;
+  const text = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : null);
+  const cards = [];
+  $('.card').each(function () {
+    const card = $(this).data('card');
+    if (card) {
+      const parts = [card.cardId, card.blueprintId, card.zone, card.owner ?? ''];
+      if (card.assign) parts.push(`assign ${card.assign}`);
+      if (card.skirmish) parts.push('skirmish');
+      cards.push(parts.join(':'));
+    }
+  });
+  const stats = {};
+  document.querySelectorAll('.playerStats > div[id]').forEach((el) => (stats[el.id] = text(el)));
+  const ui = window.ui;
+  return {
+    twilight: text(document.querySelector('.twilightPool')),
+    phase: text(document.querySelector('.phase')),
+    initiative: text(document.querySelector('#initiative')),
+    ruleOf4: text(document.querySelector('#ruleof4')),
+    alert: ui?.alertText ? text(ui.alertText.get(0)) : null,
+    stats,
+    cards: cards.sort(),
+  };
 }

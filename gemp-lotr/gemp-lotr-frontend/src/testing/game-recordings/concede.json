@@ -1,0 +1,287 @@
+{
+ "scenario": "concede",
+ "note": "Cancel and concede while a decision waits: the legacy page does not poll then, so it never learns the game ended",
+ "participant": "GamePlayer0",
+ "mode": "player",
+ "size": "1366x768",
+ "exchanges": [
+  {
+   "method": "GET",
+   "path": "/player",
+   "params": {},
+   "status": 200,
+   "contentType": "application/json; charset=UTF-8",
+   "body": "{\"hasTrophies\":false,\"name\":\"GamePlayer0\",\"type\":\"aut\"}"
+  },
+  {
+   "method": "GET",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><gameState cn=\"2\"><ge message=\"You are starting a game of Fellowship Block\" timestamp=\"2026-11-12 09:49:03.3081\" type=\"M\"/><ge message=\"Players in the game are: GameFoe0, GamePlayer0\" timestamp=\"2026-11-12 09:49:03.3081\" type=\"M\"/><ge allParticipantIds=\"GamePlayer0,GameFoe0\" maps=\"\" notes=\"Deck used: &lt;a href='/share/deck?id=R2FtZVBsYXllcjB8R2FtZSBjaGVjayBkZWNr' target='_blank'&gt;Game check deck&lt;/a&gt; [Fellowship Block]&lt;br/&gt;&lt;br/&gt;Deck Notes:&lt;br/&gt;\" participantId=\"GamePlayer0\" summary=\"Casual  - a public game of &lt;b&gt;Fellowship Block&lt;/b&gt;. This game table uses the 'Default' timer.  Each player has a total time bank of 45 minutes, and will time out with a loss if they run out of their time bank or take longer than 6 minutes between actions.&lt;br/&gt;&lt;br/&gt;\" timestamp=\"2026-11-12 09:49:03.3081\" type=\"PGS\"/><ge decisionType=\"INTEGER\" id=\"1\" participantId=\"GamePlayer0\" text=\"Choose a number of burdens to bid\" timestamp=\"2026-11-12 09:49:03.3081\" type=\"D\"><parameter name=\"min\" value=\"0\"/></ge><clocks><clock participantId=\"GamePlayer0\">2700</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></gameState>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 bid 0\" timestamp=\"2026-11-12 09:49:09.8843\" type=\"M\"/><ge message=\"GamePlayer0 bid 0\" timestamp=\"2026-11-12 09:49:09.8843\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 has chosen to go second\" timestamp=\"2026-11-12 09:49:09.8917\" type=\"M\"/><ge allParticipantIds=\"GamePlayer0,GameFoe0\" discardPublic=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"P\"/><ge blueprintId=\"1_319\" cardId=\"0\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_327\" cardId=\"1\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_337\" cardId=\"2\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_343\" cardId=\"3\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_349\" cardId=\"4\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_350\" cardId=\"5\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8921\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_353\" cardId=\"6\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8922\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_356\" cardId=\"7\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8922\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_360\" cardId=\"8\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8922\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:09.8923\" type=\"GS\"><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge otherCardIds=\"0\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8926\" type=\"RCFP\"/><ge blueprintId=\"1_319\" cardId=\"142\" hindered=\"false\" index=\"1\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8926\" type=\"PCIP\" zone=\"ADVENTURE_PATH\"/><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_319'&gt;Bag End&lt;/div&gt;\" timestamp=\"2026-11-12 09:49:09.8927\" type=\"M\"/><ge fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:09.8927\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge index=\"1\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8930\" type=\"PP\"/><ge index=\"1\" participantId=\"GameFoe0\" timestamp=\"2026-11-12 09:49:09.8930\" type=\"PP\"/><ge blueprintId=\"1_290\" cardId=\"143\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8931\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge blueprintId=\"1_2\" cardId=\"144\" hindered=\"false\" participantId=\"GamePlayer0\" targetCardId=\"143\" targetType=\"attached\" timestamp=\"2026-11-12 09:49:09.8931\" type=\"PCIP\" zone=\"ATTACHED\"/><ge count=\"0\" timestamp=\"2026-11-12 09:49:09.8931\" type=\"TP\"/><ge otherCardIds=\"142\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8934\" type=\"TC\"/><ge blueprintId=\"1_290\" cardId=\"143\" count=\"0\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8934\" token=\"BURDEN\" type=\"AT\" zone=\"FREE_CHARACTERS\"/><ge blueprintId=\"1_290\" cardId=\"145\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-12 09:49:09.8935\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge blueprintId=\"1_2\" cardId=\"146\" hindered=\"false\" participantId=\"GameFoe0\" targetCardId=\"145\" targetType=\"attached\" timestamp=\"2026-11-12 09:49:09.8935\" type=\"PCIP\" zone=\"ATTACHED\"/><ge count=\"0\" timestamp=\"2026-11-12 09:49:09.8936\" type=\"TP\"/><ge otherCardIds=\"142,144,143\" participantId=\"GameFoe0\" timestamp=\"2026-11-12 09:49:09.8937\" type=\"TC\"/><ge blueprintId=\"1_290\" cardId=\"145\" count=\"0\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-12 09:49:09.8937\" token=\"BURDEN\" type=\"AT\" zone=\"FREE_CHARACTERS\"/><ge phase=\"Play starting fellowship\" timestamp=\"2026-11-12 09:49:09.8937\" type=\"GPC\"/><ge charStats=\"145=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:09.8938\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"-1\"/><threatTotals name=\"GameFoe0\" value=\"1\"/></ge><ge count=\"0\" timestamp=\"2026-11-12 09:49:09.8944\" type=\"TP\"/><ge otherCardIds=\"142,146,145\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8946\" type=\"TC\"/><ge count=\"0\" timestamp=\"2026-11-12 09:49:09.8947\" type=\"TP\"/><ge otherCardIds=\"142,144,143\" participantId=\"GameFoe0\" timestamp=\"2026-11-12 09:49:09.8948\" type=\"TC\"/><ge count=\"0\" timestamp=\"2026-11-12 09:49:09.8949\" type=\"TP\"/><ge otherCardIds=\"142,146,145\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:09.8950\" type=\"TC\"/><ge charStats=\"143=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:09.8951\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"ARBITRARY_CARDS\" id=\"1\" participantId=\"GamePlayer0\" text=\"Starting fellowship - Choose next character or press DONE\" timestamp=\"2026-11-12 09:49:09.8956\" type=\"D\"><parameter name=\"min\" value=\"0\"/><parameter name=\"max\" value=\"1\"/><parameter name=\"cardId\" value=\"temp0\"/><parameter name=\"cardId\" value=\"temp1\"/><parameter name=\"cardId\" value=\"temp2\"/><parameter name=\"cardId\" value=\"temp3\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"blueprintId\" value=\"1_12\"/><parameter name=\"blueprintId\" value=\"1_12\"/><parameter name=\"blueprintId\" value=\"1_50\"/><parameter name=\"blueprintId\" value=\"1_50\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "temp0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_12'&gt;·Gimli, Dwarf of Erebor&lt;/div&gt; from deck\" timestamp=\"2026-11-12 09:49:10.4045\" type=\"M\"/><ge count=\"2\" timestamp=\"2026-11-12 09:49:10.4047\" type=\"TP\"/><ge message=\"GamePlayer0 adds 2 to twilight pool\" timestamp=\"2026-11-12 09:49:10.4047\" type=\"M\"/><ge charStats=\"143=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:10.4048\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"59\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_12\" cardId=\"147\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:10.4049\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge charStats=\"147=6|3|RA6,143=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:10.4049\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"59\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"2\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"ARBITRARY_CARDS\" id=\"1\" participantId=\"GamePlayer0\" text=\"Starting fellowship - Choose next character or press DONE\" timestamp=\"2026-11-12 09:49:10.4064\" type=\"D\"><parameter name=\"min\" value=\"0\"/><parameter name=\"max\" value=\"1\"/><parameter name=\"cardId\" value=\"temp0\"/><parameter name=\"cardId\" value=\"temp1\"/><parameter name=\"cardId\" value=\"temp2\"/><parameter name=\"cardId\" value=\"temp3\"/><parameter name=\"cardId\" value=\"temp4\"/><parameter name=\"cardId\" value=\"temp5\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"blueprintId\" value=\"1_7\"/><parameter name=\"blueprintId\" value=\"1_7\"/><parameter name=\"blueprintId\" value=\"1_7\"/><parameter name=\"blueprintId\" value=\"1_7\"/><parameter name=\"blueprintId\" value=\"1_50\"/><parameter name=\"blueprintId\" value=\"1_50\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": ""
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge count=\"0\" timestamp=\"2026-11-12 09:49:11.1950\" type=\"TP\"/><ge otherCardIds=\"147,142,144,143\" participantId=\"GameFoe0\" timestamp=\"2026-11-12 09:49:11.1951\" type=\"TC\"/><ge charStats=\"145=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:11.1952\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"59\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"60\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"-1\"/><threatTotals name=\"GameFoe0\" value=\"1\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge blueprintId=\"1_191\" cardId=\"25\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2047\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_53\" cardId=\"53\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2047\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_9\" cardId=\"37\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2047\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_3\" cardId=\"21\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2047\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_176\" cardId=\"61\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2047\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_41\" cardId=\"57\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2048\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_7\" cardId=\"36\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2048\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_181\" cardId=\"15\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.2048\" type=\"PCIP\" zone=\"HAND\"/><ge phase=\"Between turns\" timestamp=\"2026-11-12 09:49:11.2055\" type=\"GPC\"/><ge charStats=\"145=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:11.2056\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"51\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"52\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"-1\"/><threatTotals name=\"GameFoe0\" value=\"1\"/></ge><ge decisionType=\"MULTIPLE_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Do you wish to mulligan? (Shuffle cards back and draw 6)\" timestamp=\"2026-11-12 09:49:11.2061\" type=\"D\"><parameter name=\"results\" value=\"No\"/><parameter name=\"results\" value=\"Yes\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 decides not to mulligan\" timestamp=\"2026-11-12 09:49:11.4449\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 decides not to mulligan\" timestamp=\"2026-11-12 09:49:11.4526\" type=\"M\"/><ge phase=\"Between turns\" timestamp=\"2026-11-12 09:49:11.4535\" type=\"GPC\"/><ge message=\"End of turn, players swap roles.\" timestamp=\"2026-11-12 09:49:11.4536\" type=\"M\"/><ge count=\"0\" timestamp=\"2026-11-12 09:49:11.4536\" type=\"TP\"/><ge otherCardIds=\"146,145\" participantId=\"GamePlayer0\" timestamp=\"2026-11-12 09:49:11.4538\" type=\"TC\"/><ge charStats=\"147=6|3|RA6,143=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:11.4538\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"51\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"52\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"2\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;&#10;========&#10;&#10;Start of turn.\" timestamp=\"2026-11-12 09:49:11.4540\" type=\"M\"/><ge message=\"Free Peoples player: GamePlayer0\" timestamp=\"2026-11-12 09:49:11.4540\" type=\"M\"/><ge phase=\"Fellowship\" timestamp=\"2026-11-12 09:49:11.4546\" type=\"GPC\"/><ge charStats=\"147=6|3|RA6,143=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowStrength=\"0\" timestamp=\"2026-11-12 09:49:11.4546\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"51\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"52\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"2\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of FELLOWSHIP phase.\" timestamp=\"2026-11-12 09:49:11.4551\" type=\"M\"/><ge decisionType=\"CARD_ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Play Fellowship action or Pass\" timestamp=\"2026-11-12 09:49:11.4563\" type=\"D\"><parameter name=\"actionText\" value=\"Play Dwarven Axe\"/><parameter name=\"actionText\" value=\"Play Dwarf Guard\"/><parameter name=\"actionText\" value=\"Use Bag End\"/><parameter name=\"actionText\" value=\"Use Gimli, Dwarf of Erebor\"/><parameter name=\"cardId\" value=\"37\"/><parameter name=\"cardId\" value=\"36\"/><parameter name=\"cardId\" value=\"142\"/><parameter name=\"cardId\" value=\"147\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"actionId\" value=\"1\"/><parameter name=\"actionId\" value=\"2\"/><parameter name=\"actionId\" value=\"3\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>/cancel",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<result>OK</result>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>/concede",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<result>OK</result>"
+  }
+ ],
+ "steps": [
+  {
+   "name": "start",
+   "exchanges": 2,
+   "gestures": [],
+   "model": {
+    "twilight": null,
+    "phase": null,
+    "initiative": null,
+    "ruleOf4": null,
+    "alert": null,
+    "stats": {},
+    "cards": []
+   }
+  },
+  {
+   "name": "cancel requested",
+   "exchanges": 10,
+   "gestures": [],
+   "model": {
+    "twilight": "0",
+    "phase": "Fellowship",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Play Fellowship action or Pass",
+    "stats": {
+     "deck0": "51",
+     "hand0": "8",
+     "threats0": "0/2",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "52",
+     "hand1": "8",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "9",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "142:1_319:ADVENTURE_PATH:GamePlayer0",
+     "143:1_290:FREE_CHARACTERS:GamePlayer0",
+     "144:1_2:ATTACHED:GamePlayer0",
+     "145:1_290:FREE_CHARACTERS:GameFoe0",
+     "146:1_2:ATTACHED:GameFoe0",
+     "147:1_12:FREE_CHARACTERS:GamePlayer0",
+     "15:1_181:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "21:1_3:HAND:GamePlayer0",
+     "25:1_191:HAND:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "36:1_7:HAND:GamePlayer0",
+     "37:1_9:HAND:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "53:1_53:HAND:GamePlayer0",
+     "57:1_41:HAND:GamePlayer0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "61:1_176:HAND:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0"
+    ]
+   }
+  },
+  {
+   "name": "conceded",
+   "exchanges": 11,
+   "gestures": [],
+   "model": {
+    "twilight": "0",
+    "phase": "Fellowship",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Play Fellowship action or Pass",
+    "stats": {
+     "deck0": "51",
+     "hand0": "8",
+     "threats0": "0/2",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "52",
+     "hand1": "8",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "9",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "142:1_319:ADVENTURE_PATH:GamePlayer0",
+     "143:1_290:FREE_CHARACTERS:GamePlayer0",
+     "144:1_2:ATTACHED:GamePlayer0",
+     "145:1_290:FREE_CHARACTERS:GameFoe0",
+     "146:1_2:ATTACHED:GameFoe0",
+     "147:1_12:FREE_CHARACTERS:GamePlayer0",
+     "15:1_181:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "21:1_3:HAND:GamePlayer0",
+     "25:1_191:HAND:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "36:1_7:HAND:GamePlayer0",
+     "37:1_9:HAND:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "53:1_53:HAND:GamePlayer0",
+     "57:1_41:HAND:GamePlayer0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "61:1_176:HAND:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0"
+    ]
+   }
+  },
+  {
+   "name": "the deck counter clicked: nothing, the page does not know the game ended",
+   "exchanges": 11,
+   "gestures": [],
+   "model": {
+    "twilight": "0",
+    "phase": "Fellowship",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Play Fellowship action or Pass",
+    "stats": {
+     "deck0": "51",
+     "hand0": "8",
+     "threats0": "0/2",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "52",
+     "hand1": "8",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "9",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "142:1_319:ADVENTURE_PATH:GamePlayer0",
+     "143:1_290:FREE_CHARACTERS:GamePlayer0",
+     "144:1_2:ATTACHED:GamePlayer0",
+     "145:1_290:FREE_CHARACTERS:GameFoe0",
+     "146:1_2:ATTACHED:GameFoe0",
+     "147:1_12:FREE_CHARACTERS:GamePlayer0",
+     "15:1_181:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "21:1_3:HAND:GamePlayer0",
+     "25:1_191:HAND:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "36:1_7:HAND:GamePlayer0",
+     "37:1_9:HAND:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "53:1_53:HAND:GamePlayer0",
+     "57:1_41:HAND:GamePlayer0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "61:1_176:HAND:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0"
+    ]
+   }
+  }
+ ]
+}

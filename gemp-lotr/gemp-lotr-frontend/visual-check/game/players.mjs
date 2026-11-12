@@ -4,17 +4,22 @@
 /** At most this many scenarios run at once: one pair of players each. */
 export const MAX_WORKERS = 4;
 
-/** The pair of worker `index`: the player in the browser and the opponent the check plays over HTTP. */
+/**
+ * The players of worker `index`: the player in the browser and the opponent the check plays over HTTP, and a third
+ * player who watches (spectator scenarios, where the check plays both sides over HTTP).
+ */
 export function pairOf(index) {
-  return { player: `GamePlayer${index}`, foe: `GameFoe${index}` };
+  return { player: `GamePlayer${index}`, foe: `GameFoe${index}`, watcher: `GameWatcher${index}` };
 }
 
 /** Every player of the game check, for the database's first start. */
 export const GAME_PLAYERS = Array.from({ length: MAX_WORKERS }, (_, index) => {
-  const { player, foe } = pairOf(index);
+  const { player, foe, watcher } = pairOf(index);
   return [
     { name: player, type: 'aut' },
     { name: foe, type: 'aut' },
+    // Watches the games of the spectator scenarios
+    { name: watcher, type: 'aut' },
   ];
 }).flat();
 
