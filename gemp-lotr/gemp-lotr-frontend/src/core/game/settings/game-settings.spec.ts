@@ -1,14 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { SettingCookies } from '../../platform/setting-cookies';
-import { COOKIES, GameSettings } from './game-settings';
+import { COOKIES, GameSettings, SERVER_COOKIE_PATH } from './game-settings';
 
 class FakeCookies {
   readonly values = new Map<string, string>();
   read(name: string): string | null {
     return this.values.get(name) ?? null;
   }
-  write(name: string, value: string): void {
-    this.values.set(name, value);
+  /** A cookie under another path is kept as `path:name`. */
+  write(name: string, value: string, path?: string): void {
+    this.values.set(path === undefined ? name : `${path}:${name}`, value);
   }
 }
 
@@ -60,6 +61,16 @@ describe('GameSettings', () => {
     ]);
   });
 
+  it('the auto-pass phases go to the server too: a saved choice when the page opens, then each change', () => {
+    expect(settings().cookies.values.size).toBe(0);
+    TestBed.resetTestingModule();
+    const { settings: s, cookies } = settings({ autoPassPhases: '' });
+    expect(cookies.values.get(`${SERVER_COOKIE_PATH}:${COOKIES.autoPassPhases}`)).toBe('');
+    expect(s.autoPassPhases()).toEqual([]);
+    s.setAutoPass('SKIRMISH', true);
+    expect(cookies.values.get(`${SERVER_COOKIE_PATH}:${COOKIES.autoPassPhases}`)).toBe('SKIRMISH');
+  });
+
   it('an animation speed that is not a number is the default', () => {
     expect(settings({ 'animation-speed': 'fast' }).settings.animationSpeed()).toBe(0);
   });
@@ -79,6 +90,7 @@ describe('GameSettings', () => {
       [COOKIES.autoAccept]: 'false',
       [COOKIES.alwaysDropDown]: 'true',
       [COOKIES.autoPassPhases]: 'SHADOW0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP',
+      [`${SERVER_COOKIE_PATH}:${COOKIES.autoPassPhases}`]: 'SHADOW0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP',
       [COOKIES.autoDismissDeckReveal]: 'true',
       [COOKIES.oldStack]: 'true',
       [COOKIES.animationSpeed]: '4',

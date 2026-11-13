@@ -19,8 +19,17 @@ export function readCookie(cookies: string, name: string): string | null {
   return null;
 }
 
-/** saveToCookie: kept for 365 days. Settings only, so they aren't sent with requests coming from other sites. */
-export function writeCookie(document: Document, name: string, value: string, now = new Date()): void {
+/**
+ * saveToCookie: kept for 365 days. Settings only, so they aren't sent with requests coming from other sites. A cookie
+ * the server reads must also be written with the server's `path`, since one under /gemp-lotr never reaches it.
+ */
+export function writeCookie(
+  document: Document,
+  name: string,
+  value: string,
+  now = new Date(),
+  path = LEGACY_COOKIE_PATH,
+): void {
   const expires = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=${LEGACY_COOKIE_PATH}; SameSite=Lax`;
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires.toUTCString()}; path=${path}; SameSite=Lax`;
 }

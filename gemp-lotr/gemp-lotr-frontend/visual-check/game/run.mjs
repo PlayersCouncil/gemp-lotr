@@ -376,6 +376,23 @@ async function playAction(act, decision, index, traffic, used) {
   if (!traffic.answered(decision)) await act.actionMenu(decision.values.actionId[index]);
 }
 
+/**
+ * The server reads the auto-pass phases from the cookies of its game requests: after a phase box is ticked, the cookie
+ * the browser sends to the server must hold that phase. Cookies are matched to the path as browsers do (RFC 6265: a
+ * prefix ending at a "/"), since Playwright's `cookies(url)` takes any prefix and would count one under /gemp-lotr.
+ */
+async function expectAutoPassReachesServer(page, phase) {
+  const path = '/gemp-lotr-server/game/check';
+  const sent = (cookie) =>
+    path === cookie.path ||
+    (path.startsWith(cookie.path) && (cookie.path.endsWith('/') || path[cookie.path.length] === '/'));
+  const cookies = (await page.context().cookies()).filter((cookie) => cookie.name === 'autoPassPhases' && sent(cookie));
+  // The longest path comes first in the request, and the server takes the first
+  const value = cookies.sort((a, b) => b.path.length - a.path.length)[0]?.value;
+  if (value === undefined || !decodeURIComponent(value).split('0').includes(phase))
+    throw new Error(`the server would not receive auto-pass in ${phase} (autoPassPhases sent: ${value ?? 'none'})`);
+}
+
 /** One step of a scenario on a page: what it does, by the decision waiting for the player. */
 async function doStep(page, kind, step, traffic, used) {
   const act = gestures(page, kind, used);
@@ -543,7 +560,10 @@ async function doStep(page, kind, step, traffic, used) {
       used.add(name);
       return page.locator(select.setting(step.setting)).selectOption(step.value);
     }
-    return act.click(select.setting(step.setting), name);
+    await act.click(select.setting(step.setting), name);
+    if (step.setting.startsWith('autoPass'))
+      await expectAutoPassReachesServer(page, step.setting.slice('autoPass'.length));
+    return;
   }
   if ('slider' in step) {
     // Its handle focused by a click, then a key

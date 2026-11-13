@@ -246,13 +246,8 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
         if (cookieHeader != null) {
             Set<Cookie> cookies = cookieDecoder.decode(cookieHeader);
             for (Cookie cookie : cookies) {
-                if (cookie.name().equals("autoPassPhases")) {
-                    final String[] phases = cookie.value().split("0");
-                    Set<Phase> result = new HashSet<>();
-                    for (String phase : phases)
-                        result.add(Phase.valueOf(phase));
-                    return result;
-                }
+                if (cookie.name().equals("autoPassPhases"))
+                    return parseAutoPassPhases(cookie.value());
             }
             for (Cookie cookie : cookies) {
                 if (cookie.name().equals("autoPass") && cookie.value().equals("false"))
@@ -260,6 +255,19 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             }
         }
         return _autoPassDefault;
+    }
+
+    /** The phases in the page's cookie, joined with "0"; empty when the player passes in none, unknown names skipped. */
+    static Set<Phase> parseAutoPassPhases(String value) {
+        Set<Phase> result = new HashSet<>();
+        for (String phase : value.split("0")) {
+            try {
+                result.add(Phase.valueOf(phase));
+            } catch (IllegalArgumentException exp) {
+                // Not a phase (the empty value of no phase at all, or a name the server no longer has)
+            }
+        }
+        return result;
     }
 
     private class SerializationVisitor implements ParticipantCommunicationVisitor {

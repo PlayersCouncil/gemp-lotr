@@ -682,9 +682,18 @@ var GempLotrGameUI = Class.extend({
             $.cookie("alwaysDropDown", "" + selected, {expires: 365});
         });
 
+        // The server reads autoPassPhases, but a cookie written from this page has the path /gemp-lotr and never
+        // reaches /gemp-lotr-server; a copy with the server's path is what the server receives.
+        var saveAutoPassPhases = function (value) {
+            $.cookie("autoPassPhases", value, {expires: 365});
+            $.cookie("autoPassPhases", value, {expires: 365, path: "/gemp-lotr-server"});
+        };
+
         var autoPassPhases = $.cookie("autoPassPhases");
         if (autoPassPhases == null)
             autoPassPhases = "FELLOWSHIP0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP";
+        else
+            saveAutoPassPhases(autoPassPhases);
 
         var passPhasesArr = autoPassPhases.split("0");
         for (var i = 0; i < passPhasesArr.length; i++) {
@@ -710,7 +719,7 @@ var GempLotrGameUI = Class.extend({
 
             if (newAutoPassPhases.length > 0)
                 newAutoPassPhases = newAutoPassPhases.substr(1);
-            $.cookie("autoPassPhases", newAutoPassPhases, {expires: 365});
+            saveAutoPassPhases(newAutoPassPhases);
         });
 
         var playerListener = function (players) {

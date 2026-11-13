@@ -26,6 +26,12 @@ export const COOKIES = {
 } as const;
 
 const DEFAULT_AUTO_PASS = 'FELLOWSHIP0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP';
+
+/**
+ * The server reads autoPassPhases from the cookies of its own requests, which a cookie under /gemp-lotr never reaches,
+ * so the value is written under the server's path too (the legacy page does the same).
+ */
+export const SERVER_COOKIE_PATH = '/gemp-lotr-server';
 const DEFAULT_TIMER_ALERTS = '600:30,300:10,60:1';
 
 function parseRules(text: string): TimerAlertRule[] {
@@ -59,6 +65,12 @@ export class GameSettings {
     parseRules(this.cookies.read(COOKIES.timerAlertRules) ?? DEFAULT_TIMER_ALERTS),
   );
 
+  constructor() {
+    // A choice saved before the server's copy existed reaches the server from the game's first request
+    const saved = this.cookies.read(COOKIES.autoPassPhases);
+    if (saved !== null) this.cookies.write(COOKIES.autoPassPhases, saved, SERVER_COOKIE_PATH);
+  }
+
   setAutoAccept(value: boolean): void {
     this.autoAccept.set(value);
     this.cookies.write(COOKIES.autoAccept, String(value));
@@ -74,6 +86,7 @@ export class GameSettings {
     const phases = AUTO_PASS_PHASES.filter((p) => (p === phase ? value : this.autoPassPhases().includes(p)));
     this.autoPassPhases.set(phases);
     this.cookies.write(COOKIES.autoPassPhases, phases.join('0'));
+    this.cookies.write(COOKIES.autoPassPhases, phases.join('0'), SERVER_COOKIE_PATH);
   }
 
   setAutoDismissDeckReveal(value: boolean): void {
