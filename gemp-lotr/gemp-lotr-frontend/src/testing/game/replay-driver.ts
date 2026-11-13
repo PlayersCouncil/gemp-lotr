@@ -158,7 +158,15 @@ export function makeGesture(
     default: {
       // Cards to pick (CARD_SELECTION, ARBITRARY_CARDS, ACTION_CHOICE): each, then Done unless that answered it
       const before = server.progress;
-      for (const cardId of value.split(',').filter(Boolean)) {
+      // A choice of actions answers with action ids; its dialog shows each action as a card, temp0, temp1, ...
+      const cardIds =
+        decision.type === 'ACTION_CHOICE'
+          ? value
+              .split(',')
+              .filter(Boolean)
+              .map((actionId) => `temp${ids('actionId').indexOf(actionId)}`)
+          : value.split(',').filter(Boolean);
+      for (const cardId of cardIds) {
         clickCard(page, cardId);
         page.advance(50);
       }

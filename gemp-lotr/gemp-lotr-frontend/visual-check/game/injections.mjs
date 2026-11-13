@@ -60,7 +60,7 @@ export const GAME_INJECTIONS = {
   'card-hidden': {
     what: 'a card of the hand not shown',
     scenario: 'opening',
-    expect: /cards: A /,
+    expect: /cards: only A \["[^"]+:HAND"\], only B \[\]/,
     afterSettle: async (page, kind) => {
       await page.evaluate((kind) => {
         const hand =

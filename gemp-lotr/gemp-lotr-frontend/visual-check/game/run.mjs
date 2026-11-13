@@ -48,6 +48,8 @@ const { values: options } = parseArgs({
     'real-images': { type: 'boolean', default: false },
     // Prints every decision the player gets and every answer sent
     verbose: { type: 'boolean', default: false },
+    // Reports what isn't covered also for a run of some scenarios (--only)
+    coverage: { type: 'boolean', default: false },
     // Saves what page A and the server said to each other, and the game the page held after each step, as test data
     // for the jsdom tests (src/testing/game-recordings, see game/README.md); page B isn't run
     record: { type: 'boolean', default: false },
@@ -134,7 +136,18 @@ function watchTraffic(page, participant, gameId) {
     traffic.events.push(...events);
     if (options.verbose) {
       for (const event of events.filter((e) => e.type === 'D' && e.participantId === participant)) {
-        const actions = event.params.filter((param) => param.name === 'actionText').map((param) => param.value);
+        const actions = event.params
+          .filter((param) => param.name === 'actionText' || param.name === 'blueprintId')
+          .map((param) => param.value)
+          .filter((value) => value !== 'inPlay');
+        // The hand, by blueprint (cards put into it and not moved or removed since)
+        const where = new Map();
+        for (const e of traffic.events) {
+          if (e.type === 'PCIP' || e.type === 'MCIP')
+            where.set(e.cardId, e.zone === 'HAND' && e.participantId === participant ? e.blueprintId : null);
+          if (e.type === 'RCFP') for (const id of (e.otherCardIds ?? '').split(',')) where.delete(id);
+        }
+        console.log(`    hand: ${[...where.values()].filter(Boolean).join(' ')}`);
         console.log(
           `  ${participant} is asked ${event.id}: ${event.decisionType} ${event.text}${actions.length ? ` [${actions.join(' | ')}]` : ''}`,
         );
@@ -330,7 +343,8 @@ async function answerByPolicy(act, decision, traffic, used) {
 async function pickCards(act, decision, indexes, traffic, used) {
   for (const index of indexes) {
     used.add('card click');
-    await act.clickCard(decision.values.cardId[index]);
+    // A choice of actions (ACTION_CHOICE) shows each as a card of its dialog: temp0, temp1, ...
+    await act.clickCard(decision.values.cardId?.[index] ?? `temp${index}`);
     await sleep(150);
   }
   // With auto-accept (on by default) the last card answers the decision itself
@@ -338,6 +352,28 @@ async function pickCards(act, decision, indexes, traffic, used) {
   if (traffic && traffic.answered(decision)) return;
   if (indexes.length === 0 && decision.type === 'CARD_ACTION_CHOICE') return act.clickButton('Pass');
   if (await act.hasButton('Done')) await act.clickButton('Done');
+}
+
+/** The blueprint of a card the page was told about, by its id. */
+function blueprintOf(traffic, cardId) {
+  return traffic.events.findLast((event) => event.type === 'PCIP' && event.cardId === cardId)?.blueprintId;
+}
+
+/** An assignment step's [minion, character] ids: each by its place in the decision's list, or by its blueprint. */
+function assignedIds(traffic, decision, [minion, character]) {
+  const pick = (ids, which) =>
+    typeof which === 'string' ? ids.find((id) => blueprintOf(traffic, id) === which) : ids[which];
+  const ids = [pick(decision.values.minions ?? [], minion), pick(decision.values.freeCharacters ?? [], character)];
+  if (ids.some((id) => id === undefined)) throw new Error(`no such assignment ${JSON.stringify([minion, character])}`);
+  return ids;
+}
+
+/** Plays the decision's action at `index`: its card clicked, then the action in its menu if it has several. */
+async function playAction(act, decision, index, traffic, used) {
+  used.add('card click');
+  await act.clickCard(decision.values.cardId[index]);
+  await sleep(300);
+  if (!traffic.answered(decision)) await act.actionMenu(decision.values.actionId[index]);
 }
 
 /** One step of a scenario on a page: what it does, by the decision waiting for the player. */
@@ -361,6 +397,13 @@ async function doStep(page, kind, step, traffic, used) {
   }
   if ('pick' in step) {
     const d = needs('cards');
+    // A card may be named by its blueprint (decisions that show cards list them)
+    step = {
+      ...step,
+      pick: step.pick.map((which) => (typeof which === 'string' ? (d.values.blueprintId ?? []).indexOf(which) : which)),
+    };
+    if (step.pick.some((index) => index < 0))
+      throw new Error(`no such card to pick in ${JSON.stringify(d.values.blueprintId)}`);
     if (step.then) {
       // Each card, then the way to finish: a button (Done) or a key (Escape)
       for (const index of step.pick) {
@@ -380,13 +423,13 @@ async function doStep(page, kind, step, traffic, used) {
   if (step.done) return act.clickButton('Done');
   if ('press' in step) return act.clickButton(step.press);
   if ('assign' in step) {
-    // A minion, then the character it goes to (both by their place in the decision's lists)
+    // A minion, then the character it goes to (by their place in the decision's lists, or by blueprint)
     const d = needs('an assignment');
-    const [minion, character] = step.assign;
+    const [minion, character] = assignedIds(traffic, d, step.assign);
     used.add('assign minion');
-    await act.clickCard(d.values.minions[minion]);
+    await act.clickCard(minion);
     await sleep(250);
-    return act.clickCard(d.values.freeCharacters[character]);
+    return act.clickCard(character);
   }
   if ('unassign' in step) {
     // The minion clicked, then clicked again
@@ -398,20 +441,69 @@ async function doStep(page, kind, step, traffic, used) {
   }
   if ('play' in step) {
     const d = needs('an action');
-    const index = d.values.actionText.findIndex((text) => step.play.test(text));
+    const index = (d.values.actionText ?? []).findIndex((text) => step.play.test(text));
     if (index < 0) throw new Error(`no action ${step.play} in ${JSON.stringify(d.values.actionText)}`);
+    return playAction(act, d, index, traffic, used);
+  }
+  if ('openMenu' in step) {
+    // The card of an action that has others: clicked, its menu left open (the next step chooses)
+    const d = needs('an action');
+    const index = (d.values.actionText ?? []).findIndex((text) => step.openMenu.test(text));
+    if (index < 0) throw new Error(`no action ${step.openMenu} in ${JSON.stringify(d.values.actionText)}`);
     used.add('card click');
-    await act.clickCard(d.values.cardId[index]);
-    await sleep(300);
-    // A card with several actions opens a menu of them
-    if (!traffic.answered(d)) await act.actionMenu(d.values.actionId[index]);
+    return act.clickCard(d.values.cardId[index]);
+  }
+  if ('menu' in step) {
+    // An action of the open menu, by its place among the actions of the decision with that text
+    const d = needs('an action');
+    const matching = (d.values.actionText ?? []).flatMap((text, i) => (step.menu.test(text) ? [i] : []));
+    const index = matching[step.nth ?? 0];
+    if (index === undefined) throw new Error(`no action ${step.menu} to choose`);
+    if (!(await act.actionMenu(d.values.actionId[index]))) throw new Error('no menu of actions is open');
     return;
   }
   if ('auto' in step) {
+    // `until`: stops at a decision whose text matches; `untilAction`: at one offering an action that matches
+    // (not taken); `plays`: actions taken whenever offered, the first matching pattern first; `picks`: cards chosen
+    // (by blueprint) when a decision asks for cards
     for (let count = 0; count < step.auto; count++) {
       const d = traffic.decision();
       if (!d || (step.until && step.until.test(d.text))) return;
-      await answerByPolicy(act, d, traffic, used);
+      // As a person would, it answers once the page has shown the decision (the cards become choosable after the
+      // phase's animations)
+      await settle(page, kind, traffic, [], 300);
+      const actions = d.values.actionText ?? [];
+      if (step.untilAction && actions.some((text) => step.untilAction.test(text))) return;
+      const wanted = (step.plays ?? [])
+        .map((pattern) => actions.findIndex((text) => pattern.test(text)))
+        .find((i) => i >= 0);
+      const blueprints = d.values.blueprintId ?? [];
+      const picked = (step.picks ?? []).map((id) => blueprints.indexOf(id)).find((i) => i >= 0);
+      if (step.assigns && d.type === 'ASSIGN_MINIONS') {
+        // Each minion to a character in turn, never the Ring-bearer while another can take it (the game would end
+        // early), then Done: so there are skirmishes
+        const minions = d.values.minions ?? [];
+        const ringBearer = traffic.events.find(
+          (e) => e.type === 'PCIP' && e.participantId === traffic.participant && e.zone === 'FREE_CHARACTERS',
+        )?.cardId;
+        const all = d.values.freeCharacters ?? [];
+        const others = all.filter((id) => id !== ringBearer);
+        const characters = others.length > 0 ? others : all;
+        for (const [i, minion] of minions.entries()) {
+          used.add('assign minion');
+          await act.clickCard(minion);
+          await sleep(250);
+          await act.clickCard(characters[i % characters.length]);
+          await sleep(250);
+        }
+        await act.clickButton('Done');
+      } else if (wanted !== undefined && d.type === 'CARD_ACTION_CHOICE') {
+        await playAction(act, d, wanted, traffic, used);
+      } else if (picked !== undefined && (d.type === 'ARBITRARY_CARDS' || d.type === 'ACTION_CHOICE')) {
+        await pickCards(act, d, [picked], traffic, used);
+      } else {
+        await answerByPolicy(act, d, traffic, used);
+      }
       await waitForNextDecision(traffic, d);
     }
     return;
@@ -547,7 +639,7 @@ async function play(kind, scenario, size, pair, label) {
   const used = new Set(mode === 'player' ? [] : [mode]);
   let game;
   try {
-    game = await startGame(options.server, pair, password);
+    game = await startGame(options.server, pair, password, scenario.deck ?? 'main');
   } catch (error) {
     return { snapshots: [], errors: [], problems: [`${label}: ${error.message}`], used, events: [] };
   }
@@ -674,11 +766,7 @@ async function play(kind, scenario, size, pair, label) {
       const before = traffic.decision();
       // Assignments stay in the page until Done: the recording keeps them, with how many exchanges came before
       if ('assign' in step && before) {
-        const [minion, character] = step.assign;
-        gestures.push({
-          after: traffic.exchanges.length,
-          assign: [before.values.minions[minion], before.values.freeCharacters[character]],
-        });
+        gestures.push({ after: traffic.exchanges.length, assign: assignedIds(traffic, before, step.assign) });
       }
       if ('unassign' in step && before) {
         gestures.push({ after: traffic.exchanges.length, unassign: before.values.minions[step.unassign] });
@@ -735,7 +823,7 @@ function writeRecording(scenario, traffic, steps, size) {
 const isAnswer = (step) =>
   step.wait !== false &&
   (step.answers ||
-    (!('then' in step) && ['integer', 'choice', 'pick', 'pass', 'done', 'play'].some((key) => key in step)));
+    (!('then' in step) && ['integer', 'choice', 'pick', 'pass', 'done', 'play', 'menu'].some((key) => key in step)));
 
 async function waitForFirst(traffic, max = 20000) {
   const start = Date.now();
@@ -760,8 +848,16 @@ function compareRuns(a, b, base) {
     const screens = compareScreens(sa.screen, sb.screen, [], false);
     const show = (value) => JSON.stringify(value).slice(0, 300);
     for (const key of Object.keys({ ...sa.state, ...sb.state })) {
-      if (JSON.stringify(sa.state[key]) !== JSON.stringify(sb.state[key])) {
-        problems.push(`${at}: ${key}: A ${show(sa.state[key])}, B ${show(sb.state[key])}`);
+      const [va, vb] = [sa.state[key], sb.state[key]];
+      if (JSON.stringify(va) !== JSON.stringify(vb)) {
+        if (Array.isArray(va) && Array.isArray(vb)) {
+          // A long list: only what each page has that the other doesn't
+          const onlyA = va.filter((item) => !vb.includes(item));
+          const onlyB = vb.filter((item) => !va.includes(item));
+          problems.push(`${at}: ${key}: only A ${show(onlyA)}, only B ${show(onlyB)}`);
+        } else {
+          problems.push(`${at}: ${key}: A ${show(va)}, B ${show(vb)}`);
+        }
       }
     }
     if (JSON.stringify(sa.requests) !== JSON.stringify(sb.requests)) {
@@ -877,11 +973,11 @@ try {
       scenarios.indexOf(a.scenario) - scenarios.indexOf(b.scenario) || sizes.indexOf(a.size) - sizes.indexOf(b.size),
   );
   // Only a run of every scenario says what is covered
-  const gaps = only || injection || options.record ? [] : coverageGaps(covered);
+  const gaps = (only && !options.coverage) || injection || options.record ? [] : coverageGaps(covered);
   for (const gap of gaps) console.log(`GAP  ${gap}`);
   writeReport(results, gaps);
   const failed = results.filter((r) => r.problems.length).length;
-  const notCovered = only || injection || options.record ? '' : `, ${gaps.length} not covered`;
+  const notCovered = (only && !options.coverage) || injection || options.record ? '' : `, ${gaps.length} not covered`;
   console.log(`\n${results.length} checks, ${failed} differ${notCovered}. Report: ${path.join(outDir, 'index.html')}`);
   process.exitCode = failed || gaps.length ? 1 : 0;
 } finally {

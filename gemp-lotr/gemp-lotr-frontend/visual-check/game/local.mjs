@@ -20,7 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { playersSql, session, waitForLogin } from '../local-server/seed.mjs';
-import { DECK_NAME, deckContents, FORMAT, GAME_PLAYERS } from './players.mjs';
+import { DECKS, deckContents, GAME_PLAYERS } from './players.mjs';
 import { BUILT_JAR } from '../tools/build-server.mjs';
 import { GAME_INJECTIONS } from './injections.mjs';
 
@@ -71,7 +71,14 @@ function useAngularBuild() {
 async function seedDecks(password) {
   for (const { name } of GAME_PLAYERS) {
     const player = await session(SERVER, name, password);
-    await player.post('/deck', { deckName: DECK_NAME, targetFormat: FORMAT, notes: '', deckContents: deckContents() });
+    for (const deck of Object.values(DECKS)) {
+      await player.post('/deck', {
+        deckName: deck.name,
+        targetFormat: deck.format,
+        notes: '',
+        deckContents: deckContents(deck),
+      });
+    }
   }
 }
 

@@ -105,6 +105,9 @@ var GempLotrGameUI = Class.extend({
     
     escFunction: null,
 
+    // True while a decision waits for the player: the page then doesn't poll (processGameEventsXml)
+    waitingForPlayer: false,
+
     init: function (url, replayMode) {
         this.replayMode = replayMode;
 
@@ -560,6 +563,9 @@ var GempLotrGameUI = Class.extend({
     processGameEnd: function() {
         var that = this;
         this.gameEnded = true;
+        // A decision still open can't be answered any more (the game ended while it waited, e.g. by conceding)
+        if (!this.replayMode)
+            this.cleanupDecision();
         this.stopTimerTick();
         this.markExpiredTimers();
         if(this.allPlayerIds == null)
@@ -733,7 +739,14 @@ var GempLotrGameUI = Class.extend({
         if (!this.spectatorMode && !this.replayMode) {
             $("#concedeGame").button().click(
                 function () {
-                    that.communication.concede();
+                    that.communication.concede(undefined, function () {
+                        // The page doesn't ask for news while a decision waits for the player (waitingForPlayer), so
+                        // it would never learn that conceding ended the game: it asks once now
+                        if (that.waitingForPlayer) {
+                            that.waitingForPlayer = false;
+                            that.updateGameState();
+                        }
+                    });
                 });
             $("#cancelGame").button().click(
                 function () {
@@ -1219,6 +1232,7 @@ var GempLotrGameUI = Class.extend({
 
     decisionFunction: function (decisionId, result) {
         var that = this;
+        this.waitingForPlayer = false;
         this.stopAnimatingTitle();
         this.stopTimerTick();
         this.communication.gameDecisionMade(decisionId, result,
@@ -1456,6 +1470,8 @@ var GempLotrGameUI = Class.extend({
                     this.markExpiredTimers();
             }
 
+            // With a decision for the player the page stops asking for news until it is answered
+            this.waitingForPlayer = hasDecision;
             if (!hasDecision) {
                 this.animations.updateGameState(animate);
             } else {

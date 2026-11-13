@@ -58,9 +58,10 @@ what can't happen, each with its reason (cards in the void are never sent to a p
 ## How both pages get the same game
 
 - **The seed.** The check's server runs with `-Dgemp.game.randomSeed`: every game draws from its own `Random` with that
-  seed (`GameRandom`: shuffles, random cards, the seating), a table's players are in name order, and a decision lists
-  cards it holds in a set in card id order. Without the property the server is unchanged (`ThreadLocalRandom`, hash
-  order).
+  seed (`GameRandom`: shuffles, random cards, the seating), a table's players are in name order, a decision lists
+  cards it holds in a set in card id order, required responses in the order of their card and text, and card
+  information its modifiers sorted. Tables may also use the formats the hall doesn't offer (the Debug decks below).
+  Without the property the server is unchanged (`ThreadLocalRandom`, hash order, hall formats only).
 - **The opponent** (`protocol.mjs` `Foe`) plays over HTTP by a fixed policy: bid 0, the first choice, the fewest cards,
   pass; a scenario's `foe` rules come first (e.g. let the player go first, play minions). When both players are asked
   at once (bids, starting fellowships, mulligans) the opponent waits for the player in the browser to answer, because
@@ -73,11 +74,11 @@ what can't happen, each with its reason (cards in the void are never sent to a p
   `replay` scenarios both sides are played over HTTP, the player concedes, and the browser opens the game's replay
   (`game.html?replayId=<player>$<recording>`, from `GET /gameHistory`). Both stop after `answers` answers in all, so
   the game stops at the same point every time.
-- **One at a time.** The players (the bots, then the page) join a game one after the other, and the check waits until
-  the game can be read first: the server changes a game's listeners under its read lock
-  (`LotroGameMediator.signupUserForGame`), so two players joining at the same moment can fail with HTTP 500 (a
-  `ConcurrentModificationException`; a server bug, not changed). Two clicks on the same card are at least 250 ms apart,
-  as the legacy page ignores a second tap within 200 ms (its touch-bounce guard).
+- **One at a time.** The players (the bots, then the page) join a game one after the other, after the game can be read:
+  the same order of joins on every run. (Joining at the same moment used to fail with HTTP 500, a
+  `ConcurrentModificationException` in `LotroGameMediator.signupUserForGame`, which held only the read lock; fixed,
+  `LotroGameMediatorSignupTest`.) Two clicks on the same card are at least 250 ms apart, as the legacy page ignores a
+  second tap within 200 ms (its touch-bounce guard), and an `auto` step answers once the page has stopped moving.
 - **The same pair** of players plays a scenario's game on both pages, so the names on the screens are the same. The
   game's own chat room is named after the game ("Welcome to room: Game12"), so the check shows both pages the same
   name, `Game#`. The legacy chat marks a message naming the player only once it knows the player (`GET /player`): the
@@ -99,8 +100,10 @@ the same way from G1 on. Record again after changing a scenario, the test deck o
 
 ## Scenarios
 
-`scenarios.mjs` explains each kind of step. The test deck (`players.mjs`) is Fellowship Block, Dwarves and Elves with
-Moria orcs, the same for both players.
+`scenarios.mjs` explains each kind of step. Both players play the same deck (`players.mjs` `DECKS`): `main`,
+Fellowship Block, Dwarves and Elves with Moria orcs; and four small decks in the Debug format (only the seeded server
+plays it), where the hand is the whole deck once the starting fellowship is out, so a scenario knows what it can play:
+`skirmish`, `transfer`, `shards` and `rescue`.
 
 | Scenario                         | What it does                                                                                                |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -122,15 +125,15 @@ Moria orcs, the same for both players.
 | `concede-while-opponent-decides` | The page polls: cancel (the server's warning), concede, the feedback dialog, the deck after the game        |
 | `spectator`                      | A third player watches a game both sides play over HTTP                                                     |
 | `replay`                         | The replay of a short game: slower, faster, played to the end                                               |
+| `effects-skirmish`               | Gimli with the Dwarven Axe and Let Them Come! beats an Orc: two required responses; For Frodo (removed)     |
+| `effects-transfer`               | The Dwarven Axe transferred from Gimli to the Dwarf Guard, who then dies to an Uruk-hai (damage +1)         |
+| `effects-shards`                 | The Shards of Narsil: a card stacked, then the menu of its two actions, the second chosen                   |
+| `effects-rescue`                 | Merry, not assigned, is discarded to remove a [sauron] Orc from Gimli's skirmish                            |
 
-Legacy behaviour the scenarios show: the page doesn't poll while a decision waits for the player, and conceding has no
-answer handler, so after conceding with a decision open the page never learns the game ended (`concede`); the server
-answers a cancel request with a warning, "You can't cancel this game", even when the opponent may still agree.
-
-Not covered yet (the check reports them): a card moved in play (MCIP: a possession transferred), flipped (FCIP: the
-Players Council's hinder), added to or removed from a skirmish (ATS, RFS), tokens removed (RT: healing), a choice of
-required responses (ACTION_CHOICE), cards stacked, dead or removed from the game, and a card with several actions (its
-menu). They need cards the test deck doesn't have.
+The page doesn't poll while a decision waits for the player. Conceding then used to leave the page unaware that the
+game had ended; now the page asks once more after its concede is answered, and closes the open decision when the game
+ends (`concede`; legacy `gameUi.js`, owner's decision of 2026-11-13). The server answers a cancel request with a
+warning, "You can't cancel this game", even when the opponent may still agree.
 
 Result on 2026-11-12, both pages `game.html`: 54 of 54 checks the same (18 scenarios at 3 window sizes, about 9
 minutes), 10 items not covered (so the run fails until they are); the 17 recordings replay in jsdom; the self-test

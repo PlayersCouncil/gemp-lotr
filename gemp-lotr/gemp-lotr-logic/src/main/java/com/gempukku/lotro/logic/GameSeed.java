@@ -3,6 +3,8 @@ package com.gempukku.lotro.logic;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.GameRandom;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.timing.Action;
 
 import java.util.*;
 
@@ -55,6 +57,20 @@ public final class GameSeed {
                 Collections.shuffle(players, random);
             }
         };
+    }
+
+    /**
+     * The actions of a decision in the order it lists them: as given, or on a seeded server by their card's id and then
+     * their text, since the given order can follow object hashes (e.g. several required responses at once).
+     */
+    public static <T extends Action> List<T> stableActionOrder(LotroGame game, List<T> actions) {
+        if (!isSeeded())
+            return actions;
+        List<T> result = new ArrayList<>(actions);
+        result.sort(Comparator
+                .comparingInt((T action) -> action.getActionAttachedToCard() != null ? action.getActionAttachedToCard().getCardId() : -1)
+                .thenComparing(action -> String.valueOf(action.getText(game))));
+        return result;
     }
 
     /**

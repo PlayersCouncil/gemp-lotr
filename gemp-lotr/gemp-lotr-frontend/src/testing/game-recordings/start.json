@@ -1,7 +1,7 @@
 {
  "scenario": "start",
  "note": "The page as it opens: the bid",
- "participant": "GamePlayer0",
+ "participant": "GamePlayer2",
  "mode": "player",
  "size": "1366x768",
  "exchanges": [
@@ -11,7 +11,7 @@
    "params": {},
    "status": 200,
    "contentType": "application/json; charset=UTF-8",
-   "body": "{\"hasTrophies\":false,\"name\":\"GamePlayer0\",\"type\":\"aut\"}"
+   "body": "{\"hasTrophies\":false,\"name\":\"GamePlayer2\",\"type\":\"aut\"}"
   },
   {
    "method": "GET",
@@ -19,7 +19,7 @@
    "params": {},
    "status": 200,
    "contentType": "application/xml; charset=UTF-8",
-   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><gameState cn=\"2\"><ge message=\"You are starting a game of Fellowship Block\" timestamp=\"2026-11-12 09:48:30.6286\" type=\"M\"/><ge message=\"Players in the game are: GameFoe0, GamePlayer0\" timestamp=\"2026-11-12 09:48:30.6286\" type=\"M\"/><ge allParticipantIds=\"GamePlayer0,GameFoe0\" maps=\"\" notes=\"Deck used: &lt;a href='/share/deck?id=R2FtZVBsYXllcjB8R2FtZSBjaGVjayBkZWNr' target='_blank'&gt;Game check deck&lt;/a&gt; [Fellowship Block]&lt;br/&gt;&lt;br/&gt;Deck Notes:&lt;br/&gt;\" participantId=\"GamePlayer0\" summary=\"Casual  - a public game of &lt;b&gt;Fellowship Block&lt;/b&gt;. This game table uses the 'Default' timer.  Each player has a total time bank of 45 minutes, and will time out with a loss if they run out of their time bank or take longer than 6 minutes between actions.&lt;br/&gt;&lt;br/&gt;\" timestamp=\"2026-11-12 09:48:30.6286\" type=\"PGS\"/><ge decisionType=\"INTEGER\" id=\"1\" participantId=\"GamePlayer0\" text=\"Choose a number of burdens to bid\" timestamp=\"2026-11-12 09:48:30.6287\" type=\"D\"><parameter name=\"min\" value=\"0\"/></ge><clocks><clock participantId=\"GamePlayer0\">2700</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></gameState>"
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><gameState cn=\"2\"><ge message=\"You are starting a game of Fellowship Block\" timestamp=\"2026-11-13 12:03:50.0088\" type=\"M\"/><ge message=\"Players in the game are: GameFoe2, GamePlayer2\" timestamp=\"2026-11-13 12:03:50.0088\" type=\"M\"/><ge allParticipantIds=\"GamePlayer2,GameFoe2\" maps=\"\" notes=\"Deck used: &lt;a href='/share/deck?id=R2FtZVBsYXllcjJ8R2FtZSBjaGVjayBkZWNr' target='_blank'&gt;Game check deck&lt;/a&gt; [Fellowship Block]&lt;br/&gt;&lt;br/&gt;Deck Notes:&lt;br/&gt;\" participantId=\"GamePlayer2\" summary=\"Casual  - a public game of &lt;b&gt;Fellowship Block&lt;/b&gt;. This game table uses the 'Default' timer.  Each player has a total time bank of 45 minutes, and will time out with a loss if they run out of their time bank or take longer than 6 minutes between actions.&lt;br/&gt;&lt;br/&gt;\" timestamp=\"2026-11-13 12:03:50.0088\" type=\"PGS\"/><ge decisionType=\"INTEGER\" id=\"1\" participantId=\"GamePlayer2\" text=\"Choose a number of burdens to bid\" timestamp=\"2026-11-13 12:03:50.0088\" type=\"D\"><parameter name=\"min\" value=\"0\"/></ge><clocks><clock participantId=\"GamePlayer2\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"GameFoe2\">2700</clock><clock participantId=\"decisionLimit\">360</clock></clocks></gameState>"
   }
  ],
  "steps": [

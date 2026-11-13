@@ -23,9 +23,6 @@ export const GAME_PLAYERS = Array.from({ length: MAX_WORKERS }, (_, index) => {
   ];
 }).flat();
 
-export const DECK_NAME = 'Game check deck';
-export const FORMAT = 'fotr_block';
-
 const copies = (count, ...ids) => ids.flatMap((id) => Array(count).fill(id));
 
 /**
@@ -33,7 +30,9 @@ const copies = (count, ...ids) => ids.flatMap((id) => Array(count).fill(id));
  * and most decisions show up in the first turns (companions, possessions, events, conditions, minions, archery,
  * assignments, skirmishes). Both players play it.
  */
-export const DECK = {
+const MAIN = {
+  name: 'Game check deck',
+  format: 'fotr_block',
   ringBearer: '1_290',
   ring: '1_2',
   sites: ['1_319', '1_327', '1_337', '1_343', '1_349', '1_350', '1_353', '1_356', '1_360'],
@@ -46,7 +45,62 @@ export const DECK = {
   ],
 };
 
+const FELLOWSHIP_SITES = ['1_319', '1_327', '1_337', '1_343', '1_349', '1_350', '1_353', '1_356', '1_360'];
+
+/**
+ * The Debug decks (a format only the seeded test server plays, HallServer) are small: once the starting fellowship
+ * is out, what is left fits in the opening hand of 8, so a scenario knows every card it can play. Each has as many
+ * Free Peoples cards as Shadow cards, as the format requires.
+ */
+const debugDeck = (name, cards) => ({
+  name,
+  format: 'debug',
+  ringBearer: '1_290',
+  ring: '1_2',
+  sites: FELLOWSHIP_SITES,
+  cards,
+});
+
+/**
+ * Gimli and Sam start. Gimli with the Dwarven Axe and Let Them Come! beats an Orc: two required responses at once and
+ * the Orc discarded from its skirmish; For Frodo exerts Sam (removed from the game); Goblin Swarms stacks an Orc that
+ * wins; A Shadow of the Past is hindered.
+ */
+const SKIRMISH = debugDeck('Game check skirmish deck', [
+  ...['1_12', '1_311', '1_9', '1_20', '103_107'],
+  ...['1_183', '1_178', '1_178', '1_185', '101_49'],
+]);
+
+/**
+ * Gimli and a Dwarf Guard start; the Dwarven Axe is played on one and transferred to the other. The Uruk Soldier
+ * (damage +1) beats the Dwarf Guard (vitality 2), which dies.
+ */
+const TRANSFER = debugDeck('Game check transfer deck', [...['1_12', '1_7', '1_9'], ...['1_154', '1_185', '1_191']]);
+
+/**
+ * The Shards of Narsil and two [gondor] cards: one stacked on it, then both its Fellowship actions are offered at
+ * once, so its card opens a menu of them.
+ */
+const SHARDS = debugDeck('Game check shards deck', [...['3_44', '1_116', '1_116'], ...['1_178', '1_185', '1_191']]);
+
+/**
+ * Gimli and Merry start; a [sauron] Orc skirmishes Gimli and Merry, not assigned, is discarded to remove it from the
+ * skirmish (the server's only way to tell a page a card left a skirmish, besides minions replaced or split).
+ */
+const RESCUE = debugDeck('Game check rescue deck', [...['1_12', '4_311'], ...['1_261', '1_271']]);
+
+/** The test decks by the names scenarios give (`deck`), each saved for every player. */
+export const DECKS = {
+  main: MAIN,
+  skirmish: SKIRMISH,
+  transfer: TRANSFER,
+  shards: SHARDS,
+  rescue: RESCUE,
+};
+
 /** The deck as POST /deck takes it. */
-export function deckContents(deck = DECK) {
-  return [deck.ringBearer, deck.ring, deck.sites.join(','), deck.cards.join(',')].join('|');
+export function deckContents(deck = MAIN) {
+  const parts = [deck.ringBearer, deck.ring, deck.sites.join(','), deck.cards.join(',')];
+  // The fifth part is the Map (DeckSerialization.buildDeckFromContents)
+  return (deck.map ? [...parts, deck.map] : parts).join('|');
 }

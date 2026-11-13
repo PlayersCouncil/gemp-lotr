@@ -8,7 +8,8 @@
 //   { pass: true }                 Pass (or Done with no card); `wait: false` on an answer: the next decision for the
 //                                  player isn't waited for (the opponent decides next)
 //   { done: true }                 the Done button
-//   { assign: [0, 1] }             a minion assigned to a character (their places in the decision's lists)
+//   { assign: [0, 1] }             a minion assigned to a character (their places in the decision's lists, or
+//                                  blueprints: { assign: ['1_154', 2] })
 //   { play: /Gimli/ }              the action whose text matches: its card is clicked, then the action in its menu
 //   { auto: 20, until: /text/ }    up to 20 decisions answered as the opponent would, until one's text matches
 //   { cardInfo: id }               right click on a card (an id, or { blueprint, nth, owner, zone } among the cards put
@@ -79,7 +80,92 @@ const FRODO = { blueprint: '1_290' };
 /** The player's first fellowship phase reached without snapshots. */
 const TO_FELLOWSHIP = quietly(OPENING);
 
+/** The opponent uses Goblin Swarms whenever it may: an Orc that wins a skirmish is stacked on it. */
+const FOE_USES_GOBLIN_SWARMS = {
+  when: /responses/,
+  answer: (decision) => {
+    const index = (decision.values.actionText ?? []).findIndex((text) => /Goblin Swarms/.test(text));
+    return index >= 0 ? decision.values.actionId[index] : undefined;
+  },
+};
+
 export const GAME_SCENARIOS = [
+  {
+    name: 'effects-skirmish',
+    note: 'Debug deck: Gimli with the Dwarven Axe and Let Them Come! beats an Orc (two required responses), For Frodo, a stacked Orc',
+    deck: 'skirmish',
+    foe: [...PLAYER_FIRST, ...FOE_PLAYS_MINIONS, FOE_USES_GOBLIN_SWARMS],
+    steps: [
+      { integer: 0, quiet: true },
+      { pick: ['1_12'], quiet: true },
+      { pick: ['1_311'], quiet: true },
+      { choice: 'No', quiet: true },
+      { play: /^Play Dwarven Axe$/, quiet: true },
+      { auto: 2, until: /^Play Fellowship action/, name: 'the Dwarven Axe on Gimli' },
+      { play: /^Play Let Them Come!$/, name: 'Let Them Come! played' },
+      { pass: true, wait: false, quiet: true },
+      { auto: 20, until: /^Assign minions/, name: "the opponent's minions" },
+      { auto: 1, assigns: true, name: 'assigned to Gimli and Sam' },
+      { auto: 20, until: /Required responses/, plays: [/^Play For Frodo/], name: 'two required responses at once' },
+      { pick: [0], name: 'one of them chosen first' },
+      { auto: 20, until: /^Reconcile/, plays: [/^Play For Frodo/], name: 'after the skirmishes' },
+    ],
+  },
+  {
+    name: 'effects-transfer',
+    note: 'Debug deck: the Dwarven Axe played on Gimli and transferred to the Dwarf Guard, who then dies in a skirmish',
+    deck: 'transfer',
+    foe: [...PLAYER_FIRST, ...FOE_PLAYS_MINIONS],
+    steps: [
+      { integer: 0, quiet: true },
+      { pick: ['1_12'], quiet: true },
+      { pick: ['1_7'], quiet: true },
+      { choice: 'No', quiet: true },
+      { play: /^Play Dwarven Axe$/, quiet: true },
+      { pick: [0], name: 'the Dwarven Axe on Gimli' },
+      { play: /^Transfer Dwarven Axe$/, quiet: true },
+      { pick: [0], name: 'the Dwarven Axe transferred to the Dwarf Guard' },
+      { pass: true, wait: false, quiet: true },
+      { auto: 20, until: /^Assign minions/, name: "the opponent's minions" },
+      { assign: ['1_154', 2], name: 'the Uruk Soldier assigned to the Dwarf Guard' },
+      { done: true, quiet: true },
+      { auto: 10, until: /^Reconcile|^Play Shadow action/, name: 'the Dwarf Guard has died' },
+    ],
+  },
+  {
+    name: 'effects-shards',
+    note: 'Debug deck: The Shards of Narsil, a [gondor] card stacked on it, then the menu of its two actions',
+    deck: 'shards',
+    foe: [...PLAYER_FIRST, ...FOE_PLAYS_MINIONS],
+    steps: [
+      // No companion in the deck: no starting fellowship
+      { integer: 0, quiet: true },
+      { choice: 'No', quiet: true },
+      { play: /^Play The Shards of Narsil$/, name: 'The Shards of Narsil played' },
+      { play: /^Stack a GONDOR card/, quiet: true },
+      { pick: [0], name: 'a [gondor] card stacked on it' },
+      { openMenu: /^Stack a GONDOR card/, name: 'its two actions: the menu' },
+      { menu: /^Add \(1\) to take a card/, name: 'the second chosen: the stacked card back to hand' },
+    ],
+  },
+  {
+    name: 'effects-rescue',
+    note: 'Debug deck: a [sauron] Orc skirmishes Gimli; Merry, not assigned, is discarded to remove it from the skirmish',
+    deck: 'rescue',
+    foe: [...PLAYER_FIRST, ...FOE_PLAYS_MINIONS],
+    steps: [
+      { integer: 0, quiet: true },
+      { pick: ['1_12'], quiet: true },
+      { pick: ['4_311'], quiet: true },
+      { choice: 'No', quiet: true },
+      { pass: true, wait: false, quiet: true },
+      { auto: 20, until: /^Assign minions/, name: "the opponent's Orc" },
+      { assign: [0, 1], name: 'the Orc assigned to Gimli' },
+      { done: true, quiet: true },
+      { auto: 10, untilAction: /^Use Merry/, name: "Gimli's skirmish: Merry may step in" },
+      { play: /^Use Merry/, name: 'Merry discarded: the Orc removed from the skirmish' },
+    ],
+  },
   { name: 'start', note: 'The page as it opens: the bid', steps: [] },
   { name: 'opening', note: 'Bid, starting fellowship, mulligan', foe: PLAYER_FIRST, steps: OPENING },
   {
@@ -188,14 +274,15 @@ export const GAME_SCENARIOS = [
   },
   {
     name: 'concede',
-    note: 'Cancel and concede while a decision waits: the legacy page does not poll then, so it never learns the game ended',
+    note: 'Cancel and concede while a decision waits: the page asks for news once more and learns the game ended',
     foe: PLAYER_FIRST,
     steps: [
       ...TO_FELLOWSHIP,
       { tab: 'options', quiet: true },
       { button: 'cancelGame', name: 'cancel requested' },
-      { button: 'concedeGame', name: 'conceded' },
-      { pile: 'deck', player: 0, name: 'the deck counter clicked: nothing, the page does not know the game ended' },
+      { button: 'concedeGame', name: 'conceded: the game has ended, the open decision closed, the feedback dialog' },
+      { key: 'Escape', quiet: true },
+      { pile: 'deck', player: 0, name: 'own deck, shown once the game has ended' },
     ],
   },
   {

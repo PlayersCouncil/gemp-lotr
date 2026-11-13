@@ -624,7 +624,9 @@ public class LotroGameMediator {
         if (!player.hasType(Player.Type.ADMIN) && !_allowSpectators && !_playersPlaying.contains(playerName))
             throw new PrivateInformationException();
 
-        _readLock.lock();
+        // The write lock: this changes the channel counter, the channels and the game's listeners, so two players
+        // joining at the same moment must not run it together (a ConcurrentModificationException in GameState did)
+        _writeLock.lock();
         try {
             int number = _channelNextIndex;
             _channelNextIndex++;
@@ -651,7 +653,7 @@ public class LotroGameMediator {
 
             visitor.visitClock(secondsLeft);
         } finally {
-            _readLock.unlock();
+            _writeLock.unlock();
         }
     }
 

@@ -1,7 +1,7 @@
 // The game server's protocol as the check uses it from Node: reading its XML, starting a game between a pair of
 // players through the hall, and the opponent, who plays over HTTP by a fixed policy (see README.md).
 import { session } from '../local-server/seed.mjs';
-import { DECK_NAME, FORMAT } from './players.mjs';
+import { DECKS } from './players.mjs';
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
 const unescape = (text) =>
@@ -67,7 +67,10 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * Starts a game of the test deck between the pair: the player makes the table, the opponent joins it. Ends any game
  * either of them still plays first. Returns the game's id and both sessions.
  */
-export async function startGame(server, pair, password) {
+/** `deckKey`: which of the test decks (players.mjs DECKS) both play. */
+export async function startGame(server, pair, password, deckKey = 'main') {
+  const deck = DECKS[deckKey];
+  if (!deck) throw new Error(`no test deck "${deckKey}"`);
   // One login at a time (see "One login for all pages" in ../README.md)
   const player = await session(server, pair.player, password);
   const foe = await session(server, pair.foe, password);
@@ -75,8 +78,8 @@ export async function startGame(server, pair, password) {
   await clearTables(foe, pair.foe);
   const created = await (
     await player.post('/hall', {
-      format: FORMAT,
-      deckName: DECK_NAME,
+      format: deck.format,
+      deckName: deck.name,
       deckSource: 'player',
       timer: 'default',
       desc: '',
@@ -91,7 +94,7 @@ export async function startGame(server, pair, password) {
   if (!tableId) {
     throw new Error(`The table of ${pair.player} is not in the hall`);
   }
-  const joined = await (await foe.post(`/hall/${tableId}`, { deckName: DECK_NAME, deckSource: 'player' })).text();
+  const joined = await (await foe.post(`/hall/${tableId}`, { deckName: deck.name, deckSource: 'player' })).text();
   if (!joined.includes('OK')) {
     throw new Error(`${pair.foe} could not join: ${joined.slice(0, 300)}`);
   }
@@ -186,6 +189,9 @@ export function foeAnswer(decision, rules = []) {
       return (values.cardId ?? []).slice(0, min).join(',');
     case 'ASSIGN_MINIONS':
       return '';
+    case 'ACTION_CHOICE':
+      // Required responses: one must be chosen
+      return values.actionId?.[0] ?? '';
     default:
       // CARD_ACTION_CHOICE and ACTION_CHOICE: pass
       return '';
@@ -216,9 +222,8 @@ export class Foe {
     /** Whether a decision waits for it. */
     this.waiting = false;
     /**
-     * Resolves once its first request (it joins the game) is answered. Players must join one at a time: the server
-     * changes the game's listeners under its read lock (LotroGameMediator.signupUserForGame), so two joining at once
-     * can fail with a ConcurrentModificationException (HTTP 500).
+     * Resolves once its first request (it joins the game) is answered. The check lets players join one at a time,
+     * so the joins come in the same order on every run.
      */
     this.ready = new Promise((resolve) => (this.joined = resolve));
     this.stopped = false;

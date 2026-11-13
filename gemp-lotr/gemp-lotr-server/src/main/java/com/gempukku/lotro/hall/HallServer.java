@@ -400,6 +400,11 @@ public class HallServer extends AbstractServer {
         LotroFormat format = _formatLibrary.getHallFormats().get(type);
         GameTimer gameTimer = GameTimer.ResolveTimer(timer);
 
+        // Seeded test servers (GameRandom) also play the formats the hall doesn't offer, such as Debug, whose small
+        // decks let a test start with exactly the cards it needs
+        if (format == null && GameSeed.isSeeded())
+            format = _formatLibrary.getFormat(type);
+
         if (format == null) {
             // Maybe it's a league format?
             league = _leagueService.getLeagueByType(type);

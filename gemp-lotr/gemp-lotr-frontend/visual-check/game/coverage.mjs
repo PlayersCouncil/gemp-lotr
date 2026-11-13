@@ -75,6 +75,7 @@ export const NOT_EXPECTED = {
   'zone VOID': 'never sent to a page: no player sees the void',
   'zone VOID_FROM_HAND': 'never sent to a page: no player sees the void',
   'event CM': 'declared in GameEvent.Type but never created by the server',
+  'event ATS': 'GameCommunicationChannel can send it, but no game code calls addToSkirmish on its listeners',
 };
 
 function javaEnum(file, pattern) {
