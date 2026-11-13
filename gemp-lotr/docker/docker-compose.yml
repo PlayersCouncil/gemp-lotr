@@ -52,7 +52,8 @@ services:
   # `git pull`), so the app container serves the new version without a restart. See frontend-watch.sh.
   frontend:
     container_name: gemp_frontend_${SERVID}
-    image: node:24-alpine
+    # The same Node as Maven's build: keep in step with node.version in gemp-lotr-frontend/pom.xml
+    image: node:24.22.2-alpine
     restart: always
     working_dir: /src/gemp-lotr-frontend
     volumes:

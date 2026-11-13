@@ -34,7 +34,8 @@ services:
       /etc/gemp-lotr/gemp-lotr-async/target/web.jar
 
   frontend:
-    image: node:24-alpine
+    # As docker/docker-compose.yml: the same Node as node.version in gemp-lotr-frontend/pom.xml
+    image: node:24.22.2-alpine
     working_dir: /src/gemp-lotr-frontend
     volumes:
       - ${CHECK_CHECKOUT}/gemp-lotr:/src
