@@ -1,0 +1,80 @@
+/*
+ * The page itself, before any component: the document, links and scrollbars. The legacy stylesheets this and the
+ * components replace: css/gemp-001/{hall,deckBuild,cardFilter}.css and css/dark-hive/jquery-ui-1.8.16.custom.css (the
+ * jQuery UI widgets' font is 1.1em of the page's 12px: 13.2px).
+ */
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--theme-page-bg);
+  font-size: 12px;
+}
+
+/* A theme's page font. Classic sets none: the browser's default, as on the legacy page (an unset value is ignored) */
+body {
+  font-family: var(--theme-font-page);
+}
+
+a:visited {
+  color: var(--theme-link-visited);
+}
+
+/* Scrollbars (hall.css). Firefox, and Chrome where the standard properties apply (they win over the -webkit- ones) */
+div {
+  scrollbar-color: var(--theme-scrollbar-track) var(--theme-scrollbar-button);
+  scrollbar-width: auto;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--theme-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--theme-scrollbar-thumb);
+}
+
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner,
+::-webkit-resizer {
+  background-color: var(--theme-scrollbar-button);
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+  display: block;
+}
+
+::-webkit-scrollbar-button:vertical:start:increment,
+::-webkit-scrollbar-button:vertical:end:decrement {
+  display: none;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment {
+  background-image: var(--theme-scroll-down);
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement {
+  background-image: var(--theme-scroll-up);
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background-image: var(--theme-scroll-right);
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background-image: var(--theme-scroll-left);
+}

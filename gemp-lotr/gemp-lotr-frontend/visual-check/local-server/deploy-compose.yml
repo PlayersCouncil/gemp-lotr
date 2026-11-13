@@ -1,0 +1,46 @@
+# The deploy test (../deploy-test.mjs): the same services as docker/docker-compose.yml (the Java server reading the web
+# folder from disk, and the `frontend` container watching the checkout), on a throwaway copy of the repository.
+name: gemp-visual-check-deploy
+
+services:
+  db:
+    image: mariadb:10.5
+    env_file:
+      - ../../../docker/.env
+    tmpfs:
+      - /var/lib/mysql
+    volumes:
+      - ../../../database_script.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ${CHECK_STATE_DIR}/init.sql:/docker-entrypoint-initdb.d/02-players.sql:ro
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 2s
+      timeout: 5s
+      retries: 60
+
+  app:
+    image: gemp_app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:${CHECK_PORT}:80'
+    volumes:
+      - ${CHECK_WEB_JAR:-../../../gemp-lotr-async/target/web.jar}:/etc/gemp-lotr/gemp-lotr-async/target/web.jar:ro
+      - ../../../gemp-lotr-cards/src/main/resources:/etc/gemp-lotr/gemp-lotr-cards/src/main/resources:ro
+      - ${CHECK_CHECKOUT}/gemp-lotr/gemp-lotr-async/src/main/web:/etc/gemp-lotr/web
+    command: >-
+      java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+      /etc/gemp-lotr/gemp-lotr-async/target/web.jar
+
+  frontend:
+    # As docker/docker-compose.yml: the same Node as node.version in gemp-lotr-frontend/pom.xml
+    image: node:24.22.2-alpine
+    working_dir: /src/gemp-lotr-frontend
+    volumes:
+      - ${CHECK_CHECKOUT}/gemp-lotr:/src
+      - frontend_node_modules:/src/gemp-lotr-frontend/node_modules
+    command: sh /src/docker/frontend-watch.sh
+
+volumes:
+  frontend_node_modules:

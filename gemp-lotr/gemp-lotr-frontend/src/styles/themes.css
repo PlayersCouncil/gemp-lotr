@@ -1,0 +1,174 @@
+/*
+ * The themes: values only (colours, fonts, backgrounds, borders, radii, images). The components draw everything with
+ * these; ThemeService sets `data-theme` on <html>. Sizes and layout belong to the components, the same in every theme.
+ *
+ * classic: the legacy deck builder's look (deckBuild.html with the jQuery UI 1.8.16 "dark-hive" theme). Its images are
+ * in public/themes/classic/ (served next to the app, so referenced by their absolute address): the dark-hive images
+ * (MIT licensed, like the legacy copy in css/dark-hive) and hall.css's scroll buttons.
+ */
+:root {
+  /* Generic names, as the legacy page used the browser's defaults: each browser picks its own (Chromium Times New Roman
+   * and Arial, Firefox its serif and sans-serif); jQuery UI named Verdana for its widgets */
+  --theme-font-text: serif;
+  --theme-font-widget: Verdana, Arial, sans-serif;
+  --theme-font-control: sans-serif;
+
+  --theme-page-bg: #000;
+  --theme-text: #fff;
+  --theme-pane-border: #bbb;
+  --theme-separator: #ddd;
+  --theme-separator-toggle: #aaa;
+
+  /* jQuery UI widgets: buttons, dialogs, the slider, the boxes cards are drawn in */
+  --theme-widget-text: #eee;
+  --theme-widget-border: #444;
+  --theme-hover-border: #0b93d5;
+  --theme-active-border: #26b3f7;
+  --theme-content-border: #555;
+  --theme-header-border: #333;
+  --theme-content-bg: #000 url('/gemp-lotr/ng/themes/classic/ui-bg_loop_25_000000_21x21.png') 50% 50% repeat;
+  --theme-default-bg: #222 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_35_222222_1x100.png') 50% 50% repeat-x;
+  --theme-hover-bg: #003147 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_33_003147_1x100.png') 50% 50%
+    repeat-x;
+  --theme-active-bg: #0972a5 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-hard_20_0972a5_1x100.png') 50% 50%
+    repeat-x;
+  --theme-header-bg: #444 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50% repeat-x;
+  --theme-backdrop: rgb(92 92 92 / 0.8);
+  --theme-radius: 6px;
+  --theme-radius-box: 7px;
+
+  /* The icon sprite (jQuery UI's 256 x 240 grid of 16px icons) in three colours */
+  --theme-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png');
+  --theme-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+  --theme-icons-active: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
+
+  /* The slider handle's keyboard focus ring, which Chrome drew around the legacy handle: dark, then light */
+  --theme-focus-ring-inner: #101010;
+  --theme-focus-ring-outer: #fff;
+  /* The filled part of a slider */
+  --theme-slider-fill: #757575;
+
+  /* Selects and text fields (hall.css) */
+  --theme-field-bg: #222;
+  --theme-field-hover-bg: #444;
+  --theme-field-border-light: #888;
+  --theme-field-border-dark: #666;
+  --theme-field-disabled-text: #ddd;
+  --theme-field-disabled-bg: #888;
+  --theme-field-radius: 8px;
+
+  /*
+   * Font metrics: the sizes the legacy page's fonts gave some boxes. Classic leaves them to its fonts (auto, normal),
+   * as the legacy page did; a theme with other fonts pins them, so its font moves nothing on a computer
+   */
+  --theme-metrics-filter-label-1: auto;
+  --theme-metrics-filter-label-2: auto;
+  --theme-metrics-filter-label-size: 80%;
+  --theme-metrics-filter-label-gap: 6px;
+  --theme-metrics-filter-label-line: normal;
+  --theme-metrics-filter-title-line: normal;
+  --theme-metrics-stats-line: normal;
+  --theme-metrics-widget-line: normal;
+  --theme-metrics-hint-line: normal;
+  --theme-metrics-deck-name-size: 1em;
+
+  /* The theme button: bright red in every theme, so players notice it (owner, 2026-11-11) */
+  --theme-attention-bg: #e0161e;
+  --theme-attention-hover-bg: #b80f16;
+  --theme-attention-border: #ff5a5f;
+  --theme-attention-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+
+  --theme-link-visited: #bf6b04;
+  --theme-modified: orange;
+  --theme-error: red;
+  --theme-valid: green;
+  --theme-warning: yellow;
+  /*
+   * Black SVGs drawn white (the legacy trick). The other icons are white already; a theme may set
+   * --theme-other-icon-filter for them (classic sets none: an unset value is ignored)
+   */
+  --theme-culture-icon-filter: invert(89%) sepia(64%) saturate(0%) hue-rotate(145deg) brightness(116%) contrast(101%);
+
+  /* Scrollbars (hall.css) */
+  --theme-scrollbar-thumb: #8888;
+  --theme-scrollbar-track: #6666;
+  --theme-scrollbar-button: #222a;
+  --theme-scroll-up: url('/gemp-lotr/ng/themes/classic/scroll-button-up.png');
+  --theme-scroll-down: url('/gemp-lotr/ng/themes/classic/scroll-button-down.png');
+  --theme-scroll-left: url('/gemp-lotr/ng/themes/classic/scroll-button-left.png');
+  --theme-scroll-right: url('/gemp-lotr/ng/themes/classic/scroll-button-right.png');
+}
+
+/* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11) */
+:root[data-theme='modern'] {
+  color-scheme: dark;
+  --theme-font-text: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --theme-font-page: var(--theme-font-text);
+  --theme-font-widget: var(--theme-font-text);
+  --theme-font-control: var(--theme-font-text);
+
+  /* The legacy page's sizes in Chromium (its filter's label columns, its lines), which this font would change */
+  --theme-metrics-filter-label-1: 91.39px;
+  --theme-metrics-filter-label-2: 62.16px;
+  --theme-metrics-filter-label-size: 74%;
+  --theme-metrics-filter-label-gap: 1px;
+  --theme-metrics-filter-label-line: 11px;
+  --theme-metrics-filter-title-line: 12px;
+  --theme-metrics-stats-line: 15px;
+  --theme-metrics-widget-line: 15px;
+  --theme-metrics-hint-line: 1.15;
+  /* The deck's name: this font is about 12% wider than the legacy Times New Roman, so a long name took more room */
+  --theme-metrics-deck-name-size: 0.89em;
+
+  --theme-page-bg: #202124;
+  --theme-text: #e7e9ee;
+  --theme-pane-border: #3c3e44;
+  --theme-separator: #4b4e55;
+  --theme-separator-toggle: #7c7f87;
+
+  --theme-widget-text: #e7e9ee;
+  --theme-widget-border: #4b4e55;
+  --theme-hover-border: #6e8bff;
+  --theme-active-border: #869dff;
+  --theme-content-border: #3c3e44;
+  --theme-header-border: #3c3e44;
+  --theme-content-bg: #28292d;
+  --theme-default-bg: #303236;
+  --theme-hover-bg: #3a3c41;
+  --theme-active-bg: rgb(110 139 255 / 0.16);
+  --theme-header-bg: #303236;
+  --theme-backdrop: rgb(12 12 14 / 0.6);
+  --theme-radius: 6px;
+  --theme-radius-box: 10px;
+
+  --theme-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png');
+  --theme-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+  --theme-icons-active: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+
+  --theme-focus-ring-inner: #202124;
+  --theme-focus-ring-outer: #8fa6ff;
+  --theme-slider-fill: #6e8bff;
+
+  --theme-field-bg: #1a1b1e;
+  --theme-field-hover-bg: #3a3c41;
+  --theme-field-border-light: #4b4e55;
+  --theme-field-border-dark: #4b4e55;
+  --theme-field-disabled-text: #7c7f87;
+  --theme-field-disabled-bg: #3a3c41;
+  --theme-field-radius: 6px;
+
+  --theme-link-visited: #869dff;
+  --theme-modified: #f5a524;
+  --theme-error: #ff6b6b;
+  --theme-valid: #3ecf8e;
+  --theme-warning: #f2c14e;
+  --theme-culture-icon-filter: invert(1) brightness(0.95);
+
+  --theme-scrollbar-thumb: #4b4e55;
+  --theme-scrollbar-track: #28292d;
+  --theme-scrollbar-button: #28292d;
+  --theme-scroll-up: none;
+  --theme-scroll-down: none;
+  --theme-scroll-left: none;
+  --theme-scroll-right: none;
+}

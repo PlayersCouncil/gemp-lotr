@@ -12,6 +12,11 @@
             <directory>${basedir}/src/main/web/</directory>
             <outputDirectory></outputDirectory>
             <filtered>false</filtered>
+            <excludes>
+                <!-- docker/frontend-watch.sh's staging folder and its list of the previous build's files -->
+                <exclude>.ng-build/**</exclude>
+                <exclude>.ng-previous-files</exclude>
+            </excludes>
         </fileSet>
     </fileSets>
 </assembly>

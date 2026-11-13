@@ -48,6 +48,24 @@ services:
     command: nohup java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector /etc/gemp-lotr/gemp-lotr-async/target/web.jar &> /logs/nohup.out &
 
 
+  # Rebuilds the Angular frontend into gemp-lotr-async/src/main/web/ng/ whenever its sources change (e.g. after a
+  # `git pull`), so the app container serves the new version without a restart. See frontend-watch.sh.
+  frontend:
+    container_name: gemp_frontend_${SERVID}
+    # The same Node as Maven's build: keep in step with node.version in gemp-lotr-frontend/pom.xml
+    image: node:24.22.2-alpine
+    restart: always
+    working_dir: /src/gemp-lotr-frontend
+    volumes:
+       - type: bind
+         source: ..
+         target: /src
+         consistency: consistent
+        # Linux (musl) node_modules stay in a volume, apart from any node_modules a host build puts in the checkout
+       - frontend_node_modules:/src/gemp-lotr-frontend/node_modules
+    command: sh /src/docker/frontend-watch.sh
+
+
   db:
     env_file:
       - .env
@@ -71,6 +89,9 @@ services:
         ipv4_address: ${DB_IP}
       
   
+volumes:
+  frontend_node_modules:
+
 networks:
   gemp_net_1:
     ipam:
