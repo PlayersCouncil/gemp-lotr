@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { PAGE_QUERY_STRING } from './page-location';
+import { PAGE_PATH, PAGE_QUERY_STRING } from './page-location';
 import {
   resolveTheme,
   THEME_ATTRIBUTE,
   THEME_BEHAVIOUR,
+  PAGE_THEMES,
   THEME_COOKIE,
   defaultViewport,
   THEME_VIEWPORT,
@@ -165,5 +166,40 @@ describe('ThemeService', () => {
     vi.spyOn(document, 'cookie', 'set').mockImplementation(() => undefined);
     service('?theme=classic').init();
     expect(document.head.querySelector('meta[name="viewport"]')).toBeNull();
+  });
+
+  describe('a page with a theme choice of its own (the game)', () => {
+    function gameService(queryString = ''): ThemeService {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PAGE_QUERY_STRING, useValue: queryString },
+          { provide: PAGE_PATH, useValue: '/gemp-lotr/ng/game' },
+        ],
+      });
+      return TestBed.inject(ThemeService);
+    }
+
+    it('starts on its own default, whatever the deck builder remembers', () => {
+      fakeCookies({ [THEME_COOKIE]: 'modern' });
+      const theme = gameService();
+      theme.init();
+      expect(theme.theme()).toBe('classic');
+      expect(PAGE_THEMES['game']).toEqual({ cookie: 'gempGameTheme', fallback: 'classic' });
+    });
+
+    it('reads and remembers its choice in its own cookie', () => {
+      const { jar } = fakeCookies({ gempGameTheme: 'modern' });
+      const theme = gameService();
+      theme.init();
+      expect(theme.theme()).toBe('modern');
+      theme.select('classic');
+      expect(jar.get('gempGameTheme')).toBe('classic');
+      expect(jar.has(THEME_COOKIE)).toBe(false);
+    });
+
+    it('takes a fallback after the address and the cookie', () => {
+      expect(resolveTheme(null, null, 'classic')).toBe('classic');
+      expect(resolveTheme('modern', null, 'classic')).toBe('modern');
+    });
   });
 });

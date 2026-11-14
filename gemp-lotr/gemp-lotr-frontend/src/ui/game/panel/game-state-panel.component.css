@@ -1,0 +1,150 @@
+/* The game state panel (gameUi.js initializeGameUI, game.css) */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-text);
+}
+
+.gd-game-player {
+  position: relative;
+  z-index: 50;
+  color: var(--theme-text);
+}
+
+.gd-game-player[data-current] {
+  background-color: var(--theme-game-current-bg);
+  color: var(--theme-game-current-text);
+}
+
+/* With the other piles shown the player's line reaches over the table */
+.gd-game-player[data-open] {
+  width: calc(100% + 168px);
+}
+
+.gd-game-player__clock {
+  float: right;
+}
+
+/* The player's own clock: bold on a band that turns orange under 10 minutes and red under 5 */
+.gd-game-player__clock[data-own] {
+  padding: 0 6px;
+  border-radius: 4px;
+  background-color: var(--theme-game-clock-bg);
+  color: var(--theme-game-clock-text);
+  font-weight: bold;
+  transition: background-color 0.5s;
+}
+
+.gd-game-player__clock[data-band='warn'],
+.gd-game-state__decision-clock[data-band='warn'] {
+  background-color: var(--theme-game-clock-warn-bg);
+}
+
+.gd-game-player__clock[data-band='danger'],
+.gd-game-state__decision-clock[data-band='danger'] {
+  background-color: var(--theme-game-clock-danger-bg);
+}
+
+/*
+ * The counters are table cells, as on the legacy page: 42px wide each, they don't fit the panel's width with the "+"
+ * beside them, and the table gives each a little less (by its content)
+ */
+.gd-game-player__stats {
+  color: var(--theme-text);
+}
+
+.gd-game-counter,
+.gd-game-player__more {
+  display: table-cell;
+}
+
+.gd-game-counter {
+  width: 42px;
+  height: 42px;
+  font-size: 200%;
+  font-weight: bolder;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.gd-game-counter[data-counter='deck'] {
+  background-image: var(--theme-game-icon-deck);
+}
+
+.gd-game-counter[data-counter='hand'] {
+  background-image: var(--theme-game-icon-hand);
+}
+
+.gd-game-counter[data-revealed] {
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px var(--theme-game-link);
+}
+
+.gd-game-counter[data-counter='threats'] {
+  background-image: var(--theme-game-icon-threats);
+}
+
+.gd-game-counter[data-counter='discard'] {
+  background-image: var(--theme-game-icon-discard);
+}
+
+.gd-game-counter[data-counter='dead'] {
+  background-image: var(--theme-game-icon-dead);
+}
+
+.gd-game-counter[data-counter='adventure-deck'] {
+  background-image: var(--theme-game-icon-adventure-deck);
+}
+
+.gd-game-counter[data-counter='removed'] {
+  background-image: var(--theme-game-icon-removed);
+}
+
+.gd-game-counter[data-clickable] {
+  color: var(--theme-game-link);
+  cursor: pointer;
+}
+
+/* The "+" button: a jQuery UI button with slim text */
+.gd-game-player__toggle {
+  box-sizing: content-box;
+  margin: 0 0.1em 0 0;
+  padding: 0.2em 0.3em;
+  font-size: 13.2px;
+  line-height: normal;
+}
+
+.gd-game-player__toggle > span {
+  display: block;
+  padding: 0.2em 0.5em;
+  font-size: 70%;
+  line-height: 1.4;
+}
+
+.gd-game-state__twilight {
+  float: right;
+  width: 40px;
+  padding: 2px;
+  border: 1px solid var(--theme-game-twilight-border);
+  border-radius: 7px;
+  background-color: var(--theme-game-twilight-bg);
+  color: var(--theme-game-twilight-text);
+  font-size: 30px;
+  text-align: right;
+}
+
+.gd-game-state__phase {
+  font-size: 120%;
+}
+
+.gd-game-state__decision-clock {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 150%;
+}

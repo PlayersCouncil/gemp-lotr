@@ -228,4 +228,46 @@ describe('applyEvent', () => {
       expect({ ...after, eventCount: 0 }).toEqual({ ...before, eventCount: 0 });
     }
   });
+
+  it('keeps the numbers of a character the server leaves out, until the card leaves play', () => {
+    let model = play(put('1'), put('2'), {
+      type: 'GS',
+      stats: stats({ charStats: { '1': ['7', '3'], '2': ['5', '2'] } }),
+    });
+    model = applyEvent(model, { type: 'GS', stats: stats({ charStats: { '2': ['6', '2'] } }) });
+    expect(model.stats?.charStats).toEqual({ '1': ['7', '3'], '2': ['6', '2'] });
+    model = applyEvent(model, { type: 'RCFP', cardIds: ['1'], participantId: 'alice' });
+    expect(model.stats?.charStats).toEqual({ '2': ['6', '2'] });
+  });
+
+  it('remembers the last Rule of 4 count sent while the rule applied', () => {
+    let model = play({ type: 'GS', stats: stats({ ruleOf4: '-1' }) });
+    expect(model.lastRuleOf4).toBeNull();
+    model = applyEvent(model, { type: 'GS', stats: stats({ ruleOf4: '2' }) });
+    model = applyEvent(model, { type: 'GS', stats: stats({ ruleOf4: '-1' }) });
+    model = applyEvent(model, { type: 'GS', stats: stats({ ruleOf4: null }) });
+    expect(model.lastRuleOf4).toBe('2');
+  });
+
+  it('notes when a card was attached: again when it is moved', () => {
+    const model = play(put('1'), put('2', { targetCardId: '1', targetType: 'attached' }), {
+      type: 'MCIP',
+      ...card('2', { targetCardId: '1', targetType: 'stacked' }),
+    });
+    expect(model.cards['2']).toMatchObject({ attachedAt: 2, stackedOn: '1', attachedTo: null });
+    expect(model.cards['1']?.attachedAt).toBe(0);
+  });
+
+  it('keeps the players of the pre-game information', () => {
+    const model = play({
+      type: 'PGS',
+      participantId: 'bob',
+      allParticipantIds: ['alice', 'bob'],
+      summary: 's',
+      notes: '',
+      maps: '',
+      metaSites: '',
+    });
+    expect(model.preGame).toMatchObject({ participantId: 'bob', players: ['alice', 'bob'] });
+  });
 });

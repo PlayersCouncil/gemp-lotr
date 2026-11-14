@@ -13,7 +13,8 @@ The first page being ported is the **deck builder**. The hall's Deck-builder but
 ## One app, one page per route
 
 The frontend is one Angular app, served under `/gemp-lotr/ng/`; each ported page is a lazy route of it,
-`/gemp-lotr/ng/<page>/` (for now only `deckbuilder`; `/gemp-lotr/ng/` and unknown paths go to it).
+`/gemp-lotr/ng/<page>/`: `deckbuilder` (`/gemp-lotr/ng/` and unknown paths go to it) and `game` (the game table,
+being ported: see "The game page" below; nothing links to it yet, `game.html` is still what the hall opens).
 
 - `src/main.ts` starts `AppComponent` (`src/ui/app/`, element `<gemp-app>`: just the `<router-outlet>`, with
   `display: contents`, so a page lays itself out as a child of `body`) with `ui/app/app.config.ts`: the providers every
@@ -246,6 +247,33 @@ The rules:
 | Selection, delivery (not modal)  | `.gd-shown-cards` (fitCards box, `data-count`) with a `button.gd-card` per card: selection choices (`data-role=card`; using one picks it), delivered packs and cards (`pack`, `card`, with counts). A "New items" dialog stays on the page, closed, once shown, keeping its size.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | Notifier (`gd-notifier`)         | `p.gd-notifier__message` (line breaks kept), `input.gd-notifier__input` (prompt; focused, selected; Enter is OK), `.gd-dialog__actions` with `button.gd-button[data-action=ok]` and, for confirm and prompt, `[data-action=cancel]`. Escape and the close button are Cancel. One at a time, in the order asked.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `div.gd-zoom`                    | The hover zoom: `aria-hidden`, `hidden` when nothing is zoomed; `--gd-zoom-left`/`-top`/`-width`/`-height` (px; placed and sized as the legacy AutoZoom did), `data-orientation`, `data-flipped` (back; Shift), `data-foil`; `img.gd-zoom__image`, `__overlay`, `__foil`. Shown after the mouse rests 500ms on a card (at once within 500ms of the last zoom); hidden by a press, when the toolbar's magnifier is off (`AutoZoomSetting`, legacy cookie) or the card information is open.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+
+## The game page
+
+`/gemp-lotr/ng/game?gameId=<id>` is the Angular port of `game.html`, built phase by phase
+(trymarz/gemp-lotr-private#27). So far it **shows** a game: the table follows the game and looks like the legacy page,
+but it can't be played on yet (the decisions come with the next phase), so nothing links to it.
+
+- **Core** (`src/core/game/`, see Code layout): the game's state from the server's events. `table/game-table.ts` sorts
+  the cards into the table's boxes (the legacy card groups' rules: rows by zone and side, what is attached to and
+  stacked on each card, the assignments, the skirmish), `table/pre-game.ts` reads the pre-game information,
+  `session/GameLog` keeps the chat box's lines (the room's chat and the game's messages, in the order they came) and
+  `session/GameViewState` what only the view holds (the open tab, the opened piles), kept with the game so a reload
+  shows the page as it was left.
+- **View** (`src/ui/game/`): `GamePageComponent` (element `<gemp-game>`) is the frame, a CSS grid with the legacy
+  page's proportions (`game-page.component.css` explains each number). `table/` draws the cards: `gd-game-cards` is a
+  row (the shared `fitCards` with the `rows` fit, cards on whole pixels of the page), `gd-game-path` the adventure
+  path, `gd-game-card-layers` what a game draws on a card (tokens, strength, vitality, site number or resistance;
+  sizes are shares of the card, in CSS). `panel/` holds the game state panel, the stats bar and the alert box, `tabs/`
+  the tab box (chat, settings, options, players), `pregame/` the panel shown until the players are known, `dialogs/`
+  the end-of-game feedback dialog.
+- **Theme.** The game page has its own choice (`gempGameTheme` cookie, `PAGE_THEMES` in `theme.service.ts`) and starts
+  on `classic`; its colours are the `--theme-game-*` values of `themes.css`. The modern look comes later.
+- **Legacy quirks kept in classic**, so the page matches `game.html`: until the players are known the timer switch is
+  a plain button that does nothing; a spectator still has the Options tab; the Rule of 4 line keeps its last count
+  while hidden; a character the server's stats leave out keeps the numbers it last had.
+- **Checked** by `npm run check:game:table` in `visual-check/` (see `visual-check/game/README.md`): every state of the
+  recorded games on both pages, pixel by pixel.
 
 ## Tests and the visual check
 

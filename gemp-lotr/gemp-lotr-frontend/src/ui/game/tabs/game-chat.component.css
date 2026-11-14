@@ -1,0 +1,122 @@
+/*
+ * The chat box of the game page (chat.js setBounds, game.css). The legacy page placed its parts from the tab box's
+ * edge: the lines 4px in and 4px under the strip of tabs (whose height it took in whole pixels: --gd-game-strip), the
+ * field under them, 25px high with 3px around it, which makes it reach 3px out of the box.
+ *
+ * Not scoped (the server's messages hold markup of their own): every rule starts at gd-game-chat.
+ */
+
+gd-game-chat {
+  font-size: 90%;
+}
+
+gd-game-chat .gd-game-chat__lines {
+  position: absolute;
+  left: 4px;
+  top: calc(4px + var(--gd-game-strip));
+  bottom: 31px;
+  width: 294px;
+  overflow: auto;
+}
+
+gd-game-chat .gd-game-chat__talk {
+  position: absolute;
+  box-sizing: content-box;
+  left: 7px;
+  bottom: -3px;
+  width: 285px;
+  height: 25px;
+}
+
+gd-game-chat .gd-game-chat__line {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='chat'] {
+  color: var(--theme-game-chat-text);
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='system'] {
+  color: var(--theme-game-chat-system-text);
+  font-size: 80%;
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='message'] {
+  padding-top: 2px;
+  font-size: 80%;
+}
+
+/* A game message's text runs on, with the card names in it */
+gd-game-chat .gd-game-chat__line[data-kind='message'] div {
+  display: inline;
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='warning'] {
+  color: var(--theme-error);
+}
+
+gd-game-chat .gd-game-chat__line[data-mention='mention'] {
+  background-color: var(--theme-game-chat-mention-bg);
+}
+
+gd-game-chat .gd-game-chat__line[data-mention='ping'] {
+  background-color: var(--theme-game-chat-ping-bg);
+}
+
+gd-game-chat .gd-game-chat__who {
+  display: flex;
+  gap: 4px;
+  min-width: fit-content;
+  margin: 1px;
+}
+
+gd-game-chat .gd-game-chat__text {
+  flex-grow: 10;
+}
+
+/* A card's name in a message: pressing it shows the card */
+gd-game-chat .cardHint {
+  display: inline;
+  color: var(--theme-game-card-hint);
+  cursor: pointer;
+}
+
+/* Links in the server's messages (game.css .ui-widget-content a) */
+gd-game-chat a,
+gd-game-chat a:link {
+  color: var(--theme-game-text-link);
+}
+
+gd-game-chat a:visited {
+  color: var(--theme-game-text-link-visited);
+}
+
+/* What players write (Markdown the server turned into HTML) */
+gd-game-chat .gd-game-chat__text p {
+  margin: 0 0 7px 5px;
+}
+
+gd-game-chat .gd-game-chat__text p a {
+  color: var(--theme-modified);
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='chat'] :is(h1, h2, h3, h4, h5, h6) {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='chat'] p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+gd-game-chat .gd-game-chat__line[data-kind='chat'] blockquote {
+  display: inline-block;
+  margin: 0 0 5px 5px;
+  border-left: 5px solid var(--theme-game-chat-quote);
+  font-style: italic;
+}

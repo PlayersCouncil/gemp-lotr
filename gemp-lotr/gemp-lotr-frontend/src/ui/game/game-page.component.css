@@ -1,0 +1,263 @@
+/*
+ * The game page's frame (gameUi.js layoutUI). The legacy page computed every box from the window; here the same
+ * sizes are a grid:
+ * - columns: the adventure path (150px in a 1px border), the game state (145px), the table (the rest), 3px apart
+ *   (the legacy 5px between boxes, less their borders);
+ * - the table's rows share the height in the legacy proportions (--u is one share);
+ * - the tab box is as high as the hand's row (at least 175px; a spectator has no hand: 200px).
+ */
+
+:host {
+  --u: calc((100vh - 35px) / 49);
+  --tabs: max(175px, 10 * var(--u));
+  /* The rows' shares of the height */
+  --r1: 5;
+  --r2: 9;
+  --r3: 9;
+  --r4: 10;
+  --r5: 6;
+  --r6: 10;
+  /* Not fixed: that would draw the page's dialogs on a layer of their own, without subpixel text */
+  position: absolute;
+  inset: 0;
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: 152px 147px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 36px calc(var(--tabs) + 2px);
+  grid-template-areas:
+    'path state table'
+    'stats state table'
+    'tabs tabs table';
+  gap: 3px;
+  padding: 5px 3px 3px 5px;
+  overflow: hidden;
+  background: var(--theme-page-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-text);
+  font-size: 12px;
+}
+
+:host([data-spectator]) {
+  --u: calc((100vh - 30px) / 42);
+  --tabs: 200px;
+  --r1: 6;
+  --r2: 10;
+  --r3: 10;
+  --r4: 10;
+  --r5: 6;
+}
+
+.gd-game__path,
+.gd-game__row,
+.gd-game__fight {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  background: var(--theme-content-bg);
+}
+
+/* Before the game: in the page's corner, as on the legacy page, over the grid */
+.gd-game__pregame {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.gd-game__path {
+  grid-area: path;
+}
+
+/* CardGroup.setBounds: the cards 3px in from the box's place, which is its border's outer edge */
+.gd-game__path > gd-game-path,
+.gd-game__row > gd-game-cards {
+  position: absolute;
+  inset: 2px 4px 4px 2px;
+}
+
+/*
+ * The boxes whose place depends on the tab box's height are put where the legacy page computed them, each from the
+ * window's height in one step: the grid's tracks add up to the same places, but each sum can end a 64th of a pixel
+ * off, which moves a line of text by a whole pixel now and then. They are placed from the page's corner (an absolutely
+ * placed box with a grid area would be placed from that area); the grid still keeps their room.
+ */
+.gd-game__stats {
+  position: absolute;
+  left: 5px;
+  top: calc(100vh - 44px - var(--tabs));
+  width: 152px;
+  height: 36px;
+}
+
+/* The state panel over the alert box (180px in its border) */
+.gd-game__state {
+  position: absolute;
+  left: 160px;
+  top: 5px;
+  width: 147px;
+  height: calc(100vh - 198px - var(--tabs));
+}
+
+.gd-game__alert {
+  position: absolute;
+  left: 160px;
+  top: calc(100vh - 190px - var(--tabs));
+  width: 147px;
+  height: 182px;
+}
+
+.gd-game__tabs {
+  position: absolute;
+  left: 5px;
+  top: calc(100vh - 5px - var(--tabs));
+  width: 302px;
+  height: calc(var(--tabs) - 5px);
+}
+
+/*
+ * The table: a row per kind of card. The characters and minions fighting lie in boxes right of the minions' row: the
+ * rows beside them keep 2 shares of the width and each box gets 1. The boxes are as high as the minions' row and the
+ * row of the characters whose player's turn it isn't; the other characters' row keeps the full width.
+ */
+.gd-game__table {
+  grid-area: table;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  /* A hair more than the exact share: the browser's arithmetic otherwise lands a 64th of a pixel under a whole one */
+  grid-template-columns: calc((100% - 2px) * 2 / (2 + var(--gd-game-fights, 0)) + 2.005px);
+  grid-auto-columns: minmax(0, 1fr);
+  grid-template-rows:
+    calc(var(--r1) * var(--u) + 2px) calc(var(--r2) * var(--u) + 2px) calc(var(--r3) * var(--u) + 2px)
+    calc(var(--r4) * var(--u) + 2px) calc(var(--r5) * var(--u) + 2px) calc(var(--r6) * var(--u) + 2px);
+  gap: 3px;
+}
+
+:host([data-spectator]) .gd-game__table {
+  grid-template-rows:
+    calc(var(--r1) * var(--u) + 2px) calc(var(--r2) * var(--u) + 2px) calc(var(--r3) * var(--u) + 2px)
+    calc(var(--r4) * var(--u) + 2px) calc(var(--r5) * var(--u) + 2px);
+}
+
+.gd-game__row {
+  grid-column: 1 / -1;
+}
+
+.gd-game__row[data-row='support-opponent'] {
+  grid-row: 1;
+  grid-column: 1 / span calc(1 + var(--gd-game-fights, 0));
+}
+
+.gd-game__row[data-row='characters-opponent'] {
+  grid-row: 2;
+}
+
+.gd-game__row[data-row='shadow'] {
+  grid-row: 3;
+  grid-column: 1;
+}
+
+.gd-game__row[data-row='characters-player'] {
+  grid-row: 4;
+}
+
+.gd-game__row[data-row='support-player'] {
+  grid-row: 5;
+}
+
+.gd-game__row[data-row='hand'] {
+  grid-row: 6;
+}
+
+.gd-game__row[data-row='support-player'],
+.gd-game__row[data-row='hand'],
+:host([data-turn='bottom']) .gd-game__row[data-row='characters-opponent'],
+:host([data-turn='top']) .gd-game__row[data-row='characters-player'] {
+  grid-column: 1 / span calc(1 + var(--gd-game-fights, 0));
+}
+
+:host([data-turn='bottom']) .gd-game__row[data-row='characters-player'],
+:host([data-turn='top']) .gd-game__row[data-row='characters-opponent'] {
+  grid-column: 1;
+}
+
+/*
+ * A box of a fight: the two sides one over the other, each 6px in from the box's place and its row's 6px smaller
+ * than the table's row beside it (two nested legacy groups). On the bottom player's turn the minions are on top.
+ */
+.gd-game__fight {
+  --top: var(--r2);
+  --bottom: var(--r3);
+  grid-row: 2 / span 2;
+  display: grid;
+  grid-template-rows: calc(var(--top) * var(--u) - 12px) calc(var(--bottom) * var(--u) - 12px);
+  row-gap: 17px;
+  padding: 5px 7px 7px 5px;
+}
+
+:host([data-turn='bottom']) .gd-game__fight {
+  --top: var(--r3);
+  --bottom: var(--r4);
+  grid-row: 3 / span 2;
+}
+
+.gd-game__fight[data-fight='skirmish'] {
+  border-color: var(--theme-game-fight-border);
+}
+
+:host([data-turn='bottom']) .gd-game__side[data-side='shadow'],
+:host([data-turn='top']) .gd-game__side[data-side='free-peoples'] {
+  grid-row: 1;
+}
+
+:host([data-turn='bottom']) .gd-game__side[data-side='free-peoples'],
+:host([data-turn='top']) .gd-game__side[data-side='shadow'] {
+  grid-row: 2;
+}
+
+/* The skirmish's totals: strength in the corner of its side, the damage bonus left of it */
+.gd-game__strength,
+.gd-game__damage {
+  position: absolute;
+  z-index: 50;
+  border-radius: 6px;
+  color: var(--theme-game-strength-text);
+  text-align: center;
+  opacity: 0.7;
+}
+
+.gd-game__strength {
+  right: 2px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--theme-game-strength-bg);
+  font-size: 300%;
+}
+
+.gd-game__strength[data-overwhelmed] {
+  background-color: var(--theme-game-strength-overwhelmed-bg);
+}
+
+.gd-game__damage {
+  right: 42px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--theme-game-damage-bg);
+  font-size: 180%;
+}
+
+.gd-game__damage[data-none] {
+  visibility: hidden;
+}
+
+:host([data-turn='bottom']) [data-side='shadow']:is(.gd-game__strength, .gd-game__damage),
+:host([data-turn='top']) [data-side='free-peoples']:is(.gd-game__strength, .gd-game__damage) {
+  top: 2px;
+}
+
+:host([data-turn='bottom']) [data-side='free-peoples']:is(.gd-game__strength, .gd-game__damage),
+:host([data-turn='top']) [data-side='shadow']:is(.gd-game__strength, .gd-game__damage) {
+  bottom: 2px;
+}

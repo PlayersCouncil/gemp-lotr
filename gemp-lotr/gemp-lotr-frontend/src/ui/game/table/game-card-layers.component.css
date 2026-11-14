@@ -1,0 +1,91 @@
+/*
+ * The layers a game draws over a card (legacy layoutTokens and the size listener of ensureCardHasBoxes): every size
+ * and place is a share of the card's sides, the longer one mostly (100cqmax).
+ */
+
+:host {
+  --long: 100cqmax;
+  position: absolute;
+  inset: 0;
+  display: block;
+  container-type: size;
+  pointer-events: none;
+  /* The card rounds its layers; these are drawn to its square corners, as the legacy token layer was */
+  border-radius: 0;
+}
+
+/* A token: two thirteenths of the longer side, one column per kind, each token a thirteenth below the one before */
+.gd-game-token {
+  --size: calc(round(down, var(--long) / 13, 1px) * 2);
+  position: absolute;
+  left: calc(
+    var(--gd-token-column) * 100cqw / (var(--gd-token-columns) + 1) - var(--size) / 2 + var(--gd-token-shift) *
+      round(down, var(--size) / 5, 1px)
+  );
+  top: round(down, calc(var(--long) / 13 * (1 + var(--gd-token-row))), 1px);
+  width: var(--size);
+  height: var(--size);
+}
+
+.gd-game-number,
+.gd-game-number__icon {
+  position: absolute;
+}
+
+/* The number: in a box 8.65% of the longer side, centred at 9% from the left */
+.gd-game-number {
+  --box: calc(var(--long) * 0.0865);
+  left: calc(var(--long) * 0.09 - var(--box) / 2);
+  width: var(--box);
+  height: var(--box);
+  /* (box * 5.5)% of the page's 12px */
+  font-size: calc(var(--long) * 0.05709);
+  font-weight: bolder;
+  text-align: center;
+  color: var(--theme-game-number-text);
+}
+
+/* A card that isn't active this turn: its tokens and icons are dimmed with its picture */
+:host-context([data-inactive]) img {
+  filter: var(--theme-game-inactive-filter);
+}
+
+:host-context([data-inactive]) .gd-game-number {
+  color: var(--theme-game-number-inactive-text);
+}
+
+.gd-game-number[data-number='strength'] {
+  top: calc(var(--long) * 0.688 - var(--box) / 2);
+}
+
+.gd-game-number[data-number='vitality'] {
+  top: calc(var(--long) * 0.8 - var(--box) / 2);
+}
+
+.gd-game-number[data-number='site'],
+.gd-game-number[data-number='resistance'] {
+  top: calc(var(--long) * 0.905 - var(--box) / 2);
+  border-radius: round(up, calc(var(--box) / 5), 1px);
+}
+
+.gd-game-number__icon[data-number='strength'] {
+  left: calc(var(--long) * 0.038);
+  top: calc(var(--long) * 0.60765);
+  width: 16.24cqw;
+  height: 16.5cqh;
+}
+
+.gd-game-number__icon[data-number='vitality'] {
+  left: 5.32cqw;
+  top: 74.65cqh;
+  width: 10.5cqh;
+  height: 10.5cqh;
+}
+
+.gd-game-number__icon[data-number='site'],
+.gd-game-number__icon[data-number='resistance'] {
+  left: 5.32cqw;
+  top: 84.5cqh;
+  width: 11.5cqh;
+  height: 11.5cqh;
+}

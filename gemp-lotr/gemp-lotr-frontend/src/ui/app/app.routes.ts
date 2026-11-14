@@ -13,6 +13,12 @@ export const APP_ROUTES: Routes = [
     canActivate: [loginRequired],
     loadComponent: () => import('../deckbuilder/deckbuilder-page.component').then((m) => m.DeckbuilderPageComponent),
   },
+  {
+    path: 'game',
+    title: 'Game of Gemp-LotR',
+    canActivate: [loginRequired],
+    loadComponent: () => import('../game/game-page.component').then((m) => m.GamePageComponent),
+  },
   { path: '', pathMatch: 'full', redirectTo: 'deckbuilder' },
   { path: '**', redirectTo: 'deckbuilder' },
 ];

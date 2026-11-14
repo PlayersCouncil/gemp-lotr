@@ -29,10 +29,13 @@ class FakeResizeObserver {
 
 @Component({
   imports: [FitCardsDirective],
-  template: `<div class="box" [gdFitCards]="cards()" [gdFitCardsScale]="scale()"></div>`,
+  template: `<div class="box" [gdFitCards]="cards()" [gdFitCardsScale]="scale()" [gdFitCardsOnPagePixels]="placed()">
+    <span></span><span></span>
+  </div>`,
 })
 class Host {
   readonly scale = signal(1);
+  readonly placed = signal<unknown>(null);
   readonly cards = signal<readonly FitCard[]>(Array.from({ length: 12 }, () => ({ horizontal: false })));
 }
 
@@ -128,5 +131,31 @@ describe('FitCardsDirective', () => {
     const { fixture, observer } = await render();
     fixture.destroy();
     expect(observer.disconnected).toBe(true);
+  });
+
+  it("puts the cards on the page's whole pixels when asked, measuring the box again when it may have moved", async () => {
+    properties['--gd-card-fit'] = 'rows';
+    const { fixture, box, observer } = await render();
+    let left = 10.25;
+    vi.spyOn(box, 'getBoundingClientRect').mockImplementation(() => ({ left, top: 20.5 }) as DOMRect);
+    observer.resize(372, 472);
+    await fixture.whenStable();
+    // Not asked: the cards stay where the box puts them
+    expect(box.style.getPropertyValue('--gd-card-snap-x')).toBe('');
+    expect((box.children[0] as HTMLElement).style.getPropertyValue('--gd-card-snap')).toBe('0px');
+
+    fixture.componentInstance.placed.set('a');
+    await fixture.whenStable();
+    expect(box.style.getPropertyValue('--gd-card-snap-x')).toBe('-0.25px');
+    expect((box.children[0] as HTMLElement).style.getPropertyValue('--gd-card-snap')).toBe('-0.5px');
+
+    left = 10.75;
+    fixture.componentInstance.placed.set('b');
+    await fixture.whenStable();
+    expect(box.style.getPropertyValue('--gd-card-snap-x')).toBe('-0.75px');
+
+    fixture.componentInstance.placed.set(null);
+    await fixture.whenStable();
+    expect(box.style.getPropertyValue('--gd-card-snap-x')).toBe('');
   });
 });

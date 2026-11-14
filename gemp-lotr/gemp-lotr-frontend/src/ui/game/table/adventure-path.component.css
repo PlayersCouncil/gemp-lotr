@@ -1,0 +1,26 @@
+/*
+ * AdvPathCardGroup: the sites at the column's full width, one under the other, 5px apart or squeezed together so the
+ * last one ends at the bottom. Each where the legacy group put it, rounded down to a whole pixel.
+ */
+
+:host {
+  --gd-card-height: 100cqw;
+  --site-h: round(down, calc(100cqw * 350 / 490), 1px);
+  --n: var(--gd-path-count, 1);
+  --gap: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / max(var(--n) - 1, 1)), 0.015625px);
+  display: block;
+  position: relative;
+  container-type: size;
+}
+
+.gd-card {
+  position: absolute;
+  left: 0;
+  top: round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px);
+}
+
+/* A card that isn't active this turn: dimmed, in a dark frame */
+.gd-card[data-inactive] {
+  --gd-card-image-filter: var(--theme-game-inactive-filter);
+  --gd-card-frame: var(--theme-game-inactive-border);
+}

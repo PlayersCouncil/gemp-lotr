@@ -42,6 +42,14 @@
   display: block;
 }
 
+/* A page may dim the picture and what is drawn on it (a game's cards that aren't active): --gd-card-image-filter */
+.gd-card__image,
+.gd-card__errata,
+.gd-card__foil,
+.gd-card__overlay {
+  filter: var(--gd-card-image-filter, none);
+}
+
 /* autozoom.css rounded every card layer by 5% */
 :host,
 :host > *,
@@ -69,7 +77,8 @@
   content: '';
   position: absolute;
   inset: 0;
-  border: 0 solid #000;
+  /* Black, unless the page gives the card another frame (a game's card that can be chosen): --gd-card-frame */
+  border: 0 solid var(--gd-card-frame, #000);
   /* landscape: the width is the longer side */
   border-width: round(down, calc(var(--gd-card-width) / 30), 1px);
   pointer-events: none;

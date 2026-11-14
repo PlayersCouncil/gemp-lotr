@@ -46,6 +46,37 @@ image server instead of placeholders), `--verbose` (every decision and answer of
 The report is `report-game/index.html`: each scenario with its steps, both screenshots of each and the differences in
 red, and what no scenario covers.
 
+## The table check
+
+`npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:
+both pages are served from disk (`../stub-server.mjs`: the legacy web root and the Angular build in it) and get a
+recorded game (see "Recordings") answer by answer, as its server sent it, up to one step; the decisions are left out,
+so no dialog is open and no card is offered, and each page asks for the next answer at once. Then the pages are
+compared: the screen (at most `--tolerance` pixels, default 60) and the game as shown (`controls.mjs`
+`readGameState`). Every step of every recording, at 1280x800, 1366x768 and 1920x1080.
+
+On the last state of two recordings (`WITH_VIEWS`: a player's and a spectator's) it also compares what the table
+doesn't show: each tab of the tab box and each player's other piles opened. Then it loads the Angular page again,
+which must show exactly what it showed before (the open tab and piles are the page's own, kept per game in the tab's
+session storage).
+
+```
+npm run check:game:table                                       everything (291 comparisons, about 6 minutes)
+npm run check:game:table -- --only opening --sizes 1366x768    one recording, one size
+npm run check:game:table -- --steps last                       only each recording's last state
+npm run check:game:table -- --only opening --step 3            one step
+```
+
+To look into a difference, `--boxes "<legacy selector> | <angular selector>"` prints the box of every match on each
+page, and `--eval "<expression>"` what an expression gives in each; with `--only`, `--sizes` and `--step`. The report
+is `report-game-table/index.html` (both screenshots and the differing pixels of each state that differs).
+
+It needs a build of the app in the legacy web root (`npx ng build --configuration development`, or the `frontend`
+Docker service's). The decisions, the dialogs and the gestures are compared by the game check above, which plays real
+games: from G3 on with `--pages legacy,angular`.
+
+Result on 2026-11-14: 291 of 291 the same.
+
 ## Coverage
 
 `coverage.mjs` lists what the scenarios must cover together: every kind of game event and decision the server sends

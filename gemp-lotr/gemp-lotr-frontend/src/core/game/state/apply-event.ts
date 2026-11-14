@@ -8,7 +8,7 @@ import { GameCard, GameModel, NO_CHOICES } from './game-model';
 
 type Cards = Record<string, GameCard>;
 
-function newCard(ref: CardRef): GameCard {
+function newCard(ref: CardRef, at: number): GameCard {
   return {
     id: ref.cardId,
     blueprintId: ref.blueprintId,
@@ -18,6 +18,7 @@ function newCard(ref: CardRef): GameCard {
     index: ref.zone === 'ADVENTURE_PATH' ? ref.index : null,
     attachedTo: ref.targetCardId !== null && ref.targetType !== 'stacked' ? ref.targetCardId : null,
     stackedOn: ref.targetCardId !== null && ref.targetType === 'stacked' ? ref.targetCardId : null,
+    attachedAt: at,
     tokens: {},
     inactive: false,
     assignedTo: null,
@@ -67,7 +68,14 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'PGS':
       return {
         ...next,
-        preGame: { summary: event.summary, notes: event.notes, maps: event.maps, metaSites: event.metaSites },
+        preGame: {
+          participantId: event.participantId,
+          players: event.allParticipantIds,
+          summary: event.summary,
+          notes: event.notes,
+          maps: event.maps,
+          metaSites: event.metaSites,
+        },
       };
     case 'GPC':
       return { ...next, phase: event.phase };
@@ -87,11 +95,11 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'PCIP':
       return {
         ...next,
-        cards: { ...model.cards, [event.cardId]: newCard(event) },
+        cards: { ...model.cards, [event.cardId]: newCard(event, model.eventCount) },
         cardOrder: model.cards[event.cardId] ? model.cardOrder : [...model.cardOrder, event.cardId],
       };
     case 'MCIP': {
-      const moved = newCard(event);
+      const moved = newCard(event, model.eventCount);
       return {
         ...next,
         cards: withCard(model.cards, event.cardId, (card) => ({
@@ -100,6 +108,7 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
           owner: moved.owner,
           attachedTo: moved.attachedTo,
           stackedOn: moved.stackedOn,
+          attachedAt: moved.attachedAt,
         })),
       };
     }
@@ -111,6 +120,12 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'RCFP':
       return {
         ...next,
+        stats: model.stats && {
+          ...model.stats,
+          charStats: Object.fromEntries(
+            Object.entries(model.stats.charStats).filter(([id]) => !event.cardIds.includes(id)),
+          ),
+        },
         cards: Object.fromEntries(Object.entries(model.cards).filter(([id]) => !event.cardIds.includes(id))),
         cardOrder: model.cardOrder.filter((id) => !event.cardIds.includes(id)),
       };
@@ -182,7 +197,10 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
       const zones = Object.entries(event.stats.playerZones);
       return {
         ...next,
-        stats: event.stats,
+        // A character the server leaves out keeps the numbers it had (the legacy page left them on the card)
+        stats: { ...event.stats, charStats: { ...model.stats?.charStats, ...event.stats.charStats } },
+        lastRuleOf4:
+          event.stats.ruleOf4 !== null && event.stats.ruleOf4 !== '-1' ? event.stats.ruleOf4 : model.lastRuleOf4,
         // Replays recorded before the server sent the flag have no player zones: the revealed hands stay as they were
         revealedHands:
           zones.length > 0 ? zones.filter(([, z]) => z.handRevealed).map(([name]) => name) : model.revealedHands,
@@ -210,6 +228,7 @@ function newVirtual(id: string, blueprintId: string): GameCard {
     index: null,
     attachedTo: null,
     stackedOn: null,
+    attachedAt: 0,
     tokens: {},
     inactive: false,
     assignedTo: null,

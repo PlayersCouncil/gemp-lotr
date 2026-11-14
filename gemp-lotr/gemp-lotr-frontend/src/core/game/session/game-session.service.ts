@@ -6,7 +6,11 @@ import { GameUpdate } from '../protocol/game-events';
 import { applyEvents } from '../state/apply-event';
 import { emptyGame, GameModel } from '../state/game-model';
 import { assignMinion, clearSelection, decisionAnswered, selectCard, unassignMinion } from '../state/local-choices';
+import { GameLog } from './game-log';
 import { GameRestore } from './game-restore';
+
+/** How long after an answer the page asks for news again (the legacy page's 100 ms). */
+export const POLL_DELAY_MS = 100;
 
 /** Where the page may send the player when a game can't go on (the legacy error dialog's buttons). */
 export type ProblemAction = 'reload' | 'mainPage' | 'hall';
@@ -77,6 +81,7 @@ export class GameSession {
   private readonly api = inject(GameApi);
   private readonly lifetime = inject(PageLifetime);
   private readonly restore = inject(GameRestore);
+  private readonly log = inject(GameLog);
 
   private readonly state = signal<GameModel>(emptyGame());
   /** The game as the page holds it. */
@@ -88,16 +93,25 @@ export class GameSession {
   private polling = false;
   /** The view's own state, kept with the game for a reload (see GameRestore). */
   private view: Readonly<Record<string, unknown>> = {};
+  /** True once the game is open and what the page held before was read back: only then is anything saved over it. */
+  private ready = false;
 
-  /** Opens the game: its whole state from the server, then what only the page held before a reload. */
-  open(gameId: string): void {
+  /**
+   * Opens the game: its whole state from the server, then what only the page held before a reload. `opened` runs
+   * once the game is there, before the page asks for news (the legacy page joins the game's chat then).
+   */
+  open(gameId: string, opened?: () => void): void {
     this.gameId = gameId;
     this.lifetime.read(this.api.open(gameId), {
       next: (update) => {
         // What the page held is read back before anything is saved over it
         this.receive(update, false);
         this.state.update((model) => this.restore.restore(gameId, model));
+        // With the messages the page had shown before a reload in front
+        this.log.restart(this.state().messages);
+        this.ready = true;
         this.save();
+        opened?.();
         this.keepCurrent(update);
       },
       error: (error: unknown) => this.fail(error),
@@ -179,17 +193,22 @@ export class GameSession {
 
   private receive(update: GameUpdate, save = true): void {
     this.channel = update.channel ?? this.channel;
+    const shown = this.state().messages.length;
     this.state.update((model) => ({
       ...applyEvents(model, update.events),
       clocks: { ...model.clocks, ...update.clocks },
     }));
+    this.log.game(this.state().messages.slice(shown));
     if (save) this.save();
   }
 
   /** After an answer: news is asked for again unless a decision now waits for the player or the game is over. */
   private keepCurrent(update: GameUpdate): void {
     const decides = update.events.some((event) => event.type === 'D');
-    if (!decides && !this.state().ended) this.poll();
+    if (decides || this.state().ended) return;
+    // A moment later, as the legacy page did: what the page starts on an answer (joining the chat) is asked first
+    this.polling = true;
+    this.lifetime.later(() => this.poll(), POLL_DELAY_MS);
   }
 
   private poll(): void {
@@ -209,10 +228,13 @@ export class GameSession {
   }
 
   private fail(error: unknown): void {
-    this.problem.set(problemFor(ApiError.from(error).status));
+    const problem = problemFor(ApiError.from(error).status);
+    this.problem.set(problem);
+    // A problem with a title is a dialog; the others are warnings in the chat box, as on the legacy page
+    if (problem.title === null) this.log.warn(problem.lines);
   }
 
   private save(): void {
-    if (this.gameId) this.restore.save(this.gameId, this.state(), this.view);
+    if (this.gameId && this.ready) this.restore.save(this.gameId, this.state(), this.view);
   }
 }

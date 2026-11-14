@@ -56,6 +56,11 @@ const PARTS = [
   ...(quick || browser ? [] : [['The modern theme on a phone', npm(VISUAL_CHECK, 'run', 'check:phone')]]),
   ['Deploying with git pull', npm(VISUAL_CHECK, 'run', 'check:deploy')],
   // The game screen (game/README.md): seeded games played on two pages
+  // The Angular game page's table against game.html on the recorded games, without a server (the app as built in the web root)
+  [
+    'Game screen: the table as the legacy page draws it',
+    npm(VISUAL_CHECK, 'run', 'check:game:table', ...(quick ? ['--', '--sizes', '1366x768'] : [])),
+  ],
   ['Game screen: the check catches deliberate bugs', npm(VISUAL_CHECK, 'run', 'check:game:selftest')],
   ...(quick ? [] : [['Game screen: every scenario on both pages', npm(VISUAL_CHECK, 'run', 'check:game')]]),
 ];

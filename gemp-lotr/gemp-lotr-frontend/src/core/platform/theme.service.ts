@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { readCookie, writeCookie } from './cookies';
-import { PAGE_QUERY_STRING } from './page-location';
+import { PAGE_PATH, PAGE_QUERY_STRING } from './page-location';
 
 /**
  * The deck builder's themes: each is a set of values (colours, fonts, borders, images) in src/styles/themes.css, chosen
@@ -72,6 +72,15 @@ const DEFAULT_THEME: ThemeName = 'modern';
  */
 export const THEME_COOKIE = 'gempDeckbuilderTheme';
 
+/**
+ * Pages with a theme choice of their own, by the last part of their address: its cookie and the theme without one. The
+ * game page starts on the classic look (owner, 2026-11-12) and remembers its choice apart from the deck builder's
+ * (`gempGameTheme`, owner 2026-11-13).
+ */
+export const PAGE_THEMES: Readonly<Record<string, { cookie: string; fallback: ThemeName }>> = {
+  game: { cookie: 'gempGameTheme', fallback: 'classic' },
+};
+
 /** Set on <html>: it picks the theme's values in src/styles/themes.css. */
 export const THEME_ATTRIBUTE = 'data-theme';
 
@@ -80,14 +89,18 @@ function isThemeName(value: unknown): value is ThemeName {
 }
 
 /** The theme to use: the address (?theme=), then the remembered choice, then modern. Unknown names are ignored. */
-export function resolveTheme(fromQuery: string | null, fromCookie: string | null): ThemeName {
+export function resolveTheme(
+  fromQuery: string | null,
+  fromCookie: string | null,
+  fallback: ThemeName = DEFAULT_THEME,
+): ThemeName {
   if (isThemeName(fromQuery)) {
     return fromQuery;
   }
   if (isThemeName(fromCookie)) {
     return fromCookie;
   }
-  return DEFAULT_THEME;
+  return fallback;
 }
 
 /**
@@ -99,6 +112,8 @@ export function resolveTheme(fromQuery: string | null, fromCookie: string | null
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly queryString = inject(PAGE_QUERY_STRING);
+  /** The page's own cookie and default, if it has them (PAGE_THEMES). */
+  private readonly page = PAGE_THEMES[inject(PAGE_PATH).split('/').filter(Boolean).at(-1) ?? ''] ?? null;
   private readonly current = signal<ThemeName>(DEFAULT_THEME);
 
   readonly theme = this.current.asReadonly();
@@ -112,7 +127,8 @@ export class ThemeService {
     if (isThemeName(fromQuery)) {
       this.remember(fromQuery);
     }
-    this.apply(resolveTheme(fromQuery, readCookie(this.document.cookie, THEME_COOKIE)));
+    const cookie = this.page?.cookie ?? THEME_COOKIE;
+    this.apply(resolveTheme(fromQuery, readCookie(this.document.cookie, cookie), this.page?.fallback));
   }
 
   /** The player's choice: remembered and applied. Unknown names are ignored. */
@@ -163,6 +179,6 @@ export class ThemeService {
   }
 
   private remember(theme: ThemeName): void {
-    writeCookie(this.document, THEME_COOKIE, theme);
+    writeCookie(this.document, this.page?.cookie ?? THEME_COOKIE, theme);
   }
 }

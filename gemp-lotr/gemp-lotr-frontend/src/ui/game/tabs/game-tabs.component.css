@@ -1,0 +1,242 @@
+/* The tab box (jQuery UI tabs with game.css's slim tabs): the strip of tabs over the open panel */
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0.2em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+  /* The strip's height in whole pixels, as the legacy page measured it, for the chat under it */
+  --gd-game-strip: 28px;
+}
+
+/* Two switches, one over the other, make the strip higher */
+:host([data-extras='2']) {
+  --gd-game-strip: 52px;
+}
+
+.gd-game-tabs__strip {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  min-height: 14px;
+  padding: 0.2em 0.2em 0;
+  border: 1px solid var(--theme-header-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-header-bg);
+  line-height: 1.3;
+}
+
+/* jQuery UI's clearfix: a hidden full stop after the tabs, which takes its width in the row */
+.gd-game-tabs__strip::after {
+  content: '.';
+  height: 0;
+  visibility: hidden;
+}
+
+.gd-game-tabs__tab {
+  display: flex;
+  align-items: center;
+  margin: 1px 0.2em 1px 0;
+  padding: 2px 3px;
+  border: 1px solid var(--theme-widget-border);
+  border-bottom: 0;
+  border-radius: var(--theme-radius) var(--theme-radius) 0 0;
+  background: var(--theme-default-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  font-size: 70%;
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gd-game-tabs__tab:hover,
+.gd-game-tabs__tab:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+.gd-game-tabs__tab[aria-selected='true'] {
+  margin-bottom: 0;
+  padding-bottom: 3px;
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+  color: var(--theme-text);
+}
+
+.gd-game-tabs__extras {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  margin: 0 0.4em 1px auto;
+  font-size: 70%;
+}
+
+.gd-game-tabs__extra {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 2px 1px 6px;
+  border-radius: 3px;
+  background: var(--theme-game-extra-bg);
+  color: var(--theme-text);
+  font-size: 90%;
+  font-weight: bold;
+}
+
+.gd-game-tabs__switch {
+  position: relative;
+  width: 25px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+/* The unfinished switch of the legacy page (see the template): a plain button in the widgets' font, its text cut off */
+.gd-game-tabs__switch:not(.gd-button) {
+  font-family: var(--theme-font-widget);
+  font-size: 1em;
+  white-space: nowrap;
+}
+
+.gd-game-tabs__switch[data-icon='zoom']::before {
+  background-position: -160px -112px;
+}
+
+.gd-game-tabs__switch[data-icon='no-zoom']::before {
+  background-position: -32px -192px;
+}
+
+.gd-game-tabs__switch[data-icon='sound']::before {
+  background-position: -144px -160px;
+}
+
+.gd-game-tabs__switch[data-icon='muted']::before {
+  background-position: -128px -160px;
+}
+
+.gd-game-tabs__panel {
+  flex: 1 1 0;
+  min-height: 0;
+  padding: 4px;
+  overflow: auto;
+}
+
+.gd-game-tabs__panel[data-panel='settings'] {
+  font-size: 70%;
+}
+
+.gd-game-setting {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0;
+}
+
+.gd-game-setting > label {
+  margin-right: 4px;
+}
+
+/* .ui-widget's form controls: the widgets' font at the panel's size */
+.gd-game-tabs__panel :is(select, input, button) {
+  font-family: var(--theme-font-widget);
+  font-size: 1em;
+}
+
+/*
+ * The animation speed (a jQuery UI slider with its lower part filled): a bar 0.8em high in a 1px border, filled up to
+ * the handle, which is 1.2em in its border and overhangs the bar's ends by half. The range input lies over the bar,
+ * wider than it by the handle, so the handle's middle travels from one end of the bar to the other.
+ */
+.gd-game-slider {
+  position: relative;
+  flex: 1 1 auto;
+  height: 0.8em;
+  margin: 0 8px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+}
+
+.gd-game-slider::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--gd-slider-share, 0) * 100%);
+  border-radius: var(--theme-radius);
+  background: var(--theme-slider-fill);
+}
+
+.gd-game-slider > .gd-slider {
+  position: absolute;
+  left: -0.6em;
+  top: -0.3em;
+  width: calc(100% + 1.2em + 2px);
+  height: calc(1.2em + 2px);
+}
+
+.gd-game-slider > .gd-slider::-webkit-slider-runnable-track {
+  height: calc(1.2em + 2px);
+  border: 0;
+  background: none;
+}
+
+.gd-game-slider > .gd-slider::-moz-range-track {
+  height: calc(1.2em + 2px);
+  border: 0;
+  background: none;
+}
+
+.gd-game-slider > .gd-slider::-webkit-slider-thumb {
+  width: calc(1.2em + 2px);
+  height: calc(1.2em + 2px);
+  margin-top: 0;
+}
+
+.gd-game-slider > .gd-slider::-moz-range-thumb {
+  width: calc(1.2em + 2px);
+  height: calc(1.2em + 2px);
+}
+
+.gd-game-setting[data-group] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.gd-game-setting__title {
+  margin-bottom: 2px;
+}
+
+.gd-game-setting__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+
+.gd-game-setting__choices > span {
+  white-space: nowrap;
+}
+
+/* A jQuery UI text button: 0.2em 0.3em around its text, which has the same again */
+.gd-game-tabs__action {
+  box-sizing: content-box;
+  margin: 0 0.1em 0 0;
+  padding: 0.2em 0.3em;
+  line-height: normal;
+}
+
+.gd-game-tabs__action > span {
+  display: block;
+  padding: 0.2em 0.3em;
+  line-height: 1.4;
+}

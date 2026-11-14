@@ -72,6 +72,12 @@ export function parseChat(doc: Document): ChatAnswer | null {
   return { messages, users };
 }
 
+/** Who wants to hear of the room's news the moment it comes (the signals say the same, to the view). */
+export interface ChatListener {
+  messages(messages: readonly ChatMessage[]): void;
+  problem(text: string): void;
+}
+
 /** How long the game page's chat waits between asking for news (the legacy game page's chatUpdateInterval). */
 export const GAME_CHAT_INTERVAL_MS = 3000;
 
@@ -86,13 +92,21 @@ export class ChatRoom {
 
   readonly messages = signal<readonly ChatMessage[]>([]);
   readonly users = signal<readonly ChatUser[]>([]);
+  /** True once the room has answered: the users are known. */
+  readonly joined = signal(false);
   /** The warning after which the chat stopped, or null while it works. */
   readonly problem = signal<string | null>(null);
 
+  private listener: ChatListener | null = null;
   private room: string | null = null;
   private interval = GAME_CHAT_INTERVAL_MS;
   private sending: string[] = [];
   private busy = false;
+
+  /** Tells a page of each batch of messages and of the problem that stops the chat, as they come. */
+  listen(listener: ChatListener): void {
+    this.listener = listener;
+  }
 
   join(room: string, interval = GAME_CHAT_INTERVAL_MS): void {
     this.room = room;
@@ -135,8 +149,12 @@ export class ChatRoom {
   private receive(doc: Document): void {
     const answer = parseChat(doc);
     if (!answer) return;
-    if (answer.messages.length > 0) this.messages.update((messages) => [...messages, ...answer.messages]);
+    if (answer.messages.length > 0) {
+      this.messages.update((messages) => [...messages, ...answer.messages]);
+      this.listener?.messages(answer.messages);
+    }
     this.users.set(answer.users);
+    this.joined.set(true);
     this.lifetime.later(() => this.poll(), this.interval);
   }
 
@@ -149,6 +167,8 @@ export class ChatRoom {
   }
 
   private fail(error: unknown): void {
-    this.problem.set(chatProblem(ApiError.from(error).status));
+    const problem = chatProblem(ApiError.from(error).status);
+    this.problem.set(problem);
+    this.listener?.problem(problem);
   }
 }

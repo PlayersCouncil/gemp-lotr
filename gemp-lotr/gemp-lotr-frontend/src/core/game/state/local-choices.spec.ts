@@ -41,6 +41,7 @@ describe('local choices', () => {
           index: null,
           attachedTo: null,
           stackedOn: null,
+          attachedAt: 0,
           tokens: {},
           inactive: false,
           assignedTo: '10',

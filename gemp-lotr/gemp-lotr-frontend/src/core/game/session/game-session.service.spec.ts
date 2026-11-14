@@ -4,7 +4,7 @@ import { provideGempHttp } from '../../api/gemp-interceptors';
 import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { GameApi } from '../api/game-api.service';
 import { provideGameState } from '../game-state';
-import { GameSession, problemFor } from './game-session.service';
+import { GameSession, POLL_DELAY_MS, problemFor } from './game-session.service';
 
 const GAME = '/gemp-lotr-server/game/7';
 const decision = (
@@ -32,17 +32,25 @@ describe('GameSession', () => {
     backend = TestBed.inject(HttpTestingController);
   }
 
-  const expectPoll = (cn: string) =>
-    backend.expectOne(
+  /** The page asks for news a moment after an answer (POLL_DELAY_MS). */
+  const expectPoll = (cn: string) => {
+    vi.advanceTimersByTime(POLL_DELAY_MS);
+    return backend.expectOne(
       (r) => r.url === GAME && r.method === 'POST' && r.body?.get('channelNumber') === cn && !r.body?.has('decisionId'),
     );
+  };
 
   beforeEach(() => {
+    vi.useFakeTimers();
     sessionStorage.clear();
     setUp();
   });
 
-  afterEach(() => backend.verify());
+  afterEach(() => {
+    vi.advanceTimersByTime(POLL_DELAY_MS);
+    backend.verify();
+    vi.useRealTimers();
+  });
 
   it('opens the game, and asks for news while no decision waits for the player', () => {
     session.open('7');

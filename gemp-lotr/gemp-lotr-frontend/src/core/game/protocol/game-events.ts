@@ -52,7 +52,10 @@ export interface PlayerZones {
 }
 
 export interface GameStats {
-  /** Per card id: strength, vitality and the rest of "S|V|…" as sent. */
+  /**
+   * Per card id: strength, vitality and the rest of "S|V|…" as sent. In the model: as last sent for each card in play
+   * (the server lists only some characters each time).
+   */
   charStats: Readonly<Record<string, readonly string[]>>;
   fellowshipArchery: string | null;
   shadowArchery: string | null;

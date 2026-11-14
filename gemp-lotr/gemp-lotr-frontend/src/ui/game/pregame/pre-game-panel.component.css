@@ -1,0 +1,71 @@
+/* The pre-game panel (game.css #pregame-info): 70% of the window wide, a fifth of its own width from the left */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  transform: translate(20%, 5vh);
+  font-family: var(--theme-font-text);
+  font-size: 16px;
+}
+
+.gd-game-pregame__summary,
+.gd-game-pregame__sides,
+.gd-game-pregame__side {
+  border: 1px solid var(--theme-content-border);
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+}
+
+.gd-game-pregame__summary {
+  display: inline-block;
+  padding: 16px;
+}
+
+.gd-game-pregame__sides {
+  display: flex;
+}
+
+.gd-game-pregame__side {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  max-height: 70vh;
+  padding: 16px;
+  border-radius: var(--theme-radius-box);
+}
+
+.gd-game-pregame__name {
+  font-size: 32px;
+  text-align: center;
+}
+
+.gd-game-pregame__content {
+  flex-basis: 100%;
+  overflow: auto;
+}
+
+.gd-game-pregame__versus {
+  flex-basis: 10px;
+  font-size: 48px;
+  transform: translateY(30%);
+}
+
+.gd-game-pregame__cards {
+  --gd-card-height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* Links in the server's texts (game.css .ui-widget-content a) */
+:host ::ng-deep a,
+:host ::ng-deep a:link {
+  color: var(--theme-game-text-link);
+}
+
+:host ::ng-deep a:visited {
+  color: var(--theme-game-text-link-visited);
+}

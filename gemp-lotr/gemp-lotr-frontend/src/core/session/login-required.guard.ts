@@ -2,8 +2,8 @@ import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { ApiError } from '../api/api-error';
-import { GempHttp } from '../api/gemp-http.service';
 import { LoginPage } from '../platform/login-page.service';
+import { PlayerInfo } from './player-info.service';
 
 /**
  * Only a logged-in player gets past this: the server answers 401 to anyone else, who goes to the login page before the
@@ -12,8 +12,8 @@ import { LoginPage } from '../platform/login-page.service';
  */
 export const loginRequired: CanActivateFn = () => {
   const loginPage = inject(LoginPage);
-  return inject(GempHttp)
-    .getText('/player')
+  return inject(PlayerInfo)
+    .load()
     .pipe(
       map(() => true),
       catchError((error: unknown) => {

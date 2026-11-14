@@ -79,6 +79,9 @@
   --theme-attention-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
 
   --theme-link-visited: #bf6b04;
+  /* Links in a dialog's text (game.css .ui-widget-content a) */
+  --theme-dialog-link: #bf6b04;
+  --theme-dialog-link-visited: #a63f03;
   --theme-modified: orange;
   --theme-error: red;
   --theme-valid: green;
@@ -88,6 +91,49 @@
    * --theme-other-icon-filter for them (classic sets none: an unset value is ignored)
    */
   --theme-culture-icon-filter: invert(89%) sepia(64%) saturate(0%) hue-rotate(145deg) brightness(116%) contrast(101%);
+
+  /*
+   * The game page (game.css). Its pictures are the site's own (/gemp-lotr/images), as on the legacy page
+   */
+  --theme-game-current-bg: #fff;
+  --theme-game-current-text: #000;
+  --theme-game-link: #9f9fff;
+  --theme-game-text-link: #bf6b04;
+  --theme-game-text-link-visited: #a63f03;
+  --theme-game-clock-bg: #000;
+  --theme-game-clock-text: #fff;
+  --theme-game-clock-warn-bg: #d9760a;
+  --theme-game-clock-danger-bg: #c62828;
+  --theme-game-twilight-bg: #000;
+  --theme-game-twilight-text: #fff;
+  --theme-game-twilight-border: #fff;
+  --theme-game-stats-text: #077;
+  --theme-game-number-text: #fff;
+  --theme-game-number-inactive-text: #777;
+  --theme-game-inactive-border: #333;
+  --theme-game-inactive-filter: grayscale(0.7) contrast(0.5) brightness(0.6);
+  --theme-game-fight-border: #f00;
+  --theme-game-strength-bg: #fff;
+  --theme-game-strength-overwhelmed-bg: #f33;
+  --theme-game-damage-bg: #ccc;
+  --theme-game-strength-text: #000;
+  --theme-game-chat-text: #3fafff;
+  --theme-game-chat-system-text: #5f5f5f;
+  --theme-game-chat-mention-bg: #ff02;
+  --theme-game-chat-quote: #505050;
+  --theme-game-card-hint: #6f6fff;
+  --theme-game-chat-ping-bg: #f004;
+  --theme-game-extra-bg: rgb(0 0 0 / 0.55);
+  --theme-game-icon-deck: url('/gemp-lotr/images/deck-42.png');
+  --theme-game-icon-hand: url('/gemp-lotr/images/hand-42.png');
+  --theme-game-icon-threats: url('/gemp-lotr/images/threats-42.png');
+  --theme-game-icon-discard: url('/gemp-lotr/images/discard-42.png');
+  --theme-game-icon-dead: url('/gemp-lotr/images/deadPile-42.png');
+  --theme-game-icon-adventure-deck: url('/gemp-lotr/images/adventureDeck-42.png');
+  --theme-game-icon-removed: url('/gemp-lotr/images/exiled-42.png');
+  --theme-game-icon-fp-archery: url('/gemp-lotr/images/fpArchery.png');
+  --theme-game-icon-shadow-archery: url('/gemp-lotr/images/shadowArchery.png');
+  --theme-game-icon-move: url('/gemp-lotr/images/move.png');
 
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;

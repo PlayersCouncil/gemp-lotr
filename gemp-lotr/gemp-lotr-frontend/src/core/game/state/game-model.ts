@@ -17,6 +17,8 @@ export interface GameCard {
   /** The card it is attached to or stacked on. */
   attachedTo: string | null;
   stackedOn: string | null;
+  /** When it was put where it is attached or stacked (the number of events before): cards under one card lie in this order. */
+  attachedAt: number;
   tokens: Readonly<Record<string, number>>;
   /** Not active this turn (the turn's TC event). */
   inactive: boolean;
@@ -40,6 +42,9 @@ export interface GameMessage {
 }
 
 export interface PreGameInfo {
+  /** The participant the page is, and the players. */
+  participantId: string | null;
+  players: readonly string[];
   summary: string;
   notes: string;
   maps: string;
@@ -74,6 +79,8 @@ export interface GameModel {
   /** The current skirmish's cards, or null outside one. */
   skirmish: { characterId: string | null; minionIds: readonly string[] } | null;
   stats: GameStats | null;
+  /** The last Rule of 4 count the server sent while the rule applied (the page keeps showing it), or null. */
+  lastRuleOf4: string | null;
   /** Players whose hand the page may see. */
   revealedHands: readonly string[];
   messages: readonly GameMessage[];
@@ -104,6 +111,7 @@ export function emptyGame(): GameModel {
     cardOrder: [],
     skirmish: null,
     stats: null,
+    lastRuleOf4: null,
     revealedHands: [],
     messages: [],
     decision: null,

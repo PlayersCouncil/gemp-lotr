@@ -1,0 +1,24 @@
+/* The alert box (gameUi.js alertBox): 150px of text over a 30px row of buttons */
+
+:host {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-text);
+}
+
+.gd-game-alert__text {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 150px;
+}
+
+.gd-game-alert__buttons {
+  position: absolute;
+  inset: 150px 0 auto;
+  height: 30px;
+}

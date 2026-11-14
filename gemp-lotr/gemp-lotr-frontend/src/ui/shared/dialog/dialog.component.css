@@ -181,6 +181,20 @@
   height: calc(var(--dialog-height) - 0.39px);
 }
 
+/* A page's message with a link (the game's feedback dialog): 300 x 200 */
+.gd-dialog[data-dialog='feedback'] {
+  --dialog-height: 200px;
+  height: calc(var(--dialog-height) - 0.39px);
+}
+
+.gd-dialog[data-dialog='feedback'] a {
+  color: var(--theme-dialog-link);
+}
+
+.gd-dialog[data-dialog='feedback'] a:visited {
+  color: var(--theme-dialog-link-visited);
+}
+
 /* Import: opened before it had content, so placed as a 150px high dialog (its minimum), then grown downwards */
 .gd-dialog[data-dialog='import'] {
   --dialog-height: 150px;

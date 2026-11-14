@@ -18,6 +18,8 @@ export const CARD_HEIGHT_PROPERTY = '--gd-card-height';
 const CARD_OFFSET_PROPERTY = '--gd-card-offset';
 /** Set on each card of the box with `rows`: how far its row moves to start on a whole pixel. */
 const CARD_SNAP_PROPERTY = '--gd-card-snap';
+/** Set on the host with `gdFitCardsOnPagePixels`: how far the cards move left to start on a whole pixel of the page. */
+const CARD_SNAP_X_PROPERTY = '--gd-card-snap-x';
 
 /**
  * Sizes a box of cards: whenever the box resizes or its cards change, works out the row height at which the cards fit
@@ -36,6 +38,13 @@ export class FitCardsDirective {
   readonly gdFitCards = input.required<readonly FitCard[]>();
   /** Scales the theme's largest row height (`--gd-card-max-height`): a card size the player chose. */
   readonly gdFitCardsScale = input(1);
+  /**
+   * The box itself may start on a fraction of a pixel (a share of the window): with `rows`, each card then goes on a
+   * whole pixel of the page, rounded down, as the legacy groups placed them. The value is anything that changes when
+   * the box may have moved without changing its size (it is measured again then); null leaves the cards where the
+   * box puts them.
+   */
+  readonly gdFitCardsOnPagePixels = input<unknown>(null);
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
@@ -84,7 +93,17 @@ export class FitCardsDirective {
     });
     this.host.style.setProperty(CARD_HEIGHT_PROPERTY, `${height}px`);
     this.host.style.setProperty(CARD_OFFSET_PROPERTY, `${offset}px`);
-    const snaps = fit === 'rows' ? rowSnaps(cards, height, size.width, gap) : [];
+    let origin = 0;
+    if (fit === 'rows' && this.gdFitCardsOnPagePixels() !== null) {
+      const box = this.host.getBoundingClientRect();
+      origin = box.top + this.host.clientTop + parsePx(style.paddingTop, 0) + offset;
+      origin -= Math.floor(origin);
+      const left = box.left + this.host.clientLeft + parsePx(style.paddingLeft, 0);
+      this.host.style.setProperty(CARD_SNAP_X_PROPERTY, `${Math.floor(left) - left}px`);
+    } else {
+      this.host.style.removeProperty(CARD_SNAP_X_PROPERTY);
+    }
+    const snaps = fit === 'rows' ? rowSnaps(cards, height, size.width, gap, origin) : [];
     Array.from(this.host.children).forEach((child, i) =>
       (child as HTMLElement).style.setProperty(CARD_SNAP_PROPERTY, `${snaps[i] ?? 0}px`),
     );

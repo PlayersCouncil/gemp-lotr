@@ -48,7 +48,7 @@ export class DialogLayers {
  * delivery, alert, confirm, prompt), `data-placed` once moved or pinned, with `--gd-dialog-left` and
  * `--gd-dialog-top` (px, its top left corner in the window), and `--gd-dialog-layer` (a number that grows each time a
  * dialog opens or is pressed, for the stacking of non-modal dialogs). Inside: `header.gd-dialog__header` with
- * `h2.gd-dialog__title` and `button.gd-dialog__close`, `.gd-dialog__body` (the content), then the actions.
+ * `h2.gd-dialog__title[data-dialog-title]` and `button.gd-dialog__close`, `.gd-dialog__body` (the content), then the actions.
  */
 @Component({
   selector: 'gd-dialog',
@@ -74,7 +74,7 @@ export class DialogLayers {
       (pointerdown)="onPointerDown($event)"
     >
       <header class="gd-dialog__header" [gdPointerDrag]="moveDrag">
-        <h2 class="gd-dialog__title" [id]="titleId">{{ heading() }}</h2>
+        <h2 class="gd-dialog__title" data-dialog-title [id]="titleId">{{ heading() }}</h2>
         <button type="button" class="gd-dialog__close" aria-label="Close" (click)="close()"></button>
       </header>
       <div class="gd-dialog__body">

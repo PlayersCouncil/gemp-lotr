@@ -16,8 +16,8 @@ const RESPONSES = path.join(FRONTEND, 'src/testing/server-responses');
 export const STUB_ORIGIN = 'http://gemp.test';
 
 const TYPES = {
-  '.html': 'text/html',
-  '.js': 'text/javascript',
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript',
   '.css': 'text/css',
   '.png': 'image/png',
