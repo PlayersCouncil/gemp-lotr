@@ -3,6 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { POLL_DELAY_MS } from '../../core/game/session/game-session.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
+import { GAME_THEME_PICKER, ThemeService } from '../../core/platform/theme.service';
+import { By } from '@angular/platform-browser';
+import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
 import { PlayerInfo } from '../../core/session/player-info.service';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
 import { GamePageComponent } from './game-page.component';
@@ -54,13 +57,14 @@ describe('GamePageComponent', () => {
   /** The page asks for news a moment after an answer. */
   const pollDelay = () => new Promise((resolve) => setTimeout(resolve, POLL_DELAY_MS + 10));
 
-  async function open(first: string, query = '?gameId=7') {
+  async function open(first: string, query = '?gameId=7', themePicker = true) {
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: query },
+        { provide: GAME_THEME_PICKER, useValue: themePicker },
       ],
     });
     backend = TestBed.inject(HttpTestingController);
@@ -107,9 +111,25 @@ describe('GamePageComponent', () => {
     expect(el.querySelector('gd-game-tabs')?.getAttribute('data-extras')).toBe(String(1 + zoom));
   });
 
-  it('has no theme button until the owner turns it on (GAME_THEME_PICKER)', async () => {
-    const { el } = await open(state(''));
-    expect(el.querySelector('.gd-game-theme')).toBeNull();
+  it('shows the red theme button in the table, unless GAME_THEME_PICKER is off', async () => {
+    const shown = await open(state(TABLE));
+    expect(shown.el.querySelector('.gd-game__table .gd-game__theme .gd-game-theme')).not.toBeNull();
+    TestBed.resetTestingModule();
+    const hidden = await open(state(TABLE), '?gameId=7', false);
+    expect(hidden.el.querySelector('.gd-game-theme')).toBeNull();
+  });
+
+  it('lets Shift flip the zoomed card in the modern view only, as the legacy game page never did', async () => {
+    const { fixture, stable } = await open(state(TABLE));
+    const zoom = () =>
+      fixture.debugElement.query(By.directive(AutoZoomComponent)).componentInstance as AutoZoomComponent;
+    const themes = TestBed.inject(ThemeService);
+    themes.select('classic');
+    await stable();
+    expect(zoom().flipOnShift()).toBe(false);
+    themes.select('modern');
+    await stable();
+    expect(zoom().flipOnShift()).toBe(true);
   });
 
   it('opens nothing without a game in the address', async () => {

@@ -407,29 +407,88 @@ export function acceptedFor(scenario, sizeLabel) {
 
 /**
  * Differences of the game page (visual-check/game, `npm run check:game` and `check:game:matrix`) that the owner has
- * accepted. Only the owner adds to it: anything not in it fails the check. An entry takes away the problems it matches:
+ * accepted. Only the owner adds to it (the decisions in trymarz/gemp-lotr-private#27, "Decisions to review"): anything
+ * not in it fails the check. Two kinds of entry:
+ *
+ *   problem    a pattern for a problem's text (e.g. /^pile \w+ \d: enter: /): the problems it matches don't count
+ *   selector   an area of the Angular page (its first visible match, grown by `margin` px; with `corner`, only the
+ *              bottom right corner that many px square): up to `maxPixels` differing pixels in it don't count, in the
+ *              screenshots of the steps `steps` matches (default: all). Read again at every screenshot, so it follows
+ *              what moves (e.g. ':focus' is wherever the focus is)
  *
  *   scenarios  the scenarios (names, or patterns: the matrix's are matrix-<state>)
  *   sizes      which window sizes (default: all)
  *   browsers   which browsers (CHECK_BROWSER; default: all)
- *   problem    a pattern for the problem's text, e.g. /^tab settings: focus: screen: /
  *   maxPixels  for a screen difference: at most this many pixels
+ *   decision   the number of the decision in #27
  *   reason     what differs and why it is accepted
- *
- * The decisions waiting for the owner are listed in trymarz/gemp-lotr-private#27 ("Decisions to review").
  */
-export const GAME_ACCEPTED = [];
+export const GAME_ACCEPTED = [
+  {
+    decision: 5,
+    scenarios: [/^matrix-/],
+    problem: /^(counters \+ \d|pile \w+ \d): enter: /,
+    reason:
+      "The keyboard reaches the counters' + and the pile counters (buttons on the Angular page, divs on the legacy " +
+      'page): Enter opens the stats or the pile (accepted 2026-11-15, as for the deck builder)',
+  },
+  {
+    decision: 5,
+    scenarios: [/^matrix-/],
+    problem: /^bid (up|down): (focus|enter|space|shiftClick|doubleClick|hover|leave): screen: /,
+    maxPixels: 600,
+    reason: "The bid's arrows are buttons: focused and pressed from the keyboard (accepted 2026-11-15)",
+  },
+  {
+    decision: 6,
+    scenarios: [/^matrix-/],
+    problem: /^(pile|cardInfo) close: space: /,
+    reason: "Space on a dialog's close button closes it (a button; the legacy page's was a link) (accepted 2026-11-15)",
+  },
+  {
+    decision: 7,
+    scenarios: [/^matrix-/],
+    selector: ':focus',
+    margin: 4,
+    maxPixels: 700,
+    reason:
+      'Focus rings drawn differently: the size and animation sliders, the replay buttons, a tab or button focused ' +
+      'after a shift click (accepted 2026-11-15)',
+  },
+  {
+    decision: 19,
+    scenarios: [/./],
+    browsers: ['firefox'],
+    selector: 'dialog[open]',
+    corner: 16,
+    margin: 2,
+    maxPixels: 150,
+    reason: "Firefox draws its own resize grip in a dialog's corner, which CSS cannot style (accepted 2026-11-15)",
+  },
+];
 
 /** Whether the owner accepted this problem of a game scenario at this window size. */
 export function acceptedGameProblem(scenario, sizeLabel, problem, entries = GAME_ACCEPTED) {
-  const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
   const pixels = Number(/ screen: (\d+) px differ$/.exec(problem)?.[1] ?? NaN);
   return entries.some(
     (entry) =>
-      entry.scenarios.some(applies) &&
-      (!entry.sizes || entry.sizes.includes(sizeLabel)) &&
-      (!entry.browsers || entry.browsers.includes(BROWSER_NAME)) &&
+      entry.problem &&
+      gameEntryApplies(entry, scenario, sizeLabel) &&
       entry.problem.test(problem) &&
       (entry.maxPixels === undefined || pixels <= entry.maxPixels),
+  );
+}
+
+/** The area entries of GAME_ACCEPTED (to read on the Angular page at every screenshot, in this order). */
+export const GAME_ACCEPTED_AREAS = GAME_ACCEPTED.filter((entry) => entry.selector);
+
+/** Whether a GAME_ACCEPTED entry applies to this scenario, window size and browser (and step, if it names steps). */
+export function gameEntryApplies(entry, scenario, sizeLabel, step = null) {
+  const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
+  return (
+    entry.scenarios.some(applies) &&
+    (!entry.sizes || entry.sizes.includes(sizeLabel)) &&
+    (!entry.browsers || entry.browsers.includes(BROWSER_NAME)) &&
+    (!entry.steps || step === null || entry.steps.test(step))
   );
 }

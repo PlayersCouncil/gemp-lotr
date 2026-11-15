@@ -186,6 +186,7 @@ async function open(browser, kind, recording, count, size) {
         screen: await page.screenshot({
           mask: select.masks.map((selector) => page.locator(selector)),
           maskColor: '#ff00ff',
+          style: select.screenshotStyle,
         }),
         state: await inPage(page, readGameState, { kind }),
         boxes: options.geometry ? await inPage(page, readGameBoxes, { kind }) : null,

@@ -28,6 +28,9 @@ export const ANGULAR_CONTRACT = {
   button: (name) => `[data-button="${name}"]`,
   // Changes over time on its own: left out of the screenshots
   masks: ['[data-clock]', '[data-chat-time]'],
+  // What the legacy page had nothing like, hidden in the screenshots (the owner put it there, 2026-11-15): the theme
+  // button in the table's top right corner; what lies under it is still compared
+  screenshotStyle: '.gd-game__theme { visibility: hidden !important; }',
 };
 
 /** On the legacy page: the same things through its own markup. */
@@ -52,6 +55,7 @@ export const LEGACY = {
   replay: (name) => ({ play: '#replayButton', slower: '#slowerButton', faster: '#fasterButton' })[name],
   button: (name) => `#${name}`,
   masks: ['.gameClock', '.decisionClock', '#chatBox .timestamp'],
+  screenshotStyle: '',
 };
 
 /**
@@ -221,6 +225,24 @@ export function readLegacyModel() {
  * Where the game page's parts are (table.mjs --geometry): every card by its id, and the panels around the table, each
  * as [x, y, width, height]. Runs in the page; the same on both pages, so their results can be compared (compareBoxes).
  */
+/**
+ * Where each accepted area is on the Angular page (GAME_ACCEPTED_AREAS): the box of the first visible match of its
+ * selector, grown by its margin (only its bottom right corner with `corner`); null where nothing matches.
+ */
+export function readAreaBoxes(entries) {
+  return entries.map(({ selector, margin = 0, corner }) => {
+    const el = Array.from(document.querySelectorAll(selector)).find((candidate) => {
+      const box = candidate.getBoundingClientRect();
+      return box.width > 0 && box.height > 0;
+    });
+    if (!el) return null;
+    const box = el.getBoundingClientRect();
+    const left = corner ? box.right - corner : box.left;
+    const top = corner ? box.bottom - corner : box.top;
+    return { left: left - margin, top: top - margin, right: box.right + margin, bottom: box.bottom + margin };
+  });
+}
+
 export function readGameBoxes({ kind }) {
   const box = (el) => {
     if (!el) return null;

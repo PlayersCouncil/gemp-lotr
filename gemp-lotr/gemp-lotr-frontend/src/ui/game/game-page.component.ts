@@ -1,5 +1,5 @@
 import { GameThemeButtonComponent } from './panel/game-theme-button.component';
-import { GAME_THEME_PICKER } from '../../core/platform/theme.service';
+import { GAME_THEME_PICKER, ThemeService } from '../../core/platform/theme.service';
 import { Component, computed, inject } from '@angular/core';
 import { ChatRoom } from '../../core/chat/chat-room.service';
 import { provideCardInteractions } from '../../core/cards/card-interactions';
@@ -164,7 +164,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     <gd-game-problem />
     <gd-card-info />
     <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
-    <gd-auto-zoom [topLayer]="false" [flipOnShift]="false" />
+    <gd-auto-zoom [topLayer]="false" [flipOnShift]="zoomFlipsOnShift()" />
   `,
 })
 export class GamePageComponent {
@@ -173,8 +173,14 @@ export class GamePageComponent {
   protected readonly decisions = inject(GameDecisions);
   protected readonly model = this.session.model;
   protected readonly table = inject(GameTableState).table;
-  /** The theme button (off until the owner accepts its place: GAME_THEME_PICKER). */
+  /** The theme button (GAME_THEME_PICKER, on). */
   protected readonly themePicker = inject(GAME_THEME_PICKER);
+  private readonly themes = inject(ThemeService);
+  /**
+   * Shift flips the zoomed card in the modern view only, as the deck builder's zoom does; the legacy game page never
+   * flipped it (its key handler got jQuery 1.6's event, which has no key), and classic keeps that (owner, 2026-11-15).
+   */
+  protected readonly zoomFlipsOnShift = computed(() => this.themes.theme() === 'modern');
 
   protected readonly stats = computed(() => this.model().stats);
   protected readonly fights = computed(() => this.table().assignments.length + (this.table().skirmish ? 1 : 0));

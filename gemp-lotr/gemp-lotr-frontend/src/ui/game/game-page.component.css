@@ -329,7 +329,7 @@
   height: 97px;
 }
 
-/* The theme button, when it is shown (GAME_THEME_PICKER): in the table's top right corner, over the opponent's support */
+/* The theme button (GAME_THEME_PICKER): in the table's top right corner, over the opponent's support */
 .gd-game__theme {
   position: absolute;
   top: 6px;

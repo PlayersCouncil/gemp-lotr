@@ -124,15 +124,20 @@ the table check's `--gesture "<gesture>@card:<id>|point:<x>,<y>|<legacy selector
 given) makes gestures on both pages of a recorded game before comparing them, without a server; `--console` prints
 what the pages write to their consoles.
 
-Differences the owner accepts go into `GAME_ACCEPTED` in `../accepted.mjs` (for this check and `check:game`): an entry
-names the scenarios, a pattern for the problem's text and, for a screen difference, at most how many pixels. Only the
-owner adds to it. `check:all` runs the matrix after the game scenarios.
+Differences the owner accepts go into `GAME_ACCEPTED` in `../accepted.mjs` (for this check and `check:game`), each
+with the number of its decision in trymarz/gemp-lotr-private#27. An entry names the scenarios and either a pattern for
+the problem's text (with, for a screen difference, at most how many pixels), or an area of the Angular page (a
+selector, read again at every screenshot, e.g. `:focus`) in which at most so many differing pixels don't count. Only
+the owner decides what goes in. `check:all` runs the matrix after the game scenarios. The theme button (the Angular
+page's only, in the table's corner) is hidden in the screenshots (`ANGULAR_CONTRACT.screenshotStyle`).
 
-Result on 2026-11-15: the options tab the same; elsewhere what differs is listed in trymarz/gemp-lotr-private#27
-("Decisions to review"): the keyboard reaching controls the legacy page's plain elements didn't (the `+`, the pile
-counters, the bid's arrows; Enter opens a pile there), Space closing a dialog, the focus rings of the sliders, the
-tabs after a shift click and the replay's buttons, a typed chat line drawn a little differently, and a few steps that
-differ by timing from one run to the next (a card's information or zoom caught while it opens).
+Result on 2026-11-15, with the owner's decisions 5, 6, 7 and 19 accepted: the bid, the dialogs and the options the
+same. Still differing: the typed chat line (decision 8, drawn a little narrower; it stays in the box, so about 350 px in
+every later step of the table), the replay's play button reached by the keyboard (decision 24), and a few steps that
+differ by timing from one run to the next (decision 15: a card's information or zoom caught while it opens).
+
+`node tools/zoom-crop.mjs --area x,y,w,h --scale 4 --out out.png a.png b.png diff.png` cuts the same area out of a
+report's screenshots and puts them side by side, enlarged, to show what differs.
 
 ## How both pages get the same game
 

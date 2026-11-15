@@ -12,7 +12,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { acceptedGameProblem } from '../accepted.mjs';
+import { acceptedGameProblem, GAME_ACCEPTED_AREAS, gameEntryApplies } from '../accepted.mjs';
 import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
 import { compareBoxes, compareScreens } from '../compare.mjs';
 import { placeholder } from '../stub-server.mjs';
@@ -22,6 +22,7 @@ import {
   ANGULAR_CONTRACT,
   cardPoint,
   LEGACY,
+  readAreaBoxes,
   readGameBoxes,
   readGameState,
   readLegacyModel,
@@ -824,7 +825,7 @@ async function play(kind, scenario, size, pair, label) {
       query = `replayId=${await replayIdOf(game, pair.player)}`;
     }
     await page.goto(`${options.server}${pagePath}?${query}`);
-    const masks = (kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT).masks;
+    const { masks, screenshotStyle } = kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT;
     // The mouse leaves the page before each snapshot (no hover state), except after a step that rests it on something
     const snapshot = async (name, keepMouse = false) => {
       if (!keepMouse) await page.mouse.move(1, 1);
@@ -855,9 +856,21 @@ async function play(kind, scenario, size, pair, label) {
       }
       const shot = {
         name,
-        screen: await page.screenshot({ mask: masks.map((selector) => page.locator(selector)), maskColor: '#ff00ff' }),
+        screen: await page.screenshot({
+          mask: masks.map((selector) => page.locator(selector)),
+          maskColor: '#ff00ff',
+          style: screenshotStyle,
+        }),
         state: await inPage(page, readGameState, { kind }),
         boxes: options.geometry ? await inPage(page, readGameBoxes, { kind }) : null,
+        // Where the accepted areas are (accepted.mjs GAME_ACCEPTED), on the Angular page
+        areas:
+          kind === 'angular' && GAME_ACCEPTED_AREAS.length
+            ? await page.evaluate(
+                readAreaBoxes,
+                GAME_ACCEPTED_AREAS.map(({ selector, margin, corner }) => ({ selector, margin, corner })),
+              )
+            : [],
         requests: traffic.requests.splice(0),
         dialogs: dialogs.splice(0),
       };
@@ -877,6 +890,7 @@ async function play(kind, scenario, size, pair, label) {
               screen: await page.screenshot({
                 mask: masks.map((selector) => page.locator(selector)),
                 maskColor: '#ff00ff',
+                style: screenshotStyle,
               }),
             }
           : shot;
@@ -901,6 +915,7 @@ async function play(kind, scenario, size, pair, label) {
           screen: await page.screenshot({
             mask: masks.map((selector) => page.locator(selector)),
             maskColor: '#ff00ff',
+            style: screenshotStyle,
           }),
           state: await inPage(page, readGameState, { kind }),
         });
@@ -1001,7 +1016,7 @@ async function waitForFirst(traffic, max = 20000) {
   while (Date.now() - start < max && traffic.events.length === 0) await sleep(100);
 }
 
-function compareRuns(a, b, base) {
+function compareRuns(a, b, base, scenario, size) {
   const problems = [...a.problems, ...b.problems];
   if (a.errors.length || b.errors.length) {
     const same = JSON.stringify(a.errors) === JSON.stringify(b.errors);
@@ -1016,7 +1031,20 @@ function compareRuns(a, b, base) {
     const sa = a.snapshots[i];
     const sb = b.snapshots[i];
     const at = `${sa.name}`;
-    const screens = compareScreens(sa.screen, sb.screen, [], false);
+    // The owner's accepted areas of this step (GAME_ACCEPTED): up to their limit, their pixels don't count
+    const areas = GAME_ACCEPTED_AREAS.map((entry, index) =>
+      gameEntryApplies(entry, scenario.name, size.label, sa.name) ? (sb.areas?.[index] ?? null) : null,
+    );
+    const compared = compareScreens(sa.screen, sb.screen, areas, false);
+    const screens = {
+      ...compared,
+      outside:
+        compared.outside +
+        compared.areas.reduce(
+          (sum, count, index) => sum + Math.max(0, count - GAME_ACCEPTED_AREAS[index].maxPixels),
+          0,
+        ),
+    };
     const show = (value) => JSON.stringify(value).slice(0, 300);
     for (const key of Object.keys({ ...sa.state, ...sb.state })) {
       const [va, vb] = [sa.state[key], sb.state[key]];
@@ -1105,7 +1133,7 @@ async function check(scenario, size, worker) {
   }
   const b = await play(pageB, scenario, size, pair, 'B');
   const name = `${scenario.name}-${size.label}`;
-  const compared = compareRuns(a, b, name);
+  const compared = compareRuns(a, b, name, scenario, size);
   // What the owner accepted (accepted.mjs GAME_ACCEPTED) doesn't count
   const problems = compared.problems.filter((problem) => !acceptedGameProblem(scenario.name, size.label, problem));
   const result = { scenario, size, ...compared, problems, accepted: compared.problems.length - problems.length };
