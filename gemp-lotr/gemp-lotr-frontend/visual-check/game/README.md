@@ -38,7 +38,8 @@ npm run check:game:record                           records every scenario for t
 removes everything again. Neither the development server nor the deck builder's check server is touched.
 
 Options of `run.mjs` (passed through `local.mjs`): `--only`, `--sizes`, `--workers` (at most 4, one pair of players
-each), `--tolerance`, `--out` (default `report-game`), `--pages` (default `legacy,legacy`), `--legacy` and `--angular`
+each; in Firefox, `CHECK_BROWSER=firefox`, 1 by default: Firefox keeps one mouse for the whole browser, so a drag on
+one page was ended by another page's click; the table check too), `--tolerance`, `--out` (default `report-game`), `--pages` (default `legacy,legacy`), `--legacy` and `--angular`
 (the pages' paths), `--inject <name>` (a bug of `injections.mjs` in page B), `--real-images` (card pictures from the
 image server instead of placeholders), `--verbose` (every decision and answer of both players), `--record` (see
 "Recordings").

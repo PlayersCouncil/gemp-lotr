@@ -19,7 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { launchBrowser } from '../browser.mjs';
+import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
 import { ANGULAR_CONTRACT, cardPoint, LEGACY, readGameState } from './controls.mjs';
@@ -36,7 +36,8 @@ const { values: options } = parseArgs({
     out: { type: 'string', default: 'report-game-table' },
     tolerance: { type: 'string', default: '60' },
     theme: { type: 'string', default: 'classic' },
-    workers: { type: 'string', default: '4' },
+    // One page at a time in Firefox, as the game check (its one mouse for the whole browser)
+    workers: { type: 'string', default: BROWSER_NAME === 'firefox' ? '1' : '4' },
     step: { type: 'string' },
     'no-decisions': { type: 'boolean', default: false },
     // A setting's cookie for both pages, e.g. --cookie alwaysDropDown=true (may be given several times)

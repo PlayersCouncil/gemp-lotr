@@ -13,7 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { acceptedGameProblem } from '../accepted.mjs';
-import { launchBrowser } from '../browser.mjs';
+import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { placeholder } from '../stub-server.mjs';
 import {
@@ -42,7 +42,9 @@ const { values: options } = parseArgs({
     angular: { type: 'string', default: '/gemp-lotr/ng/game' },
     sizes: { type: 'string', default: '1280x800,1366x768,1920x1080' },
     only: { type: 'string' },
-    workers: { type: 'string', default: String(MAX_WORKERS) },
+    // Firefox keeps one mouse for the whole browser: two pages dragging at once take it from each other (a drag up
+    // ended by the other page's click), so there one scenario plays at a time
+    workers: { type: 'string', default: BROWSER_NAME === 'firefox' ? '1' : String(MAX_WORKERS) },
     tolerance: { type: 'string', default: '60' },
     out: { type: 'string', default: 'report-game' },
     inject: { type: 'string' },

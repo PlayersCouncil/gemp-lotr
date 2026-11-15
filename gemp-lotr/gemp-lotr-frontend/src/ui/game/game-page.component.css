@@ -140,6 +140,8 @@
  */
 .gd-game__table {
   grid-area: table;
+  /* The rows are placed in it (an absolutely placed box takes its grid area only from a positioned grid) */
+  position: relative;
   display: grid;
   min-width: 0;
   min-height: 0;
@@ -158,46 +160,84 @@
     calc(var(--r4) * var(--u) + 2px) calc(var(--r5) * var(--u) + 2px);
 }
 
-.gd-game__row {
-  grid-column: 1 / -1;
+/*
+ * Each row placed where the legacy page computed it (setBounds), from the table's top in one step: its 5px gaps above it
+ * and the shares of the rows above it. The grid's tracks add up to the same places, but Firefox rounds each track to a
+ * 60th of a pixel, which put the lower rows a 60th or two higher and moved their background pattern by a pixel. A row
+ * spans every track, so the grid only gives it its columns.
+ */
+/* Holds the rows' first column (they are placed out of the grid's flow), so the fight boxes come after it */
+.gd-game__table::before {
+  content: '';
+  grid-column: 1;
+  grid-row: 1 / -1;
 }
 
-.gd-game__row[data-row='support-opponent'] {
-  grid-row: 1;
-  grid-column: 1 / span calc(1 + var(--gd-game-fights, 0));
+.gd-game__row {
+  --k: 1;
+  --y: 0;
+  --h: var(--r1);
+  position: absolute;
+  /* As wide as the table (an absolutely placed box with no column lines is placed from the grid's edges) */
+  grid-row: 1 / -1;
+  grid-column: auto;
+  left: 0;
+  right: 0;
+  top: calc((var(--k) - 1) * 5px + var(--y) * var(--u) + var(--gd-round-nearest));
+  /* Its inside as high as its shares, the border around it (setBounds sized the inside, which the browser rounds) */
+  box-sizing: content-box;
+  height: calc(var(--h) * var(--u) + var(--gd-round-nearest));
+}
+
+/*
+ * Firefox rounds a length the legacy page set from JavaScript to the nearest 60th of a pixel, but cuts a computed one
+ * down: just under half a 60th more makes the cut land where the rounding did. Chromium cuts both alike.
+ */
+:host {
+  --gd-round-nearest: 0px;
+}
+
+@supports (-moz-appearance: none) {
+  :host {
+    --gd-round-nearest: 0.008px;
+  }
 }
 
 .gd-game__row[data-row='characters-opponent'] {
-  grid-row: 2;
+  --k: 2;
+  --y: var(--r1);
+  --h: var(--r2);
 }
 
 .gd-game__row[data-row='shadow'] {
-  grid-row: 3;
-  grid-column: 1;
+  --k: 3;
+  --y: calc(var(--r1) + var(--r2));
+  --h: var(--r3);
+  grid-column: 1 / 2;
 }
 
 .gd-game__row[data-row='characters-player'] {
-  grid-row: 4;
+  --k: 4;
+  --y: calc(var(--r1) + var(--r2) + var(--r3));
+  --h: var(--r4);
 }
 
 .gd-game__row[data-row='support-player'] {
-  grid-row: 5;
+  --k: 5;
+  --y: calc(var(--r1) + var(--r2) + var(--r3) + var(--r4));
+  --h: var(--r5);
 }
 
 .gd-game__row[data-row='hand'] {
-  grid-row: 6;
+  --k: 6;
+  --y: calc(var(--r1) + var(--r2) + var(--r3) + var(--r4) + var(--r5));
+  --h: var(--r6);
 }
 
-.gd-game__row[data-row='support-player'],
-.gd-game__row[data-row='hand'],
-:host([data-turn='bottom']) .gd-game__row[data-row='characters-opponent'],
-:host([data-turn='top']) .gd-game__row[data-row='characters-player'] {
-  grid-column: 1 / span calc(1 + var(--gd-game-fights, 0));
-}
-
+/* The characters' row beside the fights: the first column only */
 :host([data-turn='bottom']) .gd-game__row[data-row='characters-player'],
 :host([data-turn='top']) .gd-game__row[data-row='characters-opponent'] {
-  grid-column: 1;
+  grid-column: 1 / 2;
 }
 
 /*

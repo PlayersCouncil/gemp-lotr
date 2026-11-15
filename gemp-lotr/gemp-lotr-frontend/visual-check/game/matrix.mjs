@@ -229,9 +229,23 @@ export const GAME_MATRIX = [
   },
 ];
 
+/** Gestures only the game page gets (with the deck builder's GESTURES). */
+export const GAME_GESTURES = {
+  // A card of a row dragged to the right, as the card-gestures scenario does (run.mjs dragCard): 250px in 10 moves
+  dragRight: async (page, target) => {
+    const box = await target.boundingBox();
+    const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    for (let i = 1; i <= 10; i++) await page.mouse.move(x + 25 * i, y);
+    await page.mouse.up();
+    await page.waitForTimeout(800);
+  },
+};
+
 /** Makes one gesture of a matrix step. `target` is a locator, or a card's point as one (cards are found by run.mjs). */
 export async function makeGesture(page, gesture, target) {
-  const make = GESTURES[gesture];
+  const make = GAME_GESTURES[gesture] ?? GESTURES[gesture];
   if (!make) throw new Error(`unknown gesture ${gesture}`);
   await make(page, target);
 }
