@@ -108,6 +108,7 @@ export function decisionCard(
     zone,
     owner: null,
     hindered: false,
+    numbersHidden: false,
     index: null,
     attachedTo: null,
     stackedOn: null,

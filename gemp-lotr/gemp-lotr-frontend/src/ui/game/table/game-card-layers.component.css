@@ -50,6 +50,11 @@
   filter: var(--theme-game-inactive-filter);
 }
 
+/* One the waiting decision offers or chose is only lightly dimmed, its tokens too (game.css .card.inactive.selectableCard img) */
+:host-context([data-inactive][data-mark]) img {
+  filter: var(--theme-game-inactive-offered-filter);
+}
+
 :host-context([data-inactive]) .gd-game-number {
   color: var(--theme-game-number-inactive-text);
 }

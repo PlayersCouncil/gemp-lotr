@@ -12,6 +12,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
+import { acceptedGameProblem } from '../accepted.mjs';
 import { launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { placeholder } from '../stub-server.mjs';
@@ -1081,7 +1082,10 @@ async function check(scenario, size, worker) {
   }
   const b = await play(pageB, scenario, size, pair, 'B');
   const name = `${scenario.name}-${size.label}`;
-  const result = { scenario, size, ...compareRuns(a, b, name) };
+  const compared = compareRuns(a, b, name);
+  // What the owner accepted (accepted.mjs GAME_ACCEPTED) doesn't count
+  const problems = compared.problems.filter((problem) => !acceptedGameProblem(scenario.name, size.label, problem));
+  const result = { scenario, size, ...compared, problems, accepted: compared.problems.length - problems.length };
   console.log(
     `${result.problems.length ? 'DIFFERS' : 'same   '} ${name}${result.problems.length ? `: ${result.problems.join(' | ').slice(0, 2000)}` : ''}`,
   );

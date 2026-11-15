@@ -126,8 +126,8 @@ export class GameCardLayersComponent {
   protected readonly numbers = computed<NumbersView | null>(() => {
     const card = this.card();
     const stats = this.session.model().stats?.charStats[card.id];
-    // A hindered card lies face down: its numbers aren't shown
-    if (!stats || card.hindered) return null;
+    // A hindered card lies face down: its numbers aren't shown, nor after it is turned up until stats name it again
+    if (!stats || card.hindered || card.numbersHidden) return null;
     const third = stats[2];
     const resistance = third?.startsWith('R') ? third.slice(1) : null;
     const owner = resistance !== null ? (RESISTANCE_OWNERS[resistance.charAt(0)] ?? null) : null;

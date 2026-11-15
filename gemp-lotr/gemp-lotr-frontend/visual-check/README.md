@@ -123,7 +123,8 @@ and lists what is really on both pages: a control with no test, or on one page o
 - what is on the phone page in each state, with each menu open, against what is tested: a control with no test fails
   it.
 
-`npm run check:mutation` (not part of `check:all`, about an hour) is mutation testing of the deck builder's logic; see
+`npm run check:mutation` (not part of `check:all`, a few hours) is mutation testing of the deck builder's and the game
+screen's logic; see
 the frontend README.
 
 `npm run inspect -- summary <report>` groups a report's differences by cause, `where <report> <name>` says where on the

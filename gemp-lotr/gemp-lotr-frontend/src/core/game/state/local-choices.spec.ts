@@ -38,6 +38,7 @@ describe('local choices', () => {
           zone: 'SHADOW_CHARACTERS',
           owner: 'bob',
           hindered: false,
+          numbersHidden: false,
           index: null,
           attachedTo: null,
           stackedOn: null,

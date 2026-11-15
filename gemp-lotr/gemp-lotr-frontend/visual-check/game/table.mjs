@@ -9,6 +9,7 @@
 //
 //   node game/table.mjs [--only <recording,...>] [--sizes 1366x768,...] [--steps last|all] [--out report-game-table]
 //                       [--tolerance 60] [--theme classic] [--step <n>: only that step of each recording]
+//                       [--generated <count> [--generated-seed <first>]: games made up from a seed instead]
 //
 // To look into a difference: `--eval "<expression>"` prints what the expression gives in both pages instead of
 // comparing them (at the last step of each chosen recording), e.g.
@@ -45,6 +46,10 @@ const { values: options } = parseArgs({
     // A gesture of the matrix (matrix.mjs) made on both pages before they are read, in order (may be given several
     // times): "shiftClick@card:25" (a card by its id), "press@point:5,5" or "press@<legacy selector>|<angular selector>"
     gesture: { type: 'string', multiple: true, default: [] },
+    // Games made up from a seed (../../src/testing/game/generated-game.ts) instead of the recordings: how many, and
+    // the first seed (generated-<seed> in the report)
+    generated: { type: 'string' },
+    'generated-seed': { type: 'string', default: '1' },
   },
 });
 const OUT = path.resolve(HERE, '..', options.out);
@@ -257,16 +262,38 @@ function stateDifferences(a, b) {
   return differences;
 }
 
-const names = fs
-  .readdirSync(RECORDINGS)
-  .filter((file) => file.endsWith('.json'))
-  .map((file) => file.replace(/\.json$/, ''))
-  .filter((name) => !options.only || options.only.split(',').includes(name))
-  .sort();
+/** The generated games (--generated), by name: the generator is TypeScript, built here with esbuild. */
+async function generatedGames(count, first) {
+  const { build } = await import('esbuild');
+  const built = await build({
+    entryPoints: [path.resolve(HERE, '../../src/testing/game/generated-game.ts')],
+    bundle: true,
+    format: 'esm',
+    platform: 'node',
+    write: false,
+    logLevel: 'silent',
+  });
+  const code = Buffer.from(built.outputFiles[0].text).toString('base64');
+  const { generatedGame } = await import(`data:text/javascript;base64,${code}`);
+  return new Map(Array.from({ length: count }, (_, i) => [`generated-${first + i}`, generatedGame(first + i)]));
+}
+
+const generated = options.generated
+  ? await generatedGames(Number(options.generated), Number(options['generated-seed']))
+  : new Map();
+const names = (
+  options.generated
+    ? [...generated.keys()]
+    : fs
+        .readdirSync(RECORDINGS)
+        .filter((file) => file.endsWith('.json'))
+        .map((file) => file.replace(/\.json$/, ''))
+        .sort()
+).filter((name) => !options.only || options.only.split(',').includes(name));
 
 const jobs = [];
 for (const name of names) {
-  const recording = JSON.parse(fs.readFileSync(path.join(RECORDINGS, `${name}.json`), 'utf8'));
+  const recording = generated.get(name) ?? JSON.parse(fs.readFileSync(path.join(RECORDINGS, `${name}.json`), 'utf8'));
   // Steps that sent nothing since the one before show the same table: once is enough
   const steps = recording.steps.filter((step, i, all) => i === 0 || step.exchanges !== all[i - 1].exchanges);
   const chosen = options.step

@@ -16,7 +16,8 @@
 .gd-card {
   position: absolute;
   left: 0;
-  top: round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px);
+  /* Where the page measured it (--gd-path-top: as the legacy group added the sites up), else computed here */
+  top: var(--gd-path-top, round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px));
 }
 
 /* A card that isn't active this turn: dimmed, in a dark frame */

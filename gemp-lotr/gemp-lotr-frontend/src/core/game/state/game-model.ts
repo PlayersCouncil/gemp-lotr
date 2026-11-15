@@ -15,6 +15,11 @@ export interface GameCard {
   /** The participant the page shows it under: its controller if the server named one, else its owner. */
   owner: string | null;
   hindered: boolean;
+  /**
+   * Its numbers are hidden: it was turned face down, and no stats named it since it was turned face up again (the
+   * legacy page hid them on the flip and showed them again only on stats naming the card).
+   */
+  numbersHidden: boolean;
   /** For a site on the adventure path, its number. */
   index: number | null;
   /** The card it is attached to or stacked on. */
@@ -69,6 +74,33 @@ export interface LocalChoices {
   minion: string | null;
 }
 
+/**
+ * The current skirmish. Its boxes show the numbers of the stats sent since it started (the legacy page made them empty
+ * when the skirmish began and wrote them on each GS after that): null before any; a damage bonus or "overwhelmed" the
+ * stats left out stays as it was.
+ */
+export interface Skirmish {
+  characterId: string | null;
+  minionIds: readonly string[];
+  shown: SkirmishNumbers;
+}
+
+export interface SkirmishNumbers {
+  fellowshipStrength: string | null;
+  shadowStrength: string | null;
+  fellowshipDamageBonus: string | null;
+  shadowDamageBonus: string | null;
+  fpOverwhelmed: string | null;
+}
+
+export const NO_SKIRMISH_NUMBERS: SkirmishNumbers = {
+  fellowshipStrength: null,
+  shadowStrength: null,
+  fellowshipDamageBonus: null,
+  shadowDamageBonus: null,
+  fpOverwhelmed: null,
+};
+
 export interface GameModel {
   /** The participant the page plays for (or the one whose side a spectator sees). */
   participantId: string | null;
@@ -89,7 +121,7 @@ export interface GameModel {
   cards: Readonly<Record<string, GameCard>>;
   cardOrder: readonly string[];
   /** The current skirmish's cards, or null outside one. */
-  skirmish: { characterId: string | null; minionIds: readonly string[] } | null;
+  skirmish: Skirmish | null;
   stats: GameStats | null;
   /** The last Rule of 4 count the server sent while the rule applied (the page keeps showing it), or null. */
   lastRuleOf4: string | null;

@@ -3,8 +3,8 @@
  * gameAnimations.js and gameUi.js, without the drawing). Events of only visual meaning (a card flashed, an event
  * shown, a card affecting another) change nothing here.
  */
-import { CardRef, GameEvent, ownerOf } from '../protocol/game-events';
-import { ALERT_DECISIONS, GameCard, GameModel, NO_CHOICES } from './game-model';
+import { CardRef, GameEvent, GameStats, ownerOf } from '../protocol/game-events';
+import { ALERT_DECISIONS, GameCard, GameModel, NO_CHOICES, NO_SKIRMISH_NUMBERS, SkirmishNumbers } from './game-model';
 
 type Cards = Record<string, GameCard>;
 
@@ -15,6 +15,7 @@ function newCard(ref: CardRef, at: number): GameCard {
     zone: ref.zone ?? '',
     owner: ownerOf(ref),
     hindered: ref.hindered,
+    numbersHidden: false,
     index: ref.zone === 'ADVENTURE_PATH' ? ref.index : null,
     attachedTo: ref.targetCardId !== null && ref.targetType !== 'stacked' ? ref.targetCardId : null,
     stackedOn: ref.targetCardId !== null && ref.targetType === 'stacked' ? ref.targetCardId : null,
@@ -47,6 +48,17 @@ function assign(cards: Readonly<Cards>, minionId: string, characterId: string): 
 
 function tokensChanged(card: GameCard, token: string, by: number): GameCard {
   return { ...card, tokens: { ...card.tokens, [token]: (card.tokens[token] ?? 0) + by } };
+}
+
+/** The skirmish's boxes after a GS: the strengths as sent, what the stats leave out as it was. */
+function skirmishNumbers(shown: SkirmishNumbers, stats: GameStats): SkirmishNumbers {
+  return {
+    fellowshipStrength: stats.fellowshipStrength,
+    shadowStrength: stats.shadowStrength,
+    fellowshipDamageBonus: stats.fellowshipDamageBonus ?? shown.fellowshipDamageBonus,
+    shadowDamageBonus: stats.shadowDamageBonus ?? shown.shadowDamageBonus,
+    fpOverwhelmed: stats.fpOverwhelmed ?? shown.fpOverwhelmed,
+  };
 }
 
 /** The page's state after one more event. */
@@ -82,6 +94,8 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'TP':
       return { ...next, twilight: event.count };
     case 'TC':
+      // No inactive cards named: the cards stay as they were (the legacy page changed them only for a list)
+      if (event.inactiveCardIds.length === 0) return { ...next, currentPlayer: event.participantId };
       return {
         ...next,
         currentPlayer: event.participantId,
@@ -121,7 +135,13 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     }
     case 'FCIP': {
       let cards = model.cards;
-      for (const id of event.cardIds) cards = withCard(cards, id, (card) => ({ ...card, hindered: event.hindered }));
+      for (const id of event.cardIds) {
+        cards = withCard(cards, id, (card) => ({
+          ...card,
+          hindered: event.hindered,
+          numbersHidden: card.numbersHidden || event.hindered,
+        }));
+      }
       return { ...next, cards };
     }
     case 'RCFP':
@@ -172,7 +192,7 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
       const ids = [...event.opposingCardIds, ...(event.cardId !== null ? [event.cardId] : [])];
       return {
         ...next,
-        skirmish: { characterId: event.cardId, minionIds: event.opposingCardIds },
+        skirmish: { characterId: event.cardId, minionIds: event.opposingCardIds, shown: NO_SKIRMISH_NUMBERS },
         cards: mapCards(model.cards, (card) => (ids.includes(card.id) ? { ...card, inSkirmish: true } : card)),
       };
     }
@@ -206,6 +226,13 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
         ...next,
         // A character the server leaves out keeps the numbers it had (the legacy page left them on the card)
         stats: { ...event.stats, charStats: { ...model.stats?.charStats, ...event.stats.charStats } },
+        // A card the stats name shows its numbers again, unless it lies face down
+        cards: mapCards(model.cards, (card) =>
+          card.numbersHidden && !card.hindered && event.stats.charStats[card.id]
+            ? { ...card, numbersHidden: false }
+            : card,
+        ),
+        skirmish: model.skirmish && { ...model.skirmish, shown: skirmishNumbers(model.skirmish.shown, event.stats) },
         lastRuleOf4:
           event.stats.ruleOf4 !== null && event.stats.ruleOf4 !== '-1' ? event.stats.ruleOf4 : model.lastRuleOf4,
         // Replays recorded before the server sent the flag have no player zones: the revealed hands stay as they were
@@ -243,6 +270,7 @@ function newVirtual(id: string, blueprintId: string): GameCard {
     zone: 'EXTRA',
     owner: null,
     hindered: false,
+    numbersHidden: false,
     index: null,
     attachedTo: null,
     stackedOn: null,

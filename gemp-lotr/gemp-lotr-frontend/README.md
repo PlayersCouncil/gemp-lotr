@@ -297,7 +297,12 @@ and replays (G4). Nothing links to it yet.
   on both pages, with the decision waiting at each, pixel by pixel; `npm run check:game -- --pages legacy,angular
 --reload` plays real games on both pages with the same gestures, and reloads the Angular page after every step;
   `src/parity/game/angular-game.parity.spec.ts` replays every recording on the page in jsdom, which must send exactly
-  the recorded requests; `npm run check:game:matrix` makes every gesture on every control on both pages.
+  the recorded requests; `src/parity/game/generated-games.parity.spec.ts` plays games made up from a seed
+  (`src/testing/game/generated-game.ts`: random events that fit together and decisions of every kind, answered with the
+  page's gestures) on the legacy page and then on the Angular page in jsdom, which must send the same answers and hold
+  the same game after every step (4 games with the unit tests, 200 in `test:parity`; `PARITY_GAME_SEED=<seed>
+PARITY_GAMES=1` repeats one); `npm run check:game:matrix` makes every gesture on every control on both pages.
+  Differences the owner accepts go into `GAME_ACCEPTED` in `visual-check/accepted.mjs`.
 
 ## Tests and the visual check
 
@@ -332,7 +337,8 @@ test:parity` repeats it.
 
 ### Mutation testing
 
-`npm run check:mutation` in `visual-check` changes one thing at a time in the deck builder's logic (a comparison, a
+`npm run check:mutation` in `visual-check` changes one thing at a time in the deck builder's and the game screen's
+logic (a comparison, a
 condition, a constant, a message) and runs the unit tests of that file; a change no test notices is listed in
 `visual-check/report-mutation/survivors.md`. It works on copies in `visual-check/.local-server/mutation/`, so the
 `frontend` container never rebuilds from a mutated file. `--files <part of a path>` limits it, `--with-parity` adds

@@ -149,6 +149,38 @@ describe('game XML', () => {
     });
   });
 
+  it('reads the rest a card and the stats carry: testing texts, archery, strengths, damage bonuses', () => {
+    expect(parse('type="PCIP" cardId="5" testingText="front" backSideTestingText="back"')).toMatchObject({
+      testingText: 'front',
+      backSideTestingText: 'back',
+    });
+    expect(
+      parse(
+        'type="GS" fellowshipArchery="2" shadowArchery="3" fellowshipStrength="8" shadowStrength="9" fellowshipDamageBonus="1" shadowDamageBonus="2" fpOverwhelmed="true"',
+      ),
+    ).toMatchObject({
+      stats: {
+        fellowshipArchery: '2',
+        shadowArchery: '3',
+        fellowshipStrength: '8',
+        shadowStrength: '9',
+        fellowshipDamageBonus: '1',
+        shadowDamageBonus: '2',
+        fpOverwhelmed: 'true',
+      },
+    });
+    // A minion taken from a split skirmish, the counts as sent (a 0 too)
+    expect(parse('type="RA" cardId="-1" otherCardIds="7"')).toEqual({
+      type: 'RA',
+      cardId: '-1',
+      opposingCardIds: ['7'],
+    });
+    expect(parse('type="AT" cardId="9" token="WOUND"')).toMatchObject({ count: 0 });
+    expect(parse('type="RT" cardId="9" token="WOUND" count="3"')).toMatchObject({ count: 3 });
+    expect(parse('type="TP" count="0"')).toEqual({ type: 'TP', count: 0 });
+    expect(parse('type="PP" participantId="bob" index="0"')).toMatchObject({ index: 0 });
+  });
+
   it('reads a decision with its parameters as lists', () => {
     expect(
       parse(

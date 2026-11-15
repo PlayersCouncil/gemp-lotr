@@ -22,6 +22,7 @@
     "check:game:down": "node game/local.mjs down",
     "check:game:selftest": "node game/local.mjs --selftest",
     "check:game:table": "node game/table.mjs",
+    "check:game:generated": "node game/table.mjs --generated 100 --steps last --out report-game-generated",
     "check:game:record": "node game/local.mjs --record --sizes 1366x768",
     "check:game:matrix": "node game/local.mjs --matrix --pages legacy,angular --sizes 1366x768 --out report-game-matrix",
     "tunnel": "node tools/tunnel.mjs"

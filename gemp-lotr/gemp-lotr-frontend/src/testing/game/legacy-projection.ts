@@ -32,6 +32,9 @@ function decisionCards(model: GameModel): string[] {
   return [];
 }
 
+/** An HTML text as the page shows it. */
+const textOf = (html: string) => new DOMParser().parseFromString(html, 'text/html').body.textContent ?? '';
+
 export function legacyView(model: GameModel): LegacyGameModel {
   const started = model.started;
   const cards = model.cardOrder.flatMap((id) => {
@@ -67,7 +70,8 @@ export function legacyView(model: GameModel): LegacyGameModel {
       ? `Initiative: ${model.stats ? (model.stats.initiative === 'FREE_PEOPLE' ? 'Free Peoples' : 'Shadow') : ''}`
       : null,
     ruleOf4: null,
-    alert: started ? (decision && ALERT_DECISIONS.includes(decision.type) ? decision.text : '') : null,
+    // As its text reads: the legacy page put the decision's HTML in the alert box
+    alert: started ? (decision && ALERT_DECISIONS.includes(decision.type) ? textOf(decision.text) : '') : null,
     stats,
     cards: [...cards, ...decisionCards(model)].sort(),
   };

@@ -3,7 +3,7 @@
 // containers:
 //
 //   npm run check:all                 (about an hour)
-//   npm run check:all -- --quick      without the control-and-gesture matrix, the phone and the game scenarios
+//   npm run check:all -- --quick      without the control-and-gesture matrices, the phone and the game scenarios
 //   npm run check:all -- --browser firefox
 //                                     the parts that use a browser, in Firefox (or webkit); the reports of
 //                                     the Chromium run are replaced
@@ -29,7 +29,7 @@ const PARTS = [
     : [
         ['Frontend: lint, types, formatting, unit tests', npm(FRONTEND, 'run', 'verify')],
         [
-          'The legacy page and the Angular page side by side, 200 generated sessions',
+          'The legacy page and the Angular page side by side, 200 generated sessions and 200 generated games',
           npm(FRONTEND, 'run', 'test:parity'),
         ],
       ]),
@@ -61,8 +61,16 @@ const PARTS = [
     'Game screen: the table as the legacy page draws it',
     npm(VISUAL_CHECK, 'run', 'check:game:table', ...(quick ? ['--', '--sizes', '1366x768'] : [])),
   ],
+  // Games made up from a seed, their last state drawn on both pages (src/testing/game/generated-game.ts)
+  [
+    'Game screen: the table of 100 generated games',
+    npm(VISUAL_CHECK, 'run', 'check:game:generated', ...(quick ? ['--', '--sizes', '1366x768'] : [])),
+  ],
   ['Game screen: the check catches deliberate bugs', npm(VISUAL_CHECK, 'run', 'check:game:selftest')],
   ...(quick ? [] : [['Game screen: every scenario on both pages', npm(VISUAL_CHECK, 'run', 'check:game')]]),
+  ...(quick
+    ? []
+    : [['Game screen: every control against every gesture', npm(VISUAL_CHECK, 'run', 'check:game:matrix')]]),
 ];
 
 const results = PARTS.map(([name, { cwd, args }]) => {

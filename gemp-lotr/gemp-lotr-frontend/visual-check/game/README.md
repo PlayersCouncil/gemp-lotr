@@ -65,7 +65,18 @@ npm run check:game:table                                       everything (291 c
 npm run check:game:table -- --only opening --sizes 1366x768    one recording, one size
 npm run check:game:table -- --steps last                       only each recording's last state
 npm run check:game:table -- --only opening --step 3            one step
+npm run check:game:table -- --generated 100 --steps last       100 made-up games instead of the recordings
 ```
+
+`--generated <count>` (from `--generated-seed`, default 1) shows games made up from a seed instead of the recordings
+(`../../src/testing/game/generated-game.ts`, built with esbuild: random events that fit together, decisions of every
+kind), named `generated-<seed>`; the jsdom parity test plays the same games on both pages
+(`src/parity/game/generated-games.parity.spec.ts`). They found what the recorded games never showed: a turn naming no
+inactive cards leaves them as they were, a skirmish's boxes stay empty until stats come after it started, an offered
+inactive card's tokens are only lightly dimmed, a card's numbers stay hidden after it is turned face up until stats name
+it, and the sites' places are added up as the legacy page did (six sites in 533px landed a pixel apart). Two legacy
+glitches are kept out of the generated games and listed for the owner in trymarz/gemp-lotr-private#27: an opponent's
+stacked card ending its flying in off its place, and a card flipped twice in one answer staying squeezed.
 
 To look into a difference, `--boxes "<legacy selector> | <angular selector>"` prints the box of every match on each
 page, and `--eval "<expression>"` what an expression gives in each; with `--only`, `--sizes` and `--step`. The report
@@ -109,6 +120,10 @@ decision offers, the decision's buttons), conceding, playing the replay; other s
 the table check's `--gesture "<gesture>@card:<id>|point:<x>,<y>|<legacy selector>|<angular selector>"` (several may be
 given) makes gestures on both pages of a recorded game before comparing them, without a server; `--console` prints
 what the pages write to their consoles.
+
+Differences the owner accepts go into `GAME_ACCEPTED` in `../accepted.mjs` (for this check and `check:game`): an entry
+names the scenarios, a pattern for the problem's text and, for a screen difference, at most how many pixels. Only the
+owner adds to it. `check:all` runs the matrix after the game scenarios.
 
 Result on 2026-11-15: the options tab the same; elsewhere what differs is listed in trymarz/gemp-lotr-private#27
 ("Decisions to review"): the keyboard reaching controls the legacy page's plain elements didn't (the `+`, the pile

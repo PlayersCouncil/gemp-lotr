@@ -1,6 +1,6 @@
 import { CardRef, Decision, GameEvent, GameStats } from '../protocol/game-events';
 import { applyEvent, applyEvents } from './apply-event';
-import { emptyGame, GameModel } from './game-model';
+import { emptyGame, NO_SKIRMISH_NUMBERS, GameModel } from './game-model';
 
 const card = (cardId: string, extra: Partial<CardRef> = {}): CardRef => ({
   cardId,
@@ -125,8 +125,12 @@ describe('applyEvent', () => {
     const model = play(put('1'), put('2'), { type: 'TC', participantId: 'bob', inactiveCardIds: ['2'] });
     expect(model.currentPlayer).toBe('bob');
     expect([model.cards['1']?.inactive, model.cards['2']?.inactive]).toEqual([false, true]);
-    const again = applyEvent(model, { type: 'TC', participantId: 'alice', inactiveCardIds: [] });
-    expect(again.cards['2']?.inactive).toBe(false);
+    const other = applyEvent(model, { type: 'TC', participantId: 'alice', inactiveCardIds: ['1'] });
+    expect([other.cards['1']?.inactive, other.cards['2']?.inactive]).toEqual([true, false]);
+    // None named: the cards stay as they were, as on the legacy page
+    const none = applyEvent(model, { type: 'TC', participantId: 'alice', inactiveCardIds: [] });
+    expect(none.currentPlayer).toBe('alice');
+    expect([none.cards['1']?.inactive, none.cards['2']?.inactive]).toEqual([false, true]);
   });
 
   it('assigns minions, moving one assigned elsewhere, and takes them off', () => {
@@ -159,7 +163,7 @@ describe('applyEvent', () => {
 
   it('follows a skirmish: started, a card added and removed, ended', () => {
     let model = play(put('1'), put('7'), put('8'), { type: 'SS', cardId: '1', opposingCardIds: ['7'] });
-    expect(model.skirmish).toEqual({ characterId: '1', minionIds: ['7'] });
+    expect(model.skirmish).toEqual({ characterId: '1', minionIds: ['7'], shown: NO_SKIRMISH_NUMBERS });
     model = applyEvent(model, { type: 'ATS', cardId: '8' });
     expect(model.cards['8']?.inSkirmish).toBe(true);
     model = applyEvent(model, { type: 'RFS', cardId: '7' });
@@ -167,6 +171,26 @@ describe('applyEvent', () => {
     model = applyEvent(model, { type: 'ES' });
     expect(model.skirmish).toBeNull();
     expect(Object.values(model.cards).some((c) => c.inSkirmish)).toBe(false);
+  });
+
+  it("shows in the skirmish's boxes only the numbers of stats sent since it started", () => {
+    const before = stats({ fellowshipStrength: '6', shadowStrength: '6', fellowshipDamageBonus: '1' });
+    let model = play(put('1'), put('7'), { type: 'GS', stats: before });
+    model = applyEvent(model, { type: 'SS', cardId: '1', opposingCardIds: ['7'] });
+    expect(model.skirmish?.shown).toEqual(NO_SKIRMISH_NUMBERS);
+    model = applyEvent(model, {
+      type: 'GS',
+      stats: stats({ fellowshipStrength: '8', shadowStrength: '5', fellowshipDamageBonus: '2', fpOverwhelmed: 'true' }),
+    });
+    // What the next stats leave out stays as it was; the strengths are always as sent
+    model = applyEvent(model, { type: 'GS', stats: stats({ fellowshipStrength: '9', shadowDamageBonus: '0' }) });
+    expect(model.skirmish?.shown).toEqual({
+      fellowshipStrength: '9',
+      shadowStrength: null,
+      fellowshipDamageBonus: '2',
+      shadowDamageBonus: '0',
+      fpOverwhelmed: 'true',
+    });
   });
 
   it('a skirmish without a character marks only the minions', () => {
@@ -227,6 +251,50 @@ describe('applyEvent', () => {
       const after = applyEvent(before, event);
       expect({ ...after, eventCount: 0 }).toEqual({ ...before, eventCount: 0 });
     }
+  });
+
+  it("hides a card's numbers from when it is turned face down until stats name it face up", () => {
+    let model = play(put('1'), put('2'), { type: 'FCIP', cardIds: ['1'], hindered: true });
+    expect([model.cards['1']?.numbersHidden, model.cards['2']?.numbersHidden]).toEqual([true, false]);
+    // Stats while it lies face down, then turned up: still hidden
+    model = applyEvent(model, { type: 'GS', stats: stats({ charStats: { '1': ['7', '3'] } }) });
+    model = applyEvent(model, { type: 'FCIP', cardIds: ['1'], hindered: false });
+    expect(model.cards['1']?.numbersHidden).toBe(true);
+    // Stats naming another card don't show them
+    model = applyEvent(model, { type: 'GS', stats: stats({ charStats: { '2': ['5', '2'] } }) });
+    expect(model.cards['1']?.numbersHidden).toBe(true);
+    model = applyEvent(model, { type: 'GS', stats: stats({ charStats: { '1': ['7', '3'] } }) });
+    expect(model.cards['1']?.numbersHidden).toBe(false);
+  });
+
+  it('remembers that the alert box asked something, through the decisions after', () => {
+    let model = play({ type: 'D', decision: decision('CARD_SELECTION') });
+    expect(model.alertAsked).toBe(true);
+    model = applyEvent(model, { type: 'D', decision: decision('INTEGER') });
+    expect(model.alertAsked).toBe(true);
+    expect(play({ type: 'D', decision: decision('INTEGER') }).alertAsked).toBe(false);
+  });
+
+  it("takes the revealed hands from stats naming one player's zones too", () => {
+    const zones = { hand: 1, discard: 0, adventureDeck: 0, dead: 0, deck: 0, removed: 0 };
+    const model = play({
+      type: 'GS',
+      stats: stats({ playerZones: { alice: { ...zones, handRevealed: true } } }),
+    });
+    expect(model.revealedHands).toEqual(['alice']);
+  });
+
+  it("a split skirmish's see-through copy is face up, active, out of the skirmish, first under nothing", () => {
+    const model = play(put('1'), put('7'), { type: 'AA', cardId: '-1', opposingCardIds: ['7'] });
+    expect(model.cards['extra-1']).toMatchObject({
+      hindered: false,
+      inactive: false,
+      inSkirmish: false,
+      attachedAt: 0,
+      zone: 'EXTRA',
+    });
+    // A new card isn't inactive unless the turn named it
+    expect(model.cards['1']?.inactive).toBe(false);
   });
 
   it('keeps the numbers of a character the server leaves out, until the card leaves play', () => {

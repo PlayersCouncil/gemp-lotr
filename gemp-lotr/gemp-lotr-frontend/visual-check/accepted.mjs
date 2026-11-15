@@ -404,3 +404,32 @@ export function acceptedFor(scenario, sizeLabel) {
     ),
   ];
 }
+
+/**
+ * Differences of the game page (visual-check/game, `npm run check:game` and `check:game:matrix`) that the owner has
+ * accepted. Only the owner adds to it: anything not in it fails the check. An entry takes away the problems it matches:
+ *
+ *   scenarios  the scenarios (names, or patterns: the matrix's are matrix-<state>)
+ *   sizes      which window sizes (default: all)
+ *   browsers   which browsers (CHECK_BROWSER; default: all)
+ *   problem    a pattern for the problem's text, e.g. /^tab settings: focus: screen: /
+ *   maxPixels  for a screen difference: at most this many pixels
+ *   reason     what differs and why it is accepted
+ *
+ * The decisions waiting for the owner are listed in trymarz/gemp-lotr-private#27 ("Decisions to review").
+ */
+export const GAME_ACCEPTED = [];
+
+/** Whether the owner accepted this problem of a game scenario at this window size. */
+export function acceptedGameProblem(scenario, sizeLabel, problem, entries = GAME_ACCEPTED) {
+  const applies = (pattern) => (pattern instanceof RegExp ? pattern.test(scenario) : pattern === scenario);
+  const pixels = Number(/ screen: (\d+) px differ$/.exec(problem)?.[1] ?? NaN);
+  return entries.some(
+    (entry) =>
+      entry.scenarios.some(applies) &&
+      (!entry.sizes || entry.sizes.includes(sizeLabel)) &&
+      (!entry.browsers || entry.browsers.includes(BROWSER_NAME)) &&
+      entry.problem.test(problem) &&
+      (entry.maxPixels === undefined || pixels <= entry.maxPixels),
+  );
+}
