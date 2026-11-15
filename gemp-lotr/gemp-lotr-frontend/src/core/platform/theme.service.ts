@@ -62,6 +62,16 @@ export const THEME_LABELS: Readonly<Record<ThemeName, string>> = { classic: 'Cla
  */
 export const THEME_PICKER = new InjectionToken<boolean>('THEME_PICKER', { providedIn: 'root', factory: () => true });
 
+/**
+ * Whether the game page shows its theme button (G6 of trymarz/gemp-lotr-private#27): the deck builder's red button,
+ * in the top right corner of the table. Off until the owner has seen where it goes and accepted its place in the
+ * comparison with the legacy page (which had none); without it the game's theme is chosen with `?theme=`.
+ */
+export const GAME_THEME_PICKER = new InjectionToken<boolean>('GAME_THEME_PICKER', {
+  providedIn: 'root',
+  factory: () => false,
+});
+
 /** Every player lands on the modern look, on every device, until they choose another (owner, 2026-11-11). */
 const DEFAULT_THEME: ThemeName = 'modern';
 

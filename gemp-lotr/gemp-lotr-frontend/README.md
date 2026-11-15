@@ -293,6 +293,11 @@ and replays (G4). Nothing links to it yet.
   a plain button that does nothing; a spectator still has the Options tab; the Rule of 4 line keeps its last count
   while hidden; a character the server's stats leave out keeps the numbers it last had; Shift doesn't flip the zoomed
   card; the page asks for news after the game's end too.
+- **Modern** (`?theme=modern`, remembered in `gempGameTheme`; the game starts on classic): the deck builder's dark
+  gray with the game's own values (`--theme-game-*` in `themes.css`), laid out as the legacy page on a computer
+  (`npm run check:game:modern`: the same games, every card and panel within 2px). The red theme button
+  (`GameThemeButtonComponent`, in the table's top right corner) is off until the owner accepts its place
+  (`GAME_THEME_PICKER`).
 - **Checked** (see `visual-check/game/README.md`): `npm run check:game:table` shows every state of the recorded games
   on both pages, with the decision waiting at each, pixel by pixel; `npm run check:game -- --pages legacy,angular
 --reload` plays real games on both pages with the same gestures, and reloads the Angular page after every step;

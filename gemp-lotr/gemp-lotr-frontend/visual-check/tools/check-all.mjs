@@ -71,6 +71,10 @@ const PARTS = [
   ...(quick
     ? []
     : [['Game screen: every control against every gesture', npm(VISUAL_CHECK, 'run', 'check:game:matrix')]]),
+  // The modern theme: the same games, laid out as the legacy page (where every card and panel is, within 2px)
+  ...(quick
+    ? []
+    : [['Game screen: the modern theme laid out as the legacy page', npm(VISUAL_CHECK, 'run', 'check:game:modern')]]),
 ];
 
 const results = PARTS.map(([name, { cwd, args }]) => {

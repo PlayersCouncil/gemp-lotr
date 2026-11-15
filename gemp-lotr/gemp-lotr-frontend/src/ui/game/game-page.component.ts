@@ -1,3 +1,5 @@
+import { GameThemeButtonComponent } from './panel/game-theme-button.component';
+import { GAME_THEME_PICKER } from '../../core/platform/theme.service';
 import { Component, computed, inject } from '@angular/core';
 import { ChatRoom } from '../../core/chat/chat-room.service';
 import { provideCardInteractions } from '../../core/cards/card-interactions';
@@ -68,6 +70,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     GameAnimationComponent,
     DecisionDialogsComponent,
     ActionMenuComponent,
+    GameThemeButtonComponent,
     CardInfoComponent,
     AutoZoomComponent,
   ],
@@ -90,6 +93,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-state class="gd-game__state" />
       <gd-game-alert class="gd-game__alert" />
       <div class="gd-game__table">
+        @if (themePicker) {
+          <span class="gd-game__theme"><gd-game-theme-button /></span>
+        }
         <section class="gd-game__row" data-row="support-opponent" aria-label="Opponent's support area">
           <gd-game-cards [stacks]="table().supportOpponent" />
         </section>
@@ -167,6 +173,8 @@ export class GamePageComponent {
   protected readonly decisions = inject(GameDecisions);
   protected readonly model = this.session.model;
   protected readonly table = inject(GameTableState).table;
+  /** The theme button (off until the owner accepts its place: GAME_THEME_PICKER). */
+  protected readonly themePicker = inject(GAME_THEME_PICKER);
 
   protected readonly stats = computed(() => this.model().stats);
   protected readonly fights = computed(() => this.table().assignments.length + (this.table().skirmish ? 1 : 0));

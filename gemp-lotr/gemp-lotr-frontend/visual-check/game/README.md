@@ -42,7 +42,9 @@ each; in Firefox, `CHECK_BROWSER=firefox`, 1 by default: Firefox keeps one mouse
 one page was ended by another page's click; the table check too), `--tolerance`, `--out` (default `report-game`), `--pages` (default `legacy,legacy`), `--legacy` and `--angular`
 (the pages' paths), `--inject <name>` (a bug of `injections.mjs` in page B), `--real-images` (card pictures from the
 image server instead of placeholders), `--verbose` (every decision and answer of both players), `--record` (see
-"Recordings").
+"Recordings"), `--theme modern` (the Angular page's theme) with `--geometry` (where every card and the panels around
+the table are, within `--margin` px, default 2, instead of the pixels: a theme laid out as the legacy page; the game as
+shown, the requests and the dialogs are compared as always). The table check has `--theme` and `--geometry` too.
 
 The report is `report-game/index.html`: each scenario with its steps, both screenshots of each and the differences in
 red, and what no scenario covers.

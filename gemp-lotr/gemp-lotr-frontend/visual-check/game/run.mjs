@@ -14,7 +14,7 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { acceptedGameProblem } from '../accepted.mjs';
 import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
-import { compareScreens } from '../compare.mjs';
+import { compareBoxes, compareScreens } from '../compare.mjs';
 import { placeholder } from '../stub-server.mjs';
 import {
   actionMenuPoint,
@@ -22,6 +22,7 @@ import {
   ANGULAR_CONTRACT,
   cardPoint,
   LEGACY,
+  readGameBoxes,
   readGameState,
   readLegacyModel,
 } from './controls.mjs';
@@ -45,6 +46,10 @@ const { values: options } = parseArgs({
     // Firefox keeps one mouse for the whole browser: two pages dragging at once take it from each other (a drag up
     // ended by the other page's click), so there one scenario plays at a time
     workers: { type: 'string', default: BROWSER_NAME === 'firefox' ? '1' : String(MAX_WORKERS) },
+    // The Angular page's theme; with another than classic, --geometry compares where the parts are, not the pixels
+    theme: { type: 'string', default: 'classic' },
+    geometry: { type: 'boolean', default: false },
+    margin: { type: 'string', default: '2' },
     tolerance: { type: 'string', default: '60' },
     out: { type: 'string', default: 'report-game' },
     inject: { type: 'string' },
@@ -113,7 +118,11 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 /** The cookies a player's settings are kept in, the same on both pages: the fastest animations, everything else default. */
 function settingsCookies(server) {
   const { hostname } = new URL(server);
-  return [{ name: 'animation-speed', value: '4', domain: hostname, path: '/' }];
+  return [
+    { name: 'animation-speed', value: '4', domain: hostname, path: '/' },
+    // The Angular page's theme (--theme): the legacy page reads no such cookie
+    { name: 'gempGameTheme', value: options.theme, domain: hostname, path: '/' },
+  ];
 }
 
 /**
@@ -848,6 +857,7 @@ async function play(kind, scenario, size, pair, label) {
         name,
         screen: await page.screenshot({ mask: masks.map((selector) => page.locator(selector)), maskColor: '#ff00ff' }),
         state: await inPage(page, readGameState, { kind }),
+        boxes: options.geometry ? await inPage(page, readGameBoxes, { kind }) : null,
         requests: traffic.requests.splice(0),
         dialogs: dialogs.splice(0),
       };
@@ -1026,6 +1036,17 @@ function compareRuns(a, b, base) {
     }
     if (JSON.stringify(sa.dialogs) !== JSON.stringify(sb.dialogs)) {
       problems.push(`${at}: dialogs: A ${show(sa.dialogs)}, B ${show(sb.dialogs)}`);
+    }
+    if (options.geometry) {
+      // Where the parts are, within --margin px, instead of the pixels (a theme laid out as the legacy page)
+      for (const line of compareBoxes(sa.boxes ?? {}, sb.boxes ?? {}, Number(options.margin))) {
+        problems.push(`${at}: ${line}`);
+      }
+      const file = `${base}-${String(i).padStart(2, '0')}`;
+      fs.writeFileSync(path.join(outDir, `${file}-A.png`), sa.screen);
+      fs.writeFileSync(path.join(outDir, `${file}-B.png`), sb.screen);
+      images.push({ name: sa.name, file, differs: false, pixels: 0 });
+      continue;
     }
     pixels = Math.max(pixels, screens.outside);
     const file = `${base}-${String(i).padStart(2, '0')}`;

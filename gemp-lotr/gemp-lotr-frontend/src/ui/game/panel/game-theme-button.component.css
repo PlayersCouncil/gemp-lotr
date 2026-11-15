@@ -1,0 +1,23 @@
+:host {
+  display: contents;
+}
+
+.gd-game-theme {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  /* Bright red in every theme, so players notice they can switch (as the deck builder's, owner 2026-11-11) */
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-bg);
+}
+
+.gd-game-theme:is(:hover, :focus, :active) {
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-hover-bg);
+}
+
+.gd-game-theme[data-icon='theme']::before,
+.gd-game-theme[data-icon='theme']:is(:hover, :focus-visible, :active)::before {
+  background-image: var(--theme-attention-icons);
+  background-position: -128px -128px;
+}

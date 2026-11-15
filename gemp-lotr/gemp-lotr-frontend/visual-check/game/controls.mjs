@@ -216,3 +216,40 @@ export function readLegacyModel() {
     cards: cards.sort(),
   };
 }
+
+/**
+ * Where the game page's parts are (table.mjs --geometry): every card by its id, and the panels around the table, each
+ * as [x, y, width, height]. Runs in the page; the same on both pages, so their results can be compared (compareBoxes).
+ */
+export function readGameBoxes({ kind }) {
+  const box = (el) => {
+    if (!el) return null;
+    const b = el.getBoundingClientRect();
+    return b.width > 0 && b.height > 0 ? [b.x, b.y, b.width, b.height].map((n) => Math.round(n * 10) / 10) : null;
+  };
+  const boxes = {};
+  const put = (name, el) => {
+    const found = box(el);
+    if (found) boxes[name] = [found];
+  };
+  if (kind === 'legacy') {
+    const ui = window.ui;
+    put('state', ui.gameStateElem?.[0]);
+    put('alert', ui.alertBox?.[0]);
+    put('stats', ui.statsDiv?.[0]);
+    put('tabs', document.querySelector('#bottomLeftTabs'));
+    for (const el of document.querySelectorAll('.card')) {
+      const id = window.$(el).data('card')?.cardId;
+      if (id !== undefined && el.closest('.ui-dialog') === null) put(`card ${id}`, el);
+    }
+  } else {
+    put('state', document.querySelector('.gd-game__state'));
+    put('alert', document.querySelector('.gd-game__alert'));
+    put('stats', document.querySelector('.gd-game__stats'));
+    put('tabs', document.querySelector('.gd-game__tabs'));
+    for (const el of document.querySelectorAll('[data-card-id]')) {
+      if (el.closest('dialog') === null) put(`card ${el.dataset.cardId}`, el);
+    }
+  }
+  return boxes;
+}

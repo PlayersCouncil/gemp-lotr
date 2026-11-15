@@ -107,6 +107,11 @@ describe('GamePageComponent', () => {
     expect(el.querySelector('gd-game-tabs')?.getAttribute('data-extras')).toBe(String(1 + zoom));
   });
 
+  it('has no theme button until the owner turns it on (GAME_THEME_PICKER)', async () => {
+    const { el } = await open(state(''));
+    expect(el.querySelector('.gd-game-theme')).toBeNull();
+  });
+
   it('opens nothing without a game in the address', async () => {
     const { el } = await open('', '');
     expect(el.querySelector('gd-game-tabs')).not.toBeNull();

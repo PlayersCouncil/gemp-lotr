@@ -22,7 +22,8 @@ import { parseArgs } from 'node:util';
 import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
-import { ANGULAR_CONTRACT, cardPoint, LEGACY, readGameState } from './controls.mjs';
+import { compareBoxes } from '../compare.mjs';
+import { ANGULAR_CONTRACT, cardPoint, LEGACY, readGameBoxes, readGameState } from './controls.mjs';
 import { makeGesture, pointTarget } from './matrix.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -51,6 +52,10 @@ const { values: options } = parseArgs({
     // the first seed (generated-<seed> in the report)
     generated: { type: 'string' },
     'generated-seed': { type: 'string', default: '1' },
+    // Where the parts are instead of the pixels (a theme laid out as the legacy page): every card and the panels around
+    // the table, each within --margin px (controls.mjs readGameBoxes)
+    geometry: { type: 'boolean', default: false },
+    margin: { type: 'string', default: '2' },
   },
 });
 const OUT = path.resolve(HERE, '..', options.out);
@@ -183,6 +188,7 @@ async function open(browser, kind, recording, count, size) {
           maskColor: '#ff00ff',
         }),
         state: await inPage(page, readGameState, { kind }),
+        boxes: options.geometry ? await inPage(page, readGameBoxes, { kind }) : null,
         problems: [
           ...errors.splice(0),
           ...log.splice(0).filter((line) => !/favicon|site\.webmanifest|apple-touch/.test(line)),
@@ -348,7 +354,11 @@ async function worker() {
 function record(name, size, step, base, legacy, angular, labels = ['legacy', 'angular']) {
   const screens = compareScreens(legacy.screen, angular.screen, [], true);
   const differences = [
-    ...(screens.outside > TOLERANCE ? [`screen: ${screens.outside} pixels differ`] : []),
+    ...(options.geometry
+      ? compareBoxes(legacy.boxes ?? {}, angular.boxes ?? {}, Number(options.margin))
+      : screens.outside > TOLERANCE
+        ? [`screen: ${screens.outside} pixels differ`]
+        : []),
     ...stateDifferences(legacy.state, angular.state),
     ...legacy.problems.map((problem) => `${labels[0]}: ${problem}`),
     ...angular.problems.map((problem) => `${labels[1]}: ${problem}`),
