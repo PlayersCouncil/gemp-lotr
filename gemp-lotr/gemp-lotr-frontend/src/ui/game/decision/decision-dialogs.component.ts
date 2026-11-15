@@ -7,6 +7,7 @@ import { CardComponent } from '../../shared/card/card.component';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
+import { CardHintsDirective } from '../table/card-hints.directive';
 import { GameCardDirective } from '../table/game-card.directive';
 
 interface ShownCard {
@@ -33,7 +34,7 @@ export function choiceLabel(html: string): string {
 @Component({
   selector: 'gd-game-decision-dialogs',
   styleUrl: './decision-dialogs.component.css',
-  imports: [DialogComponent, CardComponent, FitCardsDirective, GameCardDirective],
+  imports: [DialogComponent, CardComponent, FitCardsDirective, GameCardDirective, CardHintsDirective],
   host: { style: 'display: contents' },
   template: `
     <gd-dialog
@@ -45,7 +46,7 @@ export function choiceLabel(html: string): string {
       [open]="small() !== null"
     >
       @if (small(); as dialog) {
-        <span class="gd-game-decision__text" [innerHTML]="dialog.text"></span><br />
+        <span class="gd-game-decision__text" gdCardHints [innerHTML]="dialog.text"></span><br />
         @if (dialog.kind === 'integer') {
           <span class="gd-game-spinner" role="group" aria-label="Number">
             <button
@@ -113,7 +114,14 @@ export function choiceLabel(html: string): string {
           @for (shown of shownCards(); track shown.card.id) {
             <button [gdCard]="views.of(shown.card)" [gdGameCard]="shown.card">
               @if (shown.text !== null) {
-                <span class="gd-game-decision__card-text" [innerHTML]="shown.text"></span>
+                <!-- A click on the text only shows the cards it names: the card is chosen by its picture, as on the legacy page -->
+                <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+                <span
+                  class="gd-game-decision__card-text"
+                  gdCardHints
+                  [innerHTML]="shown.text"
+                  (click)="$event.stopPropagation()"
+                ></span>
               }
             </button>
           }
@@ -161,7 +169,7 @@ export class DecisionDialogsComponent {
   /** The small dialog when it is answered with OK (a number, a list). */
   protected readonly okFor = computed(() => {
     const dialog = this.small();
-    return dialog && (dialog.kind === 'integer' || dialog.dropDown) ? dialog : null;
+    return dialog?.answerable && (dialog.kind === 'integer' || dialog.dropDown) ? dialog : null;
   });
   /** A list takes the focus when its dialog opens, as on the legacy page; otherwise nothing in it does. */
   protected readonly listShown = computed(() => {

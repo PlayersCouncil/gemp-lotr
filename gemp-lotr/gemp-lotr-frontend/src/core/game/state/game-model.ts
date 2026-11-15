@@ -5,6 +5,9 @@
  */
 import { Clocks, Decision, DecisionType, GameStats } from '../protocol/game-events';
 
+/** The decisions asked in the alert box, which frame it. */
+export const ALERT_DECISIONS: readonly string[] = ['CARD_ACTION_CHOICE', 'CARD_SELECTION', 'ASSIGN_MINIONS'];
+
 export interface GameCard {
   id: string;
   blueprintId: string;
@@ -100,6 +103,11 @@ export interface GameModel {
   ended: boolean;
   /** The kind of decision that was still waiting when the game ended (it could no longer be answered), or null. */
   closedByEnd: DecisionType | null;
+  /**
+   * Whether the alert box has asked something (ALERT_DECISIONS). In a replay nothing is answered, and the legacy page
+   * left the box's frame 2px wide after that.
+   */
+  alertAsked: boolean;
   /** How many events have been applied. */
   eventCount: number;
 }
@@ -131,6 +139,7 @@ export function emptyGame(): GameModel {
     clocks: {},
     ended: false,
     closedByEnd: null,
+    alertAsked: false,
     eventCount: 0,
   };
 }

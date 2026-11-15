@@ -2,7 +2,7 @@ import { CardRef, Decision, GameEvent } from '../protocol/game-events';
 import { applyEvents } from '../state/apply-event';
 import { emptyGame, GameModel } from '../state/game-model';
 import { assignMinion } from '../state/local-choices';
-import { gameTable, TableStack } from './game-table';
+import { gameTable, handRevealed, moveInRow, PileName, pileCards, pileTitle, TableStack } from './game-table';
 
 const ref = (cardId: string, extra: Partial<CardRef> = {}): CardRef => ({
   cardId,
@@ -204,5 +204,55 @@ describe('gameTable', () => {
 
   it('shows the cards a decision adds to the hand row (zone EXTRA)', () => {
     expect(ids(gameTable(play(put('4', { zone: 'EXTRA' }))).hand)).toEqual(['4']);
+  });
+});
+
+describe('piles and the order of cards', () => {
+  it("titles each pile as the legacy page did, the page's own revealed hand apart", () => {
+    const piles: PileName[] = ['discard', 'deadPile', 'adventureDeck', 'removedPile', 'deck', 'revealedHand'];
+    expect(piles.map((pile) => pileTitle(pile, false))).toEqual([
+      'Discard Pile',
+      'Dead Pile',
+      'Adventure Deck',
+      "'Removed From Game' Pile",
+      'Draw Deck',
+      'Revealed Hand',
+    ]);
+    expect(pileTitle('revealedHand', true)).toBe('Your Revealed Hand');
+  });
+
+  it("lists a player's pile in the order its cards came; the own revealed hand as copies not to be used", () => {
+    const model = play(
+      put('1', { zone: 'DISCARD' }),
+      put('2', { zone: 'DISCARD', participantId: 'bob' }),
+      put('3', { zone: 'DISCARD' }),
+      put('4', { zone: 'HAND' }),
+      put('5', { zone: 'HAND', participantId: 'bob' }),
+    );
+    expect(pileCards(model, 'discard', 'alice').map((card) => card.id)).toEqual(['1', '3']);
+    expect(pileCards(model, 'revealedHand', 'alice').map((card) => card.id)).toEqual(['tempRevealed4']);
+    expect(pileCards(model, 'revealedHand', 'bob').map((card) => card.id)).toEqual(['5']);
+    expect(pileCards({ ...model, spectator: true }, 'revealedHand', 'alice')[0]?.id).toBe('4');
+  });
+
+  it("knows a hand is shown: revealed to all, or the opponent's cards in it sent", () => {
+    const model = play(put('4', { zone: 'HAND' }));
+    expect(handRevealed(model, 'alice')).toBe(false);
+    expect(handRevealed(model, 'bob')).toBe(false);
+    expect(handRevealed({ ...model, revealedHands: ['alice'] }, 'alice')).toBe(true);
+    expect(handRevealed(play(put('5', { zone: 'HAND', participantId: 'bob' })), 'bob')).toBe(true);
+    expect(handRevealed({ ...model, spectator: true }, 'alice')).toBe(true);
+  });
+
+  it('moves a dragged card before the card it lands on to the left, after it to the right', () => {
+    const order = ['x', 'a', 'b', 'c', 'y'];
+    const row = ['a', 'b', 'c'];
+    expect(moveInRow(order, row, 'c', 0)).toEqual(['x', 'c', 'a', 'b', 'y']);
+    expect(moveInRow(order, row, 'a', 2)).toEqual(['x', 'b', 'c', 'a', 'y']);
+    expect(moveInRow(order, row, 'a', 9)).toEqual(['x', 'b', 'c', 'a', 'y']);
+    // Nowhere to go, or not a card of the row
+    expect(moveInRow(order, row, 'b', 1)).toEqual(order);
+    expect(moveInRow(order, row, 'z', 0)).toEqual(order);
+    expect(moveInRow(order, [], 'a', 0)).toEqual(order);
   });
 });

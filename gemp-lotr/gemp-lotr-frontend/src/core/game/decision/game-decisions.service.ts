@@ -44,6 +44,7 @@ export class GameDecisions {
     decisionView(this.session.model(), {
       autoAccept: this.settings.autoAccept(),
       alwaysDropDown: this.settings.alwaysDropDown(),
+      replay: this.session.replaying(),
     }),
   );
 
@@ -93,7 +94,7 @@ export class GameDecisions {
   cardClicked(cardId: string, at: { x: number; y: number }, now = Date.now()): void {
     const decision = this.decision;
     const mark = this.view().marks[cardId];
-    if (!decision || (mark !== 'selectable' && mark !== 'actionable')) return;
+    if (!decision || this.session.replaying() || (mark !== 'selectable' && mark !== 'actionable')) return;
     if (this.lastClick?.cardId === cardId && now - this.lastClick.at < SELECTION_DEBOUNCE_MS) return;
     this.lastClick = { cardId, at: now };
 

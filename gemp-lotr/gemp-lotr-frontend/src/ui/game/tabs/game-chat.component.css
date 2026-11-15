@@ -19,6 +19,11 @@ gd-game-chat .gd-game-chat__lines {
   overflow: auto;
 }
 
+/* No field in a replay: the lines reach 9px above the box's foot */
+gd-game-chat .gd-game-chat__lines[data-replay] {
+  bottom: 6px;
+}
+
 gd-game-chat .gd-game-chat__talk {
   position: absolute;
   box-sizing: content-box;

@@ -36,6 +36,7 @@ describe('GameLog', () => {
       .map((entry) => (entry.kind === 'chat' ? `chat:${entry.message.html}` : `${entry.kind}:${entry.html}`));
 
   it("lists the game's lines and the room's in the order they are handed over", () => {
+    log.restart('7', []);
     log.game([{ kind: 'message', text: 'one' }]);
     chat.join('Game7');
     room().flush('<chat><message from="bob">hi</message></chat>');
@@ -99,11 +100,20 @@ describe('GameLog', () => {
 
   it("keeps the server's thanks at the end of a game, wherever it was said", () => {
     expect(log.feedback()).toBeNull();
+    log.restart('7', []);
     log.game([{ kind: 'message', text: 'Thank you for playing! <a>form</a>' }]);
     expect(log.feedback()).toBe('Thank you for playing! <a>form</a>');
     log.feedback.set(null);
     chat.join('Game7');
     room().flush('<chat><message from="System">Thank you for playing! again</message></chat>');
     expect(log.feedback()).toBe('Thank you for playing! again');
+  });
+
+  it('takes no game lines before the game (or a replay) has come', () => {
+    log.game([{ kind: 'message', text: 'too early' }]);
+    expect(kinds()).toEqual([]);
+    log.restart(null, []);
+    log.game([{ kind: 'message', text: 'in the replay' }]);
+    expect(kinds()).toEqual(['message:in the replay']);
   });
 });

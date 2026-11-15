@@ -178,7 +178,11 @@ export function animating({ kind }) {
     const $ = window.$;
     return $(':animated').length > 0 || ($('#main').queue && $('#main').queue().length > 0);
   }
-  return document.getAnimations().some((animation) => animation.playState === 'running');
+  // An event holding the page (its animation) is still moving, also between the moves
+  return (
+    document.querySelector('[data-animating]') !== null ||
+    document.getAnimations().some((animation) => animation.playState === 'running')
+  );
 }
 
 /**

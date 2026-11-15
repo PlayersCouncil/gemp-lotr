@@ -10,6 +10,7 @@ import { GameRestore } from './session/game-restore';
 import { GameSession } from './session/game-session.service';
 import { GameViewState } from './session/game-view-state';
 import { GameSettings } from './settings/game-settings';
+import { GameCardInfo } from './table/game-card-info';
 import { GameCardViews } from './table/game-card-views';
 import { GameTableState } from './table/game-table.service';
 
@@ -32,5 +33,6 @@ export function provideGameState(): Provider[] {
     GameViewState,
     GameTableState,
     GameCardViews,
+    GameCardInfo,
   ];
 }

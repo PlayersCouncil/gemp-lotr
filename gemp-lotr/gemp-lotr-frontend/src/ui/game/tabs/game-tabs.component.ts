@@ -21,9 +21,10 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
 
 /**
  * The tab box at the bottom left: the chat, the settings, the options (concede, ask to cancel) and the players in the
- * room; beside the tabs, the hover zoom's switch and the timer sounds' switch (not for a spectator).
+ * room; beside the tabs, the hover zoom's switch and the timer sounds' switch (not for a spectator). A replay has only
+ * the chat and the settings, and no timer switch.
  *
- * DOM contract: `gd-game-tabs` with `data-extras` (how many switches), holding `.gd-game-tabs__strip` with a `button[data-tab]` per tab (`aria-selected`) and
+ * DOM contract: `gd-game-tabs` with `data-extras` (how many switches), holding `.gd-game-tabs__strip` with an `a[data-tab]` (a link, as the legacy tab) per tab (`aria-selected`) and
  * `[data-toggle]` auto-zoom and timer-mute; then `.gd-game-tabs__panel` (`data-panel`). Settings: `[data-setting]`
  * named as the legacy ids (foilPresentation, animation-slider, autoAccept, autoDismissDeckReveal,
  * use-old-stack-checkbox, alwaysDropDown, autoPassFELLOWSHIP ...), `[data-timer-alert]` timerAlertBelow and
@@ -37,16 +38,17 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
   template: `
     <div class="gd-game-tabs__strip" role="tablist">
       @for (tab of tabs(); track tab.name) {
-        <button
-          type="button"
+        <!-- A link, as the legacy tab: the browser shows its focus and takes its keys as it did there -->
+        <a
+          href="#"
           role="tab"
           class="gd-game-tabs__tab"
           [attr.data-tab]="tab.name"
           [attr.aria-selected]="tab.name === selected()"
-          (click)="open(tab.name)"
+          (click)="$event.preventDefault(); open(tab.name)"
         >
           {{ tab.label }}
-        </button>
+        </a>
       }
       <div class="gd-game-tabs__extras">
         @if (zoom.available) {
@@ -246,7 +248,9 @@ export class GameTabsComponent {
    */
   protected readonly timer = computed<'ready' | 'waiting' | null>(() => {
     const model = this.session.model();
-    return !model.started ? 'waiting' : model.spectator ? null : 'ready';
+    if (!model.started) return 'waiting';
+    // A replay has no timer: its switch goes once the replayed game starts
+    return model.spectator || this.session.replaying() ? null : 'ready';
   });
 
   /** How many switches stand beside the tabs: two make the strip higher. */
@@ -256,12 +260,16 @@ export class GameTabsComponent {
    * A spectator keeps the Options tab, as on the legacy page (which meant to take it away, but decides before it
    * knows who watches).
    */
-  protected readonly tabs = computed<{ name: GameTab; label: string }[]>(() => [
-    { name: 'chat', label: 'Chat' },
-    { name: 'settings', label: 'Settings' },
-    { name: 'options', label: 'Options' },
-    { name: 'players', label: this.chat.joined() ? `Players(${this.chat.users().length})` : 'Players' },
-  ]);
+  protected readonly tabs = computed<{ name: GameTab; label: string }[]>(() => {
+    const all: { name: GameTab; label: string }[] = [
+      { name: 'chat', label: 'Chat' },
+      { name: 'settings', label: 'Settings' },
+      { name: 'options', label: 'Options' },
+      { name: 'players', label: this.chat.joined() ? `Players(${this.chat.users().length})` : 'Players' },
+    ];
+    // A replay has no game to concede and no room to be in
+    return this.session.replaying() ? all.filter((tab) => tab.name === 'chat' || tab.name === 'settings') : all;
+  });
 
   /**
    * The three rows of timer alert rules as the tab first shows them (a row without a rule: zeros). The fields keep

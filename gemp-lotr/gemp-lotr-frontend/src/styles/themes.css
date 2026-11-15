@@ -115,6 +115,9 @@
   --theme-game-selectable: #7faf7f;
   --theme-game-actionable: #7f7fff;
   --theme-game-selected: #009f9f;
+  /* A card's frame, and the frame an activated card flashes (game.css .highlightBorderOverlay) */
+  --theme-game-card-frame: #000;
+  --theme-game-highlight: #fff;
   /* An inactive card that is offered or chosen is only lightly dimmed */
   --theme-game-inactive-offered-filter: grayscale(0.3) brightness(0.85);
   /* The menu of a card's actions (jquery.contextMenu.css) */

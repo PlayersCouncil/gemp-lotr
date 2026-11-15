@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DecisionButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
+import { CardHintsDirective } from '../table/card-hints.directive';
 
 /** The legacy ids of the alert box's buttons. */
 const BUTTON_IDS: Readonly<Record<DecisionButton, string>> = {
@@ -23,9 +24,10 @@ const BUTTON_IDS: Readonly<Record<DecisionButton, string>> = {
 @Component({
   selector: 'gd-game-alert',
   styleUrl: './game-alert.component.css',
+  imports: [CardHintsDirective],
   host: { '[attr.data-frame]': 'decisions.view().frame' },
   template: `
-    <div class="gd-game-alert__text" data-game="alert" [innerHTML]="decisions.view().alert"></div>
+    <div class="gd-game-alert__text" data-game="alert" gdCardHints [innerHTML]="decisions.view().alert"></div>
     <div class="gd-game-alert__buttons" data-game="alert-buttons">
       @for (button of decisions.view().buttons; track button) {
         <button

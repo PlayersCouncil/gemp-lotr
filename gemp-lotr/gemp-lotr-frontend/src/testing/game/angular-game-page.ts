@@ -88,6 +88,8 @@ export async function openAngularGamePage(server: FakeGameServer): Promise<Angul
       { provide: PAGE_QUERY_STRING, useValue: `?gameId=${server.gameId}` },
     ],
   });
+  // As in the browser check and the legacy page's jsdom tests: the fastest animations
+  document.cookie = 'animation-speed=4; path=/';
   // As the login guard does before the page opens
   TestBed.inject(PlayerInfo).load().subscribe();
   const fixture = TestBed.createComponent(GamePageComponent);
@@ -148,6 +150,18 @@ async function makeGesture(
   index: number,
   exchange: RecordedExchange,
 ): Promise<void> {
+  if (exchange.path.endsWith('/cardInfo')) {
+    // A click anywhere first closes card information that is open (as the browser check's scenario clicks the page)
+    if (page.element.querySelector('dialog.gd-card-info[open]')) {
+      document.body.click();
+      await page.advance(0);
+    }
+    const target = find(page, card(exchange.params['cardId'] ?? ''));
+    if (!target) throw new Error(`no card ${exchange.params['cardId'] ?? ''}`);
+    target.dispatchEvent(new MouseEvent('click', { bubbles: true, shiftKey: true }));
+    await page.advance(0);
+    return;
+  }
   if (exchange.path.endsWith('/concede') || exchange.path.endsWith('/cancel')) {
     await click(page, '[data-tab="options"]');
     await click(page, `[data-button="${exchange.path.endsWith('/concede') ? 'concedeGame' : 'cancelGame'}"]`);

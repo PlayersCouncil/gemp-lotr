@@ -177,7 +177,9 @@ export class CardComponent {
   protected onPointerUp(event: PointerEvent): void {
     const press = this.press;
     this.cancelPress();
-    if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO) {
+    // Not when the card is being moved sideways in its row (an ancestor marks that with data-dragging)
+    const sideways = (event.currentTarget as Element | null)?.closest('[data-dragging]') ?? null;
+    if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO && sideways === null) {
       this.swallowClick = true;
       this.info.showDragged(this.card());
     }

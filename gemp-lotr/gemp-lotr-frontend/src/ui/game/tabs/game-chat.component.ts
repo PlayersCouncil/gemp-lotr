@@ -13,8 +13,10 @@ import {
 } from '@angular/core';
 import { ChatRoom } from '../../../core/chat/chat-room.service';
 import { GameLog, GameLogEntry } from '../../../core/game/session/game-log';
+import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { PlayerInfo } from '../../../core/session/player-info.service';
+import { CardHintsDirective } from '../table/card-hints.directive';
 
 /** A line that names the player is marked: "@name" calls them (ping), their name or "@everyone" mentions them. */
 export function mentionOf(html: string, name: string | null): 'ping' | 'mention' | null {
@@ -60,8 +62,9 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
   styleUrl: './game-chat.component.css',
   // Not scoped: it also styles what the server's messages hold (card names, links); its rules all start at gd-game-chat
   encapsulation: ViewEncapsulation.None,
+  imports: [CardHintsDirective],
   template: `
-    <div #lines class="gd-game-chat__lines">
+    <div #lines class="gd-game-chat__lines" gdCardHints [attr.data-replay]="replaying() ? '' : null">
       @for (line of views(); track $index) {
         @if (line.from !== null || line.boxed) {
           <div class="gd-game-chat__line" [attr.data-kind]="line.kind" [attr.data-mention]="line.mention">
@@ -84,13 +87,15 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
         }
       }
     </div>
-    <input
-      type="text"
-      class="gd-game-chat__talk"
-      data-chat-input
-      aria-label="Say something"
-      (keydown.enter)="send($event)"
-    />
+    @if (!replaying()) {
+      <input
+        type="text"
+        class="gd-game-chat__talk"
+        data-chat-input
+        aria-label="Say something"
+        (keydown.enter)="send($event)"
+      />
+    }
   `,
 })
 export class GameChatComponent {
@@ -98,6 +103,8 @@ export class GameChatComponent {
   private readonly chat = inject(ChatRoom);
   private readonly player = inject(PlayerInfo);
   private readonly viewState = inject(GameViewState);
+  /** A replay has no room to say anything in. */
+  protected readonly replaying = inject(GameSession).replaying;
   private readonly lines = viewChild<ElementRef<HTMLElement>>('lines');
 
   protected readonly views = computed<LineView[]>(() => {

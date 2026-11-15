@@ -24,6 +24,8 @@ export class GameLog {
   private readonly store = inject(SessionStore);
   private readonly lines = signal<readonly GameLogEntry[]>([]);
   private gameId: string | null = null;
+  /** Whether the game has opened (its messages are taken as they come). */
+  private started = false;
   /** After a reload: the room's first answer repeats what was shown. */
   private rejoining = false;
   readonly entries = this.lines.asReadonly();
@@ -38,26 +40,35 @@ export class GameLog {
     });
   }
 
-  /** The game's new messages, as the game got them. */
+  /** The game's new messages, as the game got them (before the game has opened, restart takes them). */
   game(messages: readonly GameMessage[]): void {
+    if (!this.started) return;
     this.add(messages.map((message) => ({ kind: message.kind, html: message.text, game: true })));
   }
 
   /**
    * The game opened (again): the list as the page showed it before a reload, with the game's messages it hadn't shown
-   * yet; or, the first time, the game's messages so far (the chat's lines it already had stay after them).
+   * yet; or, the first time, the game's messages so far (the chat's lines it already had stay after them). The
+   * feedback dialog is as it was left, or opens for the server's thanks among the new messages. `gameId` null (a
+   * replay): nothing is kept.
    */
-  restart(gameId: string, messages: readonly GameMessage[]): void {
+  restart(gameId: string | null, messages: readonly GameMessage[]): void {
     this.gameId = gameId;
-    const saved = this.store.read(key(gameId));
+    this.started = true;
+    const saved = gameId === null ? null : (this.store.read(key(gameId)) as SavedLog | GameLogEntry[] | null);
     const asGame = (m: GameMessage): GameLogEntry => ({ kind: m.kind, html: m.text, game: true });
-    if (Array.isArray(saved)) {
-      const lines = saved as GameLogEntry[];
+    const lines = Array.isArray(saved) ? saved : saved?.lines;
+    if (lines) {
       const shown = lines.filter((line) => line.kind !== 'chat' && line.game).length;
-      this.lines.set([...lines, ...messages.slice(shown).map(asGame)]);
+      const fresh = messages.slice(shown).map(asGame);
+      this.lines.set([...lines, ...fresh]);
+      this.feedback.set(Array.isArray(saved) ? null : (saved?.feedback ?? null));
+      this.thank(fresh);
       this.rejoining = true;
     } else {
-      this.lines.update((lines) => [...messages.map(asGame), ...lines.filter((line) => line.kind === 'chat')]);
+      const fresh = messages.map(asGame);
+      this.lines.update((kept) => [...fresh, ...kept.filter((line) => line.kind === 'chat')]);
+      this.thank(fresh);
     }
     this.save();
   }
@@ -80,19 +91,39 @@ export class GameLog {
   }
 
   private save(): void {
-    if (this.gameId !== null) this.store.write(key(this.gameId), this.lines());
+    if (this.gameId !== null) {
+      const saved: SavedLog = { lines: this.lines(), feedback: this.feedback() };
+      this.store.write(key(this.gameId), saved);
+    }
   }
 
-  private add(entries: readonly GameLogEntry[]): void {
-    if (entries.length === 0) return;
-    this.lines.update((lines) => [...lines, ...entries]);
+  /** The player closed the feedback dialog. */
+  closeFeedback(): void {
+    this.feedback.set(null);
     this.save();
-    // Any line that thanks the player is the end of the game (legacy checkForEnd)
+  }
+
+  /** The server's thanks among new lines opens the feedback dialog (legacy checkForEnd). */
+  private thank(entries: readonly GameLogEntry[]): void {
     for (const entry of entries) {
       const html = entry.kind === 'chat' ? entry.message.html : entry.html;
       if (html.includes(FEEDBACK_MARK)) this.feedback.set(html);
     }
   }
+
+  private add(entries: readonly GameLogEntry[]): void {
+    if (entries.length === 0) return;
+    this.lines.update((lines) => [...lines, ...entries]);
+    // Any line that thanks the player is the end of the game (legacy checkForEnd)
+    this.thank(entries);
+    this.save();
+  }
 }
 
 const key = (gameId: string) => `gemp.game.${gameId}.log`;
+
+/** What is kept of the chat box per game: its lines and the feedback dialog, if open. */
+interface SavedLog {
+  lines: readonly GameLogEntry[];
+  feedback: string | null;
+}

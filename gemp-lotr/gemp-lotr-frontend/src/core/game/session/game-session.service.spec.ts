@@ -48,6 +48,8 @@ describe('GameSession', () => {
 
   afterEach(() => {
     vi.advanceTimersByTime(POLL_DELAY_MS);
+    // A question for news may be open (the page asks while nothing waits for the player, also after the end)
+    backend.match((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'));
     backend.verify();
     vi.useRealTimers();
   });
@@ -75,8 +77,13 @@ describe('GameSession', () => {
     answer.flush(update('2', '<ge type="GPC" phase="Skirmish"/>'));
     expect(session.model().phase).toBe('Skirmish');
     expectPoll('2').flush(update('3', '<ge type="EG"/>'));
-    // The game is over: no more news
     expect(session.model().ended).toBe(true);
+    // The game is over, and the page still asks for news, as the legacy page did (the server sends the draw deck then)
+    expectPoll('3').flush(
+      update('4', '<ge type="PCIP" cardId="9" blueprintId="1_1" participantId="alice" zone="DECK"/>'),
+    );
+    expect(session.model().cards['9']?.zone).toBe('DECK');
+    expectPoll('4').flush(update('5', decision()));
   });
 
   it('answers nothing when no decision waits', () => {
@@ -202,7 +209,55 @@ describe('GameSession', () => {
     const poll = expectPoll('1');
     TestBed.resetTestingModule();
     expect(poll.cancelled).toBe(true);
-    backend = { verify: () => undefined } as unknown as HttpTestingController;
+    backend = { verify: () => undefined, match: () => [] } as unknown as HttpTestingController;
+  });
+
+  it('plays a replay event by event while it plays, each held as long as its animation, and stops at its end', () => {
+    session.openReplay('alice$abc');
+    expect(session.replaying()).toBe(true);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/replay/alice$abc')
+      .flush(
+        '<gameReplay><ge type="TP" count="1"/>' +
+          decision('CARD_SELECTION', '<parameter name="cardId" value="4"/>') +
+          '<ge type="TP" count="2"/></gameReplay>',
+      );
+    expect(session.replayDone()).toBe(false);
+    session.togglePlay();
+    expect(session.replayPlaying()).toBe(true);
+    vi.advanceTimersByTime(60_000);
+    // The decision asked on the way was put away before the next event (nothing is answered in a replay)
+    expect(session.model()).toMatchObject({ twilight: 2, decision: null });
+    expect(session.replayDone()).toBe(true);
+    expect(session.busy()).toBe(false);
+
+    // Paused, it waits; played again at its end, nothing more happens
+    session.togglePlay();
+    expect(session.replayPlaying()).toBe(false);
+    session.togglePlay();
+    vi.advanceTimersByTime(1000);
+    expect(session.model().twilight).toBe(2);
+  });
+
+  it('a replay with nothing in it is done at once; its speed halves and doubles within limits', () => {
+    session.togglePlay();
+    expect(session.replayPlaying()).toBe(false);
+    session.openReplay('x');
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/replay/x').flush('<gameReplay></gameReplay>');
+    expect(session.replayDone()).toBe(true);
+    const start = session.speed();
+    session.slower();
+    expect(session.speed()).toBe(Math.min(16, start * 2));
+    for (let i = 0; i < 10; i++) session.slower();
+    expect(session.speed()).toBe(16);
+    for (let i = 0; i < 20; i++) session.faster();
+    expect(session.speed()).toBe(0.0625);
+  });
+
+  it('a replay that fails to come shows the problem', () => {
+    session.openReplay('gone');
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/replay/gone').flush('', { status: 404, statusText: 'x' });
+    expect(session.problem()).not.toBeNull();
   });
 
   it("the legacy page's messages for each failure", () => {

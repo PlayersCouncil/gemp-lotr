@@ -168,6 +168,53 @@ describe('the decisions on the game page', () => {
     expect(answer()).toBe('11');
   });
 
+  it('shows the information of a card the decision offers on a right click, then on a shift click', async () => {
+    const { el, stable } = await open(
+      game(
+        d(
+          'CARD_ACTION_CHOICE',
+          param('cardId', '4') + param('blueprintId', 'inPlay') + param('actionId', '10') + param('actionText', 'Play'),
+          'Play',
+        ),
+        card('4', 'HAND'),
+      ),
+    );
+    const hand = el.querySelector<HTMLElement>('[data-row="hand"] [data-card-id="4"]')!;
+    const title = () => el.querySelector('gd-card-info [data-dialog-title]');
+    hand.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+    await stable();
+    expect(title()).not.toBeNull();
+    document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    document.body.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+    document.body.click();
+    await stable();
+    expect(title()).toBeNull();
+    const press = (target: Element, button: number, shiftKey = false) => {
+      for (const type of ['pointerdown', 'mousedown', 'pointerup', 'mouseup', button === 0 ? 'click' : 'contextmenu']) {
+        const event = new MouseEvent(type, {
+          bubbles: true,
+          cancelable: true,
+          button,
+          shiftKey,
+          clientX: 5,
+          clientY: 5,
+        });
+        Object.defineProperty(event, 'pointerType', { value: 'mouse' });
+        Object.defineProperty(event, 'pointerId', { value: 1 });
+        target.dispatchEvent(event);
+      }
+    };
+    press(hand, 2);
+    await stable();
+    expect(title()).not.toBeNull();
+    press(el.querySelector('[data-card-id="1"]')!, 0);
+    await stable();
+    expect(title()).toBeNull();
+    press(hand, 0, true);
+    await stable();
+    expect(title()).not.toBeNull();
+  });
+
   it("comes back after a reload with a card's open menu and the cards chosen but not sent", async () => {
     const state = game(
       d(

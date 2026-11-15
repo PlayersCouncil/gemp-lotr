@@ -91,6 +91,11 @@
   margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
 }
 
+/* A landscape card (a site) is as wide as the row is high */
+.gd-game-decision__cards > .gd-card[data-orientation='horizontal'] {
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-height, 200px) * 350 / 490), 1px));
+}
+
 .gd-game-decision__cards > .gd-card[data-mark] {
   --gd-card-frame: var(--theme-game-selected);
 }

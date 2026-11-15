@@ -1,4 +1,5 @@
 import { effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { PileName } from '../table/game-table';
 import { GameSession } from './game-session.service';
 
 /** A card's open menu of actions: the card, where it was clicked, and the decision it is for (decisionKey). */
@@ -25,6 +26,12 @@ export class GameViewState {
   readonly menu = signal<SavedMenu | null>(null);
   /** How far the open tab's panel is scrolled (px). */
   readonly panelScroll = signal(0);
+  /** The piles open in dialogs, in the order they were opened. */
+  readonly pileDialogs = signal<readonly { pile: PileName; player: string }[]>([]);
+  /** The card shown in the card information: a card of the game by its id, or a card named in a text. */
+  readonly cardInfo = signal<{ cardId: string | null; blueprintId: string } | null>(null);
+  /** Card ids in the order the player arranged them by dragging (the others follow in the server's order). */
+  readonly cardOrder = signal<readonly string[]>([]);
   /** How far the chat box's list is scrolled (px), or null at its end. */
   readonly chatScroll = signal<number | null>(null);
 
@@ -36,6 +43,9 @@ export class GameViewState {
         menu: this.menu(),
         panelScroll: this.panelScroll(),
         chatScroll: this.chatScroll(),
+        pileDialogs: this.pileDialogs(),
+        cardOrder: this.cardOrder(),
+        cardInfo: this.cardInfo(),
       };
       untracked(() => this.session.keepView(view));
     });
@@ -47,6 +57,25 @@ export class GameViewState {
     if (typeof saved['tab'] === 'string') this.tab.set(saved['tab']);
     if (typeof saved['panelScroll'] === 'number') this.panelScroll.set(saved['panelScroll']);
     if (typeof saved['chatScroll'] === 'number') this.chatScroll.set(saved['chatScroll']);
+    const info = saved['cardInfo'] as { cardId?: unknown; blueprintId?: unknown } | null | undefined;
+    if (info && typeof info.blueprintId === 'string') {
+      this.cardInfo.set({
+        cardId: typeof info.cardId === 'string' ? info.cardId : null,
+        blueprintId: info.blueprintId,
+      });
+    }
+    const order = saved['cardOrder'];
+    if (Array.isArray(order)) this.cardOrder.set(order.filter((id): id is string => typeof id === 'string'));
+    const dialogs = saved['pileDialogs'];
+    if (Array.isArray(dialogs)) {
+      this.pileDialogs.set(
+        dialogs.filter(
+          (d): d is { pile: PileName; player: string } =>
+            typeof (d as { pile?: unknown }).pile === 'string' &&
+            typeof (d as { player?: unknown }).player === 'string',
+        ),
+      );
+    }
     const piles = saved['openPiles'];
     if (Array.isArray(piles)) this.openPiles.set(piles.filter((index) => typeof index === 'number'));
     const menu = saved['menu'] as Partial<SavedMenu> | null | undefined;
@@ -59,6 +88,18 @@ export class GameViewState {
     ) {
       this.menu.set({ cardId: menu.cardId, x: menu.x, y: menu.y, decision: menu.decision });
     }
+  }
+
+  /** A pile's dialog opened (again: in front). */
+  openPile(pile: PileName, player: string): void {
+    this.pileDialogs.update((open) => [
+      ...open.filter((d) => d.pile !== pile || d.player !== player),
+      { pile, player },
+    ]);
+  }
+
+  closePile(pile: PileName, player: string): void {
+    this.pileDialogs.update((open) => open.filter((d) => d.pile !== pile || d.player !== player));
   }
 
   togglePiles(index: number): void {

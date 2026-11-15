@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
+import { handRevealed, PileName } from '../../../core/game/table/game-table';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { clockText } from './game-clock';
 import { PulseDirective } from './pulse.directive';
@@ -68,6 +69,10 @@ const shown = (value: number | null | undefined) => (value === null || value ===
             [attr.data-pile]="player.piles.deck ? 'deck' : null"
             [attr.data-player-index]="player.piles.deck ? player.index : null"
             [attr.data-clickable]="player.piles.deck ? '' : null"
+            [attr.role]="player.piles.deck ? 'button' : null"
+            [attr.tabindex]="player.piles.deck ? 0 : null"
+            (click)="openPile('deck', player.piles.deck, player.name)"
+            (keydown.enter)="openPile('deck', player.piles.deck, player.name)"
             >{{ player.deck }}</span
           >
           <span
@@ -75,6 +80,14 @@ const shown = (value: number | null | undefined) => (value === null || value ===
             data-counter="hand"
             [attr.data-stat]="'hand' + player.index"
             [attr.data-revealed]="player.handRevealed ? '' : null"
+            [attr.data-clickable]="player.handRevealed ? '' : null"
+            [attr.data-pile]="player.handRevealed ? 'revealedHand' : null"
+            [attr.data-player-index]="player.handRevealed ? player.index : null"
+            [attr.title]="player.handRevealed ? handTitle(player.own) : null"
+            [attr.role]="player.handRevealed ? 'button' : null"
+            [attr.tabindex]="player.handRevealed ? 0 : null"
+            (click)="openPile('revealedHand', player.handRevealed, player.name)"
+            (keydown.enter)="openPile('revealedHand', player.handRevealed, player.name)"
             >{{ player.hand }}</span
           >
           <span class="gd-game-counter" data-counter="threats" [attr.data-stat]="'threats' + player.index">{{
@@ -98,6 +111,10 @@ const shown = (value: number | null | undefined) => (value === null || value ===
               data-counter="discard"
               data-pile="discard"
               [attr.data-clickable]="player.piles.discard ? '' : null"
+              [attr.role]="player.piles.discard ? 'button' : null"
+              [attr.tabindex]="player.piles.discard ? 0 : null"
+              (click)="openPile('discard', player.piles.discard, player.name)"
+              (keydown.enter)="openPile('discard', player.piles.discard, player.name)"
               [attr.data-player-index]="player.index"
               [attr.data-stat]="'discard' + player.index"
               >{{ player.discard }}</span
@@ -107,6 +124,10 @@ const shown = (value: number | null | undefined) => (value === null || value ===
               data-counter="dead"
               data-pile="deadPile"
               [attr.data-clickable]="player.piles.dead ? '' : null"
+              [attr.role]="player.piles.dead ? 'button' : null"
+              [attr.tabindex]="player.piles.dead ? 0 : null"
+              (click)="openPile('deadPile', player.piles.dead, player.name)"
+              (keydown.enter)="openPile('deadPile', player.piles.dead, player.name)"
               [attr.data-player-index]="player.index"
               [attr.data-stat]="'deadPile' + player.index"
               >{{ player.dead }}</span
@@ -116,6 +137,10 @@ const shown = (value: number | null | undefined) => (value === null || value ===
               data-counter="adventure-deck"
               data-pile="adventureDeck"
               [attr.data-clickable]="player.piles.adventureDeck ? '' : null"
+              [attr.role]="player.piles.adventureDeck ? 'button' : null"
+              [attr.tabindex]="player.piles.adventureDeck ? 0 : null"
+              (click)="openPile('adventureDeck', player.piles.adventureDeck, player.name)"
+              (keydown.enter)="openPile('adventureDeck', player.piles.adventureDeck, player.name)"
               [attr.data-player-index]="player.index"
               [attr.data-stat]="'adventureDeck' + player.index"
               >{{ player.adventureDeck }}</span
@@ -125,6 +150,10 @@ const shown = (value: number | null | undefined) => (value === null || value ===
               data-counter="removed"
               data-pile="removedPile"
               [attr.data-clickable]="player.piles.removed ? '' : null"
+              [attr.role]="player.piles.removed ? 'button' : null"
+              [attr.tabindex]="player.piles.removed ? 0 : null"
+              (click)="openPile('removedPile', player.piles.removed, player.name)"
+              (keydown.enter)="openPile('removedPile', player.piles.removed, player.name)"
               [attr.data-player-index]="player.index"
               [attr.data-stat]="'removedPile' + player.index"
               >{{ player.removed }}</span
@@ -141,6 +170,7 @@ const shown = (value: number | null | undefined) => (value === null || value ===
       [attr.data-band]="clocks.view().decisionBand"
       [attr.data-expired]="clocks.view().decisionExpired ? '' : null"
       [gdPulse]="clocks.decisionPulse()"
+      [attr.data-empty]="decisionClock() === '' ? '' : null"
     >
       {{ decisionClock() }}
     </div>
@@ -192,7 +222,7 @@ export class GameStatePanelComponent {
         expired: clocks.expired.includes(name),
         deck: shown(zones?.deck),
         hand: shown(zones?.hand),
-        handRevealed: model.revealedHands.includes(name),
+        handRevealed: handRevealed(model, name),
         threats: threat ? (threat.total === '-1' ? threat.value : `${threat.value}/${threat.total}`) : '',
         discard: shown(zones?.discard),
         dead: shown(zones?.dead),
@@ -231,6 +261,17 @@ export class GameStatePanelComponent {
       hidden: stats !== null && (count === null || count === undefined || count === '-1'),
     };
   });
+
+  /** A counter clicked: its pile, if the player may look into it. */
+  protected openPile(pile: PileName, allowed: boolean, player: string): void {
+    if (allowed) this.view.openPile(pile, player);
+  }
+
+  protected handTitle(own: boolean): string {
+    return own
+      ? 'Your hand is revealed to your opponent and spectators. Click to see it as they do.'
+      : 'This hand is revealed. Click to view it.';
+  }
 
   protected toggle(index: number): void {
     this.view.togglePiles(index);

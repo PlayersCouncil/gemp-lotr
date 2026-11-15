@@ -6,6 +6,7 @@ import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 import { GameCardLayersComponent } from './game-card-layers.component';
 import { GameCardDirective } from './game-card.directive';
+import { ReorderDirective } from './reorder.directive';
 
 /** The share of a card left showing under the one drawn over it: attached, a fifth; stacked, a little more. */
 const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
@@ -20,9 +21,9 @@ const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
 @Component({
   selector: 'gd-game-cards',
   styleUrl: './game-cards.component.css',
-  imports: [CardComponent, FitCardsDirective, GameCardDirective, GameCardLayersComponent],
+  imports: [CardComponent, FitCardsDirective, GameCardDirective, GameCardLayersComponent, ReorderDirective],
   template: `
-    <div class="gd-game-cards__box" [gdFitCards]="fit()" [gdFitCardsOnPagePixels]="placed()">
+    <div class="gd-game-cards__box" [gdFitCards]="fit()" [gdFitCardsOnPagePixels]="placed()" [gdReorder]="ids()">
       @for (stack of stacks(); track stack.card.id) {
         <div class="gd-game-stack">
           @for (child of stack.under; track child.card.id) {
@@ -44,6 +45,9 @@ export class GameCardsComponent {
   readonly placed = input<unknown>(0);
 
   protected readonly views = inject(GameCardViews);
+
+  /** The row's cards (the ones others lie under), in their order: what dragging reorders. */
+  protected readonly ids = computed(() => this.stacks().map((stack) => stack.card.id));
 
   protected readonly fit = computed<FitCard[]>(() =>
     this.stacks().map((stack) => ({

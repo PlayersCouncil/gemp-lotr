@@ -252,8 +252,8 @@ The rules:
 
 `/gemp-lotr/ng/game?gameId=<id>` is the Angular port of `game.html`, built phase by phase
 (trymarz/gemp-lotr-private#27). A game can be **played** on it: the table, every decision, the clocks and the tab box
-behave as on the legacy page. Card information, the pile dialogs, the hover zoom, dragging cards, animations and
-replays come with G4, so nothing links to it yet.
+behave as on the legacy page, with card information, the pile dialogs, the hover zoom, dragging cards, the animations
+and replays (G4). Nothing links to it yet.
 
 - **Core** (`src/core/game/`, see Code layout): the game's state from the server's events. `table/game-table.ts` sorts
   the cards into the table's boxes (the legacy card groups' rules: rows by zone and side, what is attached to and
@@ -266,10 +266,14 @@ replays come with G4, so nothing links to it yet.
   auto-accept, the deck reveal skipped). `clock/GameClocks` counts the player's clock and the decision's while a
   decision waits, with the legacy colour bands, pulses, expiry and alert sounds (`clock/timer-cues.ts`);
   `clock/GameAttention` flashes the tab's title and plays the decision sound. The sounds, title and navigation are
-  the browser's: `core/platform/page-cues.ts`.
+  the browser's: `core/platform/page-cues.ts`. `session/event-pacing.ts` says how long each event holds the page (the
+  legacy animation queue's durations, times the speed setting) and `GameSession` applies the events one by one by it;
+  a replay (`?replayId=`) is played the same way. `table/GameCardInfo` adds the server's modifiers to the card
+  information.
 - **Coming back (D10).** A reload, or opening the game again in the tab, shows the page exactly as it was: the
   server sends the game, and the tab's session storage keeps the rest per game: the choices not sent yet, the view's
-  state above, the chat box's lines in their order (the room's greetings on joining again are left out), and what
+  state above (also the open pile dialogs, the card shown in the card information and the order of dragged cards), the
+  chat box's lines in their order (the room's greetings on joining again are left out), and what
   the page made of the game that the server's full state doesn't say again (each character's last numbers, the
   turn's inactive cards, the Rule of 4 count, a decision the end of the game closed).
 - **View** (`src/ui/game/`): `GamePageComponent` (element `<gemp-game>`) is the frame, a CSS grid with the legacy
@@ -279,18 +283,21 @@ replays come with G4, so nothing links to it yet.
   sizes are shares of the card, in CSS). `panel/` holds the game state panel, the stats bar and the alert box, `tabs/`
   the tab box (chat, settings with the timer alert rules, options, players), `pregame/` the panel shown until the
   players are known, `decision/` the decisions' dialogs (a number's spinner, a choice's buttons or list, cards to
-  choose from) and a card's menu of actions, `dialogs/` the end-of-game feedback dialog and the dialog for a game that
-  can't go on (no connection, not logged in, ...).
+  choose from) and a card's menu of actions, `dialogs/` the pile dialogs, the end-of-game feedback dialog and the
+  dialog for a game that can't go on (no connection, not logged in, ...). `table/gd-game-animation` plays the event
+  holding the page, `table/gdReorder` moves a card dragged sideways in its row, `table/gdCardHints` shows a card named
+  in a text, `panel/gd-game-replay` has the replay's buttons.
 - **Theme.** The game page has its own choice (`gempGameTheme` cookie, `PAGE_THEMES` in `theme.service.ts`) and starts
   on `classic`; its colours are the `--theme-game-*` values of `themes.css`. The modern look comes later.
 - **Legacy quirks kept in classic**, so the page matches `game.html`: until the players are known the timer switch is
   a plain button that does nothing; a spectator still has the Options tab; the Rule of 4 line keeps its last count
-  while hidden; a character the server's stats leave out keeps the numbers it last had.
+  while hidden; a character the server's stats leave out keeps the numbers it last had; Shift doesn't flip the zoomed
+  card; the page asks for news after the game's end too.
 - **Checked** (see `visual-check/game/README.md`): `npm run check:game:table` shows every state of the recorded games
   on both pages, with the decision waiting at each, pixel by pixel; `npm run check:game -- --pages legacy,angular
 --reload` plays real games on both pages with the same gestures, and reloads the Angular page after every step;
   `src/parity/game/angular-game.parity.spec.ts` replays every recording on the page in jsdom, which must send exactly
-  the recorded requests.
+  the recorded requests; `npm run check:game:matrix` makes every gesture on every control on both pages.
 
 ## Tests and the visual check
 

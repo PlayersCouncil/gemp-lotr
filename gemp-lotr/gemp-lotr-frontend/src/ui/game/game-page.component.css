@@ -35,6 +35,17 @@
   color: var(--theme-text);
   font-family: var(--theme-font-text);
   font-size: 12px;
+  /* game.css coloured the links in its dialogs */
+  --gd-card-info-link: var(--theme-game-text-link);
+  --gd-card-info-link-visited: var(--theme-game-text-link-visited);
+  /*
+   * The size slider's handle, focused as it opens, looked as under the mouse there; the browser drew its ring only
+   * after the keyboard (a shift click)
+   */
+  --gd-card-info-quiet-focus-border: var(--theme-hover-border);
+  --gd-card-info-quiet-focus-ring: none;
+  /* game.html kept the browser's 8px body margin, inside which its hover zoom was drawn */
+  --gd-zoom-shift: 8px;
 }
 
 :host([data-spectator]) {
@@ -266,4 +277,14 @@
 :host([data-turn='bottom']) [data-side='free-peoples']:is(.gd-game__strength, .gd-game__damage),
 :host([data-turn='top']) [data-side='shadow']:is(.gd-game__strength, .gd-game__damage) {
   bottom: 2px;
+}
+
+/* The replay's controls: in the page's bottom right corner (66 x 97, 4px further in than 5px, over everything) */
+.gd-game__replay {
+  position: absolute;
+  left: calc(100vw - 75px);
+  top: calc(100vh - 104px);
+  z-index: 1000;
+  width: 66px;
+  height: 97px;
 }

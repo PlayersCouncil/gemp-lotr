@@ -36,6 +36,7 @@ describe('decisionView', () => {
       min: 1,
       max: 3,
       value: 2,
+      answerable: true,
     });
     expect(decisionView(waiting(decision('INTEGER')), SETTINGS).dialog).toMatchObject({ min: 0, max: 1000, value: 0 });
   });
@@ -148,6 +149,15 @@ describe('decisionView', () => {
       '2': 'selectable',
       '6': 'selectable',
     });
+  });
+
+  it("shows a replay's decisions without anything to answer them with", () => {
+    const replay = { ...SETTINGS, replay: true };
+    expect(decisionView(waiting(decision('INTEGER')), replay).dialog).toMatchObject({ answerable: false });
+    const d = decision('CARD_SELECTION', { cardId: ['1'], min: ['0'], max: ['1'] });
+    expect(decisionView(waiting(d), replay).buttons).toEqual([]);
+    const cards = decision('ARBITRARY_CARDS', { cardId: ['a'], selectable: ['true'], min: ['0'], max: ['1'] });
+    expect(decisionView(waiting(cards), replay).dialog).toMatchObject({ buttons: [] });
   });
 
   it('reads the least number of cards (none said: 0)', () => {

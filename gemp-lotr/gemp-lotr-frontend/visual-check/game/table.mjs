@@ -21,7 +21,8 @@ import { parseArgs } from 'node:util';
 import { launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
-import { ANGULAR_CONTRACT, LEGACY, readGameState } from './controls.mjs';
+import { ANGULAR_CONTRACT, cardPoint, LEGACY, readGameState } from './controls.mjs';
+import { makeGesture, pointTarget } from './matrix.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const RECORDINGS = path.resolve(HERE, '../../src/testing/game-recordings');
@@ -41,6 +42,9 @@ const { values: options } = parseArgs({
     cookie: { type: 'string', multiple: true, default: [] },
     eval: { type: 'string' },
     boxes: { type: 'string' },
+    // A gesture of the matrix (matrix.mjs) made on both pages before they are read, in order (may be given several
+    // times): "shiftClick@card:25" (a card by its id), "press@point:5,5" or "press@<legacy selector>|<angular selector>"
+    gesture: { type: 'string', multiple: true, default: [] },
   },
 });
 const OUT = path.resolve(HERE, '..', options.out);
@@ -127,7 +131,10 @@ async function settled(page, waiting = () => 0) {
   for (let i = 0; i < 200 && same < 4; i++) {
     await page.waitForTimeout(150);
     const now = await page.evaluate(() => {
-      const loaded = Array.from(document.images).every((img) => img.complete) && document.getAnimations().length === 0;
+      const loaded =
+        Array.from(document.images).every((img) => img.complete) &&
+        document.getAnimations().length === 0 &&
+        !document.querySelector('[data-animating]');
       return loaded ? document.body.innerHTML.length + ':' + document.querySelectorAll('img').length : '';
     });
     same = now !== '' && now === last && waiting() === 0 ? same + 1 : 0;
@@ -161,8 +168,8 @@ async function open(browser, kind, recording, count, size) {
   return {
     page,
     select,
-    async snapshot() {
-      await page.mouse.move(1, 1);
+    async snapshot(keepMouse = false) {
+      if (!keepMouse) await page.mouse.move(1, 1);
       await settled(page, waiting);
       return {
         screen: await page.screenshot({
@@ -186,15 +193,39 @@ async function open(browser, kind, recording, count, size) {
   };
 }
 
+/** The gestures of --gesture, made one after the other on a page that stands still. */
+async function makeGestures(shown, kind) {
+  if (options.gesture.length === 0) return;
+  await settled(shown.page);
+  for (const spec of options.gesture) {
+    const at = spec.indexOf('@');
+    const [gesture, where] = [spec.slice(0, at), spec.slice(at + 1)];
+    let target;
+    if (where.startsWith('point:')) {
+      const [x, y] = where.slice('point:'.length).split(',').map(Number);
+      target = pointTarget({ x, y });
+    } else if (where.startsWith('card:')) {
+      const point = await inPage(shown.page, cardPoint, { kind, id: where.slice('card:'.length) });
+      if (!point?.x) throw new Error(`${spec}: the card can't be reached on the ${kind} page`);
+      target = pointTarget(point);
+    } else {
+      const [legacySelector, angularSelector] = where.split('|').map((part) => part.trim());
+      target = shown.page.locator(kind === 'legacy' ? legacySelector : (angularSelector ?? legacySelector)).first();
+    }
+    await makeGesture(shown.page, gesture, target);
+  }
+}
+
 /** Opens one page on the game and reads it (or, with `expression`, what the expression gives in it). */
 async function show(browser, kind, recording, count, size, expression = null) {
   const shown = await open(browser, kind, recording, count, size);
+  await makeGestures(shown, kind);
   let result;
   if (expression !== null) {
     await settled(shown.page);
     result = await shown.page.evaluate(expression).catch((error) => `failed: ${error.message.split('\n')[0]}`);
   } else {
-    result = await shown.snapshot();
+    result = await shown.snapshot(options.gesture.length > 0);
   }
   await shown.close();
   return result;

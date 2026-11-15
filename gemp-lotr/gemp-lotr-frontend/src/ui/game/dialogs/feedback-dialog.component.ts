@@ -20,7 +20,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
       heading="Give us feedback!"
       [focusSelf]="true"
       [open]="log.feedback() !== null"
-      (closed)="log.feedback.set(null)"
+      (closed)="log.closeFeedback()"
     >
       @if (log.feedback(); as message) {
         <div [innerHTML]="message"></div>

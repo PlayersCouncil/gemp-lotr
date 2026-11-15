@@ -141,3 +141,71 @@ export function gameTable(model: GameModel, order: readonly string[] = []): Game
     })),
   };
 }
+
+/** The piles a player's counters open (the legacy page's pile dialogs), by the counter's name. */
+export type PileName = 'discard' | 'deadPile' | 'adventureDeck' | 'removedPile' | 'deck' | 'revealedHand';
+
+const PILE_ZONES: Readonly<Record<PileName, string>> = {
+  discard: 'DISCARD',
+  deadPile: 'DEAD',
+  adventureDeck: 'ADVENTURE_DECK',
+  removedPile: 'REMOVED',
+  deck: 'DECK',
+  revealedHand: 'HAND',
+};
+
+/** A pile's dialog title, as the legacy page wrote it before the player's name. */
+export function pileTitle(pile: PileName, ownHand: boolean): string {
+  switch (pile) {
+    case 'discard':
+      return 'Discard Pile';
+    case 'deadPile':
+      return 'Dead Pile';
+    case 'adventureDeck':
+      return 'Adventure Deck';
+    case 'removedPile':
+      return "'Removed From Game' Pile";
+    case 'deck':
+      return 'Draw Deck';
+    case 'revealedHand':
+      return ownHand ? 'Your Revealed Hand' : 'Revealed Hand';
+  }
+}
+
+/**
+ * The cards of a player's pile, in the order they came. The page's own revealed hand shows copies of the hand (what
+ * the others see), never cards to use: their ids start with `tempRevealed`.
+ */
+export function pileCards(model: GameModel, pile: PileName, player: string): GameCard[] {
+  const zone = PILE_ZONES[pile];
+  const cards = model.cardOrder.flatMap((id) => {
+    const card = model.cards[id];
+    return card?.zone === zone && card.owner === player ? [card] : [];
+  });
+  const ownHand = pile === 'revealedHand' && !model.spectator && player === model.participantId;
+  return ownHand ? cards.map((card) => ({ ...card, id: `tempRevealed${card.id}` })) : cards;
+}
+
+/** Whether a player's hand is shown to the page: revealed to everyone, or a card of it was sent (not one's own). */
+export function handRevealed(model: GameModel, player: string): boolean {
+  if (model.revealedHands.includes(player)) return true;
+  const own = !model.spectator && player === model.participantId;
+  return !own && Object.values(model.cards).some((card) => card.zone === 'HAND' && card.owner === player);
+}
+
+/**
+ * The page's order of cards after one card of a row was dragged to another place in it (the legacy page moved the
+ * card's element before or after the one it was dragged onto): `order` is every card's id in the page's order,
+ * `row` the ids of the row's cards in it.
+ */
+export function moveInRow(order: readonly string[], row: readonly string[], cardId: string, to: number): string[] {
+  const from = row.indexOf(cardId);
+  if (from < 0 || to === from) return [...order];
+  const target = row[Math.max(0, Math.min(row.length - 1, to))];
+  if (target === undefined || target === cardId) return [...order];
+  const without = order.filter((id) => id !== cardId);
+  const at = without.indexOf(target);
+  // Before the card it was dragged onto when dragged left, after it when dragged right
+  without.splice(to < from ? at : at + 1, 0, cardId);
+  return without;
+}

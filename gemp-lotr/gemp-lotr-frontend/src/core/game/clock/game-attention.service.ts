@@ -46,6 +46,8 @@ export class GameAttention {
     effect(() => {
       const waiting = this.session.model().decision;
       untracked(() => {
+        // A replay shows decisions, it doesn't wait for one
+        if (this.session.replaying()) return;
         if (waiting) {
           this.flash(DECISION_TITLE);
           flashing = true;

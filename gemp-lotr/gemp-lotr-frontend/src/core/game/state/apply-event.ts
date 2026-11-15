@@ -4,7 +4,7 @@
  * shown, a card affecting another) change nothing here.
  */
 import { CardRef, GameEvent, ownerOf } from '../protocol/game-events';
-import { GameCard, GameModel, NO_CHOICES } from './game-model';
+import { ALERT_DECISIONS, GameCard, GameModel, NO_CHOICES } from './game-model';
 
 type Cards = Record<string, GameCard>;
 
@@ -223,7 +223,12 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
         local: NO_CHOICES,
       };
     case 'D':
-      return { ...next, decision: { decision: event.decision, arrivedAt: model.eventCount }, local: NO_CHOICES };
+      return {
+        ...next,
+        decision: { decision: event.decision, arrivedAt: model.eventCount },
+        local: NO_CHOICES,
+        alertAsked: model.alertAsked || ALERT_DECISIONS.includes(event.decision.type),
+      };
     case 'CAC':
     case 'EP':
     case 'CA':

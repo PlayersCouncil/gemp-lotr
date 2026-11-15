@@ -54,11 +54,13 @@
   font-size: 70%;
   line-height: 1.3;
   white-space: nowrap;
+  text-decoration: none;
   cursor: pointer;
 }
 
+/* A focused tab looks as under the mouse (jQuery UI's ui-state-focus) */
 .gd-game-tabs__tab:hover,
-.gd-game-tabs__tab:focus-visible {
+.gd-game-tabs__tab:focus {
   border-color: var(--theme-hover-border);
   background: var(--theme-hover-bg);
   color: var(--theme-text);

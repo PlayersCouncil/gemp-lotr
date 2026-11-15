@@ -181,3 +181,17 @@
 .gd-game-player__toggle:focus:not(:focus-visible) {
   outline: none;
 }
+
+/* A counter that opens a pile shows the keyboard's focus only after the keyboard */
+.gd-game-counter[data-clickable]:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/*
+ * With no clock (a replay, or before the server sends one) the legacy page, in quirks mode, gave the empty clock's
+ * line no height at all, and the line break after it none either
+ */
+.gd-game-state__decision-clock[data-empty],
+.gd-game-state__decision-clock[data-empty] + br {
+  display: none;
+}

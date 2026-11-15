@@ -40,7 +40,7 @@
 // 'replay' (run.mjs play), with `answers` given by both sides over HTTP before the page opens.
 
 /** The opponent lets the player go first (with the server's seed, the opponent chooses the seats). */
-const PLAYER_FIRST = [
+export const PLAYER_FIRST = [
   {
     when: /^Choose one$/,
     answer: (decision) => {
@@ -64,7 +64,7 @@ const quietly = (steps) => steps.map((step) => ({ ...step, quiet: true }));
  * The opponent plays the first card it can from its hand in its shadow phase: minions come, so there are assignments
  * and skirmishes. (Only cards: a site's action may be used again and again.)
  */
-const FOE_PLAYS_MINIONS = [
+export const FOE_PLAYS_MINIONS = [
   {
     when: /^Play Shadow action or Pass$/,
     answer: (decision) => {
@@ -74,11 +74,11 @@ const FOE_PLAYS_MINIONS = [
   },
 ];
 
-const GIMLI = { blueprint: '1_12' };
-const FRODO = { blueprint: '1_290' };
+export const GIMLI = { blueprint: '1_12' };
+export const FRODO = { blueprint: '1_290' };
 
 /** The player's first fellowship phase reached without snapshots. */
-const TO_FELLOWSHIP = quietly(OPENING);
+export const TO_FELLOWSHIP = quietly(OPENING);
 
 /** The opponent uses Goblin Swarms whenever it may: an Orc that wins a skirmish is stacked on it. */
 const FOE_USES_GOBLIN_SWARMS = {

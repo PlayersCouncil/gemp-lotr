@@ -41,7 +41,7 @@ export class GameClocks {
   /** The timer's cues apply to a player of the game (not a spectator). */
   private readonly applies = computed(() => {
     const model = this.session.model();
-    return model.started && !model.spectator;
+    return model.started && !model.spectator && !this.session.replaying();
   });
 
   readonly view = computed<ClocksView>(() => {

@@ -352,6 +352,107 @@ describe('GamePageComponent', () => {
     expect(el.querySelector('[data-stat="discard0"]')).toBeNull();
   });
 
+  it('opens a pile in a dialog of its own from its counter, and a revealed hand, until closed', async () => {
+    const { el, stable } = await open(
+      state(
+        TABLE + card('11', 'DISCARD') + card('12', 'DISCARD') + STATS + card('13', 'HAND', '').replace('alice', 'bob'),
+      ),
+    );
+    (el.querySelector('[data-stats-toggle="0"]') as HTMLElement).click();
+    await stable();
+    const discard = el.querySelector<HTMLElement>('[data-stat="discard0"]')!;
+    discard.click();
+    discard.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    (el.querySelector('[data-stat="hand1"]') as HTMLElement).click();
+    await stable();
+    const dialogs = () => Array.from(el.querySelectorAll<HTMLDialogElement>('dialog[data-dialog="pile"]'));
+    expect(dialogs().map((d) => d.querySelector('[data-dialog-title]')?.textContent)).toEqual([
+      'Discard Pile - alice',
+      'Revealed Hand - bob',
+    ]);
+    expect(
+      Array.from(dialogs()[0]!.querySelectorAll<HTMLElement>('[data-card-id]'), (c) => c.dataset['cardId']),
+    ).toEqual(['11', '12']);
+    (dialogs()[0]!.querySelector('.gd-dialog__close') as HTMLElement).click();
+    await stable();
+    expect(dialogs()).toHaveLength(1);
+  });
+
+  it('shows a card named in a text when its name is clicked', async () => {
+    const { el, stable } = await open(state(TABLE));
+    // Not a name: nothing
+    (el.querySelector('.gd-game-chat__line') as HTMLElement).click();
+    await stable();
+    expect(el.querySelector('gd-card-info [data-dialog-title]')).toBeNull();
+    (el.querySelector('.gd-game-chat__line .cardHint') as HTMLElement).click();
+    await stable();
+    expect(el.querySelector('gd-card-info [data-dialog-title]')?.textContent).toBe('Card Information');
+    expect(el.querySelector('gd-card-info .gd-card-info__details')).toBeNull();
+  });
+
+  it('moves a card of the hand by dragging it sideways, and that drag is not a click on the card', async () => {
+    const { el, stable } = await open(state(TABLE + card('9', 'HAND') + card('10', 'HAND')));
+    const hand = () =>
+      Array.from(el.querySelectorAll<HTMLElement>('[data-row="hand"] [data-card-id]'), (c) => c.dataset['cardId']);
+    expect(hand()).toEqual(['4', '9', '10']);
+    const box = el.querySelector<HTMLElement>('[data-row="hand"] .gd-game-cards__box')!;
+    const card4 = el.querySelector<HTMLElement>('[data-row="hand"] [data-card-id="4"]')!;
+    card4.getBoundingClientRect = () => ({ width: 50 }) as DOMRect;
+    const pointer = (target: Element, type: string, clientX: number, clientY = 100) => {
+      const event = new MouseEvent(type, { bubbles: true, clientX, clientY, button: 0 });
+      Object.defineProperty(event, 'pointerType', { value: 'mouse' });
+      Object.defineProperty(event, 'pointerId', { value: 1 });
+      target.dispatchEvent(event);
+    };
+    pointer(card4, 'pointerdown', 100);
+    pointer(card4, 'pointermove', 110);
+    expect(box.hasAttribute('data-dragging')).toBe(false);
+    pointer(card4, 'pointermove', 205);
+    expect(box.hasAttribute('data-dragging')).toBe(true);
+    // Dragged up too: a card being moved shows no card information
+    pointer(card4, 'pointerup', 205, 50);
+    expect(box.hasAttribute('data-dragging')).toBe(false);
+    card4.click();
+    await stable();
+    expect(hand()).toEqual(['9', '10', '4']);
+    expect(el.querySelector('gd-card-info [data-dialog-title]')).toBeNull();
+    // A press of something else, or of another button, moves nothing
+    pointer(box, 'pointerdown', 0);
+    pointer(box, 'pointermove', 100);
+    card4.click();
+    expect(hand()).toEqual(['9', '10', '4']);
+  });
+
+  it('plays a replay with its controls, and shows only the chat and the settings', async () => {
+    document.cookie = 'animation-speed=4; path=/';
+    try {
+      const { el, stable } = await open('', '?replayId=alice$abc');
+      backend
+        .expectOne((r) => r.url === '/gemp-lotr-server/replay/alice$abc')
+        .flush(
+          `<gameReplay>${PLAYERS}${card('1', 'FREE_CHARACTERS')}<ge type="TP" count="3"/><ge type="EG"/></gameReplay>`,
+        );
+      await stable();
+      expect(el.querySelector('[data-tab="options"]')).toBeNull();
+      const replay = el.querySelector('gd-game-replay')!;
+      (replay.querySelector('[data-replay="slower"]') as HTMLElement).click();
+      (replay.querySelector('[data-replay="faster"]') as HTMLElement).click();
+      (replay.querySelector('[data-replay="play"]') as HTMLElement).click();
+      await stable();
+      expect(replay.querySelector('[data-replay="play"]')?.getAttribute('aria-pressed')).toBe('true');
+      for (let i = 0; i < 100 && !replay.hasAttribute('data-replay-done'); i++) {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        await stable();
+      }
+      expect(replay.hasAttribute('data-replay-done')).toBe(true);
+      expect(el.querySelector('[data-game="twilight"]')?.textContent).toBe('3');
+      expect(el.querySelector('[data-card-id="1"]')).not.toBeNull();
+      expect(el.hasAttribute('data-animating')).toBe(false);
+    } finally {
+      document.cookie = 'animation-speed=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    }
+  });
+
   it("shows the server's thanks at the end of the game in a dialog too, until it is closed", async () => {
     const { el, news, stable } = await open(state(TABLE));
     expect(el.querySelector('dialog[data-dialog="feedback"][open]')).toBeNull();

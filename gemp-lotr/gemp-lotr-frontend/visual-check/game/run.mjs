@@ -29,6 +29,7 @@ import { MAX_WORKERS, pairOf } from './players.mjs';
 import { session } from '../local-server/seed.mjs';
 import { coveredBy, gaps as coverageGaps } from './coverage.mjs';
 import { endGame, foeAnswer, Foe, parseGameXml, readDecision, replayIdOf, startGame } from './protocol.mjs';
+import { GAME_MATRIX, makeGesture, pointTarget } from './matrix.mjs';
 import { GAME_SCENARIOS } from './scenarios.mjs';
 
 const { values: options } = parseArgs({
@@ -56,6 +57,14 @@ const { values: options } = parseArgs({
     // D10 of trymarz/gemp-lotr-private#27: after every step the Angular page is loaded again, and must show the same
     // page as before (the screen and the game as shown); the legacy page can't, so it isn't compared there
     reload: { type: 'boolean', default: false },
+    // Prints the box of every match of a selector at each step: "<legacy selector> | <angular selector>"
+    probe: { type: 'string' },
+    // Prints what each page writes to its console
+    console: { type: 'boolean', default: false },
+    // The gesture matrix (game/matrix.mjs) instead of the scenarios
+    matrix: { type: 'boolean', default: false },
+    // With --matrix: only the gestures whose step names contain this text (or one of several, comma-separated)
+    control: { type: 'string' },
   },
 });
 
@@ -70,9 +79,19 @@ const sizes = options.sizes.split(',').map((label) => {
   return { label, width, height };
 });
 const only = options.only?.split(',');
-const scenarios = GAME_SCENARIOS.filter((scenario) => !only || only.includes(scenario.name));
+const ALL_SCENARIOS = options.matrix ? GAME_MATRIX : GAME_SCENARIOS;
+const scenarios = ALL_SCENARIOS.filter((scenario) => !only || only.includes(scenario.name)).map((scenario) =>
+  options.control
+    ? {
+        ...scenario,
+        steps: scenario.steps.filter(
+          (step) => !('gesture' in step) || options.control.split(',').some((part) => step.name.includes(part)),
+        ),
+      }
+    : scenario,
+);
 if (only && scenarios.length !== only.length) {
-  console.error(`Unknown scenario in --only: ${only.filter((name) => !GAME_SCENARIOS.some((s) => s.name === name))}`);
+  console.error(`Unknown scenario in --only: ${only.filter((name) => !ALL_SCENARIOS.some((s) => s.name === name))}`);
   process.exit(2);
 }
 const injection = options.inject ? GAME_INJECTIONS[options.inject] : null;
@@ -311,6 +330,18 @@ function gestures(page, kind, used) {
       used.add(name);
       await locator(selector).click();
     },
+    /**
+     * A click on the part of a control the window shows, as a player makes it: without scrolling the page to show all
+     * of it (the legacy replay's play picture sticks out below the window).
+     */
+    async clickShown(selector, name) {
+      used.add(name);
+      const box = await locator(selector).boundingBox();
+      if (!box) throw new Error(`no ${name}`);
+      const viewport = page.viewportSize();
+      const bottom = Math.min(box.y + box.height, viewport?.height ?? box.y + box.height);
+      await page.mouse.click(box.x + box.width / 2, (box.y + bottom) / 2);
+    },
   };
 }
 
@@ -545,6 +576,8 @@ async function doStep(page, kind, step, traffic, used) {
     }
     used.add('hover zoom');
     await page.mouse.move(point.x, point.y);
+    // Where the mouse rests, to come back to after a reload (--reload)
+    page.lastHover = point;
     return sleep(1200);
   }
   if ('tab' in step) return act.click(select.tab(step.tab), `tab ${step.tab}`);
@@ -584,7 +617,7 @@ async function doStep(page, kind, step, traffic, used) {
     return input.press('Enter');
   }
   if ('replay' in step) {
-    await act.click(select.replay(step.replay), `replay ${step.replay}`);
+    await act.clickShown(select.replay(step.replay), `replay ${step.replay}`);
     if (step.replay === 'play') return waitForReplay(page, kind);
     return;
   }
@@ -595,6 +628,30 @@ async function doStep(page, kind, step, traffic, used) {
   if ('click' in step) {
     used.add('card info closed');
     return page.mouse.click(5, 5);
+  }
+  if ('gesture' in step) {
+    // The gesture matrix (game/matrix.mjs): a control by its selectors, or a card
+    if ('card' in step) {
+      const id = cardIdOf(traffic, step.card);
+      const point = await act.pointOf(id);
+      if (!point.x)
+        throw new Error(`card ${id} can't be reached${point.blocked ? `: ${point.blocked} lies over it` : ''}`);
+      return makeGesture(page, step.gesture, pointTarget(point));
+    }
+    const target = page.locator(step.control[kind]).filter({ visible: true }).first();
+    await target.scrollIntoViewIfNeeded({ timeout: 5000 });
+    return makeGesture(page, step.gesture, target);
+  }
+  if ('closeDialogs' in step) {
+    // Every open dialog closed by its close button (in the page: one dialog may lie over another's button)
+    await page.evaluate((kind) => {
+      const buttons =
+        kind === 'legacy'
+          ? window.$('.ui-dialog-titlebar-close:visible').get()
+          : Array.from(document.querySelectorAll('dialog[open] :is(.gd-dialog__close, .gd-card-info__close)'));
+      buttons.reverse().forEach((button) => button.click());
+    }, kind);
+    return sleep(300);
   }
   if ('button' in step) {
     return act.click(select.button(step.button), step.button === 'concedeGame' ? 'concede' : 'request cancel');
@@ -718,6 +775,7 @@ async function play(kind, scenario, size, pair, label) {
       await route.continue().catch(() => undefined);
     });
     page.on('pageerror', (error) => errors.push(error.message));
+    if (options.console) page.on('console', (message) => console.log(`console ${kind}: ${message.text()}`));
     page.on('dialog', async (dialog) => {
       if (dialog.type() === 'confirm') used.add('browser confirm');
       dialogs.push(`${dialog.type()}: ${dialog.message()}`);
@@ -769,6 +827,20 @@ async function play(kind, scenario, size, pair, label) {
           model: await inPage(page, readLegacyModel, null),
         });
       }
+      if (options.probe) {
+        const [legacySelector, angularSelector] = options.probe.split('|').map((part) => part.trim());
+        const selector = kind === 'legacy' ? legacySelector : (angularSelector ?? legacySelector);
+        const boxes = await page.evaluate(
+          (selector) =>
+            Array.from(document.querySelectorAll(selector), (el) => {
+              const b = el.getBoundingClientRect();
+              const n = (v) => Math.round(v * 100) / 100;
+              return `${el.tagName.toLowerCase()} ${n(b.left)} ${n(b.top)} ${n(b.width)} ${n(b.height)}`;
+            }),
+          selector,
+        );
+        console.log(`probe ${kind} ${name}: ${boxes.join(' | ')}`);
+      }
       const shot = {
         name,
         screen: await page.screenshot({ mask: masks.map((selector) => page.locator(selector)), maskColor: '#ff00ff' }),
@@ -796,10 +868,20 @@ async function play(kind, scenario, size, pair, label) {
             }
           : shot;
         await page.reload();
-        if (!keepMouse) await page.mouse.move(1, 1);
+        await page.mouse.move(1, 1);
         await settle(page, kind, traffic, bots);
-        // ... and what the page focuses as it opens, too
-        await page.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
+        // Pictures just loaded are first drawn with a quicker resampling; the browser redraws them a moment later
+        await sleep(1000);
+        // A page loaded under a resting mouse isn't told it is over a card until the mouse moves: it moves away and back
+        if (keepMouse && page.lastHover) {
+          await page.mouse.move(page.lastHover.x, page.lastHover.y);
+          await sleep(1200);
+        }
+        // ... and what the page focuses as it opens, too (given back after the screenshot: the next step may need it)
+        await page.evaluate(() => {
+          window.__refocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          window.__refocus?.blur();
+        });
         reloads.push({
           before,
           name,
@@ -809,13 +891,20 @@ async function play(kind, scenario, size, pair, label) {
           }),
           state: await inPage(page, readGameState, { kind }),
         });
+        await page.evaluate(() => window.__refocus?.focus());
         // What the page asked after loading again is the reload's, not the next step's
         traffic.requests.splice(0);
         dialogs.splice(0);
       }
     };
     if (mode === 'replay') {
-      await page.waitForFunction(() => window.ui?.replayGameEvents != null, null, { timeout: 20000 });
+      // The replay's events have come: the legacy page holds them, the Angular page shows its controls
+      await page.waitForFunction(
+        (kind) =>
+          kind === 'legacy' ? window.ui?.replayGameEvents != null : document.querySelector('[data-replay]') !== null,
+        kind,
+        { timeout: 20000 },
+      );
     } else {
       await waitForFirst(traffic);
     }
@@ -834,7 +923,7 @@ async function play(kind, scenario, size, pair, label) {
       if ('tab' in step) await settle(page, kind, traffic, bots);
       await doStep(page, kind, step, traffic, used);
       if (before && !('auto' in step) && isAnswer(step)) await waitForNextDecision(traffic, before);
-      if (!step.quiet) await snapshot(step.name ?? `step ${index + 1}`, 'hover' in step);
+      if (!step.quiet) await snapshot(step.name ?? `step ${index + 1}`, 'hover' in step || 'gesture' in step);
     }
     if (scenario.steps.at(-1)?.quiet) await snapshot('end');
     // A replay reads /replay, which the jsdom tests don't serve (they play games)
@@ -1063,7 +1152,8 @@ try {
       scenarios.indexOf(a.scenario) - scenarios.indexOf(b.scenario) || sizes.indexOf(a.size) - sizes.indexOf(b.size),
   );
   // Only a run of every scenario says what is covered
-  const gaps = (only && !options.coverage) || injection || options.record ? [] : coverageGaps(covered);
+  const gaps =
+    (only && !options.coverage) || injection || options.record || options.matrix ? [] : coverageGaps(covered);
   for (const gap of gaps) console.log(`GAP  ${gap}`);
   writeReport(results, gaps);
   const failed = results.filter((r) => r.problems.length).length;

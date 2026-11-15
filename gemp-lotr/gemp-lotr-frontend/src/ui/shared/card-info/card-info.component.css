@@ -43,6 +43,11 @@
   --card-height: var(--short);
 }
 
+/* With details beside the card (a game's modifiers): 400px wider */
+.gd-card-info:has(.gd-card-info__details) {
+  --info-width: max(calc(var(--card-width) + 425px), 175px);
+}
+
 .gd-card-info:has(.gd-card-info__wiki) {
   --info-height: calc(var(--card-height) + 69.61px);
 }
@@ -207,12 +212,32 @@
     0 0 0 2px var(--theme-focus-ring-outer);
 }
 
+/* A page may draw a focus that came without the keyboard otherwise (the game page: as under the mouse, no ring) */
+.gd-card-info__zoom:focus:not(:focus-visible)::-webkit-slider-thumb {
+  border-color: var(--gd-card-info-quiet-focus-border, var(--theme-focus-ring-inner));
+  box-shadow: var(
+    --gd-card-info-quiet-focus-ring,
+    0 0 0 1px var(--theme-focus-ring-inner),
+    0 0 0 2px var(--theme-focus-ring-outer)
+  );
+}
+
 .gd-card-info__zoom:focus::-moz-range-thumb {
   border-color: var(--theme-focus-ring-inner);
   background: var(--theme-hover-bg);
   box-shadow:
     0 0 0 1px var(--theme-focus-ring-inner),
     0 0 0 2px var(--theme-focus-ring-outer);
+}
+
+/* A page may draw a focus that came without the keyboard otherwise (the game page: as under the mouse, no ring) */
+.gd-card-info__zoom:focus:not(:focus-visible)::-moz-range-thumb {
+  border-color: var(--gd-card-info-quiet-focus-border, var(--theme-focus-ring-inner));
+  box-shadow: var(
+    --gd-card-info-quiet-focus-ring,
+    0 0 0 1px var(--theme-focus-ring-inner),
+    0 0 0 2px var(--theme-focus-ring-outer)
+  );
 }
 
 /* Pressing the handle didn't draw the ring yet */
@@ -276,17 +301,37 @@
 .gd-card-info__wiki {
   flex: none;
   padding: 5px;
-  color: var(--theme-text);
+  /* A page may give its links another colour (the game page's are orange, as game.css made them) */
+  color: var(--gd-card-info-link, var(--theme-text));
   text-align: center;
 }
 
 /* The page's colour for a visited link, as before this rule */
 .gd-card-info__wiki:visited {
-  color: var(--theme-link-visited);
+  color: var(--gd-card-info-link-visited, var(--theme-link-visited));
 }
 
 @media (pointer: coarse) {
   .gd-card-info__zoom {
     display: none;
   }
+}
+
+/* The card and the page's details on it, side by side; the details take the rest of the width, 20px in */
+.gd-card-info__inner {
+  display: flex;
+  flex: none;
+}
+
+.gd-card-info__inner > .gd-card-info__card {
+  margin-right: 0;
+}
+
+.gd-card-info__details {
+  flex: 1 1 auto;
+  min-width: 0;
+  /* The dialog's content kept 1em on its right */
+  margin-right: 13.2px;
+  padding: 20px;
+  overflow: auto;
 }

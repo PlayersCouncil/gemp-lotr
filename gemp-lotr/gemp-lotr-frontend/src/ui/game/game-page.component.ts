@@ -8,6 +8,7 @@ import { GameSession } from '../../core/game/session/game-session.service';
 import { GameViewState } from '../../core/game/session/game-view-state';
 import { GameSettings } from '../../core/game/settings/game-settings';
 import { GameCardActions } from '../../core/game/table/game-card-actions';
+import { GameCardInfo } from '../../core/game/table/game-card-info';
 import { GameTableState } from '../../core/game/table/game-table.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
@@ -15,6 +16,9 @@ import { CardInfoComponent } from '../shared/card-info/card-info.component';
 import { ActionMenuComponent } from './decision/action-menu.component';
 import { DecisionDialogsComponent } from './decision/decision-dialogs.component';
 import { FeedbackDialogComponent } from './dialogs/feedback-dialog.component';
+import { PileDialogsComponent } from './dialogs/pile-dialogs.component';
+import { ReplayControlsComponent } from './panel/replay-controls.component';
+import { GameAnimationComponent } from './table/game-animation.component';
 import { ProblemDialogComponent } from './dialogs/problem-dialog.component';
 import { GameAlertComponent } from './panel/game-alert.component';
 import { GameStatePanelComponent } from './panel/game-state-panel.component';
@@ -40,7 +44,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
  * `gd-game-tabs`, and `.gd-game__table` holding a `section.gd-game__row` per row (`data-row`: support-opponent,
  * characters-opponent, shadow, characters-player, support-player, hand) and a `section.gd-game__fight` per skirmish
  * (`data-fight="skirmish"`) and assignment (`data-fight="assignment"`), each with `.gd-game__side`
- * (`data-side`: shadow, free-peoples). Cards: see GameCardDirective.
+ * (`data-side`: shadow, free-peoples). `data-animating` while an event holds the page (its animation). Cards: see GameCardDirective.
  */
 @Component({
   selector: 'gemp-game',
@@ -59,6 +63,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     PreGamePanelComponent,
     FeedbackDialogComponent,
     ProblemDialogComponent,
+    PileDialogsComponent,
+    ReplayControlsComponent,
+    GameAnimationComponent,
     DecisionDialogsComponent,
     ActionMenuComponent,
     CardInfoComponent,
@@ -71,6 +78,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '[attr.data-turn]': "table().bottomTurn ? 'bottom' : 'top'",
     '[attr.data-old-stack]': "settings.oldStackVisuals() ? '' : null",
     '[style.--gd-game-fights]': 'fights()',
+    '[attr.data-animating]': "session.busy() ? '' : null",
     '(document:keydown.escape)': 'decisions.escape()',
   },
   template: `
@@ -139,16 +147,22 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-pregame class="gd-game__pregame" [info]="preGame" />
     }
     <gd-game-tabs class="gd-game__tabs" />
+    @if (session.replaying()) {
+      <gd-game-replay class="gd-game__replay" />
+    }
+    <gd-game-animation />
     <gd-game-decision-dialogs />
     <gd-game-action-menu />
+    <gd-game-piles />
     <gd-game-feedback />
     <gd-game-problem />
     <gd-card-info />
-    <gd-auto-zoom />
+    <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
+    <gd-auto-zoom [topLayer]="false" [flipOnShift]="false" />
   `,
 })
 export class GamePageComponent {
-  private readonly session = inject(GameSession);
+  protected readonly session = inject(GameSession);
   protected readonly settings = inject(GameSettings);
   protected readonly decisions = inject(GameDecisions);
   protected readonly model = this.session.model;
@@ -165,9 +179,15 @@ export class GamePageComponent {
   constructor() {
     // The tab's title and the sound when the game waits for the player
     inject(GameAttention);
+    // A card of the game shown in the card information gets the server's modifiers
+    inject(GameCardInfo);
     const query = new URLSearchParams(inject(PAGE_QUERY_STRING));
     const gameId = query.get('gameId');
-    if (gameId !== null) {
+    const replayId = query.get('replayId');
+    if (replayId !== null) {
+      // As the game history links it: "player$recording", sent as it is
+      this.session.openReplay(replayId);
+    } else if (gameId !== null) {
       const chat = inject(ChatRoom);
       inject(GameViewState).restore(gameId);
       this.session.open(gameId, () => chat.join(`Game${gameId}`));

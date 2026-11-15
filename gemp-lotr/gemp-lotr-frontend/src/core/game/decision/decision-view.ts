@@ -5,7 +5,7 @@
  * settings, so every state of every decision can be checked without a page.
  */
 import { Decision } from '../protocol/game-events';
-import { GameCard, GameModel } from '../state/game-model';
+import { ALERT_DECISIONS, GameCard, GameModel } from '../state/game-model';
 import { assignmentOf } from '../state/local-choices';
 
 /** How a card is offered: to choose it, to use one of its actions; or it is chosen already. */
@@ -30,9 +30,10 @@ export interface DecisionCard {
 }
 
 export type DecisionDialog =
-  | { kind: 'integer'; text: string; min: number; max: number; value: number }
+  | { kind: 'integer'; text: string; min: number; max: number; value: number; answerable: boolean }
   | {
       kind: 'choice';
+      answerable: boolean;
       text: string;
       /** The answers (HTML). */
       options: readonly string[];
@@ -46,7 +47,7 @@ export interface DecisionView {
   alert: string;
   /**
    * What kind of choice the alert box frames: actions to take, or cards to choose; 'ended': nothing any more, but the
-   * frame keeps its width (a choice was open when the game ended).
+   * frame keeps its width (a choice was open when the game ended, or a replay's alert box asked before).
    */
   frame: 'action' | 'selection' | 'ended' | null;
   /** The alert box's buttons, in order. */
@@ -68,6 +69,8 @@ export interface DecisionView {
 export interface DecisionSettings {
   autoAccept: boolean;
   alwaysDropDown: boolean;
+  /** A replay shows each decision, without anything to answer it with. */
+  replay?: boolean;
 }
 
 export const NO_DECISION: DecisionView = {
@@ -148,10 +151,17 @@ function cardChoice(
   };
 }
 
-/** The decisions asked in the alert box, which frame it. */
-const ALERT_DECISIONS: readonly string[] = ['CARD_ACTION_CHOICE', 'CARD_SELECTION', 'ASSIGN_MINIONS'];
-
 export function decisionView(model: GameModel, settings: DecisionSettings): DecisionView {
+  const view = askedView(model, settings);
+  if (!settings.replay) return view;
+  // A replay: the same, with no buttons; once the alert box asked, its frame stays wide (the legacy page only put the
+  // width back on an answer)
+  const dialog = view.dialog?.kind === 'cards' ? { ...view.dialog, buttons: [] } : view.dialog;
+  const frame = view.frame ?? (model.alertAsked ? 'ended' : null);
+  return { ...view, buttons: [], dialog, frame };
+}
+
+function askedView(model: GameModel, settings: DecisionSettings): DecisionView {
   const decision = model.decision?.decision;
   if (!decision) {
     // The game ended while the alert box asked: the legacy page took the question away but left the frame wide
@@ -171,6 +181,7 @@ export function decisionView(model: GameModel, settings: DecisionSettings): Deci
           min: Number(first(decision, 'min') ?? 0),
           max: Number(first(decision, 'max') ?? 1000),
           value: Number(first(decision, 'defaultValue') ?? 0),
+          answerable: !settings.replay,
         },
       };
     case 'MULTIPLE_CHOICE': {
@@ -182,6 +193,7 @@ export function decisionView(model: GameModel, settings: DecisionSettings): Deci
           text: decision.text,
           options,
           dropDown: options.length > 2 || settings.alwaysDropDown,
+          answerable: !settings.replay,
         },
       };
     }

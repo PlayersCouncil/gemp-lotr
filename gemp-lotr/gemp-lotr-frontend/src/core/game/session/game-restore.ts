@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { SessionStore } from '../../platform/session-store';
 import { Decision } from '../protocol/game-events';
-import { GameModel, LocalChoices } from '../state/game-model';
+import { GameCard, GameModel, LocalChoices } from '../state/game-model';
 import { choicesFit } from '../state/local-choices';
 
 /**
@@ -27,6 +27,10 @@ export interface SavedGame {
      * site, say, dimmed on the page, isn't).
      */
     inactive?: { cardIds: readonly string[]; currentPlayer: string | null; phase: string | null };
+    /** The clocks as last sent (once the game has ended the server's full state has none). */
+    clocks?: GameModel['clocks'];
+    /** The draw deck the server shows once the game has ended (its full state doesn't send it again). */
+    deckCards?: readonly GameCard[];
   };
   /** Game messages the page had shown (the server gives back only its last 50). */
   messages: readonly { kind: 'message' | 'warning'; text: string }[];
@@ -54,6 +58,10 @@ export class GameRestore {
         closedByEnd: model.closedByEnd,
         charStats: model.stats?.charStats ?? {},
         inactive: { cardIds: model.inactiveCardIds, currentPlayer: model.currentPlayer, phase: model.phase },
+        clocks: model.clocks,
+        deckCards: model.ended
+          ? model.cardOrder.flatMap((id) => (model.cards[id]?.zone === 'DECK' ? [model.cards[id]] : []))
+          : [],
       },
     };
     this.store.write(key(gameId), saved);
@@ -88,6 +96,15 @@ export class GameRestore {
           Object.entries(restored.cards).map(([id, card]) => [id, ids.has(id) ? { ...card, inactive: true } : card]),
         );
         restored = { ...restored, cards, inactiveCardIds: [...ids] };
+      }
+      if (restored.ended && page.clocks) restored = { ...restored, clocks: { ...page.clocks, ...restored.clocks } };
+      const missing = restored.ended ? (page.deckCards ?? []).filter((card) => !(card.id in restored.cards)) : [];
+      if (missing.length > 0) {
+        restored = {
+          ...restored,
+          cards: { ...restored.cards, ...Object.fromEntries(missing.map((card) => [card.id, card])) },
+          cardOrder: [...restored.cardOrder, ...missing.map((card) => card.id)],
+        };
       }
       const stats = restored.stats;
       if (stats && page.charStats) {
