@@ -19,11 +19,30 @@ export function unassignMinion(model: GameModel, minionId: string): GameModel {
 /** A card chosen for the waiting decision (once). */
 export function selectCard(model: GameModel, cardId: string): GameModel {
   if (!model.decision || model.local.selectedCardIds.includes(cardId)) return model;
-  return { ...model, local: { ...model.local, selectedCardIds: [...model.local.selectedCardIds, cardId] } };
+  return {
+    ...model,
+    local: {
+      ...model.local,
+      selectedCardIds: [...model.local.selectedCardIds, cardId],
+      markedCardIds: [...model.local.markedCardIds, cardId],
+    },
+  };
+}
+
+/** An action taken for the waiting choice of actions: it is the answer, and its card is drawn as chosen. */
+export function selectAction(model: GameModel, actionId: string, cardId: string): GameModel {
+  if (!model.decision) return model;
+  return { ...model, local: { ...model.local, selectedCardIds: [actionId], markedCardIds: [cardId] } };
 }
 
 export function clearSelection(model: GameModel): GameModel {
-  return { ...model, local: { ...model.local, selectedCardIds: [] } };
+  return { ...model, local: { ...model.local, selectedCardIds: [], markedCardIds: [] } };
+}
+
+/** While assigning: the minion clicked first (null: none waits). */
+export function pickMinion(model: GameModel, minionId: string | null): GameModel {
+  if (model.decision?.decision.type !== 'ASSIGN_MINIONS') return model;
+  return { ...model, local: { ...model.local, minion: minionId } };
 }
 
 /** The decision answered: it waits no more, and what was chosen for it is gone. */
@@ -57,8 +76,10 @@ export function choicesFit(model: GameModel, choices: LocalChoices): boolean {
   const minions = decision.params['minions'] ?? [];
   const characters = decision.params['freeCharacters'] ?? [];
   const cards = decision.params['cardId'] ?? [];
+  const actions = decision.params['actionId'] ?? [];
   return (
     Object.entries(choices.assignments).every(([m, c]) => minions.includes(m) && characters.includes(c)) &&
-    choices.selectedCardIds.every((id) => cards.includes(id))
+    choices.selectedCardIds.every((id) => cards.includes(id) || actions.includes(id)) &&
+    (choices.minion === null || minions.includes(choices.minion))
   );
 }

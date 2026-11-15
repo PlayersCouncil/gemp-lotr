@@ -29,13 +29,20 @@ class FakeResizeObserver {
 
 @Component({
   imports: [FitCardsDirective],
-  template: `<div class="box" [gdFitCards]="cards()" [gdFitCardsScale]="scale()" [gdFitCardsOnPagePixels]="placed()">
+  template: `<div
+    class="box"
+    [gdFitCards]="cards()"
+    [gdFitCardsScale]="scale()"
+    [gdFitCardsOnPagePixels]="placed()"
+    [gdFitCardsRoundedFrom]="rounded()"
+  >
     <span></span><span></span>
   </div>`,
 })
 class Host {
   readonly scale = signal(1);
   readonly placed = signal<unknown>(null);
+  readonly rounded = signal<number | null>(null);
   readonly cards = signal<readonly FitCard[]>(Array.from({ length: 12 }, () => ({ horizontal: false })));
 }
 
@@ -157,5 +164,18 @@ describe('FitCardsDirective', () => {
     fixture.componentInstance.placed.set(null);
     await fixture.whenStable();
     expect(box.style.getPropertyValue('--gd-card-snap-x')).toBe('');
+  });
+
+  it("sizes from an element's height rounded to a whole pixel, when the legacy group did", async () => {
+    properties['--gd-card-fit'] = 'rows';
+    const { fixture, box, observer } = await render();
+    observer.resize(372, 472.4);
+    await fixture.whenStable();
+    const exact = cardHeight(box);
+    // 472.4 + 10.3 = 482.7 rounds to 483: the box is taken as 472.7px high
+    fixture.componentInstance.rounded.set(10.3);
+    observer.resize(372, 472.4);
+    await fixture.whenStable();
+    expect(cardHeight(box)).not.toBe(exact);
   });
 });

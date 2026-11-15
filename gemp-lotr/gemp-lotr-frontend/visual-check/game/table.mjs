@@ -36,6 +36,9 @@ const { values: options } = parseArgs({
     theme: { type: 'string', default: 'classic' },
     workers: { type: 'string', default: '4' },
     step: { type: 'string' },
+    'no-decisions': { type: 'boolean', default: false },
+    // A setting's cookie for both pages, e.g. --cookie alwaysDropDown=true (may be given several times)
+    cookie: { type: 'string', multiple: true, default: [] },
     eval: { type: 'string' },
     boxes: { type: 'string' },
   },
@@ -47,18 +50,21 @@ const GAME_ID = '77';
 const HELD_MS = 8000;
 
 /**
- * The game's answers of the first `count` exchanges, one by one as the server gave them, without their decisions:
- * the first as the page opens the game, each of the others to the page's next question for news.
+ * The game's answers of the first `count` exchanges, one by one as the server gave them, without their decisions
+ * (but the last one's, which is the decision waiting at that step): the first as the page opens the game, each of the others to the page's next question for news.
  */
 function gameUpTo(recording, count) {
-  return recording.exchanges
+  const answers = recording.exchanges
     .slice(0, count)
-    .filter((exchange) => exchange.path === '/game/<id>' && exchange.status === 200)
-    .map((exchange) =>
-      exchange.body.replace(/<ge\b[^>]*?(?:\/>|>[\s\S]*?<\/ge>)/g, (event) =>
-        /\stype="D"/.test(event.slice(0, event.indexOf('>'))) ? '' : event,
-      ),
-    );
+    .filter((exchange) => exchange.path === '/game/<id>' && exchange.status === 200);
+  return answers.map((exchange, i) =>
+    // The last answer keeps its decision, unless only the table is compared
+    i === answers.length - 1 && !options['no-decisions']
+      ? exchange.body
+      : exchange.body.replace(/<ge\b[^>]*?(?:\/>|>[\s\S]*?<\/ge>)/g, (event) =>
+          /\stype="D"/.test(event.slice(0, event.indexOf('>'))) ? '' : event,
+        ),
+  );
 }
 
 /**
@@ -139,10 +145,9 @@ async function open(browser, kind, recording, count, size) {
   let waiting = await routeGame(context, recording, count, log);
   // The same settings on both pages (cookies of the stub's origin)
   await context.addCookies(
-    [
-      ['animation-speed', '4'],
-      ['gempGameTheme', options.theme],
-    ].map(([name, value]) => ({ name, value, domain: new URL(STUB_ORIGIN).hostname, path: '/gemp-lotr' })),
+    [['animation-speed', '4'], ['gempGameTheme', options.theme], ...options.cookie.map((pair) => pair.split('='))].map(
+      ([name, value]) => ({ name, value, domain: new URL(STUB_ORIGIN).hostname, path: '/gemp-lotr' }),
+    ),
   );
   const page = await context.newPage();
   page.on('pageerror', (error) => errors.push(String(error)));

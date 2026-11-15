@@ -240,3 +240,49 @@
   padding: 0.2em 0.3em;
   line-height: 1.4;
 }
+
+.gd-game-setting__rule {
+  margin: 0 0 0 8px;
+}
+
+.gd-game-setting__rule > input {
+  width: 5em;
+}
+
+.gd-game-setting__hint {
+  margin-left: 8px;
+  font-size: 80%;
+}
+
+/* A jQuery UI button that has the focus looks as under the mouse, also after a click */
+.gd-button:focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+/* The timer's rules were shown as a plain block (no gaps between its rows) */
+.gd-game-setting[data-timer-alerts] {
+  display: block;
+}
+
+/* Muted: a red X drawn over the speaker */
+.gd-game-tabs__switch[data-icon='muted']::after {
+  content: '\2715';
+  position: absolute;
+  right: -0.5px;
+  top: 4px;
+  color: var(--theme-game-muted-mark);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow:
+    0 0 2px var(--theme-game-muted-mark-edge),
+    0 0 2px var(--theme-game-muted-mark-edge);
+}
+
+/* ... and its icon turns white, as under the mouse */
+.gd-button[data-icon]:focus::before {
+  background-image: var(--theme-icons-hover);
+}

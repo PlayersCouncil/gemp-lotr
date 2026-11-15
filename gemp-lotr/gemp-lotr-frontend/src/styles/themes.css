@@ -111,6 +111,24 @@
   --theme-game-number-text: #fff;
   --theme-game-number-inactive-text: #777;
   --theme-game-inactive-border: #333;
+  /* A card offered by the waiting decision: to choose, to use; and one chosen */
+  --theme-game-selectable: #7faf7f;
+  --theme-game-actionable: #7f7fff;
+  --theme-game-selected: #009f9f;
+  /* An inactive card that is offered or chosen is only lightly dimmed */
+  --theme-game-inactive-offered-filter: grayscale(0.3) brightness(0.85);
+  /* The menu of a card's actions (jquery.contextMenu.css) */
+  --theme-game-menu-bg: #eee;
+  --theme-game-menu-border: #ccc;
+  --theme-game-menu-text: #333;
+  --theme-game-menu-hover-bg: #39f;
+  --theme-game-menu-hover-text: #fff;
+  --theme-game-spinner-bg: #000;
+  --theme-game-muted-mark: #ff3b3b;
+  --theme-game-muted-mark-edge: #000;
+  --theme-game-dialog-actions-bg: #000;
+  --theme-game-spinner-border: #000;
+  --theme-game-spinner-buttons: url('/gemp-lotr/js/jquery/images/spinnerbuttons.png');
   --theme-game-inactive-filter: grayscale(0.7) contrast(0.5) brightness(0.6);
   --theme-game-fight-border: #f00;
   --theme-game-strength-bg: #fff;

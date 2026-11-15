@@ -1,7 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
+import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { clockText } from './game-clock';
+import { PulseDirective } from './pulse.directive';
 
 interface PlayerView {
   index: number;
@@ -11,6 +13,8 @@ interface PlayerView {
   clock: string | null;
   /** The band of the player's own clock: under 10 minutes, under 5. */
   clockBand: 'warn' | 'danger' | null;
+  /** Their clock ran out and decided the game. */
+  expired: boolean;
   deck: string;
   hand: string;
   handRevealed: boolean;
@@ -38,6 +42,7 @@ const shown = (value: number | null | undefined) => (value === null || value ===
 @Component({
   selector: 'gd-game-state',
   styleUrl: './game-state-panel.component.css',
+  imports: [PulseDirective],
   template: `
     @for (player of players(); track player.index) {
       <div
@@ -51,6 +56,8 @@ const shown = (value: number | null | undefined) => (value === null || value ===
           data-clock
           [attr.data-own]="player.own ? '' : null"
           [attr.data-band]="player.own ? player.clockBand : null"
+          [attr.data-expired]="player.expired ? '' : null"
+          [gdPulse]="player.own ? clocks.bankPulse() : 0"
           >{{ player.clock }}</span
         >
         <div class="gd-game-player__stats">
@@ -128,7 +135,15 @@ const shown = (value: number | null | undefined) => (value === null || value ===
     }
     <div class="gd-game-state__twilight" data-game="twilight">{{ model().twilight }}</div>
     <div class="gd-game-state__phase" data-game="phase">{{ model().phase }}</div>
-    <div class="gd-game-state__decision-clock" data-clock>{{ decisionClock() }}</div>
+    <div
+      class="gd-game-state__decision-clock"
+      data-clock
+      [attr.data-band]="clocks.view().decisionBand"
+      [attr.data-expired]="clocks.view().decisionExpired ? '' : null"
+      [gdPulse]="clocks.decisionPulse()"
+    >
+      {{ decisionClock() }}
+    </div>
     <br />
     <div data-game="initiative">
       Initiative:
@@ -152,6 +167,7 @@ const shown = (value: number | null | undefined) => (value === null || value ===
 })
 export class GameStatePanelComponent {
   private readonly session = inject(GameSession);
+  protected readonly clocks = inject(GameClocks);
   protected readonly model = this.session.model;
 
   private readonly view = inject(GameViewState);
@@ -160,10 +176,11 @@ export class GameStatePanelComponent {
 
   protected readonly players = computed<PlayerView[]>(() => {
     const model = this.model();
+    const clocks = this.clocks.view();
     return model.players.map((name, index) => {
       const zones = model.stats?.playerZones[name];
       const threat = model.stats?.threats[name];
-      const seconds = model.clocks[name];
+      const seconds = clocks.banks[name];
       const own = !model.spectator && name === model.participantId;
       return {
         index,
@@ -171,7 +188,8 @@ export class GameStatePanelComponent {
         current: name === model.currentPlayer,
         own,
         clock: seconds === undefined ? null : clockText(seconds),
-        clockBand: seconds === undefined ? null : seconds < 300 ? 'danger' : seconds < 600 ? 'warn' : null,
+        clockBand: own ? clocks.ownBand : null,
+        expired: clocks.expired.includes(name),
         deck: shown(zones?.deck),
         hand: shown(zones?.hand),
         handRevealed: model.revealedHands.includes(name),
@@ -194,11 +212,10 @@ export class GameStatePanelComponent {
 
   /** "elapsed / limit" of the waiting decision, as the server last said. */
   protected readonly decisionClock = computed(() => {
-    const { decisionClock, decisionLimit } = this.model().clocks;
-    if (decisionClock === undefined) return '';
-    return decisionLimit !== undefined && decisionLimit > 0
-      ? `${clockText(decisionClock)} / ${clockText(decisionLimit)}`
-      : clockText(decisionClock);
+    const decision = this.clocks.view().decision;
+    if (!decision) return '';
+    const elapsed = clockText(decision.elapsed);
+    return decision.limit > 0 ? `${elapsed} / ${clockText(decision.limit)}` : elapsed;
   });
 
   protected readonly initiative = computed(() => (this.model().stats ? this.model().stats?.initiative : null));

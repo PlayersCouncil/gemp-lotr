@@ -53,3 +53,27 @@
   --gd-card-image-filter: var(--theme-game-inactive-filter);
   --gd-card-frame: var(--theme-game-inactive-border);
 }
+
+/* A card the waiting decision offers, or one chosen for it: framed in the choice's colour */
+.gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+}
+
+.gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  cursor: pointer;
+}
+
+.gd-card[data-mark='actionable'] {
+  --gd-card-frame: var(--theme-game-actionable);
+  cursor: pointer;
+}
+
+.gd-card[data-inactive][data-mark] {
+  --gd-card-image-filter: var(--theme-game-inactive-offered-filter);
+}
+
+/* A card that isn't on the table but has an action: see-through, in the hand's row */
+.gd-card[data-zone='EXTRA'] {
+  opacity: 0.7;
+}

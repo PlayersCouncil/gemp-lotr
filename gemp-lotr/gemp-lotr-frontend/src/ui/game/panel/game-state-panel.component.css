@@ -126,6 +126,34 @@
   line-height: 1.4;
 }
 
+/* A clock that calls for attention grows for a moment */
+[data-pulse] {
+  animation: gd-pulse 0.8s ease-out 1;
+}
+
+@keyframes gd-pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.35);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* A clock that ran out and ended the game stays red and still */
+.gd-game-player__clock[data-expired],
+.gd-game-state__decision-clock[data-expired] {
+  background-color: var(--theme-game-clock-danger-bg);
+  color: var(--theme-game-clock-text);
+  font-weight: bold;
+  animation: none;
+}
+
 .gd-game-state__twilight {
   float: right;
   width: 40px;
@@ -147,4 +175,9 @@
   padding: 0 6px;
   border-radius: 4px;
   font-size: 150%;
+}
+
+/* The legacy "+" was not a real button: pressed with the mouse it shows no focus */
+.gd-game-player__toggle:focus:not(:focus-visible) {
+  outline: none;
 }

@@ -75,7 +75,25 @@ It needs a build of the app in the legacy web root (`npx ng build --configuratio
 Docker service's). The decisions, the dialogs and the gestures are compared by the game check above, which plays real
 games: from G3 on with `--pages legacy,angular`.
 
-Result on 2026-11-14: 291 of 291 the same.
+Each state is shown with the decision that waited at it (`--no-decisions`: the table alone), so the decisions' dialogs,
+the alert box and the cards offered are compared too. `--cookie name=value` sets a setting on both pages (e.g.
+`--cookie alwaysDropDown=true`).
+
+Result on 2026-11-14 (G3): 291 of 291 the same.
+
+## The Angular page
+
+`--pages legacy,angular` plays each scenario on `game.html` and on the Angular page (`/gemp-lotr/ng/game`, served
+from `../.local-server/ng`: build it with `npm run build -- --output-path visual-check/.local-server/ng` in the
+frontend). `--reload` also loads the Angular page again after every step, and requires the same page as before:
+the screen and the game as shown (D10 of trymarz/gemp-lotr-private#27). The keyboard's focus is left out of that
+comparison: no page gets it back after loading. Before switching tabs both pages are let settle, since where the
+chat box's list stands depends on whether its last lines came before the tab closed.
+
+Result on 2026-11-14 (G3), `--pages legacy,angular --reload` at 3 window sizes: every scenario the same except the
+ones reaching what G4 brings (card information, the hover zoom, the pile dialogs, dragging a card, the replay):
+`card-info`, `card-gestures`, `hover-zoom`, `piles`, `reconcile-discard`, `concede`,
+`concede-while-opponent-decides` (their last step) and `replay`.
 
 ## Coverage
 

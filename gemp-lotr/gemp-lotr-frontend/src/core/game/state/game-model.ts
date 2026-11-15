@@ -3,7 +3,7 @@
  * and what the page's player has chosen but not sent (`local`, kept across reloads by GameRestore). Plain immutable
  * data: each event gives a new model, so any state can be checked without a page.
  */
-import { Clocks, Decision, GameStats } from '../protocol/game-events';
+import { Clocks, Decision, DecisionType, GameStats } from '../protocol/game-events';
 
 export interface GameCard {
   id: string;
@@ -55,8 +55,15 @@ export interface PreGameInfo {
 export interface LocalChoices {
   /** Minion id → character id, for the waiting assignment decision (sent only with Done). */
   assignments: Readonly<Record<string, string>>;
-  /** Cards chosen for the waiting decision without auto-accept. */
+  /**
+   * What is chosen so far for the waiting decision, in order: card ids, or action ids for a choice of actions (the
+   * decision's answer when it is sent).
+   */
   selectedCardIds: readonly string[];
+  /** The cards drawn as chosen (for a choice of actions: the card whose action was taken). */
+  markedCardIds: readonly string[];
+  /** While assigning: the minion clicked, waiting for the character it goes to (or a second click to take it back). */
+  minion: string | null;
 }
 
 export interface GameModel {
@@ -71,6 +78,8 @@ export interface GameModel {
   phase: string | null;
   twilight: number;
   currentPlayer: string | null;
+  /** The cards not active this turn (the turn's TC event; the full state names them before putting them in play). */
+  inactiveCardIds: readonly string[];
   /** Each player's site on the adventure path. */
   positions: Readonly<Record<string, number>>;
   /** Cards by id, and the order the server put them on the page in. */
@@ -89,11 +98,13 @@ export interface GameModel {
   local: LocalChoices;
   clocks: Clocks;
   ended: boolean;
+  /** The kind of decision that was still waiting when the game ended (it could no longer be answered), or null. */
+  closedByEnd: DecisionType | null;
   /** How many events have been applied. */
   eventCount: number;
 }
 
-export const NO_CHOICES: LocalChoices = { assignments: {}, selectedCardIds: [] };
+export const NO_CHOICES: LocalChoices = { assignments: {}, selectedCardIds: [], markedCardIds: [], minion: null };
 
 export function emptyGame(): GameModel {
   return {
@@ -107,6 +118,7 @@ export function emptyGame(): GameModel {
     twilight: 0,
     currentPlayer: null,
     positions: {},
+    inactiveCardIds: [],
     cards: {},
     cardOrder: [],
     skirmish: null,
@@ -118,6 +130,7 @@ export function emptyGame(): GameModel {
     local: NO_CHOICES,
     clocks: {},
     ended: false,
+    closedByEnd: null,
     eventCount: 0,
   };
 }

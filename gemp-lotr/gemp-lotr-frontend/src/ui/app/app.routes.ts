@@ -15,7 +15,8 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'game',
-    title: 'Game of Gemp-LotR',
+    // As game.html's title; the page changes it while it waits for the player (GameAttention)
+    title: 'GEMP: LotR-TCG - Game Table',
     canActivate: [loginRequired],
     loadComponent: () => import('../game/game-page.component').then((m) => m.GamePageComponent),
   },

@@ -108,6 +108,12 @@
   height: 182px;
 }
 
+/* Framed for a waiting choice, the legacy box kept its inner size: it grew by the wider frame, right and down */
+.gd-game__alert[data-frame] {
+  width: 149px;
+  height: 184px;
+}
+
 .gd-game__tabs {
   position: absolute;
   left: 5px;

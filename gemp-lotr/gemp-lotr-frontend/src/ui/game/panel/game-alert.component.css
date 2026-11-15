@@ -11,6 +11,19 @@
   font-family: var(--theme-font-text);
 }
 
+/* A waiting choice frames the box 2px wide in its colour (the page makes it that much larger) */
+:host([data-frame]) {
+  border-width: 2px;
+}
+
+:host([data-frame='action']) {
+  border-color: var(--theme-game-actionable);
+}
+
+:host([data-frame='selection']) {
+  border-color: var(--theme-game-selectable);
+}
+
 .gd-game-alert__text {
   position: absolute;
   inset: 0 0 auto;
@@ -21,4 +34,38 @@
   position: absolute;
   inset: 150px 0 auto;
   height: 30px;
+}
+
+/* A jQuery UI text button with slim text (game.css .alertButtons) */
+.gd-game-alert__button {
+  box-sizing: content-box;
+  margin: 0 0.1em 0 0;
+  padding: 0.2em 0.3em;
+  font-size: 13.2px;
+  line-height: normal;
+}
+
+.gd-game-alert__button > span {
+  display: block;
+  padding: 0.2em 0.5em;
+  font-size: 70%;
+  line-height: 1.4;
+}
+
+.gd-game-alert__button[data-right] {
+  float: right;
+}
+
+/* A card's name in the server's text: pressing it shows the card */
+:host ::ng-deep .cardHint {
+  display: inline;
+  color: var(--theme-game-card-hint);
+  cursor: pointer;
+}
+
+/* A jQuery UI button that has the focus looks as under the mouse, also after a click */
+.gd-button:focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
 }

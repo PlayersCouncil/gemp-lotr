@@ -210,7 +210,7 @@ describe('applyEvent', () => {
   it('a decision waits until the game ends; each clears what was chosen for the one before', () => {
     let model = play(put('1'), { type: 'D', decision: decision() });
     expect(model.decision).toEqual({ decision: decision(), arrivedAt: 1 });
-    model = { ...model, local: { assignments: {}, selectedCardIds: ['1'] } };
+    model = { ...model, local: { assignments: {}, selectedCardIds: ['1'], markedCardIds: [], minion: null } };
     model = applyEvent(model, { type: 'D', decision: decision('INTEGER') });
     expect(model.local.selectedCardIds).toEqual([]);
     model = applyEvent(model, { type: 'EG' });
@@ -269,5 +269,17 @@ describe('applyEvent', () => {
       metaSites: '',
     });
     expect(model.preGame).toMatchObject({ participantId: 'bob', players: ['alice', 'bob'] });
+  });
+
+  it('marks a card put into play inactive when the turn named it so before (as the full state does)', () => {
+    const model = play({ type: 'TC', participantId: 'alice', inactiveCardIds: ['1'] }, put('1'), put('2'));
+    expect(model.cards['1']?.inactive).toBe(true);
+    expect(model.cards['2']?.inactive).toBe(false);
+  });
+
+  it('notes the kind of decision the end of the game closed', () => {
+    const model = play({ type: 'D', decision: decision('CARD_SELECTION') }, { type: 'EG' });
+    expect(model.closedByEnd).toBe('CARD_SELECTION');
+    expect(play({ type: 'EG' }).closedByEnd).toBeNull();
   });
 });

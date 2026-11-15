@@ -12,6 +12,7 @@ describe('GameLog', () => {
   let backend: HttpTestingController;
 
   beforeEach(() => {
+    sessionStorage.clear();
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
@@ -46,15 +47,47 @@ describe('GameLog', () => {
     expect(kinds()).toEqual(['message:one', 'chat:hi', 'warning:two', 'message:three']);
   });
 
-  it("starts again with the game's earlier messages in front after a reload, keeping the chat", () => {
-    log.game([{ kind: 'message', text: 'latest' }]);
+  it("puts the game's messages so far before the room's lines when the game opens", () => {
     chat.join('Game7');
     room().flush('<chat><message from="bob">hi</message></chat>');
-    log.restart([
-      { kind: 'message', text: 'earlier' },
-      { kind: 'message', text: 'latest' },
+    log.restart('7', [{ kind: 'message', text: 'earlier' }]);
+    expect(kinds()).toEqual(['message:earlier', 'chat:hi']);
+  });
+
+  it('comes back after a reload as it was, without what the room says again on joining', () => {
+    log.restart('7', [{ kind: 'message', text: 'one' }]);
+    chat.join('Game7');
+    room().flush(
+      '<chat><message from="System" date="1">Welcome to room: Game7</message><message from="bob" date="2">hi</message></chat>',
+    );
+    log.game([{ kind: 'message', text: 'two' }]);
+    const before = kinds();
+    expect(before).toEqual(['message:one', 'chat:Welcome to room: Game7', 'chat:hi', 'message:two']);
+
+    // The page loaded again: a new log, the game's messages (one more since), and the room's greeting again
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        provideGempHttp(),
+        provideHttpClientTesting(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+        provideGameState(),
+      ],
+    });
+    log = TestBed.inject(GameLog);
+    chat = TestBed.inject(ChatRoom);
+    backend = TestBed.inject(HttpTestingController);
+    log.restart('7', [
+      { kind: 'message', text: 'one' },
+      { kind: 'message', text: 'two' },
+      { kind: 'message', text: 'three' },
     ]);
-    expect(kinds()).toEqual(['message:earlier', 'message:latest', 'chat:hi']);
+    chat.join('Game7');
+    room().flush(
+      '<chat><message from="System" date="9">Welcome to room: Game7</message><message from="bob" date="2">hi</message>' +
+        '<message from="bob" date="10">back?</message></chat>',
+    );
+    expect(kinds()).toEqual([...before, 'message:three', 'chat:back?']);
   });
 
   it("writes the room's problem and other warnings as warnings", () => {

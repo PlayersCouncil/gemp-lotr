@@ -11,7 +11,10 @@ export const ANGULAR_CONTRACT = {
   decisionButton: (label) => `[data-decision-button="${label}"]`,
   choiceButton: (index) => `[data-decision-choice="${index}"]`,
   choiceSelect: 'select[data-decision="choice"]',
-  integerInput: 'input[data-decision="integer"]',
+  // The number's spinner: the value shown and the arrows around it
+  integerValue: '[data-decision="integer"]',
+  integerDown: '[data-decision="integer-down"]',
+  integerUp: '[data-decision="integer-up"]',
   actionMenuItem: (actionId) => `[data-action-id="${actionId}"]`,
   tab: (name) => `[data-tab="${name}"]`,
   pile: (name, playerIndex) => `[data-pile="${name}"][data-player-index="${playerIndex}"]`,
@@ -31,7 +34,9 @@ export const ANGULAR_CONTRACT = {
 export const LEGACY = {
   decisionButton: (label) =>
     `.ui-dialog:visible .ui-dialog-buttonpane button:has-text("${label}"), .alertButtons button:has-text("${label}")`,
-  integerInput: '#integerDecision',
+  integerValue: '.SpinnerControl .ValueDisplay',
+  integerDown: '.SpinnerControl .LeftButton',
+  integerUp: '.SpinnerControl .RightButton',
   choiceSelect: '#multipleChoiceDecision',
   tab: (name) =>
     ({ chat: '#chatTab a', settings: '#settingsTab a', options: '#gameOptionsTab a', players: '#playersInRoomTab a' })[
@@ -159,7 +164,7 @@ export function readGameState({ kind }) {
     initiative: read('initiative'),
     ruleOf4: read('ruleof4'),
     alert: read('alert'),
-    alertButtons: Array.from(document.querySelectorAll('[data-decision-button]'), text),
+    alertButtons: Array.from(document.querySelectorAll('[data-game="alert-buttons"] [data-decision-button]'), text),
     dialogs: Array.from(document.querySelectorAll('[data-dialog-title]')).filter(shown).map(text),
     menu: Array.from(document.querySelectorAll('[data-action-id]'), text),
     stats,

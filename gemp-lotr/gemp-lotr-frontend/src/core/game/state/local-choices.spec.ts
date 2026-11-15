@@ -75,15 +75,21 @@ describe('local choices', () => {
   it('an answered decision waits no more, and what was chosen for it is gone', () => {
     const model = decisionAnswered(selectCard(waiting('CARD_SELECTION'), '1'));
     expect(model.decision).toBeNull();
-    expect(model.local).toEqual({ assignments: {}, selectedCardIds: [] });
+    expect(model.local).toEqual({ assignments: {}, selectedCardIds: [], markedCardIds: [], minion: null });
   });
 
   it('tells whether restored choices still fit the waiting decision', () => {
     const cards = waiting('CARD_SELECTION', { cardId: ['1', '2'] });
-    expect(choicesFit(cards, { assignments: {}, selectedCardIds: ['2'] })).toBe(true);
-    expect(choicesFit(cards, { assignments: {}, selectedCardIds: ['3'] })).toBe(false);
-    expect(choicesFit(assignment(), { assignments: { '20': '10' }, selectedCardIds: [] })).toBe(true);
-    expect(choicesFit(assignment(), { assignments: { '20': '99' }, selectedCardIds: [] })).toBe(false);
-    expect(choicesFit(emptyGame(), { assignments: {}, selectedCardIds: [] })).toBe(false);
+    expect(choicesFit(cards, { assignments: {}, selectedCardIds: ['2'], markedCardIds: [], minion: null })).toBe(true);
+    expect(choicesFit(cards, { assignments: {}, selectedCardIds: ['3'], markedCardIds: [], minion: null })).toBe(false);
+    expect(
+      choicesFit(assignment(), { assignments: { '20': '10' }, selectedCardIds: [], markedCardIds: [], minion: null }),
+    ).toBe(true);
+    expect(
+      choicesFit(assignment(), { assignments: { '20': '99' }, selectedCardIds: [], markedCardIds: [], minion: null }),
+    ).toBe(false);
+    expect(choicesFit(emptyGame(), { assignments: {}, selectedCardIds: [], markedCardIds: [], minion: null })).toBe(
+      false,
+    );
   });
 });

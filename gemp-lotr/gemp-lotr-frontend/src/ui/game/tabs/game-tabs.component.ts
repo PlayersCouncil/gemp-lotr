@@ -5,6 +5,7 @@ import { GameViewState } from '../../../core/game/session/game-view-state';
 import { AUTO_PASS_PHASES, GameSettings } from '../../../core/game/settings/game-settings';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { GameChatComponent } from './game-chat.component';
+import { KeepScrollDirective } from './keep-scroll.directive';
 
 export type GameTab = 'chat' | 'settings' | 'options' | 'players';
 
@@ -31,7 +32,7 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
 @Component({
   selector: 'gd-game-tabs',
   styleUrl: './game-tabs.component.css',
-  imports: [GameChatComponent],
+  imports: [GameChatComponent, KeepScrollDirective],
   host: { '[attr.data-extras]': 'extras()' },
   template: `
     <div class="gd-game-tabs__strip" role="tablist">
@@ -42,7 +43,7 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
           class="gd-game-tabs__tab"
           [attr.data-tab]="tab.name"
           [attr.aria-selected]="tab.name === selected()"
-          (click)="selected.set(tab.name)"
+          (click)="open(tab.name)"
         >
           {{ tab.label }}
         </button>
@@ -90,7 +91,7 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
       <gd-game-chat />
     </div>
     @if (selected() === 'settings') {
-      <div class="gd-game-tabs__panel" role="tabpanel" data-panel="settings">
+      <div class="gd-game-tabs__panel" role="tabpanel" data-panel="settings" gdKeepScroll>
         <div class="gd-game-setting">
           <label for="gd-game-foil">Foil presentation:</label>
           <select id="gd-game-foil" data-setting="foilPresentation">
@@ -172,10 +173,41 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
             }
           </div>
         </div>
+        @if (timer() === 'ready') {
+          <div #rules class="gd-game-setting" data-group data-timer-alerts>
+            <div class="gd-game-setting__title">Timer alert sound intervals</div>
+            @for (rule of timerRows; track $index) {
+              <div class="gd-game-setting__rule">
+                Below
+                <input
+                  type="number"
+                  min="0"
+                  max="999"
+                  data-timer-alert="timerAlertBelow"
+                  aria-label="Below, minutes"
+                  [value]="rule.belowMinutes"
+                  (change)="timerRulesChanged(rules)"
+                />
+                min, every
+                <input
+                  type="number"
+                  min="0"
+                  max="600"
+                  data-timer-alert="timerAlertEvery"
+                  aria-label="Every, seconds"
+                  [value]="rule.everySeconds"
+                  (change)="timerRulesChanged(rules)"
+                />
+                s
+              </div>
+            }
+            <div class="gd-game-setting__hint">(0 seconds disables a row)</div>
+          </div>
+        }
       </div>
     }
     @if (selected() === 'options') {
-      <div class="gd-game-tabs__panel" role="tabpanel" data-panel="options">
+      <div class="gd-game-tabs__panel" role="tabpanel" data-panel="options" gdKeepScroll>
         <div class="gd-game-setting">
           <button type="button" class="gd-button gd-game-tabs__action" data-button="concedeGame" (click)="concede()">
             <span>Concede game</span>
@@ -189,7 +221,7 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
       </div>
     }
     @if (selected() === 'players') {
-      <div class="gd-game-tabs__panel" role="tabpanel" data-panel="players">
+      <div class="gd-game-tabs__panel" role="tabpanel" data-panel="players" gdKeepScroll>
         @for (user of chat.users(); track user.name) {
           {{ userLine(user) }}<br />
         }
@@ -204,7 +236,8 @@ export class GameTabsComponent {
   protected readonly chat = inject(ChatRoom);
 
   /** The open tab: kept with the game, so a reload opens it again. */
-  protected readonly selected = inject(GameViewState).tab;
+  private readonly viewState = inject(GameViewState);
+  protected readonly selected = this.viewState.tab;
   protected readonly phases = AUTO_PASS_PHASES.map((name) => ({ name, label: PHASE_LABELS[name] ?? name }));
 
   /**
@@ -229,6 +262,34 @@ export class GameTabsComponent {
     { name: 'options', label: 'Options' },
     { name: 'players', label: this.chat.joined() ? `Players(${this.chat.users().length})` : 'Players' },
   ]);
+
+  /**
+   * The three rows of timer alert rules as the tab first shows them (a row without a rule: zeros). The fields keep
+   * what the player types; a row counts once both its numbers are above zero.
+   */
+  protected readonly timerRows = [0, 1, 2].map((row) => {
+    const rule = this.settings.timerAlertRules()[row];
+    return { belowMinutes: Math.round((rule?.belowSeconds ?? 0) / 60), everySeconds: rule?.everySeconds ?? 0 };
+  });
+
+  protected timerRulesChanged(rows: HTMLElement): void {
+    const numbers = (name: string) =>
+      Array.from(rows.querySelectorAll<HTMLInputElement>(`[data-timer-alert="${name}"]`), (field) =>
+        parseInt(field.value, 10),
+      );
+    const every = numbers('timerAlertEvery');
+    this.settings.setTimerAlertRules(
+      numbers('timerAlertBelow')
+        .map((minutes, row) => ({ belowSeconds: minutes * 60, everySeconds: every[row] ?? NaN }))
+        .filter((rule) => rule.belowSeconds > 0 && rule.everySeconds > 0),
+    );
+  }
+
+  /** Another tab: its panel starts at its top. */
+  protected open(tab: GameTab): void {
+    if (tab !== this.selected()) this.viewState.panelScroll.set(0);
+    this.selected.set(tab);
+  }
 
   protected userLine(user: { name: string; role: string | null }): string {
     const mark = user.role === 'admin' ? '* ' : user.role === 'leagueAdmin' ? '+ ' : '';

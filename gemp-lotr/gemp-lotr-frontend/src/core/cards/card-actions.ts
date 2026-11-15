@@ -9,5 +9,6 @@ import { Injectable } from '@angular/core';
  */
 @Injectable()
 export abstract class CardActions {
-  abstract activate(ref: unknown): void;
+  /** `event`: the click, where the page needs to know where the card was pressed. */
+  abstract activate(ref: unknown, event?: MouseEvent): void;
 }

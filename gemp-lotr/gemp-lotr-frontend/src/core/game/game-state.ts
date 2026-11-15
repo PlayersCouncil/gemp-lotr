@@ -2,6 +2,9 @@ import { Provider } from '@angular/core';
 import { ChatRoom } from '../chat/chat-room.service';
 import { PageLifetime } from '../platform/page-lifetime.service';
 import { GameApi } from './api/game-api.service';
+import { GameAttention } from './clock/game-attention.service';
+import { GameClocks } from './clock/game-clocks.service';
+import { GameDecisions } from './decision/game-decisions.service';
 import { GameLog } from './session/game-log';
 import { GameRestore } from './session/game-restore';
 import { GameSession } from './session/game-session.service';
@@ -23,6 +26,9 @@ export function provideGameState(): Provider[] {
     GameSettings,
     ChatRoom,
     GameLog,
+    GameDecisions,
+    GameClocks,
+    GameAttention,
     GameViewState,
     GameTableState,
     GameCardViews,

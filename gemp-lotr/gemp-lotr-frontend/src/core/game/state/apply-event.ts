@@ -85,6 +85,7 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
       return {
         ...next,
         currentPlayer: event.participantId,
+        inactiveCardIds: event.inactiveCardIds,
         cards: mapCards(model.cards, (card) => {
           const inactive = event.inactiveCardIds.includes(card.id);
           return card.inactive === inactive ? card : { ...card, inactive };
@@ -95,7 +96,13 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'PCIP':
       return {
         ...next,
-        cards: { ...model.cards, [event.cardId]: newCard(event, model.eventCount) },
+        cards: {
+          ...model.cards,
+          [event.cardId]: {
+            ...newCard(event, model.eventCount),
+            inactive: model.inactiveCardIds.includes(event.cardId),
+          },
+        },
         cardOrder: model.cards[event.cardId] ? model.cardOrder : [...model.cardOrder, event.cardId],
       };
     case 'MCIP': {
@@ -208,7 +215,13 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     }
     case 'EG':
       // A decision still open can't be answered any more
-      return { ...next, ended: true, decision: null, local: NO_CHOICES };
+      return {
+        ...next,
+        ended: true,
+        closedByEnd: model.decision?.decision.type ?? model.closedByEnd,
+        decision: null,
+        local: NO_CHOICES,
+      };
     case 'D':
       return { ...next, decision: { decision: event.decision, arrivedAt: model.eventCount }, local: NO_CHOICES };
     case 'CAC':

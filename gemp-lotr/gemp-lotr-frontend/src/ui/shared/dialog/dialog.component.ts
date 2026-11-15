@@ -48,7 +48,7 @@ export class DialogLayers {
  * delivery, alert, confirm, prompt), `data-placed` once moved or pinned, with `--gd-dialog-left` and
  * `--gd-dialog-top` (px, its top left corner in the window), and `--gd-dialog-layer` (a number that grows each time a
  * dialog opens or is pressed, for the stacking of non-modal dialogs). Inside: `header.gd-dialog__header` with
- * `h2.gd-dialog__title[data-dialog-title]` and `button.gd-dialog__close`, `.gd-dialog__body` (the content), then the actions.
+ * `h2.gd-dialog__title[data-dialog-title]` and `button.gd-dialog__close` (unless `[closable]="false"`), `.gd-dialog__body` (the content), then the actions.
  */
 @Component({
   selector: 'gd-dialog',
@@ -74,8 +74,14 @@ export class DialogLayers {
       (pointerdown)="onPointerDown($event)"
     >
       <header class="gd-dialog__header" [gdPointerDrag]="moveDrag">
-        <h2 class="gd-dialog__title" data-dialog-title [id]="titleId">{{ heading() }}</h2>
-        <button type="button" class="gd-dialog__close" aria-label="Close" (click)="close()"></button>
+        @if (headingMarkup()) {
+          <h2 class="gd-dialog__title" data-dialog-title [id]="titleId" [innerHTML]="heading()"></h2>
+        } @else {
+          <h2 class="gd-dialog__title" data-dialog-title [id]="titleId">{{ heading() }}</h2>
+        }
+        @if (closable()) {
+          <button type="button" class="gd-dialog__close" aria-label="Close" (click)="close()"></button>
+        }
       </header>
       <div class="gd-dialog__body">
         <ng-content />
@@ -98,6 +104,10 @@ export class DialogComponent {
   readonly modal = input(true);
   /** Focus the dialog itself when it opens, not its first control. */
   readonly focusSelf = input(false);
+  /** The player can close it (the close button, Escape); a dialog that must be answered can't be. */
+  readonly closable = input(true);
+  /** The heading is the server's markup (sanitized), not plain text. */
+  readonly headingMarkup = input(false);
 
   /** Closed by the player (close button, Escape), not by `open` going false. */
   readonly closed = output();
@@ -166,7 +176,7 @@ export class DialogComponent {
 
   /** Modal dialogs close on Escape by themselves; non-modal ones when it is pressed inside them. */
   protected onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && !this.modal()) {
+    if (event.key === 'Escape' && !this.modal() && this.closable()) {
       event.preventDefault();
       this.close();
     }

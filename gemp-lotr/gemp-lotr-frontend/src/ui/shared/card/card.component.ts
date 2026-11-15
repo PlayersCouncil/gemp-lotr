@@ -105,7 +105,7 @@ export class CardComponent {
     if (event.shiftKey) {
       this.info.show(this.card());
     } else {
-      this.actions.activate(this.card().ref);
+      this.actions.activate(this.card().ref, event);
     }
   }
 

@@ -16,6 +16,18 @@ export interface SavedGame {
   choices: LocalChoices;
   /** The view's state, as the view gave it. */
   view: Readonly<Record<string, unknown>>;
+  /** What the page made of the game that the server doesn't send again (see GameModel). */
+  page?: {
+    lastRuleOf4: string | null;
+    closedByEnd: GameModel['closedByEnd'];
+    /** Each character's numbers as last sent (the server's full state leaves some out). */
+    charStats?: Readonly<Record<string, readonly string[]>>;
+    /**
+     * The cards the turn's own event named inactive, with the turn and phase (the server's full state names fewer: a
+     * site, say, dimmed on the page, isn't).
+     */
+    inactive?: { cardIds: readonly string[]; currentPlayer: string | null; phase: string | null };
+  };
   /** Game messages the page had shown (the server gives back only its last 50). */
   messages: readonly { kind: 'message' | 'warning'; text: string }[];
 }
@@ -37,6 +49,12 @@ export class GameRestore {
       choices: model.local,
       view,
       messages: model.messages,
+      page: {
+        lastRuleOf4: model.lastRuleOf4,
+        closedByEnd: model.closedByEnd,
+        charStats: model.stats?.charStats ?? {},
+        inactive: { cardIds: model.inactiveCardIds, currentPlayer: model.currentPlayer, phase: model.phase },
+      },
     };
     this.store.write(key(gameId), saved);
   }
@@ -55,6 +73,28 @@ export class GameRestore {
     let restored = model;
     if (model.decision && saved.decision === decisionKey(model.decision.decision) && choicesFit(model, saved.choices)) {
       restored = { ...restored, local: saved.choices };
+    }
+    const page = saved.page;
+    if (page) {
+      restored = {
+        ...restored,
+        lastRuleOf4: restored.lastRuleOf4 ?? page.lastRuleOf4,
+        closedByEnd: restored.ended ? (restored.closedByEnd ?? page.closedByEnd) : null,
+      };
+      const inactive = page.inactive;
+      if (inactive?.currentPlayer === restored.currentPlayer && inactive.phase === restored.phase) {
+        const ids = new Set([...restored.inactiveCardIds, ...inactive.cardIds]);
+        const cards = Object.fromEntries(
+          Object.entries(restored.cards).map(([id, card]) => [id, ids.has(id) ? { ...card, inactive: true } : card]),
+        );
+        restored = { ...restored, cards, inactiveCardIds: [...ids] };
+      }
+      const stats = restored.stats;
+      if (stats && page.charStats) {
+        // Only for cards still in play; what the server sent now wins
+        const kept = Object.fromEntries(Object.entries(page.charStats).filter(([id]) => id in restored.cards));
+        restored = { ...restored, stats: { ...stats, charStats: { ...kept, ...stats.charStats } } };
+      }
     }
     return { ...restored, messages: mergeMessages(saved.messages, model.messages) };
   }

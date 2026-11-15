@@ -53,6 +53,9 @@ const { values: options } = parseArgs({
     // Saves what page A and the server said to each other, and the game the page held after each step, as test data
     // for the jsdom tests (src/testing/game-recordings, see game/README.md); page B isn't run
     record: { type: 'boolean', default: false },
+    // D10 of trymarz/gemp-lotr-private#27: after every step the Angular page is loaded again, and must show the same
+    // page as before (the screen and the game as shown); the legacy page can't, so it isn't compared there
+    reload: { type: 'boolean', default: false },
   },
 });
 
@@ -272,16 +275,12 @@ function gestures(page, kind, used) {
         .count()
         .then((n) => n > 0),
     async integer(value) {
-      if (kind === 'legacy') {
-        // The legacy field is a spinner (jquery.spinnercontrol): its arrows change the number shown
-        const shown = Number(await locator('.SpinnerControl .ValueDisplay').textContent());
-        const arrow = locator(value > shown ? '.SpinnerControl .RightButton' : '.SpinnerControl .LeftButton');
-        for (let i = 0; i < Math.abs(value - shown); i++) {
-          used.add('bid spinner');
-          await arrow.click();
-        }
-      } else {
-        await locator(select.integerInput).fill(String(value));
+      // The field is a spinner: its arrows change the number shown
+      const shown = Number(await locator(select.integerValue).textContent());
+      const arrow = locator(value > shown ? select.integerUp : select.integerDown);
+      for (let i = 0; i < Math.abs(value - shown); i++) {
+        used.add('bid spinner');
+        await arrow.click();
       }
       await this.clickButton('OK');
     },
@@ -668,6 +667,8 @@ async function play(kind, scenario, size, pair, label) {
   const errors = [];
   const dialogs = [];
   const snapshots = [];
+  // After each step, the page loaded again (--reload)
+  const reloads = [];
   const recorded = [];
   const gestures = [];
   let bots = [];
@@ -768,13 +769,50 @@ async function play(kind, scenario, size, pair, label) {
           model: await inPage(page, readLegacyModel, null),
         });
       }
-      snapshots.push({
+      const shot = {
         name,
         screen: await page.screenshot({ mask: masks.map((selector) => page.locator(selector)), maskColor: '#ff00ff' }),
         state: await inPage(page, readGameState, { kind }),
         requests: traffic.requests.splice(0),
         dialogs: dialogs.splice(0),
-      });
+      };
+      snapshots.push(shot);
+      if (options.reload && kind === 'angular' && mode !== 'replay') {
+        // The keyboard's focus isn't the game's: no page can give it back after loading again, so it is compared
+        // without it
+        const focused = await page.evaluate(() => {
+          const active = document.activeElement;
+          if (!(active instanceof HTMLElement) || active === document.body) return false;
+          active.blur();
+          return true;
+        });
+        const before = focused
+          ? {
+              ...shot,
+              screen: await page.screenshot({
+                mask: masks.map((selector) => page.locator(selector)),
+                maskColor: '#ff00ff',
+              }),
+            }
+          : shot;
+        await page.reload();
+        if (!keepMouse) await page.mouse.move(1, 1);
+        await settle(page, kind, traffic, bots);
+        // ... and what the page focuses as it opens, too
+        await page.evaluate(() => document.activeElement instanceof HTMLElement && document.activeElement.blur());
+        reloads.push({
+          before,
+          name,
+          screen: await page.screenshot({
+            mask: masks.map((selector) => page.locator(selector)),
+            maskColor: '#ff00ff',
+          }),
+          state: await inPage(page, readGameState, { kind }),
+        });
+        // What the page asked after loading again is the reload's, not the next step's
+        traffic.requests.splice(0);
+        dialogs.splice(0);
+      }
     };
     if (mode === 'replay') {
       await page.waitForFunction(() => window.ui?.replayGameEvents != null, null, { timeout: 20000 });
@@ -791,6 +829,9 @@ async function play(kind, scenario, size, pair, label) {
       if ('unassign' in step && before) {
         gestures.push({ after: traffic.exchanges.length, unassign: before.values.minions[step.unassign] });
       }
+      // Switching tabs: when the last lines come, before or after, decides where the chat box's list is (with the tab
+      // closed it doesn't follow its end); both pages are given everything first
+      if ('tab' in step) await settle(page, kind, traffic, bots);
       await doStep(page, kind, step, traffic, used);
       if (before && !('auto' in step) && isAnswer(step)) await waitForNextDecision(traffic, before);
       if (!step.quiet) await snapshot(step.name ?? `step ${index + 1}`, 'hover' in step);
@@ -798,10 +839,18 @@ async function play(kind, scenario, size, pair, label) {
     if (scenario.steps.at(-1)?.quiet) await snapshot('end');
     // A replay reads /replay, which the jsdom tests don't serve (they play games)
     if (options.record && mode !== 'replay') writeRecording(scenario, traffic, recorded, size);
-    return { snapshots, errors, problems: bots.flatMap((bot) => bot.problems), used, events: traffic.events };
+    return {
+      snapshots,
+      reloads,
+      errors,
+      problems: bots.flatMap((bot) => bot.problems),
+      used,
+      events: traffic.events,
+    };
   } catch (error) {
     return {
       snapshots,
+      reloads,
       errors,
       problems: [...bots.flatMap((bot) => bot.problems), `${label}: ${error.message.split('\n')[0]}`],
       used,
@@ -898,6 +947,27 @@ function compareRuns(a, b, base) {
       if (diff) fs.writeFileSync(path.join(outDir, `${file}-diff.png`), diff);
     }
     images.push({ name: sa.name, file, differs: screens.outside > tolerance, pixels: screens.outside });
+  }
+  // The page loaded again after a step must show what it showed before (--reload)
+  for (const [i, after] of (b.reloads ?? []).entries()) {
+    const before = after.before ?? b.snapshots[i];
+    if (!before) continue;
+    const at = `${before.name} (after a reload)`;
+    for (const key of Object.keys({ ...before.state, ...after.state })) {
+      if (JSON.stringify(before.state[key]) !== JSON.stringify(after.state[key])) {
+        problems.push(
+          `${at}: ${key}: before ${JSON.stringify(before.state[key]).slice(0, 300)}, after ${JSON.stringify(after.state[key]).slice(0, 300)}`,
+        );
+      }
+    }
+    const screens = compareScreens(before.screen, after.screen, [], true);
+    if (screens.outside > tolerance) {
+      problems.push(`${at}: screen: ${screens.outside} px differ`);
+      const file = `${base}-${String(i).padStart(2, '0')}-reload`;
+      fs.writeFileSync(path.join(outDir, `${file}-before.png`), before.screen);
+      fs.writeFileSync(path.join(outDir, `${file}-after.png`), after.screen);
+      if (screens.image) fs.writeFileSync(path.join(outDir, `${file}-diff.png`), screens.image);
+    }
   }
   return { problems, pixels, images };
 }

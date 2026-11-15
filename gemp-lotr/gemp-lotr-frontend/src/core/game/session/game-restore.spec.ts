@@ -36,7 +36,11 @@ function setUp() {
 describe('GameRestore', () => {
   it('brings back the choices when the same decision waits after the reload (it may have come at another moment)', () => {
     const { restore } = setUp();
-    const before = { ...waiting(), local: { assignments: { '20': '10' }, selectedCardIds: [] }, messages: [m('a')] };
+    const before = {
+      ...waiting(),
+      local: { assignments: { '20': '10' }, selectedCardIds: [], markedCardIds: [], minion: null },
+      messages: [m('a')],
+    };
     restore.save('7', before, { tab: 'settings' });
     const after = restore.restore('7', { ...waiting(), decision: { decision, arrivedAt: 40 } });
     expect(after.local.assignments).toEqual({ '20': '10' });
@@ -46,10 +50,18 @@ describe('GameRestore', () => {
 
   it('does not bring back choices for another decision, or ones that no longer fit', () => {
     const { restore } = setUp();
-    restore.save('7', { ...waiting(), local: { assignments: { '20': '10' }, selectedCardIds: [] } }, {});
+    restore.save(
+      '7',
+      { ...waiting(), local: { assignments: { '20': '10' }, selectedCardIds: [], markedCardIds: [], minion: null } },
+      {},
+    );
     expect(restore.restore('7', waiting({ ...decision, text: 'Other' })).local.assignments).toEqual({});
     expect(restore.restore('7', emptyGame()).local.assignments).toEqual({});
-    restore.save('7', { ...waiting(), local: { assignments: { '99': '10' }, selectedCardIds: [] } }, {});
+    restore.save(
+      '7',
+      { ...waiting(), local: { assignments: { '99': '10' }, selectedCardIds: [], markedCardIds: [], minion: null } },
+      {},
+    );
     expect(restore.restore('7', waiting()).local.assignments).toEqual({});
   });
 
@@ -60,6 +72,43 @@ describe('GameRestore', () => {
     restore.save('8', model, {});
     restore.forget('8');
     expect(restore.saved('8')).toBeNull();
+  });
+
+  it("brings back what the page made of the game that the server's full state doesn't say again", () => {
+    const { restore } = setUp();
+    const card = (id: string) => ({ ...emptyGame().cards[id], id, inactive: false }) as GameModel['cards'][string];
+    const stats = (charStats: Record<string, string[]>) =>
+      ({ charStats }) as unknown as NonNullable<GameModel['stats']>;
+    const before: GameModel = {
+      ...emptyGame(),
+      ended: true,
+      closedByEnd: 'CARD_SELECTION',
+      lastRuleOf4: '2',
+      currentPlayer: 'alice',
+      phase: 'Fellowship',
+      inactiveCardIds: ['1'],
+      cards: { '1': card('1'), '2': card('2'), '3': card('3') },
+      stats: stats({ '1': ['5', '3'], '2': ['4', '2'], '9': ['1', '1'] }),
+    };
+    restore.save('7', before, {});
+    const after = restore.restore('7', {
+      ...emptyGame(),
+      ended: true,
+      currentPlayer: 'alice',
+      phase: 'Fellowship',
+      cards: { '1': card('1'), '2': card('2'), '3': card('3') },
+      stats: stats({ '2': ['6', '2'] }),
+    });
+    expect(after.lastRuleOf4).toBe('2');
+    expect(after.closedByEnd).toBe('CARD_SELECTION');
+    // Only cards still in play; what the server sent wins
+    expect(after.stats?.charStats).toEqual({ '1': ['5', '3'], '2': ['6', '2'] });
+    expect(after.cards['1']?.inactive).toBe(true);
+    expect(after.cards['2']?.inactive).toBe(false);
+    // Another turn or phase: the turn's list isn't brought back; a game that hasn't ended has no closed decision
+    const later = restore.restore('7', { ...emptyGame(), phase: 'Shadow', cards: { '1': card('1') } });
+    expect(later.cards['1']?.inactive).toBe(false);
+    expect(later.closedByEnd).toBeNull();
   });
 
   it('tells decisions apart by what they ask', () => {

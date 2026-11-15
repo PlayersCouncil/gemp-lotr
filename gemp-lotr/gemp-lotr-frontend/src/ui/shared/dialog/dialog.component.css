@@ -195,6 +195,27 @@
   color: var(--theme-dialog-link-visited);
 }
 
+/* A game's question (a number, a choice): 400 x 200, not resizable */
+.gd-dialog[data-dialog='decision'] {
+  --dialog-width: 400px;
+  --dialog-height: 200px;
+  /* jQuery UI's height option, less the fraction it lost to the title bar (it measured in whole pixels) */
+  height: calc(var(--dialog-height) - 0.39px);
+  resize: none;
+}
+
+/* With a row of buttons, whose fraction makes up for most of that */
+.gd-dialog[data-dialog='decision']:has([gdDialogActions]) {
+  height: calc(var(--dialog-height) - 0.08px);
+}
+
+/* A game that can't go on (the game page's error dialog): 300 x 160, not resizable */
+.gd-dialog[data-dialog='game-problem'] {
+  --dialog-height: 160px;
+  height: calc(var(--dialog-height) - 0.39px);
+  resize: none;
+}
+
 /* Import: opened before it had content, so placed as a 150px high dialog (its minimum), then grown downwards */
 .gd-dialog[data-dialog='import'] {
   --dialog-height: 150px;
@@ -206,7 +227,7 @@
 }
 
 /* Selection pack and new items: 80% of the window the first time (openSizeDialog) */
-.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) {
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery'], [data-dialog='decision-cards']) {
   --dialog-width: round(down, 80vw, 0.01px);
   --dialog-height: round(down, 80vh, 0.01px);
   /* The height it really gets (below): a whole pixel can depend on those 0.39px */
@@ -218,10 +239,28 @@
  * The cards (a NormalCardGroup over the content: from 5px in from its padding box's top left, as large as the
  * content box)
  */
-.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) .gd-dialog__body {
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery'], [data-dialog='decision-cards']) .gd-dialog__body {
   display: flex;
   padding: 5px calc(2em - 5px) calc(1em - 5px) 5px;
   overflow: hidden;
+}
+
+/* A game's cards to choose from: the title bar's and the button row's fractions, as for its questions */
+.gd-dialog[data-dialog='decision-cards'] {
+  --dialog-centred-height: calc(var(--dialog-height) - 0.39px);
+  /* A hair wider: the browser otherwise keeps a 64th of a pixel less than the legacy page's 80% */
+  width: calc(var(--dialog-width) + 0.01px);
+  height: calc(var(--dialog-height) - 0.39px);
+}
+
+.gd-dialog[data-dialog='decision-cards']:has([gdDialogActions]) {
+  --dialog-centred-height: calc(var(--dialog-height) - 0.05px);
+  height: calc(var(--dialog-height) - 0.05px);
+}
+
+/* A game's cards to choose from: its group starts 8px in and is 6px smaller than the content box */
+.gd-dialog[data-dialog='decision-cards'] .gd-dialog__body {
+  padding: 8px calc(2em - 2px) calc(1em - 2px) 8px;
 }
 
 /* The notifier: the browser's alert, confirm and prompt had no jQuery UI look; drawn as a dialog */

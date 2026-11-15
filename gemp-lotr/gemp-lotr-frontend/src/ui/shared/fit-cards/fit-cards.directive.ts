@@ -45,6 +45,11 @@ export class FitCardsDirective {
    * box puts them.
    */
   readonly gdFitCardsOnPagePixels = input<unknown>(null);
+  /**
+   * Some legacy groups were sized from an element's height in whole pixels (jQuery's height(), from offsetHeight): the
+   * box's height plus this much was that element's, rounded. Null: the box's own height.
+   */
+  readonly gdFitCardsRoundedFrom = input<number | null>(null);
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly window = inject(DOCUMENT).defaultView;
@@ -83,9 +88,11 @@ export class FitCardsDirective {
     const style = this.window.getComputedStyle(this.host);
     const gap = parsePx(style.getPropertyValue('--gd-card-gap'), 5);
     const fit = parseFit(style.getPropertyValue('--gd-card-fit'));
+    const around = this.gdFitCardsRoundedFrom();
+    const boxHeight = around === null ? size.height : Math.round(size.height + around) - around;
     const { height, offset } = fitCards({
       width: size.width,
-      height: size.height,
+      height: boxHeight,
       cards,
       gap,
       maxHeight: parsePx(style.getPropertyValue('--gd-card-max-height'), 200) * scale,

@@ -1,6 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
 import { ChatRoom } from '../../core/chat/chat-room.service';
 import { provideCardInteractions } from '../../core/cards/card-interactions';
+import { GameAttention } from '../../core/game/clock/game-attention.service';
+import { GameDecisions } from '../../core/game/decision/game-decisions.service';
 import { provideGameState } from '../../core/game/game-state';
 import { GameSession } from '../../core/game/session/game-session.service';
 import { GameViewState } from '../../core/game/session/game-view-state';
@@ -10,7 +12,10 @@ import { GameTableState } from '../../core/game/table/game-table.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
 import { CardInfoComponent } from '../shared/card-info/card-info.component';
+import { ActionMenuComponent } from './decision/action-menu.component';
+import { DecisionDialogsComponent } from './decision/decision-dialogs.component';
 import { FeedbackDialogComponent } from './dialogs/feedback-dialog.component';
+import { ProblemDialogComponent } from './dialogs/problem-dialog.component';
 import { GameAlertComponent } from './panel/game-alert.component';
 import { GameStatePanelComponent } from './panel/game-state-panel.component';
 import { GameStatsBarComponent } from './panel/game-stats-bar.component';
@@ -53,6 +58,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     GameTabsComponent,
     PreGamePanelComponent,
     FeedbackDialogComponent,
+    ProblemDialogComponent,
+    DecisionDialogsComponent,
+    ActionMenuComponent,
     CardInfoComponent,
     AutoZoomComponent,
   ],
@@ -63,6 +71,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '[attr.data-turn]': "table().bottomTurn ? 'bottom' : 'top'",
     '[attr.data-old-stack]': "settings.oldStackVisuals() ? '' : null",
     '[style.--gd-game-fights]': 'fights()',
+    '(document:keydown.escape)': 'decisions.escape()',
   },
   template: `
     @if (model().started) {
@@ -130,7 +139,10 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-pregame class="gd-game__pregame" [info]="preGame" />
     }
     <gd-game-tabs class="gd-game__tabs" />
+    <gd-game-decision-dialogs />
+    <gd-game-action-menu />
     <gd-game-feedback />
+    <gd-game-problem />
     <gd-card-info />
     <gd-auto-zoom />
   `,
@@ -138,6 +150,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
 export class GamePageComponent {
   private readonly session = inject(GameSession);
   protected readonly settings = inject(GameSettings);
+  protected readonly decisions = inject(GameDecisions);
   protected readonly model = this.session.model;
   protected readonly table = inject(GameTableState).table;
 
@@ -150,6 +163,8 @@ export class GamePageComponent {
   protected readonly shadowBonus = computed(() => this.stats()?.shadowDamageBonus ?? null);
 
   constructor() {
+    // The tab's title and the sound when the game waits for the player
+    inject(GameAttention);
     const query = new URLSearchParams(inject(PAGE_QUERY_STRING));
     const gameId = query.get('gameId');
     if (gameId !== null) {

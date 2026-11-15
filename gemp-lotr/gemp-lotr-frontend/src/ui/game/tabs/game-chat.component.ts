@@ -1,14 +1,19 @@
 import {
+  afterNextRender,
   afterRenderEffect,
+  DestroyRef,
   Component,
+  effect,
   computed,
   ElementRef,
   inject,
+  untracked,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ChatRoom } from '../../../core/chat/chat-room.service';
 import { GameLog, GameLogEntry } from '../../../core/game/session/game-log';
+import { GameViewState } from '../../../core/game/session/game-view-state';
 import { PlayerInfo } from '../../../core/session/player-info.service';
 
 /** A line that names the player is marked: "@name" calls them (ping), their name or "@everyone" mentions them. */
@@ -56,7 +61,7 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
   // Not scoped: it also styles what the server's messages hold (card names, links); its rules all start at gd-game-chat
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div #lines class="gd-game-chat__lines" (scroll)="onScroll()">
+    <div #lines class="gd-game-chat__lines">
       @for (line of views(); track $index) {
         @if (line.from !== null || line.boxed) {
           <div class="gd-game-chat__line" [attr.data-kind]="line.kind" [attr.data-mention]="line.mention">
@@ -92,28 +97,82 @@ export class GameChatComponent {
   private readonly log = inject(GameLog);
   private readonly chat = inject(ChatRoom);
   private readonly player = inject(PlayerInfo);
-  private readonly lines = viewChild.required<ElementRef<HTMLElement>>('lines');
+  private readonly viewState = inject(GameViewState);
+  private readonly lines = viewChild<ElementRef<HTMLElement>>('lines');
 
   protected readonly views = computed<LineView[]>(() => {
     const name = this.player.name();
     return this.log.entries().map((entry) => lineOf(entry, name));
   });
 
-  /** The list follows its end until the player scrolls up from it. */
-  private atEnd = true;
+  /**
+   * Whether the list goes to its end when lines come: decided before they are drawn, from where the list stands (legacy
+   * appendMessage): at its end or within 30px of scrolling at all, or not scrollable (also while its tab is closed),
+   * and always for a warning.
+   */
+  private follow = true;
+  private shown = 0;
 
   constructor() {
-    afterRenderEffect(() => {
-      this.views();
-      const box = this.lines().nativeElement;
-      if (this.atEnd) box.scrollTop = box.scrollHeight;
+    // Before the new lines are drawn
+    effect(() => {
+      const views = this.views();
+      const box = this.lines()?.nativeElement;
+      const most = box ? box.scrollHeight - box.offsetHeight : 0;
+      const warned = views.slice(this.shown).some((line) => line.kind === 'warning');
+      this.shown = views.length;
+      this.follow = warned || most <= 30 || (box?.scrollTop ?? 0) / most >= 0.999;
     });
-  }
-
-  protected onScroll(): void {
-    const box = this.lines().nativeElement;
-    const most = box.scrollHeight - box.clientHeight;
-    this.atEnd = most <= 30 || box.scrollTop / most >= 0.999;
+    // Only when lines were added, as the legacy page did. While its tab is closed nothing moves it: it opens again where
+    // it was (the browser kept an element's place over a closed tab; here it is kept explicitly)
+    let drawn = 0;
+    let kept: number | null = null;
+    // After a reload: where the list was (null: at its end)
+    let restoring = true;
+    afterRenderEffect(() => {
+      const count = this.views().length;
+      const box = this.lines()?.nativeElement;
+      if (box && count > drawn && this.follow) {
+        // Not while its tab is closed: it opens again where it was
+        if (box.clientHeight > 0) box.scrollTop = box.scrollHeight;
+      }
+      if (box && restoring && count > 0) {
+        restoring = false;
+        const saved = untracked(this.viewState.chatScroll);
+        if (saved !== null) {
+          if (box.clientHeight > 0) box.scrollTop = saved;
+          else kept = saved;
+        }
+      }
+      drawn = count;
+    });
+    const destroyRef = inject(DestroyRef);
+    afterNextRender(() => {
+      const box = this.lines()?.nativeElement;
+      const Observer = box?.ownerDocument.defaultView?.ResizeObserver;
+      if (!box || !Observer) return;
+      let last = box.scrollTop;
+      box.addEventListener('scroll', () => {
+        if (restoring) return;
+        last = box.scrollTop;
+        const atEnd = box.scrollHeight - box.clientHeight - box.scrollTop < 1;
+        this.viewState.chatScroll.set(atEnd ? null : box.scrollTop);
+      });
+      const observer = new Observer(() => {
+        if (box.clientHeight === 0) {
+          // (not before the place kept over a reload is taken up)
+          if (restoring) return;
+          kept ??= last;
+          this.viewState.chatScroll.set(kept);
+        } else if (kept !== null) {
+          box.scrollTop = kept;
+          kept = null;
+          last = box.scrollTop;
+        }
+      });
+      observer.observe(box);
+      destroyRef.onDestroy(() => observer.disconnect());
+    });
   }
 
   protected send(event: Event): void {

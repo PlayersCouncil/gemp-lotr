@@ -108,7 +108,7 @@ export class GameSession {
         this.receive(update, false);
         this.state.update((model) => this.restore.restore(gameId, model));
         // With the messages the page had shown before a reload in front
-        this.log.restart(this.state().messages);
+        this.log.restart(gameId, this.state().messages);
         this.ready = true;
         this.save();
         opened?.();
@@ -142,6 +142,11 @@ export class GameSession {
       },
       error: (error: unknown) => this.fail(error),
     });
+  }
+
+  /** The player's choice for the waiting decision changed (see local-choices.ts): kept with the game. */
+  choose(apply: (model: GameModel) => GameModel): void {
+    this.change(apply);
   }
 
   assign(minionId: string, characterId: string): void {

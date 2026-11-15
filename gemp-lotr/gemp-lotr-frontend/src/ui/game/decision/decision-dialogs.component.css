@@ -1,0 +1,120 @@
+/* The decisions' dialogs (gameUi.js smallDialog and cardActionDialog) */
+
+/* The spinner (jquery.spinnercontrol.css): an arrow, the value in a box at least 50px wide, an arrow; 31px high */
+.gd-game-spinner {
+  float: left;
+  display: flex;
+  height: 31px;
+  line-height: 31px;
+}
+
+.gd-game-spinner__arrow {
+  width: 30px;
+  height: 31px;
+  padding: 0;
+  border: 0;
+  background: var(--theme-game-spinner-buttons) no-repeat left top transparent;
+  cursor: pointer;
+}
+
+.gd-game-spinner__arrow:hover {
+  background-position: left bottom;
+}
+
+.gd-game-spinner__arrow[data-decision='integer-up'] {
+  background-position: right top;
+}
+
+.gd-game-spinner__arrow[data-decision='integer-up']:hover {
+  background-position: right bottom;
+}
+
+.gd-game-spinner__value {
+  box-sizing: content-box;
+  min-width: 50px;
+  height: 29px;
+  border: 1px solid var(--theme-game-spinner-border);
+  background-color: var(--theme-game-spinner-bg);
+  font-family: Verdana;
+  font-size: 14px;
+  line-height: 29px;
+  text-align: center;
+  overflow: auto;
+}
+
+/* A jQuery UI text button: 0.2em 0.3em around its text, which has the same again */
+.gd-game-decision__button.gd-button {
+  box-sizing: content-box;
+  margin: 0 0.1em 0 0;
+  padding: 0.2em 0.3em;
+  font-size: 1em;
+  line-height: normal;
+}
+
+.gd-game-decision__button > span {
+  display: block;
+  padding: 0.2em 0.3em;
+  line-height: 1.4;
+}
+
+/* The row of buttons under a dialog (.ui-dialog-buttonpane): the buttons on the right, over a line */
+.gd-game-decision__actions {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5em 0 0;
+  padding: 0.3em 1em 0.5em 0.4em;
+  border-top: 1px solid var(--theme-content-border);
+  background-color: var(--theme-game-dialog-actions-bg);
+}
+
+.gd-game-decision__actions > .gd-game-decision__button.gd-button {
+  margin: 0.5em 0.4em 0.5em 0;
+}
+
+/* The cards to choose from: a NormalCardGroup, as the deck builder's dialogs of cards */
+.gd-game-decision__cards {
+  --gd-card-max-height: 497px;
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+}
+
+.gd-game-decision__cards > .gd-card {
+  /* Each row on a whole pixel, as the legacy group put it */
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
+  margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
+}
+
+.gd-game-decision__cards > .gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+}
+
+.gd-game-decision__cards > .gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  cursor: pointer;
+}
+
+/* An action's text, written under its card */
+.gd-game-decision__card-text {
+  position: absolute;
+  inset: 100% 0 auto;
+  text-align: left;
+}
+
+/* A card's name in the server's text: pressing it shows the card */
+:host ::ng-deep .cardHint {
+  display: inline;
+  color: var(--theme-game-card-hint);
+  cursor: pointer;
+}
+
+/* The list has the focus when its dialog opens, and shows it, as on the legacy page */
+select[data-decision='choice']:focus {
+  outline: auto 1px -webkit-focus-ring-color;
+}

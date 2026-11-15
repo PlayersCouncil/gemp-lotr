@@ -193,7 +193,7 @@ describe('GameSession', () => {
     session.clearSelection();
     session.assign('20', '10');
     session.unassign('20');
-    expect(session.model().local).toEqual({ assignments: {}, selectedCardIds: [] });
+    expect(session.model().local).toEqual({ assignments: {}, selectedCardIds: [], markedCardIds: [], minion: null });
   });
 
   it('leaving the page stops asking for news', () => {
