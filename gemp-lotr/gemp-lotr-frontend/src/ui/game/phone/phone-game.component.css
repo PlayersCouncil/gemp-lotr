@@ -26,3 +26,52 @@
 gd-phone-hand {
   height: var(--gd-phone-hand);
 }
+
+/*
+ * Held sideways: the table across the whole width, the divider under its left half, and the hand a panel in the right
+ * half, standing on the bottom, as high as dragged (up to the status bar), over the table's right part.
+ */
+:host([data-device='sideways']) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'top top'
+    'table table'
+    'divider .';
+}
+
+:host([data-device='sideways']) > gd-phone-status {
+  grid-area: top;
+}
+
+:host([data-device='sideways']) > gd-phone-table {
+  grid-area: table;
+}
+
+:host([data-device='sideways']) > gd-phone-divider {
+  grid-area: divider;
+}
+
+:host([data-device='sideways']) > gd-phone-hand {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  align-self: end;
+  z-index: 5;
+  max-height: 100%;
+  border-left: 1px solid var(--theme-separator);
+  border-top: 1px solid var(--theme-separator);
+  border-radius: 12px 0 0 0;
+  box-shadow: 0 -4px 14px var(--theme-game-phone-shade);
+}
+
+/* Before the game: the pre-game information in the table's place, scrolled up and down */
+.gd-phone-pregame {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px;
+}
+
+:host([data-device='sideways']) > .gd-phone-pregame {
+  grid-area: table;
+}

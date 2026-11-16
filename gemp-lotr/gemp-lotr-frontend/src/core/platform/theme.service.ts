@@ -84,11 +84,11 @@ export const THEME_COOKIE = 'gempDeckbuilderTheme';
 
 /**
  * Pages with a theme choice of their own, by the last part of their address: its cookie and the theme without one. The
- * game page starts on the classic look (owner, 2026-11-12) and remembers its choice apart from the deck builder's
- * (`gempGameTheme`, owner 2026-11-13).
+ * game page remembers its choice apart from the deck builder's (`gempGameTheme`, owner 2026-11-13); a player who
+ * hasn't chosen gets the modern look (owner, 2026-11-16; it was classic until then), one who chose classic keeps it.
  */
 export const PAGE_THEMES: Readonly<Record<string, { cookie: string; fallback: ThemeName }>> = {
-  game: { cookie: 'gempGameTheme', fallback: 'classic' },
+  game: { cookie: 'gempGameTheme', fallback: 'modern' },
 };
 
 /** Set on <html>: it picks the theme's values in src/styles/themes.css. */

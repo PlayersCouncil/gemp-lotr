@@ -7,7 +7,6 @@ import {
   ElementRef,
   inject,
   Injector,
-  signal,
   untracked,
   viewChild,
 } from '@angular/core';
@@ -23,12 +22,10 @@ import { GameLog } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { AUTO_PASS_PHASES, GameSettings } from '../../../core/game/settings/game-settings';
-import { RETRIEVING } from '../../../core/game/table/game-card-info';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { handRevealed, PileName, pileCards } from '../../../core/game/table/game-table';
 import { PageCues } from '../../../core/platform/page-cues';
 import { clockText } from '../panel/game-clock';
-import { CardHintsDirective } from '../table/card-hints.directive';
 import { GameChatComponent } from '../tabs/game-chat.component';
 import { PhoneCardsComponent } from './phone-cards.component';
 import { phaseLabel } from './phone-status.component';
@@ -63,14 +60,14 @@ const HALL = '/gemp-lotr/hall.html';
  * DOM contract: `gd-phone-sheets` holding, while one is open, `.gd-phone-sheet` (`data-sheet`: the kind;
  * `data-depth`: how many are open) with `.gd-phone-sheet__backdrop`, and `[role=dialog]` holding
  * `.gd-phone-sheet__head` (`h2`, `button[data-phone=sheet-close]` with `data-back` when it goes back) and
- * `.gd-phone-sheet__body`. The card's details: `img.gd-phone-detail__image`, `.gd-phone-detail__affects`, the attached
+ * `.gd-phone-sheet__body`. The card's details: `img.gd-phone-detail__image` (the picture only) and the attached
  * cards' `gd-phone-cards`. Piles: `section[data-pile]` each. The menu: `button[data-menu]`. The actions:
  * `.gd-phone-sheet[data-sheet=actions]` with `button[data-action-id]`.
  */
 @Component({
   selector: 'gd-phone-sheets',
   styleUrl: './phone-sheets.component.css',
-  imports: [PhoneCardsComponent, GameChatComponent, CardHintsDirective],
+  imports: [PhoneCardsComponent, GameChatComponent],
   template: `
     @if (top(); as entry) {
       <div class="gd-phone-sheet" [attr.data-sheet]="entry.sheet.kind" [attr.data-depth]="sheets.entries().length">
@@ -94,33 +91,13 @@ const HALL = '/gemp-lotr/hall.html';
             @switch (entry.sheet.kind) {
               @case ('card') {
                 @if (detail(); as d) {
-                  <div class="gd-phone-detail">
-                    <img
-                      class="gd-phone-detail__image"
-                      [attr.data-horizontal]="d.horizontal ? '' : null"
-                      [src]="d.image"
-                      alt=""
-                      draggable="false"
-                    />
-                    <div class="gd-phone-detail__facts">
-                      @if (d.numbers.length > 0) {
-                        <div class="gd-phone-chips">
-                          @for (n of d.numbers; track n.name) {
-                            <span class="gd-phone-chip"
-                              >{{ n.name }} <b>{{ n.value }}</b></span
-                            >
-                          }
-                        </div>
-                      }
-                      @if (d.zone) {
-                        <div class="gd-phone-note">{{ d.zone }}</div>
-                      }
-                      @if (d.affects !== null) {
-                        <h3>Affecting this card</h3>
-                        <div class="gd-phone-detail__affects" gdCardHints [innerHTML]="d.affects"></div>
-                      }
-                    </div>
-                  </div>
+                  <img
+                    class="gd-phone-detail__image"
+                    [attr.data-horizontal]="d.horizontal ? '' : null"
+                    [src]="d.image"
+                    alt=""
+                    draggable="false"
+                  />
                   @if (d.under.length > 0) {
                     <h3>Under it ({{ d.under.length }})</h3>
                     <gd-phone-cards class="gd-phone-sheet__cards" [cards]="d.under" />
@@ -391,9 +368,6 @@ export class PhoneSheetsComponent {
     return sheet?.kind === 'settings' ? sheet.tab : 'game';
   });
 
-  /** What the server says affects the card shown (HTML), by card id. */
-  private readonly affects = signal<{ cardId: string; html: string } | null>(null);
-
   constructor() {
     const injector = inject(Injector);
     // A sheet shown (opened, or shown again by going back): scrolled where it was
@@ -425,7 +399,6 @@ export class PhoneSheetsComponent {
           },
           { injector },
         );
-        if (entry.sheet.kind === 'card') this.fetchAffects(entry.sheet.cardId);
         if (entry.sheet.kind === 'chat') this.markChatSeen();
       });
     });
@@ -459,6 +432,7 @@ export class PhoneSheetsComponent {
     });
   }
 
+  /** A card's details: its picture, big, and the cards under it (attached, stacked), whose details open over it. */
   protected readonly detail = computed(() => {
     const sheet = this.top()?.sheet;
     if (sheet?.kind !== 'card') return null;
@@ -467,41 +441,13 @@ export class PhoneSheetsComponent {
     const view = card
       ? this.gameViews.of(card)
       : this.cardViews.create({ ref: { hint: true }, blueprintId: sheet.blueprintId, zone: 'SPECIAL' });
-    const stats = card ? model.stats?.charStats[card.id] : undefined;
-    const numbers: { name: string; value: string }[] = [];
-    if (stats && !card?.numbersHidden) {
-      const [strength, vitality, third] = stats;
-      if (strength !== undefined) numbers.push({ name: 'Strength', value: strength });
-      if (vitality !== undefined) numbers.push({ name: 'Vitality', value: vitality });
-      if (third !== undefined && third !== '')
-        numbers.push({
-          name: card?.zone === 'SHADOW_CHARACTERS' ? 'Site' : 'Resistance',
-          value: third.replace(/^R[A-Z]?/, ''),
-        });
-    }
-    for (const [token, count] of Object.entries(card?.tokens ?? {})) {
-      if (count > 0) numbers.push({ name: phaseLabel(token), value: String(count) });
-    }
     const under = card
       ? model.cardOrder
           .flatMap((id) => model.cards[id] ?? [])
           .filter((c) => c.attachedTo === card.id || c.stackedOn === card.id)
           .map((c) => ({ card: c, under: [] }))
       : [];
-    const affects = this.affects();
-    return {
-      image: view.imageUrl,
-      horizontal: view.horizontal,
-      numbers,
-      zone: card ? `${card.inactive ? 'Inactive · ' : ''}${zoneLabel(card.zone)}` : '',
-      affects:
-        card && !this.session.replaying() && !card.id.startsWith('temp')
-          ? affects?.cardId === card.id
-            ? affects.html
-            : RETRIEVING
-          : null,
-      under,
-    };
+    return { image: view.imageUrl, horizontal: view.horizontal, under };
   });
 
   protected readonly pilesView = computed(() => {
@@ -705,33 +651,8 @@ export class PhoneSheetsComponent {
     return [...body.querySelectorAll<HTMLElement>('.gd-phone-cards__scroll')];
   }
 
-  private fetchAffects(cardId: string | null): void {
-    if (cardId === null || cardId.startsWith('temp') || this.session.replaying()) return;
-    if (!this.session.model().cards[cardId]) return;
-    this.session.cardInfo(cardId, (html) => this.affects.set({ cardId, html }));
-  }
-
   private markChatSeen(): void {
     const seen = chatLines(this.log.entries());
     this.viewState.phone.update((phone) => (phone.chatSeen === seen ? phone : { ...phone, chatSeen: seen }));
   }
-}
-
-/** Where a card lies, in words. */
-function zoneLabel(zone: string): string {
-  const labels: Readonly<Record<string, string>> = {
-    FREE_CHARACTERS: 'Fellowship',
-    SUPPORT: 'Support area',
-    SHADOW_CHARACTERS: 'Minion',
-    ADVENTURE_PATH: 'Adventure path',
-    HAND: 'Hand',
-    DISCARD: 'Discard pile',
-    DEAD: 'Dead pile',
-    ADVENTURE_DECK: 'Adventure deck',
-    DECK: 'Draw deck',
-    REMOVED: 'Removed from game',
-    ATTACHED: 'Attached',
-    STACKED: 'Stacked',
-  };
-  return labels[zone] ?? '';
 }

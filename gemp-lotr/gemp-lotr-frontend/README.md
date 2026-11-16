@@ -287,13 +287,14 @@ and replays (G4). Nothing links to it yet.
   dialog for a game that can't go on (no connection, not logged in, ...). `table/gd-game-animation` plays the event
   holding the page, `table/gdReorder` moves a card dragged sideways in its row, `table/gdCardHints` shows a card named
   in a text, `panel/gd-game-replay` has the replay's buttons.
-- **Theme.** The game page has its own choice (`gempGameTheme` cookie, `PAGE_THEMES` in `theme.service.ts`) and starts
-  on `classic`; its colours are the `--theme-game-*` values of `themes.css`. The modern look comes later.
+- **Theme.** The game page has its own choice (`gempGameTheme` cookie, `PAGE_THEMES` in `theme.service.ts`); a player
+  who hasn't chosen gets `modern` (the owner, 2026-11-16), one who chose `classic` keeps it. Its colours are the
+  `--theme-game-*` values of `themes.css`.
 - **Legacy quirks kept in classic**, so the page matches `game.html`: until the players are known the timer switch is
   a plain button that does nothing; a spectator still has the Options tab; the Rule of 4 line keeps its last count
   while hidden; a character the server's stats leave out keeps the numbers it last had; Shift doesn't flip the zoomed
   card; the page asks for news after the game's end too.
-- **Modern** (`?theme=modern`, remembered in `gempGameTheme`; the game starts on classic): the deck builder's dark
+- **Modern** (the default; `?theme=modern`, remembered in `gempGameTheme`): the deck builder's dark
   gray with the game's own values (`--theme-game-*` in `themes.css`), laid out as the legacy page on a computer
   (`npm run check:game:modern`: the same games, every card and panel within 2px). The red theme button
   (`GameThemeButtonComponent`, in the table's top right corner) is off until the owner accepts its place

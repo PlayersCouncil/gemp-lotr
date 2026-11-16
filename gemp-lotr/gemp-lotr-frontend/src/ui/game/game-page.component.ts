@@ -91,7 +91,8 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '(document:keydown.escape)': 'escape()',
   },
   template: `
-    @if (phone() && model().started) {
+    @if (phone() && (model().started || model().preGame)) {
+      <!-- The phone layout also before the game: the pre-game information scrolls, the bid is asked in its divider -->
       <gd-game-phone />
     } @else if (model().started) {
       <section class="gd-game__path" aria-label="Adventure path">

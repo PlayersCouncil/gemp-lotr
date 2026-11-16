@@ -12,6 +12,7 @@ import {
 import { CardViews } from '../../../core/cards/card-views.service';
 import { GameAnimation } from '../../../core/game/session/event-pacing';
 import { GameSession } from '../../../core/game/session/game-session.service';
+import { CompactLayout } from '../../../core/platform/compact-layout.service';
 
 interface Box {
   left: number;
@@ -34,8 +35,13 @@ const CARD_SCALE = 350 / 490;
  * an activated card's frame flashes, a played event is shown in the middle of the table, a card affecting others
  * spreads out from each of them. Not scoped: it also styles the cards it moves (rules start at `gemp-game`).
  *
+ * In the phone layout (CompactLayout) a card put into play isn't moved itself: its row is a scroller that would clip
+ * it. Its picture is shown over everything instead, as big as the screen lets it be, and fades; the card then pulses in
+ * its row, scrolled sideways into view (the owner, 2026-11-16). Played events are sized to fit the screen too.
+ *
  * DOM contract: `gd-game-animation` holding `.gd-game-animation__card` (`img`) for each card drawn only for the
- * animation; a card flashing has `data-activated` (with `--gd-animation-duration`).
+ * animation; a card flashing has `data-activated` (with `--gd-animation-duration`), a card arriving in the phone
+ * layout `data-arrived`.
  */
 @Component({
   selector: 'gd-game-animation',
@@ -55,6 +61,8 @@ export class GameAnimationComponent {
   private readonly views = inject(CardViews);
   private readonly document = inject(DOCUMENT);
   private readonly layer = viewChild.required<ElementRef<HTMLElement>>('layer');
+  /** The phone layout: cards put into play are shown over everything rather than moved in their row. */
+  private readonly phone = inject(CompactLayout).active;
 
   /** The cards the current animation draws by itself. */
   protected readonly shown = computed<Shown[]>(() => {
@@ -63,6 +71,10 @@ export class GameAnimationComponent {
     if (animation?.kind === 'event') {
       const image = this.image(animation.blueprintId);
       return [{ image, from: { left: 0, top: 0, width: 0, height: 0 } }];
+    }
+    if (animation?.kind === 'put' && this.phone()) {
+      const card = this.session.model().cards[animation.cardId];
+      return card ? [{ image: this.image(card.blueprintId), from: { left: 0, top: 0, width: 0, height: 0 } }] : [];
     }
     if (animation?.kind === 'affect') {
       return animation.cardIds.flatMap((id) => {
@@ -93,7 +105,8 @@ export class GameAnimationComponent {
     switch (animation.kind) {
       case 'put': {
         const card = this.cardElement(animation.cardId);
-        if (card) this.flyIn(card, duration);
+        if (this.phone()) this.showPlayed(card, duration);
+        else if (card) this.flyIn(card, duration);
         break;
       }
       case 'remove':
@@ -155,6 +168,63 @@ export class GameAnimationComponent {
     card.animate([at(half, 0, 0), at(full, 1, 1 / 8), at(full, 1, 6 / 8), at(null, 1, 1)], { duration });
   }
 
+  /**
+   * The phone layout: a card put into play, its picture over everything in the middle, whole (at most 60% of the
+   * screen's height and 80% of its width), growing in and fading out; then the card itself pulses in its row, which
+   * scrolls sideways to show it (its row stays where the player scrolled the table).
+   */
+  private showPlayed(card: HTMLElement | null, duration: number): void {
+    const image = this.layer().nativeElement.querySelector<HTMLElement>('.gd-game-animation__card');
+    if (image) {
+      const ratio = card ? card.offsetWidth / card.offsetHeight : CARD_SCALE;
+      const full = this.fitted(ratio);
+      this.place(image, full);
+      image.animate(
+        [
+          { transform: this.transform(full, this.halved(full)), opacity: 0, offset: 0 },
+          { transform: 'none', opacity: 1, offset: 1 / 8 },
+          { transform: 'none', opacity: 1, offset: 5 / 8 },
+          { transform: 'none', opacity: 0, offset: 6 / 8 },
+          { transform: 'none', opacity: 0, offset: 1 },
+        ],
+        { duration, fill: 'forwards' },
+      );
+    }
+    if (!card) return;
+    setTimeout(
+      () => {
+        const row = card.closest<HTMLElement>('.gd-phone-cards__scroll');
+        if (
+          row &&
+          (card.offsetLeft < row.scrollLeft || card.offsetLeft + card.offsetWidth > row.scrollLeft + row.clientWidth)
+        ) {
+          row.scrollTo({ left: Math.max(0, card.offsetLeft - 12), behavior: 'smooth' });
+        }
+        card.style.setProperty('--gd-animation-duration', `${duration / 4}ms`);
+        card.setAttribute('data-arrived', '');
+        setTimeout(() => card.removeAttribute('data-arrived'), duration / 4);
+      },
+      (duration * 6) / 8,
+    );
+  }
+
+  /** The biggest box of this width-to-height ratio that fits the phone's screen, in its middle. */
+  private fitted(ratio: number): Box {
+    const { width, height } = this.table();
+    const cardHeight = Math.min(height * 0.6, (width * 0.8) / ratio);
+    const cardWidth = cardHeight * ratio;
+    return { left: (width - cardWidth) / 2, top: (height - cardHeight) / 2, width: cardWidth, height: cardHeight };
+  }
+
+  private halved(full: Box): Box {
+    return {
+      left: full.left + full.width / 4,
+      top: full.top + full.height / 4,
+      width: full.width / 2,
+      height: full.height / 2,
+    };
+  }
+
   /** The played event, half the table high in its middle: growing in, shown a while, fading out. */
   private showEvent(duration: number): void {
     const image = this.layer().nativeElement.querySelector<HTMLElement>('.gd-game-animation__card');
@@ -162,13 +232,18 @@ export class GameAnimationComponent {
     const { width, height } = this.table();
     const cardHeight = height / 2;
     const cardWidth = cardHeight * CARD_SCALE;
-    const full: Box = { left: width / 2 - cardWidth / 2, top: height / 4, width: cardWidth, height: cardHeight };
-    const half: Box = {
-      left: width / 2 - cardWidth / 4,
-      top: (height * 3) / 8,
-      width: cardWidth / 2,
-      height: cardHeight / 2,
-    };
+    // In the phone layout, as big as fits the screen
+    const full: Box = this.phone()
+      ? this.fitted(CARD_SCALE)
+      : { left: width / 2 - cardWidth / 2, top: height / 4, width: cardWidth, height: cardHeight };
+    const half: Box = this.phone()
+      ? this.halved(full)
+      : {
+          left: width / 2 - cardWidth / 4,
+          top: (height * 3) / 8,
+          width: cardWidth / 2,
+          height: cardHeight / 2,
+        };
     this.place(image, full);
     image.animate(
       [

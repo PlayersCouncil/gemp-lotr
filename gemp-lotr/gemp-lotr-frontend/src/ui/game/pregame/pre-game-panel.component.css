@@ -69,3 +69,35 @@
 :host ::ng-deep a:visited {
   color: var(--theme-game-text-link-visited);
 }
+
+/* In the phone layout: the whole width, the two sides one under the other, nothing taller than the page lets it be */
+:host-context(gd-game-phone) {
+  width: auto;
+  transform: none;
+  font-size: 14px;
+  gap: 8px;
+}
+
+:host-context(gd-game-phone) .gd-game-pregame__sides {
+  flex-direction: column;
+  gap: 8px;
+}
+
+:host-context(gd-game-phone) .gd-game-pregame__side {
+  max-height: none;
+}
+
+:host-context(gd-game-phone) .gd-game-pregame__name {
+  font-size: 20px;
+}
+
+:host-context(gd-game-phone) .gd-game-pregame__versus {
+  flex-basis: auto;
+  font-size: 24px;
+  text-align: center;
+  transform: none;
+}
+
+:host-context(gd-game-phone) .gd-game-pregame__cards {
+  --gd-card-height: 140px;
+}

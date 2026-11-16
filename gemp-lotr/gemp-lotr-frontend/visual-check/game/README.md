@@ -67,7 +67,8 @@ with the legacy page; each check compares the Angular page with itself:
   the same, and its screen within 60 pixels (the edges of rounded rings and shadows are blended a few shades
   differently when everything is drawn anew).
 - **touch**: a tap on a card not offered does nothing, a tap on an offered card chooses it, the divider drags and is
-  kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back.
+  kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back; held
+  sideways the hand is a panel in the right half whose grip slides it up to the status bar.
 
 - **piles**: who sees a pile's cards, by the server's rules (`Zone`, `LotroFormat.discardPileIsPublic` in
   `lotrFormats.hjson`): the dead pile and the removed pile everyone; the adventure deck its owner; the discard pile
@@ -76,6 +77,10 @@ with the legacy page; each check compares the Angular page with itself:
 
 No recorded game puts cards in the opponent's piles, so they are added to the last answer (`STATES.opponentPiles`), with
 the format's discard pile made public for `STATES.opponentPilesPublic` (the P event's `discardPublic`).
+
+- **animation**: a recorded game played from its start at the normal animation speed, sampled every frame: each
+  opponent's card put into play is shown over everything and stays whole on the screen, and no card is drawn bigger
+  than it is in its row (which would clip it).
 
 Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
 `npm run check:game:down`):
@@ -89,7 +94,7 @@ Two checks against a game check server kept up (`npm run check:game -- --only st
 
 ```
 npm run check:game:phone                                  everything (about 25 minutes)
-npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles)
+npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles, animation)
 npm run check:game:phone -- --shots --only opening        screenshots of a recording's last state, nothing checked
 ```
 

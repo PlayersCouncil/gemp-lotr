@@ -1,6 +1,7 @@
 import { effect, inject, Injectable, untracked } from '@angular/core';
 import { CardInfoService } from '../../cards/card-info.service';
 import { CardViews } from '../../cards/card-views.service';
+import { CompactLayout } from '../../platform/compact-layout.service';
 import { GameSession } from '../session/game-session.service';
 import { GameViewState } from '../session/game-view-state';
 import { GameCardRef, GameCardViews } from './game-card-views';
@@ -20,6 +21,8 @@ export class GameCardInfo {
   private readonly view = inject(GameViewState);
   private readonly gameViews = inject(GameCardViews);
   private readonly views = inject(CardViews);
+  /** The phone layout shows a card's picture only: nothing to ask the server for. */
+  private readonly compact = inject(CompactLayout).active;
   /** Until the game has come after a reload, the card kept is still to be shown again. */
   private restored = false;
 
@@ -46,6 +49,7 @@ export class GameCardInfo {
         const ref = card?.ref as Partial<GameCardRef> | null | undefined;
         const cardId = ref?.cardId;
         if (!card || typeof cardId !== 'string' || cardId.startsWith('temp') || this.session.replaying()) return;
+        if (this.compact()) return;
         this.info.details.set(RETRIEVING);
         this.session.cardInfo(cardId, (html) => {
           // Still the same card

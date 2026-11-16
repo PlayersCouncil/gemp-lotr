@@ -4,6 +4,9 @@
 // to a password gate on this machine, which passes requests on to the server. Nothing listens beyond 127.0.0.1.
 //
 //   npm run tunnel                 starts the local server first if none is kept running (check:local -- --keep)
+//   npm run tunnel -- --server http://127.0.0.1:17001
+//                                  the development server instead, with its database as it is (its players log in
+//                                  with their own names and passwords; nothing about them is changed or printed)
 //
 // Prints the address, the gate's user and password (new each time, HTTP basic authentication: the browser asks once),
 // and the test player's Gemp login. Ctrl+C closes the tunnel; `npm run check:local:down` then stops the server.
@@ -14,6 +17,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseArgs } from 'node:util';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const LOGIN_FILE = path.resolve(HERE, '../.local-server/login.json');
@@ -92,7 +96,12 @@ function startTunnel(port) {
   return { tunnel, address };
 }
 
-const login = await keptServer();
+const { values: options } = parseArgs({ options: { server: { type: 'string' } } });
+const login = options.server ? { server: options.server } : await keptServer();
+if (options.server) {
+  // The server must answer before it is put on the internet
+  await fetch(new URL('/gemp-lotr/hall.html', options.server), { signal: AbortSignal.timeout(5000) });
+}
 const user = 'gemp';
 const password = crypto.randomBytes(18).toString('base64url');
 const gate = await startGate(login.server, user, password);
@@ -112,10 +121,11 @@ tunnel.on('exit', () => {
 });
 
 console.log(`
+The game hall:     ${url}/gemp-lotr/hall.html
+A game (new page): ${url}/gemp-lotr/ng/game?gameId=<id>&theme=modern
 The deck builder:  ${url}/gemp-lotr/ng/deckbuilder/
 The legacy one:    ${url}/gemp-lotr/deckBuild.html
-The game hall:     ${url}/gemp-lotr/hall.html
 Gate (the browser asks first):  user ${user}, password ${password}
-Gemp login:        ${login.user} / ${login.password}
+${login.user ? `Gemp login:        ${login.user} / ${login.password}` : "Gemp login:        the players' own"}
 
-Ctrl+C closes the tunnel; npm run check:local:down stops the server.`);
+Ctrl+C closes the tunnel${options.server ? '' : '; npm run check:local:down stops the server'}.`);

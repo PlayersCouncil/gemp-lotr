@@ -14,6 +14,7 @@ import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { acceptedGameProblem, GAME_ACCEPTED_AREAS, gameEntryApplies } from '../accepted.mjs';
 import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
+import { loginProblems } from './login.mjs';
 import { compareBoxes, compareScreens } from '../compare.mjs';
 import { placeholder } from '../stub-server.mjs';
 import {
@@ -1210,8 +1211,12 @@ try {
   const gaps =
     (only && !options.coverage) || injection || options.record || options.matrix ? [] : coverageGaps(covered);
   for (const gap of gaps) console.log(`GAP  ${gap}`);
+  // The Angular page only for players who are logged in (game/login.mjs)
+  const notLoggedIn =
+    [pageA, pageB].includes('angular') && !options.record ? await loginProblems(browser, options.server) : [];
+  for (const problem of notLoggedIn) console.log(`LOGIN not logged in: ${problem}`);
   writeReport(results, gaps);
-  const failed = results.filter((r) => r.problems.length).length;
+  const failed = results.filter((r) => r.problems.length).length + notLoggedIn.length;
   const notCovered = (only && !options.coverage) || injection || options.record ? '' : `, ${gaps.length} not covered`;
   console.log(`\n${results.length} checks, ${failed} differ${notCovered}. Report: ${path.join(outDir, 'index.html')}`);
   process.exitCode = failed || gaps.length ? 1 : 0;

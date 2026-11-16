@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, output } from '@angular/core';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { offTableChoices } from '../../../core/game/phone/hand-place';
 import { PhoneCard, phoneTable } from '../../../core/game/phone/phone-table';
@@ -7,6 +7,7 @@ import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GameTableState } from '../../../core/game/table/game-table.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
+import { followHandDrag } from './phone-drag';
 
 /**
  * The phone layout's hand, under the divider, scrolled sideways (G7 of trymarz/gemp-lotr-private#27). When the waiting
@@ -14,7 +15,8 @@ import { PhoneCardsComponent } from './phone-cards.component';
  * place under a label saying what they are; ✕ goes back to the hand, and a button brings them back. A spectator sees
  * the player's hand as its count only.
  *
- * DOM contract: `gd-phone-hand` (`data-place`: hand, choices) holding `.gd-phone-hand__head` with the label
+ * DOM contract: `gd-phone-hand` (`data-place`: hand, choices) holding `.gd-phone-hand__grip` (`data-phone=hand-grip`,
+ * shown sideways), `.gd-phone-hand__head` with the label
  * (`.gd-phone-hand__label`), `button[data-phone=close-choices]` (✕) or `button[data-phone=show-choices]`, then the
  * cards (`gd-phone-cards` with `data-row` hand or choices).
  */
@@ -24,6 +26,15 @@ import { PhoneCardsComponent } from './phone-cards.component';
   imports: [PhoneCardsComponent, CardHintsDirective],
   host: { '[attr.data-place]': "showing() ? 'choices' : 'hand'" },
   template: `
+    <!-- Held sideways the hand is a panel in the screen's right half: its grip slides it up and down -->
+    <div
+      class="gd-phone-hand__grip"
+      data-phone="hand-grip"
+      role="separator"
+      aria-orientation="horizontal"
+      aria-label="Drag to resize the hand"
+      (pointerdown)="grip($event)"
+    ></div>
     <div class="gd-phone-hand__head">
       @if (showing(); as offer) {
         <span class="gd-phone-hand__label">
@@ -83,6 +94,19 @@ export class PhoneHandComponent {
     return model.spectator ? `${model.participantId ?? 'Player'}'s hand` : 'Your hand';
   });
   protected readonly emptyHand = computed(() => (this.session.model().spectator ? 'Not shown' : 'No cards'));
+
+  /** How far the grip has been dragged up since the press while it moves, and where it is let go (px). */
+  readonly dragged = output<number>();
+  readonly dropped = output<number>();
+  protected grip(event: PointerEvent): void {
+    if (event.button !== 0) return;
+    followHandDrag(
+      event.currentTarget as HTMLElement,
+      event,
+      (up) => this.dragged.emit(up),
+      (up) => this.dropped.emit(up),
+    );
+  }
 
   protected close(key: string): void {
     this.viewState.phone.update((phone) => ({ ...phone, closedOffer: key }));

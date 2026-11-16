@@ -3,19 +3,19 @@ import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { DecisionButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
-import { capturePointer } from '../../shared/pointer-drag/pointer-drag.directive';
 import { choiceLabel } from '../decision/decision-dialogs.component';
 import { clockText } from '../panel/game-clock';
 import { ReplayControlsComponent } from '../panel/replay-controls.component';
 import { CardHintsDirective } from '../table/card-hints.directive';
+import { followHandDrag } from './phone-drag';
 
 /**
  * The phone layout's divider between the table and the hand (G7 of trymarz/gemp-lotr-private#27): it holds the
  * waiting decision's text and its buttons (a number or one answer of several are asked here too), and is dragged up
  * and down; dragged to the bottom it hides the hand. While nothing is asked it says whose move it is.
  *
- * Emits `dragged` with the hand's height the pointer asks for (px from the page's bottom) while it moves, and
- * `dropped` when it is let go.
+ * Emits `dragged` with how far the pointer has gone up since the press (px) while it moves, and `dropped` when it is
+ * let go: the hand grows by as much.
  *
  * DOM contract: `gd-phone-divider` (`data-deciding`) holding `.gd-phone-divider__text` (`data-decision=text`),
  * `[data-clock]` the decision's clock, `.gd-phone-divider__hand-hint` while the hand is hidden, and
@@ -217,21 +217,11 @@ export class PhoneDividerComponent {
   protected down(event: PointerEvent): void {
     const target = event.target as Element | null;
     if (event.button !== 0 || target?.closest('button, select, input, a, output, gd-game-replay')) return;
-    event.preventDefault();
-    const page = this.host.closest('gd-game-phone')?.getBoundingClientRect();
-    if (!page) return;
-    capturePointer(this.host, event.pointerId);
-    const offset = event.clientY - this.host.getBoundingClientRect().bottom;
-    const height = (y: number) => page.bottom - y + offset;
-    const move = (e: PointerEvent) => this.dragged.emit(height(e.clientY));
-    const up = (e: PointerEvent) => {
-      this.host.removeEventListener('pointermove', move);
-      this.host.removeEventListener('pointerup', up);
-      this.host.removeEventListener('pointercancel', up);
-      this.dropped.emit(height(e.clientY));
-    };
-    this.host.addEventListener('pointermove', move);
-    this.host.addEventListener('pointerup', up);
-    this.host.addEventListener('pointercancel', up);
+    followHandDrag(
+      this.host,
+      event,
+      (up) => this.dragged.emit(up),
+      (up) => this.dropped.emit(up),
+    );
   }
 }

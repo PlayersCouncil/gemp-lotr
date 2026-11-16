@@ -103,6 +103,27 @@ describe('the game on a phone (G7)', () => {
     expect(computer.el.querySelector('.gd-game__table')).not.toBeNull();
   });
 
+  it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
+    const { el, click, answer } = await open(
+      '<gameState cn="1"><ge type="PGS" participantId="alice" allParticipantIds="alice,bob" summary="Casual game" ' +
+        'notes="" maps="" metaSites=""/>' +
+        decision(
+          'INTEGER',
+          param('min', '0') + param('max', '9') + param('defaultValue', '0'),
+          'Choose a number of burdens to bid',
+        ) +
+        '</gameState>',
+    );
+    expect(el.querySelector('gd-game-phone .gd-phone-pregame gd-game-pregame')).not.toBeNull();
+    expect(el.querySelector('gd-phone-table')).toBeNull();
+    expect(el.querySelector('gd-phone-hand')).toBeNull();
+    expect(el.querySelector('[data-decision="text"]')?.textContent).toBe('Choose a number of burdens to bid');
+    await click('[data-decision="integer-up"]');
+    await click('[data-decision="integer-up"]');
+    await click('[data-decision-button="OK"]');
+    expect(answer()).toBe('2');
+  });
+
   it('lays out the path first, the rows from the opponent to the player, the support Free Peoples first', async () => {
     const { el } = await open(game());
     const zones = Array.from(el.querySelectorAll('gd-phone-table .gd-phone-zone'), (z) => z.getAttribute('data-zone'));

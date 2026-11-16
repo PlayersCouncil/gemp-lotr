@@ -1102,7 +1102,7 @@ var GempLotrHallUI = Class.extend({
 				continue;
 			this.offeredGames[gameId] = true;
 			started = true;
-			this.openOrOffer("game:" + gameId, "/gemp-lotr/game.html?gameId=" + encodeURIComponent(gameId) + this.participantIdParam(),
+			this.openOrOffer("game:" + gameId, "/gemp-lotr/ng/game?gameId=" + encodeURIComponent(gameId) + this.participantIdParam(),
 				"Your game is ready", "Your game has started, but your browser blocked the new window.", "Open game");
 		}
 		if (started) {
@@ -1652,7 +1652,7 @@ var GempLotrHallUI = Class.extend({
 		} else if (status == "PLAYING") {
 			if (playing == "true" || watchable == "true") {
 				lastField.append($("<a class='hall-row-link' target='_blank'></a>")
-					.attr("href", "game.html?gameId=" + encodeURIComponent(gameId) + this.participantIdParam())
+					.attr("href", "/gemp-lotr/ng/game?gameId=" + encodeURIComponent(gameId) + this.participantIdParam())
 					.text(playing == "true" ? "Play Match" : "Spectate")
 					.button());
 			}

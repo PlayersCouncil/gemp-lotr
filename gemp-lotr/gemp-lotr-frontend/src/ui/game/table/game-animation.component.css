@@ -37,3 +37,18 @@ gemp-game .gd-card[data-activated]::after {
     border-color: var(--theme-game-highlight);
   }
 }
+
+/* The phone layout: a card just put into play pulses in its row */
+gemp-game .gd-card[data-arrived] {
+  animation: gd-arrived var(--gd-animation-duration, 400ms) ease-out 1;
+}
+
+@keyframes gd-arrived {
+  from {
+    box-shadow: 0 0 0 0 var(--theme-game-phone-accent);
+  }
+
+  to {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}

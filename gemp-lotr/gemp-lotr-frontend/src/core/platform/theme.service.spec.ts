@@ -179,12 +179,19 @@ describe('ThemeService', () => {
       return TestBed.inject(ThemeService);
     }
 
-    it('starts on its own default, whatever the deck builder remembers', () => {
-      fakeCookies({ [THEME_COOKIE]: 'modern' });
+    it('starts on its own default, modern, whatever the deck builder remembers', () => {
+      fakeCookies({ [THEME_COOKIE]: 'classic' });
+      const theme = gameService();
+      theme.init();
+      expect(theme.theme()).toBe('modern');
+      expect(PAGE_THEMES['game']).toEqual({ cookie: 'gempGameTheme', fallback: 'modern' });
+    });
+
+    it('keeps classic for a player who chose it', () => {
+      fakeCookies({ gempGameTheme: 'classic' });
       const theme = gameService();
       theme.init();
       expect(theme.theme()).toBe('classic');
-      expect(PAGE_THEMES['game']).toEqual({ cookie: 'gempGameTheme', fallback: 'classic' });
     });
 
     it('reads and remembers its choice in its own cookie', () => {

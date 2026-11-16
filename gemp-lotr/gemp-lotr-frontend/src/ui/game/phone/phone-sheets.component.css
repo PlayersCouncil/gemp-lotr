@@ -99,55 +99,23 @@
   font-size: 12px;
 }
 
-/* A card's details: the picture big, beside its numbers and what affects it */
-.gd-phone-detail {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
-  align-items: start;
-}
-
+/* A card's details: only its picture, as big as the sheet lets it be */
 .gd-phone-detail__image {
-  width: 150px;
+  justify-self: center;
+  width: min(100%, 300px);
+  max-height: 60vh;
+  object-fit: contain;
   border-radius: 5%;
   box-shadow: 0 2px 8px var(--theme-game-phone-shade);
 }
 
 .gd-phone-detail__image[data-horizontal] {
-  width: 200px;
+  width: min(100%, 420px);
 }
 
-:host-context([data-device='tablet']) .gd-phone-detail__image {
-  width: 220px;
-}
-
-.gd-phone-detail__facts {
-  display: grid;
-  gap: 6px;
-  min-width: 0;
-}
-
-.gd-phone-detail__affects {
-  font-size: 13px;
-  overflow-wrap: anywhere;
-}
-
-.gd-phone-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.gd-phone-chip {
-  padding: 1px 7px;
-  border-radius: 99px;
-  background: var(--theme-default-bg);
-  border: 1px solid var(--theme-content-border);
-  font-size: 12px;
-}
-
-.gd-phone-chip > b {
-  color: var(--theme-game-phone-accent);
+:host-context([data-device='sideways']) .gd-phone-detail__image {
+  max-height: 70vh;
+  width: auto;
 }
 
 .gd-phone-facts {

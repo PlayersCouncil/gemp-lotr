@@ -46,7 +46,7 @@ describe('PhoneSettings', () => {
     expect(settings.hand()).toBe(170);
     settings.setHand(222.4);
     device.set('sideways');
-    expect(settings.hand()).toBe(112);
+    expect(settings.hand()).toBe(200);
     settings.setHand('hidden');
     expect(settings.handHidden()).toBe(true);
     expect(cookies[PHONE_COOKIES.split]).toBe('phone:222|sideways:hidden');

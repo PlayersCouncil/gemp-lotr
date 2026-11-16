@@ -35,7 +35,7 @@ const { values: options } = parseArgs({
     devices: { type: 'string', default: 'phone,sideways,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
-    checks: { type: 'string', default: 'back,reload,touch,piles' },
+    checks: { type: 'string', default: 'back,reload,touch,piles,animation' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
   },
@@ -512,6 +512,67 @@ async function pilesCheck(browser, devices) {
   return ok === PILE_RULES.length;
 }
 
+// --- Animations ---
+
+/**
+ * The opponent's cards put into play, at the normal animation speed, in a recorded game played from its start: their
+ * picture over everything must stay whole on the screen, and no card in a row may be enlarged where its row clips it
+ * (the owner, 2026-11-16: half the card was cut off).
+ */
+async function animationCheck(browser, devices) {
+  let ok = 0;
+  for (const device of devices) {
+    const state = STATES.late;
+    const shown = await openPhone(browser, device, recordingOf(state), state.count, {
+      cookies: [['animation-speed', '0']],
+    });
+    try {
+      // Sampled every frame from the start, while the game's answers come one by one
+      await shown.page.evaluate(() => {
+        const seen = (window.__animations = { shown: 0, outside: [], grown: [] });
+        const frame = () => {
+          const { innerWidth: width, innerHeight: height } = window;
+          for (const image of document.querySelectorAll('.gd-game-animation__card')) {
+            const box = image.getBoundingClientRect();
+            if (box.width === 0 || Number(getComputedStyle(image).opacity) === 0) continue;
+            seen.shown++;
+            if (box.left < -1 || box.top < -1 || box.right > width + 1 || box.bottom > height + 1) {
+              seen.outside.push(
+                `${Math.round(box.left)},${Math.round(box.top)} ${Math.round(box.width)}x${Math.round(box.height)}`,
+              );
+            }
+          }
+          for (const card of document.querySelectorAll('gd-phone-table .gd-card, gd-phone-hand .gd-card')) {
+            // Grown: drawn bigger than it is (a flip only narrows a card, a stacked one only turns)
+            const box = card.getBoundingClientRect();
+            if (box.width > card.offsetWidth + 1 || box.height > card.offsetHeight + 1) {
+              seen.grown.push(`${card.dataset.cardId} (${getComputedStyle(card).transform})`);
+            }
+          }
+          requestAnimationFrame(frame);
+        };
+        requestAnimationFrame(frame);
+      });
+      await shown.settle();
+      const seen = await shown.page.evaluate(() => window.__animations);
+      const problems = [
+        ...(seen.shown === 0 ? ["no opponent's card was shown"] : []),
+        ...(seen.outside.length
+          ? [`cut off by the screen's edge: ${[...new Set(seen.outside)].slice(0, 3).join('; ')}`]
+          : []),
+        ...(seen.grown.length ? [`enlarged in its row: ${[...new Set(seen.grown)].join(', ')}`] : []),
+        ...shown.errors,
+      ];
+      if (problems.length === 0) ok++;
+      else console.log(`  ✗ animation · ${device}: ${problems.join('; ')}`);
+    } finally {
+      await shown.close();
+    }
+  }
+  console.log(`animation: ${ok} of ${devices.length} devices show the opponent's cards whole`);
+  return ok === devices.length;
+}
+
 // --- Reload (D10) ---
 
 /** A view set up step by step, reloaded: it must come back as it was. */
@@ -655,10 +716,44 @@ const TOUCH = [
     },
   },
   {
-    name: 'the divider dragged to the bottom hides the hand',
+    name: "held sideways, the hand's grip slides it up as a panel in the right half (hidden elsewhere)",
     state: 'late',
-    run: async (page) => {
-      await dragDivider(page, 2000);
+    run: async (page, sent, device) => {
+      const grip = page.locator('[data-phone="hand-grip"]');
+      if (device !== 'sideways') return (await grip.isVisible()) ? ['the grip shows'] : [];
+      const before = await page.locator('gd-phone-hand').boundingBox();
+      const box = await grip.boundingBox();
+      const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+      await touchDrag(page, from, { x: from.x, y: from.y - 80 });
+      await page.waitForTimeout(300);
+      const after = await page.locator('gd-phone-hand').boundingBox();
+      const width = page.viewportSize().width;
+      const problems = [];
+      if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
+      if (Math.abs(after.x - width / 2) > 2 || Math.abs(after.x + after.width - width) > 2) {
+        problems.push(`not the right half: ${after.x}–${after.x + after.width} of ${width}`);
+      }
+      await touchDrag(page, { x: from.x, y: after.y + 8 }, { x: from.x, y: 2 });
+      await page.waitForTimeout(300);
+      const top = await page.locator('gd-phone-hand').boundingBox();
+      const status = await page.locator('gd-phone-status').boundingBox();
+      if (Math.abs(top.y - (status.y + status.height)) > 2) problems.push(`slid up to ${top.y}, not to the status bar`);
+      return problems;
+    },
+  },
+  {
+    name: "the divider (held sideways: the hand's grip) dragged to the bottom hides the hand; dragged up, it is back",
+    state: 'late',
+    run: async (page, sent, device) => {
+      if (device === 'sideways') {
+        // The divider is at the bottom already, beside the hand: the hand's own grip slides it down
+        const box = await page.locator('[data-phone="hand-grip"]').boundingBox();
+        const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+        await touchDrag(page, from, { x: from.x, y: page.viewportSize().height - 1 });
+        await page.waitForTimeout(300);
+      } else {
+        await dragDivider(page, 2000);
+      }
       const hidden = await page.locator('gd-game-phone[data-hand-hidden]').count();
       const hint = await page.locator('.gd-phone-divider__hand-hint').count();
       await dragDivider(page, -200);
@@ -755,6 +850,7 @@ async function main() {
     if (chosen.includes('reload')) passed = (await reloadCheck(browser, devices)) && passed;
     if (chosen.includes('touch')) passed = (await touchCheck(browser, devices)) && passed;
     if (chosen.includes('piles')) passed = (await pilesCheck(browser, devices)) && passed;
+    if (chosen.includes('animation')) passed = (await animationCheck(browser, devices)) && passed;
     process.exitCode = passed ? 0 : 1;
   } finally {
     await browser.close();

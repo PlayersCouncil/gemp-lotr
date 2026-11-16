@@ -15,8 +15,8 @@ export const PHONE_COOKIES = {
   moveSound: 'gempGameMoveSound',
 } as const;
 
-/** The hand's height at first, on each device (px). */
-export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, sideways: 112, tablet: 180 };
+/** The hand's height at first, on each device (px); held sideways it is a panel in the right half, about half high. */
+export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, sideways: 200, tablet: 180 };
 /** The table's cards' height on each device at 100% (px): one readable size, never shrunk to fit (the owner). */
 export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, sideways: 80, tablet: 130 };
 export const CARD_SIZE_MIN = 70;

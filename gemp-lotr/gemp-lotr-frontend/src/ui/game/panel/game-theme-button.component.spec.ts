@@ -31,13 +31,13 @@ describe('GameThemeButtonComponent', () => {
     const fixture = TestBed.createComponent(GameThemeButtonComponent);
     fixture.detectChanges();
     const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('button.gd-game-theme');
-    // The game starts on the classic look
-    expect(document.documentElement.dataset['theme']).toBe('classic');
-    expect(button?.title).toBe('Switch to the Modern theme');
+    // The game starts on the modern look (no choice made)
+    expect(document.documentElement.dataset['theme']).toBe('modern');
+    expect(button?.title).toBe('Switch to the Classic theme');
     button?.click();
     fixture.detectChanges();
-    expect(document.documentElement.dataset['theme']).toBe('modern');
-    expect(written.some((cookie) => cookie.startsWith('gempGameTheme=modern'))).toBe(true);
-    expect(button?.getAttribute('aria-label')).toBe('Switch to the Classic theme');
+    expect(document.documentElement.dataset['theme']).toBe('classic');
+    expect(written.some((cookie) => cookie.startsWith('gempGameTheme=classic'))).toBe(true);
+    expect(button?.getAttribute('aria-label')).toBe('Switch to the Modern theme');
   });
 });
