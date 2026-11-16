@@ -75,6 +75,15 @@ const PARTS = [
   ...(quick
     ? []
     : [['Game screen: the modern theme laid out as the legacy page', npm(VISUAL_CHECK, 'run', 'check:game:modern')]]),
+  // The phone layout (G7): back from card details, reloads, touch; Chromium's touch input holds and moves a finger
+  ...(browser
+    ? []
+    : [
+        [
+          'Game screen: the phone layout',
+          npm(VISUAL_CHECK, 'run', 'check:game:phone', ...(quick ? ['--', '--devices', 'phone'] : [])),
+        ],
+      ]),
 ];
 
 const results = PARTS.map(([name, { cwd, args }]) => {

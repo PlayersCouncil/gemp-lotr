@@ -1,4 +1,5 @@
 import { effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { readSheet, SheetEntry } from '../phone/sheet';
 import { PileName } from '../table/game-table';
 import { GameSession } from './game-session.service';
 
@@ -9,6 +10,20 @@ export interface SavedMenu {
   y: number;
   decision: string;
 }
+
+/** Where the phone layout's table was scrolled, and what the hand's place shows (D10 for G7). */
+export interface PhoneView {
+  /** How far the table is scrolled down (px). */
+  tableTop: number;
+  /** How far each row is scrolled sideways (px), by row. */
+  rows: Readonly<Record<string, number>>;
+  /** The offer of cards from off the table closed (✕) to see the hand: its key (OffTableChoices). */
+  closedOffer: string | null;
+  /** How many chat lines the player has seen (the chat button counts the others). */
+  chatSeen: number;
+}
+
+export const NO_PHONE_VIEW: PhoneView = { tableTop: 0, rows: {}, closedOffer: null, chatSeen: 0 };
 
 /**
  * What the game page's view holds on its own: the open tab, the players whose other piles are shown, and a card's open
@@ -34,6 +49,10 @@ export class GameViewState {
   readonly cardOrder = signal<readonly string[]>([]);
   /** How far the chat box's list is scrolled (px), or null at its end. */
   readonly chatScroll = signal<number | null>(null);
+  /** The phone layout's sheets, the one shown last (GameSheets). */
+  readonly sheets = signal<readonly SheetEntry[]>([]);
+  /** The phone layout's table and hand (PhoneView). */
+  readonly phone = signal<PhoneView>(NO_PHONE_VIEW);
 
   constructor() {
     effect(() => {
@@ -46,6 +65,8 @@ export class GameViewState {
         pileDialogs: this.pileDialogs(),
         cardOrder: this.cardOrder(),
         cardInfo: this.cardInfo(),
+        sheets: this.sheets(),
+        phone: this.phone(),
       };
       untracked(() => this.session.keepView(view));
     });
@@ -75,6 +96,18 @@ export class GameViewState {
             typeof (d as { player?: unknown }).player === 'string',
         ),
       );
+    }
+    const sheets = saved['sheets'];
+    if (Array.isArray(sheets)) this.sheets.set(sheets.flatMap((entry) => readSheet(entry) ?? []));
+    const phone = saved['phone'] as Partial<PhoneView> | null | undefined;
+    if (phone && typeof phone === 'object') {
+      const rows = phone.rows && typeof phone.rows === 'object' ? phone.rows : {};
+      this.phone.set({
+        tableTop: typeof phone.tableTop === 'number' ? phone.tableTop : 0,
+        rows: Object.fromEntries(Object.entries(rows).filter(([, left]) => typeof left === 'number')),
+        closedOffer: typeof phone.closedOffer === 'string' ? phone.closedOffer : null,
+        chatSeen: typeof phone.chatSeen === 'number' ? phone.chatSeen : 0,
+      });
     }
     const piles = saved['openPiles'];
     if (Array.isArray(piles)) this.openPiles.set(piles.filter((index) => typeof index === 'number'));

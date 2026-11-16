@@ -47,6 +47,18 @@ export class PageCues {
     }
   }
 
+  /** A short buzz on a device that can (a phone); nothing elsewhere. */
+  vibrate(ms = 200): void {
+    const navigator = this.document.defaultView?.navigator;
+    if (navigator && typeof navigator.vibrate === 'function') {
+      try {
+        navigator.vibrate(ms);
+      } catch {
+        // Not allowed before the player has used the page
+      }
+    }
+  }
+
   reload(): void {
     this.document.defaultView?.location.reload();
   }

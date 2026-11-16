@@ -156,6 +156,25 @@
   --theme-game-icon-shadow-archery: url('/gemp-lotr/images/shadowArchery.png');
   --theme-game-icon-move: url('/gemp-lotr/images/move.png');
 
+  /* The phone layout (G7): only the modern theme shows it; classic has values so every name is defined */
+  --theme-game-phone-muted: #aaa;
+  --theme-game-phone-dim: #777;
+  --theme-game-phone-path-bg: #111;
+  --theme-game-phone-hand-bg: #111;
+  --theme-game-phone-offer-bg: #112;
+  --theme-game-phone-them: #f44;
+  --theme-game-phone-mine: #4c4;
+  --theme-game-phone-minions: #fc4;
+  --theme-game-phone-player-1: #c43c3c;
+  --theme-game-phone-player-2: #4459d6;
+  --theme-game-phone-on-accent: #000;
+  --theme-game-phone-accent: #39f;
+  --theme-game-phone-on-dark: #fff;
+  --theme-game-phone-on-choose: #000;
+  --theme-game-phone-shade: rgb(0 0 0 / 0.65);
+  --theme-game-phone-danger-text: #f88;
+  --theme-game-phone-twilight: radial-gradient(circle at 35% 35%, #d9d0ff, #5b4a9e 70%);
+
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;
   --theme-scrollbar-track: #6666;
@@ -274,6 +293,25 @@
   --theme-game-chat-quote: #9aa0a6;
   --theme-game-card-hint: #8fa6ff;
   --theme-game-chat-ping-bg: rgb(255 107 107 / 0.25);
+
+  /* The phone layout (G7): the prototype's colours, the deck builder's modern accents */
+  --theme-game-phone-muted: #a0a3ab;
+  --theme-game-phone-dim: #7c7f87;
+  --theme-game-phone-path-bg: #1b1c1f;
+  --theme-game-phone-hand-bg: #1b1c1f;
+  --theme-game-phone-offer-bg: #1d2230;
+  --theme-game-phone-them: #ff6b6b;
+  --theme-game-phone-mine: #3ecf8e;
+  --theme-game-phone-minions: #f2c14e;
+  --theme-game-phone-player-1: #c43c3c;
+  --theme-game-phone-player-2: #6e8bff;
+  --theme-game-phone-on-accent: #0b1020;
+  --theme-game-phone-accent: #6e8bff;
+  --theme-game-phone-on-dark: #fff;
+  --theme-game-phone-on-choose: #04150d;
+  --theme-game-phone-shade: rgb(0 0 0 / 0.65);
+  --theme-game-phone-danger-text: #ffb4a8;
+  --theme-game-phone-twilight: radial-gradient(circle at 35% 35%, #d9d0ff, #5b4a9e 70%);
 
   --theme-scrollbar-thumb: #4b4e55;
   --theme-scrollbar-track: #28292d;

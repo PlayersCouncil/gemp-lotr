@@ -1,0 +1,145 @@
+/* The divider: drag handle, the decision and its buttons (G7) */
+
+:host {
+  position: relative;
+  display: grid;
+  gap: 5px;
+  padding: 10px 8px 6px;
+  background: var(--theme-default-bg);
+  border-block: 1px solid var(--theme-separator);
+  touch-action: none;
+  cursor: ns-resize;
+  user-select: none;
+  min-width: 0;
+}
+
+/* The handle */
+:host::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  width: 36px;
+  height: 3px;
+  margin-left: -18px;
+  border-radius: 3px;
+  background: var(--theme-game-phone-dim);
+}
+
+:host([data-deciding]) {
+  border-top-color: var(--theme-game-phone-accent);
+  box-shadow: 0 -3px 12px color-mix(in srgb, var(--theme-game-phone-accent) 35%, transparent);
+}
+
+.gd-phone-divider__question {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.gd-phone-divider__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+:host(:not([data-deciding])) .gd-phone-divider__text {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-divider__clock {
+  flex: none;
+  padding-top: 2px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-divider__clock[data-band='warn'] {
+  color: var(--theme-modified);
+}
+
+.gd-phone-divider__clock[data-band='danger'] {
+  color: var(--theme-error);
+}
+
+.gd-phone-divider__hand-hint {
+  justify-self: center;
+  font-size: 11px;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-divider__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  cursor: default;
+}
+
+.gd-phone-button {
+  flex: 1 1 auto;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-weight: 600;
+}
+
+.gd-phone-button[data-primary] {
+  background: var(--theme-game-phone-accent);
+  border-color: var(--theme-game-phone-accent);
+  color: var(--theme-game-phone-on-accent);
+}
+
+.gd-phone-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gd-phone-spinner > .gd-phone-button {
+  flex: none;
+  min-width: 44px;
+  font-size: 18px;
+}
+
+.gd-phone-spinner > output {
+  min-width: 2.5em;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.gd-phone-select {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 14px;
+}
+
+/* Sideways: the question beside its buttons */
+:host-context([data-device='sideways']) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__buttons {
+  flex-wrap: nowrap;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__hand-hint {
+  grid-column: 1 / -1;
+}

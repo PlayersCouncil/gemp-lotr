@@ -29,13 +29,15 @@ log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $*"; }
 LEGACY_CARD_DATA="../gemp-lotr-async/src/main/web/js/gemp-022"
 LEGACY_CARD_DATA_FILES="$LEGACY_CARD_DATA/PC_Cards.js $LEGACY_CARD_DATA/hobbit.js $LEGACY_CARD_DATA/set40.js
     $LEGACY_CARD_DATA/cards/CardImages.js $LEGACY_CARD_DATA/cards/PackImages.js"
+# The card definitions the Shadow cards' table is generated from (the same script)
+CARD_DEFINITIONS="../gemp-lotr-cards/src/main/resources/cards ../gemp-lotr-cards/src/main/resources/blueprintMapping.txt"
 
 # Hash of the file contents that affect the build (a checkout that doesn't change content doesn't rebuild).
 # src/generated is left out: the build writes it.
 sources_fingerprint() {
     cd "$FRONTEND_DIR" &&
         # shellcheck disable=SC2086 # the file list is split on purpose
-        find src public scripts angular.json package.json package-lock.json tsconfig*.json $LEGACY_CARD_DATA_FILES \
+        find src public scripts angular.json package.json package-lock.json tsconfig*.json $LEGACY_CARD_DATA_FILES $CARD_DEFINITIONS \
             -path src/generated -prune -o -type f -exec md5sum {} + 2>/dev/null |
         sort | md5sum
 }

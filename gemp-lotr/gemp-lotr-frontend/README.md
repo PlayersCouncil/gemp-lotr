@@ -298,6 +298,21 @@ and replays (G4). Nothing links to it yet.
   (`npm run check:game:modern`: the same games, every card and panel within 2px). The red theme button
   (`GameThemeButtonComponent`, in the table's top right corner) is off until the owner accepts its place
   (`GAME_THEME_PICKER`).
+- **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
+  layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
+  status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's
+  support and characters, the minions or the skirmish and assignments as pairs, the player's characters and support;
+  support rows Free Peoples first, from `src/generated/card-sides.json`, which `scripts/extract-card-data.mjs` makes
+  from the card definitions by the server's rule: a card's culture decides its side, Gollum's and culture-less cards
+  say it themselves; the same side as the deck builder's Side filter, compared by `visual-check/game/card-sides.mjs`), each row scrolling sideways with its cards at one size (`PhoneSettings`: 100px on a phone,
+  80 sideways, 130 on a tablet, times the card size setting), the divider with the decision and its buttons (dragged;
+  its place per device in `gempGameSplit`; at the bottom it hides the hand) and the hand, where cards a decision offers
+  from off the table are shown under a label. A tap acts only in a decision; a long press opens a card's details.
+  A player's chip opens their piles: dead pile and removed pile for everyone, the adventure deck only its owner's,
+  the discard pile its owner's unless the format makes it public (`discardPublic`, as the server decides).
+  Sheets (`GameSheets`) stack: closing one shows the one below as it was. The open sheets, the scrolled table and rows
+  and the hand's place are kept with the game (`GameViewState`, D10). "Your move" buzzes and plays a sound
+  (`gempGameMoveVibrate`, `gempGameMoveSound`, on by default). Checked by `npm run check:game:phone`.
 - **Checked** (see `visual-check/game/README.md`): `npm run check:game:table` shows every state of the recorded games
   on both pages, with the decision waiting at each, pixel by pixel; `npm run check:game -- --pages legacy,angular
 --reload` plays real games on both pages with the same gestures, and reloads the Angular page after every step;

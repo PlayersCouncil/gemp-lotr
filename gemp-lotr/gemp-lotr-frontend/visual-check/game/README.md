@@ -49,6 +49,52 @@ shown, the requests and the dialogs are compared as always). The table check has
 The report is `report-game/index.html`: each scenario with its steps, both screenshots of each and the differences in
 red, and what no scenario covers.
 
+## The phone check
+
+`npm run check:game:phone` (`phone.mjs`) checks the **phone layout** (G7 of trymarz/gemp-lotr-private#27: the modern
+theme on a phone, a phone held sideways and an upright tablet, 390x844, 844x390 and 768x1024 with a touch screen) on the
+recorded games served without a server, as the table check does (`stub-game.mjs`, shared with it). Nothing is compared
+with the legacy page; each check compares the Angular page with itself:
+
+- **back**: a long press on a card in every place a card's details open from (the table's rows, an attached copy, the
+  hand, the path, cards offered in the hand's place, an assignment, the skirmish, the player's and the opponent's
+  piles from their chips, the menu's piles, an attached card's details, the hand hidden), then the details closed with
+  ✕, Escape and the backdrop: the view must be what it was before the press (`readView`: the open sheets, where the
+  table, each row and the sheet are scrolled, the divider, the hand's place, the cards marked for the decision; and the
+  screen, the clocks masked, within 10 pixels of rendering noise). 15 places × 3 ways × 3 devices.
+- **reload** (D10): the divider dragged, the hand hidden, the menu, piles and a card open and scrolled, the offered
+  cards closed with ✕: after a reload (which gets the whole game in one answer, as from the server) the view's data is
+  the same, and its screen within 60 pixels (the edges of rounded rings and shadows are blended a few shades
+  differently when everything is drawn anew).
+- **touch**: a tap on a card not offered does nothing, a tap on an offered card chooses it, the divider drags and is
+  kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back.
+
+- **piles**: who sees a pile's cards, by the server's rules (`Zone`, `LotroFormat.discardPileIsPublic` in
+  `lotrFormats.hjson`): the dead pile and the removed pile everyone; the adventure deck its owner; the discard pile
+  its owner, and the opponent too in a format that makes it public (the PC formats). Checked with the opponent's
+  cards in every pile, in a format of each kind.
+
+No recorded game puts cards in the opponent's piles, so they are added to the last answer (`STATES.opponentPiles`), with
+the format's discard pile made public for `STATES.opponentPilesPublic` (the P event's `discardPublic`).
+
+Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
+`npm run check:game:down`):
+
+- `node game/card-sides.mjs`: the Shadow cards of `src/generated/card-sides.json` (which the phone's support rows sort
+  by) against the side the server gives every card of "All cards" (`/collection/default`, the deck builder's Side
+  filter's): 3997 of 3997 the same.
+- `node game/discard-formats.mjs`: a game started in `fotr_block` and in `pc_fotr_block`; the server tells both players
+  the discard pile is private in the first and public in the second. (Movie Block and Expanded need King block sites,
+  which the test deck hasn't.)
+
+```
+npm run check:game:phone                                  everything (about 25 minutes)
+npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles)
+npm run check:game:phone -- --shots --only opening        screenshots of a recording's last state, nothing checked
+```
+
+Differences are written to `report-game-phone` (the view before and after, and the differing pixels in red).
+
 ## The table check
 
 `npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:

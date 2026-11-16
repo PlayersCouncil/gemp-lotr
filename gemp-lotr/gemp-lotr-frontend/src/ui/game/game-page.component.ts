@@ -29,6 +29,10 @@ import { PreGamePanelComponent } from './pregame/pre-game-panel.component';
 import { AdventurePathComponent } from './table/adventure-path.component';
 import { GameCardsComponent } from './table/game-cards.component';
 import { GameTabsComponent } from './tabs/game-tabs.component';
+import { PhoneGameComponent } from './phone/phone-game.component';
+import { CompactLayout } from '../../core/platform/compact-layout.service';
+import { GameSheets } from '../../core/game/phone/game-sheets';
+import { PhoneBridge } from '../../core/game/phone/phone-bridge';
 
 /** The cookie the game page remembers its hover zoom setting in (the legacy game page's). */
 export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
@@ -73,6 +77,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     GameThemeButtonComponent,
     CardInfoComponent,
     AutoZoomComponent,
+    PhoneGameComponent,
   ],
   host: {
     class: 'gd-game',
@@ -82,10 +87,13 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '[attr.data-old-stack]': "settings.oldStackVisuals() ? '' : null",
     '[style.--gd-game-fights]': 'fights()',
     '[attr.data-animating]': "session.busy() ? '' : null",
-    '(document:keydown.escape)': 'decisions.escape()',
+    '[attr.data-layout]': "phone() ? 'phone' : null",
+    '(document:keydown.escape)': 'escape()',
   },
   template: `
-    @if (model().started) {
+    @if (phone() && model().started) {
+      <gd-game-phone />
+    } @else if (model().started) {
       <section class="gd-game__path" aria-label="Adventure path">
         <gd-game-path [sites]="table().sites" />
       </section>
@@ -152,19 +160,25 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     } @else if (model().preGame; as preGame) {
       <gd-game-pregame class="gd-game__pregame" [info]="preGame" />
     }
-    <gd-game-tabs class="gd-game__tabs" />
-    @if (session.replaying()) {
-      <gd-game-replay class="gd-game__replay" />
+    @if (!phone()) {
+      <gd-game-tabs class="gd-game__tabs" />
+      @if (session.replaying()) {
+        <gd-game-replay class="gd-game__replay" />
+      }
     }
     <gd-game-animation />
-    <gd-game-decision-dialogs />
-    <gd-game-action-menu />
-    <gd-game-piles />
+    @if (!phone()) {
+      <gd-game-decision-dialogs />
+      <gd-game-action-menu />
+      <gd-game-piles />
+    }
     <gd-game-feedback />
     <gd-game-problem />
-    <gd-card-info />
-    <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
-    <gd-auto-zoom [topLayer]="false" [flipOnShift]="zoomFlipsOnShift()" />
+    @if (!phone()) {
+      <gd-card-info />
+      <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
+      <gd-auto-zoom [topLayer]="false" [flipOnShift]="zoomFlipsOnShift()" />
+    }
   `,
 })
 export class GamePageComponent {
@@ -176,6 +190,9 @@ export class GamePageComponent {
   /** The theme button (GAME_THEME_PICKER, on). */
   protected readonly themePicker = inject(GAME_THEME_PICKER);
   private readonly themes = inject(ThemeService);
+  /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
+  protected readonly phone = inject(CompactLayout).active;
+  private readonly sheets = inject(GameSheets);
   /**
    * Shift flips the zoomed card in the modern view only, as the deck builder's zoom does; the legacy game page never
    * flipped it (its key handler got jQuery 1.6's event, which has no key), and classic keeps that (owner, 2026-11-15).
@@ -197,6 +214,8 @@ export class GamePageComponent {
     inject(GameAttention);
     // A card of the game shown in the card information gets the server's modifiers
     inject(GameCardInfo);
+    // The phone layout's own handling of card details, answers and alerts
+    inject(PhoneBridge);
     const query = new URLSearchParams(inject(PAGE_QUERY_STRING));
     const gameId = query.get('gameId');
     const replayId = query.get('replayId');
@@ -207,6 +226,20 @@ export class GamePageComponent {
       const chat = inject(ChatRoom);
       inject(GameViewState).restore(gameId);
       this.session.open(gameId, () => chat.join(`Game${gameId}`));
+    }
+  }
+
+  /**
+   * Escape: in the phone layout it closes a card's actions or the sheet shown (one level) first; otherwise it finishes
+   * a choice of cards shown in a dialog, as on the legacy page.
+   */
+  protected escape(): void {
+    if (this.phone() && this.decisions.menu()) {
+      this.decisions.closeMenu();
+    } else if (this.phone() && this.sheets.top()) {
+      this.sheets.back();
+    } else {
+      this.decisions.escape();
     }
   }
 

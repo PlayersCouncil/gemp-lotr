@@ -1,0 +1,225 @@
+/* The phone layout's table: scrolled up and down, the path first, a row per kind of card (G7) */
+
+:host {
+  position: relative;
+  display: block;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+:host::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-phone-zone {
+  padding: 3px 0 4px;
+  border-left: 3px solid transparent;
+}
+
+.gd-phone-zone + .gd-phone-zone {
+  border-top: 1px solid var(--theme-content-border);
+}
+
+.gd-phone-zone[data-side='them'] {
+  border-left-color: color-mix(in srgb, var(--theme-game-phone-them) 70%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--theme-game-phone-them) 7%, transparent), transparent 55%);
+}
+
+.gd-phone-zone[data-side='mine'] {
+  border-left-color: color-mix(in srgb, var(--theme-game-phone-mine) 70%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--theme-game-phone-mine) 7%, transparent), transparent 55%);
+}
+
+.gd-phone-zone[data-side='minions'] {
+  border-left-color: color-mix(in srgb, var(--theme-game-phone-minions) 60%, transparent);
+}
+
+.gd-phone-zone[data-side='fight'] {
+  border-left-color: var(--theme-game-fight-border);
+  background: color-mix(in srgb, var(--theme-game-fight-border) 8%, transparent);
+}
+
+.gd-phone-zone[data-zone='path'] {
+  background: var(--theme-game-phone-path-bg);
+}
+
+.gd-phone-zone__label {
+  margin: 0 8px 2px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-zone__count {
+  padding: 0 5px;
+  border-radius: 99px;
+  background: var(--theme-default-bg);
+  color: var(--theme-text);
+  font-size: 10px;
+}
+
+/* The adventure path: site cards lying down, empty places as their number, the players' markers */
+.gd-phone-path {
+  --gd-phone-site: calc(var(--gd-phone-card, 100px) * 0.5);
+  position: relative;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 4px 10px 4px 12px;
+  scrollbar-width: none;
+}
+
+.gd-phone-path::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-phone-site {
+  position: relative;
+  flex: none;
+}
+
+.gd-phone-site > .gd-card {
+  /* A site lies on its side: as wide as this, 350/490 as high */
+  --gd-card-height: calc(var(--gd-phone-site) * 490 / 350);
+  touch-action: pan-x pan-y;
+}
+
+.gd-phone-site[data-here] > .gd-card {
+  box-shadow: 0 0 0 2px var(--theme-game-phone-accent);
+}
+
+.gd-phone-site[data-ahead] {
+  opacity: 0.75;
+}
+
+.gd-phone-site__empty {
+  width: calc(var(--gd-phone-site) * 490 / 350);
+  height: var(--gd-phone-site);
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--theme-separator);
+  border-radius: 5px;
+  background: none;
+  color: var(--theme-game-phone-dim);
+  font: inherit;
+}
+
+.gd-phone-site__no {
+  position: absolute;
+  right: 4px;
+  top: 1px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--theme-game-phone-on-dark);
+  text-shadow: 0 1px 1px var(--theme-game-phone-shade);
+  pointer-events: none;
+}
+
+.gd-phone-site__markers {
+  position: absolute;
+  left: 3px;
+  bottom: 3px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.gd-phone-site__marker {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--theme-game-phone-on-dark);
+  background: var(--theme-game-phone-player-1);
+  box-shadow: 0 0 0 2px var(--theme-game-phone-shade);
+}
+
+.gd-phone-site__marker[data-no='2'] {
+  background: var(--theme-game-phone-player-2);
+}
+
+/* The skirmish and the assignments: both sides of each fight */
+.gd-phone-pairs {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  overflow-x: auto;
+  padding: 6px 10px 3px 12px;
+  scrollbar-width: none;
+}
+
+.gd-phone-pairs::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-phone-pair {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 7px;
+  background: var(--theme-content-bg);
+}
+
+.gd-phone-pair[data-pair='assignment'] {
+  border-style: dashed;
+}
+
+.gd-phone-pair[data-pair='skirmish'] {
+  border: 2px solid var(--theme-game-fight-border);
+}
+
+/* The sides of a pair show all their cards: no scrolling inside a pair, the pairs' row scrolls */
+.gd-phone-pair > gd-phone-cards {
+  flex: none;
+}
+
+.gd-phone-pair__vs {
+  color: var(--theme-game-phone-muted);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gd-phone-strength {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  line-height: 1;
+  font-size: 16px;
+  font-weight: 800;
+  background: var(--theme-default-bg);
+  border: 2px solid var(--theme-game-phone-accent);
+}
+
+.gd-phone-strength[data-side='shadow'] {
+  border-color: var(--theme-game-fight-border);
+}
+
+.gd-phone-strength[data-overwhelmed] {
+  color: var(--theme-game-fight-border);
+}
+
+.gd-phone-strength > small {
+  font-size: 9px;
+  color: var(--theme-warning);
+}

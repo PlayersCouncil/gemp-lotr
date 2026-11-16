@@ -1,0 +1,208 @@
+/* The phone layout's top: the status bar and the players' chips (G7) */
+
+:host {
+  display: grid;
+  gap: 5px;
+  padding: 5px 6px 6px;
+  background: var(--theme-content-bg);
+  border-bottom: 1px solid var(--theme-content-border);
+  min-width: 0;
+}
+
+.gd-phone-status__bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gd-phone-icon {
+  position: relative;
+  flex: none;
+  min-width: 34px;
+  height: 32px;
+  padding: 0 6px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 15px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.gd-phone-unread {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: var(--theme-error);
+  color: var(--theme-game-phone-on-dark);
+  font-size: 10px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.gd-phone-status__phase {
+  flex: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--theme-game-phone-accent);
+  white-space: nowrap;
+}
+
+.gd-phone-status__twilight {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700;
+}
+
+.gd-phone-status__twilight > i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--theme-game-phone-twilight);
+}
+
+.gd-phone-status__move {
+  flex: none;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: var(--theme-game-phone-accent);
+  color: var(--theme-game-phone-on-accent);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.gd-phone-status__gap {
+  flex: 1;
+}
+
+.gd-phone-status__pills {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+
+.gd-phone-pill {
+  flex: none;
+  padding: 0 6px;
+  border-radius: 99px;
+  background: var(--theme-default-bg);
+  border: 1px solid var(--theme-content-border);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.gd-phone-pill[data-warn] {
+  border-color: var(--theme-warning);
+  color: var(--theme-warning);
+}
+
+/* The theme button: the deck builder's red button, a finger's size here */
+.gd-phone-status__theme {
+  flex: none;
+  display: inline-flex;
+}
+
+.gd-phone-players {
+  display: flex;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gd-phone-player {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1px 5px;
+  padding: 3px 6px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+  color: var(--theme-text);
+  font: inherit;
+  text-align: left;
+}
+
+.gd-phone-player[data-current] {
+  border-color: var(--theme-game-phone-accent);
+  box-shadow: inset 0 0 0 1px var(--theme-game-phone-accent);
+}
+
+.gd-phone-player__no {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--theme-game-phone-on-dark);
+  background: var(--theme-game-phone-player-1);
+}
+
+.gd-phone-player__no[data-no='2'] {
+  background: var(--theme-game-phone-player-2);
+}
+
+.gd-phone-player__name {
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-phone-player__clock {
+  flex: none;
+  margin-left: auto;
+  color: var(--theme-game-phone-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-phone-player__clock[data-band='warn'] {
+  color: var(--theme-modified);
+  font-weight: 700;
+}
+
+.gd-phone-player__clock[data-band='danger'] {
+  color: var(--theme-error);
+  font-weight: 700;
+}
+
+.gd-phone-player__counts {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--theme-game-phone-muted);
+}
+
+/* Sideways: one line at the top, the chips shrunk into it */
+:host-context([data-device='sideways']) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 3px 6px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-player {
+  flex: none;
+  max-width: 150px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-player__counts {
+  display: none;
+}

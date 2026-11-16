@@ -67,8 +67,8 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * Starts a game of the test deck between the pair: the player makes the table, the opponent joins it. Ends any game
  * either of them still plays first. Returns the game's id and both sessions.
  */
-/** `deckKey`: which of the test decks (players.mjs DECKS) both play. */
-export async function startGame(server, pair, password, deckKey = 'main') {
+/** `deckKey`: which of the test decks (players.mjs DECKS) both play; `format`: the table's, the deck's own by default. */
+export async function startGame(server, pair, password, deckKey = 'main', format = null) {
   const deck = DECKS[deckKey];
   if (!deck) throw new Error(`no test deck "${deckKey}"`);
   // One login at a time (see "One login for all pages" in ../README.md)
@@ -78,7 +78,7 @@ export async function startGame(server, pair, password, deckKey = 'main') {
   await clearTables(foe, pair.foe);
   const created = await (
     await player.post('/hall', {
-      format: deck.format,
+      format: format ?? deck.format,
       deckName: deck.name,
       deckSource: 'player',
       timer: 'default',

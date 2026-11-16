@@ -1,0 +1,126 @@
+/* A row of the phone layout's cards: one size, scrolled sideways (G7) */
+
+:host {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.gd-phone-cards__scroll {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 6px 10px 3px 12px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  position: relative;
+}
+
+.gd-phone-cards__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-phone-slot {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  scroll-snap-align: start;
+}
+
+.gd-phone-slot > .gd-card {
+  --gd-card-height: var(--gd-phone-card, 100px);
+  flex: none;
+  touch-action: pan-x pan-y;
+}
+
+/* The cards under one: small copies, a long press shows one big */
+.gd-phone-slot__under {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-width: calc(var(--gd-phone-card, 100px) * 350 / 490 + 10px);
+}
+
+.gd-phone-slot__under > .gd-card {
+  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.3);
+  touch-action: pan-x pan-y;
+}
+
+.gd-phone-cards__split {
+  flex: none;
+  width: 1px;
+  align-self: stretch;
+  margin: 0 3px;
+  background: var(--theme-hover-border);
+}
+
+.gd-phone-cards__empty {
+  color: var(--theme-game-phone-muted);
+  padding: 4px 0;
+}
+
+/* A card that isn't active this turn: dimmed, in a dark frame */
+.gd-card[data-inactive] {
+  --gd-card-image-filter: var(--theme-game-inactive-filter);
+  --gd-card-frame: var(--theme-game-inactive-border);
+}
+
+/* A card the waiting decision offers, or one chosen for it: framed and lit in the choice's colour */
+.gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+  box-shadow: 0 0 0 3px var(--theme-game-selected);
+}
+
+.gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  box-shadow:
+    0 0 0 2px var(--theme-game-selectable),
+    0 0 10px color-mix(in srgb, var(--theme-game-selectable) 45%, transparent);
+  cursor: pointer;
+}
+
+.gd-card[data-mark='actionable'] {
+  --gd-card-frame: var(--theme-game-actionable);
+  box-shadow: 0 0 0 2px var(--theme-game-actionable);
+  cursor: pointer;
+}
+
+.gd-card[data-inactive][data-mark] {
+  --gd-card-image-filter: var(--theme-game-inactive-offered-filter);
+}
+
+.gd-card[data-zone='EXTRA'] {
+  opacity: 0.85;
+}
+
+/* Stacked cards on their side, as on the table, unless the player chose the old look */
+:host-context(:not([data-old-stack])) .gd-phone-slot__under > .gd-card[data-under='stacked'] {
+  transform: rotate(-90deg);
+}
+
+.gd-phone-cards__more {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  border: 0;
+  border-radius: 99px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--theme-game-selectable);
+  color: var(--theme-game-phone-on-choose);
+  box-shadow: 0 1px 4px var(--theme-game-phone-shade);
+}
+
+/* One side of a fight shows all its cards: the row of fights scrolls instead */
+:host-context(.gd-phone-pair) .gd-phone-cards__scroll {
+  overflow: visible;
+  padding: 2px;
+}

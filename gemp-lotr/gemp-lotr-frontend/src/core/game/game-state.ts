@@ -1,3 +1,6 @@
+import { GameSheets } from './phone/game-sheets';
+import { PhoneBridge } from './phone/phone-bridge';
+import { PhoneSettings } from './phone/phone-settings';
 import { Provider } from '@angular/core';
 import { ChatRoom } from '../chat/chat-room.service';
 import { PageLifetime } from '../platform/page-lifetime.service';
@@ -34,5 +37,8 @@ export function provideGameState(): Provider[] {
     GameTableState,
     GameCardViews,
     GameCardInfo,
+    GameSheets,
+    PhoneSettings,
+    PhoneBridge,
   ];
 }

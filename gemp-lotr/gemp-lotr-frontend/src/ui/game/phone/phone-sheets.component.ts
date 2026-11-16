@@ -1,0 +1,737 @@
+import {
+  afterNextRender,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
+import { ChatRoom } from '../../../core/chat/chat-room.service';
+import { CardViews } from '../../../core/cards/card-views.service';
+import { GameClocks } from '../../../core/game/clock/game-clocks.service';
+import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
+import { chatLines, GameSheets } from '../../../core/game/phone/game-sheets';
+import { CARD_SIZE_MAX, CARD_SIZE_MIN, PhoneSettings } from '../../../core/game/phone/phone-settings';
+import { PhoneCard } from '../../../core/game/phone/phone-table';
+import { Sheet } from '../../../core/game/phone/sheet';
+import { GameLog } from '../../../core/game/session/game-log';
+import { GameSession } from '../../../core/game/session/game-session.service';
+import { GameViewState } from '../../../core/game/session/game-view-state';
+import { AUTO_PASS_PHASES, GameSettings } from '../../../core/game/settings/game-settings';
+import { RETRIEVING } from '../../../core/game/table/game-card-info';
+import { GameCardViews } from '../../../core/game/table/game-card-views';
+import { handRevealed, PileName, pileCards } from '../../../core/game/table/game-table';
+import { PageCues } from '../../../core/platform/page-cues';
+import { clockText } from '../panel/game-clock';
+import { CardHintsDirective } from '../table/card-hints.directive';
+import { GameChatComponent } from '../tabs/game-chat.component';
+import { PhoneCardsComponent } from './phone-cards.component';
+import { phaseLabel } from './phone-status.component';
+
+interface PileView {
+  pile: PileName;
+  title: string;
+  /** The cards, or null when only their number may be seen. */
+  cards: readonly PhoneCard[] | null;
+  count: string;
+}
+
+const PILE_TITLES: Readonly<Record<PileName, string>> = {
+  adventureDeck: 'Adventure deck',
+  deadPile: 'Dead pile',
+  discard: 'Discard pile',
+  removedPile: 'Removed from game',
+  deck: 'Draw deck',
+  revealedHand: 'Revealed hand',
+};
+
+/** The hall the menu goes back to. */
+const HALL = '/gemp-lotr/hall.html';
+
+/**
+ * The phone layout's sheets (G7 of trymarz/gemp-lotr-private#27), one over another (GameSheets): a card's details,
+ * a player's piles, the menu, the chat with the game's messages, the settings (one column, finger-sized rows), the
+ * game's information and the confirmations to concede or cancel; and over them all, a card's actions to choose from.
+ * Closing (✕, ‹ when it goes back, Escape on the page, the backdrop) shows the sheet below as it was, scrolled to the
+ * same place. Upright phones get them from the bottom; tablets and phones held sideways in the middle.
+ *
+ * DOM contract: `gd-phone-sheets` holding, while one is open, `.gd-phone-sheet` (`data-sheet`: the kind;
+ * `data-depth`: how many are open) with `.gd-phone-sheet__backdrop`, and `[role=dialog]` holding
+ * `.gd-phone-sheet__head` (`h2`, `button[data-phone=sheet-close]` with `data-back` when it goes back) and
+ * `.gd-phone-sheet__body`. The card's details: `img.gd-phone-detail__image`, `.gd-phone-detail__affects`, the attached
+ * cards' `gd-phone-cards`. Piles: `section[data-pile]` each. The menu: `button[data-menu]`. The actions:
+ * `.gd-phone-sheet[data-sheet=actions]` with `button[data-action-id]`.
+ */
+@Component({
+  selector: 'gd-phone-sheets',
+  styleUrl: './phone-sheets.component.css',
+  imports: [PhoneCardsComponent, GameChatComponent, CardHintsDirective],
+  template: `
+    @if (top(); as entry) {
+      <div class="gd-phone-sheet" [attr.data-sheet]="entry.sheet.kind" [attr.data-depth]="sheets.entries().length">
+        <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+        <div class="gd-phone-sheet__backdrop" (click)="sheets.back()"></div>
+        <div class="gd-phone-sheet__panel" role="dialog" aria-modal="true" [attr.aria-label]="title(entry.sheet)">
+          <div class="gd-phone-sheet__head">
+            <h2>{{ title(entry.sheet) }}</h2>
+            <button
+              type="button"
+              class="gd-phone-sheet__close"
+              data-phone="sheet-close"
+              [attr.data-back]="sheets.canGoBack() ? '' : null"
+              [attr.aria-label]="sheets.canGoBack() ? 'Back' : 'Close'"
+              (click)="back($event)"
+            >
+              {{ sheets.canGoBack() ? '‹' : '✕' }}
+            </button>
+          </div>
+          <div #body class="gd-phone-sheet__body">
+            @switch (entry.sheet.kind) {
+              @case ('card') {
+                @if (detail(); as d) {
+                  <div class="gd-phone-detail">
+                    <img
+                      class="gd-phone-detail__image"
+                      [attr.data-horizontal]="d.horizontal ? '' : null"
+                      [src]="d.image"
+                      alt=""
+                      draggable="false"
+                    />
+                    <div class="gd-phone-detail__facts">
+                      @if (d.numbers.length > 0) {
+                        <div class="gd-phone-chips">
+                          @for (n of d.numbers; track n.name) {
+                            <span class="gd-phone-chip"
+                              >{{ n.name }} <b>{{ n.value }}</b></span
+                            >
+                          }
+                        </div>
+                      }
+                      @if (d.zone) {
+                        <div class="gd-phone-note">{{ d.zone }}</div>
+                      }
+                      @if (d.affects !== null) {
+                        <h3>Affecting this card</h3>
+                        <div class="gd-phone-detail__affects" gdCardHints [innerHTML]="d.affects"></div>
+                      }
+                    </div>
+                  </div>
+                  @if (d.under.length > 0) {
+                    <h3>Under it ({{ d.under.length }})</h3>
+                    <gd-phone-cards class="gd-phone-sheet__cards" [cards]="d.under" />
+                  }
+                }
+              }
+              @case ('piles') {
+                @if (pilesView(); as p) {
+                  <dl class="gd-phone-facts">
+                    @for (fact of p.facts; track fact.name) {
+                      <dt>{{ fact.name }}</dt>
+                      <dd [attr.data-clock]="fact.clock ? '' : null">{{ fact.value }}</dd>
+                    }
+                  </dl>
+                  @for (pile of p.piles; track pile.pile) {
+                    <section [attr.data-pile]="pile.pile">
+                      <h3>{{ pile.title }} ({{ pile.count }})</h3>
+                      @if (pile.cards === null) {
+                        <div class="gd-phone-note">Only its owner sees these cards.</div>
+                      } @else {
+                        <gd-phone-cards class="gd-phone-sheet__cards" [cards]="pile.cards" empty="Empty" />
+                      }
+                    </section>
+                  }
+                }
+              }
+              @case ('menu') {
+                <div class="gd-phone-menu">
+                  @for (item of menu(); track item.key) {
+                    <button
+                      type="button"
+                      class="gd-phone-menu__item"
+                      [attr.data-menu]="item.key"
+                      [attr.data-danger]="item.key === 'concede' ? '' : null"
+                      (click)="choose(item.key)"
+                    >
+                      {{ item.label }}
+                    </button>
+                  }
+                </div>
+              }
+              @case ('chat') {
+                <div class="gd-phone-note">In the room: {{ users() }}</div>
+                <gd-game-chat class="gd-phone-chat" />
+              }
+              @case ('settings') {
+                <div class="gd-phone-settings">
+                  <div class="gd-phone-tabs" role="tablist">
+                    @for (tab of settingTabs; track tab.key) {
+                      <button
+                        type="button"
+                        role="tab"
+                        class="gd-phone-tab"
+                        [attr.data-settings-tab]="tab.key"
+                        [attr.aria-selected]="settingsTab() === tab.key"
+                        (click)="sheets.replace({ kind: 'settings', tab: tab.key })"
+                      >
+                        {{ tab.label }}
+                      </button>
+                    }
+                  </div>
+                  @if (settingsTab() === 'display') {
+                    <h3>Card size on the table</h3>
+                    <div class="gd-phone-scale">
+                      <input
+                        type="range"
+                        data-setting="card-size"
+                        aria-label="Card size"
+                        [min]="sizeMin"
+                        [max]="sizeMax"
+                        step="5"
+                        [value]="phone.cardSize()"
+                        (input)="phone.setCardSize(number($event))"
+                      />
+                      <output>{{ phone.cardSize() }}%</output>
+                    </div>
+                    <div class="gd-phone-note">
+                      Bigger cards show fewer in a row; the table scrolls further. Kept on this device.
+                    </div>
+                    <h3>Animations</h3>
+                    <div class="gd-phone-scale">
+                      <input
+                        type="range"
+                        data-setting="animation-slider"
+                        aria-label="Animation speed"
+                        min="-4"
+                        max="4"
+                        step="1"
+                        [value]="settings.animationSpeed()"
+                        (input)="settings.setAnimationSpeed(number($event))"
+                      />
+                      <output>{{ settings.animationSpeed() }}</output>
+                    </div>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="use-old-stack-checkbox"
+                        [checked]="settings.oldStackVisuals()"
+                        (change)="settings.setOldStackVisuals(checked($event))"
+                      />
+                      <span>Stacked cards upright<small>As the old look drew them.</small></span>
+                    </label>
+                  } @else {
+                    <h3>Pass automatically when you have nothing to play in</h3>
+                    @for (phase of phases; track phase) {
+                      <label class="gd-phone-toggle">
+                        <input
+                          type="checkbox"
+                          [attr.data-setting]="'autoPass' + phase"
+                          [checked]="settings.autoPassPhases().includes(phase)"
+                          (change)="settings.setAutoPass(phase, checked($event))"
+                        />
+                        <span>{{ phaseName(phase) }}</span>
+                      </label>
+                    }
+                    <h3>Playing</h3>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="autoAccept"
+                        [checked]="settings.autoAccept()"
+                        (change)="settings.setAutoAccept(checked($event))"
+                      />
+                      <span>Send at once after choosing<small>No Done tap once the last card is chosen.</small></span>
+                    </label>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="alwaysDropDown"
+                        [checked]="settings.alwaysDropDown()"
+                        (change)="settings.setAlwaysDropDown(checked($event))"
+                      />
+                      <span>Answers in a list<small>Also when there are only two.</small></span>
+                    </label>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="autoDismissDeckReveal"
+                        [checked]="settings.autoDismissDeckReveal()"
+                        (change)="settings.setAutoDismissDeckReveal(checked($event))"
+                      />
+                      <span>Skip the look at your own deck when searching it</span>
+                    </label>
+                    <h3>Alerts</h3>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="moveVibrate"
+                        [checked]="phone.moveVibrate()"
+                        (change)="phone.setMoveVibrate(checked($event))"
+                      />
+                      <span>Vibrate when it's your move</span>
+                    </label>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="moveSound"
+                        [checked]="phone.moveSound()"
+                        (change)="phone.setMoveSound(checked($event))"
+                      />
+                      <span>Sound when it's your move</span>
+                    </label>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="timerSound"
+                        [checked]="!settings.timerAudioMuted()"
+                        (change)="settings.setTimerAudioMuted(!checked($event))"
+                      />
+                      <span>Timer warnings<small>A sound as your time bank runs low.</small></span>
+                    </label>
+                  }
+                </div>
+              }
+              @case ('info') {
+                <dl class="gd-phone-facts">
+                  @for (fact of info(); track fact.name) {
+                    <dt>{{ fact.name }}</dt>
+                    <dd>{{ fact.value }}</dd>
+                  }
+                </dl>
+              }
+              @case ('confirm') {
+                @if (entry.sheet.kind === 'confirm') {
+                  <p class="gd-phone-confirm">{{ confirmText(entry.sheet.what) }}</p>
+                  <div class="gd-phone-confirm__buttons">
+                    <button type="button" class="gd-phone-menu__item" data-phone="confirm-no" (click)="sheets.back()">
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      class="gd-phone-menu__item"
+                      data-danger
+                      data-phone="confirm-yes"
+                      (click)="confirmed(entry.sheet.what)"
+                    >
+                      {{ entry.sheet.what === 'concede' ? 'Concede' : 'Request cancel' }}
+                    </button>
+                  </div>
+                }
+              }
+            }
+          </div>
+        </div>
+      </div>
+    }
+    @if (decisions.menu(); as menu) {
+      <div class="gd-phone-sheet" data-sheet="actions">
+        <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+        <div class="gd-phone-sheet__backdrop" (click)="decisions.closeMenu()"></div>
+        <div class="gd-phone-sheet__panel" role="dialog" aria-modal="true" aria-label="Choose an action">
+          <div class="gd-phone-sheet__head">
+            <h2>Choose an action</h2>
+            <button
+              type="button"
+              class="gd-phone-sheet__close"
+              data-phone="sheet-close"
+              aria-label="Close"
+              (click)="decisions.closeMenu()"
+            >
+              ✕
+            </button>
+          </div>
+          <div class="gd-phone-sheet__body">
+            <div class="gd-phone-menu">
+              @for (action of menu.actions; track action.actionId) {
+                <button
+                  type="button"
+                  class="gd-phone-menu__item"
+                  [attr.data-action-id]="action.actionId"
+                  [innerHTML]="action.text"
+                  (click)="decisions.chooseAction(action.actionId)"
+                ></button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  `,
+})
+export class PhoneSheetsComponent {
+  protected readonly sheets = inject(GameSheets);
+  protected readonly decisions = inject(GameDecisions);
+  protected readonly settings = inject(GameSettings);
+  protected readonly phone = inject(PhoneSettings);
+  private readonly session = inject(GameSession);
+  private readonly clocks = inject(GameClocks);
+  private readonly chat = inject(ChatRoom);
+  private readonly log = inject(GameLog);
+  private readonly viewState = inject(GameViewState);
+  private readonly gameViews = inject(GameCardViews);
+  private readonly cardViews = inject(CardViews);
+  private readonly cues = inject(PageCues);
+  private readonly body = viewChild<ElementRef<HTMLElement>>('body');
+
+  protected readonly top = this.sheets.top;
+  protected readonly sizeMin = CARD_SIZE_MIN;
+  protected readonly sizeMax = CARD_SIZE_MAX;
+  protected readonly phases = AUTO_PASS_PHASES;
+  protected readonly settingTabs = [
+    { key: 'game', label: 'Game' },
+    { key: 'display', label: 'Display' },
+  ] as const;
+
+  protected readonly settingsTab = computed(() => {
+    const sheet = this.top()?.sheet;
+    return sheet?.kind === 'settings' ? sheet.tab : 'game';
+  });
+
+  /** What the server says affects the card shown (HTML), by card id. */
+  private readonly affects = signal<{ cardId: string; html: string } | null>(null);
+
+  constructor() {
+    const injector = inject(Injector);
+    // A sheet shown (opened, or shown again by going back): scrolled where it was
+    let shown: Sheet | null = null;
+    let depth = 0;
+    effect(() => {
+      const entry = this.top();
+      const entries = this.sheets.entries().length;
+      untracked(() => {
+        if (!entry || (entry.sheet === shown && entries === depth)) {
+          shown = entry?.sheet ?? null;
+          depth = entries;
+          return;
+        }
+        shown = entry.sheet;
+        depth = entries;
+        const scroll = entry.scroll;
+        afterNextRender(
+          {
+            write: () => {
+              const body = this.body()?.nativeElement;
+              if (!body) return;
+              body.scrollTop = scroll.top;
+              this.rowsOf(body).forEach((row, i) => (row.scrollLeft = scroll.rows[i] ?? 0));
+              if (entry.sheet.kind === 'piles' && entry.sheet.focus && scroll.top === 0) {
+                body.querySelector(`[data-pile="${entry.sheet.focus}"]`)?.scrollIntoView({ block: 'start' });
+              }
+            },
+          },
+          { injector },
+        );
+        if (entry.sheet.kind === 'card') this.fetchAffects(entry.sheet.cardId);
+        if (entry.sheet.kind === 'chat') this.markChatSeen();
+      });
+    });
+    // Scrolling the sheet or a row in it (scroll events don't bubble: caught on the way down), kept once it stops
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const keep = () => {
+      if (timer !== null) clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
+        this.keep();
+      }, 150);
+    };
+    let watched: HTMLElement | null = null;
+    effect(() => {
+      const body = this.body()?.nativeElement ?? null;
+      if (body === watched) return;
+      watched?.removeEventListener('scroll', keep, true);
+      body?.addEventListener('scroll', keep, { capture: true, passive: true });
+      watched = body;
+    });
+    inject(DestroyRef).onDestroy(() => {
+      if (timer !== null) clearTimeout(timer);
+      watched?.removeEventListener('scroll', keep, true);
+    });
+    // While the chat is open, what comes is seen
+    effect(() => {
+      this.log.entries();
+      untracked(() => {
+        if (this.top()?.sheet.kind === 'chat') this.markChatSeen();
+      });
+    });
+  }
+
+  protected readonly detail = computed(() => {
+    const sheet = this.top()?.sheet;
+    if (sheet?.kind !== 'card') return null;
+    const model = this.session.model();
+    const card = sheet.cardId === null ? undefined : model.cards[sheet.cardId];
+    const view = card
+      ? this.gameViews.of(card)
+      : this.cardViews.create({ ref: { hint: true }, blueprintId: sheet.blueprintId, zone: 'SPECIAL' });
+    const stats = card ? model.stats?.charStats[card.id] : undefined;
+    const numbers: { name: string; value: string }[] = [];
+    if (stats && !card?.numbersHidden) {
+      const [strength, vitality, third] = stats;
+      if (strength !== undefined) numbers.push({ name: 'Strength', value: strength });
+      if (vitality !== undefined) numbers.push({ name: 'Vitality', value: vitality });
+      if (third !== undefined && third !== '')
+        numbers.push({
+          name: card?.zone === 'SHADOW_CHARACTERS' ? 'Site' : 'Resistance',
+          value: third.replace(/^R[A-Z]?/, ''),
+        });
+    }
+    for (const [token, count] of Object.entries(card?.tokens ?? {})) {
+      if (count > 0) numbers.push({ name: phaseLabel(token), value: String(count) });
+    }
+    const under = card
+      ? model.cardOrder
+          .flatMap((id) => model.cards[id] ?? [])
+          .filter((c) => c.attachedTo === card.id || c.stackedOn === card.id)
+          .map((c) => ({ card: c, under: [] }))
+      : [];
+    const affects = this.affects();
+    return {
+      image: view.imageUrl,
+      horizontal: view.horizontal,
+      numbers,
+      zone: card ? `${card.inactive ? 'Inactive · ' : ''}${zoneLabel(card.zone)}` : '',
+      affects:
+        card && !this.session.replaying() && !card.id.startsWith('temp')
+          ? affects?.cardId === card.id
+            ? affects.html
+            : RETRIEVING
+          : null,
+      under,
+    };
+  });
+
+  protected readonly pilesView = computed(() => {
+    const sheet = this.top()?.sheet;
+    if (sheet?.kind !== 'piles') return null;
+    const model = this.session.model();
+    const player = sheet.player;
+    const own = !model.spectator && player === model.participantId;
+    const zones = model.stats?.playerZones[player];
+    const threat = model.stats?.threats[player];
+    const seconds = this.clocks.view().banks[player];
+    const count = (n: number | null | undefined) => (n === null || n === undefined ? '–' : String(n));
+    const cardsOf = (pile: PileName) => pileCards(model, pile, player).map((card) => ({ card, under: [] }));
+    const piles: PileView[] = [
+      {
+        pile: 'adventureDeck',
+        title: PILE_TITLES.adventureDeck,
+        cards: own ? cardsOf('adventureDeck') : null,
+        count: count(zones?.adventureDeck),
+      },
+      { pile: 'deadPile', title: PILE_TITLES.deadPile, cards: cardsOf('deadPile'), count: count(zones?.dead) },
+      {
+        pile: 'discard',
+        title: PILE_TITLES.discard,
+        cards: model.discardPublic || own ? cardsOf('discard') : null,
+        count: count(zones?.discard),
+      },
+      {
+        pile: 'removedPile',
+        title: PILE_TITLES.removedPile,
+        cards: cardsOf('removedPile'),
+        count: count(zones?.removed),
+      },
+    ];
+    if (handRevealed(model, player)) {
+      const hand = cardsOf('revealedHand');
+      piles.push({
+        pile: 'revealedHand',
+        title: own ? 'Your revealed hand' : PILE_TITLES.revealedHand,
+        cards: hand,
+        count: String(hand.length),
+      });
+    }
+    if (own && model.ended) {
+      piles.push({ pile: 'deck', title: PILE_TITLES.deck, cards: cardsOf('deck'), count: count(zones?.deck) });
+    }
+    return {
+      facts: [
+        { name: 'Time bank', value: seconds === undefined ? '–' : clockText(seconds), clock: true },
+        { name: 'Site', value: count(model.positions[player]), clock: false },
+        { name: 'Hand', value: count(zones?.hand), clock: false },
+        { name: 'Draw deck', value: count(zones?.deck), clock: false },
+        {
+          name: 'Threats',
+          value: threat ? (threat.total === '-1' ? threat.value : `${threat.value} / ${threat.total}`) : '–',
+          clock: false,
+        },
+      ],
+      piles,
+    };
+  });
+
+  protected readonly menu = computed(() => {
+    const model = this.session.model();
+    const playing = !model.spectator && !this.session.replaying();
+    const opponent = model.players.find((p) => p !== model.participantId);
+    const items: { key: string; label: string }[] = [];
+    if (model.participantId) {
+      items.push({
+        key: 'own-piles',
+        label: playing ? 'Your piles: adventure deck, dead, discard' : `${model.participantId}'s piles`,
+      });
+    }
+    if (opponent) items.push({ key: 'opponent-piles', label: `${opponent}'s piles` });
+    items.push(
+      { key: 'chat', label: 'Chat and game log' },
+      { key: 'info', label: 'Game info' },
+      { key: 'settings', label: 'Settings' },
+    );
+    if (playing && !model.ended) {
+      items.push({ key: 'cancel', label: 'Request game cancel' }, { key: 'concede', label: 'Concede game' });
+    }
+    items.push({ key: 'hall', label: 'Back to the game hall' });
+    return items;
+  });
+
+  protected readonly users = computed(
+    () =>
+      this.chat
+        .users()
+        .map((user) => user.name)
+        .join(', ') || '–',
+  );
+
+  protected readonly info = computed(() => {
+    const model = this.session.model();
+    const pre = model.preGame;
+    return [
+      { name: 'Players', value: model.players.join(' against ') || '–' },
+      { name: 'Phase', value: phaseLabel(model.phase) || '–' },
+      { name: 'Turn', value: model.currentPlayer ?? '–' },
+      ...(pre?.summary ? [{ name: 'Game', value: pre.summary }] : []),
+      { name: 'Watching', value: model.spectator ? 'Yes' : this.session.replaying() ? 'A replay' : 'No' },
+    ];
+  });
+
+  protected title(sheet: Sheet): string {
+    switch (sheet.kind) {
+      case 'card':
+        return 'Card';
+      case 'piles': {
+        const model = this.session.model();
+        return !model.spectator && sheet.player === model.participantId ? 'Your piles' : `${sheet.player}'s piles`;
+      }
+      case 'menu':
+        return 'Menu';
+      case 'chat':
+        return 'Chat and game log';
+      case 'log':
+        return 'Game log';
+      case 'settings':
+        return 'Settings';
+      case 'info':
+        return 'Game info';
+      case 'confirm':
+        return sheet.what === 'concede' ? 'Concede game?' : 'Request game cancel?';
+    }
+  }
+
+  /**
+   * The close button: one level back. It lets go of the focus, so the sheet shown again (whose button it is too) doesn't
+   * keep it.
+   */
+  protected back(event: Event): void {
+    (event.currentTarget as HTMLElement | null)?.blur();
+    this.sheets.back();
+  }
+
+  protected choose(key: string): void {
+    const model = this.session.model();
+    const opponent = model.players.find((p) => p !== model.participantId);
+    switch (key) {
+      case 'own-piles':
+        if (model.participantId) this.sheets.open({ kind: 'piles', player: model.participantId, focus: null });
+        break;
+      case 'opponent-piles':
+        if (opponent) this.sheets.open({ kind: 'piles', player: opponent, focus: null });
+        break;
+      case 'chat':
+      case 'info':
+        this.sheets.open({ kind: key });
+        break;
+      case 'settings':
+        this.sheets.open({ kind: 'settings', tab: 'game' });
+        break;
+      case 'cancel':
+      case 'concede':
+        this.sheets.open({ kind: 'confirm', what: key });
+        break;
+      case 'hall':
+        this.cues.go(HALL);
+        break;
+    }
+  }
+
+  protected confirmText(what: 'concede' | 'cancel'): string {
+    return what === 'concede'
+      ? 'You lose this game. If you have to leave, conceding lets your opponent move on.'
+      : 'The game is cancelled, with no winner, if your opponent asks for it too.';
+  }
+
+  protected confirmed(what: 'concede' | 'cancel'): void {
+    this.sheets.closeAll();
+    if (what === 'concede') this.session.concede();
+    else this.session.cancel();
+  }
+
+  protected phaseName(phase: string): string {
+    return phaseLabel(phase);
+  }
+
+  protected checked(event: Event): boolean {
+    return (event.target as HTMLInputElement).checked;
+  }
+
+  protected number(event: Event): number {
+    return Number((event.target as HTMLInputElement).value);
+  }
+
+  /** Where the sheet shown is scrolled, kept for when it is shown again (and after a reload). */
+  private keep(): void {
+    const body = this.body()?.nativeElement;
+    if (!body) return;
+    this.sheets.keepScroll({
+      top: Math.round(body.scrollTop),
+      rows: this.rowsOf(body).map((row) => Math.round(row.scrollLeft)),
+    });
+  }
+
+  private rowsOf(body: HTMLElement): HTMLElement[] {
+    return [...body.querySelectorAll<HTMLElement>('.gd-phone-cards__scroll')];
+  }
+
+  private fetchAffects(cardId: string | null): void {
+    if (cardId === null || cardId.startsWith('temp') || this.session.replaying()) return;
+    if (!this.session.model().cards[cardId]) return;
+    this.session.cardInfo(cardId, (html) => this.affects.set({ cardId, html }));
+  }
+
+  private markChatSeen(): void {
+    const seen = chatLines(this.log.entries());
+    this.viewState.phone.update((phone) => (phone.chatSeen === seen ? phone : { ...phone, chatSeen: seen }));
+  }
+}
+
+/** Where a card lies, in words. */
+function zoneLabel(zone: string): string {
+  const labels: Readonly<Record<string, string>> = {
+    FREE_CHARACTERS: 'Fellowship',
+    SUPPORT: 'Support area',
+    SHADOW_CHARACTERS: 'Minion',
+    ADVENTURE_PATH: 'Adventure path',
+    HAND: 'Hand',
+    DISCARD: 'Discard pile',
+    DEAD: 'Dead pile',
+    ADVENTURE_DECK: 'Adventure deck',
+    DECK: 'Draw deck',
+    REMOVED: 'Removed from game',
+    ATTACHED: 'Attached',
+    STACKED: 'Stacked',
+  };
+  return labels[zone] ?? '';
+}
