@@ -33,14 +33,22 @@ export async function routeGame(context, recording, count, log, { decisions = tr
   const [opening, ...rest] = gameUpTo(recording, count, { decisions });
   // Who is in the room: in every answer of the chat
   const users = `<user>${recording.participant}</user><user>${recording.opponent ?? 'GameFoe1'}</user>`;
+  // The legacy chat marks a message naming the player only once it knows the player (GET /player): as the game check
+  // does on a real server, the game's first answer waits for that (at most 5s), on both pages
+  let playerKnown;
+  const known = new Promise((resolve) => (playerKnown = resolve));
+  setTimeout(() => playerKnown(), 5000);
   await context.route(`${STUB_ORIGIN}/gemp-lotr-server/**`, async (route) => {
     const request = route.request();
     const url = new URL(request.url());
     const call = `${request.method()} ${url.pathname.replace('/gemp-lotr-server', '')}`;
     if (call === 'GET /player') {
-      return route.fulfill({ contentType: 'application/json; charset=UTF-8', body: player?.body ?? '{}' });
+      await route.fulfill({ contentType: 'application/json; charset=UTF-8', body: player?.body ?? '{}' });
+      playerKnown();
+      return;
     }
     if (call === `GET /game/${GAME_ID}`) {
+      await known;
       return route.fulfill({ contentType: 'application/xml; charset=UTF-8', body: opening });
     }
     if (call === `POST /game/${GAME_ID}` && rest.length > 0) {
@@ -93,4 +101,33 @@ export async function settled(page, waiting = () => 0) {
     same = now !== '' && now === last && waiting() === 0 ? same + 1 : 0;
     last = now;
   }
+}
+
+/**
+ * A recording up to `count` exchanges with the game's answers made one: the opening state with every later answer's
+ * events after its own (a decision only from the last, as gameUpTo keeps it), as the server sends a page that opens
+ * the game again.
+ */
+export function asOneState(recording, count) {
+  const exchanges = recording.exchanges.slice(0, count);
+  const games = exchanges.flatMap((exchange, i) =>
+    exchange.path === '/game/<id>' && exchange.status === 200 ? [i] : [],
+  );
+  const last = games.at(-1);
+  const withoutDecisions = (body) =>
+    body.replace(/<ge\b[^>]*?(?:\/>|>[\s\S]*?<\/ge>)/g, (event) =>
+      /\stype="D"/.test(event.slice(0, event.indexOf('>'))) ? '' : event,
+    );
+  const inner = (body) =>
+    body.replace(/^[\s\S]*?<(?:gameState|update)\b[^>]*>/, '').replace(/<\/(?:gameState|update)>\s*$/, '');
+  const [first, ...rest] = games;
+  const events = rest.map((i) => (i === last ? inner(exchanges[i].body) : withoutDecisions(inner(exchanges[i].body))));
+  const opening = first === last ? exchanges[first].body : withoutDecisions(exchanges[first].body);
+  const merged = opening.replace(/<\/gameState>\s*$/, `${events.join('')}</gameState>`);
+  return {
+    ...recording,
+    exchanges: exchanges
+      .filter((_, i) => !rest.includes(i))
+      .map((exchange, i) => (i === first ? { ...exchange, body: merged } : exchange)),
+  };
 }

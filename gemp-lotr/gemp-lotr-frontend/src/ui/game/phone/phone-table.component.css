@@ -113,9 +113,10 @@
   font: inherit;
 }
 
+/* On the site's left, where its own site number is printed: its right holds the Shadow number */
 .gd-phone-site__no {
   position: absolute;
-  right: 4px;
+  left: 4px;
   top: 1px;
   font-size: 10px;
   font-weight: 800;

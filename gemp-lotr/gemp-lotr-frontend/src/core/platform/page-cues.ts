@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 
 /** The sounds a page can play, by name: the site's own files (the legacy game page's). */
 export const PAGE_SOUNDS = {
@@ -17,6 +17,28 @@ export type PageSound = keyof typeof PAGE_SOUNDS;
 export class PageCues {
   private readonly document = inject(DOCUMENT);
   private readonly audio = new Map<PageSound, HTMLAudioElement>();
+  /** Whether the page fills the screen (the browser's full screen, which the player may also leave by itself). */
+  readonly fullscreen = signal(false);
+
+  constructor() {
+    this.fullscreen.set(this.document.fullscreenElement != null);
+    this.document.addEventListener('fullscreenchange', () =>
+      this.fullscreen.set(this.document.fullscreenElement != null),
+    );
+  }
+
+  /** Whether the browser lets a page fill the screen (an iPhone's doesn't: there only videos may). */
+  fullscreenAvailable(): boolean {
+    return this.document.fullscreenEnabled;
+  }
+
+  /** The page fills the screen, or stops filling it. A browser that refuses (no user gesture) is no error. */
+  toggleFullscreen(): void {
+    const request = this.document.fullscreenElement
+      ? this.document.exitFullscreen()
+      : this.document.documentElement.requestFullscreen();
+    request.catch(() => undefined);
+  }
 
   setTitle(title: string): void {
     this.document.title = title;
@@ -61,6 +83,11 @@ export class PageCues {
 
   reload(): void {
     this.document.defaultView?.location.reload();
+  }
+
+  /** Opens `address` in place of this page (no new history entry): a new page, nothing of this one's view kept. */
+  replace(address: string): void {
+    this.document.defaultView?.location.replace(address);
   }
 
   go(address: string): void {

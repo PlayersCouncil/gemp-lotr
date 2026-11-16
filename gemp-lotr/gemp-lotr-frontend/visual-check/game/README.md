@@ -49,6 +49,30 @@ shown, the requests and the dialogs are compared as always). The table check has
 The report is `report-game/index.html`: each scenario with its steps, both screenshots of each and the differences in
 red, and what no scenario covers.
 
+## Classic on every device
+
+The owner (2026-11-16): players who keep the classic look must get exactly what `game.html` gives them, also on a phone
+or a tablet. Two checks compare the legacy page and the Angular page in the classic theme on a computer (1366×768), a
+tablet upright (768×1024) and sideways (1024×768), and a phone upright (390×844) and sideways (844×390); phones and
+tablets as their browsers are (`device-profiles.mjs`: touch, a mobile browser that reads the viewport tag, a sharp
+screen):
+
+- `npm run check:game:devices` (`devices.mjs`, on the recorded games without a server):
+  - **screens**: each recording's last state: the pixels, the game as shown, and what the browser makes of the page (its
+    layout's width and height, its zoom);
+  - **zoom**: whether a finger may zoom the page and what zooming does. A headless browser doesn't zoom for two
+    fingers, so what decides it is compared: the viewport tag and the touch rules (`touch-action`) in effect under a
+    grid of points; then a touchpad's pinch, a pan, and the browser's bars sliding away (the window taller): both pages
+    end zoomed and moved alike, the zoom kept;
+  - **switch**: the same, the Angular page switched from modern to classic with the red button (which opens the page
+    anew: a phone gives a page that had a viewport tag no way back to none, see `PageTheme.reloadForNoViewport`).
+  - `--eval "<expression>"` prints what it gives on both pages instead.
+- `npm run check:game:phones` (`run.mjs --devices`, real games on the game check's own server): every scenario on both
+  pages, made with a finger: a tap for a click, a long press for a right or shift click, a finger's drag for a drag;
+  hovering is left out (a finger can't).
+
+Modern on a computer is `npm run check:game:modern` (where every card and panel is, against the legacy page).
+
 ## The phone check
 
 `npm run check:game:phone` (`phone.mjs`) checks the **phone layout** (G7 of trymarz/gemp-lotr-private#27: the modern
@@ -82,6 +106,10 @@ the format's discard pile made public for `STATES.opponentPilesPublic` (the P ev
   opponent's card put into play is shown over everything and stays whole on the screen, and no card is drawn bigger
   than it is in its row (which would clip it).
 
+- **sites**: on each device, the number over each site card on the path lies on the card's left half, where the
+  card prints its own number, never over the Shadow number on its right, and clear of the players' markers; the path
+  is saved as `sites-<device>.png`.
+
 Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
 `npm run check:game:down`):
 
@@ -94,7 +122,7 @@ Two checks against a game check server kept up (`npm run check:game -- --only st
 
 ```
 npm run check:game:phone                                  everything (about 25 minutes)
-npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles, animation)
+npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles, animation, sites)
 npm run check:game:phone -- --shots --only opening        screenshots of a recording's last state, nothing checked
 ```
 

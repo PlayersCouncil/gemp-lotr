@@ -1,3 +1,4 @@
+import { PageCues } from './page-cues';
 import { DOCUMENT } from '@angular/common';
 import { computed, inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { readCookie, writeCookie } from './cookies';
@@ -87,9 +88,22 @@ export const THEME_COOKIE = 'gempDeckbuilderTheme';
  * game page remembers its choice apart from the deck builder's (`gempGameTheme`, owner 2026-11-13); a player who
  * hasn't chosen gets the modern look (owner, 2026-11-16; it was classic until then), one who chose classic keeps it.
  */
-export const PAGE_THEMES: Readonly<Record<string, { cookie: string; fallback: ThemeName }>> = {
-  game: { cookie: 'gempGameTheme', fallback: 'modern' },
+export const PAGE_THEMES: Readonly<Record<string, PageTheme>> = {
+  game: { cookie: 'gempGameTheme', fallback: 'modern', reloadForNoViewport: true },
 };
+
+export interface PageTheme {
+  cookie: string;
+  fallback: ThemeName;
+  /**
+   * Switching to a theme without a viewport tag (classic) loads the page again, when it has one: a phone gives a page
+   * that has had a viewport tag no way back to having none (removing the tag leaves its layout), and imitating it
+   * resets the player's zoom whenever the window changes size (the browser's bars sliding away). Opened again (with
+   * `?theme=`, which init reads and takes out of the address), the page is exactly as game.html opened on a phone. For a
+   * page that comes back as it was (the game: D10).
+   */
+  reloadForNoViewport?: boolean;
+}
 
 /** Set on <html>: it picks the theme's values in src/styles/themes.css. */
 export const THEME_ATTRIBUTE = 'data-theme';
@@ -125,6 +139,7 @@ export class ThemeService {
   /** The page's own cookie and default, if it has them (PAGE_THEMES). */
   private readonly page = PAGE_THEMES[inject(PAGE_PATH).split('/').filter(Boolean).at(-1) ?? ''] ?? null;
   private readonly current = signal<ThemeName>(DEFAULT_THEME);
+  private readonly cues = inject(PageCues);
 
   readonly theme = this.current.asReadonly();
   readonly behaviour = computed(() => THEME_BEHAVIOUR[this.current()]);
@@ -136,17 +151,33 @@ export class ThemeService {
     const fromQuery = new URLSearchParams(this.queryString).get('theme');
     if (isThemeName(fromQuery)) {
       this.remember(fromQuery);
+      // Remembered: out of the address, so a later switch isn't undone by reloading it (the game opens itself anew)
+      const window = this.document.defaultView;
+      if (this.page?.reloadForNoViewport && window) {
+        const address = new URL(window.location.href);
+        address.searchParams.delete('theme');
+        window.history.replaceState(window.history.state, '', address.toString());
+      }
     }
     const cookie = this.page?.cookie ?? THEME_COOKIE;
     this.apply(resolveTheme(fromQuery, readCookie(this.document.cookie, cookie), this.page?.fallback));
   }
 
-  /** The player's choice: remembered and applied. Unknown names are ignored. */
+  /** The player's choice: remembered and applied (or, see PageTheme.reloadForNoViewport, the page opened again). */
   select(theme: string): void {
     if (!isThemeName(theme)) {
       return;
     }
     this.remember(theme);
+    const viewport = this.document.head.querySelector('meta[name="viewport"]');
+    const location = this.document.defaultView?.location;
+    if (THEME_VIEWPORT[theme] === null && viewport && this.page?.reloadForNoViewport && location) {
+      // A new page, not a reload: a reload would bring back the zoom of the page that had a viewport tag
+      const address = new URL(location.href);
+      address.searchParams.set('theme', theme);
+      this.cues.replace(address.toString());
+      return;
+    }
     this.apply(theme);
   }
 

@@ -24,6 +24,8 @@
     "check:game:table": "node game/table.mjs",
     "check:game:modern": "node game/local.mjs --pages legacy,angular --theme modern --geometry --out report-game-modern",
     "check:game:phone": "node game/phone.mjs",
+    "check:game:devices": "node game/devices.mjs",
+    "check:game:phones": "npm --prefix .. run build -- --output-path visual-check/.local-server/ng && node game/local.mjs --pages legacy,angular --devices tablet,tablet-sideways,phone,phone-sideways --out report-game-phones",
     "check:game:generated": "node game/table.mjs --generated 100 --steps last --out report-game-generated",
     "check:game:record": "node game/local.mjs --record --sizes 1366x768",
     "check:game:matrix": "node game/local.mjs --matrix --pages legacy,angular --sizes 1366x768 --out report-game-matrix",

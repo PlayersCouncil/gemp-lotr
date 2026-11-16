@@ -75,6 +75,24 @@ const PARTS = [
   ...(quick
     ? []
     : [['Game screen: the modern theme laid out as the legacy page', npm(VISUAL_CHECK, 'run', 'check:game:modern')]]),
+  // The classic theme as game.html on every device: the recorded games' screens, zooming (game/devices.mjs), and every
+  // scenario played with a finger on tablets and phones, upright and sideways (Chromium's touch input)
+  ...(browser
+    ? []
+    : [
+        [
+          'Game screen: classic as game.html on a computer, tablets and phones',
+          npm(VISUAL_CHECK, 'run', 'check:game:devices'),
+        ],
+        ...(quick
+          ? []
+          : [
+              [
+                'Game screen: every scenario with a finger on tablets and phones',
+                npm(VISUAL_CHECK, 'run', 'check:game:phones'),
+              ],
+            ]),
+      ]),
   // The phone layout (G7): back from card details, reloads, touch; Chromium's touch input holds and moves a finger
   ...(browser
     ? []

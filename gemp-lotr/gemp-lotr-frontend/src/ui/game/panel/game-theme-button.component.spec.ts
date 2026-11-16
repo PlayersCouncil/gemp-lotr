@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PAGE_PATH, PAGE_QUERY_STRING } from '../../../core/platform/page-location';
+import { PageCues } from '../../../core/platform/page-cues';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { GameThemeButtonComponent } from './game-theme-button.component';
 
@@ -21,10 +22,12 @@ describe('GameThemeButtonComponent', () => {
   });
 
   it("switches to the next theme, named in its title, and remembers it as the game's choice", () => {
+    const replace = vi.fn();
     TestBed.configureTestingModule({
       providers: [
         { provide: PAGE_PATH, useValue: '/gemp-lotr/ng/game' },
         { provide: PAGE_QUERY_STRING, useValue: '?gameId=7' },
+        { provide: PageCues, useValue: { replace } },
       ],
     });
     TestBed.inject(ThemeService).init();
@@ -36,8 +39,9 @@ describe('GameThemeButtonComponent', () => {
     expect(button?.title).toBe('Switch to the Classic theme');
     button?.click();
     fixture.detectChanges();
-    expect(document.documentElement.dataset['theme']).toBe('classic');
+    // Classic is remembered and the page opened anew (with no viewport tag, as game.html)
     expect(written.some((cookie) => cookie.startsWith('gempGameTheme=classic'))).toBe(true);
-    expect(button?.getAttribute('aria-label')).toBe('Switch to the Modern theme');
+    expect(String(replace.mock.calls[0]?.[0])).toContain('theme=classic');
+    document.head.querySelector('meta[name="viewport"]')?.remove();
   });
 });

@@ -16,6 +16,7 @@ import { GameLog, GameLogEntry } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { PlayerInfo } from '../../../core/session/player-info.service';
+import { ThemeService } from '../../../core/platform/theme.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 
 /** A line that names the player is marked: "@name" calls them (ping), their name or "@everyone" mentions them. */
@@ -63,9 +64,10 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
   // Not scoped: it also styles what the server's messages hold (card names, links); its rules all start at gd-game-chat
   encapsulation: ViewEncapsulation.None,
   imports: [CardHintsDirective],
+  host: { '[attr.data-newest-first]': "newestFirst() ? '' : null" },
   template: `
     <div #lines class="gd-game-chat__lines" gdCardHints [attr.data-replay]="replaying() ? '' : null">
-      @for (line of views(); track $index) {
+      @for (line of shownLines(); track $index) {
         @if (line.from !== null || line.boxed) {
           <div class="gd-game-chat__line" [attr.data-kind]="line.kind" [attr.data-mention]="line.mention">
             @if (line.from !== null) {
@@ -105,12 +107,21 @@ export class GameChatComponent {
   private readonly viewState = inject(GameViewState);
   /** A replay has no room to say anything in. */
   protected readonly replaying = inject(GameSession).replaying;
+  /**
+   * The modern theme lists the newest lines first, the field to say something above them (the owner, 2026-11-16);
+   * classic keeps the legacy page's order, the newest last.
+   */
+  protected readonly newestFirst = computed(() => this.theme.theme() === 'modern');
+  private readonly theme = inject(ThemeService);
   private readonly lines = viewChild<ElementRef<HTMLElement>>('lines');
 
   protected readonly views = computed<LineView[]>(() => {
     const name = this.player.name();
     return this.log.entries().map((entry) => lineOf(entry, name));
   });
+
+  /** The lines in the order shown. */
+  protected readonly shownLines = computed(() => (this.newestFirst() ? [...this.views()].reverse() : this.views()));
 
   /**
    * Whether the list goes to its end when lines come: decided before they are drawn, from where the list stands (legacy
@@ -139,7 +150,8 @@ export class GameChatComponent {
     afterRenderEffect(() => {
       const count = this.views().length;
       const box = this.lines()?.nativeElement;
-      if (box && count > drawn && this.follow) {
+      // Newest first: new lines come at the top, and the browser keeps what the player reads where it is
+      if (box && count > drawn && this.follow && !untracked(this.newestFirst)) {
         // Not while its tab is closed: it opens again where it was
         if (box.clientHeight > 0) box.scrollTop = box.scrollHeight;
       }
@@ -162,8 +174,11 @@ export class GameChatComponent {
       box.addEventListener('scroll', () => {
         if (restoring) return;
         last = box.scrollTop;
-        const atEnd = box.scrollHeight - box.clientHeight - box.scrollTop < 1;
-        this.viewState.chatScroll.set(atEnd ? null : box.scrollTop);
+        // null: at the newest lines (the end, or the top when they come first)
+        const atNewest = this.newestFirst()
+          ? box.scrollTop < 1
+          : box.scrollHeight - box.clientHeight - box.scrollTop < 1;
+        this.viewState.chatScroll.set(atNewest ? null : box.scrollTop);
       });
       const observer = new Observer(() => {
         if (box.clientHeight === 0) {

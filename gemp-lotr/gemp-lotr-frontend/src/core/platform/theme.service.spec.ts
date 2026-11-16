@@ -1,3 +1,4 @@
+import { PageCues } from './page-cues';
 import { TestBed } from '@angular/core/testing';
 import { PAGE_PATH, PAGE_QUERY_STRING } from './page-location';
 import {
@@ -169,22 +170,59 @@ describe('ThemeService', () => {
   });
 
   describe('a page with a theme choice of its own (the game)', () => {
-    function gameService(queryString = ''): ThemeService {
+    let replace: ReturnType<typeof vi.fn>;
+    function gameService(queryString = '', path = '/gemp-lotr/ng/game'): ThemeService {
+      replace = vi.fn();
       TestBed.configureTestingModule({
         providers: [
           { provide: PAGE_QUERY_STRING, useValue: queryString },
-          { provide: PAGE_PATH, useValue: '/gemp-lotr/ng/game' },
+          { provide: PAGE_PATH, useValue: path },
+          { provide: PageCues, useValue: { replace } },
         ],
       });
       return TestBed.inject(ThemeService);
     }
+
+    afterEach(() => document.head.querySelector('meta[name="viewport"]')?.remove());
+
+    it('opens the page anew to switch to classic from modern, so a phone has no viewport tag, as game.html', () => {
+      const { jar } = fakeCookies({ gempGameTheme: 'modern' });
+      const theme = gameService();
+      theme.init();
+      expect(document.head.querySelector('meta[name="viewport"]')).not.toBeNull();
+      theme.select('classic');
+      expect(jar.get('gempGameTheme')).toBe('classic');
+      // A new page (a reload would bring back the zoom the viewport tag gave), told the theme in its address
+      expect(String(replace.mock.calls[0]?.[0])).toContain('theme=classic');
+    });
+
+    it('switches to classic in place where the page has no viewport tag, and to modern always in place', () => {
+      fakeCookies({ gempGameTheme: 'classic' });
+      const theme = gameService();
+      theme.init();
+      theme.select('modern');
+      expect(theme.theme()).toBe('modern');
+      document.head.querySelector('meta[name="viewport"]')?.remove();
+      theme.select('classic');
+      expect(theme.theme()).toBe('classic');
+      expect(replace).not.toHaveBeenCalled();
+    });
+
+    it("leaves the deck builder's switch in place (its page doesn't come back after a reload)", () => {
+      fakeCookies({ [THEME_COOKIE]: 'modern' });
+      const theme = gameService('', '/gemp-lotr/ng/deckbuilder');
+      theme.init();
+      theme.select('classic');
+      expect(theme.theme()).toBe('classic');
+      expect(replace).not.toHaveBeenCalled();
+    });
 
     it('starts on its own default, modern, whatever the deck builder remembers', () => {
       fakeCookies({ [THEME_COOKIE]: 'classic' });
       const theme = gameService();
       theme.init();
       expect(theme.theme()).toBe('modern');
-      expect(PAGE_THEMES['game']).toEqual({ cookie: 'gempGameTheme', fallback: 'modern' });
+      expect(PAGE_THEMES['game']).toEqual({ cookie: 'gempGameTheme', fallback: 'modern', reloadForNoViewport: true });
     });
 
     it('keeps classic for a player who chose it', () => {

@@ -8,7 +8,7 @@
  */
 
 :host {
-  --u: calc((100vh - 35px) / 49);
+  --u: calc((var(--gd-window-height, 100vh) - 35px) / 49);
   --tabs: max(175px, 10 * var(--u));
   /* The rows' shares of the height */
   --r1: 5;
@@ -49,7 +49,7 @@
 }
 
 :host([data-spectator]) {
-  --u: calc((100vh - 30px) / 42);
+  --u: calc((var(--gd-window-height, 100vh) - 30px) / 42);
   --tabs: 200px;
   --r1: 6;
   --r2: 10;
@@ -77,8 +77,18 @@
   top: 0;
 }
 
+/*
+ * The adventure path, placed as the legacy page computed it in one step from the window's height (advPathGroup:
+ * height - 3 paddings - the tab box - 34 - a padding, in its 1px border): as "the rest" of the grid the browser rounded
+ * its foot a 64th of a pixel differently, which a phone's zoomed-out page shows as an edge one device pixel off.
+ */
 .gd-game__path {
-  grid-area: path;
+  /* From the page's corner (an absolutely placed box with a grid area is placed from that area) */
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 152px;
+  height: calc(var(--gd-window-height, 100vh) - 52px - var(--tabs));
 }
 
 /* CardGroup.setBounds: the cards 3px in from the box's place, which is its border's outer edge */
@@ -97,7 +107,7 @@
 .gd-game__stats {
   position: absolute;
   left: 5px;
-  top: calc(100vh - 44px - var(--tabs));
+  top: calc(var(--gd-window-height, 100vh) - 44px - var(--tabs));
   width: 152px;
   height: 36px;
 }
@@ -108,13 +118,13 @@
   left: 160px;
   top: 5px;
   width: 147px;
-  height: calc(100vh - 198px - var(--tabs));
+  height: calc(var(--gd-window-height, 100vh) - 198px - var(--tabs));
 }
 
 .gd-game__alert {
   position: absolute;
   left: 160px;
-  top: calc(100vh - 190px - var(--tabs));
+  top: calc(var(--gd-window-height, 100vh) - 190px - var(--tabs));
   width: 147px;
   height: 182px;
 }
@@ -128,7 +138,7 @@
 .gd-game__tabs {
   position: absolute;
   left: 5px;
-  top: calc(100vh - 5px - var(--tabs));
+  top: calc(var(--gd-window-height, 100vh) - 5px - var(--tabs));
   width: 302px;
   height: calc(var(--tabs) - 5px);
 }
@@ -323,7 +333,7 @@
 .gd-game__replay {
   position: absolute;
   left: calc(100vw - 75px);
-  top: calc(100vh - 104px);
+  top: calc(var(--gd-window-height, 100vh) - 104px);
   z-index: 1000;
   width: 66px;
   height: 97px;

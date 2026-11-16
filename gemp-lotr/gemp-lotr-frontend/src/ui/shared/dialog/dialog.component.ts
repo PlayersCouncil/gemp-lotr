@@ -46,7 +46,8 @@ export class DialogLayers {
  *
  * DOM contract: `dialog.gd-dialog` with `data-dialog` (which dialog: deck-list, library, import, notes, selection,
  * delivery, alert, confirm, prompt), `data-placed` once moved or pinned, with `--gd-dialog-left` and
- * `--gd-dialog-top` (px, its top left corner in the window), and `--gd-dialog-layer` (a number that grows each time a
+ * `--gd-dialog-top` (px, its top left corner in the window), its last child `.gd-dialog__grip` (the resize grip drawn on
+ * touch screens), and `--gd-dialog-layer` (a number that grows each time a
  * dialog opens or is pressed, for the stacking of non-modal dialogs). Inside: `header.gd-dialog__header` with
  * `h2.gd-dialog__title[data-dialog-title]` and `button.gd-dialog__close` (unless `[closable]="false"`), `.gd-dialog__body` (the content), then the actions.
  */
@@ -87,6 +88,8 @@ export class DialogLayers {
         <ng-content />
       </div>
       <ng-content select="[gdDialogActions]" />
+      <!-- The resize grip as jQuery UI drew it, for touch screens, where the browser draws none (CSS resize) -->
+      <span class="gd-dialog__grip" aria-hidden="true"></span>
     </dialog>
   `,
 })

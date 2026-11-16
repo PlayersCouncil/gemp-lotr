@@ -9,6 +9,8 @@
 }
 
 .gd-game-spinner__arrow {
+  /* Only its picture, as the legacy spinner's divs: a phone's browser otherwise draws a button's own look under it */
+  appearance: none;
   width: 30px;
   height: 31px;
   padding: 0;

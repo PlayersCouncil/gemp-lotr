@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import {
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -49,7 +50,7 @@ const CARD_SCALE = 350 / 490;
   encapsulation: ViewEncapsulation.None,
   host: { style: 'display: contents' },
   template: `
-    <div #layer class="gd-game-animation">
+    <div #layer class="gd-game-animation" [attr.data-empty]="shown().length === 0 ? '' : null">
       @for (card of shown(); track $index) {
         <img class="gd-game-animation__card" [src]="card.image" alt="" draggable="false" />
       }
@@ -85,7 +86,14 @@ export class GameAnimationComponent {
     return [];
   });
 
+  /** Timers still to run (an activated card's flash, a card arriving): cleared when the page closes. */
+  private readonly timers = new Set<ReturnType<typeof setTimeout>>();
+
   constructor() {
+    inject(DestroyRef).onDestroy(() => {
+      for (const timer of this.timers) clearTimeout(timer);
+      this.timers.clear();
+    });
     effect(() => {
       const current = this.session.animation();
       // After the event's change is drawn (a card put into play is in its place)
@@ -130,7 +138,7 @@ export class GameAnimationComponent {
         if (card) {
           card.style.setProperty('--gd-animation-duration', `${duration}ms`);
           card.setAttribute('data-activated', '');
-          setTimeout(() => card.removeAttribute('data-activated'), duration);
+          this.later(() => card.removeAttribute('data-activated'), duration);
         }
         break;
       }
@@ -191,7 +199,7 @@ export class GameAnimationComponent {
       );
     }
     if (!card) return;
-    setTimeout(
+    this.later(
       () => {
         const row = card.closest<HTMLElement>('.gd-phone-cards__scroll');
         if (
@@ -202,7 +210,7 @@ export class GameAnimationComponent {
         }
         card.style.setProperty('--gd-animation-duration', `${duration / 4}ms`);
         card.setAttribute('data-arrived', '');
-        setTimeout(() => card.removeAttribute('data-arrived'), duration / 4);
+        this.later(() => card.removeAttribute('data-arrived'), duration / 4);
       },
       (duration * 6) / 8,
     );
@@ -285,6 +293,15 @@ export class GameAnimationComponent {
     element.style.setProperty('--gd-animation-top', `${box.top}px`);
     element.style.setProperty('--gd-animation-width', `${box.width}px`);
     element.style.setProperty('--gd-animation-height', `${box.height}px`);
+  }
+
+  /** Runs `job` after `ms`, unless the page closes first. */
+  private later(job: () => void, ms: number): void {
+    const timer = setTimeout(() => {
+      this.timers.delete(timer);
+      job();
+    }, ms);
+    this.timers.add(timer);
   }
 
   /** The transform that draws an element placed at `from` at `to` (from its top left corner). */

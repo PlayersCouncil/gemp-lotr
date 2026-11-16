@@ -32,14 +32,21 @@ const game = (events = '') => `<gameState cn="1">${TABLE}${events}</gameState>`;
 
 describe('the game on a phone (G7)', () => {
   let backend: HttpTestingController;
-  let cues: { vibrate: ReturnType<typeof vi.fn>; play: ReturnType<typeof vi.fn> };
+  let cues: {
+    vibrate: ReturnType<typeof vi.fn>;
+    play: ReturnType<typeof vi.fn>;
+    toggleFullscreen: ReturnType<typeof vi.fn>;
+  };
 
   beforeEach(() => sessionStorage.clear());
-  afterEach(() => backend.match(() => true));
+  afterEach(() => {
+    backend.match(() => true);
+    document.cookie = 'gempGameSplit=; path=/; max-age=0';
+  });
 
   /** The page with the compact layout on (the modern theme on a phone: CompactLayout) or off. */
   async function open(body: string, { compact = true } = {}) {
-    cues = { vibrate: vi.fn(), play: vi.fn() };
+    cues = { vibrate: vi.fn(), play: vi.fn(), toggleFullscreen: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
@@ -48,7 +55,15 @@ describe('the game on a phone (G7)', () => {
         { provide: PAGE_QUERY_STRING, useValue: '?gameId=7' },
         {
           provide: PageCues,
-          useValue: { ...cues, setTitle: vi.fn(), away: () => false, reload: vi.fn(), go: vi.fn() },
+          useValue: {
+            ...cues,
+            setTitle: vi.fn(),
+            away: () => false,
+            reload: vi.fn(),
+            go: vi.fn(),
+            fullscreen: signal(false),
+            fullscreenAvailable: () => true,
+          },
         },
         {
           provide: CompactLayout,
@@ -104,6 +119,8 @@ describe('the game on a phone (G7)', () => {
   });
 
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
+    // The player keeps the hand hidden on this device
+    document.cookie = 'gempGameSplit=phone:hidden; path=/';
     const { el, click, answer } = await open(
       '<gameState cn="1"><ge type="PGS" participantId="alice" allParticipantIds="alice,bob" summary="Casual game" ' +
         'notes="" maps="" metaSites=""/>' +
@@ -117,6 +134,8 @@ describe('the game on a phone (G7)', () => {
     expect(el.querySelector('gd-game-phone .gd-phone-pregame gd-game-pregame')).not.toBeNull();
     expect(el.querySelector('gd-phone-table')).toBeNull();
     expect(el.querySelector('gd-phone-hand')).toBeNull();
+    // No hand yet, so no hint to drag it up, even where the player keeps it hidden
+    expect(el.querySelector('.gd-phone-divider__hand-hint')).toBeNull();
     expect(el.querySelector('[data-decision="text"]')?.textContent).toBe('Choose a number of burdens to bid');
     await click('[data-decision="integer-up"]');
     await click('[data-decision="integer-up"]');
@@ -172,6 +191,15 @@ describe('the game on a phone (G7)', () => {
     expect(el.querySelector('.gd-phone-sheet')).toBeNull();
   });
 
+  it('puts the game in full screen from the menu, which closes', async () => {
+    const { el, click, sheet } = await open(game());
+    await click('[data-phone="menu"]');
+    expect(el.querySelector('[data-menu="fullscreen"]')?.textContent.trim()).toBe('Full screen');
+    await click('[data-menu="fullscreen"]');
+    expect(cues.toggleFullscreen).toHaveBeenCalled();
+    expect(sheet()).toBeNull();
+  });
+
   it('opens a card on a long press; sheets stack and go back one at a time, by the button and Escape', async () => {
     const { el, click, longPress, sheet, stable } = await open(game());
     await click('.gd-phone-player[data-player="alice"]');
@@ -186,6 +214,18 @@ describe('the game on a phone (G7)', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await stable();
     expect(sheet()).toBeNull();
+  });
+
+  it("opens no menu of the phone's on a long press over a card's picture in a sheet; text keeps it", async () => {
+    const { el, longPress } = await open(game());
+    await longPress('[data-zone="characters-player"] .gd-phone-slot > [data-card-id="1"]');
+    const menu = (target: Element) => {
+      const event = new MouseEvent('contextmenu', { bubbles: true, cancelable: true });
+      target.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+    expect(menu(el.querySelector('.gd-phone-detail__image')!)).toBe(true);
+    expect(menu(el.querySelector('.gd-phone-sheet__head h2')!)).toBe(false);
   });
 
   it("shows a card's details and the cards under it, whose details open over it", async () => {

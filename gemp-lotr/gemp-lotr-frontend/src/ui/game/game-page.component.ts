@@ -1,6 +1,7 @@
 import { GameThemeButtonComponent } from './panel/game-theme-button.component';
 import { GAME_THEME_PICKER, ThemeService } from '../../core/platform/theme.service';
-import { Component, computed, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ChatRoom } from '../../core/chat/chat-room.service';
 import { provideCardInteractions } from '../../core/cards/card-interactions';
 import { GameAttention } from '../../core/game/clock/game-attention.service';
@@ -89,6 +90,8 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '[attr.data-animating]': "session.busy() ? '' : null",
     '[attr.data-layout]': "phone() ? 'phone' : null",
     '(document:keydown.escape)': 'escape()',
+    '[style.--gd-window-height]': "windowHeight() + 'px'",
+    '(window:resize)': 'measureWindow()',
   },
   template: `
     @if (phone() && (model().started || model().preGame)) {
@@ -194,6 +197,13 @@ export class GamePageComponent {
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
   protected readonly phone = inject(CompactLayout).active;
   private readonly sheets = inject(GameSheets);
+  private readonly document = inject(DOCUMENT);
+  /**
+   * The window's height in whole pixels, as the legacy page measured it ($(window).height()): the layout's rows are
+   * placed from it. On a phone, a page without a viewport tag is a fraction of a pixel higher than that (its 980px
+   * wide layout scaled to the screen), which 100vh would keep, pushing the table's foot off the screen.
+   */
+  protected readonly windowHeight = signal(this.document.documentElement.clientHeight);
   /**
    * Shift flips the zoomed card in the modern view only, as the deck builder's zoom does; the legacy game page never
    * flipped it (its key handler got jQuery 1.6's event, which has no key), and classic keeps that (owner, 2026-11-15).
@@ -228,6 +238,10 @@ export class GamePageComponent {
       inject(GameViewState).restore(gameId);
       this.session.open(gameId, () => chat.join(`Game${gameId}`));
     }
+  }
+
+  protected measureWindow(): void {
+    this.windowHeight.set(this.document.documentElement.clientHeight);
   }
 
   /**

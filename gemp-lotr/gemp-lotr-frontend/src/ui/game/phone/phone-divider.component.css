@@ -143,3 +143,9 @@
 :host-context([data-device='sideways']) .gd-phone-divider__hand-hint {
   grid-column: 1 / -1;
 }
+
+/* Reached by the keyboard: the arrows move it */
+:host(:focus-visible) {
+  outline: 2px solid var(--theme-focus-ring-outer);
+  outline-offset: -2px;
+}

@@ -2,7 +2,6 @@ import {
   afterNextRender,
   Component,
   computed,
-  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -27,7 +26,9 @@ import { handRevealed, PileName, pileCards } from '../../../core/game/table/game
 import { PageCues } from '../../../core/platform/page-cues';
 import { clockText } from '../panel/game-clock';
 import { GameChatComponent } from '../tabs/game-chat.component';
+import { ModalSheetDirective } from './modal-sheet.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
+import { ScrollSettledDirective } from './scroll-settled.directive';
 import { phaseLabel } from './phone-status.component';
 
 interface PileView {
@@ -57,8 +58,9 @@ const HALL = '/gemp-lotr/hall.html';
  * Closing (✕, ‹ when it goes back, Escape on the page, the backdrop) shows the sheet below as it was, scrolled to the
  * same place. Upright phones get them from the bottom; tablets and phones held sideways in the middle.
  *
- * DOM contract: `gd-phone-sheets` holding, while one is open, `.gd-phone-sheet` (`data-sheet`: the kind;
- * `data-depth`: how many are open) with `.gd-phone-sheet__backdrop`, and `[role=dialog]` holding
+ * DOM contract: `gd-phone-sheets` holding, while one is open, `dialog.gd-phone-sheet` (a modal: `data-sheet` the kind,
+ * `data-depth` how many are open, `aria-label` its title) with `.gd-phone-sheet__backdrop`, and `.gd-phone-sheet__panel`
+ * holding
  * `.gd-phone-sheet__head` (`h2`, `button[data-phone=sheet-close]` with `data-back` when it goes back) and
  * `.gd-phone-sheet__body`. The card's details: `img.gd-phone-detail__image` (the picture only) and the attached
  * cards' `gd-phone-cards`. Piles: `section[data-pile]` each. The menu: `button[data-menu]`. The actions:
@@ -67,13 +69,19 @@ const HALL = '/gemp-lotr/hall.html';
 @Component({
   selector: 'gd-phone-sheets',
   styleUrl: './phone-sheets.component.css',
-  imports: [PhoneCardsComponent, GameChatComponent],
+  imports: [PhoneCardsComponent, GameChatComponent, ModalSheetDirective, ScrollSettledDirective],
   template: `
     @if (top(); as entry) {
-      <div class="gd-phone-sheet" [attr.data-sheet]="entry.sheet.kind" [attr.data-depth]="sheets.entries().length">
+      <dialog
+        gdModalSheet
+        class="gd-phone-sheet"
+        [attr.data-sheet]="entry.sheet.kind"
+        [attr.data-depth]="sheets.entries().length"
+        [attr.aria-label]="title(entry.sheet)"
+      >
         <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
         <div class="gd-phone-sheet__backdrop" (click)="sheets.back()"></div>
-        <div class="gd-phone-sheet__panel" role="dialog" aria-modal="true" [attr.aria-label]="title(entry.sheet)">
+        <div class="gd-phone-sheet__panel">
           <div class="gd-phone-sheet__head">
             <h2>{{ title(entry.sheet) }}</h2>
             <button
@@ -87,7 +95,7 @@ const HALL = '/gemp-lotr/hall.html';
               {{ sheets.canGoBack() ? '‹' : '✕' }}
             </button>
           </div>
-          <div #body class="gd-phone-sheet__body">
+          <div #body class="gd-phone-sheet__body" (gdScrollSettled)="keep()">
             @switch (entry.sheet.kind) {
               @case ('card') {
                 @if (detail(); as d) {
@@ -302,13 +310,13 @@ const HALL = '/gemp-lotr/hall.html';
             }
           </div>
         </div>
-      </div>
+      </dialog>
     }
     @if (decisions.menu(); as menu) {
-      <div class="gd-phone-sheet" data-sheet="actions">
+      <dialog gdModalSheet class="gd-phone-sheet" data-sheet="actions" aria-label="Choose an action">
         <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
         <div class="gd-phone-sheet__backdrop" (click)="decisions.closeMenu()"></div>
-        <div class="gd-phone-sheet__panel" role="dialog" aria-modal="true" aria-label="Choose an action">
+        <div class="gd-phone-sheet__panel">
           <div class="gd-phone-sheet__head">
             <h2>Choose an action</h2>
             <button
@@ -335,7 +343,7 @@ const HALL = '/gemp-lotr/hall.html';
             </div>
           </div>
         </div>
-      </div>
+      </dialog>
     }
   `,
 })
@@ -401,27 +409,6 @@ export class PhoneSheetsComponent {
         );
         if (entry.sheet.kind === 'chat') this.markChatSeen();
       });
-    });
-    // Scrolling the sheet or a row in it (scroll events don't bubble: caught on the way down), kept once it stops
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const keep = () => {
-      if (timer !== null) clearTimeout(timer);
-      timer = setTimeout(() => {
-        timer = null;
-        this.keep();
-      }, 150);
-    };
-    let watched: HTMLElement | null = null;
-    effect(() => {
-      const body = this.body()?.nativeElement ?? null;
-      if (body === watched) return;
-      watched?.removeEventListener('scroll', keep, true);
-      body?.addEventListener('scroll', keep, { capture: true, passive: true });
-      watched = body;
-    });
-    inject(DestroyRef).onDestroy(() => {
-      if (timer !== null) clearTimeout(timer);
-      watched?.removeEventListener('scroll', keep, true);
     });
     // While the chat is open, what comes is seen
     effect(() => {
@@ -527,6 +514,9 @@ export class PhoneSheetsComponent {
       { key: 'info', label: 'Game info' },
       { key: 'settings', label: 'Settings' },
     );
+    if (this.cues.fullscreenAvailable()) {
+      items.push({ key: 'fullscreen', label: this.cues.fullscreen() ? 'Leave full screen' : 'Full screen' });
+    }
     if (playing && !model.ended) {
       items.push({ key: 'cancel', label: 'Request game cancel' }, { key: 'concede', label: 'Concede game' });
     }
@@ -578,11 +568,11 @@ export class PhoneSheetsComponent {
   }
 
   /**
-   * The close button: one level back. It lets go of the focus, so the sheet shown again (whose button it is too) doesn't
-   * keep it.
+   * The close button: one level back. The focus goes to the sheet itself, so the sheet shown again (whose button it is
+   * too) doesn't keep it on its button.
    */
   protected back(event: Event): void {
-    (event.currentTarget as HTMLElement | null)?.blur();
+    (event.currentTarget as HTMLElement | null)?.closest('dialog')?.focus({ preventScroll: true });
     this.sheets.back();
   }
 
@@ -609,6 +599,11 @@ export class PhoneSheetsComponent {
         break;
       case 'hall':
         this.cues.go(HALL);
+        break;
+      case 'fullscreen':
+        // The menu closes: the game fills the screen behind it
+        this.sheets.closeAll();
+        this.cues.toggleFullscreen();
         break;
     }
   }
@@ -638,7 +633,7 @@ export class PhoneSheetsComponent {
   }
 
   /** Where the sheet shown is scrolled, kept for when it is shown again (and after a reload). */
-  private keep(): void {
+  protected keep(): void {
     const body = this.body()?.nativeElement;
     if (!body) return;
     this.sheets.keepScroll({

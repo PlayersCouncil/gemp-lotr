@@ -3,7 +3,7 @@
 //
 //   node game/phone.mjs [--only <recording,...>] [--devices phone,sideways,tablet] [--out report-game-phone]
 //                       [--shots: only screenshots of each recording's last step, nothing checked]
-//                       [--checks back,reload,touch]
+//                       [--checks back,reload,touch,piles,animation,sites]
 //
 // The checks:
 // - back: a long press on a card in every place a card's details open from (the table's rows, attached copies, the
@@ -15,6 +15,7 @@
 //   (D10).
 // - touch: a tap acts only in a decision (an offered card is chosen, another does nothing), the divider is dragged and
 //   kept per device, dragged to the bottom it hides the hand.
+// - sites: the site numbers on the path's cards lie on their left half, clear of the Shadow number and the markers.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -24,7 +25,7 @@ import { PNG } from 'pngjs';
 import { compareScreens } from '../compare.mjs';
 import { longPress, PHONE_CONTEXT, tap, touchDrag } from '../phone.mjs';
 import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
-import { GAME_ID, routeGame, settled } from './stub-game.mjs';
+import { asOneState, GAME_ID, routeGame, settled } from './stub-game.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const RECORDINGS = path.resolve(HERE, '../../src/testing/game-recordings');
@@ -35,9 +36,11 @@ const { values: options } = parseArgs({
     devices: { type: 'string', default: 'phone,sideways,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
-    checks: { type: 'string', default: 'back,reload,touch,piles,animation' },
+    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
+    // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
+    size: { type: 'string' },
   },
 });
 
@@ -61,7 +64,9 @@ function recordings() {
 
 /** Opens the Angular page on a device on the game as it stood after `count` exchanges, in the modern theme. */
 export async function openPhone(browser, device, recording, count, { cookies = [] } = {}) {
-  const context = await browser.newContext({ ...PHONE_CONTEXT, ...DEVICES[device] });
+  const [width, height] = options.size?.split('x').map(Number) ?? [];
+  const viewport = width && height ? { viewport: { width, height } } : DEVICES[device];
+  const context = await browser.newContext({ ...PHONE_CONTEXT, ...viewport });
   const log = [];
   const errors = [];
   await routeToStub(context, log);
@@ -684,6 +689,82 @@ const TOUCH = [
     },
   },
   {
+    name: "the chat's lines scroll inside its sheet, the newest first, the field above them",
+    state: 'late',
+    run: async (page) => {
+      await tap(page, page.locator('[data-phone="chat"]'));
+      await page.waitForTimeout(400);
+      const seen = await page.evaluate(() => {
+        const panel = document.querySelector('.gd-phone-sheet[data-sheet="chat"] .gd-phone-sheet__panel');
+        const lines = document.querySelector('.gd-phone-sheet .gd-game-chat__lines');
+        const field = document.querySelector('.gd-phone-sheet [data-chat-input]');
+        if (!panel || !lines) return null;
+        const [p, l] = [panel.getBoundingClientRect(), lines.getBoundingClientRect()];
+        return {
+          inside: l.top >= p.top - 1 && l.bottom <= p.bottom + 1 && l.bottom <= window.innerHeight + 1,
+          scrolls: lines.scrollHeight > lines.clientHeight && getComputedStyle(lines).overflowY !== 'visible',
+          fieldFirst: field ? field.getBoundingClientRect().bottom <= l.top + 1 : true,
+          count: lines.children.length,
+        };
+      });
+      if (!seen) return ['no chat sheet'];
+      return [
+        ...(seen.inside ? [] : ['the lines reach out of the sheet']),
+        ...(seen.count > 10 && !seen.scrolls ? [`${seen.count} lines don't scroll`] : []),
+        ...(seen.fieldFirst ? [] : ['the field is not above the lines']),
+      ];
+    },
+  },
+  {
+    name: "a pile's row of cards (your adventure deck) fits its sheet and scrolls sideways under a finger",
+    state: 'late',
+    run: async (page) => {
+      await tap(page, page.locator('.gd-phone-player:first-child'));
+      await page.waitForTimeout(400);
+      const row = page.locator('.gd-phone-sheet [data-pile="adventureDeck"] .gd-phone-cards__scroll');
+      if (!(await row.count())) return ['no adventure deck row'];
+      await row.scrollIntoViewIfNeeded();
+      const fit = await row.evaluate((element) => {
+        const panel = element.closest('.gd-phone-sheet__panel').getBoundingClientRect();
+        const box = element.getBoundingClientRect();
+        return { inside: box.right <= panel.right + 1, scrolls: element.scrollWidth > element.clientWidth };
+      });
+      const box = await row.boundingBox();
+      const from = { x: box.x + box.width * 0.8, y: box.y + box.height / 2 };
+      await touchDrag(page, from, { x: box.x + box.width * 0.2, y: from.y });
+      await page.waitForTimeout(400);
+      const left = await row.evaluate((element) => element.scrollLeft);
+      return [
+        ...(fit.inside ? [] : ['the row is wider than its sheet']),
+        ...(fit.scrolls && left <= 0 ? ["a finger's swipe doesn't scroll it"] : []),
+        ...(fit.scrolls ? [] : ['the row has nothing to scroll (all its cards fit?)']),
+      ];
+    },
+  },
+  {
+    name: "full screen from the menu keeps the game clear of the screen's rounded corners",
+    state: 'late',
+    run: async (page) => {
+      await tap(page, page.locator('[data-phone="menu"]'));
+      await page.waitForTimeout(300);
+      const item = page.locator('[data-menu="fullscreen"]');
+      if (!(await item.count())) return ['no full screen in the menu'];
+      await tap(page, item);
+      await page.waitForTimeout(600);
+      const seen = await page.evaluate(() => {
+        const style = getComputedStyle(document.querySelector('gd-game-phone'));
+        return {
+          full: document.fullscreenElement !== null,
+          padding: ['Top', 'Right', 'Bottom', 'Left'].map((side) => parseFloat(style[`padding${side}`])),
+        };
+      });
+      return [
+        ...(seen.full ? [] : ['the page is not in full screen']),
+        ...(seen.full && seen.padding.some((p) => p < 14) ? [`margins ${seen.padding.join(', ')}px`] : []),
+      ];
+    },
+  },
+  {
     name: 'a tap on an offered card chooses it',
     state: 'choices',
     run: async (page, sent) => {
@@ -790,33 +871,50 @@ async function touchCheck(browser, devices) {
   return ok === total;
 }
 
+// --- The adventure path ---
+
 /**
- * A recording up to `count` exchanges with the game's answers made one: the opening state with every later answer's
- * events after its own (a decision only from the last, as gameUpTo keeps it), as the server sends a page that opens
- * the game again.
+ * The site numbers on the path's cards: on each site's left half, where its own number is printed, never over its
+ * right, where its Shadow number is (the owner, 2026-11-16), and clear of the players' markers. The path of each device
+ * is saved as a picture (sites-<device>.png).
  */
-function asOneState(recording, count) {
-  const exchanges = recording.exchanges.slice(0, count);
-  const games = exchanges.flatMap((exchange, i) =>
-    exchange.path === '/game/<id>' && exchange.status === 200 ? [i] : [],
-  );
-  const last = games.at(-1);
-  const withoutDecisions = (body) =>
-    body.replace(/<ge\b[^>]*?(?:\/>|>[\s\S]*?<\/ge>)/g, (event) =>
-      /\stype="D"/.test(event.slice(0, event.indexOf('>'))) ? '' : event,
-    );
-  const inner = (body) =>
-    body.replace(/^[\s\S]*?<(?:gameState|update)\b[^>]*>/, '').replace(/<\/(?:gameState|update)>\s*$/, '');
-  const [first, ...rest] = games;
-  const events = rest.map((i) => (i === last ? inner(exchanges[i].body) : withoutDecisions(inner(exchanges[i].body))));
-  const opening = first === last ? exchanges[first].body : withoutDecisions(exchanges[first].body);
-  const merged = opening.replace(/<\/gameState>\s*$/, `${events.join('')}</gameState>`);
-  return {
-    ...recording,
-    exchanges: exchanges
-      .filter((_, i) => !rest.includes(i))
-      .map((exchange, i) => (i === first ? { ...exchange, body: merged } : exchange)),
-  };
+async function sitesCheck(browser, devices) {
+  fs.mkdirSync(OUT, { recursive: true });
+  let ok = 0;
+  for (const device of devices) {
+    const state = STATES.late;
+    const shown = await openPhone(browser, device, recordingOf(state), state.count);
+    try {
+      await shown.settle();
+      const path_ = shown.page.locator('.gd-phone-path');
+      await path_.scrollIntoViewIfNeeded();
+      await path_.screenshot({ path: path.join(OUT, `sites-${device}.png`) });
+      const wrong = await shown.page.evaluate(() => {
+        const overlap = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+        return Array.from(document.querySelectorAll('.gd-phone-site'), (site) => {
+          const number = site.querySelector('.gd-phone-site__no')?.getBoundingClientRect();
+          const card = site.querySelector(':scope > .gd-card')?.getBoundingClientRect();
+          if (!number || !card) return null;
+          const markers = Array.from(site.querySelectorAll('.gd-phone-site__marker'), (m) => m.getBoundingClientRect());
+          if (number.right > card.left + card.width / 2)
+            return `site ${site.dataset.site}: the number reaches the right half`;
+          if (markers.some((marker) => overlap(marker, number)))
+            return `site ${site.dataset.site}: the number is under a marker`;
+          return null;
+        }).filter(Boolean);
+      });
+      const sites = await shown.page.locator('.gd-phone-site__no').count();
+      if (sites > 0 && wrong.length === 0 && shown.errors.length === 0) ok++;
+      else
+        console.log(
+          `  ✗ sites · ${device}: ${sites === 0 ? 'no site on the path' : wrong.join('; ')} ${shown.errors.join(' | ')}`,
+        );
+    } finally {
+      await shown.close();
+    }
+  }
+  console.log(`sites: ${ok} of ${devices.length} devices show the site numbers on the left`);
+  return ok === devices.length;
 }
 
 const stepsOf = (recording) => (options.step ? Number(options.step) : recording.exchanges.length);
@@ -827,7 +925,7 @@ async function shots(browser) {
     for (const device of options.devices.split(',')) {
       const shown = await openPhone(browser, device, recording, stepsOf(recording));
       await shown.settle();
-      const file = path.join(OUT, `${recording.name}-${device}.png`);
+      const file = path.join(OUT, `${recording.name}-${device}${options.size ? `-${options.size}` : ''}.png`);
       await shown.page.screenshot({ path: file });
       if (shown.errors.length) console.log(`${recording.name} ${device}: ${shown.errors.join(' | ')}`);
       console.log(file);
@@ -851,6 +949,7 @@ async function main() {
     if (chosen.includes('touch')) passed = (await touchCheck(browser, devices)) && passed;
     if (chosen.includes('piles')) passed = (await pilesCheck(browser, devices)) && passed;
     if (chosen.includes('animation')) passed = (await animationCheck(browser, devices)) && passed;
+    if (chosen.includes('sites')) passed = (await sitesCheck(browser, devices)) && passed;
     process.exitCode = passed ? 0 : 1;
   } finally {
     await browser.close();

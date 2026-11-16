@@ -40,13 +40,25 @@
   flex-direction: column;
 }
 
-/* Placed at whole pixels, as jQuery UI did: half the free space around the whole-pixel box, rounded */
+/*
+ * Placed at whole pixels, as jQuery UI did: half the free space around the whole-pixel box, rounded; in the window's
+ * height as the page measures it (--gd-window-height, whole pixels as jQuery's: on a phone 100vh has a fraction)
+ */
 .gd-dialog:not([data-placed]) {
   inset: auto;
   left: round(calc((100vw - var(--dialog-outer-width)) / 2), 1px);
   top: max(
     0px,
-    round(calc((100vh - round(calc(var(--dialog-centred-height, var(--dialog-height)) + 0.4em + 2px), 1px)) / 2), 1px)
+    round(
+      calc(
+        (
+            var(--gd-window-height, 100vh) -
+              round(calc(var(--dialog-centred-height, var(--dialog-height)) + 0.4em + 2px), 1px)
+          ) /
+          2
+      ),
+      1px
+    )
   );
   margin: 0;
 }
@@ -86,6 +98,40 @@
 /* The resize grip (.ui-resizable-se: the grip icon in the corner) */
 .gd-dialog::-webkit-resizer {
   background: var(--theme-icons) -82px -226px no-repeat;
+}
+
+/*
+ * On a touch screen the browser draws no grip for CSS resize; the legacy pages drew jQuery UI's there too (an element:
+ * .ui-dialog .ui-resizable-se, 14px, 3px in from the corner, the grip-diagonal-se icon), which a finger can't drag
+ * either. Drawn the same, on the dialogs that can be resized.
+ */
+.gd-dialog__grip {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* No CSS resizing under a finger (it can't drag it): the browser would still paint its corner over the grip */
+  .gd-dialog {
+    resize: none;
+  }
+
+  .gd-dialog:not(
+      [data-dialog='decision'],
+      [data-dialog='game-problem'],
+      [data-dialog='alert'],
+      [data-dialog='confirm'],
+      [data-dialog='prompt']
+    )
+    > .gd-dialog__grip {
+    display: block;
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 14px;
+    height: 14px;
+    background: var(--theme-icons) -80px -224px no-repeat;
+    pointer-events: none;
+  }
 }
 
 .gd-dialog__header {

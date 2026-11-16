@@ -18,6 +18,15 @@ body {
   font-size: 12px;
 }
 
+/*
+ * The game page's document: game.html left it unset (the browser's white), which shows only in the fraction of a pixel
+ * a phone's zoomed-out page has under its layout (the classic theme); the modern theme keeps its page colour
+ */
+html:has(gemp-game),
+html:has(gemp-game) body {
+  background: var(--theme-game-document-bg, var(--theme-page-bg));
+}
+
 /* A theme's page font. Classic sets none: the browser's default, as on the legacy page (an unset value is ignored) */
 body {
   font-family: var(--theme-font-page);

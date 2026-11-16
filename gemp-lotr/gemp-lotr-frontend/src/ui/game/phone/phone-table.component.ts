@@ -1,14 +1,4 @@
-import {
-  afterNextRender,
-  Component,
-  computed,
-  DestroyRef,
-  effect,
-  ElementRef,
-  inject,
-  Injector,
-  untracked,
-} from '@angular/core';
+import { afterNextRender, Component, computed, effect, ElementRef, inject, Injector, untracked } from '@angular/core';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { GameSheets } from '../../../core/game/phone/game-sheets';
 import { phoneTable } from '../../../core/game/phone/phone-table';
@@ -20,6 +10,7 @@ import { GameTableState } from '../../../core/game/table/game-table.service';
 import { CardComponent } from '../../shared/card/card.component';
 import { GameCardDirective } from '../table/game-card.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
+import { ScrollSettledDirective } from './scroll-settled.directive';
 
 /**
  * The phone layout's table (G7 of trymarz/gemp-lotr-private#27), scrolled up and down: the whole adventure path, then
@@ -37,7 +28,8 @@ import { PhoneCardsComponent } from './phone-cards.component';
   selector: 'gd-phone-table',
   styleUrl: './phone-table.component.css',
   imports: [PhoneCardsComponent, CardComponent, GameCardDirective],
-  host: { '(scroll)': 'scrolled()' },
+  hostDirectives: [{ directive: ScrollSettledDirective, outputs: ['gdScrollSettled'] }],
+  host: { '(gdScrollSettled)': 'keepScroll()' },
   template: `
     <section class="gd-phone-zone" data-zone="path" aria-label="Adventure path">
       <h3 class="gd-phone-zone__label">Adventure path</h3>
@@ -158,14 +150,9 @@ export class PhoneTableComponent {
   );
   protected readonly shown = computed(() => this.session.model().skirmish?.shown ?? null);
   protected readonly overwhelmed = computed(() => this.shown()?.fpOverwhelmed === 'true');
-  private saveTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     const injector = inject(Injector);
-    const destroy = inject(DestroyRef);
-    destroy.onDestroy(() => {
-      if (this.saveTimer !== null) clearTimeout(this.saveTimer);
-    });
     // Where it was before a reload, once the cards are there
     afterNextRender({ write: () => (this.host.scrollTop = this.viewState.phone().tableTop) });
 
@@ -200,13 +187,10 @@ export class PhoneTableComponent {
     this.sheets.open({ kind: 'piles', player: model.participantId, focus: 'adventureDeck' });
   }
 
-  protected scrolled(): void {
-    if (this.saveTimer !== null) clearTimeout(this.saveTimer);
-    this.saveTimer = setTimeout(() => {
-      this.saveTimer = null;
-      const top = Math.round(this.host.scrollTop);
-      this.viewState.phone.update((phone) => (phone.tableTop === top ? phone : { ...phone, tableTop: top }));
-    }, 150);
+  /** Where the table is scrolled, kept with the game once it stops (D10). */
+  protected keepScroll(): void {
+    const top = Math.round(this.host.scrollTop);
+    this.viewState.phone.update((phone) => (phone.tableTop === top ? phone : { ...phone, tableTop: top }));
   }
 
   /** The first offered card's row in view (below the path, unless the path holds it), and the card in its row. */

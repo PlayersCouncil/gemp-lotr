@@ -19,6 +19,22 @@
     env(safe-area-inset-left, 0px);
 }
 
+/*
+ * Full screen (the menu's): the page reaches the glass, whose rounded corners would cut off the status bar's buttons
+ * and the hand's ends; the browser reports no safe area for plain rounded corners (only for cutouts), so a margin
+ * clears a corner of up to about 48px radius (its cut is 0.29 of the radius deep)
+ */
+:host-context(:fullscreen) {
+  padding: max(env(safe-area-inset-top, 0px), var(--gd-phone-corner))
+    max(env(safe-area-inset-right, 0px), var(--gd-phone-corner))
+    max(env(safe-area-inset-bottom, 0px), var(--gd-phone-corner))
+    max(env(safe-area-inset-left, 0px), var(--gd-phone-corner));
+}
+
+:host {
+  --gd-phone-corner: 14px;
+}
+
 :host([data-device='tablet']) {
   font-size: 13px;
 }

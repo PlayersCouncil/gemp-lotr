@@ -125,3 +125,39 @@ gd-game-chat .gd-game-chat__line[data-kind='chat'] blockquote {
   border-left: 5px solid var(--theme-game-chat-quote);
   font-style: italic;
 }
+
+/* The modern theme: the field first, then the lines, the newest at the top */
+gd-game-chat[data-newest-first] .gd-game-chat__lines {
+  top: calc(35px + var(--gd-game-strip));
+  bottom: 6px;
+}
+
+gd-game-chat[data-newest-first] .gd-game-chat__talk {
+  top: calc(4px + var(--gd-game-strip));
+  bottom: auto;
+}
+
+/* In the phone layout's sheet: a column, the field over the lines */
+.gd-phone-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gd-phone-chat .gd-game-chat__lines,
+.gd-phone-chat .gd-game-chat__talk {
+  position: static;
+  width: auto;
+}
+
+.gd-phone-chat .gd-game-chat__lines {
+  flex: 1;
+  min-height: 0;
+}
+
+.gd-phone-chat .gd-game-chat__talk {
+  order: -1;
+  height: 36px;
+  padding: 0 8px;
+  font-size: 15px;
+}

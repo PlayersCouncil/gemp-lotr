@@ -35,6 +35,32 @@ import { coveredBy, gaps as coverageGaps } from './coverage.mjs';
 import { endGame, foeAnswer, Foe, parseGameXml, readDecision, replayIdOf, startGame } from './protocol.mjs';
 import { GAME_MATRIX, makeGesture, pointTarget } from './matrix.mjs';
 import { GAME_SCENARIOS } from './scenarios.mjs';
+import { DEVICES } from './device-profiles.mjs';
+import { touchDrag } from '../phone.mjs';
+
+/**
+ * Waits until what `where` reads (a box or a point) has stood still for 300ms, as long as 3s: a person taps what they
+ * see, so a dialog that settles into place a moment after it opens is tapped where it ends up, on both pages.
+ */
+async function standingStill(where) {
+  let last = JSON.stringify(await where());
+  let since = Date.now();
+  const start = Date.now();
+  while (Date.now() - since < 300 && Date.now() - start < 3000) {
+    await sleep(50);
+    const now = JSON.stringify(await where());
+    if (now !== last) {
+      last = now;
+      since = Date.now();
+    }
+  }
+}
+
+/** A finger held still on a point of the page (Chromium's own long press: no click when it lifts). */
+async function longPressAt(page, { x, y }) {
+  page.__cdp ??= await page.context().newCDPSession(page);
+  await page.__cdp.send('Input.synthesizeTapGesture', { x, y, duration: 800, tapCount: 1, gestureSourceType: 'touch' });
+}
 
 const { values: options } = parseArgs({
   options: {
@@ -44,6 +70,10 @@ const { values: options } = parseArgs({
     legacy: { type: 'string', default: '/gemp-lotr/game.html' },
     angular: { type: 'string', default: '/gemp-lotr/ng/game' },
     sizes: { type: 'string', default: '1280x800,1366x768,1920x1080' },
+    // Devices instead of window sizes (game/device-profiles.mjs: pc, tablet, tablet-sideways, phone, phone-sideways):
+    // on a touch device every gesture is made with a finger (a tap for a click, a long press for a right or shift
+    // click, a finger's drag), and hovering, which a finger can't, is left out
+    devices: { type: 'string' },
     only: { type: 'string' },
     // Firefox keeps one mouse for the whole browser: two pages dragging at once take it from each other (a drag up
     // ended by the other page's click), so there one scenario plays at a time
@@ -84,10 +114,19 @@ if (!password) {
   process.exit(2);
 }
 const [pageA, pageB] = options.pages.split(',');
-const sizes = options.sizes.split(',').map((label) => {
-  const [width, height] = label.split('x').map(Number);
-  return { label, width, height };
-});
+const sizes = options.devices
+  ? options.devices.split(',').map((label) => {
+      const profile = DEVICES[label];
+      if (!profile) {
+        console.error(`Unknown device ${label}: ${Object.keys(DEVICES).join(', ')}`);
+        process.exit(2);
+      }
+      return { label, ...profile.viewport, profile };
+    })
+  : options.sizes.split(',').map((label) => {
+      const [width, height] = label.split('x').map(Number);
+      return { label, width, height };
+    });
 const only = options.only?.split(',');
 const ALL_SCENARIOS = options.matrix ? GAME_MATRIX : GAME_SCENARIOS;
 const scenarios = ALL_SCENARIOS.filter((scenario) => !only || only.includes(scenario.name)).map((scenario) =>
@@ -271,6 +310,8 @@ function gestures(page, kind, used) {
     return point ?? {};
   };
   const reach = async (id) => {
+    // A finger aims at what it sees: the card where it stands still (a dialog that just opened may still be settling)
+    if (page.__touch) await standingStill(() => pointOf(id).then((p) => (p.x ? { x: p.x, y: p.y } : null)));
     const point = await pointOf(id);
     if (!point.x) {
       throw new Error(`card ${id} can't be reached${point.blocked ? `: ${point.blocked} lies over it` : ''}`);
@@ -278,6 +319,22 @@ function gestures(page, kind, used) {
     return point;
   };
   const decisionButton = (label) => locator(select.decisionButton(label));
+  const touch = Boolean(page.__touch);
+  /**
+   * A click, or on a touch device a tap, at a point of the page (a finger's input takes the page's points too, as on a
+   * phone's zoomed-out page the browser maps them to the screen itself).
+   */
+  const pressAt = async (point, button = 'left') => {
+    if (!touch) return page.mouse.click(point.x, point.y, { button });
+    if (button === 'left') return page.touchscreen.tap(point.x, point.y);
+    return longPressAt(page, point);
+  };
+  /** A control clicked, or tapped where it stands still (as a finger aims at what it sees). */
+  const use = async (target) => {
+    if (!touch) return target.click();
+    await standingStill(() => target.boundingBox().catch(() => null));
+    return target.tap();
+  };
   return {
     pointOf,
     async clickCard(id, { button = 'left', shift = false } = {}) {
@@ -286,6 +343,12 @@ function gestures(page, kind, used) {
       const point = await reach(id);
       const last = page.lastCardClick;
       if (last?.id === id) await sleep(Math.max(0, 250 - (Date.now() - last.at)));
+      if (touch) {
+        // A finger has no Shift and no right button: a long press asks for a card's information
+        await pressAt(point, shift ? 'right' : button);
+        page.lastCardClick = { id, at: Date.now() };
+        return;
+      }
       if (shift) await page.keyboard.down('Shift');
       await page.mouse.click(point.x, point.y, { button });
       page.lastCardClick = { id, at: Date.now() };
@@ -294,6 +357,7 @@ function gestures(page, kind, used) {
     /** A card pressed, moved by (dx, dy) in steps, and released: up opens its information, sideways moves it. */
     async dragCard(id, dx, dy) {
       const point = await reach(id);
+      if (touch) return touchDrag(page, point, { x: point.x + dx, y: point.y + dy }, { steps: 10 });
       await page.mouse.move(point.x, point.y);
       await page.mouse.down();
       for (let i = 1; i <= 10; i++) await page.mouse.move(point.x + (dx * i) / 10, point.y + (dy * i) / 10);
@@ -301,7 +365,7 @@ function gestures(page, kind, used) {
     },
     async clickButton(label) {
       used.add(label === 'OK' ? 'OK button' : label);
-      await decisionButton(label).click();
+      await use(decisionButton(label));
     },
     hasButton: (label) =>
       decisionButton(label)
@@ -313,7 +377,7 @@ function gestures(page, kind, used) {
       const arrow = locator(value > shown ? select.integerUp : select.integerDown);
       for (let i = 0; i < Math.abs(value - shown); i++) {
         used.add('bid spinner');
-        await arrow.click();
+        await use(arrow);
       }
       await this.clickButton('OK');
     },
@@ -326,24 +390,25 @@ function gestures(page, kind, used) {
       } else if (kind === 'legacy') {
         used.add('choice button');
         // Two answers or fewer: a button each, in order, in the small dialog
-        await page.locator('.ui-dialog:visible .ui-dialog-content button').nth(index).click();
+        await use(page.locator('.ui-dialog:visible .ui-dialog-content button').nth(index));
       } else {
         used.add('choice button');
-        await locator(ANGULAR_CONTRACT.choiceButton(index)).click();
+        await use(locator(ANGULAR_CONTRACT.choiceButton(index)));
       }
     },
     async actionMenu(actionId) {
       const point = await inPage(page, actionMenuPoint, { kind, actionId });
       if (point) {
         used.add('action menu');
-        await page.mouse.click(point.x, point.y);
+        await pressAt(point);
       }
       return Boolean(point);
     },
     async click(selector, name) {
       used.add(name);
-      await locator(selector).click();
+      await use(locator(selector));
     },
+    pressAt,
     /**
      * A click on the part of a control the window shows, as a player makes it: without scrolling the page to show all
      * of it (the legacy replay's play picture sticks out below the window).
@@ -354,6 +419,7 @@ function gestures(page, kind, used) {
       if (!box) throw new Error(`no ${name}`);
       const viewport = page.viewportSize();
       const bottom = Math.min(box.y + box.height, viewport?.height ?? box.y + box.height);
+      if (touch) return page.touchscreen.tap(box.x + box.width / 2, (box.y + bottom) / 2);
       await page.mouse.click(box.x + box.width / 2, (box.y + bottom) / 2);
     },
   };
@@ -581,6 +647,10 @@ async function doStep(page, kind, step, traffic, used) {
     used.add('drag to reorder');
     return act.dragCard(cardIdOf(traffic, step.drag), step.by, 0);
   }
+  if ('hover' in step && page.__touch) {
+    // A finger can't hover: nothing to do on either page
+    return;
+  }
   if ('hover' in step) {
     const point = await act.pointOf(cardIdOf(traffic, step.hover));
     if (!point.x) {
@@ -641,7 +711,7 @@ async function doStep(page, kind, step, traffic, used) {
   }
   if ('click' in step) {
     used.add('card info closed');
-    return page.mouse.click(5, 5);
+    return page.__touch ? page.touchscreen.tap(5, 5) : page.mouse.click(5, 5);
   }
   if ('gesture' in step) {
     // The gesture matrix (game/matrix.mjs): a control by its selectors, or a card
@@ -733,8 +803,10 @@ async function play(kind, scenario, size, pair, label) {
   } catch (error) {
     return { snapshots: [], errors: [], problems: [`${label}: ${error.message}`], used, events: [] };
   }
-  const context = await browser.newContext({ viewport: { width: size.width, height: size.height } });
+  const context = await browser.newContext(size.profile ?? { viewport: { width: size.width, height: size.height } });
   const page = await context.newPage();
+  // A finger instead of the mouse (gestures)
+  page.__touch = Boolean(size.profile?.hasTouch);
   const errors = [];
   const dialogs = [];
   const snapshots = [];
@@ -829,7 +901,8 @@ async function play(kind, scenario, size, pair, label) {
     const { masks, screenshotStyle } = kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT;
     // The mouse leaves the page before each snapshot (no hover state), except after a step that rests it on something
     const snapshot = async (name, keepMouse = false) => {
-      if (!keepMouse) await page.mouse.move(1, 1);
+      // (a finger leaves nothing hovered: no mouse to move on a touch device)
+      if (!keepMouse && !page.__touch) await page.mouse.move(1, 1);
       await settle(page, kind, traffic, bots);
       if (label === 'B' && injection?.afterSettle) await injection.afterSettle(page, kind);
       if (options.record) {
@@ -896,7 +969,7 @@ async function play(kind, scenario, size, pair, label) {
             }
           : shot;
         await page.reload();
-        await page.mouse.move(1, 1);
+        if (!page.__touch) await page.mouse.move(1, 1);
         await settle(page, kind, traffic, bots);
         // Pictures just loaded are first drawn with a quicker resampling; the browser redraws them a moment later
         await sleep(1000);
@@ -966,6 +1039,10 @@ async function play(kind, scenario, size, pair, label) {
       events: traffic.events,
     };
   } catch (error) {
+    // What the page showed when the step failed, for looking into it
+    await page
+      .screenshot({ path: path.join(outDir, `${scenario.name}-${size.label}-failed-${label}.png`) })
+      .catch(() => undefined);
     return {
       snapshots,
       reloads,

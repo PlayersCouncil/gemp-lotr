@@ -4,14 +4,29 @@
   display: contents;
 }
 
+/* A modal <dialog> over the whole screen (the top layer); its own backdrop and panel are drawn inside it */
 .gd-phone-sheet {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 30;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  overflow: visible;
 }
 
-.gd-phone-sheet[data-sheet='actions'] {
-  z-index: 31;
+.gd-phone-sheet:focus {
+  outline: none;
+}
+
+.gd-phone-sheet::backdrop {
+  background: transparent;
 }
 
 .gd-phone-sheet__backdrop {
@@ -75,6 +90,8 @@
   overflow-y: auto;
   padding: 10px 12px 14px;
   display: grid;
+  /* One column as wide as the sheet: a row of cards in it scrolls sideways instead of growing to all its cards */
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   align-content: start;
   grid-auto-rows: max-content;
@@ -246,4 +263,17 @@
 .gd-phone-scale > input {
   flex: 1;
   accent-color: var(--theme-game-phone-accent);
+}
+
+/* Cards and pictures in a sheet: no menu of the phone's on a long press (iOS; Android: ModalSheetDirective) */
+.gd-phone-sheet img,
+.gd-phone-sheet .gd-card {
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* A pile's section and its row hold to the sheet's width (the row scrolls) */
+.gd-phone-sheet__body > section,
+.gd-phone-sheet__cards {
+  min-width: 0;
 }

@@ -131,7 +131,7 @@
   --theme-game-muted-mark-edge: #000;
   --theme-game-dialog-actions-bg: #000;
   --theme-game-spinner-border: #000;
-  --theme-game-spinner-buttons: url('/gemp-lotr/js/jquery/images/spinnerbuttons.png');
+  --theme-game-spinner-buttons: url('/gemp-lotr/ng/themes/classic/spinnerbuttons.png');
   --theme-game-inactive-filter: grayscale(0.7) contrast(0.5) brightness(0.6);
   --theme-game-fight-border: #f00;
   --theme-game-strength-bg: #fff;
@@ -155,6 +155,9 @@
   --theme-game-icon-fp-archery: url('/gemp-lotr/images/fpArchery.png');
   --theme-game-icon-shadow-archery: url('/gemp-lotr/images/shadowArchery.png');
   --theme-game-icon-move: url('/gemp-lotr/images/move.png');
+
+  /* The game page's document under its frame: unset, as game.html's (see base.css) */
+  --theme-game-document-bg: transparent;
 
   /* The phone layout (G7): only the modern theme shows it; classic has values so every name is defined */
   --theme-game-phone-muted: #aaa;
@@ -293,6 +296,8 @@
   --theme-game-chat-quote: #9aa0a6;
   --theme-game-card-hint: #8fa6ff;
   --theme-game-chat-ping-bg: rgb(255 107 107 / 0.25);
+
+  --theme-game-document-bg: var(--theme-page-bg);
 
   /* The phone layout (G7): the prototype's colours, the deck builder's modern accents */
   --theme-game-phone-muted: #a0a3ab;

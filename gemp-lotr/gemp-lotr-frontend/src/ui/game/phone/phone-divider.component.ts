@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, input, linkedSignal, output } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { DecisionButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
@@ -7,15 +7,13 @@ import { choiceLabel } from '../decision/decision-dialogs.component';
 import { clockText } from '../panel/game-clock';
 import { ReplayControlsComponent } from '../panel/replay-controls.component';
 import { CardHintsDirective } from '../table/card-hints.directive';
-import { followHandDrag } from './phone-drag';
 
 /**
  * The phone layout's divider between the table and the hand (G7 of trymarz/gemp-lotr-private#27): it holds the
  * waiting decision's text and its buttons (a number or one answer of several are asked here too), and is dragged up
  * and down; dragged to the bottom it hides the hand. While nothing is asked it says whose move it is.
  *
- * Emits `dragged` with how far the pointer has gone up since the press (px) while it moves, and `dropped` when it is
- * let go: the hand grows by as much.
+ * The phone layout drags it (gdPointerDrag, PhoneGameComponent.handDrag).
  *
  * DOM contract: `gd-phone-divider` (`data-deciding`) holding `.gd-phone-divider__text` (`data-decision=text`),
  * `[data-clock]` the decision's clock, `.gd-phone-divider__hand-hint` while the hand is hidden, and
@@ -32,7 +30,6 @@ import { followHandDrag } from './phone-drag';
     role: 'separator',
     'aria-orientation': 'horizontal',
     'aria-label': 'Drag to resize the hand',
-    '(pointerdown)': 'down($event)',
   },
   template: `
     <div class="gd-phone-divider__question">
@@ -139,11 +136,8 @@ export class PhoneDividerComponent {
   protected readonly session = inject(GameSession);
   protected readonly decisions = inject(GameDecisions);
   protected readonly clocks = inject(GameClocks);
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   readonly handHidden = input(false);
-  readonly dragged = output<number>();
-  readonly dropped = output<number>();
 
   private readonly view = this.decisions.view;
   private readonly dialog = computed(() => this.view().dialog);
@@ -211,17 +205,5 @@ export class PhoneDividerComponent {
 
   protected press(button: DecisionButton): void {
     void this.decisions.press(button);
-  }
-
-  /** Dragging starts anywhere on the divider but its buttons and fields. */
-  protected down(event: PointerEvent): void {
-    const target = event.target as Element | null;
-    if (event.button !== 0 || target?.closest('button, select, input, a, output, gd-game-replay')) return;
-    followHandDrag(
-      this.host,
-      event,
-      (up) => this.dragged.emit(up),
-      (up) => this.dropped.emit(up),
-    );
   }
 }

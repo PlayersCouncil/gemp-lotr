@@ -57,7 +57,7 @@ describe('GamePageComponent', () => {
   /** The page asks for news a moment after an answer. */
   const pollDelay = () => new Promise((resolve) => setTimeout(resolve, POLL_DELAY_MS + 10));
 
-  async function open(first: string, query = '?gameId=7', themePicker = true) {
+  async function open(first: string, query = '?gameId=7', themePicker = true, theme = 'classic') {
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
@@ -68,6 +68,8 @@ describe('GamePageComponent', () => {
       ],
     });
     backend = TestBed.inject(HttpTestingController);
+    // The legacy page's look and behaviour (the page's default is modern: tests of it say so)
+    TestBed.inject(ThemeService).select(theme);
     TestBed.inject(PlayerInfo).load().subscribe();
     backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush('{"name":"alice"}');
     const fixture = TestBed.createComponent(GamePageComponent);
@@ -239,6 +241,19 @@ describe('GamePageComponent', () => {
     expect(el.querySelector('[data-toggle="timer-mute"]')).toBeNull();
     expect(el.querySelector('[data-tab="options"]')).not.toBeNull();
     expect(el.querySelector('[data-clock][data-own]')).toBeNull();
+  });
+
+  it('lists the newest chat lines and game messages first in the modern theme, the field above them', async () => {
+    const { el, stable } = await open(state(TABLE), '?gameId=7', true, 'modern');
+    backend
+      .expectOne((r) => r.url === CHAT && r.method === 'GET')
+      .flush('<chat><message from="bob" date="2">hi</message><user>alice</user></chat>');
+    await stable();
+    const lines = Array.from(el.querySelectorAll<HTMLElement>('.gd-game-chat__line'), (line) =>
+      line.textContent.replace(/\s+/g, ' ').trim(),
+    );
+    expect(lines).toEqual(['bob: hi', 'Careful', 'Plain message', 'Hello Gimli alice']);
+    expect(el.querySelector('gd-game-chat')?.hasAttribute('data-newest-first')).toBe(true);
   });
 
   it('lists the chat and the game messages in the order they came, marking the ones that name the player', async () => {

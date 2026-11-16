@@ -7,6 +7,15 @@ gemp-game .gd-game-animation {
   pointer-events: none;
 }
 
+/*
+ * Not there while it draws nothing: an empty layer over the whole table, once the browser has made it a layer of its
+ * own (after cards flew in), lifted every dialog over it into one too, whose text then lost its sub-pixel smoothing
+ * (on a tablet or phone, against game.html)
+ */
+gemp-game .gd-game-animation[data-empty] {
+  display: none;
+}
+
 /* A card drawn only for an animation, placed where it starts; the animation moves it */
 gemp-game .gd-game-animation__card {
   position: absolute;

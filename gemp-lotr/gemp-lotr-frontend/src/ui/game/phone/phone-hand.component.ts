@@ -1,4 +1,4 @@
-import { Component, computed, inject, output } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { offTableChoices } from '../../../core/game/phone/hand-place';
 import { PhoneCard, phoneTable } from '../../../core/game/phone/phone-table';
@@ -7,7 +7,7 @@ import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GameTableState } from '../../../core/game/table/game-table.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
-import { followHandDrag } from './phone-drag';
+import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/pointer-drag.directive';
 
 /**
  * The phone layout's hand, under the divider, scrolled sideways (G7 of trymarz/gemp-lotr-private#27). When the waiting
@@ -23,7 +23,7 @@ import { followHandDrag } from './phone-drag';
 @Component({
   selector: 'gd-phone-hand',
   styleUrl: './phone-hand.component.css',
-  imports: [PhoneCardsComponent, CardHintsDirective],
+  imports: [PhoneCardsComponent, CardHintsDirective, PointerDragDirective],
   host: { '[attr.data-place]': "showing() ? 'choices' : 'hand'" },
   template: `
     <!-- Held sideways the hand is a panel in the screen's right half: its grip slides it up and down -->
@@ -33,7 +33,7 @@ import { followHandDrag } from './phone-drag';
       role="separator"
       aria-orientation="horizontal"
       aria-label="Drag to resize the hand"
-      (pointerdown)="grip($event)"
+      [gdPointerDrag]="gripDrag()"
     ></div>
     <div class="gd-phone-hand__head">
       @if (showing(); as offer) {
@@ -95,18 +95,8 @@ export class PhoneHandComponent {
   });
   protected readonly emptyHand = computed(() => (this.session.model().spectator ? 'Not shown' : 'No cards'));
 
-  /** How far the grip has been dragged up since the press while it moves, and where it is let go (px). */
-  readonly dragged = output<number>();
-  readonly dropped = output<number>();
-  protected grip(event: PointerEvent): void {
-    if (event.button !== 0) return;
-    followHandDrag(
-      event.currentTarget as HTMLElement,
-      event,
-      (up) => this.dragged.emit(up),
-      (up) => this.dropped.emit(up),
-    );
-  }
+  /** What dragging the grip does (the phone layout's own hand drag). */
+  readonly gripDrag = input<(event: PointerEvent) => DragHandlers | null>(() => null);
 
   protected close(key: string): void {
     this.viewState.phone.update((phone) => ({ ...phone, closedOffer: key }));

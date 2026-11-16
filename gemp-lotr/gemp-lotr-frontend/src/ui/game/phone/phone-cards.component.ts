@@ -1,4 +1,15 @@
-import { afterNextRender, Component, computed, DestroyRef, ElementRef, inject, input, signal } from '@angular/core';
+import {
+  afterNextRender,
+  afterRenderEffect,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { PhoneCard } from '../../../core/game/phone/phone-table';
 import { GameViewState } from '../../../core/game/session/game-view-state';
@@ -6,6 +17,7 @@ import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { CardComponent } from '../../shared/card/card.component';
 import { GameCardLayersComponent } from '../table/game-card-layers.component';
 import { GameCardDirective } from '../table/game-card.directive';
+import { ScrollSettledDirective } from './scroll-settled.directive';
 
 /**
  * A row of cards in the phone layout: one size (the table's, or what the place gives with `--gd-phone-card`), scrolled
@@ -22,10 +34,10 @@ import { GameCardDirective } from '../table/game-card.directive';
 @Component({
   selector: 'gd-phone-cards',
   styleUrl: './phone-cards.component.css',
-  imports: [CardComponent, GameCardDirective, GameCardLayersComponent],
+  imports: [CardComponent, GameCardDirective, GameCardLayersComponent, ScrollSettledDirective],
   host: { '[attr.data-row]': 'key()' },
   template: `
-    <div #scroller class="gd-phone-cards__scroll" (scroll)="scrolled(scroller)">
+    <div #scroller class="gd-phone-cards__scroll" (scroll)="measure()" (gdScrollSettled)="keepScroll()">
       @for (slot of cards(); track slot.card.id; let i = $index) {
         @if (i === shadowFrom()) {
           <span class="gd-phone-cards__split" aria-hidden="true"></span>
@@ -70,59 +82,53 @@ export class PhoneCardsComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly scrollLeft = signal(0);
   private readonly width = signal(0);
-  /** How wide the cards are together: they grow with the hand's height or the card size. */
-  private readonly contentWidth = signal(0);
-  private saveTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Where each of the row's cards starts in it (px), as last measured: the badge counts from these. */
+  private readonly lefts = signal<readonly { id: string; left: number }[]>([]);
 
   /** The cards to choose that lie right of what the row shows. */
   protected readonly hiddenMarks = computed(() => {
-    const marks = this.decisions.view().marks;
-    this.cards();
-    this.contentWidth();
-    const right = this.scrollLeft() + this.width();
     if (this.width() === 0) return 0;
-    return [...this.host.querySelectorAll<HTMLElement>('.gd-phone-slot > .gd-card')].filter(
-      (card) => marks[card.dataset['cardId'] ?? ''] === 'selectable' && card.offsetLeft + 12 > right,
-    ).length;
+    const marks = this.decisions.view().marks;
+    const right = this.scrollLeft() + this.width();
+    return this.lefts().filter(({ id, left }) => marks[id] === 'selectable' && left + 12 > right).length;
   });
+
+  private readonly scroller = viewChild.required<ElementRef<HTMLElement>>('scroller');
 
   constructor() {
     const destroy = inject(DestroyRef);
     afterNextRender({
       write: () => {
-        const scroller = this.host.querySelector<HTMLElement>('.gd-phone-cards__scroll');
-        if (!scroller) return;
+        const scroller = this.scroller().nativeElement;
         const key = this.key();
         const kept = key === null ? undefined : this.viewState.phone().rows[key];
         if (kept) scroller.scrollLeft = kept;
-        this.measure(scroller);
         if (typeof ResizeObserver === 'function') {
           // The row's own size, and the host's (its height follows the hand's, which sizes the cards)
-          const observer = new ResizeObserver(() => this.measure(scroller));
+          const observer = new ResizeObserver(() => this.measure());
           observer.observe(scroller);
           observer.observe(this.host);
           destroy.onDestroy(() => observer.disconnect());
         }
       },
     });
-    destroy.onDestroy(() => {
-      if (this.saveTimer !== null) clearTimeout(this.saveTimer);
+    // Measured again whenever the row's cards change, once they are drawn
+    afterRenderEffect({
+      read: () => {
+        this.cards();
+        this.measure();
+      },
     });
   }
 
-  protected scrolled(scroller: HTMLElement): void {
-    this.measure(scroller);
+  /** Where the row is scrolled, kept with the game once it stops (D10). */
+  protected keepScroll(): void {
     const key = this.key();
     if (key === null) return;
-    if (this.saveTimer !== null) clearTimeout(this.saveTimer);
-    // Kept once the row stops, not on every frame of a swipe
-    this.saveTimer = setTimeout(() => {
-      this.saveTimer = null;
-      const left = Math.round(scroller.scrollLeft);
-      this.viewState.phone.update((phone) =>
-        phone.rows[key] === left ? phone : { ...phone, rows: { ...phone.rows, [key]: left } },
-      );
-    }, 150);
+    const left = Math.round(this.scroller().nativeElement.scrollLeft);
+    this.viewState.phone.update((phone) =>
+      phone.rows[key] === left ? phone : { ...phone, rows: { ...phone.rows, [key]: left } },
+    );
   }
 
   /** The badge pressed: the first card to choose out of view comes into it. */
@@ -135,9 +141,16 @@ export class PhoneCardsComponent {
     if (first) scroller.scrollTo({ left: Math.max(0, first.offsetLeft - 12), behavior: 'smooth' });
   }
 
-  private measure(scroller: HTMLElement): void {
+  /** Reads the row from the page: where it is scrolled, how wide it shows, where each card starts. */
+  protected measure(): void {
+    const scroller = this.scroller().nativeElement;
     this.scrollLeft.set(scroller.scrollLeft);
     this.width.set(scroller.clientWidth);
-    this.contentWidth.set(scroller.scrollWidth);
+    const lefts = [...scroller.querySelectorAll<HTMLElement>('.gd-phone-slot > .gd-card')].map((card) => ({
+      id: card.dataset['cardId'] ?? '',
+      left: card.offsetLeft,
+    }));
+    const key = (list: readonly { id: string; left: number }[]) => list.map((c) => `${c.id}@${c.left}`).join(',');
+    if (key(this.lefts()) !== key(lefts)) this.lefts.set(lefts);
   }
 }
