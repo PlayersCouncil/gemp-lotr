@@ -86,9 +86,11 @@
 
 /*
  * The compact layout (the modern theme on a portrait or narrow screen): the deck above, the collection below, each
- * scrolling on its own, and the separator between them moving the split (--gd-split, the deck's share)
+ * scrolling on its own, and the separator between them moving the split (--gd-split, the deck's share). A double tap
+ * doesn't zoom (iOS Safari did, when the pager's buttons were tapped quickly); pinching still does.
  */
 :host([data-layout='compact']) {
+  touch-action: manipulation;
   grid-template-columns: 100%;
   grid-template-rows: minmax(0, calc((100% - 16px) * var(--gd-split, 0.5))) 16px minmax(0, 1fr);
 }
@@ -101,6 +103,8 @@
 }
 
 :host([data-layout='compact']) .gd-page__collection {
+  /* Sideways moves are swipes to the next or previous page (SwipeDirective), not the browser's */
+  touch-action: pan-y pinch-zoom;
   display: flex;
   padding: 6px 8px 8px;
   border: 0;
