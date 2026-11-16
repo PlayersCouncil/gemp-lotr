@@ -7,6 +7,7 @@ import { DeckSaver } from '../../core/deck/deck-saver.service';
 import { PacksService } from '../../core/packs/packs.service';
 import { signal, WritableSignal } from '@angular/core';
 import { CompactLayout } from '../../core/platform/compact-layout.service';
+import { CollectionBrowser } from '../../core/collection/collection-browser.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { FakeNotifier, provideFakeNotifier } from '../../testing/fake-notifier';
 import { DeckbuilderPageComponent, readSplit, RESIZE_STEP, SPLIT_COOKIE } from './deckbuilder-page.component';
@@ -413,6 +414,28 @@ describe('DeckbuilderPageComponent', () => {
       separator.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
       await fixture.whenStable();
       expect(el.style.getPropertyValue('--gd-split')).toBe('0.3');
+    });
+
+    it('pages the collection with a sideways swipe of a finger on it: right is the next page, left the previous', async () => {
+      const { fixture, el } = await render();
+      const browser = fixture.debugElement.injector.get(CollectionBrowser);
+      const next = vi.spyOn(browser, 'nextPage').mockImplementation(() => undefined);
+      const previous = vi.spyOn(browser, 'previousPage').mockImplementation(() => undefined);
+      const collection = el.querySelector<HTMLElement>('.gd-collection')!;
+      const swipe = (from: number, to: number) => {
+        for (const [type, x] of [
+          ['pointerdown', from],
+          ['pointerup', to],
+        ] as const) {
+          const event = new MouseEvent(type, { clientX: x, clientY: 300, bubbles: true });
+          Object.defineProperties(event, { pointerType: { value: 'touch' }, pointerId: { value: 1 } });
+          collection.dispatchEvent(event);
+        }
+      };
+      swipe(100, 250);
+      expect(next).toHaveBeenCalledTimes(1);
+      swipe(250, 100);
+      expect(previous).toHaveBeenCalledTimes(1);
     });
 
     it('starts from the remembered split', async () => {
