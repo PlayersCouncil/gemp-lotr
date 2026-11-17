@@ -27,3 +27,4 @@ gemp-lotr/docker/docker-compose.yml
 # Card test working material (ledgers, campaign state): never committed
 Claude outputs/
 .campaign-state
+m2-offline/
