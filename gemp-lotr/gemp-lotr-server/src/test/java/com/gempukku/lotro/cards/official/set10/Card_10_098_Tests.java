@@ -52,7 +52,7 @@ public class Card_10_098_Tests
 
 		/**
 		 * Set: 10
-		 * Name: Ruinous Hall
+		 * Name: Ruinous Hail
 		 * Unique: False
 		 * Side: Shadow
 		 * Culture: Sauron
@@ -66,7 +66,7 @@ public class Card_10_098_Tests
 
 		var card = scn.GetFreepsCard("hall");
 
-		assertEquals("Ruinous Hall", card.getBlueprint().getTitle());
+		assertEquals("Ruinous Hail", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.SHADOW, card.getBlueprint().getSide());

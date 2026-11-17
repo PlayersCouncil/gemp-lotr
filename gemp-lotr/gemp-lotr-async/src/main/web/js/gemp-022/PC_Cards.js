@@ -303,8 +303,6 @@ var PCCards = {
 	'1_377': 'https://i.lotrtcgpc.net/promos/LOTR-EN01O302.0_card.jpg',
 	
 	//2022 Christmas Errata
-	'151_39': 'https://i.lotrtcgpc.net/errata/LOTR-ENV1E039.1_card.jpg',
-	'51_4': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E004.1_card.jpg',
 	'51_9': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E009.1_card.jpg',
 	'51_16': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E016.1_card.jpg',
 	//'51_17': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E017.1_card.jpg',
@@ -330,8 +328,6 @@ var PCCards = {
 	'51_333': 'https://i.lotrtcgpc.net/errata/LOTR-EN01E333.1_card.jpg',
 	'52_1': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E001.1_card.jpg',
 	'52_12': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E012.1_card.jpg',
-	'52_25': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E025.1_card.jpg',
-	'52_28': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E028.1_card.jpg',
 	'52_32': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E032.2_card.jpg',
 	'52_43': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E043.1_card.jpg',
 	'52_44': 'https://i.lotrtcgpc.net/errata/LOTR-EN02E044.1_card.jpg',
