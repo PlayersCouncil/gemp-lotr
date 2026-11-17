@@ -194,7 +194,12 @@ public class GameJournal implements DecisionObserver {
         Map<String, String[]> parameters = new TreeMap<>(decision.getDecisionParameters());
         //Position in the list is not part of the question
         switch (decision.getDecisionType()) {
-            case CARD_ACTION_CHOICE, ACTION_CHOICE -> parameters.remove("actionId");
+            case CARD_ACTION_CHOICE, ACTION_CHOICE -> {
+                parameters.remove("actionId");
+                //Nor is the server's opinion of which actions would do nothing: it is advice about the options and
+                // not one of them, and journals written before there was any have to go on matching
+                parameters.remove("noEffect");
+            }
             case ARBITRARY_CARDS -> {
                 String[] cards = arbitraryCards(decision);
                 if (cards != null)

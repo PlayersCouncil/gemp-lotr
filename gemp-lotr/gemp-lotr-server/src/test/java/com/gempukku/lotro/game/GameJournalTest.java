@@ -154,6 +154,24 @@ public class GameJournalTest {
         };
     }
 
+    //The same choice of actions as the server sends it now, with its opinion of which of them would do nothing
+    private static AwaitingDecision actionsJudged(String[] noEffect, String... cardAndText) {
+        List<String> cardIds = new ArrayList<>(), blueprints = new ArrayList<>(), texts = new ArrayList<>();
+        for (String entry : cardAndText) {
+            cardIds.add(entry.split("=")[0]);
+            blueprints.add("inPlay");
+            texts.add(entry.split("=")[1]);
+        }
+        return new com.gempukku.lotro.logic.decisions.CardActionSelectionDecision(1, "Play Fellowship action or Pass", cardIds, blueprints, texts) {
+            {
+                setParam("noEffect", noEffect);
+            }
+
+            @Override
+            public void decisionMade(String result) { }
+        };
+    }
+
     private static AwaitingDecision arbitrary(String... blueprints) {
         List<String> ids = new ArrayList<>(), selectable = new ArrayList<>();
         for (int i = 0; i < blueprints.length; i++) {
@@ -184,6 +202,21 @@ public class GameJournalTest {
 
         assertEquals(GameJournal.fingerprint(arbitrary("1_83", "1_116", "1_83")), GameJournal.fingerprint(arbitrary("1_116", "1_83", "1_83")));
         assertNotEquals(GameJournal.fingerprint(arbitrary("1_83", "1_116", "1_83")), GameJournal.fingerprint(arbitrary("1_83", "1_116", "1_116")));
+    }
+
+    @Test
+    public void WhichActionsWouldDoNothingIsNoPartOfTheQuestion() {
+        //A journal written before decisions said which actions have no effect must go on matching them, and a
+        // change in what the server can foresee must not stop a journal matching either
+        AwaitingDecision before = actions("12=Play Gandalf", "15=Use Sam", "12=Use Gandalf");
+        AwaitingDecision unflagged = actionsJudged(new String[]{"false", "false", "false"}, "12=Play Gandalf", "15=Use Sam", "12=Use Gandalf");
+        AwaitingDecision flagged = actionsJudged(new String[]{"false", "skirmish", "effect"}, "12=Play Gandalf", "15=Use Sam", "12=Use Gandalf");
+        assertNotNull(flagged.getDecisionParameters().get("noEffect"));
+        assertNull(before.getDecisionParameters().get("noEffect"));
+        assertEquals(GameJournal.fingerprint(before), GameJournal.fingerprint(unflagged));
+        assertEquals(GameJournal.fingerprint(unflagged), GameJournal.fingerprint(flagged));
+        //The actions themselves still are
+        assertNotEquals(GameJournal.fingerprint(flagged), GameJournal.fingerprint(actionsJudged(new String[]{"false", "skirmish", "effect"}, "12=Play Gandalf", "15=Use Sam", "12=Use Frodo")));
     }
 
     @Test
