@@ -296,6 +296,10 @@
 				trigger: {
 					type: startOfTurn
 				}
+				requires: {
+					type: CanSpot
+					filter: ally,allyHome(fellowship,3),wounded
+				}
 				effect: [
 					{
 						type: ChooseActiveCards
@@ -452,6 +456,10 @@
 		timewords: Fellowship
 		effects: {
 			type: event
+			requires: {
+				type: HasCardInHand
+				player: shadow
+			}
 			effect: [
 				{
 					type: revealRandomCardsFromHand
@@ -562,6 +570,10 @@
 			{
 				type: activated
 				phase: regroup
+				requires: {
+					type: canSpot
+					filter: minion
+				}
 				cost: {
 					type: exert
 					select: self
@@ -800,7 +812,8 @@
 			cost: {
 				type: discardFromHand
 				forced: false
-				count: 0-2
+				// At least one: declining the offer is the way to discard none (F-0300).
+				count: 1-2
 				memorize: discardedCards
 			}
 			effect: {
@@ -969,6 +982,10 @@
 		effects: {
 			type: activated
 			phase: maneuver
+			requires: {
+				type: canSpot
+				filter: side(shadow),condition
+			}
 			cost: {
 				type: exert
 				select: bearer
@@ -1006,13 +1023,9 @@
 		keywords: Tale
 		effects: {
 			type: event
-			requires: {
-				type: location
-				filter: or(river,forest)
-			}
 			cost: {
 				type: exert
-				select: choose(elf)
+				select: choose(elf,atSite(or(river,forest)))
 				memorize: exertedElf
 			}
 			effect: {

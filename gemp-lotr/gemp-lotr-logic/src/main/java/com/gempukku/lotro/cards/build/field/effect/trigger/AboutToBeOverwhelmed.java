@@ -13,8 +13,6 @@ import com.gempukku.lotro.logic.effects.ResolveSkirmishEffect;
 import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
-import java.util.Set;
-
 public class AboutToBeOverwhelmed implements TriggerCheckerProducer {
     @Override
     public TriggerChecker getTriggerChecker(JSONObject value, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
@@ -32,16 +30,11 @@ public class AboutToBeOverwhelmed implements TriggerCheckerProducer {
                 if (effect.getType() == Effect.Type.BEFORE_SKIRMISH_RESOLVED) {
                     Filter filter = Filters.changeToFilter(affectedFilter.getFilterable(actionContext));
                     ResolveSkirmishEffect resolveEffect = (ResolveSkirmishEffect) effect;
-                    ResolveSkirmishEffect.Result upcomingResult = resolveEffect.getUpcomingResult(game);
-                    if (upcomingResult == ResolveSkirmishEffect.Result.FELLOWSHIP_OVERWHELMED
-                            && filter.accepts(game, game.getGameState().getSkirmish().getFellowshipCharacter())) {
-                        return true;
-                    } else if (upcomingResult == ResolveSkirmishEffect.Result.SHADOW_OVERWHELMED) {
-                        Set<PhysicalCard> shadowCharacters = game.getGameState().getSkirmish().getShadowCharacters();
-                        for (PhysicalCard shadowCharacter : shadowCharacters) {
-                            if (filter.accepts(game, shadowCharacter)) {
-                                return true;
-                            }
+                    // Overwhelm is decided character by character: a minion spared it beside others who are not
+                    // is not about to be overwhelmed
+                    for (PhysicalCard overwhelmed : resolveEffect.getUpcomingOverwhelmed(game)) {
+                        if (filter.accepts(game, overwhelmed)) {
+                            return true;
                         }
                     }
                 }

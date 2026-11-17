@@ -16,4 +16,9 @@ public class MultiplyEvaluator implements Evaluator {
     public int evaluateExpression(LotroGame game, PhysicalCard self) {
         return _multiplier.evaluateExpression(game, self) * _source.evaluateExpression(game, self);
     }
+
+    @Override
+    public boolean isSpent(LotroGame game, PhysicalCard self) {
+        return _source.isSpent(game, self);
+    }
 }

@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -37,13 +38,19 @@ public class DiscardFromPlay implements EffectAppenderProducer {
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
         final String stackedCardsMemory = FieldUtils.getString(effectObject.get("memorizeStackedCards"), "memorizeStackedCards");
 
-        MultiEffectAppender result = new MultiEffectAppender();
-
-        EffectAppender cardResolver = CardResolver.resolveCards(select, override,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, override,
                 (actionContext) -> Filters.canBeDiscarded(discardingPlayer.getPlayer(actionContext), actionContext.getSource()),
                 valueSource, memory, player, "Choose cards to discard", environment);
 
         EffectUtils.validatePreEvaluate(cost, effectObject, discardingPlayer, valueSource, cardResolver);
+
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With no card that may be discarded it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), false);
+            }
+        };
 
         result.addEffectAppender(cardResolver);
         result.addEffectAppender(

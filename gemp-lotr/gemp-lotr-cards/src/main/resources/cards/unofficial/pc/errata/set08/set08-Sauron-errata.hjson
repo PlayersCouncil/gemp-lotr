@@ -2,10 +2,10 @@
 
 	58_103: {
 		cardInfo: {
-			//id: 8_103.1
+			//id: 58_103.1
 			parent: 8_103
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/58_103.jpg
 			collInfo: 8R103
@@ -14,10 +14,11 @@
 		title: Grond
 		subtitle: Hammer of the Underworld
 		unique: true
+		side: Shadow
 		culture: Sauron
 		twilight: 3
-		type: possession
-		keyword: [
+		type: Possession
+		keywords: [
 			Support Area
 			Engine
 		]
@@ -60,21 +61,21 @@
 						type: discard
 						select: choose(and(culture(sauron),minion))
 					}
+				]
+				effect: [
 					{
 						type: chooseActiveCards
 						text: Choose a card for GROND to SMASH
 						select: choose(side(free people),not(companion),minTwilight(memory(numberOfTokens)),maxTwilight(memory(numberOfTokens)))
 						memorize: chosenCard
 					}
-				]
-				effect: [
 					{
 						type: If
 						check: [
 							{
 								type: MemoryMatches
 								memory: chosenCard
-								filter: not(or(zone(SUPPORT),and(zone(ATTACHED),attachedTo(zone(SUPPORT)))))
+								filter: not(support)
 							}
 						]
 						true: {
@@ -102,25 +103,26 @@
 
 	58_102: {
 		cardInfo: {
-			//id: 8_102.1
+			//id: 58_102.1
 			parent: 8_102
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/58_102.jpg
 			collInfo: 8C102
 			rarity: C
 		}
 		title: Great Hill Troll
-		side: shadow
+		unique: false
+		side: Shadow
 		culture: Sauron
-		type: minion
+		type: Minion
 		race: Troll
 		twilight: 9
 		strength: 16
 		vitality: 4
 		site: 5
-		keyword: [
+		keywords: [
 			Fierce
 			Besieger
 		]
@@ -136,8 +138,7 @@
 			}
 			{
 				type: Trigger
-				optional: false
-				optional:true
+				optional: true
 				trigger: {
 					type: played
 					filter: self

@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -17,8 +18,11 @@ public class Card_11_042_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_42");
-					// put other cards in here as needed for the test case
+					put("gollum", "11_42");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability used only on purpose
+					put("gimli", "1_13");       // Gimli, Son of Glóin: damage +1; a skirmish ability used only on purpose
+					put("raiders", "1_158");    // Uruk-hai Raiding Party: [isengard] Uruk-hai, strength 9; damage +1 only
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc, strength 13, vitality 3; no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_11_042_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gollum");
 
 		assertEquals("Gollum", card.getBlueprint().getTitle());
 		assertEquals("Skulker", card.getBlueprint().getSubtitle());
@@ -61,18 +65,105 @@ public class Card_11_042_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GollumTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityExertsGollumTwiceToMakeAnotherMinionStrengthPlus2ForThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		var gollum = scn.GetShadowCard("gollum");
+		var raiders = scn.GetShadowCard("raiders");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(gollum, raiders, troop);
+		// Vitality 4 with 1 wound: 3 left, enough to exert twice.
+		scn.AddWoundsToChar(gollum, 1);
+		assertEquals(1, scn.GetWoundsOn(gollum));
 
-		assertEquals(2, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, raiders}, new PhysicalCardImpl[]{gimli, troop});
+		scn.ShadowDeclineAssignments();
+		assertFalse(scn.IsCharAssigned(gollum));
+
+		// Aragorn's skirmish: the Raiding Party is in it, the Goblin Patrol Troop waits for Gimli's, and Gollum is in none.
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		assertEquals(9, scn.GetStrength(raiders));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+		assertEquals(3, scn.GetWoundsOn(gollum));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(raiders, troop));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(gollum, aragorn, gimli));
+		scn.ShadowChooseCard(troop);
+		assertEquals(15, scn.GetStrength(troop));
+		assertEquals(9, scn.GetStrength(raiders));
+		assertEquals(5, scn.GetStrength(gollum));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// Each skirmish is a phase of its own: in Gimli's, the next, the Troop is 13 again.
+		scn.PassSkirmishActions();
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
+		scn.FreepsResolveSkirmish(gimli);
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertEquals(13, scn.GetStrength(troop));
+	}
+
+	@Test
+	public void SkirmishAbilityIsNotOfferedWhenGollumCannotExertTwice() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var gollum = scn.GetShadowCard("gollum");
+		var raiders = scn.GetShadowCard("raiders");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum, raiders);
+		// Vitality 4 with 2 wounds: 2 left, enough for one exertion and not for two.
+		scn.AddWoundsToChar(gollum, 2);
+		assertEquals(2, scn.GetWoundsOn(gollum));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, raiders);
+		scn.ShadowDeclineAssignments();
+
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(gollum));
+		assertEquals(2, scn.GetWoundsOn(gollum));
+	}
+
+	@Test
+	public void WithNoOtherMinionTheAbilityIsOfferedAndGollumExertsForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var gollum = scn.GetShadowCard("gollum");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(gollum);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, gollum);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(gollum));
+		assertEquals(5, scn.GetStrength(gollum));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+		assertEquals(2, scn.GetWoundsOn(gollum));
+		assertEquals(5, scn.GetStrength(gollum));
+		assertEquals(8, scn.GetStrength(aragorn));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

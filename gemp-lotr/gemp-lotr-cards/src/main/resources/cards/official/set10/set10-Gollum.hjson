@@ -147,32 +147,30 @@
 		site: 3
 		effects: [
 			{
-				type: Trigger
-				optional: false
-				trigger: {
-					type: assignedToSkirmish
-					side: free people
-					filter: self
-				}
-				effect: {
-					type: choice
-					player: free people
-					texts: [
-						Make Gollum strength +3
-						Add a burden
-					]
-					effects: [
-						{
-							type: modifyStrength
-							select: self
-							amount: 3
-							until: regroup
-						}
-						{
-							type: addBurdens
-							player: free people
-						}
-					]
+				type: modifier
+				modifier: {
+					type: extraCostToAssign
+					minion: self
+					cost: {
+						type: choice
+						player: fp
+						texts: [
+							Make Gollum strength +3
+							Add a burden
+						]
+						effects: [
+							{
+								type: modifyStrength
+								select: self
+								amount: 3
+								until: regroup
+							}
+							{
+								type: addBurdens
+								player: fp
+							}
+						]
+					}
 				}
 			}
 		]

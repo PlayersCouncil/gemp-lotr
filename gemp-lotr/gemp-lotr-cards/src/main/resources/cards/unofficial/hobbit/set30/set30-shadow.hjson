@@ -6,10 +6,12 @@
 			rarity: _
 		}
 		title: Anger
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 1
 		type: event
-		timeword: skirmish
+		timewords: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -28,7 +30,17 @@
 				}
 			}
 		}
+		gametext: Make a minion strength +2 (or +4 if skirmishing a character bearing a follower).
+		lore: "'Out jumped the goblins, big goblins, great ugly-looking goblins, lots of goblins, before you could say rocks and blocks.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_33: {
 		cardInfo: {
 			image: hobbit/HDG3033.jpg
@@ -38,6 +50,7 @@
 		title: Fimbul
 		subtitle: Orkish Assassin
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 2
 		type: minion
@@ -45,7 +58,7 @@
 		strength: 7
 		vitality: 2
 		site: 3
-		keyword: damage+1
+		keywords: damage+1
 		effects: [
 			{
 				type: extraCost
@@ -66,10 +79,21 @@
 					select: choose(minion)
 					showAll: true
 					shuffle: true
+					mustExist: true
 				}
 			}
 		]
+		gametext: <b>Damage +1</b>. To play, exert an Orc.<br><b>Shadow:</b> Discard Fimbul from play to play a minion from your draw deck.
+		lore: "His strong will and keen senses were only surpassed by his burning hatred for Dwarves."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_34: {
 		cardInfo: {
 			image: hobbit/HDG3034.jpg
@@ -77,10 +101,12 @@
 			rarity: _
 		}
 		title: Hatred Rekindled
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 3
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: {
 			type: activated
 			phase: shadow
@@ -89,13 +115,24 @@
 				forced: false
 				select: choose(any)
 				count: 3
+				memorize: discardedCards
 			}
 			effect: {
 				type: playCardFromDiscard
-				select: choose(orc)
+				select: choose(orc,not(memory(discardedCards)))
+			}
+		}
+		gametext: <b>Shadow:</b> Discard 3 cards from hand to play an Orc from your discard pile.
+		lore: "'Down, heedless of order, rushed all the dwarves of Dain to his help. Down too came many of the Lake-men, for Bard could not restrain them...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_35: {
 		cardInfo: {
 			image: hobbit/HDG3035.jpg
@@ -103,10 +140,12 @@
 			rarity: _
 		}
 		title: Host of Thousands
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 0
 		type: event
-		timeword: shadow
+		timewords: shadow
 		effects: {
 			type: event
 			effect: {
@@ -114,7 +153,17 @@
 				select: choose(orc)
 			}
 		}
+		gametext: Play an Orc from your discard pile.
+		lore: "'Goblins had scaled the Mountain from the other side and already many were on the slopes above the Gate...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_36: {
 		cardInfo: {
 			image: hobbit/HDG3036.jpg
@@ -124,6 +173,7 @@
 		title: Narzug
 		subtitle: Orkish Assassin
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 2
 		type: minion
@@ -131,31 +181,66 @@
 		strength: 6
 		vitality: 2
 		site: 3
-		keyword: archer
-		effects: {
-			type: SelfRemovedFromPlayTrigger
-			optional: true
-			method: discarded
-			requires: [
-				{
+		keywords: archer
+		effects: [
+			{
+				// A kill is no discard (CR 4.2 "killed"), so "killed or discarded" is two triggers.
+				// player: owner, or the offer goes to the Free Peoples player.
+				type: killedTrigger
+				optional: true
+				player: owner
+				requires: {
 					type: not
 					requires: {
 						type: phase
 						phase: regroup
 					}
 				}
-			]
-			cost: {
-				type: removeTwilight
-				amount: 3
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: wound
+					select: choose(ally)
+					times: 2
+				}
 			}
-			effect: {
-				type: wound
-				select: choose(ally)
-				times: 2
+			{
+				type: SelfRemovedFromPlayTrigger
+				optional: true
+				method: discarded
+				requires: [
+					{
+						type: not
+						requires: {
+							type: phase
+							phase: regroup
+						}
+					}
+				]
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: wound
+					select: choose(ally)
+					times: 2
+				}
+			}
+		]
+		gametext: <b>Archer</b>.<br>When Narzug is killed or discarded from play (except during the regroup phase), you may remove (3) to wound an ally twice.
+		lore: "'The Dwarf runt will never be King!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_37: {
 		cardInfo: {
 			image: hobbit/HDG3037.jpg
@@ -164,26 +249,21 @@
 		}
 		title: Not at Home
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
-				type: Trigger
-				optional: false
-				requires: {
-					type: HasCardInDeadPile
+				type: modifier
+				modifier: {
+					type: comesIntoPlayExhausted
 					filter: culture(dwarven),companion
-				}
-				trigger: {
-					type: played
-					filter: culture(dwarven),companion
-					memorize: playedCompanion
-				}
-				effect: {
-					type: exhaust
-					select: memory(playedCompanion)
+					requires: {
+						type: HasCardInDeadPile
+						filter: culture(dwarven),companion
+					}
 				}
 			}
 			{
@@ -201,7 +281,17 @@
 				]
 			}
 		]
+		gametext: If there is a [dwarven] companion in the dead pile, each [dwarven] companion comes into play exhausted.<br><b>Regroup:</b> Place a Shadow card (except Smaug) from your discard pile on top of your draw deck. Discard this condition.
+		lore: "'I'm sure the rain has got into the dry clothes.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_38: {
 		cardInfo: {
 			image: hobbit/HDG3038.jpg
@@ -209,6 +299,8 @@
 			rarity: _
 		}
 		title: Orkish Marauder
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 3
 		type: minion
@@ -252,7 +344,17 @@
 				}
 			}
 		]
+		gametext: When you play this minion, you may spot 4 [dwarven] followers to exhaust a [dwarven] companion.<br><b>Maneuver:</b> Spot 7 companions and remove (2) to wound a companion (except Bilbo).
+		lore: "'The scent is fresh! They took the mountain pass.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_39: {
 		cardInfo: {
 			image: hobbit/HDG3039.jpg
@@ -260,6 +362,8 @@
 			rarity: _
 		}
 		title: Orkish Aggressor
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 2
 		type: minion
@@ -270,6 +374,10 @@
 		effects: {
 			type: activated
 			phase: assignment
+			requires: {
+				type: canSpot
+				filter: name(Bilbo),assignableToSkirmishAgainst(self)
+			}
 			effect: [
 				{
 					type: assignFpCharacterToSkirmish
@@ -291,7 +399,17 @@
 				}
 			]
 		}
+		gametext: <b>Assignment:</b> Assign this minion to skirmish Bilbo. The Free Peoples player may add a doubt to discard this minion.
+		lore: "'Suddenly a rogue goblin attacks him and as they fight they fall off the bridge...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_40: {
 		cardInfo: {
 			image: hobbit/HDG3040.jpg
@@ -299,6 +417,8 @@
 			rarity: _
 		}
 		title: Watchful Orc
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 4
 		type: minion
@@ -339,14 +459,24 @@
 					}
 					{
 						type: addKeyword
-						select: all(site)
+						select: all(site,zone(adventure path))
 						keyword: fromMemory(keywordSelected)
 						until: endOfTurn
 					}
 				]
 			}
 		]
+		gametext: When you play this minion, you may play the fellowship's next site (replacing opponent's site if necessary).<br><b>Shadow:</b> Exert this minion twice to make each site on the adventure path gain battleground, mountain, forest or underground until the end of the turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_41: {
 		cardInfo: {
 			image: hobbit/HDG3041.jpg
@@ -356,6 +486,7 @@
 		title: Yazneg
 		subtitle: Orkish Assassin
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 1
 		type: minion
@@ -381,7 +512,17 @@
 				select: choose(follower)
 			}
 		}
+		gametext: <b>Maneuver:</b> Remove (3) and discard this minion from play to discard a follower.
+		lore: "Yazneg detects the Dwarves and focuses his attack on them in a last ditch effort to claim the head of their leader Thorin Oakenshield, for his master."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_42: {
 		cardInfo: {
 			image: hobbit/HDG3042.jpg
@@ -389,6 +530,8 @@
 			rarity: _
 		}
 		title: Goblin Footman
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 3
 		type: minion
@@ -409,7 +552,17 @@
 				on: minion
 			}
 		}
+		gametext: When you play this minion, you may play a possession from your discard pile on your minion.
+		lore: "Goblin weapons include scimitars, axes, and spears, as well as bows."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_66: {
 		cardInfo: {
 			image: hobbit/HDG3066.jpg
@@ -419,6 +572,7 @@
 		title: Smaug
 		subtitle: The Golden
 		unique: true
+		side: Shadow
 		culture: smaug
 		twilight: 16
 		type: minion
@@ -426,7 +580,7 @@
 		strength: 17
 		vitality: 5
 		site: 7
-		keyword: [
+		keywords: [
 			damage+2
 			fierce
 		]
@@ -473,5 +627,14 @@
 				}
 			}
 		]
+		gametext: <b>Damage +2</b>. <b>Fierce</b>.<br>Discard Smaug if not at a mountain.<br>For each Dwarf, Man and Elf you spot, Smaug's twilight cost is -1.<br><b>Regroup:</b> Exert Smaug and discard another minion to discard a Free Peoples card (except a companion, Bard or a Ring).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 }

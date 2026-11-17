@@ -3,13 +3,13 @@ package com.gempukku.lotro.cards.official.set07;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_07_217_Tests
 {
@@ -18,8 +18,12 @@ public class Card_07_217_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_217");
-					// put other cards in here as needed for the test case
+					put("nertea", "7_217");
+					// Cards for the Free Peoples hand, which decides who has initiative.
+					put("hand1", "1_13");
+					put("hand2", "1_13");
+					put("hand3", "1_13");
+					put("hand4", "1_13");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,33 +51,68 @@ public class Card_07_217_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var nertea = scn.GetFreepsCard("nertea");
 
-		assertEquals("Úlairë Nertëa", card.getBlueprint().getTitle());
-		assertEquals("Black-Mantled Wraith", card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.WRAITH, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.NAZGUL, card.getBlueprint().getRace());
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(3, card.getBlueprint().getSiteNumber());
+		assertEquals("Úlairë Nertëa", nertea.getBlueprint().getTitle());
+		assertEquals("Black-Mantled Wraith", nertea.getBlueprint().getSubtitle());
+		assertTrue(nertea.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, nertea.getBlueprint().getSide());
+		assertEquals(Culture.WRAITH, nertea.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, nertea.getBlueprint().getCardType());
+		assertEquals(Race.NAZGUL, nertea.getBlueprint().getRace());
+		assertEquals(4, nertea.getBlueprint().getTwilightCost());
+		assertEquals(9, nertea.getBlueprint().getStrength());
+		assertEquals(2, nertea.getBlueprint().getVitality());
+		assertEquals(3, nertea.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireNerteaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WithInitiativeRegroupAbilityDiscardsHerToAddABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var nertea = scn.GetShadowCard("nertea");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// No minion in the Shadow phase: straight on to the regroup phase.
+		scn.FreepsPass();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(nertea);
+		// Three cards in the Free Peoples hand: the Shadow has initiative.
+		scn.MoveCardsToHand(scn.GetFreepsCard("hand1"), scn.GetFreepsCard("hand2"), scn.GetFreepsCard("hand3"));
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertTrue(scn.ShadowHasInitiative());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.ShadowActionAvailable(nertea));
+
+		scn.ShadowUseCardAction(nertea);
+		assertInDiscard(nertea);
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithFourCardsInTheFreePeoplesHandRegroupAbilityIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var nertea = scn.GetShadowCard("nertea");
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(nertea);
+		// Four cards in the Free Peoples hand: the Free Peoples player has initiative.
+		scn.MoveCardsToHand(scn.GetFreepsCard("hand1"), scn.GetFreepsCard("hand2"),
+				scn.GetFreepsCard("hand3"), scn.GetFreepsCard("hand4"));
+		scn.FreepsPass();
+
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(nertea));
+		assertInZone(Zone.SHADOW_CHARACTERS, nertea);
+		assertEquals(0, scn.GetBurdens());
 	}
 }

@@ -26,6 +26,10 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: another,companion,wounded
+				}
 				effect: {
 					type: heal
 					select: choose(another,companion)
@@ -262,6 +266,10 @@
 		timewords: Fellowship
 		effects: {
 			type: event
+			requires: {
+				type: HasCardInHand
+				player: shadow
+			}
 			effect: [
 				{
 					type: chooseHowManyToSpot
@@ -285,10 +293,21 @@
 					player: you
 					count: 1
 					select: choose(side(shadow),memory(revealedCards))
+					memorize: discardedCard
 				}
 				{
-					type: drawCards
-					player: shadow
+					// "then its owner draws a card": the owner of the card discarded; with no Shadow card revealed,
+					// nothing is discarded and nobody draws (Ketura, Q-0350: A).
+					type: If
+					check: {
+						type: memoryMatches
+						memory: discardedCard
+						filter: any
+					}
+					true: {
+						type: drawCards
+						player: ownerFromMemory(discardedCard)
+					}
 				}
 			]
 		}
@@ -385,21 +404,37 @@
 			}
 			effect: [
 				{
-					type: choice
-					texts: [
-						Discard a stacked Shadow card
-						Wound a minion bearing fortification
-					]
-					effects: [
-						{
-							type: discardStackedCards
-							select: choose(side(shadow))
-						}
-						{
-							type: wound
-							select: choose(minion,hasAttached(fortification))
-						}
-					]
+					type: If
+					check: {
+						type: Or
+						requires: [
+							{
+								type: HasCardStacked
+								filter: side(shadow)
+							}
+							{
+								type: CanSpot
+								filter: minion,hasAttached(fortification)
+							}
+						]
+					}
+					true: {
+						type: choice
+						texts: [
+							Discard a stacked Shadow card
+							Wound a minion bearing fortification
+						]
+						effects: [
+							{
+								type: discardStackedCards
+								select: choose(side(shadow))
+							}
+							{
+								type: wound
+								select: choose(minion,hasAttached(fortification))
+							}
+						]
+					}
 				}
 			]
 		}
@@ -446,6 +481,11 @@
 			{
 				type: activated
 				phase: maneuver
+				// Ketura (Q-0349: B): only a copy in the support area may be transferred, as First Level 7_92
+				requires: {
+					type: CanSpot
+					filter: self,Zone(SUPPORT)
+				}
 				cost: {
 					type: choice
 					texts: [
@@ -468,6 +508,7 @@
 				effect: {
 					type: transfer
 					select: self
+					fromSupport: true
 					where: choose(minion)
 				}
 			}

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_294_Tests
@@ -17,8 +18,12 @@ public class Card_07_294_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_294");
-					// put other cards in here as needed for the test case
+					put("troop", "7_294");
+					put("chieftain", "1_266");  // Orc Chieftain: another [sauron] Orc; text on a weapon PLAYED on him only
+					put("stairs", "1_24");      // Stairs of Khazad-dûm: [dwarven] condition of cost 0, no requirement; played to take the hand from 4 to 3
+					put("sword", "1_299");      // Hobbit Sword: a card for the Free Peoples hand
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a card for the Free Peoples hand
+					put("boromir", "1_96");     // Boromir, Lord of Gondor: a card for the Free Peoples hand
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +51,7 @@ public class Card_07_294_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("troop");
 
 		assertEquals("Orc Archer Troop", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +67,44 @@ public class Card_07_294_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcArcherTroopTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WithTheShadowInitiativeTheMinionArcheryTotalIsPlusOneAndOnlyTheTroopIsFierce() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var stairs = scn.GetFreepsCard("stairs");
+		var sword = scn.GetFreepsCard("sword");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		// Four cards in the Free Peoples hand: the Free Peoples player has initiative.
+		scn.MoveCardsToHand(stairs, sword, aragorn, boromir);
+
+		var troop = scn.GetShadowCard("troop");
+		var chieftain = scn.GetShadowCard("chieftain");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop, chieftain);
+		scn.FreepsRefreshDecision();
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(4, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsHasInitiative());
+		// 1 for the Troop's own archer keyword, and no more.
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(chieftain, Keyword.FIERCE));
+
+		// A card played from four to three: the Shadow has initiative.
+		scn.FreepsPlayCard(stairs);
+
+		assertInZone(Zone.SUPPORT, stairs);
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertFalse(scn.FreepsHasInitiative());
+		// 1 for the archer keyword + 1.  The fellowship archery total is untouched.
+		assertEquals(2, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.HasKeyword(troop, Keyword.FIERCE));
+		// The Troop alone: another [sauron] Orc beside it is not made fierce.
+		assertFalse(scn.HasKeyword(chieftain, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set02;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,10 @@ public class Card_02_062_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_62");
-					// put other cards in here as needed for the test case
+					put("pursuer1", "2_62");
+					put("pursuer2", "2_62");
+					// Goblin Patrol Troop: [moria] Orc, strength 13, no text
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +48,7 @@ public class Card_02_062_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pursuer1");
 
 		assertEquals("Goblin Pursuer", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +63,33 @@ public class Card_02_062_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinPursuerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachPursuerIsStrengthPlusThreeOnceTheFellowshipHasMovedTwiceThisTurn() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pursuer1 = scn.GetShadowCard("pursuer1");
+		var pursuer2 = scn.GetShadowCard("pursuer2");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.FreepsPass(); // the fellowship's first move of the turn, to site 2
+		scn.MoveMinionsToTable(pursuer1, pursuer2, troop);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetMoveCount());
+		assertEquals(6, scn.GetStrength(pursuer1));
+		assertEquals(6, scn.GetStrength(pursuer2));
+		assertEquals(13, scn.GetStrength(troop));
+
+		// Nobody is assigned, so the minions are still in play when the fellowship moves again.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+
+		assertEquals(2, scn.GetMoveCount());
+		// Each copy is +3 for itself alone (two copies giving each other +3 would read 12);
+		// the other [moria] Orc is untouched.
+		assertEquals(9, scn.GetStrength(pursuer1));
+		assertEquals(9, scn.GetStrength(pursuer2));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

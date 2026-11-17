@@ -18,8 +18,16 @@ public class Card_07_016_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_16");
-					// put other cards in here as needed for the test case
+					put("arwen", "7_16");
+					// Legolas, Companion of the Ring: an Elf companion, strength 6, no archer; his text needs a
+					// battleground or forest, which no site of this path is
+					put("legolas", "11_21");
+					// Black Rider: a fierce [wraith] Nazgûl, strength 8, +1 for each companion (11 beside three)
+					put("rider", "12_161");
+					// White Hand Destroyer: a fierce [uruk-hai] Uruk-hai, strength 10; hunter only for sites controlled
+					put("destroyer", "17_124");
+					// Morgul Hound: a [wraith] Orc, strength 5, not fierce while the Ring-bearer has fewer than 2 wounds
+					put("hound", "7_192");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -48,7 +56,7 @@ public class Card_07_016_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("arwen");
 
 		assertEquals("Arwen", card.getBlueprint().getTitle());
 		assertEquals("Fair Elf Maiden", card.getBlueprint().getSubtitle());
@@ -64,18 +72,80 @@ public class Card_07_016_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ArwenTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus3InHerOwnSkirmishAgainstAFierceMinionOfEitherRoundAndNotWhileWaitingForIt() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var rider = scn.GetShadowCard("rider");
+		var destroyer = scn.GetShadowCard("destroyer");
+		scn.MoveCompanionsToTable(arwen, legolas);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(rider, destroyer);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{legolas, destroyer}, new PhysicalCardImpl[]{arwen, rider});
 
-		assertEquals(2, scn.GetTwilight());
+		// Legolas's skirmish is fought first: Arwen is assigned to a fierce minion but is not skirmishing yet,
+		// and Legolas, an Elf skirmishing a fierce minion, is not reached.
+		scn.FreepsResolveSkirmish(legolas);
+		assertTrue(scn.IsCharSkirmishingAgainst(legolas, destroyer));
+		assertEquals(6, scn.GetStrength(arwen));
+		assertEquals(6, scn.GetStrength(legolas));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// Legolas (6) loses to the Destroyer (10).
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(legolas));
+
+		// Her own skirmish, against the fierce [wraith] Nazgûl: 6 + 3.
+		scn.FreepsResolveSkirmish(arwen);
+		assertTrue(scn.IsCharSkirmishingAgainst(arwen, rider));
+		assertEquals(9, scn.GetStrength(arwen));
+		assertEquals(6, scn.GetStrength(legolas));
+
+		// Arwen (9) loses to the Black Rider (8 + 3 companions).
+		assertEquals(0, scn.GetWoundsOn(arwen));
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(arwen));
+
+		// The fierce round: against the fierce [uruk-hai] Uruk-hai, 6 + 3 again.
+		assertTrue(scn.InFierceRound());
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{arwen, destroyer}, new PhysicalCardImpl[]{legolas, rider});
+		scn.FreepsResolveSkirmish(arwen);
+		assertTrue(scn.IsCharSkirmishingAgainst(arwen, destroyer));
+		assertEquals(9, scn.GetStrength(arwen));
+		assertEquals(6, scn.GetStrength(legolas));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void IsNotStrengthenedSkirmishingAMinionThatIsNotFierceWhileAFierceMinionFightsElsewhere() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var arwen = scn.GetFreepsCard("arwen");
+		var legolas = scn.GetFreepsCard("legolas");
+		var rider = scn.GetShadowCard("rider");
+		var hound = scn.GetShadowCard("hound");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(arwen, legolas);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(rider, hound);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{arwen, hound}, new PhysicalCardImpl[]{legolas, rider});
+
+		// The Ring-bearer has no wound, so the Hound is not fierce.
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertFalse(scn.HasKeyword(hound, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(rider, Keyword.FIERCE));
+
+		scn.FreepsResolveSkirmish(arwen);
+		assertTrue(scn.IsCharSkirmishingAgainst(arwen, hound));
+		assertEquals(6, scn.GetStrength(arwen));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 	}
 }

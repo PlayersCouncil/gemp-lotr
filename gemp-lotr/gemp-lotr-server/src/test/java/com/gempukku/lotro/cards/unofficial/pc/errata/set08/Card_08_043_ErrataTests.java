@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_08_043_ErrataTests
 {
@@ -18,8 +19,11 @@ public class Card_08_043_ErrataTests
 				new HashMap<>()
 				{{
 					put("host", "58_43");
-					put("wraith1", "8_41");
-					put("wraith2", "8_41");
+					put("oath", "8_41");        // Oathbreaker: [gondor] Wraith companion; to play, add a threat
+					put("deadman", "10_27");    // Dead Man of Dunharrow: [gondor] Wraith companion; to play, add a threat; exerts twice when played
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man, no Wraith
+					put("guard", "1_7");        // Dwarf Guard: [dwarven] companion with no text but its play requirement
+					put("troop", "1_177");      // Goblin Patrol Troop: strength 13, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -31,26 +35,28 @@ public class Card_08_043_ErrataTests
 	public void ShadowHostStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
 		/**
-		* Set: 8
-		* Title: Shadow Host
-		* Unique: True
-		* Side: FREE_PEOPLE
-		* Culture: Gondor
-		* Twilight Cost: 5
-		* Type: companion
-		* Subtype: Wraith
-		* Strength: 9
-		* Vitality: 3
-		* Signet: Aragorn
-		* Game Text: <b>Enduring.</b> To play, spot 2 [gondor] Wraiths and add 2 threats. 
-		* 	While Shadow Host is exhausted, it is defender +1.
-		*/
+		 * Set: 8
+		 * Name: Shadow Host
+		 * Unique: True
+		 * Side: Free Peoples
+		 * Culture: Gondor
+		 * Twilight Cost: 5
+		 * Type: Companion
+		 * Race: Wraith
+		 * Strength: 9
+		 * Vitality: 3
+		 * Resistance: 6
+		 * Signet: Aragorn
+		 * Game Text: Enduring. To play, spot 2 [gondor] Wraiths and add 2 threats.
+		 * While Shadow Host is exhausted, it is defender +1.
+		 */
 
-		//Pre-game setup
 		var scn = GetScenario();
 
 		var host = scn.GetFreepsCard("host");
 
+		assertEquals("Shadow Host", host.getBlueprint().getTitle());
+		assertNull(host.getBlueprint().getSubtitle());
 		assertTrue(host.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, host.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, host.getBlueprint().getCulture());
@@ -65,49 +71,115 @@ public class Card_08_043_ErrataTests
 	}
 
 	@Test
-	public void HostRequires2GondorWraithsAnd2ThreatsToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedByAddingTwoThreatsOnSpottingTwoGondorWraithsWhetherExhaustedOrNot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var host = scn.GetFreepsCard("host");
-		var wraith1 = scn.GetFreepsCard("wraith1");
-		var wraith2 = scn.GetFreepsCard("wraith2");
-		scn.MoveCardsToHand(host, wraith1, wraith2);
+		var oath = scn.GetFreepsCard("oath");
+		var deadman = scn.GetFreepsCard("deadman");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(oath, deadman, aragorn);
+		// One Wraith exhausted, the other not.
+		scn.AddWoundsToChar(deadman, 2);
+		scn.MoveCardsToHand(host);
 
 		scn.StartGame();
 
-		assertFalse(scn.FreepsPlayAvailable(host));
-		scn.FreepsPlayCard(wraith1);
-		scn.RemoveThreats(1);
-		assertFalse(scn.FreepsPlayAvailable(host));
-		scn.FreepsPlayCard(wraith2);
-		scn.RemoveThreats(1);
+		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.FreepsPlayAvailable(host));
 
-		assertEquals(0, scn.GetThreats());
-		assertEquals(0, scn.GetWoundsOn(wraith1));
-		assertEquals(0, scn.GetWoundsOn(wraith2));
 		scn.FreepsPlayCard(host);
+
+		assertInZone(Zone.FREE_CHARACTERS, host);
 		assertEquals(2, scn.GetThreats());
-		assertEquals(0, scn.GetWoundsOn(wraith1));
-		assertEquals(0, scn.GetWoundsOn(wraith2));
+		// Spotting exerts nobody.
+		assertEquals(0, scn.GetWoundsOn(oath));
+		assertEquals(2, scn.GetWoundsOn(deadman));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void HostIsDefenderPlus1IfExhausted() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void OneGondorWraithBesideAGondorManIsNotEnoughUntilASecondWraithIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var host = scn.GetFreepsCard("host");
-		scn.MoveCompanionsToTable(host);
+		var oath = scn.GetFreepsCard("oath");
+		var deadman = scn.GetFreepsCard("deadman");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(oath, aragorn, guard);
+		scn.MoveCardsToHand(host, deadman);
 
 		scn.StartGame();
 
-		assertFalse(scn.HasKeyword(host, Keyword.DEFENDER));
+		assertFalse(scn.FreepsPlayAvailable(host));
+
+		scn.FreepsPlayCard(deadman);
+
+		// Dead Man of Dunharrow added his own threat: 1, with room for 2 more among 5 companions.
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.FreepsPlayAvailable(host));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWhileOnlyOneMoreThreatCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var host = scn.GetFreepsCard("host");
+		var oath = scn.GetFreepsCard("oath");
+		var deadman = scn.GetFreepsCard("deadman");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(oath, deadman);
+		scn.MoveCardsToHand(host, aragorn);
+		scn.AddThreats(2);
+
+		scn.StartGame();
+
+		// 3 companions (Frodo and the two Wraiths) and 2 threats: a third may be added, a fourth may not.
+		assertEquals(2, scn.GetThreats());
+		assertFalse(scn.FreepsPlayAvailable(host));
+
+		scn.FreepsPlayCard(aragorn);
+
+		// 4 companions: 2 more threats fit.
+		assertTrue(scn.FreepsPlayAvailable(host));
+		scn.FreepsPlayCard(host);
+
+		assertInZone(Zone.FREE_CHARACTERS, host);
+		assertEquals(4, scn.GetThreats());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ExhaustedByASkirmishWoundShadowHostIsDefenderPlusOneAndAnotherExhaustedWraithIsNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var host = scn.GetFreepsCard("host");
+		var oath = scn.GetFreepsCard("oath");
+		scn.MoveCompanionsToTable(host, oath);
 		scn.AddWoundsToChar(host, 1);
-		assertFalse(scn.HasKeyword(host, Keyword.DEFENDER));
-		scn.AddWoundsToChar(host, 1);
-		assertTrue(scn.HasKeyword(host, Keyword.DEFENDER));
+		scn.AddWoundsToChar(oath, 2);
+
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+
+		// Vitality 3 with 1 wound: not exhausted.
+		assertEquals(0, scn.GetKeywordCount(host, Keyword.DEFENDER));
+		// Oathbreaker is exhausted, but he is not Shadow Host.
+		assertEquals(0, scn.GetKeywordCount(oath, Keyword.DEFENDER));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(host, troop);
+		scn.PassSkirmishActions();
+
+		// Strength 9 + 2 (enduring, 1 wound) loses to 13: a second wound, and Shadow Host is exhausted.
+		assertEquals(2, scn.GetWoundsOn(host));
 		assertEquals(1, scn.GetKeywordCount(host, Keyword.DEFENDER));
+		assertEquals(0, scn.GetKeywordCount(oath, Keyword.DEFENDER));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

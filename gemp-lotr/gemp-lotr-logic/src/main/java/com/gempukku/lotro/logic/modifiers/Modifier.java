@@ -17,6 +17,18 @@ public interface Modifier {
 
     String getText(LotroGame game, PhysicalCard self);
 
+    /**
+     * This modifier as the card's information lists it ("Affecting card"), one entry for each source it is shown
+     * as coming from: itself, for every modifier but the rules' sums of borne cards' printed numbers, which are
+     * shown card by card (StatModifiersRule; engine pass 59).  For showing only: nothing the game decides reads it.
+     * @param game The game.
+     * @param card The card the modifier affects.
+     * @return The modifiers to list, each with its own source and text.
+     */
+    default List<Modifier> getShownAsAffecting(LotroGame game, PhysicalCard card) {
+        return List.of(this);
+    }
+
     ModifierEffect getModifierEffect();
 
     boolean isNonCardTextModifier();
@@ -74,7 +86,12 @@ public interface Modifier {
 
     boolean isUnhastyCompanionAllowedToParticipateInSkirmishes(LotroGame game, PhysicalCard card);
 
-    boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card);
+    /**
+     * Appends, as costs of the given action, what this modifier has the Free Peoples player pay to assign the
+     * minion to skirmish the character, and says whether it charges for that assignment at all
+     * (ExtraAssignmentCostModifier).
+     */
+    boolean appendExtraAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion);
 
     boolean isAllyPreventedFromParticipatingInArcheryFire(LotroGame game, PhysicalCard card);
 
@@ -121,7 +138,13 @@ public interface Modifier {
 
     boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source);
 
-    boolean canBeHealed(LotroGame game, PhysicalCard card);
+    /**
+     * Whether this modifier lets performingPlayer heal a wound from the card.  A bar on healing that names a
+     * player ("you may not heal ...") answers false for that player's heals alone; one that names nobody answers
+     * false whoever heals.  healSource is the card whose text makes the heal (null for none): a bar with an
+     * exception by source ("except by Wraiths", Spirit of Dread 16_5; Q-0357) answers true for a heal it excepts.
+     */
+    boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard healSource);
 
     boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source);
 
@@ -135,7 +158,12 @@ public interface Modifier {
 
     boolean canDiscardCardsFromTopOfDeck(LotroGame game, String playerId, PhysicalCard source);
 
-    int getSpotCountModifier(LotroGame game, Filterable filter);
+    /**
+     * What this modifier adds to the number of cards a player can spot with one filter alone ("add 1 to the number
+     * of Ents you can spot"). The spotting player is the one whose count it is, or null for a count that is no
+     * player's, to which no such bonus is added (F-0502).
+     */
+    int getSpotCountModifier(LotroGame game, Filterable filter, String spottingPlayer);
 
     boolean hasFlagActive(LotroGame game, ModifierFlag modifierFlag);
 
@@ -151,7 +179,15 @@ public interface Modifier {
 
     int getInitiativeHandSizeModifier(LotroGame game);
 
+    int getHandSizeModifier(LotroGame game, String playerId);
+
     boolean lostAllKeywords(LotroGame game, PhysicalCard card);
+
+    /**
+     * The most of a keyword this modifier lets the card have, whatever gives it: Integer.MAX_VALUE for every
+     * modifier but a bar on gaining keywords (CantGainKeywordsModifier, Q-0282).
+     */
+    int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword);
 
     Evaluator getFpSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);
     Evaluator getShadowSkirmishStrengthOverrideEvaluator(LotroGame game, PhysicalCard fpCharacter);

@@ -17,8 +17,7 @@ public class Card_05_035_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "5_35");
-					// put other cards in here as needed for the test case
+					put("knight", "5_35");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_05_035_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("knight");
 
 		assertEquals("Gondorian Knight", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,20 +59,5 @@ public class Card_05_035_Tests
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GondorianKnightTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
 	}
 }

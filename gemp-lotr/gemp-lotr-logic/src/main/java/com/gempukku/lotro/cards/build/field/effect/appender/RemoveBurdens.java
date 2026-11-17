@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -29,7 +30,17 @@ public class RemoveBurdens implements EffectAppenderProducer {
 
         String memorize = "_temp";
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // With no burden to remove, or none that may be removed, it does nothing.  How many it would
+            // remove is not worked out.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final LotroGame game = actionContext.getGame();
+                if (game.getGameState().getBurdens() == 0 || !game.getModifiersQuerying().canRemoveBurden(game, actionContext.getSource()))
+                    return EffectForecast.NOTHING;
+                return EffectForecast.UNKNOWN;
+            }
+        };
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -43,8 +54,14 @@ public class RemoveBurdens implements EffectAppenderProducer {
                         if (cost && actionContext.getGame().getGameState().getBurdens() < evaluator.getMinimum(actionContext.getGame(), null))
                             return new FailedEffect();
 
-                        final int min = Math.min(actionContext.getGame().getGameState().getBurdens(), evaluator.getMinimum(actionContext.getGame(), null));
-                        final int max = Math.min(actionContext.getGame().getGameState().getBurdens(), evaluator.getMaximum(actionContext.getGame(), null));
+                        // As an effect, burdens that may not be removed (a bar on removing them: Black Breath 1_207) are
+                        // none to choose from, so "remove up to N burdens" asks nothing there (F-0512).  A cost is
+                        // left as it was: it is not offered under the bar (isPlayableInFull).
+                        final LotroGame game = actionContext.getGame();
+                        final int removable = (cost || game.getModifiersQuerying().canRemoveBurden(game, actionContext.getSource()))
+                                ? game.getGameState().getBurdens() : 0;
+                        final int min = Math.min(removable, evaluator.getMinimum(game, null));
+                        final int max = Math.min(removable, evaluator.getMaximum(game, null));
                         if (min != max) {
                             return new PlayoutDecisionEffect(
                                     actionContext.getPerformingPlayer(),

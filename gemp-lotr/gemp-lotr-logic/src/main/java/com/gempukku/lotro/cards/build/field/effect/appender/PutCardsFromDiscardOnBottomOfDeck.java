@@ -30,8 +30,8 @@ public class PutCardsFromDiscardOnBottomOfDeck implements EffectAppenderProducer
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCardsInDiscard(select, valueSource, "_temp", "you", "Choose cards from discard", environment));
+        final EffectAppender cardResolver = CardResolver.resolveCardsInDiscard(select, valueSource, "_temp", "you", "Choose cards from discard", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -62,7 +62,7 @@ public class PutCardsFromDiscardOnBottomOfDeck implements EffectAppenderProducer
                     }
                 });
 
-        return result;
-
+        // Taught for Q-0224 (IdleOffers): with no such card in the discard pile, nothing is placed beneath the deck.
+        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 }

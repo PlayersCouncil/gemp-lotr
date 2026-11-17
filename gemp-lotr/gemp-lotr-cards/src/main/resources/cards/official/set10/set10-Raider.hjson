@@ -293,21 +293,23 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,easterling
-				}
-				effect: [
+				requires: [
 					{
-						type: chooseHowManyToSpot
-						filter: companion
-						memorize: spotCount
+						type: canSpot
+						filter: another,easterling
 					}
+					{
+						type: canSpot
+						filter: companion
+						count: 6
+					}
+				]
+				effect: [
 					{
 						type: addBurdens
 						amount: {
-							type: fromMemory
-							memory: spotCount
+							type: forEachYouCanSpot
+							filter: companion
 							over: 5
 						}
 					}

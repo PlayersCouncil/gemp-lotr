@@ -17,8 +17,7 @@ public class Card_10_081_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "10_81");
-					// put other cards in here as needed for the test case
+					put("guard", "10_81");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,35 +45,20 @@ public class Card_10_081_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var guard = scn.GetFreepsCard("guard");
 
-		assertEquals("Cirith Ungol Guard", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void CirithUngolGuardTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(3, scn.GetTwilight());
+		assertEquals("Cirith Ungol Guard", guard.getBlueprint().getTitle());
+		assertNull(guard.getBlueprint().getSubtitle());
+		assertFalse(guard.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, guard.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, guard.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, guard.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, guard.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(guard, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(guard, Keyword.DAMAGE));
+		assertEquals(3, guard.getBlueprint().getTwilightCost());
+		assertEquals(9, guard.getBlueprint().getStrength());
+		assertEquals(2, guard.getBlueprint().getVitality());
+		assertEquals(6, guard.getBlueprint().getSiteNumber());
 	}
 }

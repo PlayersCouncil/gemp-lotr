@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.LeagueDAO;
@@ -23,7 +23,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class LeagueServiceTest extends AbstractAtTest {
+public class LeagueServiceTest extends LoadedLibraries {
 
     @Test
     public void testJoiningLeagueAfterMaxGamesPlayed() throws Exception {

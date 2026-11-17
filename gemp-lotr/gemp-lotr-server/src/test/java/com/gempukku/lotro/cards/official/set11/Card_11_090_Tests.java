@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_090_Tests
@@ -18,8 +19,19 @@ public class Card_11_090_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_90");
-					// put other cards in here as needed for the test case
+					put("bree", "11_90");
+					// A second copy: each counts the hand for itself.
+					put("bree2", "11_90");
+					// Harad Standard-bearer: another [men] Man minion, strength 10.  Its skirmish ability is never used.
+					put("bearer", "11_84");
+					// Cards for the hands.  Gimli, Son of Glóin: a companion the Free Peoples player plays from hand.
+					// His skirmish ability is never used.
+					put("gimli", "1_13");
+					// Legion of Harad: a [men] minion with no text but toil, only ever held in a hand.
+					put("legion1", "11_88");
+					put("legion2", "11_88");
+					put("legion3", "11_88");
+					put("legion4", "11_88");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +59,7 @@ public class Card_11_090_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("bree");
 
 		assertEquals("Man of Bree", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +74,60 @@ public class Card_11_090_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ManofBreeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus1ForEachCardInTheFreePeoplesHandAndFollowsTheHandAsItChanges() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		var legion1 = scn.GetFreepsCard("legion1");
+		var legion2 = scn.GetFreepsCard("legion2");
+
+		var bree = scn.GetShadowCard("bree");
+		var bree2 = scn.GetShadowCard("bree2");
+		var bearer = scn.GetShadowCard("bearer");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCardsToHand(gimli, legion1, legion2);
+		// Laid early, in the fellowship phase, to be read before and after a Free Peoples card is played (Q-0228).
+		scn.MoveMinionsToTable(bree, bree2, bearer);
+		scn.FreepsRefreshDecision();
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(3, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetShadowHandCount());
+		// 4 printed + 3 cards in hand, on each copy; the other minion is left at its printed 10.
+		assertEquals(7, scn.GetStrength(bree));
+		assertEquals(7, scn.GetStrength(bree2));
+		assertEquals(10, scn.GetStrength(bearer));
+
+		scn.FreepsPlayCard(gimli);
+
+		assertInZone(Zone.FREE_CHARACTERS, gimli);
+		assertEquals(2, scn.GetFreepsHandCount());
+		// 4 + 2.
+		assertEquals(6, scn.GetStrength(bree));
+		assertEquals(6, scn.GetStrength(bree2));
+		assertEquals(10, scn.GetStrength(bearer));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void CardsInTheShadowPlayersHandAreNotCounted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var bree = scn.GetShadowCard("bree");
+		var legion1 = scn.GetShadowCard("legion1");
+		var legion2 = scn.GetShadowCard("legion2");
+		var legion3 = scn.GetShadowCard("legion3");
+		var legion4 = scn.GetShadowCard("legion4");
+
+		scn.StartGame();
+		scn.MoveCardsToHand(legion1, legion2, legion3, legion4);
+		scn.MoveMinionsToTable(bree);
+
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(4, scn.GetShadowHandCount());
+		// Counting the Shadow player's four cards would read 8.
+		assertEquals(4, scn.GetStrength(bree));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

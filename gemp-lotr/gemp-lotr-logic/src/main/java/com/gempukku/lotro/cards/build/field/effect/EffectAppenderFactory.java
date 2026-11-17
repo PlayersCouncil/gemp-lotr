@@ -47,6 +47,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
         effectAppenderProducers.put("cancelspecialability", new CancelSpecialAbility());
         effectAppenderProducers.put("canplaynextaction", new CanPlayNextAction());
+        effectAppenderProducers.put("cantgainkeywords", new CantGainKeywords());
         effectAppenderProducers.put("chooseactivecards", new ChooseActiveCards());
         effectAppenderProducers.put("chooseaculture", new ChooseACulture());
         effectAppenderProducers.put("chooseakeyword", new ChooseAKeyword());
@@ -92,6 +93,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("hinder", new HinderCardsInPlay());
         effectAppenderProducers.put("incrementperphaselimit", new IncrementPerPhaseLimit());
         effectAppenderProducers.put("incrementperturnlimit", new IncrementPerTurnLimit());
+        effectAppenderProducers.put("incrementpersitelimit", new IncrementPerSiteLimit());
         effectAppenderProducers.put("incrementtoil", new IncrementToil());
         effectAppenderProducers.put("kill", new Kill());
         effectAppenderProducers.put("liberatesite", new LiberateSite());
@@ -200,6 +202,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("startskirmish", new StartSkirmish());
         effectAppenderProducers.put("storeculture", new StoreCulture());
         effectAppenderProducers.put("storekeyword", new StoreKeyword());
+        effectAppenderProducers.put("storerace", new StoreRace());
         effectAppenderProducers.put("storeracefromcard", new StoreRaceFromCard());
         effectAppenderProducers.put("storewhileinzone", new StoreWhileInZone());
         effectAppenderProducers.put("takecontrolofsite", new TakeControlOfSite());
@@ -273,6 +276,26 @@ public class EffectAppenderFactory {
                 @Override
                 public boolean isPlayabilityCheckedForEffect() {
                     return effectAppender.isPlayabilityCheckedForEffect();
+                }
+
+                @Override
+                public void tallyWoundsPlacedAsCost(ActionContext actionContext, java.util.Map<com.gempukku.lotro.game.PhysicalCard, Integer> tally) {
+                    effectAppender.tallyWoundsPlacedAsCost(actionContext, tally);
+                }
+
+                @Override
+                public void tallyWoundsOfPayingOnce(ActionContext actionContext, java.util.Map<com.gempukku.lotro.game.PhysicalCard, Integer> tally) {
+                    effectAppender.tallyWoundsOfPayingOnce(actionContext, tally);
+                }
+
+                @Override
+                public EffectForecast forecast(ActionContext actionContext) {
+                    return effectAppender.forecast(actionContext);
+                }
+
+                @Override
+                public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                    return effectAppender.isCertainToDoNothingIfChosen(actionContext);
                 }
             };
         } else {

@@ -39,9 +39,17 @@
 			}
 			{
 				type: activated
-				requires: {
-					type: ringIsActive
-				}
+				requires: [
+					{
+						type: ringIsActive
+					}
+					{
+						type: not
+						requires: {
+							type: ringIsOn
+						}
+					}
+				]
 				phase: maneuver
 				effect: {
 					type: putOnRing

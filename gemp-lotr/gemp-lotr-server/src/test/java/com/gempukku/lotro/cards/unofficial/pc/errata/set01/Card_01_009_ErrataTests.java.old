@@ -152,10 +152,10 @@ public class Card_01_009_ErrataTests
 		//pump gimli up using his ability so he's strong enough to beat both orcs
 		scn.FreepsResolveSkirmish(gimli);
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsUseCardAction(gimli);
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.ShadowPass();
+		scn.FreepsPass();
 		scn.FreepsResolveActionOrder("Axe");
 		assertTrue(scn.ShadowDecisionAvailable("choose"));
 		scn.ShadowChooseOption("exert");

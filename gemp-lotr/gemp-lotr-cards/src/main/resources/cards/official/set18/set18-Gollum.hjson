@@ -290,23 +290,32 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				text: Add threats up to the number of burdens
 				optional: true
 				trigger: {
 					type: winsSkirmish
 					filter: self
 				}
+				requires: {
+					type: canSpotBurdens
+					amount: 1
+				}
 				effect: {
 					type: addThreats
 					amount: {
+						type: range
+						from: 0
+						to: {
+							type: forEachBurden
+						}
+					}
+					default: {
 						type: forEachBurden
 					}
 				}
 			}
 			{
 				type: Trigger
-				optional: false
 				text: Play Gollum from your discard pile
 				optional: true
 				trigger: {
@@ -366,14 +375,22 @@
 			}
 			effect: [
 				{
+					type: chooseActiveCards
+					player: free people
+					text: Choose two companions
+					select: choose(companion,not(ringBearer))
+					count: 2
+					memorize: chosenCompanions
+				}
+				{
 					type: kill
 					player: free people
-					select: choose(companion,not(ringBearer))
+					select: choose(memory(chosenCompanions))
 				}
 				{
 					type: returnToHand
 					player: free people
-					select: choose(companion,not(ringBearer))
+					select: choose(memory(chosenCompanions))
 				}
 			]
 		}

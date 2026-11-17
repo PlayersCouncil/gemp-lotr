@@ -17,8 +17,13 @@ public class Card_11_194_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_194");
-					// put other cards in here as needed for the test case
+					put("lurtz", "11_194");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, vitality 4; a
+					                            // maneuver ability used only on purpose
+					put("sam", "1_311");        // Sam, Son of Hamfast: [shire] Hobbit companion, vitality 4;
+					                            // "Fellowship: Exert Sam to remove a burden"
+					put("bounder", "1_286");    // Bounder: Hobbit ally, vitality 2; a skirmish ability used only on purpose
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] Orc minion, strength 13, vitality 3, no text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +51,7 @@ public class Card_11_194_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lurtz");
 
 		assertEquals("Lurtz", card.getBlueprint().getTitle());
 		assertEquals("Minion of the White Wizard", card.getBlueprint().getSubtitle());
@@ -65,18 +70,68 @@ public class Card_11_194_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LurtzTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus3ForEachExhaustedCompanionAndNoOtherExhaustedCharacter() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var lurtz = scn.GetShadowCard("lurtz");
+		var troop = scn.GetShadowCard("troop");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(bounder);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid early, in the fellowship phase, to be read (Q-0228).
+		scn.MoveMinionsToTable(lurtz, troop);
+		assertEquals(13, scn.GetStrength(lurtz));
 
-		assertEquals(7, scn.GetTwilight());
+		// Frodo exhausted (3 wounds of 4); Aragorn wounded and not exhausted (2 of 4); an exhausted ally (1 of 2)
+		// and an exhausted minion (2 of 3), which are no companions.
+		scn.AddWoundsToChar(frodo, 3);
+		scn.AddWoundsToChar(aragorn, 2);
+		scn.AddWoundsToChar(bounder, 1);
+		scn.AddWoundsToChar(troop, 2);
+		assertEquals(1, scn.GetVitality(frodo));
+		assertEquals(2, scn.GetVitality(aragorn));
+		assertEquals(1, scn.GetVitality(bounder));
+		assertEquals(1, scn.GetVitality(troop));
+		assertEquals(16, scn.GetStrength(lurtz));   // 13 + 3 for Frodo
+		assertEquals(13, scn.GetStrength(troop));
+
+		// A second exhausted companion, of another culture and race.
+		scn.AddWoundsToChar(aragorn, 1);
+		assertEquals(1, scn.GetVitality(aragorn));
+		assertEquals(19, scn.GetStrength(lurtz));   // 13 + 3 + 3
+		assertEquals(13, scn.GetStrength(troop));
+	}
+
+	@Test
+	public void WithNoExhaustedCompanionHeIsAsPrintedAndACompanionExertingToExhaustionMakesHimPlus3() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var lurtz = scn.GetShadowCard("lurtz");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+		scn.AddWoundsToChar(sam, 2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lurtz);
+		scn.AddBurdens(1);
+		scn.FreepsRefreshDecision();
+
+		// Sam has 2 vitality left: wounded, not exhausted.
+		assertEquals(2, scn.GetWoundsOn(sam));
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(13, scn.GetStrength(lurtz));
+
+		assertTrue(scn.FreepsActionAvailable(sam));
+		scn.FreepsUseCardAction(sam);
+
+		assertEquals(3, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(16, scn.GetStrength(lurtz));   // 13 + 3 for Sam
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

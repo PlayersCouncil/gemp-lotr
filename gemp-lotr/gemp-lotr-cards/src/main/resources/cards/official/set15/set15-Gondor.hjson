@@ -453,10 +453,6 @@
 			{
 				type: activated
 				phase: skirmish
-				requires: {
-					type: canSpot
-					filter: self,inSkirmishAgainst(roaming,minion)
-				}
 				cost: {
 					type: exert
 					select: self
@@ -738,8 +734,17 @@
 								filter: bearer,ranger
 							}
 							{
-								type: location
-								filter: forest
+								type: and
+								requires: [
+									{
+										type: canSpot
+										filter: bearer,companion
+									}
+									{
+										type: location
+										filter: forest
+									}
+								]
 							}
 						]
 					}

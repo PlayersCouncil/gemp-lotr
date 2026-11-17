@@ -59,13 +59,61 @@
 		culture: Shire
 		twilight: 1
 		type: Event
-		timewords: Regroup
+		timewords: [
+			Regroup
+			Skirmish
+		]
 		effects: [
 			{
 				type: event
+				requires: [
+					{
+						type: or
+						requires: [
+							{
+								type: phase
+								phase: regroup
+							}
+							{
+								type: location
+								filter: battleground
+							}
+						]
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: phase
+								phase: regroup
+							}
+							{
+								type: canSpot
+								filter: hobbit,inSkirmish
+							}
+						]
+					}
+				]
 				cost: {
-					type: discard
-					select: choose(hobbit,notAssignedToSkirmish)
+					type: If
+					check: {
+						type: phase
+						phase: regroup
+					}
+					true: {
+						type: discard
+						select: choose(hobbit,notAssignedToSkirmish)
+					}
+					false: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: discard
+							select: choose(hobbit,notAssignedToSkirmish)
+						}
+					]
 				}
 				effect: [
 					{
@@ -73,18 +121,6 @@
 						select: choose(minion)
 					}
 				]
-			}
-			{
-				type: playedInOtherPhase
-				phase: skirmish
-				requires: {
-					type: canSpot
-					filter: hobbit,inSkirmish
-				}
-				cost: {
-					type: addBurdens
-					amount: 2
-				}
 			}
 		]
 		gametext: Discard a Hobbit not assigned to a skirmish from play to discard a minion from play.<br>If the fellowship is at a battleground site, you may add 2 burdens to play this event during a skirmish involving a Hobbit.
@@ -151,14 +187,16 @@
 		effects: [
 			{
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: played
 					filter: hobbit
+					player: you
 				}
 				effect: [
 					{
 						type: removeBurdens
+						amount: 0-1
 					}
 					{
 						type: If
@@ -448,11 +486,11 @@
 					requires: [
 						{
 							type: canSpot
-							filter: name(Frodo)
+							filter: name(Frodo),not(exhausted)
 						}
 						{
 							type: canSpot
-							filter: name(Sam)
+							filter: name(Sam),not(exhausted)
 						}
 					]
 					filter: or(name(Frodo),name(Sam))

@@ -7,14 +7,17 @@
 		}
 		title: Crown of Erebor
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: artifact
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
+				// Q-0414 (on Q-0314): "Then" begins a separate effect with a "may" of its own, so the trigger is
+				// required, the heal a choice of 0 to 1 and the doubt removal its own 0 to 1 after it.
 				type: Trigger
-				optional: true
+				optional: false
 				trigger: {
 					type: played
 					filter: your,name(Roäc)
@@ -23,10 +26,14 @@
 					{
 						type: heal
 						select: choose(or(name(Thorin),name(Dain Ironfoot)))
+						count: 0-1
 					}
 					{
 						type: optional
 						text: Would you like to remove a doubt?
+						requires: {
+							type: canSpotBurdens
+						}
 						effect: {
 							type: removeBurdens
 							amount: 1
@@ -47,7 +54,17 @@
 				}
 			}
 		]
+		gametext: Each time you play Roäc, you may heal Thorin or Dain Ironfoot. Then, you may remove a doubt.<br><b>Assignment:</b> If you cannot spot Thorin, [dwarven] allies may be assigned to skirmishes.
+		lore: "Dain has crowned their chief with gold, and sworn friendship with them for ever."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_2: {
 		cardInfo: {
 			image: hobbit/HDG322.jpg
@@ -57,6 +74,7 @@
 		title: Dain Ironfoot
 		subtitle: Lord of the Iron Hills
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: ally
@@ -90,18 +108,30 @@
 				}
 			}
 		]
+		gametext: Thorin is strength +1.<br>At the start of the regroup phase, you may discard a [dwarven] follower to discard a minion (except Smaug).
+		lore: "Good morning. I see we're in a bit of a crowd..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_3: {
 		cardInfo: {
 			image: hobbit/HDG323.jpg
 			collInfo: 32_3
 			rarity: _
 		}
-		title: Du Bekar!
+		title: Du Bekâr!
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: event
-		timeword: assignment
+		timewords: assignment
 		effects: {
 			type: event
 			cost: {
@@ -114,7 +144,17 @@
 				select: choose(minion,maxTwilight(4))
 			}
 		}
+		gametext: Discard 2 [dwarven] cards (except companions) in play to discard a minion that has a twilight cost of 4 or less.
+		lore: "Our forces rallied and drove the Orcs back. And our enemy had been defeated."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_4: {
 		cardInfo: {
 			image: hobbit/HDG324.jpg
@@ -122,6 +162,8 @@
 			rarity: _
 		}
 		title: Dwarven Spear
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: possession
@@ -136,7 +178,17 @@
 				amount: 1
 			}
 		}
+		gametext: Bearer must be a [dwarven] character.<br>While skirmishing a mounted minion, bearer is strength +1.
+		lore: "Dwarven smiths created weaponry of all sizes and styles."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_5: {
 		cardInfo: {
 			image: hobbit/HDG325.jpg
@@ -145,6 +197,7 @@
 		}
 		title: Iron Hills Army
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: ally
@@ -152,7 +205,7 @@
 		race: dwarf
 		strength: 9
 		vitality: 3
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: activated
 			phase: maneuver
@@ -183,7 +236,17 @@
 				select: choose(minion)
 			}
 		}
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> If you can spot more minions than companions, exert Iron Hills Army and discard a [dwarven] follower to make an opponent discard a minion.
+		lore: "The Dwarves of the Iron Hills proved crucial in winning the ensuing Battle of Five Armies."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_6: {
 		cardInfo: {
 			image: hobbit/HDG326.jpg
@@ -191,10 +254,12 @@
 			rarity: _
 		}
 		title: King Under the Mountain
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: event
-		timeword: fellowship
+		timewords: fellowship
 		effects: {
 			type: event
 			cost: {
@@ -205,17 +270,29 @@
 				select: choose(culture(dwarven),follower)
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: Add a doubt to play a [dwarven] follower from your draw deck.
+		lore: "Under the Mountain dark and tall. The King has come unto his hall!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	32_7: {
 		cardInfo: {
 			image: hobbit/HDG327.jpg
 			collInfo: 32_7
 			rarity: _
 		}
-		title: Ring of Thror
+		title: Ring of Thrór
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 0
 		type: artifact
@@ -230,6 +307,7 @@
 					filter: bearer
 					amount: {
 						type: forEachInDiscard
+						discard: you
 						filter: culture(dwarven),or(possession,artifact)
 						limit: 3
 					}
@@ -250,16 +328,27 @@
 				]
 			}
 		]
+		gametext: Bearer must be a [dwarven] companion.<br>Bearer is strength +1 for each [dwarven] possession and [dwarven] artifact in your discard pile (limit +3).<br><b>Maneuver:</b> Take a [dwarven] event into hand from your discard pile. Discard this artifact.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_8: {
 		cardInfo: {
 			image: hobbit/HDG328.jpg
 			collInfo: 32_8
 			rarity: _
 		}
-		title: Roac
+		title: Roäc
 		subtitle: Son of Carc
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: follower
@@ -276,10 +365,29 @@
 			{
 				type: activated
 				phase: maneuver
-				requires: {
-					type: canSpot
-					filter: self,attachedTo(any)
-				}
+				// With no [dwarven] ally to play from the draw deck nor to allow, neither branch can do anything and
+				// Roäc is not discarded for nothing: a Hobbit-set play from the draw deck with nothing it could play is
+				// withheld (Q-0019; the orchestrator on Q-0406 and Q-0418), as Old Thrush 31_42's take is.
+				requires: [
+					{
+						type: canSpot
+						filter: self,attachedTo(any)
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: canSpot
+								filter: culture(dwarven),ally
+							}
+							{
+								type: playable
+								fromZone: DECK
+								filter: culture(dwarven),ally
+							}
+						]
+					}
+				]
 				cost: {
 					type: discard
 					select: self
@@ -296,6 +404,7 @@
 							select: choose(culture(dwarven),ally)
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: EnableParticipationInSkirmishes
@@ -306,16 +415,27 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Exert Thorin.<br><b>Maneuver:</b> If Roac is attached, discard him to play a [dwarven] ally from your draw deck, or to allow a [dwarven] ally to participate in skirmishes until the regroup phase.
+		lore: "The treasure is likely to be your death."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_9: {
 		cardInfo: {
 			image: hobbit/HDG329.jpg
 			collInfo: 32_9
 			rarity: _
 		}
-		title: Thrain
+		title: Thráin
 		subtitle: Father of Thorin
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: follower
@@ -348,21 +468,34 @@
 					on: bearer
 					showAll: true
 					shuffle: true
+					mustExist: true
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Spot Gandalf and add (2).<br>Each time bearer wins a skirmish, you may play a [dwarven] possession or [dwarven] artifact from your draw deck on bearer.
+		lore: "Tell Thorin that I love him! Will you do that?"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_10: {
 		cardInfo: {
 			image: hobbit/HDG3210.jpg
 			collInfo: 32_10
 			rarity: _
 		}
-		title: Thror's Heirlooms
+		title: Thrór's Heirlooms
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: event
-		timeword: regroup
+		timewords: regroup
 		effects: {
 			type: event
 			cost: {
@@ -379,6 +512,7 @@
 					{
 						type: playCardFromDrawDeck
 						select: choose(or(name(Thrain),and(culture(dwarven),or(possession,artifact))))
+						mustExist: true
 						showAll: true
 						shuffle: true
 					}
@@ -389,15 +523,26 @@
 				]
 			}
 		}
+		gametext: Exert a Dwarf companion to play Thráin, a [dwarven] possession or a [dwarven] artifact from your draw deck or discard pile.
+		lore: "I was blind, but now I begin to see... the Arkenstone! One of them has taken it from me...."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_11: {
 		cardInfo: {
 			image: hobbit/HDG3211.jpg
 			collInfo: 32_11
 			rarity: _
 		}
-		title: Thror's Key
+		title: Thrór's Key
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: possession
@@ -445,15 +590,26 @@
 				}
 			}
 		]
+		gametext: Bearer must be a [dwarven] companion.<br>Each time the fellowship moves from site 6 or 7, remove (2).<br><b>Regroup:</b> If the fellowship is at site 6 or lower, exert bearer or discard this possession to discard a minion.
+		lore: "I forgot to mention a small key. Here it is!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_12: {
 		cardInfo: {
 			image: hobbit/HDG3212.jpg
 			collInfo: 32_12
 			rarity: _
 		}
-		title: Thror's Map
+		title: Thrór's Map
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 0
 		type: possession
@@ -500,7 +656,17 @@
 				}
 			]
 		}
+		gametext: Bearer must be a [dwarven] companion.<br><b>Fellowship or Regroup:</b> Exert bearer or discard this possession to play the fellowship's next site (replacing opponent's site if necessary). Heal a [dwarven] companion if you play a mountain site.
+		lore: "Stand by the grey stone when the thrush knocks..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_13: {
 		cardInfo: {
 			image: hobbit/HDG3213.jpg
@@ -510,6 +676,7 @@
 		title: Galadriel
 		subtitle: Elven Lady
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 3
 		type: ally
@@ -517,7 +684,7 @@
 		race: elf
 		strength: 3
 		vitality: 3
-		keyword: wise
+		keywords: wise
 		effects: [
 			{
 				type: Trigger
@@ -561,7 +728,17 @@
 				}
 			}
 		]
+		gametext: <b>Wise</b>.<br>At the start of each of your turns, you may heal Gandalf.<br><b>Skirmish:</b> Exert Galadriel and discard a Shadow card from hand to make a minion strength -2 (or -3 if a Wise character is skirmishing that minion).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_14: {
 		cardInfo: {
 			image: hobbit/HDG3214.jpg
@@ -570,6 +747,7 @@
 		}
 		title: Nenya
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 0
 		type: artifact
@@ -591,6 +769,12 @@
 			{
 				type: activated
 				phase: fellowship
+				// A Hobbit-set take from the draw deck with nothing to take is withheld (Q-0019; the orchestrator on
+				// Q-0406 and Q-0418): asked before the cost, as Old Thrush 31_42 has it.
+				requires: {
+					type: hasCardInDrawDeck
+					filter: culture(gandalf),spell
+				}
 				cost: [
 					{
 						type: exert
@@ -610,16 +794,27 @@
 				}
 			}
 		]
+		gametext: Bearer must be Galadriel.<br>At the start of each of your turns, you may heal a Wise ally.<br><b>Fellowship:</b> Exert Galadriel and add (2) to take a [gandalf] spell from your draw deck into your hand.
+		lore: "The power of the Lady... wields the Elven-ring."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_15: {
 		cardInfo: {
 			image: hobbit/HDG3215.jpg
 			collInfo: 32_15
 			rarity: _
 		}
-		title: Bain
+		title: Baïn
 		subtitle: Son of Bard
 		unique: true
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 2
 		type: ally
@@ -653,7 +848,17 @@
 				}
 			}
 		]
+		gametext: At the start of each of your turns, you may heal a [esgaroth] Man (except The Master).<br><b>Maneuver:</b> Exert Bain to allow Bard to participate in archery fire and skirmishes until the regroup phase.
+		lore: "We're not leaving, not without our father."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_16: {
 		cardInfo: {
 			image: hobbit/HDG3216.jpg
@@ -662,6 +867,7 @@
 		}
 		title: Black Arrow
 		unique: true
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 1
 		type: possession
@@ -702,7 +908,17 @@
 				}
 			]
 		}
+		gametext: Bearer must be Bard.<br><b>Archery:</b> Exert Bard and discard this possession to wound a minion twice. If that minion is Smaug, wound it again.
+		lore: "Black arrow! I have saved you to the last. You have never failed me and I have always recovered you."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_17: {
 		cardInfo: {
 			image: hobbit/HDG3217.jpg
@@ -711,6 +927,7 @@
 		}
 		title: Esgaroth Volunteers
 		unique: true
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 3
 		type: ally
@@ -718,7 +935,7 @@
 		race: man
 		strength: 6
 		vitality: 4
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: activated
 			phase: maneuver
@@ -736,14 +953,26 @@
 				until: start(regroup)
 			}
 		}
+		gametext: <b>Archer</b>.<br><b>Maneuver:</b> Spot Bard and exert Esgaroth Volunteers to allow Esgaroth Volunteers to participate in archery fire and skirmishes until the regroup phase.
+		lore: "Bard's army was hastily assembled from among the survivors of Esgaroth."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_18: {
 		cardInfo: {
 			image: hobbit/HDG3218.jpg
 			collInfo: 32_18
 			rarity: _
 		}
-		title: Iron-forged Weapon
+		title: Iron-Forged Weapon
+		unique: false
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 2
 		type: possession
@@ -766,7 +995,17 @@
 				select: choose(minion)
 			}
 		}
+		gametext: Bearer must be a Man or a [dwarven] companion.<br><b>Skirmish:</b> If bearer is not assigned to a skirmish, discard this possession to wound a minion.
+		lore: "The weapons of Dale are made by the nearby Dwarves, ensuring only the best quality."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_19: {
 		cardInfo: {
 			image: hobbit/HDG3219.jpg
@@ -776,6 +1015,7 @@
 		title: Percy
 		subtitle: Bard's Lieutenant
 		unique: true
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 2
 		type: ally
@@ -783,7 +1023,7 @@
 		race: man
 		strength: 6
 		vitality: 3
-		keyword: archer
+		keywords: archer
 		effects: [
 			{
 				type: modifier
@@ -808,7 +1048,17 @@
 				}
 			}
 		]
+		gametext: <b>Archer</b>.<br>Each [esgaroth] Man bearing a weapon may participate in archery fire and skirmishes.<br><b>Response:</b> If another [esgaroth] ally is about to take a wound, exert Percy to prevent that wound.
+		lore: "Bard! Orcs are storming over the causeway!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_20: {
 		cardInfo: {
 			image: hobbit/HDG3220.jpg
@@ -818,6 +1068,7 @@
 		title: The Master
 		subtitle: Master of Lake-Town
 		unique: true
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 2
 		type: ally
@@ -862,151 +1113,224 @@
 							type: forEachInMemory
 							memory: discardedCards
 						}
-		  }
+					}
+				]
+			}
 		]
-	  }
-	]
-  }
-  32_21: {
-	title: Former Herald
-	culture: gandalf
-	twilight: 1
-	type: event
-	timeword: maneuver
-	effects: {
-	  type: event
-	  cost: {
-		type: exert
-		select: choose(wise,ally)
-		memorize: exertedAlly
-	  }
-	  effect: [
-		{
-		  type: modifyStrength
-		  select: memory(exertedAlly)
-		  amount: 3
-		  until: start(regroup)
+		gametext: At the start of each of your turns, you may spot Bard to heal Bard and The Master.<br><b>Fellowship:</b> Exert The Master twice to discard up to 3 cards from hand and draw an equal number of cards.
+		lore: "I say unto you...welcome!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		{
-		  type: EnableParticipationInArcheryFireAndSkirmishes
-		  select: memory(exertedAlly)
-		  until: start(regroup)
-		}
-	  ]
 	}
-  }
-  32_22: {
-	title: Gathering of the Three Rings
-	culture: gandalf
-	twilight: 3
-	type: event
-	timeword: maneuver
-	keyword: [
-	  spell
-	]
-	effects: {
-	  type: event
-	  effect: {
-		type: modifyStrength
-		count: {
-		  type: forEachYouCanSpot
-		  filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+
+	32_21: {
+		cardInfo: {
+			image: hobbit/HDG3221.jpg
+			collInfo: 32_21
+			rarity: _
 		}
-		select: choose(minion)
-		amount: {
-		  type: forEachYouCanSpot
-		  filter: or(name(Gandalf),name(Elrond),name(Galadriel))
-		  multiplier: -1
+		title: Former Herald
+		unique: false
+		side: Free Peoples
+		culture: gandalf
+		twilight: 1
+		type: event
+		timewords: maneuver
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				select: choose(wise,ally)
+				memorize: exertedAlly
+			}
+			effect: [
+				{
+					type: modifyStrength
+					select: memory(exertedAlly)
+					amount: 3
+					until: start(regroup)
+				}
+				{
+					type: EnableParticipationInArcheryFireAndSkirmishes
+					select: memory(exertedAlly)
+					until: start(regroup)
+				}
+			]
 		}
-		until: start(regroup)
-	  }
+		gametext: Exert a Wise ally to make that ally strength +3 and participate in archery fire and skirmishes until the regroup phase.
+		lore: "You should have stayed dead."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-  }
-  32_23: {
-	title: Narya
-	unique: true
-	culture: gandalf
-	twilight: 0
-	type: artifact
-	itemclass: ring
-	vitality: 1
-	target: name(Gandalf)
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyCost
-		  filter: culture(gandalf),event
-		  amount: -1
+
+	32_22: {
+		cardInfo: {
+			image: hobbit/HDG3222.jpg
+			collInfo: 32_22
+			rarity: _
 		}
-	  }
-	  {
-		type: Response
-		trigger: {
-		  type: aboutToDiscard
-		  filter: bearer
+		title: Gathering of the Three Rings
+		unique: false
+		side: Free Peoples
+		culture: gandalf
+		twilight: 3
+		type: event
+		timewords: maneuver
+		keywords: spell
+		effects: {
+			type: event
+			effect: {
+				type: modifyStrength
+				count: {
+					type: forEachYouCanSpot
+					filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+				}
+				select: choose(minion)
+				amount: {
+					type: forEachYouCanSpot
+					filter: or(name(Gandalf),name(Elrond),name(Galadriel))
+					multiplier: -1
+				}
+				until: start(regroup)
+			}
 		}
-		cost: {
-		  type: exert
-		  select: bearer
+		gametext: <b>Spell</b>.<br>Make X minions strength -X until the regroup phase, where X is the number of the following characters you can spot: Gandalf, Elrond or Galadriel.
+		lore: "It all began with the forging of the Great Rings..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		effect: {
-		  type: preventDiscard
-		  select: bearer
+	}
+
+	32_23: {
+		cardInfo: {
+			image: hobbit/HDG3223.jpg
+			collInfo: 32_23
+			rarity: _
 		}
-	  }
-	]
-  }
-  32_24: {
-	title: Saruman
-	subtitle: The White
+		title: Narya
 		unique: true
-	culture: gandalf
-	type: ally
-	allyHome: 3H
-	race: wizard
-	twilight: 4
-	strength: 8
-	vitality: 4
-	keyword: wise
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: addKeyword
-		  filter: name(Gandalf)
-		  keyword: defender+1
+		side: Free Peoples
+		culture: gandalf
+		twilight: 0
+		type: artifact
+		itemclass: ring
+		vitality: 1
+		target: name(Gandalf)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyCost
+					filter: culture(gandalf),event
+					amount: -1
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: aboutToDiscard
+					filter: bearer
+				}
+				cost: {
+					type: exert
+					select: bearer
+				}
+				effect: {
+					type: preventDiscard
+					select: bearer
+				}
+			}
+		]
+		gametext: Bearer must be Gandalf.<br>The twilight cost of each [gandalf] event is -1.<br><b>Response:</b> If Gandalf is about to be discarded, exert him to prevent that.
+		lore: "For this is the Ring of Fire, and with it you may rekindle hearts in a world that grows chill."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: activated
-		phase: fellowship
-		cost: {
-		  type: discard
-		  select: choose(wise,ally)
+	}
+
+	32_24: {
+		cardInfo: {
+			image: hobbit/HDG3224.jpg
+			collInfo: 32_24
+			rarity: _
 		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: choose(name(Gandalf))
+		title: Saruman
+		subtitle: The White
+		unique: true
+		side: Free Peoples
+		culture: gandalf
+		type: ally
+		allyHome: 3H
+		race: wizard
+		twilight: 4
+		strength: 8
+		vitality: 4
+		keywords: wise
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: name(Gandalf)
+					keyword: defender+1
+				}
+			}
+			{
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: choose(wise,ally)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(name(Gandalf))
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(wise,character)
+					amount: {
+						type: cardAffectedLimitPerPhase
+						source: 2
+						limit: 2
+					}
+				}
+			}
+		]
+		gametext: <b>Wise</b>.<br>Gandalf is <b>defender +1</b>.<br><b>Fellowship:</b> Discard a Wise ally to play Gandalf from your discard pile.<br><b>Skirmish:</b> Exert Saruman to make a Wise character strength +2 (limit +2).
+		lore: "Are you in need of assistance, my Lady?"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: exert
-		  select: self
-		}
-		effect: {
-		  type: modifyStrength
-		  select: choose(wise,character)
-		  amount: {
-			type: cardAffectedLimitPerPhase
-			source: 2
-			limit: 2
-		  }
-		}
-	  }
-	]
-  }
+	}
 }

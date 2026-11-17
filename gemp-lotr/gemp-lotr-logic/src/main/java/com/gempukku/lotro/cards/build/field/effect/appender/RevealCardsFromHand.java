@@ -5,6 +5,7 @@ import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
+import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
@@ -24,7 +25,7 @@ public class RevealCardsFromHand implements EffectAppenderProducer {
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
-
+        final PlayerSource handSource = PlayerResolver.resolvePlayer(hand);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
@@ -35,7 +36,9 @@ public class RevealCardsFromHand implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsToReveal = actionContext.getCardsFromMemory(memorize);
-                        return new RevealCardsFromYourHandEffect(actionContext.getSource(), actionContext.getPerformingPlayer(), cardsToReveal);
+                        // The hand is the one the definition names, which is not always that of the player acting:
+                        // its owner is the one player who is not shown the cards, and the one the game log names.
+                        return new RevealCardsFromYourHandEffect(actionContext.getSource(), handSource.getPlayer(actionContext), cardsToReveal);
                     }
                 });
 

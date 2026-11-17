@@ -6,10 +6,12 @@
 			rarity: _
 		}
 		title: Ancestral Knowledge
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: event
-		timeword: maneuver
+		timewords: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -31,7 +33,17 @@
 				}
 			}
 		}
+		gametext: Exert a Dwarf character to discard a condition (or 2 conditions if you can spot 4 Shadow conditions).
+		lore: "'If more of us valued food and cheer and song above hoarded gold, it would be a merrier world.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_2: {
 		cardInfo: {
 			image: hobbit/HDG302.jpg
@@ -41,6 +53,7 @@
 		title: Balin
 		subtitle: Brother of Dwalin
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: companion
@@ -60,7 +73,17 @@
 				select: choose(side(free people),event)
 			}
 		}
+		gametext: <b>Fellowship:</b> Exert Balin to shuffle a Free Peoples event from your discard pile into your draw deck.
+		lore: "'That is when I saw him; the young dwarf prince facing down the Pale Orc.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_3: {
 		cardInfo: {
 			image: hobbit/HDG303.jpg
@@ -68,10 +91,12 @@
 			rarity: _
 		}
 		title: Battle Fury
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: event
-		timeword: skirmish
+		timewords: skirmish
 		effects: {
 			type: event
 			effect: {
@@ -90,7 +115,17 @@
 				}
 			}
 		}
+		gametext: Make a Dwarf character strength +3 (or +4 if he bears a [dwarven] follower).
+		lore: "The Dwarves quickly dispatch Orcs with their mighty battle axes."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_4: {
 		cardInfo: {
 			image: hobbit/HDG304.jpg
@@ -98,10 +133,12 @@
 			rarity: _
 		}
 		title: Battle of Azanulbizar
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 0
 		type: event
-		timeword: maneuver
+		timewords: maneuver
 		effects: {
 			type: event
 			cost: {
@@ -128,7 +165,17 @@
 				]
 			}
 		}
+		gametext: Exert a Dwarf character to wound 2 Orcs or to wound 1 Orc twice.
+		lore: "It was the greatest battle of the War of Dwarves and Orcs, and was a decisive victory for the Dwarves."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_5: {
 		cardInfo: {
 			image: hobbit/HDG305.jpg
@@ -138,6 +185,7 @@
 		title: Bifur
 		subtitle: Inarticulate
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: follower
@@ -167,7 +215,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Exert a companion. <helper>(At the start of the maneuver phase, you may exert a companion to transfer this to a companion.)</helper><br>Each time bearer wins a fierce skirmish, you may discard a condition from play.
+		lore: "Bifur has the rusting remains of an Orc axe embedded in his forehead."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_6: {
 		cardInfo: {
 			image: hobbit/HDG306.jpg
@@ -177,6 +235,7 @@
 		title: Bofur
 		subtitle: Encouraging Fellow
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: follower
@@ -212,7 +271,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Add a doubt. <helper>(At the start of the maneuver phase, you may add a doubt to transfer this to a companion.)</helper><br><b>Response:</b> If bearer is about to take a wound, transfer Bofur to your support area to prevent that wound.
+		lore: "Bofur has a desastrous tendency to state the obvious..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_7: {
 		cardInfo: {
 			image: hobbit/HDG307.jpg
@@ -222,6 +291,7 @@
 		title: Bombur
 		subtitle: Chief Cook
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: follower
@@ -244,7 +314,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Exert a [dwarven] companion. <helper>(At the start of the maneuver phase, you may exert a [dwarven] companion to transfer this to a companion.)</helper><br>Bearer is <b>damage +1</b>.
+		lore: "His immense size and voracious appetite causes frequent problems."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_8: {
 		cardInfo: {
 			image: hobbit/HDG308.jpg
@@ -252,8 +332,9 @@
 			rarity: _
 		}
 		title: Dori
-		subtitle: Really a Decent Fellow
+		subtitle: Really a decent fellow
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: follower
@@ -276,7 +357,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Exert Bilbo. <helper>(At the start of the maneuver phase, you may exert Bilbo to transfer this to a companion.)</helper><br>Bearer may not be overwhelmed unless his strength is tripled.
+		lore: "'Dori was really a decent fellow in spite of his grumbling.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_9: {
 		cardInfo: {
 			image: hobbit/HDG309.jpg
@@ -286,6 +377,7 @@
 		title: Dwalin
 		subtitle: Brother of Balin
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: companion
@@ -293,7 +385,7 @@
 		strength: 7
 		vitality: 3
 		resistance: 6
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: activated
 			phase: maneuver
@@ -308,7 +400,17 @@
 				until: start(regroup)
 			}
 		}
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Exert Dwalin to make him <b>defender +1</b> until the regroup phase.
+		lore: "'Proud, brave and one of the tallest of the Dwarves.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_10: {
 		cardInfo: {
 			image: hobbit/HDG3010.jpg
@@ -318,6 +420,7 @@
 		title: Fili
 		subtitle: Brother of Kili
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: companion
@@ -325,7 +428,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: Response
 			trigger: {
@@ -347,16 +450,27 @@
 				select: choose(culture(dwarven),companion)
 			}
 		}
+		gametext: <b>Damage +1</b>.<br><b>Response:</b> If a [dwarven] companion is about to take a wound, exert Fili and add (1) to prevent that wound.
+		lore: "'Kili, grab my hand! Kili...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_11: {
 		cardInfo: {
 			image: hobbit/HDG3011.jpg
 			collInfo: 30_11
 			rarity: _
 		}
-		title: Gloin
+		title: Glóin
 		subtitle: Father of Gimli
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: companion
@@ -364,7 +478,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: activated
 			phase: skirmish
@@ -378,7 +492,17 @@
 				amount: 3
 			}
 		}
+		gametext: <b>Damage +1</b>.<br><b>Skirmish:</b> Exert Glóin to make him strength +3.
+		lore: "'What does he say? Does he offer us insult?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_12: {
 		cardInfo: {
 			image: hobbit/HDG3012.jpg
@@ -388,6 +512,7 @@
 		title: Kili
 		subtitle: Brother of Fili
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: companion
@@ -395,7 +520,7 @@
 		strength: 6
 		vitality: 3
 		resistance: 6
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: activated
 			phase: archery
@@ -414,7 +539,17 @@
 				}
 			]
 		}
+		gametext: <b>Archer</b>.<br><b>Archery:</b> Exert Kili to wound a minion; Kili does not add to the fellowship archery total.
+		lore: "He is a skilled fighter and expert archer, having been trained with weapons from an early age."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_13: {
 		cardInfo: {
 			image: hobbit/HDG3013.jpg
@@ -422,50 +557,55 @@
 			rarity: _
 		}
 		title: Lore of Imladris
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: event
-		timeword: maneuver
+		timewords: maneuver
 		effects: {
 			type: event
 			effect: {
-				type: choice
-				texts: [
-					Heal a companion
-					Heal 2 Dwarf companions
-				]
-				effects: [
-					{
-						type: heal
-						 select: choose(companion)
-					}
-					{
-						type: If
-						check: {
-							type: canSpot
-							filter: name(Elrond)
-						}
-						true: {
-							type: heal
-							select: choose(companion,dwarf)
-							count: 2
-						}
-					}
-				]
+				type: If
+				check: {
+					type: canSpot
+					filter: name(Elrond)
+				}
+				true: {
+					type: heal
+					select: choose(companion,dwarf)
+					count: 2
+				}
+				false: {
+					type: heal
+					select: choose(companion)
+				}
+			}
+		}
+		gametext: Heal a companion (or 2 Dwarf companions if you spot Elrond).
+		lore: "'Elrond has cured you: he has tended you for days, ever since you were brought in.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_14: {
 		cardInfo: {
 			image: hobbit/HDG3014.jpg
 			collInfo: 30_14
 			rarity: _
 		}
-		title: Noble Intentions
+		title: Noble intentions
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 0
 		type: event
-		timeword: skirmish
+		timewords: skirmish
 		effects: {
 			type: event
 			cost: {
@@ -478,7 +618,17 @@
 				amount: 3
 			}
 		}
+		gametext: Exert a companion (except Bilbo) to make Bilbo strength +3.
+		lore: "'The most that can be said for the dwarves is this: they intended to pay Bilbo really handsomely for his services... but they would all have done their best to get him out of trouble, if he got into it...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_15: {
 		cardInfo: {
 			image: hobbit/HDG3015.jpg
@@ -488,6 +638,7 @@
 		title: Nori
 		subtitle: Of the Blue Mountains
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: companion
@@ -514,16 +665,27 @@
 				select: choose(possession)
 			}
 		}
+		gametext: <b>Maneuver:</b> Exert Nori twice and discard a [dwarven] follower to discard a possession.
+		lore: "A Dwarf of independent spirit and inclinations, Nori was accustomed to relying on himself and trusting his own resourcefulness."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_16: {
 		cardInfo: {
 			image: hobbit/HDG3016.jpg
 			collInfo: 30_16
 			rarity: _
 		}
-		title: Oin
+		title: Óin
 		subtitle: Knowledgeable Healer
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: follower
@@ -552,7 +714,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Discard a [dwarven] card from hand. <helper>(At the start of the maneuver phase, you may discard a [dwarven] card from hand to transfer this to a companion.)</helper><br>When you transfer Óin, heal bearer.
+		lore: "Well read with an enquiring mind, Óin is the healer among the Company."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_17: {
 		cardInfo: {
 			image: hobbit/HDG3017.jpg
@@ -561,6 +733,7 @@
 		}
 		title: Orcrist
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: artifact
@@ -589,7 +762,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be Thorin.<br>He is <b>damage +1</b>.<br>Each time Thorin wins a skirmish, you may wound an Orc.
+		lore: "The Elves of Gondolin had named it Orcrist and it had killed hundreds of orcs in its time."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_18: {
 		cardInfo: {
 			image: hobbit/HDG3018.jpg
@@ -599,6 +782,7 @@
 		title: Ori
 		subtitle: Dwarven Chronicler
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: follower
@@ -627,7 +811,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Discard a [dwarven] card from hand. <helper>(At the start of the maneuver phase, you may discard a [dwarven] card from hand to transfer this to a companion.)</helper><br>When you transfer Ori to Balin, you may draw 3 cards.
+		lore: "'Ori is said to be the youngest of the company.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_19: {
 		cardInfo: {
 			image: hobbit/HDG3019.jpg
@@ -637,6 +831,7 @@
 		title: Thorin
 		subtitle: Oakenshield
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: companion
@@ -644,7 +839,7 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		keyword: damage+1
+		keywords: damage+1
 		effects: [
 			{
 				type: modifier
@@ -670,18 +865,30 @@
 				}
 			}
 		]
+		gametext: <b>Damage +1</b>.<br>Thorin is strength +1 for each [dwarven] follower he bears.<br><b>Fellowship:</b> Discard a [dwarven] follower to place a [dwarven] artifact from your discard pile beneath your draw deck.
+		lore: "'We will seize this chance to take back Erebor.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_20: {
 		cardInfo: {
 			image: hobbit/HDG3020.jpg
 			collInfo: 30_20
 			rarity: _
 		}
-		title: To me! O My Kinsfolk!
+		title: To me! O my kinsfolk!
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 0
 		type: event
-		timeword: fellowship
+		timewords: fellowship
 		effects: {
 			type: event
 			effect: {
@@ -689,7 +896,17 @@
 				select: choose(culture(dwarven),follower)
 			}
 		}
+		gametext: Play a [dwarven] follower from your discard pile.
+		lore: "'To me! To me! Elves and Men! To me! O my kinsfolk!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_21: {
 		cardInfo: {
 			image: hobbit/HDG3021.jpg
@@ -699,6 +916,7 @@
 		title: Elrond
 		subtitle: Elven Lord
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 4
 		type: ally
@@ -706,7 +924,7 @@
 		race: elf
 		strength: 8
 		vitality: 4
-		keyword: wise
+		keywords: wise
 		effects: [
 			{
 				type: Trigger
@@ -715,22 +933,21 @@
 					type: startOfTurn
 				}
 				effect: {
-					type: choice
-					texts: [
-						Heal a Wise ally
-						Heal Elrond twice
-					]
-					effects: [
-						{
-							type: heal
-							select: choose(wise,ally)
-						}
-						{
-							type: heal
-							select: self
-							times: 2
-						}
-					]
+					type: If
+					check: {
+						type: canSpotWounds
+						filter: self
+						amount: 2
+					}
+					true: {
+						type: heal
+						select: self
+						times: 2
+					}
+					false: {
+						type: heal
+						select: choose(wise,ally)
+					}
 				}
 			}
 			{
@@ -747,7 +964,17 @@
 				}
 			}
 		]
+		gametext: <b>Wise</b>.<br>At the start of each of your turns, you may heal a Wise ally (or heal Elrond twice).<br><b>Regroup:</b> Exert Elrond twice to heal a companion.
+		lore: "'What will happen if your plan should fail?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_22: {
 		cardInfo: {
 			image: hobbit/HDG3022.jpg
@@ -757,6 +984,7 @@
 		title: Bard
 		subtitle: The Bowman
 		unique: true
+		side: Free Peoples
 		culture: esgaroth
 		twilight: 2
 		type: ally
@@ -764,7 +992,7 @@
 		race: man
 		strength: 6
 		vitality: 3
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: activated
 			phase: regroup
@@ -792,7 +1020,17 @@
 				}
 			]
 		}
+		gametext: <b>Archer</b>.<br><b>Regroup:</b> Exert Bard to wound a minion. If that minion is Smaug, wound it again.
+		lore: "'You have no right to enter that mountain!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_23: {
 		cardInfo: {
 			image: hobbit/HDG3023.jpg
@@ -800,10 +1038,12 @@
 			rarity: _
 		}
 		title: A Wizard Is Never Late
+		unique: false
+		side: Free Peoples
 		culture: gandalf
 		twilight: 1
 		type: event
-		timeword: fellowship
+		timewords: fellowship
 		effects: {
 			type: event
 			effect: {
@@ -818,6 +1058,7 @@
 						select: choose(or(name(Gandalf),and(ally,not(dwarf))))
 						showAll: true
 						shuffle: true
+						mustExist: true
 					}
 					{
 						type: playCardFromDiscard
@@ -826,21 +1067,31 @@
 				]
 			}
 		}
+		gametext: Play Gandalf or an ally (except a Dwarf) from your draw deck or discard pile.
+		lore: "'Gandalf, for four hundred years, we have lived in peace - a hard-won, watchful peace.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_24: {
 		cardInfo: {
 			image: hobbit/HDG3024.jpg
 			collInfo: 30_24
 			rarity: _
 		}
-		title: Dawn Take You All
+		title: Dawn Take You All!
+		unique: false
+		side: Free Peoples
 		culture: gandalf
 		twilight: 3
 		type: event
-		timeword: skirmish
-		keyword: [
-			spell
-		]
+		timewords: skirmish
+		keywords: spell
 		effects: {
 			type: event
 			cost: {
@@ -867,7 +1118,17 @@
 				]
 			}
 		}
+		gametext: <b>Spell</b>.<br>Exert Gandalf twice to wound a minion twice or to discard a Troll.
+		lore: "'Are we, are we at peace? Trolls have come down from the mountains, they are raiding villages...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_25: {
 		cardInfo: {
 			image: hobbit/HDG3025.jpg
@@ -877,6 +1138,7 @@
 		title: Gandalf
 		subtitle: Leader of Dwarves
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		twilight: 2
 		type: companion
@@ -884,7 +1146,7 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		keyword: wise
+		keywords: wise
 		effects: [
 			{
 				type: Trigger
@@ -894,7 +1156,7 @@
 					player: you
 				}
 				requires: {
-					type: sarumanfirstsentenceactive
+					type: gandalfFirstSentenceActive
 				}
 				effect: {
 					type: drawCards
@@ -920,6 +1182,7 @@
 					select: choose(dwarf)
 					showAll: true
 					shuffle: true
+					mustExist: true
 				}
 			}
 			{
@@ -937,7 +1200,17 @@
 				}
 			}
 		]
+		gametext: <b>Wise</b>.<br>Each time you reconcile, you may draw 2 cards.<br><b>Skirmish:</b> Play a [gandalf] skirmish event and add a doubt to play a Dwarf from your draw deck.<br><b>Skirmish:</b> Play a [dwarven] skirmish event to make an Orc skirmishing Bilbo strength -2.
+		lore: "'You do know my name... I am Gandalf.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_26: {
 		cardInfo: {
 			image: hobbit/HDG3026.jpg
@@ -947,6 +1220,7 @@
 		title: Gandalf
 		subtitle: Friend of Thorin
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		twilight: 1
 		type: companion
@@ -954,7 +1228,7 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		keyword: wise
+		keywords: wise
 		effects: [
 			{
 				type: modifier
@@ -967,7 +1241,7 @@
 							count: 2
 						}
 						{
-							type: sarumanfirstsentenceactive
+							type: gandalfFirstSentenceActive
 						}
 					]
 					filter: self
@@ -1000,7 +1274,17 @@
 				}
 			}
 		]
+		gametext: <b>Wise</b>.<br>While you can spot 2 [dwarven] followers, Gandalf cannot be discarded.<br>The twilight cost of Thorin is -2.<br><b>Fellowship:</b> Discard a [dwarven] follower and add a doubt to draw 3 cards.
+		lore: "'Well, that's decided. It will be very good for you...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_27: {
 		cardInfo: {
 			image: hobbit/HDG3027.jpg
@@ -1010,6 +1294,7 @@
 		title: Gandalf
 		subtitle: The Grey
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		twilight: 2
 		type: companion
@@ -1017,7 +1302,7 @@
 		strength: 7
 		vitality: 4
 		resistance: 6
-		keyword: wise
+		keywords: wise
 		effects: [
 			{
 				type: Trigger
@@ -1027,7 +1312,7 @@
 					filter: your,culture(gandalf),event
 				}
 				requires: {
-					type: sarumanfirstsentenceactive
+					type: gandalfFirstSentenceActive
 				}
 				effect: {
 					type: wound
@@ -1048,461 +1333,639 @@
 						Play from your discard pile
 					]
 					effects: [
-			  {
-			  type: playCardFromDrawDeck
-			  select: choose(or(artifact,and(dwarf,companion)))
-				showAll: true
-				shuffle: true
+						{
+							type: playCardFromDrawDeck
+							select: choose(or(artifact,and(dwarf,companion)))
+							showAll: true
+							shuffle: true
+							mustExist: true
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(or(artifact,and(dwarf,companion)))
+						}
+					]
+				}
+			}
+		]
+		gametext: <b>Wise</b>.<br>Each time you play a [gandalf] event, you may wound a minion (except Smaug).<br><b>Fellowship:</b> Add 2 doubts to play an artifact or a Dwarf companion from your draw deck or discard pile.
+		lore: "'Dragon sickness is a malady that affects all of us.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	30_28: {
+		cardInfo: {
+			image: hobbit/HDG3028.jpg
+			collInfo: 30_28
+			rarity: _
+		}
+		title: Gandalf
+		subtitle: Leader of the Company
+		unique: true
+		side: Free Peoples
+		culture: gandalf
+		twilight: 4
+		type: companion
+		race: wizard
+		strength: 7
+		vitality: 4
+		resistance: 6
+		keywords: wise
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeDiscarded
+					requires: {
+						type: gandalfFirstSentenceActive
+					}
+					filter: self
+				}
 			}
 			{
-			  type: playCardFromDiscard
-			  select: choose(or(artifact,and(dwarf,companion)))
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfTurn
+				}
+				cost: {
+					type: addBurdens
+					amount: 1
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(dwarf,companion)
+					showAll: true
+					shuffle: true
+					mustExist: true
+				}
 			}
-		  ]
+		]
+		gametext: <b>Wise</b>.<br>Gandalf cannot be discarded.<br>At the start of each of your turns, you may add a doubt to play a Dwarf companion from your draw deck.
+		lore: "'I cannot forsake them! They are in grave danger.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	]
-  }
-  30_28: {
-	title: Gandalf
-	subtitle: Leader of the Company
-		unique: true
-	culture: gandalf
-	twilight: 4
-	type: companion
-	race: wizard
-	strength: 7
-	vitality: 4
-	resistance: 6
-	keyword: wise
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: cantBeDiscarded
-		  requires: {
-			type: sarumanfirstsentenceactive
-		  }
-		  filter: self
-		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: startOfPhase
-		  phase: fellowship
-		}
-		cost: {
-		  type: addBurdens
-		  amount: 1
-		}
-		effect: {
-		  type: playCardFromDrawDeck
-		  select: choose(dwarf,companion)
-			showAll: true
-			shuffle: true
-		}
-	  }
-	]
-  }
-  30_29: {
-	title: Glamdring
-		unique: true
-	culture: gandalf
-	twilight: 2
-	type: artifact
-	itemclass: hand weapon
-	strength: 2
-	target: name(Gandalf)
-	effects: {
-	  type: trigger
-	  optional: true
-	  trigger: {
-		type: winsSkirmish
-		filter: bearer
-	  }
-	  effect: {
-		type: removeBurdens
-		amount: 1
-	  }
 	}
-  }
-  30_30: {
-		title: He Gives Me Courage
+
+	30_29: {
+		cardInfo: {
+			image: hobbit/HDG3029.jpg
+			collInfo: 30_29
+			rarity: _
+		}
+		title: Glamdring
+		unique: true
+		side: Free Peoples
+		culture: gandalf
+		twilight: 2
+		type: artifact
+		itemclass: hand weapon
+		strength: 2
+		target: name(Gandalf)
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: winsSkirmish
+				filter: bearer
+			}
+			effect: {
+				type: removeBurdens
+				amount: 1
+			}
+		}
+		gametext: Bearer must be Gandalf.<br>Each time Gandalf wins a skirmish, you may remove a doubt.
+		lore: "'This Gandalf, was Glamdring, Foehammer that the king of Gondolin once wore. Keep them well!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	30_30: {
+		cardInfo: {
+			image: hobbit/HDG3030.jpg
+			collInfo: 30_30
+			rarity: _
+		}
+		title: He gives me courage
+		unique: false
+		side: Free Peoples
 		culture: gandalf
 		twilight: 2
 		type: event
-		timeword: maneuver
+		timewords: maneuver
 		effects: {
-		  type: event
-		  requires: {
+			type: event
+			requires: {
 				type: canSpot
 				filter: name(Gandalf)
-		  }
-		  effect: {
-			type: choice
-			texts: [
-			  Remove a burden
-			  Exert Gandalf and an [ELVEN] Wise Ally to remove 2 burdens
-			]
-			effects: [
-			  {
-					type: removeBurdens
-					amount: 1
-			  }
-			  {
-					type: costToEffect
-					cost: [
-					  {
-						type: exert
-						select: choose(name(Gandalf))
-					  }
-					  {
-						type: exert
-						select: choose(culture(elven),wise,ally)
-					  }
-					]
-					effect: {
-					  type: removeBurdens
-					  amount: 2
+			}
+			effect: {
+				type: choice
+				texts: [
+					Remove a burden
+					Exert Gandalf and an [ELVEN] Wise Ally to remove 2 burdens
+				]
+				effects: [
+					{
+						type: removeBurdens
+						amount: 1
 					}
-			  }
-			]
-	  }
-	}
-  }
-  30_31: {
-	title: Take Up Arms
-	culture: gandalf
-	twilight: 1
-	type: event
-	timeword: skirmish
-	keyword: [
-	  spell
-	]
-	effects: {
-	  type: event
-	  requires: {
-		type: canSpot
-		filter: name(Gandalf)
-	  }
-	  effect: {
-		type: modifyStrength
-		select: choose(minion)
-		amount: -3
-	  }
-	}
-  }
-  30_43: {
-	title: Bilbo
-	subtitle: Expert Burglar
-		unique: true
-	culture: shire
-	twilight: 0
-	type: companion
-	race: hobbit
-	strength: 3
-	vitality: 4
-	resistance: 8
-	canStartWithRing: true
-	keyword: [
-	  burglar
-	]
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: played
-		  filter: culture(dwarven),timeword(fellowship),event
-		}
-		effect: {
-		  type: drawCards
-		  count: 2
-		}
-	  }
-	  {
-		type: activated
-		phase: fellowship
-		cost: {
-		  type: discard
-		  select: choose(culture(dwarven),follower)
-		}
-		effect: {
-		  type: modifyStrength
-		  select: self
-		  amount: {
-			type: Conditional
-			requires: {
-			  type: canSpot
-			  filter: name(Gollum)
+					{
+						type: costToEffect
+						cost: [
+							{
+								type: exert
+								select: choose(name(Gandalf))
+							}
+							{
+								type: exert
+								select: choose(culture(elven),wise,ally)
+							}
+						]
+						effect: {
+							type: removeBurdens
+							amount: 2
+						}
+					}
+				]
 			}
-			true: 2
-			false: 1
-		  }
-		  until: start(regroup)
 		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: discard
-		  select: choose(culture(dwarven),follower)
-		}
-		effect: {
-		  type: modifyStrength
-		  select: self
-		  amount: {
-			type: Conditional
-			requires: {
-			  type: canSpot
-			  filter: name(Gollum)
+		gametext: Spot Gandalf to remove a doubt (or 2 doubts, if you exert Gandalf and a [elven] Wise ally).
+		lore: "'Perhaps because I am afraid, and he gives me courage.'"
+		promotext: ""
+		alts: {
+			promos: {
 			}
-			true: 2
-			false: 1
-		  }
-		  until: start(regroup)
-		}
-	  }
-	]
-  }
-  30_44: {
-	title: Bilbo
-	subtitle: Collector of Treasures
-		unique: true
-	culture: shire
-	twilight: 0
-	type: companion
-	race: hobbit
-	strength: 3
-	vitality: 4
-	resistance: 8
-	canStartWithRing: true
-	keyword: [
-	  burglar
-	]
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: discarded
-		  fromZone: hand
-		  source: follower
-		}
-		effect: {
-		  type: drawCards
-		  count: 2
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		requires: {
-		  type: canSpot
-		  filter: self,inSkirmishAgainst(or(name(Smaug),name(Gollum)))
-		}
-		cost: {
-		  type: addBurdens
-		  amount: 1
-		}
-		effect: {
-		  type: modifyStrength
-		  select: self
-		  amount: {
-			type: cardAffectedLimitPerPhase
-			limit: 3
-			source: 3
-		  }
-		}
-	  }
-	]
-  }
-  30_45: {
-	title: Bilbo
-	subtitle: Master in Riddles
-		unique: true
-	culture: shire
-	twilight: 0
-	type: companion
-	race: hobbit
-	strength: 3
-	vitality: 4
-	resistance: 8
-	canStartWithRing: true
-	keyword: [
-	  burglar
-	]
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyStrength
-		  filter: self,inSkirmishAgainst(or(name(Smaug),name(Gollum)))
-		  amount: 2
-		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: heals
-		  filter: companion
-		}
-		requires: {
-		  type: canSpot
-		  filter: minion
-		}
-		effect: {
-		  type: drawCards
-		}
-	  }
-	]
-  }
-  30_46: {
-	title: Bilbo
-	subtitle: Reliable Companion
-		unique: true
-	culture: shire
-	twilight: 0
-	type: companion
-	race: hobbit
-	strength: 3
-	vitality: 4
-	resistance: 8
-	canStartWithRing: true
-	keyword: [
-	  burglar
-	]
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: cantBeOverwhelmedMultiplier
-		  filter: self,inSkirmishAgainst(or(name(Smaug),name(Gollum)))
-		  multiplier: 3
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: PlayCardFromHand
-		  select: choose(culture(dwarven),timeword(skirmish),event)
-		}
-		effect: {
-		  type: drawCards
-		  count: {
-			type: Conditional
-			requires: {
-			  type: canSpot
-			  filter: self,inSkirmish
+			errata: {
 			}
-			true: 4
-			false: 2
-		  }
 		}
-	  }
-	]
-  }
-  30_47: {
-	title: Sting
-		unique: true
-	culture: shire
-	twilight: 1
-	type: artifact
-	itemclass: hand weapon
-	strength: 2
-	target: name(Bilbo)
-	effects: {
-	  type: trigger
-	  optional: true
-	  trigger: {
-		type: winsSkirmish
-		filter: bearer
-	  }
-	  requires: {
-		type: playedCardThisPhase
-		filter: your,culture(dwarven),event
-	  }
-	  effect: {
-		type: discard
-		select: choose(condition)
-	  }
 	}
-  }
-  30_48: {
-	title: The One Ring
+
+	30_31: {
+		cardInfo: {
+			image: hobbit/HDG3031.jpg
+			collInfo: 30_31
+			rarity: _
+		}
+		title: Take up arms. Fight!
+		unique: false
+		side: Free Peoples
+		culture: gandalf
+		twilight: 1
+		type: event
+		timewords: skirmish
+		keywords: spell
+		effects: {
+			type: event
+			requires: {
+				type: canSpot
+				filter: name(Gandalf)
+			}
+			effect: {
+				type: modifyStrength
+				select: choose(minion)
+				amount: -3
+			}
+		}
+		gametext: <b>Spell</b>.<br>Spot Gandalf to make a minion strength -3.
+		lore: "'Take up arms. Fight. Fight!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	30_43: {
+		cardInfo: {
+			image: hobbit/HDG3043.jpg
+			collInfo: 30_43
+			rarity: _
+		}
+		title: Bilbo
+		subtitle: Expert Burglar
 		unique: true
-	culture: shire
-	twilight: 0
-	type: artifact
-	itemclass: ring
-	vitality: 1
-	resistance: 1
-	target: name(Bilbo)
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyStrength
-		  requires: [
+		side: Free Peoples
+		culture: shire
+		twilight: 0
+		type: companion
+		race: hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		canStartWithRing: true
+		keywords: burglar
+		effects: [
 			{
-			  type: ringIsOn
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: culture(dwarven),timeword(fellowship),event
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
 			}
 			{
-			  type: ringIsActive
+				type: activated
+				phase: fellowship
+				cost: {
+					type: discard
+					select: choose(culture(dwarven),follower)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: name(Gollum)
+						}
+						true: 2
+						false: 1
+					}
+					until: start(regroup)
+				}
 			}
-		  ]
-		  filter: bearer
-		  amount: 2
-		}
-	  }
-	  {
-		type: trigger
-		optional: false
-		requires: [
-		  {
-			type: ringIsOn
-		  }
-		  {
-			type: ringIsActive
-		  }
-		  {
-			type: phase
-			phase: skirmish
-		  }
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discard
+					select: choose(culture(dwarven),follower)
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: name(Gollum)
+						}
+						true: 2
+						false: 1
+					}
+					until: start(regroup)
+				}
+			}
 		]
-		trigger: {
-		  type: aboutToTakeWound
-		  filter: bearer
+		gametext: <b>Burglar</b>.<br>Each time you play a [dwarven] fellowship event, you may draw 2 cards.<br><b>Fellowship or Skirmish:</b> Discard a [dwarven] follower to make Bilbo strength +1 (or +2 if you spot Gollum) until the regroup phase.
+		lore: "'I'm going on an adventure.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		effect: [
-		  {
-			type: negateWound
-			select: all(bearer)
-		  }
-		  {
-			type: addBurdens
-		  }
+	}
+
+	30_44: {
+		cardInfo: {
+			image: hobbit/HDG3044.jpg
+			collInfo: 30_44
+			rarity: _
+		}
+		title: Bilbo
+		subtitle: Collector of Treasures
+		unique: true
+		side: Free Peoples
+		culture: shire
+		twilight: 0
+		type: companion
+		race: hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		canStartWithRing: true
+		keywords: burglar
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: discarded
+					fromZone: hand
+					source: follower,zone(support)
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
+			# Dwarven Warhammer 33_7's discard of 2 to attach a follower is a discard to transfer one (Ketura,
+			# Q-0407: "Given that internally it uses the 'transfer' action, then we should treat Bilbo as
+			# responding to the warhammer"): one offer for the use, made as its cost is paid.
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: usesSpecialAbility
+					player: you
+					filter: name(Dwarven Warhammer)
+				}
+				effect: {
+					type: drawCards
+					count: 2
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: self,inSkirmishAgainst(or(name(Smaug),name(Gollum)))
+				}
+				cost: {
+					type: addBurdens
+					amount: 1
+				}
+				effect: {
+					type: modifyStrength
+					select: self
+					amount: {
+						type: cardAffectedLimitPerPhase
+						limit: 3
+						source: 3
+					}
+				}
+			}
 		]
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		requires: {
-		  type: ringIsActive
+		gametext: <b>Burglar</b>.<br>When you discard a card from hand to transfer a follower, you may draw 2 cards.<br><b>Skirmish:</b> If Bilbo is skirmishing Smaug or Gollum, add a doubt to make Bilbo strength +3 (limit +3).
+		lore: "'The Arkenstone... Master Burglar.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		cost: {
-		  type: addBurdens
-		  amount: 1
+	}
+
+	30_45: {
+		cardInfo: {
+			image: hobbit/HDG3045.jpg
+			collInfo: 30_45
+			rarity: _
 		}
-		effect: {
-		  type: putOnRing
+		title: Bilbo
+		subtitle: Master in Riddles
+		unique: true
+		side: Free Peoples
+		culture: shire
+		twilight: 0
+		type: companion
+		race: hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		canStartWithRing: true
+		keywords: burglar
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self,inSkirmishAgainst(or(name(Smaug),name(Gollum)))
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: heals
+					filter: companion
+				}
+				requires: {
+					type: canSpot
+					filter: minion
+				}
+				effect: {
+					type: drawCards
+				}
+			}
+		]
+		gametext: <b>Burglar</b>.<br>While skirmishing Smaug or Gollum, Bilbo is strength +2.<br>Each time a companion heals, you may spot a minion to draw a card.
+		lore: "'What do I have in my pocket?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	]
-  }
+	}
+
+	30_46: {
+		cardInfo: {
+			image: hobbit/HDG3046.jpg
+			collInfo: 30_46
+			rarity: _
+		}
+		title: Bilbo
+		subtitle: Reliable Companion
+		unique: true
+		side: Free Peoples
+		culture: shire
+		twilight: 0
+		type: companion
+		race: hobbit
+		strength: 3
+		vitality: 4
+		resistance: 8
+		canStartWithRing: true
+		keywords: burglar
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: cantBeOverwhelmedMultiplier
+					filter: self,inSkirmishAgainst(or(name(Smaug),name(Gollum)))
+					multiplier: 3
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: PlayCardFromHand
+					select: choose(culture(dwarven),timeword(skirmish),event)
+				}
+				effect: {
+					type: drawCards
+					count: {
+						type: Conditional
+						requires: {
+							type: canSpot
+							filter: self,inSkirmish
+						}
+						true: 4
+						false: 2
+					}
+				}
+			}
+		]
+		gametext: <b>Burglar</b>.<br>Bilbo cannot be overwhelmed by Smaug or Gollum unless his strength is tripled.<br><b>Skirmish:</b> Play a [dwarven] skirmish event to draw 2 cards (or 4 cards if Bilbo is skirmishing).
+		lore: "'I would have doubted me too. I'm not a hero...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	30_47: {
+		cardInfo: {
+			image: hobbit/HDG3047.jpg
+			collInfo: 30_47
+			rarity: _
+		}
+		title: Sting
+		unique: true
+		side: Free Peoples
+		culture: shire
+		twilight: 1
+		type: artifact
+		itemclass: hand weapon
+		strength: 2
+		target: name(Bilbo)
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: winsSkirmish
+				filter: bearer
+			}
+			requires: {
+				type: playedCardThisPhase
+				filter: your,culture(dwarven),event
+			}
+			effect: {
+				type: discard
+				select: choose(condition)
+			}
+		}
+		gametext: Bearer must be Bilbo.<br>Each time Bilbo wins a skirmish in which you played a [dwarven] event, you may discard a condition.
+		lore: "'I will give you a name, and I will call you Sting.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	30_48: {
+		cardInfo: {
+			image: hobbit/HDG3048.jpg
+			collInfo: 30_48
+			rarity: _
+		}
+		title: The One Ring
+		unique: true
+		side: Free Peoples
+		culture: shire
+		twilight: 0
+		type: artifact
+		itemclass: ring
+		vitality: 1
+		resistance: 1
+		target: name(Bilbo)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: [
+						{
+							type: ringIsOn
+						}
+						{
+							type: ringIsActive
+						}
+					]
+					filter: bearer
+					amount: 2
+				}
+			}
+			{
+				type: trigger
+				optional: false
+				requires: [
+					{
+						type: ringIsOn
+					}
+					{
+						type: ringIsActive
+					}
+					{
+						type: phase
+						phase: skirmish
+					}
+				]
+				trigger: {
+					type: aboutToTakeWound
+					filter: bearer
+				}
+				effect: [
+					{
+						type: negateWound
+						select: all(bearer)
+					}
+					{
+						type: addBurdens
+					}
+				]
+			}
+			{
+				type: activated
+				phase: skirmish
+				requires: {
+					type: ringIsActive
+				}
+				cost: {
+					type: addBurdens
+					amount: 1
+				}
+				effect: {
+					type: putOnRing
+				}
+			}
+		]
+		gametext: Bearer must be Bilbo.<br>While wearing The One Ring, Bilbo is strength +2, and each time he is about to take a wound in a skirmish, add a doubt instead.<br><b>Skirmish:</b> Add a doubt to wear The One Ring until the regroup phase.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

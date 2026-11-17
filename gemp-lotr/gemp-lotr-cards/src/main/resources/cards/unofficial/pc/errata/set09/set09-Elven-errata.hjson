@@ -74,10 +74,10 @@
 	
 	59_14: {
 		cardInfo: {
-			//id: 9_14.1
+			//id: 59_14.1
 			parent: 9_14
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN09E014.1_card.jpg
 			collInfo: 9R+14
@@ -119,10 +119,10 @@
 
 	59_16: {
 		cardInfo: {
-			//id: 9_16.1
+			//id: 59_16.1
 			parent: 9_16
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/59_16.jpg
 			collInfo: 9R+16
@@ -143,6 +143,11 @@
 			{
 				type: activated
 				phase: skirmish
+				// The X of the second sentence is read from the card revealed: with no card to reveal
+				// the ability is not offered (Q-0148).
+				requires: {
+					type: HasCardInDrawDeck
+				}
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck
@@ -151,7 +156,7 @@
 					}
 					{
 						type: optional
-						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost the the card revealed?
+						text: Would you like to exert Glorfindel to make a Nazgul he is skirmishing strength -X, where X is the twilight cost of the card revealed?
 						cost: {
 							type: exert
 							select: self
@@ -169,7 +174,7 @@
 				]
 			}
 		]
-		gametext: <b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength –X, where X is the twilight cost of <br>the card revealed.
+		gametext: <b>Skirmish:</b> Reveal the top card of your draw deck. You may exert Glorfindel to make a Nazgûl he is skirmishing strength –X, where X is the twilight cost of the card revealed.
 		lore: ""
 		promotext: ""
 		alts: {

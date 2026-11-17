@@ -19,6 +19,9 @@
 			{
 				type: Trigger
 				optional: true
+				requires: {
+					type: ControlsSite
+				}
 				trigger: {
 					type: winsSkirmish
 					filter: bearer
@@ -320,6 +323,11 @@
 							type: forEachFPCulture
 							over: 2
 						}
+						// Filled in with all there are (Q-0341: A, as F-0561).
+						default: {
+							type: forEachFPCulture
+							over: 2
+						}
 						memorize: chosenNumber
 					}
 					{
@@ -370,11 +378,7 @@
 						type: PlayCardFromHand
 						select: choose(or(nazgul,culture(sauron)),minion)
 						discount: -4
-						memorize: playedMinion
-					}
-					{
-						type: exhaust
-						select: memory(playedMinion)
+						exhausted: true
 					}
 				]
 			}

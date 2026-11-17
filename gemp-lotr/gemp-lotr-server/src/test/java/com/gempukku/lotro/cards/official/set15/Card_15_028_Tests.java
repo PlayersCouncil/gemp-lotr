@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set15;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,13 @@ public class Card_15_028_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "15_28");
-					// put other cards in here as needed for the test case
+					put("avenger", "15_28");
+					put("avenger2", "15_28");
+
+					put("quickbeam", "6_33");   // Quickbeam, Bregalad: Ent companion, strength 8; only a cost discount of his own
+					put("onod", "17_26");       // Woodland Onod: Ent companion, strength 7; a skirmish ability used only on purpose
+					put("treebeard", "4_104");  // Treebeard, Oldest Living Thing: Ent ally, strength 12; a Fellowship ability only
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: [gandalf] companion who is no Ent
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_15_028_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("avenger");
 
 		assertEquals("Ent Avenger", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +66,47 @@ public class Card_15_028_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EntAvengerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthPlus2OnceAThirdEntIsPlayedCountingItselfAndAnEntAlly() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var avenger = scn.GetFreepsCard("avenger");
+		var quickbeam = scn.GetFreepsCard("quickbeam");
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(avenger, gandalf);
+		scn.MoveAlliesToTable(treebeard);
+		scn.MoveCardsToHand(quickbeam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(4, scn.GetTwilight());
+		// Two Ents (the Avenger himself and the ally Treebeard) beside Gandalf, who is no Ent.
+		assertEquals(6, scn.GetStrength(avenger));
+		assertEquals(12, scn.GetStrength(treebeard));
+		assertTrue(scn.FreepsPlayAvailable(quickbeam));
+		scn.FreepsPlayCard(quickbeam);
+
+		// Three Ents now.  The bonus is the Avenger's alone.
+		assertEquals(8, scn.GetStrength(avenger));
+		assertEquals(8, scn.GetStrength(quickbeam));
+		assertEquals(12, scn.GetStrength(treebeard));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TwoCopiesAmongThreeEntsAreEachStrengthPlus2Only() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var avenger = scn.GetFreepsCard("avenger");
+		var avenger2 = scn.GetFreepsCard("avenger2");
+		var onod = scn.GetFreepsCard("onod");
+		scn.MoveCompanionsToTable(avenger, avenger2, onod);
+
+		scn.StartGame();
+
+		// 6 + 2 each, not + 4: each copy strengthens only itself.
+		assertEquals(8, scn.GetStrength(avenger));
+		assertEquals(8, scn.GetStrength(avenger2));
+		assertEquals(7, scn.GetStrength(onod));
 	}
 }

@@ -5,19 +5,37 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
-import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
+import com.gempukku.lotro.logic.timing.RuleUtils;
 import com.gempukku.lotro.logic.timing.results.DrawCardOrPutIntoHandResult;
 
 import java.util.Collections;
 
 public class PutCardFromDeckIntoHandEffect extends AbstractEffect {
+    private final String _takingPlayer;
     private final PhysicalCard _card;
     private final boolean _reveal;
+    private final boolean _inPlaceOfDraw;
 
-    public PutCardFromDeckIntoHandEffect(PhysicalCard card, boolean reveal) {
+    /**
+     * @param takingPlayer the player carrying the effect out, who need not be the owner of the card: a bar on
+     *                     taking cards into hand is read for this player (RuleUtils.isBarredFromTakingIntoHand)
+     */
+    public PutCardFromDeckIntoHandEffect(String takingPlayer, PhysicalCard card, boolean reveal) {
+        this(takingPlayer, card, reveal, false);
+    }
+
+    /**
+     * @param inPlaceOfDraw true when the card is taken in place of a card its owner was about to draw ("about to
+     *                      draw a card ... look at the top three cards of your draw deck instead. Take [one]
+     *                      into your hand"): that card is the card drawn, for a text that answers a draw
+     *                      (Q-0205: B).  Every other card taken from a draw deck is taken into hand and not drawn.
+     */
+    public PutCardFromDeckIntoHandEffect(String takingPlayer, PhysicalCard card, boolean reveal, boolean inPlaceOfDraw) {
+        _takingPlayer = takingPlayer;
         _card = card;
         _reveal = reveal;
+        _inPlaceOfDraw = inPlaceOfDraw;
     }
 
     @Override
@@ -36,8 +54,7 @@ public class PutCardFromDeckIntoHandEffect extends AbstractEffect {
     }
 
     private boolean cantTakeIntoHand(LotroGame game) {
-        return game.getModifiersQuerying().hasFlagActive(game,
-                ModifierFlag.CANT_TAKE_INTO_HAND_FROM_DISCARD_OR_DECK, _card.getOwner());
+        return RuleUtils.isBarredFromTakingIntoHand(game, _takingPlayer, _card);
     }
 
     @Override
@@ -53,7 +70,7 @@ public class PutCardFromDeckIntoHandEffect extends AbstractEffect {
             }
             gameState.removeCardsFromZone(_card.getOwner(), Collections.singleton(_card));
             gameState.addCardToZone(game, _card, Zone.HAND);
-            game.getActionsEnvironment().emitEffectResult(new DrawCardOrPutIntoHandResult(_card.getOwner()));
+            game.getActionsEnvironment().emitEffectResult(new DrawCardOrPutIntoHandResult(_card.getOwner(), _inPlaceOfDraw));
 
             return new FullEffectResult(true);
         }

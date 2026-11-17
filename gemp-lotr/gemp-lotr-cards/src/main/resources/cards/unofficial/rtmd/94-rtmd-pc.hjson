@@ -144,14 +144,21 @@
 				filter: your,companion
 				memorize: dyingCompanion
 			}
-			requires: {
-				type: IsOwner
-			}
+			requires: [
+				{
+					type: IsOwner
+				}
+				{
+					type: CanSpot
+					filter: possession,attachedTo(memory(dyingCompanion)),transferableTo(character,not(memory(dyingCompanion)))
+				}
+			]
 			effect: {
 				type: DoWhile
 				check: {
-					type: CanSpot
-					filter: possession,attachedTo(memory(dyingCompanion))
+					type: MemoryMatches
+					memory: moved
+					filter: possession
 				}
 				effect: [
 					{
@@ -159,6 +166,7 @@
 						select: choose(possession,attachedTo(memory(dyingCompanion)))
 						where: choose(character,not(memory(dyingCompanion)))
 						checkTarget: true
+						memorizeTransferred: moved
 					}
 				]
 			}
@@ -613,6 +621,9 @@
 		effects: {
 			type: Activated
 			phase: archery
+			requires: {
+				type: IsOwner
+			}
 			effect: [
 				{
 					type: ModifyStrength
@@ -819,9 +830,14 @@
 			trigger: {
 				type: EndOfTurn
 			}
-			requires: {
-				type: OwnerIsFreeps
-			}
+			requires: [
+				{
+					type: OwnerIsFreeps
+				}
+				{
+					type: SiteAvailableToControl
+				}
+			]
 			effect: [
 				{
 					type: ChooseOpponent
@@ -1020,7 +1036,7 @@
 				minimumDeckSize: 100
 			}
 		]
-		gametext: Your deck must have at least 100 cards.
+		gametext: Your draw deck must have at least 100 cards.
 		lore: ""
 		promotext: ""
 		helptext: ""
@@ -1186,8 +1202,9 @@
 					type: OwnerIsFreeps
 				}
 				{
+					// Not offered when no minion can be assigned to the Ring-bearer, as when he is hindered (Q-0034, F-0337).
 					type: CanSpot
-					filter: minion
+					filter: minion,AssignableToSkirmishAgainst(ringBearer)
 				}
 			]
 			effect: {
@@ -1345,7 +1362,7 @@
 				}
 			}
 		]
-		gametext: You may not play or take into hand cards from your discard pile or draw deck (except when reconciling).
+		gametext: You may not play or take into hand cards from your discard pile or draw deck (except when reconciling or starting fellowship).
 		lore: ""
 		promotext: ""
 		helptext: ""

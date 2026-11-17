@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_086_Tests
@@ -18,8 +19,36 @@ public class Card_13_086_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "13_86");
-					// put other cards in here as needed for the test case
+					put("wind", "13_86");
+					put("runner", "13_90");     // Easterling Runner: [men] Man minion, cost 3; a Shadow ability used only on purpose
+					put("ted", "18_75");        // Ted Sandyman, Chief's Men's Ally: [men] Hobbit minion, site 2; abilities used only on purpose
+					put("brigand", "4_10");     // Dunlending Brigand: [dunland] Man minion, no text
+					put("stragglers", "13_99"); // Stragglers: [men] support-area condition; its skirmish ability is used only on purpose
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetTokensScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("wind", "13_86");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a second companion to take an archery wound
+					// Garrison of Osgiliath: a [gondor] condition of the support area, played with 2 [gondor] tokens;
+					// its ability is a skirmish one
+					put("garrison", "6_52");
+					// Heirs of Gondor: a [gondor] condition of the support area, played with 1 [gondor] token; its
+					// ability is a skirmish one
+					put("heirs", "13_69");
+					// Ships of Great Draught: a [raider] possession of the Shadow support area.  "Shadow: Remove a
+					// threat or discard a [raider] card from hand to add a [raider] token here."  Two more copies
+					// are the [raider] cards discarded from hand.
+					put("ships1", "8_65");
+					put("ships2", "8_65");
+					put("ships3", "8_65");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +76,7 @@ public class Card_13_086_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("wind");
 
 		assertEquals("Desert Wind", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +91,118 @@ public class Card_13_086_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertWindTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void TheMinionArcheryTotalIsPlus2OnceFiveCultureTokensOfAnyCultureCanBeSpottedAndNotAtFour() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTokensScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var garrison = scn.GetFreepsCard("garrison");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToSupportArea(garrison);
+
+		var wind = scn.GetShadowCard("wind");
+		var ships = scn.GetShadowCard("ships1");
+		var spare1 = scn.GetShadowCard("ships2");
+		var spare2 = scn.GetShadowCard("ships3");
+		// The Shadow player's own Free Peoples condition: in play, and not active on this turn.
+		var theirHeirs = scn.GetShadowCard("heirs");
+		scn.MoveCardsToSupportArea(ships, theirHeirs);
+		scn.MoveCardsToHand(spare1, spare2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddTokensToCard(garrison, 2);
+		scn.AddTokensToCard(ships, 2);
+		scn.AddTokensToCard(theirHeirs, 1);
+		assertEquals(2, scn.GetCultureTokensOn(garrison));
+		assertEquals(2, scn.GetCultureTokensOn(ships));
+		assertEquals(1, scn.GetCultureTokensOn(theirHeirs));
+		assertInHand(spare1, spare2);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(wind);
+		scn.ShadowRefreshDecision();
 
-		assertEquals(5, scn.GetTwilight());
+		// 2 [gondor] tokens on a Free Peoples card and 2 [raider] tokens on a Shadow card: four.  The token on
+		// the card that is not active would make five.  No minion is an archer.
+		assertEquals(0, scn.GetShadowArcheryTotal());
+
+		// A fifth token, of either culture.
+		scn.ShadowUseCardAction(ships);
+		scn.ShadowChooseCard(spare1);
+		assertEquals(3, scn.GetCultureTokensOn(ships));
+		assertEquals(2, scn.GetShadowArcheryTotal());
+
+		// A sixth adds nothing more: "5 or more".
+		scn.ShadowUseCardAction(ships);
+		assertEquals(4, scn.GetCultureTokensOn(ships));
+		assertInDiscard(spare1, spare2);
+		assertEquals(2, scn.GetShadowArcheryTotal());
+
+		// The two wounds are the Free Peoples player's to place.
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.PassArcheryActions();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		scn.FreepsChooseCard(aragorn);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(frodo, aragorn));
+		scn.FreepsChooseCard(aragorn);
+
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(wind));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void CanBePlayedOnlyOnceAMenMinionIsSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wind = scn.GetShadowCard("wind");
+		var runner = scn.GetShadowCard("runner");
+		var brigand = scn.GetShadowCard("brigand");
+		var stragglers = scn.GetShadowCard("stragglers");
+		scn.MoveCardsToSupportArea(stragglers);
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.MoveMinionsToTable(brigand);
+		assertInZone(Zone.SUPPORT, stragglers);
+		assertInZone(Zone.SHADOW_CHARACTERS, brigand);
+		scn.FreepsPass();
+		scn.MoveCardsToHand(wind, runner);
+		assertInHand(wind, runner);
+		scn.ShadowRefreshDecision();
+
+		// A [dunland] Man minion and a [men] condition: neither is a [men] minion.
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(wind));
+
+		scn.ShadowPlayCard(runner);
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		assertTrue(scn.ShadowPlayAvailable(wind));
+		scn.ShadowPlayCard(wind);
+		assertInZone(Zone.SHADOW_CHARACTERS, wind);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AMenMinionWhoIsNoManIsSpottedToPlayIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var wind = scn.GetShadowCard("wind");
+		var ted = scn.GetShadowCard("ted");
+
+		scn.StartGame();
+		scn.SetTwilight(20);
+		scn.MoveMinionsToTable(ted);
+		scn.FreepsPass();
+		scn.MoveCardsToHand(wind);
+		assertInHand(wind);
+		scn.ShadowRefreshDecision();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowPlayAvailable(wind));
+		scn.ShadowPlayCard(wind);
+		assertInZone(Zone.SHADOW_CHARACTERS, wind);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

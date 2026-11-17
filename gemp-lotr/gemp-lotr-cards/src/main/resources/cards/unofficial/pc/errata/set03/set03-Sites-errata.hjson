@@ -1,5 +1,6 @@
 {
 
+	# History: revision 1 (errata sheet date 2021.12.19, batch "02: 2021 Yuletide").
 	# 53_120: {
 	# 	cardInfo: {
 	# 		//id: 3_120.1
@@ -67,11 +68,11 @@
 	
 	53_120: {
 		cardInfo: {
-			//id: 53_120.1
+			//id: 53_120.2
 			parent: 3_120
 			variant: ERRATA
 			variantPath: errata/pc
-			revision: 1
+			revision: 2
 			image: errata/LOTR-EN03E120.1_card.jpg
 			collInfo: 3U120
 			rarity: U

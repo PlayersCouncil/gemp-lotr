@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
@@ -12,6 +13,7 @@ import com.gempukku.lotro.logic.decisions.MultipleChoiceAwaitingDecision;
 import com.gempukku.lotro.logic.effects.PlayoutDecisionEffect;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.timing.Effect;
+import com.gempukku.lotro.logic.timing.FailedEffect;
 import org.json.simple.JSONObject;
 
 import java.util.LinkedList;
@@ -68,10 +70,27 @@ public class Choice implements EffectAppenderProducer {
                     }
                 }
 
+                // The branch taken is carried out in a context that says whether it was open because it can be
+                // carried out in full: what is then picked within it is an extension of the choice, and is held
+                // to what can be done in full as well (Ketura on Q-0209).  Where no branch can be and they are
+                // offered all the same, it says not, whatever a choice this one is a branch of had said.
+                final boolean doableInFull = !playableEffectAppenders.isEmpty();
+                final ActionContext branchContext = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect()) {
+                    @Override
+                    public boolean isBranchChosenAsDoableInFull() {
+                        return doableInFull;
+                    }
+                };
+
+                // Exactly one branch can be carried out in full: that is the one the player is capable of choosing
+                // (CR 4.2 "effect"; Ketura on F-0310), so it is taken without a question, and it is the one
+                // remembered as chosen, in the words the question would have shown.
                 if (playableEffectAppenders.size() == 1) {
                     SubAction subAction = new SubAction(action);
-                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, delegate);
-                    actionContext.setValueToMemory(memorize, textArray[0]);
+                    playableEffectAppenders.getFirst().appendEffect(cost, subAction, branchContext);
+                    actionContext.setValueToMemory(memorize, effectTexts.getFirst());
                     return new StackActionEffect(subAction);
                 }
 
@@ -82,6 +101,14 @@ public class Choice implements EffectAppenderProducer {
                     // being no cost at all.
                     if(cost)
                         return null;
+
+                    // A choice whose every branch is certain to do nothing is not put to the player (Ketura on
+                    // F-0116: "the prompt should be smarter"; F-0293).  It comes to nothing, as whichever branch
+                    // was picked would have.  Each branch says for itself: a single effect by its forecast, one
+                    // that holds others (an "if", a cost and what it buys, several effects, a play) from what
+                    // it holds (Q-0220: D).  A branch that cannot tell keeps the question.
+                    if (EffectForecast.areCertainToDoNothingIfChosen(delegate, possibleEffectAppenders))
+                        return new FailedEffect();
 
                     // If we are an effect however, then we will let "no valid choices" default to the player choosing
                     // which fork to go down; this should eliminate situations like Here Lies Balin doing nothing
@@ -100,11 +127,32 @@ public class Choice implements EffectAppenderProducer {
                                 new MultipleChoiceAwaitingDecision(1, "Choose action to perform", effectTexts.toArray(new String[0])) {
                                     @Override
                                     protected void validDecisionMade(int index, String result) {
-                                        playableEffectAppenders.get(index).appendEffect(cost, subAction, delegate);
+                                        playableEffectAppenders.get(index).appendEffect(cost, subAction, branchContext);
                                         actionContext.setValueToMemory(memorize, result);
                                     }
                                 }));
                 return new StackActionEffect(subAction);
+            }
+
+            // Whichever option is taken: nothing only if no option would do anything.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final String choosingPlayer = playerSource.getPlayer(actionContext);
+                ActionContext delegate = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect());
+                return EffectForecast.together(delegate, possibleEffectAppenders);
+            }
+
+            // As a branch of another choice: it comes to nothing only if every option of its own would.
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                final String choosingPlayer = playerSource.getPlayer(actionContext);
+                ActionContext delegate = new DelegateActionContext(actionContext,
+                        choosingPlayer, actionContext.getGame(), actionContext.getSource(),
+                        actionContext.getEffectResult(), actionContext.getEffect());
+                return possibleEffectAppenders.length > 0
+                        && EffectForecast.areCertainToDoNothingIfChosen(delegate, possibleEffectAppenders);
             }
 
             @Override

@@ -33,12 +33,15 @@
 				phase: archery
 				effect: [
 					{
-						type: heal
-						select: choose(culture(raider),archer)
-						count: {
+						type: repeat
+						times: {
 							type: ForEachCultureToken
 							culture: raider
 							filter: self
+						}
+						effect: {
+							type: heal
+							select: choose(culture(raider),archer)
 						}
 					}
 					{
@@ -739,10 +742,16 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,easterling
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,easterling
+					}
+					{
+						type: canSpotBurdens
+						amount: 1
+					}
+				]
 				effect: {
 					type: addTwilight
 					amount: {
@@ -951,12 +960,32 @@
 					]
 					effects: [
 						{
-							type: modifyStrength
-							select: choose(southron)
-							amount: {
-								type: forEachBurden
-								limit: 5
+							type: If
+							check: {
+								type: canSpot
+								filter: southron
 							}
+							true: [
+								{
+									type: chooseActiveCards
+									select: choose(southron)
+									text: Choose a Southron to make strength +1 for each burden you spot
+									memorize: chosenSouthron
+								}
+								{
+									type: chooseHowManyBurdensToSpot
+									memorize: spotCount
+								}
+								{
+									type: modifyStrength
+									select: memory(chosenSouthron)
+									amount: {
+										type: fromMemory
+										memory: spotCount
+										limit: 5
+									}
+								}
+							]
 						}
 						{
 							type: modifyStrength
@@ -1299,21 +1328,29 @@
 			},
 			effect: [
 				{
-					type: preventable
-					text: Would you like to discard 2 companions to prevent adding burdens for each companion over 4?
-					player: fp
-					cost: {
-						type: discard
-						player: fp
-						select: choose(companion,not(ringBearer))
-						count: 2
+					type: If
+					check: {
+						type: canSpot
+						filter: companion
+						count: 5
 					}
-					effect: {
-						type: addBurdens
-						amount: {
-							type: forEachYouCanSpot
-							filter: companion
-							over: 4
+					true: {
+						type: preventable
+						text: Would you like to discard 2 companions to prevent adding burdens for each companion over 4?
+						player: fp
+						cost: {
+							type: discard
+							player: fp
+							select: choose(companion,not(ringBearer))
+							count: 2
+						}
+						effect: {
+							type: addBurdens
+							amount: {
+								type: forEachYouCanSpot
+								filter: companion
+								over: 4
+							}
 						}
 					}
 				}
@@ -2307,6 +2344,7 @@
 					cost: {
 						type: wound
 						select: choose(companion)
+						player: fp
 					}
 				}
 			}

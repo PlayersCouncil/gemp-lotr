@@ -1,5 +1,6 @@
 package com.gempukku.lotro.logic.effects;
 
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Side;
 import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -110,10 +111,29 @@ public class KillEffect extends AbstractSuccessfulEffect {
             }
         }
 
-        DiscardUtils.cardsToChangeZones(game, toBeKilled, discardedCards, toAddToDiscard);
+        // The One Ring is never discarded, for any reason (Q-0109), and so not with the cards its dead bearer
+        // bore either: it stays in play and is laid where he was, in the skirmish too if he was killed in one,
+        // until a new Ring-bearer takes it up or the game ends with it there (Q-0232).  What is needed of each
+        // bearer is read here, while he is still in play.
+        Map<PhysicalCard, Zone> ringsLeftBehind = new LinkedHashMap<>();
+        Set<PhysicalCard> ringsLeftInSkirmish = new HashSet<>();
+        for (PhysicalCard card : toBeKilled) {
+            for (PhysicalCard attachedCard : gameState.getAttachedCards(card)) {
+                if (attachedCard.getBlueprint().getCardType() == CardType.THE_ONE_RING) {
+                    ringsLeftBehind.put(attachedCard, card.getZone());
+                    if (gameState.getSkirmish() != null && gameState.getSkirmish().getFellowshipCharacter() == card)
+                        ringsLeftInSkirmish.add(attachedCard);
+                }
+            }
+        }
+
+        DiscardUtils.cardsToChangeZones(game, toBeKilled, ringsLeftBehind.keySet(), discardedCards, toAddToDiscard);
         toRemoveFromZone.addAll(toAddToDiscard);
 
         gameState.removeCardsFromZone(null, toRemoveFromZone);
+
+        for (Map.Entry<PhysicalCard, Zone> ringLeftBehind : ringsLeftBehind.entrySet())
+            gameState.layCardWhereItsBearerWas(ringLeftBehind.getKey(), ringLeftBehind.getValue(), ringsLeftInSkirmish.contains(ringLeftBehind.getKey()));
 
         for (PhysicalCard deadCard : toAddToDeadPile)
             gameState.addCardToZone(game, deadCard, Zone.DEAD);
@@ -125,8 +145,9 @@ public class KillEffect extends AbstractSuccessfulEffect {
             game.getActionsEnvironment().emitEffectResult(new KilledResult(killedCards, new HashSet<>(_killers), _cause));
         for (PhysicalCard killedCard : killedCards)
             game.getActionsEnvironment().emitEffectResult(new ForEachKilledResult(killedCard, _killers, _cause));
+        // Those killed are told apart from the cards discarded with them: a killed character was not discarded.
         for (PhysicalCard discardedCard : discardedCards)
-            game.getActionsEnvironment().emitEffectResult(new DiscardCardsFromPlayResult(null, null, discardedCard));
+            game.getActionsEnvironment().emitEffectResult(new DiscardCardsFromPlayResult(null, null, discardedCard, killedCards.contains(discardedCard)));
 
     }
 }

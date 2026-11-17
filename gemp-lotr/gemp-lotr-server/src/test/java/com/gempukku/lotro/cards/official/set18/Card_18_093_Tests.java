@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set18;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,12 @@ public class Card_18_093_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_93");
-					// put other cards in here as needed for the test case
+					put("wary", "18_93");
+					put("wary2", "18_93");      // a second copy: not unique
+
+					put("faramir", "18_48");    // Faramir, Captain of Ithilien: [gondor] Man companion, ranger, hunter 2; a maneuver heal used only on purpose
+					put("legolas", "15_18");    // Legolas, Fleet-footed Hunter: [elven] Elf companion, hunter 1; a regroup draw used only on purpose
+					put("tracker", "15_171");   // Tracking Uruk: [uruk-hai] Uruk-hai minion, strength 14; hunter 1 is its whole text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_18_093_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("wary");
 
 		assertEquals("Wary Orc", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +65,42 @@ public class Card_18_093_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WaryOrcTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthPlus1ForEachHunterCompanionAndForNoOtherCharacter() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var faramir = scn.GetFreepsCard("faramir");
+		var legolas = scn.GetFreepsCard("legolas");
+		scn.MoveCardsToHand(faramir, legolas);
+
+		var wary = scn.GetShadowCard("wary");
+		var wary2 = scn.GetShadowCard("wary2");
+		var tracker = scn.GetShadowCard("tracker");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid now to be read across the Free Peoples player's plays (Q-0228).
+		scn.MoveMinionsToTable(wary, wary2, tracker);
+		scn.FreepsRefreshDecision();
 
-		assertEquals(3, scn.GetTwilight());
+		// A companion who is no hunter (Frodo) and a hunter who is no companion: neither counts.
+		assertFalse(scn.HasKeyword(frodo, Keyword.HUNTER));
+		assertTrue(scn.HasKeyword(tracker, Keyword.HUNTER));
+		assertEquals(7, scn.GetStrength(wary));
+		assertEquals(7, scn.GetStrength(wary2));
+		assertEquals(14, scn.GetStrength(tracker));
+
+		scn.FreepsPlayCard(faramir);
+		// One hunter companion: +1, though his hunter number is 2. Each copy has its own +1, not the other's too.
+		assertEquals(8, scn.GetStrength(wary));
+		assertEquals(8, scn.GetStrength(wary2));
+		assertEquals(14, scn.GetStrength(tracker));
+
+		scn.FreepsPlayCard(legolas);
+		// Two hunter companions, of two cultures and races: +2.
+		assertEquals(9, scn.GetStrength(wary));
+		assertEquals(9, scn.GetStrength(wary2));
+		assertEquals(14, scn.GetStrength(tracker));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

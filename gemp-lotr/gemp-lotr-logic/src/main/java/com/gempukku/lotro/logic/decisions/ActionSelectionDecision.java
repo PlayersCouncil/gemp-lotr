@@ -40,10 +40,8 @@ public abstract class ActionSelectionDecision extends AbstractAwaitingDecision {
     }
 
     private String[] getActionTexts(List<? extends Action> actions) {
-        String[] result = new String[actions.size()];
-        for (int i = 0; i < result.length; i++)
-            result[i] = actions.get(i).getText(_game);
-        return result;
+        // Each as it words itself, and two offers of one action told apart by what each is for.
+        return OfferedActionTexts.of(_game, actions);
     }
 
     protected Action getSelectedAction(String result) throws DecisionResultInvalidException {

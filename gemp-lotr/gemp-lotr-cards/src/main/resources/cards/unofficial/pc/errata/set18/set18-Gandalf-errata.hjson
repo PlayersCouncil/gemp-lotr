@@ -1,7 +1,10 @@
 {
 	68_18: {
 		cardInfo: {
-			//id: 8_18.1
+			//id: 68_18.1
+			parent: 18_18
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN18E018.1.jpg
 			collInfo: 18R18
@@ -9,10 +12,11 @@
 		}
 		title: Beorning Axe
 		unique: false
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 2
-		type: possession
-		itemclass: hand weapon
+		type: Possession
+		itemclass: Hand weapon
 		strength: 2
 		vitality: 1
 		target: culture(gandalf),man
@@ -24,10 +28,16 @@
 					type: WinsSkirmish
 					filter: bearer,title(Grimbeorn)
 				}
-				requires: {
-					type: perTurnLimit
-					limit: 1
-				}
+				requires: [
+					{
+						type: perTurnLimit
+						limit: 1
+					}
+					{
+						type: HasCardInDiscard
+						filter: culture(gandalf),event
+					}
+				]
 				effect: [
 					{
 						type: PutCardsFromDiscardIntoHand
@@ -43,7 +53,7 @@
 			
 		]
 
-		gametext: Bearer must be a [gandalf] Man.\While bearer is Grimbeorn, each time he wins a skirmish you may take a [gandalf] event into hand from your discard pile (limit once per turn).
+		gametext: Bearer must be a [gandalf] Man. While bearer is Grimbeorn, each time he wins a skirmish you may take a [gandalf] event into hand from your discard pile (limit once per turn).
 		lore: No Orc or wolf dared enter the land of the Beornings.
 		promotext: ""
 		alts: {

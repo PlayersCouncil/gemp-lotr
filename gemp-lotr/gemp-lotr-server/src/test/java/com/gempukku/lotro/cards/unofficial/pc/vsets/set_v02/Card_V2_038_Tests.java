@@ -2,52 +2,39 @@ package com.gempukku.lotro.cards.unofficial.pc.vsets.set_v02;
 
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.framework.VirtualTableScenario;
-import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.state.LotroGame;
-import com.gempukku.lotro.logic.actions.ActivateCardAction;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.effects.TakeOffTheOneRingEffect;
 import com.gempukku.lotro.logic.modifiers.ArcheryTotalModifier;
-import com.gempukku.lotro.logic.timing.Action;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V2_038_Tests
 {
-
+	// Every skirmish here is fought at site 2 of the Fellowship path, Ettenmoors: "Skirmish: Exert your companion or
+	// minion to make that character strength +2", a skirmish special ability either player may use.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("balrog", "102_38");
-					put("runner", "1_178");
-					put("drums", "1_168");
-					put("dark", "1_188");
+					put("savage", "1_151");      // Uruk Savage: [isengard], strength 5, vitality 3; Damage +1 is its whole text
+					put("runner", "1_178");      // Goblin Runner: [moria], strength 5, vitality 1
 
-					put("sting", "5_116");
-					put("severed", "4_319");
-					put("companion1", "3_7");
-					put("companion2", "3_122");
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability, never used
+					put("gimli", "1_13");        // Gimli, Son of Gloin: strength 6, vitality 3, Damage +1.  "Skirmish: Exert Gimli to make him strength +2."
+					put("boromir", "1_97");      // Boromir, Son of Denethor: vitality 3.  "Skirmish: Exert Boromir to make a Hobbit strength +3."
+					put("bounder", "1_286");     // Bounder: Hobbit ally, home site 2, vitality 2.  "Skirmish: Exert this ally to prevent a Hobbit from being overwhelmed unless that Hobbit's strength is tripled."
+					put("saga", "1_114");        // The Saga of Elendil: condition on a [gondor] companion, vitality +1.  "Skirmish: Discard this condition to make bearer strength +2."
+					put("swordarm", "1_116");    // Swordarm of the White Tower: skirmish event for 0.  "Make a [gondor] companion strength +2."
 				}},
-				new HashMap<>() {{
-					put("site1", "1_319");
-					put("site2", "1_331"); //Ettenmoors for the site ability
-					put("site3", "1_341");
-					put("site4", "1_343");
-					put("site5", "1_349");
-					put("site6", "1_351");
-					put("site7", "1_353");
-					put("site8", "1_356");
-					put("site9", "1_360");
-				}},
+				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.ATARRing
+				VirtualTableScenario.RulingRing
 		);
 	}
 
@@ -67,9 +54,9 @@ public class Card_V2_038_Tests
 		 * Vitality: 5
 		 * Site Number: 4
 		 * Game Text: Fierce. Damage +1.
-		* 	Each time a minion takes a wound, you may remove (1) to add a threat.
-		* 	Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
-		*/
+		 * Each time a minion takes a wound, you may remove (1) to add a threat.
+		 * Each time the Free Peoples player uses a skirmish special ability during a skirmish involving the Balrog, you may wound a companion it is skirmishing.
+		 */
 
 		var scn = GetScenario();
 
@@ -92,143 +79,398 @@ public class Card_V2_038_Tests
 	}
 
 	@Test
-	public void BalrogRemoves1ToAddThreatEachTimeAnyMinionIsWounded() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void EachMinionTakingAWoundLetsTheShadowPlayerRemoveOneTwilightToAddAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var balrog = scn.GetShadowCard("balrog");
+		var savage = scn.GetShadowCard("savage");
 		var runner = scn.GetShadowCard("runner");
-		scn.MoveMinionsToTable(balrog, runner);
+		// Four companions, so that three threats can be added.
+		scn.MoveCompanionsToTable("aragorn", "gimli", "boromir");
 
-		//Added to increase threat threshold to 3
-		scn.MoveCompanionsToTable("companion1");
-		scn.MoveCompanionsToTable("companion2");
-
-		//cheating to add fellowship archery
+		// Three fellowship archery wounds, for the Shadow player to place one at a time.
 		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, null, 3));
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ARCHERY);
-		scn.SetTwilight(2);
 
-		scn.PassCurrentPhaseActions();
+		scn.MoveMinionsToTable(balrog, savage, runner);
+		scn.SkipToArcheryWounds();
+		scn.SetTwilight(3);
+
 		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(savage));
+
+		// A minion of another culture
+		scn.ShadowChooseCard(savage);
+
+		assertEquals(1, scn.GetWoundsOn(savage));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
+
+		scn.ShadowAcceptOptionalTrigger();
+
 		assertEquals(2, scn.GetTwilight());
-		assertEquals(0, scn.GetWoundsOn(balrog));
-		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
-
-		//Wounding Balrog triggers ability
-		scn.ShadowChooseCard(balrog);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
-		scn.ShadowAcceptOptionalTrigger();
 		assertEquals(1, scn.GetThreats());
-		assertEquals(1, scn.GetTwilight());
+
+		// The Balrog himself
+		assertEquals(0, scn.GetWoundsOn(balrog));
+		scn.ShadowChooseCard(balrog);
+
 		assertEquals(1, scn.GetWoundsOn(balrog));
-
-		//Wounding something other than the balrog triggers ability
-		scn.ShadowChooseCard(runner);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
 		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(2, scn.GetThreats());
-		assertEquals(0, scn.GetTwilight());
-		assertEquals(Zone.DISCARD, runner.getZone());
 
-		//Third arrow wounding without enough twilight causes ability to not trigger
-		assertEquals(2, scn.GetWoundsOn(balrog));
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetThreats());
+
+		// A minion the wound kills
+		assertInZone(Zone.SHADOW_CHARACTERS, runner);
+		scn.ShadowChooseCard(runner);
+
+		assertInZone(Zone.DISCARD, runner);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(3, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
 	@Test
-	public void BalrogWoundsOpponentWhenFreepsUsesSpecialAbilityFromAnySource() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TwoWoundsOnOneMinionAreTwoOffers() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var balrog = scn.GetShadowCard("balrog");
-		var drums = scn.GetShadowCard("drums");
-		var dark = scn.GetShadowCard("dark");
-		scn.MoveMinionsToTable(balrog);
-		scn.MoveCardsToSupportArea(dark);
-		scn.MoveCardsToHand(drums);
-
-		var frodo = scn.GetRingBearer();
-		var ring = scn.GetRing();
-		var sting = scn.GetFreepsCard("sting");
-		var severed = scn.GetFreepsCard("severed");
-		scn.AttachCardsTo(frodo, sting);
-		scn.MoveCardsToHand(severed);
-
-		var ettenmoors = scn.GetShadowSite(2);
+		var savage = scn.GetShadowCard("savage");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
 
 		scn.StartGame();
 
-		//Cheat and add an ability to Frodo which takes off the One Ring
-		scn.ApplyAdHocAction(new AbstractActionProxy() {
-			@Override
-			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
-				ActivateCardAction action = new ActivateCardAction(frodo, VirtualTableScenario.P1);
-				action.appendEffect(new TakeOffTheOneRingEffect());
-				return Collections.singletonList(action);
-			}
-		});
-
+		scn.MoveMinionsToTable(balrog, savage);
 		scn.SkipToAssignments();
+		scn.SetTwilight(2);
+		scn.FreepsAssignAndResolve(gimli, savage);
 
-		scn.FreepsAssignToMinions(frodo, balrog);
-		scn.FreepsResolveSkirmish(frodo);
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetThreats());
 
-		//5 skirmish action options: Ring, Sting, Site, Event (and cheated ring-removal ability).
-		// The first 3 should trigger the Balrog's ability, the event should not.
-		assertEquals(5, scn.FreepsGetCardChoiceCount());
-		assertEquals(0, scn.GetWoundsOn(frodo));
+		// Gimli's 6 beats the Savage's 5, and Damage +1 makes it two wounds on the one minion.
+		scn.PassSkirmishActions();
 
-		//Regular Free Peoples ability
-		scn.FreepsUseCardAction(sting);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
 		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(2, scn.GetWoundsOn(frodo)); //1 exertion from sting, 1 wound from balrog
-		scn.FreepsChoose("0"); //Have to pick whether to buff smeagol or debuff gollum
 
-		//One Ring ability used by the Free Peoples player
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsUseCardAction(ring);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
 		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(3, scn.GetWoundsOn(frodo));
 
-		//Cheat and take the Ring off so we don't have to count burdens
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsUseCardAction(frodo);
-		scn.ShadowDeclineOptionalTrigger(); //Ironically, the balrog's ability responds to our cheating
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetThreats());
+		assertEquals(2, scn.GetWoundsOn(savage));
+		// The Balrog was assigned to nobody and is fierce: the fierce assignment phase is next.
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
 
-		//Site ability used by the Free Peoples player
-		scn.ShadowPassCurrentPhaseAction();
+	@Test
+	public void DeclinedItCostsNothingAndWithAnEmptyPoolItIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable("aragorn");
+
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, null, 3));
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog, savage);
+		scn.SkipToArcheryWounds();
+		scn.SetTwilight(1);
+
+		scn.ShadowChooseCard(savage);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
+
+		// The second wound makes the offer again, and paying for it empties the pool.
+		scn.ShadowChooseCard(savage);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+
+		// The third wound, on the Balrog, finds nothing to pay with.
+		scn.ShadowChooseCard(balrog);
+
+		assertEquals(1, scn.GetWoundsOn(balrog));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithAsManyThreatsAsCompanionsItIsStillOfferedAndPaidForWithNoThreatAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable("aragorn");
+
+		scn.ApplyAdHocModifier(new ArcheryTotalModifier(null, Side.FREE_PEOPLE, null, 1));
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog, savage);
+		scn.SkipToArcheryWounds();
+		scn.SetTwilight(2);
+		// Frodo and Aragorn: no more than 2 threats.
+		scn.AddThreats(2);
+
+		assertEquals(2, scn.GetThreatLimit());
+		assertEquals(2, scn.GetThreats());
+
+		scn.ShadowChooseCard(savage);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void EachFreePeoplesSkirmishAbilityUsedInTheBalrogsSkirmishLetsHimWoundTheCompanionHeFights() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var savage = scn.GetShadowCard("savage");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var boromir = scn.GetFreepsCard("boromir");
+		var saga = scn.GetFreepsCard("saga");
+		scn.MoveCompanionsToTable(aragorn, gimli, boromir);
+		scn.AttachCardsTo(aragorn, saga);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog, savage);
+		scn.SkipToAssignments();
+		// Twilight to spare, so that a companion's wound could be answered as a minion's is if it counted as one.
+		scn.SetTwilight(3);
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, balrog}, new PhysicalCardImpl[]{gimli, savage});
+		scn.FreepsResolveSkirmish(aragorn);
+		var ettenmoors = scn.GetCurrentSite();
+
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, balrog));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+
+		// An ability of a card the companion in the skirmish bears.  Declined, nobody is wounded.
+		scn.FreepsUseCardAction(saga);
+
+		assertInZone(Zone.DISCARD, saga);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowDeclineOptionalTrigger();
+
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+
+		// An ability of a companion who is in no skirmish
+		scn.FreepsUseCardAction(boromir);
+
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Boromir's one wound is his own exertion.
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
+
+		// The site's ability, paid for by Gimli, who is assigned to the Savage in a skirmish yet to be fought
 		scn.FreepsUseCardAction(ettenmoors);
-		assertEquals(4, scn.GetWoundsOn(frodo)); // 1 exertion from site
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable());
+		scn.FreepsChooseCard(gimli);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
 		scn.ShadowAcceptOptionalTrigger();
-		assertEquals(5, scn.GetWoundsOn(frodo)); //1 exertion from site, 1 wound from balrog
 
-		//Free Peoples event should not trigger
-		scn.ShadowPassCurrentPhaseAction();
-		scn.FreepsPlayCard(severed);
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		// A companion's wounds are not a minion's: nothing was removed to add a threat.
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ASkirmishAbilityUsedInAnotherSkirmishAndASkirmishEventInTheBalrogsSetNothingOff() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var savage = scn.GetShadowCard("savage");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var swordarm = scn.GetFreepsCard("swordarm");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToHand(swordarm);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog, savage);
+		scn.SkipToAssignments();
+		// An empty pool, so that the Savage's wounds bring no offer of their own.
+		scn.SetTwilight(0);
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, balrog}, new PhysicalCardImpl[]{gimli, savage});
+
+		// Gimli's skirmish with the Savage: the Balrog is assigned, and his skirmish has not begun.
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsUseCardAction(gimli);
+
+		assertEquals(1, scn.GetWoundsOn(gimli));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(5, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 
-		//None of the equivalent Shadow abilities should activate the Balrog's ability
-		//Shadow ability
-		scn.ShadowUseCardAction(dark);
+		scn.ShadowPass();
+		scn.FreepsPass();
+
+		// The Balrog's skirmish.  An event is no special ability.
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, balrog));
+		assertEquals(8, scn.GetStrength(aragorn));
+
+		scn.FreepsPlayCard(swordarm);
+
+		assertEquals(10, scn.GetStrength(aragorn));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(5, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		scn.ShadowPass();
 
-		//Shadow use of site
-		scn.FreepsPassCurrentPhaseAction();
+		// The ability that set nothing off in the Savage's skirmish does in the Balrog's.
+		scn.FreepsUseCardAction(gimli);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		// Gimli's two wounds are his two exertions.
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheShadowPlayerUsingASkirmishAbilityToExertTheBalrogSetsNeitherTriggerOff() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog);
+		scn.SkipToAssignments();
+		scn.SetTwilight(3);
+		scn.FreepsAssignAndResolve(aragorn, balrog);
+		var ettenmoors = scn.GetCurrentSite();
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetWoundsOn(balrog));
+		assertEquals(17, scn.GetStrength(balrog));
+
+		// The same site ability that sets the trigger off when the Free Peoples player uses it.  The Balrog is
+		// the Shadow player's only minion and so the one who exerts: a wound token, and no wound taken.
 		scn.ShadowUseCardAction(ettenmoors);
-		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(5, scn.GetWoundsOn(frodo));
 
-		//Shadow event
-		scn.FreepsPassCurrentPhaseAction();
-		scn.ShadowPlayCard(drums);
+		assertEquals(1, scn.GetWoundsOn(balrog));
+		assertEquals(19, scn.GetStrength(balrog));
 		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
-		assertEquals(5, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void TheRingsResponseUsedInTheBalrogsSkirmishIsNotASkirmishAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var frodo = scn.GetRingBearer();
+		var ring = scn.GetRing();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(frodo, balrog);
+		var ettenmoors = scn.GetCurrentSite();
+
+		scn.FreepsUseCardAction(ettenmoors);
+		scn.FreepsChooseCard(aragorn);
+
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(balrog));
+		scn.ShadowAcceptOptionalTrigger();
+
+		// The Ruling Ring: "Response: If bearer is about to take a wound in a skirmish, he wears The One Ring
+		// until the regroup phase."  A special ability the Free Peoples player uses in the Balrog's skirmish,
+		// and not a skirmish special ability.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(ring));
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertTrue(scn.RBWearingOneRing());
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void FightingAnAllyTheBalrogHasNoCompanionToWoundAndMakesNoOffer() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var balrog = scn.GetShadowCard("balrog");
+		var bounder = scn.GetFreepsCard("bounder");
+		scn.MoveAlliesToTable(bounder);
+
+		scn.StartGame();
+
+		scn.MoveMinionsToTable(balrog);
+		scn.SkipToAssignments();
+		// At site 2 the Bounder is at home and may be assigned.
+		scn.FreepsAssignAndResolve(bounder, balrog);
+
+		assertTrue(scn.IsCharSkirmishingAgainst(bounder, balrog));
+		assertEquals(0, scn.GetWoundsOn(bounder));
+
+		scn.FreepsUseCardAction(bounder);
+
+		// An ally is no companion: with nobody the Balrog may wound, and nothing to pay, there is nothing to offer.
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable());
+		// The Bounder's ability goes on to its choice of a Hobbit, himself or Frodo.
+		scn.FreepsChooseCard(bounder);
+
+		// The one wound is the Bounder's exertion.
+		assertEquals(1, scn.GetWoundsOn(bounder));
+		assertInZone(Zone.SUPPORT, bounder);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 }

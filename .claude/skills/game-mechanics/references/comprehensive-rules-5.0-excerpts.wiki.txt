@@ -1,0 +1,148 @@
+Comprehensive Rules 5.0 Excerpts:
+
+
+== Summary of Differences From Decipher Era ==
+
+* [[PC Errata]] are in effect, the same versions applying to all PC formats. 
+* {{SL|Item}} is a term used as a synonym for "Artifact or Possession".
+* "Here" on sites is a term used as a shorthand for "while the fellowship is at this site"
+* The game ends at site 9 when the Shadow player is about to reconcile, instead of at the start of the Regroup phase.
+* Discard piles are public information.
+* Cannot > Can; Game text and rules which use verbiage to the effect of "X cannot happen" override text which states "X can happen".
+* {{SL|Relentless}} is a keyword that forces a set additional assignment and skirmish phases after fierce skirmishes finish resolving.
+* Cards may have 2-dot and 3-dot uniqueness that restrict those cards to 2 or 3 cards in play, respectively.
+* "{{SL|Hinder}}" means to flip a card face-down so that it loses its game text and most attributes.  "{{SL|Restore}}" means to flip the card back face-up.  When players {{SL|reconcile}}, all of their hindered cards are restored.
+
+----
+
+===<div id="hinder">hinder</div>===
+
+# <li value="1">"Hindering" a card means to temporarily disable that card, making it unable to be used for most purposes.  It remains hindered until "restored", which can be an effect on cards but also happens automatically when players {{SL|reconcile}}.</li>
+
+# <li value="2">When a card is hindered, flip it face down, but do not remove any borne cards, stacked cards, or tokens.  Borne and stacked cards are not themselves hindered unless the hindering effect says so.</li> 
+#* Hindered cards are not hidden information; any player may request to inspect a hindered card as they could any other card in play.
+#* If all players agree, an alternate hinder indication can be used, such as by turning the card 90 degrees, 180 degrees, or using a special token.  These options may be more convenient in situations where a card is loaded up with tokens.
+
+# <li value="3">Tokens on hindered cards cannot be spotted, counted, reinforced, removed, or added to (even if there are zero tokens). Hindered characters thus cannot be exerted, wounded, or healed.</li>
+#* ''Exception'': If the Ring-bearer is hindered, burdens may be spotted and counted, but they still cannot be added or removed.
+#* If a character is hindered before it is about to be wounded, exerted, or healed, then the wound, exertion, or heal does not resolve.<br> {{Quote|text=''{{Card|Anduril, Legend Remade}} hinders a companion as it is about to be wounded.  Because that companion is now hindered, the wound token cannot be added.''}}
+
+# <li value="4">The entire game text of hindered cards does not apply.  This includes triggers, special abilities, modifiers, keywords, and other effects.</li>
+
+# <li value = "5">Other non-game-text card traits such as title, culture, card type, all flavors of subtype (Race, Item Class, etc) also do not apply on hindered cards.</li>
+#* This means that hindered cards cannot be spotted or targeted by their title, culture, card type, or race/item class by any game effect.  They also cannot be counted by effects which count how many of certain cards you can spot.<br> {{Quote|text=''If Gimli is hindered, you cannot "spot Gimli" or use Gimli when you "spot a companion", "spot a {{CI|Dwarven}} card", or "spot a Dwarf".}}<br> {{Quote|text=''If there are 6 companions on the table, but 1 of them is hindered, {{Card|Ulaire Enquea, Lieutenant of Morgul}} can only spot 5 companions and so cannot use his ability.''}}
+
+# <li value="6">The side/alignment of a hindered card continues to apply.</li> 
+#* This means that hindered cards can be spotted or targeted as "a Free Peoples card" or "a Shadow card", or as "a hindered Free Peoples card" or "a hindered Shadow card".
+#* If a hindered card does not have a side, such as the One Ring, then it can only be spotted or targeted as "a card" or "a hindered card".
+
+# <li value="7">Numeric stats on hindered cards do not apply.  Do not treat stats such as strength, vitality, or twilight cost as zero, but instead treat them as if the stat doesn't exist.</li> 
+#* {{Quote|text=''{{Card|Grond, Hammer of the Underworld}}, removes X tokens to discard a Free Peoples card with a twilight cost of X.  A hindered {{Card|Elrond, Lord of Rivendell}} does not have a twilight cost of 4, neither does he have a twilight cost of 0: he has no twilight cost at all.  Thus Grond is unable to discard a hindered Elrond, even if 0 tokens are removed, as Elrond is not currently a "Free Peoples card with a twilight cost".''}}
+
+# <li value="8">If a borne card is being hindered but not the card it is borne by, all stat bonuses it provides are temporarily revoked from its bearer.</li>
+#* This means that death can occur if a card granting a vitality bonus is hindered on an exhausted character, or corruption can occur if a resistance-boosting card is hindered.
+
+# <li value="9">Cards which are borne by hindered cards cannot interact with their bearer but are otherwise still in play and active; they can be interacted with and use their game text normally.</li>
+#* {{Quote|text=''{{Card|Gimli's Battle Axe, Trusted Weapon}} is borne by Gimli, who becomes hindered. As Gimli has no game text and no stats, he cannot gain damage or strength bonuses.  However, when there are 3 threats, the fellowship archery total is still +1, as this does not rely on Gimli to interact with the effect.''}}<br> {{Quote|text=''{{Card|Gwemegil}} is borne by Arwen, who becomes hindered.  Gwemegil's skirmish special ability cannot exert Arwen, but it can still be activated and discard cards from hand to make nobody strength +1. ''}}
+
+# <li value="10">Cards stacked on hindered cards also continue to be in play as normal.  However, those cards are now stacked "on a Free Peoples/Shadow card" and so may lose the ability to fulfill requirements of certain special abilities.</li>
+#* {{Quote|text=''If {{Card|Slaked Thirsts}} is stacked on a {{CI|Dwarven}} condition which later is hindered, Slaked Thirsts' conditional ability is no longer able to be invoked, as it is merely stacked on "a hindered Free Peoples card".}}
+
+# <li value="11">Although the game text of hindered cards does not apply, "passive play restriction" rules continue to be enforced on the hindered card.  In general, if a new card play would result in an inconsistent game state once a hindered card has been restored, that play is disallowed.</li>
+#* If a hindered card is unique, you cannot play another copy of that card with the same title.  If the card is 2-dot or 3-dot, this applies if there are already 2 or 3 copies in play, respectively.<br> {{Quote|text=''If you have a hindered Aragorn, and play a second Aragorn, this would be an inconsistent game state once the Free Peoples player reconciles, as there would be 2 Aragorns in play. Thus, the play is disallowed.''}}
+#* If the hindered card is an item (possession or artifact), it continues to restrict its bearer from bearing any other cards of the same item class via play or transfer.<br> {{Quote|text=''If {{Card|Shadowfax}} is hindered on Gandalf, you cannot play a {{Card|Horse of Rohan}} on Gandalf.  Otherwise once Shadowfax was restored, you would have 2 mounts on 1 character, so it is disallowed.''}}
+#* However, note that the game text of such items does not apply, so any restrictions that come from the game text of a hindered card are ignored.<br> {{Quote|text=''If Aragorn bears {{Card|Anduril, Flame of the West}}, he cannot bear {{Card|Aragorn's Bow}} due to Anduril's game text.  If Anduril is hindered, a {{Card|Ranger's Sword}} cannot be played on Aragorn due to passive item class restrictions. But because Anduril's game text does not apply, Aragorn's Bow can now be played. Upon being restored, Anduril's game text resumes being applied, upon which Aragorn's Bow would be discarded.''}}
+#* If a hindered card is a Companion, it continues to count towards the Rule of 9.<br> {{Quote|text=''If you have 9 companions in play and 1 is hindered, playing another companion would result in there being 10 companions in play after reconciling, which is inconsistent with the Rule of 9, therefore it is disallowed.''}}
+#* If a hindered card is a Companion, it continues to contribute towards the threat limit.
+
+# <li value="12">If a hindered card is a Companion, it does '''not''' add 1 twilight when moving. </li>
+
+# <li value="13">If a card is hindered while in the process of evaluating a special ability or trigger on that card, the effects of that text continue to be executed until fulfilled. </li>
+
+# <li value="14">Hindered characters cannot be assigned to skirmishes.</li>
+#* If an assigned character is hindered, they are immediately removed from the skirmish assignment, which may cancel it.
+#* If an actively skirmishing character is hindered, they are immediately removed from the skirmish, which may cancel it.
+
+# <li value="15">Cards in out-of-play zones cannot be hindered. If a hindered card is discarded or otherwise moved to your hand, draw deck, dead pile, adventure deck, or discard pile, or removed from the game, it is flipped the correct way up and exits play as any other card. </li>
+#* This does not count as the card being restored and thus does not trigger restore responses.
+
+# <li value="16">Sites cannot be hindered.  The One Ring however can be hindered.  </li>  
+
+# <li value="17">During the Regroup phase, if the fellowship has no unhindered companions, the Free Peoples player cannot choose to move.</li>
+#* {{Quote|text=''If everyone is occupied or distracted, nobody can take charge leading the fellowship forward.''}}
+
+# <li value="18">While the Ring-bearer is hindered, they cannot be corrupted until restored.</li>
+
+See also {{SL|restore}}, {{SL|reconcile}}
+----
+
+
+===<div id="restore">restore</div>===
+
+# <li value="1">When a hindered card is restored, flip it back face up (or otherwise return it to its original orientation) and it immediately returns to activity.</li>
+
+# <li value="2">Restoring a card does not count as the card "being played".</li>
+#* {{Quote|text=''{{Card|Shelob, Her Ladyship}}, stings a companion upon being played.  But after being hindered and restored, she is not being played again and so does not sting a second companion.''}}
+
+# <li value="3">When multiple cards are restored, they are all restored simultaneously.</li>
+
+# <li value="4">You cannot restore a card unless it is already hindered.  If you attempt to restore a non-hindered card, it does nothing (and if that restore action was a cost, it fails to fulfill the cost).</li>  
+
+# <li value="5">When a card is specifying a target for a restore action, it may specify traits that are normally not spottable due to being hindered.  When doing so, only consider the traits printed on that card, not any keywords or other traits granted by game text or other card effects.</li>
+#* {{Quote|text=''You can "restore an Orc" or "restore a {{CI|Gondor}} companion", even though other actions would not be able to interact with that hindered card using "discard an Orc" or "spot a {{CI|Gondor}} companion".''}}
+#* {{Quote|text=''When restoring a "minion with ambush", you can select a {{Card|Southron Scout}}, but you cannot select a {{Card|Southron Explorer}} who would receive ambush from {{Card|Desert Wind Stalker}}; until the Explorer is restored it is not yet a valid target for the Stalker's effect.}}
+
+
+See also {{SL|hinder}}, {{SL|reconcile}}
+
+----
+
+
+===<div id="reconcile">reconcile</div>===
+A player reconciles their hand as follows:
+* They may first discard one card from their hand.
+* If they then have less than eight cards in his hand, they must draw cards until they have eight.
+* Otherwise (when they have more than eight cards in their hand), they must discard from their hand until they have only eight.
+
+When any player reconciles (before they discard any cards from hand), restore all cards owned by that player which would be active upon restoration. 
+ ''This means that if you are the Free Peoples player and you somehow have a hindered Shadow card, that Shadow card is not restored because it would not be active upon restoration.  All of your hindered Free Peoples cards will be restored, as they will be active (briefly) upon restoration.''
+
+If The One Ring is hindered, it is restored when the Free Peoples player reconciles.
+
+See also {{SL|regroup phase}}, {{SL|restore}}.
+
+----
+
+
+===<div id="non-unique">non-unique</div>===
+All cards that do not have a single dot (•) before their card title are non-unique. This means that all players may have multiple copies of those cards in play at one time. If a card has 2 dots (:) it is restricted to 2 copies in play, and if it has 3 dots (∴) it is limited to 3 copies in play.  These multi-dot cards are still considered "non-unique".  
+
+If you have multiple copies of a non-unique card in play, the effects of those copies are cumulative.
+
+See also {{SL|unique}}.
+
+----
+
+===<div id="item">item</div>===
+"Item" is a shorthand term meaning "possession or artifact".  This term is only used on PC cards.
+
+----
+
+
+===<div id="relentless">relentless</div>===
+After all normal and {{SL|fierce}} skirmishes have resolved, surviving minions with the '''relentless''' keyword must be defended against a third time, with a new relentless {{SL|assignment phase}} and {{SL|skirmish phase}}.
+
+Although the relentless skirmishes follow fierce skirmishes, a minion which is relentless is not automatically fierce; for all three skirmish rounds to be performed, you must have minions with both the fierce and relentless keywords (not necessarily the same minion).  Thus, if you have no fierce minions but you do have a relentless minion, you will only perform two rounds of skirmishes: a regular skirmish and a relentless skirmish, skipping the fierce skirmish.
+
+Game text which affects fierce minions does not affect relentless minions unless they are also fierce.  Likewise game text which affects a "fierce skirmish" does not affect a "relentless skirmish".  
+
+ ''{{Card|Eowyn, Dernhelm}} skirmishes against a relentless minion who is not fierce.  She does not gain +2 strength, as the minion is not fierce.''
+
+ ''{{Card|Filibert Bolger, Wily Rascal}} cannot be used to cancel a relentless skirmish, even if that relentless minion is also fierce.''
+
+In all other ways, relentless skirmishes behave like the other two rounds of skirmish.
+
+See also {{SL|fierce}}.
+
+----
+

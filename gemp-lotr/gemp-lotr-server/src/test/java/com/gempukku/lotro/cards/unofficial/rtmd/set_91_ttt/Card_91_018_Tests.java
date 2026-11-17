@@ -13,11 +13,10 @@ import static org.junit.Assert.*;
 
 public class Card_91_018_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario(Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				// No card but the Ring-bearer is needed
+				new HashMap<>(),
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -27,7 +26,9 @@ public class Card_91_018_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario(Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				// No card but the Ring-bearer is needed
+				new HashMap<>(),
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -36,11 +37,15 @@ public class Card_91_018_Tests
 		);
 	}
 
-	protected VirtualTableScenario GetStandardScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+	protected VirtualTableScenario GetStandardScenario(Consumer<VirtualTableScenario> bidHandler) throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				// No card but the Ring-bearer is needed
+				new HashMap<>(),
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				VirtualTableScenario.RulingRing,
+				null, null,
+				bidHandler
 		);
 	}
 
@@ -50,14 +55,15 @@ public class Card_91_018_Tests
 		 * Set: RTMD 91
 		 * Name: Race Text 91_18
 		 * Type: MetaSite
+		 * Intensity: 6
 		 * Game Text: You must bid at least 6 burdens.
 		 */
 
 		var scn = GetFreepsScenario(
 				s -> {
-					s.FreepsDecided("6");
-					s.ShadowDecided("0");
-					s.FreepsDecided("0");
+					s.FreepsChoose("6");
+					s.ShadowChoose("0");
+					s.FreepsChoose("Go first");
 				}
 		);
 
@@ -65,13 +71,13 @@ public class Card_91_018_Tests
 
 		assertEquals("Race Text 91_18", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(6, card.getBlueprint().getIntensity());
 	}
 
 	@Test
 	public void FreepsMustBidAtLeast6WithModifier() throws DecisionResultInvalidException, CardNotFoundException {
 		// 91_18: "You must bid at least 6 burdens."
-		// Freeps has the modifier, so their minimum bid should be 6.
-		// Bidding less than 6 should be rejected.
+		// Freeps has the modifier, so their minimum bid should be 6: no bid below it can be made.
 
 		GetFreepsScenario(
 				scn -> {
@@ -80,15 +86,18 @@ public class Card_91_018_Tests
 
 					// Bidding 6 should succeed
 					assertEquals(6, scn.FreepsGetChoiceMin());
-					scn.FreepsDecided("6");
+					scn.FreepsChoose("6");
 
 					// Shadow can bid 0
 					assertEquals(0, scn.ShadowGetChoiceMin());
-					scn.ShadowDecided("0");
+					scn.ShadowChoose("0");
 
 					// Freeps wins, chooses seat
-					scn.FreepsDecided("0");
+					scn.FreepsChoose("Go first");
 
+					// Each bid is that player's burdens
+					assertEquals(6, scn.FreepsGetBurdens());
+					assertEquals(0, scn.ShadowGetBurdens());
 					assertTrue(scn.FreepsDecisionAvailable("mulligan"));
 				}
 		);
@@ -102,15 +111,18 @@ public class Card_91_018_Tests
 				scn -> {
 					// Freeps can bid 0
 					assertEquals(0, scn.FreepsGetChoiceMin());
-					scn.FreepsDecided("0");
+					scn.FreepsChoose("0");
 
 					// Shadow bidding 6 should succeed
 					assertEquals(6, scn.ShadowGetChoiceMin());
-					scn.ShadowDecided( "6");
+					scn.ShadowChoose("6");
 
 					// Shadow wins, chooses seat
-					scn.ShadowDecided( "0");
+					scn.ShadowChoose("Go first");
 
+					// Each bid is that player's burdens
+					assertEquals(0, scn.FreepsGetBurdens());
+					assertEquals(6, scn.ShadowGetBurdens());
 					assertTrue(scn.ShadowDecisionAvailable("mulligan"));
 				}
 		);
@@ -120,9 +132,45 @@ public class Card_91_018_Tests
 	public void BiddingWorksNormallyWithoutModifier() throws DecisionResultInvalidException, CardNotFoundException {
 		// Without the modifier, both players can bid 0.
 
-		var scn = GetStandardScenario();
+		GetStandardScenario(
+				scn -> {
+					assertTrue(scn.FreepsDecisionAvailable("bid"));
 
-		// This uses the default BidAndSeatPlayers() which bids 1/0, so it already passed
-		assertTrue(scn.FreepsDecisionAvailable("mulligan"));
+					// The same bids the rig makes by default: 1 and 0, each from a minimum of 0
+					assertEquals(0, scn.FreepsGetChoiceMin());
+					scn.FreepsChoose("1");
+
+					assertEquals(0, scn.ShadowGetChoiceMin());
+					scn.ShadowChoose("0");
+
+					scn.FreepsChoose("Go first");
+
+					assertEquals(1, scn.FreepsGetBurdens());
+					assertEquals(0, scn.ShadowGetBurdens());
+					assertTrue(scn.FreepsDecisionAvailable("mulligan"));
+				}
+		);
+	}
+
+	@Test
+	public void TheOwnerMayBidMoreThan6() throws DecisionResultInvalidException, CardNotFoundException {
+		// "At least": 6 is a floor under the bid and not the bid itself.
+
+		GetFreepsScenario(
+				scn -> {
+					assertEquals(6, scn.FreepsGetChoiceMin());
+					scn.FreepsChoose("7");
+
+					scn.ShadowChoose("0");
+
+					// The higher bidder is the one asked where he sits
+					scn.FreepsChoose("Go first");
+
+					// The 7 burdens bid are the owner's; a bid cut down to 6 would read 6
+					assertEquals(7, scn.FreepsGetBurdens());
+					assertEquals(0, scn.ShadowGetBurdens());
+					assertTrue(scn.FreepsDecisionAvailable("mulligan"));
+				}
+		);
 	}
 }

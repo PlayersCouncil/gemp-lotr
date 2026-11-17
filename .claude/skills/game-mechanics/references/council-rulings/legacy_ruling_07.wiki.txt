@@ -1,0 +1,64 @@
+{{CardSplashImage|Troop Tower}}
+'''Status: Discussion (2025-04-25)'''
+= Troop Tower =
+
+__TOC__
+
+
+
+{{Card|Troop Tower}} reads:
+
+{{CardText|Troop Tower}}
+
+Notably, it does not state that {{C|Sauron}} Orcs are are strength +1 "for each besieger stacked on a site ''you'' control", but merely "for each besieger stacked on [any] site".  
+
+The community (and Gemp) has historically read this card as if it read "stacked on a site you control".  With the Grand Card Rework, the card was altered to instead match its literal reading.
+
+{{Card|Olog-hai of Mordor}} also fails to disambiguate in the same way.
+
+== Rules Entries ==
+
+It is well-known that the game restricts the cards of your alter-ego from being active while you are playing the opposite side, which is to say while you are playing Shadow, your Free Peoples cards may as well not exist.  However, the rules do not treat that distinction as absolutely as the average player might think: 
+
+{{Quote|title=active|text=
+During your turn, only these cards in play are active:
+
+* sites on the adventure path,
+* sites in any player's support area,
+* your Free Peoples cards,
+* your copy of The One Ring, and
+* your opponents' Shadow cards.
+
+
+'''All other cards in play are inactive'''. Inactive cards are not affected by the game and do not affect the game. Any tokens on them are ignored (such as burdens, culture tokens, threats, and wounds). 
+}}
+
+
+{{Quote|title=stack|text=
+Stacked cards are not in play and '''are not active'''. '''You cannot spot them'''. They do not count for uniqueness. A stacked unique card may be in play elsewhere. Multiple copies of the same unique card may be stacked together. 
+}}
+
+
+Contrary to common wisdom, your own alter-side cards are given the same level of inaccessibility as stacked cards are: they are both "inactive" with no further qualifications.  Which is to say: a Shadow card counting stacked cards is performing an action as "rules-piercing" as a theoretical Shadow card that spotted your own Frodo would.  Both are disallowed with the same language and level of specificity. 
+
+
+== Ramifications ==
+
+This particular question is difficult mostly due to the historical nature of the misread card.  On the one hand, it is part of the Legacy Team's mandate to preserve the card game in its historical state as much as possible.  On the other hand--a great many people were for a great many years clearly misreading the card and adding language that simply is not there.
+
+Note: interpreting the card the prior way does not of necessity require errata.  Decipher loved to issue errata-level rewrites of cards as "clarifications", which very often involved inserting words they did not write into the new reading.  
+
+
+== The Question ==
+
+Do we:
+
+* '''A''': Revert to the historical mis-read of Troop Tower and issue a card ruling/clarification that it is to be read as "All {{C|Sauron}} Orcs are strength +1 for each besieger stacked on a site '''you control'''". 
+
+* '''B''': Keep the current Gemp implementation and issue no further changes (besides the record of the ruling decision itself).
+
+
+----
+
+
+{{Rules_Table}}

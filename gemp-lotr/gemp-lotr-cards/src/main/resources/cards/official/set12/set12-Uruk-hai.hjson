@@ -692,7 +692,7 @@
 				]
 				effect: {
 					type: discard
-					select: all(condition,zone(support))
+					select: all(condition,support)
 				}
 			}
 		]
@@ -992,13 +992,17 @@
 				trigger: {
 					type: Killed
 					filter: companion
-					killer: culture(uruk-hai),minion
-					inSkirmish: true
+				}
+				// "In a skirmish involving an [uruk-hai] minion": whatever killed him, not "killed by" (F-0547).
+				requires: {
+					type: canSpot
+					filter: culture(uruk-hai),minion,inSkirmish
 				}
 				cost: {
 					type: discardFromHand
 					forced: false
-					count: any
+					// At least one: declining the offer is the way to discard none (F-0300).
+					count: anyNonZero
 					memorize: discardedCards
 				}
 				effect: {
@@ -1194,6 +1198,10 @@
 				trigger: {
 					type: startOfSkirmishInvolving
 					filter: self
+				}
+				requires: {
+					type: canSpotWounds
+					filter: character,inSkirmishAgainst(self)
 				}
 				effect: {
 					type: drawCards

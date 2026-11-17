@@ -88,7 +88,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.IsHindered(mount));
 
@@ -114,7 +114,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(runner);
 
@@ -141,7 +141,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowPlayCard(squealer);
 
@@ -172,7 +172,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No Nazgul - ability should not be available
 		assertFalse(scn.ShadowActionAvailable(legions));
@@ -197,7 +197,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(legions);
 
@@ -239,7 +239,7 @@ public class Card_V3_068_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(10);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		scn.ShadowUseCardAction(legions);
 

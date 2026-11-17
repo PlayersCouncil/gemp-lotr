@@ -35,6 +35,7 @@ public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
         boolean forced = FieldUtils.getBoolean(effectObject.get("forced"), "forced");
 
         final var playerSource = PlayerResolver.resolvePlayer(player);
+        final var deckSource = PlayerResolver.resolvePlayer(deck);
         final ValueSource countSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
 
         MultiEffectAppender result = new MultiEffectAppender();
@@ -59,7 +60,8 @@ public class DiscardCardsFromDrawDeck implements EffectAppenderProducer {
                     new DelayedAppender() {
                         @Override
                         protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                            return new ShuffleDeckEffect(actionContext.getPerformingPlayer());
+                            // The deck that was looked through is the one reshuffled, whoever carried the search out (F-0369)
+                            return new ShuffleDeckEffect(deckSource.getPlayer(actionContext));
                         }
                     });
 

@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,7 @@ public class Card_04_017_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_17");
-					// put other cards in here as needed for the test case
+					put("savage", "4_17");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +40,12 @@ public class Card_04_017_Tests
 		 * Strength: 11
 		 * Vitality: 1
 		 * Site Number: 3
-		 * Game Text: &nbsp; &nbsp;
+		 * Game Text: (none)
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("savage");
 
 		assertEquals("Dunlending Savage", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,20 +58,5 @@ public class Card_04_017_Tests
 		assertEquals(11, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingSavageTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
 	}
 }

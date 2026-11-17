@@ -40,7 +40,7 @@
 				effect: {
 					type: putCardsFromDiscardIntoHand
 					select: choose(other,culture(dwarven),possession)
-					count: 2
+					count: 0-2
 				}
 			}
 		]
@@ -156,39 +156,74 @@
 				type: canSpot
 				filter: dwarf,hunter
 			}
-			effect: [
-				{
-					type: choice
-					texts: [
-						Exert a minion for each hunter you can spot
-						Reinforce a {dwarven} token for each hunter you can spot
-					]
-					effects: [
-						{
-							type: repeat
-							times: {
-								type: forEachYouCanSpot
-								filter: hunter
-							}
-							effect: {
-								type: exert
-								select: choose(minion)
-							}
-						}
-						{
-							type: repeat
-							times: {
-								type: forEachYouCanSpot
-								filter: hunter
-							}
-							effect: {
-								type: reinforceTokens
-								culture: dwarven
-							}
-						}
-					]
+			effect: {
+				// A player may choose only what can be done in full (F-0310): the repeats do not say so for themselves.
+				type: If
+				check: {
+					type: CanSpot
+					filter: minion,canExert
 				}
-			]
+				true: {
+					type: If
+					check: {
+						type: CanSpotCultureTokens
+						culture: dwarven
+					}
+					true: {
+						type: choice
+						texts: [
+							Exert a minion for each hunter you can spot
+							Reinforce a {dwarven} token for each hunter you can spot
+						]
+						effects: [
+							{
+								type: repeat
+								times: {
+									type: forEachYouCanSpot
+									filter: hunter
+								}
+								effect: {
+									type: exert
+									select: choose(minion)
+								}
+							}
+							{
+								type: repeat
+								times: {
+									type: forEachYouCanSpot
+									filter: hunter
+								}
+								effect: {
+									type: reinforceTokens
+									culture: dwarven
+								}
+							}
+						]
+					}
+					false: {
+						type: repeat
+						times: {
+							type: forEachYouCanSpot
+							filter: hunter
+						}
+						effect: {
+							type: exert
+							select: choose(minion)
+						}
+					}
+				}
+				false: {
+					type: repeat
+					times: {
+						type: forEachYouCanSpot
+						filter: hunter
+					}
+					effect: {
+						type: reinforceTokens
+						culture: dwarven
+					}
+				}
+			}
 		}
 		gametext: Spot a Dwarf hunter and choose one: exert a minion for each hunter you can spot or reinforce a [dwarven] token for each hunter you can spot.
 		lore: "Always well armed, a Dwarf has many options in battle."
@@ -246,7 +281,7 @@
 				}
 				effect: {
 					type: putCardsFromDiscardIntoHand
-					select: choose(not(event),culture(dwarven))
+					select: choose(not(event),culture(dwarven),not(self))
 				}
 			}
 		]

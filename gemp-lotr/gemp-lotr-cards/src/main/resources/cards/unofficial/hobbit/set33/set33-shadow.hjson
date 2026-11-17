@@ -8,6 +8,7 @@
 		title: Bill Ferny Sr.
 		subtitle: Servant of Azog
 		unique: true
+		side: Shadow
 		culture: gundabad
 		twilight: 2
 		type: minion
@@ -19,10 +20,9 @@
 			{
 				type: modifier
 				modifier: {
-					type: cantBeAssignedToSkirmishAgainst
-					minion: self
-					fpCharacter: any
-					side: free people
+					type: CantBeAssignedToSkirmish
+					filter: self
+					player: freeps
 				}
 			}
 			{
@@ -46,7 +46,17 @@
 				}
 			}
 		]
+		gametext: The Free Peoples player may not assign a character to skirmish Bill Ferny Sr.<br>Bill Ferny Sr. may not be assigned to skirmish Bilbo.<br><b>Regroup:</b> Kill an ally whose home is site 1 to return Bill Ferny Sr. to your hand.
+		lore: "'A promise of payment... for your head.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_23: {
 		cardInfo: {
 			image: hobbit/HDG3323.jpg
@@ -54,6 +64,8 @@
 			rarity: _
 		}
 		title: Scouting Warg
+		unique: false
+		side: Shadow
 		culture: gundabad
 		twilight: 4
 		type: possession
@@ -101,7 +113,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be an Orc.<br>Bearer is <b>fierce</b>.<br>If bearer is Yazneg, he is strength +3 and <b>damage +1</b>.<br><b>Regroup:</b> Exert bearer twice to discard a Free Peoples possession.
+		lore: "'I barely escaped with my life! '"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_24: {
 		cardInfo: {
 			image: hobbit/HDG3324.jpg
@@ -109,10 +131,12 @@
 			rarity: _
 		}
 		title: Alfrid's Influence
+		unique: false
+		side: Shadow
 		culture: men
 		twilight: 1
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: modifier
@@ -150,7 +174,17 @@
 				]
 			}
 		]
+		gametext: The site number of each [men] Man is -3.<br><b>Shadow:</b> Remove (1) to discard the bottom card of your draw deck. If it is a minion, play a [men] Man from your discard pile.
+		lore: "'A desperate bunch of mercenaries, if ever there was, Sire. '"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_25: {
 		cardInfo: {
 			image: hobbit/HDG3325.jpg
@@ -160,6 +194,7 @@
 		title: Braga
 		subtitle: Captain of the Guard
 		unique: true
+		side: Shadow
 		culture: men
 		twilight: 3
 		type: minion
@@ -167,7 +202,7 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		keyword: fierce
+		keywords: fierce
 		effects: {
 			type: activated
 			phase: skirmish
@@ -182,7 +217,17 @@
 				until: start(regroup)
 			}
 		}
+		gametext: <b>Fierce</b>.<br><b>Skirmish:</b> Place an Orc from play beneath your draw deck to make a [men] Man strength +3 until the regroup phase.
+		lore: "'What's going on here? Stay where you are.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_26: {
 		cardInfo: {
 			image: hobbit/HDG3326.jpg
@@ -190,6 +235,8 @@
 			rarity: _
 		}
 		title: Gangsquad Spies
+		unique: false
+		side: Shadow
 		culture: men
 		twilight: 3
 		type: minion
@@ -197,7 +244,7 @@
 		strength: 9
 		vitality: 3
 		site: 6
-		keyword: fierce
+		keywords: fierce
 		effects: [
 			{
 				type: modifier
@@ -220,7 +267,17 @@
 				}
 			}
 		]
+		gametext: <b>Fierce</b>.<br>The site number of each [men] Man is -3.<br><b>Maneuver:</b> Place an Orc from play beneath your draw deck to play a [men] card from your discard pile.
+		lore: "'What are dwarves doing in these parts?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_27: {
 		cardInfo: {
 			image: hobbit/HDG3327.jpg
@@ -228,6 +285,8 @@
 			rarity: _
 		}
 		title: Laketown Patrol
+		unique: false
+		side: Shadow
 		culture: men
 		twilight: 4
 		type: minion
@@ -235,7 +294,7 @@
 		strength: 10
 		vitality: 3
 		site: 6
-		keyword: fierce
+		keywords: fierce
 		effects: [
 			{
 				type: Trigger
@@ -258,7 +317,17 @@
 				}
 			}
 		]
+		gametext: <b>Fierce</b>.<br>When you play this minion, you may place an Orc from your discard pile beneath your draw deck.<br>Each [dwarven] companion loses all strength bonuses from weapons.
+		lore: "'If you come in peace lay down your arms.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_28: {
 		cardInfo: {
 			image: hobbit/HDG3328.jpg
@@ -266,6 +335,8 @@
 			rarity: _
 		}
 		title: Spear of the Guard
+		unique: false
+		side: Shadow
 		culture: men
 		twilight: 0
 		type: possession
@@ -300,7 +371,17 @@
 				}
 			]
 		}
+		gametext: Bearer must be a [men] Man.<br><b>Skirmish:</b> Exert bearer to discard the bottom card of your draw deck. If it is a minion, make bearer <b>damage +1</b>.
+		lore: "'We caught them stealing weapons, Sire.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_29: {
 		cardInfo: {
 			image: hobbit/HDG3329.jpg
@@ -308,10 +389,12 @@
 			rarity: _
 		}
 		title: Ancient Grudge
+		unique: true
+		side: Shadow
 		culture: mirkwood
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: modifier
@@ -340,7 +423,17 @@
 				}
 			}
 		]
+		gametext: While you can spot 3 [mirkwood] conditions, each [dwarven] character skirmishing a [gundabad] Orc is strength -2.<br><b>Skirmish:</b> Remove (3) to make a [gundabad] Orc strength +2.
+		lore: "'...for they did not love dwarves...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_30: {
 		cardInfo: {
 			image: hobbit/HDG3330.jpg
@@ -348,10 +441,12 @@
 			rarity: _
 		}
 		title: Borders of the Forest
+		unique: false
+		side: Shadow
 		culture: mirkwood
 		twilight: 1
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: Trigger
@@ -401,19 +496,30 @@
 				}
 			}
 		]
+		gametext: At the end of your Shadow phase, you may heal a [gundabad] Orc.<br><b>Assignment:</b> At a forest, assign a [gundabad] Orc to skirmish Bilbo. The Free Peoples player may add a doubt to prevent this and assign that Orc.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_31: {
 		cardInfo: {
 			image: hobbit/HDG3331.jpg
 			collInfo: 33_31
 			rarity: _
 		}
-		title: Elf-guards
+		title: Elf-Guards
 		unique: true
+		side: Shadow
 		culture: mirkwood
 		twilight: 1
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: Trigger
@@ -442,7 +548,17 @@
 				}
 			}
 		]
+		gametext: Each time a Free Peoples character loses a skirmish, you may discard a [gundabad] Orc from play to add a doubt.<br>While a [dwarven] card is stacked on a [mirkwood] condition, doubts cannot be removed.
+		lore: "'Do not think I won't kill you, Dwarf!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_32: {
 		cardInfo: {
 			image: hobbit/HDG3332.jpg
@@ -450,10 +566,12 @@
 			rarity: _
 		}
 		title: Elven Jails
+		unique: false
+		side: Shadow
 		culture: mirkwood
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: activated
@@ -516,7 +634,17 @@
 				]
 			}
 		]
+		gametext: When this condition is discarded, cards stacked here return to their owner's hand.<br><b>Regroup:</b> Discard a [gundabad] Orc from play and remove (4) to stack a [dwarven] companion with the lowest strength here.
+		lore: "'There is no escape from my magic doors.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_33: {
 		cardInfo: {
 			image: hobbit/HDG3333.jpg
@@ -524,10 +652,12 @@
 			rarity: _
 		}
 		title: Secretive People
+		unique: false
+		side: Shadow
 		culture: mirkwood
 		twilight: 1
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: activated
@@ -536,19 +666,26 @@
 					type: removeTwilight
 					amount: 3
 				}
-				effect: {
-					type: modifyStrength
-					select: choose(minion)
-					amount: {
-						type: cardAffectedLimitPerPhase
-						limit: 3
-						source: {
-							type: forEachYouCanSpot
-							filter: culture(elven)
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: culture(elven)
+						text: Choose how many {elven} cards to spot
+						memorize: spotCount
+					}
+					{
+						type: modifyStrength
+						select: choose(minion)
+						amount: {
+							type: cardAffectedLimitPerPhase
 							limit: 3
+							source: {
+								type: fromMemory
+								memory: spotCount
+							}
 						}
 					}
-				}
+				]
 			}
 			{
 				type: activated
@@ -575,7 +712,17 @@
 				]
 			}
 		]
+		gametext: <b>Skirmish:</b> Remove (3) to make a minion strength +X (limit +3), where X is the number of [elven] cards you spot.<br><b>Regroup:</b> Exert a minion and remove (4) to discard a [dwarven] or [elven] card borne by a character. Discard this condition.
+		lore: "'It is the legacy of my people; it is mine to protect it...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_34: {
 		cardInfo: {
 			image: hobbit/HDG3334.jpg
@@ -584,10 +731,11 @@
 		}
 		title: The Elvenking
 		unique: true
+		side: Shadow
 		culture: mirkwood
 		twilight: 3
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: Trigger
@@ -608,6 +756,7 @@
 							select: choose(culture(mirkwood),condition)
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: playCardFromDiscard
@@ -621,7 +770,7 @@
 				trigger: {
 					type: aboutToDiscard
 					filter: another,condition,or(culture(gundabad),culture(mirkwood))
-					source: side(free people)
+					opponent: true
 				}
 				cost: {
 					type: discard
@@ -629,11 +778,21 @@
 				}
 				effect: {
 					type: preventDiscard
-					select: all(or(culture(gundabad),culture(mirkwood)),condition)
+					select: all(any)
 				}
 			}
 		]
+		gametext: When you play this condition, you may play a [mirkwood] condition from your draw deck or discard pile.<br><b>Response:</b> If [gundabad] and/or [mirkwood] conditions are about to be discarded by an opponent, discard this condition to prevent that.
+		lore: "'The fortunes of the world will rise and fall...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_35: {
 		cardInfo: {
 			image: hobbit/HDG3335.jpg
@@ -641,6 +800,8 @@
 			rarity: _
 		}
 		title: Boulder Rock
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: possession
@@ -680,7 +841,17 @@
 				}
 			]
 		}
+		gametext: Bearer must be a Troll or a Giant.<br><b>Archery:</b> Discard this possession to reveal up to 3 cards at random from your hand. For each Shadow card revealed, the minion archery total is +1.
+		lore: "'...splintered into little bits with a bang.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_36: {
 		cardInfo: {
 			image: hobbit/HDG3336.jpg
@@ -688,6 +859,8 @@
 			rarity: _
 		}
 		title: Bridging Troll
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 5
 		type: minion
@@ -714,7 +887,17 @@
 				select: choose(culture(dwarven),or(possession,artifact))
 			}
 		}
+		gametext: <b>Skirmish:</b> Exert this minion and discard an Orc to make the Free Peoples player discard a [dwarven] possession or [dwarven] artifact.
+		lore: "'Two great trolls appeared; they bore great slabs of stone, and flung them down to serve as gangways...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_37: {
 		cardInfo: {
 			image: hobbit/HDG3337.jpg
@@ -722,6 +905,8 @@
 			rarity: _
 		}
 		title: Catapult Troll
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 5
 		type: minion
@@ -752,13 +937,31 @@
 					}
 				}
 				{
-					type: discard
-					player: fp
-					select: choose(side(free people),minTwilight(memory(cardTwilight)),maxTwilight(memory(cardTwilight)),not(companion))
+					type: If
+					check: {
+						type: memoryMatches
+						memory: revealedCard
+						filter: any
+					}
+					true: {
+						type: discard
+						player: fp
+						select: choose(side(free people),minTwilight(memory(cardTwilight)),maxTwilight(memory(cardTwilight)),not(companion))
+					}
 				}
 			]
 		}
+		gametext: <b>Skirmish:</b> Exert this minion to reveal a random card from your hand. The Free Peoples player must discard a Free Peoples card (except a companion) that has the same twilight cost as the revealed card.
+		lore: "'...both sides were pitless...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_38: {
 		cardInfo: {
 			image: hobbit/HDG3338.jpg
@@ -766,6 +969,8 @@
 			rarity: _
 		}
 		title: Goblin Archer
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 2
 		type: minion
@@ -773,7 +978,7 @@
 		strength: 4
 		vitality: 1
 		site: 4
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: Trigger
 			optional: true
@@ -799,7 +1004,17 @@
 				}
 			}
 		}
+		gametext: <b>Archer</b>.<br>When you play this minion, you may spot 3 [dwarven] companions to add a doubt. The Free Peoples player may wound Bilbo to prevent this.
+		lore: "They did not halt until they were out of bowshot from the walls."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_39: {
 		cardInfo: {
 			image: hobbit/HDG3339.jpg
@@ -807,6 +1022,8 @@
 			rarity: _
 		}
 		title: Goblin Band
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 3
 		type: minion
@@ -814,7 +1031,7 @@
 		strength: 7
 		vitality: 2
 		site: 4
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: modifier
 			modifier: {
@@ -837,7 +1054,17 @@
 				}
 			}
 		}
+		gametext: <b>Archer</b>.<br>While you can spot 2 doubts or 2 wounds on Bilbo, the minion archery total is +1.
+		lore: "It was dark, but not too dark for the night-eyes of Orcs..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_40: {
 		cardInfo: {
 			image: hobbit/HDG3340.jpg
@@ -845,6 +1072,8 @@
 			rarity: _
 		}
 		title: Goblin Bow
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 0
 		type: possession
@@ -863,12 +1092,8 @@
 			{
 				type: modifier
 				modifier: {
-					type: cantTakeWounds
+					type: cantTakeArcheryWounds
 					filter: ally
-					requires: {
-						type: phase
-						phase: archery
-					}
 				}
 			}
 			{
@@ -882,10 +1107,20 @@
 					type: playCardFromDiscard
 					select: choose(culture(moria),archer)
 				}
-					limitPerTurn: 1
+				limitPerTurn: 1
 			}
 		]
+		gametext: Bearer must be a [moria] Orc.<br>Bearer is an <b>archer</b>.<br>Allies cannot take archery wounds.<br><b>Archery:</b> Exert bearer to play a [moria] archer from your discard pile (limit once per turn).
+		lore: "'Every moment they expected to feel the bite of black-feathered arrows. Many whined overhead...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_41: {
 		cardInfo: {
 			image: hobbit/HDG3341.jpg
@@ -893,6 +1128,8 @@
 			rarity: _
 		}
 		title: Goblin Troop
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 4
 		type: minion
@@ -900,7 +1137,7 @@
 		strength: 8
 		vitality: 3
 		site: 4
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: modifier
 			modifier: {
@@ -913,7 +1150,17 @@
 				amount: 1
 			}
 		}
+		gametext: <b>Archer</b>.<br>While you can spot a [dwarven] artifact, the minion archery total is +1.
+		lore: "Most of the Goblin arrows flew harmlessly into the chasm, but there were so many!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_42: {
 		cardInfo: {
 			image: hobbit/HDG3342.jpg
@@ -921,6 +1168,8 @@
 			rarity: _
 		}
 		title: Granite Giant
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 5
 		type: minion
@@ -942,6 +1191,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
+					removedTwilight: 2
 					select: self
 				}
 			}
@@ -965,7 +1215,17 @@
 				}
 			}
 		]
+		gametext: <b>Shadow:</b> At a mountain, remove (2) to play this minion from your discard pile.<br><b>Archery:</b> Exert this minion and discard an Orc from play to make the minion archery total +2.
+		lore: "'The lightning splinters on the peaks, and rocks shiver, and great crashes split the air...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_43: {
 		cardInfo: {
 			image: hobbit/HDG3343.jpg
@@ -974,6 +1234,7 @@
 		}
 		title: Great Goblin's Sceptre
 		unique: true
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: possession
@@ -993,7 +1254,17 @@
 				amount: 2
 			}
 		}
+		gametext: Bearer must be a unique Orc.<br>While bearer is The Great Goblin, each other Orc is strength +2.
+		lore: "'Take them away to dark holes full of snakes...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_44: {
 		cardInfo: {
 			image: hobbit/HDG3344.jpg
@@ -1001,6 +1272,8 @@
 			rarity: _
 		}
 		title: Lavastone Giant
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 7
 		type: minion
@@ -1022,6 +1295,7 @@
 				}
 				effect: {
 					type: playCardFromDiscard
+					removedTwilight: 2
 					select: self
 				}
 			}
@@ -1067,7 +1341,17 @@
 				]
 			}
 		]
+		gametext: <b>Shadow:</b> At a mountain, remove (2) to play this minion from your discard pile.<br><b>Archery:</b> Exert this minion to reveal a random card from your opponent's hand. If it is a Shadow card, the minion archery total is +2. Otherwise, exert this minion.
+		lore: "'This is no thunderstorm. It's a thunder-battle!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_45: {
 		cardInfo: {
 			image: hobbit/HDG3345.jpg
@@ -1075,8 +1359,9 @@
 			rarity: _
 		}
 		title: The Great Goblin
-		subtitle: Goblin King
+		subtitle: Goblin-King
 		unique: true
+		side: Shadow
 		culture: moria
 		twilight: 4
 		type: minion
@@ -1084,7 +1369,7 @@
 		strength: 10
 		vitality: 3
 		site: 4
-		keyword: fierce
+		keywords: fierce
 		effects: [
 			{
 				type: modifier
@@ -1115,7 +1400,17 @@
 				}
 			}
 		]
+		gametext: <b>Fierce</b>.<br>Each Orc archer is twilight cost -1.<br><b>Skirmish:</b> Discard another Orc to wound a character The Great Goblin is skirmishing. The Free Peoples player may add a doubt to prevent this.
+		lore: "'Slash them! Beat them! Bite them! Gnash them!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_46: {
 		cardInfo: {
 			image: hobbit/HDG3346.jpg
@@ -1123,10 +1418,12 @@
 			rarity: _
 		}
 		title: Hidden
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 0
 		type: event
-		timeword: assignment
+		timewords: assignment
 		effects: {
 			type: event
 			requires: {
@@ -1147,7 +1444,17 @@
 				}
 			}
 		}
+		gametext: Spot a [sauron] card to play an Orc from your discard pile. Its twilight cost is -1 (or -3 at a forest).
+		lore: "'Wait, Gandalf! What if it's a trap?!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_47: {
 		cardInfo: {
 			image: hobbit/HDG3347.jpg
@@ -1155,6 +1462,8 @@
 			rarity: _
 		}
 		title: Malevolent Orc
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 2
 		type: minion
@@ -1174,7 +1483,17 @@
 				select: choose(or(culture(gundabad),culture(sauron)),event)
 			}
 		}
+		gametext: At the end of your Shadow phase, you may take a [gundabad] or [sauron] event from your discard pile into hand.
+		lore: "'I saw them with my own eyes. Rank upon rank of Moria Orcs! '"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_48: {
 		cardInfo: {
 			image: hobbit/HDG3348.jpg
@@ -1182,6 +1501,8 @@
 			rarity: _
 		}
 		title: Orc Ambusher
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 1
 		type: minion
@@ -1209,20 +1530,37 @@
 					type: exert
 					select: self
 				}
-				effect: {
-					type: drawCards
-					count: {
-						type: cardPhaseLimit
-						limit: 3
-						amount: {
-							type: forEachYouCanSpot
-							filter: ally
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: ally
+						memorize: spotCount
+					}
+					{
+						type: drawCards
+						count: {
+							type: cardPhaseLimit
+							limit: 3
+							amount: {
+								type: fromMemory
+								memory: spotCount
+							}
 						}
 					}
-				}
+				]
 			}
 		]
+		gametext: The site number of each [sauron] Orc is -1.<br><b>Shadow:</b> Exert this minion and spot another [sauron] Orc to draw a card for each ally you spot (limit 3).
+		lore: "'Something moves in the shadows unseen... But every day it grows in strength.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_49: {
 		cardInfo: {
 			image: hobbit/HDG3349.jpg
@@ -1230,6 +1568,8 @@
 			rarity: _
 		}
 		title: Orc Sentinel
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 1
 		type: minion
@@ -1257,21 +1597,37 @@
 					type: exert
 					select: self
 				}
-				effect: {
-					type: drawCards
-					count: {
-						type: cardPhaseLimit
-						limit: 3
-						amount: {
-							type: forEachYouCanSpot
-							filter: unique,minion
+				effect: [
+					{
+						type: chooseHowManyToSpot
+						filter: unique,minion
+						memorize: spotCount
+					}
+					{
+						type: drawCards
+						count: {
+							type: cardPhaseLimit
 							limit: 3
+							amount: {
+								type: fromMemory
+								memory: spotCount
+							}
 						}
 					}
-				}
+				]
 			}
 		]
+		gametext: The site number of each [sauron] Orc is -1.<br><b>Shadow:</b> Exert this minion and spot another [sauron] Orc to draw a card for each unique minion you spot (limit 3).
+		lore: "'If what you say is true, the world is in danger. The power in that fortress will only grow stronger.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_50: {
 		cardInfo: {
 			image: hobbit/HDG3350.jpg
@@ -1279,6 +1635,8 @@
 			rarity: _
 		}
 		title: Orc Underling
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 1
 		type: minion
@@ -1311,7 +1669,17 @@
 				}
 			}
 		]
+		gametext: The site number of each [sauron] Orc is -1.<br><b>Response:</b> If an Orc is about to take a wound, remove (2) to prevent that wound.
+		lore: "'But still the Enemy made no sign.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_51: {
 		cardInfo: {
 			image: hobbit/HDG3351.jpg
@@ -1319,10 +1687,12 @@
 			rarity: _
 		}
 		title: Rise of the Necromancer
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 2
 		type: event
-		timeword: skirmish
+		timewords: skirmish
 		effects: {
 			type: event
 			requires: {
@@ -1334,13 +1704,13 @@
 				{
 					type: shuffleCardsFromPlayIntoDrawDeck
 					select: choose(orc)
-					count: 1-100
+					count: 0-100
 					memorize: shuffledOrcs
 				}
 				{
 					type: modifyStrength
 					select: choose(orc)
-					 amount: {
+					amount: {
 						type: forEachInMemory
 						memory: shuffledOrcs
 						filter: orc
@@ -1349,19 +1719,30 @@
 				}
 			]
 		}
+		gametext: Spot 2 [sauron] minions to shuffle any number of Orcs from play into your draw deck. Make an Orc strength +3 for each Orc shuffled this way.
+		lore: "'The East will fall... The time of the Elves is over. The Age of the Orc has come.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_59: {
 		cardInfo: {
 			image: hobbit/HDG3359.jpg
 			collInfo: 33_59
 			rarity: _
 		}
-		title: Dragon-sickness
+		title: Dragon-Sickness
 		unique: true
+		side: Shadow
 		culture: smaug
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: modifier
@@ -1388,7 +1769,17 @@
 				}
 			}
 		]
+		gametext: Thorin is strength -1 for each [dwarven] character in the dead pile.<br><b>Shadow:</b> Discard this condition to play a minion from your discard pile.
+		lore: "'By my life, I will not part with a single coin. Not one piece of it!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_60: {
 		cardInfo: {
 			image: hobbit/HDG3360.jpg
@@ -1397,10 +1788,11 @@
 		}
 		title: The Last Lights of Durin's Day
 		unique: true
+		side: Shadow
 		culture: smaug
 		twilight: 0
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: {
 			type: activated
 			phase: regroup
@@ -1423,6 +1815,11 @@
 					type: optional
 					player: fp
 					text: Would you like to take a Dwarven or Shire event into hand from discard?
+					requires: {
+						type: HasCardInDiscard
+						player: fp
+						filter: or(culture(dwarven),culture(shire)),event
+					}
 					effect: {
 						type: putCardsFromDiscardIntoHand
 						select: choose(or(culture(dwarven),culture(shire)),event)
@@ -1430,7 +1827,17 @@
 				}
 			]
 		}
+		gametext: <b>Regroup:</b> At site 7 or 8, remove (4) to make the Free Peoples player choose to move again this turn (if the move limit allows). The Free Peoples player may take a [dwarven] or [shire] event into hand from his or her discard pile.
+		lore: "'It is our one chance to find the hidden door. '"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_61: {
 		cardInfo: {
 			image: hobbit/HDG3361.jpg
@@ -1439,10 +1846,11 @@
 		}
 		title: Dark Sorcery
 		unique: true
+		side: Shadow
 		culture: wraith
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: extraCost
@@ -1454,7 +1862,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: sarumanFirstSentenceInactive
+					type: gandalfFirstSentenceInactive
 				}
 			}
 			{
@@ -1470,5 +1878,14 @@
 				}
 			}
 		]
+		gametext: To play, exert an Orc.<br>The first sentence of Gandalf's game text does not apply.<br><b>Shadow:</b> Discard this condition to draw 2 cards.
+		lore: "'There is no light, Wizard, that can defeat Darkness!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
 }

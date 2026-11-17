@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -17,11 +18,16 @@ import java.util.List;
 public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject, "deck", "count", "memorize");
+        FieldUtils.validateAllowedFields(effectObject, "deck", "count", "allowFewer", "memorize");
 
         final String deck = FieldUtils.getString(effectObject.get("deck"), "deck", "you");
         final ValueSource valueSource = ValueResolver.resolveEvaluator(effectObject.get("count"), 1, environment);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize");
+        // A reveal that is done only to count what is revealed (Taunt 12_104: "Reveal the top 5 cards ... to make an
+        // [orc] minion strength +1 for each [orc] card revealed") is paid by a draw deck holding fewer cards than the
+        // count, so long as it holds one.  Without it, a reveal that is the price of an effect ("reveal the top 5
+        // cards to add a burden") is paid only by the whole count (Ketura's ruling, Q-0378: A; F-0425).
+        final boolean allowFewer = FieldUtils.getBoolean(effectObject.get("allowFewer"), "allowFewer", false);
 
         if (memorize == null)
             throw new InvalidCardDefinitionException("You need to define what memory to use to store revealed cards");
@@ -34,7 +40,16 @@ public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
                 final String deckId = playerSource.getPlayer(actionContext);
                 final int count = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
-                return actionContext.getGame().getGameState().getDeck(deckId).size() >= count;
+                return actionContext.getGame().getGameState().getDeck(deckId).size() >= (allowFewer ? Math.min(count, 1) : count);
+            }
+
+            // From an empty draw deck nothing is revealed.  How many cards it would reveal is not worked out: a
+            // deck shorter than that still shows what is there.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final String deckId = playerSource.getPlayer(actionContext);
+                return actionContext.getGame().getGameState().getDeck(deckId).isEmpty()
+                        ? EffectForecast.NOTHING_FROM_A_DRAW_DECK : EffectForecast.UNKNOWN;
             }
 
             @Override
@@ -42,7 +57,7 @@ public class RevealTopCardsOfDrawDeck implements EffectAppenderProducer {
                 final String deckId = playerSource.getPlayer(actionContext);
                 final int count = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
-                return new RevealTopCardsOfDrawDeckEffect(actionContext.getSource(), deckId, count) {
+                return new RevealTopCardsOfDrawDeckEffect(actionContext.getSource(), deckId, count, allowFewer) {
                     @Override
                     protected void cardsRevealed(List<PhysicalCard> revealedCards) {
 						actionContext.setCardMemory(memorize, revealedCards);

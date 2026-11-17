@@ -18,8 +18,10 @@ public class Card_15_082_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "15_82");
-					// put other cards in here as needed for the test case
+					put("hillman1", "15_82");
+					put("hillman2", "15_82");    // a second copy: not unique
+					put("explorer", "4_250");    // Southron Explorer: Regroup: exert him and remove (5) to take control of a site
+					put("corps", "11_73");       // Corps of Harad: another [men] Man minion, fierce only at a battleground (none on this path)
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +49,7 @@ public class Card_15_082_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("hillman1");
 
 		assertEquals("Grousing Hillman", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +64,52 @@ public class Card_15_082_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GrousingHillmanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WhileItsOwnerControlsASiteThisMinionIsStrengthPlus3AndFierce() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var hillman1 = scn.GetShadowCard("hillman1");
+		var hillman2 = scn.GetShadowCard("hillman2");
+		var explorer = scn.GetShadowCard("explorer");
+		var corps = scn.GetShadowCard("corps");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Both markers on site 3: site 1 is behind them, and the Free Peoples player holds it, as he may have
+		// taken it on a turn of his own as the Shadow player.
+		scn.SkipToSite(3);
+		var site1 = scn.GetSite(1);
+		var site2 = scn.GetSite(2);
+		scn.FreepsTakeControlOfSite();
+		assertTrue(scn.FreepsControls(site1));
+		scn.MoveMinionsToTable(hillman1, hillman2, explorer, corps);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.SetTwilight(5);
 
-		assertEquals(4, scn.GetTwilight());
+		// Only the other player controls a site: no bonus.
+		assertEquals(4, scn.FreepsGetSiteNumber());
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.FreepsControls(site1));
+		assertEquals(9, scn.GetStrength(hillman1));
+		assertEquals(9, scn.GetStrength(hillman2));
+		assertEquals(10, scn.GetStrength(corps));
+		assertFalse(scn.HasKeyword(hillman1, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(hillman2, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(corps, Keyword.FIERCE));
+
+		scn.FreepsPass();
+		scn.ShadowRefreshDecision();
+		scn.ShadowUseCardAction(explorer);
+
+		// The Explorer takes site 2 for its owner: each Hillman is 9 + 3 and fierce, the other copy adding
+		// nothing to it; the Corps of Harad is not touched.
+		assertTrue(scn.ShadowControls(site2));
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertEquals(12, scn.GetStrength(hillman1));
+		assertEquals(12, scn.GetStrength(hillman2));
+		assertEquals(10, scn.GetStrength(corps));
+		assertTrue(scn.HasKeyword(hillman1, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(hillman2, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(corps, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

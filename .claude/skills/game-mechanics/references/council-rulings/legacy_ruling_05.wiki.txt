@@ -1,0 +1,113 @@
+{{CardSplashImage|White Hand Sieger}}
+'''Status: Voting (2025-04-25)'''
+= White Hand Sieger =
+
+__TOC__
+
+
+
+{{Card|White Hand Sieger}} reads:
+
+{{CardText|White Hand Sieger}}
+
+The way that this card should be interpreted is unclear.  It could be:
+
+* '''A''': To play, spot an {{CI|Uruk}} minion and a site you control.
+* '''B''': To play, spot an {{CI|Uruk}} minion and an uncontrolled site eligible to be controlled.  You must take control of that site to play this minion.
+
+
+== (Dis)similar Cards ==
+The wording on this card is unique, due to being a set 18 card (and possibly due to its unique usage).  However, Decipher waffled considerably on the precise wording that should be used for "if you control a site"/"spot a site you control" as an adjective vs "take control" / "control a site" as a verb.
+
+=== "Controlled Site" as an adjective ===
+Decipher used both "spot a site you control" and the spot-less "if you control a site" throughout all eras of the game:
+
+* {{Card|Hill Chief}} uses "spot a site you control" in Towers Block.
+{{CardText|Hill Chief}}
+* (King Block does not appear to have any, as the vast majority of site control mechanics involved stacking "on a site you control" rather than caring about those sites themselves directly.)
+* {{Card|Land Had Changed}} uses "spot a site you control" in Hunters Block.
+{{CardText|Land Had Changed}}
+
+
+
+* {{Card|Burn Every Village}} uses "if you control a site" in Towers Block
+{{CardText|Burn Every Village}}
+* {{Card|Gothmog, Lieutenant of Morgul}} uses "while you control a site" in King Block
+{{CardText|Gothmog, Lieutenant of Morgul}}
+* {{Card|White Hand Berserker}} uses "if you control a site" in Hunter Block
+{{CardText|White Hand Berserker}}
+
+
+=== "Control" as a verb ===
+Decipher used both "take control of a site" and "control a site" as the way to describe the act of taking a site and putting it into your support area throughout all eras of the game:
+
+* {{Card|Hillman Band}} shows "take control" in Towers Block
+{{CardText|Hillman Band}}
+* {{Card|Siege Troop}} shows "take control" in King Block
+{{CardText|Siege Troop}}
+* {{Card|Uruk Infantry}} shows "take control" in Hunters Block
+{{CardText|Uruk Infantry}}
+
+
+
+* {{Card|Isengard Scout Troop}} shows "control a site" in Towers Block
+{{CardText|Isengard Scout Troop}}
+* {{Card|Gorgoroth Swarm}} shows "control a site" in King Block
+{{CardText|Gorgoroth Swarm}}
+* {{Card|Corsair Bow}} shows "control a site" in Hunters Block
+{{CardText|Corsair Bow}}
+
+
+----
+
+
+For a complete list, see [[Site Control]].
+
+
+== Precedent ==
+
+In 2018, Dictionary made [https://lotrtcgwiki.com/forums/index.php?topic=11340.msg94163#msg94163 a summary post on TLHH], which links back to threads from 2013 and 2008.  He argues that "must" is a counterpart to "may" in the phrase "may control a site", which would make "must control a site" read as an imperative verb.
+
+Past threads did not seem to be very thorough in their interrogation of what wordings did and did not exist in each era of the game; there was a common misconception that "take control" was retired when it was clearly not.  There does not seem to have been a solid consensus in any era.
+
+As of the Grand Card Rework, Gemp implements Sieger as option A.
+
+
+== Ramification ==
+White Hand Sieger is also unique in that it is completely free, a cost 0 minion; this wasn't done on any other minion in the game.  Usually a low cost is associated with an alternate cost, such as exertions, card discard, or stringent spot requirements.  
+
+It can be argued that the prerequisite of having already controlled a site is the alternate cost.  However, this then means that you could control a site and then drop 4x Sieger with no additional penalty.
+
+If instead it is a verb-cost, meaning that you must take control of a site to play the minion, this restricts the card from being spammed 4x on a single site unless the site path has been carefully prepared.  It also often prevents the card itself from being played in region 1.  A highly successful site control deck will also "suffer from its own success" if they ramp up control too consistently and be unable to play Sieger.  This overall inconvenience would compensate for the low cost.
+
+
+== The Question ==
+
+Do we:
+
+* '''A''': interpret White Hand Sieger as requiring Shadow to already have controlled a site to play it.
+
+or
+
+* '''B''': interpret White Hand Sieger to force a site control to occur, and to be unable to play if a site cannot be controlled at the moment of play.
+
+
+== 2025-04-28 Decision ==
+
+The Legacy Rules Team opted for option A.  The Comprehensive Rules 4.2 will have the following individual card ruling added:
+
+{{Quote|title={{Card|White Hand Sieger}}|text=
+* '''Ruling Type''': Ruling
+* '''Ruling Text''': To play, spot an {{CI|Uruk}} minion and a site you control.  The site must already be controlled before this card may be played.
+  
+}}
+
+=== Clarifying Opinion ===
+While the most “by the book” reading of {{Card|White Hand Sieger}} does seem to suggest that the player take control of a site in order to play the minion, it seemed unlikely that an on demand site control card would also be a no cost minion. The face value interpretation makes the card both a mid to late game swarm option and cheap, easy site control.  This coupled with the unusual wording suggests that the intended meaning was a double spot requirement. 
+
+Later sets often seem to have this kind of garbled verbiage but in an attempt to preserve both the likely original design and the common community reading of this card the ruling council chose the double spot requirement interpretation.
+
+----
+
+
+{{Rules_Table}}

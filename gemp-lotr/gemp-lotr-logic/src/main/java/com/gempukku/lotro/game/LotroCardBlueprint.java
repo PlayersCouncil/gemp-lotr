@@ -44,6 +44,17 @@ public interface LotroCardBlueprint {
 
     int getUniqueRestriction();
 
+    /**
+     * Whether only its owner's cards of its title count toward this card's uniqueness when it is played (the
+     * definition word {@code uniquePerPlayer}).  CR 4.2 "unique": "Other players may also have a card with the
+     * title of Gandalf in play, but only one is allowed per player."  Every other card counts both players' cards
+     * of its title, as the game always has: Ketura (F-0655) wanted the per-player check switched on by the card
+     * that needs it, not made everywhere.  Set on The Palantír of Orthanc 13_36 alone, whose "if you can spot The
+     * Palantír of Orthanc, discard it" is for the Shadow player's 3_67 and 4_166.
+     * @return True where the definition says {@code uniquePerPlayer: true}.
+     */
+    default boolean isUniquePerPlayer() { return false; }
+
     String getTitle();
     String getSanitizedTitle();
     String getSanitizedSubtitle();
@@ -86,6 +97,13 @@ public interface LotroCardBlueprint {
     boolean hasAllyHome(AllyHome home);
 
     PlayEventAction getPlayEventCardAction(String playerId, LotroGame game, PhysicalCard self);
+
+    /**
+     * The action that plays this event "ignoring all costs": no twilight cost, and none of the costs in its own
+     * text that can be passed over (PlayEventAction.isCostsIgnored).  Whether the event may be played at all is
+     * asked elsewhere (PlayUtils.checkPlayRequirementsIgnoringCosts).
+     */
+    PlayEventAction getPlayEventCardActionIgnoringCosts(String playerId, LotroGame game, PhysicalCard self);
 
     List<? extends Modifier> getInPlayModifiers(LotroGame game, PhysicalCard self);
 
@@ -167,6 +185,15 @@ public interface LotroCardBlueprint {
     boolean canPayAidCost(LotroGame game, PhysicalCard self);
 
     void appendAidCosts(LotroGame game, CostToEffectAction action, PhysicalCard self);
+
+    /**
+     * The N of a follower's printed "Aid - (N)": the twilight its Aid costs, which a Free Peoples follower adds
+     * and a Shadow follower removes.  A reading of the card and nothing more: the Aid is paid through
+     * appendAidCosts.
+     * @return That number; null for a card with no Aid, and for a follower whose Aid is not a plain amount of
+     * twilight and nothing else ("Aid - Add a burden.", "Aid - Exert a [gondor] companion.").
+     */
+    default Integer getAidTwilightCost() { return null; }
 
     boolean skipUniquenessCheck();
 

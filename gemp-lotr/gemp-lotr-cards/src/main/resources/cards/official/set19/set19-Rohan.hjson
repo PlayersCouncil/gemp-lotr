@@ -22,6 +22,10 @@
 					type: startOfPhase
 					phase: skirmish
 				}
+				requires: {
+					type: canSpot
+					filter: culture(rohan),man,not(hasAttached(self))
+				}
 				effect: {
 					type: transfer
 					select: self

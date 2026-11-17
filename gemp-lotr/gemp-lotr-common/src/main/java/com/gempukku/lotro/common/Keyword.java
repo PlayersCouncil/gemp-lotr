@@ -79,8 +79,6 @@ public enum Keyword implements Filterable {
     BURGLAR("Burglar", true, false, false, true, true),
 
     //PC Keywords
-    CONCEALED("Concealed", true, false, false, true, true),
-    EXPOSED("Exposed", true, false, false, true, true),
     RELENTLESS("Relentless", true, false, false, true, true);
 
     private final String humanReadable;

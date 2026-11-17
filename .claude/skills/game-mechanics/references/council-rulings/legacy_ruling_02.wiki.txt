@@ -1,0 +1,106 @@
+{{CardSplashImage|Sudden Fury}}
+'''Status: Ruling Enacted on Gemp (2025-04-18)'''
+= Skirmish End Status of Removed Characters =
+
+__TOC__
+
+In the Comprehensive Rules 4.0, glossary section "skirmish phase(s)", it states:
+
+  A losing character is any character on the losing side in a skirmish when it resolves. Also, '''any character removed during his or her skirmish is a losing character''', even if that character’s side eventually wins. That character is not wounded (or overwhelmed) when the skirmish resolves.
+  ''Boromir, bearing a Blade of Gondor (“Skirmish: Exert Boromir to wound an Orc or Uruk-hai he is skirmishing.”), faces two Uruk-hai who each have only 1 vitality remaining. Boromir exerts once to use the Blade and kill one of the Uruk-hai. '''That Uruk-hai is a losing character.''' If the surviving Uruk-hai goes on to win the skirmish, Boromir will be a losing character, and that second Uruk-hai will be a winning character.''
+
+Bold emphasis added. This was the logic that Gemp was coded against, that characters which are removed from a skirmish are considered losing characters and will fire or fulfill "skirmish lost" type triggers or requirements.
+
+However, in Current Rulings Document dated June 17, 2005, the following section was added:
+
+  '''skirmish phase'''
+  A losing character is any character on the losing side when a skirmish revolves. If a character is removed from his or her skirmish and there are still one or more characters on each side of that skirmish, '''the removed character is neither a losing nor a winning character'''. A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
+
+Bold emphasis added. This section was likely overlooked during Gemp's development. The [[Comprehensive_Rules_4.1#skirmish_phase]] document was updated to include this, and the example was also altered to match the now-overturned paragraph that it is supposed to be explaining:
+
+  A losing character is any character on the losing side when a skirmish revolves. If a character is removed from his or her skirmish and there are still one or more characters on each side of that skirmish, the removed character is '''[neither a losing nor a winning character]'''. A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
+  ''Boromir, bearing a Blade of Gondor (1R95) ("Skirmish: Exert Boromir to wound an Orc or Uruk-hai he is skirmishing."), faces two Uruk-hai who each have only 1 vitality remaining. Boromir exerts once to use the Blade and kill one of the Uruk-hai. That Uruk-hai is '''[neither a losing nor a winning character]'''. If the surviving Uruk-hai goes on to win the skirmish, Boromir will be a losing character, and that second Uruk-hai will be a winning character.''
+
+There is another relevant paragraph earlier in the "skirmish phase(s)" entry:
+
+    If all characters of one side are removed during a skirmish before strength has been totaled, the skirmish resolves and the other side wins.
+
+So: we are told, in sum:
+
+* Individual characters which are not the final character for their side being removed from a skirmish causes them to lose win/loss status
+* If all characters of one side are removed from a skirmish, the other side wins
+
+This leaves a gap in definition, namely whether the ''final'' character removed from a skirmish counts as losing; we know that his fellows who fled before him are in limbo and not considered won or lost, but has he?  We also know his opponents clearly "won", but has he clearly "lost"?
+
+
+== Gemp ==
+
+Originally, Gemp was coded following the unaltered entry in 4.0, which led to the following bug report:
+
+* [https://github.com/PlayersCouncil/gemp-lotr/issues/571 Dwarven Axe considering a killed minion a losing member of the skirmish #571]
+** 2 minions were assigned to a Dwarf bearing {{Card|Dwarven Axe}}, and one was killed, which caused it to be removed from the skirmish. Ultimately the Dwarf lost the skirmish against the remaining minion. However, once the skirmish ended, Dwarven Axe treated the killed minion as having lost and discarded cards from the top of the deck.
+
+This is perfectly in line with the 4.0 entry, and is almost an exact recreation of the scenario described in the example.  However as it was found to violate the behavior described in the CRD entry, the skirmish resolution code was altered to no longer broadcast "this character has lost a skirmish" for all removed characters.
+
+Following this change, two reports were made:
+
+* [https://github.com/PlayersCouncil/gemp-lotr/issues/603 Citadel of the Stars killing a minion is not counted as a skirmish loss for New Errand #603]
+** {{Card|Citadel of the Stars}} killed/removed a minion from its skirmish early, which caused {{Card|New Errand}} to not grant its owner the ability to place a wound (as the minion did not "lose").
+
+* [https://github.com/PlayersCouncil/gemp-lotr/issues/600 Sudden Fury not treating a discarded hobbit as a skirmish loser #600]
+** {{Card|Sudden Fury}} (which adds tokens every time a Hobbit loses a skirmish) did not detect {{Card|Merry, Learned Guide}} as he self-discarded, removing him from the skirmish and so not "losing".
+
+
+== Decipher Intention ==
+
+Gemp user c_c_j found [https://web.archive.org/web/20050211042329/http://www2.decipher.com/content/2005/02/021005lotrbrfinnfoley.html a deck article published by Decipher] regarding the interaction between discarding hobbits and Sudden Fury with the following quote:
+
+  Not everyone can be discarded, though, and if Pippin happens to be fighting even a six-strength minion he'll be in trouble. With {{Card|Sudden Fury}}, however, you can take advantage of all the hobbits you've discarded. Note that if you discard your hobbit from a skirmish, you still lose that skirmish, which is bad news if your hobbit was fighting a {{Card|Hillman Tribe}}, but good news if you have Sudden Fury out!
+
+The article is dated February 10, 2005. The "neither winning nor losing" CRD entry was first published in the June 17, 2005 CRD, meaning that the rules could have simply changed since that article was published.  Either way, it seems clear that the interaction at time of publication was intended to cause a "skirmish lost" trigger
+
+
+== Ramifications ==
+List of cards which trigger based on losing a skirmish:
+
+{{ListTable
+|filter= CR.GameText RLIKE '(loses a s{{!}}lost a s)' AND {{PromoFilter}} AND {{HobbitFilter}}
+|sort= {{StandardSort}}
+|columns=3
+}}
+
+In general, whether a card benefits from this interpretation depends on its target; Shadow cards targeting Free Peoples losses will benefit from a looser definition, and vice versa.  Cards which target their own side losing are either a downside ({{Card|Citadel of Minas Tirith}}), or are otherwise intentionally attempting to mitigate future losses ({{Card|Sudden Fury}}). "Downside" cards will be hurt by a looser definition of skirmish loss, while "mitigate" cards will benefit.  
+
+
+
+== The Question ==
+
+The following situations are understood:
+
+* Being removed from a skirmish before that skirmish resolves cancels it and results in no winner or losers.
+* Removing an excess character from one side of a skirmish results in that removed character being neither a winner nor a loser.
+* Removing all opponents of a character results in that character winning the skirmish.
+
+So all that's left is deciding whether:
+
+* A: the final character of a particular side being removed from a skirmish loses that skirmish
+* B: the final character of a particular side being removed from a skirmish neither wins nor loses that skirmish
+
+
+== 2025-04-14 Decision ==
+
+The Legacy Rules Team opted for option A.  The Comprehensive Rules 4.2 will have the following changes to the "skirmish phase(s)" entry under Section Two: Glossary of Terms:
+
+{{Quote|title=skirmish phase(s)|text=
+A losing character is any character on the losing side when a skirmish revolves. '''A character removed from his or her skirmish is a losing character, unless there are still one or more characters on each side of that skirmish, in which case the removed character is neither a losing nor a winning character.''' A character removed from a skirmish is not wounded (or overwhelmed) when that skirmish resolves.
+
+
+''Boromir, bearing a Blade of Gondor (1R95) ("Skirmish: Exert Boromir to wound an Orc or Uruk-hai he is skirmishing."), faces two Uruk-hai who each have only 1 vitality remaining. Boromir exerts once to use the Blade and kill one of the Uruk-hai. That Uruk-hai is neither a losing nor a winning character. '''If Boromir exerts to use the Blade again to wound the second Uruk-hai, Boromir will be the winning character, and that second Uruk-hai will be a losing character.'''''
+}}
+
+The initial behavior of the last removed character being a losing character appears to have been intentional for interacting with the likes of {{Card|Sudden Fury}}.  The later addition of the "neither winning nor losing" section seems to make the most sense as only applying to additional characters in a skirmish, as a means of avoiding the very issue with {{Card|Dwarven Axe}} described above.  
+
+----
+
+
+{{Rules_Table}}

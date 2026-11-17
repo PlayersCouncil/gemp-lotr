@@ -346,7 +346,8 @@
 			type: event
 			cost: {
 				type: transferToSupport
-				select: choose(follower,attachedTo(hobbit))
+				// "to your support area": only the player's own followers can go there (Ketura's ruling, Q-0401: B)
+				select: choose(your,follower,attachedTo(hobbit))
 				memorizeBearer: bearer
 			}
 			effect: [

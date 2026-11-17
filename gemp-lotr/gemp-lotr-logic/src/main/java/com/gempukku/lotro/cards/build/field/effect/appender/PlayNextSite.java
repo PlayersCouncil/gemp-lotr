@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.common.Filterable;
 import com.gempukku.lotro.filters.Filter;
 import com.gempukku.lotro.filters.Filters;
@@ -26,7 +27,7 @@ public class PlayNextSite implements EffectAppenderProducer {
 
         final FilterableSource filterableSource = environment.getFilterFactory().generateFilter(filter, environment);
 
-        return new DelayedAppender() {
+        final DelayedAppender playNextSite = new DelayedAppender() {
             @Override
             public boolean isPlayableInFull(ActionContext actionContext) {
                 final LotroGame game = actionContext.getGame();
@@ -67,5 +68,12 @@ public class PlayNextSite implements EffectAppenderProducer {
                 };
             }
         };
+
+        // Taught for Q-0224 (IdleOffers): where no site can be played (on a numbered path, the player's own site of
+        // the next number already lies there, or he has none; no site after 9; a next site that cannot be replaced)
+        // the effect plays nothing (F-0496, Andúril 7_79).  On a Shadows-block path his own site lying next is
+        // replaced (Q-0238), and that is still offered.
+        return TaughtForecast.teach(playNextSite, actionContext ->
+                playNextSite.isPlayableInFull(actionContext) ? EffectForecast.UNKNOWN : EffectForecast.NOTHING);
     }
 }

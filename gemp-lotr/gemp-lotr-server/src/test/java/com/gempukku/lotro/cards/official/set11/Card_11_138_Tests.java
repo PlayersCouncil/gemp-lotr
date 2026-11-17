@@ -18,10 +18,10 @@ public class Card_11_138_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_138");
-					// put other cards in here as needed for the test case
+					put("goblin", "11_138");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				// The King path: site 1 (Edoras Hall) and site 2 (King's Tent) have no terrain, and neither is underground.
+				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +47,7 @@ public class Card_11_138_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("goblin");
 
 		assertEquals("Skulking Goblin", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +62,28 @@ public class Card_11_138_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SkulkingGoblinTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheFellowshipsCurrentSiteGainsUndergroundAndOnlyThatSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var goblin = scn.GetShadowCard("goblin");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		var edorasHall = scn.GetCurrentSite();
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(edorasHall, Keyword.UNDERGROUND));
+
+		// Laid early, in the fellowship phase at site 1, to be read before and after (Q-0228).
+		scn.MoveMinionsToTable(goblin);
+		assertTrue(scn.HasKeyword(edorasHall, Keyword.UNDERGROUND));
+
+		// The fellowship moves to King's Tent: the underground goes with the current site.
+		scn.FreepsPass();
+		var kingsTent = scn.GetCurrentSite();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(kingsTent, Keyword.UNDERGROUND));
+		assertFalse(scn.HasKeyword(edorasHall, Keyword.UNDERGROUND));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

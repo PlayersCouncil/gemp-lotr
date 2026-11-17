@@ -8,6 +8,7 @@
 		title: Alfrid
 		subtitle: Lickspittle
 		unique: true
+		side: Shadow
 		culture: men
 		twilight: 2
 		type: minion
@@ -53,10 +54,21 @@
 					select: choose(side(shadow),condition)
 					showAll: true
 					shuffle: true
+					mustExist: true
 				}
 			}
 		]
+		gametext: Each time a [esgaroth] ally is assigned to a skirmish, exert a [dwarven] companion.<br><b>Maneuver:</b> Heal a [esgaroth] ally to play Alfrid from your discard pile.<br><b>Skirmish:</b> Exert Alfrid twice to play a Shadow condition from your draw deck.
+		lore: "The Master has his eye on you."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_26: {
 		cardInfo: {
 			image: hobbit/HDG3226.jpg
@@ -65,10 +77,11 @@
 		}
 		title: War for Gold
 		unique: true
+		side: Shadow
 		culture: mirkwood
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: Trigger
@@ -111,7 +124,17 @@
 				]
 			}
 		]
+		gametext: Each time the fellowship moves, add (1) for each ally you can spot (limit (3)).<br><b>Maneuver:</b> Discard this condition to wound a [dwarven] ally (or discard a [dwarven] possession instead if you cannot spot a [dwarven] ally).
+		lore: "It is fruitless to reason with a dwarf."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_27: {
 		cardInfo: {
 			image: hobbit/HDG3227.jpg
@@ -119,6 +142,8 @@
 			rarity: _
 		}
 		title: Assaulting Goblin
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 2
 		type: minion
@@ -145,7 +170,17 @@
 				select: choose(another,orc)
 			}
 		}
+		gametext: <b>Response:</b> If another Orc is about to take a wound at a battleground, exert this minion to prevent that wound.
+		lore: "The clouds were torn by the wind, and a red sunset slashed the West."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_28: {
 		cardInfo: {
 			image: hobbit/HDG3228.jpg
@@ -155,6 +190,7 @@
 		title: Azog
 		subtitle: Commander of the Wolves Army
 		unique: true
+		side: Shadow
 		culture: moria
 		twilight: 4
 		type: minion
@@ -162,7 +198,7 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		keyword: damage+1
+		keywords: damage+1
 		effects: {
 			type: activated
 			phase: maneuver
@@ -180,7 +216,17 @@
 				discount: -2
 			}
 		}
+		gametext: <b>Damage +1</b>.<br><b>Maneuver:</b> Exert Azog at a battleground to play a [moria] minion from your discard pile. Its twilight cost is -2.
+		lore: "The Mountain will be their tomb! To war!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_29: {
 		cardInfo: {
 			image: hobbit/HDG3229.jpg
@@ -189,6 +235,7 @@
 		}
 		title: Azog's Mace
 		unique: true
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: possession
@@ -226,7 +273,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be an Orc.<br>If bearer is Azog, he is <b>fierce</b>.<br><b>Shadow:</b> Exert bearer twice to play an Orc from your discard pile for each [dwarven] companion over 3.
+		lore: "Azog had sworn to wipe out the line of Durin."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_30: {
 		cardInfo: {
 			image: hobbit/HDG3230.jpg
@@ -234,6 +291,8 @@
 			rarity: _
 		}
 		title: Dark Bats
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 1
 		type: minion
@@ -270,7 +329,17 @@
 				}
 			}
 		}
+		gametext: <b>Shadow:</b> Exert this minion to draw 3 cards. If you cannot spot 3 Orcs, the Free Peoples player may add 2 doubts to prevent this.
+		lore: "Behold! The bats are above his army like a sea of locusts."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_31: {
 		cardInfo: {
 			image: hobbit/HDG3231.jpg
@@ -278,6 +347,8 @@
 			rarity: _
 		}
 		title: Demolition Troll
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 5
 		type: minion
@@ -302,7 +373,17 @@
 				}
 			}
 		}
+		gametext: <b>Skirmish:</b> Exert this minion to make a [moria] minion strength +2 (limit +2).
+		lore: "Send in the War Beasts!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_32: {
 		cardInfo: {
 			image: hobbit/HDG3232.jpg
@@ -310,6 +391,8 @@
 			rarity: _
 		}
 		title: Vicious Warg
+		unique: false
+		side: Shadow
 		culture: moria
 		twilight: 3
 		type: possession
@@ -343,7 +426,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be an Orc.<br>Bearer is <b>fierce</b>.<br>When you play this possession at a battleground site, you may add (4) (except at site 9).
+		lore: "...where the warg howls, there also the orc prowls."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_33: {
 		cardInfo: {
 			image: hobbit/HDG3233.jpg
@@ -352,10 +445,11 @@
 		}
 		title: Were-worms
 		unique: true
+		side: Shadow
 		culture: moria
 		twilight: 0
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: Trigger
@@ -398,12 +492,22 @@
 						type: fromMemory
 						memory: numberOfTokens
 						multiplier: 2
-						limit: 8
+						limit: 4
 					}
 				}
 			}
 		]
+		gametext: Each time a [moria] minion wins a skirmish, you may place a [moria] token here.<br><b>Shadow:</b> If the fellowship is at a battleground, discard this condition to add (2) for each [moria] token here (limit (8)).
+		lore: "...and fight the Were-worms in the Last Desert."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_34: {
 		cardInfo: {
 			image: hobbit/HDG3234.jpg
@@ -412,6 +516,7 @@
 		}
 		title: The Wolves Army
 		unique: true
+		side: Shadow
 		culture: moria
 		twilight: 5
 		type: minion
@@ -438,6 +543,7 @@
 						select: choose(culture(moria),not(timeword(response)))
 						showAll: true
 						shuffle: true
+						mustExist: true
 					}
 					{
 						type: playCardFromDiscard
@@ -446,7 +552,17 @@
 				]
 			}
 		}
+		gametext: When you play this minion, you may play a [moria] card from your draw deck or discard pile.
+		lore: "Upon one side were the Goblins and the Wolves, and upon the other were Elves and Men and Dwarves."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_35: {
 		cardInfo: {
 			image: hobbit/HDG3235.jpg
@@ -456,6 +572,7 @@
 		title: Azog
 		subtitle: Servant of Sauron
 		unique: true
+		side: Shadow
 		culture: sauron
 		twilight: 4
 		type: minion
@@ -463,7 +580,7 @@
 		strength: 9
 		vitality: 3
 		site: 5
-		keyword: damage+1
+		keywords: damage+1
 		effects: [
 			{
 				type: Trigger
@@ -478,7 +595,7 @@
 				}
 				effect: {
 					type: discard
-					select: choose(possession,attachedTo(culture(dwarven),companion))
+					select: choose(or(possession,artifact),attachedTo(culture(dwarven),companion))
 				}
 			}
 			{
@@ -497,7 +614,17 @@
 				}
 			}
 		]
+		gametext: <b>Damage +1</b>.<br>Each time Azog wins a skirmish, you may exert him to discard a possession or artifact borne by a [dwarven] companion.<br><b>Maneuver:</b> Spot 4 minions to make Azog fierce until the regroup phase.
+		lore: "What of Oakenshield? You promised me his head."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_36: {
 		cardInfo: {
 			image: hobbit/HDG3236.jpg
@@ -507,6 +634,7 @@
 		title: Bolg
 		subtitle: Captain of the Orc Army
 		unique: true
+		side: Shadow
 		culture: sauron
 		twilight: 4
 		type: minion
@@ -514,7 +642,7 @@
 		strength: 9
 		vitality: 3
 		site: 4
-		keyword: damage+1
+		keywords: damage+1
 		effects: [
 			{
 				type: modifier
@@ -542,7 +670,17 @@
 				}
 			}
 		]
+		gametext: <b>Damage +1</b>.<br>Each other Orc is strength +1.<br><b>Regroup:</b> If Bolg is not mounted, exert him to play an Orc from your discard pile. Its twilight cost is -2.
+		lore: "Bolg is the skillful leader of the Orc host."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_37: {
 		cardInfo: {
 			image: hobbit/HDG3237.jpg
@@ -550,15 +688,32 @@
 			rarity: _
 		}
 		title: Danger Wrapped in Shadows
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: activated
 				phase: shadow
 				limitPerPhase: 1
+				requires: {
+					type: or
+					requires: [
+						{
+							type: playable
+							fromZone: DISCARD
+							filter: culture(sauron),not(and(timeword(response),event))
+							discount: 2
+						}
+						{
+							type: hasCardInDrawDeck
+							filter: culture(sauron),not(and(timeword(response),event))
+						}
+					]
+				}
 				cost: {
 					type: removeTwilight
 					amount: 2
@@ -575,6 +730,7 @@
 							select: choose(culture(sauron),not(and(timeword(response),event)))
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: playCardFromDiscard
@@ -613,7 +769,17 @@
 				}
 			}
 		]
+		gametext: <b>Shadow:</b> Remove (2) to play a [sauron] card from your draw deck or discard pile (limit once per phase).<br><b>Skirmish:</b> Remove a doubt or exert Sauron to make an Orc strength +1 (limit +3).
+		lore: "A Dark Power dwells in there..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_38: {
 		cardInfo: {
 			image: hobbit/HDG3238.jpg
@@ -621,10 +787,12 @@
 			rarity: _
 		}
 		title: Hidden Attack
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 0
 		type: event
-		timeword: regroup
+		timewords: regroup
 		effects: {
 			type: event
 			requires: {
@@ -649,7 +817,17 @@
 				}
 			]
 		}
+		gametext: Spot an Orc to play a [sauron] Orc (or 2 [sauron] Orcs if you spot a character in the dead pile) from your discard pile.
+		lore: "...the Dwarves are about to be overrun! Thorin must be warned!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_39: {
 		cardInfo: {
 			image: hobbit/HDG3239.jpg
@@ -657,10 +835,12 @@
 			rarity: _
 		}
 		title: Jail
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 2
 		type: condition
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: activated
@@ -701,7 +881,17 @@
 				}
 			}
 		]
+		gametext: <b>Regroup:</b> Discard a minion to stack a Wise character on this condition. A Wise character may exert twice to prevent this. Copies of characters stacked here cannot be played.
+		lore: "...a prisoner in the dungeons of the Necromancer."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_40: {
 		cardInfo: {
 			image: hobbit/HDG3240.jpg
@@ -710,6 +900,7 @@
 		}
 		title: The Orc Army
 		unique: true
+		side: Shadow
 		culture: sauron
 		twilight: 5
 		type: minion
@@ -749,7 +940,17 @@
 				}
 			}
 		]
+		gametext: At the start of the regroup phase, you may heal each Orc twice.<br><b>Regroup:</b> If this minion is not mounted, exert him to make the Free Peoples player wound a companion.
+		lore: "The Orcs, heartened by the promise of blood and plunder, are dangerous foes in battle."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	32_41: {
 		cardInfo: {
 			image: hobbit/HDG3241.jpg
@@ -757,6 +958,8 @@
 			rarity: _
 		}
 		title: Orkish Bow
+		unique: false
+		side: Shadow
 		culture: sauron
 		twilight: 1
 		type: possession
@@ -779,963 +982,1353 @@
 					type: played
 					filter: self
 				}
-			effect: [
-		  {
-				type: chooseActiveCards
-				text: Choose card to discard
-				select: choose(culture(dwarven),weapon)
-				memorize: chosenWeapon
-		  }
-		  {
-				type: memorize
-				memory: oldBearer
-				filter: hasAttached(memory(chosenWeapon))
-		  }
-		  {
-			type: preventable
-			text: Would you like to exert {oldBearer} to prevent discarding of {chosenWeapon}?
-			player: fp
-			cost: {
-			  type: exert
-			  select: choose(memory(oldBearer))
+				requires: {
+					type: canSpot
+					filter: culture(dwarven),weapon
+				}
+				effect: [
+					{
+						type: chooseActiveCards
+						text: Choose card to discard
+						select: choose(culture(dwarven),weapon)
+						memorize: chosenWeapon
+					}
+					{
+						type: memorize
+						memory: oldBearer
+						filter: hasAttached(memory(chosenWeapon))
+					}
+					{
+						type: preventable
+						text: Would you like to exert {oldBearer} to prevent discarding of {chosenWeapon}?
+						player: fp
+						cost: {
+							type: exert
+							select: choose(memory(oldBearer))
+						}
+						effect: {
+							type: discard
+							select: memory(chosenWeapon)
+						}
+					}
+				]
 			}
-			effect: {
-			  type: discard
-			  select: memory(chosenWeapon)
-			}
-		  }
 		]
-	  }
-	]
-  }
-  32_42: {
-	title: Orkish Pursuer
-	culture: sauron
-	twilight: 3
-	type: minion
-	race: orc
-	strength: 8
-	vitality: 3
-	site: 4
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: winsSkirmish
-		  filter: self
+		gametext: Bearer must be a [sauron] Orc.<br>Bearer is an <b>archer</b>.<br>When you play this possession, you may discard a [dwarven] weapon. The Free Peoples player may exert its bearer to prevent this.
+		lore: "Arrows fell among them."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		cost: {
-		  type: exert
-		  select: self
-		  times: 2
+	}
+
+	32_42: {
+		cardInfo: {
+			image: hobbit/HDG3242.jpg
+			collInfo: 32_42
+			rarity: _
 		}
-		effect: {
-		  type: addBurdens
-		}
-	  }
-	  {
-		type: activated
-		phase: regroup
-		requires: {
-		  type: cantSpot
-		  filter: self,mounted
-		}
-		cost: {
-		  type: exert
-		  select: self
-		}
-		effect: {
-		  type: wound
-		  player: fp
-		  select: choose(companion)
-		}
-	  }
-	]
-  }
-  32_43: {
-	title: Orkish Veteran
-	culture: sauron
-	twilight: 2
-	type: minion
-	race: orc
-	strength: 7
-	vitality: 2
-	site: 4
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: addKeyword
-		  requires: {
-			type: location
-			filter: siteNumber(9)
-		  }
-		  filter: orc
-		  keyword: archer
-		}
-	  }
-	  {
-		type: activated
-		phase: regroup
-		cost: {
-		  type: discard
-		  select: choose(orc)
-		}
-		effect: {
-		  type: wound
-		  player: fp
-		  select: choose(companion)
-		}
-	  }
-	]
-  }
-  32_44: {
-	title: Ring of Thror
-	subtitle: Last of the Seven Rings
-		unique: true
-	culture: sauron
-	twilight: 0
-	type: artifact
-	itemclass: ring
-	vitality: 1
-	target: name(Sauron)
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: addKeyword
-		  filter: bearer
-		  keyword: fierce
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: removeTwilight
-		  amount: 2
-		}
-		effect: {
-		  type: addKeyword
-		  select: choose(or(name(Sauron),and(culture(wraith),minion)))
-		  keyword: damage
-		  amount: {
-			type: cardAffectedLimitPerPhase
-			limit: 1
-			source: 1
-		  }
-		}
-	  }
-	]
-  }
-  32_45: {
-	title: Sauron
-	subtitle: The Necromancer
-		unique: true
-	culture: sauron
-	twilight: 5
-	type: minion
-	race: maia
-	strength: 13
-	vitality: 4
-	site: 5
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyStrength
-		  filter: culture(gundabad),orc
-		  amount: 1
-		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: addKeyword
-		  filter: culture(gundabad),orc
-		  keyword: fierce
-		}
-	  }
-	  {
-		type: activated
-		phase: assignment
-		cost: {
-		  type: exert
-		  select: self
-		}
-		effect: [
+		title: Orkish Pursuer
+		unique: false
+		side: Shadow
+		culture: sauron
+		twilight: 3
+		type: minion
+		race: orc
+		strength: 8
+		vitality: 3
+		site: 4
+		effects: [
 			{
-				type: assignFPCharacterToSkirmish
-				fpCharacter: choose(companion,not(name(Bilbo)))
-				minion: choose(minion,or(culture(gundabad),culture(wraith)))
-				memorizeFPCharacter: chosenCompanion
-				memorizeMinion: chosenMinion
-				preventText: Would you like to add 2 doubts or exert {chosenCompanion} to prevent it from being assigned to {chosenMinion}?
-				preventCost: {
-					type: choice
-					texts: [
-						Add 2 doubts
-						Exert the companion
-					]
-					effects: [
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: self
+				}
+				cost: {
+					type: exert
+					select: self
+					times: 2
+				}
+				effect: {
+					type: addBurdens
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				requires: {
+					type: cantSpot
+					filter: self,mounted
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: wound
+					player: fp
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: Each time this minion wins a skirmish, you may exert him twice to add a doubt.<br><b>Regroup:</b> If this minion is not mounted, exert him to make the Free Peoples player wound a companion.
+		lore: "The cunning ambushes of the Orc armies rely upon scouts first finding the enemy."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_43: {
+		cardInfo: {
+			image: hobbit/HDG3243.jpg
+			collInfo: 32_43
+			rarity: _
+		}
+		title: Orkish Veteran
+		unique: false
+		side: Shadow
+		culture: sauron
+		twilight: 2
+		type: minion
+		race: orc
+		strength: 7
+		vitality: 2
+		site: 4
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					requires: {
+						type: location
+						filter: siteNumber(9)
+					}
+					filter: orc
+					keyword: archer
+				}
+			}
+			{
+				type: activated
+				phase: regroup
+				cost: {
+					type: discard
+					select: choose(orc)
+				}
+				effect: {
+					type: wound
+					player: fp
+					select: choose(companion)
+				}
+			}
+		]
+		gametext: At site 9, each Orc is an <b>archer</b>.<br><b>Regroup:</b> Discard an Orc to make the Free Peoples player wound a companion.
+		lore: "The bodyguard of Bolg, goblins of huge size with scimitars of steel."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_44: {
+		cardInfo: {
+			image: hobbit/HDG3244.jpg
+			collInfo: 32_44
+			rarity: _
+		}
+		title: Ring of Thrór
+		subtitle: Last of the Seven Rings
+		unique: true
+		side: Shadow
+		culture: sauron
+		twilight: 0
+		type: artifact
+		itemclass: ring
+		vitality: 1
+		target: name(Sauron)
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: bearer
+					keyword: fierce
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 2
+				}
+				effect: {
+					type: addKeyword
+					select: choose(or(name(Sauron),and(culture(wraith),minion)))
+					keyword: damage
+					amount: {
+						type: cardPhaseLimit
+						limit: 1
+						amount: 1
+					}
+				}
+			}
+		]
+		gametext: Bearer must be Sauron.<br>He is <b>fierce</b>.<br><b>Skirmish:</b> Remove (2) to make Sauron or a [wraith] minion <b>damage +1</b> (limit +1).
+		lore: "...all his ravings were of that. The last of the Seven..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_45: {
+		cardInfo: {
+			image: hobbit/HDG3245.jpg
+			collInfo: 32_45
+			rarity: _
+		}
+		title: Sauron
+		subtitle: The Necromancer
+		unique: true
+		side: Shadow
+		culture: sauron
+		twilight: 5
+		type: minion
+		race: maia
+		strength: 13
+		vitality: 4
+		site: 5
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: culture(gundabad),orc
+					amount: 1
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: culture(gundabad),orc
+					keyword: fierce
+				}
+			}
+			{
+				type: activated
+				phase: assignment
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: [
+					{
+						type: assignFPCharacterToSkirmish
+						fpCharacter: choose(companion,not(name(Bilbo)))
+						minion: choose(minion,or(culture(gundabad),culture(wraith)))
+						memorizeFPCharacter: chosenCompanion
+						memorizeMinion: chosenMinion
+						preventText: Would you like to add 2 doubts or exert {chosenCompanion} to prevent it from being assigned to {chosenMinion}?
+						preventCost: {
+							type: choice
+							texts: [
+								Add 2 doubts
+								Exert the companion
+							]
+							effects: [
+								{
+									type: addBurdens
+									amount: 2
+								}
+								{
+									type: exert
+									select: memory(chosenCompanion)
+								}
+							]
+						}
+					}
+				]
+			}
+		]
+		gametext: Each [gundabad] Orc is strength +1 and <b>fierce</b>.<br><b>Assignment:</b> Exert Sauron to assign a [gundabad] or [wraith] minion to a companion (except Bilbo). The Free Peoples player may add 2 doubts or exert that companion to prevent this.
+		lore: "...the Shadow grows once more..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_50: {
+		cardInfo: {
+			image: hobbit/HDG3250.jpg
+			collInfo: 32_50
+			rarity: _
+		}
+		title: Dissension
+		unique: false
+		side: Shadow
+		culture: smaug
+		twilight: 2
+		type: event
+		timewords: skirmish
+		effects: [
+			{
+				type: activatedInDiscard
+				phase: skirmish
+				cost: {
+					type: exert
+					select: choose(name(Smaug))
+					times: 2
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: self
+				}
+			}
+			{
+				type: event
+				cost: {
+					type: chooseHowManyBurdensToSpot
+					memorize: burdenCount
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(dwarven),companion)
+					amount: {
+						type: fromMemory
+						memory: burdenCount
+						multiplier: -1
+					}
+				}
+			}
+		]
+		gametext: You may exert Smaug twice to play this event from your discard pile.<br>Spot X doubts to make a [dwarven] companion strength -X.
+		lore: "A sickness lies on that treasure, a sickness that drove your grandfather mad!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_51: {
+		cardInfo: {
+			image: hobbit/HDG3251.jpg
+			collInfo: 32_51
+			rarity: _
+		}
+		title: Dragon's Malice
+		unique: true
+		side: Shadow
+		culture: smaug
+		twilight: 0
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: winsSkirmish
+					filter: name(Smaug)
+					memorizeLoser: loser
+				}
+				effect: {
+					type: addBurdens
+					amount: {
+						type: Conditional
+						requires: {
+							type: memoryMatches
+							memory: loser
+							filter: companion,culture(dwarven),zone(dead)
+						}
+						true: 2
+						false: 1
+					}
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeWounds
+					filter: name(Bilbo)
+					requires: [
 						{
-							type: addBurdens
-							amount: 2
+							type: ringIsOn
 						}
 						{
-							type: exert
-							select: memory(chosenCompanion)
+							type: canSpot
+							filter: name(Bilbo),inSkirmishAgainst(name(Smaug))
 						}
 					]
 				}
 			}
 		]
-	  }
-	]
-  }
-  32_50: {
-	title: Dissention
-	culture: smaug
-	twilight: 2
-	type: event
-	timeword: skirmish
-	effects: [
-	  {
-		type: activatedInDiscard
-		phase: skirmish
-		cost: {
-		  type: exert
-		  select: choose(name(Smaug))
-		  times: 2
+		gametext: Each time Smaug wins a skirmish, you may add a doubt (or 2 doubts if a [dwarven] companion he is skirmishing is killed).<br>Smaug cannot wound Bilbo wearing the One Ring.
+		lore: "You care about them, do you?! Good. Then you can watch them die!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: self
+	}
+
+	32_52: {
+		cardInfo: {
+			image: hobbit/HDG3252.jpg
+			collInfo: 32_52
+			rarity: _
 		}
-	  }
-	  {
+		title: Smaug's Awakening
+		unique: false
+		side: Shadow
+		culture: smaug
+		twilight: 0
 		type: event
-		cost: {
-		  type: chooseHowManyBurdensToSpot
-		  memorize: burdenCount
+		timewords: shadow
+		effects: {
+			type: event
+			effect: [
+				{
+					type: choice
+					texts: [
+						Play Smaug from your draw deck
+						Play Smaug from your discard pile
+					]
+					effects: [
+						{
+							type: playCardFromDrawDeck
+							select: choose(name(Smaug))
+							discount: -8
+							memorize: playedSmaug
+							showAll: true
+							shuffle: true
+							mustExist: true
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(name(Smaug))
+							discount: -8
+							memorize: playedSmaug
+						}
+					]
+				}
+				{
+					type: modifyStrength
+					select: memory(playedSmaug)
+					amount: -4
+					until: start(regroup)
+				}
+				{
+					type: addKeyword
+					select: memory(playedSmaug)
+					keyword: damage
+					amount: -1
+					until: start(regroup)
+				}
+				{
+					type: optional
+					text: Would you like to discard 2 Orcs to take {self} back into hand?
+					cost: {
+						type: discard
+						select: choose(orc)
+						count: 2
+					}
+					effect: {
+						type: putPlayedEventIntoHand
+					}
+				}
+			]
 		}
-		effect: {
-		  type: modifyStrength
-		  select: choose(culture(dwarven),companion)
-		  amount: {
-			type: fromMemory
-			memory: burdenCount
-			multiplier: -1
-		  }
+		gametext: Play Smaug from your draw deck or discard pile at twilight cost -8. He is strength -4 and damage -1 until the regroup phase. Then you may discard 2 Orcs to take this card back into hand.
+		lore: "...the Lonely Mountain where dear old Smaug lives, though I hope he is not expecting you."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	]
-  }
-  32_51: {
-	title: Dragon's Malice
+	}
+
+	32_53: {
+		cardInfo: {
+			image: hobbit/HDG3253.jpg
+			collInfo: 32_53
+			rarity: _
+		}
+		title: Terrifying Legend
 		unique: true
-	culture: smaug
-	twilight: 0
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: winsSkirmish
-		  filter: name(Smaug)
-		}
-		effect: {
-		  type: addBurdens
-		  amount: 1
-		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: killed
-		  filter: companion,culture(dwarven)
-		}
-		requires: {
-		  type: canSpot
-		  filter: name(Smaug),inSkirmish
-		}
-		effect: {
-		  type: addBurdens
-		  amount: 1
-		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: cantTakeWounds
-		  filter: name(Bilbo)
-		  requires: [
+		side: Shadow
+		culture: smaug
+		twilight: 0
+		type: condition
+		keywords: support area
+		effects: [
 			{
-			  type: ringIsOn
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: companion
+				}
+				requires: {
+					type: or
+					requires: [
+						{
+							type: canSpot
+							filter: weapon
+						}
+						{
+							type: and
+							requires: [
+								{
+									type: canSpot
+									filter: name(Smaug)
+								}
+								{
+									type: canSpot
+									filter: ally,canExert
+								}
+							]
+						}
+					]
+				}
+				effect: [
+					{
+						type: discard
+						select: choose(weapon)
+					}
+					{
+						type: If
+						check: {
+							type: canSpot
+							filter: name(Smaug)
+						}
+						true: {
+							type: exert
+							select: all(ally)
+						}
+					}
+				]
 			}
 			{
-			  type: canSpot
-			  filter: name(Bilbo),inSkirmishAgainst(name(Smaug))
+				type: activated
+				phase: regroup
+				cost: [
+					{
+						type: discard
+						select: choose(minion)
+					}
+					{
+						type: removeTwilight
+						amount: 3
+					}
+				]
+				effect: {
+					type: discard
+					select: choose(man,ally)
+				}
 			}
-		  ]
+		]
+		gametext: Each time a companion is killed, you may discard a weapon (and exert each ally if you spot Smaug).<br><b>Regroup:</b> Discard a minion from play and remove (3) to discard a Man ally.
+		lore: "Who are you that would stand against me?"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	]
-  }
-  32_52: {
-	title: Smaug's Awakening
-	culture: smaug
-	twilight: 0
-	type: event
-	timeword: shadow
-	effects: {
-	  type: event
-	  effect: [
-		{
-		  type: choice
-		  texts: [
-			Play Smaug from your draw deck
-			Play Smaug from your discard pile
-		  ]
-		  effects: [
+	}
+
+	32_54: {
+		cardInfo: {
+			image: hobbit/HDG3254.jpg
+			collInfo: 32_54
+			rarity: _
+		}
+		title: Twisted Gold of Dragon
+		unique: true
+		side: Shadow
+		culture: smaug
+		twilight: 0
+		type: condition
+		keywords: support area
+		effects: [
 			{
-			  type: playCardFromDrawDeck
-			  select: choose(name(Smaug))
-			  discount: -8
-			  memorize: playedSmaug
-				showAll: true
-				shuffle: true
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: your,name(Smaug)
+				}
+				effect: {
+					type: playCardFromDrawDeck
+					select: choose(side(shadow),condition)
+					showAll: true
+					shuffle: true
+					mustExist: true
+				}
 			}
 			{
-			  type: playCardFromDiscard
-			  select: choose(name(Smaug))
-			  discount: -8
-			  memorize: playedSmaug
+				type: activated
+				phase: shadow
+				cost: {
+					type: discard
+					select: choose(orc)
+					count: 3
+				}
+				effect: {
+					type: choice
+					texts: [
+						Play Smaug from your draw deck
+						Play Smaug from your discard pile
+					]
+					effects: [
+						{
+							type: playCardFromDrawDeck
+							select: choose(name(Smaug))
+							discount: -6
+							showAll: true
+							shuffle: true
+							mustExist: true
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(name(Smaug))
+							discount: -6
+						}
+					]
+				}
 			}
-		  ]
+		]
+		gametext: Each time you play Smaug, you may play a Shadow condition from your draw deck.<br><b>Shadow:</b> Discard 3 Orcs from play to play Smaug from your draw deck or discard pile. Its twilight cost is -6.
+		lore: "I kill where I wish and none dare resist."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		{
-		  type: modifyStrength
-		  select: memory(playedSmaug)
-		  amount: -4
-		  until: start(regroup)
+	}
+
+	32_55: {
+		cardInfo: {
+			image: hobbit/HDG3255.jpg
+			collInfo: 32_55
+			rarity: _
 		}
-		{
-		  type: addKeyword
-		  select: memory(playedSmaug)
-		  keyword: damage
-		  amount: -1
-		  until: start(regroup)
+		title: Wrath of the Dragon
+		unique: true
+		side: Shadow
+		culture: smaug
+		twilight: 2
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: killed
+					filter: character
+					killer: name(Smaug)
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(orc)
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: choice
+					texts: [
+						Discard this condition
+						Exert Smaug twice
+					]
+					effects: [
+						{
+							type: discard
+							select: self
+						}
+						{
+							type: exert
+							select: choose(name(Smaug))
+							times: 2
+						}
+					]
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(side(shadow),condition,not(self))
+				}
+			}
+		]
+		gametext: Each time Smaug kills a character, you may play an Orc from your discard pile.<br><b>Skirmish:</b> Discard this condition or exert Smaug twice to play a Shadow condition from your discard pile.
+		lore: "...my teeth are swords... and my breath death!"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		{
-		  type: optional
-		  text: Would you like to discard 2 Orcs to take {self} back into hand?
-		  cost: {
-			  type: discard
-			  select: choose(orc)
-			  count: 2
+	}
+
+	32_56: {
+		cardInfo: {
+			image: hobbit/HDG3256.jpg
+			collInfo: 32_56
+			rarity: _
+		}
+		title: Dol Guldur Blade
+		unique: false
+		side: Shadow
+		culture: wraith
+		twilight: 0
+		type: possession
+		itemclass: hand weapon
+		strength: 2
+		target: culture(wraith),minion
+		effects: [
+			{
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: addTwilight
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discard
+					select: choose(orc)
+					memorize: discardedOrc
+				}
+				effect: {
+					type: choice
+					texts: [
+						Play a WRAITH card from your draw deck
+						Play a WRAITH card from your discard pile
+					]
+					effects: [
+						{
+							type: playCardFromDrawDeck
+							select: choose(culture(wraith),not(timeword(response),event))
+							showAll: true
+							shuffle: true
+							mustExist: true
+						}
+						{
+							type: playCardFromDiscard
+							select: choose(culture(wraith),not(timeword(response),event),not(self),not(memory(discardedOrc)))
+						}
+					]
+				}
+			}
+		]
+		gametext: Bearer must be a [wraith] minion.<br>When you play this possession, add (2).<br><b>Maneuver:</b> Discard an Orc from play to play a [wraith] card from your draw deck or discard pile.
+		lore: "That is not from the world of the living."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_57: {
+		cardInfo: {
+			image: hobbit/HDG3257.jpg
+			collInfo: 32_57
+			rarity: _
+		}
+		title: The Great Enemy
+		unique: false
+		side: Shadow
+		culture: wraith
+		twilight: 1
+		type: event
+		timewords: shadow
+		effects: {
+			type: event
+			effect: [
+				{
+					type: chooseHowManyToSpot
+					filter: wise,character
+					memorize: countOfCharacters
+				}
+				{
+					type: putCardsFromDiscardIntoHand
+					select: choose(minion)
+					count: {
+						type: fromMemory
+						memory: countOfCharacters
+					}
+				}
+			]
+		}
+		gametext: Spot X Wise characters to take into hand X minions from your discard pile.
+		lore: "We grow in number. We grow in strength."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_58: {
+		cardInfo: {
+			image: hobbit/HDG3258.jpg
+			collInfo: 32_58
+			rarity: _
+		}
+		title: He Is Summoning His Servants
+		unique: true
+		side: Shadow
+		culture: wraith
+		twilight: 2
+		type: condition
+		keywords: support area
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: cantSpot
+						count: 2
+						filter: wise,character
+					}
+					filter: culture(wraith),minion
+					amount: 2
+				}
+			}
+			{
+				type: activated
+				phase: shadow
+				cost: {
+					type: discardFromHand
+					forced: false
+					select: choose(orc)
+					memorize: discardedCard
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(wraith),minion,not(memory(discardedCard)))
+				}
+			}
+		]
+		gametext: If you cannot spot 2 Wise characters, each [wraith] minion is strength +2.<br><b>Shadow:</b> Discard an Orc from hand to play a [wraith] minion from your discard pile.
+		lore: "...Who, above all else, desire power."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_59: {
+		cardInfo: {
+			image: hobbit/HDG3259.jpg
+			collInfo: 32_59
+			rarity: _
+		}
+		title: Úlairë Attëa
+		subtitle: Revived
+		unique: true
+		side: Shadow
+		culture: wraith
+		twilight: 6
+		type: minion
+		race: nazgul
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: wise,character
+					limit: 2
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 1
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(another,culture(wraith),minion)
+					amount: {
+						type: cardAffectedLimitPerPhase
+						limit: 3
+						source: 1
+					}
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>This minion is twilight cost -1 for each Wise character you spot (limit -2).<br><b>Skirmish:</b> Remove (1) to make another [wraith] minion strength +1 (limit +3).
+		lore: "The Nazgûl were stronger at night."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_60: {
+		cardInfo: {
+			image: hobbit/HDG3260.jpg
+			collInfo: 32_60
+			rarity: _
+		}
+		title: Úlairë Cantëa
+		subtitle: Revived
+		unique: true
+		side: Shadow
+		culture: wraith
+		twilight: 5
+		type: minion
+		race: nazgul
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: {
+			type: trigger
+			optional: true
+			trigger: {
+				type: transferred
+				filter: side(free people),follower
+				to: character
+			}
+			cost: {
+				type: exert
+				select: self
 			}
 			effect: {
-			  type: putPlayedEventIntoHand
+				type: discard
+				select: choose(weapon)
 			}
 		}
-	  ]
+		gametext: <b>Fierce</b>.<br>Each time the Free Peoples player transfers a follower, you may exert Úlairë Cantëa to discard a weapon.
+		lore: "The Ringwraith has no semblance to the Man, its being passed into twilight, life spirit into void."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
-  }
-  32_53: {
-	title: Terrifying Legend
-		unique: true
-	culture: smaug
-	twilight: 0
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: killed
-		  filter: companion
+
+	32_61: {
+		cardInfo: {
+			image: hobbit/HDG3261.jpg
+			collInfo: 32_61
+			rarity: _
 		}
-		effect: [
-		  {
-			type: discard
-			select: choose(weapon)
-		  }
-		  {
-			type: If
-			check: {
-			  type: canSpot
-			  filter: name(Smaug)
+		title: Úlairë Enquëa
+		subtitle: Revived
+		unique: true
+		side: Shadow
+		culture: wraith
+		twilight: 6
+		type: minion
+		race: nazgul
+		strength: 11
+		vitality: 4
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: wise,character
+					limit: 2
+					multiplier: -1
+				}
 			}
-			true: {
-			  type: exert
-			  select: all(ally)
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: discarded
+					player: fp
+					filter: condition
+				}
+				effect: {
+					type: exert
+					select: choose(companion)
+				}
 			}
-		  }
 		]
-	  }
-	  {
-		type: activated
-		phase: regroup
-		cost: [
-		  {
-			type: discard
-			select: choose(minion)
-		  }
-		  {
-			type: removeTwilight
-			amount: 3
-		  }
+		gametext: <b>Fierce</b>.<br>This minion is twilight cost -1 for each Wise character you spot (limit -2).<br>Each time the Free Peoples player discards a condition, you may exert a companion.
+		lore: "In their white faces burned keen and merciless eyes..."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	32_62: {
+		cardInfo: {
+			image: hobbit/HDG3262.jpg
+			collInfo: 32_62
+			rarity: _
+		}
+		title: Úlairë Lemenya
+		subtitle: Revived
+		unique: true
+		side: Shadow
+		culture: wraith
+		twilight: 4
+		type: minion
+		race: nazgul
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(wraith),minion
+					amount: -3
+				}
+			}
+			{
+				type: trigger
+				optional: true
+				trigger: {
+					type: discarded
+					player: fp
+					filter: condition
+				}
+				effect: {
+					type: discard
+					select: choose(ally)
+				}
+			}
 		]
-		effect: {
-		  type: discard
-		  select: choose(man,ally)
-		}
-	  }
-	]
-  }
-  32_54: {
-	title: Twisted Gold of Dragon
-		unique: true
-	culture: smaug
-	twilight: 1
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: played
-		  filter: your,name(Smaug)
-		}
-		effect: {
-		  type: playCardFromDrawDeck
-		  select: choose(side(shadow),condition)
-			showAll: true
-			shuffle: true
-		}
-	  }
-	  {
-		type: activated
-		phase: shadow
-		cost: {
-		  type: discard
-		  select: choose(orc)
-		  count: 3
-		}
-		effect: {
-		  type: choice
-		  texts: [
-			Play Smaug from your draw deck
-			Play Smaug from your discard pile
-		  ]
-		  effects: [
-			{
-			  type: playCardFromDrawDeck
-			  select: choose(name(Smaug))
-			  discount: -6
-				showAll: true
-				shuffle: true
+		gametext: <b>Fierce</b>.<br>The site number of each [wraith] minion is -3.<br>Each time the Free Peoples player discards a condition, you may discard an ally.
+		lore: "Sauron gave to them Nine Rings of Power."
+		promotext: ""
+		alts: {
+			promos: {
 			}
-			{
-			  type: playCardFromDiscard
-			  select: choose(name(Smaug))
-			  discount: -6
+			errata: {
 			}
-		  ]
 		}
-	  }
-	]
-  }
-  32_55: {
-	title: Wrath of the Dragon
-		unique: true
-	culture: smaug
-	twilight: 2
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: killed
-		  filter: character
-		}
-		requires: {
-		  type: canSpot
-		  filter: name(Smaug),inSkirmish
-		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: choose(orc)
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: choice
-		  texts: [
-			Discard this condition
-			Exert Smaug twice
-		  ]
-		  effects: [
-			{
-			  type: discard
-			  select: self
-			}
-			{
-			  type: exert
-			  select: choose(name(Smaug))
-			  times: 2
-			}
-		  ]
-		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: choose(side(shadow),condition)
-		}
-	  }
-	]
-  }
-  32_56: {
-	title: Dol Guldur Blade
-	culture: wraith
-	twilight: 0
-	type: possession
-	itemclass: hand weapon
-	strength: 2
-	target: culture(wraith),minion
-	effects: [
-	  {
-		type: Trigger
-		optional: false
-		trigger: {
-		  type: played
-		  filter: self
-		}
-		effect: {
-		  type: addTwilight
-		  amount: 2
-		}
-	  }
-	  {
-		type: activated
-		phase: maneuver
-		cost: {
-		  type: discard
-		  select: choose(orc)
-		}
-		effect: {
-		  type: choice
-		  texts: [
-			Play a WRAITH card from your draw deck
-			Play a WRAITH card from your discard pile
-		  ]
-		  effects: [
-			{
-			  type: playCardFromDrawDeck
-			  select: choose(culture(wraith),not(timeword(response),event))
-				showAll: true
-				shuffle: true
-			}
-			{
-			  type: playCardFromDiscard
-			  select: choose(culture(wraith),not(timeword(response),event))
-			}
-		  ]
-		}
-	  }
-	]
-  }
-  32_57: {
-	title: The Great Enemy
-	culture: wraith
-	twilight: 1
-	type: event
-	timeword: shadow
-	effects: {
-	  type: event
-	  effect: [
-		{
-		  type: chooseHowManyToSpot
-		  filter: wise,character
-		  memorize: countOfCharacters
-		}
-		{
-		  type: putCardsFromDiscardIntoHand
-		  select: choose(minion)
-		  count: {
-			type: fromMemory
-			memory: countOfCharacters
-		  }
-		}
-	  ]
 	}
-  }
-  32_58: {
-	title: He Is Summoning His Servants
+
+	32_63: {
+		cardInfo: {
+			image: hobbit/HDG3263.jpg
+			collInfo: 32_63
+			rarity: _
+		}
+		title: Úlairë Nelya
+		subtitle: Revived
 		unique: true
-	culture: wraith
-	twilight: 2
-	type: condition
-	keyword: support area
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyStrength
-		  requires: {
-			type: cantSpot
-			count: 2
-			filter: wise,character
-		  }
-		  filter: culture(wraith),minion
-		  amount: 2
+		side: Shadow
+		culture: wraith
+		twilight: 5
+		type: minion
+		race: nazgul
+		strength: 10
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: {
+			type: modifier
+			modifier: {
+				type: addKeyword
+				requires: {
+					type: canSpot
+					filter: follower,attachedTo(companion)
+				}
+				filter: self
+				keyword: damage+1
+			}
 		}
-	  }
-	  {
-		type: activated
-		phase: shadow
-		cost: {
-		  type: discardFromHand
-		  forced: false
-		  select: choose(orc)
+		gametext: <b>Fierce</b>.<br>While you can spot a companion bearing a follower, Úlairë Nelya is <b>damage +1</b>.
+		lore: "Many of the Nine were princes of power."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: choose(culture(wraith),minion)
-		}
-	  }
-	]
-  }
-  32_59: {
-	title: Úlairë Attëa
-	subtitle: Revived
-		unique: true
-	culture: wraith
-	twilight: 6
-	type: minion
-	race: nazgul
-	strength: 12
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifyOwnCost
-		amount: {
-		  type: forEachYouCanSpot
-		  filter: wise,character
-		  limit: 2
-		  multiplier: -1
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: removeTwilight
-		  amount: 1
-		}
-		effect: {
-		  type: modifyStrength
-		  select: choose(another,culture(wraith),minion)
-		  amount: {
-			type: cardAffectedLimitPerPhase
-			limit: 3
-			source: 1
-		  }
-		}
-	  }
-	]
-  }
-  32_60: {
-	title: Úlairë Cantëa
-	subtitle: Revived
-		unique: true
-	culture: wraith
-	twilight: 5
-	type: minion
-	race: nazgul
-	strength: 10
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: {
-	  type: trigger
-	  optional: true
-	  trigger: {
-		type: transferred
-		filter: side(free people),follower
-		to: character
-	  }
-	  cost: {
-		type: exert
-		select: self
-	  }
-	  effect: {
-		type: discard
-		select: choose(weapon)
-	  }
 	}
-  }
-  32_61: {
-	title: Úlairë Enquëa
-	subtitle: Revived
+
+	32_64: {
+		cardInfo: {
+			image: hobbit/HDG3264.jpg
+			collInfo: 32_64
+			rarity: _
+		}
+		title: Úlairë Nertëa
+		subtitle: Revived
 		unique: true
-	culture: wraith
-	twilight: 6
-	type: minion
-	race: nazgul
-	strength: 11
-	vitality: 4
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifyOwnCost
-		amount: {
-		  type: forEachYouCanSpot
-		  filter: wise,character
-		  limit: 2
-		  multiplier: -1
+		side: Shadow
+		culture: wraith
+		twilight: 4
+		type: minion
+		race: nazgul
+		strength: 9
+		vitality: 2
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(wraith),minion
+					amount: -3
+				}
+			}
+			{
+				type: Response
+				trigger: {
+					type: discarded
+					player: fp
+					filter: condition
+				}
+				cost: {
+					type: exert
+					select: self
+				}
+				effect: {
+					type: playCardFromDiscard
+					select: choose(culture(wraith),minion)
+					discount: -8
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>The site number of each [wraith] minion is -3.<br><b>Response:</b> If the Free Peoples player discards a condition, exert Úlairë Nertëa to play a [wraith] minion from your discard pile; its twilight cost is -8.
+		lore: "Some accepted Sauron's gift for glory."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: discarded
-		  player: fp
-		  filter: condition
-		}
-		effect: {
-		  type: exert
-		  select: choose(companion)
-		}
-	  }
-	]
-  }
-  32_62: {
-	title: Úlairë Lemenya
-	subtitle: Revived
-		unique: true
-	culture: wraith
-	twilight: 4
-	type: minion
-	race: nazgul
-	strength: 9
-	vitality: 2
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifySiteNumber
-		  filter: culture(wraith),minion
-		  amount: -3
-		}
-	  }
-	  {
-		type: trigger
-		optional: true
-		trigger: {
-		  type: discarded
-		  player: fp
-		  filter: condition
-		}
-		effect: {
-		  type: discard
-		  select: choose(ally)
-		}
-	  }
-	]
-  }
-  32_63: {
-	title: Úlairë Nelya
-	subtitle: Revived
-		unique: true
-	culture: wraith
-	twilight: 5
-	type: minion
-	race: nazgul
-	strength: 10
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: {
-	  type: modifier
-	  modifier: {
-		type: addKeyword
-		requires: {
-		  type: canSpot
-		  filter: follower,attachedTo(companion)
-		}
-		filter: self
-		keyword: damage+1
-	  }
 	}
-  }
-  32_64: {
-	title: Úlairë Nertëa
-	subtitle: Revived
+
+	32_65: {
+		cardInfo: {
+			image: hobbit/HDG3265.jpg
+			collInfo: 32_65
+			rarity: _
+		}
+		title: Úlairë Otsëa
+		subtitle: Revived
 		unique: true
-	culture: wraith
-	twilight: 4
-	type: minion
-	race: nazgul
-	strength: 9
-	vitality: 2
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifySiteNumber
-		  filter: culture(wraith),minion
-		  amount: -3
+		side: Shadow
+		culture: wraith
+		twilight: 4
+		type: minion
+		race: nazgul
+		strength: 9
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifier
+				modifier: {
+					type: modifySiteNumber
+					filter: culture(wraith),minion
+					amount: -3
+				}
+			}
+			{
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					requires: {
+						type: canSpot
+						filter: follower,attachedTo(companion)
+					}
+					filter: culture(wraith),minion
+					amount: 1
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>The site number of each [wraith] minion is -3.<br>While you can spot a companion bearing a follower, each [wraith] minion is strength +1.
+		lore: "...in their haggard hands were swords of steel."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: Response
-		trigger: {
-		  type: discarded
-		  player: fp
-		  filter: condition
+	}
+
+	32_66: {
+		cardInfo: {
+			image: hobbit/HDG3266.jpg
+			collInfo: 32_66
+			rarity: _
 		}
-		cost: {
-		  type: exert
-		  select: self
-		}
-		effect: {
-		  type: playCardFromDiscard
-		  select: choose(culture(wraith),minion)
-		  discount: -8
-		}
-	  }
-	]
-  }
-  32_65: {
-	title: Úlairë Otsëa
-	subtitle: Revived
+		title: Úlairë Toldëa
+		subtitle: Revived
 		unique: true
-	culture: wraith
-	twilight: 4
-	type: minion
-	race: nazgul
-	strength: 9
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifier
-		modifier: {
-		  type: modifySiteNumber
-		  filter: culture(wraith),minion
-		  amount: -3
+		side: Shadow
+		culture: wraith
+		twilight: 6
+		type: minion
+		race: nazgul
+		strength: 12
+		vitality: 3
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: wise,character
+					limit: 2
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: removeTwilight
+					amount: 3
+				}
+				effect: {
+					type: modifyStrength
+					select: choose(culture(wraith),minion)
+					amount: {
+						type: cardAffectedLimitPerPhase
+						limit: 4
+						source: 2
+					}
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>This minion is twilight cost -1 for each Wise character you spot (limit -2).<br><b>Skirmish:</b> Remove (3) to make a [wraith] minion strength +2 (limit +4).
+		lore: "They are calling for it. Calling for the precious."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: modifier
-		modifier: {
-		  type: modifyStrength
-		  requires: {
-			type: canSpot
-			filter: follower,attachedTo(companion)
-		  }
-		  filter: culture(wraith),minion
-		  amount: 1
+	}
+
+	32_67: {
+		cardInfo: {
+			image: hobbit/HDG3267.jpg
+			collInfo: 32_67
+			rarity: _
 		}
-	  }
-	]
-  }
-  32_66: {
-	title: Úlairë Toldëa
-	subtitle: Revived
+		title: The Witch-King
+		subtitle: Revived
 		unique: true
-	culture: wraith
-	twilight: 6
-	type: minion
-	race: nazgul
-	strength: 12
-	vitality: 3
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifyOwnCost
-		amount: {
-		  type: forEachYouCanSpot
-		  filter: wise,character
-		  limit: 2
-		  multiplier: -1
+		side: Shadow
+		culture: wraith
+		twilight: 8
+		type: minion
+		race: nazgul
+		strength: 14
+		vitality: 4
+		site: 5
+		keywords: fierce
+		effects: [
+			{
+				type: modifyOwnCost
+				amount: {
+					type: forEachYouCanSpot
+					filter: wise,character
+					multiplier: -1
+				}
+			}
+			{
+				type: activated
+				phase: skirmish
+				cost: {
+					type: discardFromHand
+					forced: false
+					count: 3
+				}
+				effect: {
+					type: addKeyword
+					select: choose(culture(wraith),minion)
+					keyword: damage+1
+				}
+			}
+		]
+		gametext: <b>Fierce</b>.<br>The Witch-King is twilight cost -1 for each Wise character you spot.<br><b>Skirmish:</b> Discard 3 cards from hand to make a [wraith] minion <b>damage +1</b>.
+		lore: "...his hair was long and on his helm was a crown."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: removeTwilight
-		  amount: 3
-		}
-		effect: {
-		  type: modifyStrength
-		  select: choose(culture(wraith),minion)
-		  amount: {
-			type: cardAffectedLimitPerPhase
-			limit: 4
-			source: 2
-		  }
-		}
-	  }
-	]
-  }
-  32_67: {
-	title: The Witch-king
-	subtitle: Revived
-		unique: true
-	culture: wraith
-	twilight: 8
-	type: minion
-	race: nazgul
-	strength: 14
-	vitality: 4
-	site: 5
-	keyword: fierce
-	effects: [
-	  {
-		type: modifyOwnCost
-		amount: {
-		  type: forEachYouCanSpot
-		  filter: wise,character
-		  multiplier: -1
-		}
-	  }
-	  {
-		type: activated
-		phase: skirmish
-		cost: {
-		  type: discardFromHand
-		  forced: false
-		  count: 3
-		}
-		effect: {
-		  type: addKeyword
-		  select: choose(culture(wraith),minion)
-		  keyword: damage+1
-		}
-	  }
-	]
-  }
+	}
 }

@@ -2,21 +2,22 @@
 
 	57_332: {
 		cardInfo: {
-			//id: 7_332.1
+			//id: 57_332.1
 			parent: 7_332
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/57_332.jpg
 			collInfo: 7U332
 			rarity: U
 		}
 		title: Rohirrim Road
-		type: site
+		unique: false
+		type: Site
 		block: King
 		twilight: 0
 		site: 1
-		direction: left
+		direction: Left
 		effects: {
 			type: activated
 			phase: fellowship
@@ -50,21 +51,22 @@
 	
 	57_359: {
 		cardInfo: {
-			//id: 7_359.1
+			//id: 57_359.1
 			parent: 7_359
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/57_359.jpg
 			collInfo: 7U359
 			rarity: U
 		}
 		title: Northern Ithilien
-		type: site
+		unique: false
+		type: Site
 		block: King
 		twilight: 8
 		site: 8
-		direction: right
+		direction: Right
 		effects: {
 			type: activated
 			phase: shadow

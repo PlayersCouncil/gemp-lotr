@@ -8,10 +8,12 @@ import com.gempukku.lotro.game.state.actions.DefaultActionsEnvironment;
 import com.gempukku.lotro.logic.InvalidSoloAdventureException;
 import com.gempukku.lotro.logic.PlayOrder;
 import com.gempukku.lotro.logic.actions.OptionalTriggerAction;
+import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
 import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.ActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.effects.ResolveSkirmishEffect;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 import com.gempukku.lotro.logic.timing.results.KilledResult;
@@ -55,6 +57,7 @@ public class TurnProcedure {
     public void carryOutPendingActionsUntilDecisionNeeded() {
         while (!_userFeedback.hasPendingDecisions() && _game.getWinnerPlayerId() == null) {
             // First check for any "state-based" effects
+            _game.getModifiersEnvironment().checkSelfSpottingConditions(_game);
             _initiativeChangeRule.checkInitiativeChange(_game);
             _characterDeathRule.checkCharactersZeroVitality(_game);
 
@@ -112,7 +115,7 @@ public class TurnProcedure {
             if (!_initialized) {
                 _initialized = true;
                 appendEffect(new PlayoutRequiredBeforeResponsesEffect(this, new HashSet<>(), _effect));
-                appendEffect(new PlayoutOptionalBeforeResponsesEffect(this, new HashSet<>(), _game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_game.getGameState().getCurrentPlayerId(), true), 0, _effect));
+                appendEffect(new PlayoutOptionalBeforeResponsesEffect(this, new OptionalTriggersUsed(), _game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_game.getGameState().getCurrentPlayerId(), true), 0, _effect));
                 appendEffect(new PlayEffect(_effect));
             }
 
@@ -239,14 +242,42 @@ public class TurnProcedure {
         }
     }
 
+    /**
+     * The optional "is about to" triggers already used in one window, by trigger identifier
+     * ({@link OptionalTriggerAction#getTriggerIdentifier()}): each is offered once in the window, and each text of a
+     * card is a trigger of its own (F-0617; no card has two optional "is about to" texts that answer one effect, so
+     * that half of the change is shown by none).
+     * The skirmish's resolution window is the exception. There a response that changes the total strength of either
+     * side returns the skirmish to the start of step 3 (3A of the skirmish procedure, Ketura 2026-10-20), which is
+     * a new chance to answer "is about to be overwhelmed": the triggers used before the change are offered again
+     * (Fishing Boat 13_48, F-0566). Responses are never held here and are offered again in any window.
+     */
+    private static class OptionalTriggersUsed {
+        private final Set<String> _triggers = new HashSet<>();
+        private List<Integer> _sideStrengths;
+
+        /**
+         * Called as each offer of the window is made. Forgets the triggers used if the window is the skirmish's
+         * resolution and either side's strength is not what it was at the last offer.
+         */
+        private void beforeOffer(LotroGame game, Effect effect) {
+            if (effect instanceof ResolveSkirmishEffect resolveSkirmish) {
+                List<Integer> sideStrengths = resolveSkirmish.getSideStrengths(game);
+                if (!sideStrengths.equals(_sideStrengths))
+                    _triggers.clear();
+                _sideStrengths = sideStrengths;
+            }
+        }
+    }
+
     private class PlayoutOptionalBeforeResponsesEffect extends UnrespondableEffect {
         private final SystemQueueAction _action;
-        private final Set<PhysicalCard> _cardTriggersUsed;
+        private final OptionalTriggersUsed _cardTriggersUsed;
         private final PlayOrder _playOrder;
         private final int _passCount;
         private final Effect _effect;
 
-        private PlayoutOptionalBeforeResponsesEffect(SystemQueueAction action, Set<PhysicalCard> cardTriggersUsed, PlayOrder playOrder, int passCount, Effect effect) {
+        private PlayoutOptionalBeforeResponsesEffect(SystemQueueAction action, OptionalTriggersUsed cardTriggersUsed, PlayOrder playOrder, int passCount, Effect effect) {
             _action = action;
             _cardTriggersUsed = cardTriggersUsed;
             _playOrder = playOrder;
@@ -260,7 +291,8 @@ public class TurnProcedure {
 
             final List<Action> optionalBeforeTriggers = game.getActionsEnvironment().getOptionalBeforeTriggers(activePlayer, _effect);
             // Remove triggers already resolved
-            optionalBeforeTriggers.removeIf(action -> _cardTriggersUsed.contains(action.getActionSource()));
+            _cardTriggersUsed.beforeOffer(game, _effect);
+            optionalBeforeTriggers.removeIf(action -> _cardTriggersUsed._triggers.contains(((OptionalTriggerAction) action).getTriggerIdentifier()));
 
             final List<Action> optionalBeforeActions = _game.getActionsEnvironment().getOptionalBeforeActions(activePlayer, _effect);
 
@@ -276,7 +308,7 @@ public class TurnProcedure {
                                 if (action != null) {
                                     _game.getActionsEnvironment().addActionToStack(action);
                                     if (optionalBeforeTriggers.contains(action))
-                                        _cardTriggersUsed.add(action.getActionSource());
+                                        _cardTriggersUsed._triggers.add(((OptionalTriggerAction) action).getTriggerIdentifier());
                                     _action.insertEffect(new PlayoutOptionalBeforeResponsesEffect(_action, _cardTriggersUsed, _playOrder, 0, _effect));
                                 } else {
                                     if ((_passCount + 1) < _playOrder.getPlayerCount()) {
@@ -355,6 +387,12 @@ public class TurnProcedure {
 
         @Override
         public void doPlayEffect(LotroGame game) {
+            // A trigger whose card's limit on uses was taken by one carried out before it is dropped: it is
+            // neither carried out nor put to the player to be ordered (F-0145).
+            _actions.removeIf(action -> action instanceof RequiredTriggerAction requiredTrigger && requiredTrigger.isSpent());
+            if (_actions.isEmpty())
+                return;
+
             if (_actions.size() == 1) {
                 _game.getActionsEnvironment().addActionToStack(_actions.get(0));
             } else if (areAllActionsTheSame(game)) {

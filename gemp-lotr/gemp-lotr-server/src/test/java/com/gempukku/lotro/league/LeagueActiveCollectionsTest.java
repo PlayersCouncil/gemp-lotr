@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.LeagueDAO;
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  * {@link LeagueService#getActiveLeagueCollections()}: the collections the admin add-items form offers besides
  * My cards and Trophies.
  */
-public class LeagueActiveCollectionsTest extends AbstractAtTest {
+public class LeagueActiveCollectionsTest extends LoadedLibraries {
 
     private static LeagueParams params(String name, long code, String collectionName, ZonedDateTime start, String format, int days) {
         var p = new LeagueParams();

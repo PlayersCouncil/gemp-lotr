@@ -17,8 +17,12 @@ public class Card_11_177_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_177");
-					// put other cards in here as needed for the test case
+					put("army", "11_177");
+
+					put("legolas", "1_51");     // Legolas, Prince of Mirkwood: an archer companion, resistance 6; +3 only against a Nazgul
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: an archer ally, resistance 0, home 6F; an archery ability used only on purpose
+					put("sam", "1_311");        // Sam, Son of Hamfast: Fellowship: exert Sam to remove a burden
+					put("marksman", "1_176");   // Goblin Marksman: a Shadow archer, and nothing else
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_11_177_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("army");
 
 		assertEquals("Army of Uruk-hai", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +67,68 @@ public class Card_11_177_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ArmyofUrukhaiTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+
+	@Test
+	public void ArchersOfResistance5OrLessAddNothingToTheFellowshipArcheryTotalAndTheMinionArcheryTotalIsUntouched() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var army = scn.GetShadowCard("army");
+		var legolas = scn.GetFreepsCard("legolas");
+		var orophin = scn.GetFreepsCard("orophin");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable(legolas);
+		scn.MoveAlliesToTable(orophin);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Site 6 is Orophin's home, where an ally takes part in archery fire.
+		scn.SkipToSite(5);
+		scn.AddBurdens(1);
+		assertEquals(1, scn.GetBurdens());
+		scn.MoveMinionsToTable(marksman);
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertEquals(6, scn.GetCurrentSiteNumber());
 
-		assertEquals(5, scn.GetTwilight());
+		// One burden: Legolas is resistance 6 - 1 = 5; an ally has resistance 0.
+		assertEquals(5, scn.GetResistance(legolas));
+		assertEquals(0, scn.GetResistance(orophin));
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetShadowArcheryTotal());
+
+		scn.MoveMinionsToTable(army);
+		// Neither archer adds; the Shadow archer, who has no resistance either, still adds to the minion total.
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+	}
+
+	@Test
+	public void AnArcherOfResistance6AddsToTheFellowshipArcheryTotal() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var army = scn.GetShadowCard("army");
+		var legolas = scn.GetFreepsCard("legolas");
+		var sam = scn.GetFreepsCard("sam");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable(legolas, sam);
+
+		scn.StartGame();
+		scn.AddBurdens(1);
+		scn.MoveMinionsToTable(army, marksman);
+		scn.FreepsRefreshDecision();
+		assertEquals(1, scn.GetBurdens());
+		assertEquals(5, scn.GetResistance(legolas));
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		// Sam removes the burden: Legolas is back at resistance 6, one more than the limit.
+		scn.FreepsUseCardAction(sam);
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetBurdens());
+		assertEquals(6, scn.GetResistance(legolas));
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 }

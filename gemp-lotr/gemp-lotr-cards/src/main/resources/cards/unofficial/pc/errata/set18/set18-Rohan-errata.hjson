@@ -2,7 +2,10 @@
 
 	68_96: {
 		cardInfo: {
-			//id: 8_96.1
+			//id: 68_96.1
+			parent: 18_96
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/68_96.jpg
 			collInfo: 18R96
@@ -10,6 +13,7 @@
 		}
 		title: Erkenbrand's Horn
 		unique: true
+		side: Free Peoples
 		culture: Rohan
 		twilight: 1
 		type: Possession

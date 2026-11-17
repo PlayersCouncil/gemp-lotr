@@ -271,7 +271,7 @@
 				requires: [
 					{
 						type: canSpot
-						filter: name(Saruman)
+						filter: name(Saruman),minion
 					}
 					{
 						type: cantSpot
@@ -284,7 +284,7 @@
 				}
 				effect: {
 					type: returnToHand
-					select: choose(name(Saruman))
+					select: choose(name(Saruman),minion)
 				}
 			}
 		]

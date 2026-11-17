@@ -17,8 +17,7 @@ public class Card_04_254_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_254");
-					// put other cards in here as needed for the test case
+					put("soldier", "4_254");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,36 +45,21 @@ public class Card_04_254_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var soldier = scn.GetFreepsCard("soldier");
 
-		assertEquals("Southron Soldier", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
-		assertEquals(2, scn.GetKeywordCount(card, Keyword.AMBUSH));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(4, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SouthronSoldierTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		assertEquals("Southron Soldier", soldier.getBlueprint().getTitle());
+		assertNull(soldier.getBlueprint().getSubtitle());
+		assertFalse(soldier.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, soldier.getBlueprint().getSide());
+		assertEquals(Culture.RAIDER, soldier.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, soldier.getBlueprint().getCardType());
+		assertEquals(Race.MAN, soldier.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(soldier, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(soldier, Keyword.AMBUSH));
+		assertEquals(2, scn.GetKeywordCount(soldier, Keyword.AMBUSH));
+		assertEquals(2, soldier.getBlueprint().getTwilightCost());
+		assertEquals(4, soldier.getBlueprint().getStrength());
+		assertEquals(1, soldier.getBlueprint().getVitality());
+		assertEquals(4, soldier.getBlueprint().getSiteNumber());
 	}
 }

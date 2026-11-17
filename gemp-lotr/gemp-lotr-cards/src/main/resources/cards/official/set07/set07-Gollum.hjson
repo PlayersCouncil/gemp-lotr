@@ -71,13 +71,13 @@
 		timewords: Skirmish
 		effects: {
 			type: event
+			cost: {
+				type: discard
+				select: choose(culture(gollum),condition)
+				count: any
+				memorize: discardedCards
+			}
 			effect: [
-				{
-					type: discard
-					select: choose(culture(gollum),condition)
-					count: any
-					memorize: discardedCards
-				}
 				{
 					type: modifyStrength
 					select: choose(name(Sméagol))
@@ -131,10 +131,11 @@
 					type: discardFromHand
 					forced: false
 					count: 3
+					memorize: discardedCards
 				}
 				effect: {
 					type: playCardFromDiscard
-					select: choose(name(Sméagol))
+					select: choose(name(Sméagol),not(memory(discardedCards)))
 				}
 			}
 		]
@@ -172,8 +173,8 @@
 					filter: name(Sméagol)
 				}
 				requires: {
-					type: canSpot
-					filter: name(Sméagol),inSkirmish
+					type: phase
+					phase: skirmish
 				}
 				effect: {
 					type: discard
@@ -261,6 +262,7 @@
 			{
 				type: activatedInDiscard
 				phase: shadow
+				specialAbility: false
 				requires: [
 					{
 						type: haveInitiative
@@ -416,6 +418,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				requires: [
 					{
 						type: haveInitiative
@@ -537,6 +540,7 @@
 			{
 				type: activatedInDiscard
 				phase: shadow
+				specialAbility: false
 				requires: [
 					{
 						type: haveInitiative
@@ -877,10 +881,19 @@
 				}
 			}
 			{
-				type: modifier
-				modifier: {
-					type: modifyMoveLimit
-					amount: 1
+				type: Trigger
+				optional: false
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: addModifier
+					modifier: {
+						type: modifyMoveLimit
+						amount: 1
+					}
+					until: endOfTurn
 				}
 			}
 			{
@@ -924,11 +937,12 @@
 			cost: {
 				type: discard
 				select: choose(name(Sméagol))
+				memorize: discardedSmeagol
 			},
 			effect: [
 				{
 					type: playCardFromDiscard
-					select: choose(companion)
+					select: choose(companion,not(memory(discardedSmeagol)))
 				}
 			]
 		}
@@ -1081,17 +1095,25 @@
 			effect: [
 				{
 					type: if
-					check: {
-						type: isGreaterThan
-						firstNumber: {
-							type: forEachVitality
-							filter: name(Sméagol),inSkirmish
+					// Ketura (Q-0359): read as "(or cancel Sméagol's skirmish if he is not the Ring-bearer and he
+					// has more vitality than ...)", in every format; the Ring-bearer Sméagol is healed.
+					check: [
+						{
+							type: cantSpot
+							filter: name(Sméagol),ringBearer
 						}
-						secondNumber: {
-							type: forEachVitality
-							filter: minion,inSkirmishAgainst(name(Sméagol))
+						{
+							type: isGreaterThan
+							firstNumber: {
+								type: forEachVitality
+								filter: name(Sméagol),inSkirmish
+							}
+							secondNumber: {
+								type: forEachVitality
+								filter: minion,inSkirmishAgainst(name(Sméagol))
+							}
 						}
-					}
+					]
 					false: {
 						type: heal
 						select: choose(name(Sméagol))
@@ -1274,7 +1296,11 @@
 					type: addActivated
 					filter: minion
 					phase: assignment
-					text: Assign this minion to bearer of Reckless Pride.
+					text: Assign this minion to Sméagol.
+					requires: {
+						type: canSpot
+						filter: name(Sméagol),assignableToSkirmishAgainst(self)
+					}
 					effect: {
 						type: assignFpCharacterToSkirmish
 						fpCharacter: choose(name(Sméagol))

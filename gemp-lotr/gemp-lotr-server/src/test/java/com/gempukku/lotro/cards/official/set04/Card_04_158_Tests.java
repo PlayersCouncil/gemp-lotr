@@ -3,11 +3,13 @@ package com.gempukku.lotro.cards.official.set04;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_158_Tests
@@ -17,8 +19,15 @@ public class Card_04_158_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_158");
-					// put other cards in here as needed for the test case
+					put("lieutenant", "4_158");
+					put("savage", "1_151");     // Uruk Savage: [isengard] Uruk-hai, strength 5, vitality 3, Damage +1 and nothing else
+					put("sentry", "10_84");     // Cirith Ungol Sentry: [sauron] Uruk-hai, strength 8, vitality 2, Damage +1 and nothing else
+					put("chaser", "4_181");     // Uruk Chaser: [isengard] Uruk-hai printed fierce; stronger in a fierce skirmish only
+					put("raiders", "4_207");    // Uruk-hai Raiding Party: [isengard] Uruk-hai, strength 9, vitality 3, damage +1
+					put("forger", "3_56");      // Isengard Forger: an [isengard] Orc, no Uruk-hai; a Shadow ability only
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability used only on purpose
+					put("gimli", "1_13");       // Gimli, Son of Gloin: strength 6, vitality 3; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +55,7 @@ public class Card_04_158_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lieutenant");
 
 		assertEquals("Lieutenant of Orthanc", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +72,93 @@ public class Card_04_158_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LieutenantofOrthancTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ManeuverAbilityExertsHimToMakeAnotherUrukHaiFierceUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var lieutenant = scn.GetShadowCard("lieutenant");
+		var savage = scn.GetShadowCard("savage");
+		var sentry = scn.GetShadowCard("sentry");
+		var chaser = scn.GetShadowCard("chaser");
+		var forger = scn.GetShadowCard("forger");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(lieutenant, savage, sentry, chaser, forger);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
 
-		assertEquals(7, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(lieutenant));
+		assertFalse(scn.HasKeyword(savage, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertTrue(scn.ShadowActionAvailable(lieutenant));
+		scn.ShadowUseCardAction(lieutenant);
+
+		// Uruk-hai of two cultures, and one fierce already; not the Lieutenant himself or an [isengard] Orc.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(savage, sentry, chaser));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(lieutenant, forger));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(savage);
+
+		assertEquals(1, scn.GetWoundsOn(lieutenant));
+		assertTrue(scn.HasKeyword(savage, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(sentry, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(forger, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(lieutenant, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(lieutenant);
+		scn.ShadowChooseCard(sentry);
+		assertEquals(2, scn.GetWoundsOn(lieutenant));
+		assertTrue(scn.HasKeyword(sentry, Keyword.FIERCE));
+
+		// Vitality 3 with 2 wounds: exhausted, so he can no longer exert.
+		scn.FreepsPass();
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(lieutenant));
+	}
+
+	@Test
+	public void FierceLastsThroughTheFierceSkirmishAndEndsAtTheRegroupPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var lieutenant = scn.GetShadowCard("lieutenant");
+		var raiders = scn.GetShadowCard("raiders");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lieutenant, raiders);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertFalse(scn.HasKeyword(raiders, Keyword.FIERCE));
+		// The Raiding Party is the one other Uruk-hai: chosen with nothing asked.
+		scn.ShadowUseCardAction(lieutenant);
+		assertEquals(1, scn.GetWoundsOn(lieutenant));
+		assertTrue(scn.HasKeyword(raiders, Keyword.FIERCE));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, raiders);
+		// The Lieutenant fights nobody.
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		// Strength 9 beats Aragorn's 8: no wound for the Uruk-hai, 1 + damage 1 for Aragorn.
+		scn.PassSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.HasKeyword(raiders, Keyword.FIERCE));
+
+		scn.PassFierceAssignmentActions();
+		scn.FreepsAssignAndResolve(gimli, raiders);
+		assertTrue(scn.IsCharSkirmishingAgainst(gimli, raiders));
+		assertTrue(scn.HasKeyword(raiders, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(lieutenant, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		scn.PassFierceSkirmishActions();
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.HasKeyword(raiders, Keyword.FIERCE));
 	}
 }

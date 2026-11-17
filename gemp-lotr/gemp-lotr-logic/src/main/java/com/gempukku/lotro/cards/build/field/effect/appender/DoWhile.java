@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -25,7 +26,11 @@ public class DoWhile implements EffectAppenderProducer {
 
         final EffectAppender[] effectAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, effectArray, environment);
 
-        return new DelayedAppender() {
+        // Taught for Q-0224 (IdleOffers): what is done at least once, and would do nothing the first time, does
+        // nothing (it is repeated only for what it did: shapes.md, F-0322).
+        // No test exercises this (engine pass 27): where a printed card has it in an offer that pays nothing
+        // (Race Text 94_4), a requirement written by hand answers first (IdleOffers).
+        return TaughtForecast.teach(new DelayedAppender() {
             private boolean conditionsMatch(ActionContext actionContext) {
                 for (Requirement condition : conditions) {
                     if (!condition.accepts(actionContext))
@@ -44,6 +49,6 @@ public class DoWhile implements EffectAppenderProducer {
                         });
                 return new StackActionEffect(doWhile);
             }
-        };
+        }, actionContext -> EffectForecast.together(actionContext, effectAppenders));
     }
 }

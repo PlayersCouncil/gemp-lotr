@@ -3,11 +3,13 @@ package com.gempukku.lotro.cards.official.set19;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_19_040_Tests
@@ -17,8 +19,24 @@ public class Card_19_040_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "19_40");
-					// put other cards in here as needed for the test case
+					put("witchking", "19_40");
+					// Úlairë Nelya, Lieutenant of Morgul: a [wraith] Nazgûl; only her Shadow ability, never used
+					put("nelya", "1_233");
+					// Ulaire Attea, Khamul of the East: a [raider] Nazgûl, so a Nazgûl of another culture
+					put("khamul", "103_61");
+					// Morgul Creeper: a [wraith] Orc, so a [wraith] minion who is no Nazgûl
+					put("creeper", "8_75");
+					// Black Rider: a fierce [wraith] Nazgûl, not unique; strength 8, +1 for each companion. One in
+					// play, the other in hand, of the same title.
+					put("rider1", "12_161");
+					put("rider2", "12_161");
+					// The Witch-king, Lord of Angmar: another card of the title, only ever in hand
+					put("angmar", "1_237");
+
+					// Aragorn, Ranger of the North (strength 8, vitality 4) and Gimli, Son of Glóin (strength 6,
+					// vitality 3): their abilities are never used
+					put("aragorn", "1_89");
+					put("gimli", "1_13");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +64,7 @@ public class Card_19_040_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("witchking");
 
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Dark Lord", card.getBlueprint().getSubtitle());
@@ -62,18 +80,149 @@ public class Card_19_040_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheWitchkingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityDiscardsANazgulFromHandToMakeHimStrengthPlusOneUntilTheSkirmishEnds() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var witchking = scn.GetShadowCard("witchking");
+		var rider = scn.GetShadowCard("rider1");
+		var nelya = scn.GetShadowCard("nelya");
+		var khamul = scn.GetShadowCard("khamul");
+		var creeper = scn.GetShadowCard("creeper");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToHand(nelya, khamul, creeper);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertInHand(nelya, khamul, creeper);
+		scn.MoveMinionsToTable(witchking, rider);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, witchking}, new PhysicalCardImpl[]{gimli, rider});
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
 
-		assertEquals(8, scn.GetTwilight());
+		assertInHand(nelya, khamul, creeper);
+		assertEquals(14, scn.GetStrength(witchking));
+		assertTrue(scn.ShadowActionAvailable(witchking));
+		scn.ShadowUseCardAction(witchking);
+
+		// Either Nazgûl pays, whatever its culture; the [wraith] Orc does not
+		assertTrue(scn.ShadowHasCardChoiceAvailable(nelya, khamul));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(creeper));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(nelya);
+
+		assertInDiscard(nelya);
+		assertInHand(khamul, creeper);
+		// +1: no Úlairë Nelya is in play, and the Black Rider in play is a Nazgûl of another title
+		assertEquals(15, scn.GetStrength(witchking));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		// Aragorn's 8 loses to 15 and takes a wound; in the next skirmish the bonus is gone
+		scn.PassSkirmishActions();
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		scn.FreepsResolveSkirmish(gimli);
+		assertEquals(14, scn.GetStrength(witchking));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void WithACardOfTheDiscardedNazgulsTitleInPlayTheBonusIsPlusTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var rider1 = scn.GetShadowCard("rider1");
+		var rider2 = scn.GetShadowCard("rider2");
+		var angmar = scn.GetShadowCard("angmar");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+		scn.MoveCardsToHand(rider2, angmar);
+
+		scn.StartGame();
+		assertInHand(rider2, angmar);
+		scn.MoveMinionsToTable(witchking, rider1);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, witchking}, new PhysicalCardImpl[]{gimli, rider1});
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertInHand(rider2, angmar);
+		assertEquals(14, scn.GetStrength(witchking));
+
+		// A Black Rider discarded while the other Black Rider is in play
+		scn.ShadowUseCardAction(witchking);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(rider2, angmar));
+		scn.ShadowChooseCard(rider2);
+		assertInDiscard(rider2);
+		assertEquals(16, scn.GetStrength(witchking));
+
+		// A Witch-king discarded: he spots The Witch-king, himself
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(witchking);
+		assertInDiscard(angmar);
+		assertEquals(18, scn.GetStrength(witchking));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AbilityIsOfferedInAnotherSkirmishAndNotInTheAssignmentPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var rider = scn.GetShadowCard("rider1");
+		var nelya = scn.GetShadowCard("nelya");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToHand(nelya);
+
+		scn.StartGame();
+		assertInHand(nelya);
+		scn.MoveMinionsToTable(witchking, rider);
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+		scn.FreepsPass();
+
+		assertInHand(nelya);
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(witchking));
+		scn.ShadowPass();
+
+		// He is left out of the skirmishes, and is offered the ability in the Black Rider's
+		scn.FreepsAssignToMinions(gimli, rider);
+		scn.ShadowDeclineAssignments();
+		assertFalse(scn.IsCharAssigned(witchking));
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+
+		assertTrue(scn.ShadowActionAvailable(witchking));
+		scn.ShadowUseCardAction(witchking);
+		assertInDiscard(nelya);
+		assertEquals(15, scn.GetStrength(witchking));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void AbilityIsNotOfferedWithNoNazgulInHand() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var witchking = scn.GetShadowCard("witchking");
+		var creeper = scn.GetShadowCard("creeper");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		// A [wraith] minion in hand, but no Nazgûl
+		scn.MoveCardsToHand(creeper);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(witchking);
+		assertInHand(creeper);
+		assertEquals(1, scn.GetShadowHandCount());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, witchking);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(witchking));
 	}
 }

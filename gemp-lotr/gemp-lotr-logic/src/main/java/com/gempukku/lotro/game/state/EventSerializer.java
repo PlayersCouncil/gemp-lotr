@@ -149,7 +149,9 @@ public class EventSerializer {
             deckElement.setAttribute("playerId", player);
             deckElement.setAttribute("name", deck.getDeckName());
             deckElement.setAttribute("rb", deck.getRingBearer());
-            deckElement.setAttribute("ring", deck.getRing());
+            //A deck does not have to include The One Ring (e.g. a lesson that has not introduced it yet)
+            if (deck.getRing() != null)
+                deckElement.setAttribute("ring", deck.getRing());
             deckElement.setAttribute("sites", String.join(",", deck.getSites()));
             deckElement.setAttribute("deck", String.join(",", deck.getDrawDeckCards()));
 
@@ -185,6 +187,7 @@ public class EventSerializer {
         eventElem.setAttribute("shadowDamageBonus", String.valueOf(gameStats.getShadowSkirmishDamageBonus()));
 
         eventElem.setAttribute("fpOverwhelmed", String.valueOf(gameStats.isFpOverwhelmed()));
+        eventElem.setAttribute("shadowOverwhelmed", String.valueOf(gameStats.isShadowOverwhelmed()));
 
         eventElem.setAttribute("moveLimit", String.valueOf(gameStats.getMoveLimit()));
         eventElem.setAttribute("moveCount", String.valueOf(gameStats.getMoveCount()));

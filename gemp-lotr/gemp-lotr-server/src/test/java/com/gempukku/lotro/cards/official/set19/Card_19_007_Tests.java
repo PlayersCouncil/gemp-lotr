@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_19_007_Tests
@@ -17,8 +18,11 @@ public class Card_19_007_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "19_7");
-					// put other cards in here as needed for the test case
+					put("legolas", "19_7");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] companion; a maneuver ability used only on purpose
+					put("bow", "1_90");         // Aragorn's Bow: makes Aragorn an archer, with an Archery ability of its own
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc, vitality 1 (exhausted)
+					put("savage", "1_151");     // Uruk Savage: an [isengard] Uruk-hai, vitality 3, Damage +1 and no other text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +50,7 @@ public class Card_19_007_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("legolas");
 
 		assertEquals("Legolas", card.getBlueprint().getTitle());
 		assertEquals("Skeptical Guide", card.getBlueprint().getSubtitle());
@@ -63,18 +67,78 @@ public class Card_19_007_Tests
 		assertEquals(7, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LegolasTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ArcheryAbilityAddsTwoThreatsToWoundAMinionAndHeAddsNothingToTheArcheryTotalForThePhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bow = scn.GetFreepsCard("bow");
+		var frodo = scn.GetRingBearer();
+		var runner = scn.GetShadowCard("runner");
+		var savage = scn.GetShadowCard("savage");
+		// Three companions: room for two threats.
+		scn.MoveCompanionsToTable(legolas, aragorn);
+		scn.AttachCardsTo(aragorn, bow);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner, savage);
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(2, scn.GetTwilight());
+		// Legolas and Aragorn, an archer by the Bow, each add 1.
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertTrue(scn.FreepsActionAvailable(legolas));
+
+		scn.FreepsUseCardAction(legolas);
+		assertEquals(2, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(runner, savage));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, aragorn, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+
+		// The Runner, of vitality 1, is wounded and so killed: a wound, not an exertion.
+		scn.FreepsChooseCard(runner);
+		assertInZone(Zone.DISCARD, runner);
+		assertEquals(0, scn.GetWoundsOn(savage));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// Legolas no longer adds; Aragorn still does.
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+
+		// The one archery wound of the fellowship goes on the Uruk-hai, the one minion left.
+		scn.SkipToArcheryWounds();
+		assertEquals(1, scn.GetWoundsOn(savage));
+
+		// Once the archery phase is over, Legolas counts again.
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void ArcheryAbilityIsNotOfferedWhenTwoThreatsCannotBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bow = scn.GetFreepsCard("bow");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(legolas, aragorn);
+		scn.AttachCardsTo(aragorn, bow);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		// Three companions and two threats: one more could be added, two cannot.
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(legolas));
+		// The Bow's ability, with Aragorn able to exert, is offered beside it.
+		assertTrue(scn.FreepsActionAvailable(bow));
+		assertEquals(2, scn.GetThreats());
 	}
 }

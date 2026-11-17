@@ -17,8 +17,12 @@ public class Card_08_005_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "8_5");
-					// put other cards in here as needed for the test case
+					put("gimli", "8_5");
+
+					put("dwarfguard", "1_7");   // Dwarf Guard: a Dwarf companion, strength 4, vitality 2, no damage bonus; "To play, spot a Dwarf"
+					// Gollum, Nasty Treacherous Creature: strength 5, vitality 4.  "Regroup: Discard Gollum to exert a
+					// companion or ally."
+					put("gollum", "5_24");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_08_005_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gimli");
 
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Counter of Foes", card.getBlueprint().getSubtitle());
@@ -65,18 +69,55 @@ public class Card_08_005_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ForEachWoundOnGimliHeIsStrengthPlusOneAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var gimli = scn.GetFreepsCard("gimli");
+		var dwarfguard = scn.GetFreepsCard("dwarfguard");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(gimli, dwarfguard);
+
+		var gollum = scn.GetShadowCard("gollum");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(gollum);
+		// Another Dwarf companion with a wound of his own, for whom the text does nothing.
+		scn.AddWoundsToChar(dwarfguard, 1);
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(2, scn.GetTwilight());
+		// No wound: his printed 6 and damage +1.
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertEquals(1, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetWoundsOn(dwarfguard));
+		assertEquals(4, scn.GetStrength(dwarfguard));
+		assertEquals(0, scn.GetKeywordCount(dwarfguard, Keyword.DAMAGE));
+
+		// The Shadow player's Gollum exerts him: one wound, by legal play.
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(gollum));
+		scn.ShadowUseCardAction(gollum);
+		// The Dwarf Guard, vitality 2 with a wound, is exhausted and cannot be exerted.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(gimli, frodo));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(dwarfguard));
+		scn.ShadowChooseCard(gimli);
+
+		// 6 + 1, and damage +1 + 1.
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertEquals(7, scn.GetStrength(gimli));
+		assertEquals(2, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(1, scn.GetWoundsOn(dwarfguard));
+		assertEquals(4, scn.GetStrength(dwarfguard));
+		assertEquals(0, scn.GetKeywordCount(dwarfguard, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+
+		// A second wound: 6 + 2, and damage +1 + 2.
+		scn.AddWoundsToChar(gimli, 1);
+		assertEquals(2, scn.GetWoundsOn(gimli));
+		assertEquals(8, scn.GetStrength(gimli));
+		assertEquals(3, scn.GetKeywordCount(gimli, Keyword.DAMAGE));
+		assertEquals(4, scn.GetStrength(dwarfguard));
+		assertEquals(0, scn.GetKeywordCount(dwarfguard, Keyword.DAMAGE));
 	}
 }

@@ -1,22 +1,37 @@
 {
 	53_82: {
 		cardInfo: {
-			//id: 3_82.1
+			//id: 53_82.1
 			parent: 3_82
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E082.1.jpg
 			collInfo: 3U82
 			rarity: U
 		}
 		title: News of Mordor
-		culture: wraith
+		unique: false
+		side: Shadow
+		culture: Wraith
 		twilight: 1
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: culture(isengard),minion,canExert
+					}
+					{
+						type: canSpot
+						filter: nazgul,canExert
+					}
+				]
+			}
 			effect: [
 				{
 					type: choice
@@ -56,7 +71,7 @@
 				}
 			]
 		}
-		gametext: Choose one: exert an [isengard] minion to make a Nazgul damage +1 until the regroup phase, or exert a Nazgul to prevent all wounds to an [isengard] minion until the regroup phase.
+		gametext: Choose one: exert an [isengard] minion to make a Nazgul damage +1 until the regroup phase, or exert a Nazgul to make an [isengard] minion unable to take wounds until the regroup phase.
 		lore: "'Build me an army worthy of Mordor.'"
 		promotext: ""
 		alts: {

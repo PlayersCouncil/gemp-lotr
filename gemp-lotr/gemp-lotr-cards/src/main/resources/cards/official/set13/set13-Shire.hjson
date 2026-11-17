@@ -38,6 +38,10 @@
 					type: startOfSkirmishInvolving
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: other,ringBound,hobbit
+				}
 				effect: {
 					type: removeBurdens
 					amount: {
@@ -214,8 +218,9 @@
 							{
 								type: Conditional
 								requires: {
-									type: location
-									filter: dwelling
+									type: memoryMatches
+									memory: chosenHobbit
+									filter: atSite(dwelling)
 								}
 								true: 1
 								false: 0
@@ -262,6 +267,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(shire))
@@ -279,14 +285,10 @@
 			}
 			{
 				type: event
-				requires: {
-					type: location
-					filter: or(dwelling,forest)
-				}
 				effect: [
 					{
 						type: modifyStrength
-						select: choose(your,hobbit)
+						select: choose(your,hobbit,atSite(or(dwelling,forest)))
 						amount: 3
 					}
 				]
@@ -627,9 +629,19 @@
 					type: AddCultureTokens
 					culture: shire
 					select: self
+					// Ketura (Q-0383: A, 2026-10-28): two counts added together, so a site of both kinds adds two
 					count: {
-						type: forEachYouCanSpot
-						filter: or(forest,dwelling),site,zone(adventure path)
+						type: sum
+						source: [
+							{
+								type: forEachYouCanSpot
+								filter: forest,site,zone(adventure path)
+							}
+							{
+								type: forEachYouCanSpot
+								filter: dwelling,site,zone(adventure path)
+							}
+						]
 					}
 				}
 			}
@@ -751,18 +763,22 @@
 					filter: your,follower
 				}
 				effect: {
-					type: heal
-					select: choose(companion)
-					memorize: chosenCompanion
-					times: {
-						type: Conditional
-						requires: {
-							type: memoryMatches
-							memory: chosenCompanion
-							filter: name(Sam)
-						}
-						true: 2
-						false: 1
+					type: If
+					// Ketura (Q-0392): "heal Sam twice" is available only while Sam has 2 wounds to heal; with
+					// one, any companion is chosen and healed once.
+					check: {
+						type: canSpotWounds
+						filter: name(Sam)
+						amount: 2
+					}
+					true: {
+						type: heal
+						select: choose(name(Sam),wounded)
+						times: 2
+					}
+					false: {
+						type: heal
+						select: choose(companion)
 					}
 				}
 			}

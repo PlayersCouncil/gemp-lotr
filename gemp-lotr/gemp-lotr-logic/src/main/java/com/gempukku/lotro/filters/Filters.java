@@ -10,11 +10,11 @@ import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.game.state.Skirmish;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayUtils;
+import com.gempukku.lotro.logic.effects.PlaySiteEffect;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.RuleUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Filters {
     private static final Map<CardType, Filter> _typeFilterMap = new HashMap<>();
@@ -85,6 +85,14 @@ public class Filters {
         return countSpottable(game, spotOverrides, filters) >= count;
     }
 
+    /**
+     * Whether the spotting player can spot this many cards, counting the bonuses to his own count
+     * ({@link #countSpottable(LotroGame, String, Map, Filterable...)}).
+     */
+    public static boolean canSpot(LotroGame game, String spottingPlayer, int count, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, spottingPlayer, spotOverrides, filters) >= count;
+    }
+
     public static boolean hasActive(LotroGame game, Filterable... filters) {
         return findFirstActive(game, SpotOverride.NONE, filters) != null;
     }
@@ -136,12 +144,21 @@ public class Filters {
 
     public static int countSpottable(LotroGame game, Filterable... filters) { return countSpottable(game, SpotOverride.NONE, filters); }
     public static int countSpottable(LotroGame game, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
+        return countSpottable(game, null, spotOverrides, filters);
+    }
+
+    /**
+     * The number of cards the spotting player can spot. With one filter, the bonuses to that player's own count are
+     * added ("add 1 to the number of Ents you can spot" raises its owner's count and no other: F-0502); a count made
+     * for no player (null) gets none.
+     */
+    public static int countSpottable(LotroGame game, String spottingPlayer, Map<InactiveReason, Boolean> spotOverrides, Filterable... filters) {
         GetCardsMatchingFilterVisitor matchingFilterVisitor = new GetCardsMatchingFilterVisitor(game, Filters.and(filters, Filters.spottable));
         game.getGameState().iterateActiveCards(matchingFilterVisitor, spotOverrides);
         int result = matchingFilterVisitor.getCounter();
         //TODO: make this less dependent on how the definition is arranged
-        if (filters.length == 1)
-            result += game.getModifiersQuerying().getSpotBonus(game, filters[0]);
+        if (filters.length == 1 && spottingPlayer != null)
+            result += game.getModifiersQuerying().getSpotBonus(game, filters[0], spottingPlayer);
         return result;
     }
 
@@ -154,8 +171,20 @@ public class Filters {
 
     // Filters available
 
+    /**
+     * An event of the given phase (or a response event).  A card is what is printed on it, except an event
+     * printed with several phases while it is being played: that is an event of the phase it is played in and
+     * of no other (CR 4.2 "phase action"; GameState.getPhaseOfEventBeingPlayed, F-0292).
+     */
     public static Filter timeword(Timeword timeword) {
-        return (game, physicalCard) -> physicalCard.getBlueprint().hasTimeword(timeword);
+        return (game, physicalCard) -> {
+            if (game != null && game.getGameState() != null) {
+                final Timeword playedIn = game.getGameState().getPhaseOfEventBeingPlayed(physicalCard);
+                if (playedIn != null)
+                    return playedIn == timeword;
+            }
+            return physicalCard.getBlueprint().hasTimeword(timeword);
+        };
     }
 
     public static Filter maxResistance(final int resistance) {
@@ -197,7 +226,17 @@ public class Filters {
         return hasAnyCultureTokens(1);
     }
 
+    /**
+     * A card with at least the given number of culture tokens of any one culture on it.  A count of 0 or less is true
+     * of every card, as hasToken's is: the game keeps a culture's count at 0 on a card whose tokens of it were all
+     * removed, and a card that never had one has no count at all, so reading the counts would tell the two apart
+     * (F-0578: Grond 58_103's "remove X [sauron] tokens here" at X = 0 did nothing on a Grond that never had a token).
+     * @param count How many tokens of one culture the card must have.
+     * @return The filter.
+     */
     public static Filter hasAnyCultureTokens(final int count) {
+        if (count <= 0)
+            return (game, physicalCard) -> true;
         return (game, physicalCard) -> {
             Map<Token, Integer> tokens = game.getGameState().getTokens(physicalCard);
             for (Map.Entry<Token, Integer> tokenCount : tokens.entrySet()) {
@@ -276,14 +315,17 @@ public class Filters {
                 Filters.and(
                         CardType.ALLY,
                         (Filter) (game, physicalCard) -> {
+                            // A card that says the ally may not participate in skirmishes beats whatever would
+                            // have him skirmish: another card's "participates", or an assignment that takes an
+                            // ally wherever he is ("can't" beats "can").
+                            boolean preventedByCard = game.getModifiersQuerying().isAllyPreventedFromParticipatingInSkirmishes(game, assignedBySide, physicalCard);
+                            if (preventedByCard)
+                                return false;
                             if (allowAllyToSkirmish)
                                 return true;
                             boolean allowedToSkirmish = game.getModifiersQuerying().isAllyAllowedToParticipateInSkirmishes(game, assignedBySide, physicalCard);
                             if (allowedToSkirmish)
                                 return true;
-                            boolean preventedByCard = game.getModifiersQuerying().isAllyPreventedFromParticipatingInSkirmishes(game, assignedBySide, physicalCard);
-                            if (preventedByCard)
-                                return false;
                             return RuleUtils.isAllyAtHome(physicalCard, game.getGameState().getCurrentSiteNumber(), game.getGameState().getCurrentSiteBlock());
                         }),
                 Filters.and(
@@ -330,11 +372,9 @@ public class Filters {
 
                         if (assignedToSkirmish) {
                             if(!ignoreDefender) {
-                                int defender = game.getModifiersQuerying().getKeywordCount(game, physicalCard, Keyword.DEFENDER);
-                                var assignments = game.getGameState().getAssignments()
-                                        .stream().filter(x -> x.getFellowshipCharacter() == physicalCard || x.getShadowCharacters().contains(physicalCard)).collect(
-                                                Collectors.toSet());
-                                if(1 + defender <= assignments.size())
+                                // One more, with defender counted against the minions the character already
+                                // has (F-0355: not against the Assignment records naming him, never more than 1).
+                                if(!RuleUtils.hasRoomForAssignments(game, physicalCard, 1))
                                     return false;
                             }
                             else {
@@ -356,7 +396,12 @@ public class Filters {
     public static final Filter item = Filters.or(CardType.ARTIFACT, CardType.POSSESSION);
     public static final Filter character = Filters.or(CardType.ALLY, CardType.COMPANION, CardType.MINION);
 
-    public static final Filter ringBearer = (game, physicalCard) -> game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()) == physicalCard;
+    public static final Filter ringBearer = (NamesNoKind) (game, physicalCard) -> game.getGameState().getRingBearer(game.getGameState().getCurrentPlayerId()) == physicalCard;
+    /**
+     * The One Ring, by what is printed on it and not by what the game currently takes it for: a hindered card has
+     * no card type to be found by (CR 5.0 "hinder"), and the rules must still find a hindered Ring (Q-0109).
+     */
+    public static final Filter theOneRing = (game, physicalCard) -> physicalCard.getBlueprint().getCardType() == CardType.THE_ONE_RING;
 
     public static final Filter inSkirmish = (game, physicalCard) -> {
         Skirmish skirmish = game.getGameState().getSkirmish();
@@ -435,8 +480,13 @@ public class Filters {
                 && game.getModifiersQuerying().canBeExerted(game, source, physicalCard);
     }
 
-    public static Filter canHeal =
-            (game, physicalCard) -> game.getGameState().getWounds(physicalCard) > 0 && game.getModifiersQuerying().canBeHealed(game, physicalCard);
+    /**
+     * A wounded card that performingPlayer may heal a wound from by healSource's text (null for none).
+     */
+    public static Filter canHeal(final String performingPlayer, final PhysicalCard healSource) {
+        return (game, physicalCard) -> game.getGameState().getWounds(physicalCard) > 0
+                && game.getModifiersQuerying().canBeHealed(game, performingPlayer, physicalCard, healSource);
+    }
 
     public static final Filter notAssignedToSkirmish = (game, physicalCard) -> {
         for (Assignment assignment : game.getGameState().getAssignments()) {
@@ -471,19 +521,49 @@ public class Filters {
         };
     }
 
+    /**
+     * A card that could be played now by a card's effect ("play a ... from your discard pile", "... stacked
+     * here", the definition word Playable) or as a phase action.  A response event is not such a card: it is
+     * played in answer to its own trigger and to nothing else, so it is refused here unless it is also an event
+     * of the current phase (Eye of Barad-dur, Skirmish and Response).  Only the rule that offers response events
+     * in answer to their triggers asks with ignoreResponseEvents false.
+     */
     public static Filter playable(final int twilightModifier) {
-        return playable(twilightModifier, 0, false, false, false);
+        return playable(twilightModifier, 0, false, false, true);
     }
 
     public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
+        return playable(twilightModifier, withTwilightRemoved, 0, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+    }
+
+    /**
+     * @param withTwilightRemoved twilight that will have left the pool before the card is played
+     * @param withThreatsAdded threats that will have been added before the card is played
+     */
+    public static Filter playable(final int twilightModifier, final int withTwilightRemoved, final int withThreatsAdded, final boolean ignoreRoamingPenalty, final boolean ignoreCheckingDeadPile, final boolean ignoreResponseEvents) {
         return (game, physicalCard) -> {
             Side expectedSide = (physicalCard.getOwner().equals(game.getGameState().getCurrentPlayerId()) ? Side.FREE_PEOPLE : Side.SHADOW);
             final LotroCardBlueprint blueprint = physicalCard.getBlueprint();
             if (blueprint.getSide() != expectedSide)
                 return false;
 
-            return PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, withTwilightRemoved, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
+            return PlayUtils.checkPlayRequirements(game, physicalCard, Filters.any, withTwilightRemoved, withThreatsAdded, twilightModifier, ignoreRoamingPenalty, ignoreCheckingDeadPile, ignoreResponseEvents);
         };
+    }
+
+    /**
+     * A card in play that a card's effect could transfer now to one of the cards the filters accept (the
+     * definition word TransferableTo): nothing says the card cannot be transferred, and among those cards there
+     * is an active one it may go to (RuleUtils.getTransferTargetFilter: an eligible bearer other than the one it
+     * has).  It is the choice the Transfer effect makes of the card to transfer where it has checkTarget and a
+     * bearer to be chosen (F-0340), so a requirement written with it withholds "you may transfer ... to another
+     * eligible bearer" when a yes would move nothing (F-0324).
+     */
+    public static Filter transferableTo(final Filterable... to) {
+        final Filter toFilter = Filters.and(to);
+        return (game, physicalCard) -> physicalCard.getZone().isInPlay()
+                && game.getModifiersQuerying().canBeTransferred(game, physicalCard)
+                && Filters.countActive(game, toFilter, RuleUtils.getTransferTargetFilter(game, physicalCard)) > 0;
     }
 
     /**
@@ -494,7 +574,7 @@ public class Filters {
         return (game, physicalCard) -> PlayUtils.checkPlayRequirementsIgnoringCosts(game, physicalCard);
     }
 
-    public static final Filter any = (game, physicalCard) -> true;
+    public static final Filter any = (NamesNoKind) (game, physicalCard) -> true;
     public static final Filter none = (game, physicalCard) -> false;
     public static final Filter unique = (game, physicalCard) -> game.getModifiersQuerying().getUniqueness(game, physicalCard) == 1;
 
@@ -539,6 +619,63 @@ public class Filters {
     public static final Filter allyAtHome = Filters.and(
             CardType.ALLY,
             (Filter) (game, physicalCard) -> RuleUtils.isAllyAtHome(physicalCard, game.getGameState().getCurrentSiteNumber(), game.getGameState().getCurrentSiteBlock()));
+
+    /**
+     * A card at a site the given filter accepts: "while bearer is at a plains site", "heal that Man if at a
+     * plains" (the definition word atSite(...)).  CR 4.2 "ally": "Each ally in your support area is considered to
+     * be at his home site.  When your fellowship is at your ally's home site, that ally is considered to be at the
+     * same site as the fellowship."  So an ally is at each of his home sites that lies on the adventure path
+     * (RuleUtils.getAllyHomeSitesOnThePath), wherever the fellowship is, and in a skirmish away from home as well
+     * (Ketura on F-0503); an ally with no home on the path (a home not yet laid, a path of another block, a
+     * Shadows path, where "allies have no home sites") is at no site and is at a site of no terrain.  Every other
+     * card is at the site the fellowship is at.  A card borne is where the card at the bottom of its bearers is,
+     * and an ally is known by what is printed on him, so a hindered ally is still at his home site (Q-0252).
+     * The site is asked the filter as it stands, a terrain a card has given it included.  F-0518, engine pass 48.
+     */
+    public static Filter atSite(final Filterable siteFilter) {
+        return (game, physicalCard) -> {
+            PhysicalCard at = physicalCard;
+            // A card is borne by one card at most, so the walk ends; the count is against a chain that is broken.
+            for (int depth = 0; at.getAttachedTo() != null && depth < 50; depth++)
+                at = at.getAttachedTo();
+            if (at.getBlueprint().getCardType() == CardType.ALLY) {
+                for (PhysicalCard homeSite : RuleUtils.getAllyHomeSitesOnThePath(game, at)) {
+                    if (accepts(game, homeSite, siteFilter))
+                        return true;
+                }
+                return false;
+            }
+            final PhysicalCard currentSite = game.getGameState().getCurrentSite();
+            return currentSite != null && accepts(game, currentSite, siteFilter);
+        };
+    }
+
+    /**
+     * A site on the adventure path of whose number the given player's adventure deck holds a site the given filter
+     * accepts: the site a card that replaces it "with your site of the same number" would lay
+     * (PlaySiteEffect.findSitesToPlay, asked as the definition's playSite asks it, the block in the filter).  The
+     * definition word sameNumberInYourAdventureDeck(...), the player the one whose action it is.  Paths Seldom
+     * Trodden 1_222, Úlairë Nelya 1_233 and Dark Places 2_55 lay only their own block's site, on any path, and are
+     * not offered where there is none to lay (Q-0327, the shape of F-0379).  What would bar the replacing at
+     * resolution ("cannot be replaced", a bar on playing sites) is not asked here.  A site with no number (one
+     * not laid) is not accepted; a controlled site keeps its number and is.
+     */
+    public static Filter sameNumberInAdventureDeck(final String playerId, final Filterable deckSiteFilter) {
+        return (game, physicalCard) -> {
+            final Integer siteNumber = physicalCard.getSiteNumber();
+            if (physicalCard.getBlueprint().getCardType() != CardType.SITE || siteNumber == null)
+                return false;
+            return !PlaySiteEffect.findSitesToPlay(game, playerId, null, siteNumber, deckSiteFilter).isEmpty();
+        };
+    }
+
+    /**
+     * A character a card says "may not participate in archery fire" (Streets of Edoras). Participating has
+     * parts: counting for the archery total, and taking archery wounds. The bar is on both, so a card that sends
+     * archery wounds to allies sends none to this one.
+     */
+    public static final Filter barredFromArcheryFire =
+            (game, physicalCard) -> game.getModifiersQuerying().isAllyPreventedFromParticipatingInArcheryFire(game, physicalCard);
 
     public static Filter allyWithSameHome(final PhysicalCard card) {
         return Filters.and(
@@ -612,9 +749,32 @@ public class Filters {
     }
 
     public static Filter hasAttached(int count, final Filterable... filters) {
+        return hasAttached(count, SpotOverride.NONE, filters);
+    }
+
+    /**
+     * Bearing at least that many cards that the filters accept, counted with the overrides given: with
+     * SpotOverride.INCLUDE_HINDERED a hindered card the bearer bears is counted, which is what "bearing 3 or more
+     * cards" means where the text says "cards" and nothing more (Ketura, 2026-10-07, on Lying Counsel 15_85; a
+     * hindered card is still a card, and still borne).
+     */
+    public static Filter hasAttached(int count, Map<InactiveReason, Boolean> spotOverrides, final Filterable... filters) {
         return (game, physicalCard) -> {
             List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
-            return (Filters.filterActive(game, physicalCardList, filters).size() >= count);
+            return (Filters.filterActive(game, spotOverrides, physicalCardList, filters).size() >= count);
+        };
+    }
+
+    /**
+     * The card that bears the given card, as that card's own text means it ("bearer"). This is hasAttached, but a
+     * hindered card still has its bearer: it is still attached, and CR 5.0 "hinder" has the text of a card that is
+     * hindered in the middle of its own special ability or trigger carried out until fulfilled. Nothing of a
+     * hindered card starts by this: its modifiers, triggers and abilities are stopped where the card is hindered.
+     */
+    public static Filter bearerOf(final PhysicalCard attachment) {
+        return (NamesNoKind) (game, physicalCard) -> {
+            List<PhysicalCard> physicalCardList = game.getGameState().getAttachedCards(physicalCard);
+            return !Filters.filterActive(game, SpotOverride.INCLUDE_HINDERED, physicalCardList, attachment).isEmpty();
         };
     }
 
@@ -632,7 +792,7 @@ public class Filters {
     }
 
     public static Filter not(final Filterable... filters) {
-        return (game, physicalCard) -> !Filters.and(filters).accepts(game, physicalCard);
+        return (RulesAKindOut) (game, physicalCard) -> !Filters.and(filters).accepts(game, physicalCard);
     }
 
     public static Filter sameCard(final PhysicalCard card) {
@@ -644,12 +804,67 @@ public class Filters {
         final Set<Integer> cardIds = new HashSet<>();
         for (PhysicalCard card : cards)
             cardIds.add(card.getCardId());
-        return (game, physicalCard) -> cardIds.contains(physicalCard.getCardId());
+        return (NamesNoKind) (game, physicalCard) -> cardIds.contains(physicalCard.getCardId());
     }
 
     public static Filter zone(final Zone zone) {
         return (game, physicalCard) -> physicalCard.getZone() == zone;
     }
+
+    /**
+     * Whether the card is in a support area: lying in one, or borne, at any depth, by a card that is.  A card
+     * that a companion or a minion bears is not.  Ketura, 2026-10-07 (Q-0099): "'Support' is meant to be shorthand
+     * for 'in the support area'.  A card attached to another is on Gemp in the 'attached zone', but ultimately
+     * that's an implementation detail; it is still 'in the support area'."  An ally and a site that a player
+     * controls lie in a support area, so what they bear is in it too.
+     */
+    public static boolean isInSupportArea(PhysicalCard card) {
+        return supportAreaOf(card) != null;
+    }
+
+    /**
+     * The player in whose support area the card is, or null if it is in nobody's.  Ketura, 2026-10-07 (Q-0101):
+     * "If my opponent's Black Breath is on my Elrond, it's in my support area, because that's where Elrond is."
+     * So the area is that of the card at the bottom of the chain of bearers, whoever owns the cards above it: an
+     * ally lies in its owner's support area, and a site a player controls in the support area of the player who
+     * controls it, whoever's adventure deck it came from.  A stacked card is in nobody's ("Stacked cards are
+     * definitely not seen"), and so is anything a companion or a minion bears.
+     */
+    public static String supportAreaOf(PhysicalCard card) {
+        PhysicalCard at = card;
+        // A card is borne by one card at most, so the walk ends; the count is against a chain that is broken.
+        for (int depth = 0; at != null && depth < 50; depth++) {
+            if (at.getZone() == Zone.SUPPORT)
+                return at.getCardController() != null ? at.getCardController() : at.getOwner();
+            if (at.getZone() != Zone.ATTACHED)
+                return null;
+            at = at.getAttachedTo();
+        }
+        return null;
+    }
+
+    /**
+     * "In <that player's> support area", borne cards included (see supportAreaOf).
+     */
+    public static Filter inSupportAreaOf(final String playerId) {
+        return (game, physicalCard) -> playerId != null && playerId.equals(supportAreaOf(physicalCard));
+    }
+
+    /**
+     * "In an opponent's support area", for the player given: in a support area that is not that player's.
+     */
+    public static Filter inSupportAreaOfAnOpponentOf(final String playerId) {
+        return (game, physicalCard) -> {
+            String area = supportAreaOf(physicalCard);
+            return area != null && !area.equals(playerId);
+        };
+    }
+
+    /**
+     * A "support card": a card in a support area (see isInSupportArea).  Filters.zone(Zone.SUPPORT) is the card
+     * lying in the support area itself, which is what "transfer this from your support area" means.
+     */
+    public static final Filter inSupportArea = (game, physicalCard) -> isInSupportArea(physicalCard);
 
     public static Filter hasWounds(final int wounds) {
         return (game, physicalCard) -> game.getGameState().getWounds(physicalCard) >= wounds;
@@ -667,8 +882,65 @@ public class Filters {
         return (game, physicalCard) -> game.getModifiersQuerying().isCardType(game, physicalCard, cardType);
     }
 
+    /**
+     * Borne by a card that every one of the filters accepts.  A hindered bearer has no title, culture, card type,
+     * race or number to be found by (CR 5.0 "hinder"), so a card it bears is not "borne by a companion" or "borne
+     * by a Hobbit" (Ketura on Q-0108): a hindered bearer is found only where no filter given finds him by a kind
+     * of card (findsABearerByNoKind).  The card borne is still in play and still borne, and "the cards this card
+     * bears", "a card on bearer" and "each attached follower" go on finding it.
+     * <p>
+     * A not(...) is the other thing a hindered bearer is asked: it finds the bearer by nothing and only rules a
+     * kind of bearer out, and it is asked of him as he is printed.  Asfaloth 1_31's attachedTo(not(ally)) is
+     * there to leave out an ally, who is at his home site and not at the fellowship's: borne by a hindered
+     * companion it is with the fellowship all the same, and borne by a hindered ally it is still at his home
+     * (Ketura on Q-0252).  A not(...) joined to another word arrives here inside an and, and is not seen.
+     */
     public static Filter attachedTo(final Filterable... filters) {
-        return (game, physicalCard) -> physicalCard.getAttachedTo() != null && Filters.and(filters).accepts(game, physicalCard.getAttachedTo());
+        final boolean findsAHinderedBearer = findsABearerByNoKind(filters);
+        return (game, physicalCard) -> {
+            final PhysicalCard bearer = physicalCard.getAttachedTo();
+            if (bearer == null)
+                return false;
+            if (!findsAHinderedBearer && game.getGameState().isHindered(bearer))
+                return false;
+            return Filters.and(filters).accepts(game, bearer);
+        };
+    }
+
+    /**
+     * A filter that says which card is meant and nothing of what kind of card it is: the cards given (in), the
+     * card that bears a given card (bearerOf), the Ring-bearer, who is that by the rules and not by anything
+     * printed on him, and any card at all.  A hindered card is still found by these.  A filter is given this type
+     * where it is made.  Every other filter but a not(...) by itself (RulesAKindOut) is taken to go by something
+     * a hindered card has not got: its title, culture, card type, race, item class, keywords and numbers "do not
+     * apply" (CR 5.0 "hinder").  That takes in any filter built with and or or, which cannot be seen into, and so
+     * every attachedTo of a definition that gives more than one word for the bearer: FilterFactory joins them
+     * before they come here.  Two things a hindered card does keep are not marked, because no definition writes
+     * either inside attachedTo: its side, and being hindered.
+     */
+    private interface NamesNoKind extends Filter {
+    }
+
+    /**
+     * A filter made by not(...): it says what a card is not.  Given to attachedTo by itself it finds the bearer
+     * by no kind of card, so a hindered bearer is asked it too, as he is printed.
+     */
+    private interface RulesAKindOut extends Filter {
+    }
+
+    /**
+     * Whether attachedTo asks these filters of a hindered bearer: none of them finds the bearer by a kind of card.
+     * Each is a card itself, a filter made as NamesNoKind, or a not(...) (RulesAKindOut).  A card given as itself
+     * is a card's own "self": its text is not in force while it is hindered, so this is reached only by a text
+     * being carried out "until fulfilled" after its card was hindered in the middle of it (CR 5.0 "hinder"), and
+     * no card in print shows it.
+     */
+    private static boolean findsABearerByNoKind(final Filterable... filters) {
+        for (Filterable filter : filters) {
+            if (!(filter instanceof PhysicalCard || filter instanceof NamesNoKind || filter instanceof RulesAKindOut))
+                return false;
+        }
+        return true;
     }
 
     public static Filter stackedOn(final Filterable... filters) {
@@ -833,11 +1105,24 @@ public class Filters {
         }
     }
 
+    /**
+     * Gathers the cards a filter accepts, and hands them back in the order of their card ids: the same order in
+     * every run of the same game, whoever asks (Ketura on Q-0142).  A card is given a new id as it comes into play,
+     * so for cards in play this is the order they came into play, and a card that took another's place stands
+     * where that one stood.  Whatever takes "each" or "every" card matching a filter takes them in this order,
+     * and so does a decision that lists them.
+     */
     private static class GetCardsMatchingFilterVisitor extends CompletePhysicalCardVisitor {
         private final LotroGame game;
         private final Filter _filter;
 
-        private final Set<PhysicalCard> _physicalCards = new HashSet<>();
+        // Kept in the order visited.  A set whose order was the cards' hash codes stood here before, and those
+        // differ from one run to the next.
+        private final Set<PhysicalCard> _physicalCards = new LinkedHashSet<>();
+        // The cards in play are nearly always visited in the order of their ids already, so the sorting is only
+        // done when a card has been met out of turn.
+        private boolean _inIdOrder = true;
+        private int _lastCardId = Integer.MIN_VALUE;
 
         private GetCardsMatchingFilterVisitor(LotroGame game, Filter filter) {
             this.game = game;
@@ -846,8 +1131,14 @@ public class Filters {
 
         @Override
         protected void doVisitPhysicalCard(PhysicalCard physicalCard) {
-            if (_filter.accepts(game, physicalCard))
-                _physicalCards.add(physicalCard);
+            if (_filter.accepts(game, physicalCard)) {
+                if (_physicalCards.add(physicalCard)) {
+                    final int cardId = physicalCard.getCardId();
+                    if (cardId < _lastCardId)
+                        _inIdOrder = false;
+                    _lastCardId = cardId;
+                }
+            }
         }
 
         public int getCounter() {
@@ -855,7 +1146,12 @@ public class Filters {
         }
 
         public Set<PhysicalCard> getPhysicalCards() {
-            return _physicalCards;
+            if (_inIdOrder)
+                return _physicalCards;
+
+            List<PhysicalCard> sorted = new ArrayList<>(_physicalCards);
+            sorted.sort(Comparator.comparingInt(PhysicalCard::getCardId));
+            return new LinkedHashSet<>(sorted);
         }
     }
 }

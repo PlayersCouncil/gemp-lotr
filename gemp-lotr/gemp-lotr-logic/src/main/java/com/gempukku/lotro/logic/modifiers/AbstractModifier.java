@@ -178,7 +178,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public boolean isAssignmentCostPaid(LotroGame game, PhysicalCard card) {
+    public boolean appendExtraAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion) {
         return false;
     }
 
@@ -298,7 +298,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public boolean canBeHealed(LotroGame game, PhysicalCard card) {
+    public boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard healSource) {
         return true;
     }
 
@@ -338,7 +338,7 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
-    public int getSpotCountModifier(LotroGame game, Filterable filter) {
+    public int getSpotCountModifier(LotroGame game, Filterable filter, String spottingPlayer) {
         return 0;
     }
 
@@ -379,8 +379,18 @@ public abstract class AbstractModifier implements Modifier {
     }
 
     @Override
+    public int getHandSizeModifier(LotroGame game, String playerId) {
+        return 0;
+    }
+
+    @Override
     public boolean lostAllKeywords(LotroGame game, PhysicalCard card) {
         return false;
+    }
+
+    @Override
+    public int getKeywordGainLimit(LotroGame game, PhysicalCard card, Keyword keyword) {
+        return Integer.MAX_VALUE;
     }
 
     @Override

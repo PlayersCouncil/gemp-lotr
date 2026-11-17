@@ -34,7 +34,7 @@ public class MemorizeDiscard implements EffectAppenderProducer {
 
         final FilterableSource filterSource = environment.getFilterFactory().generateFilter(filter, environment);
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new UnrespondableEffect() {

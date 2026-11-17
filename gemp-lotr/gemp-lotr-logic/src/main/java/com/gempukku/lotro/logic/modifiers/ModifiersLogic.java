@@ -3,8 +3,10 @@ package com.gempukku.lotro.logic.modifiers;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.ExtraPlayCost;
+import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.actions.AssignmentCostAction;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.modifiers.evaluator.Evaluator;
 import com.gempukku.lotro.logic.timing.Action;
@@ -19,10 +21,15 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     private final List<Modifier> _untilEndOfTurnModifiers = new LinkedList<>();
 
     private final Set<Modifier> _skipSet = new HashSet<>();
+    // The modifiers isInForce is working out, innermost last; the first _workingOutDepth entries are in use.
+    private final List<WorkingOut> _workingOut = new ArrayList<>();
+    private int _workingOutDepth = 0;
 
     private final Map<Phase, Map<String, LimitCounter>> _endOfPhaseLimitCounters = new HashMap<>();
     private final Map<Phase, Map<String, LimitCounter>> _startOfPhaseLimitCounters = new HashMap<>();
     private final Map<String, LimitCounter> _turnLimitCounters = new HashMap<>();
+    // "Limit once per site": cleared when the fellowship moves to another site, and with the turn.
+    private final Map<String, LimitCounter> _siteLimitCounters = new HashMap<>();
 
     private int _drawnThisPhaseCount = 0;
     private final Map<Integer, Integer> _woundsPerPhaseMap = new HashMap<>();
@@ -83,6 +90,29 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
+    public LimitCounter getSiteLimitCounter(PhysicalCard card) {
+        return getSiteLimitCounter(card, "");
+    }
+
+    @Override
+    public LimitCounter getSiteLimitCounter(PhysicalCard card, String prefix) {
+        LimitCounter limitCounter = _siteLimitCounters.get(prefix + card.getCardId());
+        if (limitCounter == null) {
+            limitCounter = new DefaultLimitCounter();
+            _siteLimitCounters.put(prefix + card.getCardId(), limitCounter);
+        }
+        return limitCounter;
+    }
+
+    /**
+     * The fellowship has moved to another site: what was counted "per site" was counted at the site it left.
+     * An exertion on arriving, which comes after this, belongs to the site arrived at (F-0146).
+     */
+    public void signalFellowshipMoved() {
+        _siteLimitCounters.clear();
+    }
+
+    @Override
     public void addedWound(PhysicalCard card) {
         final int cardId = card.getCardId();
         final Integer previousWounds = _woundsPerPhaseMap.get(cardId);
@@ -130,13 +160,53 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         return getKeywordModifiersAffectingCard(game, modifierEffect, null, card);
     }
 
+    /**
+     * The modifiers that say what the SOURCE of an effect may not do: "burdens cannot be added", "threats cannot
+     * be removed by Free Peoples cards", "Shadow cards may not discard cards from your hand".  They are asked
+     * about the card whose text is being carried out, and they hold whether or not that card is hindered: a card
+     * that hinders itself as a cost, or is hindered in answer to its ability, still carries the ability out
+     * (CR 5.0 "hinder"), and "cannot" binds what it then does (Ketura on Q-0070, "can't > can"; F-0151).
+     * getModifiersAffectingCard answers with nothing for a hindered card, which is right for what the card
+     * itself has (its text, its keywords, the bonuses on it) and wrong for what its effect is forbidden.
+     */
+    private List<Modifier> getModifiersAffectingSource(LotroGame game, ModifierEffect modifierEffect, PhysicalCard source) {
+        return getKeywordModifiersAffectingCard(game, modifierEffect, null, source, true);
+    }
+
+    /**
+     * The modifiers that keep a card from being taken out of play: "cannot be discarded", "cannot be returned to
+     * hand".  For a card that is not hindered these are all of them, as getModifiersAffectingCard gives them.  A
+     * hindered card gets nothing from other cards, their protections included (CR 5.0 "hinder"), but what the
+     * RULES forbid about it still holds: "The Ring-bearer cannot be discarded or returned to your hand" (CR 4.2
+     * "Ring-bearer") is no card's text, and a discard that reaches hindered cards must not take a hindered
+     * Ring-bearer and lose the game (F-0174).  A rule's modifier is one with no source card (RingBearerRule and
+     * the other rule classes add theirs so).  This is the counterpart of getModifiersAffectingSource: there, what
+     * a hindered source is forbidden to do; here, what may not be done to a hindered card by rule.
+     */
+    private List<Modifier> getModifiersProtectingCard(LotroGame game, ModifierEffect modifierEffect, PhysicalCard card) {
+        if (card == null || !game.getGameState().isHindered(card))
+            return getModifiersAffectingCard(game, modifierEffect, card);
+
+        List<Modifier> rules = new LinkedList<>();
+        for (Modifier modifier : getKeywordModifiersAffectingCard(game, modifierEffect, null, card, true)) {
+            if (modifier.getSource() == null)
+                rules.add(modifier);
+        }
+        return rules;
+    }
+
     private List<Modifier> getKeywordModifiersAffectingCard(LotroGame game, ModifierEffect modifierEffect, Keyword keyword, PhysicalCard card) {
+        return getKeywordModifiersAffectingCard(game, modifierEffect, keyword, card, false);
+    }
+
+    private List<Modifier> getKeywordModifiersAffectingCard(LotroGame game, ModifierEffect modifierEffect, Keyword keyword, PhysicalCard card, boolean evenIfHindered) {
         List<Modifier> modifiers = _modifiers.get(modifierEffect);
         if (modifiers == null)
             return Collections.emptyList();
 
+        //A hindered card has no text and nothing applies to it.
         //If we are checking that the card has been hindered, we don't want to abort early
-        if(card != null && keyword != Keyword.HINDERED && game.getGameState().isHindered(card))
+        if(!evenIfHindered && card != null && keyword != Keyword.HINDERED && game.getGameState().isHindered(card))
             return Collections.emptyList();
 
         LinkedList<Modifier> liveModifiers = new LinkedList<>();
@@ -154,21 +224,171 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
             if (keyword == null || keywordMatches) {
                 if (!_skipSet.contains(modifier)) {
-                    _skipSet.add(modifier);
-                    Condition condition = modifier.getCondition();
-                    if (condition == null || condition.isFullfilled(game))
-                        if (modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null ||
-                                modifier.isNonCardTextModifier() ||
-                                !hasTextRemoved(game, modifier.getSource())) {
-                            if (card == null || modifier.affectsCard(game, card))
-                                liveModifiers.add(modifier);
-                        }
-                    _skipSet.remove(modifier);
+                    if (isInForce(game, modifierEffect, modifier, card))
+                        liveModifiers.add(modifier);
+                } else if (isAssumedInForce(modifier, card)) {
+                    // Worked out as if it were in force, to see whether its answer leans on itself (CR 4.2 "loops").
+                    liveModifiers.add(modifier);
+                } else if (isHeldWhileBeingWorkedOut(game, modifier, modifierEffect)
+                        && (card == null || modifier.affectsCard(game, card))) {
+                    // Asked about while its own condition is being worked out: in force if it held (Q-0276).
+                    liveModifiers.add(modifier);
                 }
             }
         }
 
         return liveModifiers;
+    }
+
+    /**
+     * Whether a modifier is in force for a card (or, with no card, at all): its condition holds, the text of its
+     * card has not been taken away, and it affects the card.  While this is worked out the modifier is left out of
+     * every question asked inside it (the skip set), so that two texts that read each other do not ask each other
+     * for ever.
+     *
+     * That alone gives the wrong answer where the two texts undo each other.  CR 4.2 "loops": "When an infinite
+     * loop occurs that includes no voluntary actions, the loop ends immediately with no effect", with Frodo, Weary
+     * From the Journey 15_144 skirmishing Black Land Observer 15_101 or Wandering Hillman 15_94: "Neither the
+     * minions nor Frodo would get the strength bonuses."  Frodo's +2 makes him 10, which gives the Observer +3,
+     * which takes the +2 away; worked out with his own +2 left out, each of the two saw the other without its bonus
+     * and both applied (F-0536).
+     *
+     * So when the working out asked about this very modifier for this very card again, and the answer is that it is
+     * in force, it is worked out a second time as if it were in force.  If it then is not, its answer undoes itself,
+     * which is the loop going round, and it is not in force: no effect.  If it still is, its answer does not lean on
+     * itself and stands.  A modifier that is not in force with itself left out stays so either way, so a text that
+     * holds only because it holds is not in force, as before.  A loop of texts that answer the same either way
+     * (Frodo at 10 before his bonus: the Observer is 11 whatever Frodo gets) is no loop, and the texts apply.  A
+     * modifier asked about again only for ANOTHER card is not worked out twice: it is left out there, as before.
+     * The second working out costs nothing where no text reads itself back.  A condition that counts its own grant
+     * (SelfSpottingCondition, Q-0276) is held as it was and is not worked out twice.
+     */
+    private boolean isInForce(LotroGame game, ModifierEffect modifierEffect, Modifier modifier, PhysicalCard card) {
+        final WorkingOut workingOut = pushWorkingOut(modifier, card);
+        _skipSet.add(modifier);
+        try {
+            boolean inForce = worksOutInForce(game, modifierEffect, modifier, card);
+            if (inForce && workingOut.askedAgain && !(modifier.getCondition() instanceof SelfSpottingCondition)) {
+                workingOut.assumedInForce = true;
+                inForce = worksOutInForce(game, modifierEffect, modifier, card);
+            }
+            return inForce;
+        } finally {
+            _skipSet.remove(modifier);
+            popWorkingOut();
+        }
+    }
+
+    private boolean worksOutInForce(LotroGame game, ModifierEffect modifierEffect, Modifier modifier, PhysicalCard card) {
+        Condition condition = modifier.getCondition();
+        if (condition != null && !condition.isFullfilled(game))
+            return false;
+        if (modifierEffect != ModifierEffect.TEXT_MODIFIER && modifier.getSource() != null
+                && !modifier.isNonCardTextModifier() && hasTextRemoved(game, modifier.getSource()))
+            return false;
+        return card == null || modifier.affectsCard(game, card);
+    }
+
+    /**
+     * A modifier that isInForce is working out, met again inside its own working out: notes that it was met again
+     * if it is met for the same card, and answers whether it is being worked out as if in force.  A modifier left
+     * out by any other part of this class (affectsCardWithSkipSet, hasKeywordAsGiven) has no entry and answers false.
+     */
+    private boolean isAssumedInForce(Modifier modifier, PhysicalCard card) {
+        for (int i = _workingOutDepth - 1; i >= 0; i--) {
+            final WorkingOut workingOut = _workingOut.get(i);
+            if (workingOut.modifier == modifier) {
+                if (workingOut.card != card)
+                    return false;
+                workingOut.askedAgain = true;
+                return workingOut.assumedInForce;
+            }
+        }
+        return false;
+    }
+
+    private WorkingOut pushWorkingOut(Modifier modifier, PhysicalCard card) {
+        final WorkingOut workingOut;
+        if (_workingOutDepth == _workingOut.size()) {
+            workingOut = new WorkingOut();
+            _workingOut.add(workingOut);
+        } else {
+            workingOut = _workingOut.get(_workingOutDepth);
+        }
+        _workingOutDepth++;
+        workingOut.modifier = modifier;
+        workingOut.card = card;
+        workingOut.assumedInForce = false;
+        workingOut.askedAgain = false;
+        return workingOut;
+    }
+
+    private void popWorkingOut() {
+        final WorkingOut workingOut = _workingOut.get(--_workingOutDepth);
+        workingOut.modifier = null;
+        workingOut.card = null;
+    }
+
+    /** One modifier that isInForce is working out; kept in a stack that is reused, as this is asked very often. */
+    private static final class WorkingOut {
+        private Modifier modifier;
+        private PhysicalCard card;
+        private boolean assumedInForce;
+        private boolean askedAgain;
+    }
+
+    private static boolean namesKeyword(Modifier modifier, Keyword keyword) {
+        Modifier named = modifier instanceof DelegateModifier delegateModifier ? delegateModifier.delegate : modifier;
+        return named instanceof KeywordAffectingModifier keyModifier && keyModifier.getKeywords() != null
+                && keyModifier.getKeywords().contains(keyword);
+    }
+
+    /**
+     * A modifier whose condition counts its own grant once it has held (SelfSpottingCondition: Sentry Uruk 15_170,
+     * Q-0276), asked about while that condition is being worked out: in force if the condition held when it was
+     * last worked out and the text of its card has not been taken away.  Every other modifier is left out while
+     * it is being worked out, as before.
+     */
+    private boolean isHeldWhileBeingWorkedOut(LotroGame game, Modifier modifier, ModifierEffect modifierEffect) {
+        if (!(modifier.getCondition() instanceof SelfSpottingCondition selfSpotting) || !selfSpotting.hasHeld())
+            return false;
+        return modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null
+                || modifier.isNonCardTextModifier() || !hasTextRemoved(game, modifier.getSource());
+    }
+
+    /**
+     * Works out, at each step of the game, the condition of every modifier that counts its own grant once it has
+     * held (SelfSpottingCondition), so that what each remembers follows the board whether or not anything asked
+     * about its card in between: a fierce minion that comes into play and is killed before anything asks whether
+     * Sentry Uruk 15_170 is fierce has still made it fierce (Q-0276).  Called from TurnProcedure beside the other
+     * state-based checks.
+     */
+    @Override
+    public void checkSelfSpottingConditions(LotroGame game) {
+        List<Modifier> modifiers = _modifiers.get(ModifierEffect.GIVE_KEYWORD_MODIFIER);
+        if (modifiers == null)
+            return;
+        // Gathered first: working a condition out reads the modifiers, and in nearly every game there is none.
+        List<Modifier> selfSpotting = null;
+        for (Modifier modifier : modifiers) {
+            if (modifier.getCondition() instanceof SelfSpottingCondition) {
+                if (selfSpotting == null)
+                    selfSpotting = new ArrayList<>();
+                selfSpotting.add(modifier);
+            }
+        }
+        if (selfSpotting == null)
+            return;
+        for (Modifier modifier : selfSpotting) {
+            if (!_skipSet.contains(modifier)) {
+                _skipSet.add(modifier);
+                try {
+                    modifier.getCondition().isFullfilled(game);
+                } finally {
+                    _skipSet.remove(modifier);
+                }
+            }
+        }
     }
 
     public void signalEndOfPhase(Phase phase) {
@@ -210,6 +430,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         _untilEndOfPhaseModifiers.clear();
 
         _turnLimitCounters.clear();
+        _siteLimitCounters.clear();
         _startOfPhaseLimitCounters.clear();
         _endOfPhaseLimitCounters.clear();
     }
@@ -244,13 +465,13 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public Collection<Modifier> getModifiersAffecting(LotroGame game, PhysicalCard card) {
-        Set<Modifier> result = new HashSet<>();
+        Set<Modifier> result = new LinkedHashSet<>();
         for (List<Modifier> modifiers : _modifiers.values()) {
             for (Modifier modifier : modifiers) {
                 Condition condition = modifier.getCondition();
                 if (condition == null || condition.isFullfilled(game))
                     if (affectsCardWithSkipSet(game, card, modifier))
-                        result.add(modifier);
+                        result.addAll(modifier.getShownAsAffecting(game, card));
             }
         }
         return result;
@@ -306,6 +527,25 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean hasKeyword(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
+        return hasKeywordAsGiven(game, physicalCard, keyword)
+                && getKeywordGainLimit(game, physicalCard, keyword) > 0;
+    }
+
+    /**
+     * The most of a keyword a card may have while it is barred from gaining keywords (CantGainKeywordsModifier,
+     * Into the Caves 17_100; Q-0282): what it had as the bar was laid. Integer.MAX_VALUE with no bar, and for what
+     * is no game text keyword (the keywords a lose-all removes: isCandidateForKeywordRemovalWithTextRemoval).
+     */
+    private int getKeywordGainLimit(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
+        if (!isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword))
+            return Integer.MAX_VALUE;
+        int limit = Integer.MAX_VALUE;
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.CANT_GAIN_KEYWORDS_MODIFIER, physicalCard))
+            limit = Math.min(limit, modifier.getKeywordGainLimit(game, physicalCard, keyword));
+        return limit;
+    }
+
+    private boolean hasKeywordAsGiven(LotroGame game, PhysicalCard physicalCard, Keyword keyword) {
         LoggingThreadLocal.logMethodStart(physicalCard, "hasKeyword " + keyword.getHumanReadable());
         try {
             if (isCandidateForKeywordRemovalWithTextRemoval(game, physicalCard, keyword) &&
@@ -332,6 +572,17 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                             } finally {
                                 _skipSet.remove(modifier);
                             }
+                        } else if (modifier.getCondition() instanceof SelfSpottingCondition) {
+                            // Only a modifier that counts its own grant reaches here while it is being worked
+                            // out (isHeldWhileBeingWorkedOut): it gives what it held (Q-0276).
+                            if (modifier.hasKeyword(game, physicalCard, keyword))
+                                return true;
+                        } else if (isAssumedInForce(modifier, physicalCard)) {
+                            // Worked out as if in force (isInForce, CR 4.2 "loops"): it gives the keyword it names.
+                            // One that names none (a copy of another card's keywords) is read as giving nothing,
+                            // as it was before, and is not asked, as asking could come back here.
+                            if (namesKeyword(modifier, keyword))
+                                return true;
                         } else {
                             return false;
                         }
@@ -363,7 +614,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 if (appliesKeywordModifier(game, physicalCard, modifier.getSource(), keyword))
                     result += modifier.getKeywordCountModifier(game, physicalCard, keyword);
             }
-            return Math.max(0, result);
+            return Math.min(Math.max(0, result), getKeywordGainLimit(game, physicalCard, keyword));
         } finally {
             LoggingThreadLocal.logMethodEnd();
         }
@@ -414,6 +665,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 result += modifier.getArcheryTotalModifier(game, side);
             }
         }
+        return Math.max(0, result);
+    }
+
+    @Override
+    public int getHandSize(LotroGame game, String playerId) {
+        int result = game.getFormat().getHandSize();
+        for (Modifier modifier : getModifiers(game, ModifierEffect.HAND_SIZE_MODIFIER))
+            result += modifier.getHandSizeModifier(game, playerId);
         return Math.max(0, result);
     }
 
@@ -514,18 +773,42 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public int getCurrentTwilightCost(LotroGame game, PhysicalCard physicalCard) {
+        final LotroCardBlueprint blueprint = physicalCard.getBlueprint();
+        // A site has a Shadow number and not a twilight cost.  What changes it ("Each site's Shadow number is -1")
+        // changes it where the site lies, so a site is read with everything that applies.
+        if (blueprint.getCardType() == CardType.SITE)
+            return getTwilightCostToPlay(game, physicalCard, null, 0, true);
+        // A card in play costs the number printed on it (CR 4.2 "twilight cost": "Cards already in play that
+        // affect another card's twilight cost have that effect only when the card to be modified is coming into
+        // play"; and by Ketura's ruling of 2026-10-06 the card's own text about its cost is read the same way).
+        final Zone zone = physicalCard.getZone();
+        if (zone != null && zone.isInPlay())
+            return Math.max(0, blueprint.getTwilightCost());
+        // Anywhere else the question is what the card would cost to play, the roaming penalty apart.
         return getTwilightCostToPlay(game, physicalCard, null, 0, true);
+    }
+
+    @Override
+    public int getTwilightCostToTransfer(LotroGame game, PhysicalCard physicalCard) {
+        // A card being transferred is in play, and is not coming into play: neither another card's text nor its
+        // own changes the number printed on it.
+        return Math.max(0, physicalCard.getBlueprint().getTwilightCost());
     }
 
     @Override
     public int getTwilightCostToPlay(LotroGame game, PhysicalCard physicalCard, PhysicalCard target, int twilightCostModifier, boolean ignoreRoamingPenalty) {
         LoggingThreadLocal.logMethodStart(physicalCard, "getTwilightCost");
         try {
-            int result = physicalCard.getBlueprint().getTwilightCost() + twilightCostModifier;
-            result += physicalCard.getBlueprint().getTwilightCostModifier(game, physicalCard, target);
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TWILIGHT_COST_MODIFIER, physicalCard)) {
-                result += modifier.getTwilightCostModifier(game, physicalCard, target, ignoreRoamingPenalty);
-            }
+            // What a card costs to play is what it costs to play now: an event printed with several phases is
+            // priced as an event of this one (CR 4.2 "phase action"), before its play as it is during it.
+            int result = game.getGameState().asIfBeingPlayed(physicalCard, () -> {
+                int cost = physicalCard.getBlueprint().getTwilightCost() + twilightCostModifier;
+                cost += physicalCard.getBlueprint().getTwilightCostModifier(game, physicalCard, target);
+                for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.TWILIGHT_COST_MODIFIER, physicalCard)) {
+                    cost += modifier.getTwilightCostModifier(game, physicalCard, target, ignoreRoamingPenalty);
+                }
+                return cost;
+            });
             result = Math.max(0, result);
 
             if (!ignoreRoamingPenalty && hasKeyword(game, physicalCard, Keyword.ROAMING)) {
@@ -724,6 +1007,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean isAllyAllowedToParticipateInArcheryFire(LotroGame game, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "isAllyAllowedToParticipateInArcheryFire");
         try {
+            // "May not participate" beats every "may participate", whatever card says it.
+            if (isAllyPreventedFromParticipatingInArcheryFire(game, card))
+                return false;
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.PRESENCE_MODIFIER, card)) {
                 if (modifier.isAllyParticipateInArcheryFire(game, card))
                     return true;
@@ -738,6 +1024,9 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean isAllyAllowedToParticipateInSkirmishes(LotroGame game, Side sidePlayer, PhysicalCard card) {
         LoggingThreadLocal.logMethodStart(card, "isAllyAllowedToParticipateInSkirmishes");
         try {
+            // "May not participate" beats every "may participate", whatever card says it.
+            if (isAllyPreventedFromParticipatingInSkirmishes(game, sidePlayer, card))
+                return false;
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.PRESENCE_MODIFIER, card)) {
                 if (modifier.isAllyParticipateInSkirmishes(game, sidePlayer, card))
                     return true;
@@ -976,7 +1265,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeDiscardedFromPlay(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard source) {
         LoggingThreadLocal.logMethodStart(card, "canBeDiscardedFromPlay");
         try {
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.DISCARD_FROM_PLAY_MODIFIER, card))
+            for (Modifier modifier : getModifiersProtectingCard(game, ModifierEffect.DISCARD_FROM_PLAY_MODIFIER, card))
                 if (!modifier.canBeDiscardedFromPlay(game, performingPlayer, card, source))
                     return false;
             return true;
@@ -1004,7 +1293,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     public boolean canBeReturnedToHand(LotroGame game, PhysicalCard card, PhysicalCard source) {
         LoggingThreadLocal.logMethodStart(card, "canBeReturnedToHand");
         try {
-            for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.RETURN_TO_HAND_MODIFIER, card))
+            for (Modifier modifier : getModifiersProtectingCard(game, ModifierEffect.RETURN_TO_HAND_MODIFIER, card))
                 if (!modifier.canBeReturnedToHand(game, card, source))
                     return false;
             return true;
@@ -1014,14 +1303,14 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public boolean canBeHealed(LotroGame game, PhysicalCard card) {
+    public boolean canBeHealed(LotroGame game, String performingPlayer, PhysicalCard card, PhysicalCard healSource) {
         LoggingThreadLocal.logMethodStart(card, "canBeHealed");
         try {
             if(game.getGameState().isHindered(card))
                 return false;
 
             for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.WOUND_MODIFIER, card))
-                if (!modifier.canBeHealed(game, card))
+                if (!modifier.canBeHealed(game, performingPlayer, card, healSource))
                     return false;
             return true;
         } finally {
@@ -1031,7 +1320,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canAddBurden(LotroGame game, String performingPlayer, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.BURDEN_MODIFIER, source)) {
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.BURDEN_MODIFIER, source)) {
             if (!modifier.canAddBurden(game, performingPlayer, source))
                 return false;
         }
@@ -1040,7 +1329,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canRemoveBurden(LotroGame game, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.BURDEN_MODIFIER, source)) {
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.BURDEN_MODIFIER, source)) {
             if (!modifier.canRemoveBurden(game, source))
                 return false;
         }
@@ -1049,7 +1338,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canRemoveThreat(LotroGame game, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.THREAT_MODIFIER, source)) {
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.THREAT_MODIFIER, source)) {
             if (!modifier.canRemoveThreat(game, source))
                 return false;
         }
@@ -1117,7 +1406,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canDiscardCardsFromHand(LotroGame game, String playerId, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
             if (!modifier.canDiscardCardsFromHand(game, playerId, source))
                 return false;
         return true;
@@ -1125,7 +1414,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public boolean canDiscardCardsFromTopOfDeck(LotroGame game, String playerId, PhysicalCard source) {
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
+        for (Modifier modifier : getModifiersAffectingSource(game, ModifierEffect.DISCARD_NOT_FROM_PLAY, source))
             if (!modifier.canDiscardCardsFromTopOfDeck(game, playerId, source))
                 return false;
         return true;
@@ -1146,6 +1435,20 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
 
     @Override
     public Side hasInitiative(LotroGame game) {
+        return hasInitiative(game, 0);
+    }
+
+    @Override
+    public Side hasInitiativeNotCounting(LotroGame game, PhysicalCard cardAsking) {
+        // The card is one of those counted below only while it is the Free Peoples player's own and lies in his
+        // hand or in the void from it.
+        final boolean counted = cardAsking != null
+                && (cardAsking.getZone() == Zone.HAND || cardAsking.getZone() == Zone.VOID_FROM_HAND)
+                && cardAsking.getOwner().equals(game.getGameState().getCurrentPlayerId());
+        return hasInitiative(game, counted ? 1 : 0);
+    }
+
+    private Side hasInitiative(LotroGame game, int cardsNotCounted) {
         for (Modifier modifier : getModifiers(game, ModifierEffect.INITIATIVE_MODIFIER)) {
             if (!modifier.shadowCanHaveInitiative(game))
                 return Side.FREE_PEOPLE;
@@ -1157,8 +1460,12 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
                 return initiative;
         }
 
+        // A card being played from hand is still counted while it is in the void and, once placed, until its play
+        // is announced: the loss of initiative is answered together with the play (CR 4.2 "playing a card").
         int freePeopleInitiativeHandSize = game.getGameState().getHand(game.getGameState().getCurrentPlayerId()).size()
-                + game.getGameState().getVoidFromHand(game.getGameState().getCurrentPlayerId()).size();
+                + game.getGameState().getVoidFromHand(game.getGameState().getCurrentPlayerId()).size()
+                + game.getActionsEnvironment().countCardsEnteringPlayFromHand(game.getGameState().getCurrentPlayerId())
+                - cardsNotCounted;
 
         int initiativeHandSize = 4;
         for (Modifier modifier : getModifiers(game, ModifierEffect.INITIATIVE_MODIFIER))
@@ -1225,10 +1532,10 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public int getSpotBonus(LotroGame game, Filterable filter) {
+    public int getSpotBonus(LotroGame game, Filterable filter, String spottingPlayer) {
         int result = 0;
         for (Modifier modifier : getModifiers(game, ModifierEffect.SPOT_MODIFIER))
-            result += modifier.getSpotCountModifier(game, filter);
+            result += modifier.getSpotCountModifier(game, filter, spottingPlayer);
         return Math.max(0, result);
     }
 
@@ -1269,13 +1576,30 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     }
 
     @Override
-    public boolean assignmentCostWasPaid(LotroGame game, PhysicalCard card) {
-        // Only modifiers that affect this specific card count: paying the cost for one minion must not
-        // mark every other minion with an assignment cost as paid.
-        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.PAID_ASSIGNMENT_COST_MODIFIER, card))
-            if (modifier.isAssignmentCostPaid(game, card))
-                return true;
-        return false;
+    public CostToEffectAction getAssignmentCosts(LotroGame game, String assigningPlayer, PhysicalCard fpCharacter, PhysicalCard minion) {
+        // Only the Free Peoples player is ever charged to assign
+        if (assigningPlayer == null || !assigningPlayer.equals(game.getGameState().getCurrentPlayerId()))
+            return null;
+
+        // One payment for the pair, every charge in it.  Its source is the card that charges (the first, should
+        // two ever charge for one assignment).
+        AssignmentCostAction payment = null;
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ASSIGNMENT_MODIFIER, minion)) {
+            final AssignmentCostAction payingInto = (payment != null) ? payment : new AssignmentCostAction(modifier.getSource(), assigningPlayer);
+            if (modifier.appendExtraAssignmentCosts(game, payingInto, fpCharacter, minion))
+                payment = payingInto;
+        }
+        return payment;
+    }
+
+    @Override
+    public boolean appendAssignmentCosts(LotroGame game, CostToEffectAction action, PhysicalCard fpCharacter, PhysicalCard minion) {
+        boolean charged = false;
+        for (Modifier modifier : getModifiersAffectingCard(game, ModifierEffect.ASSIGNMENT_MODIFIER, minion)) {
+            if (modifier.appendExtraAssignmentCosts(game, action, fpCharacter, minion))
+                charged = true;
+        }
+        return charged;
     }
 
     @Override
@@ -1360,6 +1684,11 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
             if (modifier.deadPileGoesToDiscard(game, card))
                 return true;
         return false;
+    }
+
+    @Override
+    public boolean comesIntoPlayExhausted(LotroGame game, PhysicalCard card) {
+        return !getModifiersAffectingCard(game, ModifierEffect.COMES_INTO_PLAY_EXHAUSTED_MODIFIER, card).isEmpty();
     }
 
     @Override

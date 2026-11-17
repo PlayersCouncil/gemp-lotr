@@ -1,5 +1,7 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -29,10 +31,19 @@ public class AlterOverwhelmMultiplier implements EffectAppenderProducer {
         final TimeResolver.Time until = TimeResolver.resolveTime(effectObject.get("until"), "end(current)");
         final String memory = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver = CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose characters to apply overwhelm multiplier on", environment);
+        // Protection from being overwhelmed, given for the current phase by a skirmish action, is gone when the
+        // skirmish is.
+        final boolean endsWithSkirmish = until.endsWithCurrentPhase(Phase.SKIRMISH);
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, actionContext -> new ConstantEvaluator(1), memory, "you", "Choose characters to apply overwhelm multiplier on", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.givenTo(cardResolver.forecast(actionContext), endsWithSkirmish);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override

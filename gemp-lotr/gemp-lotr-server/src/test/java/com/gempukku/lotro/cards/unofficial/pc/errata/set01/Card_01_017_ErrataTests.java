@@ -9,19 +9,29 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_01_017_ErrataTests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("grimir", "51_17");
-					put("guard", "1_7");
-					put("skirmishEvent", "1_3"); // Dwarf Axe, Dwarven Skirmish event
-					put("fellowshipEvent", "1_6"); // Delving, Dwarven Fellowship event
-					put("runner", "1_178"); // Goblin Runner
+
+					put("gimli", "1_13");         // Gimli, Son of Gloin: [dwarven] Dwarf companion, strength 6, vitality 3
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: [gondor] Man companion, strength 8
+
+					put("blow", "1_5");           // Cleaving Blow: [dwarven] skirmish event, cost 1: a Dwarf is strength +2 and damage +1
+					put("strike", "1_3");         // Axe Strike: [dwarven] skirmish event, cost 0
+					put("halls", "1_26");         // Their Halls of Stone: [dwarven] skirmish event, cost 0
+					put("fury", "1_4");           // Battle Fury: [dwarven] skirmish event, cost 0: exert a Dwarf to make that Dwarf strength +3
+					put("balin", "1_19");         // Here Lies Balin, Son of Fundin: [dwarven] maneuver event: exert a Dwarf to wound Orcs
+					put("nobody", "1_23");        // Nobody Tosses a Dwarf: [dwarven] response event, cost 0, to a Dwarf winning a skirmish
+					put("swordarm", "1_116");     // Swordarm of the White Tower: [gondor] skirmish event: a [gondor] companion is strength +2
+					put("armor", "1_8");          // Dwarven Armor: [dwarven] possession
+
+					put("savage", "1_151");       // Uruk Savage: strength 5, vitality 3
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -35,7 +45,7 @@ public class Card_01_017_ErrataTests
 		/**
 		 * Set: 1
 		 * Name: Grimir, Dwarven Elder
-		 * Unique: true
+		 * Unique: True
 		 * Side: Free Peoples
 		 * Culture: Dwarven
 		 * Twilight Cost: 1
@@ -44,8 +54,9 @@ public class Card_01_017_ErrataTests
 		 * Strength: 3
 		 * Vitality: 3
 		 * Site Number: 3
-		 * Game Text: Skirmish: Spot a [dwarven] companion and exert Grimir twice to play a [dwarven] skirmish event from your discard pile, then remove it from the game.
-		*/
+		 * Game Text: Skirmish: Spot a [dwarven] companion and exert Grimir twice to play a [dwarven] skirmish
+		 * event from your discard pile, then remove it from the game.
+		 */
 
 		var scn = GetScenario();
 
@@ -65,91 +76,213 @@ public class Card_01_017_ErrataTests
 	}
 
 	@Test
-	public void GrimirAbilityPlaysOnlyDwarvenSkirmishEventsFromDiscardAndRemovesThem() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void ExertsGrimirTwiceToPlayADwarvenSkirmishEventFromTheDiscardPileWhichIsThenRemovedFromTheGame() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var grimir = scn.GetFreepsCard("grimir");
-		var guard = scn.GetFreepsCard("guard");
-		var skirmishEvent = scn.GetFreepsCard("skirmishEvent");
-		var fellowshipEvent = scn.GetFreepsCard("fellowshipEvent");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCompanionsToTable(guard);
-		scn.MoveCardsToSupportArea(grimir);
-		// Both a skirmish event and a fellowship event in discard
-		scn.MoveCardsToDiscard(skirmishEvent, fellowshipEvent);
-		scn.MoveMinionsToTable(runner);
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var blow = scn.GetFreepsCard("blow");
+		var strike = scn.GetFreepsCard("strike");
+		var halls = scn.GetFreepsCard("halls");
+		var balin = scn.GetFreepsCard("balin");
+		var nobody = scn.GetFreepsCard("nobody");
+		var swordarm = scn.GetFreepsCard("swordarm");
+		var armor = scn.GetFreepsCard("armor");
+		var shadowFury = scn.GetShadowCard("fury");
+		var savage = scn.GetShadowCard("savage");
+		// Aragorn is here so that Swordarm of the White Tower has someone to be played for.
+		scn.MoveCompanionsToTable(gimli, aragorn);
+		scn.MoveAlliesToTable(grimir);
+		// Two [dwarven] events that are not skirmish events lie beside the two that are: a maneuver event and a
+		// response event.  The game refuses both whoever plays them, a maneuver event in a skirmish phase and
+		// a response event played by any card's effect.
+		scn.MoveCardsToDiscard(blow, strike, balin, nobody, swordarm, armor);
+		// [dwarven] skirmish events that are not in this player's discard pile: one in hand, one in the other
+		// player's pile.
+		scn.MoveCardsToHand(halls);
+		scn.MoveCardsToDiscard(shadowFury);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(guard, runner);
+		scn.FreepsAssignAndResolve(gimli, savage);
 
-		// Grimir's ability should be available during skirmish
-		assertTrue(scn.FreepsActionAvailable(grimir));
+		var pool = scn.GetTwilight();
 		assertEquals(0, scn.GetWoundsOn(grimir));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(6, scn.GetStrength(gimli));
+		assertTrue(scn.FreepsActionAvailable(grimir));
 
 		scn.FreepsUseCardAction(grimir);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(blow, strike));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(balin, nobody, swordarm, armor, halls, shadowFury));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
 
-		// Only the skirmish event is a valid target, so it is auto-selected
-		// (fellowship event is ignored). Grimir should have 2 wounds (exerted twice).
+		// Cleaving Blow is played: it costs 1 and makes a Dwarf strength +2.
+		scn.FreepsChooseCardBPFromSelection(blow);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(gimli, grimir));
+		scn.FreepsChooseCard(gimli);
+
 		assertEquals(2, scn.GetWoundsOn(grimir));
-
-		scn.FreepsChooseCard(guard); //Skirmish event target
-
-		// The skirmish event should have been removed from the game
-		assertEquals(Zone.REMOVED, skirmishEvent.getZone());
-		// The fellowship event should still be in discard (untouched)
-		assertEquals(Zone.DISCARD, fellowshipEvent.getZone());
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertEquals(pool + 1, scn.GetTwilight());
+		assertEquals(8, scn.GetStrength(gimli));
+		assertInZone(Zone.REMOVED, blow);
+		assertInZone(Zone.DISCARD, strike, balin, nobody, swordarm, armor, shadowFury);
+		assertInZone(Zone.HAND, halls);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test
-	public void GrimirAbilityRequiresDwarvenCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void TheEventsOwnCostIsPaidWhenItIsPlayedThisWay() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var grimir = scn.GetFreepsCard("grimir");
-		var skirmishEvent = scn.GetFreepsCard("skirmishEvent");
-		var runner = scn.GetShadowCard("runner");
-
-		// No Dwarven companion on the table -- only Frodo (Hobbit)
-		scn.MoveCardsToSupportArea(grimir);
-		scn.MoveCardsToDiscard(skirmishEvent);
-		scn.MoveMinionsToTable(runner);
+		var gimli = scn.GetFreepsCard("gimli");
+		var fury = scn.GetFreepsCard("fury");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToDiscard(fury);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
 		scn.SkipToAssignments();
-		// Frodo gets assigned to runner
-		scn.FreepsAssignAndResolve(scn.GetRingBearer(), runner);
+		scn.FreepsAssignAndResolve(gimli, savage);
 
-		// Grimir's ability should NOT be available without a Dwarven companion
-		assertFalse(scn.FreepsActionAvailable(grimir));
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		assertTrue(scn.FreepsActionAvailable(grimir));
+
+		// Battle Fury is the only event there and, once Grimir has exerted twice, Gimli the only Dwarf who can
+		// exert for it: neither is asked for.
+		scn.FreepsUseCardAction(grimir);
+		assertEquals(2, scn.GetWoundsOn(grimir));
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		// 6 + 3
+		assertEquals(9, scn.GetStrength(gimli));
+		assertInZone(Zone.REMOVED, fury);
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
 	}
 
 	@Test
-	public void GrimirAbilityRequiresExertingTwiceSoExhaustedGrimirCannotUse() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void IsNotOfferedWhenGrimirsOwnExertionsWouldLeaveTheOnlyEventUnplayable() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var grimir = scn.GetFreepsCard("grimir");
-		var guard = scn.GetFreepsCard("guard");
-		var skirmishEvent = scn.GetFreepsCard("skirmishEvent");
-		var runner = scn.GetShadowCard("runner");
-
-		scn.MoveCompanionsToTable(guard);
-		scn.MoveCardsToSupportArea(grimir);
-		scn.MoveCardsToDiscard(skirmishEvent);
-		scn.MoveMinionsToTable(runner);
-
-		// Wound Grimir twice so he's exhausted (1 vitality remaining)
-		scn.AddWoundsToChar(grimir, 2);
+		var gimli = scn.GetFreepsCard("gimli");
+		var fury = scn.GetFreepsCard("fury");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToDiscard(fury);
+		// Vitality 3 with 2 wounds: Gimli can be spotted and cannot exert.  Battle Fury needs a Dwarf to exert,
+		// and Grimir is the only one who can: after his two exertions nobody is left to pay for it.
+		scn.AddWoundsToChar(gimli, 2);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
 		scn.SkipToAssignments();
-		scn.FreepsAssignAndResolve(guard, runner);
+		scn.FreepsAssignAndResolve(gimli, savage);
 
-		// Grimir is exhausted -- cannot exert twice
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
 		assertFalse(scn.FreepsActionAvailable(grimir));
+		assertEquals(0, scn.GetWoundsOn(grimir));
+		assertInZone(Zone.DISCARD, fury);
 	}
 
+	@Test
+	public void NeedsACompanionOfTheDwarvenCultureToSpot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grimir = scn.GetFreepsCard("grimir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var blow = scn.GetFreepsCard("blow");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToDiscard(blow);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(aragorn, savage);
+
+		// Grimir is himself a [dwarven] character, but an ally; Aragorn is a companion, but a [gondor] one.
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(grimir));
+
+		// Gimli, a [dwarven] companion, is put beside them and the decision asked again.
+		scn.MoveCompanionsToTable(gimli);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(grimir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWhenGrimirCanExertOnlyOnce() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grimir = scn.GetFreepsCard("grimir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var blow = scn.GetFreepsCard("blow");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveAlliesToTable(grimir);
+		scn.MoveCardsToDiscard(blow);
+		// Vitality 3 with 1 wound: one exertion is left to him, not two.
+		scn.AddWoundsToChar(grimir, 1);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, savage);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(grimir));
+
+		scn.RemoveWoundsFromChar(grimir, 1);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(grimir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void IsNotOfferedWithNoDwarvenSkirmishEventInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var grimir = scn.GetFreepsCard("grimir");
+		var gimli = scn.GetFreepsCard("gimli");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var blow = scn.GetFreepsCard("blow");
+		var halls = scn.GetFreepsCard("halls");
+		var balin = scn.GetFreepsCard("balin");
+		var nobody = scn.GetFreepsCard("nobody");
+		var swordarm = scn.GetFreepsCard("swordarm");
+		var armor = scn.GetFreepsCard("armor");
+		var shadowFury = scn.GetShadowCard("fury");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCompanionsToTable(gimli, aragorn);
+		scn.MoveAlliesToTable(grimir);
+		// Every near miss and nothing else: a [dwarven] maneuver event, a [dwarven] response event, a [gondor]
+		// skirmish event and a [dwarven] possession in the discard pile, and [dwarven] skirmish events in hand
+		// and in the other player's discard pile.
+		scn.MoveCardsToDiscard(balin, nobody, swordarm, armor, shadowFury);
+		scn.MoveCardsToHand(halls);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToAssignments();
+		scn.FreepsAssignAndResolve(gimli, savage);
+
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(grimir));
+
+		scn.MoveCardsToDiscard(blow);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(grimir));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
 }

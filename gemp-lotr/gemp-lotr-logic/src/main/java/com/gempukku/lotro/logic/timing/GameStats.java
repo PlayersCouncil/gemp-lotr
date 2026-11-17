@@ -29,6 +29,7 @@ public class GameStats {
     private int _shadowSkirmishDamageBonus;
 
     private boolean _fpOverwhelmed;
+    private boolean _shadowOverwhelmed;
 
     private Map<String, Map<Zone, Integer>> _zoneSizes = new HashMap<>();
     private Map<String, Integer> _threats = new HashMap<>();
@@ -142,6 +143,14 @@ public class GameStats {
         if (newFpOverwhelmed != _fpOverwhelmed) {
             changed = true;
             _fpOverwhelmed = newFpOverwhelmed;
+        }
+
+        //The other way round: as the skirmish stands, the minions lose it and at least one of them is overwhelmed
+        // (the same sums as ResolveSkirmishEffect, where a tie or a Free Peoples overwhelm comes first)
+        boolean newShadowOverwhelmed = !newFpOverwhelmed && !RuleUtils.getMinionsFacingOverwhelm(game).isEmpty();
+        if (newShadowOverwhelmed != _shadowOverwhelmed) {
+            changed = true;
+            _shadowOverwhelmed = newShadowOverwhelmed;
         }
 
         Map<String, Map<Zone, Integer>> newZoneSizes = new HashMap<>();
@@ -316,6 +325,10 @@ public class GameStats {
         return _fpOverwhelmed;
     }
 
+    public boolean isShadowOverwhelmed() {
+        return _shadowOverwhelmed;
+    }
+
     public Map<String, Map<Zone, Integer>> getZoneSizes() {
         return Collections.unmodifiableMap(_zoneSizes);
     }
@@ -369,6 +382,7 @@ public class GameStats {
         copy._shadowSkirmishStrength = _shadowSkirmishStrength;
         copy._shadowSkirmishDamageBonus = _shadowSkirmishDamageBonus;
         copy._fpOverwhelmed = _fpOverwhelmed;
+        copy._shadowOverwhelmed = _shadowOverwhelmed;
         copy._zoneSizes = _zoneSizes;
         copy._threats = _threats;
         copy._threatTotals = _threatTotals;

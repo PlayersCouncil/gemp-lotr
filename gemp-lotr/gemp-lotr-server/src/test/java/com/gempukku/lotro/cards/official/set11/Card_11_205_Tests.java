@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -17,8 +18,20 @@ public class Card_11_205_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_205");
-					// put other cards in here as needed for the test case
+					put("vigilant", "11_205");
+					put("vigilant2", "11_205");
+					// Murderous Uruk: an [uruk-hai] Uruk-hai minion; damage +1 and muster (a regroup trigger) only.
+					put("murderous", "11_195");
+					// Saruman, Master of the White Hand: an [uruk-hai] minion who is a Wizard and no Uruk-hai; each
+					// companion is resistance -1, and a skirmish ability used only on purpose.
+					put("saruman", "17_116");
+					// Cirith Ungol Guard: a [sauron] Uruk-hai, damage +1 and no other text: an Uruk-hai of another culture.
+					put("guard", "10_81");
+					// Dark Alliance: an [uruk-hai] condition in the support area (no minion); a response used only on purpose.
+					put("alliance", "12_141");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man, strength 8; a maneuver ability only
+					put("boromir", "1_97");     // Boromir, Son of Denethor: [gondor] Man, strength 7, vitality 3; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +59,7 @@ public class Card_11_205_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("vigilant");
 
 		assertEquals("Vigilant Uruk", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -64,18 +77,72 @@ public class Card_11_205_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void VigilantUrukTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CountsEachUrukHaiMinionNotAssignedAndNoOtherCardAsTheAssignmentsAreMadeAndTheSkirmishesEnd() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		scn.MoveCompanionsToTable(aragorn, boromir);
+
+		var vigilant = scn.GetShadowCard("vigilant");
+		var murderous = scn.GetShadowCard("murderous");
+		var saruman = scn.GetShadowCard("saruman");
+		var guard = scn.GetShadowCard("guard");
+		var alliance = scn.GetShadowCard("alliance");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(vigilant, murderous, saruman, guard);
+		scn.MoveCardsToSupportArea(alliance);
 
-		assertEquals(2, scn.GetTwilight());
+		// 6 + 2 x 3: itself, the Murderous Uruk and Saruman; not the [sauron] Guard, nor Dark Alliance, an
+		// [uruk-hai] card that is no minion, though neither is assigned.
+		assertEquals(12, scn.GetStrength(vigilant));
+		// The bonus is this minion's alone.
+		assertEquals(8, scn.GetStrength(murderous));
+		assertEquals(8, scn.GetStrength(saruman));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, vigilant }, new PhysicalCardImpl[] { boromir, murderous });
+		scn.ShadowDeclineAssignments();
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, vigilant));
+		assertTrue(scn.IsCharAssignedAgainst(boromir, murderous));
+		assertFalse(scn.IsCharAssigned(saruman));
+		// 6 + 2: Saruman alone of the [uruk-hai] minions is not assigned.
+		assertEquals(8, scn.GetStrength(vigilant));
+
+		// The lurker's skirmish comes last: Boromir's first.
+		scn.FreepsResolveSkirmish(boromir);
+		assertTrue(scn.IsCharSkirmishingAgainst(boromir, murderous));
+		assertEquals(8, scn.GetStrength(vigilant));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+
+		scn.PassSkirmishActions();
+		// Boromir, 7 against 8, loses and lives with 2 wounds; that skirmish is over and the Murderous Uruk is no
+		// longer assigned (CR 4.2 "skirmish phase(s)").
+		assertEquals(2, scn.GetWoundsOn(boromir));
+
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, vigilant));
+		// 6 + 2 x 2: Saruman and the Murderous Uruk; itself, in its own skirmish, still assigned.
+		assertEquals(10, scn.GetStrength(vigilant));
+		assertEquals(8, scn.GetStrength(murderous));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void EachCopyIsStrengthenedForItselfAlone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var vigilant = scn.GetShadowCard("vigilant");
+		var vigilant2 = scn.GetShadowCard("vigilant2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(vigilant, vigilant2);
+
+		// 6 + 2 x 2 (both copies) each: a second copy's bonus adds nothing to the first.
+		assertEquals(10, scn.GetStrength(vigilant));
+		assertEquals(10, scn.GetStrength(vigilant2));
 	}
 }

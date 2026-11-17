@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_129_Tests
@@ -17,8 +18,10 @@ public class Card_17_129_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_129");
-					// put other cards in here as needed for the test case
+					put("legion", "17_129");
+					// Companions beside Frodo, so that the threats can be there: no more threats than companions.
+					put("sam", "1_311");        // Sam, Son of Hamfast: a fellowship ability and a response to Frodo's death only
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,35 +49,79 @@ public class Card_17_129_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var legion = scn.GetFreepsCard("legion");
 
-		assertEquals("White Hand Legion", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(17, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals("White Hand Legion", legion.getBlueprint().getTitle());
+		assertNull(legion.getBlueprint().getSubtitle());
+		assertFalse(legion.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, legion.getBlueprint().getSide());
+		assertEquals(Culture.URUK_HAI, legion.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, legion.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, legion.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(legion, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(legion, Keyword.DAMAGE));
+		assertEquals(6, legion.getBlueprint().getTwilightCost());
+		assertEquals(17, legion.getBlueprint().getStrength());
+		assertEquals(3, legion.getBlueprint().getVitality());
+		assertEquals(5, legion.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WhiteHandLegionTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WithThreeThreatsItIsPlayedByRemovingTwoOfThem() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable("sam", "aragorn");
+		var legion = scn.GetShadowCard("legion");
+		scn.MoveCardsToHand(legion);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddThreats(3);
+		assertEquals(3, scn.GetThreats());
+		assertInZone(Zone.HAND, legion);
+		// Enough for its cost and the roaming penalty at site 2; the pool is not what this test reads.
+		scn.SetTwilight(20);
+		scn.FreepsPass();
 
-		assertEquals(6, scn.GetTwilight());
+		assertEquals(3, scn.GetThreats());
+		assertInZone(Zone.HAND, legion);
+		assertTrue(scn.ShadowPlayAvailable(legion));
+
+		scn.ShadowPlayCard(legion);
+
+		// Two removed, not every threat there was.
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, legion);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void CannotBePlayedWithOneThreatUntilASecondIsThere() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		scn.MoveCompanionsToTable("sam");
+		var legion = scn.GetShadowCard("legion");
+		scn.MoveCardsToHand(legion);
+
+		scn.StartGame();
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.HAND, legion);
+		scn.SetTwilight(20);
+		scn.FreepsPass();
+
+		assertEquals(1, scn.GetThreats());
+		assertInZone(Zone.HAND, legion);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(legion));
+
+		scn.AddThreats(1);
+		scn.ShadowRefreshDecision();
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.ShadowPlayAvailable(legion));
+
+		scn.ShadowPlayCard(legion);
+		assertEquals(0, scn.GetThreats());
+		assertInZone(Zone.SHADOW_CHARACTERS, legion);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

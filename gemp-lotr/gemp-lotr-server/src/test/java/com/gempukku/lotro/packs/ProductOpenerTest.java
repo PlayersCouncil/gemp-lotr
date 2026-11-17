@@ -1,6 +1,6 @@
 package com.gempukku.lotro.packs;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
 import org.junit.BeforeClass;
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  * Exercises the shared pack-expansion routine against a synthetic product library, plus the real
  * product definitions for the tagged products the designer asked for.
  */
-public class ProductOpenerTest extends AbstractAtTest {
+public class ProductOpenerTest extends LoadedLibraries {
 
     /**
      * A small, fully deterministic-where-it-matters product set.  Kept out of the real product

@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set02;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_090_Tests
@@ -18,8 +18,8 @@ public class Card_02_090_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_90");
-					// put other cards in here as needed for the test case
+					put("taskmaster1", "2_90");
+					put("taskmaster2", "2_90");   // not unique: "this minion" is read beside another copy
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,33 +47,55 @@ public class Card_02_090_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var taskmaster = scn.GetFreepsCard("taskmaster1");
 
-		assertEquals("Orc Taskmaster", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.SAURON, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getSiteNumber());
+		assertEquals("Orc Taskmaster", taskmaster.getBlueprint().getTitle());
+		assertNull(taskmaster.getBlueprint().getSubtitle());
+		assertFalse(taskmaster.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, taskmaster.getBlueprint().getSide());
+		assertEquals(Culture.SAURON, taskmaster.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, taskmaster.getBlueprint().getCardType());
+		assertEquals(Race.ORC, taskmaster.getBlueprint().getRace());
+		assertEquals(3, taskmaster.getBlueprint().getTwilightCost());
+		assertEquals(8, taskmaster.getBlueprint().getStrength());
+		assertEquals(3, taskmaster.getBlueprint().getVitality());
+		assertEquals(6, taskmaster.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrcTaskmasterTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ShadowAbilityExertsThisMinionToAddOneUntilItIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var taskmaster1 = scn.GetShadowCard("taskmaster1");
+		var taskmaster2 = scn.GetShadowCard("taskmaster2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(taskmaster1, taskmaster2);
+		scn.FreepsPass();
 
+		// 1 companion + 2 for Ettenmoors
 		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(taskmaster1));
+		assertEquals(0, scn.GetWoundsOn(taskmaster2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(taskmaster1));
+		assertTrue(scn.ShadowActionAvailable(taskmaster2));
+
+		scn.ShadowUseCardAction(taskmaster1);
+		// The Taskmaster used exerts, and the copy beside it does not.
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(taskmaster1));
+		assertEquals(0, scn.GetWoundsOn(taskmaster2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		scn.ShadowUseCardAction(taskmaster1);
+		assertEquals(5, scn.GetTwilight());
+		assertEquals(2, scn.GetWoundsOn(taskmaster1));
+		assertEquals(0, scn.GetWoundsOn(taskmaster2));
+
+		// Vitality 3 with 2 wounds: exhausted, so it can no longer exert; the copy still can.
+		assertFalse(scn.ShadowActionAvailable(taskmaster1));
+		assertTrue(scn.ShadowActionAvailable(taskmaster2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

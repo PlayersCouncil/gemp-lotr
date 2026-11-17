@@ -22,7 +22,12 @@ public class SendMessage implements EffectAppenderProducer {
         if (text == null)
             throw new InvalidCardDefinitionException("SendMessage requires the text field to be set.");
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
+            @Override
+            protected boolean remembersSomething() {
+                return false;
+            }
+
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new UnrespondableEffect() {

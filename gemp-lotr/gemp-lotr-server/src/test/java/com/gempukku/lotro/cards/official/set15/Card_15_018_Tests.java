@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_018_Tests
@@ -17,8 +18,12 @@ public class Card_15_018_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "15_18");
-					// put other cards in here as needed for the test case
+					put("legolas", "15_18");
+
+					put("rumil", "17_12");      // Rumil, Silvan Elf: [elven] Elf companion, Hunter 1; his texts need a wounded minion or the archery phase
+					put("faramir", "18_48");    // Faramir, Captain of Ithilien: [gondor] Man companion, Ranger, Hunter 2; a maneuver heal never used here
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion who is no hunter; a maneuver ability only
+					put("uruk", "15_171");      // Tracking Uruk: [uruk-hai] minion, Hunter 1 and nothing else
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +51,7 @@ public class Card_15_018_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("legolas");
 
 		assertEquals("Legolas", card.getBlueprint().getTitle());
 		assertEquals("Fleet-footed Hunter", card.getBlueprint().getSubtitle());
@@ -61,20 +66,74 @@ public class Card_15_018_Tests
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
+		assertNull(card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LegolasTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupAbilityExertsAnyTwoHunterCompanionsToDrawACard() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legolas = scn.GetFreepsCard("legolas");
+		var rumil = scn.GetFreepsCard("rumil");
+		var faramir = scn.GetFreepsCard("faramir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var uruk = scn.GetShadowCard("uruk");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(legolas, rumil, faramir, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// A hunter who is no companion, left unassigned so that he is still in play in the regroup phase.
+		scn.MoveMinionsToTable(uruk);
+		scn.SkipToPhase(Phase.REGROUP);
 
-		assertEquals(2, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertInPlay(uruk);
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertEquals(0, scn.GetWoundsOn(rumil));
+		assertEquals(0, scn.GetWoundsOn(faramir));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		int hand = scn.GetFreepsHandCount();
+		int deck = scn.GetFreepsDeckCount();
+		assertTrue(scn.FreepsActionAvailable(legolas));
+
+		scn.FreepsUseCardAction(legolas);
+		// Three hunter companions of three titles, two cultures and two races; not Aragorn or Frodo, who are no
+		// hunters, nor the Tracking Uruk, a hunter who is no companion.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(legolas, rumil, faramir));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn, frodo, uruk));
+		assertEquals(2, scn.FreepsGetChoiceMin());
+		assertEquals(2, scn.FreepsGetChoiceMax());
+
+		// Legolas need not be one of the two.
+		scn.FreepsChooseCards(rumil, faramir);
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertEquals(1, scn.GetWoundsOn(rumil));
+		assertEquals(1, scn.GetWoundsOn(faramir));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(hand + 1, scn.GetFreepsHandCount());
+		assertEquals(deck - 1, scn.GetFreepsDeckCount());
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityIsNotOfferedWhileOnlyOneHunterCompanionCanExert() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var rumil = scn.GetFreepsCard("rumil");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(legolas, rumil, aragorn);
+
+		scn.StartGame();
+		// Rumil, the only other hunter companion, is exhausted (vitality 3, 2 wounds). Legolas could exert twice and
+		// Aragorn, who is no hunter, could exert: neither pays for two hunter companions.
+		scn.AddWoundsToChar(rumil, 2);
+		assertEquals(2, scn.GetWoundsOn(rumil));
+		assertEquals(0, scn.GetWoundsOn(legolas));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(legolas));
 	}
 }

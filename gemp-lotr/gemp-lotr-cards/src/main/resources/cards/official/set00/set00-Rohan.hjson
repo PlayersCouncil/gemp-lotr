@@ -33,6 +33,11 @@
 					type: played
 					filter: self
 				}
+				# Not offered with no Shadow possession to discard: it has no cost (Q-0034).
+				requires: {
+					type: canSpot
+					filter: side(shadow),possession
+				}
 				effect: {
 					type: discard
 					select: choose(side(shadow),possession)

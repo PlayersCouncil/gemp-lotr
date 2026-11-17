@@ -13,6 +13,12 @@
 			1x1_230
 			// Bounder: Free Peoples Shire ally, twilight 1
 			1x1_286
+			// Enheartened Foe: Shadow response event, twilight 0, nothing to spot
+			1x1_247
+			// Drums in the Deep: Shadow skirmish event, twilight 0
+			1x1_168
+			// Foul Things: Shadow event of the Shadow phase, twilight 2: "Play a [moria] minion from your discard pile."
+			1x2_59
 		]
 	}
 ]

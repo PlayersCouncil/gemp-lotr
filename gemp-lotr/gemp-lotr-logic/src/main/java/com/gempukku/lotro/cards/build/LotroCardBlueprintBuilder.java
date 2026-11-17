@@ -26,6 +26,7 @@ public class LotroCardBlueprintBuilder implements CardGenerationEnvironment {
         fieldProcessors.put("title", new TitleFieldProcessor());
         fieldProcessors.put("subtitle", new SubtitleFieldProcessor());
         fieldProcessors.put("unique", new UniqueFieldProcessor());
+        fieldProcessors.put("uniqueperplayer", new UniquePerPlayerFieldProcessor());
         fieldProcessors.put("side", new SideFieldProcessor());
         fieldProcessors.put("culture", new CultureFieldProcessor());
         fieldProcessors.put("type", new CardTypeFieldProcessor());

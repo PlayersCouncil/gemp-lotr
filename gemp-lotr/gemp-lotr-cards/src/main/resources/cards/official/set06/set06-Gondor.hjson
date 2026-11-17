@@ -29,6 +29,10 @@
 					type: winsSkirmish
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: minion
+				}
 				effect: {
 					type: modifySiteNumber
 					select: choose(minion)
@@ -109,7 +113,7 @@
 			{
 				type: activated
 				phase: skirmish
-				text: Remove an {elven} token to make minion skirmishing Aragorin strength -3
+				text: Remove an {elven} token to make a minion skirmishing Aragorn strength -3
 				cost: {
 					type: RemoveCultureTokens
 					culture: elven
@@ -182,7 +186,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				text: Heal another {gondor} companion
 				optional: true
 				trigger: {
@@ -363,22 +366,21 @@
 			},
 			effect: [
 				{
-					type: choice
-					texts: [
-						Discard a minion
-						Discard 2 {wraith} minions
-					]
-					effects: [
-						{
-							type: discard
-							select: choose(minion)
-						}
-						{
-							type: discard
-							select: choose(culture(wraith),minion)
-							count: 2
-						}
-					]
+					type: If
+					check: {
+						type: canSpot
+						filter: culture(wraith),minion
+						count: 2
+					}
+					true: {
+						type: discard
+						select: choose(culture(wraith),minion)
+						count: 2
+					}
+					false: {
+						type: discard
+						select: choose(minion)
+					}
 				}
 			]
 		}

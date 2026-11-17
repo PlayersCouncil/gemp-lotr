@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_054_Tests
@@ -17,8 +18,9 @@ public class Card_11_054_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_54");
-					// put other cards in here as needed for the test case
+					put("aragorn", "11_54");
+
+					put("sword", "1_299");      // Hobbit Sword: a card for the Free Peoples hand; no text but its bearer
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +48,7 @@ public class Card_11_054_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("Strider", card.getBlueprint().getSubtitle());
@@ -62,18 +64,53 @@ public class Card_11_054_Tests
 		assertEquals(8, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachMoveOfTheFellowshipAddsOneTheRegroupMoveAsWell() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertEquals(0, scn.GetTwilight());
 
-		assertEquals(1, scn.GetTwilight());
+		scn.FreepsPass();
+		// To Ettenmoors: 2 for its Shadow number + 2 for Frodo and Aragorn + 1 for Aragorn's text.
+		assertEquals(5, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		scn.SkipToMovementDecision();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		int pool = scn.GetTwilight();
+
+		scn.FreepsChooseToMove();
+		// To Rivendell Valley: 0 for its Shadow number + 2 for the companions + 1 for Aragorn's text.
+		assertEquals(pool + 3, scn.GetTwilight());
+		assertEquals(2, scn.GetMoveCount());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void StayingAtTheRegroupDecisionAddsNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var sword = scn.GetFreepsCard("sword");
+		scn.MoveCompanionsToTable(aragorn);
+		assertInZone(Zone.FREE_CHARACTERS, aragorn);
+
+		scn.StartGame();
+		scn.FreepsPass();
+		scn.SkipToMovementDecision();
+		assertTrue(scn.FreepsDecisionAvailable("another move"));
+		// A card in hand, so that the Free Peoples player is asked to reconcile and the turn does not end at once.
+		scn.SetFreepsHand(sword);
+		int pool = scn.GetTwilight();
+
+		scn.FreepsChooseToStay();
+		assertEquals(pool, scn.GetTwilight());
+		assertEquals(1, scn.GetMoveCount());
+		assertTrue(scn.FreepsDecisionAvailable("Reconcile"));
 	}
 }

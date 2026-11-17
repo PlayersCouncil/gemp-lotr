@@ -30,6 +30,7 @@ public class RemoveCardsInDeckFromGame implements EffectAppenderProducer {
         boolean showAll = FieldUtils.getBoolean(effectObject.get("showAll"), "showAll");
 
         PlayerSource playerSource = PlayerResolver.resolvePlayer(player);
+        PlayerSource deckSource = PlayerResolver.resolvePlayer(deck);
 
         MultiEffectAppender result = new MultiEffectAppender();
 
@@ -49,7 +50,8 @@ public class RemoveCardsInDeckFromGame implements EffectAppenderProducer {
                     new DelayedAppender() {
                         @Override
                         protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
-                            return new ShuffleDeckEffect(actionContext.getPerformingPlayer());
+                            // The deck that was looked through is the one reshuffled, whoever carried the search out (F-0369)
+                            return new ShuffleDeckEffect(deckSource.getPlayer(actionContext));
                         }
                     });
 

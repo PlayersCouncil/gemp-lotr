@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.effects;
 
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.PlayOrder;
@@ -38,13 +39,16 @@ public abstract class RevealRandomCardsFromHandEffect extends AbstractEffect {
     @Override
     protected FullEffectResult playEffectReturningResult(LotroGame game) {
         if (_actingPlayer.equals(_playerHand) || game.getModifiersQuerying().canLookOrRevealCardsInHand(game, _playerHand, _actingPlayer)) {
-            List<PhysicalCard> randomCards = GameUtils.getRandomCards(game.getGameState().getHand(_playerHand), _count);
+            List<PhysicalCard> randomCards = GameUtils.getRandomCards(game, _playerHand, Zone.HAND, game.getGameState().getHand(_playerHand), _count);
 
             if (randomCards.size() > 0) {
                 final PlayOrder playerOrder = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_source.getOwner(), false);
 
                 String nextPlayer;
                 while ((nextPlayer = playerOrder.getNextPlayer()) != null) {
+                    // The owner of the hand knows his own cards and has the game log: he is shown nothing.
+                    if (nextPlayer.equals(_playerHand))
+                        continue;
                     game.getUserFeedback().sendAwaitingDecision(nextPlayer,
                             new ArbitraryCardsSelectionDecision(1, _playerHand+" revealed card(s) from hand at random", randomCards, Collections.emptySet(), 0, 0) {
                                 @Override
@@ -56,7 +60,8 @@ public abstract class RevealRandomCardsFromHandEffect extends AbstractEffect {
                 game.getGameState().sendMessage(GameUtils.getCardLink(_source) + " revealed cards from " + _playerHand + " hand at random - " + getAppendedNames(randomCards));
             }
             else {
-                game.getGameState().sendMessage("No cards in " + _playerHand + " hand to reveal");
+                // Nobody is shown a list of no cards: the game log says there was nothing to reveal (Q-0144).
+                game.getGameState().sendMessage(GameUtils.getNoCardsRevealedFromHandMessage(game, _source, _playerHand));
             }
             cardsRevealed(randomCards);
             for (PhysicalCard randomCard : randomCards)

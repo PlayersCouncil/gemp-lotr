@@ -82,11 +82,13 @@
 				{
 					type: modifyStrength
 					select: choose(dwarf)
+					memorize: chosenDwarf
 					amount: {
 						type: Conditional
 						requires: {
-							type: location
-							filter: battleground
+							type: memoryMatches
+							memory: chosenDwarf
+							filter: atSite(battleground)
 						}
 						true: 4
 						false: 2
@@ -170,6 +172,7 @@
 				phase: fellowship
 				cost: {
 					type: discardStackedCards
+					select: choose(side(free people))
 					on: self
 				}
 				effect: {
@@ -724,13 +727,23 @@
 					type: ShuffleCardsFromPlayIntoDrawDeck
 					select: choose(culture(dwarven),condition)
 					includeStacked: true
+					memorize: shuffledCondition
 					memorizeStacked: stackedCards
 				}
 				{
 					type: repeat
 					times: {
-						type: forEachInMemory
-						memory: stackedCards
+						type: sum
+						source: [
+							{
+								type: forEachInMemory
+								memory: shuffledCondition
+							}
+							{
+								type: forEachInMemory
+								memory: stackedCards
+							}
+						]
 					}
 					effect: {
 						type: exert

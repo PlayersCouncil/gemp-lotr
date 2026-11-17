@@ -17,10 +17,10 @@ public class Card_11_193_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_193");
-					// put other cards in here as needed for the test case
+					put("lookout", "11_193");
 				}},
-				VirtualTableScenario.FellowshipSites,
+				// The King path: site 1 (Edoras Hall) and site 2 (King's Tent) have no terrain.
+				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -46,7 +46,7 @@ public class Card_11_193_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lookout");
 
 		assertEquals("Lookout Uruk", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +63,28 @@ public class Card_11_193_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LookoutUrukTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheFellowshipsCurrentSiteGainsBattlegroundAndOnlyThatSite() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var lookout = scn.GetShadowCard("lookout");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(3, scn.GetTwilight());
+		var edorasHall = scn.GetCurrentSite();
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(edorasHall, Keyword.BATTLEGROUND));
+
+		// Laid early, in the fellowship phase at site 1, to be read before and after (Q-0228).
+		scn.MoveMinionsToTable(lookout);
+		assertTrue(scn.HasKeyword(edorasHall, Keyword.BATTLEGROUND));
+
+		// The fellowship moves to King's Tent: the battleground goes with the current site.
+		scn.FreepsPass();
+		var kingsTent = scn.GetCurrentSite();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(kingsTent, Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(edorasHall, Keyword.BATTLEGROUND));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

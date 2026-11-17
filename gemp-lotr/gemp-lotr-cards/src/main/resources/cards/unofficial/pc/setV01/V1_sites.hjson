@@ -94,6 +94,7 @@
 		}
 	}
 
+	# History: revision 0, the card as first released in V1 (not in the errata sheet, so no date).
 	# 101_59: {
 	# 	cardInfo: {
 	# 		//id: 101_59
@@ -162,6 +163,7 @@
 	101_59: {
 		cardInfo: {
 			//id: 101_59
+			revision: 1
 			image: sets/vset1/LOTR-ENV1S059.0_card.jpg
 			collInfo: V1U59
 			rarity: U
@@ -177,22 +179,13 @@
 		effects: {
 			type: activated
 			phase: fellowship
-			requires: [
-				{
-					type: perTurnLimit
-					limit: 6
-				}
-			]
+			effectLimitPerTurn: 6
 			cost: {
 				type: exert
 				select: choose(unbound,companion)
 				memorize: exertedComp
 			}
 			effect: [
-				{
-					type: incrementPerTurnLimit
-					limit: 6
-				}
 				{
 					type: chooseActiveCards
 					text: Choose a companion of a different culture to make strength +1 until the end of the turn.
@@ -329,28 +322,21 @@
 			}
 			requires: [
 				{
+					# "here" stands for the site's title (Ketura on Q-0027), so an ally who has this site's text
+					# (Uruviel) makes the offer too while the fellowship is at a Lorien Throne Room.
 					type: Location
-					filter: self
-				}
-				{
-					type: PerPhaseLimit
-					limit: 1
+					filter: name(Lorien Throne Room)
 				}
 			]
+			limitPerPhase: 1
 			cost: {
 				type: exert
 				select: choose(culture(elven),ally)
 			}
-			effect: [
-				{
-					type: heal
-					select: memory(exertedComp)
-				}
-				{
-					type: IncrementPerPhaseLimit
-					limit: 1
-				}
-			]
+			effect: {
+				type: heal
+				select: memory(exertedComp)
+			}
 		}
 		gametext: Forest. Sanctuary. Each time a companion exerts here, you may exert an [elven] ally to heal that companion (limit once per phase).
 		lore: ""
@@ -380,7 +366,6 @@
 		keywords: River
 		effects: {
 			type: Trigger
-			optional: false
 			optional: false
 			trigger: {
 				type: startOfPhase
@@ -424,10 +409,18 @@
 				type: movesTo
 				filter: self
 			}
-			requires: {
-				type: isSide
-				side: shadow
-			}
+			requires: [
+				{
+					type: isSide
+					side: shadow
+				}
+				# Not offered when there is nothing to draw for (Q-0033).
+				{
+					type: canSpot
+					filter: companion
+					count: 5
+				}
+			]
 			effect: {
 				type: drawCards
 				count: {

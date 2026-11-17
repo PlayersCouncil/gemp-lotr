@@ -76,7 +76,7 @@ public class BotAssignmentRestrictionTest {
         scn.StartGame();
         scn.SkipToPhase(Phase.ASSIGNMENT);
 
-        scn.FreepsPassCurrentPhaseAction();
+        scn.FreepsPass();
         assertTrue(scn.ShadowActionAvailable(guard));
         scn.ShadowUseCardAction(guard);
         scn.ShadowChooseCard(scn.GetFreepsCard("aragorn"));

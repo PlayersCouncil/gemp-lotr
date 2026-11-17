@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,14 +13,21 @@ import static org.junit.Assert.*;
 public class Card_11_183_Tests
 {
 
+	// The Towers path: site 1 (Eastemnet Gullies) has no terrain, site 2 (Uruk Camp) is a battleground and a plains,
+	// site 4 (White Rocks) a battleground and no plains.
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_183");
-					// put other cards in here as needed for the test case
+					put("feral", "11_183");
+					put("ruthless", "11_200");  // Ruthless Uruk: an [uruk-hai] Uruk-hai, strength 10, no damage bonus;
+					                            // its text answers only its own assignment
 				}},
-				VirtualTableScenario.FellowshipSites,
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.TowersSites);
+					put("site2", "4_335");      // Uruk Camp: Battleground. Plains. Exerts each Uruk-hai played; none is
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +53,7 @@ public class Card_11_183_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("feral");
 
 		assertEquals("Feral Uruk", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +68,55 @@ public class Card_11_183_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FeralUrukTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus1AndDamagePlus1OnlyOnceTheFellowshipIsAtABattlegroundSiteAndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var feral = scn.GetShadowCard("feral");
+		var ruthless = scn.GetShadowCard("ruthless");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid early, in the fellowship phase at site 1, to be read before and after the move.
+		scn.MoveMinionsToTable(feral, ruthless);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(9, scn.GetStrength(feral));
+		assertEquals(0, scn.GetKeywordCount(feral, Keyword.DAMAGE));
+		assertEquals(10, scn.GetStrength(ruthless));
+		assertEquals(0, scn.GetKeywordCount(ruthless, Keyword.DAMAGE));
+
+		// The fellowship moves to Uruk Camp.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(10, scn.GetStrength(feral));  // 9 printed + 1
+		assertEquals(1, scn.GetKeywordCount(feral, Keyword.DAMAGE));
+		// Another Uruk-hai minion at the same battleground gains neither.
+		assertEquals(10, scn.GetStrength(ruthless));
+		assertEquals(0, scn.GetKeywordCount(ruthless, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsStrengthPlus1AndDamagePlus1AtABattlegroundThatIsNoPlains() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var feral = scn.GetShadowCard("feral");
+		var ruthless = scn.GetShadowCard("ruthless");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveMinionsToTable(feral, ruthless);
+
+		// White Rocks.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(10, scn.GetStrength(feral));
+		assertEquals(1, scn.GetKeywordCount(feral, Keyword.DAMAGE));
+		assertEquals(10, scn.GetStrength(ruthless));
+		assertEquals(0, scn.GetKeywordCount(ruthless, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

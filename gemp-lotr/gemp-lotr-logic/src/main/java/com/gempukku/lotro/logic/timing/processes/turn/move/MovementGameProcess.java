@@ -27,19 +27,27 @@ public class MovementGameProcess implements GameProcess {
     public void process(LotroGame game) {
         PhysicalCard currentSite = game.getGameState().getCurrentSite();
         final SystemQueueAction action = new SystemQueueAction();
+        // The steps of a move, in the order the rules list them (Comprehensive Rules 4.2, "moving your
+        // fellowship"): the next site is placed if needed; "When you move from..."; "When the fellowship
+        // moves..."; the player marker is moved; "When you move to..."; the twilight of the move.  The first
+        // two kinds of text are answered with the fellowship still at the site it is leaving.
         game.getFormat().getAdventure().appendNextSiteAction(action);
         action.appendEffect(
                 new TriggeringResultEffect(Effect.Type.BEFORE_MOVE_FROM, new WhenMoveFromResult(currentSite), "Fellowship moved from"));
+        action.appendEffect(
+                new TriggeringResultEffect(Effect.Type.BEFORE_MOVE, new WhenMovesResult(), "Fellowship moves"));
         action.appendEffect(
                 new UnrespondableEffect() {
                     @Override
                     protected void doPlayEffect(LotroGame game) {
                         GameState gameState = game.getGameState();
                         gameState.movePlayerToNextSite(game);
+                        // The marker is on the new site, but the fellowship has moved there only when the
+                        // twilight of the move has been added: until then, standing checks on where the
+                        // fellowship is wait (GameState.isFellowshipArriving).
+                        gameState.setFellowshipArriving(true);
                     }
                 });
-        action.appendEffect(
-                new TriggeringResultEffect(Effect.Type.BEFORE_MOVE, new WhenMovesResult(), "Fellowship moves"));
         action.appendEffect(
                 new TriggeringResultEffect(Effect.Type.BEFORE_MOVE_TO, new WhenMoveToResult(), "Fellowship moved to"));
         action.appendEffect(
@@ -71,7 +79,18 @@ public class MovementGameProcess implements GameProcess {
                         AddTwilightEffect effect = new AddTwilightEffect(
                                 null,
                                 AddTwilightEffect.Cause.MOVE,
-                                siteTwilightCost + companionsAddingTwilightForMoveCount);
+                                siteTwilightCost + companionsAddingTwilightForMoveCount) {
+                            @Override
+                            protected FullEffectResult playEffectReturningResult(LotroGame game) {
+                                FullEffectResult result = super.playEffectReturningResult(game);
+                                // The fellowship has now moved to the new site.  A card that is discarded for
+                                // being there goes in the batch of this effect's result, after its text has
+                                // had its say in the twilight just added (Decipher on Bill the Pony: "the
+                                // Shadow number of that site is reduced before Bill the Pony is discarded").
+                                game.getGameState().setFellowshipArriving(false);
+                                return result;
+                            }
+                        };
                         effect.setSourceText("Moving");
                         action.insertEffect(effect);
                     }

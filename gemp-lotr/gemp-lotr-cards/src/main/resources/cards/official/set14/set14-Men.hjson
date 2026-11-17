@@ -24,7 +24,7 @@
 			}
 			requires: {
 				type: canSpot
-				filter: another,culture(men)
+				filter: another,culture(men),man
 			}
 			cost: {
 				type: discard

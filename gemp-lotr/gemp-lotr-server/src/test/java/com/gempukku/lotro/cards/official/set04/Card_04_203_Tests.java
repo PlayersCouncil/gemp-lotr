@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_203_Tests
@@ -17,8 +18,8 @@ public class Card_04_203_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_203");
-					// put other cards in here as needed for the test case
+					put("horde", "4_203");
+					put("horde2", "4_203");       // a second copy in hand: each copy's discount is its own, and they do not add up
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +47,7 @@ public class Card_04_203_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("horde");
 
 		assertEquals("Uruk-hai Horde", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +64,67 @@ public class Card_04_203_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukhaiHordeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TwilightCostIsMinus1ForEachSiteItsOwnerControlsAndNotForTheOtherPlayers() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var horde = scn.GetShadowCard("horde");
+		var horde2 = scn.GetShadowCard("horde2");
+		scn.MoveCardsToHand(horde, horde2);
+		assertInHand(horde, horde2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Both markers on site 4: sites 1, 2 and 3 are behind every marker.
+		scn.SkipToSite(4);
+		assertEquals(0, scn.GetShadowControlledSiteCount());
+		assertEquals(6, scn.GetTwilightCost(horde));
+		assertEquals(6, scn.GetTwilightCost(horde2));
 
-		assertEquals(6, scn.GetTwilight());
+		scn.ShadowTakeControlOfSite();
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertEquals(5, scn.GetTwilightCost(horde));
+
+		scn.ShadowTakeControlOfSite();
+		assertEquals(2, scn.GetShadowControlledSiteCount());
+		// 6 - 1 for each of two sites, for each copy (not 6 - 4: a copy's text is about that copy alone).
+		assertEquals(4, scn.GetTwilightCost(horde));
+		assertEquals(4, scn.GetTwilightCost(horde2));
+
+		// A site the Free Peoples player controls is not counted.
+		scn.FreepsTakeControlOfSite();
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
+		assertEquals(4, scn.GetTwilightCost(horde));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void WithTwoSitesControlledItIsPlayedForFourAndNotForThree() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var horde = scn.GetShadowCard("horde");
+		scn.MoveCardsToHand(horde);
+		assertInHand(horde);
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		assertEquals(2, scn.GetShadowControlledSiteCount());
+
+		// The fellowship moves to The Bridge of Khazad-dum, site 5: this minion does not roam there.
+		scn.FreepsPass();
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		// 6 - 2 = 4: three is one short.
+		assertFalse(scn.ShadowPlayAvailable(horde));
+
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(horde));
+		scn.ShadowPlayCard(horde);
+		assertInZone(Zone.SHADOW_CHARACTERS, horde);
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

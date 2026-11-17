@@ -9,44 +9,75 @@ import org.junit.Test;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
+import static com.gempukku.lotro.framework.Assertions.*;
 
 public class Card_V3_115_Tests
 {
-
-// ----------------------------------------
-// SAM, UNDAUNTED TESTS
-// ----------------------------------------
 
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("sam", "103_115");        // Sam, Undaunted
+					put("sam", "103_115");
+					put("merry", "1_302");        // Merry, Friend to Sam: a Hobbit, resistance 6; a skirmish ability never used here
+					put("pippin", "1_306");       // Pippin, Friend to Frodo: his text is about [shire] tales
+					put("aragorn", "1_89");       // Aragorn, Ranger of the North: a maneuver ability never used here
+					put("bounder", "1_286");      // Bounder: a Hobbit ally; a skirmish ability
 
-					// Shadow support conditions
-					put("bladetip1", "1_209");    // Blade Tip - cost 0 (even) condition, support area
-					put("bladetip2", "1_209");    // Second copy for attaching
-					put("blackbreath1", "1_207"); // Black Breath - cost 1 (odd) condition
-					put("blackbreath2", "1_207"); // Second copy for attaching
+					// Shadow conditions that lie in the support area, of four costs and three cultures.
+					put("wreathed", "1_238");     // Wreathed in Shadow: [wraith], cost 0; an archery ability
+					put("armory", "1_157");       // Uruk-hai Armory: [isengard], cost 1; needs an Uruk-hai
+					put("fewnumber", "1_260");    // The Number Must Be Few: [sauron], cost 2; needs 7 companions
+					put("bloodlust", "1_144");    // Uruk Bloodlust: [isengard], cost 3; a response to an Uruk-hai's win
+					// Weary: an [isengard] condition, cost 1, borne by a companion or an ally; it answers its bearer being
+					// assigned to an [isengard] tracker.
+					put("weary1", "4_212");
+					put("weary2", "4_212");
+					// Throw Yourself in Next Time: a [moria] condition, cost 0, borne by a Hobbit companion, who may then
+					// be exerted only by Shadow cards.
+					put("throwyourself", "2_71");
 
-					// Shadow support possessions
-					put("charger", "103_41");     // Bladetusk Charger - cost 3 (odd) possession
-					put("ships", "8_65");         // Ships of Great Draught - cost 2 (even) possession
+					// Shadow possessions that lie in the support area.
+					put("hides", "4_19");         // Hides: [dunland], cost 1; a response for [dunland] Men
+					put("grond", "8_103");        // Grond: [sauron], cost 3; Shadow and regroup abilities
+					put("ships", "8_65");         // Ships of Great Draught: [raider], cost 2; Shadow and regroup abilities
+					put("sails", "8_50");         // Black Sails of Umbar: [raider], cost 2; a Shadow ability
+					// Goblin Scimitar: a [moria] possession, cost 0, borne by a [moria] Orc.
+					put("scimitar", "1_180");
+					// Goblin Spear: a [moria] possession, cost 1, borne by a [moria] minion; it answers its bearer killing
+					// a companion.
+					put("spear", "1_182");
 
-					// Shadow attached possessions (should NOT be hindered)
-					put("raiderbow", "7_155");    // Raider Bow - cost 2 (even), attaches to Raider man
-					put("spear", "4_255");        // Southron Spear - cost 1 (odd), attaches to Southron
+					// Shadow artifacts that lie in the support area: neither condition nor possession.
+					put("palantir", "3_67");      // The Palantir of Orthanc: [isengard], cost 0; a Shadow ability
+					put("crown", "101_39");       // Pale Crown: [wraith], cost 1; a skirmish ability
 
-					// Shadow artifacts (should NOT be hindered - not condition or possession)
-					put("ithilstone", "9_47");    // Ithil Stone - cost 0 (even) artifact
-					put("palecrown", "101_39");   // Pale Crown - cost 1 (odd) artifact
+					// Free Peoples cards that lie in the support area.
+					put("map", "1_318");          // Thror's Map: a possession, cost 0; fellowship or regroup ability
+					put("toby", "1_305");         // Old Toby: a possession, cost 1
+					put("longstem", "17_21");     // Long-stemmed Pipe: a condition, cost 2; a regroup ability
+					put("halfling", "17_106");    // Halfling Leaf: a condition, cost 1; a skirmish ability
 
-					put("southron", "4_222");     // Desert Warrior - for attaching possessions
-
-					put("aragorn", "1_89");
+					put("troop", "1_177");        // Goblin Patrol Troop: a [moria] Orc with no text, cost 6
+					put("runner1", "1_178");      // Goblin Runner: strength 5; its text is about being played
+					put("runner2", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// Gimli, Bearer of Grudges 9_4 bears the Ring: resistance 4, and +1 for his damage +1.
+	protected VirtualTableScenario GetGimliRingBearerScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("sam", "103_115");
+					put("frodo", "13_149");     // Frodo, Frenzied Fighter: the one Frodo who cannot bear the Ring, so the one who may be in play beside another Ring-bearer (Q-0159); resistance 8, and his texts want more minions than companions, or a skirmish he is not in
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.GimliRB,
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -89,201 +120,582 @@ public class Card_V3_115_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
 	}
 
+	@Test
+	public void PlayedForTwoAndFrodoIsThenResistancePlusTwoAndNoOtherHobbitIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+
+		scn.MoveCompanionsToTable(merry);
+		scn.MoveCardsToHand(sam);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(6, scn.GetResistance(merry));
+
+		scn.FreepsPlayCard(sam);
+
+		assertInZone(Zone.FREE_CHARACTERS, sam);
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(12, scn.GetResistance(frodo));
+		assertEquals(6, scn.GetResistance(merry));
+		assertEquals(6, scn.GetResistance(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 
 	@Test
-	public void SamHindersEvenConditions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void AFrodoWhoIsNotTheRingBearerIsResistancePlusTwoAndARingBearerWhoIsNotFrodoIsNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetGimliRingBearerScenario();
+
+		var gimli = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var frodo = scn.GetFreepsCard("frodo");
+
+		scn.MoveCompanionsToTable(frodo);
+
+		scn.StartGame();
+
+		assertEquals(8, scn.GetResistance(frodo));
+		// 4, and 1 for his damage +1
+		assertEquals(5, scn.GetResistance(gimli));
+
+		scn.MoveCompanionsToTable(sam);
+
+		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(5, scn.GetResistance(gimli));
+		assertEquals(6, scn.GetResistance(sam));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ConditionAndEvenHindersEveryShadowSupportConditionOfEvenCostAndNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
-		var bladetip = scn.GetShadowCard("bladetip1");   // Cost 0 - even
-		var blackbreath = scn.GetShadowCard("blackbreath1"); // Cost 1 - odd
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToSupportArea(bladetip, blackbreath);
-		scn.MoveMinionsToTable(southron);
+		var merry = scn.GetFreepsCard("merry");
+		var bounder = scn.GetFreepsCard("bounder");
+		var map = scn.GetFreepsCard("map");
+		var toby = scn.GetFreepsCard("toby");
+		var longstem = scn.GetFreepsCard("longstem");
+		var halfling = scn.GetFreepsCard("halfling");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var armory = scn.GetShadowCard("armory");
+		var fewnumber = scn.GetShadowCard("fewnumber");
+		var bloodlust = scn.GetShadowCard("bloodlust");
+		var wearyOnAlly = scn.GetShadowCard("weary1");
+		var wearyOnCompanion = scn.GetShadowCard("weary2");
+		var hides = scn.GetShadowCard("hides");
+		var grond = scn.GetShadowCard("grond");
+		var ships = scn.GetShadowCard("ships");
+		var sails = scn.GetShadowCard("sails");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var palantir = scn.GetShadowCard("palantir");
+		var crown = scn.GetShadowCard("crown");
+		var throwOnCompanion = scn.GetShadowCard("throwyourself");
+		var spear = scn.GetShadowCard("spear");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner1");
+
+		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToSupportArea(map, toby, longstem, halfling);
+		scn.MoveCardsToSupportArea(wreathed, armory, fewnumber, bloodlust, hides, grond, ships, sails, palantir, crown);
+		scn.AttachCardsTo(bounder, wearyOnAlly);
+		scn.AttachCardsTo(merry, wearyOnCompanion, throwOnCompanion);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.AttachCardsTo(runner, spear);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		assertFalse(scn.IsHindered(bladetip));
-		assertFalse(scn.IsHindered(blackbreath));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(wreathed));
+		assertFalse(scn.IsHindered(fewnumber));
 
 		scn.FreepsUseCardAction(sam);
 
-		// Choose condition
-		scn.FreepsChoose("condition");
-		// Choose even
-		scn.FreepsChoose("even");
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsChoiceAvailable("conditions"));
+		assertTrue(scn.FreepsChoiceAvailable("possessions"));
+		scn.FreepsChoose("conditions");
+		assertTrue(scn.FreepsChoiceAvailable("odd-numbered"));
+		assertTrue(scn.FreepsChoiceAvailable("even-numbered"));
+		scn.FreepsChoose("even-numbered");
 
-		// Blade Tip (0) should be hindered, Black Breath (1) should not
-		assertTrue(scn.IsHindered(bladetip));
-		assertFalse(scn.IsHindered(blackbreath));
-	}
-
-	@Test
-	public void SamHindersOddConditions() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		var bladetip = scn.GetShadowCard("bladetip1");   // Cost 0 - even
-		var blackbreath = scn.GetShadowCard("blackbreath1"); // Cost 1 - odd
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToSupportArea(bladetip, blackbreath);
-		scn.MoveMinionsToTable(southron);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		scn.FreepsUseCardAction(sam);
-
-		// Choose condition
-		scn.FreepsChoose("condition");
-		// Choose odd
-		scn.FreepsChoose("odd");
-
-		// Black Breath (1) should be hindered, Blade Tip (0) should not
-		assertFalse(scn.IsHindered(bladetip));
-		assertTrue(scn.IsHindered(blackbreath));
-	}
-
-	@Test
-	public void SamHindersEvenPossessions() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		var charger = scn.GetShadowCard("charger");  // Cost 3 - odd
-		var ships = scn.GetShadowCard("ships");      // Cost 2 - even
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToSupportArea(charger, ships);
-		scn.MoveMinionsToTable(southron);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.MANEUVER);
-
-		assertFalse(scn.IsHindered(charger));
+		// Costs 0 and 2.
+		assertTrue(scn.IsHindered(wreathed));
+		assertTrue(scn.IsHindered(fewnumber));
+		// Conditions of odd cost, in the support area and on an ally.
+		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.IsHindered(bloodlust));
+		assertFalse(scn.IsHindered(wearyOnAlly));
+		assertFalse(scn.IsHindered(wearyOnCompanion));
+		// A condition of cost 0 that a companion bears is no support card.
+		assertFalse(scn.IsHindered(throwOnCompanion));
+		// Possessions and artifacts of even cost: 2, 2, 0 on a minion, 0.
 		assertFalse(scn.IsHindered(ships));
-
-		scn.FreepsUseCardAction(sam);
-
-		// Choose possession
-		scn.FreepsChoose("possession");
-		// Choose even
-		scn.FreepsChoose("even");
-
-		// Ships (2) should be hindered, Charger (3) should not
-		assertFalse(scn.IsHindered(charger));
-		assertTrue(scn.IsHindered(ships));
+		assertFalse(scn.IsHindered(sails));
+		assertFalse(scn.IsHindered(scimitar));
+		assertFalse(scn.IsHindered(palantir));
+		// A Free Peoples condition of cost 2.
+		assertFalse(scn.IsHindered(longstem));
+		assertFalse(scn.IsHindered(hides));
+		assertFalse(scn.IsHindered(grond));
+		assertFalse(scn.IsHindered(crown));
+		assertFalse(scn.IsHindered(map));
+		assertFalse(scn.IsHindered(toby));
+		assertFalse(scn.IsHindered(halfling));
+		assertFalse(scn.IsHindered(spear));
+		assertFalse(scn.IsHindered(troop));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void SamHindersOddPossessions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void ConditionAndOddHindersEveryShadowSupportConditionOfOddCostTheOneOnAnAllyIncluded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
-		var charger = scn.GetShadowCard("charger");  // Cost 3 - odd
-		var ships = scn.GetShadowCard("ships");      // Cost 2 - even
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToSupportArea(charger, ships);
-		scn.MoveMinionsToTable(southron);
+		var merry = scn.GetFreepsCard("merry");
+		var bounder = scn.GetFreepsCard("bounder");
+		var map = scn.GetFreepsCard("map");
+		var toby = scn.GetFreepsCard("toby");
+		var longstem = scn.GetFreepsCard("longstem");
+		var halfling = scn.GetFreepsCard("halfling");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var armory = scn.GetShadowCard("armory");
+		var fewnumber = scn.GetShadowCard("fewnumber");
+		var bloodlust = scn.GetShadowCard("bloodlust");
+		var wearyOnAlly = scn.GetShadowCard("weary1");
+		var wearyOnCompanion = scn.GetShadowCard("weary2");
+		var hides = scn.GetShadowCard("hides");
+		var grond = scn.GetShadowCard("grond");
+		var ships = scn.GetShadowCard("ships");
+		var sails = scn.GetShadowCard("sails");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var palantir = scn.GetShadowCard("palantir");
+		var crown = scn.GetShadowCard("crown");
+		var throwOnCompanion = scn.GetShadowCard("throwyourself");
+		var spear = scn.GetShadowCard("spear");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner1");
+
+		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToSupportArea(map, toby, longstem, halfling);
+		scn.MoveCardsToSupportArea(wreathed, armory, fewnumber, bloodlust, hides, grond, ships, sails, palantir, crown);
+		scn.AttachCardsTo(bounder, wearyOnAlly);
+		scn.AttachCardsTo(merry, wearyOnCompanion, throwOnCompanion);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.AttachCardsTo(runner, spear);
 		scn.SkipToPhase(Phase.MANEUVER);
 
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.IsHindered(wearyOnAlly));
+
 		scn.FreepsUseCardAction(sam);
+		scn.FreepsChoose("conditions");
+		scn.FreepsChoose("odd-numbered");
 
-		// Choose possession
-		scn.FreepsChoose("possession");
-		// Choose odd
-		scn.FreepsChoose("odd");
-
-		// Charger (3) should be hindered, Ships (2) should not
-		assertTrue(scn.IsHindered(charger));
+		// Costs 1 and 3 in the support area, and the Weary an ally bears: what an ally bears is in the support area.
+		assertTrue(scn.IsHindered(armory));
+		assertTrue(scn.IsHindered(bloodlust));
+		assertTrue(scn.IsHindered(wearyOnAlly));
+		// The same card on a companion is no support card.
+		assertFalse(scn.IsHindered(wearyOnCompanion));
+		// Conditions of even cost.
+		assertFalse(scn.IsHindered(wreathed));
+		assertFalse(scn.IsHindered(fewnumber));
+		// Possessions and an artifact of odd cost: 1, 3, 1.
+		assertFalse(scn.IsHindered(hides));
+		assertFalse(scn.IsHindered(grond));
+		assertFalse(scn.IsHindered(crown));
+		// A Free Peoples condition of cost 1.
+		assertFalse(scn.IsHindered(halfling));
 		assertFalse(scn.IsHindered(ships));
+		assertFalse(scn.IsHindered(sails));
+		assertFalse(scn.IsHindered(scimitar));
+		assertFalse(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(map));
+		assertFalse(scn.IsHindered(toby));
+		assertFalse(scn.IsHindered(longstem));
+		assertFalse(scn.IsHindered(bounder));
+		assertFalse(scn.IsHindered(throwOnCompanion));
+		assertFalse(scn.IsHindered(spear));
+		assertFalse(scn.IsHindered(troop));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void SamDoesNotHinderAttachedCards() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PossessionAndEvenHindersEveryShadowSupportPossessionOfEvenCostAndNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var bladetip1 = scn.GetShadowCard("bladetip1");  // Support area - cost 0 even
-		var bladetip2 = scn.GetShadowCard("bladetip2");  // Attached to Aragorn
-		var ships = scn.GetShadowCard("ships");          // Support area - cost 2 even
-		var raiderbow = scn.GetShadowCard("raiderbow");  // Attached - cost 2 even
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam, aragorn);
-		scn.MoveCardsToSupportArea(bladetip1, ships);
-		scn.AttachCardsTo(aragorn, bladetip2);
-		scn.AttachCardsTo(southron, raiderbow);
-		scn.MoveMinionsToTable(southron);
+		var merry = scn.GetFreepsCard("merry");
+		var bounder = scn.GetFreepsCard("bounder");
+		var map = scn.GetFreepsCard("map");
+		var toby = scn.GetFreepsCard("toby");
+		var longstem = scn.GetFreepsCard("longstem");
+		var halfling = scn.GetFreepsCard("halfling");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var armory = scn.GetShadowCard("armory");
+		var fewnumber = scn.GetShadowCard("fewnumber");
+		var bloodlust = scn.GetShadowCard("bloodlust");
+		var wearyOnAlly = scn.GetShadowCard("weary1");
+		var wearyOnCompanion = scn.GetShadowCard("weary2");
+		var hides = scn.GetShadowCard("hides");
+		var grond = scn.GetShadowCard("grond");
+		var ships = scn.GetShadowCard("ships");
+		var sails = scn.GetShadowCard("sails");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var palantir = scn.GetShadowCard("palantir");
+		var crown = scn.GetShadowCard("crown");
+		var throwOnCompanion = scn.GetShadowCard("throwyourself");
+		var spear = scn.GetShadowCard("spear");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner1");
+
+		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToSupportArea(map, toby, longstem, halfling);
+		scn.MoveCardsToSupportArea(wreathed, armory, fewnumber, bloodlust, hides, grond, ships, sails, palantir, crown);
+		scn.AttachCardsTo(bounder, wearyOnAlly);
+		scn.AttachCardsTo(merry, wearyOnCompanion, throwOnCompanion);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.AttachCardsTo(runner, spear);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		scn.FreepsUseCardAction(sam);
-		scn.FreepsChoose("condition");
-		scn.FreepsChoose("even");
-
-		// Support area condition hindered
-		assertTrue(scn.IsHindered(bladetip1));
-		// Attached condition NOT hindered
-		assertFalse(scn.IsHindered(bladetip2));
-	}
-
-	@Test
-	public void SamDoesNotHinderArtifacts() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetScenario();
-
-		var sam = scn.GetFreepsCard("sam");
-		var ships = scn.GetShadowCard("ships");          // Possession - cost 2 even
-		var ithilstone = scn.GetShadowCard("ithilstone"); // Artifact - cost 0 even
-		var charger = scn.GetShadowCard("charger");      // Possession - cost 3 odd
-		var palecrown = scn.GetShadowCard("palecrown");  // Artifact - cost 1 odd
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam);
-		scn.MoveCardsToSupportArea(ships, ithilstone, charger, palecrown);
-		scn.MoveMinionsToTable(southron);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(ships));
+		assertFalse(scn.IsHindered(sails));
 
 		scn.FreepsUseCardAction(sam);
-		scn.FreepsChoose("possession");
-		scn.FreepsChoose("even");
+		scn.FreepsChoose("possessions");
+		assertTrue(scn.FreepsChoiceAvailable("odd-numbered"));
+		assertTrue(scn.FreepsChoiceAvailable("even-numbered"));
+		scn.FreepsChoose("even-numbered");
 
-		// Even possession hindered
+		// Both of cost 2.
 		assertTrue(scn.IsHindered(ships));
-		// Even artifact NOT hindered (not a possession)
-		assertFalse(scn.IsHindered(ithilstone));
-		// Odd cards not hindered
-		assertFalse(scn.IsHindered(charger));
-		assertFalse(scn.IsHindered(palecrown));
+		assertTrue(scn.IsHindered(sails));
+		// A possession of cost 0 that a minion bears is no support card.
+		assertFalse(scn.IsHindered(scimitar));
+		// An artifact of cost 0 is no possession.
+		assertFalse(scn.IsHindered(palantir));
+		// Possessions of odd cost.
+		assertFalse(scn.IsHindered(hides));
+		assertFalse(scn.IsHindered(grond));
+		// Conditions of even cost.
+		assertFalse(scn.IsHindered(wreathed));
+		assertFalse(scn.IsHindered(fewnumber));
+		// A Free Peoples possession of cost 0.
+		assertFalse(scn.IsHindered(map));
+		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.IsHindered(bloodlust));
+		assertFalse(scn.IsHindered(wearyOnAlly));
+		assertFalse(scn.IsHindered(wearyOnCompanion));
+		assertFalse(scn.IsHindered(crown));
+		assertFalse(scn.IsHindered(toby));
+		assertFalse(scn.IsHindered(longstem));
+		assertFalse(scn.IsHindered(halfling));
+		assertFalse(scn.IsHindered(throwOnCompanion));
+		assertFalse(scn.IsHindered(spear));
+		assertFalse(scn.IsHindered(troop));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 
 	@Test
-	public void SamRequiresFourOrFewerCompanions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void PossessionAndOddHindersEveryShadowSupportPossessionOfOddCostAndNothingElse() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var sam = scn.GetFreepsCard("sam");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var bladetip = scn.GetShadowCard("bladetip1");
-		var southron = scn.GetShadowCard("southron");
-		scn.MoveCompanionsToTable(sam, aragorn); // Frodo + Sam + Aragorn = 3
-		scn.MoveCardsToSupportArea(bladetip);
-		scn.MoveMinionsToTable(southron);
+		var merry = scn.GetFreepsCard("merry");
+		var bounder = scn.GetFreepsCard("bounder");
+		var map = scn.GetFreepsCard("map");
+		var toby = scn.GetFreepsCard("toby");
+		var longstem = scn.GetFreepsCard("longstem");
+		var halfling = scn.GetFreepsCard("halfling");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var armory = scn.GetShadowCard("armory");
+		var fewnumber = scn.GetShadowCard("fewnumber");
+		var bloodlust = scn.GetShadowCard("bloodlust");
+		var wearyOnAlly = scn.GetShadowCard("weary1");
+		var wearyOnCompanion = scn.GetShadowCard("weary2");
+		var hides = scn.GetShadowCard("hides");
+		var grond = scn.GetShadowCard("grond");
+		var ships = scn.GetShadowCard("ships");
+		var sails = scn.GetShadowCard("sails");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var palantir = scn.GetShadowCard("palantir");
+		var crown = scn.GetShadowCard("crown");
+		var throwOnCompanion = scn.GetShadowCard("throwyourself");
+		var spear = scn.GetShadowCard("spear");
+		var troop = scn.GetShadowCard("troop");
+		var runner = scn.GetShadowCard("runner1");
+
+		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToSupportArea(map, toby, longstem, halfling);
+		scn.MoveCardsToSupportArea(wreathed, armory, fewnumber, bloodlust, hides, grond, ships, sails, palantir, crown);
+		scn.AttachCardsTo(bounder, wearyOnAlly);
+		scn.AttachCardsTo(merry, wearyOnCompanion, throwOnCompanion);
 
 		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.AttachCardsTo(runner, spear);
 		scn.SkipToPhase(Phase.MANEUVER);
 
-		// 3 companions - should be available
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(hides));
+		assertFalse(scn.IsHindered(grond));
+
+		scn.FreepsUseCardAction(sam);
+		scn.FreepsChoose("possessions");
+		scn.FreepsChoose("odd-numbered");
+
+		// Costs 1 and 3.
+		assertTrue(scn.IsHindered(hides));
+		assertTrue(scn.IsHindered(grond));
+		// A possession of cost 1 that a minion bears is no support card.
+		assertFalse(scn.IsHindered(spear));
+		// An artifact of cost 1 is no possession.
+		assertFalse(scn.IsHindered(crown));
+		// Possessions of even cost.
+		assertFalse(scn.IsHindered(ships));
+		assertFalse(scn.IsHindered(sails));
+		assertFalse(scn.IsHindered(scimitar));
+		// Conditions of odd cost.
+		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.IsHindered(bloodlust));
+		assertFalse(scn.IsHindered(wearyOnAlly));
+		assertFalse(scn.IsHindered(wearyOnCompanion));
+		// A Free Peoples possession of cost 1.
+		assertFalse(scn.IsHindered(toby));
+		assertFalse(scn.IsHindered(wreathed));
+		assertFalse(scn.IsHindered(fewnumber));
+		assertFalse(scn.IsHindered(palantir));
+		assertFalse(scn.IsHindered(map));
+		assertFalse(scn.IsHindered(longstem));
+		assertFalse(scn.IsHindered(halfling));
+		assertFalse(scn.IsHindered(throwOnCompanion));
+		assertFalse(scn.IsHindered(troop));
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWithFiveCompanionsToSpotAndOfferedWithFour() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var pippin = scn.GetFreepsCard("pippin");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var bounder = scn.GetFreepsCard("bounder");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var troop = scn.GetShadowCard("troop");
+
+		// Five companions with Frodo, and an ally.
+		scn.MoveCompanionsToTable(sam, merry, pippin, aragorn);
+		scn.MoveAlliesToTable(bounder);
+		scn.MoveCardsToSupportArea(wreathed);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(sam));
+
+		// A hindered companion cannot be spotted: four are left, and the ally is no companion.
+		scn.HinderCard(aragorn);
+		scn.FreepsRefreshDecision();
+
 		assertTrue(scn.FreepsActionAvailable(sam));
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhileTheRingBearerIsHinderedAndNoBurdenCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToSupportArea(wreathed);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.HinderCard(frodo);
+		scn.FreepsRefreshDecision();
+
+		assertFalse(scn.FreepsActionAvailable(sam));
+		assertEquals(0, scn.GetBurdens());
+		assertFalse(scn.IsHindered(wreathed));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithNoShadowConditionOrPossessionInASupportAreaTheBurdenIsAddedAndNothingIsAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var halfling = scn.GetFreepsCard("halfling");
+		var toby = scn.GetFreepsCard("toby");
+		var wearyOnCompanion = scn.GetShadowCard("weary2");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var palantir = scn.GetShadowCard("palantir");
+		var troop = scn.GetShadowCard("troop");
+
+		// A Shadow condition on a companion, a Shadow possession on a minion, a Shadow artifact and Free Peoples
+		// cards in the support areas: nothing that either answer to either question could hinder.
+		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveCardsToSupportArea(halfling, toby);
+		scn.MoveCardsToSupportArea(palantir);
+		scn.AttachCardsTo(merry, wearyOnCompanion);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		// It has a cost, so it is offered though it can hinder nothing.
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.FreepsUseCardAction(sam);
+
+		assertEquals(1, scn.GetBurdens());
+		assertFalse(scn.IsHindered(wearyOnCompanion));
+		assertFalse(scn.IsHindered(scimitar));
+		assertFalse(scn.IsHindered(palantir));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithNoShadowSupportCardOfTheTypeChosenOddOrEvenIsNotAsked() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var toby = scn.GetFreepsCard("toby");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var scimitar = scn.GetShadowCard("scimitar");
+		var troop = scn.GetShadowCard("troop");
+
+		// A Shadow condition in the support area. The only Shadow possession is on a minion, and the only
+		// possession in a support area is a Free Peoples one.
+		scn.MoveCompanionsToTable(sam);
+		scn.MoveCardsToSupportArea(toby);
+		scn.MoveCardsToSupportArea(wreathed);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop);
+		scn.AttachCardsTo(troop, scimitar);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		scn.FreepsUseCardAction(sam);
+
+		// The first question is a real one: there is a condition to hinder.
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.FreepsChoiceAvailable("conditions"));
+		assertTrue(scn.FreepsChoiceAvailable("possessions"));
+		scn.FreepsChoose("possessions");
+
+		// Neither odd nor even could hinder a possession.
+		assertFalse(scn.IsHindered(wreathed));
+		assertFalse(scn.IsHindered(scimitar));
+		assertFalse(scn.IsHindered(toby));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void UsedOnceItIsWithheldForTheRestOfTheTurnAndOfferedAgainOnTheNextTurn() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
+		var wreathed = scn.GetShadowCard("wreathed");
+		var armory = scn.GetShadowCard("armory");
+		var fewnumber = scn.GetShadowCard("fewnumber");
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+
+		scn.MoveCompanionsToTable(sam, merry);
+		scn.MoveCardsToSupportArea(wreathed, armory, fewnumber);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner1);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertEquals(0, scn.GetBurdens());
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.FreepsUseCardAction(sam);
+		scn.FreepsChoose("conditions");
+		scn.FreepsChoose("even-numbered");
+
+		assertEquals(1, scn.GetBurdens());
+		assertTrue(scn.IsHindered(wreathed));
+		assertTrue(scn.IsHindered(fewnumber));
+		assertFalse(scn.IsHindered(armory));
+
+		// Later in the same maneuver phase: a burden could still be added and the Armory could still be hindered.
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(sam));
+
+		// The fellowship moves again: a second maneuver phase in the same turn.
+		scn.SkipToMovementDecision();
+		scn.FreepsChooseToMove();
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.IsHindered(armory));
+		assertFalse(scn.FreepsActionAvailable(sam));
+		assertEquals(1, scn.GetBurdens());
+
+		// The other player's turn, and then this player's next.
+		scn.SkipToOtherPlayersTurn();
+		scn.SkipToOtherPlayersTurn();
+		scn.MoveMinionsToTable(runner2);
+		scn.SkipToPhase(Phase.MANEUVER);
+
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertTrue(scn.FreepsActionAvailable(sam));
+
+		scn.FreepsUseCardAction(sam);
+		scn.FreepsChoose("conditions");
+		scn.FreepsChoose("odd-numbered");
+
+		assertEquals(2, scn.GetBurdens());
+		assertTrue(scn.IsHindered(armory));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

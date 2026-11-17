@@ -18,8 +18,12 @@ public class Card_07_290_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_290");
-					// put other cards in here as needed for the test case
+					put("soldier", "7_290");
+					put("soldier2", "7_290");
+					put("chieftain", "1_266");  // Orc Chieftain: [sauron] Orc, strength 7, vitality 2; its text answers a weapon played on it
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability used only on purpose
+					put("gimli", "1_13");       // Gimli, Son of Gloin: strength 6, vitality 3; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_07_290_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("soldier");
 
 		assertEquals("Mordor Soldier", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +66,97 @@ public class Card_07_290_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MordorSoldierTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityRemovesOneThreatToMakeThisSoldierStrengthPlus4AndNotTheOtherCopy() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var soldier = scn.GetShadowCard("soldier");
+		var soldier2 = scn.GetShadowCard("soldier2");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Frodo, Aragorn and Gimli: room for the two threats.
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
+		scn.MoveMinionsToTable(soldier, soldier2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, soldier);
+		// The other copy, left over, goes into the same skirmish.
+		scn.ShadowAssignToMinions(aragorn, soldier2);
 
-		assertEquals(1, scn.GetTwilight());
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+		assertEquals(3, scn.GetStrength(soldier));
+		assertEquals(3, scn.GetStrength(soldier2));
+		assertTrue(scn.ShadowActionAvailable(soldier));
+		assertTrue(scn.ShadowActionAvailable(soldier2));
+
+		scn.ShadowUseCardAction(soldier);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(7, scn.GetStrength(soldier));
+		assertEquals(3, scn.GetStrength(soldier2));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityIsOfferedWhileHeWaitsForHisSkirmishAndTheBonusLastsOnlyForThatSkirmish() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var soldier = scn.GetShadowCard("soldier");
+		var chieftain = scn.GetShadowCard("chieftain");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		scn.MoveCompanionsToTable(aragorn, gimli);
+
+		scn.StartGame();
+		scn.AddThreats(1);
+		assertEquals(1, scn.GetThreats());
+		scn.MoveMinionsToTable(soldier, chieftain);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{aragorn, soldier}, new PhysicalCardImpl[]{gimli, chieftain});
+
+		// Gimli's skirmish first: the Soldier is waiting for his own against Aragorn.
+		scn.FreepsResolveSkirmish(gimli);
+		scn.FreepsPass();
+		assertEquals(3, scn.GetStrength(soldier));
+		assertTrue(scn.ShadowActionAvailable(soldier));
+		scn.ShadowUseCardAction(soldier);
+		assertEquals(0, scn.GetThreats());
+		assertEquals(7, scn.GetStrength(soldier));
+		assertEquals(7, scn.GetStrength(chieftain));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+
+		assertEquals(0, scn.GetWoundsOn(gimli));
+		scn.PassSkirmishActions();
+		// The Chieftain's 7 against Gimli's 6: a wound, not a kill.
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		scn.FreepsResolveSkirmish(aragorn);
+
+		// The +4 was made in Gimli's skirmish and is gone in the next.
+		assertEquals(3, scn.GetStrength(soldier));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityIsNotOfferedWithNoThreatToRemove() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var soldier = scn.GetShadowCard("soldier");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(soldier);
+		assertEquals(0, scn.GetThreats());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, soldier);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(soldier));
+		assertEquals(3, scn.GetStrength(soldier));
 	}
 }

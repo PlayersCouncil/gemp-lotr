@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set18;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_18_039_Tests
@@ -18,8 +18,11 @@ public class Card_18_039_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_39");
-					// put other cards in here as needed for the test case
+					put("armor", "18_39");
+					put("ranger", "7_116");     // Ranger of Osgiliath: [gondor] Man companion, no knight; a regroup ability used only on purpose
+					put("merchant", "7_97");    // Gondorian Merchant: the [gondor] Man ally, no knight; an ability that needs initiative
+					put("pippin", "103_31");    // Pippin, Trollslayer: a [gondor] Hobbit, no Man; a skirmish ability used only on purpose
+					put("guard", "5_83");       // Household Guard: a [rohan] Man companion, valiant, no other text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -45,7 +48,7 @@ public class Card_18_039_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("armor");
 
 		assertEquals("Armor of the White City", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -58,18 +61,57 @@ public class Card_18_039_Tests
 		assertEquals(1, card.getBlueprint().getStrength());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ArmoroftheWhiteCityTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void BearerMustBeAGondorManAndIsAKnight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var armor = scn.GetFreepsCard("armor");
+		var frodo = scn.GetRingBearer();
+		var ranger = scn.GetFreepsCard("ranger");
+		var pippin = scn.GetFreepsCard("pippin");
+		var guard = scn.GetFreepsCard("guard");
+		var merchant = scn.GetFreepsCard("merchant");
+		scn.MoveCompanionsToTable(ranger, pippin, guard);
+		scn.MoveAlliesToTable(merchant);
+		scn.MoveCardsToHand(armor);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.HAND, armor);
+		assertFalse(scn.HasKeyword(merchant, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(ranger, Keyword.KNIGHT));
+		assertTrue(scn.FreepsPlayAvailable(armor));
+		scn.FreepsPlayCard(armor);
+		// A [gondor] Man, companion or ally; not Pippin ([gondor], no Man), the Household Guard (a Man, [rohan]) or Frodo.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(ranger, merchant));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pippin, guard, frodo));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(merchant);
+
+		assertAttachedTo(armor, merchant);
+		// The ally who bears it is a knight; the [gondor] Man who does not is none.
+		assertTrue(scn.HasKeyword(merchant, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(ranger, Keyword.KNIGHT));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void ACompanionWhoBearsItIsAKnight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var armor = scn.GetFreepsCard("armor");
+		var ranger = scn.GetFreepsCard("ranger");
+		var merchant = scn.GetFreepsCard("merchant");
+		scn.MoveCompanionsToTable(ranger);
+		scn.MoveAlliesToTable(merchant);
+
+		scn.StartGame();
+
+		assertFalse(scn.HasKeyword(ranger, Keyword.KNIGHT));
+		scn.AttachCardsTo(ranger, armor);
+
+		assertAttachedTo(armor, ranger);
+		assertTrue(scn.HasKeyword(ranger, Keyword.KNIGHT));
+		assertFalse(scn.HasKeyword(merchant, Keyword.KNIGHT));
 	}
 }

@@ -156,6 +156,10 @@
 						effect: {
 							type: optional
 							text: Would you like to reinforce a culture token
+							requires: {
+								type: canSpot
+								filter: hasAnyCultureTokens(1)
+							}
 							effect: {
 								type: reinforceTokens
 							}

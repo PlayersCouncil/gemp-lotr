@@ -25,13 +25,16 @@ public class DeckBuildingRestrictionGameTextProcessor implements EffectProcessor
         FieldUtils.validateAllowedFields(effectObj, "filter", "pile", "min", "max", "text");
 
         final int max = FieldUtils.getInteger(effectObj.get("max"), "max", 1000);
-        final int min = FieldUtils.getInteger(effectObj.get("max"), "min", 0);
+        final int min = FieldUtils.getInteger(effectObj.get("min"), "min", 0);
         final String pileStr = FieldUtils.getString(effectObj.get("pile"), "pile");
         final PileType pileType = PileType.Parse(pileStr);
-        final String failureMsg = FieldUtils.getString(effectObj.get("text"), "text");
+        final String text = FieldUtils.getString(effectObj.get("text"), "text");
 
-        if(StringUtils.isBlank(failureMsg))
+        if(StringUtils.isBlank(text))
             throw new InvalidCardDefinitionException("'text' field is required for deck validation operations to communicate to the player what validation they are faling in the deckbuilder.  Ensure it is user friendly.");
+        // The text is printed as a sentence in the middle of the message, which gives it its full stop: one that
+        // the definition wrote as well would be printed twice.
+        final String failureMsg = StringUtils.removeEnd(text.trim(), ".");
         if(max < min)
             throw new InvalidCardDefinitionException("'max' field may not be less than 'min' field for deck validations.");
         if(min < 0)

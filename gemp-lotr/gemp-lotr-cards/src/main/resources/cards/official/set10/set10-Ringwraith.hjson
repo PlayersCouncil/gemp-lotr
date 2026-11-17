@@ -344,29 +344,41 @@
 				}
 				effect: [
 					{
+						// "a possession": the Sword itself is one (Ketura, Q-0353: A).  A choice of 0 or 1, so that a
+						// player taking the trigger with only the Sword in play need not discard it (Ketura's addition
+						// to Q-0353); with nothing chosen, nothing follows.
 						type: chooseActiveCards
 						text: Choose card to discard
+						count: 0-1
 						select: choose(possession,canBeDiscarded)
 						memorize: chosenPossession
 					}
 					{
-						type: choice
-						player: ownerFromMemory(chosenPossession)
-						texts: [
-							Discard {chosenPossession}
-							Put {chosenPossession} on top of deck
-						]
-						effects: [
-							{
-								type: discard
-								player: shadow
-								select: memory(chosenPossession)
-							}
-							{
-								type: putCardsFromPlayOnTopOfDeck
-								select: memory(chosenPossession)
-							}
-						]
+						type: If
+						check: {
+							type: memoryMatches
+							memory: chosenPossession
+							filter: any
+						}
+						true: {
+							type: choice
+							player: ownerFromMemory(chosenPossession)
+							texts: [
+								Discard {chosenPossession}
+								Put {chosenPossession} on top of deck
+							]
+							effects: [
+								{
+									type: discard
+									player: shadow
+									select: memory(chosenPossession)
+								}
+								{
+									type: putCardsFromPlayOnTopOfDeck
+									select: memory(chosenPossession)
+								}
+							]
+						}
 					}
 				]
 			}
@@ -415,7 +427,7 @@
 						requires: {
 							type: memoryMatches
 							memory: chosenMinion
-							filter: inSkirmishAgainst(cultureInDeadPile)
+							filter: inSkirmishAgainst(companion,cultureInDeadPile)
 						}
 						true: 4
 						false: 2

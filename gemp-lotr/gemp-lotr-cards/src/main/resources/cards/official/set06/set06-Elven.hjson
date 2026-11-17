@@ -320,7 +320,7 @@
 				}
 				effect: [
 					{
-						type: revealTopCardsOfDrawDeck
+						type: lookAtTopCardsOfDrawDeck
 						memorize: revealedCard
 					}
 					{
@@ -446,31 +446,38 @@
 					memorize: revealedCard
 				}
 				{
-					type: choice
-					texts: [
-						Discard {revealedCard}
-						Return {revealedCard} to top of deck
-						Take {revealedCard} into hand
-					]
-					effects: [
-						{
-							type: discardCardsFromDrawDeck
-							select: memory(revealedCard)
-							showAll: false
-							shuffle: false
-							forced: false
-						}
-						{
-							type: multiple
-						}
-						{
-							type: putCardsFromDeckIntoHand
-							select: memory(revealedCard)
-							reveal: true
-							shuffle: false
-							showAll: false
-						}
-					]
+					type: If
+					check: {
+						type: HasCardInMemory
+						memory: revealedCard
+					}
+					true: {
+						type: choice
+						texts: [
+							Discard {revealedCard}
+							Return {revealedCard} to top of deck
+							Take {revealedCard} into hand
+						]
+						effects: [
+							{
+								type: discardCardsFromDrawDeck
+								select: memory(revealedCard)
+								showAll: false
+								shuffle: false
+								forced: false
+							}
+							{
+								type: multiple
+							}
+							{
+								type: putCardsFromDeckIntoHand
+								select: memory(revealedCard)
+								reveal: true
+								shuffle: false
+								showAll: false
+							}
+						]
+					}
 				}
 			]
 		}
@@ -517,6 +524,11 @@
 				{
 					type: optional
 					text: Would you like to discard {revealedCard}?
+					requires: {
+						type: MemoryMatches
+						memory: revealedCard
+						filter: any
+					}
 					effect: {
 						type: discardCardsFromDrawDeck
 						select: memory(revealedCard)
