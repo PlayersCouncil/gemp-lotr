@@ -114,8 +114,8 @@ and lists what is really on both pages: a control with no test, or on one page o
   opening the menu first;
 - what only the compact layout has, with what must happen written out (`COMPACT_SCENARIOS`): its two menus, the
   filters kept shown, the theme in the menu, the split dragged with a finger and remembered, the pager's slider as the
-  card size (the separator, the toggle and that slider aren't compared with the legacy page), long presses, a phone held
-  sideways, a tablet, and switching themes on each device, turned or resized before and after (each switched page must
+  card size (the separator, the toggle and that slider aren't compared with the legacy page), long presses, sideways
+  swipes on the collection paging it, quick taps on the pager (no double-tap zoom on iOS), a phone held sideways, a tablet, and switching themes on each device, turned or resized before and after (each switched page must
   match one freshly loaded in that theme);
 - what is on the phone page in each state, with each menu open, against what is tested: a control with no test fails
   it.

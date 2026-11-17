@@ -344,6 +344,20 @@ const field = (page, name) => page.locator(`.gd-field[data-field="${name}"]`);
 const fieldPart = (page, name) =>
   field(page, name).evaluate((el) => el.closest('[data-part]')?.getAttribute('data-part') ?? null);
 
+/** The first card (`start`) of each collection page the page asks the server for, from now until `stop()`. */
+function listenForPages(page) {
+  const starts = [];
+  const listen = (request) => {
+    const url = new URL(request.url());
+    if (url.pathname.includes('/collection/') && url.searchParams.has('start')) {
+      starts.push(Number(url.searchParams.get('start')));
+    }
+  };
+  page.on('request', listen);
+  starts.stop = () => page.off('request', listen);
+  return starts;
+}
+
 /** The separator dragged by `dx`, `dy` with a finger. */
 async function dragSeparator(page, dx, dy) {
   const from = await centre(separator(page));
@@ -814,6 +828,55 @@ export const COMPACT_SCENARIOS = [
       await tap(page, page.locator($.collectionCards).first());
       await pause(page, 800);
       expect((await page.locator(CONTROLS.siteCards.angular).count()) === 1, 'the site is not in the strip');
+    },
+  },
+  {
+    name: 'compact-swipe-pages',
+    note: "A sideways swipe on the collection presses the pager's button on that side; a scroll or a slow drag doesn't",
+    covers: [],
+    run: async (page) => {
+      const starts = listenForPages(page);
+      const cards = await page.locator('.gd-page__collection').boundingBox();
+      const y = cards.y + cards.height * 0.6;
+      const left = { x: cards.x + cards.width * 0.2, y };
+      const right = { x: cards.x + cards.width * 0.8, y };
+      await touchDrag(page, left, right, { steps: 4 });
+      await pause(page, 1500);
+      expect(starts.at(-1) > 0, `a swipe to the right asked for ${starts.join(', ') || 'no page'}, not the next one`);
+      await touchDrag(page, right, left, { steps: 4 });
+      await pause(page, 1500);
+      expect(starts.at(-1) === 0, `a swipe to the left asked for ${starts.join(', ')}, not the first page again`);
+      const asked = starts.length;
+      // Up and down is a scroll; a drag too slow for a swipe is not one
+      await touchDrag(page, right, { x: right.x - 20, y: y - 150 }, { steps: 4 });
+      await touchDrag(page, left, right, { steps: 60 });
+      await pause(page, 1000);
+      expect(starts.length === asked, `a scroll or a slow drag asked for pages: ${starts.slice(asked).join(', ')}`);
+      starts.stop();
+    },
+  },
+  {
+    name: 'compact-quick-taps',
+    note: 'Two quick taps on the next page button page on twice, and the page takes no double tap as a zoom (iOS)',
+    covers: [],
+    run: async (page) => {
+      const touchAction = await page.evaluate(() => getComputedStyle(document.querySelector('.gd-page')).touchAction);
+      expect(touchAction === 'manipulation', `the page's touch-action is ${touchAction}: iOS zooms on a double tap`);
+      const starts = listenForPages(page);
+      const next = page.locator(CONTROLS.nextPage.angular);
+      await reach(page, next);
+      for (let i = 0; i < 2; i++) {
+        await tap(page, next);
+        // Again as soon as the next page is there (the button is disabled while it loads)
+        for (let waited = 0; (starts.length <= i || (await next.isDisabled())) && waited < 5000; waited += 50) {
+          await page.waitForTimeout(50);
+        }
+      }
+      await pause(page, 500);
+      expect(starts.length === 2 && starts[1] > starts[0], `two taps asked for ${starts.join(', ')}`);
+      const scale = await page.evaluate(() => window.visualViewport?.scale ?? 1);
+      expect(scale === 1, `the page is zoomed to ${scale}`);
+      starts.stop();
     },
   },
   {
