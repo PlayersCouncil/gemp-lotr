@@ -3,7 +3,7 @@
 //
 //   node game/phone.mjs [--only <recording,...>] [--devices phone,sideways,tablet] [--out report-game-phone]
 //                       [--shots: only screenshots of each recording's last step, nothing checked]
-//                       [--checks back,reload,touch,piles,animation,sites,fold]
+//                       [--checks back,reload,touch,piles,animation,sites,fold,archery]
 //
 // The checks:
 // - back: a long press on a card in every place a card's details open from (the table's rows, attached copies, the
@@ -18,6 +18,7 @@
 // - sites: the site numbers on the path's cards lie on their left half, clear of the Shadow number and the markers.
 // - fold: the cards not active this turn fold away (the player's shrink, the opponent's hide behind a button); a tap
 //   opens them, another folds them again, a reload keeps them open, the next turn folds them again.
+// - archery: the archery totals show as two pills with the computer layout's icons, first and whole in the status bar.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -38,7 +39,7 @@ const { values: options } = parseArgs({
     devices: { type: 'string', default: 'phone,sideways,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
-    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold' },
+    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold,archery' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
     // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
@@ -224,10 +225,23 @@ const STATES = {
   opponentPilesPublic: { recording: 'effects-skirmish', count: 25, events: opponentCards, discardPublic: true },
   /**
    * As late, with two minions stacked on the player's own possession (50), which the decision offers too (as a Web's
-   * stacked minions are offered; the owner, 2026-11-17): they show full size in the hand's place.
+   * stacked minions are offered; the owner, 2026-11-17): they show in the hand's place, smaller than its cards.
    */
   underOffer: { recording: 'effects-skirmish', count: 25, events: stackedMinions, offer: ['9101', '9102'] },
+  /**
+   * As late, with the archery totals the server gives in the archery phase (2 for the Free Peoples, 1 for the
+   * Shadow): the recorded games pass that phase within one answer, so they never stay on screen.
+   */
+  archery: { recording: 'effects-skirmish', count: 25, lastEvents: () => archeryTotals('2', '1') },
 };
+
+/** The game's stats as the server sends them in the archery phase (GS), with these totals. */
+function archeryTotals(fp, shadow) {
+  return (
+    `<ge fellowshipArchery="${fp}" shadowArchery="${shadow}" initiative="FREE_PEOPLE" moveCount="1" moveLimit="2" ` +
+    `ruleof4="-1" timestamp="2026-11-17 00:00:00.0000" type="GS"/>`
+  );
+}
 
 /** Two minions stacked on the player's possession 50, as the server stacks a card (PCIP, targetType stacked). */
 function stackedMinions(_opponent, player) {
@@ -257,12 +271,13 @@ function opponentCards(opponent) {
 }
 
 /**
- * The recording a state opens (a copy; the recording isn't changed): its added events in the last answer, the cards
+ * The recording a state opens (a copy; the recording isn't changed): its added events in the last answer (first, or
+ * after the answer's own with `lastEvents`), the cards
  * its decision offers too (`offer`), and its format's discard pile made public (the P event's discardPublic).
  */
 function recordingOf(state) {
   const base = recording(state.recording);
-  if (!state.events && !state.discardPublic && !state.offer) return base;
+  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer) return base;
   const publicDiscard = (body) =>
     state.discardPublic
       ? body
@@ -282,6 +297,9 @@ function recordingOf(state) {
       let body = publicDiscard(exchange.body);
       if (i === last && state.events) {
         body = body.replace(/(<update[^>]*>)/, `$1${state.events(opponent, base.participant)}`);
+      }
+      if (i === last && state.lastEvents) {
+        body = body.replace(/(<\/update>)/, `${state.lastEvents(opponent, base.participant)}$1`);
       }
       if (i === last && state.offer) {
         const params = state.offer.map((id) => `<parameter name="cardId" value="${id}"/>`).join('');
@@ -810,13 +828,17 @@ const TOUCH = [
     },
   },
   {
-    name: 'offered cards stacked on a card show full size in the hand, and a tap chooses one',
+    name: 'offered cards stacked on a card show first in the hand, smaller than it, and a tap chooses one',
     state: 'underOffer',
     run: async (page, sent, device) => {
       const hand = page.locator('gd-phone-hand');
       const big = hand.locator('[data-from-under] > .gd-card[data-card-id="9101"]');
       if (!(await big.count())) return ['the stacked cards are not in the hand'];
       const host = await hand.locator('.gd-phone-cards__host').getAttribute('data-host');
+      // Before the hand's own cards (the owner, 2026-11-17)
+      const first = await page.evaluate(
+        () => document.querySelector('gd-phone-hand .gd-phone-cards__scroll')?.firstElementChild?.className ?? '',
+      );
       const sizes = await page.evaluate(() => {
         const height = (selector) => document.querySelector(selector)?.getBoundingClientRect().height ?? 0;
         return {
@@ -825,15 +847,27 @@ const TOUCH = [
           small: height('gd-phone-table .gd-phone-slot__under > .gd-card[data-card-id="9101"]'),
         };
       });
+      // Scrolled back to its start, the row stays there: the copy of the card they lie under is seen (the owner,
+      // 2026-11-17: the row snapped back to the offered card, the small Frodo out of view)
+      const start = await page.evaluate(async () => {
+        const scroller = document.querySelector('gd-phone-hand .gd-phone-cards__scroll');
+        scroller.scrollTo({ left: 0 });
+        await new Promise((resolve) => setTimeout(resolve, 600));
+        const host = document.querySelector('gd-phone-hand .gd-phone-cards__host').getBoundingClientRect();
+        const row = scroller.getBoundingClientRect();
+        return { left: scroller.scrollLeft, hostShown: host.left >= row.left - 1 };
+      });
       fs.mkdirSync(OUT, { recursive: true });
-      await big.scrollIntoViewIfNeeded();
       await hand.screenshot({ path: path.join(OUT, `under-offer-${device}.png`) });
       await tap(page, big);
       await page.waitForTimeout(500);
       const mark = await big.getAttribute('data-mark').catch(() => null);
       return [
         ...(host === '50' ? [] : [`shown under the copy of ${host}, not 50`]),
-        ...(Math.abs(sizes.big - sizes.hand) <= 1 ? [] : [`${sizes.big}px high, the hand's ${sizes.hand}px`]),
+        ...(start.left === 0 && start.hostShown ? [] : [`scrolled to its start, the row went back to ${start.left}px`]),
+        ...(first.includes('gd-phone-cards__host') ? [] : [`the hand starts with ${first}, not the offered cards`]),
+        // Smaller than the hand's cards (70%), bigger than the copy of the card they lie under (45%)
+        ...(Math.abs(sizes.big - sizes.hand * 0.7) <= 1.5 ? [] : [`${sizes.big}px high, the hand's ${sizes.hand}px`]),
         ...(sizes.small > 0 && sizes.small < sizes.big / 2 ? [] : [`the table's copy ${sizes.small}px high`]),
         ...(mark === 'selected' || sent.some((body) => /decisionValue=9101/.test(body))
           ? []
@@ -977,6 +1011,55 @@ async function sitesCheck(browser, devices) {
   return ok === devices.length;
 }
 
+// --- Archery ---
+
+/**
+ * The archery totals in the status bar, as the private mobile page showed them (the owner, 2026-11-17): a Free Peoples
+ * pill and a Shadow pill with the computer layout's icons, first among the pills and whole on the screen.
+ */
+async function archeryCheck(browser, devices) {
+  fs.mkdirSync(OUT, { recursive: true });
+  let ok = 0;
+  for (const device of devices) {
+    const state = STATES.archery;
+    const shown = await openPhone(browser, device, recordingOf(state), state.count);
+    try {
+      await shown.settle();
+      const seen = await shown.page.evaluate(() => {
+        const pills = Array.from(document.querySelectorAll('.gd-phone-pill'));
+        const box = document.querySelector('.gd-phone-status__pills')?.getBoundingClientRect();
+        return pills.map((pill) => {
+          const rect = pill.getBoundingClientRect();
+          const icon = pill.querySelector('.gd-phone-pill__icon');
+          return {
+            key: pill.dataset.pill,
+            text: pill.textContent.trim(),
+            whole: !!box && rect.left >= box.left - 0.5 && rect.right <= box.right + 0.5 && rect.width > 0,
+            icon: !!icon && getComputedStyle(icon).backgroundImage.includes('Archery'),
+          };
+        });
+      });
+      await shown.page.locator('gd-phone-status').screenshot({ path: path.join(OUT, `archery-${device}.png`) });
+      const [fp, shadow] = seen;
+      const problems = [
+        ...(fp?.key === 'fp-archery' && fp.text === 'FP 2' ? [] : [`first pill ${JSON.stringify(fp)}`]),
+        ...(shadow?.key === 'shadow-archery' && shadow.text === 'Sh 1'
+          ? []
+          : [`second pill ${JSON.stringify(shadow)}`]),
+        ...[fp, shadow].filter((pill) => pill && !pill.whole).map((pill) => `${pill.key} cut off`),
+        ...[fp, shadow].filter((pill) => pill && !pill.icon).map((pill) => `${pill.key} without its icon`),
+        ...shown.errors,
+      ];
+      if (problems.length === 0) ok++;
+      else console.log(`  ✗ archery · ${device}: ${problems.join('; ')}`);
+    } finally {
+      await shown.close();
+    }
+  }
+  console.log(`archery: ${ok} of ${devices.length} devices show the archery totals`);
+  return ok === devices.length;
+}
+
 // --- Cards not active this turn ---
 
 /** The recorded games whose last step has cards not active this turn on the table, in both players' turns. */
@@ -1099,6 +1182,7 @@ async function main() {
     if (chosen.includes('animation')) passed = (await animationCheck(browser, devices)) && passed;
     if (chosen.includes('sites')) passed = (await sitesCheck(browser, devices)) && passed;
     if (chosen.includes('fold')) passed = (await foldCheck(browser, devices)) && passed;
+    if (chosen.includes('archery')) passed = (await archeryCheck(browser, devices)) && passed;
     process.exitCode = passed ? 0 : 1;
   } finally {
     await browser.close();

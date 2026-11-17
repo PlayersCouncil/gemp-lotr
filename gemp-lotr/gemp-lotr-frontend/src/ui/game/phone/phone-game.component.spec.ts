@@ -191,6 +191,26 @@ describe('the game on a phone (G7)', () => {
     expect(el.querySelector('.gd-phone-sheet')).toBeNull();
   });
 
+  it('shows the archery totals the server gives, first among the pills; none outside archery', async () => {
+    const stats = (fp: string, shadow: string) =>
+      `<ge type="GS" fellowshipArchery="${fp}" shadowArchery="${shadow}" moveCount="1" moveLimit="2" ` +
+      'initiative="FREE_PEOPLE" ruleof4="-1"/>';
+    const { el } = await open(game(stats('2', '3')));
+    const pills = () =>
+      Array.from(el.querySelectorAll('.gd-phone-pill'), (pill) => [
+        pill.getAttribute('data-pill'),
+        pill.textContent?.trim(),
+        pill.querySelector('.gd-phone-pill__icon') !== null,
+      ]);
+    expect(pills().slice(0, 2)).toEqual([
+      ['fp-archery', 'FP 2', true],
+      ['shadow-archery', 'Sh 3', true],
+    ]);
+    TestBed.resetTestingModule();
+    const outside = await open(game(stats('null', 'null')));
+    expect(outside.el.querySelector('[data-pill$="-archery"]')).toBeNull();
+  });
+
   it('puts the game in full screen from the menu, which closes', async () => {
     const { el, click, sheet } = await open(game());
     await click('[data-phone="menu"]');
@@ -284,7 +304,7 @@ describe('the game on a phone (G7)', () => {
     expect(answer()).toBe('6');
   });
 
-  it('shows offered cards under a card full size after the hand, after a copy of that card; a tap chooses', async () => {
+  it('shows offered cards under a card smaller, before the hand, after a copy of that card; a tap chooses', async () => {
     // A minion stacked on a possession (11 on 4) and a card attached to a companion (2 on 1), both offered
     const { el, stable, answer } = await open(
       game(
@@ -313,14 +333,35 @@ describe('the game on a phone (G7)', () => {
       ['2', 'selectable'],
       ['11', 'selectable'],
     ]);
-    // The hand's own cards stay, and the small copies on the table stay lit
-    expect(hand.querySelector('.gd-phone-slot > [data-card-id="6"]')).not.toBeNull();
+    // First, then the hand's own cards after a split; the small copies on the table stay lit
+    const order = Array.from(
+      hand.querySelectorAll('.gd-phone-cards__host, .gd-phone-slot > .gd-card, [data-offers-end]'),
+      (el) => el.getAttribute('data-host') ?? el.getAttribute('data-card-id') ?? 'split',
+    );
+    expect(order).toEqual(['1', '2', '4', '11', 'split', '6', '7']);
     expect(
       el.querySelector('gd-phone-table .gd-phone-slot__under [data-card-id="11"]')?.getAttribute('data-mark'),
     ).toBe('selectable');
     hand.querySelector<HTMLElement>('[data-from-under] > [data-card-id="11"]')!.click();
     await stable();
     expect(answer()).toBe('11');
+  });
+
+  it('scrolls the hand back to its start when new cards from under a card are offered', async () => {
+    const { el, stable } = await open(game(card('11', 'STACKED', 'targetCardId="4" targetType="stacked"')));
+    const scroller = el.querySelector<HTMLElement>('gd-phone-hand .gd-phone-cards__scroll')!;
+    // The player scrolled the hand right
+    let left = 300;
+    Object.defineProperty(scroller, 'scrollLeft', { get: () => left, set: (value: number) => (left = value) });
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush(
+        `<update cn="2">${decision('CARD_ACTION_CHOICE', param('actionId', '1') + param('cardId', '11') + param('blueprintId', 'inPlay') + param('actionText', 'Play'))}</update>`,
+      );
+    await stable();
+    expect(el.querySelector('gd-phone-hand [data-from-under] > [data-card-id="11"]')).not.toBeNull();
+    expect(left).toBe(0);
   });
 
   it('shows no cards from under a card in the hand when the decision offers none of them', async () => {

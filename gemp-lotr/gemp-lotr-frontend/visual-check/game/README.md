@@ -93,7 +93,7 @@ with the legacy page; each check compares the Angular page with itself:
 - **touch**: a tap on a card not offered does nothing, a tap on an offered card chooses it, the divider drags and is
   kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back; held
   sideways the hand is a panel in the right half whose grip slides it up to the status bar. Minions stacked on a
-  possession and offered by the decision (`STATES.underOffer`) show full size after the hand, behind a small copy of
+  possession and offered by the decision (`STATES.underOffer`) show before the hand, smaller than its cards and bigger than the copy, behind a small copy of
   the possession, and a tap there chooses one (`under-offer-<device>.png`).
 
 - **piles**: who sees a pile's cards, by the server's rules (`Zone`, `LotroFormat.discardPileIsPublic` in
@@ -116,6 +116,10 @@ the format's discard pile made public for `STATES.opponentPilesPublic` (the P ev
   turn fold away: the player's are shrunk, the opponent's hidden behind a "Show N" button. A tap on the row's button
   opens them (full size, or shown), another folds them again, and a row opened stays open after a reload.
 
+- **archery**: on each device, with the archery totals the server sends in the archery phase (`STATES.archery`; the
+  recorded games pass that phase within one answer), the status bar shows a Free Peoples pill and a Shadow pill with
+  the computer layout's icons, first among the pills and not cut off (`archery-<device>.png`).
+
 Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
 `npm run check:game:down`):
 
@@ -128,7 +132,7 @@ Two checks against a game check server kept up (`npm run check:game -- --only st
 
 ```
 npm run check:game:phone                                  everything (about 25 minutes)
-npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles, animation, sites, fold)
+npm run check:game:phone -- --devices phone --checks back one device, one check (back, reload, touch, piles, animation, sites, fold, archery)
 npm run check:game:phone -- --shots --only opening        screenshots of a recording's last state, nothing checked
 ```
 

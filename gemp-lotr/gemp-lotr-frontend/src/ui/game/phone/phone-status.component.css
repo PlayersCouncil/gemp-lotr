@@ -93,6 +93,12 @@
   overflow: hidden;
 }
 
+/* On a line of their own under the bar, when they don't fit beside the phase */
+.gd-phone-status__pills[data-wrapped] {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
 .gd-phone-pill {
   flex: none;
   padding: 0 6px;
@@ -101,6 +107,38 @@
   border: 1px solid var(--theme-content-border);
   font-size: 11px;
   white-space: nowrap;
+}
+
+/* The archery totals: the computer layout's icons, on the private mobile page's plates */
+.gd-phone-pill[data-pill$='-archery'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700;
+}
+
+.gd-phone-pill[data-pill='fp-archery'] {
+  background: var(--theme-game-phone-fp-archery-bg);
+  color: var(--theme-game-phone-on-fp-archery);
+}
+
+.gd-phone-pill[data-pill='shadow-archery'] {
+  background: var(--theme-game-phone-shadow-archery-bg);
+  color: var(--theme-game-phone-on-shadow-archery);
+}
+
+.gd-phone-pill__icon {
+  width: 14px;
+  height: 14px;
+  background: no-repeat center / contain;
+}
+
+[data-pill='fp-archery'] > .gd-phone-pill__icon {
+  background-image: var(--theme-game-icon-fp-archery);
+}
+
+[data-pill='shadow-archery'] > .gd-phone-pill__icon {
+  background-image: var(--theme-game-icon-shadow-archery);
 }
 
 .gd-phone-pill[data-warn] {
@@ -189,6 +227,31 @@
   gap: 8px;
   font-size: 11px;
   color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-player__counts > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* The counters' icons: the computer layout's (the theme's), at the line's height */
+.gd-phone-player__icon {
+  width: 15px;
+  height: 15px;
+  background: no-repeat center / contain;
+}
+
+[data-count='hand'] > .gd-phone-player__icon {
+  background-image: var(--theme-game-icon-hand);
+}
+
+[data-count='deck'] > .gd-phone-player__icon {
+  background-image: var(--theme-game-icon-deck);
+}
+
+[data-count='threats'] > .gd-phone-player__icon {
+  background-image: var(--theme-game-icon-threats);
 }
 
 /* Sideways: one line at the top, the chips shrunk into it */

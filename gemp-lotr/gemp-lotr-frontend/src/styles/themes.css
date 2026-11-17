@@ -170,6 +170,10 @@
   --theme-game-phone-minions: #fc4;
   --theme-game-phone-player-1: #c43c3c;
   --theme-game-phone-player-2: #4459d6;
+  --theme-game-phone-fp-archery-bg: #cfe3a8;
+  --theme-game-phone-on-fp-archery: #1f2a12;
+  --theme-game-phone-shadow-archery-bg: #a8261c;
+  --theme-game-phone-on-shadow-archery: #fff;
   --theme-game-phone-on-accent: #000;
   --theme-game-phone-accent: #39f;
   --theme-game-phone-on-dark: #fff;
@@ -310,6 +314,11 @@
   --theme-game-phone-minions: #f2c14e;
   --theme-game-phone-player-1: #c43c3c;
   --theme-game-phone-player-2: #6e8bff;
+  /* The archery pills: a light Shire green for the Free Peoples, red for the Shadow (as the private mobile page) */
+  --theme-game-phone-fp-archery-bg: #cfe3a8;
+  --theme-game-phone-on-fp-archery: #1f2a12;
+  --theme-game-phone-shadow-archery-bg: #a8261c;
+  --theme-game-phone-on-shadow-archery: #fff;
   --theme-game-phone-on-accent: #0b1020;
   --theme-game-phone-accent: #6e8bff;
   --theme-game-phone-on-dark: #fff;

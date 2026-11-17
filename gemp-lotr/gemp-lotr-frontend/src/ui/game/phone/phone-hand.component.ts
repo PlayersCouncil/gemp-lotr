@@ -14,7 +14,8 @@ import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/po
  * decision offers cards from off the table (a deck, a pile, the adventure deck for a site), they take the hand's
  * place under a label saying what they are; ✕ goes back to the hand, and a button brings them back. A spectator sees
  * the player's hand as its count only. Cards lying under a card on the table that the decision offers (stacked on it,
- * attached to it) follow the hand's own cards full size, after a small copy of the card they lie under.
+ * attached to it) come first, smaller than its own, each
+ * group after a small copy of the card they lie under.
  *
  * DOM contract: `gd-phone-hand` (`data-place`: hand, choices) holding `.gd-phone-hand__grip` (`data-phone=hand-grip`,
  * shown sideways), `.gd-phone-hand__head` with the label
@@ -81,7 +82,7 @@ export class PhoneHandComponent {
 
   private readonly phone = computed(() => phoneTable(this.table(), this.session.model()));
   protected readonly hand = computed<readonly PhoneCard[]>(() => this.phone().hand);
-  /** Cards under a card on the table that the decision offers: full size after the hand's own (offeredUnder). */
+  /** Cards under a card on the table that the decision offers: before the hand's own, smaller (offeredUnder). */
   protected readonly under = computed(() => offeredUnder(this.phone(), this.decisions.view().marks));
   /** The cards the decision offers from off the table, or null. */
   protected readonly offer = computed(() => offTableChoices(this.decisions.view(), this.session.model()));

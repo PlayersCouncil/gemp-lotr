@@ -14,6 +14,8 @@
   overflow-y: hidden;
   padding: 6px 10px 3px 12px;
   scroll-snap-type: x proximity;
+  /* The cards stop where the row's padding ends, so its start shows its first card whole and the margin before it */
+  scroll-padding-inline: 12px 10px;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   position: relative;
@@ -50,6 +52,14 @@
   --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.18);
 }
 
+/*
+ * Offered cards from the table, before the hand's own: smaller than a hand card, bigger than the copy of the card they
+ * lie under, so they don't pass for cards in the hand (the owner, 2026-11-17: one Hobbit Sword looked like two)
+ */
+.gd-phone-slot[data-from-under] > .gd-card {
+  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.7);
+}
+
 /* Where the offered cards from under a card start: what they lie under, and a small copy of it */
 .gd-phone-cards__host {
   flex: none;
@@ -59,8 +69,8 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding-left: 8px;
-  border-left: 1px solid var(--theme-hover-border);
+  /* A place the row stops at, as a card is: the row's start shows it, not the card after it (the owner, 2026-11-17) */
+  scroll-snap-align: start;
   font-size: 11px;
   font-weight: 700;
   color: var(--theme-game-phone-muted);
@@ -88,6 +98,7 @@
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
+  scroll-snap-align: start;
   background: none;
   color: var(--theme-game-phone-muted);
   cursor: pointer;

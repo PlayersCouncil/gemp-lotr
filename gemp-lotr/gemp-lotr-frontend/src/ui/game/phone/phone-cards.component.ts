@@ -35,7 +35,8 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
  * none; `button.gd-phone-cards__more` the badge; `button.gd-phone-cards__fold` (`data-fold` shrink or hide,
  * `aria-expanded`) the fold's button, `data-shrunk` on a shrunk card's slot; for `offers`, a
  * `.gd-phone-cards__host` (`data-host` = the card's id) with a small copy of the card they lie under, then a
- * `.gd-phone-slot[data-from-under]` per offered card.
+ * `.gd-phone-slot[data-from-under]` per offered card, all before the row's own cards, and a split
+ * (`[data-offers-end]`) after them.
  */
 @Component({
   selector: 'gd-phone-cards',
@@ -44,6 +45,23 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
   host: { '[attr.data-row]': 'key()' },
   template: `
     <div #scroller class="gd-phone-cards__scroll" (scroll)="measure()" (gdScrollSettled)="keepScroll()">
+      <!-- First, before the row's own cards (the owner, 2026-11-17: an action such as putting on the Ring is seen first) -->
+      @for (offer of offers(); track offer.host.id + offer.how; let last = $last) {
+        <span class="gd-phone-cards__host" [attr.data-host]="offer.host.id">
+          <span class="gd-phone-cards__host-label">{{ offer.how === 'stacked' ? 'Stacked on' : 'Attached to' }}</span>
+          <button [gdCard]="views.of(offer.host)" [gdGameCard]="offer.host" data-host-copy=""></button>
+        </span>
+        @for (slot of offer.cards; track slot.card.id) {
+          <div class="gd-phone-slot" data-from-under="">
+            <button [gdCard]="views.of(slot.card)" [gdGameCard]="slot.card">
+              <gd-game-card-layers [card]="slot.card" />
+            </button>
+          </div>
+        }
+        @if (last) {
+          <span class="gd-phone-cards__split" data-offers-end="" aria-hidden="true"></span>
+        }
+      }
       @for (slot of cards(); track slot.card.id; let i = $index) {
         @if (i === shadowFrom()) {
           <span class="gd-phone-cards__split" aria-hidden="true"></span>
@@ -82,19 +100,6 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
       } @empty {
         <span class="gd-phone-cards__empty">{{ empty() }}</span>
       }
-      @for (offer of offers(); track offer.host.id + offer.how) {
-        <span class="gd-phone-cards__host" [attr.data-host]="offer.host.id">
-          <span class="gd-phone-cards__host-label">{{ offer.how === 'stacked' ? 'Stacked on' : 'Attached to' }}</span>
-          <button [gdCard]="views.of(offer.host)" [gdGameCard]="offer.host" data-host-copy=""></button>
-        </span>
-        @for (slot of offer.cards; track slot.card.id) {
-          <div class="gd-phone-slot" data-from-under="">
-            <button [gdCard]="views.of(slot.card)" [gdGameCard]="slot.card">
-              <gd-game-card-layers [card]="slot.card" />
-            </button>
-          </div>
-        }
-      }
     </div>
     @if (hiddenMarks() > 0) {
       <button type="button" class="gd-phone-cards__more" (click)="showMarked(scroller)">
@@ -109,7 +114,7 @@ export class PhoneCardsComponent {
   readonly key = input<string | null>(null);
   readonly shadowFrom = input<number | null>(null);
   readonly empty = input('None');
-  /** Cards under a card on the table that the decision offers, shown full size after the row's own (offeredUnder). */
+  /** Cards under a card on the table that the decision offers, shown before the row's own, smaller (offeredUnder). */
   readonly offers = input<readonly UnderOffer[]>([]);
   /** How the row's cards not active this turn fold away, if they do; `opened` when the player opened them. */
   readonly fold = input<PhoneFold | null>(null);
@@ -173,6 +178,20 @@ export class PhoneCardsComponent {
           observer.observe(this.host);
           destroy.onDestroy(() => observer.disconnect());
         }
+      },
+    });
+    // New offered cards from under a card: the row goes back to its start, where they are (the first seen, after a
+    // reload too, keeps where the row was)
+    let lastOffers: string | undefined;
+    afterRenderEffect({
+      write: () => {
+        const offers = this.offers()
+          .flatMap((offer) => offer.cards.map(({ card }) => card.id))
+          .join(',');
+        if (lastOffers !== undefined && offers !== lastOffers && offers !== '') {
+          this.scroller().nativeElement.scrollLeft = 0;
+        }
+        lastOffers = offers;
       },
     });
     // Measured again whenever the row's cards change, once they are drawn

@@ -64,8 +64,9 @@ export function offTableChoices(view: DecisionView, model: GameModel): OffTableC
 
 /**
  * Cards lying under a card on the table (stacked on it, attached to it) that the waiting decision offers, with that
- * card: the hand's place shows them full size after its own cards (the owner, 2026-11-17: the small copies under a card
- * were too small to tap safely, e.g. minions stacked on a Web). The small copies stay lit too.
+ * card: the hand's place shows them before its own cards, smaller than them, (the owner, 2026-11-17: the small copies under a
+ * card were too small to tap safely, e.g. minions stacked on a Web; an action such as putting on the Ring must be
+ * seen first). The small copies stay lit too.
  */
 export interface UnderOffer {
   host: GameCard;
