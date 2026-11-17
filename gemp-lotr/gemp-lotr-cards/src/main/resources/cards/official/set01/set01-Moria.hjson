@@ -838,10 +838,11 @@
 				trigger: {
 					type: winsSkirmish
 					filter: your,culture(moria),orc,inSkirmish
+					memorize: winner
 				}
 				effect: {
 					type: StackCardsFromPlay
-					select: choose(your,culture(moria),orc,inSkirmish)
+					select: memory(winner)
 					where: self
 				}
 			}
