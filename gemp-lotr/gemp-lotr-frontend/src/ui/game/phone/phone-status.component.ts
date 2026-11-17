@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   afterRenderEffect,
   Component,
@@ -9,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CompactLayout } from '../../../core/platform/compact-layout.service';
+import { PageCues } from '../../../core/platform/page-cues';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { chatLines, GameSheets } from '../../../core/game/phone/game-sheets';
 import { GameLog } from '../../../core/game/session/game-log';
@@ -48,34 +50,25 @@ interface Pill {
 @Component({
   selector: 'gd-phone-status',
   styleUrl: './phone-status.component.css',
-  imports: [GameThemeButtonComponent],
+  imports: [GameThemeButtonComponent, NgTemplateOutlet],
   template: `
     <div class="gd-phone-status__bar">
       <button type="button" class="gd-phone-icon" data-phone="menu" aria-label="Menu" (click)="open('menu')">☰</button>
       <span class="gd-phone-status__phase" data-game="phase">{{ phase() }}</span>
       <span class="gd-phone-status__twilight" data-game="twilight" title="Twilight pool"
-        ><i aria-hidden="true"></i>{{ model().twilight }}</span
+        ><svg class="gd-phone-status__gem" width="16" height="18" viewBox="0 0 18 20" aria-hidden="true">
+          <path class="gd-phone-status__gem-stone" d="M9 1l7 6-7 12L2 7z" />
+          <path class="gd-phone-status__gem-facets" d="M2 7h14M9 1L6 7l3 12 3-12z" /></svg
+        >{{ model().twilight }}</span
       >
       @if (yourMove()) {
         <span class="gd-phone-status__move" data-phone="your-move">Your move</span>
       }
       <span class="gd-phone-status__gap"></span>
-      <!-- Upright, pills that don't fit beside the phase take a line of their own (the private mobile page): the same
-           element, moved under the bar by its order -->
-      <span #pillsBox class="gd-phone-status__pills" [attr.data-wrapped]="pillsWrapped() ? '' : null">
-        @for (pill of pills(); track pill.key) {
-          <span
-            class="gd-phone-pill"
-            [attr.data-pill]="pill.key"
-            [attr.data-warn]="pill.warn ? '' : null"
-            [title]="pill.title"
-          >
-            @if (pill.icon) {
-              <i class="gd-phone-pill__icon" aria-hidden="true"></i>
-            }
-            {{ pill.text }}</span
-          >
-        }
+      <!-- Upright, pills that don't fit beside the phase take a line of their own under the bar (the private mobile
+           page): both places are always there, one shown, so nothing is drawn anew when they move -->
+      <span #pillsInline class="gd-phone-status__pills" data-place="bar" [hidden]="pillsWrapped()">
+        <ng-container [ngTemplateOutlet]="pillList" />
       </span>
       <button
         type="button"
@@ -91,6 +84,34 @@ interface Pill {
       </button>
       <gd-game-theme-button class="gd-phone-status__theme" />
     </div>
+    <div #pillsLine class="gd-phone-status__pills" data-place="line" [hidden]="!pillsWrapped()">
+      <ng-container [ngTemplateOutlet]="pillList" />
+    </div>
+    <ng-template #pillList>
+      @for (pill of pills(); track pill.key) {
+        <span
+          class="gd-phone-pill"
+          [attr.data-pill]="pill.key"
+          [attr.data-warn]="pill.warn ? '' : null"
+          [title]="pill.title"
+        >
+          @if (pill.icon) {
+            <i class="gd-phone-pill__icon" aria-hidden="true"></i>
+          }
+          <!-- Line icons for the initiative's banner and the moves' road (no text glyphs, the owner, 2026-11-17) -->
+          @if (pill.key === 'initiative') {
+            <svg class="gd-phone-pill__line" width="11" height="13" viewBox="0 0 11 13" aria-hidden="true">
+              <path d="M1.5 12V1.5h7l-1.8 2.5 1.8 2.5h-7" />
+            </svg>
+          } @else if (pill.key === 'moves') {
+            <svg class="gd-phone-pill__line" width="14" height="12" viewBox="0 0 14 12" aria-hidden="true">
+              <path d="M2 11c3-2 1-5 5-6s4-3 5-4" stroke-dasharray="2 2" />
+            </svg>
+          }
+          {{ pill.text }}</span
+        >
+      }
+    </ng-template>
     <div class="gd-phone-players">
       @for (player of players(); track player.name) {
         <button
@@ -136,7 +157,8 @@ export class PhoneStatusComponent {
   protected readonly pillsWrapped = signal(false);
   private readonly device = inject(CompactLayout).device;
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly pillsBox = viewChild.required<ElementRef<HTMLElement>>('pillsBox');
+  private readonly pillsInline = viewChild.required<ElementRef<HTMLElement>>('pillsInline');
+  private readonly pillsLine = viewChild.required<ElementRef<HTMLElement>>('pillsLine');
 
   constructor() {
     afterRenderEffect({
@@ -147,11 +169,18 @@ export class PhoneStatusComponent {
         this.fitPills();
       },
     });
+    const destroyed = inject(DestroyRef);
     if (typeof ResizeObserver === 'function') {
       const observer = new ResizeObserver(() => this.fitPills());
       observer.observe(this.host);
-      inject(DestroyRef).onDestroy(() => observer.disconnect());
+      destroyed.onDestroy(() => observer.disconnect());
     }
+    // The theme's fonts come after the page and change every width: measured again then
+    let alive = true;
+    destroyed.onDestroy(() => (alive = false));
+    void inject(PageCues)
+      .fontsReady()
+      .then(() => alive && this.fitPills());
   }
 
   /**
@@ -159,7 +188,7 @@ export class PhoneStatusComponent {
    * line of their own, until the bar's free space holds them again.
    */
   private fitPills(): void {
-    const box = this.pillsBox().nativeElement;
+    const box = (this.pillsWrapped() ? this.pillsLine() : this.pillsInline()).nativeElement;
     if (this.device() === 'sideways') {
       if (this.pillsWrapped()) this.pillsWrapped.set(false);
       return;
@@ -202,7 +231,7 @@ export class PhoneStatusComponent {
       const free = stats.initiative === 'FREE_PEOPLE';
       pills.push({
         key: 'initiative',
-        text: free ? '⚑ FP' : '⚑ Sh',
+        text: free ? 'FP' : 'Sh',
         title: `Initiative: ${free ? 'Free Peoples' : 'Shadow'}`,
         warn: false,
       });
@@ -210,7 +239,7 @@ export class PhoneStatusComponent {
     if (stats.moveCount !== null && stats.moveLimit !== null) {
       pills.push({
         key: 'moves',
-        text: `⇢ ${stats.moveCount}/${stats.moveLimit}`,
+        text: `${stats.moveCount}/${stats.moveLimit}`,
         title: 'Moves made / allowed',
         warn: false,
       });

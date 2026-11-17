@@ -5,6 +5,7 @@
   box-sizing: border-box;
   border: 1px solid var(--theme-content-border);
   border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-frame-shadow);
   background: var(--theme-content-bg);
   color: var(--theme-text);
   font-family: var(--theme-font-text);
@@ -155,6 +156,7 @@
 }
 
 .gd-game-state__twilight {
+  position: relative;
   float: right;
   width: 40px;
   padding: 2px;
@@ -164,6 +166,62 @@
   color: var(--theme-game-twilight-text);
   font-size: 30px;
   text-align: right;
+}
+
+/* The twilight pool's gem, set on the box's corner (the modern theme; none in classic) */
+.gd-game-state__twilight::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: -8px;
+  width: 16px;
+  height: 18px;
+  background: var(--theme-game-gem) center / contain no-repeat;
+  pointer-events: none;
+}
+
+/*
+ * A player's number: "1. " in classic, as the legacy page; a heraldic shield in the player's colour in the modern
+ * theme (the dot not shown)
+ */
+.gd-game-player__no {
+  --gd-shield: var(--theme-game-phone-player-1);
+  position: relative;
+  isolation: isolate;
+  display: var(--theme-game-badge-display);
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--theme-game-badge-width);
+  height: var(--theme-game-badge-height);
+  margin-right: var(--theme-game-badge-gap);
+  padding: var(--theme-game-badge-pad);
+  clip-path: var(--theme-game-badge-clip);
+  background: var(--theme-game-badge-edge);
+  color: var(--theme-game-badge-text);
+  font-family: var(--theme-game-badge-font);
+  font-size: var(--theme-game-badge-size);
+  font-weight: var(--theme-game-badge-weight);
+  vertical-align: var(--theme-game-badge-align);
+}
+
+.gd-game-player__no[data-no='2'] {
+  --gd-shield: var(--theme-game-phone-player-2);
+}
+
+.gd-game-player__no::before {
+  content: var(--theme-game-badge-inner);
+  position: absolute;
+  left: 1.5px;
+  top: 1.5px;
+  z-index: -1;
+  width: 13px;
+  height: 16px;
+  clip-path: path('M0 0H13V6.5C13 11 9.5 14 6.5 16C3.5 14 0 11 0 6.5Z');
+  background: var(--gd-shield);
+}
+
+.gd-game-player__dot {
+  display: var(--theme-game-badge-dot);
 }
 
 .gd-game-state__phase {

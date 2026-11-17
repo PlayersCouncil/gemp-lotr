@@ -3,7 +3,7 @@
 //
 //   node game/phone.mjs [--only <recording,...>] [--devices phone,sideways,tablet] [--out report-game-phone]
 //                       [--shots: only screenshots of each recording's last step, nothing checked]
-//                       [--checks back,reload,touch,piles,animation,sites,fold,archery]
+//                       [--checks back,reload,touch,piles,animation,sites,fold,archery,stack]
 //
 // The checks:
 // - back: a long press on a card in every place a card's details open from (the table's rows, attached copies, the
@@ -19,6 +19,7 @@
 // - fold: the cards not active this turn fold away (the player's shrink, the opponent's hide behind a button); a tap
 //   opens them, another folds them again, a reload keeps them open, the next turn folds them again.
 // - archery: the archery totals show as two pills with the computer layout's icons, first and whole in the status bar.
+// - stack: stacked cards lie on their side, upright with the "old look" setting, on each device and the computer page.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -39,7 +40,7 @@ const { values: options } = parseArgs({
     devices: { type: 'string', default: 'phone,sideways,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
-    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold,archery' },
+    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold,archery,stack' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
     // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
@@ -52,6 +53,8 @@ export const DEVICES = {
   phone: { viewport: { width: 390, height: 844 } },
   sideways: { viewport: { width: 844, height: 390 } },
   tablet: { viewport: { width: 768, height: 1024 } },
+  /** The computer layout of the same page, for what both layouts share (the stack check). */
+  computer: { viewport: { width: 1366, height: 768 } },
 };
 
 const OUT = path.resolve(HERE, '..', options.out);
@@ -67,7 +70,7 @@ function recordings() {
 
 /** Opens the Angular page on a device on the game as it stood after `count` exchanges, in the modern theme. */
 export async function openPhone(browser, device, recording, count, { cookies = [] } = {}) {
-  const [width, height] = options.size?.split('x').map(Number) ?? [];
+  const [width, height] = (device !== 'computer' && options.size?.split('x').map(Number)) || [];
   const viewport = width && height ? { viewport: { width, height } } : DEVICES[device];
   const context = await browser.newContext({ ...PHONE_CONTEXT, ...viewport });
   const log = [];
@@ -148,12 +151,13 @@ async function view(shown) {
   await shown.page.waitForTimeout(300);
   return {
     data: await shown.page.evaluate(readView),
-    // The clocks tick: not compared
+    // The clocks tick: not compared, a little round them too (a book font's figures reach past their box)
     screen: await shown.page.screenshot({
       animations: 'disabled',
       caret: 'hide',
       mask: [shown.page.locator('[data-clock]')],
       maskColor: '#ff00ff',
+      style: '[data-clock] { outline: 3px solid #ff00ff !important; outline-offset: 0 !important; }',
     }),
   };
 }
@@ -894,7 +898,7 @@ const TOUCH = [
     },
   },
   {
-    name: "held sideways, the hand's grip slides it up as a panel in the right half (hidden elsewhere)",
+    name: "held sideways, the hand's grip slides it up as a panel in the right half, on the divider (hidden elsewhere)",
     state: 'late',
     run: async (page, sent, device) => {
       const grip = page.locator('[data-phone="hand-grip"]');
@@ -910,6 +914,14 @@ const TOUCH = [
       if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
       if (Math.abs(after.x - width / 2) > 2 || Math.abs(after.x + after.width - width) > 2) {
         problems.push(`not the right half: ${after.x}–${after.x + after.width} of ${width}`);
+      }
+      // The divider in the right half too, the hand standing on it (the owner, 2026-11-17: it was in the left half)
+      const divider = await page.locator('gd-phone-divider').boundingBox();
+      if (Math.abs(divider.x - width / 2) > 2 || Math.abs(divider.x + divider.width - width) > 2) {
+        problems.push(`the divider in ${divider.x}–${divider.x + divider.width} of ${width}, not the right half`);
+      }
+      if (Math.abs(after.y + after.height - divider.y) > 2) {
+        problems.push(`the hand ends at ${after.y + after.height}, the divider starts at ${divider.y}`);
       }
       await touchDrag(page, { x: from.x, y: after.y + 8 }, { x: from.x, y: 2 });
       await page.waitForTimeout(300);
@@ -934,11 +946,15 @@ const TOUCH = [
       }
       const hidden = await page.locator('gd-game-phone[data-hand-hidden]').count();
       const hint = await page.locator('.gd-phone-divider__hand-hint').count();
+      // Held sideways, the hint to drag the hand up is in the right half, where the hand was
+      const hintBox = hint ? await page.locator('.gd-phone-divider__hand-hint').boundingBox() : null;
+      const leftOfHalf = device === 'sideways' && hintBox && hintBox.x < page.viewportSize().width / 2 - 2;
       await dragDivider(page, -200);
       const back = await page.locator('gd-phone-hand').count();
       return [
         ...(hidden ? [] : ['the hand is still shown']),
         ...(hint ? [] : ['no hint to drag it up']),
+        ...(leftOfHalf ? [`the hint to drag it up at x ${hintBox.x}, in the left half`] : []),
         ...(back ? [] : ["dragged up, the hand didn't come back"]),
       ];
     },
@@ -1029,8 +1045,10 @@ async function archeryCheck(browser, devices) {
     try {
       await shown.settle();
       const seen = await shown.page.evaluate(() => {
-        const pills = Array.from(document.querySelectorAll('.gd-phone-pill'));
-        const box = document.querySelector('.gd-phone-status__pills')?.getBoundingClientRect();
+        // The pills shown: beside the phase, or on their own line (both are in the page, one hidden)
+        const shown = document.querySelector('.gd-phone-status__pills:not([hidden])');
+        const pills = Array.from(shown?.querySelectorAll('.gd-phone-pill') ?? []);
+        const box = shown?.getBoundingClientRect();
         return pills.map((pill) => {
           const rect = pill.getBoundingClientRect();
           const icon = pill.querySelector('.gd-phone-pill__icon');
@@ -1061,6 +1079,40 @@ async function archeryCheck(browser, devices) {
   }
   console.log(`archery: ${ok} of ${devices.length} devices show the archery totals`);
   return ok === devices.length;
+}
+
+// --- Stacked cards ---
+
+/**
+ * The "old look for stacked cards" setting (cookie use-old-stack): stacked cards lie on their side, and stand upright
+ * with it, on the phone layouts and the computer layout (the owner, 2026-11-17: switching it changed nothing).
+ */
+async function stackCheck(browser, devices) {
+  let ok = 0;
+  let total = 0;
+  for (const device of [...devices, 'computer']) {
+    const turned = {};
+    for (const old of [false, true]) {
+      const state = STATES.underOffer;
+      const shown = await openPhone(browser, device, recordingOf(state), state.count, {
+        cookies: [['use-old-stack', String(old)]],
+      });
+      try {
+        await shown.settle();
+        turned[old] = await shown.page.evaluate(() => {
+          const card = document.querySelector('.gd-card[data-under="stacked"]');
+          return card ? getComputedStyle(card).transform !== 'none' : null;
+        });
+      } finally {
+        await shown.close();
+      }
+    }
+    total++;
+    if (turned[false] === true && turned[true] === false) ok++;
+    else console.log(`  ✗ stack · ${device}: on their side ${turned[false]}, with the old look ${turned[true]}`);
+  }
+  console.log(`stack: ${ok} of ${total} draw stacked cards as the setting says`);
+  return ok === total;
 }
 
 // --- Cards not active this turn ---
@@ -1186,6 +1238,7 @@ async function main() {
     if (chosen.includes('sites')) passed = (await sitesCheck(browser, devices)) && passed;
     if (chosen.includes('fold')) passed = (await foldCheck(browser, devices)) && passed;
     if (chosen.includes('archery')) passed = (await archeryCheck(browser, devices)) && passed;
+    if (chosen.includes('stack')) passed = (await stackCheck(browser, devices)) && passed;
     process.exitCode = passed ? 0 : 1;
   } finally {
     await browser.close();

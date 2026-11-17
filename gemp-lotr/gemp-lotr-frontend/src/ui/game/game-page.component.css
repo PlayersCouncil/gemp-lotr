@@ -8,6 +8,33 @@
  */
 
 :host {
+  /* The shared colour slots in the game's own colours (themes.css: the same in classic, Middle-earth in modern) */
+  --theme-text: var(--theme-game-ui-text);
+  --theme-widget-text: var(--theme-game-ui-widget-text);
+  --theme-page-bg: var(--theme-game-ui-page-bg);
+  --theme-content-bg: var(--theme-game-ui-content-bg);
+  --theme-default-bg: var(--theme-game-ui-default-bg);
+  --theme-hover-bg: var(--theme-game-ui-hover-bg);
+  --theme-header-bg: var(--theme-game-ui-header-bg);
+  --theme-content-border: var(--theme-game-ui-content-border);
+  --theme-header-border: var(--theme-game-ui-header-border);
+  --theme-separator: var(--theme-game-ui-separator);
+  --theme-widget-border: var(--theme-game-ui-widget-border);
+  --theme-hover-border: var(--theme-game-ui-hover-border);
+  --theme-active-border: var(--theme-game-ui-active-border);
+  --theme-active-bg: var(--theme-game-ui-active-bg);
+  --theme-focus-ring-inner: var(--theme-game-ui-focus-ring-inner);
+  --theme-focus-ring-outer: var(--theme-game-ui-focus-ring-outer);
+  --theme-backdrop: var(--theme-game-ui-backdrop);
+  --theme-field-bg: var(--theme-game-ui-field-bg);
+  --theme-field-border-light: var(--theme-game-ui-field-border-light);
+  --theme-field-border-dark: var(--theme-game-ui-field-border-dark);
+  --theme-link-visited: var(--theme-game-ui-link-visited);
+  --theme-slider-fill: var(--theme-game-ui-slider-fill);
+  --theme-scrollbar-thumb: var(--theme-game-ui-scrollbar-thumb);
+  --theme-scrollbar-track: var(--theme-game-ui-scrollbar-track);
+  --theme-scrollbar-button: var(--theme-game-ui-scrollbar-button);
+  --theme-frame-shadow: var(--theme-game-ui-frame-shadow);
   --u: calc((var(--gd-window-height, 100vh) - 35px) / 49);
   --tabs: max(175px, 10 * var(--u));
   /* The rows' shares of the height */
@@ -67,6 +94,7 @@
   min-height: 0;
   border: 1px solid var(--theme-content-border);
   border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-frame-shadow);
   background: var(--theme-content-bg);
 }
 

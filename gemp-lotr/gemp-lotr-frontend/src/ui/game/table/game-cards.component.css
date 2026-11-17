@@ -43,9 +43,17 @@
   margin-right: calc(round(down, calc(var(--gd-card-width) * 0.22), 1px) - var(--gd-card-width));
 }
 
-/* Stacked cards lie on their side, unless the player chose the old look (game.css .stack-horiz) */
-:host-context(:not([data-old-stack])) .gd-game-stack > .gd-card[data-under='stacked'] {
+/*
+ * Stacked cards lie on their side, unless the player chose the old look (game.css .stack-horiz; the game page's
+ * data-old-stack). Not :host-context(:not([data-old-stack])): any element above without the attribute (<html>) matched
+ * that, so the setting did nothing
+ */
+.gd-game-stack > .gd-card[data-under='stacked'] {
   transform: rotate(-90deg) translateY(10%);
+}
+
+:host-context([data-old-stack]) .gd-game-stack > .gd-card[data-under='stacked'] {
+  transform: none;
 }
 
 /* A card that isn't active this turn: dimmed, in a dark frame */

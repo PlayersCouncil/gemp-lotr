@@ -185,7 +185,7 @@ const HALL = '/gemp-lotr/hall.html';
                     <div class="gd-phone-note">
                       Bigger cards show fewer in a row; the table scrolls further. Kept on this device.
                     </div>
-                    <h3>Animations</h3>
+                    <h3>Animation speed</h3>
                     <div class="gd-phone-scale">
                       <input
                         type="range"
@@ -199,6 +199,7 @@ const HALL = '/gemp-lotr/hall.html';
                       />
                       <output>{{ settings.animationSpeed() }}</output>
                     </div>
+                    <h3>Cards</h3>
                     <label class="gd-phone-toggle">
                       <input
                         type="checkbox"

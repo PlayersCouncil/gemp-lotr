@@ -9,12 +9,8 @@
   overflow: hidden;
   background: var(--theme-page-bg);
   color: var(--theme-text);
-  font:
-    12px/1.3 system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  /* EB Garamond in the modern theme: its small letters run small, so a size up on the system font's 12px */
+  font: 14px/1.3 var(--theme-game-phone-font-text);
   padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
     env(safe-area-inset-left, 0px);
 }
@@ -36,7 +32,7 @@
 }
 
 :host([data-device='tablet']) {
-  font-size: 13px;
+  font-size: 15px;
 }
 
 gd-phone-hand {
@@ -44,8 +40,10 @@ gd-phone-hand {
 }
 
 /*
- * Held sideways: the table across the whole width, the divider under its left half, and the hand a panel in the right
- * half, standing on the bottom, as high as dragged (up to the status bar), over the table's right part.
+ * Held sideways: the table across the whole width and down to the bottom; the right half holds the divider at the
+ * bottom and the hand a panel standing on it, as high as dragged (up to the status bar), over the table's right part.
+ * Everything of the hand's is on the right, the hint to drag a hidden hand up too (the owner, 2026-11-17: on the phone
+ * the divider in the left half looked like the hand on the left).
  */
 :host([data-device='sideways']) {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -53,7 +51,7 @@ gd-phone-hand {
   grid-template-areas:
     'top top'
     'table table'
-    'divider .';
+    'table table';
 }
 
 :host([data-device='sideways']) > gd-phone-status {
@@ -65,12 +63,15 @@ gd-phone-hand {
 }
 
 :host([data-device='sideways']) > gd-phone-divider {
-  grid-area: divider;
+  grid-column: 2;
+  grid-row: 3;
+  z-index: 5;
+  border-left: 1px solid var(--theme-separator);
 }
 
 :host([data-device='sideways']) > gd-phone-hand {
   grid-column: 2;
-  grid-row: 2 / 4;
+  grid-row: 2;
   align-self: end;
   z-index: 5;
   max-height: 100%;

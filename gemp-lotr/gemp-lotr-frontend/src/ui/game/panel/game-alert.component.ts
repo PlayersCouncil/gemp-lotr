@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { DecisionButton } from '../../../core/game/decision/decision-view';
+import { Component, computed, inject } from '@angular/core';
+import { DecisionButton, mainButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 
@@ -36,6 +36,7 @@ const BUTTON_IDS: Readonly<Record<DecisionButton, string>> = {
           [attr.data-decision-button]="button"
           [attr.data-button-id]="ids[button]"
           [attr.data-right]="button === 'Done' && decisions.view().doneOnRight ? '' : null"
+          [attr.data-main]="button === main() ? '' : null"
           (click)="decisions.press(button)"
         >
           <span>{{ button }}</span>
@@ -46,5 +47,7 @@ const BUTTON_IDS: Readonly<Record<DecisionButton, string>> = {
 })
 export class GameAlertComponent {
   protected readonly decisions = inject(GameDecisions);
+  /** The button that goes on with the game (mainButton): the modern theme's gold pill. */
+  protected readonly main = computed(() => mainButton(this.decisions.view().buttons));
   protected readonly ids = BUTTON_IDS;
 }

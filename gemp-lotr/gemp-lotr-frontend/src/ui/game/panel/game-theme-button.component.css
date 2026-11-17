@@ -22,8 +22,11 @@
   background-position: -128px -128px;
 }
 
-/* In the phone layout's status bar: a finger's size */
+/* In the phone layout's status bar: a finger's size, a round seal (dark red with a gold ring in the modern theme) */
 :host-context(gd-phone-status) .gd-game-theme {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border-color: var(--theme-game-phone-accent);
+  background: var(--theme-game-phone-seal-bg);
 }

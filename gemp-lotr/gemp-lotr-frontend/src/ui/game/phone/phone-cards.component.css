@@ -37,6 +37,7 @@
   --gd-card-height: var(--gd-phone-card, 100px);
   flex: none;
   touch-action: pan-x pan-y;
+  box-shadow: var(--theme-game-phone-card-shadow);
 }
 
 /* A card not active this turn, shrunk out of the way (the fold's button enlarges it) */
@@ -90,13 +91,12 @@
 .gd-phone-cards__fold {
   flex: none;
   align-self: center;
-  min-height: 28px;
+  min-height: 36px;
   border: 1px solid var(--theme-separator);
   border-radius: 99px;
-  padding: 2px 10px;
+  padding: 2px 12px;
   font: inherit;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 14px;
   white-space: nowrap;
   scroll-snap-align: start;
   background: none;
@@ -104,7 +104,10 @@
   cursor: pointer;
 }
 
-/* The cards under one: small copies, a long press shows one big */
+/*
+ * The cards under one (attached, stacked): small copies under it, a long press shows one big (the owner, 2026-11-17:
+ * kept so, not peeking out behind it)
+ */
 .gd-phone-slot__under {
   display: flex;
   flex-wrap: wrap;
@@ -136,23 +139,30 @@
   --gd-card-frame: var(--theme-game-inactive-border);
 }
 
-/* A card the waiting decision offers, or one chosen for it: framed and lit in the choice's colour */
+/*
+ * A card the waiting decision offers, or one chosen for it: framed in the choice's colour, a crisp ring a little off
+ * the card (no glow spilling onto its neighbours)
+ */
 .gd-card[data-mark] {
   --gd-card-frame: var(--theme-game-selected);
-  box-shadow: 0 0 0 3px var(--theme-game-selected);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-selected);
 }
 
 .gd-card[data-mark='selectable'] {
   --gd-card-frame: var(--theme-game-selectable);
   box-shadow:
-    0 0 0 2px var(--theme-game-selectable),
-    0 0 10px color-mix(in srgb, var(--theme-game-selectable) 45%, transparent);
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-selectable);
   cursor: pointer;
 }
 
 .gd-card[data-mark='actionable'] {
   --gd-card-frame: var(--theme-game-actionable);
-  box-shadow: 0 0 0 2px var(--theme-game-actionable);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-actionable);
   cursor: pointer;
 }
 
@@ -164,9 +174,17 @@
   opacity: 0.85;
 }
 
-/* Stacked cards on their side, as on the table, unless the player chose the old look */
-:host-context(:not([data-old-stack])) .gd-phone-slot__under > .gd-card[data-under='stacked'] {
+/*
+ * Stacked cards on their side, as on the table, unless the player chose the old look (the game page's data-old-stack).
+ * Not :host-context(:not([data-old-stack])): any element above without the attribute (<html>) matched that, so the
+ * setting did nothing
+ */
+.gd-phone-slot__under > .gd-card[data-under='stacked'] {
   transform: rotate(-90deg);
+}
+
+:host-context([data-old-stack]) .gd-phone-slot__under > .gd-card[data-under='stacked'] {
+  transform: none;
 }
 
 .gd-phone-cards__more {

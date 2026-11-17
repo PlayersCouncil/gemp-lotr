@@ -135,6 +135,11 @@ gd-game-chat[data-newest-first] .gd-game-chat__lines {
 gd-game-chat[data-newest-first] .gd-game-chat__talk {
   top: calc(4px + var(--gd-game-strip));
   bottom: auto;
+  /* In the game's colours, not the browser's grey field */
+  border: 1px solid var(--theme-field-border-light);
+  border-radius: var(--theme-radius);
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
 }
 
 /* In the phone layout's sheet: a column, the field over the lines */

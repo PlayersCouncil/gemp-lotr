@@ -81,6 +81,15 @@ export class PageCues {
     }
   }
 
+  /**
+   * Once the page's fonts are loaded (at once where they are, or the browser can't tell): text set in a font still
+   * coming is laid out again when it comes, so a scroll restored before would land elsewhere.
+   */
+  fontsReady(): Promise<void> {
+    const fonts = this.document.fonts as FontFaceSet | undefined;
+    return fonts?.ready ? fonts.ready.then(() => undefined) : Promise.resolve();
+  }
+
   reload(): void {
     this.document.defaultView?.location.reload();
   }

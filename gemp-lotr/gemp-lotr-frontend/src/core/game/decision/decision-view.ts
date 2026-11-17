@@ -123,6 +123,14 @@ export function decisionCard(
 }
 
 /** The least number of cards a decision takes ("min"; none said: 0). */
+/**
+ * The button that goes on with the game, drawn as the main one (the modern theme's gold pill): Done, else Pass or OK;
+ * none among other buttons.
+ */
+export function mainButton(buttons: readonly DecisionButton[]): DecisionButton | null {
+  return buttons.find((b) => b === 'Done') ?? buttons.find((b) => b === 'Pass' || b === 'OK') ?? null;
+}
+
 export function minimum(decision: Decision): number {
   return Number(first(decision, 'min') ?? 0) || 0;
 }

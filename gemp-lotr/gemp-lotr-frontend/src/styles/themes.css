@@ -36,6 +36,8 @@
   --theme-backdrop: rgb(92 92 92 / 0.8);
   --theme-radius: 6px;
   --theme-radius-box: 7px;
+  /* A box's frame drawn inside its border (box-shadow); none in classic */
+  --theme-frame-shadow: none;
 
   /* The icon sprite (jQuery UI's 256 x 240 grid of 16px icons) in three colours */
   --theme-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png');
@@ -180,7 +182,89 @@
   --theme-game-phone-on-choose: #000;
   --theme-game-phone-shade: rgb(0 0 0 / 0.65);
   --theme-game-phone-danger-text: #f88;
-  --theme-game-phone-twilight: radial-gradient(circle at 35% 35%, #d9d0ff, #5b4a9e 70%);
+  --theme-game-phone-font-display: var(--theme-font-text);
+  --theme-game-phone-font-text: var(--theme-font-text);
+  --theme-game-phone-sheet-bg: #222;
+  --theme-game-phone-on-sheet: #fff;
+  --theme-game-phone-sheet-chip: #333;
+  --theme-game-phone-sheet-line: #666;
+  --theme-game-phone-card-shadow: none;
+  --theme-game-phone-seal-bg: var(--theme-attention-bg);
+
+  /* The decision's main button (Done, Pass, OK) and the boxes' inner frame line: in classic as every other button and
+   * box (no change from the legacy page) */
+  --theme-game-main-bg: var(--theme-default-bg);
+  --theme-game-main-edge: var(--theme-widget-border);
+  --theme-game-main-text: var(--theme-widget-text);
+  --theme-game-main-radius: var(--theme-radius);
+  --theme-game-main-shadow: none;
+  --theme-game-main-font: var(--theme-font-widget);
+  --theme-game-main-weight: normal;
+  --theme-game-main-spacing: normal;
+  --theme-game-main-case: none;
+  --theme-game-main-hover-bg: var(--theme-hover-bg);
+  --theme-game-main-hover-edge: var(--theme-hover-border);
+  --theme-game-main-hover-text: var(--theme-text);
+  --theme-game-main-active-bg: var(--theme-active-bg);
+  --theme-game-main-active-edge: var(--theme-active-border);
+  --theme-game-ui-frame-shadow: var(--theme-frame-shadow);
+  /* The computer layout's player numbers ("1. name") and twilight box: plain text and box in classic */
+  --theme-game-badge-display: inline;
+  --theme-game-badge-width: auto;
+  --theme-game-badge-height: auto;
+  --theme-game-badge-clip: none;
+  --theme-game-badge-edge: transparent;
+  --theme-game-badge-pad: 0;
+  --theme-game-badge-text: inherit;
+  --theme-game-badge-font: inherit;
+  --theme-game-badge-size: inherit;
+  --theme-game-badge-weight: inherit;
+  --theme-game-badge-align: baseline;
+  --theme-game-badge-gap: 0;
+  --theme-game-badge-inner: none;
+  --theme-game-badge-dot: inline;
+  --theme-game-gem: none;
+  --theme-game-phone-frame: #666;
+  --theme-game-phone-frame-inner: #444;
+  --theme-game-phone-ring: #666;
+  --theme-game-phone-rule: #666;
+  --theme-game-phone-curl-left: none;
+  --theme-game-phone-curl-right: none;
+  --theme-game-phone-curl-left-small: none;
+  --theme-game-phone-curl-right-small: none;
+  --theme-game-phone-gem: #5b4a9e;
+  --theme-game-phone-gem-edge: #d9d0ff;
+  --theme-game-phone-gem-facet: #d9d0ff;
+
+  /*
+   * The game page's own colours for the shared slots (the game page maps each --theme-X to --theme-game-ui-X): the
+   * same as everywhere in classic; the modern theme gives the game its Middle-earth look, the deck builder keeps its own
+   */
+  --theme-game-ui-text: var(--theme-text);
+  --theme-game-ui-widget-text: var(--theme-widget-text);
+  --theme-game-ui-page-bg: var(--theme-page-bg);
+  --theme-game-ui-content-bg: var(--theme-content-bg);
+  --theme-game-ui-default-bg: var(--theme-default-bg);
+  --theme-game-ui-hover-bg: var(--theme-hover-bg);
+  --theme-game-ui-header-bg: var(--theme-header-bg);
+  --theme-game-ui-content-border: var(--theme-content-border);
+  --theme-game-ui-header-border: var(--theme-header-border);
+  --theme-game-ui-separator: var(--theme-separator);
+  --theme-game-ui-widget-border: var(--theme-widget-border);
+  --theme-game-ui-hover-border: var(--theme-hover-border);
+  --theme-game-ui-active-border: var(--theme-active-border);
+  --theme-game-ui-active-bg: var(--theme-active-bg);
+  --theme-game-ui-focus-ring-inner: var(--theme-focus-ring-inner);
+  --theme-game-ui-focus-ring-outer: var(--theme-focus-ring-outer);
+  --theme-game-ui-backdrop: var(--theme-backdrop);
+  --theme-game-ui-field-bg: var(--theme-field-bg);
+  --theme-game-ui-field-border-light: var(--theme-field-border-light);
+  --theme-game-ui-field-border-dark: var(--theme-field-border-dark);
+  --theme-game-ui-link-visited: var(--theme-link-visited);
+  --theme-game-ui-slider-fill: var(--theme-slider-fill);
+  --theme-game-ui-scrollbar-thumb: var(--theme-scrollbar-thumb);
+  --theme-game-ui-scrollbar-track: var(--theme-scrollbar-track);
+  --theme-game-ui-scrollbar-button: var(--theme-scrollbar-button);
 
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;
@@ -192,7 +276,7 @@
   --theme-scroll-right: url('/gemp-lotr/ng/themes/classic/scroll-button-right.png');
 }
 
-/* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11) */
+/* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11); the game page Middle-earth */
 :root[data-theme='modern'] {
   color-scheme: dark;
   --theme-font-text: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
@@ -258,74 +342,158 @@
   --theme-culture-icon-filter: invert(1) brightness(0.95);
 
   /* The game page (G6 of trymarz/gemp-lotr-private#27): the same dark gray, its marks in the theme's accents */
-  --theme-game-current-bg: #3a3c41;
-  --theme-game-current-text: #e7e9ee;
-  --theme-game-link: #8fa6ff;
-  --theme-game-text-link: #f5a524;
-  --theme-game-text-link-visited: #d98b0f;
-  --theme-game-clock-bg: #1a1b1e;
-  --theme-game-clock-text: #e7e9ee;
+  --theme-game-current-bg: #2e251a;
+  --theme-game-current-text: #ece2cc;
+  --theme-game-link: #e2c271;
+  --theme-game-text-link: #d9b866;
+  --theme-game-text-link-visited: #b8913c;
+  --theme-game-clock-bg: #110e0a;
+  --theme-game-clock-text: #ece2cc;
   --theme-game-clock-warn-bg: #b4740f;
   --theme-game-clock-danger-bg: #c43c3c;
-  --theme-game-twilight-bg: #1a1b1e;
-  --theme-game-twilight-text: #e7e9ee;
-  --theme-game-twilight-border: #6e8bff;
-  --theme-game-stats-text: #5ec8c8;
+  --theme-game-twilight-bg: #110e0a;
+  --theme-game-twilight-text: #ece2cc;
+  --theme-game-twilight-border: #9b85d0;
+  --theme-game-stats-text: #c9a24a;
   --theme-game-number-text: #fff;
-  --theme-game-number-inactive-text: #7c7f87;
-  --theme-game-inactive-border: #3c3e44;
-  --theme-game-selectable: #3ecf8e;
-  --theme-game-actionable: #6e8bff;
-  --theme-game-selected: #2dd4bf;
-  --theme-game-card-frame: #111214;
-  --theme-game-highlight: #f2f3f5;
-  --theme-game-menu-bg: #303236;
-  --theme-game-menu-border: #4b4e55;
-  --theme-game-menu-text: #e7e9ee;
-  --theme-game-menu-hover-bg: #6e8bff;
-  --theme-game-menu-hover-text: #fff;
-  --theme-game-spinner-bg: #1a1b1e;
-  --theme-game-spinner-border: #4b4e55;
-  --theme-game-muted-mark: #ff6b6b;
-  --theme-game-muted-mark-edge: #202124;
-  --theme-game-dialog-actions-bg: #28292d;
-  --theme-game-fight-border: #ff6b6b;
-  --theme-game-strength-bg: #e7e9ee;
-  --theme-game-strength-overwhelmed-bg: #ff6b6b;
-  --theme-game-damage-bg: #9aa0a6;
-  --theme-game-strength-text: #202124;
-  --theme-game-chat-text: #8fa6ff;
-  --theme-game-chat-system-text: #9aa0a6;
-  --theme-game-chat-mention-bg: rgb(245 165 36 / 0.18);
-  --theme-game-chat-quote: #9aa0a6;
-  --theme-game-card-hint: #8fa6ff;
-  --theme-game-chat-ping-bg: rgb(255 107 107 / 0.25);
+  --theme-game-number-inactive-text: #8f8163;
+  --theme-game-inactive-border: #3a2f20;
+  --theme-game-selectable: #e0b44c;
+  --theme-game-actionable: #9fb4d8;
+  --theme-game-selected: #7fae57;
+  --theme-game-card-frame: #0d0b08;
+  --theme-game-highlight: #f4ead2;
+  --theme-game-menu-bg: #241d15;
+  --theme-game-menu-border: #5a4a2c;
+  --theme-game-menu-text: #ece2cc;
+  --theme-game-menu-hover-bg: #c9a24a;
+  --theme-game-menu-hover-text: #1a140c;
+  --theme-game-spinner-bg: #110e0a;
+  --theme-game-spinner-border: #5a4a2c;
+  --theme-game-muted-mark: #c0503c;
+  --theme-game-muted-mark-edge: #13100c;
+  --theme-game-dialog-actions-bg: #1c1712;
+  --theme-game-fight-border: #c0503c;
+  --theme-game-strength-bg: #ecdfc0;
+  --theme-game-strength-overwhelmed-bg: #c0503c;
+  --theme-game-damage-bg: #a89a7c;
+  --theme-game-strength-text: #2b2115;
+  --theme-game-chat-text: #d9b866;
+  --theme-game-chat-system-text: #a89a7c;
+  --theme-game-chat-mention-bg: rgb(201 162 74 / 0.18);
+  --theme-game-chat-quote: #a89a7c;
+  --theme-game-card-hint: #e2c271;
+  --theme-game-chat-ping-bg: rgb(192 80 60 / 0.25);
 
-  --theme-game-document-bg: var(--theme-page-bg);
+  --theme-game-document-bg: #13100c;
 
   /* The phone layout (G7): the prototype's colours, the deck builder's modern accents */
-  --theme-game-phone-muted: #a0a3ab;
-  --theme-game-phone-dim: #7c7f87;
-  --theme-game-phone-path-bg: #1b1c1f;
-  --theme-game-phone-hand-bg: #1b1c1f;
-  --theme-game-phone-offer-bg: #1d2230;
-  --theme-game-phone-them: #ff6b6b;
-  --theme-game-phone-mine: #3ecf8e;
-  --theme-game-phone-minions: #f2c14e;
-  --theme-game-phone-player-1: #c43c3c;
-  --theme-game-phone-player-2: #6e8bff;
+  --theme-game-phone-muted: #b3a483;
+  --theme-game-phone-dim: #8f8163;
+  --theme-game-phone-path-bg: #16120d;
+  --theme-game-phone-hand-bg: #1c1712;
+  --theme-game-phone-offer-bg: #241d15;
+  --theme-game-phone-them: #c0503c;
+  --theme-game-phone-mine: #7fae57;
+  --theme-game-phone-minions: #c98a2e;
+  --theme-game-phone-player-1: #a8322a;
+  --theme-game-phone-player-2: #3b5a9a;
   /* The archery pills: a light Shire green for the Free Peoples, red for the Shadow (as the private mobile page) */
   --theme-game-phone-fp-archery-bg: #cfe3a8;
   --theme-game-phone-on-fp-archery: #1f2a12;
   --theme-game-phone-shadow-archery-bg: #a8261c;
   --theme-game-phone-on-shadow-archery: #fff;
-  --theme-game-phone-on-accent: #0b1020;
-  --theme-game-phone-accent: #6e8bff;
+  --theme-game-phone-on-accent: #1a140c;
+  --theme-game-phone-accent: #c9a24a;
   --theme-game-phone-on-dark: #fff;
-  --theme-game-phone-on-choose: #04150d;
+  --theme-game-phone-on-choose: #1a140c;
   --theme-game-phone-shade: rgb(0 0 0 / 0.65);
   --theme-game-phone-danger-text: #ffb4a8;
-  --theme-game-phone-twilight: radial-gradient(circle at 35% 35%, #d9d0ff, #5b4a9e 70%);
+  --theme-game-phone-font-display: Cinzel, 'EB Garamond', Georgia, serif;
+  --theme-game-phone-font-text: 'EB Garamond', Georgia, serif;
+  --theme-game-phone-sheet-bg: #ecdfc0;
+  --theme-game-phone-on-sheet: #2b2115;
+  --theme-game-phone-sheet-chip: #d9c99f;
+  --theme-game-phone-sheet-line: #6b5a36;
+  --theme-game-phone-card-shadow: 0 3px 8px rgb(0 0 0 / 0.55);
+  --theme-game-phone-seal-bg: #7d1f1a;
+  --theme-game-main-bg: #c9a24a;
+  --theme-game-main-edge: #8c6a24;
+  --theme-game-main-text: #1a140c;
+  --theme-game-main-radius: 999px;
+  --theme-game-main-shadow: inset 0 1px 0 #f0d58a, 0 2px 4px rgb(0 0 0 / 0.5);
+  --theme-game-main-font: Cinzel, 'EB Garamond', Georgia, serif;
+  --theme-game-main-weight: 700;
+  --theme-game-main-spacing: 0.08em;
+  --theme-game-main-case: uppercase;
+  --theme-game-main-hover-bg: #e0b44c;
+  --theme-game-main-hover-edge: #8c6a24;
+  --theme-game-main-hover-text: #1a140c;
+  --theme-game-main-active-bg: #b8913c;
+  --theme-game-main-active-edge: #8c6a24;
+  /* The double bronze frame: a bronze border, then a fine line inside it */
+  --theme-game-ui-frame-shadow: inset 0 0 0 2px #1c1712, inset 0 0 0 3px #5a4a2c;
+  /* Player numbers on heraldic shields (no dot), the twilight box's gem */
+  --theme-game-badge-display: inline-grid;
+  --theme-game-badge-width: 16px;
+  --theme-game-badge-height: 19px;
+  --theme-game-badge-clip: path('M0 0H16V8C16 13.5 11.5 17 8 19C4.5 17 0 13.5 0 8Z');
+  --theme-game-badge-edge: #c9a24a;
+  --theme-game-badge-pad: 0 0 3px;
+  --theme-game-badge-text: #fff;
+  --theme-game-badge-font: 'EB Garamond', Georgia, serif;
+  --theme-game-badge-size: 12px;
+  --theme-game-badge-weight: 700;
+  --theme-game-badge-align: middle;
+  --theme-game-badge-gap: 4px;
+  --theme-game-badge-inner: '';
+  --theme-game-badge-dot: none;
+  --theme-game-gem: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='20' viewBox='0 0 18 20'%3E%3Cpath d='M9 1l7 6-7 12L2 7z' fill='%234a3576' stroke='%239b85d0' stroke-linejoin='round'/%3E%3Cpath d='M2 7h14M9 1L6 7l3 12 3-12z' fill='none' stroke='%23cbbcf0' stroke-width='0.7'/%3E%3C/svg%3E");
+  /* The owner's picks of 2026-11-17: a gold pill for the main answer, flourished lines, double bronze frames, gold
+   * rings round counts, heraldic shields for the players, the twilight a cut gem */
+  --theme-game-phone-frame: #8c7442;
+  --theme-game-phone-frame-inner: #5a4a2c;
+  --theme-game-phone-ring: #c9a24a;
+  --theme-game-phone-rule: rgb(201 162 74 / 0.55);
+  --theme-game-phone-curl-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='14' viewBox='0 0 46 14'%3E%3Cpath d='M46 7H22c-6 0-8-6-13-6S1 4 1 7s4 6 8 6 6-3 6-6' fill='none' stroke='%23c9a24a' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --theme-game-phone-curl-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='14' viewBox='0 0 46 14'%3E%3Cpath d='M0 7h24c6 0 8-6 13-6s8 3 8 6-4 6-8 6-6-3-6-6' fill='none' stroke='%23c9a24a' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  /* The same curls drawn at the row lines' size (a shrunk picture was blended differently at each paint) */
+  --theme-game-phone-curl-left-small: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='9' viewBox='0 0 46 14'%3E%3Cpath d='M46 7H22c-6 0-8-6-13-6S1 4 1 7s4 6 8 6 6-3 6-6' fill='none' stroke='%23c9a24a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --theme-game-phone-curl-right-small: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='9' viewBox='0 0 46 14'%3E%3Cpath d='M0 7h24c6 0 8-6 13-6s8 3 8 6-4 6-8 6-6-3-6-6' fill='none' stroke='%23c9a24a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --theme-game-phone-gem: #4a3576;
+  --theme-game-phone-gem-edge: #9b85d0;
+  --theme-game-phone-gem-facet: #cbbcf0;
+
+  /*
+   * The game page in Middle-earth colours (the owner, 2026-11-17): night and leather surfaces, bronze lines, gold for
+   * what matters, parchment for the decision; the phone's text in EB Garamond, its titles in Cinzel (both SIL OFL, in
+   * themes/modern/fonts). Only the game: the deck builder keeps the values above.
+   */
+  --theme-game-ui-text: #ece2cc;
+  --theme-game-ui-widget-text: #ece2cc;
+  --theme-game-ui-page-bg: #13100c;
+  --theme-game-ui-content-bg: #1c1712;
+  --theme-game-ui-default-bg: #241d15;
+  --theme-game-ui-hover-bg: #2e251a;
+  --theme-game-ui-header-bg: #241d15;
+  --theme-game-ui-content-border: #8c7442;
+  --theme-game-ui-header-border: #3a2f20;
+  --theme-game-ui-separator: #5a4a2c;
+  --theme-game-ui-widget-border: #5a4a2c;
+  --theme-game-ui-hover-border: #c9a24a;
+  --theme-game-ui-active-border: #e2c271;
+  --theme-game-ui-active-bg: rgb(201 162 74 / 0.16);
+  --theme-game-ui-focus-ring-inner: #13100c;
+  --theme-game-ui-focus-ring-outer: #e2c271;
+  --theme-game-ui-backdrop: rgb(8 6 4 / 0.65);
+  --theme-game-ui-field-bg: #110e0a;
+  --theme-game-ui-field-border-light: #5a4a2c;
+  --theme-game-ui-field-border-dark: #5a4a2c;
+  --theme-game-ui-link-visited: #d9b866;
+  --theme-game-ui-slider-fill: #c9a24a;
+  --theme-game-ui-scrollbar-thumb: #5a4a2c;
+  --theme-game-ui-scrollbar-track: #1c1712;
+  --theme-game-ui-scrollbar-button: #1c1712;
 
   --theme-scrollbar-thumb: #4b4e55;
   --theme-scrollbar-track: #28292d;

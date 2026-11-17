@@ -1,12 +1,23 @@
-/* The divider: drag handle, the decision and its buttons (G7) */
+/*
+ * The divider: drag handle, the decision and its buttons (G7). A parchment sheet with dark ink in the modern theme
+ * (the owner, 2026-11-17): its fields and buttons take the sheet's colours
+ */
 
 :host {
+  --theme-text: var(--theme-game-phone-on-sheet);
+  --theme-separator: var(--theme-game-phone-sheet-line);
+  --theme-field-bg: var(--theme-game-phone-sheet-chip);
+  --theme-game-phone-muted: var(--theme-game-phone-sheet-line);
+  --theme-game-phone-dim: var(--theme-game-phone-sheet-line);
   position: relative;
   display: grid;
-  gap: 5px;
-  padding: 10px 8px 6px;
-  background: var(--theme-default-bg);
-  border-block: 1px solid var(--theme-separator);
+  gap: 8px;
+  padding: 12px 12px 10px;
+  background: var(--theme-game-phone-sheet-bg);
+  color: var(--theme-text);
+  border-top: 2px solid var(--theme-game-phone-sheet-line);
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -6px 16px var(--theme-game-phone-shade);
   touch-action: none;
   cursor: ns-resize;
   user-select: none;
@@ -28,7 +39,6 @@
 
 :host([data-deciding]) {
   border-top-color: var(--theme-game-phone-accent);
-  box-shadow: 0 -3px 12px color-mix(in srgb, var(--theme-game-phone-accent) 35%, transparent);
 }
 
 .gd-phone-divider__question {
@@ -41,23 +51,26 @@
 .gd-phone-divider__text {
   flex: 1;
   min-width: 0;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 600;
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
 :host(:not([data-deciding])) .gd-phone-divider__text {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 400;
+  font-style: italic;
   color: var(--theme-game-phone-muted);
 }
 
 .gd-phone-divider__clock {
   flex: none;
-  padding-top: 2px;
-  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--theme-game-phone-sheet-chip);
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
-  color: var(--theme-game-phone-muted);
 }
 
 .gd-phone-divider__clock[data-band='warn'] {
@@ -70,33 +83,42 @@
 
 .gd-phone-divider__hand-hint {
   justify-self: center;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--theme-game-phone-muted);
 }
 
 .gd-phone-divider__buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   cursor: default;
 }
 
+/* Pills: the answer outlined in ink, the main one (Pass, Done, OK) ink with gold letters */
 .gd-phone-button {
-  flex: 1 1 auto;
-  min-height: 36px;
-  padding: 0 12px;
+  flex: 0 1 auto;
+  min-height: 44px;
+  padding: 4px 16px;
   border: 1px solid var(--theme-separator);
-  border-radius: var(--theme-radius);
-  background: var(--theme-hover-bg);
+  border-radius: 999px;
+  background: transparent;
   color: var(--theme-text);
   font: inherit;
-  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
 }
 
 .gd-phone-button[data-primary] {
-  background: var(--theme-game-phone-accent);
-  border-color: var(--theme-game-phone-accent);
-  color: var(--theme-game-phone-on-accent);
+  padding-inline: 22px;
+  background: var(--theme-game-main-bg);
+  border-color: var(--theme-game-main-edge);
+  box-shadow: var(--theme-game-main-shadow);
+  color: var(--theme-game-main-text);
+  font-family: var(--theme-game-main-font);
+  font-weight: var(--theme-game-main-weight);
+  font-size: 15px;
+  letter-spacing: var(--theme-game-main-spacing);
+  text-transform: var(--theme-game-main-case);
 }
 
 .gd-phone-spinner {

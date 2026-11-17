@@ -63,6 +63,7 @@ describe('the game on a phone (G7)', () => {
             go: vi.fn(),
             fullscreen: signal(false),
             fullscreenAvailable: () => true,
+            fontsReady: () => Promise.resolve(),
           },
         },
         {
@@ -197,7 +198,7 @@ describe('the game on a phone (G7)', () => {
       'initiative="FREE_PEOPLE" ruleof4="-1"/>';
     const { el } = await open(game(stats('2', '3')));
     const pills = () =>
-      Array.from(el.querySelectorAll('.gd-phone-pill'), (pill) => [
+      Array.from(el.querySelectorAll('.gd-phone-status__pills:not([hidden]) .gd-phone-pill'), (pill) => [
         pill.getAttribute('data-pill'),
         pill.textContent?.trim(),
         pill.querySelector('.gd-phone-pill__icon') !== null,

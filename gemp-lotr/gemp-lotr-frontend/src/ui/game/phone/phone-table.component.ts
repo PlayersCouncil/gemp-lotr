@@ -1,4 +1,15 @@
-import { afterNextRender, Component, computed, effect, ElementRef, inject, Injector, untracked } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  untracked,
+} from '@angular/core';
+import { PageCues } from '../../../core/platform/page-cues';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { GameSheets } from '../../../core/game/phone/game-sheets';
 import { phoneTable } from '../../../core/game/phone/phone-table';
@@ -32,7 +43,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
   host: { '(gdScrollSettled)': 'keepScroll()' },
   template: `
     <section class="gd-phone-zone" data-zone="path" aria-label="Adventure path">
-      <h3 class="gd-phone-zone__label">Adventure path</h3>
+      <h3 class="gd-phone-zone__label">The road</h3>
       <div class="gd-phone-path" data-row="path">
         @for (site of phone().path; track site.number) {
           <div
@@ -74,17 +85,26 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         [attr.data-side]="row.side"
         [attr.aria-label]="row.label"
       >
+        <!-- An empty row is one line: its label and "none" (the owner, 2026-11-17) -->
         <h3 class="gd-phone-zone__label">
-          {{ row.label }} <span class="gd-phone-zone__count">{{ row.cards.length }}</span>
+          {{ row.label }}
+          @if (row.cards.length > 0) {
+            <span class="gd-phone-zone__count">{{ row.cards.length }}</span>
+          } @else {
+            <span class="gd-phone-zone__none">none</span>
+          }
+          <span class="gd-phone-zone__rule" aria-hidden="true"></span>
         </h3>
-        <gd-phone-cards
-          [cards]="row.cards"
-          [key]="row.key"
-          [shadowFrom]="row.shadowFrom"
-          [fold]="row.fold"
-          [opened]="unfolded().includes(row.key)"
-          (foldToggled)="toggleFold(row.key)"
-        />
+        @if (row.cards.length > 0) {
+          <gd-phone-cards
+            [cards]="row.cards"
+            [key]="row.key"
+            [shadowFrom]="row.shadowFrom"
+            [fold]="row.fold"
+            [opened]="unfolded().includes(row.key)"
+            (foldToggled)="toggleFold(row.key)"
+          />
+        }
       </section>
     }
     @if (phone().pairs.length > 0) {
@@ -129,17 +149,26 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         [attr.data-side]="row.side"
         [attr.aria-label]="row.label"
       >
+        <!-- An empty row is one line: its label and "none" (the owner, 2026-11-17) -->
         <h3 class="gd-phone-zone__label">
-          {{ row.label }} <span class="gd-phone-zone__count">{{ row.cards.length }}</span>
+          {{ row.label }}
+          @if (row.cards.length > 0) {
+            <span class="gd-phone-zone__count">{{ row.cards.length }}</span>
+          } @else {
+            <span class="gd-phone-zone__none">none</span>
+          }
+          <span class="gd-phone-zone__rule" aria-hidden="true"></span>
         </h3>
-        <gd-phone-cards
-          [cards]="row.cards"
-          [key]="row.key"
-          [shadowFrom]="row.shadowFrom"
-          [fold]="row.fold"
-          [opened]="unfolded().includes(row.key)"
-          (foldToggled)="toggleFold(row.key)"
-        />
+        @if (row.cards.length > 0) {
+          <gd-phone-cards
+            [cards]="row.cards"
+            [key]="row.key"
+            [shadowFrom]="row.shadowFrom"
+            [fold]="row.fold"
+            [opened]="unfolded().includes(row.key)"
+            (foldToggled)="toggleFold(row.key)"
+          />
+        }
       </section>
     }
   `,
@@ -169,8 +198,23 @@ export class PhoneTableComponent {
 
   constructor() {
     const injector = inject(Injector);
-    // Where it was before a reload, once the cards are there
-    afterNextRender({ write: () => (this.host.scrollTop = this.viewState.phone().tableTop) });
+    // Where it was before a reload, once the cards are there and the text set in its own fonts (the modern theme's
+    // come after the page: restored before, the table moved when they came)
+    const cues = inject(PageCues);
+    const destroyed = inject(DestroyRef);
+    let alive = true;
+    destroyed.onDestroy(() => (alive = false));
+    afterNextRender({
+      write: () => {
+        const top = this.viewState.phone().tableTop;
+        this.host.scrollTop = top;
+        // Again once the fonts are in, unless the player has scrolled meanwhile (the fonts moved it a pixel or two)
+        const set = this.host.scrollTop;
+        void cues.fontsReady().then(() => {
+          if (alive && Math.abs(this.host.scrollTop - set) <= 2) this.host.scrollTop = top;
+        });
+      },
+    });
 
     // A new turn folds the cards not active in it again (the first turn seen, after a reload too, keeps them)
     let lastTurn: string | null = null;

@@ -6,6 +6,7 @@
   box-sizing: border-box;
   border: 1px solid var(--theme-content-border);
   border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-frame-shadow);
   background: var(--theme-content-bg);
   color: var(--theme-text);
   font-family: var(--theme-font-text);
@@ -54,6 +55,31 @@
 
 .gd-game-alert__button[data-right] {
   float: right;
+}
+
+/* The button that goes on with the game (Done, Pass, OK): a gold pill in the modern theme, as every button in classic */
+.gd-game-alert__button[data-main] {
+  border-color: var(--theme-game-main-edge);
+  border-radius: var(--theme-game-main-radius);
+  box-shadow: var(--theme-game-main-shadow);
+  background: var(--theme-game-main-bg);
+  color: var(--theme-game-main-text);
+  font-family: var(--theme-game-main-font);
+  font-weight: var(--theme-game-main-weight);
+  letter-spacing: var(--theme-game-main-spacing);
+  text-transform: var(--theme-game-main-case);
+}
+
+.gd-game-alert__button[data-main]:enabled:hover,
+.gd-game-alert__button[data-main]:focus {
+  border-color: var(--theme-game-main-hover-edge);
+  background: var(--theme-game-main-hover-bg);
+  color: var(--theme-game-main-hover-text);
+}
+
+.gd-game-alert__button[data-main]:enabled:active {
+  border-color: var(--theme-game-main-active-edge);
+  background: var(--theme-game-main-active-bg);
 }
 
 /* A card's name in the server's text: pressing it shows the card */

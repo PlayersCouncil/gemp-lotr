@@ -27,6 +27,7 @@
   padding: 0.2em;
   border: 1px solid var(--theme-content-border);
   border-radius: var(--theme-radius);
+  box-shadow: var(--theme-frame-shadow);
   background: var(--theme-content-bg);
   color: var(--theme-text);
   font-family: var(--theme-font-widget);

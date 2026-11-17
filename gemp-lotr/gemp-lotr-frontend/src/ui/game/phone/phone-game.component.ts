@@ -24,8 +24,8 @@ const HAND_CHROME = 26 + 12;
  * the status bar and the players' chips at the top, the table scrolling up and down, the divider with the decision,
  * and the hand under it. The divider's place is kept per device in a cookie (PhoneSettings); dragged to the bottom it
  * hides the hand (shown again while a decision offers cards in its place). Held sideways the table takes the whole
- * width, the divider the left half of the bottom, and the hand is a panel in the right half that its grip slides up as
- * far as the status bar (the owner, 2026-11-16). Sheets open over everything.
+ * width, the divider the right half of the bottom, and the hand is a panel in the right half standing on it, which its
+ * grip slides up as far as the status bar (the owner, 2026-11-16, 2026-11-17). Sheets open over everything.
  *
  * DOM contract: `gd-game-phone` with `data-device` (phone, sideways, tablet), `data-hand-hidden`, `--gd-phone-card`
  * (the table's cards' height), `--gd-phone-hand` (the hand's height), holding `gd-phone-status`, `gd-phone-table`,
@@ -107,7 +107,7 @@ export class PhoneGameComponent {
 
   /**
    * Dragging the divider (anywhere but its buttons and fields) or the hand's grip: the hand grows by as much as the
-   * pointer goes up, wherever the divider is (held sideways it is beside the hand), and its place is kept when let go.
+   * pointer goes up, wherever the divider is (held sideways it is under the hand), and its place is kept when let go.
    */
   protected readonly handDrag = (event: PointerEvent): DragHandlers | null => {
     const target = event.target as Element | null;
@@ -142,13 +142,13 @@ export class PhoneGameComponent {
 
   /**
    * The hand's height for where the pointer is: hidden near the bottom, never squeezing the table out. Held sideways
-   * the hand is a panel in the right half beside the table and the divider: it may reach the status bar.
+   * the hand is a panel in the right half over the table, standing on the divider: it may reach the status bar.
    */
   private clamp(height: number): number {
     if (height < HIDE_BELOW) return 0;
     const under = this.host.clientHeight - this.status().nativeElement.offsetHeight;
-    const max =
-      this.phone.device() === 'sideways' ? under : under - this.divider().nativeElement.offsetHeight - TABLE_MIN;
+    const divider = this.divider().nativeElement.offsetHeight;
+    const max = this.phone.device() === 'sideways' ? under - divider : under - divider - TABLE_MIN;
     return Math.round(Math.max(HAND_MIN, Math.min(max, height)));
   }
 }

@@ -51,7 +51,8 @@ const shown = (value: number | null | undefined) => (value === null || value ===
         [attr.data-current]="player.current ? '' : null"
         [attr.data-open]="open().has(player.index) ? '' : null"
       >
-        {{ player.index + 1 }}. {{ player.name
+        <span class="gd-game-player__no" [attr.data-no]="player.index + 1">{{ player.index + 1 }}</span
+        ><span class="gd-game-player__dot">. </span>{{ player.name
         }}<span
           class="gd-game-player__clock"
           data-clock

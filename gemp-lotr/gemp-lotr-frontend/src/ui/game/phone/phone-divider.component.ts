@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
-import { DecisionButton } from '../../../core/game/decision/decision-view';
+import { DecisionButton, mainButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { choiceLabel } from '../decision/decision-dialogs.component';
@@ -151,10 +151,7 @@ export class PhoneDividerComponent {
     return dialog?.kind === 'cards' ? dialog.buttons : this.view().buttons;
   });
   /** The button that goes on with the game: Done or Pass, OK. */
-  protected readonly primary = computed(() => {
-    const buttons = this.buttons();
-    return buttons.find((b) => b === 'Done') ?? buttons.find((b) => b === 'Pass' || b === 'OK') ?? null;
-  });
+  protected readonly primary = computed(() => mainButton(this.buttons()));
   protected readonly deciding = computed(() => this.session.model().decision !== null && !this.session.replaying());
   protected readonly handCount = computed(() => {
     const model = this.session.model();
