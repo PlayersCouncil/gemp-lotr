@@ -38,6 +38,38 @@ export interface PhoneRow {
   cards: readonly PhoneCard[];
   /** In a support row, the first Shadow card's index (a line marks where they start), or null. */
   shadowFrom: number | null;
+  /**
+   * How its cards not active this turn fold away (the owner, 2026-11-17): the player's shrink (yours in the other side's
+   * turn), the opponent's hide behind a button; the minions never (they are always the Shadow player's in play).
+   */
+  fold: PhoneFold | null;
+}
+
+export type PhoneFold = 'shrink' | 'hide';
+
+/** A row's cards not active this turn as they are shown: folded away, or shown because the player opened them. */
+export interface PhoneFolding {
+  how: PhoneFold;
+  /** The cards that fold, by id. */
+  ids: ReadonlySet<string>;
+  /** Folded now: not opened by the player, and none of them offered by the waiting decision (those always show). */
+  folded: boolean;
+  /** One of them is offered: they show and can't be folded until the decision is answered. */
+  offered: boolean;
+}
+
+/** The row's folding, or null when it has no card to fold. `marks` are the waiting decision's (GameDecisions). */
+export function phoneFolding(
+  cards: readonly PhoneCard[],
+  how: PhoneFold | null,
+  opened: boolean,
+  marks: Readonly<Record<string, string>>,
+): PhoneFolding | null {
+  if (how === null) return null;
+  const ids = new Set(cards.filter(({ card }) => card.inactive).map(({ card }) => card.id));
+  if (ids.size === 0) return null;
+  const offered = [...ids].some((id) => marks[id] === 'selectable' || marks[id] === 'actionable');
+  return { how, ids, folded: !opened && !offered, offered };
 }
 
 /** Both sides of one fight: the skirmish being fought, or an assignment waiting for its skirmish. */
@@ -74,12 +106,16 @@ function supportRow(key: PhoneRowKey, side: 'them' | 'mine', label: string, stac
     label,
     cards: [...free, ...shadow].map(phoneCard),
     shadowFrom: free.length > 0 && shadow.length > 0 ? free.length : null,
+    fold: foldOf(side),
   };
 }
 
 function row(key: PhoneRowKey, side: PhoneRow['side'], label: string, stacks: readonly TableStack[]): PhoneRow {
-  return { key, side, label, cards: stacks.map(phoneCard), shadowFrom: null };
+  return { key, side, label, cards: stacks.map(phoneCard), shadowFrom: null, fold: foldOf(side) };
 }
+
+const foldOf = (side: PhoneRow['side']): PhoneFold | null =>
+  side === 'mine' ? 'shrink' : side === 'them' ? 'hide' : null;
 
 export function phoneTable(table: GameTable, model: GameModel): PhoneTable {
   const bottom = table.bottom;

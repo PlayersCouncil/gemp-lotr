@@ -3,7 +3,7 @@
 //
 //   node game/phone.mjs [--only <recording,...>] [--devices phone,sideways,tablet] [--out report-game-phone]
 //                       [--shots: only screenshots of each recording's last step, nothing checked]
-//                       [--checks back,reload,touch,piles,animation,sites]
+//                       [--checks back,reload,touch,piles,animation,sites,fold]
 //
 // The checks:
 // - back: a long press on a card in every place a card's details open from (the table's rows, attached copies, the
@@ -16,6 +16,8 @@
 // - touch: a tap acts only in a decision (an offered card is chosen, another does nothing), the divider is dragged and
 //   kept per device, dragged to the bottom it hides the hand.
 // - sites: the site numbers on the path's cards lie on their left half, clear of the Shadow number and the markers.
+// - fold: the cards not active this turn fold away (the player's shrink, the opponent's hide behind a button); a tap
+//   opens them, another folds them again, a reload keeps them open, the next turn folds them again.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,7 +38,7 @@ const { values: options } = parseArgs({
     devices: { type: 'string', default: 'phone,sideways,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
-    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites' },
+    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
     // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
@@ -220,7 +222,23 @@ const STATES = {
   opponentPiles: { recording: 'effects-skirmish', count: 25, events: opponentCards },
   /** As opponentPiles, in a format whose discard pile is public (discardPublic, e.g. pc_fotr_block, pc_expanded). */
   opponentPilesPublic: { recording: 'effects-skirmish', count: 25, events: opponentCards, discardPublic: true },
+  /**
+   * As late, with two minions stacked on the player's own possession (50), which the decision offers too (as a Web's
+   * stacked minions are offered; the owner, 2026-11-17): they show full size in the hand's place.
+   */
+  underOffer: { recording: 'effects-skirmish', count: 25, events: stackedMinions, offer: ['9101', '9102'] },
 };
+
+/** Two minions stacked on the player's possession 50, as the server stacks a card (PCIP, targetType stacked). */
+function stackedMinions(_opponent, player) {
+  return ['9101', '9102']
+    .map(
+      (cardId) =>
+        `<ge blueprintId="1_178" cardId="${cardId}" hindered="false" participantId="${player}" targetCardId="50" ` +
+        `targetType="stacked" timestamp="2026-11-17 00:00:00.0000" type="PCIP" zone="STACKED"/>`,
+    )
+    .join('');
+}
 
 /** A card of the opponent's in each pile, as the server puts a card somewhere (PCIP). */
 function opponentCards(opponent) {
@@ -239,12 +257,12 @@ function opponentCards(opponent) {
 }
 
 /**
- * The recording a state opens (a copy; the recording isn't changed): its added events in the last answer, and its
- * format's discard pile made public (the P event's discardPublic).
+ * The recording a state opens (a copy; the recording isn't changed): its added events in the last answer, the cards
+ * its decision offers too (`offer`), and its format's discard pile made public (the P event's discardPublic).
  */
 function recordingOf(state) {
   const base = recording(state.recording);
-  if (!state.events && !state.discardPublic) return base;
+  if (!state.events && !state.discardPublic && !state.offer) return base;
   const publicDiscard = (body) =>
     state.discardPublic
       ? body
@@ -261,11 +279,15 @@ function recordingOf(state) {
     ...base,
     exchanges: base.exchanges.map((exchange, i) => {
       if (exchange.path !== '/game/<id>' || typeof exchange.body !== 'string') return exchange;
-      const body = publicDiscard(exchange.body);
-      return {
-        ...exchange,
-        body: i === last && state.events ? body.replace(/(<update[^>]*>)/, `$1${state.events(opponent)}`) : body,
-      };
+      let body = publicDiscard(exchange.body);
+      if (i === last && state.events) {
+        body = body.replace(/(<update[^>]*>)/, `$1${state.events(opponent, base.participant)}`);
+      }
+      if (i === last && state.offer) {
+        const params = state.offer.map((id) => `<parameter name="cardId" value="${id}"/>`).join('');
+        body = body.replace(/(<ge\b[^>]*\btype="D"[^>]*>)/, `$1${params}`);
+      }
+      return { ...exchange, body };
     }),
   };
 }
@@ -397,6 +419,12 @@ async function backCase(browser, device, place) {
   const results = [];
   try {
     await shown.settle();
+    // The cards not active this turn opened first (the fold check covers folding), so every place has its cards
+    for (const button of await shown.page.locator('.gd-phone-cards__fold[aria-expanded="false"]').all()) {
+      await button.scrollIntoViewIfNeeded();
+      await tap(shown.page, button);
+      await shown.settle();
+    }
     if (place.before) {
       await place.before(shown.page);
       await shown.settle();
@@ -782,6 +810,38 @@ const TOUCH = [
     },
   },
   {
+    name: 'offered cards stacked on a card show full size in the hand, and a tap chooses one',
+    state: 'underOffer',
+    run: async (page, sent, device) => {
+      const hand = page.locator('gd-phone-hand');
+      const big = hand.locator('[data-from-under] > .gd-card[data-card-id="9101"]');
+      if (!(await big.count())) return ['the stacked cards are not in the hand'];
+      const host = await hand.locator('.gd-phone-cards__host').getAttribute('data-host');
+      const sizes = await page.evaluate(() => {
+        const height = (selector) => document.querySelector(selector)?.getBoundingClientRect().height ?? 0;
+        return {
+          big: height('gd-phone-hand [data-from-under] > .gd-card'),
+          hand: height('gd-phone-hand .gd-phone-slot:not([data-from-under]) > .gd-card'),
+          small: height('gd-phone-table .gd-phone-slot__under > .gd-card[data-card-id="9101"]'),
+        };
+      });
+      fs.mkdirSync(OUT, { recursive: true });
+      await big.scrollIntoViewIfNeeded();
+      await hand.screenshot({ path: path.join(OUT, `under-offer-${device}.png`) });
+      await tap(page, big);
+      await page.waitForTimeout(500);
+      const mark = await big.getAttribute('data-mark').catch(() => null);
+      return [
+        ...(host === '50' ? [] : [`shown under the copy of ${host}, not 50`]),
+        ...(Math.abs(sizes.big - sizes.hand) <= 1 ? [] : [`${sizes.big}px high, the hand's ${sizes.hand}px`]),
+        ...(sizes.small > 0 && sizes.small < sizes.big / 2 ? [] : [`the table's copy ${sizes.small}px high`]),
+        ...(mark === 'selected' || sent.some((body) => /decisionValue=9101/.test(body))
+          ? []
+          : [`not chosen (mark ${mark})`]),
+      ];
+    },
+  },
+  {
     name: 'the divider is dragged up and kept per device',
     state: 'late',
     run: async (page, sent, device) => {
@@ -917,6 +977,94 @@ async function sitesCheck(browser, devices) {
   return ok === devices.length;
 }
 
+// --- Cards not active this turn ---
+
+/** The recorded games whose last step has cards not active this turn on the table, in both players' turns. */
+const FOLD_RECORDINGS = ['shadow-turn', 'card-gestures'];
+
+/** Each row's fold as the page shows it: its button, and the sizes of its active and not active cards. */
+function readFolds() {
+  return Array.from(document.querySelectorAll('gd-phone-table gd-phone-cards[data-row]'), (row) => {
+    const button = row.querySelector('.gd-phone-cards__fold');
+    const heights = (inactive) =>
+      Array.from(row.querySelectorAll('.gd-phone-slot > .gd-card'))
+        .filter((card) => card.hasAttribute('data-inactive') === inactive)
+        .map((card) => Math.round(card.getBoundingClientRect().height));
+    return {
+      row: row.dataset.row,
+      how: button?.dataset.fold ?? null,
+      open: button ? button.getAttribute('aria-expanded') === 'true' : null,
+      active: heights(false),
+      inactive: heights(true),
+    };
+  });
+}
+
+/** What is wrong with a row's fold, open or folded (empty when it is right). */
+function foldProblems(fold, open) {
+  const big = Math.max(0, ...fold.active);
+  if (fold.open !== open) return [`${fold.row}: the button says ${fold.open ? 'open' : 'folded'}`];
+  if (fold.how === 'hide') {
+    if (!open && fold.inactive.length > 0) return [`${fold.row}: ${fold.inactive.length} hidden cards still shown`];
+    if (open && fold.inactive.length === 0) return [`${fold.row}: the opened cards aren't shown`];
+  }
+  if (fold.how === 'shrink' && fold.inactive.length > 0) {
+    const size = Math.max(...fold.inactive);
+    if (!open && big > 0 && size > big * 0.6) return [`${fold.row}: shrunk cards ${size}px high, the others ${big}px`];
+    if (open && big > 0 && Math.abs(size - big) > 1)
+      return [`${fold.row}: enlarged cards ${size}px high, the others ${big}px`];
+  }
+  return [];
+}
+
+async function foldCase(browser, device, name) {
+  const base = recording(name);
+  const shown = await openPhone(browser, device, base, base.exchanges.length);
+  const problems = [];
+  try {
+    await shown.settle();
+    const folds = (await shown.page.evaluate(readFolds)).filter((fold) => fold.how !== null);
+    if (folds.length === 0) return ['nothing to fold'];
+    for (const fold of folds) problems.push(...foldProblems(fold, false));
+    const press = async (row) => {
+      const button = shown.page.locator(`gd-phone-cards[data-row="${row}"] .gd-phone-cards__fold`);
+      await button.scrollIntoViewIfNeeded();
+      await tap(shown.page, button);
+      await shown.settle();
+      return (await shown.page.evaluate(readFolds)).find((fold) => fold.row === row);
+    };
+    for (const { row } of folds) {
+      problems.push(...foldProblems(await press(row), true));
+      problems.push(...foldProblems(await press(row), false));
+    }
+    // Opened, then the page loaded again: still open (D10)
+    const kept = folds[0].row;
+    await press(kept);
+    await shown.reload();
+    const after = (await shown.page.evaluate(readFolds)).find((fold) => fold.row === kept);
+    problems.push(...foldProblems(after, true).map((problem) => `after a reload, ${problem}`));
+    if (shown.errors.length) problems.push(...shown.errors);
+    return problems;
+  } finally {
+    await shown.close();
+  }
+}
+
+async function foldCheck(browser, devices) {
+  let ok = 0;
+  let total = 0;
+  for (const device of devices) {
+    for (const name of FOLD_RECORDINGS) {
+      total++;
+      const problems = await foldCase(browser, device, name);
+      if (problems.length === 0) ok++;
+      else console.log(`  ✗ fold · ${device} · ${name}: ${problems.join('; ')}`);
+    }
+  }
+  console.log(`fold: ${ok} of ${total} fold the cards not active this turn and open them`);
+  return ok === total;
+}
+
 const stepsOf = (recording) => (options.step ? Number(options.step) : recording.exchanges.length);
 
 async function shots(browser) {
@@ -950,6 +1098,7 @@ async function main() {
     if (chosen.includes('piles')) passed = (await pilesCheck(browser, devices)) && passed;
     if (chosen.includes('animation')) passed = (await animationCheck(browser, devices)) && passed;
     if (chosen.includes('sites')) passed = (await sitesCheck(browser, devices)) && passed;
+    if (chosen.includes('fold')) passed = (await foldCheck(browser, devices)) && passed;
     process.exitCode = passed ? 0 : 1;
   } finally {
     await browser.close();

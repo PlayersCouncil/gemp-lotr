@@ -3,8 +3,9 @@
  * (a deck, a pile, the adventure deck when a site is to be played) under a label saying what they are (G7 of
  * trymarz/gemp-lotr-private#27). Pure.
  */
-import { DecisionView, decisionCard } from '../decision/decision-view';
+import { CardMark, DecisionView, decisionCard } from '../decision/decision-view';
 import { GameCard, GameModel } from '../state/game-model';
+import { PhoneCard, PhoneTable } from './phone-table';
 
 export interface OffTableCard {
   card: GameCard;
@@ -59,4 +60,35 @@ export function offTableChoices(view: DecisionView, model: GameModel): OffTableC
     };
   }
   return null;
+}
+
+/**
+ * Cards lying under a card on the table (stacked on it, attached to it) that the waiting decision offers, with that
+ * card: the hand's place shows them full size after its own cards (the owner, 2026-11-17: the small copies under a card
+ * were too small to tap safely, e.g. minions stacked on a Web). The small copies stay lit too.
+ */
+export interface UnderOffer {
+  host: GameCard;
+  how: 'stacked' | 'attached';
+  cards: readonly PhoneCard[];
+}
+
+/** Offered, or chosen already for the decision (so a card chosen among several stays where it was tapped). */
+const OFFERED: ReadonlySet<CardMark> = new Set<CardMark>(['selectable', 'actionable', 'selected']);
+
+export function offeredUnder(table: PhoneTable, marks: Readonly<Record<string, CardMark>>): UnderOffer[] {
+  const hosts = [
+    ...table.above.flatMap((row) => row.cards),
+    ...table.pairs.flatMap((pair) => [...pair.characters, ...pair.minions]),
+    ...table.below.flatMap((row) => row.cards),
+  ];
+  return hosts.flatMap(({ card: host, under }) =>
+    (['stacked', 'attached'] as const).flatMap((how) => {
+      const cards = under.filter((card) => {
+        const mark = marks[card.id];
+        return (card.stackedOn !== null) === (how === 'stacked') && mark !== undefined && OFFERED.has(mark);
+      });
+      return cards.length > 0 ? [{ host, how, cards: cards.map((card) => ({ card, under: [] })) }] : [];
+    }),
+  );
 }

@@ -284,6 +284,51 @@ describe('the game on a phone (G7)', () => {
     expect(answer()).toBe('6');
   });
 
+  it('shows offered cards under a card full size after the hand, after a copy of that card; a tap chooses', async () => {
+    // A minion stacked on a possession (11 on 4) and a card attached to a companion (2 on 1), both offered
+    const { el, stable, answer } = await open(
+      game(
+        card('11', 'STACKED', 'targetCardId="4" targetType="stacked"', 'alice', '1_121') +
+          decision(
+            'CARD_SELECTION',
+            param('cardId', '11', '2') + param('min', '1') + param('max', '1'),
+            'Choose a card',
+          ),
+      ),
+    );
+    const hand = el.querySelector('gd-phone-hand')!;
+    const hosts = Array.from(hand.querySelectorAll('.gd-phone-cards__host'), (host) => [
+      host.getAttribute('data-host'),
+      host.querySelector('.gd-phone-cards__host-label')?.textContent?.trim(),
+    ]);
+    expect(hosts).toEqual([
+      ['1', 'Attached to'],
+      ['4', 'Stacked on'],
+    ]);
+    const offered = Array.from(hand.querySelectorAll('[data-from-under] > .gd-card'), (c) => [
+      c.getAttribute('data-card-id'),
+      c.getAttribute('data-mark'),
+    ]);
+    expect(offered).toEqual([
+      ['2', 'selectable'],
+      ['11', 'selectable'],
+    ]);
+    // The hand's own cards stay, and the small copies on the table stay lit
+    expect(hand.querySelector('.gd-phone-slot > [data-card-id="6"]')).not.toBeNull();
+    expect(
+      el.querySelector('gd-phone-table .gd-phone-slot__under [data-card-id="11"]')?.getAttribute('data-mark'),
+    ).toBe('selectable');
+    hand.querySelector<HTMLElement>('[data-from-under] > [data-card-id="11"]')!.click();
+    await stable();
+    expect(answer()).toBe('11');
+  });
+
+  it('shows no cards from under a card in the hand when the decision offers none of them', async () => {
+    const { el } = await open(game());
+    expect(el.querySelector('gd-phone-hand .gd-phone-cards__host')).toBeNull();
+    expect(el.querySelector('gd-phone-hand [data-from-under]')).toBeNull();
+  });
+
   it('keeps the sheets and the hand place with the game, so a reload shows them again (D10)', async () => {
     const first = await open(game());
     await first.click('[data-phone="menu"]');
@@ -350,6 +395,45 @@ describe('the game on a phone (G7)', () => {
     it('shows the player all their own piles, whatever the format', async () => {
       expect(await piles(PILES(false), 'alice')).toEqual({ discard: 1, dead: 1, removed: 1, adventure: 1 });
     });
+  });
+
+  it("folds the cards not active this turn: the player's shrink, the opponent's hide; the next turn folds again", async () => {
+    // Alice's Free Peoples turn: her Shadow condition (3) and bob's companion (10) are not active
+    const { el, click, stable } = await open(
+      game(card('10', 'FREE_CHARACTERS', '', 'bob') + '<ge type="TC" participantId="alice" otherCardIds="3,10"/>'),
+    );
+    const slot = (id: string) => el.querySelector(`.gd-phone-slot:has(> [data-card-id="${id}"])`);
+    const button = (row: string) => el.querySelector<HTMLElement>(`[data-zone="${row}"] .gd-phone-cards__fold`);
+    expect(slot('3')?.hasAttribute('data-shrunk')).toBe(true);
+    expect(slot('4')?.hasAttribute('data-shrunk')).toBe(false);
+    expect(button('support-player')?.getAttribute('data-fold')).toBe('shrink');
+    expect(button('support-player')?.getAttribute('aria-expanded')).toBe('false');
+    expect(slot('10')).toBeNull();
+    expect(button('characters-opponent')?.textContent?.trim()).toBe('Show 1 ▸');
+    // The minions never fold, and rows of active cards have no button
+    expect(button('shadow')).toBeNull();
+    expect(button('characters-player')).toBeNull();
+
+    await click('[data-zone="characters-opponent"] .gd-phone-cards__fold');
+    expect(slot('10')).not.toBeNull();
+    expect(button('characters-opponent')?.textContent?.trim()).toBe('◂ Hide');
+    await click('[data-zone="characters-opponent"] .gd-phone-cards__fold');
+    expect(slot('10')).toBeNull();
+    await click('[data-zone="support-player"] .gd-phone-cards__fold');
+    expect(slot('3')?.hasAttribute('data-shrunk')).toBe(false);
+    expect(button('support-player')?.getAttribute('aria-expanded')).toBe('true');
+
+    // Bob's Free Peoples turn: alice's Free Peoples cards shrink, the row opened before folds again
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush('<update cn="2"><ge type="TC" participantId="bob" otherCardIds="1,4,5"/></update>');
+    await stable();
+    expect(slot('4')?.hasAttribute('data-shrunk')).toBe(true);
+    expect(slot('1')?.hasAttribute('data-shrunk')).toBe(true);
+    expect(slot('3')?.hasAttribute('data-shrunk')).toBe(false);
+    expect(button('support-player')?.getAttribute('aria-expanded')).toBe('false');
+    expect(slot('10')).not.toBeNull();
   });
 
   it('buzzes and plays a sound when a decision comes, unless turned off', async () => {

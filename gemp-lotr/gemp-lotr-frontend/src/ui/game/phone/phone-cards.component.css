@@ -37,6 +37,62 @@
   touch-action: pan-x pan-y;
 }
 
+/* A card not active this turn, shrunk out of the way (the fold's button enlarges it) */
+.gd-phone-slot[data-shrunk] > .gd-card {
+  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.45);
+}
+
+.gd-phone-slot[data-shrunk] > .gd-phone-slot__under {
+  max-width: calc(var(--gd-phone-card, 100px) * 0.45 * 350 / 490 + 10px);
+}
+
+.gd-phone-slot[data-shrunk] > .gd-phone-slot__under > .gd-card {
+  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.18);
+}
+
+/* Where the offered cards from under a card start: what they lie under, and a small copy of it */
+.gd-phone-cards__host {
+  flex: none;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding-left: 8px;
+  border-left: 1px solid var(--theme-hover-border);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--theme-game-phone-muted);
+  text-align: center;
+}
+
+.gd-phone-cards__host-label {
+  max-width: 64px;
+}
+
+.gd-phone-cards__host > .gd-card {
+  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.45);
+  touch-action: pan-x pan-y;
+}
+
+/* Opens the row's cards not active this turn (shown, or enlarged), and folds them again */
+.gd-phone-cards__fold {
+  flex: none;
+  align-self: center;
+  min-height: 28px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 99px;
+  padding: 2px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: none;
+  color: var(--theme-game-phone-muted);
+  cursor: pointer;
+}
+
 /* The cards under one: small copies, a long press shows one big */
 .gd-phone-slot__under {
   display: flex;

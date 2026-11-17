@@ -77,7 +77,14 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         <h3 class="gd-phone-zone__label">
           {{ row.label }} <span class="gd-phone-zone__count">{{ row.cards.length }}</span>
         </h3>
-        <gd-phone-cards [cards]="row.cards" [key]="row.key" [shadowFrom]="row.shadowFrom" />
+        <gd-phone-cards
+          [cards]="row.cards"
+          [key]="row.key"
+          [shadowFrom]="row.shadowFrom"
+          [fold]="row.fold"
+          [opened]="unfolded().includes(row.key)"
+          (foldToggled)="toggleFold(row.key)"
+        />
       </section>
     }
     @if (phone().pairs.length > 0) {
@@ -125,7 +132,14 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         <h3 class="gd-phone-zone__label">
           {{ row.label }} <span class="gd-phone-zone__count">{{ row.cards.length }}</span>
         </h3>
-        <gd-phone-cards [cards]="row.cards" [key]="row.key" [shadowFrom]="row.shadowFrom" />
+        <gd-phone-cards
+          [cards]="row.cards"
+          [key]="row.key"
+          [shadowFrom]="row.shadowFrom"
+          [fold]="row.fold"
+          [opened]="unfolded().includes(row.key)"
+          (foldToggled)="toggleFold(row.key)"
+        />
       </section>
     }
   `,
@@ -148,6 +162,8 @@ export class PhoneTableComponent {
   protected readonly pairsLabel = computed(() =>
     this.phone().pairs[0]?.kind === 'skirmish' ? 'Skirmish' : 'Assignments',
   );
+  /** The rows whose cards not active this turn the player opened, this turn. */
+  protected readonly unfolded = computed(() => this.viewState.phone().unfolded);
   protected readonly shown = computed(() => this.session.model().skirmish?.shown ?? null);
   protected readonly overwhelmed = computed(() => this.shown()?.fpOverwhelmed === 'true');
 
@@ -155,6 +171,19 @@ export class PhoneTableComponent {
     const injector = inject(Injector);
     // Where it was before a reload, once the cards are there
     afterNextRender({ write: () => (this.host.scrollTop = this.viewState.phone().tableTop) });
+
+    // A new turn folds the cards not active in it again (the first turn seen, after a reload too, keeps them)
+    let lastTurn: string | null = null;
+    effect(() => {
+      const current = this.session.model().currentPlayer;
+      if (current === null) return;
+      untracked(() => {
+        if (lastTurn !== null && current !== lastTurn) {
+          this.viewState.phone.update((phone) => (phone.unfolded.length === 0 ? phone : { ...phone, unfolded: [] }));
+        }
+        lastTurn = current;
+      });
+    });
 
     // A decision offering cards on the table brings the first of them into view
     let lastDecision: string | null | undefined;
@@ -185,6 +214,14 @@ export class PhoneTableComponent {
     const model = this.session.model();
     if (model.spectator || model.participantId === null) return;
     this.sheets.open({ kind: 'piles', player: model.participantId, focus: 'adventureDeck' });
+  }
+
+  /** A row's cards not active this turn opened, or folded again. */
+  protected toggleFold(key: string): void {
+    this.viewState.phone.update((phone) => ({
+      ...phone,
+      unfolded: phone.unfolded.includes(key) ? phone.unfolded.filter((k) => k !== key) : [...phone.unfolded, key],
+    }));
   }
 
   /** Where the table is scrolled, kept with the game once it stops (D10). */

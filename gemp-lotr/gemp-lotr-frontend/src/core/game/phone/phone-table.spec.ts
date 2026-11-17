@@ -3,7 +3,7 @@ import { applyEvents } from '../state/apply-event';
 import { emptyGame, GameModel } from '../state/game-model';
 import { gameTable } from '../table/game-table';
 import { isShadowCard } from './card-sides';
-import { PhoneCard, phoneTable } from './phone-table';
+import { PhoneCard, phoneFolding, phoneTable } from './phone-table';
 
 // Blueprints whose side the card definitions give: 1_7 and 1_2 Free Peoples, 1_121 and 1_151 Shadow
 const FREE = '1_7';
@@ -142,5 +142,58 @@ describe('phoneTable', () => {
     ]);
     const table = phoneTable(gameTable({ ...model, spectator: true }), { ...model, spectator: true });
     expect(table.below.map((row) => row.label)).toEqual(["alice's characters", "alice's support"]);
+  });
+});
+
+describe('phoneFolding', () => {
+  // Alice's Free Peoples turn: her Shadow condition (3) and bob's Free Peoples cards (2, 4) are not active
+  const turn = play(
+    put('1'),
+    put('2', { participantId: 'bob' }),
+    put('3', { zone: 'SUPPORT', blueprintId: SHADOW }),
+    put('4', { zone: 'SUPPORT', participantId: 'bob' }),
+    put('5', { zone: 'SHADOW_CHARACTERS', participantId: 'bob', blueprintId: SHADOW }),
+    { type: 'TC', participantId: 'alice', inactiveCardIds: ['2', '3', '4'] },
+  );
+  const table = phone(turn);
+  const row = (key: string) => [...table.above, ...table.below].find((r) => r.key === key)!;
+
+  it("shrinks the player's own cards, hides the opponent's, never folds the minions", () => {
+    expect([...table.above, ...table.below].map((r) => [r.key, r.fold])).toEqual([
+      ['support-opponent', 'hide'],
+      ['characters-opponent', 'hide'],
+      ['shadow', null],
+      ['characters-player', 'shrink'],
+      ['support-player', 'shrink'],
+    ]);
+  });
+
+  it('folds only the cards not active this turn, until the player opens them', () => {
+    const own = row('support-player');
+    expect(phoneFolding(own.cards, own.fold, false, {})).toEqual({
+      how: 'shrink',
+      ids: new Set(['3']),
+      folded: true,
+      offered: false,
+    });
+    expect(phoneFolding(own.cards, own.fold, true, {})?.folded).toBe(false);
+    const theirs = row('characters-opponent');
+    expect(phoneFolding(theirs.cards, theirs.fold, false, {})?.how).toBe('hide');
+  });
+
+  it('has nothing to fold in a row of active cards, or one that never folds', () => {
+    const own = row('characters-player');
+    expect(phoneFolding(own.cards, own.fold, false, {})).toBeNull();
+    const minions = row('shadow');
+    expect(phoneFolding(minions.cards, minions.fold, false, {})).toBeNull();
+  });
+
+  it('shows the folded cards while the waiting decision offers one of them', () => {
+    const theirs = row('support-opponent');
+    expect(phoneFolding(theirs.cards, theirs.fold, false, { '4': 'selectable' })).toMatchObject({
+      folded: false,
+      offered: true,
+    });
+    expect(phoneFolding(theirs.cards, theirs.fold, false, { '4': 'actionable' })?.folded).toBe(false);
   });
 });
