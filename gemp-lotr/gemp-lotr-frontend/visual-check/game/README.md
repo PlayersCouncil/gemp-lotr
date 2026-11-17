@@ -88,8 +88,8 @@ with the legacy page; each check compares the Angular page with itself:
   screen, the clocks masked, within 10 pixels of rendering noise). 15 places × 3 ways × 3 devices.
 - **reload** (D10): the divider dragged, the hand hidden, the menu, piles and a card open and scrolled, the offered
   cards closed with ✕: after a reload (which gets the whole game in one answer, as from the server) the view's data is
-  the same, and its screen within 60 pixels (the edges of rounded rings and shadows are blended a few shades
-  differently when everything is drawn anew).
+  the same, and its screen within 60 pixels more than 10 shades off (the edges of rounded rings, shadows and the
+  overlapping glows of offered cards are blended a few shades differently when everything is drawn anew).
 - **touch**: a tap on a card not offered does nothing, a tap on an offered card chooses it, the divider drags and is
   kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back; held
   sideways the hand is a panel in the right half whose grip slides it up to the status bar. Minions stacked on a

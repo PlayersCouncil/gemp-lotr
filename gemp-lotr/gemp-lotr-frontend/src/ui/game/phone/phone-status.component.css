@@ -11,6 +11,7 @@
 
 .gd-phone-status__bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 5px;
   min-width: 0;
@@ -82,19 +83,32 @@
 }
 
 .gd-phone-status__gap {
+  flex: 0 0 0;
+}
+
+.gd-phone-status__bar:has(> [data-wrapped]) .gd-phone-status__gap {
   flex: 1;
 }
 
+/*
+ * Beside the phase the pills take the bar's free space (no width of their own, so they never wrap the bar), right
+ * aligned; when they don't fit there they move under it (data-wrapped) and the gap takes the free space, which says
+ * whether they would fit again (PhoneStatusComponent.fitPills)
+ */
 .gd-phone-status__pills {
   display: flex;
+  justify-content: flex-end;
   gap: 4px;
   min-width: 0;
-  flex: 0 1 auto;
+  flex: 1 1 0;
   overflow: hidden;
 }
 
 /* On a line of their own under the bar, when they don't fit beside the phase */
 .gd-phone-status__pills[data-wrapped] {
+  order: 1;
+  flex: 1 0 100%;
+  justify-content: flex-start;
   flex-wrap: wrap;
   overflow: visible;
 }

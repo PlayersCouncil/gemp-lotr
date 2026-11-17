@@ -211,6 +211,20 @@ describe('the game on a phone (G7)', () => {
     expect(outside.el.querySelector('[data-pill$="-archery"]')).toBeNull();
   });
 
+  it("shows the game's summary in Game info rendered, not as HTML tags", async () => {
+    const pgs =
+      '<ge type="PGS" participantId="alice" allParticipantIds="alice,bob" ' +
+      'summary="&lt;b&gt;Format:&lt;/b&gt; Fellowship block&lt;br&gt;Timer: 80 minutes" notes="" maps="" metaSites=""/>';
+    const { el, click } = await open(game(pgs));
+    await click('[data-phone="menu"]');
+    await click('[data-menu="info"]');
+    const facts = Array.from(el.querySelectorAll('.gd-phone-sheet[data-sheet="info"] .gd-phone-facts dt'));
+    const summary = facts.find((dt) => dt.textContent === 'Game')?.nextElementSibling;
+    expect(summary?.querySelector('b')?.textContent).toBe('Format:');
+    expect(summary?.querySelector('br')).not.toBeNull();
+    expect(summary?.textContent).toBe('Format: Fellowship blockTimer: 80 minutes');
+  });
+
   it('puts the game in full screen from the menu, which closes', async () => {
     const { el, click, sheet } = await open(game());
     await click('[data-phone="menu"]');
@@ -347,7 +361,7 @@ describe('the game on a phone (G7)', () => {
     expect(answer()).toBe('11');
   });
 
-  it('scrolls the hand back to its start when new cards from under a card are offered', async () => {
+  it('keeps the hand where the player scrolled it when a new decision offers cards from under a card', async () => {
     const { el, stable } = await open(game(card('11', 'STACKED', 'targetCardId="4" targetType="stacked"')));
     const scroller = el.querySelector<HTMLElement>('gd-phone-hand .gd-phone-cards__scroll')!;
     // The player scrolled the hand right
@@ -361,7 +375,8 @@ describe('the game on a phone (G7)', () => {
       );
     await stable();
     expect(el.querySelector('gd-phone-hand [data-from-under] > [data-card-id="11"]')).not.toBeNull();
-    expect(left).toBe(0);
+    // Never scrolled for them (the owner, 2026-11-17: after a card was played the hand jumped to its start)
+    expect(left).toBe(300);
   });
 
   it('shows no cards from under a card in the hand when the decision offers none of them', async () => {

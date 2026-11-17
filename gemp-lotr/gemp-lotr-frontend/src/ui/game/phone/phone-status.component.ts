@@ -1,4 +1,3 @@
-import { NgTemplateOutlet } from '@angular/common';
 import {
   afterRenderEffect,
   Component,
@@ -49,7 +48,7 @@ interface Pill {
 @Component({
   selector: 'gd-phone-status',
   styleUrl: './phone-status.component.css',
-  imports: [GameThemeButtonComponent, NgTemplateOutlet],
+  imports: [GameThemeButtonComponent],
   template: `
     <div class="gd-phone-status__bar">
       <button type="button" class="gd-phone-icon" data-phone="menu" aria-label="Menu" (click)="open('menu')">☰</button>
@@ -61,11 +60,23 @@ interface Pill {
         <span class="gd-phone-status__move" data-phone="your-move">Your move</span>
       }
       <span class="gd-phone-status__gap"></span>
-      @if (!pillsWrapped()) {
-        <span #pills class="gd-phone-status__pills">
-          <ng-container [ngTemplateOutlet]="pillList" />
-        </span>
-      }
+      <!-- Upright, pills that don't fit beside the phase take a line of their own (the private mobile page): the same
+           element, moved under the bar by its order -->
+      <span #pillsBox class="gd-phone-status__pills" [attr.data-wrapped]="pillsWrapped() ? '' : null">
+        @for (pill of pills(); track pill.key) {
+          <span
+            class="gd-phone-pill"
+            [attr.data-pill]="pill.key"
+            [attr.data-warn]="pill.warn ? '' : null"
+            [title]="pill.title"
+          >
+            @if (pill.icon) {
+              <i class="gd-phone-pill__icon" aria-hidden="true"></i>
+            }
+            {{ pill.text }}</span
+          >
+        }
+      </span>
       <button
         type="button"
         class="gd-phone-icon"
@@ -80,27 +91,6 @@ interface Pill {
       </button>
       <gd-game-theme-button class="gd-phone-status__theme" />
     </div>
-    <!-- Upright, the pills that don't fit beside the phase take a line of their own (the private mobile page) -->
-    @if (pillsWrapped()) {
-      <div #pills class="gd-phone-status__pills" data-wrapped="">
-        <ng-container [ngTemplateOutlet]="pillList" />
-      </div>
-    }
-    <ng-template #pillList>
-      @for (pill of pills(); track pill.key) {
-        <span
-          class="gd-phone-pill"
-          [attr.data-pill]="pill.key"
-          [attr.data-warn]="pill.warn ? '' : null"
-          [title]="pill.title"
-        >
-          @if (pill.icon) {
-            <i class="gd-phone-pill__icon" aria-hidden="true"></i>
-          }
-          {{ pill.text }}</span
-        >
-      }
-    </ng-template>
     <div class="gd-phone-players">
       @for (player of players(); track player.name) {
         <button
@@ -146,7 +136,7 @@ export class PhoneStatusComponent {
   protected readonly pillsWrapped = signal(false);
   private readonly device = inject(CompactLayout).device;
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-  private readonly pillsBox = viewChild<ElementRef<HTMLElement>>('pills');
+  private readonly pillsBox = viewChild.required<ElementRef<HTMLElement>>('pillsBox');
 
   constructor() {
     afterRenderEffect({
@@ -169,19 +159,21 @@ export class PhoneStatusComponent {
    * line of their own, until the bar's free space holds them again.
    */
   private fitPills(): void {
-    const box = this.pillsBox()?.nativeElement;
-    if (!box) return;
+    const box = this.pillsBox().nativeElement;
     if (this.device() === 'sideways') {
       if (this.pillsWrapped()) this.pillsWrapped.set(false);
       return;
     }
+    // The pills' own width: right aligned, an overflow goes left, where scrollWidth doesn't count it
+    const pills = Array.from(box.children) as HTMLElement[];
+    const needed = pills.reduce((width, pill) => width + pill.offsetWidth, 0) + 4 * Math.max(0, pills.length - 1);
     if (!this.pillsWrapped()) {
-      if (box.scrollWidth > box.clientWidth + 1) this.pillsWrapped.set(true);
+      if (needed > box.clientWidth + 1) this.pillsWrapped.set(true);
       return;
     }
     const free = this.host.querySelector<HTMLElement>('.gd-phone-status__gap')?.clientWidth ?? 0;
     // The bar's gap between items (5px) is taken again by the pills beside the phase
-    if (box.scrollWidth + 5 <= free) this.pillsWrapped.set(false);
+    if (needed + 5 <= free) this.pillsWrapped.set(false);
   }
 
   protected readonly phase = computed(() => phaseLabel(this.model().phase));

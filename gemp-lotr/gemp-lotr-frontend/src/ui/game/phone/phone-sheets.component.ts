@@ -284,7 +284,12 @@ const HALL = '/gemp-lotr/hall.html';
                 <dl class="gd-phone-facts">
                   @for (fact of info(); track fact.name) {
                     <dt>{{ fact.name }}</dt>
-                    <dd>{{ fact.value }}</dd>
+                    @if (fact.html) {
+                      <!-- The server's summary is HTML (the format, the timer), shown as the pre-game panel does -->
+                      <dd [innerHTML]="fact.value"></dd>
+                    } @else {
+                      <dd>{{ fact.value }}</dd>
+                    }
                   }
                 </dl>
               }
@@ -535,13 +540,14 @@ export class PhoneSheetsComponent {
   protected readonly info = computed(() => {
     const model = this.session.model();
     const pre = model.preGame;
-    return [
+    const facts: { name: string; value: string; html?: boolean }[] = [
       { name: 'Players', value: model.players.join(' against ') || '–' },
       { name: 'Phase', value: phaseLabel(model.phase) || '–' },
       { name: 'Turn', value: model.currentPlayer ?? '–' },
-      ...(pre?.summary ? [{ name: 'Game', value: pre.summary }] : []),
+      ...(pre?.summary ? [{ name: 'Game', value: pre.summary, html: true }] : []),
       { name: 'Watching', value: model.spectator ? 'Yes' : this.session.replaying() ? 'A replay' : 'No' },
     ];
+    return facts;
   });
 
   protected title(sheet: Sheet): string {

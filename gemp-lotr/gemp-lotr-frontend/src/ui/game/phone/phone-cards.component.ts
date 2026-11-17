@@ -180,20 +180,6 @@ export class PhoneCardsComponent {
         }
       },
     });
-    // New offered cards from under a card: the row goes back to its start, where they are (the first seen, after a
-    // reload too, keeps where the row was)
-    let lastOffers: string | undefined;
-    afterRenderEffect({
-      write: () => {
-        const offers = this.offers()
-          .flatMap((offer) => offer.cards.map(({ card }) => card.id))
-          .join(',');
-        if (lastOffers !== undefined && offers !== lastOffers && offers !== '') {
-          this.scroller().nativeElement.scrollLeft = 0;
-        }
-        lastOffers = offers;
-      },
-    });
     // Measured again whenever the row's cards change, once they are drawn
     afterRenderEffect({
       read: () => {

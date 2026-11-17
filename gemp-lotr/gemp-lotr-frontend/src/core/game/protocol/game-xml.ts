@@ -3,6 +3,7 @@
  * The attribute names are the server's (EventSerializer); an attribute the server leaves out reads as null.
  */
 import { attr, childElements } from '../../api/xml';
+import { legacyRelativeImages } from '../../platform/app-paths';
 import { CardRef, Clocks, Decision, DecisionType, GameEvent, GameStats, GameUpdate, PlayerZones } from './game-events';
 
 const DECISION_TYPES: readonly DecisionType[] = [
@@ -28,8 +29,9 @@ function number(element: Element, name: string): number | null {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
+/** An attribute's text; HTML in it (a decision's text, an action's, a log line) shows its pictures from this page. */
 function text(element: Element, name: string): string {
-  return attr(element, name) ?? '';
+  return legacyRelativeImages(attr(element, name) ?? '');
 }
 
 function cardRef(element: Element): CardRef {

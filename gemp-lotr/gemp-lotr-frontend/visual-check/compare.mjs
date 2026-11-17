@@ -189,9 +189,10 @@ function inside(x, y, area) {
 
 /**
  * Compares two screenshots. Pixels inside an accepted area count towards that area's limit, all others towards
- * `outside`. Returns a diff image only when asked, since most steps are identical.
+ * `outside`. Returns a diff image only when asked, since most steps are identical. A pixel differs when a channel is
+ * more than `shades` off (2 unless a check says otherwise).
  */
-export function compareScreens(bufferA, bufferB, areas, withImage) {
+export function compareScreens(bufferA, bufferB, areas, withImage, shades = 2) {
   const a = PNG.sync.read(bufferA);
   const b = PNG.sync.read(bufferB);
   if (a.width !== b.width || a.height !== b.height) {
@@ -206,7 +207,7 @@ export function compareScreens(bufferA, bufferB, areas, withImage) {
       Math.abs(a.data[i + 1] - b.data[i + 1]),
       Math.abs(a.data[i + 2] - b.data[i + 2]),
     );
-    if (d > 2) {
+    if (d > shades) {
       const x = (i / 4) % a.width;
       const y = Math.floor(i / 4 / a.width);
       const area = areas.findIndex((candidate) => candidate && inside(x, y, candidate));

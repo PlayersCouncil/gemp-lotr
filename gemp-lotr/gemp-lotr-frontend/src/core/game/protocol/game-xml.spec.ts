@@ -24,6 +24,25 @@ describe('game XML', () => {
     });
   });
 
+  it("shows the pictures in the server's HTML from the legacy pages' folder (a culture in an action's text)", () => {
+    const culture = "&lt;img src='images/cultures/gondor.png'/&gt; Gondor";
+    const event = parse(
+      `type="D" id="1" decisionType="CARD_ACTION_CHOICE" participantId="alice" text="Choose ${culture}"`,
+      `<parameter name="actionText" value="Remove a ${culture} token here"/>`,
+    );
+    expect(event).toMatchObject({
+      type: 'D',
+      decision: {
+        text: "Choose <img src='/gemp-lotr/images/cultures/gondor.png'/> Gondor",
+        params: { actionText: ["Remove a <img src='/gemp-lotr/images/cultures/gondor.png'/> Gondor token here"] },
+      },
+    });
+    expect(parse(`type="M" message="Played ${culture}"`)).toEqual({
+      type: 'M',
+      message: "Played <img src='/gemp-lotr/images/cultures/gondor.png'/> Gondor",
+    });
+  });
+
   it('reads a whole game state the same way, and nothing else', () => {
     expect(parseGameUpdate(parseXml('<gameState cn="1"/>'))?.channel).toBe('1');
     expect(parseGameUpdate(parseXml('<error/>'))).toBeNull();

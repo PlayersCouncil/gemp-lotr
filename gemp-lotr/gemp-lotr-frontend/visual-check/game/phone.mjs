@@ -166,18 +166,21 @@ const RENDERING_NOISE = 10;
 /**
  * After a reload every box is drawn anew: the anti-aliased edges of rounded borders, rings and shadows (the current
  * player's chip, the site's ring, the markers) land up to ~25 shades off in a few dozen pixels. The table check's
- * tolerance; what D10 asks for (sheets, scroll, divider, hand) is compared exactly in the data.
+ * tolerance; what D10 asks for (sheets, scroll, divider, hand) is compared exactly in the data. Held sideways, the glows
+ * of neighbouring offered cards where they overlap blend up to 10 shades differently in a full run (72 pixels): only
+ * pixels more than RELOAD_SHADES off count (the owner's choice, 2026-11-17).
  */
 const RELOAD_NOISE = 60;
+const RELOAD_SHADES = 10;
 
-/** The differences between two views: their data, and their pixels beyond `tolerance`. */
-function differences(before, after, tolerance = RENDERING_NOISE) {
+/** The differences between two views: their data, and their pixels beyond `tolerance` (more than `shades` off). */
+function differences(before, after, tolerance = RENDERING_NOISE, shades = 2) {
   const found = [];
   for (const key of Object.keys(before.data)) {
     const [a, b] = [JSON.stringify(before.data[key]), JSON.stringify(after.data[key])];
     if (a !== b) found.push(`${key}: ${a} → ${b}`);
   }
-  const { outside } = compareScreens(before.screen, after.screen, [], false);
+  const { outside } = compareScreens(before.screen, after.screen, [], false, shades);
   if (outside > tolerance) found.push(`${outside} pixels differ in ${differingBox(before.screen, after.screen)}`);
   return found;
 }
@@ -688,7 +691,7 @@ async function reloadCheck(browser, devices) {
         // Every picture is new after a reload: Chrome smooths them a while after drawing them
         await shown.page.waitForTimeout(2000);
         const after = await view(shown);
-        const problems = [...differences(before, after, RELOAD_NOISE), ...shown.errors.splice(0)];
+        const problems = [...differences(before, after, RELOAD_NOISE, RELOAD_SHADES), ...shown.errors.splice(0)];
         if (problems.length === 0) same++;
         else {
           console.log(`  ✗ reload · ${device} · ${reload.name}: ${problems.join('; ')}`);
