@@ -741,3 +741,36 @@ body {
 	font-size: 80%;
 	margin-left: 8px;
 }
+
+/* Taking a game back (js/gemp-022/undo.js) */
+.undoTier {
+    display: inline-block;
+    min-width: 4.5em;
+    margin: 0 0.5em;
+    padding: 0.1em 0.5em;
+    border-radius: 0.8em;
+    text-align: center;
+    font-weight: bold;
+    color: #111;
+}
+.undoTier-green { background: #7ccf7c; }
+.undoTier-yellow { background: #f0d860; }
+.undoTier-red { background: #ee7b7b; }
+.undoPoint { margin: 0.4em 0; }
+.undoWhy, .undoNote, .undoClock { margin: 0.2em 0 0.2em 0.5em; font-size: 90%; opacity: 0.85; }
+.undoLabel { font-weight: bold; }
+.undoRequest > div { margin: 0.4em 0; }
+.undoDecline { margin-top: 1em; padding-top: 0.6em; border-top: 1px solid rgba(128, 128, 128, 0.5); }
+.undoBanner {
+    position: fixed;
+    top: 0.6em;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    max-width: 80%;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    background: rgba(20, 20, 20, 0.92);
+    color: #fff;
+    cursor: pointer;
+}

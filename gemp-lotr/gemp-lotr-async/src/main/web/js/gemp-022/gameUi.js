@@ -738,6 +738,7 @@ var GempLotrGameUI = Class.extend({
         this.chatBox = new ChatBoxUI(chatRoomName, $("#chatBox"), this.communication.url, false, playerListener, false, displayChatListener);
         this.chatBox.chatUpdateInterval = 3000;
 
+        this.undo = new GempLotrUndo(this);
         if (!this.spectatorMode && !this.replayMode) {
             $("#concedeGame").button().click(
                 function () {
@@ -1219,6 +1220,10 @@ var GempLotrGameUI = Class.extend({
             function (xml) {
                 that.processXml(xml, false);
                 that.chatBox.beginGameChat();
+                // requests to take the game back, and anything else that must reach a player who is looking at a
+                // decision (see undo.js)
+                if (that.undo != null)
+                    that.undo.start();
             }, this.gameErrorMap());
     },
 
@@ -1283,6 +1288,10 @@ var GempLotrGameUI = Class.extend({
                 that.showErrorDialog("Game access forbidden", "This game is private and does not allow spectators.", false, false, true);
             },
             "409": function () {
+                // The game was taken back and this page is on its way to being loaded again: the channel it was
+                // using is gone, which is what is meant to happen (see undo.js)
+                if (that.undo != null && that.undo.reloading)
+                    return;
                 that.showErrorDialog("Concurrent access error", "You are observing this Game Hall from another browser or window. Close this window or if you wish to observe it here, click \"Refresh page\".", true, false, false);
             },
             "410": function () {
@@ -1365,7 +1374,14 @@ var GempLotrGameUI = Class.extend({
         var root = xml.documentElement;
         if (root.tagName == 'gameReplay') {
             this.replayGameEvents = root.getElementsByTagName("ge");
-            this.replayGameEventNextIndex = 0;
+            // A replay of a game that was taken back holds the table sent again from nothing at that point.  The
+            // page is loaded again there (playNextReplayEvent) and carries on from that event.
+            var replayFrom = parseInt(getUrlParam("replayFrom"));
+            this.replayGameEventNextIndex = isNaN(replayFrom) ? 0 : Math.max(0, Math.min(replayFrom, this.replayGameEvents.length));
+            this.replayTableLaid = false;
+            // Carrying on from a table sent again: it is laid out at once, not card by card, up to the mark that
+            // says the game was taken back
+            this.replayLayingTable = !isNaN(replayFrom) && replayFrom > 0;
 
             $("#replayButton").click(
                 function () {
@@ -1397,7 +1413,21 @@ var GempLotrGameUI = Class.extend({
                         next();
                     });
                 var gameEvent = this.replayGameEvents[this.replayGameEventNextIndex];
-                this.processGameEvent(gameEvent, true);
+                if (gameEvent.getAttribute("type") == "P" && !this.replayTableLaid) {
+                    this.replayTableLaid = true;
+                } else if (gameEvent.getAttribute("type") == "P") {
+                    // The game was taken back here and the table is laid out again from nothing: this page cannot
+                    // lay a table out twice, so it is loaded again to carry on from this event
+                    var search = window.location.search.replace(/[?&]replayFrom=[^&]*/, "");
+                    search += (search.indexOf("?") == -1 ? "?" : "&") + "replayFrom=" + this.replayGameEventNextIndex;
+                    if (search.charAt(0) == "&")
+                        search = "?" + search.substring(1);
+                    window.location.search = search;
+                    return;
+                }
+                this.processGameEvent(gameEvent, !this.replayLayingTable);
+                if (gameEvent.getAttribute("type") == "GR")
+                    this.replayLayingTable = false;
 
                 this.replayGameEventNextIndex++;
 
@@ -1467,6 +1497,10 @@ var GempLotrGameUI = Class.extend({
         } else if (eventType == "S") {
             // a scenario (tutorial, puzzle) has something to show: see scenario/scenarioOverlay.js
             this.animations.scenarioEvent(gameEvent, animate);
+        } else if (eventType == "GR") {
+            // the game was taken back to an earlier point, and the table has just been sent again: see undo.js
+            if (this.undo != null)
+                this.undo.gameReverted(gameEvent);
         }
     },
 

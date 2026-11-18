@@ -539,6 +539,74 @@ var GempLotrCommunication = Class.extend({
             dataType:"text"
         });
     },
+    // Taking a game back (see undo.js).  These answer in JSON, and fail quietly: the caller decides what to say.
+    getRestorePoints:function (callback, failure) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/restorePoints",
+            cache:false,
+            data:{ participantId:getUrlParam("participantId") },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    requestUndo:function (entryCount, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/undo",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                entryCount:entryCount == null ? "" : entryCount },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    replyUndo:function (requestId, reply, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/undoReply",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                requestId:requestId,
+                reply:reply },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    setUndoAutoDecline:function (on, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/autoDecline",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                on:on ? "true" : "false" },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    // A long poll: answered when there is a notice numbered above "after", or after a while with none.
+    // after = -1 asks only where to start from.
+    getGameNotices:function (after, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/notices",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                after:after },
+            success:callback,
+            timeout: 60000,
+            error:failure,
+            dataType:"json"
+        });
+    },
     cancel:function (errorMap) {
         $.ajax({
             type:"POST",

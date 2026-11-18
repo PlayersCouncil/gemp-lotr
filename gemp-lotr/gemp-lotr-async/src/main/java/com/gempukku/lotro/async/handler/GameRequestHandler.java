@@ -286,9 +286,10 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     /**
-     * POST /game/{id}/notices: participantId, and after = the number of the last notice the client has seen (0 for
-     * none).  Held until there is a later notice or the usual long-polling time has passed; a client asks again at
-     * once, whether or not it is showing its player a decision.
+     * POST /game/{id}/notices: participantId, and after = the number of the last notice the client has seen.  Held
+     * until there is a later notice or the usual long-polling time has passed; a client asks again at once, whether
+     * or not it is showing its player a decision.  A client that has only just arrived sends after = -1 and is told
+     * at once, with no notices, which number to carry on from ("latest"): what was said before it came is not for it.
      */
     private void notices(HttpRequest request, String gameId, final ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
@@ -302,6 +303,13 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
                 throw new HttpProcessingException(403);
             final GameNotices gameNotices = gameMediator.getNotices();
             gameNotices.know(resourceOwner.getName());
+            if (after < 0) {
+                Map<String, Object> json = new LinkedHashMap<>();
+                json.put("notices", new ArrayList<>());
+                json.put("latest", gameNotices.latest(resourceOwner.getName()));
+                responseWriter.writeJsonResponse(JsonUtils.Serialize(json));
+                return;
+            }
 
             longPollingSystem.processLongPollingResource(new LongPollingResource() {
                 private boolean _processed;
@@ -326,6 +334,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
                         }
                         Map<String, Object> json = new LinkedHashMap<>();
                         json.put("notices", notices);
+                        json.put("latest", gameNotices.latest(resourceOwner.getName()));
                         responseWriter.writeJsonResponse(JsonUtils.Serialize(json));
                     } catch (Exception e) {
                         logHttpError(_log, 500, "game notices poller", e);

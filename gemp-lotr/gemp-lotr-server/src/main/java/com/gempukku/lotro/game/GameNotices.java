@@ -57,6 +57,14 @@ public class GameNotices {
             request.processRequest();
     }
 
+    /**
+     * @return The number of the last notice this person has been sent; 0 if none.  A client that has only just
+     * arrived starts from here: what was said before it came is not for it.
+     */
+    public synchronized int latest(String person) {
+        return queue(person).next - 1;
+    }
+
     /** Everybody who has a queue. */
     public synchronized List<String> people() {
         return new ArrayList<>(_queues.keySet());

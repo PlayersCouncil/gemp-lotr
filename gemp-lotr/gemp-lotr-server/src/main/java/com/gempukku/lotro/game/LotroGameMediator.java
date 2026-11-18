@@ -617,6 +617,8 @@ public class LotroGameMediator {
             for (String person : _notices.people()) {
                 Map<String, String> fields = new LinkedHashMap<>();
                 fields.put("reason", "revert");
+                fields.put("message", announcement);
+                fields.put("tier", tier);
                 if (newChannels.containsKey(person))
                     fields.put("channelNumber", String.valueOf(newChannels.get(person)));
                 _notices.send(person, GameNotices.RESYNC, fields);
