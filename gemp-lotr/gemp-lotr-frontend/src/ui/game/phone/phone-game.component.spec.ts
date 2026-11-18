@@ -119,6 +119,70 @@ describe('the game on a phone (G7)', () => {
     expect(computer.el.querySelector('.gd-game__table')).not.toBeNull();
   });
 
+  it('opens the cards under a card below it with its ▾ and puts them back with ▴; the setting can remove the button', async () => {
+    const { el, click } = await open(game());
+    const toggle = '[data-zone="characters-player"] .gd-phone-slot__toggle';
+    const peek = () =>
+      el.querySelector('[data-zone="characters-player"] .gd-phone-slot > [data-under][data-card-id="2"]');
+    const opened = () =>
+      el.querySelector('[data-zone="characters-player"] .gd-phone-slot__opened > [data-card-id="2"]');
+    expect(el.querySelector(toggle)?.textContent?.trim()).toBe('▾');
+    expect(el.querySelector(toggle)?.getAttribute('aria-expanded')).toBe('false');
+    expect(peek()).not.toBeNull();
+    expect(opened()).toBeNull();
+
+    await click(toggle);
+    expect(el.querySelector(toggle)?.textContent?.trim()).toBe('▴');
+    expect(peek()).toBeNull();
+    expect(opened()).not.toBeNull();
+
+    await click(toggle);
+    expect(peek()).not.toBeNull();
+    expect(opened()).toBeNull();
+
+    // "Nothing": no button, the cards only peek out
+    TestBed.resetTestingModule();
+    document.cookie = 'gempPhoneUnderButton=none; path=/';
+    try {
+      const without = await open(game());
+      expect(without.el.querySelector(toggle)).toBeNull();
+      expect(
+        without.el.querySelector('[data-zone="characters-player"] .gd-phone-slot > [data-under][data-card-id="2"]'),
+      ).not.toBeNull();
+    } finally {
+      document.cookie = 'gempPhoneUnderButton=; path=/; max-age=0';
+    }
+  });
+
+  it("layers a fight's minions on the first; its ▾ opens the others in a row under it", async () => {
+    // Bob's minions 5 and 10 assigned to alice's companion 1
+    const { el, click } = await open(
+      game(card('10', 'SHADOW_CHARACTERS', '', 'bob') + '<ge type="AA" cardId="1" otherCardIds="5,10"/>'),
+    );
+    const pair = '.gd-phone-pair[data-pair="assignment"]';
+    const toggle = `${pair} .gd-phone-layered__toggle`;
+    const peeking = () => el.querySelector(`${pair} .gd-phone-layered > [data-layered][data-card-id="10"]`);
+    const opened = () => el.querySelector(`${pair} .gd-phone-layered__rest [data-card-id="10"]`);
+    // The first on top, in its own place; the other under it, peeking out
+    expect(el.querySelector(`${pair} .gd-phone-layered > .gd-phone-slot > [data-card-id="5"]`)).not.toBeNull();
+    expect(peeking()).not.toBeNull();
+    expect(el.querySelector(toggle)?.textContent?.trim()).toBe('▾ 1');
+
+    await click(toggle);
+    expect(el.querySelector(toggle)?.textContent?.trim()).toBe('▴');
+    expect(peeking()).toBeNull();
+    expect(opened()).not.toBeNull();
+    // The first stays where it was
+    expect(el.querySelector(`${pair} .gd-phone-layered > .gd-phone-slot > [data-card-id="5"]`)).not.toBeNull();
+
+    await click(toggle);
+    expect(peeking()).not.toBeNull();
+    // One minion: no stack
+    TestBed.resetTestingModule();
+    const single = await open(game('<ge type="AA" cardId="1" otherCardIds="5"/>'));
+    expect(single.el.querySelector('.gd-phone-layered')).toBeNull();
+  });
+
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
     // The player keeps the hand hidden on this device
     document.cookie = 'gempGameSplit=phone:hidden; path=/';
@@ -162,8 +226,10 @@ describe('the game on a phone (G7)', () => {
     );
     expect(support).toEqual(['4', '3']);
     expect(el.querySelector('[data-zone="support-player"] .gd-phone-cards__split')).not.toBeNull();
-    // The attached card: a small copy under its card
-    expect(el.querySelector('[data-zone="characters-player"] .gd-phone-slot__under [data-card-id="2"]')).not.toBeNull();
+    // The attached card: under its card, peeking out on its left
+    expect(
+      el.querySelector('[data-zone="characters-player"] .gd-phone-slot > [data-under][data-card-id="2"]'),
+    ).not.toBeNull();
     expect(Array.from(el.querySelectorAll('gd-phone-hand .gd-card'), (c) => c.getAttribute('data-card-id'))).toEqual([
       '6',
       '7',
@@ -355,7 +421,7 @@ describe('the game on a phone (G7)', () => {
     );
     expect(order).toEqual(['1', '2', '4', '11', 'split', '6', '7']);
     expect(
-      el.querySelector('gd-phone-table .gd-phone-slot__under [data-card-id="11"]')?.getAttribute('data-mark'),
+      el.querySelector('gd-phone-table .gd-phone-slot > [data-under][data-card-id="11"]')?.getAttribute('data-mark'),
     ).toBe('selectable');
     hand.querySelector<HTMLElement>('[data-from-under] > [data-card-id="11"]')!.click();
     await stable();
@@ -460,21 +526,25 @@ describe('the game on a phone (G7)', () => {
       game(card('10', 'FREE_CHARACTERS', '', 'bob') + '<ge type="TC" participantId="alice" otherCardIds="3,10"/>'),
     );
     const slot = (id: string) => el.querySelector(`.gd-phone-slot:has(> [data-card-id="${id}"])`);
-    const button = (row: string) => el.querySelector<HTMLElement>(`[data-zone="${row}"] .gd-phone-cards__fold`);
+    const button = (row: string) => el.querySelector<HTMLElement>(`[data-zone="${row}"] button[data-fold]`);
     expect(slot('3')?.hasAttribute('data-shrunk')).toBe(true);
     expect(slot('4')?.hasAttribute('data-shrunk')).toBe(false);
     expect(button('support-player')?.getAttribute('data-fold')).toBe('shrink');
     expect(button('support-player')?.getAttribute('aria-expanded')).toBe('false');
     expect(slot('10')).toBeNull();
     expect(button('characters-opponent')?.textContent?.trim()).toBe('Show 1 ▸');
+    // Hidden, the row is one line: its title, with the button on it, and no row of cards
+    expect(button('characters-opponent')?.closest('.gd-phone-zone__label')).not.toBeNull();
+    expect(el.querySelector('[data-zone="characters-opponent"] gd-phone-cards')).toBeNull();
     // The minions never fold, and rows of active cards have no button
     expect(button('shadow')).toBeNull();
     expect(button('characters-player')).toBeNull();
 
-    await click('[data-zone="characters-opponent"] .gd-phone-cards__fold');
+    await click('[data-zone="characters-opponent"] button[data-fold]');
     expect(slot('10')).not.toBeNull();
     expect(button('characters-opponent')?.textContent?.trim()).toBe('◂ Hide');
-    await click('[data-zone="characters-opponent"] .gd-phone-cards__fold');
+    expect(button('characters-opponent')?.closest('.gd-phone-zone__label')).not.toBeNull();
+    await click('[data-zone="characters-opponent"] button[data-fold]');
     expect(slot('10')).toBeNull();
     await click('[data-zone="support-player"] .gd-phone-cards__fold');
     expect(slot('3')?.hasAttribute('data-shrunk')).toBe(false);

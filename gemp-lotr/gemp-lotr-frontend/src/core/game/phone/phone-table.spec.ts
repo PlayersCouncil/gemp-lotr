@@ -117,6 +117,20 @@ describe('phoneTable', () => {
     expect(path[2]?.ahead).toBe(true);
   });
 
+  it("shows the site of the player looking big, whoever's turn it is", () => {
+    const model = play(
+      put('s1', { zone: 'ADVENTURE_PATH', index: 1, blueprintId: '1_319' }),
+      put('s2', { zone: 'ADVENTURE_PATH', index: 2, blueprintId: '1_327' }),
+      { type: 'PP', participantId: 'alice', index: 1 },
+      { type: 'PP', participantId: 'bob', index: 2 },
+      { type: 'TC', participantId: 'bob', inactiveCardIds: [] },
+    );
+    const path = phone(model).path;
+    // Bob's turn at site 2; Alice looks, and her fellowship stands at site 1
+    expect(path.map((site) => site.own)).toEqual([true, false, false, false, false, false, false, false, false]);
+    expect(path[1]?.here).toBe(true);
+  });
+
   it('shows the skirmish first, then the assignments, as pairs; the minions fighting leave their row', () => {
     const model = play(
       put('1'),

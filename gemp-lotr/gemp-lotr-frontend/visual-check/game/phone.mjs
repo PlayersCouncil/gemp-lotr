@@ -40,6 +40,11 @@ const { values: options } = parseArgs({
     devices: { type: 'string', default: 'phone,sideways,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
+    // With --shots: what to tap first (a selector, the first match), e.g. --tap '.gd-phone-slot__toggle'; given again,
+    // tapped in that order (--tap '[data-phone="menu"]' --tap '[data-menu="settings"]')
+    tap: { type: 'string', multiple: true },
+    // With --shots: one of the prepared states (STATES, e.g. underOffer) instead of the recordings' last steps
+    state: { type: 'string' },
     checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold,archery,stack' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
@@ -219,6 +224,8 @@ const STATES = {
   assign: { recording: 'effects-skirmish', count: 14 },
   /** The skirmish being fought. */
   skirmish: { recording: 'effects-skirmish', count: 15 },
+  /** The skirmish with three minions in it (a stack of minions, the owner 2026-11-18). */
+  skirmishMinions: { recording: 'effects-skirmish', count: 15, lastEvents: skirmishMinions },
   /** Late in the game: piles with cards, cards attached, a choice of cards on the table. */
   late: { recording: 'effects-skirmish', count: 25 },
   /**
@@ -259,6 +266,18 @@ function stackedMinions(_opponent, player) {
         `targetType="stacked" timestamp="2026-11-17 00:00:00.0000" type="PCIP" zone="STACKED"/>`,
     )
     .join('');
+}
+
+/** Two more of the opponent's minions in the recorded skirmish (Gimli, 47, against 54): three minions in one fight. */
+function skirmishMinions(opponent) {
+  const minions = ['9201', '9202']
+    .map(
+      (cardId) =>
+        `<ge blueprintId="1_178" cardId="${cardId}" hindered="false" participantId="${opponent}" ` +
+        `timestamp="2026-11-17 00:00:00.0000" type="PCIP" zone="SHADOW_CHARACTERS"/>`,
+    )
+    .join('');
+  return `${minions}<ge cardId="47" otherCardIds="54,9201,9202" timestamp="2026-11-17 00:00:00.0000" type="SS"/>`;
 }
 
 /** A card of the opponent's in each pile, as the server puts a card somewhere (PCIP). */
@@ -385,7 +404,16 @@ const PLACES = [
     target:
       'gd-phone-table [data-zone="support-player"] .gd-phone-slot > .gd-card, gd-phone-table [data-zone="support-opponent"] .gd-phone-slot > .gd-card',
   },
-  { name: 'an attached copy', state: 'late', target: 'gd-phone-table .gd-phone-slot__under > .gd-card' },
+  {
+    name: 'a card from under one, opened below it',
+    state: 'late',
+    before: async (page) => {
+      const toggle = page.locator('gd-phone-table .gd-phone-slot__toggle').first();
+      await toggle.scrollIntoViewIfNeeded();
+      await tap(page, toggle);
+    },
+    target: 'gd-phone-table .gd-phone-slot__opened > .gd-card',
+  },
   { name: 'the hand', state: 'late', target: 'gd-phone-hand .gd-phone-slot > .gd-card' },
   { name: 'the adventure path', state: 'late', target: '.gd-phone-site > .gd-card' },
   {
@@ -427,7 +455,9 @@ const PLACES = [
     name: "an attached card's details",
     state: 'late',
     before: async (page) => {
-      const owner = page.locator('gd-phone-table .gd-phone-slot:has(.gd-phone-slot__under) > .gd-card').first();
+      const owner = page
+        .locator('gd-phone-table .gd-phone-slot:has(> .gd-card[data-under]) > .gd-card:not([data-under])')
+        .first();
       await owner.scrollIntoViewIfNeeded();
       await longPress(page, owner);
     },
@@ -445,7 +475,7 @@ async function backCase(browser, device, place) {
   try {
     await shown.settle();
     // The cards not active this turn opened first (the fold check covers folding), so every place has its cards
-    for (const button of await shown.page.locator('.gd-phone-cards__fold[aria-expanded="false"]').all()) {
+    for (const button of await shown.page.locator('gd-phone-table button[data-fold][aria-expanded="false"]').all()) {
       await button.scrollIntoViewIfNeeded();
       await tap(shown.page, button);
       await shown.settle();
@@ -851,7 +881,14 @@ const TOUCH = [
         return {
           big: height('gd-phone-hand [data-from-under] > .gd-card'),
           hand: height('gd-phone-hand .gd-phone-slot:not([data-from-under]) > .gd-card'),
-          small: height('gd-phone-table .gd-phone-slot__under > .gd-card[data-card-id="9101"]'),
+          // The table's copy peeks out on its card's left (the owner, 2026-11-18)
+          peeks: (() => {
+            const copy = document.querySelector(
+              'gd-phone-table .gd-phone-slot > .gd-card[data-under][data-card-id="9101"]',
+            );
+            const own = copy?.parentElement?.querySelector(':scope > .gd-card:not([data-under])');
+            return !!copy && !!own && copy.getBoundingClientRect().left < own.getBoundingClientRect().left;
+          })(),
         };
       });
       // Scrolled back to its start, the row stays there: the copy of the card they lie under is seen (the owner,
@@ -875,7 +912,7 @@ const TOUCH = [
         ...(first.includes('gd-phone-cards__host') ? [] : [`the hand starts with ${first}, not the offered cards`]),
         // Smaller than the hand's cards (70%), bigger than the copy of the card they lie under (45%)
         ...(Math.abs(sizes.big - sizes.hand * 0.7) <= 1.5 ? [] : [`${sizes.big}px high, the hand's ${sizes.hand}px`]),
-        ...(sizes.small > 0 && sizes.small < sizes.big / 2 ? [] : [`the table's copy ${sizes.small}px high`]),
+        ...(sizes.peeks ? [] : ["the table's copy doesn't peek out on its card's left"]),
         ...(mark === 'selected' || sent.some((body) => /decisionValue=9101/.test(body))
           ? []
           : [`not chosen (mark ${mark})`]),
@@ -1122,14 +1159,15 @@ const FOLD_RECORDINGS = ['shadow-turn', 'card-gestures'];
 
 /** Each row's fold as the page shows it: its button, and the sizes of its active and not active cards. */
 function readFolds() {
-  return Array.from(document.querySelectorAll('gd-phone-table gd-phone-cards[data-row]'), (row) => {
-    const button = row.querySelector('.gd-phone-cards__fold');
+  // A row's section: the opponent's button is on its title line, and its cards' row is gone while all are hidden
+  return Array.from(document.querySelectorAll('gd-phone-table section.gd-phone-zone[data-zone]'), (row) => {
+    const button = row.querySelector('button[data-fold]');
     const heights = (inactive) =>
       Array.from(row.querySelectorAll('.gd-phone-slot > .gd-card'))
         .filter((card) => card.hasAttribute('data-inactive') === inactive)
         .map((card) => Math.round(card.getBoundingClientRect().height));
     return {
-      row: row.dataset.row,
+      row: row.dataset.zone,
       how: button?.dataset.fold ?? null,
       open: button ? button.getAttribute('aria-expanded') === 'true' : null,
       active: heights(false),
@@ -1165,7 +1203,7 @@ async function foldCase(browser, device, name) {
     if (folds.length === 0) return ['nothing to fold'];
     for (const fold of folds) problems.push(...foldProblems(fold, false));
     const press = async (row) => {
-      const button = shown.page.locator(`gd-phone-cards[data-row="${row}"] .gd-phone-cards__fold`);
+      const button = shown.page.locator(`gd-phone-table section[data-zone="${row}"] button[data-fold]`);
       await button.scrollIntoViewIfNeeded();
       await tap(shown.page, button);
       await shown.settle();
@@ -1207,10 +1245,18 @@ const stepsOf = (recording) => (options.step ? Number(options.step) : recording.
 
 async function shots(browser) {
   fs.mkdirSync(OUT, { recursive: true });
-  for (const recording of recordings()) {
+  const state = options.state ? STATES[options.state] : null;
+  if (options.state && !state) throw new Error(`no state ${options.state} (${Object.keys(STATES).join(', ')})`);
+  for (const recording of state ? [{ ...recordingOf(state), name: options.state }] : recordings()) {
     for (const device of options.devices.split(',')) {
-      const shown = await openPhone(browser, device, recording, stepsOf(recording));
+      const shown = await openPhone(browser, device, recording, state ? state.count : stepsOf(recording));
       await shown.settle();
+      for (const selector of options.tap ?? []) {
+        const target = shown.page.locator(selector).first();
+        await target.scrollIntoViewIfNeeded();
+        await tap(shown.page, target);
+        await shown.settle();
+      }
       const file = path.join(OUT, `${recording.name}-${device}${options.size ? `-${options.size}` : ''}.png`);
       await shown.page.screenshot({ path: file });
       if (shown.errors.length) console.log(`${recording.name} ${device}: ${shown.errors.join(' | ')}`);

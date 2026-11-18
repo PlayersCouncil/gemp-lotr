@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SettingCookies } from '../../platform/setting-cookies';
-import { COOKIES, GameSettings, SERVER_COOKIE_PATH } from './game-settings';
+import { COOKIES, GameSettings, SERVER_COOKIE_PATH, UNDER_BUTTON_COOKIE } from './game-settings';
 
 class FakeCookies {
   readonly values = new Map<string, string>();
@@ -99,5 +99,18 @@ describe('GameSettings', () => {
     });
     expect(s.autoPassPhases()).toEqual(['SHADOW', 'MANEUVER', 'ARCHERY', 'ASSIGNMENT', 'REGROUP']);
     expect(s.animationSpeed()).toBe(4);
+  });
+
+  it("keeps the phone layout's button under a card in its own cookie: shown by default, unknown values ignored", () => {
+    expect(settings().settings.underButton()).toBe('button');
+    TestBed.resetTestingModule();
+    expect(settings({ [UNDER_BUTTON_COOKIE]: 'space' }).settings.underButton()).toBe('space');
+    TestBed.resetTestingModule();
+    expect(settings({ [UNDER_BUTTON_COOKIE]: 'big' }).settings.underButton()).toBe('button');
+    TestBed.resetTestingModule();
+    const { settings: s, cookies } = settings();
+    s.setUnderButton('none');
+    expect(s.underButton()).toBe('none');
+    expect(cookies.values.get(UNDER_BUTTON_COOKIE)).toBe('none');
   });
 });

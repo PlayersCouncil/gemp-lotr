@@ -23,9 +23,18 @@ export interface PhoneView {
   chatSeen: number;
   /** The rows whose cards not active this turn the player opened (PhoneFolding), until the turn changes. */
   unfolded: readonly string[];
+  /** The cards whose cards under them the player opened below them (the ▾ button), by id. */
+  openUnder: readonly string[];
 }
 
-export const NO_PHONE_VIEW: PhoneView = { tableTop: 0, rows: {}, closedOffer: null, chatSeen: 0, unfolded: [] };
+export const NO_PHONE_VIEW: PhoneView = {
+  tableTop: 0,
+  rows: {},
+  closedOffer: null,
+  chatSeen: 0,
+  unfolded: [],
+  openUnder: [],
+};
 
 /**
  * What the game page's view holds on its own: the open tab, the players whose other piles are shown, and a card's open
@@ -110,6 +119,7 @@ export class GameViewState {
         closedOffer: typeof phone.closedOffer === 'string' ? phone.closedOffer : null,
         chatSeen: typeof phone.chatSeen === 'number' ? phone.chatSeen : 0,
         unfolded: Array.isArray(phone.unfolded) ? phone.unfolded.filter((key) => typeof key === 'string') : [],
+        openUnder: Array.isArray(phone.openUnder) ? phone.openUnder.filter((id) => typeof id === 'string') : [],
       });
     }
     const piles = saved['openPiles'];

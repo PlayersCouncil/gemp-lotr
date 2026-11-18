@@ -28,6 +28,15 @@ export const COOKIES = {
 const DEFAULT_AUTO_PASS = 'FELLOWSHIP0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP';
 
 /**
+ * The phone layout's button under a card that others lie under (the owner, 2026-11-18): shown (▾ opens them below it,
+ * ▴ closes them), an empty space that still opens them, or none (they only peek out on its left). A cookie of the
+ * modern layout's own, not a legacy one.
+ */
+export const UNDER_BUTTONS = ['button', 'space', 'none'] as const;
+export type UnderButton = (typeof UNDER_BUTTONS)[number];
+export const UNDER_BUTTON_COOKIE = 'gempPhoneUnderButton';
+
+/**
  * The server reads autoPassPhases from the cookies of its own requests, which a cookie under /gemp-lotr never reaches,
  * so the value is written under the server's path too (the legacy page does the same).
  */
@@ -58,6 +67,10 @@ export class GameSettings {
   readonly autoDismissDeckReveal = signal(this.cookies.read(COOKIES.autoDismissDeckReveal) === 'true');
   /** Stacked cards drawn the old way (default off). */
   readonly oldStackVisuals = signal(this.cookies.read(COOKIES.oldStack) === 'true');
+  /** The phone layout's button under a card others lie under (default shown). */
+  readonly underButton = signal<UnderButton>(
+    UNDER_BUTTONS.find((value) => value === this.cookies.read(UNDER_BUTTON_COOKIE)) ?? 'button',
+  );
   /** -4 (slowest) to 4 (fastest); animations last 2^-speed times as long (default 0). */
   readonly animationSpeed = signal(Number(this.cookies.read(COOKIES.animationSpeed) ?? '0') || 0);
   readonly timerAudioMuted = signal(this.cookies.read(COOKIES.timerAudioMuted) === 'true');
@@ -97,6 +110,11 @@ export class GameSettings {
   setOldStackVisuals(value: boolean): void {
     this.oldStackVisuals.set(value);
     this.cookies.write(COOKIES.oldStack, String(value));
+  }
+
+  setUnderButton(value: UnderButton): void {
+    this.underButton.set(value);
+    this.cookies.write(UNDER_BUTTON_COOKIE, value);
   }
 
   setAnimationSpeed(value: number): void {

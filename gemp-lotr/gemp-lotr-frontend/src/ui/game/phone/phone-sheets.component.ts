@@ -21,7 +21,7 @@ import { Sheet } from '../../../core/game/phone/sheet';
 import { GameLog } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
-import { AUTO_PASS_PHASES, GameSettings } from '../../../core/game/settings/game-settings';
+import { AUTO_PASS_PHASES, GameSettings, UnderButton } from '../../../core/game/settings/game-settings';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { handRevealed, PileName, pileCards } from '../../../core/game/table/game-table';
 import { PageCues } from '../../../core/platform/page-cues';
@@ -210,6 +210,22 @@ const HALL = '/gemp-lotr/hall.html';
                       />
                       <span>Stacked cards upright<small>As the old look drew them.</small></span>
                     </label>
+                    <h3>Under a card holding others</h3>
+                    @for (choice of underChoices; track choice.value) {
+                      <label class="gd-phone-toggle">
+                        <input
+                          type="radio"
+                          name="gd-phone-under-button"
+                          data-setting="underButton"
+                          [value]="choice.value"
+                          [checked]="settings.underButton() === choice.value"
+                          (change)="settings.setUnderButton(choice.value)"
+                        />
+                        <span
+                          >{{ choice.label }}<small>{{ choice.note }}</small></span
+                        >
+                      </label>
+                    }
                   } @else {
                     <h3>Pass automatically when you have nothing to play in</h3>
                     @for (phase of phases; track phase) {
@@ -380,6 +396,16 @@ export class PhoneSheetsComponent {
   protected readonly sizeMin = CARD_SIZE_MIN;
   protected readonly sizeMax = CARD_SIZE_MAX;
   protected readonly phases = AUTO_PASS_PHASES;
+  /** The button under a card others lie under (GameSettings.underButton). */
+  protected readonly underChoices: readonly { value: UnderButton; label: string; note: string }[] = [
+    { value: 'button', label: 'A ▾ button', note: 'Opens the cards under it below it, big; ▴ puts them back.' },
+    {
+      value: 'space',
+      label: 'An empty space',
+      note: 'The button without its look: the space under the card opens them.',
+    },
+    { value: 'none', label: 'Nothing', note: 'They only peek out on its left.' },
+  ];
   protected readonly settingTabs = [
     { key: 'game', label: 'Game' },
     { key: 'display', label: 'Display' },

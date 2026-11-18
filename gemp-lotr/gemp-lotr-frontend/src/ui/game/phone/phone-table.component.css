@@ -147,6 +147,29 @@
   display: none;
 }
 
+/*
+ * The opponent's cards not active this turn, shown or hidden from the title line: one line for the row while they are
+ * hidden (the owner, 2026-11-18). A small pill next to the row's count (sideways, the line's end lies under the hand),
+ * tall enough for a finger
+ */
+.gd-phone-zone__fold {
+  flex: none;
+  min-height: 28px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 99px;
+  padding: 0 12px;
+  font: inherit;
+  font-family: var(--theme-game-phone-font-text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  background: none;
+  color: var(--theme-game-phone-muted);
+  cursor: pointer;
+}
+
 .gd-phone-zone[data-side='minions'] .gd-phone-zone__rule {
   display: block;
   flex: 1;
@@ -159,9 +182,12 @@
 
 /* The adventure path: site cards lying down, empty places as their number, the players' markers */
 .gd-phone-path {
-  --gd-phone-site: calc(var(--gd-phone-card, 100px) * 0.5);
+  /* The small sites (all but the player's own): half as high as the big one */
+  --gd-phone-site: calc(var(--gd-phone-card, 100px) * 0.36);
   position: relative;
   display: flex;
+  /* The small sites level with the big one's middle */
+  align-items: center;
   gap: 4px;
   overflow-x: auto;
   padding: 4px 10px 4px 12px;
@@ -181,6 +207,14 @@
   /* A site lies on its side: as wide as this, 350/490 as high */
   --gd-card-height: calc(var(--gd-phone-site) * 490 / 350);
   touch-action: pan-x pan-y;
+}
+
+/*
+ * The site where the player looking stands: as big as a card in the rows, lying down (the owner, 2026-11-18); the
+ * others stay small on either side, and the road scrolls
+ */
+.gd-phone-site[data-own] > .gd-card {
+  --gd-card-height: var(--gd-phone-card, 100px);
 }
 
 .gd-phone-site[data-here] > .gd-card {
@@ -265,6 +299,12 @@
 }
 
 /* Where each player stands: their number on a heraldic shield, as in their chip */
+/* A small site has no room for both on its left: who stands there on its right */
+.gd-phone-site:not([data-own]) > .gd-phone-site__markers {
+  left: auto;
+  right: 3px;
+}
+
 .gd-phone-site__marker {
   --gd-shield: var(--theme-game-phone-player-1);
   position: relative;
@@ -304,7 +344,7 @@
   position: relative;
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
   overflow-x: auto;
   padding: 6px 10px 3px 12px;
   scrollbar-width: none;
@@ -314,11 +354,14 @@
   display: none;
 }
 
+/* A fight upright: the minions on top, the strengths between, the characters under them (the owner, 2026-11-18) */
 .gd-phone-pair {
   flex: none;
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+  /* The cards in one line on the left: opened, the top minion stays above the companion (the owner, 2026-11-18) */
+  align-items: flex-start;
+  gap: 3px;
   padding: 2px;
   border: 1px solid var(--theme-separator);
   border-radius: 7px;
@@ -336,6 +379,14 @@
 /* The sides of a pair show all their cards: no scrolling inside a pair, the pairs' row scrolls */
 .gd-phone-pair > gd-phone-cards {
   flex: none;
+}
+
+/* The strengths and "vs" under the middle of a card */
+.gd-phone-pair > .gd-phone-strength,
+.gd-phone-pair > .gd-phone-pair__vs {
+  align-self: flex-start;
+  margin-left: calc(var(--gd-phone-card, 100px) * 350 / 490 / 2 + 2px);
+  transform: translateX(-50%);
 }
 
 .gd-phone-pair__vs {

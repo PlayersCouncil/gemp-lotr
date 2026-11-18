@@ -25,40 +25,89 @@
   display: none;
 }
 
+/*
+ * A card's place: the cards under it (attached, stacked) peek out on its left as on the table, a share of each showing
+ * (its columns, set by the component); under it, the ▾ button, and the cards under it once opened (the owner,
+ * 2026-11-18)
+ */
 .gd-phone-slot {
+  --gd-slot-card: var(--gd-phone-card, 100px);
+  /* A fifth of an attached card shows, a little more of a stacked one (the table's game-cards) */
+  --gd-phone-peek: round(down, calc(var(--gd-slot-card) * 350 / 490 / 5), 1px);
+  --gd-phone-peek-stacked: round(down, calc(var(--gd-slot-card) * 350 / 490 * 0.22), 1px);
   flex: none;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  display: grid;
+  /* The component's columns for the cards peeking out, then the card */
+  grid-template-columns: var(--gd-slot-columns, auto);
+  align-items: start;
+  row-gap: 3px;
   scroll-snap-align: start;
 }
 
 .gd-phone-slot > .gd-card {
-  --gd-card-height: var(--gd-phone-card, 100px);
-  flex: none;
+  --gd-card-height: var(--gd-slot-card);
+  grid-row: 1;
   touch-action: pan-x pan-y;
   box-shadow: var(--theme-game-phone-card-shadow);
 }
 
 /* A card not active this turn, shrunk out of the way (the fold's button enlarges it) */
-.gd-phone-slot[data-shrunk] > .gd-card {
-  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.45);
+.gd-phone-slot[data-shrunk] {
+  --gd-slot-card: calc(var(--gd-phone-card, 100px) * 0.45);
 }
 
-.gd-phone-slot[data-shrunk] > .gd-phone-slot__under {
-  max-width: calc(var(--gd-phone-card, 100px) * 0.45 * 350 / 490 + 10px);
+/* Stacked cards on their side, as on the table, unless the player chose the old look (the game page's data-old-stack) */
+.gd-phone-slot > .gd-card[data-under='stacked'] {
+  transform: rotate(-90deg) translateY(10%);
 }
 
-.gd-phone-slot[data-shrunk] > .gd-phone-slot__under > .gd-card {
-  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.18);
+:host-context([data-old-stack]) .gd-phone-slot > .gd-card[data-under='stacked'] {
+  transform: none;
+}
+
+/* Opens the cards under the card below it, and closes them: small, and still easy to hit with a finger */
+.gd-phone-slot__toggle {
+  grid-column: 1 / -1;
+  height: 24px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 6px;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  background: none;
+  color: var(--theme-game-phone-muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* The player's setting: an empty space that still opens them */
+.gd-phone-slot__toggle[data-mode='space'] {
+  opacity: 0;
+}
+
+/*
+ * The cards under it, opened: upright and as big as the card, to read, long press and choose; side by side from under
+ * the card, its place widening so the next card moves right (the owner, 2026-11-18)
+ */
+.gd-phone-slot__opened {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 5px;
+}
+
+.gd-phone-slot__opened > .gd-card {
+  --gd-card-height: var(--gd-slot-card);
+  touch-action: pan-x pan-y;
+  box-shadow: var(--theme-game-phone-card-shadow);
 }
 
 /*
  * Offered cards from the table, before the hand's own: smaller than a hand card, bigger than the copy of the card they
  * lie under, so they don't pass for cards in the hand (the owner, 2026-11-17: one Hobbit Sword looked like two)
  */
-.gd-phone-slot[data-from-under] > .gd-card {
-  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.7);
+.gd-phone-slot[data-from-under] {
+  --gd-slot-card: calc(var(--gd-phone-card, 100px) * 0.7);
 }
 
 /* Where the offered cards from under a card start: what they lie under, and a small copy of it */
@@ -105,19 +154,53 @@
 }
 
 /*
- * The cards under one (attached, stacked): small copies under it, a long press shows one big (the owner, 2026-11-17:
- * kept so, not peeking out behind it)
+ * A fight's minions, layered (the owner, 2026-11-18): the first on top, the others under it peeking out on its left as
+ * attached cards do; opened, the others in a row under its ▴, the fight widening
  */
-.gd-phone-slot__under {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  max-width: calc(var(--gd-phone-card, 100px) * 350 / 490 + 10px);
+.gd-phone-layered {
+  --gd-slot-card: var(--gd-phone-card, 100px);
+  --gd-phone-peek: round(down, calc(var(--gd-slot-card) * 350 / 490 / 5), 1px);
+  display: grid;
+  grid-template-columns: var(--gd-slot-columns, auto);
+  align-items: start;
+  row-gap: 3px;
 }
 
-.gd-phone-slot__under > .gd-card {
-  --gd-card-height: calc(var(--gd-phone-card, 100px) * 0.3);
+.gd-phone-layered > .gd-card,
+.gd-phone-layered > .gd-phone-slot {
+  grid-row: 1;
+}
+
+.gd-phone-layered > .gd-card {
+  --gd-card-height: var(--gd-slot-card);
   touch-action: pan-x pan-y;
+  box-shadow: var(--theme-game-phone-card-shadow);
+}
+
+.gd-phone-layered__toggle {
+  grid-column: 1 / -1;
+  height: 24px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 6px;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  background: none;
+  color: var(--theme-game-phone-muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.gd-phone-layered__toggle[data-mode='space'] {
+  opacity: 0;
+}
+
+.gd-phone-layered__rest {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
 }
 
 .gd-phone-cards__split {
@@ -183,19 +266,6 @@
 
 .gd-card[data-zone='EXTRA'] {
   opacity: 0.85;
-}
-
-/*
- * Stacked cards on their side, as on the table, unless the player chose the old look (the game page's data-old-stack).
- * Not :host-context(:not([data-old-stack])): any element above without the attribute (<html>) matched that, so the
- * setting did nothing
- */
-.gd-phone-slot__under > .gd-card[data-under='stacked'] {
-  transform: rotate(-90deg);
-}
-
-:host-context([data-old-stack]) .gd-phone-slot__under > .gd-card[data-under='stacked'] {
-  transform: none;
 }
 
 .gd-phone-cards__more {
