@@ -110,9 +110,10 @@ public class GameMediatorRevertTest {
             public void visitGameEvent(GameEvent gameEvent) { }
         });
         GameCommunicationChannel channel = sitting.mediator.getCommunicationChannel(alice, channelNumber[0]);
-        sitting.play(20);
+        //(few enough answers that no game is over yet: the soonest a Ring-bearer can die is the first skirmish)
+        sitting.play(12);
         int there = sitting.mediator.journalSize();
-        sitting.play(5);
+        sitting.play(3);
         channel.consumeGameEvents();
 
         assertNull(sitting.mediator.revertTo(there));
