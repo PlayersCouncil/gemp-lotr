@@ -42,6 +42,8 @@ public class LotroGameMediator {
     private volatile DefaultLotroGame _lotroGame;
     /** Everything that steered this game (see GameJournal); what it is rebuilt from.  Null for a scenario's game. */
     private GameJournal _journal;
+    /** What each player has been shown and when, for saying what taking the game back would undo.  Null with no journal. */
+    private InformationLedger _ledger;
     /** What the game is built from, kept so that it can be built again.  Null for a scenario's game. */
     private final LotroFormat _format;
     private final LotroCardBlueprintLibrary _library;
@@ -144,10 +146,11 @@ public class LotroGameMediator {
         _userFeedback = built.feedback;
         _lotroGame = built.game;
         _journal = built.journal;
+        _ledger = built.ledger;
         attachBot();
     }
 
-    private record Built(DefaultUserFeedback feedback, DefaultLotroGame game, GameJournal journal) { }
+    private record Built(DefaultUserFeedback feedback, DefaultLotroGame game, GameJournal journal, InformationLedger ledger) { }
 
     /**
      * Builds this mediator's game from what it was made of, with a journal kept of it from the first moment.
@@ -158,16 +161,33 @@ public class LotroGameMediator {
         DefaultUserFeedback feedback = new DefaultUserFeedback();
         GameJournal journal = new GameJournal();
         feedback.addDecisionObserver(journal);
+        final InformationLedger ledger = new InformationLedger(_playerDecks.keySet(), _format, journal);
+        feedback.addDecisionObserver(ledger);
         //The same map of decks every time: the game seats its players in the order the map gives them
         DefaultLotroGame game = new DefaultLotroGame(_format, _playerDecks, feedback, _library, _timeSettings.toString(),
                 _allowSpectators, _tournamentName, _extraInfo);
-        if (_packOpener != null)
-            game.setPackOpener(_packOpener);
+        if (_packOpener != null) {
+            //What comes out of a pack is chance that no journal holds
+            game.setPackOpener(new PackOpener() {
+                @Override
+                public List<String> getAvailablePackIds() {
+                    return _packOpener.getAvailablePackIds();
+                }
+
+                @Override
+                public List<String> openPack(String packId) {
+                    ledger.barrier("a booster pack was opened");
+                    return _packOpener.openPack(packId);
+                }
+            });
+        }
         feedback.setGame(game);
+        ledger.setGame(game);
         if (toRepeat != null)
             journal.replayRandomFrom(toRepeat);
-        game.getGameState().setRandom(journal.random(GameRandom.DEFAULT));
-        return new Built(feedback, game, journal);
+        game.getGameState().setRandom(journal.random(ledger.watching(GameRandom.DEFAULT)));
+        game.addGameStateListener(InformationLedger.LISTENER_NAME, ledger);
+        return new Built(feedback, game, journal, ledger);
     }
 
     /** The bot hears the game through a listener that knows the game's rules, so each game gets one of its own. */
@@ -370,6 +390,9 @@ public class LotroGameMediator {
             List<GameJournal.Entry> entries = _journal.entries();
             if (entryCount < 0 || entryCount > entries.size())
                 return "The game's journal has no entry " + entryCount;
+            String barrier = _ledger.barrierSince(entryCount);
+            if (barrier != null)
+                return "The game cannot be taken back that far: " + barrier;
             GameJournal prefix = _journal.upTo(entryCount);
 
             final Built built = build(prefix);
@@ -444,6 +467,7 @@ public class LotroGameMediator {
             _userFeedback = built.feedback;
             _lotroGame = built.game;
             _journal = built.journal;
+            _ledger = built.ledger;
 
             //The players' settings as they are now, which may not be as they were back then
             Map<String, Set<Phase>> wanted = new HashMap<>(_autoPass);
@@ -466,6 +490,20 @@ public class LotroGameMediator {
             return null;
         } finally {
             _writeLock.unlock();
+        }
+    }
+
+    /**
+     * @return What taking the game back to the moment its journal held this many entries would undo, for the player
+     * who wants it: nothing of anybody else's (green), other players' choices or a shuffle (yellow), or something
+     * that player has seen since (red).  Null for a scenario's game.
+     */
+    public RevertAssessment assessRevert(String requester, int entryCount) {
+        _readLock.lock();
+        try {
+            return _ledger == null ? null : _ledger.assess(entryCount, requester);
+        } finally {
+            _readLock.unlock();
         }
     }
 
