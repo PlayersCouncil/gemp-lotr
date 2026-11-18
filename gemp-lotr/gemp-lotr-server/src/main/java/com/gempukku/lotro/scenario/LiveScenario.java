@@ -112,6 +112,7 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     private final ScenarioDefinition _def;
     private final LotroCardBlueprintLibrary _library;
+    private final LotroFormat _format;
     private final ScenarioTable _table;
     private final ScenarioSession _session;
     private final String _human;
@@ -129,6 +130,8 @@ public class LiveScenario implements ScenarioSession.Listener {
     private boolean _botFallbackReported;
     private int _lastCheckpoint;
     private Integer _resumedAt;
+    /** Set for a game that took the place of another when that one was taken back (see Again). */
+    private boolean _takenBack;
     private boolean _begun;
     /** Where the scenario stands in its campaign, as the client is to be told; null if it is in none. */
     private Map<String, Object> _campaign;
@@ -189,6 +192,7 @@ public class LiveScenario implements ScenarioSession.Listener {
                         TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier) {
         _def = def;
         _library = library;
+        _format = format;
         _human = humanPlayer;
         _opponent = OPPONENT_PLAYER;
         _renderer = renderer;
@@ -224,6 +228,34 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     public void SetHost(Host host) {
         _host = host;
+    }
+
+    /**
+     * @return Whether this game can be taken back to an earlier point by building it again (see Again).  A game
+     * with an author cannot: what the author has written since is not in the journal, and the authoring tool has
+     * its own way of going back.  Nor can a draft's test, or a game the script played itself into.
+     */
+    public boolean CanBeBuiltAgain() {
+        return _author == null && !_draftTest && _runTo == null;
+    }
+
+    /**
+     * Builds this scenario's game again, to take this one's place when it is taken back to an earlier point
+     * (LotroGameMediator.revertTo): the same scenario for the same person, following this game's journal as far as
+     * it is given.  Whatever was waiting to hear how this game ends will hear how that one does, if it is kept;
+     * this one is to be discarded then, and that one if it is not.
+     * @param earlier This game's journal up to the point to go back to.
+     * @return The game, built and not yet begun.
+     */
+    public LiveScenario Again(GameJournal earlier) {
+        if (!CanBeBuiltAgain())
+            throw new IllegalStateException("A scenario's game with an author is not built again");
+        LiveScenario again = new LiveScenario(_def, _library, _format, _human, _renderer, _timer, earlier);
+        again._campaign = _campaign;
+        again._resumedAt = _resumedAt;
+        again._takenBack = true;
+        again._whenSettled.addAll(_whenSettled);
+        return again;
     }
 
     /**
@@ -404,7 +436,8 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_runTo != null)
             runScript();
         _begun = true;
-        if (_table.FollowedAnything() && _session.Director().currentStep() != null)
+        //(a game taken back did not start anywhere new: it is still the game that started where the first one did)
+        if (!_takenBack && _table.FollowedAnything() && _session.Director().currentStep() != null)
             _resumedAt = _session.Director().currentStep().number;
         _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.SerializeWithNulls(infoEvent()));
         for (String player : List.of(_opponent, _human)) {

@@ -11,6 +11,7 @@ import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.DecisionArbiter;
 import com.gempukku.lotro.game.DecisionObserver;
 import com.gempukku.lotro.game.GameJournal;
+import com.gempukku.lotro.game.GameRandom;
 import com.gempukku.lotro.game.JournalFollower;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -200,6 +201,14 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
      */
     public void AutoPassed(java.util.function.BiConsumer<String, Phase> autoPassed) {
         _autoPassed = autoPassed;
+    }
+
+    /**
+     * Has the game's random outcomes pass through something else on their way (something that wants to hear of each
+     * shuffle, say), outside the journal and the scenario's own random.  Only before the game is begun.
+     */
+    public void WatchRandom(java.util.function.UnaryOperator<GameRandom> watcher) {
+        _gameState.setRandom(watcher.apply(_journal.random(_random)));
     }
 
     /** How many of the earlier game's answers this one was given. */

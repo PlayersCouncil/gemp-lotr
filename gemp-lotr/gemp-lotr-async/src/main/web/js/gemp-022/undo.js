@@ -51,12 +51,16 @@ var GempLotrUndo = Class.extend({
             $("#undoGame").button().click(function () {
                 that.openList();
             });
-            $("#undoGame").closest(".setting-row").show();
         }
 
         this.pollNotices();
-        // A request may have been waiting since before this page was loaded
         this.comm.getRestorePoints(function (json) {
+            // The button is there only in a game where something can be taken back (not, say, a scenario that is
+            // being written as it is played)
+            var policy = json.policy || {};
+            if (!that.game.spectatorMode && (policy.green || policy.yellow || policy.red))
+                $("#undoGame").closest(".setting-row").show();
+            // A request may have been waiting since before this page was loaded
             if (json.pending != null)
                 that.showPending(json.pending);
         }, function () {

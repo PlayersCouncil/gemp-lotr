@@ -40,7 +40,11 @@ public class LotroGameMediator {
     // ever written inside the write lock.
     private volatile DefaultUserFeedback _userFeedback;
     private volatile DefaultLotroGame _lotroGame;
-    /** Everything that steered this game (see GameJournal); what it is rebuilt from.  Null for a scenario's game. */
+    /**
+     * Everything that steered this game (see GameJournal); what it is rebuilt from.  A scenario's game keeps its own
+     * (ScenarioTable.Journal), and this is that one; null for a scenario's game that cannot be built again (one
+     * with an author).
+     */
     private GameJournal _journal;
     /** What each player has been shown and when, for saying what taking the game back would undo.  Null with no journal. */
     private InformationLedger _ledger;
@@ -113,8 +117,11 @@ public class LotroGameMediator {
     private final boolean _soloGame;
     private final BotPlayer _botPlayer;
     private final LotroDeck _botDeck;
-    /** Set if this is a scenario's game: the scenario built the game, plays the other seat and decides when it ends. */
-    private final LiveScenario _scenario;
+    /**
+     * Set if this is a scenario's game: the scenario built the game, plays the other seat and decides when it ends.
+     * Replaced, with the game, when the game is taken back (revertTo).
+     */
+    private volatile LiveScenario _scenario;
 
     private final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock(true);
     private final ReentrantReadWriteLock.ReadLock _readLock = _lock.readLock();
@@ -233,26 +240,7 @@ public class LotroGameMediator {
         feedback.addDecisionObserver(ledger);
         RestorePoints restorePoints = new RestorePoints(journal);
         feedback.addDecisionObserver(restorePoints);
-        feedback.addDecisionObserver(new DecisionObserver() {
-            @Override
-            public void decisionIssued(String playerId, AwaitingDecision decision) { }
-
-            @Override
-            public void decisionAnswering(String playerId, AwaitingDecision decision) {
-                //Only of the game being played: a game being rebuilt has no recordings listening to it yet
-                if (feedback != _userFeedback)
-                    return;
-                Map<GameStateListener, Integer> sent = new HashMap<>();
-                for (GameStateListener listener : new ArrayList<>(_gameStateListeners.keySet()))
-                    if (listener instanceof GameCommunicationChannel recording && !recording.isLiveConnection())
-                        sent.put(recording, recording.eventCount());
-                if (!sent.isEmpty())
-                    _recordedAt.put(journal.entries().size(), sent);
-            }
-
-            @Override
-            public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) { }
-        });
+        feedback.addDecisionObserver(recordingsCounted(feedback, journal));
         //The same map of decks every time: the game seats its players in the order the map gives them
         DefaultLotroGame game = new DefaultLotroGame(_format, _playerDecks, feedback, _library, _timeSettings.toString(),
                 _allowSpectators, _tournamentName, _extraInfo);
@@ -277,6 +265,54 @@ public class LotroGameMediator {
         if (toRepeat != null)
             journal.replayRandomFrom(toRepeat);
         game.getGameState().setRandom(journal.random(ledger.watching(GameRandom.DEFAULT)));
+        game.addGameStateListener(InformationLedger.LISTENER_NAME, ledger);
+        return new Built(feedback, game, journal, ledger, restorePoints);
+    }
+
+    /**
+     * @return Something to observe a game's decisions that notes, each time an answer is about to be given, how many
+     * events each recording of the game has been sent so far (_recordedAt).
+     */
+    private DecisionObserver recordingsCounted(DefaultUserFeedback feedback, GameJournal journal) {
+        return new DecisionObserver() {
+            @Override
+            public void decisionIssued(String playerId, AwaitingDecision decision) { }
+
+            @Override
+            public void decisionAnswering(String playerId, AwaitingDecision decision) {
+                //Only of the game being played: a game being rebuilt has no recordings listening to it yet
+                if (feedback != _userFeedback)
+                    return;
+                Map<GameStateListener, Integer> sent = new HashMap<>();
+                for (GameStateListener listener : new ArrayList<>(_gameStateListeners.keySet()))
+                    if (listener instanceof GameCommunicationChannel recording && !recording.isLiveConnection())
+                        sent.put(recording, recording.eventCount());
+                if (!sent.isEmpty())
+                    _recordedAt.put(journal.entries().size(), sent);
+            }
+
+            @Override
+            public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) { }
+        };
+    }
+
+    /**
+     * Has a scenario's game, which the scenario built and keeps the journal of, watched the way build has an
+     * ordinary game watched: what each player is shown, and the places the game can be taken back to.  To be called
+     * before the scenario is begun.
+     */
+    private Built watch(LiveScenario scenario) {
+        DefaultUserFeedback feedback = scenario.Table().userFeedback();
+        DefaultLotroGame game = scenario.Table().game();
+        GameJournal journal = scenario.Table().Journal();
+        InformationLedger ledger = new InformationLedger(scenario.Table().Decks().keySet(), game.getFormat(), journal);
+        feedback.addDecisionObserver(ledger);
+        RestorePoints restorePoints = new RestorePoints(journal);
+        feedback.addDecisionObserver(restorePoints);
+        feedback.addDecisionObserver(recordingsCounted(feedback, journal));
+        ledger.setGame(game);
+        restorePoints.setGame(game);
+        scenario.Table().WatchRandom(ledger::watching);
         game.addGameStateListener(InformationLedger.LISTENER_NAME, ledger);
         return new Built(feedback, game, journal, ledger, restorePoints);
     }
@@ -318,6 +354,14 @@ public class LotroGameMediator {
 
         _userFeedback = scenario.Table().userFeedback();
         _lotroGame = scenario.Table().game();
+        //The person may take back anything of their own, as in a game against a bot: there is nobody to ask
+        if (scenario.CanBeBuiltAgain()) {
+            Built watched = watch(scenario);
+            _journal = watched.journal;
+            _ledger = watched.ledger;
+            _restorePoints = watched.restorePoints;
+            _undoPolicy = UndoPolicy.SOLO;
+        }
         scenario.SetHost(this::scenarioOpponentAnswered);
         listenForTheEnd();
     }
@@ -449,7 +493,7 @@ public class LotroGameMediator {
 
     /**
      * @return How many entries the game's journal holds now.  Taking the game back to this many (revertTo) is taking
-     * it back to this moment.  0 for a scenario's game, which keeps its own.
+     * it back to this moment.  0 for a game that cannot be taken back (a scenario's with an author).
      */
     public int journalSize() {
         _readLock.lock();
@@ -465,7 +509,8 @@ public class LotroGameMediator {
      * moment the answer's decision was waiting.
      *
      * The engine cannot be wound back, so a second game is built beside this one and given the journal up to that
-     * point.  Only if it took every answer as the first game did, and has come to rest on the same decision, does
+     * point (a scenario's game by its scenario, LiveScenario.Again, which lays its board out and follows the journal
+     * itself).  Only if it took every answer as the first game did, and has come to rest on the same decision, does
      * it take the first game's place: everybody listening to the old game is moved over to the new one and sent the
      * table as it now stands.  Otherwise the new game is thrown away and the game in progress is not touched.
      *
@@ -480,8 +525,8 @@ public class LotroGameMediator {
     private String revertTo(int entryCount, String announcement, String requester, String tier, String label) {
         _writeLock.lock();
         try {
-            if (_journal == null)
-                return "A scenario's game is not taken back this way";
+            if (_journal == null || (_scenario != null && !_scenario.CanBeBuiltAgain()))
+                return "A scenario's game with an author is not taken back this way";
             if (_lotroGame.isFinished())
                 return "The game is over";
             List<GameJournal.Entry> entries = _journal.entries();
@@ -492,9 +537,21 @@ public class LotroGameMediator {
                 return "The game cannot be taken back that far: " + barrier;
             GameJournal prefix = _journal.upTo(entryCount);
 
-            final Built built = build(prefix);
+            final LiveScenario again = _scenario == null ? null : _scenario.Again(prefix);
+            final Built built = again == null ? build(prefix) : watch(again);
             String problem;
-            try {
+            if (again != null) {
+                try {
+                    //Whatever the scripted opponent is given to do at once waits for the lock this thread holds, and
+                    // is dropped if the game it was for is not the one being played by then
+                    again.SetHost(this::scenarioOpponentAnswered);
+                    again.Begin();
+                    problem = again.Table().FollowProblem();
+                } catch (RuntimeException exp) {
+                    LOG.error("Scenario game " + _gameId + " could not be rebuilt from its journal", exp);
+                    problem = "the rebuilt game broke: " + exp;
+                }
+            } else try {
                 built.game.startGame();
                 JournalFollower follower = new JournalFollower().follow(prefix, new JournalFollower.Table() {
                     @Override
@@ -540,10 +597,17 @@ public class LotroGameMediator {
                 problem = "the rebuilt game is over";
             if (problem == null && entryCount < entries.size() && entries.get(entryCount).kind() == GameJournal.Kind.ANSWER) {
                 GameJournal.Entry next = entries.get(entryCount);
-                if (!GameJournal.matches(next, built.feedback.getAwaitingDecision(next.player())))
-                    problem = "the rebuilt game is not waiting on the decision " + next.player() + " was asked at that point";
+                //(a scenario's journal writes its players down by seat)
+                String asked = next.player();
+                for (String player : _playersPlaying)
+                    if (_journal.keyOf(player).equals(next.player()))
+                        asked = player;
+                if (!GameJournal.matches(next, built.feedback.getAwaitingDecision(asked)))
+                    problem = "the rebuilt game is not waiting on the decision " + asked + " was asked at that point";
             }
             if (problem != null) {
+                if (again != null)
+                    again.Discard();
                 LOG.warn("Game " + _gameId + " was not taken back to journal entry " + entryCount + " of " + entries.size() + ": " + problem);
                 return problem;
             }
@@ -568,6 +632,12 @@ public class LotroGameMediator {
             _journal = built.journal;
             _ledger = built.ledger;
             _restorePoints = built.restorePoints;
+            if (again != null) {
+                //Whoever was waiting to hear how the scenario ends has been handed on to the new one (Again)
+                LiveScenario was = _scenario;
+                _scenario = again;
+                was.Discard();
+            }
 
             //The players' settings as they are now, which may not be as they were back then
             Map<String, Set<Phase>> wanted = new HashMap<>(_autoPass);
@@ -634,7 +704,7 @@ public class LotroGameMediator {
     /**
      * @return What taking the game back to the moment its journal held this many entries would undo, for the player
      * who wants it: nothing of anybody else's (green), other players' choices or a shuffle (yellow), or something
-     * that player has seen since (red).  Null for a scenario's game.
+     * that player has seen since (red).  Null for a game that cannot be taken back.
      */
     public RevertAssessment assessRevert(String requester, int entryCount) {
         _readLock.lock();
@@ -650,7 +720,7 @@ public class LotroGameMediator {
      * each time it was taken back, each under a line beginning "# " that says who took it back and how far, and
      * last, under "# The game as it ended", the journal of the game as it was finally played.  Each is a whole
      * journal (GameJournal.read), so any of the games it was at some time can be built again from the same decks.
-     * Null for a scenario's game.
+     * Null for a game that cannot be taken back.
      */
     public String getAuditJournal() {
         _readLock.lock();
@@ -681,7 +751,7 @@ public class LotroGameMediator {
         return _undoPolicy;
     }
 
-    /** What taking back is allowed at this table.  A scenario's game has none yet, whatever is set. */
+    /** What taking back is allowed at this table.  A game that cannot be built again has none, whatever is set. */
     public void setUndoPolicy(UndoPolicy policy) {
         if (_journal != null)
             _undoPolicy = policy;
@@ -753,7 +823,7 @@ public class LotroGameMediator {
 
     /**
      * @return The places this player may ask to have the game taken back to as things stand, the latest first, each
-     * with what going back to it would undo for them.  Empty for anybody who is not playing, and for a scenario's game.
+     * with what going back to it would undo for them.  Empty for anybody who is not playing, and for a game that cannot be taken back.
      */
     public List<RestorePointView> getRestorePoints(String player) {
         _readLock.lock();

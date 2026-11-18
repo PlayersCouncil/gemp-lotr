@@ -115,6 +115,8 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
      */
     public RevertAssessment assess(int entryCount, String requester) {
         List<GameJournal.Entry> entries = _journal.entries();
+        //(a scenario's journal writes its players down by seat, not by name)
+        String requesterKey = _journal.keyOf(requester);
         int othersAnswers = 0;
         boolean shuffled = false;
         boolean picked = false;
@@ -122,7 +124,7 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
             GameJournal.Entry entry = entries.get(i);
             switch (entry.kind()) {
                 case ANSWER -> {
-                    if (!entry.player().equals(requester))
+                    if (!entry.player().equals(requesterKey))
                         othersAnswers++;
                 }
                 case SHUFFLE, ORDER -> shuffled = true;

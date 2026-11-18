@@ -1045,4 +1045,126 @@ public class LiveScenarioTest {
         assertEquals(1, again.step.getIntValue("sub"));
         assertEquals(1, second.LastCheckpoint());
     }
+
+    /**
+     * Plays the person's side as the script allows until a given step is waiting for its answer, noting for each
+     * step answered on the way how many entries the game's journal held when its decision was waiting.
+     */
+    private static Map<Integer, Integer> playUntilNoting(Client client, int stepNumber) throws Exception {
+        Map<Integer, Integer> journalAt = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < 50; i++) {
+            client.await();
+            assertNotNull("The game ended before step " + stepNumber, client.step);
+            if (client.step.getIntValue("step") == stepNumber && client.decision != null)
+                return journalAt;
+            if (client.decision != null) {
+                journalAt.put(client.step.getIntValue("step"), client.mediator.journalSize());
+                client.answerAsAllowed();
+            } else {
+                client.acknowledge();
+            }
+        }
+        fail("Step " + stepNumber + " never came");
+        return journalAt;
+    }
+
+    @Test
+    public void TheGameCanBeTakenBackToAnEarlierAnswerOfThePersons() throws Exception {
+        LiveScenario scenario = live(opening());
+        List<String> settled = new ArrayList<>();
+        scenario.WhenSettled(() -> settled.add("settled"));
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        Map<Integer, Integer> journalAt = playUntilNoting(client, 7);
+        assertTrue("The person answered step 1 and something after it: " + journalAt, journalAt.containsKey(1) && journalAt.size() >= 2);
+
+        //Everything the person has answered is theirs to go back to, with nobody to ask: the other seat is the script's
+        List<LotroGameMediator.RestorePointView> points = mediator.getRestorePoints(HUMAN);
+        assertEquals(points.toString(), journalAt.size(), points.size());
+        assertEquals("the latest first", journalAt.get(1).intValue(), points.getLast().entryCount());
+        for (LotroGameMediator.RestorePointView point : points)
+            assertNull(point.toString(), point.unavailable());
+
+        LotroGameMediator.UndoReply reply = mediator.requestUndo(HUMAN, journalAt.get(1));
+        assertEquals(reply.message(), "done", reply.status());
+        assertEquals(journalAt.get(1).intValue(), mediator.journalSize());
+        assertTrue("The game is its scenario's new game", mediator.getScenario() != scenario && mediator.getScenario().Table().game() == mediator.getGame());
+        assertNull("which is not a game picked up at a checkpoint", mediator.getScenario().ResumedAt());
+
+        //The person's browser starts over, and finds the first step waiting as it was
+        client.stepsSeen.clear();
+        client.connect();
+        client.await();
+        assertNotNull(client.info);
+        assertEquals(1, client.step.getIntValue("step"));
+        assertEquals("human", client.step.getString("seat"));
+        assertNotNull(client.decision);
+
+        //...and the scenario plays through from there as if nothing had happened
+        for (int i = 0; i < 50 && client.end == null; i++) {
+            client.await();
+            if (client.end != null || mediator.isFinished())
+                break;
+            if (client.decision != null)
+                client.answerAsAllowed();
+            else
+                client.acknowledge();
+        }
+        client.poll();
+        assertEquals(List.of(1, 2, 3, 4, 5, 6, 7, 8), client.stepsSeen);
+        assertNotNull(client.end);
+        assertEquals("complete", client.end.getString("result"));
+        assertEquals(LiveScenario.Result.COMPLETE, mediator.getScenario().Result());
+        assertEquals(List.of(), mediator.getScenario().Problems());
+        assertEquals("Whoever was waiting to hear how the scenario ends hears it once, from the game that ended", List.of("settled"), settled);
+        assertEquals(1, mediator.getReverts().size());
+    }
+
+    @Test
+    public void TheLastAnswerCanBeTakenBackWhileTheOpponentIsStillToAct() throws Exception {
+        LiveScenario scenario = live(opening());
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+        assertEquals(1, client.step.getIntValue("step"));
+        client.answerAsAllowed();
+        //The opponent's step is on the screen, waiting to be read; its play has not been made
+        client.await();
+        assertEquals(2, client.step.getIntValue("step"));
+        assertTrue(client.step.getBooleanValue("acknowledge"));
+
+        LotroGameMediator.UndoReply reply = mediator.requestUndo(HUMAN, null);
+        assertEquals(reply.message(), "done", reply.status());
+        client.connect();
+        client.await();
+        assertEquals(1, client.step.getIntValue("step"));
+        assertNotNull(client.decision);
+
+        //The opponent's play that was waiting belongs to the game that is gone, and does nothing to this one
+        Thread.sleep(100);
+        client.poll();
+        assertEquals(1, client.step.getIntValue("step"));
+        client.answerAsAllowed();
+        client.await();
+        assertEquals(2, client.step.getIntValue("step"));
+        assertEquals(List.of(), mediator.getScenario().Problems());
+    }
+
+    @Test
+    public void AGameThatIsADraftsTestIsNotTakenBack() throws Exception {
+        LiveScenario scenario = live(opening());
+        scenario.SetDraftTest();
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        client.await();
+        client.answerAsAllowed();
+        client.await();
+
+        assertEquals(List.of(), mediator.getRestorePoints(HUMAN));
+        assertEquals("refused", mediator.requestUndo(HUMAN, null).status());
+        assertTrue(mediator.getScenario() == scenario);
+    }
 }

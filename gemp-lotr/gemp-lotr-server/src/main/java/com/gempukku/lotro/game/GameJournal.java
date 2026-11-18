@@ -110,6 +110,11 @@ public class GameJournal implements DecisionObserver {
         _keys = keys;
     }
 
+    /** @return What this journal writes a player down as (see PlayerKeys): what Entry.player holds for them. */
+    public String keyOf(String player) {
+        return _keys.keyOf(player);
+    }
+
     public List<Entry> entries() {
         return Collections.unmodifiableList(_entries);
     }

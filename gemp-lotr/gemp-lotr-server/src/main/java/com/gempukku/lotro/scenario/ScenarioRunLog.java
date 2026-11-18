@@ -81,7 +81,8 @@ public class ScenarioRunLog {
         AtomicInteger runId = new AtomicInteger(NOT_KEPT);
         Runnable finish = () -> {
             int id = runId.get();
-            if (id > 0 && scenario.Result() != null && over.get() && written.compareAndSet(false, true))
+            //(asked of the game each time: a game that is taken back is given its scenario anew)
+            if (id > 0 && mediator.getScenario().Result() != null && over.get() && written.compareAndSet(false, true))
                 finished(player, mediator, id, recording);
         };
         scenario.WhenSettled(finish);
