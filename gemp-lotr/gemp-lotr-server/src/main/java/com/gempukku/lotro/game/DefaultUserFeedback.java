@@ -51,6 +51,10 @@ public class DefaultUserFeedback implements UserFeedback {
     }
 
     public void participantDecided(String playerId) {
+        AwaitingDecision decision = _awaitingDecisionMap.get(playerId);
+        if (decision != null)
+            for (DecisionObserver observer : _observers)
+                observer.decisionAnswering(playerId, decision);
         _awaitingDecisionMap.remove(playerId);
         _held.remove(playerId);
         _game.getGameState().playerDecisionFinished(playerId);

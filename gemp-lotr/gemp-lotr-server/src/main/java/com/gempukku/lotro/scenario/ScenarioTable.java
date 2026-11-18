@@ -11,6 +11,7 @@ import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.DecisionArbiter;
 import com.gempukku.lotro.game.DecisionObserver;
 import com.gempukku.lotro.game.GameJournal;
+import com.gempukku.lotro.game.JournalFollower;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
@@ -76,8 +77,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     /** Players are written down by seat, so that a journal can be followed whoever is sitting there. */
     private final GameJournal _journal = new GameJournal(player -> SeatOf(player).key());
     private GameJournal _following;
-    private int _answersFollowed;
-    private int _notesFollowed;
+    /** Feeds this game the journal it follows; shared with everything else that follows a journal. */
+    private final JournalFollower _follower = new JournalFollower();
     private String _followProblem;
     private java.util.function.Consumer<GameJournal.Entry> _noteFollower;
     private java.util.function.BiPredicate<String, Phase> _askToPass;
@@ -202,10 +203,10 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     }
 
     /** How many of the earlier game's answers this one was given. */
-    public int AnswersFollowed() { return _answersFollowed; }
+    public int AnswersFollowed() { return _follower.answersFollowed(); }
 
     /** Whether the earlier game it followed took this one anywhere: an answer given, or a note acted on. */
-    public boolean FollowedAnything() { return _answersFollowed > 0 || _notesFollowed > 0; }
+    public boolean FollowedAnything() { return _follower.answersFollowed() > 0 || _follower.notesFollowed() > 0; }
 
     /**
      * @return Why this game could not follow the earlier one to its end; null if it did (or was not asked to).  A
@@ -281,43 +282,37 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     }
 
     private void follow(GameJournal earlier) {
-        for (GameJournal.Entry answer : earlier.entries()) {
-            if (answer.kind() == GameJournal.Kind.NOTE && _noteFollower != null) {
-                try {
-                    _noteFollower.accept(answer);
-                    _notesFollowed++;
-                } catch (RuntimeException exp) {
-                    _followProblem = "the note \"" + answer.detail() + " " + answer.value() + "\" could not be followed: " + exp;
-                    return;
-                }
+        _follower.follow(earlier, new JournalFollower.Table() {
+            @Override
+            public String playerOf(String key) {
+                return Player(key.equals(Seat.FREEPS.key()) ? Seat.FREEPS : Seat.SHADOW);
             }
-            if (answer.kind() != GameJournal.Kind.ANSWER)
-                continue;
-            Seat seat = answer.player().equals(Seat.FREEPS.key()) ? Seat.FREEPS : Seat.SHADOW;
-            String player = Player(seat);
-            AwaitingDecision decision = userFeedback().getAwaitingDecision(player);
-            if (!GameJournal.matches(answer, decision)) {
-                _followProblem = "answer " + (_answersFollowed + 1) + " was given by the " + seat.key() + " seat to a "
-                        + answer.detail() + ", but the game is "
-                        + (decision == null ? "not asking that seat anything" : "asking it a " + GameJournal.fingerprint(decision)
-                                + " (\"" + decision.getText() + "\")");
-                return;
+
+            @Override
+            public AwaitingDecision awaiting(String player) {
+                return userFeedback().getAwaitingDecision(player);
             }
-            String concrete = GameJournal.concrete(decision, answer.value());
-            if (concrete == null) {
-                _followProblem = "answer " + (_answersFollowed + 1) + " (\"" + answer.value() + "\") is not among what the game is offering the "
-                        + seat.key() + " seat now";
-                return;
+
+            @Override
+            public void answer(String player, AwaitingDecision decision, String answer) {
+                PlayerDecided(player, answer);
             }
-            try {
-                PlayerDecided(player, concrete);
-            } catch (RuntimeException exp) {
-                _followProblem = "answer " + (_answersFollowed + 1) + " (\"" + answer.value() + "\") was not accepted: " + exp;
-                return;
+
+            @Override
+            public boolean note(GameJournal.Entry note) {
+                if (_noteFollower == null)
+                    return false;
+                _noteFollower.accept(note);
+                return true;
             }
-            _answersFollowed++;
-        }
-        if (_journal.divergence() != null)
+
+            @Override
+            public String describe(String key) {
+                return "the " + key + " seat";
+            }
+        });
+        _followProblem = _follower.problem();
+        if (_followProblem == null && _journal.divergence() != null)
             _followProblem = _journal.divergence();
     }
 
@@ -334,6 +329,12 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         _userFeedback.addDecisionObserver(new DecisionObserver() {
             @Override
             public void decisionIssued(String playerId, AwaitingDecision decision) { }
+
+            @Override
+            public void decisionAnswering(String playerId, AwaitingDecision decision) {
+                if (_arranged)
+                    _journal.decisionAnswering(playerId, decision);
+            }
 
             @Override
             public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) {

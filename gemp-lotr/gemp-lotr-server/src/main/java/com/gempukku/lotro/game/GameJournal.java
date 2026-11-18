@@ -31,6 +31,10 @@ import java.util.TreeMap;
  * and do again whatever each note says was done.  The new journal fills up as the game is replayed, so at the end
  * it is a complete journal in its own right.
  *
+ * Entries are in the order things were caused: an answer, then whatever came of it.  So the entries ahead of an
+ * answer are exactly what had happened when its decision was waiting, and upTo(that many) is the journal of a game
+ * brought back to that moment.
+ *
  * Players are written down by whatever keyOf says, so that a journal does not have to be replayed by the same people
  * (a scenario writes "freeps" and "shadow").  Cards are written down by card ID.  Those are handed out in a fixed
  * order as a game goes, so the same game gives the same card the same ID.
@@ -95,6 +99,8 @@ public class GameJournal implements DecisionObserver {
     /** Random outcomes of an earlier game that this one is to repeat, soonest first. */
     private final LinkedList<Entry> _toRepeat = new LinkedList<>();
     private String _divergence;
+    /** While a decision is taking an answer: how many entries there were when it was given.  Otherwise -1. */
+    private int _answeringAt = -1;
 
     public GameJournal() {
         this(PlayerKeys.NAMES);
@@ -151,6 +157,18 @@ public class GameJournal implements DecisionObserver {
     }
 
     /**
+     * @return A journal of this one's first entries, that many of them: replaying it leaves a game at the point
+     * where the next entry was written.  Cut just before an answer, that is the moment its decision was waiting.
+     */
+    public GameJournal upTo(int entryCount) {
+        if (entryCount < 0 || entryCount > _entries.size())
+            throw new IllegalArgumentException("A journal of " + _entries.size() + " entries cannot be cut at " + entryCount);
+        GameJournal result = new GameJournal(_keys);
+        result._entries.addAll(_entries.subList(0, entryCount));
+        return result;
+    }
+
+    /**
      * Has this game's random outcomes come out as an earlier game's did, for as long as that game's journal lasts
      * and this game keeps asking for the same ones.  After that, chance takes over again.
      */
@@ -173,9 +191,25 @@ public class GameJournal implements DecisionObserver {
     @Override
     public void decisionIssued(String playerId, AwaitingDecision decision) { }
 
+    /**
+     * An answer goes into the journal where the journal stood when the answer was given, ahead of anything the
+     * decision did on taking it (a mulligan's shuffle is written while the decision is still taking its answer).
+     * That keeps the journal in the order things were caused, which is what lets it be cut just before an answer:
+     * everything ahead of the cut had happened when that decision was waiting, and nothing else had.
+     */
+    @Override
+    public void decisionAnswering(String playerId, AwaitingDecision decision) {
+        _answeringAt = _entries.size();
+    }
+
     @Override
     public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) {
-        _entries.add(new Entry(Kind.ANSWER, _keys.keyOf(playerId), fingerprint(decision), stable(decision, answer == null ? "" : answer)));
+        Entry entry = new Entry(Kind.ANSWER, _keys.keyOf(playerId), fingerprint(decision), stable(decision, answer == null ? "" : answer));
+        if (_answeringAt >= 0 && _answeringAt <= _entries.size())
+            _entries.add(_answeringAt, entry);
+        else
+            _entries.add(entry);
+        _answeringAt = -1;
     }
 
     /**

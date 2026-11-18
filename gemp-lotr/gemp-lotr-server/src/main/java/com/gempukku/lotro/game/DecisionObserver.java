@@ -15,6 +15,14 @@ public interface DecisionObserver {
     void decisionIssued(String playerId, AwaitingDecision decision);
 
     /**
+     * A player's answer is about to be given to the decision they were asked.  The decision may yet refuse it, in
+     * which case decisionAnswered is not called and the decision is asked again.  Whatever the decision does on
+     * taking the answer (and some do a good deal: a mulligan shuffles and deals) happens after this and before
+     * decisionAnswered, so this is the last moment at which the game is as it was when the decision was waiting.
+     */
+    default void decisionAnswering(String playerId, AwaitingDecision decision) { }
+
+    /**
      * The game has accepted an answer.  It has not yet carried on from it.
      */
     void decisionAnswered(String playerId, AwaitingDecision decision, String answer);
