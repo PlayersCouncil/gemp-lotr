@@ -179,6 +179,10 @@ public class LotroServer extends AbstractServer {
                     _lotroCardBlueprintLibrary, gameSettings.timeSettings(), spectate, !gameSettings.competitive(),
                     gameSettings.hiddenGame(), tournamentName, _markdownParser, _botService, gameSettings.isSolo(),
                     extraInfo, _packOpener);
+            //What may be taken back: against a bot anything (the mediator sees to that); in a league whatever a casual
+            // game allows, until leagues have a setting of their own; in a tournament only one's own choices
+            if (!gameSettings.isSolo())
+                lotroGameMediator.setUndoPolicy(gameSettings.competitive() && gameSettings.league() == null ? UndoPolicy.TOURNAMENT : UndoPolicy.CASUAL);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override

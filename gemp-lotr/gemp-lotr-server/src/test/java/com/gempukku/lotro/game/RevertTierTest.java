@@ -1,12 +1,9 @@
 package com.gempukku.lotro.game;
 
-import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import org.junit.Test;
-
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -18,44 +15,24 @@ import static org.junit.Assert.assertTrue;
  * since (red).  The games are ordinary ones played from the bids.
  */
 public class RevertTierTest {
-    private static final Set<CardType> LAID_DOWN = Set.of(CardType.COMPANION, CardType.POSSESSION, CardType.ALLY, CardType.CONDITION, CardType.ARTIFACT);
-
     private static RevertAssessment.Tier tier(MediatorSitting sitting, String player, int there) {
         return sitting.mediator.assessRevert(player, there).tier();
     }
 
     private static boolean asked(MediatorSitting sitting, String player, String textStart) {
-        AwaitingDecision decision = sitting.mediator.awaitingDecision(player);
-        return decision != null && decision.getText().startsWith(textStart);
+        return sitting.asked(player, textStart);
     }
 
-    /** The bids and the choice of who goes first, answered the plainest way, up to the starting fellowships. */
     private static String toStartingFellowships(MediatorSitting sitting) {
-        sitting.mediator.startGame();
-        for (int i = 0; i < 20; i++) {
-            for (String player : MediatorSitting.PLAYERS)
-                if (asked(sitting, player, "Starting fellowship"))
-                    return player;
-            String player = sitting.asked();
-            sitting.answer(player, "0");
-        }
-        throw new AssertionError("The game never came to its starting fellowships");
+        return sitting.toStartingFellowships();
     }
 
-    /** Has the player choosing a starting fellowship take the first card on offer. */
     private static void pick(MediatorSitting sitting, String player) {
-        sitting.answer(player, sitting.parameter(player, "cardId")[0]);
+        sitting.pick(player);
     }
 
-    /** Both starting fellowships finished without another card, up to the first question about a mulligan. */
     private static String toMulligans(MediatorSitting sitting) {
-        for (int i = 0; i < 20; i++) {
-            for (String player : MediatorSitting.PLAYERS)
-                if (asked(sitting, player, "Do you wish to mulligan"))
-                    return player;
-            sitting.answer(sitting.asked(), "");
-        }
-        throw new AssertionError("The game never came to its mulligans");
+        return sitting.toMulligans();
     }
 
     @Test
@@ -118,15 +95,7 @@ public class RevertTierTest {
             if (decision.getDecisionType() != AwaitingDecisionType.CARD_ACTION_CHOICE
                     || sitting.mediator.getGame().getGameState().getCurrentPhase() != Phase.FELLOWSHIP)
                 continue;
-            String[] actions = sitting.parameter(player, "actionId");
-            String[] cards = sitting.parameter(player, "cardId");
-            String[] texts = sitting.parameter(player, "actionText");
-            String play = null;
-            for (int i = 0; i < actions.length && play == null; i++) {
-                PhysicalCard card = sitting.mediator.getGame().getGameState().findCardById(Integer.parseInt(cards[i]));
-                if (texts[i].startsWith("Play ") && card != null && LAID_DOWN.contains(card.getBlueprint().getCardType()))
-                    play = actions[i];
-            }
+            String play = sitting.playOfACardThatStays(player);
             if (play == null)
                 continue;
             found++;

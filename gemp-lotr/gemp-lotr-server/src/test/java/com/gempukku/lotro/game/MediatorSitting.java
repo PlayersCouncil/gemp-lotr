@@ -3,10 +3,12 @@ package com.gempukku.lotro.game;
 import com.gempukku.lotro.bots.AssignmentLegality;
 import com.gempukku.lotro.bots.random.RandomDecisionBot;
 import com.gempukku.lotro.chat.MarkdownParser;
+import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /** A game at a mediator, with two players who answer at random and somebody counting how it ends. */
 class MediatorSitting {
@@ -23,6 +26,8 @@ class MediatorSitting {
     final LotroGameMediator mediator;
     final Map<String, RandomDecisionBot> bots = new LinkedHashMap<>();
     final List<String> endings = new ArrayList<>();
+    /** How the table stood each time an answer was about to be given, by how many entries the journal then held. */
+    final Map<Integer, String> boardAt = new LinkedHashMap<>();
 
     MediatorSitting() {
         LotroDeck aragorn = DeckSerialization.buildDeckFromContents("Aragorn Starter", Boards.ARAGORN_STARTER, FORMAT, "Aragorn Starter");
@@ -64,6 +69,7 @@ class MediatorSitting {
                 break;
             AwaitingDecision decision = mediator.awaitingDecision(player);
             String answer = bots.get(player).chooseAction(mediator.getGame().getGameState(), decision, new AssignmentLegality(mediator.getGame()));
+            boardAt.put(mediator.journalSize(), board());
             //The bots' door: it takes an answer by name, and puts a refused one right
             mediator.botAnswered(player, decision.getAwaitingDecisionId(), answer);
             given++;
@@ -87,6 +93,7 @@ class MediatorSitting {
 
     /** Gives a player's answer to what they are being asked. */
     void answer(String player, String answer) {
+        boardAt.put(mediator.journalSize(), board());
         mediator.botAnswered(player, mediator.awaitingDecision(player).getAwaitingDecisionId(), answer);
     }
 
@@ -98,4 +105,70 @@ class MediatorSitting {
     String other(String player) {
         return player.equals(PLAYERS.get(0)) ? PLAYERS.get(1) : PLAYERS.get(0);
     }
+
+    boolean asked(String player, String textStart) {
+        AwaitingDecision decision = mediator.awaitingDecision(player);
+        return decision != null && decision.getText().startsWith(textStart);
+    }
+
+    /** Starts the game and answers the bids and the choice of who goes first the plainest way. */
+    String toStartingFellowships() {
+        mediator.startGame();
+        for (int i = 0; i < 20; i++) {
+            for (String player : PLAYERS)
+                if (asked(player, "Starting fellowship"))
+                    return player;
+            answer(asked(), "0");
+        }
+        throw new AssertionError("The game never came to its starting fellowships");
+    }
+
+    /** Has the player choosing a starting fellowship take the first card on offer. */
+    void pick(String player) {
+        answer(player, parameter(player, "cardId")[0]);
+    }
+
+    /** Both starting fellowships finished without another card, up to the first question about a mulligan. */
+    String toMulligans() {
+        for (int i = 0; i < 20; i++) {
+            for (String player : PLAYERS)
+                if (asked(player, "Do you wish to mulligan"))
+                    return player;
+            answer(asked(), "");
+        }
+        throw new AssertionError("The game never came to its mulligans");
+    }
+
+    /**
+     * From the start of the game to the first decision of the first turn, nobody taking a mulligan.
+     * @return Who is asked it.
+     */
+    String toFirstTurn() {
+        toStartingFellowships();
+        String first = toMulligans();
+        answer(first, "0");
+        answer(other(first), "0");
+        return asked();
+    }
+
+    /**
+     * @return The action, among those a player is being offered, that plays a card which is laid on the table and
+     * stays there (a companion, a possession and the like: nothing that draws or reveals); null if there is none.
+     */
+    String playOfACardThatStays(String player) {
+        AwaitingDecision decision = mediator.awaitingDecision(player);
+        if (decision == null || decision.getDecisionType() != AwaitingDecisionType.CARD_ACTION_CHOICE)
+            return null;
+        String[] actions = parameter(player, "actionId");
+        String[] cards = parameter(player, "cardId");
+        String[] texts = parameter(player, "actionText");
+        for (int i = 0; i < actions.length; i++) {
+            PhysicalCard card = mediator.getGame().getGameState().findCardById(Integer.parseInt(cards[i]));
+            if (texts[i].startsWith("Play ") && card != null && STAYS.contains(card.getBlueprint().getCardType()))
+                return actions[i];
+        }
+        return null;
+    }
+
+    private static final Set<CardType> STAYS = Set.of(CardType.COMPANION, CardType.POSSESSION, CardType.ALLY, CardType.CONDITION, CardType.ARTIFACT);
 }

@@ -117,6 +117,20 @@ public class GameMediatorRevertTest {
 
         assertNull(sitting.mediator.revertTo(there));
 
+        //The watcher is told, apart from the game's own events, to fetch the table again, and on which channel
+        List<GameNotices.Notice> notices = sitting.mediator.getNotices().after("Alice", 0);
+        GameNotices.Notice resync = notices.get(notices.size() - 1);
+        assertEquals(GameNotices.RESYNC, resync.type());
+        int newNumber = Integer.parseInt(resync.fields().get("channelNumber"));
+        assertTrue(newNumber != channelNumber[0]);
+        try {
+            sitting.mediator.getCommunicationChannel(alice, channelNumber[0]);
+            org.junit.Assert.fail("The channel the game was watched on before is gone, and anything sent on it is refused");
+        } catch (com.gempukku.lotro.SubscriptionConflictException expected) {
+        }
+        assertTrue("...and nothing more is sent on it", channel.consumeGameEvents().isEmpty());
+
+        channel = sitting.mediator.getCommunicationChannel(alice, newNumber);
         List<GameEvent> sent = channel.consumeGameEvents();
         assertEquals("The table is laid out again from nothing", GameEvent.Type.PARTICIPANTS, sent.get(0).getType());
         assertTrue(sent.stream().anyMatch(event -> event.getType() == GameEvent.Type.PUT_CARD_INTO_PLAY));
