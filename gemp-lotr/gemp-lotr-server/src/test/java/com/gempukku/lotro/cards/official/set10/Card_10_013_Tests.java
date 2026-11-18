@@ -33,6 +33,9 @@ public class Card_10_013_Tests
 					// Smeagol, Once Like Us: a [shire] companion who is no Hobbit; an assignment ability used only on purpose
 					put("smeagol", "103_116");
 
+					// Uruk Slayer: Uruk-hai, strength 9, vitality 2; damage +1, and a skirmish ability: remove (1) to make
+					// this minion strength +1 (limit +3)
+					put("slayer", "1_153");
 					put("savage", "1_151");     // Uruk Savage: Uruk-hai, strength 5, vitality 3; damage +1 is its whole text
 					put("party", "1_158");      // Uruk-hai Raiding Party: Uruk-hai, strength 9, vitality 3; damage +1 is its whole text
 					// Footman of Dunland: [men] Man, strength 7, vitality 3; the site gains plains
@@ -281,5 +284,38 @@ public class Card_10_013_Tests
 		assertTrue(scn.HasKeyword(savage, Keyword.DAMAGE));
 		assertInDiscard(phial);
 		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ABonusTheMinionsOwnAbilityGaveBeforeThePhialIsKept() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var phial = scn.GetFreepsCard("phial");
+		var sam = scn.GetFreepsCard("sam");
+		var slayer = scn.GetShadowCard("slayer");
+		scn.MoveCompanionsToTable(sam);
+		scn.AttachCardsTo(sam, phial);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(slayer);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(sam, slayer);
+		scn.FreepsResolveSkirmish(sam);
+		scn.SetTwilight(5);
+
+		// The Slayer makes itself strength +1 with its own ability, before the Phial is used on it.
+		scn.FreepsPass();
+		assertTrue(scn.ShadowActionAvailable(slayer));
+		scn.ShadowUseCardAction(slayer);
+		assertEquals(10, scn.GetStrength(slayer));
+
+		scn.FreepsUseCardAction(phial);
+
+		// The Phial takes away its game text (damage +1, and the ability, so it can be used no more), but the +1 it
+		// already gave itself is the result of an effect that has been carried out, not its game text, and stays.
+		assertFalse(scn.HasKeyword(slayer, Keyword.DAMAGE));
+		assertEquals(10, scn.GetStrength(slayer));
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(slayer));
 	}
 }

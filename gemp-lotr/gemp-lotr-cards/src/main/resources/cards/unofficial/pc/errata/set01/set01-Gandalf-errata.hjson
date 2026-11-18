@@ -204,10 +204,12 @@
 					type: Discard
 					count: 1
 					select: choose(side(Shadow), condition)
+					memorize: chosenCondition
 				}
 				{
+					// "all other conditions": the chosen one stays unhindered even when its discard was prevented
 					type: Hinder
-					select: all(condition)
+					select: all(condition,not(memory(chosenCondition)))
 				}
 			]
 		}
