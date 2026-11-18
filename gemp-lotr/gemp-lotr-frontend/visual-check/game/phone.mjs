@@ -754,6 +754,73 @@ function answers(page) {
 
 const TOUCH = [
   {
+    // The owner, 2026-11-18: the settings and the menu go back and close with a swipe down, as the card details do
+    name: 'a swipe down goes back from the settings to the menu, then closes the menu',
+    state: 'late',
+    run: async (page) => {
+      const top = () =>
+        page.evaluate(
+          () => [...document.querySelectorAll('.gd-phone-sheet')].at(-1)?.getAttribute('data-sheet') ?? null,
+        );
+      const swipe = async () => {
+        const box = await page.locator('.gd-phone-sheet .gd-phone-sheet__panel').last().boundingBox();
+        if (!box) return;
+        const x = box.x + box.width / 2;
+        const y = box.y + Math.min(120, box.height / 3);
+        await touchDrag(page, { x, y }, { x, y: y + 160 });
+        await page.waitForTimeout(400);
+      };
+      await tap(page, page.locator('[data-phone="menu"]'));
+      await page.waitForTimeout(300);
+      await tap(page, page.locator('[data-menu="settings"]'));
+      await page.waitForTimeout(400);
+      if ((await top()) !== 'settings') return ['no settings'];
+      const problems = [];
+      await swipe();
+      if ((await top()) !== 'menu') problems.push(`from the settings, the swipe left ${await top()}`);
+      await swipe();
+      if ((await top()) !== null) problems.push(`from the menu, the swipe left ${await top()} open`);
+      return problems;
+    },
+  },
+  {
+    // The owner, 2026-11-18: a swipe down does what the details' corner button does (‹ back, ✕ closed)
+    name: "a swipe down closes a card's details: back to the sheet under them, then closed",
+    state: 'late',
+    run: async (page) => {
+      const top = () =>
+        page.evaluate(
+          () => [...document.querySelectorAll('.gd-phone-sheet')].at(-1)?.getAttribute('data-sheet') ?? null,
+        );
+      const swipe = async () => {
+        const box = await page.locator('.gd-phone-sheet[data-sheet="card"] .gd-phone-sheet__panel').boundingBox();
+        if (!box) return;
+        const x = box.x + box.width / 2;
+        const y = box.y + Math.min(120, box.height / 3);
+        await touchDrag(page, { x, y }, { x, y: y + 160 });
+        await page.waitForTimeout(400);
+      };
+      const problems = [];
+      await tap(page, page.locator(OWN_CHIP));
+      await page.waitForTimeout(400);
+      await longPress(page, page.locator('.gd-phone-sheet[data-sheet="piles"] .gd-card').first());
+      await page.waitForTimeout(400);
+      if ((await top()) !== 'card') return ['no details over the piles'];
+      await swipe();
+      if ((await top()) !== 'piles') problems.push(`over the piles, the swipe left ${await top()}`);
+      await tap(page, page.locator('[data-phone="sheet-close"]'));
+      await page.waitForTimeout(400);
+      const card = page.locator('gd-phone-table .gd-phone-slot > .gd-card').first();
+      await card.scrollIntoViewIfNeeded();
+      await longPress(page, card);
+      await page.waitForTimeout(400);
+      if ((await top()) !== 'card') return [...problems, 'no details over the table'];
+      await swipe();
+      if ((await top()) !== null) problems.push(`alone, the swipe left ${await top()} open`);
+      return problems;
+    },
+  },
+  {
     name: 'a tap on a card not offered does nothing',
     state: 'late',
     run: async (page, sent) => {

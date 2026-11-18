@@ -98,6 +98,14 @@ html:has(gemp-game) body {
   background: var(--theme-game-document-bg, var(--theme-page-bg));
 }
 
+/*
+ * The game's phone layout: no pull-to-refresh, which a swipe down (closing a card's details, scrolling the table back to
+ * its top) would otherwise start, reloading the game
+ */
+html:has(gd-game-phone) {
+  overscroll-behavior: none;
+}
+
 /* A theme's page font. Classic sets none: the browser's default, as on the legacy page (an unset value is ignored) */
 body {
   font-family: var(--theme-font-page);

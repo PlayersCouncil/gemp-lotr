@@ -346,6 +346,64 @@ describe('the game on a phone (G7)', () => {
     expect(sheet()).toBeNull();
   });
 
+  it("closes a card's details with a swipe down, as their corner button does: back, then closed", async () => {
+    const { el, click, longPress, sheet, stable } = await open(game());
+    /** A finger on the details, `down` px further down when it lifts (`sideways` px across). */
+    const swipe = async (down: number, sideways = 0) => {
+      const panel = el.querySelector('.gd-phone-sheet[data-sheet="card"] .gd-phone-sheet__panel');
+      if (!panel) throw new Error('no details open');
+      const touch = (y: number, x = 100) => ({ clientX: x, clientY: y });
+      const event = (type: string, touches: object[], changed: object[]) =>
+        Object.assign(new Event(type, { bubbles: true }), { touches, changedTouches: changed });
+      panel.dispatchEvent(event('touchstart', [touch(200)], [touch(200)]));
+      panel.dispatchEvent(event('touchend', [], [touch(200 + down, 100 + sideways)]));
+      await stable();
+    };
+    // Over the piles: the swipe goes back to them, as ‹
+    await click('.gd-phone-player[data-player="alice"]');
+    await longPress('[data-pile="deadPile"] [data-card-id="9"]');
+    expect(sheet()?.getAttribute('data-sheet')).toBe('card');
+    // Too short, or more sideways than down: nothing
+    await swipe(30);
+    await swipe(90, 120);
+    expect(sheet()?.getAttribute('data-sheet')).toBe('card');
+    await swipe(120);
+    expect(sheet()?.getAttribute('data-sheet')).toBe('piles');
+    // Alone: the swipe closes them, as ✕; on another sheet it does nothing
+    await click('[data-phone="sheet-close"]');
+    await longPress('[data-zone="characters-player"] .gd-phone-slot > [data-card-id="1"]');
+    expect(sheet()?.getAttribute('data-sheet')).toBe('card');
+    await swipe(120);
+    expect(sheet()).toBeNull();
+  });
+
+  it('goes back from the settings to the menu with a swipe down, and closes the menu with another', async () => {
+    const { el, click, sheet, stable } = await open(game());
+    const swipe = async () => {
+      const panel = el.querySelector('.gd-phone-sheet .gd-phone-sheet__panel');
+      if (!panel) throw new Error('no sheet open');
+      const event = (type: string, y: number) =>
+        Object.assign(new Event(type, { bubbles: true }), {
+          touches: type === 'touchstart' ? [{ clientX: 100, clientY: y }] : [],
+          changedTouches: [{ clientX: 100, clientY: y }],
+        });
+      panel.dispatchEvent(event('touchstart', 200));
+      panel.dispatchEvent(event('touchend', 320));
+      await stable();
+    };
+    await click('[data-phone="menu"]');
+    await click('[data-menu="settings"]');
+    expect(sheet()?.getAttribute('data-sheet')).toBe('settings');
+    await swipe();
+    expect(sheet()?.getAttribute('data-sheet')).toBe('menu');
+    await swipe();
+    expect(sheet()).toBeNull();
+    // The chat keeps its touches
+    await click('[data-phone="chat"]');
+    await swipe();
+    expect(sheet()?.getAttribute('data-sheet')).toBe('chat');
+  });
+
   it("opens no menu of the phone's on a long press over a card's picture in a sheet; text keeps it", async () => {
     const { el, longPress } = await open(game());
     await longPress('[data-zone="characters-player"] .gd-phone-slot > [data-card-id="1"]');

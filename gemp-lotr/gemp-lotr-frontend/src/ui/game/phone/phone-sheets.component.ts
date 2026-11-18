@@ -29,6 +29,7 @@ import { PageCues } from '../../../core/platform/page-cues';
 import { clockText } from '../panel/game-clock';
 import { GameChatComponent } from '../tabs/game-chat.component';
 import { ModalSheetDirective } from './modal-sheet.directive';
+import { SwipeDownDirective } from './swipe-down.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
 import { ScrollSettledDirective } from './scroll-settled.directive';
 import { phaseLabel } from './phone-status.component';
@@ -71,7 +72,7 @@ const HALL = '/gemp-lotr/hall.html';
 @Component({
   selector: 'gd-phone-sheets',
   styleUrl: './phone-sheets.component.css',
-  imports: [PhoneCardsComponent, GameChatComponent, ModalSheetDirective, ScrollSettledDirective],
+  imports: [PhoneCardsComponent, GameChatComponent, ModalSheetDirective, ScrollSettledDirective, SwipeDownDirective],
   template: `
     @if (top(); as entry) {
       <dialog
@@ -83,7 +84,16 @@ const HALL = '/gemp-lotr/hall.html';
       >
         <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
         <div class="gd-phone-sheet__backdrop" (click)="sheets.back()"></div>
-        <div class="gd-phone-sheet__panel">
+        <!--
+          A card's details, the settings and the menu: a swipe down does what the corner button does, ✕ or ‹ (the owner,
+          2026-11-18)
+        -->
+        <div
+          class="gd-phone-sheet__panel"
+          [gdSwipeDown]="swipeCloses(entry.sheet.kind)"
+          gdSwipeDownScroller=".gd-phone-sheet__body"
+          (gdSwipedDown)="sheets.back()"
+        >
           <div class="gd-phone-sheet__head">
             <h2>{{ title(entry.sheet) }}</h2>
             <button
@@ -619,6 +629,11 @@ export class PhoneSheetsComponent {
   protected back(event: Event): void {
     (event.currentTarget as HTMLElement | null)?.closest('dialog')?.focus({ preventScroll: true });
     this.sheets.back();
+  }
+
+  /** The sheets a swipe down goes back from (SwipeDownDirective): not the chat, whose field and lines take touches. */
+  protected swipeCloses(kind: string): boolean {
+    return kind === 'card' || kind === 'settings' || kind === 'menu';
   }
 
   protected choose(key: string): void {
