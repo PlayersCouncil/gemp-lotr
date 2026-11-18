@@ -755,7 +755,7 @@ function answers(page) {
 const TOUCH = [
   {
     // The owner, 2026-11-18: the settings and the menu go back and close with a swipe down, as the card details do
-    name: 'a swipe down goes back from the settings to the menu, then closes the menu',
+    name: 'a swipe down goes back from the settings to the menu, then closes the menu; it closes the piles',
     state: 'late',
     run: async (page) => {
       const top = () =>
@@ -780,6 +780,12 @@ const TOUCH = [
       if ((await top()) !== 'menu') problems.push(`from the settings, the swipe left ${await top()}`);
       await swipe();
       if ((await top()) !== null) problems.push(`from the menu, the swipe left ${await top()} open`);
+      // The piles, from a player's chip
+      await tap(page, page.locator(OWN_CHIP));
+      await page.waitForTimeout(400);
+      if ((await top()) !== 'piles') return [...problems, 'no piles'];
+      await swipe();
+      if ((await top()) !== null) problems.push(`from the piles, the swipe left ${await top()} open`);
       return problems;
     },
   },

@@ -85,8 +85,8 @@ const HALL = '/gemp-lotr/hall.html';
         <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
         <div class="gd-phone-sheet__backdrop" (click)="sheets.back()"></div>
         <!--
-          A card's details, the settings and the menu: a swipe down does what the corner button does, ✕ or ‹ (the owner,
-          2026-11-18)
+          A card's details, the piles, the game info, the settings and the menu: a swipe down does what the corner button
+          does, ✕ or ‹ (the owner, 2026-11-18)
         -->
         <div
           class="gd-phone-sheet__panel"
@@ -631,9 +631,12 @@ export class PhoneSheetsComponent {
     this.sheets.back();
   }
 
-  /** The sheets a swipe down goes back from (SwipeDownDirective): not the chat, whose field and lines take touches. */
+  /**
+   * The sheets a swipe down goes back from (SwipeDownDirective; the owner, 2026-11-18). Not the chat and its log, whose
+   * field and lines take touches, nor a confirmation, which is answered.
+   */
   protected swipeCloses(kind: string): boolean {
-    return kind === 'card' || kind === 'settings' || kind === 'menu';
+    return ['card', 'piles', 'info', 'settings', 'menu'].includes(kind);
   }
 
   protected choose(key: string): void {
