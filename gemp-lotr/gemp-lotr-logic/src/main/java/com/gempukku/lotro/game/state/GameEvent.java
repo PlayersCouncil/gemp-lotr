@@ -27,7 +27,9 @@ public class GameEvent {
         GAME_ENDED("EG"),
         CARD_AFFECTED_BY_CARD("CAC"), SHOW_CARD_ON_SCREEN("EP"), FLASH_CARD_IN_PLAY("CA"), DECISION("D"),
         PRE_GAME_SETUP("PGS"),
-        SCENARIO("S");
+        SCENARIO("S"),
+        //The game was taken back to an earlier point; whoever is watching has just been sent the table again
+        GAME_REVERTED("GR");
 
         private final String code;
 
@@ -65,6 +67,7 @@ public class GameEvent {
     private Integer _version;
     private boolean _discardIsPublic;
     private String _scenario;
+    private String _tier;
 
     public GameEvent(Type type) {
         _type = type;
@@ -288,6 +291,16 @@ public class GameEvent {
 
     public GameEvent phase(String phase) {
         _phase = phase;
+        return this;
+    }
+
+    /** For GAME_REVERTED: what going back undid for the player who asked (GREEN, YELLOW, RED); empty if nobody asked. */
+    public String getTier() {
+        return _tier;
+    }
+
+    public GameEvent tier(String tier) {
+        _tier = tier;
         return this;
     }
 

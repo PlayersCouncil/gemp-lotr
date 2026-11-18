@@ -255,6 +255,16 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     }
 
     @Override
+    public void gameReverted(String requester, String tier, String message, int skipFrom) {
+        appendEvent(new GameEvent(GAME_REVERTED).participantId(requester).tier(tier).message(message).index(skipFrom));
+    }
+
+    /** How many events are waiting to be taken.  For a channel nobody takes from (a recording), all it was ever sent. */
+    public synchronized int eventCount() {
+        return _events.size();
+    }
+
+    @Override
     public void scenarioEvent(String playerId, String json) {
         if (playerId.equals(_self))
             appendEvent(new GameEvent(SCENARIO).participantId(playerId).scenario(json));

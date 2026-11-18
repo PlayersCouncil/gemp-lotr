@@ -83,4 +83,16 @@ public interface GameStateListener {
      * @param json What to show, as the scenario wrote it for the client.
      */
     default void scenarioEvent(String playerId, String json) { }
+
+    /**
+     * The game has been taken back to an earlier point, and this listener has just been sent the whole table as it
+     * now stands.
+     * @param requester Who asked for it; empty if nobody did.
+     * @param tier What it undid for them (GREEN, YELLOW, RED); empty if nobody asked.
+     * @param message Words for it.
+     * @param skipFrom For a listener that keeps everything it is sent: how many events it had been sent when the
+     *                 game was last where it now is again.  Everything from there to this call is either play that
+     *                 has been undone or the table being sent again, and counts for nothing.
+     */
+    default void gameReverted(String requester, String tier, String message, int skipFrom) { }
 }

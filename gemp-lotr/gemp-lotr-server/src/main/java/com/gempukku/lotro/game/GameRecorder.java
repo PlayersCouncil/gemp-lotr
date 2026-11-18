@@ -183,7 +183,7 @@ public class GameRecorder {
                 replay_version = 1;
             }};
 
-            var playerRecordingId = saveRecordedChannels(recordingChannels, gameInfo, decks);
+            var playerRecordingId = saveRecordedChannels(recordingChannels, gameInfo, decks, lotroGame);
             gameInfo.id = _gameHistoryService.addGameHistory(gameInfo);
 
 //            if(format.isPlaytest())
@@ -240,9 +240,44 @@ public class GameRecorder {
         return new DeflaterOutputStream(new FileOutputStream(recordingFile), deflater);
     }
 
-    private Map<String, String> saveRecordedChannels(Map<String, GameCommunicationChannel> gameProgress, DBDefs.GameHistory gameInfo, Map<String, LotroDeck> decks) {
+    /**
+     * Everything that steered the game (LotroGameMediator.getAuditJournal), kept beside the summaries so that a game
+     * somebody reports can be built again and stepped through.  It holds every shuffle and every answer of both
+     * players, so it is not for the players to fetch.
+     * @return The file's name, or null if the game kept no journal or it could not be written.
+     */
+    private String saveJournal(DBDefs.GameHistory history, String journal) {
+        if (journal == null)
+            return null;
+        try {
+            var summary = getSummaryFile(history);
+            var folder = new File(new File(new File(new File(AppConfig.getProperty("application.root"), "replay"), "journals"),
+                    summary.getParentFile().getParentFile().getName()), summary.getParentFile().getName());
+            folder.mkdirs();
+            var file = new File(folder, summary.getName().replaceAll("\\.json$", "") + ".journal.gz");
+            try (var out = new java.util.zip.GZIPOutputStream(new FileOutputStream(file))) {
+                out.write(journal.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+            return file.getName();
+        } catch (Exception exp) {
+            LOG.error("Could not save the journal of game " + history.gameId, exp);
+            return null;
+        }
+    }
+
+    private Map<String, String> saveRecordedChannels(Map<String, GameCommunicationChannel> gameProgress, DBDefs.GameHistory gameInfo, Map<String, LotroDeck> decks,
+                                                     LotroGameMediator lotroGame) {
         Map<String, String> result = new HashMap<>();
         var metadata = new ReplayMetadata(gameInfo, decks);
+        metadata.JournalFile = saveJournal(gameInfo, lotroGame.getAuditJournal());
+        for (LotroGameMediator.Revert revert : lotroGame.getReverts()) {
+            var reverted = metadata.new RevertMetadata();
+            reverted.Requester = revert.requester();
+            reverted.Tier = revert.tier();
+            reverted.Label = revert.label();
+            reverted.Turn = revert.turn();
+            metadata.Reverts.add(reverted);
+        }
 
         for (Map.Entry<String, GameCommunicationChannel> playerRecordings : gameProgress.entrySet()) {
             String playerId = playerRecordings.getKey();

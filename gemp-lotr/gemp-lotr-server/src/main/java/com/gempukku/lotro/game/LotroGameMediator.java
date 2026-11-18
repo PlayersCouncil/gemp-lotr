@@ -56,6 +56,17 @@ public class LotroGameMediator {
     private int _nextUndoId = 1;
     /** How many of their own choices each player has taken back in the phase named by _ownUndoPhase. */
     private final Map<String, Integer> _ownUndos = new HashMap<>();
+    /**
+     * For each answer given (by how many entries the journal held then): how many events each recording of the game
+     * had been sent.  When the game is taken back there, everything a recording was sent after that is undone play.
+     */
+    private final TreeMap<Integer, Map<GameStateListener, Integer>> _recordedAt = new TreeMap<>();
+    /** The journal of the game as it stood each time it was taken back, with a line saying so, soonest first. */
+    private final List<String> _journalsLeftBehind = new ArrayList<>();
+    private final List<Revert> _reverts = new ArrayList<>();
+
+    /** One taking back of the game, for its summary. */
+    public record Revert(String requester, String tier, String label, int turn) { }
     private String _ownUndoPhase = "";
 
     private record PendingUndo(int id, String requester, RestorePoints.Point point, RevertAssessment assessment,
@@ -222,6 +233,26 @@ public class LotroGameMediator {
         feedback.addDecisionObserver(ledger);
         RestorePoints restorePoints = new RestorePoints(journal);
         feedback.addDecisionObserver(restorePoints);
+        feedback.addDecisionObserver(new DecisionObserver() {
+            @Override
+            public void decisionIssued(String playerId, AwaitingDecision decision) { }
+
+            @Override
+            public void decisionAnswering(String playerId, AwaitingDecision decision) {
+                //Only of the game being played: a game being rebuilt has no recordings listening to it yet
+                if (feedback != _userFeedback)
+                    return;
+                Map<GameStateListener, Integer> sent = new HashMap<>();
+                for (GameStateListener listener : new ArrayList<>(_gameStateListeners.keySet()))
+                    if (listener instanceof GameCommunicationChannel recording && !recording.isLiveConnection())
+                        sent.put(recording, recording.eventCount());
+                if (!sent.isEmpty())
+                    _recordedAt.put(journal.entries().size(), sent);
+            }
+
+            @Override
+            public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) { }
+        });
         //The same map of decks every time: the game seats its players in the order the map gives them
         DefaultLotroGame game = new DefaultLotroGame(_format, _playerDecks, feedback, _library, _timeSettings.toString(),
                 _allowSpectators, _tournamentName, _extraInfo);
@@ -443,10 +474,10 @@ public class LotroGameMediator {
      * @return Null if the game was taken back; otherwise why it could not be.
      */
     public String revertTo(int entryCount) {
-        return revertTo(entryCount, "The game was taken back to an earlier point");
+        return revertTo(entryCount, "The game was taken back to an earlier point", "", "", "");
     }
 
-    private String revertTo(int entryCount, String announcement) {
+    private String revertTo(int entryCount, String announcement, String requester, String tier, String label) {
         _writeLock.lock();
         try {
             if (_journal == null)
@@ -523,6 +554,8 @@ public class LotroGameMediator {
 
             //The old game is left exactly as it is, with nobody listening to it: it must not tell anybody anything more
             DefaultLotroGame old = _lotroGame;
+            _journalsLeftBehind.add("# " + announcement.replace('\n', ' ') + " (entry " + entryCount + " of " + entries.size() + ")\n" + _journal.write());
+            _reverts.add(new Revert(requester, tier, label, old.getGameState().getTurnNumber()));
             for (GameResultListener listener : new ArrayList<>(_gameResultListeners))
                 old.removeGameResultListener(listener);
             for (GameStateListener listener : new ArrayList<>(_gameStateListeners.keySet()))
@@ -552,6 +585,9 @@ public class LotroGameMediator {
             // of the game as it was, then finds its channel gone and is refused.  (Decisions cannot be told apart by
             // their own numbers; most are numbered 1.)
             Map<String, Integer> newChannels = new HashMap<>();
+            //For a recording, which keeps everything it was ever sent: where in it the undone play begins
+            Map<GameStateListener, Integer> skipFrom = new HashMap<>();
+            Map<GameStateListener, Integer> recordedThen = _recordedAt.get(entryCount);
             for (Map.Entry<GameStateListener, String> listener : new ArrayList<>(_gameStateListeners.entrySet())) {
                 String who = listener.getValue();
                 if (listener.getKey() instanceof GameCommunicationChannel channel && _communicationChannels.get(who) == channel) {
@@ -561,11 +597,20 @@ public class LotroGameMediator {
                     _communicationChannels.put(who, fresh);
                     _lotroGame.addGameStateListener(who, fresh);
                     newChannels.put(who, fresh.getChannelNumber());
+                    skipFrom.put(fresh, 0);
                 } else {
+                    if (listener.getKey() instanceof GameCommunicationChannel recording) {
+                        Integer then = recordedThen == null ? null : recordedThen.get(recording);
+                        //Not a place an answer was given at: at least the table being sent again counts for nothing
+                        skipFrom.put(recording, then != null ? then : recording.eventCount());
+                    }
                     _lotroGame.addGameStateListener(who, listener.getKey());
                 }
             }
+            _recordedAt.tailMap(entryCount, false).clear();
             _lotroGame.getGameState().sendMessage(announcement);
+            for (GameStateListener listener : new ArrayList<>(_gameStateListeners.keySet()))
+                listener.gameReverted(requester, tier, announcement, skipFrom.getOrDefault(listener, 0));
             attachBot();
             for (String person : newChannels.keySet())
                 _notices.know(person);
@@ -593,6 +638,38 @@ public class LotroGameMediator {
         _readLock.lock();
         try {
             return _ledger == null ? null : _ledger.assess(entryCount, requester);
+        } finally {
+            _readLock.unlock();
+        }
+    }
+
+    /**
+     * @return Everything that steered this game, for keeping beside its replay: the journal of the game as it stood
+     * each time it was taken back, each under a line beginning "# " that says who took it back and how far, and
+     * last, under "# The game as it ended", the journal of the game as it was finally played.  Each is a whole
+     * journal (GameJournal.read), so any of the games it was at some time can be built again from the same decks.
+     * Null for a scenario's game.
+     */
+    public String getAuditJournal() {
+        _readLock.lock();
+        try {
+            if (_journal == null)
+                return null;
+            StringBuilder sb = new StringBuilder();
+            for (String left : _journalsLeftBehind)
+                sb.append(left);
+            sb.append("# The game as it ended\n").append(_journal.write());
+            return sb.toString();
+        } finally {
+            _readLock.unlock();
+        }
+    }
+
+    /** Each time the game was taken back, soonest first. */
+    public List<Revert> getReverts() {
+        _readLock.lock();
+        try {
+            return new ArrayList<>(_reverts);
         } finally {
             _readLock.unlock();
         }
@@ -854,7 +931,7 @@ public class LotroGameMediator {
     private UndoReply carryOutUndo(String requester, RestorePoints.Point point, RevertAssessment assessment, String requestId) {
         String phase = phaseNow();
         String said = requester + " took the game back to \"" + point.label() + "\" (" + assessment.tier().name().toLowerCase() + ")";
-        String problem = revertTo(point.entryCount(), said);
+        String problem = revertTo(point.entryCount(), said, requester, assessment.tier().name(), point.label());
         Map<String, String> fields = new LinkedHashMap<>();
         fields.put("requestId", requestId);
         fields.put("requester", requester);

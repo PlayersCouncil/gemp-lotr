@@ -6,6 +6,7 @@ import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.db.DeckSerialization;
 import com.gempukku.lotro.framework.LoadedLibraries;
+import com.gempukku.lotro.game.state.GameCommunicationChannel;
 import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
@@ -168,6 +169,26 @@ class MediatorSitting {
                 return actions[i];
         }
         return null;
+    }
+
+    /** The blueprint of the card an action on offer to a player belongs to. */
+    String blueprintOf(String player, String actionId) {
+        String[] actions = parameter(player, "actionId");
+        for (int i = 0; i < actions.length; i++)
+            if (actions[i].equals(actionId))
+                //(the decision itself only says "inPlay" for a card the client already has)
+                return mediator.getGame().getGameState().findCardById(Integer.parseInt(parameter(player, "cardId")[i])).getBlueprintId();
+        throw new AssertionError("No action " + actionId + " is on offer");
+    }
+
+    /**
+     * Has a recording kept of the game as a player sees it, the way GameRecorder does for a replay: a channel that is
+     * nobody's connection.  To be called before the game starts.
+     */
+    GameCommunicationChannel record(String player) {
+        GameCommunicationChannel recording = new GameCommunicationChannel(player, 0, false, mediator.getGame().getFormat());
+        mediator.addGameStateListener(player, recording);
+        return recording;
     }
 
     private static final Set<CardType> STAYS = Set.of(CardType.COMPANION, CardType.POSSESSION, CardType.ALLY, CardType.CONDITION, CardType.ARTIFACT);

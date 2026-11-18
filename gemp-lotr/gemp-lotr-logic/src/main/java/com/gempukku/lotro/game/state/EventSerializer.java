@@ -71,6 +71,8 @@ public class EventSerializer {
             }
 
         }
+        if (gameEvent.getTier() != null)
+            eventElem.setAttribute("tier", gameEvent.getTier());
         if (gameEvent.getScenario() != null)
             eventElem.setAttribute("scenario", gameEvent.getScenario());
         if (gameEvent.getGameStats() != null)
