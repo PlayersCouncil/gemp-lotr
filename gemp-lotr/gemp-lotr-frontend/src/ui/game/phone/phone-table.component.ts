@@ -37,7 +37,8 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
  * and its `gd-phone-cards` (or `.gd-phone-path` with a `.gd-phone-site` per place: `data-site`, `data-here`, a site's
  * `button.gd-card`, or `button.gd-phone-site__empty` opening the adventure deck; `data-own` on the site where the
  * player looking stands, shown big and brought to the road's middle); or `.gd-phone-pair` per fight with
- * `data-pair` skirmish or assignment: upright, its minions, the Shadow's and the Free Peoples' strengths, its characters).
+ * `data-pair` skirmish or assignment: upright, its minions, the Shadow's and the Free Peoples' strengths, its characters;
+ * `data-reversed` the other way up, for the Shadow player).
  */
 @Component({
   selector: 'gd-phone-table',
@@ -94,7 +95,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         <div class="gd-phone-pairs" data-row="pairs">
           @for (pair of phone().pairs; track pair.key) {
             <!-- Upright: the minions on top, the strengths between, the characters under them (the owner, 2026-11-18) -->
-            <div class="gd-phone-pair" [attr.data-pair]="pair.kind">
+            <div class="gd-phone-pair" [attr.data-pair]="pair.kind" [attr.data-reversed]="shadowSide() ? '' : null">
               <gd-phone-cards [cards]="pair.minions" empty="" [layered]="true" />
               @if (pair.kind === 'skirmish') {
                 <span
@@ -209,6 +210,14 @@ export class PhoneTableComponent {
   protected readonly shown = computed(() => this.session.model().skirmish?.shown ?? null);
   protected readonly overwhelmed = computed(() => this.shown()?.fpOverwhelmed === 'true');
   protected readonly shadowOverwhelmed = computed(() => this.shown()?.shadowOverwhelmed === 'true');
+  /**
+   * The player looking is the Shadow player (a spectator: the player at the bottom): the fights upside down, the
+   * companions on top and the minions at the bottom, near the player (the owner, 2026-11-18).
+   */
+  protected readonly shadowSide = computed(() => {
+    const current = this.session.model().currentPlayer;
+    return current !== null && this.table().bottom !== null && this.table().bottom !== current;
+  });
   /** The site where the player looking stands (shown big), by its number. */
   private readonly ownSite = computed(() => this.phone().path.find((site) => site.own)?.number ?? null);
   private readonly road = viewChild.required<ElementRef<HTMLElement>>('road');

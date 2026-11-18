@@ -184,6 +184,19 @@ describe('the game on a phone (G7)', () => {
     expect(single.el.querySelector('.gd-phone-layered')).toBeNull();
   });
 
+  it('turns the fights over for the Shadow player: the companions on top, the minions near the player', async () => {
+    const pair = '.gd-phone-pair[data-pair="assignment"]';
+    // Alice's turn: she is the Free Peoples player, her companion at the bottom
+    const own = await open(game('<ge type="AA" cardId="1" otherCardIds="5"/>'));
+    expect(own.el.querySelector(pair)?.hasAttribute('data-reversed')).toBe(false);
+    // Bob's turn: alice plays the Shadow
+    TestBed.resetTestingModule();
+    const shadow = await open(
+      game('<ge type="TC" participantId="bob" otherCardIds=""/><ge type="AA" cardId="1" otherCardIds="5"/>'),
+    );
+    expect(shadow.el.querySelector(pair)?.hasAttribute('data-reversed')).toBe(true);
+  });
+
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
     // The player keeps the hand hidden on this device
     document.cookie = 'gempGameSplit=phone:hidden; path=/';

@@ -226,6 +226,14 @@ const STATES = {
   skirmish: { recording: 'effects-skirmish', count: 15 },
   /** The skirmish with three minions in it (a stack of minions, the owner 2026-11-18). */
   skirmishMinions: { recording: 'effects-skirmish', count: 15, lastEvents: skirmishMinions },
+  /** The same skirmish seen by the Shadow player (the turn the opponent's): the fight turned over. */
+  shadowSkirmish: {
+    recording: 'effects-skirmish',
+    count: 15,
+    lastEvents: (opponent) =>
+      `<ge participantId="${opponent}" otherCardIds="" timestamp="2026-11-17 00:00:00.0000" type="TC"/>` +
+      skirmishMinions(opponent),
+  },
   /** Late in the game: piles with cards, cards attached, a choice of cards on the table. */
   late: { recording: 'effects-skirmish', count: 25 },
   /**

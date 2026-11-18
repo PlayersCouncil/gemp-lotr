@@ -381,6 +381,11 @@
   flex: none;
 }
 
+/* The Shadow player's view: the companions on top, the minions at the bottom near the player (the owner, 2026-11-18) */
+.gd-phone-pair[data-reversed] {
+  flex-direction: column-reverse;
+}
+
 /* The strengths and "vs" under the middle of a card */
 .gd-phone-pair > .gd-phone-strength,
 .gd-phone-pair > .gd-phone-pair__vs {
