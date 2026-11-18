@@ -1,3 +1,7 @@
+import { SELECTION_DEBOUNCE_MS } from '../../../core/game/decision/game-decisions.service';
+import { GameSettings } from '../../../core/game/settings/game-settings';
+import { PhoneSettings } from '../../../core/game/phone/phone-settings';
+import { GameSession } from '../../../core/game/session/game-session.service';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { signal } from '@angular/core';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
@@ -270,6 +274,236 @@ describe('the game on a phone (G7)', () => {
     expect(answer()).toBe('');
     await stable();
     expect(el.querySelector('.gd-phone-sheet')).toBeNull();
+  });
+
+  it("changes every setting from the settings sheet: the game's (legacy cookies) and the phone's own", async () => {
+    const { el, click, fixture, stable } = await open(game());
+    const settings = fixture.debugElement.injector.get(GameSettings);
+    const phone = fixture.debugElement.injector.get(PhoneSettings);
+    const toggle = async (setting: string) => {
+      const input = el.querySelector<HTMLInputElement>(`[data-setting="${setting}"]`);
+      if (!input) throw new Error(`no setting ${setting}`);
+      input.checked = !input.checked;
+      input.dispatchEvent(new Event('change'));
+      await stable();
+    };
+    const slide = async (setting: string, value: string) => {
+      const input = el.querySelector<HTMLInputElement>(`[data-setting="${setting}"]`);
+      if (!input) throw new Error(`no setting ${setting}`);
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+      await stable();
+    };
+    await click('[data-phone="menu"]');
+    await click('[data-menu="settings"]');
+    // The game tab
+    const shadowPass = settings.autoPassPhases().includes('SHADOW');
+    await toggle('autoPassSHADOW');
+    expect(settings.autoPassPhases().includes('SHADOW')).toBe(!shadowPass);
+    const autoAccept = settings.autoAccept();
+    await toggle('autoAccept');
+    expect(settings.autoAccept()).toBe(!autoAccept);
+    const dropDown = settings.alwaysDropDown();
+    await toggle('alwaysDropDown');
+    expect(settings.alwaysDropDown()).toBe(!dropDown);
+    const reveal = settings.autoDismissDeckReveal();
+    await toggle('autoDismissDeckReveal');
+    expect(settings.autoDismissDeckReveal()).toBe(!reveal);
+    const vibrate = phone.moveVibrate();
+    await toggle('moveVibrate');
+    expect(phone.moveVibrate()).toBe(!vibrate);
+    const sound = phone.moveSound();
+    await toggle('moveSound');
+    expect(phone.moveSound()).toBe(!sound);
+    const muted = settings.timerAudioMuted();
+    await toggle('timerSound');
+    expect(settings.timerAudioMuted()).toBe(!muted);
+    // The display tab
+    await click('[data-settings-tab="display"]');
+    await slide('card-size', '120');
+    expect(phone.cardSize()).toBe(120);
+    await slide('animation-slider', '-2');
+    expect(settings.animationSpeed()).toBe(-2);
+    const oldStack = settings.oldStackVisuals();
+    await toggle('use-old-stack-checkbox');
+    expect(settings.oldStackVisuals()).toBe(!oldStack);
+    const space = el.querySelector<HTMLInputElement>('[data-setting="underButton"][value="space"]');
+    space?.dispatchEvent(new Event('change'));
+    await stable();
+    expect(settings.underButton()).toBe('space');
+    // The cookies these wrote, gone again for the tests after this one
+    for (const name of [
+      'autoPassPhases',
+      'autoAccept',
+      'alwaysDropDown',
+      'autoDismissDeckReveal',
+      'timerAudioMuted',
+      'animation-speed',
+      'use-old-stack',
+      'gempPhoneUnderButton',
+      'gempGameMoveVibrate',
+      'gempGameMoveSound',
+      'gempGameCardSize',
+    ]) {
+      for (const path of ['/', '/gemp-lotr', '/gemp-lotr-server'])
+        document.cookie = `${name}=; path=${path}; max-age=0`;
+    }
+    expect(document.cookie).not.toContain('autoAccept=');
+  });
+
+  it('asks before conceding or cancelling: Back returns to the menu, the button does it', async () => {
+    const { el, click, fixture, sheet } = await open(game());
+    const session = fixture.debugElement.injector.get(GameSession);
+    const concede = vi.spyOn(session, 'concede').mockImplementation(() => undefined);
+    const cancel = vi.spyOn(session, 'cancel').mockImplementation(() => undefined);
+    await click('[data-phone="menu"]');
+    await click('[data-menu="concede"]');
+    expect(sheet()?.getAttribute('data-sheet')).toBe('confirm');
+    expect(el.querySelector('.gd-phone-confirm')?.textContent).toContain('You lose this game');
+    await click('[data-phone="confirm-no"]');
+    expect(sheet()?.getAttribute('data-sheet')).toBe('menu');
+    expect(concede).not.toHaveBeenCalled();
+    await click('[data-menu="concede"]');
+    await click('[data-phone="confirm-yes"]');
+    expect(concede).toHaveBeenCalledOnce();
+    expect(sheet()).toBeNull();
+    await click('[data-phone="menu"]');
+    await click('[data-menu="cancel"]');
+    expect(el.querySelector('.gd-phone-confirm')?.textContent).toContain('cancelled, with no winner');
+    expect(el.querySelector('[data-phone="confirm-yes"]')?.textContent?.trim()).toBe('Request cancel');
+    await click('[data-phone="confirm-yes"]');
+    expect(cancel).toHaveBeenCalledOnce();
+  });
+
+  it("opens a card's actions in a sheet, which closes with ✕ or the backdrop, and a choice answers", async () => {
+    const { el, click, answer } = await open(
+      game(
+        decision(
+          'CARD_ACTION_CHOICE',
+          param('cardId', '4', '4') +
+            param('blueprintId', 'inPlay', 'inPlay') +
+            param('actionId', '10', '11') +
+            param('actionText', 'First ability', 'Second ability') +
+            param('noEffect', 'false', 'limit'),
+          'Play a Fellowship action',
+        ),
+      ),
+    );
+    const actions = () => el.querySelector('.gd-phone-sheet[data-sheet="actions"]');
+    // A tap again after the bounce guard (SELECTION_DEBOUNCE_MS: a second tap within it is the finger bouncing)
+    const tapCard = async () => {
+      await new Promise((resolve) => setTimeout(resolve, SELECTION_DEBOUNCE_MS + 20));
+      await click('[data-zone="support-player"] .gd-phone-slot > [data-card-id="4"]');
+    };
+    await tapCard();
+    expect(actions()).not.toBeNull();
+    // The action that would do nothing says why
+    expect(el.querySelector('[data-action-id="11"] .gd-phone-menu__reason')?.textContent).toContain('limit reached');
+    await click('.gd-phone-sheet[data-sheet="actions"] [data-phone="sheet-close"]');
+    expect(actions()).toBeNull();
+    await tapCard();
+    await click('.gd-phone-sheet[data-sheet="actions"] .gd-phone-sheet__backdrop');
+    expect(actions()).toBeNull();
+    await tapCard();
+    await click('[data-action-id="10"]');
+    expect(answer()).toBe('10');
+  });
+
+  it('steps a number with the arrows only within its bounds, then answers it', async () => {
+    const { el, click, answer } = await open(
+      game(decision('INTEGER', param('min', '1') + param('max', '2') + param('defaultValue', '1'), 'How many?')),
+    );
+    const shown = () => el.querySelector('[data-decision="integer"]')?.textContent?.trim();
+    await click('[data-decision="integer-down"]');
+    expect(shown()).toBe('1');
+    await click('[data-decision="integer-up"]');
+    await click('[data-decision="integer-up"]');
+    expect(shown()).toBe('2');
+    await click('[data-decision-button="OK"]');
+    expect(answer()).toBe('2');
+  });
+
+  it('answers a choice with its button, or from a list with OK when the player wants lists', async () => {
+    const choice = () => game(decision('MULTIPLE_CHOICE', param('results', 'Yes', 'No'), 'Go on?'));
+    const buttons = await open(choice());
+    await buttons.click('[data-decision-choice="1"]');
+    expect(buttons.answer()).toBe('1');
+    TestBed.resetTestingModule();
+    document.cookie = 'alwaysDropDown=true; path=/';
+    try {
+      const list = await open(choice());
+      const select = list.el.querySelector<HTMLSelectElement>('select[data-decision="choice"]');
+      expect(select).not.toBeNull();
+      if (select) {
+        select.selectedIndex = 1;
+        select.dispatchEvent(new Event('change'));
+      }
+      await list.click('[data-decision-button="OK"]');
+      expect(list.answer()).toBe('1');
+    } finally {
+      document.cookie = 'alwaysDropDown=; path=/; max-age=0';
+    }
+  });
+
+  it('brings a hidden hand back from the keyboard on the divider, and hides it again', async () => {
+    document.cookie = 'gempGameSplit=phone:hidden; path=/';
+    const { el, fixture, stable } = await open(game());
+    const phone = fixture.debugElement.injector.get(PhoneSettings);
+    // Hidden in a game: the divider says the hand is there to drag up
+    expect(el.querySelector('.gd-phone-divider__hand-hint')?.textContent).toContain('Hand');
+    const divider = el.querySelector<HTMLElement>('gd-phone-divider');
+    const key = async (key: string) => {
+      divider?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      await stable();
+    };
+    await key('Enter');
+    expect(phone.handHidden()).toBe(true);
+    await key('ArrowUp');
+    expect(phone.handHidden()).toBe(false);
+    await key('ArrowDown');
+    expect(phone.handHidden()).toBe(true);
+  });
+
+  it("shows a skirmish's strengths between its sides, with a damage bonus and who is overwhelmed", async () => {
+    const stats =
+      '<ge type="GS" moveCount="1" moveLimit="2" initiative="FREE_PEOPLE" ruleof4="-1" fellowshipStrength="7" ' +
+      'shadowStrength="15" fellowshipDamageBonus="1" shadowDamageBonus="0" fpOverwhelmed="true" ' +
+      'shadowOverwhelmed="false"/>';
+    const { el } = await open(game('<ge type="SS" cardId="1" otherCardIds="5"/>' + stats));
+    const strength = (side: string) => el.querySelector(`.gd-phone-pair .gd-phone-strength[data-side="${side}"]`);
+    expect(strength('free-peoples')?.textContent?.trim()).toBe('7 +1');
+    expect(strength('free-peoples')?.hasAttribute('data-overwhelmed')).toBe(true);
+    // No bonus of 0 shown
+    expect(strength('shadow')?.textContent?.trim()).toBe('15');
+    expect(strength('shadow')?.hasAttribute('data-overwhelmed')).toBe(false);
+    expect(el.querySelector('[data-zone="pairs"] .gd-phone-zone__label')?.textContent).toContain('Skirmish');
+  });
+
+  it("opens the player's adventure deck from an empty place on the road", async () => {
+    const { el, click, sheet } = await open(game());
+    await click('.gd-phone-site[data-site="4"] .gd-phone-site__empty');
+    expect(sheet()?.getAttribute('data-sheet')).toBe('piles');
+    expect(el.querySelector('.gd-phone-sheet[data-sheet="piles"] [data-pile="adventureDeck"]')).not.toBeNull();
+  });
+
+  it("shows a revealed hand among a player's piles, and one's own draw deck once the game has ended", async () => {
+    const zones =
+      '<ge type="GS" moveCount="1" moveLimit="2" initiative="FREE_PEOPLE" ruleof4="-1">' +
+      '<playerZones name="alice" HAND="2" DISCARD="0" ADVENTURE_DECK="8" DEAD="1" DECK="50" REMOVED="0"/>' +
+      '<playerZones name="bob" HAND="8" DISCARD="0" ADVENTURE_DECK="9" DEAD="0" DECK="52" REMOVED="0" ' +
+      'handRevealed="true"/></ge>';
+    const piles = (el: HTMLElement) =>
+      Array.from(el.querySelectorAll('.gd-phone-sheet[data-sheet="piles"] [data-pile]'), (pile) =>
+        pile.getAttribute('data-pile'),
+      );
+    const { el, click } = await open(game(zones));
+    await click('.gd-phone-player[data-player="bob"]');
+    expect(piles(el)).toContain('revealedHand');
+    expect(piles(el)).not.toContain('deck');
+    TestBed.resetTestingModule();
+    const ended = await open(game(zones + '<ge type="EG"/>'));
+    await ended.click('.gd-phone-player[data-player="alice"]');
+    expect(piles(ended.el)).toContain('deck');
   });
 
   it('shows the archery totals the server gives, first among the pills; none outside archery', async () => {

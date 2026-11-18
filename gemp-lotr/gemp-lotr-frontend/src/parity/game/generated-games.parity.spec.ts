@@ -51,7 +51,9 @@ describe('generated games on both game pages', () => {
     vi.useRealTimers();
   });
 
-  it.each(Array.from({ length: GAMES }, (_, i) => FIRST_SEED + i))('seed %i', async (seed) => {
+  // A whole game on both pages; the first also loads game.html's scripts, and coverage (Maven's test run) slows it
+  // past the default 5 s
+  it.each(Array.from({ length: GAMES }, (_, i) => FIRST_SEED + i))('seed %i', { timeout: 30_000 }, async (seed) => {
     const recording = generatedGame(seed);
     const legacy = await legacyModels(recording);
 

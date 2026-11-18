@@ -135,8 +135,10 @@ export class PhoneGameComponent {
     const step = event.key === 'ArrowUp' ? HAND_STEP : event.key === 'ArrowDown' ? -HAND_STEP : 0;
     if (!step) return;
     event.preventDefault();
-    // A hidden hand comes back at its least height (a step up from nothing would still be hidden)
-    const height = this.clamp(this.handHidden() ? (step > 0 ? HAND_MIN : 0) : this.handHeight() + step);
+    // A hidden hand comes back at its least height (a step up from nothing would still be hidden); a step down from its
+    // least height hides it (the clamp would put it back at the least height, so the keys could never hide it)
+    const next = this.handHidden() ? (step > 0 ? HAND_MIN : 0) : this.handHeight() + step;
+    const height = step < 0 && next < HAND_MIN ? 0 : this.clamp(next);
     this.phone.setHand(height === 0 ? 'hidden' : height);
   }
 

@@ -1,3 +1,4 @@
+import { GameSettings } from '../../core/game/settings/game-settings';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
@@ -346,6 +347,65 @@ describe('GamePageComponent', () => {
     backend.expectOne((r) => r.url === `${GAME}/concede`).flush('');
     await click('[data-button="cancelGame"]');
     backend.expectOne((r) => r.url === `${GAME}/cancel`).flush('');
+  });
+
+  it('keeps the timer alerts as typed on the settings tab: a rule needs both numbers above 0', async () => {
+    const { el, fixture, stable } = await open(state(TABLE + STATS));
+    const settings = fixture.debugElement.injector.get(GameSettings);
+    (el.querySelector('[data-tab="settings"]') as HTMLElement).click();
+    await stable();
+    const fields = (name: string) => [...el.querySelectorAll<HTMLInputElement>(`[data-timer-alert="${name}"]`)];
+    const below = fields('timerAlertBelow');
+    const every = fields('timerAlertEvery');
+    expect(below.length).toBeGreaterThan(0);
+    const type = async (field: HTMLInputElement | undefined, value: string) => {
+      if (!field) throw new Error('no field');
+      field.value = value;
+      field.dispatchEvent(new Event('change'));
+      await stable();
+    };
+    await type(below[0], '5');
+    await type(every[0], '20');
+    expect(settings.timerAlertRules()[0]).toEqual({ belowSeconds: 300, everySeconds: 20 });
+    // A rule with a 0 is dropped
+    const before = settings.timerAlertRules().length;
+    await type(every[0], '0');
+    expect(settings.timerAlertRules().length).toBe(before - 1);
+    document.cookie = 'timerAlertRules=; path=/; max-age=0';
+    document.cookie = 'timerAlertRules=; path=/gemp-lotr; max-age=0';
+  });
+
+  it("opens a pile's dialog from its counter with a click or Enter, only where the player may look", async () => {
+    const { el, stable, news } = await open(state(TABLE + STATS));
+    for (const toggle of ['0', '1']) (el.querySelector(`[data-stats-toggle="${toggle}"]`) as HTMLElement).click();
+    await stable();
+    const dialogs = () => el.querySelectorAll('gd-game-piles gd-dialog').length;
+    const press = async (stat: string, how: 'click' | 'enter') => {
+      const counter = el.querySelector<HTMLElement>(`[data-stat="${stat}"]`);
+      if (!counter) throw new Error(`no counter ${stat}`);
+      if (how === 'click') counter.click();
+      else counter.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      await stable();
+    };
+    // Not one's to look into: nothing opens
+    await press('adventureDeck1', 'click');
+    await press('adventureDeck1', 'enter');
+    await press('deck0', 'click');
+    expect(dialogs()).toBe(0);
+    await press('deadPile1', 'click');
+    expect(dialogs()).toBe(1);
+    await press('removedPile1', 'enter');
+    await press('adventureDeck0', 'enter');
+    await press('deadPile0', 'enter');
+    expect(dialogs()).toBe(4);
+    // The opponent's revealed hand (STATS: bob's handRevealed), by click and by Enter
+    await press('hand1', 'click');
+    expect(dialogs()).toBe(5);
+    await press('hand1', 'enter');
+    // One's own deck, once the game has ended
+    await news('<ge type="EG"/>');
+    await press('deck0', 'enter');
+    expect(dialogs()).toBe(6);
   });
 
   it("opens a player's other piles, marking the ones the player may look into", async () => {
