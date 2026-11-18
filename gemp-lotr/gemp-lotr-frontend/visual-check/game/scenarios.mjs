@@ -166,6 +166,27 @@ export const GAME_SCENARIOS = [
       { play: /^Use Merry/, name: 'Merry discarded: the Orc removed from the skirmish' },
     ],
   },
+  {
+    name: 'shadow-overwhelmed',
+    note:
+      'Debug deck, the new master (2026-11-17): Gimli, Son of Glóin, with the Dwarven Axe, exerts for +2 against a ' +
+      'Goblin Runner, 10 against 5: the Shadow total turns red',
+    deck: 'overwhelm',
+    foe: [...PLAYER_FIRST, ...FOE_PLAYS_MINIONS],
+    steps: [
+      { integer: 0, quiet: true },
+      { pick: ['1_13'], quiet: true },
+      { choice: 'No', quiet: true },
+      { play: /^Play Dwarven Axe$/, quiet: true },
+      { pass: true, wait: false, quiet: true },
+      { auto: 20, until: /^Assign minions/, name: "the opponent's Goblin Runner" },
+      // The characters as the decision lists them: Frodo, then Gimli
+      { assign: ['1_178', 1], name: 'the Goblin Runner assigned to Gimli' },
+      { done: true, quiet: true },
+      { auto: 10, untilAction: /^Use Gimli/, name: "Gimli's skirmish: 8 against 5" },
+      { play: /^Use Gimli/, name: 'Gimli strength +2: 10 against 5, the Shadow overwhelmed' },
+    ],
+  },
   { name: 'start', note: 'The page as it opens: the bid', steps: [] },
   { name: 'opening', note: 'Bid, starting fellowship, mulligan', foe: PLAYER_FIRST, steps: OPENING },
   {

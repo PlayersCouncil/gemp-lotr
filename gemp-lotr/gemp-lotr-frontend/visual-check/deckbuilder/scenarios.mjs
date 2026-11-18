@@ -14,6 +14,7 @@
 //   note       why the scenario exists, shown in the report
 
 import { ANGULAR_ONLY, CONTROLS } from './controls.mjs';
+import { pause } from '../gestures.mjs';
 
 /** The selectors of one page: `$.nextPage`, `$.culture('ELVEN')`, ... (see controls.mjs). */
 export function selectors(which) {
@@ -31,10 +32,7 @@ export function selectors(which) {
 
 const collectionCard = (page, $, i) => page.locator($.collectionCards).nth(i);
 /** Waits, and then compares the pages: every pause is a step of the scenario. */
-export const pause = async (page, ms = 800) => {
-  await page.waitForTimeout(ms);
-  await page.checkpoint?.();
-};
+export { pause };
 
 /** Where the thumb of a range input is (the legacy slider's handle is an element of its own): a 16px box. */
 async function rangeThumb(page, selector) {
@@ -87,6 +85,20 @@ export const FIXTURE_DECK = {
   contents:
     '1_290|1_2|1_319,1_327,1_331,1_337,1_343,1_349,1_354,1_356,1_360|' +
     '1_12,1_12,1_13,1_17,1_30,1_45,1_50,1_76,1_89,1_131,1_131,1_133,1_143,1_165,1_178,1_191',
+};
+
+/**
+ * A deck the server must refuse site by site (the new master, 2026-11-17, DeckValidationMessagesTest): PC Movie with a
+ * Map and nine Shadows sites, none from a set PC Movie plays, so each site gets a line of its own. The fixture deck's
+ * other cards; the Map is the contents' fifth part (DeckSerialization).
+ */
+export const SITES_DECK = {
+  name: 'Shadows sites',
+  targetFormat: 'pc_movie',
+  notes: 'Created by the visual check',
+  contents:
+    '1_290|1_2|11_239,13_185,11_234,17_148,18_138,11_230,12_187,12_185,17_146|' +
+    '1_12,1_12,1_13,1_17,1_30,1_45,1_50,1_76,1_89,1_131,1_131,1_133,1_143,1_165,1_178,1_191|102_74',
 };
 
 export const SCENARIOS = [
@@ -344,6 +356,27 @@ export const SCENARIOS = [
     note: 'Fellowship Block: its only block selected, later cultures hidden',
     run: async (page, $) => {
       await page.selectOption($.format, 'fotr_block');
+      await pause(page, 1500);
+    },
+  },
+  {
+    name: 'format-sites-of-another-block',
+    serverOnly: true,
+    // Its deck exists only while it runs (run.mjs resetAccountFor), so no other scenario's deck list shows it: run
+    // with --mutating (check:local in check:all)
+    mutating: true,
+    decks: [SITES_DECK],
+    // The server's message is long: in the modern theme's font it wraps onto another line (--geometry)
+    textBoxes: ['stats'],
+    note:
+      'A PC Movie deck with nine Shadows sites: the server refuses each site on a line of its own (the new master, ' +
+      '2026-11-17: "the deck builder now lists each site that is not from a legal set on a line of its own")',
+    run: async (page, $) => {
+      await page.click($.deckList);
+      await pause(page, 1500);
+      await page.locator($.deckListItem, { hasText: SITES_DECK.name }).first().locator($.openDeck).click();
+      await pause(page, 2500);
+      await page.keyboard.press('Escape');
       await pause(page, 1500);
     },
   },

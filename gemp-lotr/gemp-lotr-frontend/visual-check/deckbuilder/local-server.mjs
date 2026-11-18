@@ -18,12 +18,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { INJECTIONS } from './injections.mjs';
-import { playersSql, seedTestData, TEST_PLAYERS, waitForLogin } from './local-server/seed.mjs';
+import { playersSql, seedTestData, TEST_PLAYERS, waitForLogin } from '../local-server/seed.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const FRONTEND = path.resolve(HERE, '..');
-const STATE_DIR = path.join(HERE, '.local-server');
-const COMPOSE_FILE = path.join(HERE, 'local-server', 'compose.yml');
+// The visual-check folder: the reports, the server's state and its compose file are there, for both pages' checks
+const CHECK_DIR = path.resolve(HERE, '..');
+const FRONTEND = path.resolve(CHECK_DIR, '..');
+const STATE_DIR = path.join(CHECK_DIR, '.local-server');
+const COMPOSE_FILE = path.join(CHECK_DIR, 'local-server', 'compose.yml');
 const PORT = process.env.GEMP_CHECK_PORT ?? '17101';
 const SERVER = `http://127.0.0.1:${PORT}`;
 
@@ -58,7 +60,7 @@ function buildAngular() {
 function runCheck(args, user, password, script = 'run.mjs') {
   return new Promise((resolve) => {
     const child = spawn(process.execPath, [path.join(HERE, script), '--server', SERVER, ...args], {
-      cwd: HERE,
+      cwd: CHECK_DIR,
       stdio: 'inherit',
       // The compose variables too, for a script that reaches the database (legacy-decks.mjs)
       env: { ...composeEnv, GEMP_USER: user, GEMP_PASSWORD: password },
@@ -85,7 +87,7 @@ function runSelfTest(user, password) {
         ...extra,
       ],
       {
-        cwd: HERE,
+        cwd: CHECK_DIR,
         encoding: 'utf8',
         maxBuffer: 64 * 1024 * 1024,
         env: { ...process.env, GEMP_USER: user, GEMP_PASSWORD: password },

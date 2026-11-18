@@ -9,7 +9,7 @@ import {
 import { Observation } from '../testing/parity/both-pages';
 import { Choices, choices } from '../testing/parity/choices';
 import { DialogAnswer } from '../testing/parity/legacy-page';
-import { CONTROLS } from '../../visual-check/controls.mjs';
+import { CONTROLS } from '../../visual-check/deckbuilder/controls.mjs';
 
 const TEXTS = ['', 'gandalf', 'the one', 'a+b & c', "frodo's", '  spaced  ', '12', '-3', 'ring bearer'];
 /** No markup: the legacy page showed a deck's name as HTML, which the Angular page deliberately doesn't. */

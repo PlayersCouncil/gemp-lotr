@@ -117,6 +117,8 @@
   --theme-game-selectable: #7faf7f;
   --theme-game-actionable: #7f7fff;
   --theme-game-selected: #009f9f;
+  /* An action that would do nothing (game.css .noEffectCard, the new master of 2026-11-17) */
+  --theme-game-no-effect: #e6d36f;
   /* A card's frame, and the frame an activated card flashes (game.css .highlightBorderOverlay) */
   --theme-game-card-frame: #000;
   --theme-game-highlight: #fff;
@@ -128,6 +130,8 @@
   --theme-game-menu-text: #333;
   --theme-game-menu-hover-bg: #39f;
   --theme-game-menu-hover-text: #fff;
+  --theme-game-menu-no-effect-text: #6f6650;
+  --theme-game-menu-no-effect-bar: #c9b24a;
   --theme-game-spinner-bg: #000;
   --theme-game-muted-mark: #ff3b3b;
   --theme-game-muted-mark-edge: #000;
@@ -358,9 +362,9 @@
   --theme-game-number-text: #fff;
   --theme-game-number-inactive-text: #8f8163;
   --theme-game-inactive-border: #3a2f20;
-  --theme-game-selectable: #e0b44c;
-  --theme-game-actionable: #9fb4d8;
-  --theme-game-selected: #7fae57;
+  --theme-game-selectable: #8fc77a;
+  --theme-game-actionable: #8f9cff;
+  --theme-game-selected: #36b7ae;
   --theme-game-card-frame: #0d0b08;
   --theme-game-highlight: #f4ead2;
   --theme-game-menu-bg: #241d15;
@@ -368,6 +372,11 @@
   --theme-game-menu-text: #ece2cc;
   --theme-game-menu-hover-bg: #c9a24a;
   --theme-game-menu-hover-text: #1a140c;
+  /* The meanings of game.html's borders kept (the new master, 2026-11-17): green to choose, blue for an action, teal
+     chosen, pale yellow double for an action that would do nothing; tones for the night and leather surfaces */
+  --theme-game-no-effect: #e6d36f;
+  --theme-game-menu-no-effect-text: #a89a7c;
+  --theme-game-menu-no-effect-bar: #c9b24a;
   --theme-game-spinner-bg: #110e0a;
   --theme-game-spinner-border: #5a4a2c;
   --theme-game-muted-mark: #c0503c;

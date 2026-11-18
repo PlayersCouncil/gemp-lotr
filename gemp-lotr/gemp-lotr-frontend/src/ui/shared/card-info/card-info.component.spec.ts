@@ -257,6 +257,7 @@ describe('CardInfoComponent', () => {
         cardInfoModal: true,
         dialogsReturnFocus: true,
         guardSecondTap: true,
+        tapMenuInCorner: false,
       });
       await open(false);
       expect(showModal).toHaveBeenCalledOnce();

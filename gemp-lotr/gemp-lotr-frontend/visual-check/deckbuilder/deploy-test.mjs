@@ -12,13 +12,14 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { launchBrowser } from './browser.mjs';
-import { playersSql, TEST_PLAYERS, waitForLogin } from './local-server/seed.mjs';
+import { launchBrowser } from '../browser.mjs';
+import { playersSql, TEST_PLAYERS, waitForLogin } from '../local-server/seed.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const REPOSITORY = path.resolve(HERE, '../../..');
-const STATE_DIR = path.join(HERE, '.local-server', 'deploy');
-const COMPOSE_FILE = path.join(HERE, 'local-server', 'deploy-compose.yml');
+const CHECK_DIR = path.resolve(HERE, '..');
+const REPOSITORY = path.resolve(CHECK_DIR, '../../..');
+const STATE_DIR = path.join(CHECK_DIR, '.local-server', 'deploy');
+const COMPOSE_FILE = path.join(CHECK_DIR, 'local-server', 'deploy-compose.yml');
 const ORIGIN = path.join(STATE_DIR, 'origin.git');
 const CHECKOUT = path.join(STATE_DIR, 'checkout');
 const DEVELOPER = path.join(STATE_DIR, 'developer');
@@ -99,6 +100,10 @@ function createRepositories() {
       'gemp-lotr/gemp-lotr-frontend',
       'gemp-lotr/gemp-lotr-async/src/main/web',
       ':!gemp-lotr/gemp-lotr-async/src/main/web/images',
+      // The card definitions: the build reads each card's side from them (scripts/extract-card-data.mjs, the game's
+      // phone layout), as the server's checkout has them
+      'gemp-lotr/gemp-lotr-cards/src/main/resources/cards',
+      'gemp-lotr/gemp-lotr-cards/src/main/resources/blueprintMapping.txt',
     ],
     { cwd: REPOSITORY },
   );

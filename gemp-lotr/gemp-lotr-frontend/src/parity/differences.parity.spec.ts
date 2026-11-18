@@ -1,6 +1,6 @@
 import { BothPages, BothPagesOptions, openBothPages } from '../testing/parity/both-pages';
 import { DialogAnswer } from '../testing/parity/legacy-page';
-import { CONTROLS } from '../../visual-check/controls.mjs';
+import { CONTROLS } from '../../visual-check/deckbuilder/controls.mjs';
 
 /**
  * Where the Angular page does not do what the legacy page did. Each test shows what each page does, so a change on

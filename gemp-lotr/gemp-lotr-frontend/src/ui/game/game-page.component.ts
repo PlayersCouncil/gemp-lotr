@@ -16,6 +16,7 @@ import { GameTableState } from '../../core/game/table/game-table.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
 import { CardInfoComponent } from '../shared/card-info/card-info.component';
+import { CardHintsDirective } from './table/card-hints.directive';
 import { ActionMenuComponent } from './decision/action-menu.component';
 import { DecisionDialogsComponent } from './decision/decision-dialogs.component';
 import { FeedbackDialogComponent } from './dialogs/feedback-dialog.component';
@@ -77,6 +78,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     ActionMenuComponent,
     GameThemeButtonComponent,
     CardInfoComponent,
+    CardHintsDirective,
     AutoZoomComponent,
     PhoneGameComponent,
   ],
@@ -143,7 +145,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
             <span class="gd-game__damage" data-side="free-peoples" [attr.data-none]="noBonus(fpBonus())">{{
               bonusText(fpBonus())
             }}</span>
-            <span class="gd-game__strength" data-side="shadow">{{ shown()?.shadowStrength }}</span>
+            <span class="gd-game__strength" data-side="shadow" [attr.data-overwhelmed]="shadowOverwhelmed()">{{
+              shown()?.shadowStrength
+            }}</span>
             <span class="gd-game__damage" data-side="shadow" [attr.data-none]="noBonus(shadowBonus())">{{
               bonusText(shadowBonus())
             }}</span>
@@ -179,7 +183,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     <gd-game-feedback />
     <gd-game-problem />
     @if (!phone()) {
-      <gd-card-info />
+      <gd-card-info gdCardHints />
       <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
       <gd-auto-zoom [topLayer]="false" [flipOnShift]="zoomFlipsOnShift()" />
     }
@@ -217,6 +221,7 @@ export class GamePageComponent {
   /** The numbers the skirmish's boxes show: those of the stats sent since it started (Skirmish). */
   protected readonly shown = computed(() => this.model().skirmish?.shown ?? null);
   protected readonly overwhelmed = computed(() => (this.shown()?.fpOverwhelmed === 'true' ? '' : null));
+  protected readonly shadowOverwhelmed = computed(() => (this.shown()?.shadowOverwhelmed === 'true' ? '' : null));
   protected readonly fpBonus = computed(() => this.shown()?.fellowshipDamageBonus ?? null);
   protected readonly shadowBonus = computed(() => this.shown()?.shadowDamageBonus ?? null);
 

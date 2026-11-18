@@ -64,6 +64,7 @@
   font-size: 12px;
   /* game.css coloured the links in its dialogs */
   --gd-card-info-link: var(--theme-game-text-link);
+  --gd-card-info-hint: var(--theme-game-card-hint);
   --gd-card-info-link-visited: var(--theme-game-text-link-visited);
   /*
    * The size slider's handle, focused as it opens, looked as under the mouse there; the browser drew its ring only

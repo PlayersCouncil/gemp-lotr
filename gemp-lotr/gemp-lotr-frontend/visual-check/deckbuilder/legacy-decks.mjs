@@ -17,11 +17,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { launchBrowser } from './browser.mjs';
+import { launchBrowser } from '../browser.mjs';
 import { CONTROLS } from './controls.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const OUT = path.join(HERE, 'report-legacy-decks');
+const CHECK_DIR = path.resolve(HERE, '..');
+const OUT = path.join(CHECK_DIR, 'report-legacy-decks');
 const { values: options } = parseArgs({
   options: {
     server: { type: 'string' },
@@ -90,7 +91,7 @@ const DATABASE_DECKS = [
 /** Decks saved again on the legacy page, as players did: what it does to them is shown in the report. */
 const RESAVED_ON_LEGACY = ['Notes typed with markup', 'Notes in lines', 'Plain deck'];
 
-const COMPOSE = path.join(HERE, 'local-server', 'compose.yml');
+const COMPOSE = path.join(CHECK_DIR, 'local-server', 'compose.yml');
 
 /**
  * Restarts the throwaway server's app: the server loads its active leagues once a day, so a league the seed created

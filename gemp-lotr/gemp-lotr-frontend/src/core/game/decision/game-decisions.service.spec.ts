@@ -105,8 +105,8 @@ describe('GameDecisions', () => {
       x: 1,
       y: 2,
       actions: [
-        { actionId: '10', text: 'Use' },
-        { actionId: '11', text: 'Exert' },
+        { actionId: '10', text: 'Use', noEffect: null },
+        { actionId: '11', text: 'Exert', noEffect: null },
       ],
     });
     decisions.closeMenu();

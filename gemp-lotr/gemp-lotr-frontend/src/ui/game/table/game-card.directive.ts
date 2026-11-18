@@ -8,7 +8,8 @@ import { assignmentOf } from '../../../core/game/state/local-choices';
  * What a card of the game says about itself in the page (the DOM contract of the game page, which the game check
  * reads): `data-card-id`, `data-blueprint-id`, `data-zone` (the server's zone), `data-assign` (the character a minion
  * is assigned to), `data-inactive` (not active this turn), `data-hindered`, `data-under` (attached, stacked) on a
- * card lying under another, and `data-mark` (selectable, actionable, selected) while the waiting decision offers it.
+ * card lying under another, and `data-mark` (selectable, actionable, selected) while the waiting decision offers it,
+ * with `data-no-effect` when every action it offers would do nothing (legacy noEffectCard).
  */
 @Directive({
   selector: '[gdGameCard]',
@@ -21,6 +22,7 @@ import { assignmentOf } from '../../../core/game/state/local-choices';
     '[attr.data-hindered]': "card().hindered ? '' : null",
     '[attr.data-under]': 'under()',
     '[attr.data-mark]': 'mark()',
+    '[attr.data-no-effect]': "noEffect() ? '' : null",
   },
 })
 export class GameCardDirective {
@@ -30,5 +32,8 @@ export class GameCardDirective {
   private readonly session = inject(GameSession);
   private readonly decisions = inject(GameDecisions);
   protected readonly mark = computed(() => this.decisions.view().marks[this.card().id] ?? null);
+  protected readonly noEffect = computed(
+    () => this.mark() === 'actionable' && this.decisions.view().noEffect[this.card().id] === true,
+  );
   protected readonly assign = computed(() => assignmentOf(this.session.model(), this.card().id));
 }

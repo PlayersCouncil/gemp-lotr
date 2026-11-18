@@ -127,7 +127,10 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
                   }
                 </span>
                 <span class="gd-phone-pair__vs">vs</span>
-                <span class="gd-phone-strength" data-side="shadow"
+                <span
+                  class="gd-phone-strength"
+                  data-side="shadow"
+                  [attr.data-overwhelmed]="shadowOverwhelmed() ? '' : null"
                   >{{ shown()?.shadowStrength ?? '–' }}
                   @if (bonus(shown()?.shadowDamageBonus); as b) {
                     <small>{{ b }}</small>
@@ -195,6 +198,7 @@ export class PhoneTableComponent {
   protected readonly unfolded = computed(() => this.viewState.phone().unfolded);
   protected readonly shown = computed(() => this.session.model().skirmish?.shown ?? null);
   protected readonly overwhelmed = computed(() => this.shown()?.fpOverwhelmed === 'true');
+  protected readonly shadowOverwhelmed = computed(() => this.shown()?.shadowOverwhelmed === 'true');
 
   constructor() {
     const injector = inject(Injector);

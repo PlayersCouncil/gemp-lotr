@@ -89,6 +89,13 @@ const SHARDS = debugDeck('Game check shards deck', [...['3_44', '1_116', '1_116'
  */
 const RESCUE = debugDeck('Game check rescue deck', [...['1_12', '4_311'], ...['1_261', '1_271']]);
 
+/**
+ * Gimli, Son of Glóin (6) with the Dwarven Axe (+2) exerts for his skirmish ability (+2) against a Goblin Runner (5):
+ * 10 against 5, the Shadow side about to be overwhelmed (the new master of 2026-11-17 turns its total red,
+ * `shadowOverwhelmed`).
+ */
+const OVERWHELM = debugDeck('Game check overwhelm deck', [...['1_13', '1_9'], ...['1_178', '1_183']]);
+
 /** The test decks by the names scenarios give (`deck`), each saved for every player. */
 export const DECKS = {
   main: MAIN,
@@ -96,6 +103,7 @@ export const DECKS = {
   transfer: TRANSFER,
   shards: SHARDS,
   rescue: RESCUE,
+  overwhelm: OVERWHELM,
 };
 
 /** The deck as POST /deck takes it. */

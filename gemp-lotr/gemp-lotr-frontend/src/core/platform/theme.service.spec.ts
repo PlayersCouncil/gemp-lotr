@@ -131,8 +131,14 @@ describe('ThemeService', () => {
       cardInfoModal: false,
       dialogsReturnFocus: false,
       guardSecondTap: false,
+      tapMenuInCorner: true,
     });
-    expect(THEME_BEHAVIOUR.modern).toEqual({ cardInfoModal: true, dialogsReturnFocus: true, guardSecondTap: true });
+    expect(THEME_BEHAVIOUR.modern).toEqual({
+      cardInfoModal: true,
+      dialogsReturnFocus: true,
+      guardSecondTap: true,
+      tapMenuInCorner: false,
+    });
   });
 
   it('lays modern out at the device width, and classic as the legacy page (no viewport, or its default after modern)', () => {

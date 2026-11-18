@@ -166,6 +166,17 @@
   cursor: pointer;
 }
 
+/* An action that would do nothing: a double pale yellow ring (game.html's pale yellow double border) */
+.gd-card[data-mark='actionable'][data-no-effect] {
+  --gd-card-frame: var(--theme-game-no-effect);
+  --gd-card-frame-style: double;
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 3px var(--theme-game-no-effect),
+    0 0 0 4px var(--theme-page-bg),
+    0 0 0 5px var(--theme-game-no-effect);
+}
+
 .gd-card[data-inactive][data-mark] {
   --gd-card-image-filter: var(--theme-game-inactive-offered-filter);
 }

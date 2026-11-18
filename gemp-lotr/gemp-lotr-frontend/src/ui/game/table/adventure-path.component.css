@@ -41,6 +41,12 @@
   cursor: pointer;
 }
 
+/* An action that would do nothing (the new master's noEffect): pale yellow and doubled (game.css .noEffectCard) */
+.gd-card[data-mark='actionable'][data-no-effect] {
+  --gd-card-frame: var(--theme-game-no-effect);
+  --gd-card-frame-style: double;
+}
+
 .gd-card[data-inactive][data-mark] {
   --gd-card-image-filter: var(--theme-game-inactive-offered-filter);
 }

@@ -91,6 +91,8 @@ export interface SkirmishNumbers {
   fellowshipDamageBonus: string | null;
   shadowDamageBonus: string | null;
   fpOverwhelmed: string | null;
+  /** The Shadow side about to be overwhelmed (new master, 2026-11-17: its total turns red too). */
+  shadowOverwhelmed: string | null;
 }
 
 export const NO_SKIRMISH_NUMBERS: SkirmishNumbers = {
@@ -99,6 +101,7 @@ export const NO_SKIRMISH_NUMBERS: SkirmishNumbers = {
   fellowshipDamageBonus: null,
   shadowDamageBonus: null,
   fpOverwhelmed: null,
+  shadowOverwhelmed: null,
 };
 
 export interface GameModel {

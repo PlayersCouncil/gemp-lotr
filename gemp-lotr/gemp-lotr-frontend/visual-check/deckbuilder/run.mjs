@@ -4,10 +4,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { BROWSER_NAME, launchBrowser } from './browser.mjs';
+import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
 import { CONTROLS } from './controls.mjs';
-import { acceptedBehaviour, acceptedFor, withoutLegacyBugs } from './accepted.mjs';
-import { MY_CARDS } from './local-server/seed.mjs';
+import { acceptedBehaviour, acceptedFor, withoutLegacyBugs } from '../accepted.mjs';
+import { MY_CARDS } from '../local-server/seed.mjs';
 import {
   compareBoxes,
   compareRequests,
@@ -18,7 +18,7 @@ import {
   MOUSE_TRACKER,
   readBoxes,
   readPageState,
-} from './compare.mjs';
+} from '../compare.mjs';
 import { INJECTIONS } from './injections.mjs';
 import { coverageGaps, matrixScenarios } from './matrix.mjs';
 import {
@@ -32,7 +32,7 @@ import {
   reach,
 } from './phone.mjs';
 import { FIXTURE_DECK, SCENARIOS, selectors } from './scenarios.mjs';
-import { routeToStub, STUB_ORIGIN } from './stub-server.mjs';
+import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
 
 const { values: options } = parseArgs({
   options: {
@@ -100,8 +100,13 @@ const allScenarios = options.phone
   : options.matrix
     ? matrixScenarios()
     : SCENARIOS;
-const scenarios = allScenarios.filter((s) =>
-  only ? only.has(s.name) : (!s.mutating || options.mutating) && (!options.filter || s.name.includes(options.filter)),
+const scenarios = allScenarios.filter(
+  (s) =>
+    // A scenario that needs the server's own answers (deck validation) is left out of a stubbed run
+    (!s.serverOnly || !options.stubbed) &&
+    (only
+      ? only.has(s.name)
+      : (!s.mutating || options.mutating) && (!options.filter || s.name.includes(options.filter))),
 );
 const tolerance = Number(options.tolerance);
 /** Controls --geometry leaves out (none yet: the theme picker isn't in CONTROLS, ANGULAR_ONLY). */
@@ -135,18 +140,38 @@ async function login() {
 
 let session;
 
-/** The deck the deck list scenarios open, saved (again) under the test player. */
-async function createFixtureDeck(context) {
+/** A deck saved (again) under the test player. */
+async function saveDeck(context, deck) {
   const response = await context.request.post(`${options.server}/gemp-lotr-server/deck`, {
     form: {
-      deckName: FIXTURE_DECK.name,
-      targetFormat: FIXTURE_DECK.targetFormat,
-      notes: FIXTURE_DECK.notes,
-      deckContents: FIXTURE_DECK.contents,
+      deckName: deck.name,
+      targetFormat: deck.targetFormat,
+      notes: deck.notes,
+      deckContents: deck.contents,
     },
   });
   if (!response.ok()) {
-    throw new Error(`Could not save the fixture deck: HTTP ${response.status()}`);
+    throw new Error(`Could not save the deck ${deck.name}: HTTP ${response.status()}`);
+  }
+}
+
+/** The deck the deck list scenarios open, saved (again) under the test player. */
+async function createFixtureDeck(context) {
+  await saveDeck(context, FIXTURE_DECK);
+}
+
+/**
+ * The account as a scenario starts from: the fixture deck, and the scenario's own `decks` (a mutating scenario's:
+ * they exist only while it runs, so no other scenario's deck list shows them).
+ */
+async function resetAccountFor(scenario) {
+  await resetAccount();
+  if (!scenario.decks?.length) return;
+  const context = await browser.newContext({ storageState: session });
+  try {
+    for (const deck of scenario.decks) await saveDeck(context, deck);
+  } finally {
+    await context.close();
   }
 }
 
@@ -552,7 +577,7 @@ async function topUpCollection() {
 }
 
 /** What differs in one step, and the images to keep for it. */
-function compareStep(legacy, angular, areas, accepted, label, last) {
+function compareStep(legacy, angular, areas, accepted, label, last, textBoxes = []) {
   const problems = [];
   const add = (text) => problems.push(`${label}: ${text}`);
   let pixels = null;
@@ -561,7 +586,9 @@ function compareStep(legacy, angular, areas, accepted, label, last) {
   } else if (options.geometry) {
     // The excluded areas (what the legacy page has nothing like) are left out here too, and the stats box before the
     // end, as the stats area is for the pixels (STATS_AREA): its lines can be a request behind
-    const skipped = (name) => geometrySkipped(name) || (!last && name === 'stats');
+    // A scenario's `textBoxes`: boxes sized by a long text of the server's, which another theme's font wraps
+    // differently (their place is still compared, through the boxes around them)
+    const skipped = (name) => geometrySkipped(name) || (!last && name === 'stats') || textBoxes.includes(name);
     for (const line of compareBoxes(legacy.boxes, angular.boxes, Number(options.margin), skipped)) add(line);
   } else if (legacy.shot && angular.shot) {
     const screens = compareScreens(legacy.shot, angular.shot, areas, false);
@@ -614,11 +641,11 @@ async function check(scenario, size) {
   } else if (scenario.mutating && !options.stubbed) {
     // One after the other, from the same saved decks: both change the same account
     const answers = new Map();
-    await resetAccount();
+    await resetAccountFor(scenario);
     await topUpCollection();
     legacy = await capture('legacy', scenario, size, legacyFile, answers);
     const legacyDecks = JSON.parse(withoutLegacyBugs(JSON.stringify(await accountState()), 'saved'));
-    await resetAccount();
+    await resetAccountFor(scenario);
     await topUpCollection();
     angular = await capture('angular', scenario, size, angularFile, answers);
     const angularDecks = await accountState();
@@ -658,7 +685,7 @@ async function check(scenario, size) {
     // At the end the stats have arrived, and their area counts like any other
     const stepAccepted = last ? accepted : [...accepted, STATS_AREA];
     const stepAreas = b.areas.slice(0, stepAccepted.length);
-    const step = compareStep(a, b, stepAreas, stepAccepted, label, last);
+    const step = compareStep(a, b, stepAreas, stepAccepted, label, last, scenario.textBoxes);
     problems.push(...step.problems);
     if (last) pixels = step.pixels;
     // On a phone the screens differ in size and layout: no picture of their differences
@@ -789,7 +816,12 @@ function writeReport(results, gaps = []) {
   fs.writeFileSync(
     path.join(outDir, 'results.json'),
     JSON.stringify({
-      checks: results.map((r) => ({ name: `${r.scenario.name}-${r.size.label}`, problems: r.problems })),
+      // `only`: what --only takes to run the check again (tools/failed-checks.mjs)
+      checks: results.map((r) => ({
+        name: `${r.scenario.name}-${r.size.label}`,
+        only: r.scenario.name,
+        problems: r.problems,
+      })),
       gaps,
     }),
   );

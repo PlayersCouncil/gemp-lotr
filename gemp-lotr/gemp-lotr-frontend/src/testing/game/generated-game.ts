@@ -303,6 +303,7 @@ class Game {
         fellowshipDamageBonus: '0',
         fellowshipStrength: String(this.pick.below(12)),
         fpOverwhelmed: 'false',
+        shadowOverwhelmed: 'false',
         hindered: '',
         initiative: this.pick.of(['SHADOW', 'FREE_PEOPLE']),
         moveCount: String(this.pick.below(3)),

@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { noEffectReason } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { DocumentPressDirective } from '../../shared/document-press/document-press.directive';
 
@@ -7,7 +8,8 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
  * the server's text. A click anywhere else closes it.
  *
  * DOM contract: `ul.gd-game-menu` (with `--gd-menu-left` and `--gd-menu-top`, px in the page) holding a
- * `button[data-action-id]` per action.
+ * `button[data-action-id]` per action; an action that would do nothing has `data-no-effect` (its reason) and ends with
+ * `.gd-game-menu__reason` ("(limit reached)"), as game.html's noEffectAction entries.
  */
 @Component({
   selector: 'gd-game-action-menu',
@@ -30,9 +32,14 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
               type="button"
               role="menuitem"
               [attr.data-action-id]="action.actionId"
-              [innerHTML]="action.text"
+              [attr.data-no-effect]="action.noEffect"
               (click)="decisions.chooseAction(action.actionId)"
-            ></button>
+            >
+              <span [innerHTML]="action.text"></span>
+              @if (action.noEffect; as why) {
+                <span class="gd-game-menu__reason">{{ ' (' + reason(why) + ')' }}</span>
+              }
+            </button>
           </li>
         }
       </ul>
@@ -41,6 +48,7 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
 })
 export class ActionMenuComponent {
   protected readonly decisions = inject(GameDecisions);
+  protected readonly reason = noEffectReason;
 
   /** A click anywhere but on the menu closes it (the click that chooses an entry is the entry's own). */
   protected pressed(event: MouseEvent, menu: HTMLElement): void {

@@ -68,6 +68,8 @@ export interface GameStats {
   fellowshipDamageBonus: string | null;
   shadowDamageBonus: string | null;
   fpOverwhelmed: string | null;
+  /** Absent from servers before 2026-11-17 (and their replays). */
+  shadowOverwhelmed: string | null;
   /** Whether the Ring-bearer wears The One Ring. */
   wearingRing: boolean;
   playerZones: Readonly<Record<string, PlayerZones>>;

@@ -293,11 +293,17 @@ try {
     process.exit(0);
   }
   const chosen = options.checks.split(',');
-  let passed = true;
-  if (chosen.includes('screens')) passed = (await screensCheck(browser, devices)) && passed;
-  if (chosen.includes('zoom')) passed = (await zoomCheck(browser, devices, false)) && passed;
-  if (chosen.includes('switch')) passed = (await zoomCheck(browser, devices, true)) && passed;
-  process.exitCode = passed ? 0 : 1;
+  const checks = [];
+  const part = async (name, check) => {
+    if (chosen.includes(name)) checks.push({ name, check: name, problems: (await check()) ? [] : ['see the log'] });
+  };
+  await part('screens', () => screensCheck(browser, devices));
+  await part('zoom', () => zoomCheck(browser, devices, false));
+  await part('switch', () => zoomCheck(browser, devices, true));
+  // For tools/failed-checks.mjs: which of --checks to run again
+  fs.mkdirSync(OUT, { recursive: true });
+  fs.writeFileSync(path.join(OUT, 'results.json'), JSON.stringify({ checks }));
+  process.exitCode = checks.every((check) => check.problems.length === 0) ? 0 : 1;
 } finally {
   await browser.close();
 }

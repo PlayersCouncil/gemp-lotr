@@ -6,7 +6,7 @@
 //
 // Gestures that would change the game itself are left out where other scenarios make them (NOT_APPLICABLE says why):
 // a card that answers the decision when pressed, the decision's own buttons, conceding.
-import { GESTURES } from '../matrix.mjs';
+import { GESTURES } from '../gestures.mjs';
 import { ANGULAR_CONTRACT, LEGACY } from './controls.mjs';
 import { FOE_PLAYS_MINIONS, FRODO, GIMLI, PLAYER_FIRST, TO_FELLOWSHIP } from './scenarios.mjs';
 

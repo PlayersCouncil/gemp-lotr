@@ -16,6 +16,13 @@
   opacity: 0.999;
 }
 
+/* Tapped open on a touch screen, the legacy menu was drawn with the page (subpixel colours) */
+@media (pointer: coarse) {
+  .gd-game-menu {
+    opacity: 1;
+  }
+}
+
 .gd-game-menu > li {
   margin: 0;
   padding: 0;
@@ -26,7 +33,9 @@
   display: block;
   box-sizing: content-box;
   width: calc(100% - 10px);
-  height: 20px;
+  /* As tall as its text: game.css no longer cuts a long action's text off at one line */
+  height: auto;
+  min-height: 20px;
   padding: 1px 5px;
   border: 0;
   background: none;
@@ -42,6 +51,23 @@
   outline: none;
   background-color: var(--theme-game-menu-hover-bg);
   color: var(--theme-game-menu-hover-text);
+}
+
+/* An action that would do nothing: dimmed, a double bar on its left, its reason in italics (game.css noEffectAction) */
+.gd-game-menu button[data-no-effect] {
+  width: calc(100% - 14px);
+  padding-left: 3px;
+  border-left: 6px double var(--theme-game-menu-no-effect-bar);
+  color: var(--theme-game-menu-no-effect-text);
+}
+
+.gd-game-menu button[data-no-effect]:hover,
+.gd-game-menu button[data-no-effect]:focus-visible {
+  color: var(--theme-game-menu-hover-text);
+}
+
+.gd-game-menu__reason {
+  font-style: italic;
 }
 
 /* A card's name in the server's text: pressing it shows the card */

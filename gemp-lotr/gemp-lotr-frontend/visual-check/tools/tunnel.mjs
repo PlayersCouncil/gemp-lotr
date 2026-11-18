@@ -37,7 +37,7 @@ async function keptServer() {
   const login = await running();
   if (login) return login;
   console.log('Starting the local server (npm run check:local -- --keep)...');
-  spawnSync('node', ['local-server.mjs', '--keep', '--only', 'start', '--sizes', '1366x768'], {
+  spawnSync('node', ['deckbuilder/local-server.mjs', '--keep', '--only', 'start', '--sizes', '1366x768'], {
     cwd: path.resolve(HERE, '..'),
     stdio: 'inherit',
   });

@@ -12,6 +12,7 @@ import {
 import { ChatRoom } from '../../../core/chat/chat-room.service';
 import { CardViews } from '../../../core/cards/card-views.service';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
+import { noEffectReason } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { chatLines, GameSheets } from '../../../core/game/phone/game-sheets';
 import { CARD_SIZE_MAX, CARD_SIZE_MIN, PhoneSettings } from '../../../core/game/phone/phone-settings';
@@ -342,9 +343,15 @@ const HALL = '/gemp-lotr/hall.html';
                   type="button"
                   class="gd-phone-menu__item"
                   [attr.data-action-id]="action.actionId"
-                  [innerHTML]="action.text"
+                  [attr.data-no-effect]="action.noEffect"
                   (click)="decisions.chooseAction(action.actionId)"
-                ></button>
+                >
+                  <span [innerHTML]="action.text"></span>
+                  <!-- An action that would do nothing: dimmed, with why (game.html's noEffectAction) -->
+                  @if (action.noEffect; as why) {
+                    <span class="gd-phone-menu__reason">{{ ' (' + noEffectReason(why) + ')' }}</span>
+                  }
+                </button>
               }
             </div>
           </div>
@@ -356,6 +363,7 @@ const HALL = '/gemp-lotr/hall.html';
 export class PhoneSheetsComponent {
   protected readonly sheets = inject(GameSheets);
   protected readonly decisions = inject(GameDecisions);
+  protected readonly noEffectReason = noEffectReason;
   protected readonly settings = inject(GameSettings);
   protected readonly phone = inject(PhoneSettings);
   private readonly session = inject(GameSession);

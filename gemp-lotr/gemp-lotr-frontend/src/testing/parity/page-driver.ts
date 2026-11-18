@@ -1,8 +1,8 @@
 /**
- * Test-only: the same gestures on the legacy page and on the Angular page, by the names of visual-check/controls.mjs
+ * Test-only: the same gestures on the legacy page and on the Angular page, by the names of visual-check/deckbuilder/controls.mjs
  * (one list of where each control is on each page). src/parity drives both pages with these and compares.
  */
-import { CONTROLS, ControlSelectors } from '../../../visual-check/controls.mjs';
+import { CONTROLS, ControlSelectors } from '../../../visual-check/deckbuilder/controls.mjs';
 import { AngularPage } from './angular-page';
 import { DialogAnswer, LegacyJQuery, LegacyPage } from './legacy-page';
 

@@ -335,3 +335,13 @@
   padding: 20px;
   overflow: auto;
 }
+
+/*
+ * A card's name in the server's details (the new master of 2026-11-17 names the card each bonus comes from, as a
+ * card link): inline, in the colour the page gives its card links (game.css .cardHint), the text's own elsewhere
+ */
+.gd-card-info__details ::ng-deep .cardHint {
+  display: inline;
+  color: var(--gd-card-info-hint, inherit);
+  cursor: pointer;
+}

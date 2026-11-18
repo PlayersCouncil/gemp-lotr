@@ -14,10 +14,26 @@ export type CardMark = 'selectable' | 'actionable' | 'selected';
 /** A button answering or changing the choice, by the legacy button's text. */
 export type DecisionButton = 'OK' | 'Pass' | 'Done' | 'Reset choice' | 'Clear selection';
 
+/**
+ * Why the server expects an action to do nothing (the decision's `noEffect`, new master of 2026-11-17): it has
+ * nothing to act on, it has reached its limit, or it is a skirmish action that reaches nobody in the skirmish. Still
+ * offered; only shown differently.
+ */
+export type NoEffect = 'effect' | 'limit' | 'skirmish';
+
 /** An action of a card, as the server names and describes it (HTML). */
 export interface CardAction {
   actionId: string;
   text: string;
+  /** Why it would do nothing, or null when it does something (or the server doesn't say). */
+  noEffect: NoEffect | null;
+}
+
+/** The words the legacy menu adds to an action that would do nothing (gameUi.js noEffectReasonText). */
+export function noEffectReason(noEffect: NoEffect): string {
+  if (noEffect === 'limit') return 'limit reached';
+  if (noEffect === 'skirmish') return 'no one in this skirmish';
+  return 'no effect';
 }
 
 /** A card shown for the decision in a dialog (not a card of the game). */
@@ -59,6 +75,11 @@ export interface DecisionView {
   /** Each offered card's actions, by card id. */
   actions: Readonly<Record<string, readonly CardAction[]>>;
   /**
+   * The offered cards whose every action would do nothing (legacy markNoEffectCards): a pale yellow double border
+   * instead of the action's blue. A card with one action that does something isn't among them.
+   */
+  noEffect: Readonly<Record<string, true>>;
+  /**
    * Cards that aren't on the table but have an action (in a pile, say): shown see-through in the hand's row while the
    * decision waits (legacy createVirtualCard).
    */
@@ -80,6 +101,7 @@ export const NO_DECISION: DecisionView = {
   doneOnRight: false,
   marks: {},
   actions: {},
+  noEffect: {},
   extraCards: [],
   dialog: null,
 };
@@ -262,13 +284,20 @@ function askedView(model: GameModel, settings: DecisionSettings): DecisionView {
       const actionIds = param(decision, 'actionId');
       const texts = param(decision, 'actionText');
       const testing = param(decision, 'testingText');
+      // One word per action: "false", or why it would do nothing; absent in older replays
+      const noEffects = param(decision, 'noEffect');
       const actions: Record<string, CardAction[]> = {};
       const extraCards: GameCard[] = [];
       cardIds.forEach((cardId, i) => {
         if (blueprints[i] !== 'inPlay' && !actions[cardId]) {
           extraCards.push(decisionCard(cardId, blueprints[i] ?? '', text(testing[i])));
         }
-        (actions[cardId] ??= []).push({ actionId: actionIds[i] ?? '', text: texts[i] ?? '' });
+        const why = noEffects[i];
+        (actions[cardId] ??= []).push({
+          actionId: actionIds[i] ?? '',
+          text: texts[i] ?? '',
+          noEffect: why === 'effect' || why === 'limit' || why === 'skirmish' ? why : null,
+        });
       });
       return {
         ...NO_DECISION,
@@ -278,6 +307,14 @@ function askedView(model: GameModel, settings: DecisionSettings): DecisionView {
         buttons: chosen === 0 ? ['Pass'] : ['Reset choice', 'Done'],
         marks: chosen === 0 ? marksOf(cardIds, 'actionable') : marksOf(local.markedCardIds, 'selected'),
         actions,
+        noEffect:
+          chosen === 0
+            ? Object.fromEntries(
+                Object.entries(actions)
+                  .filter(([, list]) => list.length > 0 && list.every((action) => action.noEffect !== null))
+                  .map(([id]) => [id, true as const]),
+              )
+            : {},
         extraCards,
       };
     }

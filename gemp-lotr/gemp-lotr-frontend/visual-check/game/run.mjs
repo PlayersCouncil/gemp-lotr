@@ -36,7 +36,7 @@ import { endGame, foeAnswer, Foe, parseGameXml, readDecision, replayIdOf, startG
 import { GAME_MATRIX, makeGesture, pointTarget } from './matrix.mjs';
 import { GAME_SCENARIOS } from './scenarios.mjs';
 import { DEVICES } from './device-profiles.mjs';
-import { touchDrag } from '../phone.mjs';
+import { touchDrag } from '../touch.mjs';
 
 /**
  * Waits until what `where` reads (a box or a point) has stood still for 300ms, as long as 3s: a person taps what they
@@ -1242,7 +1242,12 @@ function writeReport(results, gaps) {
   fs.writeFileSync(
     path.join(outDir, 'results.json'),
     JSON.stringify({
-      checks: results.map((r) => ({ name: `${r.scenario.name}-${r.size.label}`, problems: r.problems })),
+      // `only`: what --only takes to run the check again (tools/failed-checks.mjs)
+      checks: results.map((r) => ({
+        name: `${r.scenario.name}-${r.size.label}`,
+        only: r.scenario.name,
+        problems: r.problems,
+      })),
       gaps,
     }),
   );

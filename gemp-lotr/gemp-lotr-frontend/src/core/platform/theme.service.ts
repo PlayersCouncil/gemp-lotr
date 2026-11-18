@@ -22,11 +22,16 @@ export interface ThemeBehaviour {
    * menu or dialog the first tap closed or opened moved what is under the finger): SecondTapGuard.
    */
   guardSecondTap: boolean;
+  /**
+   * A card's menu of actions opened by a tap shows at the window's top-left corner, as game.html's does: its swipe
+   * plugin hands the click handler the touch event, which has no place (the mouse's click opens it where clicked).
+   */
+  tapMenuInCorner: boolean;
 }
 
 export const THEME_BEHAVIOUR: Readonly<Record<ThemeName, ThemeBehaviour>> = {
-  classic: { cardInfoModal: false, dialogsReturnFocus: false, guardSecondTap: false },
-  modern: { cardInfoModal: true, dialogsReturnFocus: true, guardSecondTap: true },
+  classic: { cardInfoModal: false, dialogsReturnFocus: false, guardSecondTap: false, tapMenuInCorner: true },
+  modern: { cardInfoModal: true, dialogsReturnFocus: true, guardSecondTap: true, tapMenuInCorner: false },
 };
 
 /**

@@ -338,7 +338,7 @@ npm run build               # the app, with styles.css (src/styles) and the comp
 
 `src/parity/` runs the legacy deck builder itself (`deckBuild.html` and its scripts, unchanged) in jsdom next to the
 Angular page, each against its own `FakeGempServer` (`src/testing/parity/`), with clocks the test moves. The same
-gestures go to both through the selectors of `visual-check/controls.mjs`, and after each one the test compares what
+gestures go to both through the selectors of `visual-check/deckbuilder/controls.mjs`, and after each one the test compares what
 each page asked its server, shows (deck name, filter fields, cards in each place, dialogs and messages, disabled
 buttons, hidden cultures) and left saved.
 
@@ -367,7 +367,9 @@ condition, a constant, a message) and runs the unit tests of that file; a change
 
 ### The visual check
 
-`visual-check/` is a Playwright check, separate from the Maven build (see `visual-check/README.md`):
+`visual-check/` holds the Playwright checks, separate from the Maven build (see `visual-check/README.md`): the deck
+builder's in `visual-check/deckbuilder/`, the game screen's in `visual-check/game/`.
 
 - `npm run check:stubbed` compares both pages with no server or login, using placeholder card art;
-- `run.mjs` (`npm run check`) compares both pages against a running server; it still uses the legacy element IDs.
+- `deckbuilder/run.mjs` (`npm run check`) compares both pages against a running server; it still uses the legacy element
+  IDs.

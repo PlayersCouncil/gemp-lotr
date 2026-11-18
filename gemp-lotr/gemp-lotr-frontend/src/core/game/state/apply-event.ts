@@ -58,6 +58,7 @@ function skirmishNumbers(shown: SkirmishNumbers, stats: GameStats): SkirmishNumb
     fellowshipDamageBonus: stats.fellowshipDamageBonus ?? shown.fellowshipDamageBonus,
     shadowDamageBonus: stats.shadowDamageBonus ?? shown.shadowDamageBonus,
     fpOverwhelmed: stats.fpOverwhelmed ?? shown.fpOverwhelmed,
+    shadowOverwhelmed: stats.shadowOverwhelmed ?? shown.shadowOverwhelmed,
   };
 }
 

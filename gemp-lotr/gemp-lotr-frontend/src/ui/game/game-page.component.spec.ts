@@ -22,7 +22,7 @@ const PLAYERS = '<ge type="P" participantId="alice" allParticipantIds="alice,bob
 const STATS =
   '<ge type="GS" charStats="1=7|3|RF10,5=9|2|4,6=5|1|R6" fellowshipArchery="null" shadowArchery="2" moveCount="1" ' +
   'moveLimit="2" initiative="FREE_PEOPLE" ruleof4="2" fellowshipStrength="7" shadowStrength="9" ' +
-  'fellowshipDamageBonus="0" shadowDamageBonus="1" fpOverwhelmed="true">' +
+  'fellowshipDamageBonus="0" shadowDamageBonus="1" fpOverwhelmed="true" shadowOverwhelmed="true">' +
   '<playerZones name="alice" HAND="1" DISCARD="3" ADVENTURE_DECK="8" DEAD="0" DECK="50" REMOVED="0"/>' +
   '<playerZones name="bob" HAND="8" DISCARD="0" ADVENTURE_DECK="9" DEAD="0" DECK="52" REMOVED="0" handRevealed="true"/>' +
   '<threats name="alice" value="1"/><threats name="bob" value="0"/>' +
@@ -219,7 +219,11 @@ describe('GamePageComponent', () => {
     expect(fight('assignment', 'shadow')).toEqual(['7']);
     expect(el.querySelector('[data-card-id="7"]')?.getAttribute('data-assign')).toBe('6');
     expect(text('.gd-game__strength[data-side="free-peoples"]')).toBe('7');
-    expect(el.querySelector('.gd-game__strength[data-overwhelmed]')).not.toBeNull();
+    expect(el.querySelector('.gd-game__strength[data-side="free-peoples"]')?.hasAttribute('data-overwhelmed')).toBe(
+      true,
+    );
+    // The Shadow's total turns red too when the minions are about to be overwhelmed (the new master)
+    expect(el.querySelector('.gd-game__strength[data-side="shadow"]')?.hasAttribute('data-overwhelmed')).toBe(true);
     expect(el.querySelector('.gd-game__damage[data-side="free-peoples"]')?.hasAttribute('data-none')).toBe(true);
     expect(text('.gd-game__damage[data-side="shadow"]')).toBe('+1');
     // The rule no longer applies: its line is hidden, with the count it last showed
@@ -426,6 +430,28 @@ describe('GamePageComponent', () => {
     expect(el.querySelector('gd-card-info [data-dialog-title]')).toBeNull();
     (el.querySelector('.gd-game-chat__line .cardHint') as HTMLElement).click();
     await stable();
+    expect(el.querySelector('gd-card-info [data-dialog-title]')?.textContent).toBe('Card Information');
+    expect(el.querySelector('gd-card-info .gd-card-info__details')).toBeNull();
+  });
+
+  it("shows a card named in a card's details inline as a card link, and its information when clicked", async () => {
+    const { el, stable } = await open(state(TABLE));
+    const card1 = el.querySelector<HTMLElement>('[data-card-id="1"]')!;
+    card1.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+    await stable();
+    // The new master (2026-11-17) names the card a bonus comes from, as a card link inside the bold label
+    backend
+      .expectOne((r) => r.url.endsWith('/cardInfo'))
+      .flush(
+        "<b>Affecting card:</b><br><b><div class='cardHint' value='1_2'>·The One Ring, The Ruling Ring</div>:</b> " +
+          'Strength +1<br>',
+      );
+    await stable();
+    const hint = el.querySelector<HTMLElement>('gd-card-info .gd-card-info__details .cardHint');
+    expect(hint?.textContent).toBe('·The One Ring, The Ruling Ring');
+    hint!.click();
+    await stable();
+    // That card's information, a card's name: no game details
     expect(el.querySelector('gd-card-info [data-dialog-title]')?.textContent).toBe('Card Information');
     expect(el.querySelector('gd-card-info .gd-card-info__details')).toBeNull();
   });

@@ -37,6 +37,7 @@ const stats = (extra: Partial<GameStats> = {}): GameStats => ({
   fellowshipDamageBonus: null,
   shadowDamageBonus: null,
   fpOverwhelmed: null,
+  shadowOverwhelmed: null,
   wearingRing: false,
   playerZones: {},
   threats: {},
@@ -180,7 +181,13 @@ describe('applyEvent', () => {
     expect(model.skirmish?.shown).toEqual(NO_SKIRMISH_NUMBERS);
     model = applyEvent(model, {
       type: 'GS',
-      stats: stats({ fellowshipStrength: '8', shadowStrength: '5', fellowshipDamageBonus: '2', fpOverwhelmed: 'true' }),
+      stats: stats({
+        fellowshipStrength: '8',
+        shadowStrength: '5',
+        fellowshipDamageBonus: '2',
+        fpOverwhelmed: 'true',
+        shadowOverwhelmed: 'false',
+      }),
     });
     // What the next stats leave out stays as it was; the strengths are always as sent
     model = applyEvent(model, { type: 'GS', stats: stats({ fellowshipStrength: '9', shadowDamageBonus: '0' }) });
@@ -190,7 +197,11 @@ describe('applyEvent', () => {
       fellowshipDamageBonus: '2',
       shadowDamageBonus: '0',
       fpOverwhelmed: 'true',
+      // Kept as it was when the stats leave it out, as fpOverwhelmed (gameAnimations.js, the new master)
+      shadowOverwhelmed: 'false',
     });
+    model = applyEvent(model, { type: 'GS', stats: stats({ shadowOverwhelmed: 'true' }) });
+    expect(model.skirmish?.shown.shadowOverwhelmed).toBe('true');
   });
 
   it('a skirmish without a character marks only the minions', () => {

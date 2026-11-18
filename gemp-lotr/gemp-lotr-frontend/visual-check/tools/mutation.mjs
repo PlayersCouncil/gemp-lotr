@@ -207,7 +207,13 @@ function makeCopy(dir) {
   }
   // What the tests read from the browser checks: their controls (and the game page's)
   fs.mkdirSync(path.join(frontend, 'visual-check', 'game'));
-  for (const entry of ['controls.mjs', 'controls.d.mts', 'game/controls.mjs', 'game/controls.d.mts']) {
+  fs.mkdirSync(path.join(frontend, 'visual-check', 'deckbuilder'));
+  for (const entry of [
+    'deckbuilder/controls.mjs',
+    'deckbuilder/controls.d.mts',
+    'game/controls.mjs',
+    'game/controls.d.mts',
+  ]) {
     fs.copyFileSync(path.join(VISUAL_CHECK, entry), path.join(frontend, 'visual-check', entry));
   }
   fs.symlinkSync(path.join(FRONTEND, 'node_modules'), path.join(frontend, 'node_modules'));

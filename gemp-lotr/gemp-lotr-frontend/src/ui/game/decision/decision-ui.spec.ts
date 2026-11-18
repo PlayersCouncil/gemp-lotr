@@ -168,6 +168,33 @@ describe('the decisions on the game page', () => {
     expect(answer()).toBe('11');
   });
 
+  it('marks a card whose every action would do nothing, and says why in its menu (the new master)', async () => {
+    const { el, stable } = await open(
+      game(
+        d(
+          'CARD_ACTION_CHOICE',
+          param('cardId', '1', '1', '2') +
+            param('blueprintId', 'inPlay', 'inPlay', 'inPlay') +
+            param('actionId', '10', '11', '12') +
+            param('actionText', 'Use', 'Exert', 'Pump') +
+            param('noEffect', 'limit', 'skirmish', 'false'),
+          'Play a Skirmish action',
+        ),
+      ),
+    );
+    expect(el.querySelector('[data-card-id="1"]')?.hasAttribute('data-no-effect')).toBe(true);
+    expect(el.querySelector('[data-card-id="2"]')?.hasAttribute('data-no-effect')).toBe(false);
+    el.querySelector<HTMLElement>('[data-card-id="1"]')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await stable();
+    const entries = Array.from(el.querySelectorAll<HTMLElement>('.gd-game-menu [data-action-id]'));
+    // As game.html: the action's text, then why it would do nothing
+    expect(entries.map((entry) => entry.textContent?.trim())).toEqual([
+      'Use (limit reached)',
+      'Exert (no one in this skirmish)',
+    ]);
+    expect(entries.map((entry) => entry.getAttribute('data-no-effect'))).toEqual(['limit', 'skirmish']);
+  });
+
   it('shows the information of a card the decision offers on a right click, then on a shift click', async () => {
     const { el, stable } = await open(
       game(

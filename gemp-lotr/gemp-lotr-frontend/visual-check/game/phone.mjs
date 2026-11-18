@@ -27,7 +27,7 @@ import { parseArgs } from 'node:util';
 import { launchBrowser } from '../browser.mjs';
 import { PNG } from 'pngjs';
 import { compareScreens } from '../compare.mjs';
-import { longPress, PHONE_CONTEXT, tap, touchDrag } from '../phone.mjs';
+import { longPress, PHONE_CONTEXT, tap, touchDrag } from '../touch.mjs';
 import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
 import { asOneState, GAME_ID, routeGame, settled } from './stub-game.mjs';
 
@@ -1229,17 +1229,23 @@ async function main() {
     }
     const devices = options.devices.split(',');
     const chosen = options.checks.split(',');
-    let passed = true;
-    if (chosen.includes('back')) passed = (await backCheck(browser, devices)) && passed;
-    if (chosen.includes('reload')) passed = (await reloadCheck(browser, devices)) && passed;
-    if (chosen.includes('touch')) passed = (await touchCheck(browser, devices)) && passed;
-    if (chosen.includes('piles')) passed = (await pilesCheck(browser, devices)) && passed;
-    if (chosen.includes('animation')) passed = (await animationCheck(browser, devices)) && passed;
-    if (chosen.includes('sites')) passed = (await sitesCheck(browser, devices)) && passed;
-    if (chosen.includes('fold')) passed = (await foldCheck(browser, devices)) && passed;
-    if (chosen.includes('archery')) passed = (await archeryCheck(browser, devices)) && passed;
-    if (chosen.includes('stack')) passed = (await stackCheck(browser, devices)) && passed;
-    process.exitCode = passed ? 0 : 1;
+    const checks = [];
+    const part = async (name, check) => {
+      if (chosen.includes(name)) checks.push({ name, check: name, problems: (await check()) ? [] : ['see the log'] });
+    };
+    await part('back', () => backCheck(browser, devices));
+    await part('reload', () => reloadCheck(browser, devices));
+    await part('touch', () => touchCheck(browser, devices));
+    await part('piles', () => pilesCheck(browser, devices));
+    await part('animation', () => animationCheck(browser, devices));
+    await part('sites', () => sitesCheck(browser, devices));
+    await part('fold', () => foldCheck(browser, devices));
+    await part('archery', () => archeryCheck(browser, devices));
+    await part('stack', () => stackCheck(browser, devices));
+    // For tools/failed-checks.mjs: which of --checks to run again
+    fs.mkdirSync(OUT, { recursive: true });
+    fs.writeFileSync(path.join(OUT, 'results.json'), JSON.stringify({ checks }));
+    process.exitCode = checks.every((check) => check.problems.length === 0) ? 0 : 1;
   } finally {
     await browser.close();
   }

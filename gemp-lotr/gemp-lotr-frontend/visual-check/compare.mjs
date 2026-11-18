@@ -2,7 +2,7 @@
 // dialogs and the state of the page that a screenshot doesn't show.
 import { PNG } from 'pngjs';
 import { withAcceptedLink } from './accepted.mjs';
-import { CONTROLS, GEOMETRY } from './controls.mjs';
+import { CONTROLS, GEOMETRY } from './deckbuilder/controls.mjs';
 
 /** The controls with one selector each, for the page's state (the ones that take arguments are compared by scenarios). */
 export function fixedControls(which) {

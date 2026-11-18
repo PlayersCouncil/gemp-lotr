@@ -1,6 +1,6 @@
 import { Decision } from '../protocol/game-events';
 import { emptyGame, GameModel, NO_CHOICES } from '../state/game-model';
-import { actionCardIds, decisionView, minimum, minionUnassigned, NO_DECISION } from './decision-view';
+import { actionCardIds, decisionView, minimum, minionUnassigned, NO_DECISION, noEffectReason } from './decision-view';
 
 const SETTINGS = { autoAccept: true, alwaysDropDown: false };
 
@@ -114,14 +114,40 @@ describe('decisionView', () => {
     expect(none.marks).toEqual({ '5': 'actionable', extra9: 'actionable' });
     expect(none.actions).toEqual({
       '5': [
-        { actionId: '1', text: 'Use' },
-        { actionId: '2', text: 'Exert' },
+        { actionId: '1', text: 'Use', noEffect: null },
+        { actionId: '2', text: 'Exert', noEffect: null },
       ],
-      extra9: [{ actionId: '3', text: 'Play' }],
+      extra9: [{ actionId: '3', text: 'Play', noEffect: null }],
     });
+    // A server before 2026-11-17 sends no noEffect: nothing is marked
+    expect(none.noEffect).toEqual({});
     expect(none.extraCards.map((card) => [card.id, card.blueprintId, card.zone])).toEqual([['extra9', '1_9', 'EXTRA']]);
     const chosen = decisionView(waiting(d, { selectedCardIds: ['2'], markedCardIds: ['5'] }), SETTINGS);
     expect(chosen).toMatchObject({ buttons: ['Reset choice', 'Done'], marks: { '5': 'selected' } });
+  });
+
+  it('marks a card whose every action would do nothing, and says why each one would (the new master)', () => {
+    const d = decision('CARD_ACTION_CHOICE', {
+      cardId: ['5', '5', '7', '9'],
+      blueprintId: ['inPlay', 'inPlay', 'inPlay', '1_9'],
+      actionId: ['1', '2', '3', '4'],
+      actionText: ['Use', 'Exert', 'Pump', 'Play'],
+      testingText: ['null', 'null', 'null', 'null'],
+      noEffect: ['limit', 'false', 'skirmish', 'effect'],
+    });
+    const view = decisionView(waiting(d), SETTINGS);
+    expect(view.actions['5']?.map((action) => action.noEffect)).toEqual(['limit', null]);
+    expect(view.actions['7']?.[0]?.noEffect).toBe('skirmish');
+    // 5 has an action that does something: blue, as game.html's markNoEffectCards; 7 and the stand-in for 9 yellow
+    expect(view.noEffect).toEqual({ '7': true, extra9: true });
+    expect(view.marks).toEqual({ '5': 'actionable', '7': 'actionable', extra9: 'actionable' });
+    // Once a card is chosen nothing is offered: nothing is marked either
+    expect(decisionView(waiting(d, { selectedCardIds: ['3'], markedCardIds: ['7'] }), SETTINGS).noEffect).toEqual({});
+    expect(['effect', 'limit', 'skirmish'].map((why) => noEffectReason(why as 'effect'))).toEqual([
+      'no effect',
+      'limit reached',
+      'no one in this skirmish',
+    ]);
   });
 
   it('asks to choose cards in the alert box: Done once enough are chosen', () => {

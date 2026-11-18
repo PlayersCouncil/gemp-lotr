@@ -1,6 +1,6 @@
 # Game screen check
 
-The game screen's counterpart of the deck builder's visual check (`../README.md`), for the Angular port of `game.html`
+The game screen's counterpart of the deck builder's visual check (`../deckbuilder/README.md`), for the Angular port of `game.html`
 (trymarz/gemp-lotr-private#27). It plays each scenario of `scenarios.mjs` as a **real game** on two pages, one after
 the other, and compares the pages after every step:
 
@@ -280,7 +280,7 @@ the same way from G1 on. Record again after changing a scenario, the test deck o
 `scenarios.mjs` explains each kind of step. Both players play the same deck (`players.mjs` `DECKS`): `main`,
 Fellowship Block, Dwarves and Elves with Moria orcs; and four small decks in the Debug format (only the seeded server
 plays it), where the hand is the whole deck once the starting fellowship is out, so a scenario knows what it can play:
-`skirmish`, `transfer`, `shards` and `rescue`.
+`skirmish`, `transfer`, `shards`, `rescue` and `overwhelm`.
 
 | Scenario                         | What it does                                                                                                |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -306,6 +306,21 @@ plays it), where the hand is the whole deck once the starting fellowship is out,
 | `effects-transfer`               | The Dwarven Axe transferred from Gimli to the Dwarf Guard, who then dies to an Uruk-hai (damage +1)         |
 | `effects-shards`                 | The Shards of Narsil: a card stacked, then the menu of its two actions, the second chosen                   |
 | `effects-rescue`                 | Merry, not assigned, is discarded to remove a [sauron] Orc from Gimli's skirmish                            |
+| `shadow-overwhelmed`             | Gimli, Son of Glóin, with the Dwarven Axe exerts for +2: 10 against 5, the Shadow total turns red           |
+
+### The new master of 2026-11-17
+
+PlayersCouncil's master of 2026-11-17 (`patchnotes/2026-11-17.md`) changed what the game page shows. The scenarios
+cover it as follows (recorded again on a server built from it, `npm run check:game:record`):
+
+- **An action that would do nothing** (`noEffect`, a pale yellow double border): `effects-skirmish` (Sam, Son of
+  Hamfast, "effect", in three Fellowship decisions), `minions-and-skirmish` and `skirmish-event` (Axe Strike in the
+  hand, "skirmish"). The action menu's dimmed entry with its reason needs a card with two actions of which one does
+  nothing, which none of the test decks has: the unit tests cover it (`decision-ui.spec.ts`, `decision-view.spec.ts`).
+- **The Shadow overwhelmed** (`shadowOverwhelmed`, its total red): `shadow-overwhelmed`.
+- **Not covered by a scenario**: The One Ring staying on the board after the Ring-bearer is killed (Frodo with the Ring
+  is 4: a small deck can't bring the Shadow the twilight for twice that), and the infinite loop questions (they use
+  the number and choice decisions every other scenario covers). Both are the server's: the page shows what it sends.
 
 The page doesn't poll while a decision waits for the player. Conceding then used to leave the page unaware that the
 game had ended; now the page asks once more after its concede is answered, and closes the open decision when the game

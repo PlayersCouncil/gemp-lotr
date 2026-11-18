@@ -77,8 +77,10 @@
   content: '';
   position: absolute;
   inset: 0;
-  /* Black, unless the page gives the card another frame (a game's card that can be chosen): --gd-card-frame */
+  /* Black, unless the page gives the card another frame (a game's card that can be chosen): --gd-card-frame, drawn
+     solid or as the page says (double: a game's action that would do nothing): --gd-card-frame-style */
   border: 0 solid var(--gd-card-frame, #000);
+  border-style: var(--gd-card-frame-style, solid);
   /* landscape: the width is the longer side */
   border-width: round(down, calc(var(--gd-card-width) / 30), 1px);
   pointer-events: none;

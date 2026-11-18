@@ -109,6 +109,7 @@ function gameStats(element: Element): GameStats {
     fellowshipDamageBonus: attr(element, 'fellowshipDamageBonus'),
     shadowDamageBonus: attr(element, 'shadowDamageBonus'),
     fpOverwhelmed: attr(element, 'fpOverwhelmed'),
+    shadowOverwhelmed: attr(element, 'shadowOverwhelmed'),
     wearingRing: attr(element, 'wearingRing') === 'true',
     playerZones,
     threats,

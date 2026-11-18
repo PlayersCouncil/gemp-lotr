@@ -189,6 +189,40 @@
     0 0 0 3px var(--theme-game-phone-accent);
 }
 
+/* A site the waiting decision offers, or one chosen for it: as the rows' cards (phone-cards) */
+.gd-phone-site > .gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-selected);
+}
+
+.gd-phone-site > .gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-selectable);
+  cursor: pointer;
+}
+
+.gd-phone-site > .gd-card[data-mark='actionable'] {
+  --gd-card-frame: var(--theme-game-actionable);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-actionable);
+  cursor: pointer;
+}
+
+.gd-phone-site > .gd-card[data-mark='actionable'][data-no-effect] {
+  --gd-card-frame: var(--theme-game-no-effect);
+  --gd-card-frame-style: double;
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 3px var(--theme-game-no-effect),
+    0 0 0 4px var(--theme-page-bg),
+    0 0 0 5px var(--theme-game-no-effect);
+}
+
 .gd-phone-site[data-ahead] {
   opacity: 0.75;
 }
