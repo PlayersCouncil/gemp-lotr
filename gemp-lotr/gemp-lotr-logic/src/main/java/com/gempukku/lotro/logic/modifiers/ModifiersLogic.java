@@ -19,6 +19,10 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     private final Map<Phase, List<Modifier>> _untilStartOfPhaseModifiers = new HashMap<>();
     private final Map<Phase, List<Modifier>> _untilEndOfPhaseModifiers = new HashMap<>();
     private final List<Modifier> _untilEndOfTurnModifiers = new LinkedList<>();
+    // The modifiers an effect has set up for a time (until the end of a phase or turn, until the start of a phase):
+    // the result of an effect already carried out, not any card's game text, so a card whose text is taken away
+    // afterwards keeps them (a bonus its own ability gave it before the Star-glass, 10_13).
+    private final Set<Modifier> _modifiersOfEffects = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private final Set<Modifier> _skipSet = new HashSet<>();
     // The modifiers isInForce is working out, innermost last; the first _workingOutDepth entries are in use.
@@ -134,11 +138,13 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     private void removeModifiers(List<Modifier> modifiers) {
         for (List<Modifier> list : _modifiers.values())
             list.removeAll(modifiers);
+        modifiers.forEach(_modifiersOfEffects::remove);
     }
 
     private void removeModifier(Modifier modifier) {
         for (List<Modifier> list : _modifiers.values())
             list.remove(modifier);
+        _modifiersOfEffects.remove(modifier);
     }
 
     @Override
@@ -284,7 +290,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         if (condition != null && !condition.isFullfilled(game))
             return false;
         if (modifierEffect != ModifierEffect.TEXT_MODIFIER && modifier.getSource() != null
-                && !modifier.isNonCardTextModifier() && hasTextRemoved(game, modifier.getSource()))
+                && !modifier.isNonCardTextModifier() && !_modifiersOfEffects.contains(modifier)
+                && hasTextRemoved(game, modifier.getSource()))
             return false;
         return card == null || modifier.affectsCard(game, card);
     }
@@ -353,7 +360,8 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
         if (!(modifier.getCondition() instanceof SelfSpottingCondition selfSpotting) || !selfSpotting.hasHeld())
             return false;
         return modifierEffect == ModifierEffect.TEXT_MODIFIER || modifier.getSource() == null
-                || modifier.isNonCardTextModifier() || !hasTextRemoved(game, modifier.getSource());
+                || modifier.isNonCardTextModifier() || _modifiersOfEffects.contains(modifier)
+                || !hasTextRemoved(game, modifier.getSource());
     }
 
     /**
@@ -438,6 +446,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     @Override
     public void addUntilEndOfPhaseModifier(Modifier modifier, Phase phase) {
         addModifier(modifier);
+        _modifiersOfEffects.add(modifier);
         List<Modifier> list = _untilEndOfPhaseModifiers.get(phase);
         if (list == null) {
             list = new LinkedList<>();
@@ -449,6 +458,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     @Override
     public void addUntilStartOfPhaseModifier(Modifier modifier, Phase phase) {
         addModifier(modifier);
+        _modifiersOfEffects.add(modifier);
         List<Modifier> list = _untilStartOfPhaseModifiers.get(phase);
         if (list == null) {
             list = new LinkedList<>();
@@ -460,6 +470,7 @@ public class ModifiersLogic implements ModifiersEnvironment, ModifiersQuerying {
     @Override
     public void addUntilEndOfTurnModifier(Modifier modifier) {
         addModifier(modifier);
+        _modifiersOfEffects.add(modifier);
         _untilEndOfTurnModifiers.add(modifier);
     }
 
