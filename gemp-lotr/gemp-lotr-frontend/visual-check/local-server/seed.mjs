@@ -28,11 +28,9 @@ const TROPHIES = ['1x1_13', '1x1_17'];
 const BOOT_TIMEOUT_MS = 5 * 60 * 1000;
 
 /** The players, for the database's first start: only the password's hash is written (DbPlayerDAO.encodePassword). */
-export function playersSql(password) {
+export function playersSql(password, players = TEST_PLAYERS) {
   const hash = createHash('sha256').update(password, 'utf8').digest('hex');
-  const rows = TEST_PLAYERS.map(
-    ({ name, type }) => `('${name}', '${hash}', '${type}', 20170101, '127.0.0.1', '127.0.0.1')`,
-  );
+  const rows = players.map(({ name, type }) => `('${name}', '${hash}', '${type}', 20170101, '127.0.0.1', '127.0.0.1')`);
   return `USE gemp_db;\nINSERT INTO player (name, password, type, last_login_reward, last_ip, create_ip) VALUES\n${rows.join(',\n')};\n`;
 }
 
@@ -87,8 +85,8 @@ function formBody(fields) {
   return body;
 }
 
-/** Logged in as one player, one request at a time. */
-async function session(server, login, password) {
+/** Logged in as one player, one request at a time. `cookie` is the session, for a browser to share it. */
+export async function session(server, login, password) {
   const post = (url, fields, cookie) =>
     fetch(`${server}/gemp-lotr-server${url}`, {
       method: 'POST',
@@ -110,6 +108,7 @@ async function session(server, login, password) {
     return response;
   };
   return {
+    cookie,
     post: async (url, fields) => ok(await post(url, fields, cookie), `POST ${url}`),
     get: async (url) => ok(await fetch(`${server}/gemp-lotr-server${url}`, { headers: { cookie } }), `GET ${url}`),
   };

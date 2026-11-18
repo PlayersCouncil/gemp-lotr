@@ -1,0 +1,63 @@
+/* The animations of game events (gameAnimations.js). Not scoped: the rules start at gemp-game */
+
+gemp-game .gd-game-animation {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/*
+ * Not there while it draws nothing: an empty layer over the whole table, once the browser has made it a layer of its
+ * own (after cards flew in), lifted every dialog over it into one too, whose text then lost its sub-pixel smoothing
+ * (on a tablet or phone, against game.html)
+ */
+gemp-game .gd-game-animation[data-empty] {
+  display: none;
+}
+
+/* A card drawn only for an animation, placed where it starts; the animation moves it */
+gemp-game .gd-game-animation__card {
+  position: absolute;
+  left: var(--gd-animation-left, 0px);
+  top: var(--gd-animation-top, 0px);
+  width: var(--gd-animation-width, 0px);
+  height: var(--gd-animation-height, 0px);
+  border-radius: 5%;
+  transform-origin: top left;
+}
+
+/* An activated card's frame flashes three times */
+gemp-game .gd-card[data-activated]::after {
+  animation: gd-activated var(--gd-animation-duration, 1200ms) linear 1;
+}
+
+@keyframes gd-activated {
+  0%,
+  33.3%,
+  66.6%,
+  100% {
+    border-color: var(--gd-card-frame, var(--theme-game-card-frame));
+  }
+
+  16.6%,
+  50%,
+  83.3% {
+    border-color: var(--theme-game-highlight);
+  }
+}
+
+/* The phone layout: a card just put into play pulses in its row */
+gemp-game .gd-card[data-arrived] {
+  animation: gd-arrived var(--gd-animation-duration, 400ms) ease-out 1;
+}
+
+@keyframes gd-arrived {
+  from {
+    box-shadow: 0 0 0 0 var(--theme-game-phone-accent);
+  }
+
+  to {
+    box-shadow: 0 0 0 12px transparent;
+  }
+}

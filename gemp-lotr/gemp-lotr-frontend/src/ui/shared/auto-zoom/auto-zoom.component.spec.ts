@@ -180,4 +180,15 @@ describe('AutoZoomComponent', () => {
     step();
     expect(zoom.hasAttribute('data-flipped')).toBe(false);
   });
+
+  it('leaves the card as it is on Shift when flipOnShift is off (the legacy game page)', () => {
+    const { fixture, zoom, step } = render();
+    fixture.componentRef.setInput('flipOnShift', false);
+    hover.enter({}, card('1_12'), box);
+    step(HOVER_DELAY_MS);
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Shift' }));
+    step();
+    expect(zoom.hidden).toBe(false);
+    expect(zoom.hasAttribute('data-flipped')).toBe(false);
+  });
 });

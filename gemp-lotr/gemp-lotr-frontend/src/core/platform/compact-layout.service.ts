@@ -12,6 +12,9 @@ export const COMPACT_QUERY = '(max-width: 825px), (orientation: portrait) and (m
 /** Where the compact layout puts the deck and the collection side by side rather than one above the other. */
 export const SIDE_BY_SIDE_QUERY = '(orientation: landscape)';
 
+/** A screen at least a small tablet's width (the game's phone layout gives a tablet bigger cards). */
+export const TABLET_QUERY = '(min-width: 600px)';
+
 /**
  * Whether the page uses its compact layout: the modern theme on a portrait, narrow or low screen (COMPACT_QUERY), and
  * whether it puts the halves side by side (a landscape screen). The classic theme never does, as the legacy page
@@ -22,10 +25,18 @@ export class CompactLayout {
   private readonly theme = inject(ThemeService).theme;
   private readonly narrow = signal(false);
   private readonly landscape = signal(false);
+  private readonly wide = signal(false);
 
   readonly active = computed(() => this.theme() === 'modern' && this.narrow());
   /** The compact layout on a landscape screen: the deck left, the collection right. */
   readonly sideBySide = computed(() => this.active() && this.landscape());
+  /**
+   * What the compact layout is shown on: a phone held upright, a phone held sideways (any landscape screen), or a
+   * tablet held upright; null outside the compact layout.
+   */
+  readonly device = computed<'phone' | 'sideways' | 'tablet' | null>(() =>
+    !this.active() ? null : this.landscape() ? 'sideways' : this.wide() ? 'tablet' : 'phone',
+  );
 
   constructor() {
     const window = inject(DOCUMENT).defaultView;
@@ -39,5 +50,6 @@ export class CompactLayout {
     };
     follow(COMPACT_QUERY, this.narrow);
     follow(SIDE_BY_SIDE_QUERY, this.landscape);
+    follow(TABLET_QUERY, this.wide);
   }
 }

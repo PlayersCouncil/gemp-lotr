@@ -257,6 +257,7 @@ describe('CardInfoComponent', () => {
         cardInfoModal: true,
         dialogsReturnFocus: true,
         guardSecondTap: true,
+        tapMenuInCorner: false,
       });
       await open(false);
       expect(showModal).toHaveBeenCalledOnce();
@@ -281,6 +282,21 @@ describe('CardInfoComponent', () => {
     await fixture.whenStable();
     dialog.dispatchEvent(new Event('close'));
     expect(info.isOpen()).toBe(false);
+  });
+
+  it('keeps a card shown again before the close event of its own closing came (a browser sends it later)', async () => {
+    const { fixture, dialog } = await render();
+    // As a browser: close() closes at once, and the close event comes later
+    dialog.close = () => dialog.removeAttribute('open');
+    info.show(CARD);
+    await fixture.whenStable();
+    info.close();
+    await fixture.whenStable();
+    info.show(CARD);
+    dialog.dispatchEvent(new Event('close'));
+    await fixture.whenStable();
+    expect(info.isOpen()).toBe(true);
+    expect(dialog.open).toBe(true);
   });
 
   it('remembers the size, and a click ending a slide does not close it', async () => {

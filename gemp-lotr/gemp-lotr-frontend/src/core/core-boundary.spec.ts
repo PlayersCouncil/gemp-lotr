@@ -28,10 +28,15 @@ function importedPaths(file: string, source: string): string[] {
 const BROWSER_GLOBALS =
   /\b(DOCUMENT|window|document|globalThis|navigator|localStorage|sessionStorage|matchMedia|location)\b(?!\s*:)/g;
 
-/** Comments may mention the page ("in document order"), and module paths may too ('./page-location'). */
+/**
+ * Comments may mention the page ("in document order"), and so may module paths ('./page-location') and the texts of
+ * strings (a message telling the player about "another browser or window"): only code can reach the browser.
+ */
 function withoutComments(source: string): string {
   return source
     .replace(/from\s*'[^']*'/g, "from ''")
+    .replace(/'(?:[^'\\\n]|\\.)*'/g, "''")
+    .replace(/"(?:[^"\\\n]|\\.)*"/g, '""')
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/(^|[^:'"])\/\/[^\n]*/g, '$1');
 }
@@ -74,7 +79,7 @@ describe('core boundary', () => {
     expect(uses).toEqual([]);
   });
 
-  it("keeps the deck builder's state out of the app-wide injector (it belongs to the page)", () => {
+  it("keeps a page's state (the deck builder's, the game's) out of the app-wide injector (it belongs to the page)", () => {
     const pageFolders = [
       'core/deck/',
       'core/collection/',
@@ -82,6 +87,8 @@ describe('core boundary', () => {
       'core/delivery/',
       'core/actions/',
       'core/formats/',
+      'core/game/',
+      'core/chat/',
     ];
     const app = files
       .filter(({ name }) => pageFolders.some((folder) => name.startsWith(folder)))
@@ -91,7 +98,14 @@ describe('core boundary', () => {
   });
 
   it('keeps the card code free of any one page, so other pages can use it', () => {
-    const pageFolders = ['core/deck/', 'core/collection/', 'core/packs/', 'core/delivery/', 'core/actions/'];
+    const pageFolders = [
+      'core/deck/',
+      'core/collection/',
+      'core/packs/',
+      'core/delivery/',
+      'core/actions/',
+      'core/game/',
+    ];
     const shared = files.filter(({ name }) => name.startsWith('core/cards/') || name.startsWith('core/platform/'));
     const tied = shared.flatMap(({ file, name, source }) =>
       importedPaths(file, source)

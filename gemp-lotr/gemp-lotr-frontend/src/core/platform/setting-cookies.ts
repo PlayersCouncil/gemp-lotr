@@ -11,7 +11,8 @@ export class SettingCookies {
     return readCookie(this.document.cookie, name);
   }
 
-  write(name: string, value: string): void {
-    writeCookie(this.document, name, value);
+  /** Under /gemp-lotr, or under `path` when given (a cookie for the server). */
+  write(name: string, value: string, path?: string): void {
+    writeCookie(this.document, name, value, new Date(), path);
   }
 }

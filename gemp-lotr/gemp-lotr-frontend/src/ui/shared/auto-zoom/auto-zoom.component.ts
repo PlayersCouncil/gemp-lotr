@@ -8,6 +8,7 @@ import {
   effect,
   ElementRef,
   inject,
+  input,
   linkedSignal,
   signal,
   untracked,
@@ -48,7 +49,8 @@ const NO_ZOOM = new Set(['-1_1', '-1_2']);
     <div
       #panel
       class="gd-zoom"
-      popover="manual"
+      [attr.popover]="topLayer() ? 'manual' : null"
+      [attr.data-in-page]="topLayer() ? null : ''"
       aria-hidden="true"
       [hidden]="!zoom()"
       [attr.data-orientation]="zoom()?.data?.horizontal ? 'horizontal' : 'vertical'"
@@ -72,6 +74,16 @@ const NO_ZOOM = new Set(['-1_1', '-1_2']);
   `,
 })
 export class AutoZoomComponent {
+  /**
+   * In the browser's top layer (a popover), above modal dialogs; a page whose dialogs under it are never modal may keep
+   * it in the page instead, where its pictures are drawn as on the page (the legacy game page's).
+   */
+  readonly topLayer = input(true);
+  /**
+   * Whether Shift flips the zoomed card. The legacy game page never did (its key handler got jQuery 1.6's event, which
+   * has no `key`), so the classic game page turns it off.
+   */
+  readonly flipOnShift = input(true);
   protected readonly holoImage = siteImage('holo.jpg');
   private readonly setting = inject(AutoZoomSetting);
   private readonly hover = inject(CardHover);
@@ -141,7 +153,7 @@ export class AutoZoomComponent {
       const panel = this.panel().nativeElement;
       const showing = this.zoom() !== null;
       // jsdom has no popovers
-      if (typeof panel.showPopover !== 'function') {
+      if (!this.topLayer() || typeof panel.showPopover !== 'function') {
         return;
       }
       const open = panel.matches(':popover-open');
@@ -163,7 +175,7 @@ export class AutoZoomComponent {
 
     // Shift is read from the page while a card is zoomed (the mouse is on a card, which doesn't have the focus)
     effect((onCleanup) => {
-      if (!this.zoom()?.data.back || !this.window) {
+      if (!this.flipOnShift() || !this.zoom()?.data.back || !this.window) {
         return;
       }
       const window = this.window;

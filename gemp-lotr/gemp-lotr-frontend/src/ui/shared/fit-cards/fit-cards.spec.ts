@@ -181,4 +181,16 @@ describe('fit-cards sizing', () => {
     expect(parseFit('')).toBe('contain');
     expect(parseFit('stretch')).toBe('contain');
   });
+
+  it('lets a card behind show another share of its width than a fifth where the cards are drawn', () => {
+    // 137px wide: a fifth is 27px, 22% is 30px
+    expect(stackWidth({ horizontal: false, behind: [false, false], behindShown: [0.22, 0.2] }, 192)).toBe(
+      137 + 30 + 27,
+    );
+  });
+
+  it("snaps rows to the page's whole pixels when the box itself starts on a fraction of one", () => {
+    // Rows 119.25px apart from 0.5px: at 0.5, 119.75 and 239 -> 0, 119 and 239
+    expect(rowSnaps(upright(9), 114.25, 372, 5, 0.5)).toEqual([-0.5, -0.5, -0.5, -0.5, -0.75, -0.75, -0.75, -0.75, 0]);
+  });
 });

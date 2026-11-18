@@ -48,7 +48,7 @@ const { values: options, positionals: selectors } = parseArgs({
 });
 if (options.build) process.env.CHECK_NG_BUILD = options.build;
 const { routeToStub, STUB_ORIGIN } = await import('../stub-server.mjs');
-const { CONTROLS } = await import('../controls.mjs');
+const { CONTROLS } = await import('../deckbuilder/controls.mjs');
 
 const type = { chromium, firefox, webkit }[options.browser];
 if (!type || (!selectors.length && !options.screenshot)) {
