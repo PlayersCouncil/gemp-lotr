@@ -36,8 +36,24 @@ public class LotroGameMediator {
     private static final Logger LOG = LogManager.getLogger(LotroGameMediator.class);
 
     private final Map<String, GameCommunicationChannel> _communicationChannels = Collections.synchronizedMap(new HashMap<>());
-    private final DefaultUserFeedback _userFeedback;
-    private final DefaultLotroGame _lotroGame;
+    // The game and its feedback are replaced when the game is taken back to an earlier decision (revertTo).  Only
+    // ever written inside the write lock.
+    private volatile DefaultUserFeedback _userFeedback;
+    private volatile DefaultLotroGame _lotroGame;
+    /** Everything that steered this game (see GameJournal); what it is rebuilt from.  Null for a scenario's game. */
+    private GameJournal _journal;
+    /** What the game is built from, kept so that it can be built again.  Null for a scenario's game. */
+    private final LotroFormat _format;
+    private final LotroCardBlueprintLibrary _library;
+    private final String _tournamentName;
+    private final GameExtraInfo _extraInfo;
+    private final PackOpener _packOpener;
+    /** Everybody listening to the game, in the order they began, so that a rebuilt game can be given the same listeners. */
+    private final Map<GameStateListener, String> _gameStateListeners = Collections.synchronizedMap(new LinkedHashMap<>());
+    private final Set<GameResultListener> _gameResultListeners = Collections.synchronizedSet(new LinkedHashSet<>());
+    private BotGameStateListener _botListener;
+    /** The auto-pass settings each player's game is running with, as last applied. */
+    private final Map<String, Set<Phase>> _autoPass = new java.util.concurrent.ConcurrentHashMap<>();
     private final Map<String, Integer> _playerClocks = new HashMap<>();
     private final Map<String, Long> _decisionQuerySentTimes = new HashMap<>();
     private final Set<String> _playersPlaying = new HashSet<>();
@@ -79,6 +95,11 @@ public class LotroGameMediator {
         this._showInGameHall = showInGameHall;
         _soloGame = isSolo;
         _scenario = null;
+        _format = lotroFormat;
+        _library = library;
+        _tournamentName = tournamentName;
+        _extraInfo = extraInfo;
+        _packOpener = packOpener;
         if (participants.length < 1)
             throw new IllegalArgumentException("Game can't have less than one participant");
 
@@ -119,18 +140,42 @@ public class LotroGameMediator {
             _botDeck = null;
         }
 
-        _userFeedback = new DefaultUserFeedback();
-        _lotroGame = new DefaultLotroGame(lotroFormat, _playerDecks, _userFeedback, library, _timeSettings.toString(),
-                _allowSpectators, tournamentName, extraInfo);
-        if (packOpener != null) {
-            _lotroGame.setPackOpener(packOpener);
-        }
+        Built built = build(null);
+        _userFeedback = built.feedback;
+        _lotroGame = built.game;
+        _journal = built.journal;
+        attachBot();
+    }
 
-        if (_botPlayer != null) {
-            _lotroGame.addGameStateListener(_botPlayer.getName(), new BotGameStateListener(_botPlayer, this, new AssignmentLegality(_lotroGame)));
-        }
+    private record Built(DefaultUserFeedback feedback, DefaultLotroGame game, GameJournal journal) { }
 
-        _userFeedback.setGame(_lotroGame);
+    /**
+     * Builds this mediator's game from what it was made of, with a journal kept of it from the first moment.
+     * @param toRepeat The journal of the game it is to be a repeat of (its random outcomes come out the same for as
+     *                 long as that journal lasts); null for a game of its own.
+     */
+    private Built build(GameJournal toRepeat) {
+        DefaultUserFeedback feedback = new DefaultUserFeedback();
+        GameJournal journal = new GameJournal();
+        feedback.addDecisionObserver(journal);
+        //The same map of decks every time: the game seats its players in the order the map gives them
+        DefaultLotroGame game = new DefaultLotroGame(_format, _playerDecks, feedback, _library, _timeSettings.toString(),
+                _allowSpectators, _tournamentName, _extraInfo);
+        if (_packOpener != null)
+            game.setPackOpener(_packOpener);
+        feedback.setGame(game);
+        if (toRepeat != null)
+            journal.replayRandomFrom(toRepeat);
+        game.getGameState().setRandom(journal.random(GameRandom.DEFAULT));
+        return new Built(feedback, game, journal);
+    }
+
+    /** The bot hears the game through a listener that knows the game's rules, so each game gets one of its own. */
+    private void attachBot() {
+        if (_botPlayer == null)
+            return;
+        _botListener = new BotGameStateListener(_botPlayer, this, new AssignmentLegality(_lotroGame));
+        _lotroGame.addGameStateListener(_botPlayer.getName(), _botListener);
     }
 
     /**
@@ -147,6 +192,11 @@ public class LotroGameMediator {
         _botPlayer = null;
         _botDeck = null;
         _scenario = scenario;
+        _format = null;
+        _library = null;
+        _tournamentName = null;
+        _extraInfo = null;
+        _packOpener = null;
 
         for (Map.Entry<String, LotroDeck> deck : scenario.Table().Decks().entrySet()) {
             _playerDecks.put(deck.getKey(), deck.getValue());
@@ -220,9 +270,44 @@ public class LotroGameMediator {
         //A scenario says where its player is asked to pass; its script depends on it
         if (_scenario != null)
             return;
-        if (_playersPlaying.contains(playerId)) {
-            _lotroGame.setPlayerAutoPassSettings(playerId, phases);
+        if (!_playersPlaying.contains(playerId))
+            return;
+        //Sent with every request a client makes, and nearly always the same as last time
+        if (phases.equals(_autoPass.get(playerId)))
+            return;
+        _writeLock.lock();
+        try {
+            applyAutoPass(playerId, phases);
+        } finally {
+            _writeLock.unlock();
         }
+    }
+
+    private static final String AUTO_PASS_NOTE = "autopass";
+
+    /**
+     * Which phases a player is passed through decides which decisions the game asks, so a change is written in the
+     * journal where it was made and made again at the same point when the journal is followed.
+     */
+    private void applyAutoPass(String playerId, Set<Phase> phases) {
+        if (phases.equals(_autoPass.get(playerId)))
+            return;
+        _autoPass.put(playerId, EnumSet.copyOf(phases.isEmpty() ? EnumSet.noneOf(Phase.class) : phases));
+        _lotroGame.setPlayerAutoPassSettings(playerId, phases);
+        if (_journal != null) {
+            List<String> names = new ArrayList<>();
+            for (Phase phase : _autoPass.get(playerId))
+                names.add(phase.name());
+            _journal.note(playerId, AUTO_PASS_NOTE, String.join(",", names));
+        }
+    }
+
+    private static Set<Phase> autoPassOf(String names) {
+        Set<Phase> phases = EnumSet.noneOf(Phase.class);
+        if (!names.isEmpty())
+            for (String name : names.split(","))
+                phases.add(Phase.valueOf(name));
+        return phases;
     }
 
     public void sendMessageToPlayers(String message) {
@@ -230,19 +315,163 @@ public class LotroGameMediator {
     }
 
     public void addGameStateListener(String playerId, GameStateListener listener) {
+        _gameStateListeners.put(listener, playerId);
         _lotroGame.addGameStateListener(playerId, listener);
     }
 
     public void removeGameStateListener(GameStateListener listener) {
+        _gameStateListeners.remove(listener);
         _lotroGame.removeGameStateListener(listener);
     }
 
     public void addGameResultListener(GameResultListener listener) {
+        _gameResultListeners.add(listener);
         _lotroGame.addGameResultListener(listener);
     }
 
     public void removeGameResultListener(GameResultListener listener) {
+        _gameResultListeners.remove(listener);
         _lotroGame.removeGameResultListener(listener);
+    }
+
+    /**
+     * @return How many entries the game's journal holds now.  Taking the game back to this many (revertTo) is taking
+     * it back to this moment.  0 for a scenario's game, which keeps its own.
+     */
+    public int journalSize() {
+        _readLock.lock();
+        try {
+            return _journal == null ? 0 : _journal.entries().size();
+        } finally {
+            _readLock.unlock();
+        }
+    }
+
+    /**
+     * Takes the game back to the moment its journal held this many entries; cut just before an answer, that is the
+     * moment the answer's decision was waiting.
+     *
+     * The engine cannot be wound back, so a second game is built beside this one and given the journal up to that
+     * point.  Only if it took every answer as the first game did, and has come to rest on the same decision, does
+     * it take the first game's place: everybody listening to the old game is moved over to the new one and sent the
+     * table as it now stands.  Otherwise the new game is thrown away and the game in progress is not touched.
+     *
+     * The players' clocks are not taken back: whatever time has been spent stays spent.
+     *
+     * @return Null if the game was taken back; otherwise why it could not be.
+     */
+    public String revertTo(int entryCount) {
+        _writeLock.lock();
+        try {
+            if (_journal == null)
+                return "A scenario's game is not taken back this way";
+            if (_lotroGame.isFinished())
+                return "The game is over";
+            List<GameJournal.Entry> entries = _journal.entries();
+            if (entryCount < 0 || entryCount > entries.size())
+                return "The game's journal has no entry " + entryCount;
+            GameJournal prefix = _journal.upTo(entryCount);
+
+            final Built built = build(prefix);
+            String problem;
+            try {
+                built.game.startGame();
+                JournalFollower follower = new JournalFollower().follow(prefix, new JournalFollower.Table() {
+                    @Override
+                    public String playerOf(String key) {
+                        return key;
+                    }
+
+                    @Override
+                    public AwaitingDecision awaiting(String player) {
+                        return built.feedback.getAwaitingDecision(player);
+                    }
+
+                    @Override
+                    public void answer(String player, AwaitingDecision decision, String answer) {
+                        built.feedback.participantDecided(player);
+                        try {
+                            decision.decisionMade(answer);
+                        } catch (DecisionResultInvalidException exp) {
+                            throw new RuntimeException(exp.getWarningMessage());
+                        }
+                        built.feedback.decisionAccepted(player, decision, answer);
+                        built.game.carryOutPendingActionsUntilDecisionNeeded();
+                    }
+
+                    @Override
+                    public boolean note(GameJournal.Entry note) {
+                        if (!note.detail().equals(AUTO_PASS_NOTE))
+                            return false;
+                        built.game.setPlayerAutoPassSettings(note.player(), autoPassOf(note.value()));
+                        //The new game's journal has to hold it too, at the same place
+                        built.journal.note(note.player(), AUTO_PASS_NOTE, note.value());
+                        return true;
+                    }
+                });
+                problem = follower.problem();
+            } catch (RuntimeException exp) {
+                LOG.error("Game " + _gameId + " could not be rebuilt from its journal", exp);
+                problem = "the rebuilt game broke: " + exp;
+            }
+            if (problem == null)
+                problem = built.journal.divergence();
+            if (problem == null && built.game.isFinished())
+                problem = "the rebuilt game is over";
+            if (problem == null && entryCount < entries.size() && entries.get(entryCount).kind() == GameJournal.Kind.ANSWER) {
+                GameJournal.Entry next = entries.get(entryCount);
+                if (!GameJournal.matches(next, built.feedback.getAwaitingDecision(next.player())))
+                    problem = "the rebuilt game is not waiting on the decision " + next.player() + " was asked at that point";
+            }
+            if (problem != null) {
+                LOG.warn("Game " + _gameId + " was not taken back to journal entry " + entryCount + " of " + entries.size() + ": " + problem);
+                return problem;
+            }
+
+            //Whatever anybody has spent on the decision they were looking at is theirs to keep
+            for (String player : new ArrayList<>(_decisionQuerySentTimes.keySet()))
+                addTimeSpentOnDecisionToUserClock(player);
+
+            //The old game is left exactly as it is, with nobody listening to it: it must not tell anybody anything more
+            DefaultLotroGame old = _lotroGame;
+            for (GameResultListener listener : new ArrayList<>(_gameResultListeners))
+                old.removeGameResultListener(listener);
+            for (GameStateListener listener : new ArrayList<>(_gameStateListeners.keySet()))
+                old.removeGameStateListener(listener);
+            if (_botListener != null)
+                old.removeGameStateListener(_botListener);
+
+            _userFeedback = built.feedback;
+            _lotroGame = built.game;
+            _journal = built.journal;
+
+            //The players' settings as they are now, which may not be as they were back then
+            Map<String, Set<Phase>> wanted = new HashMap<>(_autoPass);
+            _autoPass.clear();
+            for (GameJournal.Entry entry : prefix.entries())
+                if (entry.kind() == GameJournal.Kind.NOTE && entry.detail().equals(AUTO_PASS_NOTE))
+                    _autoPass.put(entry.player(), autoPassOf(entry.value()));
+            for (Map.Entry<String, Set<Phase>> setting : wanted.entrySet())
+                applyAutoPass(setting.getKey(), setting.getValue());
+
+            for (GameResultListener listener : new ArrayList<>(_gameResultListeners))
+                _lotroGame.addGameResultListener(listener);
+            //Each is sent the whole table, as anybody who joins a game is
+            for (Map.Entry<GameStateListener, String> listener : new ArrayList<>(_gameStateListeners.entrySet()))
+                _lotroGame.addGameStateListener(listener.getValue(), listener.getKey());
+            _lotroGame.getGameState().sendMessage("The game was taken back to an earlier point");
+            attachBot();
+
+            startClocksForUsersPendingDecision();
+            return null;
+        } finally {
+            _writeLock.unlock();
+        }
+    }
+
+    /** For tests of this package: what the game is waiting on a player for. */
+    AwaitingDecision awaitingDecision(String playerId) {
+        return _userFeedback.getAwaitingDecision(playerId);
     }
 
     public String getWinner() {
@@ -442,7 +671,7 @@ public class LotroGameMediator {
                 // User can always reconnect and establish a new channel
                 GameCommunicationChannel channel = playerChannels.getValue();
                 if (currentTime > channel.getLastAccessed() + _timeSettings.maxSecondsPerDecision() * 1000L) {
-                    _lotroGame.removeGameStateListener(channel);
+                    removeGameStateListener(channel);
                     _communicationChannels.remove(playerId);
                 }
             }
@@ -800,7 +1029,7 @@ public class LotroGameMediator {
             GameCommunicationChannel participantCommunicationChannel = new GameCommunicationChannel(playerName, number, true, _lotroGame.getFormat());
             _communicationChannels.put(playerName, participantCommunicationChannel);
 
-            _lotroGame.addGameStateListener(playerName, participantCommunicationChannel);
+            addGameStateListener(playerName, participantCommunicationChannel);
 
             visitor.visitChannelNumber(number);
 
