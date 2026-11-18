@@ -31,9 +31,17 @@ class MediatorSitting {
     final Map<Integer, String> boardAt = new LinkedHashMap<>();
 
     MediatorSitting() {
-        LotroDeck aragorn = DeckSerialization.buildDeckFromContents("Aragorn Starter", Boards.ARAGORN_STARTER, FORMAT, "Aragorn Starter");
-        LotroDeck gandalf = DeckSerialization.buildDeckFromContents("Gandalf Starter", Boards.GANDALF_STARTER, FORMAT, "Gandalf Starter");
-        LotroGameParticipant[] participants = {new LotroGameParticipant("Alice", aragorn), new LotroGameParticipant("Bob", gandalf)};
+        this(Boards.ARAGORN_STARTER, Boards.GANDALF_STARTER);
+    }
+
+    /**
+     * @param aliceDeck Alice's deck, as DeckSerialization reads one: ring-bearer|ring|sites|the rest.
+     * @param bobDeck Bob's.
+     */
+    MediatorSitting(String aliceDeck, String bobDeck) {
+        LotroDeck alice = DeckSerialization.buildDeckFromContents("Alice's", aliceDeck, FORMAT, "Alice's");
+        LotroDeck bob = DeckSerialization.buildDeckFromContents("Bob's", bobDeck, FORMAT, "Bob's");
+        LotroGameParticipant[] participants = {new LotroGameParticipant("Alice", alice), new LotroGameParticipant("Bob", bob)};
         mediator = new LotroGameMediator("1", LoadedLibraries._formatLibrary.getFormat(FORMAT), participants, LoadedLibraries._cardLibrary,
                 new GameTimer(false, "Test", 60 * 80, 60 * 5), true, false, false, "Casual", new MarkdownParser(), null, false, null, null);
         for (String player : PLAYERS)
