@@ -17,7 +17,6 @@ import { GameLog } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { clockText } from '../panel/game-clock';
-import { GameThemeButtonComponent } from '../panel/game-theme-button.component';
 
 /** The phase as a word, as the phone shows it ("Fellowship" for FELLOWSHIP). */
 export function phaseLabel(phase: string | null): string {
@@ -39,18 +38,19 @@ interface Pill {
 
 /**
  * The phone layout's top (G7): the status bar (menu, phase, twilight, "Your move", the pills for initiative, moves,
- * archery and the Rule of 4, the chat with its unread count, the red theme button) and a chip per player (number,
+ * archery and the Rule of 4, the chat with its unread count; the red theme button is the menu's first item) and a chip
+ * per player (number,
  * name, clock, hand, deck, threats, dead pile) that opens the player's piles.
  *
  * DOM contract: `gd-phone-status` holding `.gd-phone-status__bar` with `button[data-phone=menu]`, `[data-game=phase]`,
  * `[data-game=twilight]`, `[data-phone=your-move]`, `.gd-phone-pill` (`data-pill`), `button[data-phone=chat]` (with
- * `.gd-phone-unread`), the theme button; then `.gd-phone-players` with a `button.gd-phone-player` per player
+ * `.gd-phone-unread`); then `.gd-phone-players` with a `button.gd-phone-player` per player
  * (`data-player`, `data-current`), each with `[data-clock]` and `[data-count]` hand, deck, threats, dead.
  */
 @Component({
   selector: 'gd-phone-status',
   styleUrl: './phone-status.component.css',
-  imports: [GameThemeButtonComponent, NgTemplateOutlet],
+  imports: [NgTemplateOutlet],
   template: `
     <div class="gd-phone-status__bar">
       <button type="button" class="gd-phone-icon" data-phone="menu" aria-label="Menu" (click)="open('menu')">☰</button>
@@ -82,7 +82,6 @@ interface Pill {
           <span class="gd-phone-unread">{{ unread() }}</span>
         }
       </button>
-      <gd-game-theme-button class="gd-phone-status__theme" />
     </div>
     <div #pillsLine class="gd-phone-status__pills" data-place="line" [hidden]="!pillsWrapped()">
       <ng-container [ngTemplateOutlet]="pillList" />

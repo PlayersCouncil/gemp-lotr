@@ -189,12 +189,6 @@
   color: var(--theme-warning);
 }
 
-/* The theme button: the deck builder's red button, a finger's size here */
-.gd-phone-status__theme {
-  flex: none;
-  display: inline-flex;
-}
-
 .gd-phone-players {
   display: flex;
   gap: 5px;

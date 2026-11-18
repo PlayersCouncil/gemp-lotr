@@ -1,3 +1,4 @@
+import { ThemeService } from '../../../core/platform/theme.service';
 import { signal } from '@angular/core';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -290,6 +291,21 @@ describe('the game on a phone (G7)', () => {
     expect(summary?.querySelector('b')?.textContent).toBe('Format:');
     expect(summary?.querySelector('br')).not.toBeNull();
     expect(summary?.textContent).toBe('Format: Fellowship blockTimer: 80 minutes');
+  });
+
+  it("switches the theme from the menu's red first item, as the deck builder does; the piles are on the chips", async () => {
+    const { el, click } = await open(game());
+    // No red button in the status bar
+    expect(el.querySelector('gd-phone-status [data-icon="theme"]')).toBeNull();
+    await click('[data-phone="menu"]');
+    const items = Array.from(el.querySelectorAll('.gd-phone-menu__item'), (item) => item.getAttribute('data-menu'));
+    expect(items[0]).toBe('theme');
+    expect(items).not.toContain('own-piles');
+    expect(items).not.toContain('opponent-piles');
+    expect(el.querySelector('[data-menu="theme"]')?.textContent?.trim()).toBe('Switch to the Classic theme');
+    const select = vi.spyOn(TestBed.inject(ThemeService), 'select').mockImplementation(() => undefined);
+    await click('[data-menu="theme"]');
+    expect(select).toHaveBeenCalledWith('classic');
   });
 
   it('puts the game in full screen from the menu, which closes', async () => {

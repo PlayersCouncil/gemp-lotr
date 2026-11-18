@@ -442,16 +442,6 @@ const PLACES = [
     target: '.gd-phone-sheet[data-sheet="piles"] [data-pile="discard"] .gd-card',
   },
   {
-    name: "the menu's piles",
-    state: 'late',
-    before: async (page) => {
-      await tap(page, page.locator('[data-phone="menu"]'));
-      await page.waitForTimeout(200);
-      await tap(page, page.locator('[data-menu="own-piles"]'));
-    },
-    target: '.gd-phone-sheet[data-sheet="piles"] .gd-card',
-  },
-  {
     name: "an attached card's details",
     state: 'late',
     before: async (page) => {
@@ -680,12 +670,11 @@ const RELOADS = [
   },
   { name: 'hand hidden', state: 'late', act: async (page) => dragDivider(page, 2000) },
   {
-    name: 'menu, piles and a card open, scrolled',
+    // The piles from the player's chip (the menu has no piles since 2026-11-18)
+    name: 'piles and a card open, scrolled',
     state: 'late',
     act: async (page) => {
-      await tap(page, page.locator('[data-phone="menu"]'));
-      await page.waitForTimeout(200);
-      await tap(page, page.locator('[data-menu="own-piles"]'));
+      await tap(page, page.locator(OWN_CHIP));
       await page.waitForTimeout(300);
       await page.evaluate(() => {
         const body = document.querySelector('.gd-phone-sheet__body');

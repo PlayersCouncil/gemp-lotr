@@ -234,11 +234,16 @@ async function zoomCheck(browser, devices, viaSwitch) {
     const angular = await open(browser, 'angular', device, recording, viaSwitch ? 'modern' : 'classic');
     try {
       if (viaSwitch) {
-        // The red button: classic is remembered and the page loaded again
+        // The red button (the phone layout: the menu's red first item): classic is remembered and the page loaded again
         await angular.servingWhole();
+        const menu = angular.page.locator('[data-phone="menu"]');
+        if (await menu.count()) {
+          await menu.tap();
+          await angular.page.waitForTimeout(300);
+        }
         await Promise.all([
           angular.page.waitForEvent('load'),
-          angular.page.locator('[data-icon="theme"]').first().tap(),
+          angular.page.locator('[data-menu="theme"], [data-icon="theme"]').first().tap(),
         ]);
         await settled(angular.page);
         const theme = await angular.page.evaluate(() => document.documentElement.dataset.theme);

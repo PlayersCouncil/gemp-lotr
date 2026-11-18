@@ -21,6 +21,7 @@ import { Sheet } from '../../../core/game/phone/sheet';
 import { GameLog } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
+import { GAME_THEME_PICKER, THEME_LABELS, THEMES, ThemeService } from '../../../core/platform/theme.service';
 import { AUTO_PASS_PHASES, GameSettings, UnderButton } from '../../../core/game/settings/game-settings';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { handRevealed, PileName, pileCards } from '../../../core/game/table/game-table';
@@ -139,6 +140,8 @@ const HALL = '/gemp-lotr/hall.html';
                     <button
                       type="button"
                       class="gd-phone-menu__item"
+                      [class.gd-button]="item.key === 'theme'"
+                      [attr.data-icon]="item.key === 'theme' ? 'theme' : null"
                       [attr.data-menu]="item.key"
                       [attr.data-danger]="item.key === 'concede' ? '' : null"
                       (click)="choose(item.key)"
@@ -390,6 +393,13 @@ export class PhoneSheetsComponent {
   private readonly gameViews = inject(GameCardViews);
   private readonly cardViews = inject(CardViews);
   private readonly cues = inject(PageCues);
+  private readonly theme = inject(ThemeService);
+  /** Players may switch themes (GAME_THEME_PICKER): the menu's first item does it. */
+  private readonly themePicker = inject(GAME_THEME_PICKER);
+  /** The theme the menu's first item switches to: the next one, after the last the first. */
+  private readonly nextTheme = computed(
+    () => THEMES[(THEMES.indexOf(this.theme.theme()) + 1) % THEMES.length] ?? THEMES[0],
+  );
   private readonly body = viewChild<ElementRef<HTMLElement>>('body');
 
   protected readonly top = this.sheets.top;
@@ -540,15 +550,9 @@ export class PhoneSheetsComponent {
   protected readonly menu = computed(() => {
     const model = this.session.model();
     const playing = !model.spectator && !this.session.replaying();
-    const opponent = model.players.find((p) => p !== model.participantId);
     const items: { key: string; label: string }[] = [];
-    if (model.participantId) {
-      items.push({
-        key: 'own-piles',
-        label: playing ? 'Your piles: adventure deck, dead, discard' : `${model.participantId}'s piles`,
-      });
-    }
-    if (opponent) items.push({ key: 'opponent-piles', label: `${opponent}'s piles` });
+    // The theme first, red, as in the deck builder's menu (the owner, 2026-11-18); the piles are on the players' chips
+    if (this.themePicker) items.push({ key: 'theme', label: `Switch to the ${THEME_LABELS[this.nextTheme()]} theme` });
     items.push(
       { key: 'chat', label: 'Chat and game log' },
       { key: 'info', label: 'Game info' },
@@ -618,14 +622,9 @@ export class PhoneSheetsComponent {
   }
 
   protected choose(key: string): void {
-    const model = this.session.model();
-    const opponent = model.players.find((p) => p !== model.participantId);
     switch (key) {
-      case 'own-piles':
-        if (model.participantId) this.sheets.open({ kind: 'piles', player: model.participantId, focus: null });
-        break;
-      case 'opponent-piles':
-        if (opponent) this.sheets.open({ kind: 'piles', player: opponent, focus: null });
+      case 'theme':
+        this.theme.select(this.nextTheme());
         break;
       case 'chat':
       case 'info':

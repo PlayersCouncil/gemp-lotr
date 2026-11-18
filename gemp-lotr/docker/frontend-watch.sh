@@ -1,5 +1,5 @@
 #!/bin/sh
-# Keeps the Angular app (the deck builder and the pages ported after it) served by the Java server in step with its
+# Keeps the Angular app (one build: the deck builder, ng/deckbuilder/, and the game, ng/game) served by the Java server in step with its
 # sources, so a `git pull` on the server is enough to deploy a frontend change (as it is for the legacy jQuery pages).
 #
 # Run by the `frontend` service in docker-compose.yml. Every POLL_SECONDS it fingerprints the frontend sources and the
