@@ -881,6 +881,15 @@ public class LotroGameMediator {
      * @param entryCount Which of the player's restore points (its entryCount); null for the latest, their last answer.
      */
     public UndoReply requestUndo(String requester, Integer entryCount) {
+        return requestUndo(requester, entryCount, false);
+    }
+
+    /**
+     * @param ownOnly Whether this is the Undo button's ask, which undoes a choice of the player's own and never asks
+     *                anybody: refused if the place has stopped being green since the button was drawn (the other
+     *                player has just answered, say), where requestUndo would go on to ask.
+     */
+    public UndoReply requestUndo(String requester, Integer entryCount, boolean ownOnly) {
         _writeLock.lock();
         try {
             if (!_playersPlaying.contains(requester))
@@ -903,6 +912,8 @@ public class LotroGameMediator {
             String unavailable = unavailable(requester, assessment);
             if (unavailable != null)
                 return new UndoReply("refused", unavailable, 0);
+            if (ownOnly && assessment.tier() != RevertAssessment.Tier.GREEN)
+                return new UndoReply("refused", "No longer yours to undo", 0);
 
             Set<String> toAsk = new LinkedHashSet<>();
             if (assessment.tier() != RevertAssessment.Tier.GREEN && !_undoPolicy.othersAgreeAtOnce())

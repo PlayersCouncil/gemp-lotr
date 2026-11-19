@@ -129,15 +129,21 @@ the format's discard pile made public for `STATES.opponentPilesPublic` (the P ev
 `npm run check:game:undo` (`undo.mjs`, against a game check server kept up, as the two checks below) plays real games
 with each player on a page of their own and checks taking a game back as the players see it:
 
-- **own**: a choice nobody else has seen or answered is in the list as Green and is taken back at once; both pages
-  show the game as it was and say so, and the game goes on;
-- **done**: a starting fellowship nothing more fits into asks only for DONE; the last card is Green meanwhile and
+- **own**: after a choice nobody else has seen or answered, the Undo button is in the alert box and says what it
+  undoes; the list has the place as green, "Undo", with what was done ("Played Gimli"). The button takes it back at
+  once; both pages show the game as it was and say so, the button is gone, and the game goes on;
+- **done**: a starting fellowship nothing more fits into asks only for DONE; the last card is green meanwhile and
   is taken back, offered again and chosen again, and after DONE the opponent goes on;
-- **approve**: once the opponent has answered, every place needs asking; the asker waits (and may withdraw), the
-  opponent is shown the request with the same tier and approves; both pages show the game as it was at that place;
+- **skip**: with "Skip extra confirmations" on, the page presses that DONE itself;
+- **approve**: once the opponent has answered there is no Undo button and every place in the list is a revert with
+  its reasons; the "i" button explains the tiers. Asked, the asker waits (and may withdraw) and the opponent is
+  shown the same place, tier and reasons. Nothing in the request is the default (Enter does nothing, the first Tab
+  goes to Approve), and the opponent's own decision cannot be answered while it waits. Approved, both pages show
+  the game as it was at that place;
 - **decline**: the asker is told, nothing changes, the game goes on;
-- **decline-all**: the asker's list then shows the places that need asking as unavailable, with the reason;
-- **withdraw**: the opponent's request goes away;
+- **decline-all**: the asker's list shows the reverts as off, with the reason; the asked player's "Auto-decline
+  revert requests" switch is on (the asker's is not), and turning it off lets requests through again;
+- **withdraw**: the opponent's request goes away, and their decision can be answered again;
 - **concede**: the opponent concedes while this player's decision waits, and the page shows the end without the
   decision being answered first.
 

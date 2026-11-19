@@ -36,25 +36,41 @@ const ONLY = argument('only', '').split(',').filter(Boolean);
 const UNDO = {
   legacy: {
     path: '/gemp-lotr/game.html',
-    /** Opens the list of places the game can be taken back to. */
+    /** The Undo button: there while the player's last choice is their own to take back. */
+    undoButton: '#undoLast',
+    /** Opens the list of places the game can be taken back to ("Revert..." in the Options tab). */
     openList: async (page) => {
       await page.locator(LEGACY.tab('options')).click();
       await page.locator('#undoGame').click();
     },
     list: '.undoList',
-    /** A place in the list: its button, its tier, what it is and why it is as it is. */
+    /** A place in the list (its tier is its data-tier): its button, what was done there, why it is not green, why it is off. */
     point: '.undoPoint',
     pointButton: 'button',
-    pointTier: '.undoTier',
     pointLabel: '.undoLabel',
     pointWhy: '.undoWhy',
-    listNote: '.undoNote',
-    declineAll: '#undoDeclineAll',
+    pointOff: '.undoOff',
+    /** The headings the list is divided by: a turn and its phase. */
+    listWhen: '.undoPoints .undoWhen',
+    /** The "i" button and the explanation of the tiers it opens. */
+    info: '.undoInfo',
+    help: '.undoHelp',
+    /** "Auto-decline revert requests", in the Options tab. */
+    autoDecline: async (page) => {
+      await page.locator(LEGACY.tab('options')).click();
+      return page.locator('#undoAutoDecline');
+    },
+    /** "Skip extra confirmations", in the Settings tab. */
+    skipSetting: async (page) => {
+      await page.locator(LEGACY.tab('settings')).click();
+      return page.locator('#skipConfirmations');
+    },
     closeList: '.ui-dialog:has(.undoList) .ui-dialog-titlebar-close',
-    /** A request waiting for an answer: the asker's and the asked player's dialog. */
+    /** A request waiting for an answer (its tier is its data-tier): the asker's and the asked player's dialog. */
     request: '.undoRequest',
+    requestFrame: '.ui-dialog:has(.undoRequest)',
     requestButton: (label) => `.ui-dialog:has(.undoRequest) .ui-dialog-buttonpane button:has(:text-is("${label}"))`,
-    requestButtons: '.ui-dialog:has(.undoRequest) .ui-dialog-buttonpane button',
+    requestButtons: '.ui-dialog:has(.undoRequest) .ui-dialog-buttonset button',
     banner: '.undoBanner',
     /** The decision's own dialog (not undo's). */
     decisionDialog: '.ui-dialog:visible:not(:has(.undoList)):not(:has(.undoRequest))',
@@ -136,7 +152,7 @@ class Seat {
     await this.page.locator(ui.decisionCard).nth(index).click();
   }
 
-  /** The places the list offers, the latest first: `{ button, enabled, tier, label, why }`. */
+  /** The places the list offers, the latest first: `{ button, enabled, tier, label, why, off }`. */
   async openList() {
     await ui.openList(this.page);
     await this.page.locator(ui.list).waitFor({ timeout: 10000 });
@@ -145,12 +161,22 @@ class Seat {
         rows.map((row) => ({
           button: row.querySelector(sel.pointButton)?.textContent.trim(),
           enabled: !row.querySelector(sel.pointButton)?.disabled,
-          tier: row.querySelector(sel.pointTier)?.textContent.trim(),
+          tier: row.dataset.tier,
           label: row.querySelector(sel.pointLabel)?.textContent.trim(),
-          why: row.querySelector(sel.pointWhy)?.textContent.trim() ?? '',
+          why: Array.from(row.querySelectorAll(`${sel.pointWhy} > *`), (line) => line.textContent.trim()),
+          off: row.querySelector(sel.pointOff)?.textContent.trim() ?? '',
         })),
-      { pointButton: ui.pointButton, pointTier: ui.pointTier, pointLabel: ui.pointLabel, pointWhy: ui.pointWhy },
+      { pointButton: ui.pointButton, pointLabel: ui.pointLabel, pointWhy: ui.pointWhy, pointOff: ui.pointOff },
     );
+  }
+
+  /** The Undo button: null if it is not shown, otherwise `{ enabled, title }`. */
+  undoButton() {
+    return this.page.evaluate((selector) => {
+      const button = document.querySelector(selector);
+      if (!button || button.getBoundingClientRect().width === 0) return null;
+      return { enabled: !button.disabled, title: button.title, text: button.textContent.trim() };
+    }, ui.undoButton);
   }
 
   async takeBack(index = 0) {
@@ -164,17 +190,19 @@ class Seat {
   /** The request on the screen, if any: `{ text, tier, buttons }`. Read in one go: the dialog may close meanwhile. */
   request() {
     return this.page.evaluate(
-      ({ request, tier, buttons }) => {
+      ({ request, label, why, buttons }) => {
         const shown = (el) => el && el.getBoundingClientRect().width > 0;
         const dialog = Array.from(document.querySelectorAll(request)).find(shown);
         if (!dialog) return null;
         return {
           text: dialog.textContent.replace(/\s+/g, ' ').trim(),
-          tier: dialog.querySelector(tier)?.textContent.trim() ?? '',
+          tier: dialog.dataset.tier,
+          label: dialog.querySelector(label)?.textContent.trim() ?? '',
+          why: Array.from(dialog.querySelectorAll(`${why} > *`), (line) => line.textContent.trim()),
           buttons: Array.from(document.querySelectorAll(buttons), (button) => button.textContent.trim()),
         };
       },
-      { request: ui.request, tier: ui.pointTier, buttons: ui.requestButtons },
+      { request: ui.request, label: ui.pointLabel, why: ui.pointWhy, buttons: ui.requestButtons },
     );
   }
 
@@ -253,28 +281,44 @@ async function bothHaveChosen(table) {
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+/** What the page's focus is on: `{ onFrame, text }` (whether it is the request's dialog itself, and its words). */
+const focus = (who) =>
+  who.page.evaluate((frame) => {
+    const active = document.activeElement;
+    return { onFrame: !!active?.matches(frame), text: (active?.textContent.trim() ?? '').slice(0, 40) };
+  }, ui.requestFrame);
+
 const CHECKS = {
-  /** A choice nobody else has seen or answered is taken back at once, without asking anybody. */
+  /** A choice nobody else has seen or answered: the Undo button is there, and takes it back at once. */
   async own(table, problems) {
     const { first, second, start } = table;
+    if (await first.undoButton()) problems.push('the Undo button is shown before anything was chosen');
     const offered = await first.offered();
     await first.play(0);
+    const button = await until(() => first.undoButton(), 'the Undo button');
+    await first.shot('own', '1-undo-button');
+    if (!button.enabled || !/^Undo: Played /.test(button.title)) {
+      problems.push(`the Undo button should be on and say what it undoes: ${JSON.stringify(button)}`);
+    }
     const points = await first.openList();
-    await first.shot('own', '1-list');
+    await first.shot('own', '2-list');
     if (points.length !== 1) problems.push(`one place to go back to was expected, the list has ${points.length}`);
     const point = points[0];
-    if (point && !(point.tier === 'Green' && point.button === 'Take back' && point.enabled)) {
-      problems.push(`the player's own last choice should be Green with "Take back": ${JSON.stringify(point)}`);
+    if (point && !(point.tier === 'GREEN' && /Undo$/.test(point.button) && point.enabled && point.why.length === 0)) {
+      problems.push(`the player's own last choice should be green, "Undo", with no reasons: ${JSON.stringify(point)}`);
     }
+    if (point && !/^Played \S/.test(point.label)) problems.push(`the place should say what was done: "${point.label}"`);
+    await first.closeList();
     const loads = { first: first.loads, second: second.loads };
-    await first.takeBack(0);
-    await until(async () => first.banner(), 'the page to say the game was taken back');
+    await first.page.locator(ui.undoButton).click();
+    const banner = await until(async () => first.banner(), 'the page to say the choice was undone');
+    if (!/ undid: Played /.test(banner)) problems.push(`the page says: "${banner}"`);
     await until(
       async () => (await first.decision())?.startsWith('Starting fellowship'),
       'the choice to be asked again',
     );
     await sleep(500);
-    await first.shot('own', '2-taken-back');
+    await first.shot('own', '3-undone');
     if (await first.request()) problems.push('a request was shown for a choice that needs nobody asked');
     if (!same(await first.cards(), start.first)) {
       problems.push(`the cards are not as before the choice: ${JSON.stringify(await first.cards())}`);
@@ -282,11 +326,13 @@ const CHECKS = {
     if ((await first.offered()) !== offered) {
       problems.push(`${offered} cards were offered before; now ${await first.offered()}`);
     }
-    await until(async () => second.banner(), 'the other page to say the game was taken back');
+    if (await first.undoButton()) problems.push('the Undo button is still shown with nothing left to undo');
+    await until(async () => second.banner(), 'the other page to say the choice was undone');
     if (!same(await second.cards(), start.second)) problems.push("the other player's cards are not as before");
     table.note = `${KIND === 'legacy' ? 'page loads' : 'loads'}: ${first.loads - loads.first} (asker), ${second.loads - loads.second} (other)`;
     // ...and the game goes on from there
     await first.play(1);
+    await until(() => first.undoButton(), 'the Undo button after the next choice');
   },
 
   /**
@@ -312,11 +358,11 @@ const CHECKS = {
     const points = await first.openList();
     await first.shot('done', '2-list');
     if (points.length !== picks) problems.push(`${picks} cards were chosen, the list has ${points.length} places`);
-    if (!(points[0]?.tier === 'Green' && points[0]?.enabled)) {
-      problems.push(`the last card should be Green while DONE waits: ${JSON.stringify(points[0])}`);
+    if (!(points[0]?.tier === 'GREEN' && points[0]?.enabled)) {
+      problems.push(`the last card should be green while DONE waits: ${JSON.stringify(points[0])}`);
     }
     await first.takeBack(0);
-    await until(async () => first.banner(), 'the page to say the game was taken back');
+    await until(async () => first.banner(), 'the page to say the choice was undone');
     await until(
       async () => (await first.decision())?.includes('Choose next character'),
       'the last card to be offered again',
@@ -333,41 +379,95 @@ const CHECKS = {
     table.note = `${picks} cards fill the fellowship`;
   },
 
-  /** Anything the opponent has answered since needs the opponent's leave: asked, shown with its tier, approved. */
+  /** With "Skip extra confirmations" on, the page presses that DONE itself. */
+  async skip(table, problems) {
+    const { first, second } = table;
+    await (await ui.skipSetting(first.page)).check();
+    let picks = 0;
+    while (!(await second.decision())?.startsWith('Starting fellowship')) {
+      if (picks >= 4) throw new Error('four cards chosen and the opponent is still not asked');
+      await first.play(0);
+      picks++;
+      await sleep(800);
+      if ((await first.decision())?.includes('Nothing more can be added')) {
+        problems.push('the DONE ask was shown though extra confirmations are skipped');
+        return;
+      }
+    }
+    table.note = `${picks} cards, no DONE asked`;
+  },
+
+  /** Anything the opponent has answered since is a revert, and needs the opponent's leave: asked, shown, approved. */
   async approve(table, problems) {
     const { first, second } = table;
     await bothHaveChosen(table);
+    if (await first.undoButton()) problems.push('the Undo button is shown though the opponent has answered since');
     const points = await first.openList();
-    await first.shot('approve', '1-list');
     if (points.length !== 2) problems.push(`two places to go back to were expected, the list has ${points.length}`);
     for (const point of points) {
-      if (point.tier === 'Green' || point.button !== 'Ask' || !point.enabled) {
-        problems.push(`after the opponent's card, no place should be Green or taken at once: ${JSON.stringify(point)}`);
+      if (point.tier === 'GREEN' || !/Revert$/.test(point.button) || !point.enabled || point.why.length === 0) {
+        problems.push(`after the opponent's card, every place is a revert, with its reasons: ${JSON.stringify(point)}`);
       }
     }
+    if (points[0]?.label !== 'Pressed DONE')
+      problems.push(`the latest place should be "Pressed DONE": ${points[0]?.label}`);
+    if ((await first.page.locator(ui.listWhen).count()) < 1)
+      problems.push('the list has no heading for its turn and phase');
+    // The "i" button explains the three tiers
+    if (await first.page.locator(ui.help).isVisible()) problems.push('the explanation of the tiers is open unasked');
+    await first.page.locator(`${ui.list} ${ui.info}`).click();
+    const help = ((await first.page.locator(ui.help).textContent()) ?? '').replace(/\s+/g, ' ');
+    if (!/Undo\..*Revert\..*approval.*Revert\./.test(help)) problems.push(`the explanation of the tiers: "${help}"`);
+    await first.shot('approve', '1-list');
+
     await first.takeBack(0);
     const mine = await until(() => first.request(), "the asker's waiting dialog");
     const theirs = await until(() => second.request(), "the opponent's request dialog");
     await first.shot('approve', '2-waiting');
     await second.shot('approve', '2-asked');
-    if (!same(mine.buttons, ['Withdraw the request'])) problems.push(`the asker's buttons: ${mine.buttons}`);
-    if (!same(theirs.buttons, ['Approve', 'Decline', 'Decline all for this game'])) {
+    if (!same(mine.buttons, ['Withdraw'])) problems.push(`the asker's buttons: ${mine.buttons}`);
+    if (!same(theirs.buttons, ['Approve', 'Decline', 'Decline all']))
       problems.push(`the opponent's buttons: ${theirs.buttons}`);
+    if (theirs.tier !== points[0]?.tier || !same(theirs.why, points[0]?.why) || theirs.label !== points[0]?.label) {
+      problems.push(
+        `the opponent is shown ${JSON.stringify(theirs)}, the asker was shown ${JSON.stringify(points[0])}`,
+      );
     }
-    if (theirs.tier !== points[0]?.tier) {
-      problems.push(`the opponent is shown ${theirs.tier}, the asker was shown ${points[0]?.tier}`);
-    }
-    table.note = `tier ${theirs.tier}`;
+    table.note = `${theirs.tier}: ${theirs.why.join('; ')}`;
+
+    // Nothing is the default: Enter does nothing, and the first Tab goes to Approve
+    await sleep(200);
+    if (!(await focus(second)).onFrame)
+      problems.push(`the focus is on "${(await focus(second)).text}" when the request opens`);
+    await second.page.keyboard.press('Enter');
+    await sleep(500);
+    if (!(await second.request())) throw new Error('Enter answered the request before anything was chosen');
+    await second.page.keyboard.press('Tab');
+    if ((await focus(second)).text !== 'Approve')
+      problems.push(`the first Tab goes to "${(await focus(second)).text}"`);
+
+    // While it waits, the opponent's own decision cannot be answered
+    const before = await second.cards();
+    await second.page
+      .locator(ui.decisionCard)
+      .first()
+      .click({ force: true, timeout: 2000 })
+      .catch(() => undefined);
+    await sleep(700);
+    if (!same(await second.cards(), before)) problems.push('a card was chosen while the request was waiting');
+    await second.shot('approve', '2-asked-frozen');
+
     await second.answerRequest('Approve');
-    await until(async () => first.banner(), 'the asker to be told the game was taken back');
-    await until(async () => second.banner(), 'the opponent to be told the game was taken back');
+    const banner = await until(async () => first.banner(), 'the asker to be told the game was reverted');
+    if (!/ reverted: Pressed DONE/.test(banner)) problems.push(`the asker's page says: "${banner}"`);
+    await until(async () => second.banner(), 'the opponent to be told the game was reverted');
     await until(
       async () => (await first.decision())?.startsWith('Starting fellowship'),
       'the choice to be asked again',
     );
     await sleep(500);
-    await first.shot('approve', '3-taken-back');
-    await second.shot('approve', '3-taken-back');
+    await first.shot('approve', '3-reverted');
+    await second.shot('approve', '3-reverted');
     if (!same(await first.cards(), table.beforeDone.first)) problems.push("the asker's cards are not as at that point");
     if (!same(await second.cards(), table.beforeDone.second))
       problems.push("the opponent's cards are not as at that point");
@@ -386,7 +486,7 @@ const CHECKS = {
     await second.answerRequest('Decline');
     const banner = await until(() => first.banner(), 'the asker to be told');
     await first.shot('decline', '1-declined');
-    if (!/declin/i.test(banner)) problems.push(`the asker is told: "${banner}"`);
+    if (!/declined the revert/.test(banner)) problems.push(`the asker is told: "${banner}"`);
     await until(async () => !(await first.request()) && !(await second.request()), 'the request to leave both screens');
     if (first.loads !== loads.first || second.loads !== loads.second) problems.push('a page was loaded again');
     if (!same(await first.cards(), before.first) || !same(await second.cards(), before.second)) {
@@ -396,26 +496,38 @@ const CHECKS = {
     await second.play(0);
   },
 
-  /** "Decline all": this request and every later one that would need asking; the asker's list says so. */
+  /**
+   * "Decline all": this request and every later one. The asker's list says so; the switch in the asked player's
+   * Options tab is on, and turning it off there lets requests through again.
+   */
   async 'decline-all'(table, problems) {
     const { first, second } = table;
     await bothHaveChosen(table);
     await first.openList();
     await first.takeBack(0);
     await until(() => second.request(), "the opponent's request dialog");
-    await second.answerRequest('Decline all for this game');
+    await second.answerRequest('Decline all');
     await until(() => first.banner(), 'the asker to be told');
     await until(async () => !(await first.request()), "the asker's waiting dialog to close");
     const points = await first.openList();
     await first.shot('decline-all', '1-list');
     for (const point of points) {
-      if (point.enabled || !point.why) {
-        problems.push(
-          `with every request declined, a place that needs asking should be off, with the reason: ${JSON.stringify(point)}`,
-        );
+      if (point.enabled || !/auto-declining/.test(point.off)) {
+        problems.push(`with every request declined, a revert should be off and say why: ${JSON.stringify(point)}`);
       }
     }
-    table.note = points[0]?.why;
+    table.note = points[0]?.off;
+    await first.closeList();
+    const theirSwitch = await ui.autoDecline(second.page);
+    await second.shot('decline-all', '2-switch');
+    if (!(await theirSwitch.isChecked())) problems.push("the asked player's auto-decline switch is not on");
+    const mySwitch = await ui.autoDecline(first.page);
+    if (await mySwitch.isChecked()) problems.push("the asker's own auto-decline switch is on");
+    await theirSwitch.uncheck();
+    await sleep(500);
+    if ((await first.openList()).some((point) => !point.enabled)) {
+      problems.push('with the switch turned off again, the reverts are still off');
+    }
   },
 
   /** The asker thinks better of it: the opponent's dialog goes away, nothing is taken back. */
@@ -427,11 +539,13 @@ const CHECKS = {
     await first.takeBack(0);
     await until(() => second.request(), "the opponent's request dialog");
     await until(() => first.request(), "the asker's waiting dialog");
-    await first.answerRequest('Withdraw the request');
+    await first.answerRequest('Withdraw');
     await until(async () => !(await second.request()), "the opponent's request dialog to close");
     await until(async () => !(await first.request()), "the asker's waiting dialog to close");
     await second.shot('withdraw', '1-withdrawn');
     if (!same(await second.cards(), before)) problems.push('the cards changed though the request was withdrawn');
+    // The opponent's choice can be answered again
+    await second.play(0);
   },
 
   /** The opponent concedes while this player's decision waits: the page shows the end without being answered first. */

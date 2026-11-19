@@ -1242,6 +1242,11 @@ var GameAnimations = Class.extend({
                     that.game.startTimerTick();
                 }
                 
+                if (that.game.confirmsItself(decision)) {
+                    next();
+                    return;
+                }
+
                 var decisionType = decision.getAttribute("decisionType");
                 if (decisionType == "INTEGER") {
                     that.game.integerDecision(decision);
@@ -1264,6 +1269,8 @@ var GameAnimations = Class.extend({
 
                 if (that.game.scenario != null)
                     that.game.scenario.decisionShown(decision);
+                if (that.game.undo != null)
+                    that.game.undo.decisionShown();
 
                 next();
             });

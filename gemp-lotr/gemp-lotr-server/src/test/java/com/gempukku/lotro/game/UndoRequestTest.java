@@ -327,4 +327,23 @@ public class UndoRequestTest {
         assertTrue(sitting.mediator.isFinished());
         assertEquals("ended", lastNotice(sitting, asked, GameNotices.RESYNC).fields().get("reason"));
     }
+
+    @Test
+    public void TheUndoButtonsAskUndoesOnlyAChoiceOfOnesOwnAndNeverAsksAnybody() {
+        MediatorSitting sitting = new MediatorSitting(Boards.ONE_COMPANION, Boards.ONE_COMPANION);
+        String first = sitting.toStartingFellowships();
+        String second = sitting.other(first);
+        sitting.pick(first);
+        sitting.pressDone(first);
+        //The button was drawn while the choice was the player's own; the other player has answered since
+        sitting.pick(second);
+
+        LotroGameMediator.UndoReply reply = sitting.mediator.requestUndo(first, null, true);
+        assertEquals("refused", reply.status());
+        assertEquals("No longer yours to undo", reply.message());
+        assertNull("and nobody is asked for a revert by it", sitting.mediator.getPendingUndo());
+
+        //...where the same ask from the list would go on to ask the other player
+        assertEquals("pending", sitting.mediator.requestUndo(first, null, false).status());
+    }
 }

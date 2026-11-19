@@ -742,25 +742,69 @@ body {
 	margin-left: 8px;
 }
 
-/* Taking a game back (js/gemp-022/undo.js) */
-.undoTier {
+/* Undo and revert (js/gemp-022/undo.js) */
+.undoMark {
     display: inline-block;
-    min-width: 4.5em;
-    margin: 0 0.5em;
-    padding: 0.1em 0.5em;
-    border-radius: 0.8em;
+    width: 1.4em;
+    margin-right: 0.4em;
+    border-radius: 0.3em;
     text-align: center;
     font-weight: bold;
     color: #111;
 }
-.undoTier-green { background: #7ccf7c; }
-.undoTier-yellow { background: #f0d860; }
-.undoTier-red { background: #ee7b7b; }
-.undoPoint { margin: 0.4em 0; }
-.undoWhy, .undoNote, .undoClock { margin: 0.2em 0 0.2em 0.5em; font-size: 90%; opacity: 0.85; }
-.undoLabel { font-weight: bold; }
+.undoMark-green, .undoGo-green { background: #7ccf7c; }
+.undoMark-yellow, .undoGo-yellow { background: #f0d860; }
+.undoMark-red, .undoGo-red { background: #ee7b7b; }
+/* The Undo button: lower right of the alert box, Pass and Done being on the lower left */
+/* (#undoLast: jQuery UI makes its buttons position: relative) */
+#undoLast { position: absolute; right: 3px; bottom: 3px; margin: 0; }
+.undoLast .ui-button-text { padding: .2em .6em; }
+.alertButtons.besideUndo { width: calc(100% - 5.5em) !important; }
+.undoOptions label { margin-left: 0.3em; }
+.undoOptions #undoAutoDecline { margin-left: 1em; }
+.undoHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4em; }
+.undoInfo {
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    font-style: italic;
+    font-weight: bold;
+    cursor: pointer;
+}
+.undoHelp { margin: 0 0 0.6em 0; padding: 0.5em; border: 1px solid rgba(128, 128, 128, 0.6); border-radius: 0.4em; font-size: 110%; }
+.undoHelp > div { margin: 0.3em 0; }
+/* The list reads as a list: one bordered box, a heading for each turn and phase, a line between the rows */
+.undoPoints { border: 1px solid rgba(128, 128, 128, 0.6); border-radius: 0.4em; max-height: 22em; overflow-y: auto; }
+.undoPoints:empty { display: none; }
+.undoPoints .undoWhen { padding: 0.25em 0.6em; background: rgba(128, 128, 128, 0.25); font-size: 85%; text-transform: uppercase; letter-spacing: 0.05em; }
+.undoPoint { padding: 0.4em 0.6em; border-top: 1px solid rgba(128, 128, 128, 0.3); }
+.undoGo {
+    min-width: 6.5em;
+    margin-right: 0.8em;
+    padding: 0.25em 0.6em;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 0.3em;
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
+}
+.undoGo:disabled { opacity: 0.4; cursor: default; }
+.undoWhy { margin: 0.25em 0 0 7.3em; }
+.undoRequest .undoWhy { margin-left: 1.8em; }
+.undoOff, .undoNote, .undoClock { margin: 0.25em 0 0 7.3em; font-size: 90%; opacity: 0.85; }
+.undoNote, .undoClock { margin-left: 0; }
 .undoRequest > div { margin: 0.4em 0; }
-.undoDecline { margin-top: 1em; padding-top: 0.6em; border-top: 1px solid rgba(128, 128, 128, 0.5); }
+.undoTarget .undoLabel { font-weight: bold; font-size: 115%; }
+.undoTarget .undoWhen { margin-left: 0.8em; font-size: 85%; opacity: 0.85; }
+/* A request is answered or runs out: it has no close button, so the first Tab is Approve */
+.undoRequestDialog .ui-dialog-titlebar-close { display: none; }
+.undoRequestDialog:focus { outline: none; }
+.undoRequestDialog .ui-dialog-buttonpane .undoInfo { float: left; margin: 0.9em 0 0 1em; }
+/* While a request waits nothing in the game can be answered */
+body.undoFrozen .alertButtons, body.undoFrozen .ui-dialog[inert] { opacity: 0.45; }
 .undoBanner {
     position: fixed;
     top: 0.6em;

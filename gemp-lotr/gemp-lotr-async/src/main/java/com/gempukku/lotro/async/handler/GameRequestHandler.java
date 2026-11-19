@@ -215,6 +215,8 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
         policy.put("green", gameMediator.getUndoPolicy().green());
         policy.put("yellow", gameMediator.getUndoPolicy().yellow());
         policy.put("red", gameMediator.getUndoPolicy().red());
+        //Whether anybody is asked before a yellow or red one is carried out (not against a bot or in a scenario)
+        policy.put("asks", !gameMediator.getUndoPolicy().othersAgreeAtOnce());
         policy.put("timeoutSeconds", gameMediator.getUndoPolicy().timeoutSeconds());
         policy.put("greenPerPhase", gameMediator.getUndoPolicy().greenPerPhase());
         List<String> declining = new ArrayList<>();
@@ -240,8 +242,10 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             Player resourceOwner = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
             String entryCount = getFormParameterSafely(postDecoder, "entryCount");
             LotroGameMediator gameMediator = gameOf(gameId);
+            //ownOnly: the Undo button, which never asks anybody (see LotroGameMediator.requestUndo)
+            boolean ownOnly = "true".equals(getFormParameterSafely(postDecoder, "ownOnly"));
             LotroGameMediator.UndoReply reply = gameMediator.requestUndo(resourceOwner.getName(),
-                    entryCount == null || entryCount.isEmpty() ? null : Integer.valueOf(entryCount));
+                    entryCount == null || entryCount.isEmpty() ? null : Integer.valueOf(entryCount), ownOnly);
             responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(undoReplyJson(reply)));
         } catch (NumberFormatException exp) {
             throw new HttpProcessingException(400);

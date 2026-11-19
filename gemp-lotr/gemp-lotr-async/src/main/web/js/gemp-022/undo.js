@@ -1,14 +1,19 @@
-// Taking a game back to an earlier point (the server side is LotroGameMediator.requestUndo).
+// Undo and revert: taking a game back to an earlier point (the server side is LotroGameMediator.requestUndo).
 //
 // Everything the game screen does about it is in this file, so that a new client has one place to read:
 //
 //   - A second poll, for notices, that runs all the time.  The game screen does not ask for game events while its
-//     player is looking at a decision, so anything that has to reach a player then (a request to take the game
-//     back, a concession) comes as a notice.
-//   - The "Take back..." button: the list of places the player may go back to, each with its tier (green: only your
-//     own choices; yellow: the other player's too; red: you have seen something since) and why it may not be asked
-//     for just now.
-//   - The dialog a player is shown when the other player asks, with Approve, Decline and Decline all.
+//     player is looking at a decision, so anything that has to reach a player then (a revert request, a concession)
+//     comes as a notice.
+//   - The Undo button, in the lower right of the alert box: there while the player's last choice is still their own
+//     business (green: nobody else has answered or seen anything since), and takes it back at once.
+//   - "Revert..." in the Options tab: the list of every place the player may go back to.  A green one is an undo;
+//     a yellow one (the opponent replays choices) or a red one (hidden information was revealed) is asked of the
+//     opponent.  It is in a tab on purpose: it is not meant to be used all the time.
+//   - "Auto-decline revert requests" beside it: for this game only, off to begin with.
+//   - The dialog a player is shown when the opponent asks, with Approve, Decline and Decline all.  Nothing in it is
+//     the default: Enter does nothing, and the first Tab goes to Approve.  While a request waits the game stands
+//     still, and the page lets no decision be answered.
 //   - What happens when the game has been taken back: the table is fetched again from nothing.  This client does
 //     that by loading the page again; the server has moved it to a new channel in any case.
 //   - The banner that says a game was taken back, in a game and in a replay.
@@ -18,9 +23,24 @@ var GempLotrUndo = Class.extend({
     lastNotice: -1,
     started: false,
     reloading: false,
+    // Whether a request is waiting, so that nothing in the game may be answered
+    frozen: false,
+    policy: null,
+    // The player's last choice, if it is theirs to undo: what the Undo button takes back
+    latest: null,
+    undoButton: null,
     listDialog: null,
     requestDialog: null,
     countdown: null,
+    refreshing: false,
+    refreshAgain: false,
+
+    // How a tier is shown: its mark, what going back to it is called, and what it means (the "i" button)
+    TIERS: {
+        GREEN: {mark: "✓", word: "Undo", means: "Only your own choice. Nobody is asked."},
+        YELLOW: {mark: "~", word: "Revert", means: "Your opponent replays choices."},
+        RED: {mark: "✕", word: "Revert", means: "Hidden information was revealed."}
+    },
 
     init: function (game) {
         this.game = game;
@@ -51,19 +71,95 @@ var GempLotrUndo = Class.extend({
             $("#undoGame").button().click(function () {
                 that.openList();
             });
+            $("#undoAutoDecline").change(function () {
+                that.comm.setUndoAutoDecline($(this).prop("checked"), function () {
+                }, function () {
+                });
+            });
         }
 
         this.pollNotices();
+        this.refresh();
+    },
+
+    /* ---- what can be taken back just now ---- */
+
+    // Asks the server again what the player may go back to.  The game screen calls this whenever the game has moved
+    // on (gameUi.processXml); asked while an answer is on its way, it asks once more when that has come.
+    refresh: function () {
+        if (!this.started || this.reloading)
+            return;
+        if (this.refreshing) {
+            this.refreshAgain = true;
+            return;
+        }
+        var that = this;
+        this.refreshing = true;
+        var done = function () {
+            that.refreshing = false;
+            if (that.refreshAgain) {
+                that.refreshAgain = false;
+                that.refresh();
+            }
+        };
         this.comm.getRestorePoints(function (json) {
-            // The button is there only in a game where something can be taken back (not, say, a scenario that is
-            // being written as it is played)
-            var policy = json.policy || {};
-            if (!that.game.spectatorMode && (policy.green || policy.yellow || policy.red))
-                $("#undoGame").closest(".setting-row").show();
+            that.policy = json.policy || {};
+            var allowed = that.policy.green || that.policy.yellow || that.policy.red;
+            if (!that.game.spectatorMode) {
+                // The row is there only in a game where something can be taken back (not, say, a scenario that is
+                // being written as it is played); the switch only where there is somebody who could ask
+                $(".undoOptions").toggle(!!allowed);
+                $("#undoAutoDecline, label[for='undoAutoDecline']").toggle(!!that.policy.asks);
+                $("#undoAutoDecline").prop("checked", !!json.autoDecline);
+                that.showUndoButton(json.pending == null && json.points.length > 0 ? json.points[0] : null);
+            }
             // A request may have been waiting since before this page was loaded
-            if (json.pending != null)
+            if (json.pending != null && that.requestDialog == null)
                 that.showPending(json.pending);
+            done();
+        }, done);
+    },
+
+    showUndoButton: function (latest) {
+        var that = this;
+        this.latest = latest != null && latest.tier == "GREEN" ? latest : null;
+        // (the alert box is drawn once the game has said who is playing, which may be after this has started)
+        if (this.undoButton == null && this.game.alertBox != null) {
+            this.undoButton = $("<button id='undoLast' class='undoLast'></button>").text(this.TIERS.GREEN.mark + " Undo").button().hide();
+            this.undoButton.click(function () {
+                that.undoLatest();
+            });
+            this.game.alertBox.append(this.undoButton);
+        }
+        if (this.undoButton == null)
+            return;
+        if (this.latest == null) {
+            this.undoButton.hide();
+            this.game.alertButtons.removeClass("besideUndo");
+            return;
+        }
+        var off = this.latest.unavailable != null;
+        this.undoButton.button(off ? "disable" : "enable")
+            .attr("title", off ? this.latest.unavailable : "Undo: " + this.latest.label).show();
+        // (a Done button on the right of the alert box moves over for it)
+        this.game.alertButtons.addClass("besideUndo");
+    },
+
+    undoLatest: function () {
+        if (this.latest == null || this.frozen)
+            return;
+        var that = this;
+        this.undoButton.button("disable");
+        // ownOnly: if the opponent has answered in the meantime this is no longer an undo, and nobody is to be asked
+        // for a revert by a button that says Undo
+        this.comm.requestUndo(this.latest.entryCount, true, function (json) {
+            if (json.status == "refused") {
+                that.showBanner(json.message, null);
+                that.refresh();
+            }
         }, function () {
+            that.showBanner("Undo could not be sent", null);
+            that.refresh();
         });
     },
 
@@ -112,6 +208,7 @@ var GempLotrUndo = Class.extend({
         } else if (notice.type == "undoRequested") {
             this.showPending({
                 requestId: notice.requestId, requester: notice.requester, label: notice.label, tier: notice.tier,
+                turn: parseInt(notice.turn), phase: notice.phase,
                 reasons: notice.reasons == null || notice.reasons == "" ? [] : notice.reasons.split("; "),
                 secondsLeft: parseInt(notice.seconds)
             });
@@ -119,75 +216,104 @@ var GempLotrUndo = Class.extend({
             this.closeRequest();
             if (notice.outcome != "done" && notice.message != null)
                 this.showBanner(notice.message, null);
+            this.refresh();
         }
     },
 
-    /* ---- asking ---- */
+    /* ---- how a place to go back to is drawn ---- */
 
-    tierWords: function (tier) {
-        if (tier == "GREEN")
-            return "Green: only your own choices are undone";
-        if (tier == "YELLOW")
-            return "Yellow: the other player will have to redo some of their choices";
-        if (tier == "RED")
-            return "Red: cards have been seen since then that would not have been";
-        return "";
+    // The coloured mark of a tier: colour, and a sign that says the same without it.
+    tierMark: function (tier) {
+        var look = this.TIERS[tier];
+        return $("<span class='undoMark'></span>").addClass("undoMark-" + (tier || "").toLowerCase())
+            .attr("data-tier", tier || "").text(look == null ? "" : look.mark);
     },
 
-    tierChip: function (tier) {
-        return $("<span class='undoTier'></span>").addClass("undoTier-" + (tier || "").toLowerCase())
-            .text(tier == null ? "" : tier.charAt(0) + tier.substring(1).toLowerCase()).attr("title", this.tierWords(tier));
+    // The "i" button and what it opens: what the three colours mean.
+    tierHelp: function () {
+        var help = $("<div class='undoHelp'></div>").hide();
+        var asks = this.policy != null && this.policy.asks;
+        for (var tier in this.TIERS) {
+            var look = this.TIERS[tier];
+            var line = $("<div></div>").append(this.tierMark(tier)).append($("<b></b>").text(" " + look.word + ". "));
+            line.append($("<span></span>").text(look.means + (tier == "GREEN" || !asks ? "" : " Needs their approval.")));
+            help.append(line);
+        }
+        var button = $("<button class='undoInfo' title='What the colours mean'>i</button>").click(function () {
+            help.toggle();
+        });
+        return {button: button, panel: help};
     },
+
+    // "Turn 2 · Fellowship"; what is before the first turn is the game being set up
+    when: function (turn, phase) {
+        return (turn > 0 ? "Turn " + turn : "Setup") + (phase == null || phase == "" ? "" : " · " + phase);
+    },
+
+    reasonsOf: function (reasons) {
+        var why = $("<div class='undoWhy'></div>");
+        for (var i = 0; i < reasons.length; i++)
+            why.append($("<div></div>").append($("<b></b>").text(reasons[i])));
+        return why;
+    },
+
+    /* ---- the list ---- */
 
     openList: function () {
         var that = this;
         this.comm.getRestorePoints(function (json) {
             that.closeList();
+            that.policy = json.policy || {};
+            var help = that.tierHelp();
             var content = $("<div class='undoList'></div>");
+            content.append($("<div class='undoHead'></div>").append($("<span></span>").text("Go back to before:")).append(help.button));
+            content.append(help.panel);
             if (json.pending != null) {
-                content.append($("<div class='undoNote'></div>").text("A request to take the game back is waiting for an answer."));
+                content.append($("<div class='undoNote'></div>").text("A revert request is pending."));
             } else if (json.points.length == 0) {
-                content.append($("<div class='undoNote'></div>").text("There is nothing you can take back just now."));
+                content.append($("<div class='undoNote'></div>").text("Nothing to go back to."));
             }
+            var rows = $("<div class='undoPoints'></div>");
+            var under = null;
             for (var i = 0; i < json.points.length && json.pending == null; i++) {
                 (function (point) {
-                    var row = $("<div class='undoPoint'></div>");
-                    var button = $("<button></button>").text(point.tier == "GREEN" ? "Take back" : "Ask").button();
+                    var when = that.when(point.turn, point.phase);
+                    if (when != under) {
+                        under = when;
+                        rows.append($("<div class='undoWhen'></div>").text(when));
+                    }
+                    var look = that.TIERS[point.tier];
+                    var row = $("<div class='undoPoint'></div>").attr("data-tier", point.tier);
+                    var button = $("<button class='undoGo'></button>").addClass("undoGo-" + point.tier.toLowerCase())
+                        .text(look.mark + " " + look.word);
                     if (point.unavailable != null)
-                        button.button("disable");
+                        button.prop("disabled", true);
                     button.click(function () {
                         that.ask(point.entryCount);
                     });
                     row.append(button);
-                    row.append(that.tierChip(point.tier));
                     row.append($("<span class='undoLabel'></span>").text(point.label));
+                    if (point.reasons.length > 0)
+                        row.append(that.reasonsOf(point.reasons));
                     if (point.unavailable != null)
-                        row.append($("<div class='undoWhy'></div>").text(point.unavailable));
-                    else if (point.reasons.length > 0)
-                        row.append($("<div class='undoWhy'></div>").text(point.reasons.join("; ")));
-                    content.append(row);
+                        row.append($("<div class='undoOff'></div>").text(point.unavailable));
+                    rows.append(row);
                 })(json.points[i]);
             }
-            var declineAll = $("<input type='checkbox' id='undoDeclineAll'>").prop("checked", json.autoDecline);
-            declineAll.change(function () {
-                that.comm.setUndoAutoDecline($(this).prop("checked"), function () {
-                }, function () {
-                });
-            });
-            content.append($("<div class='undoDecline'></div>").append(declineAll)
-                .append($("<label for='undoDeclineAll'></label>").text(" Decline every request to take this game back")));
+            content.append(rows);
 
             that.listDialog = content.dialog({
-                title: "Take the game back",
-                width: 520,
+                title: "Revert",
+                width: 460,
                 modal: false,
+                dialogClass: "undoDialog",
                 close: function () {
                     $(this).dialog("destroy").remove();
                     that.listDialog = null;
                 }
             });
         }, function () {
-            that.showBanner("The list of places to go back to could not be fetched.", null);
+            that.showBanner("The list could not be fetched", null);
         });
     },
 
@@ -198,14 +324,14 @@ var GempLotrUndo = Class.extend({
 
     ask: function (entryCount) {
         var that = this;
-        this.comm.requestUndo(entryCount, function (json) {
+        this.comm.requestUndo(entryCount, false, function (json) {
             that.closeList();
             // "done" needs nothing: the notice that the game was taken back loads the page again.
             // "pending" needs nothing either: the notice that a request is waiting shows it.
             if (json.status == "refused" && json.message != null)
                 that.showBanner(json.message, null);
         }, function () {
-            that.showBanner("The request could not be sent.", null);
+            that.showBanner("The request could not be sent", null);
         });
     },
 
@@ -214,20 +340,23 @@ var GempLotrUndo = Class.extend({
     showPending: function (pending) {
         var that = this;
         this.closeRequest();
+        this.closeList();
         var mine = pending.requester == this.game.bottomPlayerId && !this.game.spectatorMode;
         var asked = !mine && !this.game.spectatorMode;
         var left = pending.secondsLeft;
+        var help = this.tierHelp();
 
-        var content = $("<div class='undoRequest'></div>");
-        content.append($("<div></div>").text(mine ? "You have asked for the game to be taken back to:"
-            : pending.requester + " asks for the game to be taken back to:"));
-        content.append($("<div class='undoLabel'></div>").text(pending.label));
-        content.append($("<div></div>").append(this.tierChip(pending.tier)).append($("<span></span>").text(" " + this.tierWords(pending.tier))));
+        var content = $("<div class='undoRequest'></div>").attr("data-tier", pending.tier);
+        content.append($("<div class='undoHead'></div>")
+            .append($("<span></span>").text(mine ? "You asked to revert to before:" : pending.requester + " asks to revert to before:")));
+        content.append(help.panel);
+        content.append($("<div class='undoTarget'></div>").append(this.tierMark(pending.tier))
+            .append($("<span class='undoLabel'></span>").text(pending.label))
+            .append($("<span class='undoWhen'></span>").text(this.when(pending.turn, pending.phase))));
         if (pending.reasons != null && pending.reasons.length > 0)
-            content.append($("<div class='undoWhy'></div>").text(pending.reasons.join("; ")));
+            content.append(this.reasonsOf(pending.reasons));
         var clock = $("<div class='undoClock'></div>");
         content.append(clock);
-        content.append($("<div class='undoNote'></div>").text("The game is standing still until this is settled."));
 
         var reply = function (answer) {
             return function () {
@@ -240,30 +369,46 @@ var GempLotrUndo = Class.extend({
         };
         var buttons = {};
         if (mine)
-            buttons["Withdraw the request"] = reply("cancel");
+            buttons["Withdraw"] = reply("cancel");
         if (asked) {
             buttons["Approve"] = reply("approve");
             buttons["Decline"] = reply("decline");
-            buttons["Decline all for this game"] = reply("declineAll");
+            buttons["Decline all"] = reply("declineAll");
         }
 
         this.requestDialog = content.dialog({
-            title: "Take the game back?",
-            width: 480,
+            title: mine ? "Revert requested" : "Revert request",
+            width: 420,
             modal: false,
             closeOnEscape: false,
+            dialogClass: "undoDialog undoRequestDialog",
             buttons: buttons,
             close: function () {
                 $(this).dialog("destroy").remove();
                 that.requestDialog = null;
             }
         });
+        // Nothing here is the default: the dialog itself has the focus, so that Enter does nothing and the first Tab
+        // goes to the first button (Approve, for the player who is asked).  The "i" button comes after the answers,
+        // in the same row, so that it is not what Tab reaches first
+        var frame = this.requestDialog.closest(".ui-dialog");
+        frame.find(".ui-dialog-buttonpane").append(help.button);
+        frame.attr("tabindex", -1);
+        frame.find("button").attr("title", function () {
+            return $(this).text() == "Decline all" ? "Decline this and every later revert request in this game" : null;
+        });
+        setTimeout(function () {
+            frame.focus();
+        }, 0);
+
         var tick = function () {
-            clock.text(left > 0 ? "Refused in " + left + " seconds if nobody answers" : "Out of time");
+            clock.text(left > 0 ? "Game paused · auto-declines in " + left + "s" : "Out of time");
             left--;
         };
         tick();
         this.countdown = setInterval(tick, 1000);
+        if (!this.game.spectatorMode)
+            this.freeze(true);
     },
 
     closeRequest: function () {
@@ -273,6 +418,31 @@ var GempLotrUndo = Class.extend({
         }
         if (this.requestDialog != null)
             this.requestDialog.dialog("close");
+        this.freeze(false);
+    },
+
+    /* ---- the game standing still ---- */
+
+    // While a request waits no decision can be answered: the server would refuse the answer, and a player who had
+    // clicked would not know why nothing came of it.  Cards can still be looked at and the chat used.
+    freeze: function (on) {
+        this.frozen = on;
+        $("body").toggleClass("undoFrozen", on);
+        var answering = $(".alertButtons").add(this.game.smallDialog == null ? null : this.game.smallDialog.closest(".ui-dialog"))
+            .add(this.game.cardActionDialog == null ? null : this.game.cardActionDialog.closest(".ui-dialog"));
+        if (on)
+            answering.attr("inert", "");
+        else
+            answering.removeAttr("inert");
+        if (this.undoButton != null && on)
+            this.undoButton.button("disable");
+        $("#undoGame").button(on ? "disable" : "enable");
+    },
+
+    // A decision drawn while a request waits (one that was on its way) is stood still like the rest.
+    decisionShown: function () {
+        if (this.frozen)
+            this.freeze(true);
     },
 
     /* ---- saying so ---- */
@@ -288,7 +458,7 @@ var GempLotrUndo = Class.extend({
         $(".undoBanner").remove();
         var banner = $("<div class='undoBanner'></div>");
         if (tier != null && tier != "")
-            banner.append(this.tierChip(tier));
+            banner.append(this.tierMark(tier));
         banner.append($("<span></span>").text(" " + message));
         banner.click(function () {
             $(this).remove();

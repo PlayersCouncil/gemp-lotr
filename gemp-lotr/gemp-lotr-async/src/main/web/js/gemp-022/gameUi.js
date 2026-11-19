@@ -79,6 +79,7 @@ var GempLotrGameUI = Class.extend({
     settingsAutoAccept: false,
     settingsAutoDismissDeckReveal: false,
     settingsAlwaysDropDown: false,
+    settingsSkipConfirmations: false,
 
     windowWidth: null,
     windowHeight: null,
@@ -689,6 +690,18 @@ var GempLotrGameUI = Class.extend({
             $.cookie("alwaysDropDown", "" + selected, {expires: 365});
         });
 
+        // Off unless the player turns it on: see confirmsItself
+        if ($.cookie("skipConfirmations") == "true") {
+            $("#skipConfirmations").prop("checked", true);
+            this.settingsSkipConfirmations = true;
+        }
+
+        $("#skipConfirmations").bind("change", function () {
+            var selected = $("#skipConfirmations").prop("checked");
+            that.settingsSkipConfirmations = selected;
+            $.cookie("skipConfirmations", "" + selected, {expires: 365});
+        });
+
         // The server reads autoPassPhases, but a cookie written from this page has the path /gemp-lotr and never
         // reaches /gemp-lotr-server; a copy with the server's path is what the server receives.
         var saveAutoPassPhases = function (value) {
@@ -809,6 +822,11 @@ var GempLotrGameUI = Class.extend({
                     }
                     this.lastSelectedCardId = clickedCardId;
                     this.lastSelectionTime = now;
+                    // while a revert request waits, nothing in the game is answered (see undo.js)
+                    if (this.undo != null && this.undo.frozen) {
+                        event.stopPropagation();
+                        return false;
+                    }
                     // a scenario step may not want this card clicked yet (it says so itself)
                     if (this.scenario != null && !this.scenario.cardClicked(selectedCardElem)) {
                         event.stopPropagation();
@@ -1282,6 +1300,15 @@ var GempLotrGameUI = Class.extend({
             }, this.gameErrorMap());
     },
 
+    // A decision that asks for nothing but to be confirmed (the server marks it confirmOnly: DONE on a starting
+    // fellowship nothing more fits into) is answered for a player who has "Skip extra confirmations" on.
+    confirmsItself: function (decision) {
+        if (!this.settingsSkipConfirmations || this.replayMode || this.getDecisionParameter(decision, "confirmOnly") != "true")
+            return false;
+        this.decisionFunction(decision.getAttribute("id"), "");
+        return true;
+    },
+
     decisionFunction: function (decisionId, result) {
         var that = this;
         this.decisionPending = false;
@@ -1595,6 +1622,9 @@ var GempLotrGameUI = Class.extend({
             }
             if (gameEvents.length > 0 && this.scenario != null && this.scenario.author != null)
                 this.scenario.author.gameMoved();
+            // What the player may undo changes as the game moves on (see undo.js)
+            if (gameEvents.length > 0 && this.undo != null && !this.replayMode)
+                this.undo.refresh();
         } catch (e) {
             this.showErrorDialog("Game error", "There was an error while processing game events in your browser. Reload the game to continue", true, false, false);
             console.log(e);

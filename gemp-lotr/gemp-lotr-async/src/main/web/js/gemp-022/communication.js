@@ -552,14 +552,15 @@ var GempLotrCommunication = Class.extend({
             dataType:"json"
         });
     },
-    requestUndo:function (entryCount, callback, failure) {
+    requestUndo:function (entryCount, ownOnly, callback, failure) {
         $.ajax({
             type:"POST",
             url:this.url + "/game/" + getUrlParam("gameId") + "/undo",
             cache:false,
             data:{
                 participantId:getUrlParam("participantId"),
-                entryCount:entryCount == null ? "" : entryCount },
+                entryCount:entryCount == null ? "" : entryCount,
+                ownOnly:ownOnly ? "true" : "false" },
             success:callback,
             error:failure,
             dataType:"json"
