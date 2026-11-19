@@ -1,5 +1,6 @@
 // Taking a game back (undo): real games on a game check server kept up, each player on a page of their own in a real
-// browser. A player takes back a choice of their own at once; asks the opponent for anything more, who approves,
+// browser. A player takes back a choice of their own at once (also the last card of a full starting fellowship, which
+// waits for DONE); asks the opponent for anything more, who approves,
 // declines or declines everything; withdraws a request; and sees the opponent concede while a decision of their own
 // is still waiting. Each check plays its own game and says what it found; a screenshot of every step worth seeing is
 // saved in the report folder.
@@ -189,6 +190,9 @@ class Seat {
 
   async shot(check, step) {
     fs.mkdirSync(OUT, { recursive: true });
+    // Off the cards, so the hover zoom is not in the picture
+    await this.page.mouse.move(2, 2);
+    await sleep(300);
     await this.page.screenshot({ path: path.join(OUT, `${check}-${step}-${this.name}.png`) });
   }
 }
@@ -283,6 +287,50 @@ const CHECKS = {
     table.note = `${KIND === 'legacy' ? 'page loads' : 'loads'}: ${first.loads - loads.first} (asker), ${second.loads - loads.second} (other)`;
     // ...and the game goes on from there
     await first.play(1);
+  },
+
+  /**
+   * A fellowship nothing more fits into does not end by itself: the player is asked only to press DONE, so the last
+   * card is still theirs to take back. Taken back, it is offered again; chosen again and DONE pressed, the opponent
+   * goes on.
+   */
+  async done(table, problems) {
+    const { first, second } = table;
+    const full = async () => (await first.decision())?.includes('Nothing more can be added');
+    let picks = 0;
+    let beforeLast;
+    while (!(await full())) {
+      if (picks >= 4) throw new Error('four cards chosen and the fellowship still takes more');
+      beforeLast = await first.cards();
+      await first.play(0);
+      picks++;
+    }
+    await first.shot('done', '1-asked-for-done');
+    if ((await first.offered()) !== 0) problems.push(`the DONE ask offers ${await first.offered()} cards`);
+    if (!(await first.hasButton('Done'))) problems.push('the DONE ask has no Done button');
+    if (await second.decision()) problems.push('the opponent is asked something before DONE is pressed');
+    const points = await first.openList();
+    await first.shot('done', '2-list');
+    if (points.length !== picks) problems.push(`${picks} cards were chosen, the list has ${points.length} places`);
+    if (!(points[0]?.tier === 'Green' && points[0]?.enabled)) {
+      problems.push(`the last card should be Green while DONE waits: ${JSON.stringify(points[0])}`);
+    }
+    await first.takeBack(0);
+    await until(async () => first.banner(), 'the page to say the game was taken back');
+    await until(
+      async () => (await first.decision())?.includes('Choose next character'),
+      'the last card to be offered again',
+    );
+    await sleep(500);
+    if (!same(await first.cards(), beforeLast)) problems.push('the cards are not as before the last card was chosen');
+    await first.play(0);
+    await until(full, 'the DONE ask again');
+    await first.click('Done');
+    await until(
+      async () => (await second.decision())?.startsWith('Starting fellowship'),
+      "the opponent's turn to choose",
+    );
+    table.note = `${picks} cards fill the fellowship`;
   },
 
   /** Anything the opponent has answered since needs the opponent's leave: asked, shown with its tier, approved. */

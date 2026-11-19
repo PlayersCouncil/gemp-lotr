@@ -131,6 +131,8 @@ with each player on a page of their own and checks taking a game back as the pla
 
 - **own**: a choice nobody else has seen or answered is in the list as Green and is taken back at once; both pages
   show the game as it was and say so, and the game goes on;
+- **done**: a starting fellowship nothing more fits into asks only for DONE; the last card is Green meanwhile and
+  is taken back, offered again and chosen again, and after DONE the opponent goes on;
 - **approve**: once the opponent has answered, every place needs asking; the asker waits (and may withdraw), the
   opponent is shown the request with the same tier and approves; both pages show the game as it was at that place;
 - **decline**: the asker is told, nothing changes, the game goes on;
