@@ -1,0 +1,107 @@
+/* The phone layout (G7): the top, the table, the divider and the hand, one above another */
+
+:host {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  overflow: hidden;
+  background: var(--theme-page-bg);
+  color: var(--theme-text);
+  /* EB Garamond in the modern theme: its small letters run small, so a size up on the system font's 12px */
+  font: 14px/1.3 var(--theme-game-phone-font-text);
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+
+/*
+ * Full screen (the menu's): the page reaches the glass, whose rounded corners would cut off the status bar's buttons
+ * and the hand's ends; the browser reports no safe area for plain rounded corners (only for cutouts), so a margin
+ * clears a corner of up to about 48px radius (its cut is 0.29 of the radius deep)
+ */
+:host-context(:fullscreen) {
+  padding: max(env(safe-area-inset-top, 0px), var(--gd-phone-corner))
+    max(env(safe-area-inset-right, 0px), var(--gd-phone-corner))
+    max(env(safe-area-inset-bottom, 0px), var(--gd-phone-corner))
+    max(env(safe-area-inset-left, 0px), var(--gd-phone-corner));
+}
+
+:host {
+  --gd-phone-corner: 14px;
+}
+
+:host([data-device='tablet']) {
+  font-size: 15px;
+}
+
+gd-phone-hand {
+  height: var(--gd-phone-hand);
+}
+
+/*
+ * Held sideways: two columns, nothing over anything (the owner, 2026-11-19). The table scrolls on the left, down to the
+ * bottom; on the right, a panel docked to the edge: the decision on top, the hand (or the cards offered in its place)
+ * under it in rows scrolled down, its cards one size (Settings › Display card size). Dragging the decision or the
+ * hand's grip down hides the hand, up shows it, as upright.
+ */
+:host([data-device='sideways']) {
+  --gd-phone-rail: clamp(250px, 40%, 460px);
+  grid-template-columns: minmax(0, 1fr) var(--gd-phone-rail);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    'top top'
+    'table divider'
+    'table hand';
+}
+
+:host([data-device='sideways']) > gd-phone-status {
+  grid-area: top;
+}
+
+:host([data-device='sideways']) > gd-phone-table {
+  grid-area: table;
+}
+
+:host([data-device='sideways']) > gd-phone-divider {
+  grid-area: divider;
+  border-left: 1px solid var(--theme-separator);
+}
+
+:host([data-device='sideways']) > gd-phone-hand {
+  grid-area: hand;
+  height: auto;
+  min-height: 0;
+  border-left: 1px solid var(--theme-separator);
+}
+
+/*
+ * The hand hidden (the divider dragged down): the decision at the bottom of the panel, the table keeping its width (the
+ * owner, 2026-11-19); the panel's empty top on the hand's background
+ */
+:host([data-device='sideways'][data-hand-hidden]) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'top top'
+    'table hand'
+    'table divider';
+}
+
+:host([data-device='sideways'][data-hand-hidden])::after {
+  content: '';
+  grid-area: hand;
+  border-left: 1px solid var(--theme-separator);
+  background: var(--theme-game-phone-hand-bg);
+}
+
+/* Before the game: the pre-game information in the table's place, scrolled up and down */
+.gd-phone-pregame {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px;
+}
+
+:host([data-device='sideways']) > .gd-phone-pregame {
+  grid-area: table;
+}

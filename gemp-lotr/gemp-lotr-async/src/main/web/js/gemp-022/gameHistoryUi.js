@@ -352,7 +352,7 @@ var GameHistoryUI = Class.extend({
                         return $("<i></i>").text("not stored");
                     return $("<a target='_blank' rel='noopener'></a>").text("Replay")
                         .attr("title", "Opens the replay in a new tab")
-                        .attr("href", "game.html?replayId=" + playerId + "$" + row.recordingId);  // same link as before
+                        .attr("href", "/gemp-lotr/ng/game?replayId=" + playerId + "$" + row.recordingId);  // the Angular game page
                 }}
         ];
         // Pages come from the server newest first; sorting inside one page would only mislead, so no sort headers.

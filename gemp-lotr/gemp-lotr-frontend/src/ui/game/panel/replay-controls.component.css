@@ -1,0 +1,59 @@
+/*
+ * A replay's controls (gameUi.js init in replay mode): two jQuery UI icon buttons, 2.4em wide, and under them the
+ * play picture made a jQuery UI button (.2em .3em around it). The picture is wider than the box and sticks out of it,
+ * and out of the window at its bottom, as on the legacy page.
+ */
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+}
+
+.gd-game-replay__speed {
+  /* a button centres its content; the icon keeps to its place */
+  display: flex;
+  align-items: flex-start;
+  /* 2.4em and the legacy line's height, at the widgets' 13.2px (a button has a font size of its own) */
+  width: 31.67px;
+  height: 52.27px;
+  margin-right: 1.32px;
+  padding: 0;
+}
+
+/* The icon where jQuery UI put it in these buttons: near the top left corner, as on the legacy page */
+.gd-game-replay__speed::before {
+  margin: 0.6px 0 0 -3.2px;
+}
+
+.gd-game-replay__play {
+  box-sizing: content-box;
+  padding: 2.64px 3.96px;
+  line-height: 0;
+}
+
+.gd-game-replay__play > img {
+  display: block;
+}
+
+/* jQuery UI's triangles pointing left and right */
+.gd-game-replay__speed[data-icon='slower']::before {
+  background-position: -96px -16px;
+}
+
+.gd-game-replay__speed[data-icon='faster']::before {
+  background-position: -32px -16px;
+}
+
+/* A jQuery UI button that has the focus looks as under the mouse, also after a click (ui-state-focus) */
+.gd-button:focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+.gd-button[data-icon]:focus::before {
+  background-image: var(--theme-icons-hover);
+}

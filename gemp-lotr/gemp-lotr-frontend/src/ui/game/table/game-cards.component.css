@@ -1,0 +1,93 @@
+/* A row of the table's cards: NormalCardGroup, as the deck builder's piles (deck-area.component.css) */
+
+:host {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gd-game-cards__box {
+  --gd-card-gap: 5px;
+  --gd-card-fit: rows;
+  --gd-card-max-height: 497px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  pointer-events: none;
+}
+
+/* A row is as high as the row height, which can have a fraction; a card is a whole number of px */
+.gd-game-stack {
+  position: relative;
+  left: var(--gd-card-snap-x, 0px);
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
+  display: flex;
+  align-items: flex-start;
+  height: var(--gd-card-height);
+}
+
+.gd-game-stack > .gd-card {
+  pointer-events: auto;
+}
+
+/* A card under another shows a share of its width (rounded down): a fifth attached, a little more stacked */
+.gd-game-stack > .gd-card[data-under='attached'] {
+  margin-right: calc(round(down, calc(var(--gd-card-width) / 5), 1px) - var(--gd-card-width));
+}
+
+.gd-game-stack > .gd-card[data-under='stacked'] {
+  margin-right: calc(round(down, calc(var(--gd-card-width) * 0.22), 1px) - var(--gd-card-width));
+}
+
+/*
+ * Stacked cards lie on their side, unless the player chose the old look (game.css .stack-horiz; the game page's
+ * data-old-stack). Not :host-context(:not([data-old-stack])): any element above without the attribute (<html>) matched
+ * that, so the setting did nothing
+ */
+.gd-game-stack > .gd-card[data-under='stacked'] {
+  transform: rotate(-90deg) translateY(10%);
+}
+
+:host-context([data-old-stack]) .gd-game-stack > .gd-card[data-under='stacked'] {
+  transform: none;
+}
+
+/* A card that isn't active this turn: dimmed, in a dark frame */
+.gd-card[data-inactive] {
+  --gd-card-image-filter: var(--theme-game-inactive-filter);
+  --gd-card-frame: var(--theme-game-inactive-border);
+}
+
+/* A card the waiting decision offers, or one chosen for it: framed in the choice's colour */
+.gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+}
+
+.gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  cursor: pointer;
+}
+
+.gd-card[data-mark='actionable'] {
+  --gd-card-frame: var(--theme-game-actionable);
+  cursor: pointer;
+}
+
+/* An action that would do nothing (the new master's noEffect): pale yellow and doubled (game.css .noEffectCard) */
+.gd-card[data-mark='actionable'][data-no-effect] {
+  --gd-card-frame: var(--theme-game-no-effect);
+  --gd-card-frame-style: double;
+}
+
+.gd-card[data-inactive][data-mark] {
+  --gd-card-image-filter: var(--theme-game-inactive-offered-filter);
+}
+
+/* A card that isn't on the table but has an action: see-through, in the hand's row */
+.gd-card[data-zone='EXTRA'] {
+  opacity: 0.7;
+}

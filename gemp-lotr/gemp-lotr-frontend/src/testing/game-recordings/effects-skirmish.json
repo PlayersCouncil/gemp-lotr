@@ -1,0 +1,680 @@
+{
+ "scenario": "effects-skirmish",
+ "note": "Debug deck: Gimli with the Dwarven Axe and Let Them Come! beats an Orc (two required responses), For Frodo, a stacked Orc",
+ "participant": "GamePlayer0",
+ "mode": "player",
+ "size": "1366x768",
+ "exchanges": [
+  {
+   "method": "GET",
+   "path": "/player",
+   "params": {},
+   "status": 200,
+   "contentType": "application/json; charset=UTF-8",
+   "body": "{\"hasTrophies\":false,\"name\":\"GamePlayer0\",\"type\":\"aut\"}"
+  },
+  {
+   "method": "GET",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><gameState cn=\"2\"><ge message=\"You are starting a game of Debug\" timestamp=\"2026-11-18 08:37:36.3820\" type=\"M\"/><ge message=\"Players in the game are: GameFoe0, GamePlayer0\" timestamp=\"2026-11-18 08:37:36.3820\" type=\"M\"/><ge allParticipantIds=\"GamePlayer0,GameFoe0\" maps=\"\" notes=\"Deck used: &lt;a href='/share/deck?id=R2FtZVBsYXllcjB8R2FtZSBjaGVjayBza2lybWlzaCBkZWNr' target='_blank'&gt;Game check skirmish deck&lt;/a&gt; [Debug]&lt;br/&gt;&lt;br/&gt;Deck Notes:&lt;br/&gt;\" participantId=\"GamePlayer0\" summary=\"Casual  - a public game of &lt;b&gt;Debug&lt;/b&gt;. This game table uses the 'Default' timer.  Each player has a total time bank of 45 minutes, and will time out with a loss if they run out of their time bank or take longer than 6 minutes between actions.&lt;br/&gt;&lt;br/&gt;\" timestamp=\"2026-11-18 08:37:36.3820\" type=\"PGS\"/><ge decisionType=\"INTEGER\" id=\"1\" participantId=\"GamePlayer0\" text=\"Choose a number of burdens to bid\" timestamp=\"2026-11-18 08:37:36.3820\" type=\"D\"><parameter name=\"min\" value=\"0\"/></ge><clocks><clock participantId=\"GamePlayer0\">2700</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></gameState>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 bid 0\" timestamp=\"2026-11-18 08:37:42.8549\" type=\"M\"/><ge message=\"GamePlayer0 bid 0\" timestamp=\"2026-11-18 08:37:42.8549\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 has chosen to go second\" timestamp=\"2026-11-18 08:37:42.8687\" type=\"M\"/><ge allParticipantIds=\"GamePlayer0,GameFoe0\" discardPublic=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8694\" type=\"P\"/><ge blueprintId=\"1_319\" cardId=\"0\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8695\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_327\" cardId=\"1\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8695\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_337\" cardId=\"2\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8695\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_343\" cardId=\"3\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8696\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_349\" cardId=\"4\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8696\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_350\" cardId=\"5\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8696\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_353\" cardId=\"6\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8696\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_356\" cardId=\"7\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8696\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge blueprintId=\"1_360\" cardId=\"8\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8697\" type=\"PCIP\" zone=\"ADVENTURE_DECK\"/><ge fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:42.8722\" type=\"GS\"><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge otherCardIds=\"0\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8810\" type=\"RCFP\"/><ge blueprintId=\"1_319\" cardId=\"42\" hindered=\"false\" index=\"1\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8811\" type=\"PCIP\" zone=\"ADVENTURE_PATH\"/><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_319'&gt;Bag End&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:42.8820\" type=\"M\"/><ge fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:42.8841\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge index=\"1\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8913\" type=\"PP\"/><ge index=\"1\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:42.8913\" type=\"PP\"/><ge blueprintId=\"1_290\" cardId=\"43\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8919\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge blueprintId=\"1_2\" cardId=\"44\" hindered=\"false\" participantId=\"GamePlayer0\" targetCardId=\"43\" targetType=\"attached\" timestamp=\"2026-11-18 08:37:42.8920\" type=\"PCIP\" zone=\"ATTACHED\"/><ge count=\"0\" timestamp=\"2026-11-18 08:37:42.8920\" type=\"TP\"/><ge otherCardIds=\"42\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8949\" type=\"TC\"/><ge blueprintId=\"1_290\" cardId=\"43\" count=\"0\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8950\" token=\"BURDEN\" type=\"AT\" zone=\"FREE_CHARACTERS\"/><ge blueprintId=\"1_290\" cardId=\"45\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:42.8950\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge blueprintId=\"1_2\" cardId=\"46\" hindered=\"false\" participantId=\"GameFoe0\" targetCardId=\"45\" targetType=\"attached\" timestamp=\"2026-11-18 08:37:42.8950\" type=\"PCIP\" zone=\"ATTACHED\"/><ge count=\"0\" timestamp=\"2026-11-18 08:37:42.8950\" type=\"TP\"/><ge otherCardIds=\"43,44,42\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:42.8951\" type=\"TC\"/><ge blueprintId=\"1_290\" cardId=\"45\" count=\"0\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:42.8951\" token=\"BURDEN\" type=\"AT\" zone=\"FREE_CHARACTERS\"/><ge phase=\"Play starting fellowship\" timestamp=\"2026-11-18 08:37:42.8952\" type=\"GPC\"/><ge charStats=\"45=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:42.8972\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"-1\"/><threatTotals name=\"GameFoe0\" value=\"1\"/></ge><ge count=\"0\" timestamp=\"2026-11-18 08:37:42.8991\" type=\"TP\"/><ge otherCardIds=\"46,42,45\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.8992\" type=\"TC\"/><ge count=\"0\" timestamp=\"2026-11-18 08:37:42.8993\" type=\"TP\"/><ge otherCardIds=\"43,44,42\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:42.8994\" type=\"TC\"/><ge count=\"0\" timestamp=\"2026-11-18 08:37:42.9001\" type=\"TP\"/><ge otherCardIds=\"46,42,45\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:42.9002\" type=\"TC\"/><ge charStats=\"43=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:42.9017\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"ARBITRARY_CARDS\" id=\"1\" participantId=\"GamePlayer0\" text=\"Starting fellowship - Choose next character or press DONE\" timestamp=\"2026-11-18 08:37:42.9147\" type=\"D\"><parameter name=\"min\" value=\"0\"/><parameter name=\"max\" value=\"1\"/><parameter name=\"cardId\" value=\"temp0\"/><parameter name=\"cardId\" value=\"temp1\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"blueprintId\" value=\"1_12\"/><parameter name=\"blueprintId\" value=\"1_311\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "temp0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_12'&gt;·Gimli, Dwarf of Erebor&lt;/div&gt; from deck\" timestamp=\"2026-11-18 08:37:43.3846\" type=\"M\"/><ge count=\"2\" timestamp=\"2026-11-18 08:37:43.3853\" type=\"TP\"/><ge message=\"GamePlayer0 adds 2 to twilight pool\" timestamp=\"2026-11-18 08:37:43.3857\" type=\"M\"/><ge charStats=\"43=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:43.3885\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"9\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"1\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_12\" cardId=\"47\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.3889\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge charStats=\"43=4|4|RF10,47=6|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:43.3896\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"9\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"2\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"ARBITRARY_CARDS\" id=\"1\" participantId=\"GamePlayer0\" text=\"Starting fellowship - Choose next character or press DONE\" timestamp=\"2026-11-18 08:37:43.3976\" type=\"D\"><parameter name=\"min\" value=\"0\"/><parameter name=\"max\" value=\"1\"/><parameter name=\"cardId\" value=\"temp0\"/><parameter name=\"selectable\" value=\"true\"/><parameter name=\"blueprintId\" value=\"1_311\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "temp0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_311'&gt;·Sam, Son of Hamfast&lt;/div&gt; from deck\" timestamp=\"2026-11-18 08:37:43.8409\" type=\"M\"/><ge count=\"4\" timestamp=\"2026-11-18 08:37:43.8412\" type=\"TP\"/><ge message=\"GamePlayer0 adds 2 to twilight pool\" timestamp=\"2026-11-18 08:37:43.8412\" type=\"M\"/><ge charStats=\"43=4|4|RF10,47=6|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:43.8415\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"8\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"2\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_311\" cardId=\"48\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8417\" type=\"PCIP\" zone=\"FREE_CHARACTERS\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=6|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:43.8419\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"8\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge count=\"0\" timestamp=\"2026-11-18 08:37:43.8489\" type=\"TP\"/><ge otherCardIds=\"48,43,44,42,47\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:43.8491\" type=\"TC\"/><ge charStats=\"45=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"SHADOW\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:43.8493\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"8\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"10\" DISCARD=\"0\" HAND=\"0\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"-1\"/><threatTotals name=\"GameFoe0\" value=\"1\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge blueprintId=\"101_49\" cardId=\"17\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8654\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"103_107\" cardId=\"11\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8655\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_178\" cardId=\"12\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8655\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_20\" cardId=\"16\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8656\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_9\" cardId=\"15\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8657\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_183\" cardId=\"9\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8657\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_178\" cardId=\"13\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8657\" type=\"PCIP\" zone=\"HAND\"/><ge blueprintId=\"1_185\" cardId=\"18\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:43.8658\" type=\"PCIP\" zone=\"HAND\"/><ge phase=\"Between turns\" timestamp=\"2026-11-18 08:37:43.8661\" type=\"GPC\"/><ge charStats=\"45=4|4|RF10\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:43.8663\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"-1\"/><threatTotals name=\"GameFoe0\" value=\"1\"/></ge><ge decisionType=\"MULTIPLE_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Do you wish to mulligan? (Shuffle cards back and draw 6)\" timestamp=\"2026-11-18 08:37:43.8675\" type=\"D\"><parameter name=\"results\" value=\"No\"/><parameter name=\"results\" value=\"Yes\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 decides not to mulligan\" timestamp=\"2026-11-18 08:37:44.3242\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 decides not to mulligan\" timestamp=\"2026-11-18 08:37:44.3411\" type=\"M\"/><ge count=\"0\" timestamp=\"2026-11-18 08:37:44.3419\" type=\"TP\"/><ge otherCardIds=\"46,45\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:44.3425\" type=\"TC\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=6|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:44.3428\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;&#10;========&#10;&#10;Start of turn.\" timestamp=\"2026-11-18 08:37:44.3439\" type=\"M\"/><ge message=\"Free Peoples player: GamePlayer0\" timestamp=\"2026-11-18 08:37:44.3439\" type=\"M\"/><ge phase=\"Fellowship\" timestamp=\"2026-11-18 08:37:44.3462\" type=\"GPC\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=6|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:44.3465\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of FELLOWSHIP phase.\" timestamp=\"2026-11-18 08:37:44.3482\" type=\"M\"/><ge decisionType=\"CARD_ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Play Fellowship action or Pass\" timestamp=\"2026-11-18 08:37:44.3550\" type=\"D\"><parameter name=\"actionText\" value=\"Play Let Them Come!\"/><parameter name=\"actionText\" value=\"Play Dwarven Axe\"/><parameter name=\"actionText\" value=\"Use Bag End\"/><parameter name=\"actionText\" value=\"Use Gimli, Dwarf of Erebor\"/><parameter name=\"actionText\" value=\"Use Sam, Son of Hamfast\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"effect\"/><parameter name=\"cardId\" value=\"16\"/><parameter name=\"cardId\" value=\"15\"/><parameter name=\"cardId\" value=\"42\"/><parameter name=\"cardId\" value=\"47\"/><parameter name=\"cardId\" value=\"48\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"actionId\" value=\"1\"/><parameter name=\"actionId\" value=\"2\"/><parameter name=\"actionId\" value=\"3\"/><parameter name=\"actionId\" value=\"4\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "1"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge otherCardIds=\"15\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:44.5381\" type=\"RCFP\"/><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_9'&gt;Dwarven Axe&lt;/div&gt; from hand on &lt;div class='cardHint' value='1_12'&gt;·Gimli, Dwarf of Erebor&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:44.5390\" type=\"M\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=6|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:44.5392\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"7\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge count=\"0\" timestamp=\"2026-11-18 08:37:44.5402\" type=\"TP\"/><ge blueprintId=\"1_9\" cardId=\"49\" hindered=\"false\" participantId=\"GamePlayer0\" targetCardId=\"47\" targetType=\"attached\" timestamp=\"2026-11-18 08:37:44.5404\" type=\"PCIP\" zone=\"ATTACHED\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:44.5407\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"7\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"CARD_ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Play Fellowship action or Pass\" timestamp=\"2026-11-18 08:37:44.5574\" type=\"D\"><parameter name=\"actionText\" value=\"Play Let Them Come!\"/><parameter name=\"actionText\" value=\"Use Bag End\"/><parameter name=\"actionText\" value=\"Use Gimli, Dwarf of Erebor\"/><parameter name=\"actionText\" value=\"Use Sam, Son of Hamfast\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"effect\"/><parameter name=\"cardId\" value=\"16\"/><parameter name=\"cardId\" value=\"42\"/><parameter name=\"cardId\" value=\"47\"/><parameter name=\"cardId\" value=\"48\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"actionId\" value=\"1\"/><parameter name=\"actionId\" value=\"2\"/><parameter name=\"actionId\" value=\"3\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/></ge><clocks><clock participantId=\"GamePlayer0\">2694</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='1_20'&gt;Let Them Come!&lt;/div&gt; from hand\" timestamp=\"2026-11-18 08:37:46.4508\" type=\"M\"/><ge otherCardIds=\"16\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:46.4508\" type=\"RCFP\"/><ge count=\"2\" timestamp=\"2026-11-18 08:37:46.4509\" type=\"TP\"/><ge message=\"GamePlayer0 adds 2 to twilight pool\" timestamp=\"2026-11-18 08:37:46.4510\" type=\"M\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:46.4511\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"9\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_20\" cardId=\"50\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:46.4512\" type=\"PCIP\" zone=\"SUPPORT\"/><ge decisionType=\"CARD_ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Play Fellowship action or Pass\" timestamp=\"2026-11-18 08:37:46.4552\" type=\"D\"><parameter name=\"actionText\" value=\"Use Bag End\"/><parameter name=\"actionText\" value=\"Use Sam, Son of Hamfast\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"noEffect\" value=\"effect\"/><parameter name=\"cardId\" value=\"42\"/><parameter name=\"cardId\" value=\"48\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"actionId\" value=\"1\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"blueprintId\" value=\"inPlay\"/><parameter name=\"blueprintId\" value=\"inPlay\"/></ge><clocks><clock participantId=\"GamePlayer0\">2693</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": ""
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge blueprintId=\"1_327\" cardId=\"51\" hindered=\"false\" index=\"2\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:48.6757\" type=\"PCIP\" zone=\"ADVENTURE_PATH\"/><ge message=\"GameFoe0 plays &lt;div class='cardHint' value='1_327'&gt;Bree Gate&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:48.6758\" type=\"M\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"0\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.6760\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge index=\"2\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:48.6788\" type=\"PP\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" ruleof4=\"0\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.6788\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"Moving added 5 twilight\" timestamp=\"2026-11-18 08:37:48.6801\" type=\"M\"/><ge count=\"7\" timestamp=\"2026-11-18 08:37:48.6801\" type=\"TP\"/><ge message=\"End of FELLOWSHIP phase.\" timestamp=\"2026-11-18 08:37:48.6812\" type=\"M\"/><ge phase=\"Shadow\" timestamp=\"2026-11-18 08:37:48.6814\" type=\"GPC\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.6814\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"8\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of SHADOW phase.\" timestamp=\"2026-11-18 08:37:48.6820\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2691</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 plays &lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt; from hand\" timestamp=\"2026-11-18 08:37:48.6928\" type=\"M\"/><ge count=\"6\" timestamp=\"2026-11-18 08:37:48.6930\" type=\"TP\"/><ge message=\"GameFoe0 removes 1 from twilight pool\" timestamp=\"2026-11-18 08:37:48.6930\" type=\"M\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.6932\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"7\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"101_49\" cardId=\"52\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:48.6933\" type=\"PCIP\" zone=\"SUPPORT\"/><ge message=\"GameFoe0 plays &lt;div class='cardHint' value='1_183'&gt;Goblin Swarms&lt;/div&gt; from hand\" timestamp=\"2026-11-18 08:37:48.7033\" type=\"M\"/><ge count=\"5\" timestamp=\"2026-11-18 08:37:48.7034\" type=\"TP\"/><ge message=\"GameFoe0 removes 1 from twilight pool\" timestamp=\"2026-11-18 08:37:48.7034\" type=\"M\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.7035\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_183\" cardId=\"53\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:48.7035\" type=\"PCIP\" zone=\"SUPPORT\"/><ge message=\"GameFoe0 plays &lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; from hand\" timestamp=\"2026-11-18 08:37:48.7129\" type=\"M\"/><ge count=\"2\" timestamp=\"2026-11-18 08:37:48.7131\" type=\"TP\"/><ge message=\"GameFoe0 removes 3 from twilight pool\" timestamp=\"2026-11-18 08:37:48.7132\" type=\"M\"/><ge charStats=\"48=3|4|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.7133\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_178\" cardId=\"54\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:48.7134\" type=\"PCIP\" zone=\"SHADOW_CHARACTERS\"/><ge charStats=\"48=3|4|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.7137\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_178\" cardId=\"54\" hindered=\"false\" timestamp=\"2026-11-18 08:37:48.7171\" type=\"CA\" zone=\"SHADOW_CHARACTERS\"/><ge message=\"&lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; required triggered effect is used\" timestamp=\"2026-11-18 08:37:48.7171\" type=\"M\"/><ge message=\"&lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; added 2 twilight\" timestamp=\"2026-11-18 08:37:48.7179\" type=\"M\"/><ge count=\"4\" timestamp=\"2026-11-18 08:37:48.7179\" type=\"TP\"/><ge blueprintId=\"101_49\" cardId=\"52\" hindered=\"false\" timestamp=\"2026-11-18 08:37:48.7266\" type=\"CA\" zone=\"SUPPORT\"/><ge message=\"&lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt; required triggered effect is used\" timestamp=\"2026-11-18 08:37:48.7266\" type=\"M\"/><ge message=\"&lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt; hinders &lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:48.7307\" type=\"M\"/><ge hindered=\"true\" otherCardIds=\"52\" timestamp=\"2026-11-18 08:37:48.7308\" type=\"FCIP\"/><ge charStats=\"48=3|4|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.7311\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"End of SHADOW phase.\" timestamp=\"2026-11-18 08:37:48.7332\" type=\"M\"/><ge phase=\"Maneuver\" timestamp=\"2026-11-18 08:37:48.7337\" type=\"GPC\"/><ge message=\"&#10;Start of MANEUVER phase.\" timestamp=\"2026-11-18 08:37:48.7346\" type=\"M\"/><ge message=\"End of MANEUVER phase.\" timestamp=\"2026-11-18 08:37:48.7363\" type=\"M\"/><ge phase=\"Archery\" timestamp=\"2026-11-18 08:37:48.7368\" type=\"GPC\"/><ge charStats=\"48=3|4|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"0\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"0\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.7369\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of ARCHERY phase.\" timestamp=\"2026-11-18 08:37:48.7376\" type=\"M\"/><ge message=\"Archery fire: fellowship - 0, minion - 0\" timestamp=\"2026-11-18 08:37:48.7383\" type=\"M\"/><ge message=\"End of ARCHERY phase.\" timestamp=\"2026-11-18 08:37:48.7394\" type=\"M\"/><ge phase=\"Assignment\" timestamp=\"2026-11-18 08:37:48.7397\" type=\"GPC\"/><ge charStats=\"48=3|4|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:48.7398\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of ASSIGNMENT phase.\" timestamp=\"2026-11-18 08:37:48.7403\" type=\"M\"/><ge decisionType=\"ASSIGN_MINIONS\" id=\"1\" participantId=\"GamePlayer0\" text=\"Assign minions to companions or allies at home\" timestamp=\"2026-11-18 08:37:48.7416\" type=\"D\"><parameter name=\"freeCharacters\" value=\"43\"/><parameter name=\"freeCharacters\" value=\"47\"/><parameter name=\"freeCharacters\" value=\"48\"/><parameter name=\"minions\" value=\"54\"/></ge><clocks><clock participantId=\"GamePlayer0\">2691</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "43,47 54,48"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 assigns characters to skirmish\" timestamp=\"2026-11-18 08:37:51.5535\" type=\"M\"/><ge cardId=\"47\" otherCardIds=\"54\" timestamp=\"2026-11-18 08:37:51.5536\" type=\"AA\"/><ge message=\"End of ASSIGNMENT phase.\" timestamp=\"2026-11-18 08:37:51.5596\" type=\"M\"/><ge decisionType=\"CARD_SELECTION\" id=\"1\" participantId=\"GamePlayer0\" text=\"Choose next skirmish to resolve\" timestamp=\"2026-11-18 08:37:51.5603\" type=\"D\"><parameter name=\"min\" value=\"1\"/><parameter name=\"max\" value=\"1\"/><parameter name=\"cardId\" value=\"47\"/></ge><clocks><clock participantId=\"GamePlayer0\">2689</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "47"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"Next skirmish to resolve is for &lt;div class='cardHint' value='1_12'&gt;·Gimli, Dwarf of Erebor&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:53.5638\" type=\"M\"/><ge cardId=\"47\" timestamp=\"2026-11-18 08:37:53.5638\" type=\"RA\"/><ge cardId=\"47\" otherCardIds=\"54\" timestamp=\"2026-11-18 08:37:53.5642\" type=\"SS\"/><ge phase=\"Skirmish\" timestamp=\"2026-11-18 08:37:53.5642\" type=\"GPC\"/><ge charStats=\"48=3|4|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"5\" timestamp=\"2026-11-18 08:37:53.5645\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"6\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"CARD_ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Choose action to play or Pass\" timestamp=\"2026-11-18 08:37:53.5740\" type=\"D\"><parameter name=\"actionText\" value=\"Play For Frodo\"/><parameter name=\"noEffect\" value=\"false\"/><parameter name=\"cardId\" value=\"11\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"loopBanned\" value=\"false\"/><parameter name=\"blueprintId\" value=\"inPlay\"/></ge><clocks><clock participantId=\"GamePlayer0\">2687</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 plays &lt;div class='cardHint' value='103_107'&gt;For Frodo&lt;/div&gt; from hand\" timestamp=\"2026-11-18 08:37:54.3435\" type=\"M\"/><ge otherCardIds=\"11\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:54.3437\" type=\"RCFP\"/><ge blueprintId=\"103_107\" cardId=\"11\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:54.3437\" type=\"EP\" zone=\"VOID_FROM_HAND\"/><ge count=\"6\" timestamp=\"2026-11-18 08:37:54.3438\" type=\"TP\"/><ge message=\"GamePlayer0 adds 2 to twilight pool\" timestamp=\"2026-11-18 08:37:54.3438\" type=\"M\"/><ge charStats=\"48=3|4|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"5\" timestamp=\"2026-11-18 08:37:54.3441\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"103_107\" cardId=\"11\" hindered=\"false\" otherCardIds=\"48\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:54.3445\" type=\"CAC\" zone=\"VOID_FROM_HAND\"/><ge message=\"GamePlayer0 chooses &lt;div class='cardHint' value='1_311'&gt;·Sam, Son of Hamfast&lt;/div&gt;.\" timestamp=\"2026-11-18 08:37:54.3448\" type=\"M\"/><ge message=\"&lt;div class='cardHint' value='1_311'&gt;·Sam, Son of Hamfast&lt;/div&gt; exert due to &lt;div class='cardHint' value='103_107'&gt;For Frodo&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:54.3479\" type=\"M\"/><ge blueprintId=\"1_311\" cardId=\"48\" count=\"1\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:54.3479\" token=\"WOUND\" type=\"AT\" zone=\"FREE_CHARACTERS\"/><ge charStats=\"48=3|3|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"5\" timestamp=\"2026-11-18 08:37:54.3483\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"GamePlayer0 removes &lt;div class='cardHint' value='103_107'&gt;For Frodo&lt;/div&gt; from the game\" timestamp=\"2026-11-18 08:37:54.3533\" type=\"M\"/><ge blueprintId=\"103_107\" cardId=\"11\" hindered=\"false\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:37:54.3534\" type=\"PCIP\" zone=\"REMOVED\"/><ge charStats=\"48=3|3|RA5,54=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"5\" timestamp=\"2026-11-18 08:37:54.3538\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><clocks><clock participantId=\"GamePlayer0\">2687</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge decisionType=\"CARD_ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Choose action to play or Pass\" timestamp=\"2026-11-18 08:37:54.3648\" type=\"D\"/><clocks><clock participantId=\"GamePlayer0\">2687</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": ""
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"Skirmish resolved: Free Peoples defeated Shadow\" timestamp=\"2026-11-18 08:37:55.6060\" type=\"M\"/><ge decisionType=\"ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Required responses\" timestamp=\"2026-11-18 08:37:55.6126\" type=\"D\"><parameter name=\"actionText\" value=\"Resolve skirmish damage\"/><parameter name=\"actionText\" value=\"Required trigger from &lt;div class='cardHint' value='1_9'&gt;Dwarven Axe&lt;/div&gt;\"/><parameter name=\"actionText\" value=\"Required trigger from &lt;div class='cardHint' value='1_20'&gt;Let Them Come!&lt;/div&gt;\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"actionId\" value=\"1\"/><parameter name=\"actionId\" value=\"2\"/><parameter name=\"blueprintId\" value=\"rules\"/><parameter name=\"blueprintId\" value=\"1_9\"/><parameter name=\"blueprintId\" value=\"1_20\"/></ge><clocks><clock participantId=\"GamePlayer0\">2686</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"&lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; is wounded by &lt;div class='cardHint' value='1_12'&gt;·Gimli, Dwarf of Erebor&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:57.2919\" type=\"M\"/><ge blueprintId=\"1_178\" cardId=\"54\" count=\"1\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:57.2920\" token=\"WOUND\" type=\"AT\" zone=\"SHADOW_CHARACTERS\"/><ge charStats=\"48=3|3|RA5,54=5|0|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"5\" timestamp=\"2026-11-18 08:37:57.2922\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; gets killed\" timestamp=\"2026-11-18 08:37:57.2934\" type=\"M\"/><ge blueprintId=\"1_178\" cardId=\"54\" count=\"1\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:37:57.2935\" token=\"WOUND\" type=\"RT\" zone=\"SHADOW_CHARACTERS\"/><ge otherCardIds=\"54\" timestamp=\"2026-11-18 08:37:57.2936\" type=\"RCFP\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:57.2938\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"2\" DISCARD=\"1\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge decisionType=\"ACTION_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Required responses\" timestamp=\"2026-11-18 08:37:57.2968\" type=\"D\"><parameter name=\"actionText\" value=\"Required trigger from &lt;div class='cardHint' value='1_9'&gt;Dwarven Axe&lt;/div&gt;\"/><parameter name=\"actionText\" value=\"Required trigger from &lt;div class='cardHint' value='1_20'&gt;Let Them Come!&lt;/div&gt;\"/><parameter name=\"actionId\" value=\"0\"/><parameter name=\"actionId\" value=\"1\"/><parameter name=\"blueprintId\" value=\"1_9\"/><parameter name=\"blueprintId\" value=\"1_20\"/></ge><clocks><clock participantId=\"GamePlayer0\">2685</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge blueprintId=\"1_9\" cardId=\"49\" hindered=\"false\" targetCardId=\"47\" targetType=\"attached\" timestamp=\"2026-11-18 08:37:59.7763\" type=\"CA\" zone=\"ATTACHED\"/><ge message=\"&lt;div class='cardHint' value='1_9'&gt;Dwarven Axe&lt;/div&gt; required triggered effect is used\" timestamp=\"2026-11-18 08:37:59.7763\" type=\"M\"/><ge message=\"GameFoe0 discards top cards from their deck - &lt;div class='cardHint' value='1_185'&gt;Goblin Warrior&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:59.7796\" type=\"M\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"1\" fellowshipStrength=\"8\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:59.7798\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"1\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_20\" cardId=\"50\" hindered=\"false\" timestamp=\"2026-11-18 08:37:59.7807\" type=\"CA\" zone=\"SUPPORT\"/><ge message=\"&lt;div class='cardHint' value='1_20'&gt;Let Them Come!&lt;/div&gt; required triggered effect is used\" timestamp=\"2026-11-18 08:37:59.7807\" type=\"M\"/><ge timestamp=\"2026-11-18 08:37:59.7838\" type=\"ES\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:59.7838\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"1\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge phase=\"Regroup\" timestamp=\"2026-11-18 08:37:59.7846\" type=\"GPC\"/><ge message=\"&#10;Start of REGROUP phase.\" timestamp=\"2026-11-18 08:37:59.7851\" type=\"M\"/><ge message=\"GameFoe0 restores all of their hindered cards on reconciling: &lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt;\" timestamp=\"2026-11-18 08:37:59.7863\" type=\"M\"/><ge hindered=\"false\" otherCardIds=\"52\" timestamp=\"2026-11-18 08:37:59.7864\" type=\"FCIP\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:59.7865\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"1\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"GameFoe0 reconciles\" timestamp=\"2026-11-18 08:37:59.7869\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2683</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:37:59.7975\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"6\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"GameFoe0 draws 1 card\" timestamp=\"2026-11-18 08:37:59.8050\" type=\"M\"/><ge decisionType=\"MULTIPLE_CHOICE\" id=\"1\" participantId=\"GamePlayer0\" text=\"Do you want to make another move?\" timestamp=\"2026-11-18 08:37:59.8060\" type=\"D\"><parameter name=\"results\" value=\"Yes\"/><parameter name=\"results\" value=\"No\"/></ge><clocks><clock participantId=\"GamePlayer0\">2683</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "0"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 decides to move again.\" timestamp=\"2026-11-18 08:38:00.6848\" type=\"M\"/><ge blueprintId=\"1_337\" cardId=\"55\" hindered=\"false\" index=\"3\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:38:00.6857\" type=\"PCIP\" zone=\"ADVENTURE_PATH\"/><ge message=\"GameFoe0 plays &lt;div class='cardHint' value='1_337'&gt;Council Courtyard&lt;/div&gt;\" timestamp=\"2026-11-18 08:38:00.6857\" type=\"M\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"1\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.6858\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"6\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge index=\"3\" participantId=\"GamePlayer0\" timestamp=\"2026-11-18 08:38:00.6867\" type=\"PP\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.6867\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"6\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"Moving added 3 twilight\" timestamp=\"2026-11-18 08:38:00.6872\" type=\"M\"/><ge count=\"9\" timestamp=\"2026-11-18 08:38:00.6872\" type=\"TP\"/><ge message=\"End of REGROUP phase.\" timestamp=\"2026-11-18 08:38:00.6876\" type=\"M\"/><ge phase=\"Shadow\" timestamp=\"2026-11-18 08:38:00.6877\" type=\"GPC\"/><ge message=\"&#10;Start of SHADOW phase.\" timestamp=\"2026-11-18 08:38:00.6879\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2683</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 plays &lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; from hand\" timestamp=\"2026-11-18 08:38:00.6947\" type=\"M\"/><ge count=\"6\" timestamp=\"2026-11-18 08:38:00.6948\" type=\"TP\"/><ge message=\"GameFoe0 removes 3 from twilight pool\" timestamp=\"2026-11-18 08:38:00.6949\" type=\"M\"/><ge charStats=\"48=3|3|RA5,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.6950\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_178\" cardId=\"56\" hindered=\"false\" participantId=\"GameFoe0\" timestamp=\"2026-11-18 08:38:00.6951\" type=\"PCIP\" zone=\"SHADOW_CHARACTERS\"/><ge charStats=\"48=3|3|RA5,56=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.6954\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge blueprintId=\"1_178\" cardId=\"56\" hindered=\"false\" timestamp=\"2026-11-18 08:38:00.6972\" type=\"CA\" zone=\"SHADOW_CHARACTERS\"/><ge message=\"&lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; required triggered effect is used\" timestamp=\"2026-11-18 08:38:00.6972\" type=\"M\"/><ge message=\"&lt;div class='cardHint' value='1_178'&gt;Goblin Runner&lt;/div&gt; added 2 twilight\" timestamp=\"2026-11-18 08:38:00.6976\" type=\"M\"/><ge count=\"8\" timestamp=\"2026-11-18 08:38:00.6976\" type=\"TP\"/><ge blueprintId=\"101_49\" cardId=\"52\" hindered=\"false\" timestamp=\"2026-11-18 08:38:00.7061\" type=\"CA\" zone=\"SUPPORT\"/><ge message=\"&lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt; required triggered effect is used\" timestamp=\"2026-11-18 08:38:00.7061\" type=\"M\"/><ge message=\"&lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt; hinders &lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt;\" timestamp=\"2026-11-18 08:38:00.7081\" type=\"M\"/><ge hindered=\"true\" otherCardIds=\"52\" timestamp=\"2026-11-18 08:38:00.7082\" type=\"FCIP\"/><ge charStats=\"48=3|3|RA5,56=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.7083\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"End of SHADOW phase.\" timestamp=\"2026-11-18 08:38:00.7104\" type=\"M\"/><ge phase=\"Maneuver\" timestamp=\"2026-11-18 08:38:00.7108\" type=\"GPC\"/><ge message=\"&#10;Start of MANEUVER phase.\" timestamp=\"2026-11-18 08:38:00.7116\" type=\"M\"/><ge message=\"End of MANEUVER phase.\" timestamp=\"2026-11-18 08:38:00.7132\" type=\"M\"/><ge phase=\"Archery\" timestamp=\"2026-11-18 08:38:00.7136\" type=\"GPC\"/><ge charStats=\"48=3|3|RA5,56=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"0\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"0\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.7138\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of ARCHERY phase.\" timestamp=\"2026-11-18 08:38:00.7146\" type=\"M\"/><ge message=\"Archery fire: fellowship - 0, minion - 0\" timestamp=\"2026-11-18 08:38:00.7156\" type=\"M\"/><ge message=\"End of ARCHERY phase.\" timestamp=\"2026-11-18 08:38:00.7168\" type=\"M\"/><ge phase=\"Assignment\" timestamp=\"2026-11-18 08:38:00.7171\" type=\"GPC\"/><ge charStats=\"48=3|3|RA5,56=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"52\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:00.7171\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"&#10;Start of ASSIGNMENT phase.\" timestamp=\"2026-11-18 08:38:00.7176\" type=\"M\"/><ge decisionType=\"ASSIGN_MINIONS\" id=\"1\" participantId=\"GamePlayer0\" text=\"Assign minions to companions or allies at home\" timestamp=\"2026-11-18 08:38:00.7188\" type=\"D\"><parameter name=\"freeCharacters\" value=\"43\"/><parameter name=\"freeCharacters\" value=\"47\"/><parameter name=\"freeCharacters\" value=\"48\"/><parameter name=\"minions\" value=\"56\"/></ge><clocks><clock participantId=\"GamePlayer0\">2683</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {
+    "decisionId": "1",
+    "decisionValue": "43,47,48"
+   },
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GamePlayer0 skips assigning any characters\" timestamp=\"2026-11-18 08:38:01.6564\" type=\"M\"/><clocks><clock participantId=\"GamePlayer0\">2683</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  },
+  {
+   "method": "POST",
+   "path": "/game/<id>",
+   "params": {},
+   "status": 200,
+   "contentType": "application/xml; charset=UTF-8",
+   "body": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><update cn=\"2\"><ge message=\"GameFoe0 skips assigning any characters\" timestamp=\"2026-11-18 08:38:01.6643\" type=\"M\"/><ge message=\"End of ASSIGNMENT phase.\" timestamp=\"2026-11-18 08:38:01.6656\" type=\"M\"/><ge phase=\"Regroup\" timestamp=\"2026-11-18 08:38:01.6673\" type=\"GPC\"/><ge message=\"&#10;Start of REGROUP phase.\" timestamp=\"2026-11-18 08:38:01.6681\" type=\"M\"/><ge message=\"GameFoe0 restores all of their hindered cards on reconciling: &lt;div class='cardHint' value='101_49'&gt;·A Shadow of the Past&lt;/div&gt;\" timestamp=\"2026-11-18 08:38:01.6699\" type=\"M\"/><ge hindered=\"false\" otherCardIds=\"52\" timestamp=\"2026-11-18 08:38:01.6700\" type=\"FCIP\"/><ge charStats=\"48=3|3|RA5,56=5|1|4,43=4|4|RF10,47=8|3|RA6\" fellowshipArchery=\"null\" fellowshipDamageBonus=\"0\" fellowshipStrength=\"0\" fpOverwhelmed=\"false\" hindered=\"\" initiative=\"FREE_PEOPLE\" moveCount=\"2\" moveLimit=\"2\" shadowArchery=\"null\" shadowDamageBonus=\"0\" shadowOverwhelmed=\"false\" shadowStrength=\"0\" timestamp=\"2026-11-18 08:38:01.6701\" type=\"GS\"><playerZones ADVENTURE_DECK=\"8\" DEAD=\"0\" DECK=\"0\" DISCARD=\"0\" HAND=\"5\" REMOVED=\"1\" name=\"GamePlayer0\"/><playerZones ADVENTURE_DECK=\"7\" DEAD=\"0\" DECK=\"0\" DISCARD=\"2\" HAND=\"5\" REMOVED=\"0\" name=\"GameFoe0\"/><threats name=\"GamePlayer0\" value=\"0\"/><threats name=\"GameFoe0\" value=\"0\"/><threatTotals name=\"GamePlayer0\" value=\"3\"/><threatTotals name=\"GameFoe0\" value=\"-1\"/></ge><ge message=\"GameFoe0 reconciles\" timestamp=\"2026-11-18 08:38:01.6708\" type=\"M\"/><ge message=\"GamePlayer0 decides to stay and reconcile.\" timestamp=\"2026-11-18 08:38:01.6823\" type=\"M\"/><ge message=\"GamePlayer0 reconciles\" timestamp=\"2026-11-18 08:38:01.6833\" type=\"M\"/><ge decisionType=\"CARD_SELECTION\" id=\"1\" participantId=\"GamePlayer0\" text=\"Reconcile - choose card to discard or press DONE\" timestamp=\"2026-11-18 08:38:01.6833\" type=\"D\"><parameter name=\"min\" value=\"0\"/><parameter name=\"max\" value=\"1\"/><parameter name=\"cardId\" value=\"9\"/><parameter name=\"cardId\" value=\"12\"/><parameter name=\"cardId\" value=\"13\"/><parameter name=\"cardId\" value=\"17\"/><parameter name=\"cardId\" value=\"18\"/></ge><clocks><clock participantId=\"GamePlayer0\">2683</clock><clock participantId=\"GameFoe0\">2700</clock><clock participantId=\"decisionClock\">0</clock><clock participantId=\"decisionLimit\">360</clock></clocks></update>"
+  }
+ ],
+ "steps": [
+  {
+   "name": "start",
+   "exchanges": 2,
+   "gestures": [],
+   "model": {
+    "twilight": null,
+    "phase": null,
+    "initiative": null,
+    "ruleOf4": null,
+    "alert": null,
+    "stats": {},
+    "cards": []
+   }
+  },
+  {
+   "name": "the Dwarven Axe on Gimli",
+   "exchanges": 10,
+   "gestures": [],
+   "model": {
+    "twilight": "0",
+    "phase": "Fellowship",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Play Fellowship action or Pass",
+    "stats": {
+     "deck0": "0",
+     "hand0": "7",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "2",
+     "hand1": "8",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "9",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:HAND:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "16:1_20:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0"
+    ]
+   }
+  },
+  {
+   "name": "Let Them Come! played",
+   "exchanges": 11,
+   "gestures": [],
+   "model": {
+    "twilight": "2",
+    "phase": "Fellowship",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Play Fellowship action or Pass",
+    "stats": {
+     "deck0": "0",
+     "hand0": "6",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "2",
+     "hand1": "8",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "9",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:HAND:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "50:1_20:SUPPORT:GamePlayer0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0"
+    ]
+   }
+  },
+  {
+   "name": "the opponent's minions",
+   "exchanges": 13,
+   "gestures": [],
+   "model": {
+    "twilight": "4",
+    "phase": "Assignment",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Assign minions to companions or allies at home",
+    "stats": {
+     "deck0": "0",
+     "hand0": "6",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "2",
+     "hand1": "5",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "8",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:HAND:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "50:1_20:SUPPORT:GamePlayer0",
+     "51:1_327:ADVENTURE_PATH:GameFoe0",
+     "52:101_49:SUPPORT:GameFoe0",
+     "53:1_183:SUPPORT:GameFoe0",
+     "54:1_178:SHADOW_CHARACTERS:GameFoe0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0"
+    ]
+   }
+  },
+  {
+   "name": "assigned to Gimli and Sam",
+   "exchanges": 14,
+   "gestures": [],
+   "model": {
+    "twilight": "4",
+    "phase": "Assignment",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Choose next skirmish to resolve",
+    "stats": {
+     "deck0": "0",
+     "hand0": "6",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "0",
+     "deck1": "2",
+     "hand1": "5",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "8",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:HAND:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "50:1_20:SUPPORT:GamePlayer0",
+     "51:1_327:ADVENTURE_PATH:GameFoe0",
+     "52:101_49:SUPPORT:GameFoe0",
+     "53:1_183:SUPPORT:GameFoe0",
+     "54:1_178:SHADOW_CHARACTERS:GameFoe0:assign 47",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0"
+    ]
+   }
+  },
+  {
+   "name": "two required responses at once",
+   "exchanges": 18,
+   "gestures": [],
+   "model": {
+    "twilight": "6",
+    "phase": "Skirmish",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "",
+    "stats": {
+     "deck0": "0",
+     "hand0": "5",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "1",
+     "deck1": "2",
+     "hand1": "5",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "0",
+     "deadPile1": "0",
+     "adventureDeck1": "8",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:REMOVED:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0:skirmish",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "50:1_20:SUPPORT:GamePlayer0",
+     "51:1_327:ADVENTURE_PATH:GameFoe0",
+     "52:101_49:SUPPORT:GameFoe0",
+     "53:1_183:SUPPORT:GameFoe0",
+     "54:1_178:SHADOW_CHARACTERS:GameFoe0:skirmish",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0",
+     "temp0:rules:SPECIAL:",
+     "temp1:1_9:SPECIAL:",
+     "temp2:1_20:SPECIAL:"
+    ]
+   }
+  },
+  {
+   "name": "one of them chosen first",
+   "exchanges": 19,
+   "gestures": [],
+   "model": {
+    "twilight": "6",
+    "phase": "Skirmish",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "",
+    "stats": {
+     "deck0": "0",
+     "hand0": "5",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "1",
+     "deck1": "2",
+     "hand1": "5",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "1",
+     "deadPile1": "0",
+     "adventureDeck1": "8",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:REMOVED:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0:skirmish",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "50:1_20:SUPPORT:GamePlayer0",
+     "51:1_327:ADVENTURE_PATH:GameFoe0",
+     "52:101_49:SUPPORT:GameFoe0",
+     "53:1_183:SUPPORT:GameFoe0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0",
+     "temp0:1_9:SPECIAL:",
+     "temp1:1_20:SPECIAL:"
+    ]
+   }
+  },
+  {
+   "name": "after the skirmishes",
+   "exchanges": 25,
+   "gestures": [],
+   "model": {
+    "twilight": "8",
+    "phase": "Regroup",
+    "initiative": "Initiative: Free Peoples",
+    "ruleOf4": "Rule of 4: 0 card",
+    "alert": "Reconcile - choose card to discard or press DONE",
+    "stats": {
+     "deck0": "0",
+     "hand0": "5",
+     "threats0": "0/3",
+     "showStats0": "+",
+     "discard0": "0",
+     "deadPile0": "0",
+     "adventureDeck0": "8",
+     "removedPile0": "1",
+     "deck1": "0",
+     "hand1": "5",
+     "threats1": "0",
+     "showStats1": "+",
+     "discard1": "2",
+     "deadPile1": "0",
+     "adventureDeck1": "7",
+     "removedPile1": "0"
+    },
+    "cards": [
+     "11:103_107:REMOVED:GamePlayer0",
+     "12:1_178:HAND:GamePlayer0",
+     "13:1_178:HAND:GamePlayer0",
+     "17:101_49:HAND:GamePlayer0",
+     "18:1_185:HAND:GamePlayer0",
+     "1:1_327:ADVENTURE_DECK:GamePlayer0",
+     "2:1_337:ADVENTURE_DECK:GamePlayer0",
+     "3:1_343:ADVENTURE_DECK:GamePlayer0",
+     "42:1_319:ADVENTURE_PATH:GamePlayer0",
+     "43:1_290:FREE_CHARACTERS:GamePlayer0",
+     "44:1_2:ATTACHED:GamePlayer0",
+     "45:1_290:FREE_CHARACTERS:GameFoe0",
+     "46:1_2:ATTACHED:GameFoe0",
+     "47:1_12:FREE_CHARACTERS:GamePlayer0",
+     "48:1_311:FREE_CHARACTERS:GamePlayer0",
+     "49:1_9:ATTACHED:GamePlayer0",
+     "4:1_349:ADVENTURE_DECK:GamePlayer0",
+     "50:1_20:SUPPORT:GamePlayer0",
+     "51:1_327:ADVENTURE_PATH:GameFoe0",
+     "52:101_49:SUPPORT:GameFoe0",
+     "53:1_183:SUPPORT:GameFoe0",
+     "55:1_337:ADVENTURE_PATH:GameFoe0",
+     "56:1_178:SHADOW_CHARACTERS:GameFoe0",
+     "5:1_350:ADVENTURE_DECK:GamePlayer0",
+     "6:1_353:ADVENTURE_DECK:GamePlayer0",
+     "7:1_356:ADVENTURE_DECK:GamePlayer0",
+     "8:1_360:ADVENTURE_DECK:GamePlayer0",
+     "9:1_183:HAND:GamePlayer0"
+    ]
+   }
+  }
+ ]
+}

@@ -10,6 +10,13 @@
     <artifactId>gemp-lotr-async</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
+        <!-- Not a code dependency: makes Maven build the Angular frontend (into src/main/web/ng/) before this module packages the web folder -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>gemp-lotr-frontend</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>gemp-lotr-server</artifactId>

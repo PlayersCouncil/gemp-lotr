@@ -1,0 +1,108 @@
+/*
+ * The controls several components use: a button (.gd-button, a jQuery UI button) and a slider (.gd-slider, a jQuery
+ * UI slider on a native range input). A component adds its own sizes and states to them.
+ */
+
+.gd-button {
+  box-sizing: border-box;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+  color: var(--theme-widget-text);
+  font-family: var(--theme-font-widget);
+  cursor: pointer;
+}
+
+.gd-button:enabled:hover,
+.gd-button:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+.gd-button:enabled:active {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-button:disabled {
+  opacity: 0.35;
+  background-image: none;
+  cursor: default;
+}
+
+/* An icon from the sprite, drawn by ::before; data-icon picks it */
+.gd-button[data-icon]::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  background: var(--theme-icons) no-repeat;
+}
+
+.gd-button[data-icon]:enabled:hover::before,
+.gd-button[data-icon]:focus-visible::before {
+  background-image: var(--theme-icons-hover);
+}
+
+/* .ui-state-active .ui-icon */
+.gd-button[data-icon]:enabled:active::before {
+  background-image: var(--theme-icons-active);
+}
+
+.gd-button[data-icon='previous']::before {
+  background-position: -80px -192px;
+}
+
+.gd-button[data-icon='next']::before {
+  background-position: -48px -192px;
+}
+
+.gd-slider {
+  appearance: none;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+}
+
+.gd-slider::-webkit-slider-runnable-track {
+  box-sizing: border-box;
+  height: 10.6px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+}
+
+.gd-slider::-moz-range-track {
+  box-sizing: border-box;
+  height: 10.6px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+}
+
+.gd-slider::-webkit-slider-thumb {
+  appearance: none;
+  box-sizing: border-box;
+  width: 15.8px;
+  height: 15.8px;
+  margin-top: -3.6px;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+}
+
+.gd-slider::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 15.8px;
+  height: 15.8px;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+}
+
+/* The legacy slider focused its handle: Chrome drew its focus ring (dark, then light) over the border */
+.gd-slider:focus {
+  outline: none;
+}
