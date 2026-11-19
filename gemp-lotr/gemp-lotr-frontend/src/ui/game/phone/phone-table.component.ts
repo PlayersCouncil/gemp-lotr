@@ -102,27 +102,25 @@ const HALF_ROW = 3;
             <div class="gd-phone-pair" [attr.data-pair]="pair.kind" [attr.data-reversed]="shadowSide() ? '' : null">
               <gd-phone-cards [cards]="pair.minions" empty="" [layered]="true" />
               @if (pair.kind === 'skirmish') {
-                <!-- The strengths on one line between the sides: a shorter fight (the owner, 2026-11-19) -->
-                <span class="gd-phone-pair__score">
-                  <span
-                    class="gd-phone-strength"
-                    data-side="shadow"
-                    [attr.data-overwhelmed]="shadowOverwhelmed() ? '' : null"
-                    >{{ shown()?.shadowStrength ?? '–' }}
-                    @if (bonus(shown()?.shadowDamageBonus); as b) {
-                      <small>{{ b }}</small>
-                    }
-                  </span>
-                  <span class="gd-phone-pair__vs">vs</span>
-                  <span
-                    class="gd-phone-strength"
-                    data-side="free-peoples"
-                    [attr.data-overwhelmed]="overwhelmed() ? '' : null"
-                    >{{ shown()?.fellowshipStrength ?? '–' }}
-                    @if (bonus(shown()?.fellowshipDamageBonus); as b) {
-                      <small>{{ b }}</small>
-                    }
-                  </span>
+                <!-- Each strength next to its side: the Shadow's by the minions, the Free Peoples' by the companions -->
+                <span
+                  class="gd-phone-strength"
+                  data-side="shadow"
+                  [attr.data-overwhelmed]="shadowOverwhelmed() ? '' : null"
+                  >{{ shown()?.shadowStrength ?? '–' }}
+                  @if (bonus(shown()?.shadowDamageBonus); as b) {
+                    <small>{{ b }}</small>
+                  }
+                </span>
+                <span class="gd-phone-pair__vs">vs</span>
+                <span
+                  class="gd-phone-strength"
+                  data-side="free-peoples"
+                  [attr.data-overwhelmed]="overwhelmed() ? '' : null"
+                  >{{ shown()?.fellowshipStrength ?? '–' }}
+                  @if (bonus(shown()?.fellowshipDamageBonus); as b) {
+                    <small>{{ b }}</small>
+                  }
                 </span>
               } @else {
                 <span class="gd-phone-pair__vs">vs</span>
