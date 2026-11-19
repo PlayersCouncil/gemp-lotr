@@ -437,7 +437,7 @@ export class Authoring {
 
   /* ---------------------------------------------------------------- changes */
 
-  /** Sends what the Step tab has not sent. False when it was refused (and `regardless` wasn't asked). */
+  /** Sends what the Step tab has not sent (StepTabHooks.flush); what goes elsewhere goes only if that `went`. */
   async flush(regardless = false): Promise<StepFlushResult> {
     return this.stepTab.flush(regardless);
   }
