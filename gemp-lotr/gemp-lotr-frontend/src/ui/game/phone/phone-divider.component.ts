@@ -3,6 +3,8 @@ import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { DecisionButton, mainButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
+import { GameUndo } from '../../../core/game/undo/game-undo.service';
+import { UNDO_BUTTON } from '../../../core/game/undo/undo-view';
 import { choiceLabel } from '../decision/decision-dialogs.component';
 import { clockText } from '../panel/game-clock';
 import { ReplayControlsComponent } from '../panel/replay-controls.component';
@@ -19,7 +21,9 @@ import { CardHintsDirective } from '../table/card-hints.directive';
  * `[data-clock]` the decision's clock, `.gd-phone-divider__hand-hint` while the hand is hidden, and
  * `.gd-phone-divider__buttons` with `button[data-decision-button]` (OK, Pass, Done, Reset choice, Clear selection),
  * `button[data-decision-choice]`, `select[data-decision=choice]`, the number's `button[data-decision=integer-down]`,
- * `output[data-decision=integer]`, `button[data-decision=integer-up]`.
+ * `output[data-decision=integer]`, `button[data-decision=integer-up]`; the buttons are `inert` (`data-frozen`) while a
+ * revert request waits. After them, while the player's last choice is theirs to take back, `button[data-undo=last]`
+ * (as the alert box's, GameAlertComponent).
  */
 @Component({
   selector: 'gd-phone-divider',
@@ -45,7 +49,11 @@ import { CardHintsDirective } from '../table/card-hints.directive';
       <gd-game-replay class="gd-phone-divider__replay" />
     }
     @if (small(); as dialog) {
-      <div class="gd-phone-divider__buttons">
+      <div
+        class="gd-phone-divider__buttons"
+        [attr.inert]="undo.frozen() ? '' : null"
+        [attr.data-frozen]="undo.frozen() ? '' : null"
+      >
         @if (dialog.kind === 'integer') {
           <span class="gd-phone-spinner" role="group" aria-label="Number">
             <button
@@ -116,7 +124,11 @@ import { CardHintsDirective } from '../table/card-hints.directive';
         }
       </div>
     } @else if (buttons().length > 0) {
-      <div class="gd-phone-divider__buttons">
+      <div
+        class="gd-phone-divider__buttons"
+        [attr.inert]="undo.frozen() ? '' : null"
+        [attr.data-frozen]="undo.frozen() ? '' : null"
+      >
         @for (button of buttons(); track button) {
           <button
             type="button"
@@ -130,12 +142,26 @@ import { CardHintsDirective } from '../table/card-hints.directive';
         }
       </div>
     }
+    @if (undo.button(); as undoButton) {
+      <button
+        type="button"
+        class="gd-phone-button gd-phone-divider__undo"
+        data-undo="last"
+        [title]="undoButton.title"
+        [disabled]="!undoButton.enabled"
+        (click)="undo.undoLatest()"
+      >
+        {{ undoLabel }}
+      </button>
+    }
   `,
 })
 export class PhoneDividerComponent {
   protected readonly session = inject(GameSession);
   protected readonly decisions = inject(GameDecisions);
   protected readonly clocks = inject(GameClocks);
+  protected readonly undo = inject(GameUndo);
+  protected readonly undoLabel = UNDO_BUTTON;
 
   readonly handHidden = input(false);
 

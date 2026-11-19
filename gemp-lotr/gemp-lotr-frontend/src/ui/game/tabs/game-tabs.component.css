@@ -244,6 +244,11 @@
   line-height: 1.4;
 }
 
+/* Revert... and, a little apart, its switch (game.css .undoOptions) */
+.gd-game-tabs__undo > input {
+  margin-left: 1em;
+}
+
 .gd-game-setting__rule {
   margin: 0 0 0 8px;
 }

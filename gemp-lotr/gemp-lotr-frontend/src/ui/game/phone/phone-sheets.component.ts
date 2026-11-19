@@ -24,6 +24,7 @@ import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GAME_THEME_PICKER, THEME_LABELS, THEMES, ThemeService } from '../../../core/platform/theme.service';
 import { AUTO_PASS_PHASES, GameSettings, UnderButton } from '../../../core/game/settings/game-settings';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
+import { GameUndo } from '../../../core/game/undo/game-undo.service';
 import { handRevealed, PileName, pileCards } from '../../../core/game/table/game-table';
 import { PageCues } from '../../../core/platform/page-cues';
 import { clockText } from '../panel/game-clock';
@@ -66,7 +67,9 @@ const HALL = '/gemp-lotr/hall.html';
  * holding
  * `.gd-phone-sheet__head` (`h2`, `button[data-phone=sheet-close]` with `data-back` when it goes back) and
  * `.gd-phone-sheet__body`. The card's details: `img.gd-phone-detail__image` (the picture only) and the attached
- * cards' `gd-phone-cards`. Piles: `section[data-pile]` each. The menu: `button[data-menu]`. The actions:
+ * cards' `gd-phone-cards`. Piles: `section[data-pile]` each. The menu: `button[data-menu]` (`revert` opens the list of
+ * places to go back to, UndoListComponent, as Revert... in the computer layout's Options tab). The settings have
+ * `[data-setting]` toggles (skipConfirmations; undoAutoDecline under "This game", where anybody would be asked). The actions:
  * `.gd-phone-sheet[data-sheet=actions]` with `button[data-action-id]`.
  */
 @Component({
@@ -296,6 +299,32 @@ const HALL = '/gemp-lotr/hall.html';
                       />
                       <span>Skip the look at your own deck when searching it</span>
                     </label>
+                    <label class="gd-phone-toggle">
+                      <input
+                        type="checkbox"
+                        data-setting="skipConfirmations"
+                        [checked]="settings.skipConfirmations()"
+                        (change)="settings.setSkipConfirmations(checked($event))"
+                      />
+                      <span
+                        >Skip extra confirmations<small
+                          >Answers a question that only asks you to confirm, such as DONE on a full starting fellowship.
+                          You can no longer undo the choice before it.</small
+                        ></span
+                      >
+                    </label>
+                    @if (autoDeclineShown()) {
+                      <h3>This game</h3>
+                      <label class="gd-phone-toggle">
+                        <input
+                          type="checkbox"
+                          data-setting="undoAutoDecline"
+                          [checked]="undo.autoDeclining()"
+                          (change)="undo.setAutoDecline(checked($event))"
+                        />
+                        <span>Auto-decline revert requests<small>Only for this game.</small></span>
+                      </label>
+                    }
                     <h3>Alerts</h3>
                     <label class="gd-phone-toggle">
                       <input
@@ -416,6 +445,11 @@ export class PhoneSheetsComponent {
   private readonly chat = inject(ChatRoom);
   private readonly log = inject(GameLog);
   private readonly viewState = inject(GameViewState);
+  protected readonly undo = inject(GameUndo);
+  /** "Auto-decline revert requests": for a player, where something can be taken back and anybody would be asked. */
+  protected readonly autoDeclineShown = computed(
+    () => this.undo.playing() && this.undo.allowed() && !!this.undo.policy()?.asks,
+  );
   private readonly gameViews = inject(GameCardViews);
   private readonly cardViews = inject(CardViews);
   private readonly cues = inject(PageCues);
@@ -592,6 +626,7 @@ export class PhoneSheetsComponent {
     if (this.cues.fullscreenAvailable()) {
       items.push({ key: 'fullscreen', label: this.cues.fullscreen() ? 'Leave full screen' : 'Full screen' });
     }
+    if (playing && !model.ended && this.undo.allowed()) items.push({ key: 'revert', label: 'Revert...' });
     if (playing && !model.ended) {
       items.push({ key: 'cancel', label: 'Request game cancel' }, { key: 'concede', label: 'Concede game' });
     }
@@ -678,6 +713,11 @@ export class PhoneSheetsComponent {
         break;
       case 'hall':
         this.cues.go(HALL);
+        break;
+      case 'revert':
+        // The list is a dialog over the table: the sheets go
+        this.sheets.closeAll();
+        this.undo.openList();
         break;
       case 'fullscreen':
         // The menu closes: the game fills the screen behind it

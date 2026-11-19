@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { noEffectReason } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
+import { GameUndo } from '../../../core/game/undo/game-undo.service';
 import { DocumentPressDirective } from '../../shared/document-press/document-press.directive';
 
 /**
@@ -9,7 +10,8 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
  *
  * DOM contract: `ul.gd-game-menu` (with `--gd-menu-left` and `--gd-menu-top`, px in the page) holding a
  * `button[data-action-id]` per action; an action that would do nothing has `data-no-effect` (its reason) and ends with
- * `.gd-game-menu__reason` ("(limit reached)"), as game.html's noEffectAction entries.
+ * `.gd-game-menu__reason` ("(limit reached)"), as game.html's noEffectAction entries. `inert` while a revert request
+ * waits.
  */
 @Component({
   selector: 'gd-game-action-menu',
@@ -23,6 +25,7 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
         role="menu"
         [style.--gd-menu-left]="menu.x + 'px'"
         [style.--gd-menu-top]="menu.y + 'px'"
+        [attr.inert]="undo.frozen() ? '' : null"
         #list
         (gdDocumentPress)="pressed($event, list)"
       >
@@ -48,6 +51,7 @@ import { DocumentPressDirective } from '../../shared/document-press/document-pre
 })
 export class ActionMenuComponent {
   protected readonly decisions = inject(GameDecisions);
+  protected readonly undo = inject(GameUndo);
   protected readonly reason = noEffectReason;
 
   /** A click anywhere but on the menu closes it (the click that chooses an entry is the entry's own). */

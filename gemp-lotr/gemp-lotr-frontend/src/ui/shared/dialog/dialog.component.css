@@ -90,6 +90,11 @@
   outline: none;
 }
 
+/* Nothing in it can be used for now (a game's decision while a revert request waits): dimmed, as undo.js does */
+.gd-dialog[inert] {
+  opacity: 0.45;
+}
+
 /* The modal overlay. Not fixed: that would put the dialog on a layer of its own, without subpixel text */
 .gd-dialog::backdrop {
   position: absolute;
@@ -254,6 +259,15 @@
 /* With a row of buttons, whose fraction makes up for most of that */
 .gd-dialog[data-dialog='decision']:has([gdDialogActions]) {
   height: calc(var(--dialog-height) - 0.08px);
+}
+
+/* Taking a game back (undo.js): the list 460px wide, a request 420px, as high as their content; inside a phone's width */
+.gd-dialog[data-dialog='undo-list'] {
+  --dialog-width: min(460px, calc(100vw - 2em));
+}
+
+.gd-dialog[data-dialog='undo-request'] {
+  --dialog-width: min(420px, calc(100vw - 2em));
 }
 
 /* A game that can't go on (the game page's error dialog): 300 x 160, not resizable */

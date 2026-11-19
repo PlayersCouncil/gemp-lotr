@@ -3,6 +3,7 @@ import { ChatRoom } from '../../../core/chat/chat-room.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { AUTO_PASS_PHASES, GameSettings } from '../../../core/game/settings/game-settings';
+import { GameUndo } from '../../../core/game/undo/game-undo.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { GameChatComponent } from './game-chat.component';
 import { KeepScrollDirective } from './keep-scroll.directive';
@@ -27,8 +28,10 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
  * DOM contract: `gd-game-tabs` with `data-extras` (how many switches), holding `.gd-game-tabs__strip` with an `a[data-tab]` (a link, as the legacy tab) per tab (`aria-selected`) and
  * `[data-toggle]` auto-zoom and timer-mute; then `.gd-game-tabs__panel` (`data-panel`). Settings: `[data-setting]`
  * named as the legacy ids (foilPresentation, animation-slider, autoAccept, autoDismissDeckReveal,
- * use-old-stack-checkbox, alwaysDropDown, autoPassFELLOWSHIP ...), `[data-timer-alert]` timerAlertBelow and
- * timerAlertEvery; options: `[data-button]` concedeGame and cancelGame.
+ * use-old-stack-checkbox, alwaysDropDown, skipConfirmations, autoPassFELLOWSHIP ...), `[data-timer-alert]`
+ * timerAlertBelow and timerAlertEvery; options: `[data-button]` undoGame ("Revert...", there for a player in a game
+ * where something can be taken back; disabled while a request waits), concedeGame and cancelGame, and beside Revert
+ * `[data-setting=undoAutoDecline]` where anybody would be asked.
  */
 @Component({
   selector: 'gd-game-tabs',
@@ -157,6 +160,19 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
             (change)="settings.setAlwaysDropDown(checked($event))"
           /><label for="gd-game-drop-down">Always display drop-down in answer selection</label>
         </div>
+        <div class="gd-game-setting">
+          <input
+            id="gd-game-skip-confirmations"
+            type="checkbox"
+            data-setting="skipConfirmations"
+            [checked]="settings.skipConfirmations()"
+            (change)="settings.setSkipConfirmations(checked($event))"
+          /><label
+            for="gd-game-skip-confirmations"
+            title="Answer for you any question that only asks you to confirm, such as pressing DONE on a starting fellowship that is already full. You can no longer undo the choice before it."
+            >Skip extra confirmations</label
+          >
+        </div>
         <div class="gd-game-setting" data-group>
           <div class="gd-game-setting__title">
             Phases when game auto-passes for you, if you have no phase actions to play
@@ -210,6 +226,32 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
     }
     @if (selected() === 'options') {
       <div class="gd-game-tabs__panel" role="tabpanel" data-panel="options" gdKeepScroll>
+        @if (undoRow()) {
+          <div class="gd-game-setting gd-game-tabs__undo">
+            <button
+              type="button"
+              class="gd-button gd-game-tabs__action"
+              data-button="undoGame"
+              [disabled]="undo.frozen()"
+              (click)="undo.openList()"
+            >
+              <span>Revert...</span>
+            </button>
+            @if (undo.policy()?.asks) {
+              <input
+                id="gd-game-undo-auto-decline"
+                type="checkbox"
+                data-setting="undoAutoDecline"
+                [checked]="undo.autoDeclining()"
+                (change)="undo.setAutoDecline(checked($event))"
+              /><label
+                for="gd-game-undo-auto-decline"
+                title="Decline every revert request in this game without being asked. Only for this game."
+                >Auto-decline revert requests</label
+              >
+            }
+          </div>
+        }
         <div class="gd-game-setting">
           <button type="button" class="gd-button gd-game-tabs__action" data-button="concedeGame" (click)="concede()">
             <span>Concede game</span>
@@ -236,6 +278,9 @@ export class GameTabsComponent {
   protected readonly settings = inject(GameSettings);
   protected readonly zoom = inject(AutoZoomSetting);
   protected readonly chat = inject(ChatRoom);
+  protected readonly undo = inject(GameUndo);
+  /** Revert... and its switch: for a player, in a game where something can be taken back (as undo.js). */
+  protected readonly undoRow = computed(() => this.undo.allowed() && this.undo.playing());
 
   /** The open tab: kept with the game, so a reload opens it again. */
   private readonly viewState = inject(GameViewState);

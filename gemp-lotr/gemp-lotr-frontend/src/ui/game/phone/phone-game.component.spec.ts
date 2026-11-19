@@ -319,6 +319,51 @@ describe('the game on a phone (G7)', () => {
     expect(el.querySelector('.gd-phone-sheet')).toBeNull();
   });
 
+  it('takes a game back on a phone: Undo in the divider, Revert... in the menu, its switches in the settings', async () => {
+    const { el, click, stable } = await open(
+      game(decision('CARD_SELECTION', param('cardId', '1') + param('max', '1'))),
+    );
+    const policy = { green: true, yellow: true, red: true, asks: true, timeoutSeconds: 60, greenPerPhase: 3 };
+    const green = { entryCount: 4, label: 'Played Gimli', turn: 1, phase: 'Fellowship', tier: 'GREEN' };
+    const restore = { points: [green], policy, autoDecline: false, declining: [], pending: null };
+    backend.expectOne((r) => r.url === `${GAME}/notices`).flush({ notices: [], latest: 1 });
+    backend.match((r) => r.url === `${GAME}/restorePoints`).forEach((r) => r.flush(restore));
+    await stable();
+    const undo = el.querySelector<HTMLButtonElement>('gd-phone-divider [data-undo="last"]')!;
+    expect(undo.textContent?.trim()).toBe('✓ Undo');
+    expect(undo.title).toBe('Undo: Played Gimli');
+
+    await click('[data-phone="menu"]');
+    await click('[data-menu="settings"]');
+    expect(el.querySelector('[data-setting="skipConfirmations"]')).not.toBeNull();
+    const decline = el.querySelector<HTMLInputElement>('[data-setting="undoAutoDecline"]')!;
+    decline.checked = true;
+    decline.dispatchEvent(new Event('change'));
+    await stable();
+    expect(backend.expectOne((r) => r.url === `${GAME}/autoDecline`).request.body?.get('on')).toBe('true');
+
+    // Revert...: the sheets go, the list opens over the table
+    await click('[data-phone="sheet-close"]');
+    await click('[data-menu="revert"]');
+    expect(el.querySelector('.gd-phone-sheet')).toBeNull();
+    backend.match((r) => r.url === `${GAME}/restorePoints`).forEach((r) => r.flush(restore));
+    await stable();
+    expect(el.querySelector<HTMLDialogElement>('dialog[data-dialog="undo-list"]')?.open).toBe(true);
+
+    // A request closes every sheet (it would hide the request), and the answers can't be pressed meanwhile
+    await click('[data-phone="menu"]');
+    backend
+      .expectOne((r) => r.url === `${GAME}/notices`)
+      .flush({
+        notices: [{ number: 2, type: 'undoRequested', requestId: '3', requester: 'bob', tier: 'RED', seconds: '60' }],
+        latest: 2,
+      });
+    await stable();
+    expect(el.querySelector('.gd-phone-sheet')).toBeNull();
+    expect(el.querySelector<HTMLDialogElement>('dialog[data-dialog="undo-request"]')?.open).toBe(true);
+    expect(el.querySelector('.gd-phone-divider__buttons')?.hasAttribute('inert')).toBe(true);
+  });
+
   it("changes every setting from the settings sheet: the game's (legacy cookies) and the phone's own", async () => {
     const { el, click, fixture, stable } = await open(game());
     const settings = fixture.debugElement.injector.get(GameSettings);

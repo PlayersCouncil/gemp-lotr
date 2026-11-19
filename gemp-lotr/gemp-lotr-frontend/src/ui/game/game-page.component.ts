@@ -35,6 +35,10 @@ import { PhoneGameComponent } from './phone/phone-game.component';
 import { CompactLayout } from '../../core/platform/compact-layout.service';
 import { GameSheets } from '../../core/game/phone/game-sheets';
 import { PhoneBridge } from '../../core/game/phone/phone-bridge';
+import { GameUndo } from '../../core/game/undo/game-undo.service';
+import { UndoBannerComponent } from './undo/undo-banner.component';
+import { UndoListComponent } from './undo/undo-list.component';
+import { UndoRequestComponent } from './undo/undo-request.component';
 
 /** The cookie the game page remembers its hover zoom setting in (the legacy game page's). */
 export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
@@ -53,6 +57,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
  * characters-opponent, shadow, characters-player, support-player, hand) and a `section.gd-game__fight` per skirmish
  * (`data-fight="skirmish"`) and assignment (`data-fight="assignment"`), each with `.gd-game__side`
  * (`data-side`: shadow, free-peoples). `data-animating` while an event holds the page (its animation). Cards: see GameCardDirective.
+ * Taking the game back (in both layouts): `gd-undo-list`, `gd-undo-request` and `gd-undo-banner` (see ./undo).
  */
 @Component({
   selector: 'gemp-game',
@@ -81,6 +86,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     CardHintsDirective,
     AutoZoomComponent,
     PhoneGameComponent,
+    UndoListComponent,
+    UndoRequestComponent,
+    UndoBannerComponent,
   ],
   host: {
     class: 'gd-game',
@@ -182,6 +190,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     }
     <gd-game-feedback />
     <gd-game-problem />
+    <gd-undo-list />
+    <gd-undo-request />
+    <gd-undo-banner />
     @if (!phone()) {
       <gd-card-info gdCardHints />
       <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
@@ -240,8 +251,13 @@ export class GamePageComponent {
       this.session.openReplay(replayId);
     } else if (gameId !== null) {
       const chat = inject(ChatRoom);
+      const undo = inject(GameUndo);
       inject(GameViewState).restore(gameId);
-      this.session.open(gameId, () => chat.join(`Game${gameId}`));
+      // Once the game is there: its chat, and taking it back (the notices' poll, what can be taken back)
+      this.session.open(gameId, () => {
+        chat.join(`Game${gameId}`);
+        undo.start(gameId);
+      });
     }
   }
 
