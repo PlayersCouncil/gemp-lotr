@@ -76,6 +76,7 @@ describe('ScenarioLayerComponent', () => {
     nextLabel: signal<string | null>('Next'),
     nudges: signal(0),
     playing: signal(true),
+    picking: signal(false),
     next: vi.fn(),
     choose: vi.fn(),
   };
@@ -368,6 +369,14 @@ describe('ScenarioLayerComponent', () => {
     guide.playing.set(false);
     press(' ');
     expect(guide.next).toHaveBeenCalledTimes(3);
+    // An author picking something on the table (the bubble fades meanwhile)
+    guide.playing.set(true);
+    guide.picking.set(true);
+    fixture.detectChanges();
+    expect(el.querySelector('.gd-scenario')?.hasAttribute('data-picking')).toBe(true);
+    press('Escape');
+    expect(guide.next).toHaveBeenCalledTimes(3);
+    guide.picking.set(false);
     // Gone with the page
     guide.playing.set(true);
     fixture.destroy();

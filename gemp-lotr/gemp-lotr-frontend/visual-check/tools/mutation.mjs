@@ -64,6 +64,16 @@ export const TARGETS = [
   'src/core/game/decision/decision-view.ts',
   'src/core/game/decision/game-decisions.service.ts',
   'src/core/game/protocol/game-xml.ts',
+  // The scenario authoring panel: its calls, what it makes of the server's state, and the steps its buttons write
+  'src/core/game/authoring/authoring-api.service.ts',
+  'src/core/game/authoring/authoring-ui-store.ts',
+  'src/core/game/authoring/authoring.service.ts',
+  'src/core/game/authoring/notices.ts',
+  'src/core/game/authoring/selection.ts',
+  'src/core/game/authoring/step-ops.ts',
+  'src/core/game/authoring/steps.ts',
+  'src/core/game/authoring/terms.ts',
+  'src/core/game/authoring/timeline.ts',
   // Scenarios on the game page: the script's events, what a step allows, the guide, and where its bubble goes
   'src/core/game/scenario/bubble-placement.ts',
   'src/core/game/scenario/scenario-api.service.ts',

@@ -11,6 +11,12 @@
   font-family: var(--theme-game-scenario-font);
 }
 
+/* While its author picks something on the table, what the layer draws is not in the way of what is behind it */
+.gd-scenario[data-picking] :is(.gd-scenario-bubble, .gd-scenario-pointer) {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
 /* ---- the bubble ---- */
 
 .gd-scenario-bubble {

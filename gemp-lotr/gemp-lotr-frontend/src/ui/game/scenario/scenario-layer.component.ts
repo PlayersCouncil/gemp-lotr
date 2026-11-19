@@ -69,6 +69,8 @@ const px = (value: number) => `${Math.round(value)}px`;
  * `footer.gd-scenario-bubble__foot` holding `button.gd-scenario-button` (`data-scenario`: next, or `data-choice`
  * with the choice's name); `.gd-scenario-hint`; `.gd-scenario-zoom` (`data-blocks` while it takes the pointer) with
  * `.gd-scenario-zoom__frame` > `img.gd-scenario-zoom__card`, `svg.gd-scenario-zoom__dim`, `.gd-scenario-zoom__mark`.
+ * `.gd-scenario` has `data-picking` while an author picks something on the table (the bubble fades and lets the
+ * pointer through).
  */
 @Component({
   selector: 'gd-game-scenario',
@@ -79,7 +81,7 @@ const px = (value: number) => `${Math.round(value)}px`;
   host: { style: 'display: contents' },
   template: `
     @if (showing()) {
-      <div class="gd-scenario">
+      <div class="gd-scenario" [attr.data-picking]="guide.picking() ? '' : null">
         @if (zoomPicture(); as picture) {
           @if (drawn().zoom; as zoom) {
             <div class="gd-scenario-zoom" [attr.data-blocks]="zoomBlocks() ? '' : null">
@@ -552,7 +554,8 @@ export class ScenarioLayerComponent {
     ) {
       return;
     }
-    if (!this.guide.playing() || this.guide.nextLabel() === null || this.collapsed()) return;
+    // (nor while its author is picking something on the table: there Escape is the picking's)
+    if (!this.guide.playing() || this.guide.picking() || this.guide.nextLabel() === null || this.collapsed()) return;
     const target = event.target instanceof HTMLElement ? event.target : null;
     if (target?.closest('input, textarea, select, [contenteditable], [data-own-keys]')) return;
     if (event.key === 'Escape' && this.cardInfo.isOpen()) return;

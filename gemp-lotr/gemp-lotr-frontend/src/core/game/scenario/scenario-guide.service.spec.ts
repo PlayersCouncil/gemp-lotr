@@ -11,12 +11,14 @@ import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { GameDecisions } from '../decision/game-decisions.service';
 import { provideGameState } from '../game-state';
 import { readingTime } from '../session/event-pacing';
+import { ScenarioSettings } from './scenario-events';
 import { GameLog } from '../session/game-log';
 import { GameSession, POLL_DELAY_MS } from '../session/game-session.service';
 import { GameSettings } from '../settings/game-settings';
 import {
   ACKNOWLEDGE_RETRY_MS,
   HINT_MS,
+  ScenarioAuthorHooks,
   ScenarioGuide,
   STOCK_NOT_NOW,
   STOCK_OFF_SCRIPT,
@@ -783,6 +785,144 @@ describe('ScenarioGuide', () => {
       // Starting again from the end panel isn't asked about either
       await guide.askRestart();
       start();
+    });
+  });
+
+  describe("an author's game (the authoring panel's hooks)", () => {
+    function hooks() {
+      const author = {
+        writing: signal(true),
+        picking: signal(false),
+        settings: signal<ScenarioSettings | null>(null),
+        restart: vi.fn<(fromCheckpoint: boolean) => boolean>(() => true),
+        leaving: vi.fn<(hash: string) => boolean>(() => false),
+        stepShown: vi.fn(),
+      };
+      const typed: ScenarioAuthorHooks = author;
+      return Object.assign(author, { typed });
+    }
+
+    it('starts again through the panel, and as ever once the panel has no say', () => {
+      open(S({ ...INFO, author: true }) + CARD_ACTIONS);
+      const author = hooks();
+      const detach = guide.attachAuthor(author);
+      guide.restart(true);
+      expect(author.restart).toHaveBeenCalledWith(true);
+      expect(backend.match((r) => r.url === START)).toEqual([]);
+      author.restart.mockReturnValue(false);
+      guide.restart();
+      expect(backend.match((r) => r.url === START)).toHaveLength(1);
+      detach();
+      // (taking it away twice, or after another took its place, changes nothing)
+      const other = hooks();
+      guide.attachAuthor(other);
+      detach();
+      guide.startNext();
+      guide.restart();
+      expect(other.restart).toHaveBeenCalled();
+    });
+
+    it('leaves a game being written without conceding, the panel asking about unsaved changes first', async () => {
+      open(S({ ...INFO, author: true }) + CARD_ACTIONS);
+      const author = hooks();
+      guide.attachAuthor(author);
+      await guide.leave();
+      expect(notifier.dialogs).toEqual([]);
+      expect(backend.match((r) => r.url === `${GAME}/concede`)).toEqual([]);
+      expect(author.leaving).toHaveBeenCalledWith('');
+      expect(hall.go).toHaveBeenCalledWith('');
+      author.leaving.mockReturnValue(true);
+      guide.backToHall('#account/scenarios');
+      expect(author.leaving).toHaveBeenLastCalledWith('#account/scenarios');
+      expect(hall.go).toHaveBeenCalledTimes(1);
+      // (a test of the draft is left as a player's game is)
+      author.writing.set(false);
+      notifier.answers.push(false);
+      await guide.leave();
+      expect(notifier.dialogs).toHaveLength(1);
+    });
+
+    it("plays by the draft's settings as the panel has them, and takes nothing while the author picks on the table", () => {
+      open(S({ ...INFO, author: true }) + CARD_ACTIONS);
+      const author = hooks();
+      guide.attachAuthor(author);
+      TestBed.tick();
+      expect(settings.fixed()).toEqual({ autoAccept: true, autoDismissDeckReveal: true, animationSpeed: null });
+      author.settings.set({ autoAccept: false, autoDismissDeckReveal: false, animationSpeed: 2 });
+      TestBed.tick();
+      expect(settings.fixed()).toEqual({ autoAccept: false, autoDismissDeckReveal: false, animationSpeed: 2 });
+      author.picking.set(true);
+      expect(guide.picking()).toBe(true);
+      const nudges = guide.nudges();
+      expect(guide.allows({ kind: 'card', cardId: '7' })).toBe(false);
+      expect(guide.nudges()).toBe(nudges);
+      expect(guide.hint()).toBeNull();
+    });
+
+    it('says when a step is put on the screen', () => {
+      const author = hooks();
+      guide.attachAuthor(author);
+      open(S({ ...INFO, author: true }) + S(step({ messages: [message('One')] })) + CARD_ACTIONS);
+      expect(author.stepShown).toHaveBeenCalledWith(expect.objectContaining({ step: 1, sub: 0 }));
+    });
+
+    it('puts a message of the step on the screen up for its author, the decision answerable meanwhile', () => {
+      const messages = [message('One'), message('Two'), message('Picked', { on: { moment: 'picked', card: 'frodo' } })];
+      open(S({ ...INFO, author: true }) + S(step({ step: 4, sub: 2, messages, allow: allow(['12']) })) + CARD_ACTIONS);
+      expect(guide.phase()).toBe('reading');
+      expect(guide.preview(4, 1, 1)).toBe(false);
+      expect(guide.preview(3, 2, 1)).toBe(false);
+      expect(guide.preview(4, 2, 7)).toBe(false);
+      expect(header()).toBe('One');
+      expect(guide.preview(4, 2, 1)).toBe(true);
+      expect(header()).toBe('Two');
+      expect(guide.phase()).toBe('answering');
+      expect(guide.preview(4, 2, 2)).toBe(true);
+      expect(header()).toBe('Picked');
+      guide.next();
+      expect(header()).toBe('Two');
+      expect(guide.preview(4, 2, 0)).toBe(true);
+      expect(header()).toBe('One');
+      // (the step put up again: from the first, to be read)
+      session.refresh();
+      backend
+        .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+        .flush(`<update cn="2">${S(step({ step: 4, sub: 2, messages, allow: allow(['12']) }))}</update>`);
+      TestBed.tick();
+      expect(guide.phase()).toBe('reading');
+    });
+
+    it('previews a step that is only read without making anything answerable', () => {
+      open(S({ ...INFO, author: true }) + S(step({ seat: 'opponent', messages: [message('One'), message('Two')] })));
+      expect(guide.preview(1, 0, 1)).toBe(true);
+      expect(header()).toBe('Two');
+      expect(guide.phase()).toBe('waiting');
+      expect(guide.preview(2, 0, 0)).toBe(false);
+    });
+
+    it('shows the message up where its author is trying its bubble, until the step is put up again', () => {
+      const messages = [message('One', { side: 'left' }), message('Two')];
+      open(S({ ...INFO, author: true }) + S(step({ messages })) + CARD_ACTIONS);
+      expect(guide.tryPlace(1, { side: 'right' })).toBe(false);
+      expect(guide.tryPlace(0, { side: 'above' })).toBe(true);
+      expect(guide.message()).toMatchObject({ header: 'One', side: 'above', gap: null });
+      expect(guide.tryPlace(0, { gap: '3' })).toBe(true);
+      expect(guide.message()).toMatchObject({ side: 'above', gap: '3' });
+      const logged = log.entries().length;
+      TestBed.tick();
+      expect(log.entries().length).toBe(logged);
+      guide.next();
+      expect(guide.message()).toMatchObject({ header: 'Two', side: 'auto' });
+      expect(guide.tryPlace(1, { gap: '20px' })).toBe(true);
+      expect(guide.message()).toMatchObject({ header: 'Two', gap: '20px', side: 'auto' });
+      // (nothing up: nothing to try)
+      open(S({ ...INFO, author: true }) + CARD_ACTIONS);
+    });
+
+    it('tries nothing with nothing on the screen', () => {
+      open(S({ ...INFO, author: true }) + CARD_ACTIONS);
+      expect(guide.tryPlace(0, { side: 'left' })).toBe(false);
+      expect(guide.preview(1, 0, 0)).toBe(false);
     });
   });
 

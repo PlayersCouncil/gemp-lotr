@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { computed, effect, inject, Injectable, Signal, signal, untracked } from '@angular/core';
 import { CardInfoService } from '../../cards/card-info.service';
 import { Notifier } from '../../notifier/notifier';
 import { gamePageUrl } from '../../platform/app-paths';
@@ -15,7 +15,7 @@ import { GameSettings } from '../settings/game-settings';
 import { LocalChoices } from '../state/game-model';
 import { GameCardRef } from '../table/game-card-views';
 import { ScenarioApi } from './scenario-api.service';
-import { ScenarioMessage, ScenarioStep } from './scenario-events';
+import { MessageSide, ScenarioMessage, ScenarioSettings, ScenarioStep } from './scenario-events';
 import { characterComplete, openingMessages, planAllows, PlanContext, scenarioPlan } from './scenario-plan';
 
 /**
@@ -54,6 +54,33 @@ export const HINT_MS = 7000;
 export const ACKNOWLEDGE_RETRY_MS = 2000;
 /** Conceding is given this long to reach the server before the page leaves for the hall (ms). */
 const LEAVE_MS = 300;
+
+/**
+ * What the scenario authoring panel (core/game/authoring, the Authoring service) has the guide do differently while
+ * the person is writing the scenario, or testing a draft of it: the guide's one extension point, so it needs nothing
+ * of the panel's. The panel attaches it (`attachAuthor`) once it knows the game is a draft's.
+ */
+export interface ScenarioAuthorHooks {
+  /** Writing (not testing): Leave keeps the draft's game as it is (nothing conceded, nothing asked but unsaved changes). */
+  readonly writing: Signal<boolean>;
+  /** Picking something on the table for a message: nothing there answers the decision, and no key reads on. */
+  readonly picking: Signal<boolean>;
+  /** The player's settings the draft fixes for its game, as the panel has the draft (null: the scenario info's). */
+  readonly settings: Signal<ScenarioSettings | null>;
+  /** "Start again" (from the last checkpoint): true when the panel has done it (the script plays itself there). */
+  restart(fromCheckpoint: boolean): boolean;
+  /** On the way back to the Game Hall (to `hash`): true when the panel has stopped that (to ask about unsaved changes). */
+  leaving(hash: string): boolean;
+  /** A step has just been put on the screen, or put up again. */
+  stepShown?(step: ScenarioStep): void;
+}
+
+/** Where the bubble of a message sits, tried on the screen before the change has been to the server and back. */
+export interface TriedPlace {
+  side?: MessageSide;
+  /** As a message gives it ("3", "20px"); null: the scenario's, else the stock distance. */
+  gap?: string | null;
+}
 
 const NO_CLICKS: NextClicks = { cardIds: [], button: null, options: [] };
 
@@ -105,23 +132,40 @@ export class ScenarioGuide implements DecisionGate {
   /** The page is on its way to another one (starting over, leaving): how this game ends is no longer news. */
   readonly leaving = signal(false);
   private acknowledging: ScenarioStep | null = null;
+  /** The authoring panel's say (ScenarioAuthorHooks), while the game is a draft's. */
+  private readonly author = signal<ScenarioAuthorHooks | null>(null);
+  /** The author is picking something on the table: nothing on it answers the decision, and no key reads on. */
+  readonly picking = computed(() => this.author()?.picking() ?? false);
+  /** The author put this message up to look at (preview): the decision can be answered meanwhile. */
+  private readonly previewing = signal<ScenarioMessage | null>(null);
+  /** Where the author is trying the shown message's bubble (tryPlace): that message, and the place. */
+  private readonly tried = signal<{ message: ScenarioMessage; place: TriedPlace } | null>(null);
 
   readonly phase = computed<GuidePhase>(() => {
     if (this.end()) return 'ended';
     const step = this.step();
     if (!step) return this.notice() ? 'notice' : 'idle';
     if (step.seat === 'opponent' || step.pause) return 'waiting';
+    // (an author looking at one of the step's messages can always get on with the game)
+    if (this.previewing()) return 'answering';
     const message = this.opening()[this.read()];
     return message && message.advance !== 'decision' ? 'reading' : 'answering';
   });
 
-  /** The message on the screen, or null. */
-  readonly message = computed<ScenarioMessage | null>(() => {
+  /** The message on the screen as the server sent it, or null. */
+  private readonly shown = computed<ScenarioMessage | null>(() => {
     const notice = this.notice();
     if (!this.step()) {
       return notice && !this.end() ? noticeMessage(notice.message ?? STOCK_OFF_SCRIPT) : null;
     }
     return this.moment() ?? this.opening()[this.read()] ?? null;
+  });
+
+  /** The message on the screen (where its author is trying its bubble, there), or null. */
+  readonly message = computed<ScenarioMessage | null>(() => {
+    const shown = this.shown();
+    const tried = this.tried();
+    return shown && tried?.message === shown ? { ...shown, ...tried.place } : shown;
   });
 
   /** Which of the opening messages is up and how many there are, when there are several; else null. */
@@ -194,24 +238,28 @@ export class ScenarioGuide implements DecisionGate {
         this.moment.set(null);
         this.hint.set(null);
         this.acknowledgeFailed.set(false);
+        this.previewing.set(null);
+        this.tried.set(null);
         const step = this.step();
         // A step that only waits to be read and has nothing to read has been read
         if (shown > 0 && step && this.phase() === 'waiting' && this.opening().length === 0 && this.playing()) {
           this.acknowledge(null);
         }
+        if (shown > 0 && step) this.author()?.stepShown?.(step);
       });
     });
 
-    // The settings the scenario fixes for its game (a replay keeps the watcher's own)
+    // The settings the scenario fixes for its game (a replay keeps the watcher's own); a draft's as its author has it
     effect(() => {
       const info = this.info();
       const playing = this.playing();
-      untracked(() => this.settings.fix(info && playing ? info.settings : {}));
+      const settings = this.author()?.settings() ?? info?.settings ?? {};
+      untracked(() => this.settings.fix(info && playing ? settings : {}));
     });
 
     // What a message says goes into the game log too, as said by the opponent
     effect(() => {
-      const message = this.message();
+      const message = this.shown();
       const step = this.step();
       const info = this.info();
       if (!message || message.html === '') return;
@@ -301,6 +349,8 @@ export class ScenarioGuide implements DecisionGate {
 
   allows(gesture: DecisionGesture): boolean {
     if (!this.playing()) return true;
+    // (an author picking something on the table is not playing)
+    if (this.picking()) return false;
     this.hint.set(null);
     const phase = this.phase();
     if (phase === 'reading' || phase === 'waiting' || phase === 'ended') {
@@ -374,8 +424,54 @@ export class ScenarioGuide implements DecisionGate {
     this.hint.set(null);
   }
 
-  /** Starts the scenario again: from the beginning, or from its last checkpoint. */
+  /**
+   * The authoring panel's say in the game (see ScenarioAuthorHooks), while it is a draft's; the function returned takes
+   * it away again.
+   */
+  attachAuthor(hooks: ScenarioAuthorHooks): () => void {
+    this.author.set(hooks);
+    return () => {
+      if (this.author() === hooks) this.author.set(null);
+    };
+  }
+
+  /**
+   * Puts message `index` of the step on the screen up, for its author to look at, if that step (`step`, and `sub` in a
+   * block) is the one on the screen; the decision can be answered meanwhile. False when it isn't (or has no such
+   * message). The next step put up (or this one again) starts afresh.
+   */
+  preview(step: number, sub: number, index: number): boolean {
+    const shown = this.step();
+    const message = shown?.messages[index];
+    if (!shown || !message || shown.step !== step || shown.sub !== sub) return false;
+    const at = this.opening().indexOf(message);
+    if (at > -1) {
+      this.moment.set(null);
+      this.read.set(at);
+    } else {
+      this.moment.set(message);
+    }
+    // (only the player's own step has a decision to get on with)
+    this.previewing.set(shown.seat === 'human' && !shown.pause ? message : null);
+    return true;
+  }
+
+  /**
+   * Shows the bubble of message `index` of the step on the screen where its author is trying it (its side, its
+   * gap), at once, if that message is the one up; the change itself comes back from the server as the step put up
+   * again. False when that message isn't up.
+   */
+  tryPlace(index: number, place: TriedPlace): boolean {
+    const shown = this.shown();
+    if (!shown || this.step()?.messages[index] !== shown) return false;
+    const was = this.tried();
+    this.tried.set({ message: shown, place: { ...(was?.message === shown ? was.place : {}), ...place } });
+    return true;
+  }
+
+  /** Starts the scenario again: from the beginning, or from its last checkpoint (a draft's: as its author says). */
   restart(fromCheckpoint = false): void {
+    if (this.author()?.restart(fromCheckpoint)) return;
     const info = this.info();
     if (info) this.start(info.id, fromCheckpoint);
   }
@@ -404,9 +500,12 @@ export class ScenarioGuide implements DecisionGate {
     if (over || (await this.notifier.confirm('Start this scenario again from the beginning?'))) this.restart();
   }
 
-  /** "Leave": the game is given up (asked about first) and the page goes back to the Game Hall. */
+  /**
+   * "Leave": the game is given up (asked about first) and the page goes back to the Game Hall. A draft's game being
+   * written stays as it is, to be come back to.
+   */
   async leave(): Promise<void> {
-    if (this.phase() === 'ended' || this.session.model().ended) {
+    if (this.phase() === 'ended' || this.session.model().ended || this.author()?.writing()) {
       this.backToHall();
       return;
     }
@@ -416,7 +515,9 @@ export class ScenarioGuide implements DecisionGate {
     this.lifetime.later(() => this.backToHall(), LEAVE_MS);
   }
 
+  /** Back to the Game Hall (to `hash`, a place in it); an author with unsaved changes is asked about them first. */
   backToHall(hash = ''): void {
+    if (this.author()?.leaving(hash)) return;
     this.hall.go(hash);
   }
 }

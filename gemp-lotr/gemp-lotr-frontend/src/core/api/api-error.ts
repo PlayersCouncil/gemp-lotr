@@ -16,11 +16,18 @@ export class ApiError extends Error {
     /** HTTP status; 0 for network failures, INVALID_RESPONSE_STATUS for unreadable responses. */
     readonly status: number,
     message: string,
-    options?: { cause?: unknown },
+    options?: { cause?: unknown; said?: string | null },
   ) {
     super(message, options);
     this.name = 'ApiError';
+    this.said = options?.said ?? null;
   }
+
+  /**
+   * What the server said went wrong, where its answer says so in words: the `error` of a JSON body (`{"error": "..."}`,
+   * as the scenario authoring calls answer a refusal); null otherwise.
+   */
+  readonly said: string | null;
 
   static from(error: unknown): ApiError {
     if (error instanceof ApiError) {
@@ -29,6 +36,7 @@ export class ApiError extends Error {
     if (error instanceof HttpErrorResponse) {
       return new ApiError(error.status, `Gemp server call failed (HTTP ${error.status}): ${error.url ?? ''}`, {
         cause: error,
+        said: saidIn(error.error),
       });
     }
     return new ApiError(INVALID_RESPONSE_STATUS, 'Unreadable response from the Gemp server', { cause: error });
@@ -37,6 +45,20 @@ export class ApiError extends Error {
   is(status: number): boolean {
     return this.status === status;
   }
+}
+
+/** The `error` text of a JSON answer body (a string, as the calls ask for text; or already parsed), if it has one. */
+function saidIn(body: unknown): string | null {
+  let value = body;
+  if (typeof body === 'string') {
+    try {
+      value = JSON.parse(body) as unknown;
+    } catch {
+      return null;
+    }
+  }
+  const said = value !== null && typeof value === 'object' ? (value as { error?: unknown }).error : undefined;
+  return typeof said === 'string' && said !== '' ? said : null;
 }
 
 /** What to tell the player about a failed call: the message for its status, or else the generic one. */
