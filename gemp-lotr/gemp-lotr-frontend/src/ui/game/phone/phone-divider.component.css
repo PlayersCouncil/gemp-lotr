@@ -196,6 +196,24 @@
   font-size: 15px;
 }
 
+/* A low screen held sideways (a phone under its browser's bars): a tighter decision, more room for the hand */
+@media (max-height: 420px) {
+  :host-context([data-device='sideways']) {
+    gap: 4px;
+    padding: 8px 10px 6px;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-divider__text {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-button {
+    min-height: 36px;
+    padding: 2px 12px;
+  }
+}
+
 :host-context([data-device='sideways']) .gd-phone-divider__buttons {
   flex-wrap: nowrap;
 }
