@@ -128,8 +128,10 @@ public class Card_91_001_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 		scn.FreepsChooseCard(merry);
 
-		// At a total of 6 the choice is over, though Legolas (2) is still in the draw deck: the other
-		// player is asked for his starting fellowship
+		// At a total of 6 nothing more is offered, though Legolas (2) is still in the draw deck: the player is
+		// asked only to press DONE, and once he has, the other player is asked for his starting fellowship
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsDecisionAvailable("Starting fellowship"));
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 		scn.ShadowDeclineChoosing();
@@ -249,7 +251,9 @@ public class Card_91_001_Tests
 		assertTrue(scn.ShadowHasCardChoiceAvailable(merry));
 		scn.ShadowChooseCard(merry);
 
-		// Done selecting, finish starting fellowship
+		// At a total of 6 nothing more fits: he is asked only to press DONE, which finishes his starting fellowship
+		assertTrue(scn.ShadowIsAskedOnlyToConfirm());
+		scn.ShadowConfirm();
 		assertFalse(scn.ShadowDecisionAvailable("Starting fellowship"));
 
 

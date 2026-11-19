@@ -267,7 +267,10 @@ public class DrawDeckShuffledWhenTheLookIsOverTests
 
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
 		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
-		// The game has gone on to the other player's starting fellowship
+		// Aragorn's 4 is the whole of the 4: the player is asked only to press DONE, and once he has, the game
+		// goes on to the other player's starting fellowship
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
 }

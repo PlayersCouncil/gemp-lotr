@@ -47,4 +47,10 @@ final class Boards {
                     "1_304,1_84,1_312,1_26,1_26,1_86,1_168,1_168,1_168,1_176,1_176,1_176,1_176,1_177,1_178,1_178,1_178" +
                     ",1_178,1_179,1_179,1_179,1_180,1_180,1_180,1_180,1_181,1_181,1_181,1_187,1_187,1_187,1_191," +
                     "1_191,1_191,1_196,1_196";
+    /**
+     * A deck whose one companion besides the Ring-bearer is Merry, From O'er the Brandywine 1_303, among minions
+     * (Goblin Runner 1_178): its starting fellowship is Merry, after whom nothing more can be added.
+     */
+    static final String ONE_COMPANION =
+            "1_290|1_2|1_320,1_327,1_340,1_346,1_349,1_351,1_355,1_358,1_361|1_303" + ",1_178".repeat(40);
 }

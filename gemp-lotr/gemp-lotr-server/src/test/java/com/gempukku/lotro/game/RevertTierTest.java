@@ -31,6 +31,10 @@ public class RevertTierTest {
         sitting.pick(player);
     }
 
+    private static void pressDone(MediatorSitting sitting, String player) {
+        sitting.pressDone(player);
+    }
+
     private static String toMulligans(MediatorSitting sitting) {
         return sitting.toMulligans();
     }
@@ -51,12 +55,37 @@ public class RevertTierTest {
 
         int secondPick = sitting.mediator.journalSize();
         pick(sitting, second);
-        if (asked(sitting, second, "Starting fellowship"))
-            assertEquals("The second player's own pick is theirs alone", RevertAssessment.Tier.GREEN, tier(sitting, second, secondPick));
-        else
-            assertEquals("With nothing left that could be added, the pick ended the fellowships and the hands were dealt at once: "
-                    + "the second player has seen a hand", RevertAssessment.Tier.RED, tier(sitting, second, secondPick));
+        //(whether more could be added or not: with nothing more, the player is asked to press DONE)
+        assertTrue("A pick never completes the fellowship by itself: " + sitting.waiting(), asked(sitting, second, "Starting fellowship"));
+        assertEquals("The second player's own pick is theirs alone", RevertAssessment.Tier.GREEN, tier(sitting, second, secondPick));
         assertEquals("The first player has now seen one of the second player's companions", RevertAssessment.Tier.RED, tier(sitting, first, firstPick));
+    }
+
+    @Test
+    public void TheLastPickOfTheStartingFellowshipsIsTheChoosersOwnUntilDoneIsPressedAndTheHandsAreDealt() {
+        MediatorSitting sitting = new MediatorSitting(Boards.ONE_COMPANION, Boards.ONE_COMPANION);
+        String first = toStartingFellowships(sitting);
+        String second = sitting.other(first);
+        pick(sitting, first);
+        pressDone(sitting, first);
+
+        int lastPick = sitting.mediator.journalSize();
+        pick(sitting, second);
+
+        //Merry was the one companion to add: nothing more can be, and the game waits for DONE.  Nothing has
+        // followed the pick, and nobody has been dealt a hand.
+        assertTrue("The second player is asked only to press DONE: " + sitting.waiting(), sitting.askedToPressDone(second));
+        assertEquals(null, sitting.mediator.awaitingDecision(first));
+        assertEquals("The last pick is the chooser's own while DONE is waiting", RevertAssessment.Tier.GREEN, tier(sitting, second, lastPick));
+
+        int done = sitting.mediator.journalSize();
+        pressDone(sitting, second);
+
+        //It is pressing DONE that has the hands dealt
+        assertTrue(sitting.waiting(), asked(sitting, first, "Do you wish to mulligan"));
+        assertEquals("Once DONE is pressed the hands are dealt: the second player has seen a hand",
+                RevertAssessment.Tier.RED, tier(sitting, second, lastPick));
+        assertEquals("...and so it is going back to the pressing of DONE itself", RevertAssessment.Tier.RED, tier(sitting, second, done));
     }
 
     @Test

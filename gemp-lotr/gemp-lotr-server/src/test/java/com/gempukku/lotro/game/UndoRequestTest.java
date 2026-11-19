@@ -230,12 +230,11 @@ public class UndoRequestTest {
             assertTrue("A bid is not gone back to", sitting.mediator.getRestorePoints(player).isEmpty());
 
         sitting.pick(first);
-        //(Unless that pick was the last thing before the hands were dealt)
-        if (sitting.asked(first, "Starting fellowship") || sitting.asked(sitting.other(first), "Starting fellowship")) {
-            List<LotroGameMediator.RestorePointView> points = sitting.mediator.getRestorePoints(first);
-            assertEquals(1, points.size());
-            assertTrue(points.get(0).label(), points.get(0).label().contains("Starting fellowship"));
-        }
+        //(A pick never completes the fellowship by itself: with nothing more to add, the player is asked to press DONE)
+        assertTrue(sitting.waiting(), sitting.asked(first, "Starting fellowship"));
+        List<LotroGameMediator.RestorePointView> points = sitting.mediator.getRestorePoints(first);
+        assertEquals(1, points.size());
+        assertTrue(points.get(0).label(), points.get(0).label().contains("Starting fellowship"));
 
         String mulligans = sitting.toMulligans();
         for (String player : MediatorSitting.PLAYERS)
@@ -244,6 +243,42 @@ public class UndoRequestTest {
         sitting.answer(sitting.other(mulligans), "1");
         for (String player : MediatorSitting.PLAYERS)
             assertTrue("A mulligan is not gone back to", sitting.mediator.getRestorePoints(player).isEmpty());
+    }
+
+    @Test
+    public void TheLastPickOfTheStartingFellowshipsIsTakenBackAtOnceUntilDoneIsPressedAndNotAfter() {
+        MediatorSitting sitting = new MediatorSitting(Boards.ONE_COMPANION, Boards.ONE_COMPANION);
+        String first = sitting.toStartingFellowships();
+        String second = sitting.other(first);
+        sitting.pick(first);
+        sitting.pressDone(first);
+
+        String board = sitting.board();
+        String waiting = sitting.waiting();
+        int lastPick = sitting.mediator.journalSize();
+        sitting.pick(second);
+
+        //Merry was the one companion to add: the second player is asked only to press DONE, and the pick is on offer
+        assertTrue(sitting.waiting(), sitting.askedToPressDone(second));
+        List<LotroGameMediator.RestorePointView> points = sitting.mediator.getRestorePoints(second);
+        assertEquals(lastPick, points.get(0).entryCount());
+        assertEquals("GREEN", points.get(0).tier());
+
+        LotroGameMediator.UndoReply reply = sitting.mediator.requestUndo(second, null);
+
+        assertEquals(reply.message(), "done", reply.status());
+        assertNull("Nobody was asked", sitting.mediator.getPendingUndo());
+        assertEquals(board, sitting.board());
+        assertEquals("The second player is choosing again, with Merry on offer", waiting, sitting.waiting());
+
+        //Chosen again, and DONE pressed: that has the hands dealt, and the fellowships are closed
+        sitting.pick(second);
+        sitting.pressDone(second);
+
+        assertTrue(sitting.waiting(), sitting.asked(first, "Do you wish to mulligan"));
+        for (String player : MediatorSitting.PLAYERS)
+            assertTrue("With the hands dealt the fellowships are closed", sitting.mediator.getRestorePoints(player).isEmpty());
+        assertEquals("refused", sitting.mediator.requestUndo(second, lastPick).status());
     }
 
     @Test

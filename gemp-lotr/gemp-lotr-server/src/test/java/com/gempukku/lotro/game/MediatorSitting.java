@@ -11,6 +11,7 @@ import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.timing.GameResultListener;
+import com.gempukku.lotro.logic.timing.processes.pregame.PlayerPlaysStartingFellowshipGameProcess;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.util.ArrayList;
@@ -132,12 +133,37 @@ class MediatorSitting {
         throw new AssertionError("The game never came to its starting fellowships");
     }
 
-    /** Has the player choosing a starting fellowship take the first card on offer. */
+    /**
+     * Has the player choosing a starting fellowship take the first card on offer.  The fellowship is not complete
+     * after it even where nothing more can be added: the player is then asked only to press DONE (see pressDone).
+     */
     void pick(String player) {
         answer(player, parameter(player, "cardId")[0]);
     }
 
-    /** Both starting fellowships finished without another card, up to the first question about a mulligan. */
+    /**
+     * @return Whether the player is being asked only to press DONE: nothing more can be added to the starting
+     * fellowship being chosen, and the decision carries PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY.
+     */
+    boolean askedToPressDone(String player) {
+        AwaitingDecision decision = mediator.awaitingDecision(player);
+        if (decision == null)
+            return false;
+        String[] marked = decision.getDecisionParameters().get(PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY);
+        return marked != null && List.of(marked).contains("true");
+    }
+
+    /** Has a player who is asked only to press DONE (see askedToPressDone) press it, which completes the fellowship. */
+    void pressDone(String player) {
+        if (!askedToPressDone(player))
+            throw new AssertionError(player + " is not being asked only to press DONE: " + waiting());
+        answer(player, "");
+    }
+
+    /**
+     * Both starting fellowships finished without another card, up to the first question about a mulligan: each
+     * player still choosing presses DONE, whether there is more that could be added or not.
+     */
     String toMulligans() {
         for (int i = 0; i < 20; i++) {
             for (String player : PLAYERS)

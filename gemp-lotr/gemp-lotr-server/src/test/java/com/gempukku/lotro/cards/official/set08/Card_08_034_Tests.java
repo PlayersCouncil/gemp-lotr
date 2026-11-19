@@ -196,13 +196,18 @@ public class Card_08_034_Tests
 		int shuffles = scn.GetFreepsDeckShuffleCount();
 		scn.FreepsChooseCard(faramir);
 
-		// His 3 leaves 1 of the 4, which no companion left fits, so the choice is over; nothing is offered him,
-		// and the other player is choosing now.
+		// His 3 leaves 1 of the 4, which no companion left fits, so nobody is left to offer; nothing is offered
+		// him either: all he is asked is to press DONE.
 		assertInZone(Zone.FREE_CHARACTERS, faramir);
 		assertInZone(Zone.DECK, gknight, pippin);
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
-		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
 		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+
+		scn.FreepsConfirm();
+
+		// His fellowship is complete with nothing offered on the way, and the other player is choosing now.
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
 

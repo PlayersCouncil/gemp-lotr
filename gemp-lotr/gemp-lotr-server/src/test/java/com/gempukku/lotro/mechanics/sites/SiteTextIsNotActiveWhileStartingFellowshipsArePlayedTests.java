@@ -128,7 +128,7 @@ public class SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests
 
 		scn.FreepsChooseCard(gimli);
 
-		// The total is 2 and there is room for another.  At 4 for Gimli the choice would have ended with him.
+		// The total is 2 and there is room for another.  At 4 for Gimli nobody would have been offered after him.
 		assertInZone(Zone.FREE_CHARACTERS, gimli);
 		assertEquals(2, scn.GetTwilight());
 		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship"));
@@ -136,10 +136,12 @@ public class SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests
 
 		scn.FreepsChooseCard(legolas);
 
-		// 2 + 2 fills the 4: nobody else can be played, so the first player is asked nothing more and the second
-		// player is choosing
+		// 2 + 2 fills the 4: nobody else can be played, so the first player is asked only to press DONE, and once
+		// he has, the second player is choosing
 		assertInZone(Zone.FREE_CHARACTERS, legolas);
 		assertInZone(Zone.DECK, pippin);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 
@@ -195,10 +197,12 @@ public class SiteTextIsNotActiveWhileStartingFellowshipsArePlayedTests
 
 		scn.ShadowChooseCard(pippin);
 
-		// 2 + 1 leaves 1 of the 4: Legolas at 2 does not fit, nobody else can be played, and the game goes on to
-		// the mulligans
+		// 2 + 1 leaves 1 of the 4: Legolas at 2 does not fit and nobody else can be played, so the second player
+		// is asked only to press DONE, and once he has, the game goes on to the mulligans
 		assertInZone(Zone.FREE_CHARACTERS, pippin);
 		assertNotInZone(Zone.FREE_CHARACTERS, legolas);
+		assertTrue(scn.ShadowIsAskedOnlyToConfirm());
+		scn.ShadowConfirm();
 		assertFalse(scn.ShadowDecisionAvailable("Starting fellowship"));
 		assertTrue(scn.FreepsDecisionAvailable("Do you wish to mulligan"));
 	}

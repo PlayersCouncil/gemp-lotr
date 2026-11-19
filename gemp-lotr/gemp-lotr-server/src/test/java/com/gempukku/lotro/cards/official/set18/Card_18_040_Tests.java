@@ -235,13 +235,18 @@ public class Card_18_040_Tests
 		int freepsShuffles = scn.GetFreepsDeckShuffleCount();
 		scn.FreepsChooseCard(boromir);
 
-		// His 3 leaves 1 of the 4 allowed, and no companion here costs 1 or less: the choice is over. Nothing is
-		// offered him, and the other player is choosing now.
+		// His 3 leaves 1 of the 4 allowed, and no companion here costs 1 or less: nobody is left to offer. Nothing
+		// is offered him either: all he is asked is to press DONE.
 		assertInZone(Zone.FREE_CHARACTERS, boromir);
 		assertEquals(0, scn.GetAttachedCards(boromir).size());
 		assertInZone(Zone.DECK, brand, chain);
 		assertEquals(freepsShuffles, scn.GetFreepsDeckShuffleCount());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
+
+		// His fellowship is complete with nothing offered on the way, and the other player is choosing now.
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}

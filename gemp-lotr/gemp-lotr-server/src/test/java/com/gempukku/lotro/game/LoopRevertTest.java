@@ -39,8 +39,11 @@ public class LoopRevertTest {
     private void toTheSkirmish() {
         sitting = new MediatorSitting(DECK, DECK);
         String first = sitting.toStartingFellowships();
+        //Merry is the one companion in each deck: once he is down nothing more can be added, and DONE is pressed
         sitting.pick(first);
+        sitting.pressDone(first);
         sitting.pick(sitting.other(first));
+        sitting.pressDone(sitting.other(first));
         String mulligan = sitting.asked();
         sitting.answer(mulligan, "0");
         sitting.answer(sitting.other(mulligan), "0");

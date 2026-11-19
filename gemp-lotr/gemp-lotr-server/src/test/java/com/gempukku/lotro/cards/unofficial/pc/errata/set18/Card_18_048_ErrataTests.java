@@ -119,8 +119,13 @@ public class Card_18_048_ErrataTests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(boromir));
 
 		scn.FreepsChooseCard(gimli);
+		// 2 + 2 is the 4: Boromir does not fit, nobody is left to offer, and the player is asked only to press
+		// DONE.  Once he has, his fellowship is complete and the other player is choosing.
 		assertInZone(Zone.FREE_CHARACTERS, faramir, gimli);
 		assertInZone(Zone.DECK, boromir);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
