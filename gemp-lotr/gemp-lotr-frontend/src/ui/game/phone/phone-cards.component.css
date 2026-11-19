@@ -291,6 +291,26 @@
   padding: 2px;
 }
 
+/*
+ * Offered cards in the hand's place, as the player chose (Settings › Display): wrapped into rows that fill its width,
+ * scrolled down, a row at a time (the owner, 2026-11-19). The cards keep the hand's size: dragging it up enlarges them
+ */
+:host-context(gd-phone-hand[data-scroll='down']) {
+  flex: 1;
+  min-height: 0;
+}
+
+:host-context(gd-phone-hand[data-scroll='down']) .gd-phone-cards__scroll {
+  height: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  overscroll-behavior-y: contain;
+}
+
 /* The hand held sideways: its cards wrap into rows, scrolled up and down in the hand's panel */
 :host-context([data-device='sideways'] gd-phone-hand) {
   height: 100%;

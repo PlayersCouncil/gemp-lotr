@@ -220,6 +220,8 @@ function writeDiff(file, before, after) {
 const STATES = {
   /** The starting fellowship chosen from the deck: cards offered in the hand's place, the path, attached cards. */
   choices: { recording: 'effects-skirmish', count: 4 },
+  /** The same, with ten cards offered from off the table: rows when the player wants them scrolled down. */
+  manyChoices: { recording: 'effects-skirmish', count: 4, moreChoices: 8 },
   /** Minions assigned, the assignments as pairs; cards in every row. */
   assign: { recording: 'effects-skirmish', count: 14 },
   /** The skirmish being fought. */
@@ -311,7 +313,7 @@ function opponentCards(opponent) {
  */
 function recordingOf(state) {
   const base = recording(state.recording);
-  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer) return base;
+  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer && !state.moreChoices) return base;
   const publicDiscard = (body) =>
     state.discardPublic
       ? body
@@ -334,6 +336,16 @@ function recordingOf(state) {
       }
       if (i === last && state.lastEvents) {
         body = body.replace(/(<\/update>)/, `${state.lastEvents(opponent, base.participant)}$1`);
+      }
+      if (i === last && state.moreChoices) {
+        // More cards in a decision offering cards from off the table (cardId, blueprintId, selectable each)
+        const ids = Array.from({ length: state.moreChoices }, (_, n) => `x${n}`);
+        const params = [
+          ...ids.map((id) => `<parameter name="cardId" value="${id}"/>`),
+          ...ids.map(() => '<parameter name="blueprintId" value="1_7"/>'),
+          ...ids.map(() => '<parameter name="selectable" value="true"/>'),
+        ].join('');
+        body = body.replace(/(<ge\b[^>]*\btype="D"[^>]*>)/, `$1${params}`);
       }
       if (i === last && state.offer) {
         const params = state.offer.map((id) => `<parameter name="cardId" value="${id}"/>`).join('');

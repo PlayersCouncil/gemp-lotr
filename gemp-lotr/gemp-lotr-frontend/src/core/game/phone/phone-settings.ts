@@ -13,7 +13,15 @@ export const PHONE_COOKIES = {
   /** "Your move" makes the phone buzz / plays a sound (default on, the owner 2026-11-16). */
   moveVibrate: 'gempGameMoveVibrate',
   moveSound: 'gempGameMoveSound',
+  /** How a deck or other cards to choose scroll in the hand's place: sideways (default) or down, in rows. */
+  choicesScroll: 'gempGameChoicesScroll',
 } as const;
+
+/**
+ * How cards offered from off the table (a deck, a pile) scroll in the hand's place (the owner, 2026-11-19): sideways
+ * in one row, or wrapped into rows scrolled down. The player's own hand always scrolls sideways.
+ */
+export type ChoicesScroll = 'sideways' | 'down';
 
 /** The hand's height at first, on each device (px); held sideways it is a panel in the right half, about half high. */
 export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, sideways: 150, tablet: 180 };
@@ -59,6 +67,9 @@ export class PhoneSettings {
   readonly cardSize = signal(clampSize(Number(this.cookies.read(PHONE_COOKIES.cardSize) ?? '100')));
   readonly moveVibrate = signal(this.cookies.read(PHONE_COOKIES.moveVibrate) !== 'false');
   readonly moveSound = signal(this.cookies.read(PHONE_COOKIES.moveSound) !== 'false');
+  readonly choicesScroll = signal<ChoicesScroll>(
+    this.cookies.read(PHONE_COOKIES.choicesScroll) === 'down' ? 'down' : 'sideways',
+  );
 
   /** The hand's height on this device (px), or "hidden". */
   readonly hand = computed<number | 'hidden'>(() => {
@@ -92,6 +103,11 @@ export class PhoneSettings {
   setMoveVibrate(value: boolean): void {
     this.moveVibrate.set(value);
     this.cookies.write(PHONE_COOKIES.moveVibrate, String(value));
+  }
+
+  setChoicesScroll(value: ChoicesScroll): void {
+    this.choicesScroll.set(value);
+    this.cookies.write(PHONE_COOKIES.choicesScroll, value);
   }
 
   setMoveSound(value: boolean): void {

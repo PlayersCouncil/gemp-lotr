@@ -712,6 +712,42 @@ describe('the game on a phone (G7)', () => {
     expect(hand()?.getAttribute('data-place')).toBe('choices');
   });
 
+  it('scrolls offered cards down in rows when the player chooses it in the settings; the hand stays sideways', async () => {
+    const { el, click, fixture, stable } = await open(
+      game(
+        decision(
+          'ARBITRARY_CARDS',
+          param('cardId', 'a', 'b') +
+            param('blueprintId', '1_1', '1_2') +
+            param('selectable', 'true', 'true') +
+            param('min', '1') +
+            param('max', '1'),
+          'Choose a card from your deck',
+        ),
+      ),
+    );
+    const phone = fixture.debugElement.injector.get(PhoneSettings);
+    const hand = () => el.querySelector('gd-phone-hand');
+    // Sideways by default
+    expect(hand()?.hasAttribute('data-scroll')).toBe(false);
+    await click('[data-phone="menu"]');
+    await click('[data-menu="settings"]');
+    await click('[data-settings-tab="display"]');
+    try {
+      el.querySelector('[data-setting="choicesScroll"][value="down"]')?.dispatchEvent(new Event('change'));
+      await stable();
+      expect(phone.choicesScroll()).toBe('down');
+      expect(hand()?.getAttribute('data-scroll')).toBe('down');
+      // The player's own hand keeps scrolling sideways
+      await click('[data-phone="sheet-close"]');
+      await click('[data-phone="close-choices"]');
+      expect(hand()?.getAttribute('data-place')).toBe('hand');
+      expect(hand()?.hasAttribute('data-scroll')).toBe(false);
+    } finally {
+      for (const path of ['/', '/gemp-lotr']) document.cookie = `gempGameChoicesScroll=; path=${path}; max-age=0`;
+    }
+  });
+
   it('a tap acts only in a decision: an offered card is chosen, another does nothing', async () => {
     const { el, stable, answer } = await open(
       game(

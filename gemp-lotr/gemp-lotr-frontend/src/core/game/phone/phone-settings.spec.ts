@@ -73,4 +73,18 @@ describe('PhoneSettings', () => {
     settings.setMoveVibrate(false);
     expect(cookies[PHONE_COOKIES.moveVibrate]).toBe('false');
   });
+
+  it('scrolls offered cards sideways unless the player chose rows scrolled down, kept in its cookie', () => {
+    expect(create().choicesScroll()).toBe('sideways');
+    TestBed.resetTestingModule();
+    cookies[PHONE_COOKIES.choicesScroll] = 'down';
+    const settings = create();
+    expect(settings.choicesScroll()).toBe('down');
+    settings.setChoicesScroll('sideways');
+    expect(settings.choicesScroll()).toBe('sideways');
+    expect(cookies[PHONE_COOKIES.choicesScroll]).toBe('sideways');
+    TestBed.resetTestingModule();
+    cookies[PHONE_COOKIES.choicesScroll] = 'diagonal';
+    expect(create().choicesScroll()).toBe('sideways');
+  });
 });
