@@ -513,7 +513,7 @@ class PlayScenario extends TableFlow {
 	}
 
 	open(win, gameId) {
-		var url = "/gemp-lotr/game.html?gameId=" + encodeURIComponent(gameId) + this.mainHall.participantIdParam();
+		var url = "/gemp-lotr/ng/game?gameId=" + encodeURIComponent(gameId) + this.mainHall.participantIdParam();
 		if (win != null && !win.closed) {
 			win.location.href = url;
 			try {

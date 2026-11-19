@@ -105,8 +105,6 @@ var GempLotrGameUI = Class.extend({
     
     escFunction: null,
 
-    // Set once a scenario (tutorial, puzzle) announces itself: the overlay that shows its messages
-    scenario: null,
     // True while a decision waits for the player: the page then doesn't poll (processGameEventsXml)
     waitingForPlayer: false,
 
@@ -605,11 +603,6 @@ var GempLotrGameUI = Class.extend({
         }
 
         this.tabPane = $("#bottomLeftTabs").tabs().css("visibility", "visible");
-        // a hidden tab forgets how far its log was scrolled, so put the chat back at the bottom when it is shown
-        this.tabPane.bind("tabsshow", function () {
-            if (that.chatBox != null)
-                that.chatBox.repinIfPinned();
-        });
 
         this.chatBoxDiv = $("#chatBox");
 
@@ -808,11 +801,6 @@ var GempLotrGameUI = Class.extend({
                     }
                     this.lastSelectedCardId = clickedCardId;
                     this.lastSelectionTime = now;
-                    // a scenario step may not want this card clicked yet (it says so itself)
-                    if (this.scenario != null && !this.scenario.cardClicked(selectedCardElem)) {
-                        event.stopPropagation();
-                        return false;
-                    }
                     this.selectionFunction(clickedCardId, event);
                 }
                 event.stopPropagation();
@@ -979,8 +967,7 @@ var GempLotrGameUI = Class.extend({
 
     layoutUI: function (sizeChanged) {
         var padding = this.padding;
-        // (the scenario authoring panel is docked down the right-hand side, and the table makes room for it)
-        var width = $(window).width() - (this.reservedRight || 0);
+        var width = $(window).width();
         var height = $(window).height();
         if (sizeChanged) {
             this.windowWidth = width;
@@ -1252,36 +1239,8 @@ var GempLotrGameUI = Class.extend({
             }, this.gameErrorMap());
     },
 
-    // Asks for news once, while a decision is waiting to be answered here, which is when nothing else asks: the
-    // server has just been made to send something (the scenario authoring panel changed the step on the screen).
-    // With no decision waiting the usual asking is already going on and nothing needs doing.
-    pollOnce: function () {
-        var that = this;
-        if (!this.decisionPending || this.pollingOnce)
-            return;
-        this.pollingOnce = true;
-        // (should the asking fail, it is not held against the next one for ever)
-        setTimeout(function () {
-            that.pollingOnce = false;
-        }, 20000);
-        this.communication.updateGameState(
-            this.channelNumber,
-            function (xml) {
-                that.pollingOnce = false;
-                that.answeringOnce = true;
-                try {
-                    that.processXml(xml, true);
-                } finally {
-                    that.answeringOnce = false;
-                }
-            }, this.gameErrorMap());
-    },
-
     decisionFunction: function (decisionId, result) {
         var that = this;
-        this.decisionPending = false;
-        if (this.scenario != null)
-            this.scenario.decisionAnswered();
         this.waitingForPlayer = false;
         this.stopAnimatingTitle();
         this.stopTimerTick();
@@ -1341,30 +1300,6 @@ var GempLotrGameUI = Class.extend({
             modal: true,
             buttons: buttons
         }).text(text);
-    },
-
-    // A modal question with a button to carry on and one to go back; the dialog is gone once either is pressed
-    showConfirmDialog: function (title, text, proceedLabel, backLabel, proceedFunction) {
-        var buttons = {};
-        buttons[proceedLabel] = function () {
-            $(this).dialog("close");
-            proceedFunction();
-        };
-        buttons[backLabel] = function () {
-            $(this).dialog("close");
-        };
-
-        $("<div></div>").text(text).dialog({
-            title: title,
-            resizable: false,
-            modal: true,
-            width: 400,
-            buttons: buttons,
-            close: function () {
-                $(this).dialog("destroy").remove();
-            }
-        });
-        $('.ui-dialog :button').blur();
     },
 
     getCardModifiersFunction: function (cardId, func) {
@@ -1486,9 +1421,6 @@ var GempLotrGameUI = Class.extend({
             this.processGameEnd();
         } else if (eventType == "PGS") {
             this.preGameSetup(gameEvent);
-        } else if (eventType == "S") {
-            // a scenario (tutorial, puzzle) has something to show: see scenario/scenarioOverlay.js
-            this.animations.scenarioEvent(gameEvent, animate);
         }
     },
 
@@ -1549,17 +1481,11 @@ var GempLotrGameUI = Class.extend({
 
             // With a decision for the player the page stops asking for news until it is answered
             this.waitingForPlayer = hasDecision;
-            if (hasDecision) {
-                this.decisionPending = true;
-                this.startAnimatingTitle();
-            } else if (!this.answeringOnce && !this.decisionPending) {
-                // (news asked for once, over a waiting decision, never starts the asking up; and nor does anything
-                // that arrives while a decision is waiting, which can now happen: the once-asked-for news may be
-                // what brings the next decision, with the reply to the last answer coming in empty behind it)
+            if (!hasDecision) {
                 this.animations.updateGameState(animate);
+            } else {
+                this.startAnimatingTitle();
             }
-            if (gameEvents.length > 0 && this.scenario != null && this.scenario.author != null)
-                this.scenario.author.gameMoved();
         } catch (e) {
             this.showErrorDialog("Game error", "There was an error while processing game events in your browser. Reload the game to continue", true, false, false);
             console.log(e);
@@ -1908,7 +1834,7 @@ var GempLotrGameUI = Class.extend({
                     var group = that.revealedHandGroups[playerId];
                     if (ownHand)
                         that.syncOwnRevealedHand(true);
-                    that.capCards(group, that.openCompactCardDialog(dialog, $(".card", dialog)));
+                    openSizeDialog(dialog);
                     that.dialogResize(dialog, group);
                     group.layoutCards();
                 });
@@ -2426,7 +2352,7 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        this.capCards(this.specialGroup, this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card")));
+        openSizeDialog(this.cardActionDialog);
         this.arbitraryDialogResize(false);
         $('.ui-dialog :button').blur();
     },
@@ -3060,10 +2986,8 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        //(each card has its action's text under it)
-        this.capCards(this.specialGroup, this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"), 36));
-        this.specialGroup.setBounds(this.padding, this.padding, this.cardActionDialog.width() + 10 - 2 * this.padding,
-            this.cardActionDialog.height() + 10 - 36 - 2 * this.padding);
+        openSizeDialog(this.cardActionDialog);
+        this.arbitraryDialogResize(false);
         $('.ui-dialog :button').blur();
     },
 
@@ -3152,10 +3076,6 @@ var GempLotrGameUI = Class.extend({
 
         var freeCharacters = this.getDecisionParameters(decision, "freeCharacters");
         var minions = this.getDecisionParameters(decision, "minions");
-        var maxAssignableParam = this.getDecisionParameter(decision, "maxAssignable");
-        var maxAssignable = maxAssignableParam == null ? null : parseInt(maxAssignableParam);
-        if (isNaN(maxAssignable))
-            maxAssignable = null;
 
         var that = this;
 
@@ -3165,7 +3085,6 @@ var GempLotrGameUI = Class.extend({
         if (!this.replayMode) {
             this.alertButtons.html("<button id='Done'>Done</button>");
             $("#Done").button().click(function () {
-                var assignedCount = 0;
                 var atLeastOnMinionUnassigned = false;
 
                 var assignmentMap = {};
@@ -3175,43 +3094,29 @@ var GempLotrGameUI = Class.extend({
                 if (minions.length > 0)
                     $(".card:cardId(" + minions + ")").each(function () {
                         var card = $(this).data("card");
-                        if (card.assign != null) {
+                        if (card.assign != null)
                             assignmentMap[card.assign] += " " + card.cardId;
-                            assignedCount++;
-                        } else
+                        else
                             atLeastOnMinionUnassigned = true;
                     });
 
-                var sendAssignments = function () {
-                    var assignmentArray = new Array();
-                    for (var i = 0; i < freeCharacters.length; i++) {
-                        assignmentArray.push(assignmentMap[freeCharacters[i]]);
-                    }
+                if (atLeastOnMinionUnassigned && !confirm("At least one minion has not been assigned, do you want to proceed?"))
+                    return;
 
-                    that.alertText.html("");
-                    // ****CCG League****: Border around alert box
-                    that.alertBox.css({"border-radius": "7px", "border-color": "", "border-width": "1px"});
-                    that.alertButtons.html("");
-                    that.clearSelection();
+                var assignmentArray = new Array();
+                for (var i = 0; i < freeCharacters.length; i++) {
+                    assignmentArray.push(assignmentMap[freeCharacters[i]]);
+                }
 
-                    that.decisionFunction(id, "" + assignmentArray);
+                that.alertText.html("");
+                // ****CCG League****: Border around alert box
+                that.alertBox.css({"border-radius": "7px", "border-color": "", "border-width": "1px"});
+                that.alertButtons.html("");
+                that.clearSelection();
 
-                    that.PlaySound("awaitAction");
-                };
-
-                // The server says how many minions can be assigned at most (more minions than companions, for
-                // example); with that known, only assigning fewer is worth a warning.  Without it, any unassigned
-                // minion is.
-                var warn = atLeastOnMinionUnassigned;
-                if (warn && maxAssignable != null)
-                    warn = assignedCount < maxAssignable;
-
-                if (warn)
-                    that.showConfirmDialog("Unassigned minions",
-                        "At least one minion has not been assigned, do you want to proceed?",
-                        "Proceed", "Go back", sendAssignments);
-                else
-                    sendAssignments();
+                that.decisionFunction(id, "" + assignmentArray);
+                
+                that.PlaySound("awaitAction");
             });
         }
 
@@ -3300,106 +3205,6 @@ var GempLotrGameUI = Class.extend({
         $(".noEffectCard").removeClass("noEffectCard");
         $(".selectedCard").removeClass("selectedCard");
         this.selectionFunction = null;
-    },
-
-    // Opens a dialog that shows cards sized to those cards rather than to most of the window: the cards at a
-    // comfortable height in as few rows as fit, never beyond 90% of the window (cards then shrink to fit).
-    // cardElems are the card divs the dialog's group will lay out.
-    /**
-     * Opens a dialog of cards at a size that suits them: as large as a comfortable card (up to 500px tall), in as
-     * few rows as fit, and no larger than 90% of the room there is (the window, less the scenario authoring panel
-     * where that is open).  Cards are made smaller only where that many would not otherwise fit.
-     * @param labelHeight Room to leave under each row of cards for a line of text (the action's, in a choice of
-     *                    actions); 0 for none.
-     */
-    openCompactCardDialog: function (dialog, cardElems, labelHeight) {
-        var padding = this.padding;
-        var minContentWidth = 340;
-        var label = labelHeight || 0;
-        // jQuery UI lays the dialog out inside a bit of padding, and the group's bounds are trimmed by 6 px
-        var slack = 16;
-
-        // each card's width for a height of 100, to scale by
-        var ratios = new Array();
-        cardElems.each(function () {
-            ratios.push($(this).data("card").getWidthForMaxDimension(100) / 100);
-        });
-
-        dialog.dialog("open");
-
-        // What the dialog adds around its content (title bar, buttons, padding), measured now that it is laid out
-        var widget = dialog.dialog("widget");
-        var chromeWidth = dialog.dialog("option", "width") - dialog.width();
-        var chromeHeight = dialog.dialog("option", "height") - dialog.height();
-        if (!this.replayMode && widget.find(".ui-dialog-buttonpane").length == 0)
-            chromeHeight += 56;
-
-        var panel = $("#scenarioAuthor:visible");
-        var roomWidth = $(window).width() - (panel.length > 0 ? panel.outerWidth() : 0);
-        var roomHeight = $(window).height();
-        var maxGroupWidth = Math.floor(roomWidth * 0.9) - chromeWidth - slack;
-        var maxGroupHeight = Math.floor(roomHeight * 0.9) - chromeHeight - slack;
-
-        var layout = function (cardHeight) {
-            var widths = $.map(ratios, function (ratio) {
-                return Math.ceil(ratio * cardHeight);
-            });
-            var total = 0, widest = 0;
-            $.each(widths, function (i, width) {
-                total += width;
-                widest = Math.max(widest, width);
-            });
-            total += padding * Math.max(0, widths.length - 1);
-            var rowsNeeded = function (groupWidth) {
-                var rows = 1, x = 0;
-                for (var i = 0; i < widths.length; i++) {
-                    if (x > 0 && x + widths[i] > groupWidth) {
-                        rows++;
-                        x = 0;
-                    }
-                    x += widths[i] + padding;
-                }
-                return rows;
-            };
-            for (var rows = 1; rows <= widths.length; rows++) {
-                // as wide as the widest row, the cards shared out evenly between the rows
-                var perRow = Math.ceil(widths.length / rows);
-                var widestRow = 0;
-                for (var first = 0; first < widths.length; first += perRow) {
-                    var row = 0;
-                    for (var i = first; i < Math.min(widths.length, first + perRow); i++)
-                        row += widths[i] + (i > first ? padding : 0);
-                    widestRow = Math.max(widestRow, row);
-                }
-                var width = Math.max(minContentWidth - slack, widestRow);
-                var height = rows * (cardHeight + label) + (rows - 1) * padding;
-                if (width <= maxGroupWidth && height <= maxGroupHeight && rowsNeeded(width) <= rows)
-                    return {width: width, height: height, cardHeight: cardHeight};
-            }
-            return null;
-        };
-
-        var size = null;
-        if (ratios.length == 0)
-            size = {width: minContentWidth - slack, height: Math.min(maxGroupHeight, 150), cardHeight: null};
-        for (var cardHeight = 500; size == null && cardHeight >= 80; cardHeight -= 20)
-            size = layout(cardHeight);
-        if (size == null)
-            size = {width: maxGroupWidth, height: maxGroupHeight, cardHeight: null};
-
-        var width = size.width + slack + chromeWidth;
-        var height = size.height + slack + chromeHeight;
-        dialog.dialog({width: width, height: height});
-        dialog.dialog("option", "position", [Math.max(0, Math.floor((roomWidth - width) / 2)), Math.max(0, Math.floor((roomHeight - height) / 2))]);
-        return size.cardHeight;
-    },
-
-    /**
-     * Lays a dialog's cards out at the height openCompactCardDialog planned them for: the group would otherwise fill
-     * its height with fewer, larger rows than the width was planned for, and fall back to more, smaller ones.
-     */
-    capCards: function (group, cardHeight) {
-        group.maxCardHeight = cardHeight != null ? cardHeight : CardGroup.prototype.maxCardHeight;
     },
 
     dialogResize: function (dialog, group) {
