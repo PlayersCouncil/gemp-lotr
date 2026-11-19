@@ -124,6 +124,25 @@ the format's discard pile made public for `STATES.opponentPilesPublic` (the P ev
   with the "old look for stacked cards" setting (cookie `use-old-stack`), on each device and on the computer layout of
   the same page (1366x768).
 
+## Taking a game back (undo)
+
+`npm run check:game:undo` (`undo.mjs`, against a game check server kept up, as the two checks below) plays real games
+with each player on a page of their own and checks taking a game back as the players see it:
+
+- **own**: a choice nobody else has seen or answered is in the list as Green and is taken back at once; both pages
+  show the game as it was and say so, and the game goes on;
+- **approve**: once the opponent has answered, every place needs asking; the asker waits (and may withdraw), the
+  opponent is shown the request with the same tier and approves; both pages show the game as it was at that place;
+- **decline**: the asker is told, nothing changes, the game goes on;
+- **decline-all**: the asker's list then shows the places that need asking as unavailable, with the reason;
+- **withdraw**: the opponent's request goes away;
+- **concede**: the opponent concedes while this player's decision waits, and the page shows the end without the
+  decision being answered first.
+
+It runs on `game.html` (`UNDO.legacy` in `undo.mjs` is where that page keeps each thing); the Angular game page has
+no undo yet, and gets an entry of its own there. `--only own,approve` runs some of them; a screenshot of each step is
+saved in `report-undo/` (`--out`).
+
 Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
 `npm run check:game:down`):
 
