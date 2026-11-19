@@ -2,6 +2,7 @@
  * What the game server sends a game page (GET and POST /game/{id}, GET /replay/{id}), typed. The server writes each
  * event as a `<ge type="…">` element (EventSerializer); game-xml.ts reads them into these.
  */
+import { ScenarioEvent } from '../scenario/scenario-events';
 
 /** A card as an event names it: put into play, moved, flashed, shown, given tokens. */
 export interface CardRef {
@@ -112,7 +113,9 @@ export type GameEvent =
   | ({ type: 'CAC'; affectedCardIds: readonly string[] } & CardRef)
   | ({ type: 'EP' } & CardRef)
   | ({ type: 'CA' } & CardRef)
-  | { type: 'D'; decision: Decision };
+  | { type: 'D'; decision: Decision }
+  /** A scripted game's word to the person playing it (a scenario); null when the page can't read it. */
+  | { type: 'S'; scenario: ScenarioEvent | null };
 
 /** Clock values: per participant the seconds left in their bank; also the decision's clock and limit. */
 export type Clocks = Readonly<Record<string, number>>;

@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { displayName } from '../../../core/game/scenario/scenario-state';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
@@ -61,7 +62,7 @@ export class PileDialogsComponent {
         key: `${pile}:${player}`,
         pile,
         player,
-        title: `${pileTitle(pile, own)} - ${player}`,
+        title: `${pileTitle(pile, own)} - ${displayName(model.scenario, player)}`,
         cards,
         fit: cards.map((card): FitCard => ({ horizontal: this.views.of(card).horizontal })),
       };

@@ -34,6 +34,8 @@ interface LineView {
   from: string | null;
   html: string;
   mention: 'ping' | 'mention' | null;
+  /** A line the page put in a player's mouth (a scripted game's message). */
+  said: boolean;
   /**
    * The text is in a box of its own: a chat line's, and a game message's unless it names the player (the legacy page
    * left those bare, so their parts, e.g. card names, are laid out one by one and wrap as wholes).
@@ -44,10 +46,24 @@ interface LineView {
 function lineOf(entry: GameLogEntry, name: string | null): LineView {
   if (entry.kind === 'chat') {
     const { from, html, system } = entry.message;
-    return { kind: system ? 'system' : 'chat', from, html, mention: mentionOf(html, name), boxed: true };
+    return {
+      kind: system ? 'system' : 'chat',
+      from,
+      html,
+      mention: mentionOf(html, name),
+      said: entry.said !== undefined,
+      boxed: true,
+    };
   }
   const mention = mentionOf(entry.html, name);
-  return { kind: entry.kind, from: null, html: entry.html, mention, boxed: entry.kind === 'message' && !mention };
+  return {
+    kind: entry.kind,
+    from: null,
+    html: entry.html,
+    mention,
+    said: false,
+    boxed: entry.kind === 'message' && !mention,
+  };
 }
 
 /**
@@ -55,8 +71,9 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
  * unless the player scrolled up, and the field to say something (Enter sends it).
  *
  * DOM contract: `gd-game-chat` holding `.gd-game-chat__lines` with one `.gd-game-chat__line` per line (`data-kind`
- * chat, system, message, warning; `data-mention` ping or mention when it names the player; the game page shows no
- * times), and `input[data-chat-input]`.
+ * chat, system, message, warning; `data-mention` ping or mention when it names the player; `data-said` on a line the
+ * page put in a player's mouth, a scripted game's message; the game page shows no times), and
+ * `input[data-chat-input]`.
  */
 @Component({
   selector: 'gd-game-chat',
@@ -69,7 +86,12 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
     <div #lines class="gd-game-chat__lines" gdCardHints [attr.data-replay]="replaying() ? '' : null">
       @for (line of shownLines(); track $index) {
         @if (line.from !== null || line.boxed) {
-          <div class="gd-game-chat__line" [attr.data-kind]="line.kind" [attr.data-mention]="line.mention">
+          <div
+            class="gd-game-chat__line"
+            [attr.data-kind]="line.kind"
+            [attr.data-mention]="line.mention"
+            [attr.data-said]="line.said ? '' : null"
+          >
             @if (line.from !== null) {
               <div class="gd-game-chat__who">
                 <span>

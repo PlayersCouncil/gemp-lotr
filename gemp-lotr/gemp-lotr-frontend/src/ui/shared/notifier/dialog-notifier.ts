@@ -1,10 +1,10 @@
 import { Injectable, signal } from '@angular/core';
-import { Notifier } from '../../../core/notifier/notifier';
+import { ConfirmWords, Notifier } from '../../../core/notifier/notifier';
 
 /** A message or question waiting for the player. */
 export type NotifierRequest =
   | { kind: 'alert'; message: string; resolve: () => void }
-  | { kind: 'confirm'; message: string; resolve: (ok: boolean) => void }
+  | { kind: 'confirm'; message: string; words: ConfirmWords; resolve: (ok: boolean) => void }
   | {
       kind: 'prompt';
       message: string;
@@ -26,8 +26,8 @@ export class DialogNotifier extends Notifier {
     return new Promise((resolve) => this.push({ kind: 'alert', message, resolve }));
   }
 
-  confirm(message: string): Promise<boolean> {
-    return new Promise((resolve) => this.push({ kind: 'confirm', message, resolve }));
+  confirm(message: string, words: ConfirmWords = {}): Promise<boolean> {
+    return new Promise((resolve) => this.push({ kind: 'confirm', message, words, resolve }));
   }
 
   askText(message: string, defaultValue = ''): Promise<string | null> {

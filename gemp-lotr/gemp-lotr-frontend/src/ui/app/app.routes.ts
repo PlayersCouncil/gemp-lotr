@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
+import { Notifier } from '../../core/notifier/notifier';
 import { loginRequired } from '../../core/session/login-required.guard';
+import { DialogNotifier } from '../shared/notifier/dialog-notifier';
 
 /**
  * The app's pages, each loaded on first use, under the app's base href (/gemp-lotr/ng/): /gemp-lotr/ng/<path>. The
@@ -18,6 +20,8 @@ export const APP_ROUTES: Routes = [
     // As game.html's title; the page changes it while it waits for the player (GameAttention)
     title: 'GEMP: LotR-TCG - Game Table',
     canActivate: [loginRequired],
+    // The game page asks its questions in dialogs of its own (gd-notifier), not the browser's
+    providers: [DialogNotifier, { provide: Notifier, useExisting: DialogNotifier }],
     loadComponent: () => import('../game/game-page.component').then((m) => m.GamePageComponent),
   },
   { path: '', pathMatch: 'full', redirectTo: 'deckbuilder' },

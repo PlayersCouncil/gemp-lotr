@@ -5,7 +5,8 @@ import { GameMessage } from '../state/game-model';
 
 /** A line of the game page's chat box: what a player said, or what the game reports. `html` is the server's. */
 export type GameLogEntry =
-  | { kind: 'chat'; message: ChatMessage }
+  /** `said`: a line the page itself put in a player's mouth (a scripted game's message), by what it is a line of. */
+  | { kind: 'chat'; message: ChatMessage; said?: string }
   /** `game`: the game's own message (not the page's warning about a problem). */
   | { kind: 'message' | 'warning'; html: string; game?: boolean };
 
@@ -88,6 +89,21 @@ export class GameLog {
 
   warn(lines: readonly string[]): void {
     this.add(lines.map((html) => ({ kind: 'warning', html })));
+  }
+
+  /**
+   * A line as if a player had said it, though no chat room did: what a scripted game's message says, under its
+   * opponent's name. `what` names the line (a step's message): said again (after a reload, or rewritten by the
+   * scenario's author), it is the same line, with the newer words.
+   */
+  say(what: string, from: string, html: string): void {
+    const line: GameLogEntry = { kind: 'chat', message: { from, html, date: null, system: false }, said: what };
+    if (this.lines().some((other) => other.kind === 'chat' && other.said === what)) {
+      this.lines.update((lines) => lines.map((other) => (other.kind === 'chat' && other.said === what ? line : other)));
+      this.save();
+    } else {
+      this.add([line]);
+    }
   }
 
   private save(): void {

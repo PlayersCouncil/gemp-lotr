@@ -1,0 +1,439 @@
+import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { CardInfoService } from '../../cards/card-info.service';
+import { Notifier } from '../../notifier/notifier';
+import { gamePageUrl } from '../../platform/app-paths';
+import { HallTab } from '../../platform/hall-tab.service';
+import { PageCues } from '../../platform/page-cues';
+import { PageLifetime } from '../../platform/page-lifetime.service';
+import { SessionService } from '../../session/session.service';
+import { DecisionGate, DecisionGates, DecisionGesture } from '../decision/decision-gate';
+import { DecisionButton } from '../decision/decision-view';
+import { GameDecisions } from '../decision/game-decisions.service';
+import { GameLog } from '../session/game-log';
+import { GameSession } from '../session/game-session.service';
+import { GameSettings } from '../settings/game-settings';
+import { LocalChoices } from '../state/game-model';
+import { GameCardRef } from '../table/game-card-views';
+import { ScenarioApi } from './scenario-api.service';
+import { ScenarioMessage, ScenarioStep } from './scenario-events';
+import { characterComplete, openingMessages, planAllows, PlanContext, scenarioPlan } from './scenario-plan';
+
+/**
+ * Where the player is with the step on the screen:
+ * - `idle`: nothing of the script is up;
+ * - `reading`: its opening messages are up, and the decision can't be answered until they have been read;
+ * - `answering`: the decision can be answered (by what the step allows);
+ * - `waiting`: a step that is only read (the opponent's, or one put before the player's own decision): the server
+ *   waits to be told it has been;
+ * - `notice`: the game has left its script and says so;
+ * - `ended`: the scenario is over.
+ */
+export type GuidePhase = 'idle' | 'reading' | 'answering' | 'waiting' | 'notice' | 'ended';
+
+/** What the page says of a click the step doesn't take: at the card or the button that was clicked. */
+export interface GuideHint {
+  html: string;
+  cardId: string | null;
+  button: DecisionButton | null;
+  /** The answer of a choice, by its place in the list. */
+  option: number | null;
+}
+
+/** What is to be clicked next, for the page to point out. */
+export interface NextClicks {
+  cardIds: readonly string[];
+  button: DecisionButton | null;
+  options: readonly number[];
+}
+
+/** What is said of a click the step doesn't take when the step has nothing of its own to say. */
+export const STOCK_NOT_NOW = "<p>You could do that in a real game, but for this lesson let's hold off for now.</p>";
+export const STOCK_OFF_SCRIPT = '<p>You have left the script.</p>';
+/** How long a hint stays up (ms), and how long a failed "I have read it" waits before it is said again. */
+export const HINT_MS = 7000;
+export const ACKNOWLEDGE_RETRY_MS = 2000;
+/** Conceding is given this long to reach the server before the page leaves for the hall (ms). */
+const LEAVE_MS = 300;
+
+const NO_CLICKS: NextClicks = { cardIds: [], button: null, options: [] };
+
+/** A card that isn't on the table but has an action is shown under a made-up id ("extra12"): the card it stands for. */
+const realCard = (cardId: string) => (cardId.startsWith('extra') ? cardId.substring(5) : cardId);
+
+/**
+ * A scripted game (a scenario) as the person plays it: which of the step's messages is up, whether the decision may
+ * be answered yet, which clicks the step takes (it is one of the page's decision gates) and what is said of the
+ * others, telling the server a step has been read, and starting over or leaving. The game's model holds what the
+ * server said (GameModel.scenario); this holds what only the page knows. Page-scoped.
+ */
+@Injectable()
+export class ScenarioGuide implements DecisionGate {
+  private readonly session = inject(GameSession);
+  private readonly decisions = inject(GameDecisions);
+  private readonly settings = inject(GameSettings);
+  private readonly log = inject(GameLog);
+  private readonly api = inject(ScenarioApi);
+  private readonly lifetime = inject(PageLifetime);
+  private readonly cues = inject(PageCues);
+  private readonly hall = inject(HallTab);
+  private readonly notifier = inject(Notifier);
+  private readonly acting = inject(SessionService);
+  private readonly cardInfo = inject(CardInfoService);
+
+  private readonly scenario = computed(() => this.session.model().scenario);
+  /** Who the scenario is, or null in an ordinary game. */
+  readonly info = computed(() => this.scenario()?.info ?? null);
+  readonly step = computed(() => this.scenario()?.step ?? null);
+  readonly end = computed(() => this.scenario()?.end ?? null);
+  private readonly notice = computed(() => this.scenario()?.notice ?? null);
+  /** Whether a scripted game is being played on this page (not: watched again in a replay). */
+  readonly playing = computed(() => this.info() !== null && !this.session.replaying());
+
+  /** The messages the step opens with, and how many of them have been read. */
+  private readonly opening = computed(() => {
+    const step = this.step();
+    return step ? openingMessages(step) : [];
+  });
+  private readonly read = signal(0);
+  /** A message of a moment inside the answering (a card picked, a character given its minions), while it is up. */
+  private readonly moment = signal<ScenarioMessage | null>(null);
+  /** Counts the times something the player did had to wait for a message to be read: the page shakes its button. */
+  readonly nudges = signal(0);
+  readonly hint = signal<GuideHint | null>(null);
+  /** Telling the server a step was read failed: its button offers to try again. */
+  readonly acknowledgeFailed = signal(false);
+  /** The page is on its way to another one (starting over, leaving): how this game ends is no longer news. */
+  readonly leaving = signal(false);
+  private acknowledging: ScenarioStep | null = null;
+
+  readonly phase = computed<GuidePhase>(() => {
+    if (this.end()) return 'ended';
+    const step = this.step();
+    if (!step) return this.notice() ? 'notice' : 'idle';
+    if (step.seat === 'opponent' || step.pause) return 'waiting';
+    const message = this.opening()[this.read()];
+    return message && message.advance !== 'decision' ? 'reading' : 'answering';
+  });
+
+  /** The message on the screen, or null. */
+  readonly message = computed<ScenarioMessage | null>(() => {
+    const notice = this.notice();
+    if (!this.step()) {
+      return notice && !this.end() ? noticeMessage(notice.message ?? STOCK_OFF_SCRIPT) : null;
+    }
+    return this.moment() ?? this.opening()[this.read()] ?? null;
+  });
+
+  /** Which of the opening messages is up and how many there are, when there are several; else null. */
+  readonly count = computed(() => {
+    const opening = this.opening();
+    const at = this.moment() ? -1 : this.read();
+    return opening.length > 1 && at >= 0 && at < opening.length ? { at: at + 1, of: opening.length } : null;
+  });
+
+  /** What the message's button says, or null when it has none (it goes by itself, or ends in a choice). */
+  readonly nextLabel = computed<string | null>(() => {
+    const message = this.message();
+    if (!message || this.session.replaying() || message.choices.length > 0) return null;
+    if (this.phase() === 'notice') return 'OK';
+    if (message.advance !== 'next') return null;
+    if (this.acknowledgeFailed()) return 'Try again';
+    return this.phase() === 'waiting' && this.read() === this.opening().length - 1 ? 'Continue' : 'Next';
+  });
+
+  private readonly context = computed<PlanContext | null>(() => {
+    const step = this.step();
+    const decision = this.session.model().decision?.decision;
+    if (!this.playing() || !step?.allow || step.seat !== 'human' || step.pause || !decision) return null;
+    return { decision, allow: step.allow, local: this.session.model().local, actions: this.decisions.view().actions };
+  });
+
+  /** What the step takes next, or null when it takes anything (or nothing is asked). */
+  readonly plan = computed(() => {
+    const context = this.context();
+    return context ? scenarioPlan(context) : null;
+  });
+
+  /**
+   * How each card the decision offers stands with the step: `live` (what the step wants clicked) or `notnow` (the
+   * game would take it, the step doesn't). Empty when the step takes anything.
+   */
+  readonly cardMarks = computed<Readonly<Record<string, 'live' | 'notnow'>>>(() => {
+    const plan = this.plan();
+    if (!plan || (this.phase() !== 'answering' && this.phase() !== 'reading')) return {};
+    return Object.fromEntries(
+      Object.entries(this.decisions.view().marks)
+        .filter(([, mark]) => mark !== 'selected')
+        .map(([cardId]) => [cardId, plan.liveCards.includes(cardId) ? 'live' : 'notnow'] as const),
+    );
+  });
+
+  /** What to point out as the next click, while the decision can be answered. */
+  readonly nextClicks = computed<NextClicks>(() => {
+    const plan = this.plan();
+    if (!plan || this.phase() !== 'answering') return NO_CLICKS;
+    return {
+      cardIds: plan.liveCards,
+      button: plan.ready ? 'Done' : plan.liveCards.length === 0 && plan.pass ? 'Pass' : null,
+      options: plan.options,
+    };
+  });
+
+  /** What the gesture being carried out found: for what came of it (`after`). */
+  private before: { local: LocalChoices; ready: boolean } | null = null;
+
+  constructor() {
+    inject(DecisionGates).add(this);
+
+    // Another step put up (or the same again): its messages from the first, nothing left over from the last
+    effect(() => {
+      const shown = this.scenario()?.shown ?? 0;
+      untracked(() => {
+        this.read.set(0);
+        this.moment.set(null);
+        this.hint.set(null);
+        this.acknowledgeFailed.set(false);
+        const step = this.step();
+        // A step that only waits to be read and has nothing to read has been read
+        if (shown > 0 && step && this.phase() === 'waiting' && this.opening().length === 0 && this.playing()) {
+          this.acknowledge(null);
+        }
+      });
+    });
+
+    // The settings the scenario fixes for its game (a replay keeps the watcher's own)
+    effect(() => {
+      const info = this.info();
+      const playing = this.playing();
+      untracked(() => this.settings.fix(info && playing ? info.settings : {}));
+    });
+
+    // What a message says goes into the game log too, as said by the opponent
+    effect(() => {
+      const message = this.message();
+      const step = this.step();
+      const info = this.info();
+      if (!message || message.html === '') return;
+      const at = step ? `${step.step}.${step.sub}:${step.messages.indexOf(message)}` : 'notice';
+      untracked(() => this.log.say(`scenario ${at}`, info?.opponentName ?? 'Scenario', message.html));
+    });
+
+    // A replay shows each opening message in turn, for as long as it takes to read
+    effect(() => {
+      const animation = this.session.animation()?.animation;
+      if (animation?.kind === 'read') untracked(() => this.read.set(animation.message));
+    });
+
+    // A message that waits for a card's information to be opened, or closed again
+    let open = this.cardInfo.card() !== null;
+    effect(() => {
+      const card = this.cardInfo.card();
+      const wasOpen = open;
+      open = card !== null;
+      untracked(() => {
+        const message = this.message();
+        if (!message || !this.playing() || this.acknowledgeFailed()) return;
+        if (message.advance === 'inspect' && card && !wasOpen) {
+          const wanted = message.advanceCard === null ? null : (this.step()?.cards[message.advanceCard] ?? null);
+          const shown = (card.ref as Partial<GameCardRef> | null)?.cardId ?? null;
+          if (wanted === null || (shown !== null && realCard(shown) === wanted)) this.next();
+        } else if (message.advance === 'close' && !card && wasOpen) {
+          this.next();
+        }
+      });
+    });
+  }
+
+  /** The message's button: on to the next message, or to the decision, or the step has been read. */
+  next(): void {
+    if (this.phase() === 'notice') {
+      this.session.noticeRead();
+      return;
+    }
+    if (this.moment()) {
+      this.moment.set(null);
+      return;
+    }
+    const opening = this.opening();
+    if (this.read() >= opening.length) return;
+    if (this.read() === opening.length - 1 && this.phase() === 'waiting') {
+      this.acknowledge(null);
+      return;
+    }
+    this.read.update((read) => read + 1);
+  }
+
+  /** One of the buttons a step ends in. */
+  choose(name: string): void {
+    this.acknowledge(name);
+  }
+
+  /** Tells the server the step has been read; it goes from the screen once the server knows. */
+  private acknowledge(choice: string | null): void {
+    const step = this.step();
+    const gameId = this.session.openGame;
+    if (!step || !gameId || this.acknowledging === step) return;
+    this.acknowledging = step;
+    this.lifetime.write(this.api.acknowledge(gameId, step.step, choice), {
+      next: () => {
+        this.acknowledging = null;
+        this.acknowledgeFailed.set(false);
+        if (this.step() === step) this.session.stepRead();
+        // (what the server does next comes with the news the page is asking for; if it isn't asking, it asks)
+        this.session.refresh();
+      },
+      error: () => {
+        this.acknowledging = null;
+        if (this.step() !== step) return;
+        if (this.message()) {
+          this.acknowledgeFailed.set(true);
+          this.nudges.update((count) => count + 1);
+        } else {
+          // Nothing on the screen to press again: said again by itself
+          this.lifetime.later(() => {
+            if (this.step() === step) this.acknowledge(choice);
+          }, ACKNOWLEDGE_RETRY_MS);
+        }
+      },
+    });
+  }
+
+  allows(gesture: DecisionGesture): boolean {
+    if (!this.playing()) return true;
+    this.hint.set(null);
+    const phase = this.phase();
+    if (phase === 'reading' || phase === 'waiting' || phase === 'ended') {
+      this.nudges.update((count) => count + 1);
+      return false;
+    }
+    const context = this.context();
+    if (!context) return true;
+    if (!planAllows(context, gesture)) {
+      this.refuse(context, gesture);
+      return false;
+    }
+    this.before = { local: context.local, ready: scenarioPlan(context).ready };
+    return true;
+  }
+
+  after(gesture: DecisionGesture): void {
+    const before = this.before;
+    this.before = null;
+    const context = this.context();
+    // (answered: the step has gone, and its moments with it)
+    if (!before || !context) return;
+    if (gesture.kind === 'button' && (gesture.button === 'Reset choice' || gesture.button === 'Clear selection')) {
+      this.moment.set(null);
+      return;
+    }
+    const { local, allow } = context;
+    const picked = local.markedCardIds.find((id) => !before.local.markedCardIds.includes(id));
+    if (picked !== undefined) this.raise('picked', picked);
+    if (local.minion !== null && local.minion !== before.local.minion) this.raise('picked', local.minion);
+    for (const [minion, character] of Object.entries(local.assignments)) {
+      if (before.local.assignments[minion] !== character && characterComplete(allow, local, character)) {
+        this.raise('assigned', character);
+      }
+    }
+    if (!before.ready && scenarioPlan(context).ready) this.raise('ready', null);
+  }
+
+  /** The step's message for a moment, if it has one, takes the bubble. */
+  private raise(moment: 'picked' | 'assigned' | 'ready', cardId: string | null): void {
+    const step = this.step();
+    const message = step?.messages.find(
+      (candidate) =>
+        candidate.on?.moment === moment &&
+        (candidate.on.card === null || (cardId !== null && step.cards[candidate.on.card] === realCard(cardId))),
+    );
+    if (message) this.moment.set(message);
+  }
+
+  private refuse(context: PlanContext, gesture: DecisionGesture): void {
+    const step = this.step();
+    const cardId = gesture.kind === 'card' || gesture.kind === 'action' ? gesture.cardId : null;
+    const alias =
+      cardId === null || !step
+        ? undefined
+        : Object.keys(context.allow.hints).find((name) => step.cards[name] === realCard(cardId));
+    const hint: GuideHint = {
+      html: (alias === undefined ? null : context.allow.hints[alias]) ?? context.allow.otherwise ?? STOCK_NOT_NOW,
+      cardId,
+      button: gesture.kind === 'button' ? gesture.button : null,
+      option: gesture.kind === 'choice' ? gesture.index : null,
+    };
+    this.hint.set(hint);
+    this.lifetime.later(() => {
+      if (this.hint() === hint) this.hint.set(null);
+    }, HINT_MS);
+  }
+
+  /** The hint has had its say (another click somewhere). */
+  dismissHint(): void {
+    this.hint.set(null);
+  }
+
+  /** Starts the scenario again: from the beginning, or from its last checkpoint. */
+  restart(fromCheckpoint = false): void {
+    const info = this.info();
+    if (info) this.start(info.id, fromCheckpoint);
+  }
+
+  /** The scenario that follows this one in its campaign. */
+  startNext(): void {
+    const next = this.info()?.campaign?.next;
+    if (next) this.start(next.id, false);
+  }
+
+  private start(id: string, fromCheckpoint: boolean): void {
+    if (this.leaving()) return;
+    this.leaving.set(true);
+    this.lifetime.write(this.api.start(id, fromCheckpoint), {
+      next: (started) => this.cues.go(gamePageUrl(started.gameId, this.acting.participantId)),
+      error: () => {
+        this.leaving.set(false);
+        this.notifier.tell('The scenario could not be started. Go back to the Game Hall and try from there.');
+      },
+    });
+  }
+
+  /** "Start again" asked for in the middle of a game: asked about first. */
+  async askRestart(): Promise<void> {
+    const over = this.phase() === 'ended' || this.session.model().ended;
+    if (over || (await this.notifier.confirm('Start this scenario again from the beginning?'))) this.restart();
+  }
+
+  /** "Leave": the game is given up (asked about first) and the page goes back to the Game Hall. */
+  async leave(): Promise<void> {
+    if (this.phase() === 'ended' || this.session.model().ended) {
+      this.backToHall();
+      return;
+    }
+    if (!(await this.notifier.confirm('Leave this scenario? You can start it again from the Game Hall.'))) return;
+    this.leaving.set(true);
+    this.session.concede();
+    this.lifetime.later(() => this.backToHall(), LEAVE_MS);
+  }
+
+  backToHall(hash = ''): void {
+    this.hall.go(hash);
+  }
+}
+
+function noticeMessage(html: string): ScenarioMessage {
+  return {
+    header: null,
+    html,
+    anchors: [],
+    gap: null,
+    highlight: [],
+    highlightStyle: 'gold',
+    avoid: [],
+    side: 'auto',
+    advance: 'next',
+    advanceCard: null,
+    choices: [],
+    on: null,
+    zoom: null,
+  };
+}

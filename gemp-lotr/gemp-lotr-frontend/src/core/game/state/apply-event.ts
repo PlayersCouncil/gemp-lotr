@@ -4,6 +4,7 @@
  * shown, a card affecting another) change nothing here.
  */
 import { CardRef, GameEvent, GameStats, ownerOf } from '../protocol/game-events';
+import { applyScenarioEvent, renameOpponent } from '../scenario/scenario-state';
 import { ALERT_DECISIONS, GameCard, GameModel, NO_CHOICES, NO_SKIRMISH_NUMBERS, SkirmishNumbers } from './game-model';
 
 type Cards = Record<string, GameCard>;
@@ -218,9 +219,15 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
         cards: withCard(model.cards, event.cardId, (card) => tokensChanged(card, event.token, -event.count)),
       };
     case 'M':
-      return { ...next, messages: [...model.messages, { kind: 'message', text: event.message }] };
+      return {
+        ...next,
+        messages: [...model.messages, { kind: 'message', text: renameOpponent(model.scenario, event.message) }],
+      };
     case 'W':
-      return { ...next, messages: [...model.messages, { kind: 'warning', text: event.message }] };
+      return {
+        ...next,
+        messages: [...model.messages, { kind: 'warning', text: renameOpponent(model.scenario, event.message) }],
+      };
     case 'GS': {
       const zones = Object.entries(event.stats.playerZones);
       return {
@@ -261,6 +268,9 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'EP':
     case 'CA':
       return next;
+    case 'S':
+      // (one the page can't read changes nothing)
+      return event.scenario ? { ...next, scenario: applyScenarioEvent(model.scenario, event.scenario) } : next;
   }
 }
 

@@ -124,6 +124,38 @@
   --theme-game-highlight: #fff;
   /* An inactive card that is offered or chosen is only lightly dimmed */
   --theme-game-inactive-offered-filter: grayscale(0.3) brightness(0.85);
+  /*
+   * A scripted game (a scenario: a tutorial, a puzzle): the bubble its messages are in and the buttons under them,
+   * the outlines it draws (what a message is about, in the colour the message asks for; what to click next), what it
+   * says of a click it doesn't take, its menu, and the panel it ends with.
+   */
+  --theme-game-scenario-font: 'Trebuchet MS', 'Segoe UI', Verdana, sans-serif;
+  --theme-game-scenario-bg: #1c1912;
+  --theme-game-scenario-text: #f3ead6;
+  --theme-game-scenario-border: #d8b24a;
+  --theme-game-scenario-quiet-border: #b9ad8e;
+  --theme-game-scenario-shadow: 0 6px 24px rgba(0, 0, 0, 0.75);
+  --theme-game-scenario-heading: #f0cf6a;
+  --theme-game-scenario-muted: #b9ad8e;
+  --theme-game-scenario-grip: #6e6347;
+  --theme-game-scenario-strong: #ffe9a8;
+  --theme-game-scenario-link: #9fc4ff;
+  --theme-game-scenario-button-bg: #3a3017;
+  --theme-game-scenario-main-bg: #d8b24a;
+  --theme-game-scenario-main-text: #1c1912;
+  --theme-game-scenario-outline: #f0cf6a;
+  --theme-game-scenario-outline-alarm: #ff6b5e;
+  --theme-game-scenario-outline-go: #7fdc7f;
+  --theme-game-scenario-outline-cool: #7fb4ff;
+  --theme-game-scenario-outline-next: #7fe0ff;
+  --theme-game-scenario-hint-bg: #2b2518;
+  --theme-game-scenario-menu-bg: rgba(28, 25, 18, 0.88);
+  --theme-game-scenario-menu-border: #6e5f33;
+  --theme-game-scenario-rule: #4a4230;
+  --theme-game-scenario-shade: rgba(0, 0, 0, 0.55);
+  --theme-game-scenario-zoom-shade: rgba(0, 0, 0, 0.72);
+  --theme-game-scenario-zoom-dim: rgba(0, 0, 0, 0.62);
+  --theme-game-scenario-pointer-edge: rgba(0, 0, 0, 0.75);
   /* The menu of a card's actions (jquery.contextMenu.css) */
   --theme-game-menu-bg: #eee;
   --theme-game-menu-border: #ccc;
@@ -373,6 +405,16 @@
   --theme-game-selected: #36b7ae;
   --theme-game-card-frame: #0d0b08;
   --theme-game-highlight: #f4ead2;
+  --theme-game-scenario-font: var(--theme-font-text);
+  --theme-game-scenario-bg: #241d15;
+  --theme-game-scenario-text: #ece2cc;
+  --theme-game-scenario-border: #c9a24a;
+  --theme-game-scenario-button-bg: #3a2f20;
+  --theme-game-scenario-main-bg: #c9a24a;
+  --theme-game-scenario-main-text: #1a140c;
+  --theme-game-scenario-hint-bg: #2e2519;
+  --theme-game-scenario-menu-bg: rgba(36, 29, 21, 0.9);
+  --theme-game-scenario-menu-border: #5a4a2c;
   --theme-game-menu-bg: #241d15;
   --theme-game-menu-border: #5a4a2c;
   --theme-game-menu-text: #ece2cc;

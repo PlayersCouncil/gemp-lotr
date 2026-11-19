@@ -5,6 +5,7 @@ import {
   computed,
   ElementRef,
   inject,
+  input,
   linkedSignal,
   signal,
   viewChild,
@@ -38,8 +39,8 @@ function isMetaSiteModifier(blueprintId: string): boolean {
  * when it has none); clicking anywhere else, the close button or Escape closes it, unless the size slider was just
  * used. A click or right-click on a card behind it only closes it (other controls still work).
  *
- * Modal if the theme says so (ThemeBehaviour), and always over another modal dialog (a card in the selection dialog),
- * which would otherwise cover it.
+ * Modal if the theme says so (ThemeBehaviour) and the page doesn't say otherwise (`plain`), and always over another
+ * modal dialog (a card in the selection dialog), which would otherwise cover it.
  *
  * DOM contract: `dialog.gd-card-info` with `--gd-card-info-zoom` (0.4 to 1, the slider) for the theme to size the
  * card with; `.gd-card-info__header` (`.gd-card-info__title`, `button.gd-card-info__close`),
@@ -127,6 +128,8 @@ export class CardInfoComponent {
   private readonly theme = inject(ThemeService);
   private readonly document = inject(DOCUMENT);
   private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+  /** Never modal by the theme's wish (the page draws over it: something that points at the card shown). */
+  readonly plain = input(false);
 
   protected readonly holoImage = siteImage('holo.jpg');
   protected readonly zoomMin = ZOOM_MIN;
@@ -290,7 +293,9 @@ export class CardInfoComponent {
   }
 
   private opensModal(): boolean {
-    return this.theme.behaviour().cardInfoModal || this.document.querySelector('dialog:modal') !== null;
+    return (
+      (this.theme.behaviour().cardInfoModal && !this.plain()) || this.document.querySelector('dialog:modal') !== null
+    );
   }
 
   protected onClick(event: MouseEvent): void {

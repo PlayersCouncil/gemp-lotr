@@ -4,6 +4,7 @@
  */
 import { attr, childElements } from '../../api/xml';
 import { legacyRelativeImages } from '../../platform/app-paths';
+import { parseScenarioEvent } from '../scenario/scenario-events';
 import { CardRef, Clocks, Decision, DecisionType, GameEvent, GameStats, GameUpdate, PlayerZones } from './game-events';
 
 const DECISION_TYPES: readonly DecisionType[] = [
@@ -200,6 +201,9 @@ export function parseGameEvent(element: Element): GameEvent | null {
       const parsed = decision(element);
       return parsed ? { type: 'D', decision: parsed } : null;
     }
+    case 'S':
+      // (its JSON as the server wrote it: the pictures its HTML names are put right as it is read)
+      return { type: 'S', scenario: parseScenarioEvent(attr(element, 'scenario') ?? '') };
     default:
       return null;
   }

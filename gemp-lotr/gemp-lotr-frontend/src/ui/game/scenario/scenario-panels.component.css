@@ -1,0 +1,108 @@
+/*
+ * A scripted game's own corner of the page, and the panels that stop play (scenario.css of the legacy page). Above
+ * everything else a scenario draws (the layer of its bubbles is at 100000).
+ */
+
+.gd-scenario-menu {
+  position: fixed;
+  /* Beside the table's theme button, which keeps the corner; left of a panel docked at the window's right */
+  top: 6px;
+  right: calc(var(--gd-reserved, 0px) + 44px);
+  z-index: 100003;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 3px 12px;
+  border: 1px solid var(--theme-game-scenario-menu-border);
+  border-radius: 14px;
+  background: var(--theme-game-scenario-menu-bg);
+  color: var(--theme-game-scenario-heading);
+  font-family: var(--theme-game-scenario-font);
+  font-size: 12px;
+}
+
+.gd-scenario-menu :is(button, a) {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--theme-game-scenario-muted);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gd-scenario-menu :is(button, a):hover {
+  color: var(--theme-game-scenario-text);
+  text-decoration: underline;
+}
+
+.gd-scenario-shade {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  background: var(--theme-game-scenario-shade);
+  font-family: var(--theme-game-scenario-font);
+}
+
+.gd-scenario-panel {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 460px;
+  max-width: 86vw;
+  padding: 20px 24px 18px;
+  border: 2px solid var(--theme-game-scenario-border);
+  border-radius: 12px;
+  background: var(--theme-game-scenario-bg);
+  box-shadow: var(--theme-game-scenario-shadow);
+  color: var(--theme-game-scenario-text);
+  font-size: 15px;
+  line-height: 1.45;
+  transform: translate(-50%, -50%);
+}
+
+/* An ending that isn't a win is said more quietly */
+.gd-scenario-panel:is([data-result='failed'], [data-result='off_script'], [data-result='error']) {
+  border-color: var(--theme-game-scenario-quiet-border);
+}
+
+.gd-scenario-panel h2 {
+  margin: 0 0 10px;
+  color: var(--theme-game-scenario-heading);
+  font-size: 22px;
+}
+
+.gd-scenario-panel__body {
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
+}
+
+.gd-scenario-panel__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* The way onward stands apart at the right, the ways back at the left */
+.gd-scenario-panel__buttons:has([data-onward]) {
+  justify-content: flex-start;
+}
+
+.gd-scenario-panel__buttons [data-onward] {
+  margin-left: auto;
+}
+
+.gd-scenario-panel__report {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--theme-game-scenario-rule);
+  color: var(--theme-game-scenario-muted);
+  font-size: 12px;
+}
+
+.gd-scenario-panel__report a {
+  color: var(--theme-game-scenario-link);
+}

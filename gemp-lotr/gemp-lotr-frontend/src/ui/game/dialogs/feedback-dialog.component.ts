@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
 import { GameLog } from '../../../core/game/session/game-log';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 
@@ -7,6 +8,8 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
  * the game's replays; the page shows that message in a dialog too (as well as in the chat box).
  *
  * The dialog itself has the focus when it opens, not its link (the legacy page opened it before it had the text).
+ *
+ * A scripted game (a scenario) has no such dialog: the panel it ends with has the form's link.
  *
  * DOM contract: a modal `gd-dialog` with `data-dialog=feedback`, holding the server's message.
  */
@@ -19,7 +22,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
       name="feedback"
       heading="Give us feedback!"
       [focusSelf]="true"
-      [open]="log.feedback() !== null"
+      [open]="log.feedback() !== null && guide.info() === null"
       (closed)="log.closeFeedback()"
     >
       @if (log.feedback(); as message) {
@@ -30,4 +33,6 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
 })
 export class FeedbackDialogComponent {
   protected readonly log = inject(GameLog);
+  /** A scripted game ends with a panel of its own, which has the form's link. */
+  protected readonly guide = inject(ScenarioGuide);
 }

@@ -253,3 +253,9 @@
 .gd-game-state__decision-clock[data-empty] + br {
   display: none;
 }
+
+/* A tutorial isn't played against the clock (the clocks still run on the server, only to notice that somebody has
+   gone away) */
+:host-context(gemp-game[data-scenario='tutorial']) [data-clock] {
+  visibility: hidden;
+}
