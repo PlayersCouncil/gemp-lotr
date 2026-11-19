@@ -8,15 +8,19 @@
 //   npm run check:game -- --only start --sizes 1366x768 --keep     a game check server, kept up
 //   npm run check:game:undo                                        every check, on the legacy page
 //   npm run check:game:undo -- --only own,approve --out report-undo
+//   npm run check:game:undo -- --page angular --theme modern       on the Angular game page (npm run build first)
+//   npm run check:game:undo -- --page legacy,angular               mixed: each seat on another kind of page, then the
+//                                                                  other way round (each check runs twice)
 //   npm run check:game:down
 //
-// The page is game.html: the Angular game page has no undo yet. `UNDO` below is what a page must offer for these
-// checks (its `legacy` entry is game.html's); the Angular page gets an entry of its own, and `--page angular`.
+// `UNDO` below is where each kind of page keeps what these checks use: game.html (`legacy`) by its own markup, the
+// Angular game page (`angular`) by its DOM contract (data-undo, data-dialog, data-decision-button, ...). `--theme`
+// (classic, the default, or modern) is the Angular page's theme; game.html reads no such cookie.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from '../browser.mjs';
-import { LEGACY, readGameState } from './controls.mjs';
+import { ANGULAR_CONTRACT, LEGACY, readGameState } from './controls.mjs';
 import { pairOf } from './players.mjs';
 import { endGame, startGame } from './protocol.mjs';
 
@@ -28,7 +32,9 @@ const argument = (name, fallback) => {
   const at = process.argv.indexOf(`--${name}`);
   return at < 0 ? fallback : process.argv[at + 1];
 };
-const KIND = argument('page', 'legacy');
+/** The kinds of page: one for both seats, or two (the first seat's and the second's, then the other way round). */
+const KINDS = argument('page', 'legacy').split(',').filter(Boolean);
+const THEME = argument('theme', 'classic');
 const OUT = path.resolve(CHECK_DIR, argument('out', 'report-undo'));
 const ONLY = argument('only', '').split(',').filter(Boolean);
 
@@ -72,18 +78,57 @@ const UNDO = {
     requestButton: (label) => `.ui-dialog:has(.undoRequest) .ui-dialog-buttonpane button:has(:text-is("${label}"))`,
     requestButtons: '.ui-dialog:has(.undoRequest) .ui-dialog-buttonset button',
     banner: '.undoBanner',
-    /** The decision's own dialog (not undo's). */
+    /** The decision's own dialog (not undo's), and its title. */
     decisionDialog: '.ui-dialog:visible:not(:has(.undoList)):not(:has(.undoRequest))',
+    decisionTitle: '.ui-dialog-title',
     decisionCard: '.ui-dialog:visible:not(:has(.undoList)):not(:has(.undoRequest)) .card',
     decisionButton: (label) =>
       `.ui-dialog:visible:not(:has(.undoList)):not(:has(.undoRequest)) :is(button:text-is("${label}"), button:has(:text-is("${label}")))`,
     chat: '#chatBox',
   },
+  angular: {
+    path: '/gemp-lotr/ng/game',
+    undoButton: '[data-undo="last"]',
+    openList: async (page) => {
+      await page.locator(ANGULAR_CONTRACT.tab('options')).click();
+      await page.locator(ANGULAR_CONTRACT.button('undoGame')).click();
+    },
+    list: '[data-undo="list"]',
+    point: '[data-undo="point"]',
+    pointButton: 'button[data-undo="go"]',
+    pointLabel: '[data-undo="label"]',
+    pointWhy: '[data-undo="why"]',
+    pointOff: '[data-undo="off"]',
+    listWhen: '[data-undo="points"] [data-undo="when"]',
+    info: '[data-undo="info"]',
+    help: '[data-undo="help"]',
+    autoDecline: async (page) => {
+      await page.locator(ANGULAR_CONTRACT.tab('options')).click();
+      return page.locator(ANGULAR_CONTRACT.setting('undoAutoDecline'));
+    },
+    skipSetting: async (page) => {
+      await page.locator(ANGULAR_CONTRACT.tab('settings')).click();
+      return page.locator(ANGULAR_CONTRACT.setting('skipConfirmations'));
+    },
+    closeList: 'dialog[data-dialog="undo-list"] .gd-dialog__close',
+    request: '[data-undo="request"]',
+    requestFrame: 'dialog[data-dialog="undo-request"]',
+    requestButton: (label) => `dialog[data-dialog="undo-request"] button[data-undo-reply]:has(:text-is("${label}"))`,
+    requestButtons: 'dialog[data-dialog="undo-request"] button[data-undo-reply]',
+    banner: '[data-undo="banner"]',
+    decisionDialog: 'dialog[data-dialog^="decision"][open]',
+    decisionTitle: '[data-dialog-title]',
+    decisionCard: 'dialog[data-dialog="decision-cards"][open] [data-card-id]',
+    decisionButton: (label) =>
+      `:is(dialog[data-dialog^="decision"][open], [data-game="alert-buttons"]) :is(button:text-is("${label}"), button:has(:text-is("${label}")))`,
+    chat: 'gd-game-chat',
+  },
 };
-const ui = UNDO[KIND];
-if (!ui) {
-  throw new Error(`--page ${KIND}: only ${Object.keys(UNDO).join(', ')} has undo`);
+for (const kind of KINDS) {
+  if (!UNDO[kind]) throw new Error(`--page ${kind}: only ${Object.keys(UNDO).join(', ')} has undo`);
 }
+if (KINDS.length > 2)
+  throw new Error('--page: one kind of page, or two (the first seat on one, the second on the other)');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -98,11 +143,13 @@ async function until(read, what, max = 15000) {
   }
 }
 
-/** One player's page: the page, how often it was loaded, and what went wrong on it. */
+/** One player's page: its kind (and where it keeps things), the page, how often it was loaded, what went wrong on it. */
 class Seat {
-  constructor(name, page) {
+  constructor(name, page, kind) {
     this.name = name;
     this.page = page;
+    this.kind = kind;
+    this.ui = UNDO[kind];
     this.loads = 0;
     this.errors = [];
     page.on('load', () => this.loads++);
@@ -112,7 +159,7 @@ class Seat {
   }
 
   state() {
-    return this.page.evaluate(readGameState, { kind: KIND });
+    return this.page.evaluate(readGameState, { kind: this.kind });
   }
 
   /** The cards on the table (not the ones a decision's dialog offers, whose ids are temp0, temp1, ...). */
@@ -130,33 +177,33 @@ class Seat {
 
   /** The title of the decision's dialog, if one is open. */
   async decision() {
-    const dialog = this.page.locator(ui.decisionDialog).first();
+    const dialog = this.page.locator(this.ui.decisionDialog).first();
     if (!(await dialog.isVisible().catch(() => false))) return null;
-    return ((await dialog.locator('.ui-dialog-title').textContent()) ?? '').trim();
+    return ((await dialog.locator(this.ui.decisionTitle).textContent()) ?? '').trim();
   }
 
   hasButton(label) {
-    return this.page.locator(ui.decisionButton(label)).first().isVisible();
+    return this.page.locator(this.ui.decisionButton(label)).first().isVisible();
   }
 
   async click(label) {
-    await this.page.locator(ui.decisionButton(label)).first().click();
+    await this.page.locator(this.ui.decisionButton(label)).first().click();
   }
 
   offered() {
-    return this.page.locator(ui.decisionCard).count();
+    return this.page.locator(this.ui.decisionCard).count();
   }
 
   /** Clicks a card the decision offers (with auto-accept, on by default, that answers a choice of one card). */
   async pick(index = 0) {
-    await this.page.locator(ui.decisionCard).nth(index).click();
+    await this.page.locator(this.ui.decisionCard).nth(index).click();
   }
 
   /** The places the list offers, the latest first: `{ button, enabled, tier, label, why, off }`. */
   async openList() {
-    await ui.openList(this.page);
-    await this.page.locator(ui.list).waitFor({ timeout: 10000 });
-    return this.page.locator(`${ui.list} ${ui.point}`).evaluateAll(
+    await this.ui.openList(this.page);
+    await this.page.locator(this.ui.list).waitFor({ timeout: 10000 });
+    return this.page.locator(`${this.ui.list} ${this.ui.point}`).evaluateAll(
       (rows, sel) =>
         rows.map((row) => ({
           button: row.querySelector(sel.pointButton)?.textContent.trim(),
@@ -166,7 +213,12 @@ class Seat {
           why: Array.from(row.querySelectorAll(`${sel.pointWhy} > *`), (line) => line.textContent.trim()),
           off: row.querySelector(sel.pointOff)?.textContent.trim() ?? '',
         })),
-      { pointButton: ui.pointButton, pointLabel: ui.pointLabel, pointWhy: ui.pointWhy, pointOff: ui.pointOff },
+      {
+        pointButton: this.ui.pointButton,
+        pointLabel: this.ui.pointLabel,
+        pointWhy: this.ui.pointWhy,
+        pointOff: this.ui.pointOff,
+      },
     );
   }
 
@@ -176,15 +228,15 @@ class Seat {
       const button = document.querySelector(selector);
       if (!button || button.getBoundingClientRect().width === 0) return null;
       return { enabled: !button.disabled, title: button.title, text: button.textContent.trim() };
-    }, ui.undoButton);
+    }, this.ui.undoButton);
   }
 
   async takeBack(index = 0) {
-    await this.page.locator(`${ui.list} ${ui.point}`).nth(index).locator(ui.pointButton).click();
+    await this.page.locator(`${this.ui.list} ${this.ui.point}`).nth(index).locator(this.ui.pointButton).click();
   }
 
   async closeList() {
-    await this.page.locator(ui.closeList).click();
+    await this.page.locator(this.ui.closeList).click();
   }
 
   /** The request on the screen, if any: `{ text, tier, buttons }`. Read in one go: the dialog may close meanwhile. */
@@ -202,16 +254,16 @@ class Seat {
           buttons: Array.from(document.querySelectorAll(buttons), (button) => button.textContent.trim()),
         };
       },
-      { request: ui.request, label: ui.pointLabel, why: ui.pointWhy, buttons: ui.requestButtons },
+      { request: this.ui.request, label: this.ui.pointLabel, why: this.ui.pointWhy, buttons: this.ui.requestButtons },
     );
   }
 
   async answerRequest(label) {
-    await this.page.locator(ui.requestButton(label)).click();
+    await this.page.locator(this.ui.requestButton(label)).click();
   }
 
   async banner() {
-    const banner = this.page.locator(ui.banner).first();
+    const banner = this.page.locator(this.ui.banner).first();
     if (!(await banner.isVisible().catch(() => false))) return null;
     return ((await banner.textContent()) ?? '').replace(/\s+/g, ' ').trim();
   }
@@ -221,23 +273,30 @@ class Seat {
     // Off the cards, so the hover zoom is not in the picture
     await this.page.mouse.move(2, 2);
     await sleep(300);
-    await this.page.screenshot({ path: path.join(OUT, `${check}-${step}-${this.name}.png`) });
+    // (mixed, each check runs with the seats both ways: the kind of page tells them apart)
+    const kind = KINDS.length > 1 ? `-${this.kind}` : '';
+    await this.page.screenshot({ path: path.join(OUT, `${check}-${step}-${this.name}${kind}.png`) });
   }
 }
 
 let browser;
 
-async function seat(game, who, name) {
+async function seat(game, who, name, kind) {
   const { hostname } = new URL(server);
   const context = await browser.newContext({ viewport: { width: 1366, height: 768 } });
   const cookies = who.cookie.split('; ').map((text) => {
     const [cookie, ...value] = text.split('=');
     return { name: cookie, value: value.join('='), domain: hostname, path: '/' };
   });
-  await context.addCookies([...cookies, { name: 'animation-speed', value: '4', domain: hostname, path: '/' }]);
+  await context.addCookies([
+    ...cookies,
+    { name: 'animation-speed', value: '4', domain: hostname, path: '/' },
+    // The Angular page's theme (the legacy page reads no such cookie)
+    { name: 'gempGameTheme', value: THEME, domain: hostname, path: '/' },
+  ]);
   const page = await context.newPage();
-  const made = new Seat(name, page);
-  await page.goto(`${server}${ui.path}?gameId=${game.gameId}`);
+  const made = new Seat(name, page, kind);
+  await page.goto(`${server}${made.ui.path}?gameId=${game.gameId}`);
   return made;
 }
 
@@ -245,13 +304,13 @@ async function seat(game, who, name) {
  * A game up to the first starting fellowship: both bid nothing, whoever is asked goes first. Returns the player
  * choosing a fellowship (`first`), the other one (`second`), and what both pages showed just before any card was chosen.
  */
-async function toFellowship(check) {
+async function toFellowship(check, kinds) {
   const pair = pairOf(0);
   const game = await startGame(server, pair, password, 'main');
   // One page at a time: the players join in the same order every run
-  const a = await seat(game, game.player, pair.player);
+  const a = await seat(game, game.player, pair.player, kinds[0]);
   await until(() => a.hasButton('OK'), `${pair.player}'s bid`);
-  const b = await seat(game, game.foe, pair.foe);
+  const b = await seat(game, game.foe, pair.foe, kinds[1]);
   await until(() => b.hasButton('OK'), `${pair.foe}'s bid`);
   await a.click('OK');
   await b.click('OK');
@@ -286,7 +345,7 @@ const focus = (who) =>
   who.page.evaluate((frame) => {
     const active = document.activeElement;
     return { onFrame: !!active?.matches(frame), text: (active?.textContent.trim() ?? '').slice(0, 40) };
-  }, ui.requestFrame);
+  }, who.ui.requestFrame);
 
 const CHECKS = {
   /** A choice nobody else has seen or answered: the Undo button is there, and takes it back at once. */
@@ -310,7 +369,7 @@ const CHECKS = {
     if (point && !/^Played \S/.test(point.label)) problems.push(`the place should say what was done: "${point.label}"`);
     await first.closeList();
     const loads = { first: first.loads, second: second.loads };
-    await first.page.locator(ui.undoButton).click();
+    await first.page.locator(first.ui.undoButton).click();
     const banner = await until(async () => first.banner(), 'the page to say the choice was undone');
     if (!/ undid: Played /.test(banner)) problems.push(`the page says: "${banner}"`);
     await until(
@@ -329,7 +388,7 @@ const CHECKS = {
     if (await first.undoButton()) problems.push('the Undo button is still shown with nothing left to undo');
     await until(async () => second.banner(), 'the other page to say the choice was undone');
     if (!same(await second.cards(), start.second)) problems.push("the other player's cards are not as before");
-    table.note = `${KIND === 'legacy' ? 'page loads' : 'loads'}: ${first.loads - loads.first} (asker), ${second.loads - loads.second} (other)`;
+    table.note = `page loads: ${first.loads - loads.first} (asker), ${second.loads - loads.second} (other)`;
     // ...and the game goes on from there
     await first.play(1);
     await until(() => first.undoButton(), 'the Undo button after the next choice');
@@ -382,7 +441,7 @@ const CHECKS = {
   /** With "Skip extra confirmations" on, the page presses that DONE itself. */
   async skip(table, problems) {
     const { first, second } = table;
-    await (await ui.skipSetting(first.page)).check();
+    await (await first.ui.skipSetting(first.page)).check();
     let picks = 0;
     while (!(await second.decision())?.startsWith('Starting fellowship')) {
       if (picks >= 4) throw new Error('four cards chosen and the opponent is still not asked');
@@ -411,12 +470,13 @@ const CHECKS = {
     }
     if (points[0]?.label !== 'Pressed DONE')
       problems.push(`the latest place should be "Pressed DONE": ${points[0]?.label}`);
-    if ((await first.page.locator(ui.listWhen).count()) < 1)
+    if ((await first.page.locator(first.ui.listWhen).count()) < 1)
       problems.push('the list has no heading for its turn and phase');
     // The "i" button explains the three tiers
-    if (await first.page.locator(ui.help).isVisible()) problems.push('the explanation of the tiers is open unasked');
-    await first.page.locator(`${ui.list} ${ui.info}`).click();
-    const help = ((await first.page.locator(ui.help).textContent()) ?? '').replace(/\s+/g, ' ');
+    if (await first.page.locator(first.ui.help).isVisible())
+      problems.push('the explanation of the tiers is open unasked');
+    await first.page.locator(`${first.ui.list} ${first.ui.info}`).click();
+    const help = ((await first.page.locator(first.ui.help).textContent()) ?? '').replace(/\s+/g, ' ');
     if (!/Undo\..*Revert\..*approval.*Revert\./.test(help)) problems.push(`the explanation of the tiers: "${help}"`);
     await first.shot('approve', '1-list');
 
@@ -449,7 +509,7 @@ const CHECKS = {
     // While it waits, the opponent's own decision cannot be answered
     const before = await second.cards();
     await second.page
-      .locator(ui.decisionCard)
+      .locator(second.ui.decisionCard)
       .first()
       .click({ force: true, timeout: 2000 })
       .catch(() => undefined);
@@ -518,10 +578,10 @@ const CHECKS = {
     }
     table.note = points[0]?.off;
     await first.closeList();
-    const theirSwitch = await ui.autoDecline(second.page);
+    const theirSwitch = await second.ui.autoDecline(second.page);
     await second.shot('decline-all', '2-switch');
     if (!(await theirSwitch.isChecked())) problems.push("the asked player's auto-decline switch is not on");
-    const mySwitch = await ui.autoDecline(first.page);
+    const mySwitch = await first.ui.autoDecline(first.page);
     if (await mySwitch.isChecked()) problems.push("the asker's own auto-decline switch is on");
     await theirSwitch.uncheck();
     await sleep(500);
@@ -555,7 +615,7 @@ const CHECKS = {
     await who.post(`/game/${game.gameId}/concede`, {});
     try {
       await until(
-        async () => /concession/i.test((await first.page.locator(ui.chat).textContent()) ?? ''),
+        async () => /concession/i.test((await first.page.locator(first.ui.chat).textContent()) ?? ''),
         'the concession to show',
         10000,
       );
@@ -569,11 +629,12 @@ const CHECKS = {
   },
 };
 
-async function run(name) {
+/** Runs one check with the seats on these kinds of page (the first seat is whoever opens the game first). */
+async function run(name, kinds) {
   const problems = [];
   let table;
   try {
-    table = await toFellowship(name);
+    table = await toFellowship(name, kinds);
     await CHECKS[name](table, problems);
   } catch (error) {
     problems.push(error.message.split('\n')[0]);
@@ -587,20 +648,28 @@ async function run(name) {
     await table.first.page.context().close();
     await table.second.page.context().close();
   }
-  console.log(`${problems.length ? '  ✗' : '  ✓'} ${name}${table?.note ? ` (${table.note})` : ''}`);
+  const where =
+    kinds[0] === kinds[1] ? '' : ` [${table?.first.kind ?? kinds[0]} asks, ${table?.second.kind ?? kinds[1]} answers]`;
+  console.log(`${problems.length ? '  ✗' : '  ✓'} ${name}${where}${table?.note ? ` (${table.note})` : ''}`);
   for (const problem of problems) console.log(`      ${problem}`);
   return problems.length === 0;
 }
 
 const names = Object.keys(CHECKS).filter((name) => ONLY.length === 0 || ONLY.includes(name));
+// One kind for both seats; two kinds: each check with the seats one way, then the other way round
+const pairs = KINDS.length === 1 ? [[KINDS[0], KINDS[0]]] : [KINDS, [...KINDS].reverse()];
 browser = await launchBrowser();
 let ok = 0;
 try {
   for (const name of names) {
-    if (await run(name)) ok++;
+    for (const kinds of pairs) {
+      if (await run(name, kinds)) ok++;
+    }
   }
 } finally {
   await browser.close();
 }
-console.log(`${ok} of ${names.length} undo checks passed on the ${KIND} page. Screenshots: ${OUT}`);
-process.exitCode = ok === names.length ? 0 : 1;
+const pages = KINDS.length === 1 ? `the ${KINDS[0]} page` : `${KINDS.join(' and ')} pages, mixed`;
+const theme = KINDS.includes('angular') ? ` (${THEME})` : '';
+console.log(`${ok} of ${names.length * pairs.length} undo checks passed on ${pages}${theme}. Screenshots: ${OUT}`);
+process.exitCode = ok === names.length * pairs.length ? 0 : 1;
