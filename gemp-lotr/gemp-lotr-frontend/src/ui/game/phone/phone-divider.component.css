@@ -152,10 +152,19 @@
   font-size: 14px;
 }
 
-/* Sideways: the question beside its buttons */
+/* Sideways: the question beside its buttons, in the panel on the right; a smaller question, the timer under it */
 :host-context([data-device='sideways']) {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__question {
+  flex-direction: column;
+  gap: 2px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__text {
+  font-size: 15px;
 }
 
 :host-context([data-device='sideways']) .gd-phone-divider__buttons {

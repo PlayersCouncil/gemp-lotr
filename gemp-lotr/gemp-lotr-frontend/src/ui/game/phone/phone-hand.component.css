@@ -89,7 +89,7 @@
   --gd-phone-card: var(--gd-phone-hand-card, 120px);
 }
 
-/* The grip: only held sideways, where the hand is a panel that slides up and down */
+/* The grip: only held sideways, where the hand fills the panel on the right: dragging it sizes the hand's cards */
 .gd-phone-hand__grip {
   display: none;
 }
@@ -115,7 +115,10 @@
   background: var(--theme-game-phone-dim);
 }
 
-/* Sideways, the cards keep the table's size and wrap into rows that scroll up and down: a higher hand shows more */
+/*
+ * Sideways, the cards wrap into rows that fill the panel and scroll down; their size is the hand's, as upright (the
+ * grip or the divider dragged up makes them bigger)
+ */
 :host-context([data-device='sideways']) > gd-phone-cards {
-  --gd-phone-card: var(--gd-phone-table-card, 80px);
+  --gd-phone-card: var(--gd-phone-hand-card, 112px);
 }

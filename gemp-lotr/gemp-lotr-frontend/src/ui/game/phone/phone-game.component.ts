@@ -23,9 +23,9 @@ const HAND_CHROME = 26 + 12;
  * The game in the modern theme on a phone or an upright tablet (G7 of trymarz/gemp-lotr-private#27; CompactLayout):
  * the status bar and the players' chips at the top, the table scrolling up and down, the divider with the decision,
  * and the hand under it. The divider's place is kept per device in a cookie (PhoneSettings); dragged to the bottom it
- * hides the hand (shown again while a decision offers cards in its place). Held sideways the table takes the whole
- * width, the divider the right half of the bottom, and the hand is a panel in the right half standing on it, which its
- * grip slides up as far as the status bar (the owner, 2026-11-16, 2026-11-17). Sheets open over everything.
+ * hides the hand (shown again while a decision offers cards in its place). Held sideways the screen has two columns
+ * (the owner, 2026-11-19): the table on the left, and a panel docked on the right with the divider on top and the hand
+ * filling the rest, its cards in rows; dragging sizes the hand's cards. Sheets open over everything.
  *
  * DOM contract: `gd-game-phone` with `data-device` (phone, sideways, tablet), `data-hand-hidden`, `--gd-phone-card`
  * (the table's cards' height), `--gd-phone-hand` (the hand's height), holding `gd-phone-status`, `gd-phone-table`,
