@@ -743,6 +743,21 @@ describe('GamePageComponent in a scripted game', () => {
     expect(el.querySelector('section.gd-scenario-panel')?.getAttribute('data-result')).toBe('complete');
     expect(el.querySelector('.gd-scenario-panel__report a')?.getAttribute('href')).toBe('x');
   });
+
+  it("docks the authoring panel at the right in a draft's game, the page leaving it the room", async () => {
+    const { el, stable } = await open(TABLE + STATS + S({ ...INFO, author: true }) + ACTIONS);
+    expect(el.querySelector('gd-game-author section.gd-author')).not.toBeNull();
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/scenarios/author/state').flush('{"session":false}');
+    await stable();
+    expect(el.querySelector('.gd-author')?.getAttribute('data-view')).toBe('elsewhere');
+    expect(document.documentElement.style.getPropertyValue('--gd-page-right')).toBe('430px');
+    document.documentElement.style.removeProperty('--gd-page-right');
+  });
+
+  it('has no authoring panel in a scenario played as a player', async () => {
+    const { el } = await open(TABLE + STATS + S(INFO));
+    expect(el.querySelector('gd-game-author')).toBeNull();
+  });
 });
 
 describe('mentionOf', () => {

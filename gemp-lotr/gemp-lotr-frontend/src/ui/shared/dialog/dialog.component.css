@@ -47,7 +47,8 @@
  */
 .gd-dialog:not([data-placed]) {
   inset: auto;
-  left: round(calc((100vw - var(--dialog-outer-width)) / 2), 1px);
+  /* (in what the page leaves of the window: see page-room.ts) */
+  left: round(calc((100vw - var(--gd-page-right, 0px) - var(--dialog-outer-width)) / 2), 1px);
   top: max(
     0px,
     round(

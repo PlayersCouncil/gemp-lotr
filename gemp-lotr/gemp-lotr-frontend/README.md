@@ -299,6 +299,16 @@ and replays (G4). Nothing links to it yet.
   (`npm run check:game:modern`: the same games, every card and panel within 2px). The red theme button
   (`GameThemeButtonComponent`, in the table's top right corner) is off until the owner accepts its place
   (`GAME_THEME_PICKER`).
+- **Scenario authoring** (`core/game/authoring`, `ui/game/authoring`): in a draft's game (the scenario's info says
+  `author`, or `draftTest` for a player's game of the draft; never in a replay or the phone layout) the authoring panel
+  is docked at the window's right, 430px wide (30px folded; floating in a corner in a test). The `Authoring` service
+  holds the server's state of the draft (`/gemp-lotr-server/scenarios/author/*`, `AuthoringApi`; never sent with a
+  `participantId`), keeps it fresh as the game moves, handles every answer (a fresh game is a full page load to its
+  `gameId`, the panel's view coming back from `sessionStorage["gemp-author-ui"]`) and has the scenario guide behave as
+  a draft's game needs (`ScenarioGuide.attachAuthor`). The page leaves the panel its room with `--gd-page-right` on the
+  document element (`ui/shared/page-room.ts`), which the page's host, the dialogs, the card information, the hover zoom,
+  the animations and the replay controls keep to; it is unset, so nothing moves, when no panel is docked. The tabs are
+  one component each; the widgets they share are in `ui/game/authoring/widgets/`.
 - **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
   layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
   status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's

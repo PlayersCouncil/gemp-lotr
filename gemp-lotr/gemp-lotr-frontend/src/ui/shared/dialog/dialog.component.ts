@@ -12,6 +12,7 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { pageRight } from '../page-room';
 import { DragHandlers, PointerDragDirective } from '../pointer-drag/pointer-drag.directive';
 import { ThemeService } from '../../../core/platform/theme.service';
 
@@ -201,9 +202,11 @@ export class DialogComponent {
     }
     const start = this.dialog().nativeElement.getBoundingClientRect();
     const { clientX: startX, clientY: startY } = event;
+    // (in what the page leaves of the window: see page-room.ts)
+    const right = this.window ? pageRight(this.window.document) : 0;
     return {
       move: (e) => {
-        const maxLeft = (this.window?.innerWidth ?? 0) - start.width;
+        const maxLeft = (this.window?.innerWidth ?? 0) - right - start.width;
         const maxTop = (this.window?.innerHeight ?? 0) - start.height;
         this.placed.set({
           left: Math.round(Math.max(0, Math.min(maxLeft, start.left + e.clientX - startX))),

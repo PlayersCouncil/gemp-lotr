@@ -36,6 +36,8 @@ import { ScenarioGuide } from '../../core/game/scenario/scenario-guide.service';
 import { NotifierDialogComponent } from '../shared/notifier/notifier-dialog.component';
 import { ScenarioLayerComponent } from './scenario/scenario-layer.component';
 import { ScenarioPanelsComponent } from './scenario/scenario-panels.component';
+import { AuthoringPanelComponent } from './authoring/authoring-panel.component';
+import { Authoring } from '../../core/game/authoring/authoring.service';
 import { CompactLayout } from '../../core/platform/compact-layout.service';
 import { GameSheets } from '../../core/game/phone/game-sheets';
 import { PhoneBridge } from '../../core/game/phone/phone-bridge';
@@ -58,7 +60,8 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
  * (`data-fight="skirmish"`) and assignment (`data-fight="assignment"`), each with `.gd-game__side`
  * (`data-side`: shadow, free-peoples). `data-animating` while an event holds the page (its animation). Cards: see GameCardDirective.
  * `data-scenario` (tutorial, puzzle, sandbox) in a scripted game, which draws over the page with `gd-game-scenario`
- * and `gd-game-scenario-panels`.
+ * and `gd-game-scenario-panels`; a draft's game adds `gd-game-author` (the authoring panel), the page leaving it the room
+ * at the window's right (`--gd-page-right` on the document element).
  */
 @Component({
   selector: 'gemp-game',
@@ -89,6 +92,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     PhoneGameComponent,
     ScenarioLayerComponent,
     ScenarioPanelsComponent,
+    AuthoringPanelComponent,
     NotifierDialogComponent,
   ],
   host: {
@@ -198,6 +202,10 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-scenario />
     }
     <gd-game-scenario-panels />
+    @if (!phone() && authoring.active()) {
+      <!-- A draft's game: the authoring panel, docked at the right (in a test, floating) -->
+      <gd-game-author />
+    }
     @if (!phone()) {
       <!-- (a scripted game's bubbles point at the card information too: it is never modal there) -->
       <gd-card-info gdCardHints [plain]="scenario.playing()" />
@@ -216,6 +224,8 @@ export class GamePageComponent {
   protected readonly themePicker = inject(GAME_THEME_PICKER);
   /** A scripted game (a scenario), if this is one: its messages, and the answers its steps take. */
   protected readonly scenario = inject(ScenarioGuide);
+  /** A draft's game (the scenario says its player is writing it, or testing it): the authoring panel. */
+  protected readonly authoring = inject(Authoring);
   private readonly themes = inject(ThemeService);
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
   protected readonly phone = inject(CompactLayout).gameActive;

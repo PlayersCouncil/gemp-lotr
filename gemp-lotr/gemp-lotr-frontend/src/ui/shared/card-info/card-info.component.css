@@ -6,7 +6,11 @@
  */
 .gd-card-info {
   line-height: var(--theme-metrics-widget-line);
-  --long-exact: min(calc(var(--gd-card-info-zoom, 0.5) * 1039px), calc(100vh - 75px), calc(100vw - 425px));
+  --long-exact: min(
+    calc(var(--gd-card-info-zoom, 0.5) * 1039px),
+    calc(100vh - 75px),
+    calc(100vw - var(--gd-page-right, 0px) - 425px)
+  );
   --long: round(down, var(--long-exact), 1px);
   --short: round(down, calc(var(--long-exact) * 745 / 1039), 1px);
   --card-width: var(--short);
@@ -21,7 +25,8 @@
   /* Above everything else on the page: when it isn't modal (ThemeBehaviour) */
   z-index: 20000;
   /* jQuery UI centres by the whole-pixel outer size, and keeps the title bar on the screen */
-  left: round(calc((100vw - round(calc(var(--info-width) + 0.4em + 2px), 1px)) / 2), 1px);
+  /* (in what the page leaves of the window: see page-room.ts) */
+  left: round(calc((100vw - var(--gd-page-right, 0px) - round(calc(var(--info-width) + 0.4em + 2px), 1px)) / 2), 1px);
   top: max(0px, round(calc((100vh - round(calc(var(--info-height) + 0.4em + 2px), 1px)) / 2), 1px));
   width: var(--info-width);
   height: var(--info-height);
