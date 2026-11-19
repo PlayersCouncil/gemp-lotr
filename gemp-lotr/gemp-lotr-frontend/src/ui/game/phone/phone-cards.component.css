@@ -216,6 +216,11 @@
   padding: 4px 0;
 }
 
+/* A touch shows at once: a card pressed dims a moment, before the server answers (the layout review, 2026-11-19) */
+.gd-card:active {
+  opacity: 0.82;
+}
+
 /* A card that isn't active this turn: dimmed, in a dark frame */
 .gd-card[data-inactive] {
   --gd-card-image-filter: var(--theme-game-inactive-filter);
@@ -289,6 +294,26 @@
 :host-context(.gd-phone-pair) .gd-phone-cards__scroll {
   overflow: visible;
   padding: 2px;
+}
+
+/*
+ * Offered cards in the hand's place, as the player chose (Settings › Display): wrapped into rows that fill its width,
+ * scrolled down, a row at a time (the owner, 2026-11-19). The cards keep the hand's size: dragging it up enlarges them
+ */
+:host-context(gd-phone-hand[data-scroll='down']) {
+  flex: 1;
+  min-height: 0;
+}
+
+:host-context(gd-phone-hand[data-scroll='down']) .gd-phone-cards__scroll {
+  height: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  overscroll-behavior-y: contain;
 }
 
 /* The hand held sideways: its cards wrap into rows, scrolled up and down in the hand's panel */

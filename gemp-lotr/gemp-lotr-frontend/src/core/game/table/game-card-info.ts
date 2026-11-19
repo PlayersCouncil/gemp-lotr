@@ -22,7 +22,7 @@ export class GameCardInfo {
   private readonly gameViews = inject(GameCardViews);
   private readonly views = inject(CardViews);
   /** The phone layout shows a card's picture only: nothing to ask the server for. */
-  private readonly compact = inject(CompactLayout).active;
+  private readonly compact = inject(CompactLayout).gameActive;
   /** Until the game has come after a reload, the card kept is still to be shown again. */
   private restored = false;
 

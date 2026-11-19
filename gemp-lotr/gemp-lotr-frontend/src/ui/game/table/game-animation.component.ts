@@ -63,7 +63,7 @@ export class GameAnimationComponent {
   private readonly document = inject(DOCUMENT);
   private readonly layer = viewChild.required<ElementRef<HTMLElement>>('layer');
   /** The phone layout: cards put into play are shown over everything rather than moved in their row. */
-  private readonly phone = inject(CompactLayout).active;
+  private readonly phone = inject(CompactLayout).gameActive;
 
   /** The cards the current animation draws by itself. */
   protected readonly shown = computed<Shown[]>(() => {

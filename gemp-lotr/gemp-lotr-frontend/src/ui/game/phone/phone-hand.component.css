@@ -89,7 +89,7 @@
   --gd-phone-card: var(--gd-phone-hand-card, 120px);
 }
 
-/* The grip: only held sideways, where the hand is a panel that slides up and down */
+/* The grip: only held sideways, where the hand fills the panel on the right: dragged down it hides the hand */
 .gd-phone-hand__grip {
   display: none;
 }
@@ -115,7 +115,34 @@
   background: var(--theme-game-phone-dim);
 }
 
-/* Sideways, the cards keep the table's size and wrap into rows that scroll up and down: a higher hand shows more */
+/*
+ * Sideways, the cards wrap into rows that fill the panel and scroll down, one size (the card size setting), but never
+ * taller than the space left under the decision, so a whole row always shows (the owner's phone, 2026-11-19: a long
+ * question left only the cards' tops). The hand is the size container its cards measure.
+ */
+:host-context([data-device='sideways']) {
+  container-type: size;
+}
+
 :host-context([data-device='sideways']) > gd-phone-cards {
-  --gd-phone-card: var(--gd-phone-table-card, 80px);
+  --gd-phone-card: clamp(48px, calc(100cqh - var(--gd-phone-hand-chrome, 60px)), var(--gd-phone-hand-card, 112px));
+}
+
+/*
+ * A low screen held sideways (a phone under its browser's bars): no grip (the decision drags the hand away), a slim
+ * title line, so the cards keep most of the little height there is
+ */
+@media (max-height: 420px) {
+  :host-context([data-device='sideways']) {
+    --gd-phone-hand-chrome: 34px;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-hand__grip {
+    display: none;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-hand__head {
+    min-height: 22px;
+    padding-top: 2px;
+  }
 }

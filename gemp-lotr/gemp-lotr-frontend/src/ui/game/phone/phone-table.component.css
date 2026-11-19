@@ -4,6 +4,9 @@
   position: relative;
   display: block;
   min-height: 0;
+  /* A faint wood grain under the rows (the layout review, 2026-11-19), scrolling with them */
+  background: var(--theme-game-phone-table-grain);
+  background-attachment: local;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -18,12 +21,39 @@
   padding: 6px 0 4px;
 }
 
-/* Between rows: a fine gold line with curled ends (the owner's pick, 2026-11-17) */
+/*
+ * An upright tablet: two columns, every row across both, except a player's two short rows, side by side (data-half;
+ * the layout review, 2026-11-19)
+ */
+:host-context([data-device='tablet']) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+}
+
+:host-context([data-device='tablet']) .gd-phone-zone {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+:host-context([data-device='tablet']) .gd-phone-zone[data-half] {
+  grid-column: auto;
+}
+
+/* Between rows: a quiet hairline (the layout review, 2026-11-19) */
 .gd-phone-zone + .gd-phone-zone::before {
   content: '';
   display: block;
   height: 10px;
-  margin: -6px 10px 2px;
+  margin: -6px 12px 2px;
+  background: linear-gradient(var(--theme-game-phone-rule-quiet), var(--theme-game-phone-rule-quiet)) center / 100% 1px
+    no-repeat;
+}
+
+/* Beside the minions and the fights, where the game happens: the fine gold line with curled ends (2026-11-17) */
+.gd-phone-zone + .gd-phone-zone:is([data-side='minions'], [data-side='fight'])::before,
+.gd-phone-zone:is([data-side='minions'], [data-side='fight']) + .gd-phone-zone::before {
+  margin-inline: 10px;
   background:
     var(--theme-game-phone-curl-left-small) left center no-repeat,
     var(--theme-game-phone-curl-right-small) right center no-repeat,
@@ -210,10 +240,10 @@
 }
 
 /*
- * The site where the player looking stands: as big as a card in the rows, lying down (the owner, 2026-11-18); the
- * others stay small on either side, and the road scrolls
+ * The site where the game is happening (the turn's player stands there): as big as a card in the rows, lying down (the
+ * owner, 2026-11-18, 2026-11-19); the others stay small on either side, and the road scrolls
  */
-.gd-phone-site[data-own] > .gd-card {
+.gd-phone-site[data-big] > .gd-card {
   --gd-card-height: var(--gd-phone-card, 100px);
 }
 
@@ -300,7 +330,7 @@
 
 /* Where each player stands: their number on a heraldic shield, as in their chip */
 /* A small site has no room for both on its left: who stands there on its right */
-.gd-phone-site:not([data-own]) > .gd-phone-site__markers {
+.gd-phone-site:not([data-big]) > .gd-phone-site__markers {
   left: auto;
   right: 3px;
 }
@@ -386,7 +416,10 @@
   flex-direction: column-reverse;
 }
 
-/* The strengths and "vs" under the middle of a card */
+/*
+ * The strengths and "vs" under the middle of a card, each strength next to its side (the owner, 2026-11-19: one line
+ * between the sides felt less natural)
+ */
 .gd-phone-pair > .gd-phone-strength,
 .gd-phone-pair > .gd-phone-pair__vs {
   align-self: flex-start;
