@@ -86,7 +86,7 @@ public class Card_V3_050_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int twilightBefore = scn.GetTwilight();
 
@@ -116,7 +116,7 @@ public class Card_V3_050_Tests
 		assertEquals(3, scn.GetKeywordCount(initiate, Keyword.AMBUSH));
 
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(whisper);
 		scn.ShadowChoose("Remove");
 
@@ -143,7 +143,7 @@ public class Card_V3_050_Tests
 		assertEquals(3, scn.GetKeywordCount(initiate, Keyword.AMBUSH));
 
 		scn.SetTwilight(25);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Play Whisper first
 		scn.ShadowPlayCard(whisper);
@@ -188,7 +188,7 @@ public class Card_V3_050_Tests
 		assertFalse(scn.HasKeyword(orc, Keyword.AMBUSH));
 
 		scn.SetTwilight(15);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(whisper);
 		scn.ShadowChoose("Remove");
 

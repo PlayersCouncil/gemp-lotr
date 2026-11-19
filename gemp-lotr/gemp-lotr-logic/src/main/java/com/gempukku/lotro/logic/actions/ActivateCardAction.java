@@ -1,6 +1,7 @@
 package com.gempukku.lotro.logic.actions;
 
 import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.GameUtils;
@@ -20,6 +21,9 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
 
     protected boolean _prevented;
     protected Zone _originalZone;
+    // Whether the card was in a support area when its ability was offered: lying in one, or borne by a card that
+    // is.  Read now, as the zone is, because paying the costs may move the card.
+    protected boolean _originallyInSupportArea;
 
     public ActivateCardAction(PhysicalCard physicalCard, String performingPlayer) {
         _physicalCard = physicalCard;
@@ -27,6 +31,7 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
         setText("Use " + GameUtils.getFullName(_physicalCard));
         _message = GameUtils.getCardLink(_physicalCard) + " is used";
         _originalZone = physicalCard.getZone();
+        _originallyInSupportArea = Filters.isInSupportArea(physicalCard);
     }
 
     public String getPerformingPlayer() {
@@ -84,5 +89,6 @@ public class ActivateCardAction extends AbstractCostToEffectAction {
 
     protected void generateCardEffect() {
         _activateCardEffect = new ActivateCardEffect(_physicalCard, _player, getActionTimeword(), _originalZone);
+        _activateCardEffect.getActivateCardResult().setActivatedInSupportArea(_originallyInSupportArea);
     }
 }

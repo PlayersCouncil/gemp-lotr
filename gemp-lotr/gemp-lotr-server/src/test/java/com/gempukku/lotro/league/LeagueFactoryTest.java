@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.db.LeagueDAO;
@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 /**
  * Exercises {@link LeagueFactory}: defaults, validation for each league type, instantiation and persistence.
  */
-public class LeagueFactoryTest extends AbstractAtTest {
+public class LeagueFactoryTest extends LoadedLibraries {
     private static final ZonedDateTime START = ZonedDateTime.of(2026, 3, 1, 0, 0, 0, 0, DateUtils.UTC);
 
     private LeagueDAO _leagueDao;

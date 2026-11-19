@@ -12,6 +12,7 @@ import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.hall.GameTimer;
+import com.gempukku.lotro.logic.GameSeed;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -222,19 +223,21 @@ public class LotroGameMediator {
 
                 sb.append("<b>Affecting card:</b>");
                 Collection<Modifier> modifiers = _lotroGame.getModifiersQuerying().getModifiersAffecting(_lotroGame, card);
+                List<String> modifierLines = new ArrayList<>();
                 for (Modifier modifier : modifiers) {
                     PhysicalCard source = modifier.getSource();
                     if (source != null) {
-                        sb.append("<br><b>")
-                                .append(GameUtils.getCardLink(source))
-                                .append(":</b> ")
-                                .append(modifier.getText(_lotroGame, card));
+                        modifierLines.add("<br><b>" + GameUtils.getCardLink(source) + ":</b> "
+                                + modifier.getText(_lotroGame, card));
                     }
                     else {
-                        sb.append("<br><b><i>System</i>:</b> ")
-                                .append(modifier.getText(_lotroGame, card));
+                        modifierLines.add("<br><b><i>System</i>:</b> " + modifier.getText(_lotroGame, card));
                     }
                 }
+                // Seeded test servers: the same game shows the same list, whatever the modifiers' hash order
+                if (GameSeed.isSeeded())
+                    Collections.sort(modifierLines);
+                modifierLines.forEach(sb::append);
                 if (modifiers.size() == 0) {
                     sb.append("<br><i>nothing</i>");
                 }
@@ -244,7 +247,7 @@ public class LotroGameMediator {
                             .append(card.getOwner());
                 }
 
-                Map<Token, Integer> map = _lotroGame.getGameState().getTokens(card);
+                Map<Token, Integer> map = _lotroGame.getGameState().getTokensHeld(card);
                 if (map != null && map.size() > 0) {
                     sb.append("<br><b>Tokens:</b>");
                     for (Map.Entry<Token, Integer> tokenIntegerEntry : map.entrySet()) {
@@ -272,7 +275,11 @@ public class LotroGameMediator {
                 sb.append("<br><br><b>Effective stats:</b>");
                 try {
                     PhysicalCard target = card.getAttachedTo();
-                    int twilightCost = _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
+                    // A card in play costs the number printed on it (CR 4.2 "twilight cost"), and a site there
+                    // shows its Shadow number as it stands; a card anywhere else shows what it would cost to play.
+                    int twilightCost = card.getZone() != null && card.getZone().isInPlay()
+                            ? _lotroGame.getModifiersQuerying().getCurrentTwilightCost(_lotroGame, card)
+                            : _lotroGame.getModifiersQuerying().getTwilightCostToPlay(_lotroGame, card, target, 0, false);
                     sb.append("<br><b>Twilight cost:</b> ")
                             .append(twilightCost);
                 } catch (UnsupportedOperationException ignored) {
@@ -442,6 +449,7 @@ public class LotroGameMediator {
                             try {
                                 _userFeedback.participantDecided(playerName);
                                 awaitingDecision.decisionMade(answer);
+                                _userFeedback.decisionAccepted(playerName, awaitingDecision, answer);
 
                                 // Decision successfully made, add the time to user clock
                                 addTimeSpentOnDecisionToUserClock(playerName);
@@ -494,6 +502,8 @@ public class LotroGameMediator {
                         if (!accepted.equals(answer))
                             LOG.warn("Bot " + botName + " game=" + _gameId + " decision=\"" + awaitingDecision.getText()
                                     + "\": answer \"" + answer + "\" was rejected, used fallback \"" + accepted + "\"");
+
+                        _userFeedback.decisionAccepted(botName, awaitingDecision, accepted);
 
                         // Decision successfully made, add the time to user clock
                         addTimeSpentOnDecisionToUserClock(botName);
@@ -614,7 +624,9 @@ public class LotroGameMediator {
         if (!player.hasType(Player.Type.ADMIN) && !_allowSpectators && !_playersPlaying.contains(playerName))
             throw new PrivateInformationException();
 
-        _readLock.lock();
+        // The write lock: this changes the channel counter, the channels and the game's listeners, so two players
+        // joining at the same moment must not run it together (a ConcurrentModificationException in GameState did)
+        _writeLock.lock();
         try {
             int number = _channelNextIndex;
             _channelNextIndex++;
@@ -641,7 +653,7 @@ public class LotroGameMediator {
 
             visitor.visitClock(secondsLeft);
         } finally {
-            _readLock.unlock();
+            _writeLock.unlock();
         }
     }
 

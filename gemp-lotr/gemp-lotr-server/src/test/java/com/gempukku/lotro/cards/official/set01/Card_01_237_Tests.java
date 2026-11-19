@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_01_237_Tests
@@ -17,8 +18,18 @@ public class Card_01_237_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_237");
-					// put other cards in here as needed for the test case
+					put("witchking", "1_237");
+					// Ulaire Lemenya, Lieutenant of Morgul: a [wraith] Nazgul, cost 4, site 3, strength 9; her text
+					// reaches only companions and allies bearing a [wraith] condition
+					put("lemenya", "1_232");
+					// Ulaire Attea, Khamul of the East: a [raider] Nazgul, cost 6, site 3, strength 12; his text
+					// wants 3 burdens
+					put("attea", "103_61");
+					// Morgul Creeper and Morgul Hound: [wraith] Orcs, no Nazgul; their texts want burdens or wounds
+					// on the Ring-bearer
+					put("creeper", "8_75");
+					put("hound", "7_192");
+					put("runner", "1_178");     // Goblin Runner: a [moria] Orc; its (2) only when played
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +57,7 @@ public class Card_01_237_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("witchking");
 
 		assertEquals("The Witch-king", card.getBlueprint().getTitle());
 		assertEquals("Lord of Angmar", card.getBlueprint().getSubtitle());
@@ -62,18 +73,40 @@ public class Card_01_237_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void TheWitchkingTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthPlus2ForEachOtherNazgulPlayedAndNothingForOtherMinions() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var witchking = scn.GetShadowCard("witchking");
+		var lemenya = scn.GetShadowCard("lemenya");
+		var attea = scn.GetShadowCard("attea");
+		var creeper = scn.GetShadowCard("creeper");
+		var hound = scn.GetShadowCard("hound");
+		var runner = scn.GetShadowCard("runner");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetShadowHand(lemenya, attea);
+		scn.FreepsPass();
+		scn.MoveMinionsToTable(witchking, creeper, hound, runner);
+		// Lemenya 4 + 2 roaming, Attea 6 + 2 roaming at site 2
+		scn.SetTwilight(20);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		assertEquals(8, scn.GetTwilight());
+		// Three other minions, two of them [wraith], and two Nazgul in hand: none of them counts.
+		assertInZone(Zone.HAND, lemenya, attea);
+		assertEquals(14, scn.GetStrength(witchking));
+
+		scn.ShadowPlayCard(lemenya);
+		assertEquals(16, scn.GetStrength(witchking));
+		assertEquals(9, scn.GetStrength(lemenya));
+
+		// A Nazgul of another culture counts as well.  With both: 18.  Himself counted would read 20, [wraith] Nazgul
+		// only 16, every other [wraith] minion 20, every other minion 22, +1 for each 16.
+		scn.ShadowPlayCard(attea);
+		assertEquals(18, scn.GetStrength(witchking));
+		assertEquals(9, scn.GetStrength(lemenya));
+		assertEquals(12, scn.GetStrength(attea));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

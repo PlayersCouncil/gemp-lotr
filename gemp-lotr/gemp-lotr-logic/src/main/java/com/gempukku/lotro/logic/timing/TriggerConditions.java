@@ -177,6 +177,13 @@ public class TriggerConditions {
         return false;
     }
 
+    /**
+     * Whether a wound by a source the filter accepts killed the character it was placed on.  The character is either
+     * gone already (a dead pile for a Free Peoples character, out of play for a minion: an optional trigger or a
+     * response is asked after the required triggers of the batch, the rule's death among them), or still in play
+     * with no vitality left, on his way to the death the rule's required trigger in the same batch will carry out
+     * (a required trigger is gathered at the start of the batch, before anyone is killed).
+     */
     public static boolean forEachMortallyWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
             var woundResult = (WoundResult) effectResult;
@@ -187,9 +194,15 @@ public class TriggerConditions {
                     (
                             (Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) && wounded.getZone() == Zone.DEAD)
                                     || (Filters.accepts(game, wounded, CardType.MINION) && wounded.getZone() != Zone.SHADOW_CHARACTERS)
+                                    || isInPlayWithNoVitalityLeft(game, wounded)
                     );
         }
         return false;
+    }
+
+    private static boolean isInPlayWithNoVitalityLeft(LotroGame game, PhysicalCard character) {
+        return character.getZone() != null && character.getZone().isInPlay()
+                && game.getModifiersQuerying().getVitality(game, character) <= 0;
     }
 
     public static boolean forEachWounded(LotroGame game, EffectResult effectResult, Filterable... filters) {
@@ -358,7 +371,8 @@ public class TriggerConditions {
      * to split attention here between FOR_EACH_KILLED (for overwhelms and direct kill effects) and FOR_EACH_WOUNDED (for
      * mortal wounds and direct vitality subtraction).  To avoid triggering twice when mortally wounded, we abort early
      * if we detect the killer information has not been provided at all (as it will be when fired by a zero-vitality
-     * check).
+     * check).  The killers of a skirmish's losers are its winners, every minion in it where the Shadow side wins:
+     * the wound for losing names them all as its sources, and so does the kill of an overwhelm.
      */
     public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, boolean inSkirmish, KillEffect.Cause cause, Filterable killedBy, Filterable... killed) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {

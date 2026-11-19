@@ -1,615 +1,1125 @@
 ---
 name: test-generation
 description: >
-  Guide for designing and writing unit tests for Gemp-LotR HJSON card definitions using
-  VirtualTableScenario. Use this skill when creating test files for new or modified cards,
-  designing test scenarios, choosing test helper cards, or deciding what aspects of a card
-  need test coverage. Trigger when: the user asks to write tests for a card, asks what needs
-  testing, asks about test design patterns, or is implementing a Card_V*_Tests file.
-  Also trigger when reviewing or improving existing card tests.
+  The Card Test Standard for Gemp-LotR: what a card's unit tests must cover and how the test file is laid out, so
+  that every card is tested the same way and the tests can be checked against the card's English text and the
+  rules. Use this skill when writing, reviewing or auditing any Card_*_Tests file, when deciding what a card needs
+  tested, when a test disagrees with the game, or when converting old tests. Use the gemp-testing skill alongside
+  it for how to drive the rig.
 ---
 
-# Generating Unit Tests for HJSON Cards
+# The Card Test Standard
 
-How to design and write tests for a card's HJSON definition. Bridges the VTS API with the card's HJSON structure.
+## What a card's tests are for
 
-For VTS API method signatures, see the `gemp-testing` skill. For HJSON field details, see the `hjson-reference` skill. For game rules context, see the `game-mechanics` skill.
+A card's tests say what the card does, in a form the game can be held to. They are worked out from **the card's
+English text and the rules**, and then the game is run against them. The HJSON definition is the thing under test,
+so it is never where an expectation comes from: a test that was written by reading the `effects` block proves only
+that the definition does what the definition says.
 
----
+That makes a disagreement between a test and the game a finding, not a broken test. When the game does something
+the text does not say, the test keeps saying what the text says, and the disagreement is recorded and handed up
+(see "When something is in the way").
 
-## The Testing Mindset
+### Where an expectation may come from, in order
 
-A card's HJSON defines *what* should happen. The test verifies *that* it happens — and that it *doesn't* happen when it shouldn't. Every effect, filter, trigger, and requirement is a claim that needs evidence.
+1. **Ketura's rulings**, recorded in `card-test-campaign/references/rulings-log.md`.
+2. **The rules.** Comprehensive Rules 4.2 is Decipher's last and holds the individual card rulings (Section
+   Three) and the glossary. The Comprehensive Rules 5.0 excerpts are the Players' Council's and cover what the
+   PC added or changed (hinder, restore, relentless, items, multi-dot uniqueness, when the game ends); where the
+   two differ, 5.0 is in force. Look things up with `card-test-campaign/scripts/rules.py`, which searches both;
+   do not rely on remembering either document.
+3. **The card's text**, as the generator sheets have it: the reviewed spreadsheet for a Decipher card, the V-set
+   sheets and the master errata sheet for a PC card, matched to the definition by revision number.
+   `packet.py <id> --blind` prints the sheet row and the definition's own printed fields and game text, and
+   nothing of how the card is implemented.
 
-Before writing any test code: **read the card's HJSON definition**. Not just the game text — the actual HJSON. Inspect filters, triggers, requirements, selectors. The HJSON tells you exactly what needs testing.
+What you remember about the game is not on the list. Where the text and rules leave a real doubt about what
+should happen, that is a question for Ketura, and asking is always better than guessing: obscure rulings are the
+commonest reason a correct implementation gets reported as a bug.
 
----
+**When the sheet and the definition disagree.** For a Decipher card the sheet is the reviewed source, and a
+difference is a finding unless a ruling accounts for it (check `packet.py`'s rulings section first: a reprint
+ruled to keep an earlier card's signet looks exactly like a wrong signet). For a PC card the master errata sheet
+is only about 95% accurate, because some of its rows are errata that were proposed and never released: write the
+tests to the definition's own game text, and report the difference as a flag, not as an error. Where what differs
+is a printed field and the definition looks to be the slip (a title's capitals, 69_24), the stats test still
+asserts the definition's value and the difference is a finding with no test parked on it: the lander who corrects
+the definition changes the stats test's line and its header with it. A keyword the card prints and the definition lacks is
+not such a field: it plays (River on Lake-Town 30_63, F-0752), so its own test asserts it and is parked on the finding. Before flagging,
+look at which sheet row the packet matched and at the rulings log's "Revisions" entry: a V-set sheet row that is
+simply an earlier revision, where an errata row matches the definition, is no discrepancy. `Sources:` then cites
+the errata row, and a revision number that does not line up is F-0032, already known.
 
-## What Needs Testing
+**Deliberate departures.** A few things the game does are knowingly not what the text or rules say, for the
+sake of how it plays: Goblin Runner adds its (2) without asking, separate instances of ambush are offered as
+one, an X of zero that would do nothing is not offered, and a card that plays something "from your draw deck or
+discard pile" is not offered when neither pile has anything it could play. The rulings log lists them. The "draw deck or discard pile" one holds, outside the Hobbit sets, only for the
+eight `mustExist: true` definitions Q-0019 names. In the Hobbit sets (30 to 33) it holds for every play from the
+draw deck (Q-0418: B, Q-0419: B): a Hobbit-set draw-deck play without `mustExist: true` is a finding (F-0799;
+shapes.md, "A Hobbit-set play from the draw deck ALONE is withheld"). Something of the same kind that is not on the list is a question, not a finding.
 
-For every card, decompose its HJSON `effects` array. Each effect entry generates one or more test methods.
+## The file
 
-### Per-Effect Checklist
-
-| HJSON Construct | What to Test |
-|-----------------|-------------|
-| Filter (e.g., `culture(gondor),companion`) | Valid targets pass, invalid targets rejected |
-| Selector (`choose` vs `all`) | Correct number of targets affected |
-| Requirement (`requires: [canSpot...]`) | Ability available when met, unavailable when not |
-| Cost (`cost: [exert...]`) | Cost actually paid (wound appears, card discarded, etc.) |
-| Effect (`effect: [wound...]`) | Effect actually applied to correct target |
-| Trigger (`trigger: {type: played}`) | Fires on correct event, doesn't fire on wrong event |
-| Value (`amount: {type: forEachYouCanSpot}`) | Scales correctly with board state |
-| Duration (`until: endOfTurn`) | Effect persists through phase, expires at boundary |
-| Limit (`limitPerPhase: 1`) | Works once, blocked on second attempt |
-| `optional: true/false` | Optional triggers offer choice; mandatory ones don't |
-
-### Stats Test (Always Present)
-
-Every card test file starts with a `StatsAreCorrect` test that verifies the blueprint:
+One class per card, in the folder and under the name it already has. The class has one or more
+`Get...Scenario()` methods, a stats test, and behaviour tests. Nothing else: no base class, no helper methods, no
+fields, and none of the campaign's bookkeeping. What a reader finds is test names that say what happens, the
+card's printed text in the stats test's header, and comments where a number or a choice of helper card needs
+explaining.
+A method that only returns a site or card map for several scenarios to share is a helper method too (lint
+refuses it): write the map into each `Get...Scenario()`.
 
 ```java
-@Test
-public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-    var scn = GetScenario();
-    var card = scn.GetFreepsCard("card");
+public class Card_01_040_Tests
+{
+	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("elrond", "1_40");
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk
+					put("silinde", "1_60");     // Silinde, Elf of Mirkwood: Elf ally, home site 3
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally, home site 6
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
 
-    assertEquals("Card Title", card.getBlueprint().getTitle());
-    assertEquals("Subtitle", card.getBlueprint().getSubtitle());
-    assertTrue(card.getBlueprint().isUnique());
-    assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-    assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
-    assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-    assertEquals(Race.MAN, card.getBlueprint().getRace());
-    assertEquals(4, card.getBlueprint().getTwilightCost());
-    assertEquals(8, card.getBlueprint().getStrength());
-    assertEquals(4, card.getBlueprint().getVitality());
-    assertEquals(6, card.getBlueprint().getResistance());
-    // keywords, signet, site number, itemclass as applicable
+	@Test
+	public void ElrondStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+		/**
+		 * Set: 1
+		 * Name: Elrond, Lord of Rivendell
+		 * ... every printed field, then the game text ...
+		 */
+		...
+	}
+
+	@Test
+	public void FellowshipActionExertsElrondToDrawACardUntilHeIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveAlliesToTable(elrond);
+
+		scn.StartGame();
+
+		assertEquals(0, scn.GetWoundsOn(elrond));
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertTrue(scn.FreepsActionAvailable(elrond));
+
+		scn.FreepsUseCardAction(elrond);
+		assertEquals(1, scn.GetWoundsOn(elrond));
+		assertEquals(1, scn.GetFreepsHandCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.FreepsUseCardAction(elrond);
+		scn.FreepsUseCardAction(elrond);
+		// Vitality 4 with 3 wounds: exhausted, so he can no longer exert.
+		assertEquals(3, scn.GetWoundsOn(elrond));
+		assertFalse(scn.FreepsActionAvailable(elrond));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
 }
 ```
 
-This test uses `VirtualTableScenario.FindCard()` or a constructed scenario — either works since it only reads the blueprint.
+The whole of this file is `cards/official/set01/Card_01_040_Tests.java`, and is the worked example of the standard.
 
----
+### The ledger
 
-## Test Design Principles
+The ledger is the card's text cut into clauses, each with a type and the checks it calls for, and under each
+clause the tests that claim those checks. It is working material: how an author plans a card, how a reviewer
+sees what was understood and what was tested, and what the conformance check holds the tests to. **It is not
+part of the test file.** It lives in a file of its own beside the campaign's other bookkeeping, at the path
+`packet.py <id>` prints (`<campaign state>/ledgers/<set>/<id>.txt`). Ketura does not want it in the finished
+tests: no ledger comment, and no clause tags above the tests.
 
-### 1. Pre-Check, Action, Post-Check
-
-Never just perform an action and assert the result. Assert the *before* state too. This documents intent and catches false positives.
-
-```java
-// BAD: Only checks result
-scn.FreepsUseCardAction(card);
-assertEquals(1, scn.GetWoundsOn(aragorn));
-
-// GOOD: Documents the full transition
-assertEquals(0, scn.GetWoundsOn(aragorn));    // pre-check
-scn.FreepsUseCardAction(card);                // action
-assertEquals(1, scn.GetWoundsOn(aragorn));    // post-check
-```
-
-If the action exerts, confirm 0 wounds before and 1 wound after. If it heals, wound the character first, confirm the wound, then heal, then confirm removal. The pre-check IS the documentation.
-
-### 2. Bookend with Phase Assertions
-
-After performing an action and all its knock-on effects, assert that the game has returned to the expected phase and is awaiting the correct player's input. This catches dangling decisions, unresolved triggers, and unexpected game state.
-
-```java
-scn.FreepsUseCardAction(card);
-scn.FreepsChooseCard(target);
-// ... resolve any sub-decisions ...
-assertTrue(scn.AwaitingFreepsManeuverPhaseActions());  // bookend
-```
-
-If you're in the skirmish phase, assert `AwaitingFreepsSkirmishPhaseActions()`. If the action should end the phase, assert the *next* phase. This is the most common source of test failures when a card has unexpected triggers or responses — the bookend catches them immediately.
-
-`AwaitingXYPhaseActions()` is not only for bookending after actions — it also serves as a "nothing happened" anchor. When testing that a trigger did NOT fire or an effect was NOT applied, assert the expected phase to confirm the game moved on without pausing for a decision:
-
-```java
-// Testing that a trigger does NOT fire (e.g., owner-gating blocks it)
-scn.FreepsPassCurrentPhaseAction();
-scn.ShadowPassCurrentPhaseAction();
-// If the trigger had fired, we'd be stuck on a wound choice — instead:
-assertTrue(scn.AwaitingFreepsRegroupPhaseActions());  // confirms nothing happened
-```
-
-### 3. Combine Positive and Negative Cases
-
-Don't write separate tests for "works on valid target" and "doesn't work on invalid target." Put both in the same scenario and verify both simultaneously.
-
-```java
-// Testing a filter that targets Dwarves
-var dwarf = scn.GetFreepsCard("dwarf");    // valid
-var elf = scn.GetFreepsCard("elf");        // invalid
-scn.MoveCompanionsToTable(dwarf, elf);
-
-scn.FreepsUseCardAction(card);
-assertTrue(scn.FreepsHasCardChoiceAvailable(dwarf));
-assertFalse(scn.FreepsHasCardChoiceAvailable(elf));
-```
-
-One test, two assertions, complete filter coverage. If the filter targets a specific class (e.g., companions), include an alternate class (e.g., ally or minion) to confirm exclusion. If it targets a race (e.g., Dwarves), include a different race (e.g., Elves).
-
-### 4. N+1 Targets for Choice Validation
-
-Gemp auto-resolves choices when there are exactly N valid targets for an N-target selection. This means you can't verify filter specificity if there's only one valid target — the engine skips the choice entirely.
-
-**Always provide at least one more valid target than the minimum**, so the choice is presented to the player and you can inspect it with `HasCardChoiceAvailable` / `HasCardChoiceNotAvailable`.
-
-```java
-// BAD: Testing "choose a Dwarf" with only 1 Dwarf in play
-var gimli = scn.GetFreepsCard("gimli");
-scn.MoveCompanionsToTable(gimli);
-scn.FreepsUseCardAction(card);
-// Gimli is auto-chosen — no chance to verify filter
-
-// GOOD: Two Dwarves → choice is presented, Elf proves filter works
-var gimli = scn.GetFreepsCard("gimli");
-var dwarfGuard = scn.GetFreepsCard("guard");
-var legolas = scn.GetFreepsCard("legolas");  // Elf — should be excluded
-scn.MoveCompanionsToTable(gimli, dwarfGuard, legolas);
-
-scn.FreepsUseCardAction(card);
-assertTrue(scn.FreepsHasCardChoiceAvailable(gimli));      // valid
-assertTrue(scn.FreepsHasCardChoiceAvailable(dwarfGuard)); // valid
-assertFalse(scn.FreepsHasCardChoiceAvailable(legolas));   // invalid — filter works
-scn.FreepsChooseCard(gimli);
-```
-
-This applies to ALL choice-based effects: wounds, heals, discards, plays, assigns. If your effect says "choose N cards matching filter," put N+1 valid cards and at least 1 invalid card in the scenario.
-
-### 4b. Effect Fizzle: Costs Gate, Effects Attempt
-
-For any action to be usable, requirements must be met and costs must be payable — but effects only need to be *attempted*. If there is no valid target for the effect, or only part of the effect can be accomplished, the effect "fizzles" but the action still resolves (costs are still paid).
-
-This means you **cannot** test "action unavailable because the effect has no valid target." The action is available as long as the cost is payable. Instead, test that the effect fizzles: activate the action, pay the cost, then assert that the game returns to phase actions with the effect unapplied.
-
-```java
-// Exert Arwen (Aragorn signet), but only Gimli (Gandalf signet) could be healed — fizzles
-scn.FreepsUseCardAction(mod);
-scn.FreepsChooseCard(arwen);
-
-// Effect fizzles — back to fellowship actions, cost paid but no heal
-assertTrue(scn.AwaitingFellowshipPhaseActions());
-assertEquals(1, scn.GetWoundsOn(arwen));  // cost was paid
-assertEquals(1, scn.GetWoundsOn(gimli));  // not healed — wrong signet
-```
-
-### 5. Progressive Act-Assert for Multi-Step Effects
-
-If a card triggers after several things happen, you don't need separate tests for each step. Write one test that progressively sets up and asserts at each stage, since each step's setup is congruent with the next step's precondition.
-
-```java
-// Card triggers "each time a companion takes a wound"
-// Test: first wound triggers, second wound triggers again
-assertEquals(0, scn.GetWoundsOn(companion));
-scn.ShadowUseCardAction(woundSource);
-scn.ShadowChooseCard(companion);
-assertEquals(1, scn.GetWoundsOn(companion));
-// assert trigger fired, resolve it...
-
-// Second wound — still triggers (no separate test needed)
-scn.ShadowUseCardAction(woundSource);
-scn.ShadowChooseCard(companion);
-assertEquals(2, scn.GetWoundsOn(companion));
-// assert trigger fired again...
-```
-
-Each further assertion builds on the state established by prior steps. This tests accumulation, idempotency, and repeated-fire behavior in a single method.
-
-### 6. Arrange (Cheat) vs Act (Legitimate)
-
-The Arrange-Act-Assert triad maps directly to VTS:
-- **Arrange** = cheating (`MoveCompanionsToTable`, `AttachCardsTo`, `AddWoundsToChar`, `SetTwilight`, etc.)
-- **Act** = legitimate game actions (`FreepsPlayCard`, `FreepsUseCardAction`, `SkipToPhase`, etc.)
-- **Assert** = queries and assertions
-
-**Never cheat when you want to test an action's impact.** If you're testing that an ability exerts a character, don't call `AddWoundsToChar` — use the ability and verify the wound appears. Cheating is for setting up preconditions only.
-
-Conversely, **always cheat for preconditions** rather than playing cards legitimately. If you need Aragorn on the table, don't play him from hand — cheat him to the table. Tests should only exercise the mechanic under test.
-
-```java
-// Arrange: cheat the setup
-scn.MoveCompanionsToTable(aragorn);
-scn.AddWoundsToChar(aragorn, 2);   // pre-wound for heal test
-scn.StartGame();
-
-// Pre-check: confirm arranged state
-assertEquals(2, scn.GetWoundsOn(aragorn));
-
-// Act: use the card legitimately
-scn.FreepsUseCardAction(healCard);
-
-// Assert: verify behavior
-assertEquals(1, scn.GetWoundsOn(aragorn));  // healed 1
-```
-
-### 7. Pass Actions for Non-Relevant Players
-
-The game engine alternates between players in most phases. If you're testing a Shadow card during the maneuver phase, Freeps gets to act first. You must pass for them:
-
-```java
-scn.SkipToPhase(Phase.MANEUVER);
-scn.FreepsPassCurrentPhaseAction();   // FP goes first in maneuver
-scn.ShadowUseCardAction(shadowCard);  // Now Shadow can act
-```
-
-Forgetting this is one of the most common test failures. The action procedure for alternating phases (Maneuver, Archery, Skirmish, Regroup) always starts with the Free Peoples player.
-
-### 8. Dismiss Revealed Cards Before Choosing
-
-When a card effect searches the draw deck (or reveals cards from any hidden zone), the player is first shown the full set of revealed cards. This reveal popup must be dismissed before the player can make a selection from those cards. Use `FreepsDismissRevealedCards()` or `ShadowDismissRevealedCards()` before calling `FreepsChooseCardBPFromSelection()` or similar.
-
-```java
-// Card searches the draw deck for a companion
-scn.FreepsUseCardAction(deckSearchCard);
-scn.FreepsDismissRevealedCards();                    // dismiss the reveal popup
-scn.FreepsChooseCardBPFromSelection(targetCard);     // now choose from the revealed cards
-```
-
-Forgetting the dismiss step will cause the test to fail because the game is waiting on the reveal acknowledgment, not the selection decision.
-
-### 9. Reference Existing Tests for Similar Cards
-
-Before writing tests from scratch, search for tests of cards with similar effects. If you're testing a "wound prevention response," look at how other wound-prevention cards are tested. The pattern may already be established.
+**A ledger lives only as long as the authoring.** It is written when a card's tests are written afresh, held to
+by the author, the reviewer and `lint.py <id> --ledger` until the tests are approved, and then let go: the
+approved tests are the record, and their names and comments are what a later reader has (Ketura, 2026-11-05).
+Ledgers are never committed, and nothing on a clean clone expects one: `lint.py` without `--ledger` applies only
+the rules about how a test is written to a card with no ledger. If a later question needs what a ledger held
+(why a test lays the board it does), derive the card's ledger again from its text and its tests.
 
 ```
-// Search for tests of similar mechanics
-Grep for: "aboutToTakeWound" or "preventWound" in test files
-Grep for: the specific effect type you're implementing
+LEDGER  1_40  Elrond, Lord of Rivendell
+Sources: sheet; neither rules document names this card for anything that bears on its tests
+
+C1 ToPlay     [+ - B]      To play, spot Gandalf or an Elf.
+     + - B  ->  CannotBePlayedUntilGandalfIsSpotted
+     + B    ->  CannotBePlayedUntilAnElfIsSpotted
+C2 Trigger    [+ F R]      At the start of each of your turns, heal every ally whose home is site 3.
+     + F  ->  StartOfTurnHealsEveryAllyWhoseHomeIsSite3AndNoOthers
+     R    ->  HealsAtTheStartOfItsOwnersTurnsAndNotTheOpponents
+     no -: the only turns that are not yours are ones on which this card is not active
+C3 Activated  [+ - C C-]   Fellowship: Exert Elrond to draw a card.
+     + - C C-  ->  FellowshipActionExertsElrondToDrawACardUntilHeIsExhausted
+
+Notes: Elrond is himself an ally whose home is site 3, so C2 heals him too.
 ```
 
----
+- **`C` clauses are the game text, word for word, in order.** Cut at sentences and line breaks; a conditional
+  effect in parentheses that is game text ("(and heal a companion if you can spot 3 rings)") may be cut off as an
+  `Effect` clause of its own, since it has checks of its own; cut off from an event, it owes its own `D` where its
+  effect names no duration, though the event's `D` reads the same phase (lint's `duration`; Axe-work 17_5's C2). A parenthesis inside a sentence stays in that
+  sentence's clause ("defender +1 (or defender +2 if you spot an Orc) until the regroup phase", 2_2): the
+  conformance check reads the clauses as the text in order. One that closes its sentence may be cut off or kept
+  whole: both conform (Mordor Fiend 60_91 cuts "(or (5) if this minion is roaming)" off, 10_91 keeps it). A sentence whose "and" joins two predicates of
+  different types ("This minion may not bear possessions and is discarded if not at a marsh") is cut at the
+  "and": left whole, a claim for either half satisfies the conformance check for both. The second clause's text
+  then starts with the "and" ("and cannot take wounds.", "and add 3 threats.": Númenor's Pride 7_45), as lint accepts. So is one whose "and"
+  joins two predicates of ONE type that are shown on different boards ("Saruman may not take wounds during the
+  archery phase and may not be assigned to a skirmish": two Restrictions, 53_68, 3_69); one condition with two
+  results ("is strength +3 and fierce", read together in every test) stays whole. A sentence that is a choice
+  between two branches ("Make an Uruk-hai strength +2, or spot 5 companions to make ...", 1_139) may be cut at
+  the comma before "or", the choice's `B` listed on the first; a "; or" is cut the same way (Pull of the Ring
+  18_133). The second clause takes `Effect` (1_139) or the first's type (`Activated`, 4_124); either way
+  it lists the first clause's `-` and claims its `-` tests again, the phase and cost being one, and it lists
+  and claims `+` as well (lint asks `+` of `Effect` and `Event` alike: No Finer Blade 33_21's second clause). Every word of the
+  game text is in exactly one `C` clause, keyword lines included; reminder text in brackets is left out (a
+  `<helper>(...)</helper>` span is such reminder text, and quoted in a clause it fails the conformance check). The
+  conformance check joins the `C` clauses and compares them with the definition's game text, markup taken out of
+  both: `<b>Regroup:</b>` and `Regroup:` are alike to it, and either may be written. A semicolon is
+  no sentence end: an ability's "...; this minion does not add to the minion archery total" stays in its clause
+  (Uruk Crossbowman 4_183; Q-0164).
+- **A card's play has no clause of its own** (Q-0279: B, engine pass 31). The printed cost, type and site number
+  are the stats test's, and what they do in a plain play is shown once, in `mechanics/costs/TwilightPoolTests` and
+  `WhereACardIsPlayedTests`: no test only plays a card. A card's play is tested where its own text bears on it,
+  by the test of that clause, which plays the card from hand by legal play and reads what it cost and where it
+  went: a bearer (`PlayOn`), a requirement or an extra cost to play (`ToPlay`, `ExtraCost`), a cost its text
+  changes or speaks of, toil, a text about when it may be played, a card that answers its own play or its being
+  in play (a standing discard of itself, shown by playing it while its condition holds: Deep Hatred 13_3; a "When you play" trigger, and as well an "each time you play a <kind>" on a card of that kind:
+  shapes.md, Red Book of Westmarch 2_113). lint's `plain-play` reads the definition and the text for these (`gen_play.py`'s reading, which is
+  cautious) and asks for a test that plays the card where it finds one and none does; where what it names is not
+  a clause of the card's own play (a text about ANOTHER card's play), the card keeps a test that plays it, which
+  claims a `P1 Play [+]` clause: the seven cards of `orchestrator/engine-pass-28/tools-files/plainplay-keep.tsv`
+  (Silinde 1_60, Uruviel 1_67, The Witch-king 52_85, Scouring of the Shire 68_112, Mantle of the White Wizard
+  103_3, Hailing from the Far South 103_52, Ominous Sky 103_97) and no others. Any other card named for such a text
+  (Dwarven Cooking Pot 33_5's "each time you play Bifur, Bofur or Bombur") has no `P1`: its own play from hand is
+  laid as a `-` of that trigger, a near miss of its filter (pitfalls, lint's `plain-play` warning; Sharku 5_58).
+- **No reading of a printed cost or bonus doing its ordinary work** (Q-0279: E2, engine pass 31). A test does
+  not read the pool across a card's play to show its printed cost paid, nor a bearer's strength, vitality or
+  resistance to show a borne card's printed bonus (or the bearer just before it comes or after it goes), where
+  nothing changes the one or the other: that is `mechanics/costs/TwilightPoolTests`' and `BorneItemsTests`'. It reads
+  them where the card's own text, or another card on the table, changes the cost, the pool, the bonus or where
+  the card goes, the nearest miss of that text included, and where something else moves the same number in the
+  same stretch (a move, another play, a wound). The landed tests were stripped to this by engine pass 31; a lone
+  test landed before it may still read the pool so, and lint does not flag it: take the reading out (3_6). A card
+  played from a pile by another card's effect is held there too (`TwilightPoolTests`,
+  `AMinionPlayedFromTheDiscardPileRemovesItsCostAndTheRoamingPenalty`): the pool after it is not read; one short
+  of it, where the play is a cost, is (1_196). So is a card played from hand as the cost of another card's ability (Grond
+  8_103's [sauron] minion): the pool after it is not read, one short of it is. A helper card's play, made only to meet a requirement, is held
+  too: the pool after it is not read (1_165, the troll's [moria] Orc). Where the card under test removes twilight
+  of its own for a play from a pile (Uruk Captain 2_46, Constantly Threatening 4_6), the pool after the play is
+  read, with the sum spelled out: that is its own text changing the pool.
+- **`R` clauses are everything that is not printed on the card**: a ruling that names it, an interaction from a
+  rules example, a rule that differs by format. Their text says where they come from. A rules example that names
+  the card is owed even where it hinders (Gwemegil 1_47 in CR 5.0 "hinder"): Q-0237 waives only boards it names none in.
+  It is owed too where a `mechanics/` class already lays it on this very card, and a glossary entry's own example
+  naming this card alone is typed `Rule` (`Ruling` is Section Three; 1_47's `Ruling` is not wrong): 3_35 in CR 4.2 "limit".
+  An example that quotes this card's text word for word without its title names it too (Old Toby 1_305 in CR 4.2
+  "when", as Merry 51_303 in "while").
+- A clause line is `ID Type [checks] text`. Long text continues on following lines, indented.
+- **Under each clause, one line per test that claims any of its checks**: `checks -> TestMethodName`. A test may
+  claim checks of several clauses and a check may be claimed by several tests; the checks on a claim line may
+  stand in any order. Every check a clause lists must be
+  claimed, and every behaviour test in the file must claim something. A test that claims nothing is either
+  missing from the ledger or testing nothing the card says. A test parked with `@Ignore` claims the checks it
+  would show if the reading it asserts is right; the conformance check warns where a parked test is a check's
+  only claimant, because that check is not being exercised.
+- `Dropped:` is for a card that had behaviour tests before: anything they asserted that the new tests do not,
+  and why, or `none`. A reviewer compares the old file with the new and should find nothing this line does not
+  account for. Name the kinds of card the old tests used and what stands in for each now (an archer who is not
+  unique, an item of the card's own culture). An old assertion on the game's own wording of a decision need not
+  be listed. A dropped assertion that belongs to the rules and not the card (the Rule of 4) is listed, so that a
+  mechanic test can pick it up.
+- `Sources:` says where the text came from and whether the rules name the card. `Findings:` lists any finding ids
+  (`F-0000`) or questions (`Q-0000`) the card is tied to. `Notes:` is for anything a reviewer should know, above
+  all why a check the wording seems to call for was left off. What was tried is said in words (what was run
+  and what it showed), never by the path of a scratch file. A twin's ledger made from the first card's keeps such a claim
+  only as "tried on <first id>", and only where the two definitions match line for line (4_129 from 1_110). Each may run onto following lines. Put `Sources:`
+  above the clauses and `Findings:`, `Dropped:` and `Notes:` below them.
 
-## Choosing Test Cards
+Something in the Notes that a later reader of the *test* would need (why a helper card was chosen, why a number
+is what it is) belongs in the test as an ordinary comment, in plain words, with no clause ids.
 
-The single most important test design decision is which helper cards to include. Bad choices inject unwanted side effects that pollute your test.
+### The checks
 
-### The Golden Rule
+Each check is one thing a test demonstrates. A clause lists the checks its wording calls for; each listed check is
+then claimed by a test.
 
-**Read the HJSON for every card you put in a test.** Don't assume a card is "simple" based on its name. Look for:
-- Keywords that affect game flow (Archer, Fierce, Damage, Enduring, Lurker)
-- Triggers that fire automatically (on play, on wound, on phase start)
-- Modifiers that alter stats or rules passively
-- Play requirements that constrain setup
+| Check | Shows that |
+|---|---|
+| `+` | With everything the text asks for in place, the thing happens. State is read before and after. |
+| `-` | In the *nearest* situation where the text says it should not happen, it does not: the requirement one card short, the event that almost matches, the phase next door. It has to be a situation in which the card is active, so that a mistake in the definition could make the test fail: a Free Peoples card doing nothing on the opponent's turn shows the rule "active", not the card. A site's phase ability is active only while the fellowship is there, so its phase next door is at that site: a Fellowship ability on a site 2 or later takes the maneuver phase of the turn the fellowship moves there (Fangorn Forest 4_332). |
+| `C` | Each cost is paid, read before and after. |
+| `C-` | With a cost that cannot be paid, the action is not offered. A cost is judged payable IN FULL before it begins, a repeated cost for every repetition (F-0425, Ketura: "if you're unable to pay the cost by default, you're not supposed to be able to perform the action at all"): a cost that can be paid once and not in full is a `C-` board too. A card discarding itself as its only cost has no `C-`: leave the `no C-:` line out (one written anyway draws lint's `waived` warning, which asks for it to be taken out). A cost of "a <kind>" that the card may pay with itself, being of that kind (Q-0353, shapes.md; Isengard Artisan 6_65), is not that case: it keeps its `no C-:` line, and lint's other `waived` warning ("with a reason given in the ledger") is expected there; nor has a choice of costs one of whose branches is that discard ("exert or discard this minion", 11_201: no `C-` and no `no C-:` line), though the other branch made unpayable is still a `B` board (11_201: exhausted, the discard paid with nothing asked). Where such an ability's effect plays a card from a discard pile, that play is itself a cost (Q-0062) and its board, nothing there that can be played, is the `C-` lint's `pile-cost` asks for (Mustering for Battle 7_244, Freely Across Our Land 13_127). The same holds for a card played from hand by such an ability (Beasts of Burden 15_97): the play's boards are its `C-`, and no `no C-:` line is written. A copy left in the pile that cannot be played because its unique title is already in play is such a board too, and withdraws the action (Frodo, Master of the Precious 5_111). |
+| `F` | Who or what can be chosen or affected is exactly who the wording says. Valid candidates: at least one more than is needed, differing from each other in everything the wording does *not* mention, all offered or affected. Invalid candidates: one for each thing the wording excludes, each failing *only* the thing it is there for, none offered or affected. What that asks for each shape of wording the campaign has met is set out under "The candidates of `F`, case by case", below this table: find the case of the wording at hand there (`lookup.py "<words>" --in standard`). A target after an ability's "to", or an event's target, also owes the board where nothing matches it: offered, played or paid for nothing (the `Activated` and `Event` rows; missed on 4_169, 4_259 and 4_183). So does a target after the "to" of an optional trigger with a cost ("you may exert him to discard a minion that has strength 7 or less": offered, the exertion paid, nothing discarded; 14_8). It is owed in the card's own file though a `mechanics/` class lays it on this very card (Gorgoroth Garrison 7_273 in StackingTests). Each such target owes its own: "assign a [dunland] Man to an unbound companion" owes a board with no [dunland] Man and one with no unbound companion (4_31). For a heal that board is nobody of the kind WOUNDED, since a heal's choice offers only wounded characters (3_107). A card named by its place ("discard the bottom card of your draw deck") is such a target: its board is that pile empty (Alfrid's Influence 33_24). On a Decipher card, a target the Ring-bearer always matches ("make the Free Peoples player wound a companion", 3_57) has no such board, since no hindered Ring-bearer is owed there (Q-0237): a line in Notes says so. That board keeps the effect's own count above 0 with nothing matching it (3_6: a card of cost 2 revealed and no [dwarven] card in the pile); a count of 0 or nothing to count is another board. |
+| `D` | The effect is still in force just before the boundary the text names and gone just after. "Just before" is in the phase that precedes the boundary in a full turn, with the thing the effect touches going on: for "until the regroup phase", during a skirmish that follows one already resolved, and then at the first regroup decision. An effect that holds a shorter-lived part inside it (a trigger lasting until regroup that limits something phase by phase) is read across two phases, or "one in all" and "one in each phase" cannot be told apart. For "until the end of the turn" the last reading is in the Shadow phase after a second move, not at the first regroup decision, which `until: end(regroup)` also passes (Rohirrim Road 7_332); for a move limit, a third move offered in the regroup phase after the second move serves as well, since `end(regroup)` lapses with the second move (Elendil 9_32). Where the definition writes the effect more than once (each branch of a choice), D is read after the boundary on each (Arwen's Fate 1_93). |
+| `L` | A limit holds: it works up to the limit and does nothing beyond it. Which reading shows it goes by the kind of limit (Ketura on Q-0093). A limit on uses ("limit once per turn", "limit once per phase", "limit N times") withholds the ability at its limit, cost or no cost: the test reads it not offered, with its cost still payable and something on the board the effect could still have acted on. A limit on what the effect gives ("(limit +3)", or a bare number of things added: "to add a threat (limit 1)") leaves an ability or optional trigger that has a cost on offer at its limit (Q-0041): the test takes it once more and reads the cost paid and everything else as it was, with something on the board the effect could still have acted on. With no cost, and for a required trigger, it is not offered or does not happen under either kind. Where a limit caps what an X buys ("discard X cards to make … strength +X (limit +3)"), X itself is not capped: a test shows it, with one use beyond the cap or by reading the choice's maximum. A cap inside an effect ("takes no more than 1 wound") is a limit too; one that renews (each phase, each turn) is shown renewing. A "(limit +N)" on a phase ability renews with each phase of that name: the next one shows it, the same turn's after a second move or the next turn's (a Fellowship ability's next fellowship phase is the player's next turn, turn 3: `SkipToSite(2)` from turn 1 reaches it, Card_12_045_Tests). A limit on uses "once per phase" is shown renewing the same way, in a second phase of that name in the same turn, which tells it from once per turn (Card_05_009_Tests). |
+| `O` | "May" asks, and declining leaves everything as it was. Listed when the text says "may". An optional trigger whose EFFECT is then a choice of "up to N" or "each may" asks twice, the offer and then a choice from 0 to N, and that is as Ketura wants it (F-0385: "click on the card to trigger it ... and then have the option to select 0-N, if one were to change one's mind"): the test reads the offer and the choice's minimum of 0, and nothing is filed. That does not reach a choice that is a COST, or a text that says "a" and not "up to" (rulings log, "What is offered and what is asked"). |
+| `S` | A value that depends on a count is right at two different counts, and at its cap if it has one (a cap only a full table reaches, such as 9 threats with nine companions, is still read there; only a cap past every reachable board goes to Notes: Plotting 7_67); an X only an always-payable cost bounds (twilight added) has none, and its maximum is read as `Integer.MAX_VALUE` (pitfalls, "A number with no upper bound"; Hobbit Appetite 1_294). Where the count is an X the player chooses, zero is one of the counts where the action still does something at zero (One Dwarf in Moria heals whatever X is). Not where X is a number of exertions, and not where X of zero would do nothing at all: such a use is deliberately not offered (rulings log, Q-0015 and Q-0034: on an ability or optional trigger with nothing else to pay; an event is offered whatever its X can do, and no test turns on its X of zero). A count the player does not choose (races spotted, cards stacked) owes no board at zero for that alone: its two counts may be any two the board can reach (One of You Must Do This 3_63), and the `-` is that it is not. A count after the "to" of an ability with a cost still owes it under the `Activated` row: offered, paid, nothing more (Faramir 12_47, "for each wound on the Ring-bearer"). An ability that pays another cost whatever X is (a pipeweed discarded, Gandalf's Pipe 1_74) is not such a use: where the game asks X from 0, the zero is read and taken (Treasured Pipe 103_119); the zero is owed by the text, not by what the game does: such an X may be 0, and a choice there that starts at 1 is a finding. So is "for each <thing> you spot" after the "to" of an ability with a cost (Q-0248: the player's own count): the board with none to spot is laid, the ability offered and its cost paid for nothing (Uruk Brood 1_145). Where X is a number of cards moved or tokens spent, and a board can arise on which what was paid and what the board lost are different numbers (a bearer who dies takes his other items with him), one test uses that board. |
+| `R` | "Each time" happens a second time, on the same subject where the wording allows: two wounds on one minion tell "for each wound" from "for each minion wounded", which two minions wounded once cannot. Where the subject is the card itself ("each time the Free Peoples player assigns this minion"), the same subject is that card again (a second assignment phase in one turn: pitfalls, "A second assignment or skirmish phase"); a second copy shows another subject, and is owed as well only where the text's own words call for it. "At the start of each <phase>" owes `R` though the phase comes once a turn: the owner's next such phase, on turn 3, with the board taken down before the first turn's skirmishes (94_19, 14_4). "At the start of the <phase>" with no "each", on a card in play, fires each time just the same and owes the same `R` (Dervorin 7_88). On a minion or a support-area card too: it stays in play when the fellowship moves again, so its `R` is the second such phase of the same turn (White Hand Berserker 17_121, dec-b17_121; Trail of Terror 12_76, dec-b12_72). |
+| `B` | Each alternative of an "or" or "choose one" is taken in some test. Where a board that could arise makes one alternative impossible to carry out in full, a test shows the other is then what happens: a player may only choose what can be fully performed; an empty draw deck makes a "draw a card" branch such a board (pitfalls.md; Q-0029's optional draw is no branch). A discard of a whole hand with no card in it is a discard of none and may be chosen (Q-0255: B, "discarding 0 cards is kosher"), and so may "choose an opponent who may ..." whatever he could then do (Q-0257: A): neither is a board where the other alternative is forced. An "X or Y" COST also owes one board where both can be paid, with the player read as asked which (both offered) and one taken (Q-0308: B; tests landed before it are not redone). Where boards can make EITHER alternative impossible, each is shown, the one forced and then the other (Balin's Tomb 1_343). |
+| `Z` | Cards that move end up where the text says: attached to the chosen bearer, stacked, in the dead pile, on top of the deck. For a destination the text names. Where a card arrives somewhere and is taken out again in one effect, it is read there in between. A plain discard is read where it is paid or done, under `C` or `+`, and does not call for `Z`. |
+| `K` | The keyword, with its number if it has one, is on the card. Claimed by the stats test (`K -> ElrondStatsAndKeywordsAreCorrect`). |
 
-### Recommended Clean Helper Cards
+#### The candidates of `F`, case by case
 
-**Companions (Free Peoples):**
+What the `F` row asks, for each shape of wording the campaign has met. A clause owes the cases its own words fall under and no others.
 
-| Card | Title | Culture | Race | Str/Vit/Res | Tw | Gotchas |
-|------|-------|---------|------|-------------|-----|---------|
-| 1_7 | Dwarf Guard | Dwarven | Dwarf | 4/2/6 | 1 | ToPlay: spot another Dwarf. Low stats, cheap. |
-| 1_89 | Aragorn, Ranger of the North | Gondor | Man | 8/4/6 | 4 | **Ranger** keyword. Maneuver: exert for Defender+1. Very common despite not being clean. High vitality makes him hard to kill accidentally. |
-| 1_50 | Legolas, Greenleaf | Elven | Elf | 6/3/6 | 2 | **ARCHER** — avoid unless testing archery. Has archery-phase ability. Will block `SkipToPhase(ARCHERY)` unless wounds are handled. |
-| 1_13 | Gimli, Son of Gloin | Dwarven | Dwarf | 6/3/6 | 2 | **Damage +1** — avoid unless testing damage. Has skirmish exert ability. |
+**Valid candidates differ in everything the wording does not mention.** For "a Dwarf", or a keyword with no type
+word, "your archers", a companion and an ally: with no ally `all(your,archer,or(companion,minion))` passes, 94_13;
+for "a character" or "borne by a character", a companion, an ally and a minion, the three kinds of character: with
+no ally on the table `or(companion,minion)` passes, 61_100 (but "a character bearing a follower" owes no ally: no ally
+bears a follower by legal play, pitfalls "A follower's Aid is an optional trigger"; Anger 30_32); for "each minion" or "another minion", minions of two
+cultures and two races: beside Orcs alone, `minion` narrowed to `orc` passes, 60_91 (the two races are owed still where the text
+allows one culture only: "a [wraith] minion stacked here", 8_71), and for "each minion
+skirmishing <X>" two minions in ONE skirmish as well, the second put on X by the Shadow player after the Free
+Peoples player's assignment (pitfalls, "One minion to a companion"): with one minion to a skirmish a definition
+that takes "a minion" passes, 11_243; its mirror, "each companion skirmishing <a minion>", has no such board (defender gives one companion several
+minions, never one minion two companions: 18_123); for a bare type word or pair ("each companion and minion"), cards of each type differing in culture and race: beside two [gondor] Men, `companion` narrowed to `culture(gondor)` passes, 4_349, a counted one from a pile too ("shuffle X minions from your discard pile": beside Orcs alone `orc` passes, 2_41); for a bare side word, "2 Free Peoples cards" from a deck, a card of each type
+the place can hold, a companion, a possession and an event: beside companions alone, `side(freeps)` narrowed to
+`companion` passes, 68_82, and "each type" is a spread like that one, a character, an item and a card that is
+neither, not every type in print; a bare owner word, "each of your cards", owes that spread and a card of each
+side, 94_27, and a bare "cards" ("discard up to 2 cards from hand") owes it though the definition writes no filter (1_300); for a keyword or item class alone, "a pipeweed", "a pipe", cards of two cultures wherever printed
+cards have them that the bearer may bear (read the bearer lines first: a [men] Man bears only [men] hand weapons, 15_87): beside [shire] ones alone, `pipeweed` narrowed to `culture(shire)` passes, 92_4; for a terrain word
+on a site ("a river"), two sites of it that differ in another keyword (Buckleberry Ferry 1_330 and Ford of Bruinen
+1_338, a sanctuary): beside the Ferry alone, `river,not(sanctuary)` passes, 1_46, and so for the fellowship's site ("while the fellowship
+is at a forest": Derndingle 4_330 and Rivendell Waterfall 1_342, 2_35) and for a character's ("an Elf at a river or forest", 3_28, each word of the "or" owing its own pair: 11_161; a minion's own "while at an underground site" too, though it is always at the fellowship's site: 11_115), every terrain word, underground too (Balin's Tomb and The Dimholt 8_117, a sanctuary, 2_42; for a Shadow number lowered, Caves of Aglarond 4_352, 2_121); for "sanctuary" or "not a
+sanctuary", a site 3 and a site 6: at site 3 alone `not(siteNumber(3))` passes, 1_129; for a culture word
+on a kind a title is printed in ("a [gollum] minion"), one of another title, also inside an effect's "If that
+minion is ...": beside Gollum alone `name(Gollum)` passes, 15_51 (Shelob 8_26); and a card of the
+other culture whose own text stays out of the way is looked for before the culture is left out, and where printed
+cards of more than one type have the keyword, one of each type ("a fortification": a condition and Stronghold of My
+Fathers 102_48, a possession): beside conditions alone, `condition,fortification` passes, 10_117; for a bare `weapon`,
+a possession and an artifact (Narsil 9_34 on a [gondor] Man, The Balrog's Sword 2_50 on The Balrog 12_79): beside
+possessions alone, `weapon` narrowed to `possession,weapon` passes, 1_230 and 1_173; for a bar on "possessions" where
+every possession the card could bear is a hand weapon (a [moria] Creature: Foul Tentacle 2_58), no board tells
+`weapon` from `possession`, and the Notes say so and name the search that found no other; for a count or spot of an item
+type ("each [gondor] artifact you can spot"), one in a support area and one borne (helpers.md, "A [gondor] artifact
+that someone bears"): beside support-area cards alone, `zone(support)` added passes, 9_36; the same for a CHOICE of one ("discard a Free
+Peoples possession": Old Toby 1_305 beside borne ones; `attachedTo(any)` added passes, 4_13); for "discard N cards from
+hand", a card of another culture in the hand: beside [moria] cards alone, `choose(culture(moria))` passes, 1_196; for
+"a [culture] card" with no type named, a character, an item and a card that is neither, all of the culture: beside a
+[wraith] possession and condition alone, `not(minion)` added passes, 12_173; for a bearer by race ("Bearer must be a Hobbit"), the Ring-bearer and a Hobbit of another culture (Pippin, Trollslayer
+103_31): beside [shire] Hobbits who are not the Ring-bearer, `hobbit,culture(shire)` passes, 3_108; for "bearer" in a
+Modifier or Restriction on a card that a companion and an ally can both come to bear (a transfer to "a character",
+or a possession whose "Bearer must be a <race>" an ally of that race may bear: 15_25's Elf ally),
+one bearer of each: with companions alone bearing it, `and(companion,hasAttached(self))` passes, 1_207; for "bearer" in a trigger ("each skirmish involving bearer") on a card whose `PlayOn` narrows the bearer, the
+control is a character the `PlayOn` would take who does not bear it: beside a [gondor] Man, `culture(rohan),man`
+passes for `bearer`, 4_287; for "a
+companion of each culture", a companion of each culture a printed companion has, the Hobbit sets aside (Q-0303;
+Notes name a culture only they have): with three laid, a line written for the wrong culture passes, 13_189; for
+"wound each X" or any wound EFFECT, an exhausted X among them, wounded and so killed: beside unexhausted ones
+alone, `exert` written for `wound` passes, 2_19 (the exert and wound lines under "Which checks a clause lists"); the exhausted X
+may be the only candidate, chosen unasked, beside invalid ones read not offered: an exert of it is not carried out, 5_5; for "exhaust", a character of vitality 4 or more: at vitality 3,
+exhaust and exert twice both leave 2 wounds and `exert`, `times: 2` written for `exhaust` passes, 17_29 (helpers.md).
+A kind no printed card can make a candidate drops out of the spread, and Notes say why: for "Bearer must be a Dwarf"
+there is no opponent's Dwarf, as no Shadow card is a Dwarf (9_8). (For "Exert a [gondor] Man" the ally IS owed:
+Gondorian Merchant 7_97 bearing Narsil 9_34 can exert, 5_39; helpers.md.)
 
-**Minions (Shadow):**
+**Invalid candidates, word by word.** For a phrase of two words ("a [sauron] minion") that is a card for each word:
+a [sauron] card that is no minion, and a minion of another culture (where the phrase names a Shadow culture and the
+noun can be of either side, as "a [wraith] condition" on a companion, the other-culture card is a Shadow one where
+print allows, Our Foes Are Weak 11_196, or `side(shadow)` for the culture survives: 12_170, 12_171); for an item class ("bearing a hand weapon") one
+of them is a weapon of another class on a bearer of the right kind (a ranged weapon), where a card in play can bear
+one, since the game has a `weapon` filter one word wider and a possession that is no weapon cannot tell the two
+apart (65_148); for "bearing a weapon" the invalid one bears an ITEM that is no weapon, and The One Ring is no item
+(a Hobbit with The Gaffer's Pipe 1_292: 2_103, helpers.md); "mounted" is an item class too (bearing a possession of the class mount), and owes a companion
+bearing a possession that is no mount (Gimli 1_13 with Dwarven Armor 1_8, 4_346), in a spot count ("spot 3 mounted [rohan] Men": a [rohan] Man with Sword of Rohan 4_291, 6_96) as anywhere; for a number with two bounds, a card on each side (a bound no board can reach, as site 1 of
+"sites 1 to 5" for a skirmish, is stood for by the nearest reachable value inside it, site 2, and Notes says so). A bound a board can reach is read at the bound itself, with no card beyond it owed where none can be laid ("sites 7 to 9": site 6, site 7 and site 9, since 7-8 differs from 7-9 only at site 9; hobb-b31_6). Where the type word has a character neighbour (companion against ally), the card of the first word that is no X
+is a character where print allows (Barliman Butterbur 1_70, a [gandalf] ally, for "a [gandalf] companion"), or the
+type widened to `character` passes (Alatar 13_28). Where the effect sets a stat only characters have ("each [wraith] minion is strength +2"), the culture word's card that is no minion has no strength any reading reaches (a [wraith] possession's printed bonus goes to its bearer): it drops out, and Notes say so (32_58: `culture(wraith)` alone SURVIVED). Where it has an item neighbour (possession against artifact), the card of
+the first word that is no X is the other item where print allows: beside a [gondor] possession and a [rohan] condition
+alone, `choose(culture(rohan),or(possession,artifact))` passes for "a [rohan] possession" (Herugrim 54_280, 5_93). For "an X skirmishing a Y" that is an X assigned
+to another Y whose skirmish has not begun, not an X fighting something else. That is the candidate for the word
+"skirmishing"; the word "a Y" wants its own, an X fighting a character who is no Y, read DURING that skirmish (fight
+it first), or `inSkirmish` alone passes. Where Y is one character (bearer, Frodo), the first is an X assigned to him
+and read before his skirmish begins (Mithril-coat 2_105); where the text acts only once his skirmish is under way (a trigger at its start), it is an X assigned to another character whose skirmish comes later, read at the start of his, since one that already fought elsewhere passes `assignedToSkirmish(character)` (Brego 4_263). Where his text can be used in a skirmish not his own (a skirmish special ability), the second is an X fighting another companion, read during that skirmish, or `inSkirmish` passes for `inSkirmishAgainst(self)` (Glorfindel 9_16); fight that skirmish while Y is still assigned and waiting for his own, since a Y whose skirmish is over passes `assignedToSkirmish(any)` for `inSkirmish` (Sharku's Warg 5_59). Where the text also sets a condition on Y ("if bearer is Boromir"), a board where the condition fails does not stand in for that skirmish: it is fought while the condition holds, or `inSkirmish` under the condition passes (Shield of Boromir 2_38). Where Y is a kind and not one character, the skirmishes read are of Ys that differ in what the text does not mention, as for any noun: for "a Hobbit companion" the Ring-bearer and an unbound Hobbit of another culture, or `inSkirmishAgainst(hobbit,companion,unbound)` passes (4_299). For a bare race word ("skirmishing a [gondor] Man") an ally skirmishing is one of them (Gondorian Merchant 7_97 on the Towers path), or `companion` added passes (8_35). An exception
+named by a phase alone ("cannot take wounds except during a skirmish") owes the card in NO skirmish while another is
+fought, or `not(inSkirmish)` passes for `not(phase(skirmish))` (11_94; helpers.md, Long I Fell 4_97).
 
-| Card | Title | Culture | Race | Str/Vit | Tw | Site | Gotchas |
-|------|-------|---------|------|---------|-----|------|---------|
-| 1_177 | Goblin Patrol Troop | Moria | Orc | 13/3 | 6 | 4 | **CLEANEST MINION** — zero effects, no keywords, no triggers. High strength means it wins most skirmishes. |
-| 1_178 | Goblin Runner | Moria | Orc | 5/1 | 1 | 3 | Trigger: adds (2) twilight on play. Very common despite side effect. Low cost makes it easy to fit in scenarios. |
+**"The Ring-bearer", and a Frodo who is not the Ring-bearer.** For "the Ring-bearer" it is a Ring-bound companion
+who is not the Ring-bearer (Sam), not just any companion; a Ring-bearer who is not Frodo is no longer asked for on
+a card that says "the Ring-bearer" (Q-0213: A: no definition has ever written Frodo for him; the tests that have
+one stay, and no Frodo stands beside him, Q-0159: B). Where it is the text that names Frodo ("Bearer must be
+Frodo", "If Frodo dies") and a test wants a Frodo who is not the Ring-bearer, he is Frodo, Frenzied Fighter 13_149,
+the only Frodo who can be in play beside another Ring-bearer (51_313, 51_311; Q-0212). Where the definition writes the title
+again as an exclusion ("Frodo or 2 other companions", `not(name(Frodo))` in the second branch), that board is owed
+there too: the other Ring-bearer offered and that Frodo not, or `not(ringBearer)` passes (1_346).
 
-### Why Clean Cards Matter
+**A phrase the text carries more than once.** Where the text names its target more than once ("make that Dwarf A,
+or make that Dwarf B"), the candidate not chosen is read under each. Where the same phrase stands in several
+clauses, or in a condition or a trigger and not a choice ("a site bearing a weather"), each clause has its own
+invalid candidate. Where a trigger and the choice it leads to each carry the phrase ("If a [sauron] Orc wins a
+skirmish, make that Orc ...", whose definition filters the winner and then the choice), the invalid candidates take
+part in the very event the valid ones do (a [moria] Orc and a [sauron] Uruk-hai winning that same skirmish) and are
+read as not offered: on a board where the trigger never fires, the choice's own filter goes unchallenged (1_247). The other way round as well: the
+valid spread is owed by the trigger's own filter, on a board where a candidate who differs from the others in what
+the text does not mention is the one that fires it, or a narrowed trigger passes behind a wide choice (1_85). Where
+the DEFINITION writes one phrase twice, as a requirement and the choice it gates ("reveal an [elven] card from
+hand"), each owes its spread: a board where the offer rests on a card of each kind alone (shapes.md, "A phrase
+the definition writes twice"; 1_54).
 
-Consider testing a condition that says "Each time a minion takes a wound, add (1)":
-- If you use a minion with **Enduring**, it won't die from overwhelm — unexpected survival
-- If you use a minion with **Fierce**, it gets reassigned — unexpected second skirmish
-- If you use a minion with a **wound trigger**, it fires alongside your card's trigger — confusing interaction
-- If you use an **Archer** companion, archery wounds happen before you expect — skipped decisions
+**A spot requirement.** A spot requirement owes its valid candidates as a choice does, on one board or across the
+tests: for "spot an Elf companion", Elf companions of two titles, or `name(Legolas)` passes (91_12). A spot that
+must FAIL ("moves ... without a ranger") is the same: the cards that would stop it are its valid candidates, each
+read stopping it, and one that fails a word (the other player's ranger, not in the fellowship that moves) is read not stopping it (1_355).
+So is a condition on who lost or won ("no companion or ally lost a skirmish"): the losers read stopping it differ in
+what the text does not mention (culture, race), or a type pair narrowed to one culture passes (3_40).
+The same holds for a test parked on a reading of a spot that must fail: its stoppers differ as an active test's would
+(13_125, Q-0390).
 
-Use 1_177 (Goblin Patrol Troop) and the test is about your card only.
+**What a response saves; who did the thing; a card being played; the player who does it.** Where a response picks
+what it saves from several cards affected at once, an invalid candidate is among them (for "your [sauron] condition
+is about to be discarded", a [sauron] possession in the same discard; for a wound, the losers of one skirmish,
+whose wounds are taken together where a "wound each" is not: pitfalls, "Wound each"; for an exertion, an ally
+and a minion exerting with the companions: helpers.md, Devilry of Orthanc 5_49; for a heal, a companion healed
+with the Ring-bearer by one effect: helpers.md, Minas Tirith Third Circle 7_352). One that saves with no choice ("discard this
+condition to prevent that") prevents the whole of that one simultaneous discard, cards not of the kind it names and
+the opponent's own among them, and they are read saved (Q-0250: B, "the action is all or nothing"; Siege Engine
+5_60, "one or more machines"). A singular "If a <kind> is about to be discarded" saves the one card, one at each use (Q-0313: A; shapes.md). Where a trigger names who did the thing
+("exerted by a Free Peoples card", "uses a special ability"), one valid doer is neither the card itself nor its
+bearer, and one is no character where the wording allows (a possession's ability); a bare side word as the doer
+("a Shadow card is about to add twilight") owes the Restriction row's spread, a character, an item and a card that is
+neither (3_114: beside a minion and a possession, `or(minion,possession)` passed); where the wording names no side, a valid doer of each side is laid (Sharku's Warg 5_59's "a skirmish special ability": a minion's as well as a companion's, or `player: fp` passes). Where a condition or a trigger
+turns on a card of a kind being PLAYED ("unless a Shadow event is played"), each word owes a card that fails it
+alone and is played in that same window (a Shadow card that is no event, a Free Peoples event); a special ability
+used there stands in for neither (10_116). Where the wording names the PLAYER who does it ("the Free Peoples player
+is about to discard", "discarded by an opponent"), one valid doer is that player acting by no card of his side (a
+site's text: Heights of Isengard 11_244), which for a card-worded text is an invalid one (on `usesSpecialAbility`,
+`filter:` names the card whose ability is used and `player:` the one who uses it: "an opponent uses" written
+`filter: side(shadow)` misses a site's ability, F-0710, Called to Mordor 15_39); and the other player made
+to do it by that player's card (Introspection 12_29 for a discard; It Burns Us 6_110 for a reveal) is on the table
+too. Where he has a choice in it he is the one doing it (Q-0171: "if the player has a choice, they're not
+forced"); where he has none, the card's player is (Q-0251: "Since there's no optionality and no choice, I'd say this
+is Free Peoples doing the revealing"). This reaches every act a card makes the other player do, an assignment as well as a
+discard or a reveal, and either way round: Barbaric Uruk 12_135 making him assign the one unwounded companion is
+the Shadow player's assignment (F-0513, Wold of Rohan 4_336; built by engine pass 45). shapes.md has the boards (F-0296).
+Whether it reaches a draw, which only moves a card from the drawer's own deck to his own hand (Drawing His Eye
+10_29, What Are We Waiting For? 2_15), is Q-0334, open. Until it is answered, the draw is the hand owner's, as built.
 
-### When "Unclean" Cards Are Correct
+**A race against a culture.** A race against a culture, and a culture against a race, is shown with a PRINTED card
+that has the one without the other (Pippin, Trollslayer 103_31 is a [gondor] Hobbit; Sméagol, Once Like Us 103_116
+a [shire] companion who is no Hobbit; Merry, Master Holbytla 103_85 a [rohan] Hobbit; Khamûl 103_61 a [raider]
+Nazgûl: gemp-testing's `helpers.md` has them by pair), never with an ad hoc modifier: no test gives a card a
+culture or a race (Q-0213: B). Where no printed card has the one without the other, no candidate is asked for at
+all: that is always so for Elf and [elven], for Dwarf and [dwarven], for a Free Peoples Wizard and for a Free
+Peoples Wraith. Nor is one asked where the only cards of the culture outside the text's kind cannot take the
+effect: "[wraith] minions cannot take wounds" has no invalid [wraith] candidate, as no Free Peoples character is
+[wraith] and a [wraith] condition takes no wound (a line in Notes; Úlairë Nelya 15_186). The slip itself (F-0019, and the reverse, F-0291) is read off the definition: lint warns
+`race-culture` where a definition goes by the race and its text names the culture, or the reverse, and that is a
+finding to file, not a board to lay. The candidate for a culture word shares the race (and the reverse), or a definition
+that writes the one for the other passes: for "[uruk-hai] hunter minion" a [sauron] Uruk-hai made a hunter by a
+printed card (helpers.md, "A hunter and nothing else"; dec-b17_125).
 
-Sometimes you *need* a specific trait:
-- Testing "while bearer is a Ranger" → use 1_89 (Aragorn has Ranger)
-- Testing archery total modification → use 1_50 (Legolas is an Archer)
-- Testing damage bonus interaction → use 1_13 (Gimli has Damage +1)
+**A keyword or a type word that no card can tell apart; what no board can isolate.** Nor is a keyword given to a
+card no printed card with that keyword resembles (an Orc made a Southron, an ally made valiant; Q-0213: C): where
+every printed card with the keyword is of one culture, race or type, that word cannot be told from the keyword,
+which is a line in Notes. So is a type word beside something only that type has (a signet, a timeword, roaming: 1_104; an exertion in a cost, which only a character pays: 1_105), or that the rest of its phrase keeps to that type ("a minion a Hobbit companion is skirmishing": only a minion skirmishes a companion, 4_299). Where no
+board can isolate an excluded thing ("your" tale, when the opponent's is inactive anyway), put the nearest
+candidate down and say so in Notes. A Notes line that says no board tells two readings apart says, in words, how the
+other reading was tried: the `mutate.py` run (what was changed, and that it SURVIVED) or the board laid and what it
+showed, so that the reviewer need not try it again to know the line is true (4_361's `cantSpot name(Saruman)`,
+redundant beside the uniqueness rule; dec-b4_274). The same is owed for a word the definition has and the text does not name, made redundant by a rule
+(`canBeReturnedToHand` beside `unbound`, since the Ring-bearer is always Ring-bound: 5_51); name that rule in the line.
 
-The rule: use clean cards by default, unclean cards only when the test *requires* that specific trait.
+**Cards picked out by title.** Where the text picks cards out by title and a type word ("these characters:
+Celeborn, Elrond, Galadriel, Saruman"), an invalid candidate is a card of that title and another type (a follower
+named Saruman). Where no printed card of those titles is of another type, none is laid and Notes say so; a card
+whose title only begins with the name may stand as the nearest miss (Boromir, My Brother 4_111 for 7_112). Where the text names a title with no type word ("spot Saruman"), the valid candidates are cards of
+that title of each type there is (companion, ally, minion, follower) and of a second culture where the title has
+more than one, not of every culture, in the tests of EACH clause whose text names the title (shapes.md, "lint's
+`title-kinds` warning") (Q-0306: Saruman the [isengard] minion, the follower 17_38 and the [dunland]
+minion 4_33, not each of his four minion cultures; Sméagol is [gollum] and [shire], the [shire] Smeagol 103_116 printed with no accent and taken by `name(Sméagol)`
+all the same (helpers.md): find them by `packet.py --find` or helpers.md's title entries (in stage 1 no grep of
+the `.hjson` files), the V-sets' with the Decipher sets': Arwen's one ally is Lady of Rivendell 102_6). The Hobbit
+sets (30 to 33) are not counted among them, not even in a Hobbit-set card's own tests unless the card needs it
+(Q-0303). That holds for a title that pays a cost or is acted on as it does for
+one spotted or played ("exert Gollum": each of the two Gollums, [gollum] and [wraith], pays in a test of his own,
+60_20); lint warns `title-kinds` where the cards of such a title that the file names leave out a type of it or are all of one culture.
+For any word, a title or not, a Hobbit-set card is laid only where it is the one printed card that tells two
+definitions apart, and Notes say so (Q-0312: Saruman, The White 32_24 for Stern Words 19_9; Iron-forged Weapon
+32_18, the one hand weapon of another culture a Dwarf can bear, for Axe Strike 1_3).
+A card's own name in its own text is that card (`self`), not a title picking cards out: "Exert Elrond" on Elrond
+owes `C` and `C-` and no F (1_40 above; Úlairë Nelya 11_222). Another card's title in a cost is a title that pays, even
+where that card is always the bearer ("Exert Úlairë Lemenya" on the Sword of Minas Morgul 1_225): its `C-` board puts
+another card of that type and culture beside him, able to pay and left unexerted, or `choose(nazgul)` passes.
 
-### Finding Cards for Specific Traits
+**A word in one filter and not in another; cards picked by what the cost's card is.** Where a word is in one filter
+of the card and not in another ("a unique [elven] companion", then "all Free Peoples archers"), the valid
+candidates of the second vary in it. Where the effect picks its cards by something read from the card chosen for
+the cost ("exert a companion to heal another companion with the same signet"), the cost is paid in the tests by
+cards that differ in it, or a filter fixed to one value (`signet(aragorn)`) passes (92_32). "The rest" after a
+take ("take all [wraith] cards revealed and discard the rest") is such a second filter: the cards it reaches differ in
+what it does not mention, a Free Peoples card among them where the place can hold one, or `side(shadow)` passes (1_215).
 
-When you need a card with a particular race, culture, keyword, or type:
-1. **Read the HJSON** for candidate cards — don't guess from the name
-2. Check for unwanted `effects`, `keywords`, `type` entries
-3. Prefer cards with fewer/simpler effects
-4. Note any keywords that come with the card (Ranger, Archer, Damage, etc.)
+**Two places; a card played from the place; an "or" inside the phrase.** Where the text names two places a card is
+taken from ("from play or from hand"), the candidates are laid out in each. Where the card is PLAYED from the
+place, the invalid candidate can be paid for there, so that only the wording keeps it out (10_19: Shelob in the
+discard pile with a pool too small for her let "Gollum" widened to any minion pass; a Free Peoples card adds its
+cost and needs no pool laid). An "or" inside the noun phrase
+("a [gandalf] or [elven] event") is F's business, one valid candidate for each side of it, and needs no `B`; where a
+side is a bare race word ("an Elf or Dwarf"), that side owes the whole spread a bare race word owes (below), an Elf
+ally as well as an Elf companion (2_69). An "or"
+between two noun phrases, each with its own article or a name ("Gandalf or an Elf", "a [sauron] engine or a site
+you control"), is two alternatives and lists `B`, each taken alone (1_40 above; 8_95); two bare names ("Gandalf or
+Aragorn") are two such phrases (2_110; 52_110's ledger, landed earlier, called it F's).
 
-Common needs and where to look:
-- **Hobbit companion**: Check set01-Shire.hjson (Merry, Pippin, Sam variants)
-- **Uruk-hai minion**: Check set01-Isengard.hjson
-- **Nazgul**: Check set01-Wraith.hjson
-- **Elf ally**: Check set01-Elven.hjson
-- **Hand weapon**: Check set01 possessions by culture
-- **Clean condition**: Look for support-area conditions with simple effects
+**A card that is not unique, and "that card": the second copy and the untouched control.** Where the card is not
+unique and its text says "here", "this condition", "this minion" or the like, a second copy is in play wherever it
+could change a reading: the test shows which copy a card went to or came from (a card stacked on "this condition", Jail 32_39; `ShadowChooseOptionalTrigger(card)`
+where each copy makes its own offer), that a standing modifier tied to those words does not stack (a numeric
+modifier with no such words does stack, and two copies are no gap there, though "this minion is strength +1 for each X" HAS such words: a definition over every card of the title shows only with two copies laid, each reading +2N, 13_159; nor where it lays a state the engine asks
+once, yes or no, as Goblin Domain 1_175's "comes into play exhausted"), that a trigger fires once for its own
+copy; a cost that names the card ("exert this minion to ...") owes it though the effect is on another card, the
+other copy read unwounded (Orc Assault Band 7_295); in an "X or Y" cost only the branch that names the card owes it
+(Southron Leader 7_166: the exertion, not the threat). Where an effect acts on the card itself, or on "that <card>" a trigger has just named, another card of its
+kind stands beside it and is read as untouched (for "each time a companion is played, that companion ...", a
+companion already in play, or `all(companion)` passes, 91_9; where the effect then takes "that <card>" out of a
+PILE, "each time ... discards an [isengard] Orc, you may stack that Orc", the other card of its kind lies in that
+pile when the offer is taken, or a choice from the pile passes, 6_63); where a second copy cannot change a reading,
+the untouched control is a different card. A condition whose "this condition" sentence discards it is such a case: a
+second copy discards itself on the same event, so the control is another condition of the same player, read still
+there (Mallorn-trees 1_54 beside Blood of Númenor 2_31; shapes.md, lint's `second-copy`). That holds for a UNIQUE card's "here" too: Tom Bombadil's Hat 0_60's
+token trigger is read beside Kept Safe 6_111 holding [shire] tokens, or `select: self` widened passes. For a Skirmish ability on "this minion", the copy stands in the SAME
+skirmish: one in another skirmish lets `choose(minion,inSkirmish)` pass, a lone candidate being chosen unasked (7_190). A second copy of an item with a class (a Brooch, a hand
+weapon) goes on another bearer: unless a printed text allows it, two of one class on one bearer is no board a game reaches (lint's `item-class`).
 
----
+**Whose a card is and where it stands.** What the wording does not mention includes whose a card is and where it
+stands: for a bare race word ("a Man", Q-0058) one valid candidate is the opponent's, beside the companion and the
+ally the paragraph above asks for (all three for "a Hobbit": 4_321; so for a bare keyword with no side, "wound an
+archer" on the Shadow event Malice 3_79 owes its player's own Goblin Bowman 2_60 beside an archer companion and ally), where a card of his of that
+race can be in play at that moment (no minion is in a fellowship phase, unless a printed card plays yours in a
+phase that has minions: search for one first, as Bilbo, Bearer of Things Burgled 9_49 plays a [shire] tale in
+the regroup phase, Stone Trolls 1_314 onto a minion; where none does, Notes says none can be, and no board
+is made for it) (but a player's own Shadow cards are inactive on his turn, so for a "Shadow condition" chosen by a
+Free Peoples ability they are no candidates at all, as his own Free Peoples cards are none for a Shadow event
+played on the other player's turn: pitfalls, "The other player's Free Peoples cards are not active"; but where the
+Shadow player can use a "your" ability, a site's Maneuver text, the Free Peoples player's cards in play ARE active and
+not his, and one is laid as his invalid candidate: Balin's Tomb 1_343); for "a minion" or "an Uruk-hai" (any kind of minion: "a corsair", Wind That Sped Ships 8_66) on a Skirmish event, one valid
+candidate is not assigned to a skirmish (two minions on one companion: pitfalls, "One minion to a companion"), and so on a Skirmish special ability whose text names no assignment
+(Noble Leaders 7_112: `assignedToSkirmish(minion)` added to its choice survived without one). A Skirmish action's choice that is not limited to the skirmish ("your
+[sauron] minion", Morgul Vale 7_357) also wants one valid candidate IN the skirmish being resolved, or a choice
+narrowed to `not(inSkirmish)` passes. Where "your" names a pile, the other player's card in his own pile is an invalid candidate of a title the
+chooser's piles do not hold: a choice from a pile is read by blueprint (pitfalls, "A choice from a pile"); so
+not his copy of the very card chosen where the chooser's pile holds one (his Glamdring 30_29 beside one's own reads
+as offered: No Finer Blade 33_21 lays his Decipher Glamdring 1_75 instead). That is
+owed where the definition word could name the other player's pile (a `player` field: `PlayCardFromDiscard`,
+`PutCardsFromDiscardIntoHand`); a word that reads only its performer's own pile (`PlayCardFromDrawDeck`,
+`PutCardsFromDeckIntoHand`, `ShuffleCardsFromDiscardIntoDrawDeck`, `PlayCardFromDeadPile`: no `player` or deck field) owes no such board,
+since no definition of it can differ there (15_51, dec-b13_53); a landed file that lays one anyway (Orkish Smith
+61_132) is no sign that one is owed.
 
-## Test Structure by Effect Type
+**A condition inside a modifier; "bearer" or "self" with a requirement.** Where the excluded thing is part of a
+condition inside a modifier ("in a skirmish involving an [isengard] minion"), the candidates are in skirmishes, not
+merely on the table. Where the skirmish sets only a time on a kind ("Minions cannot take wounds during skirmishes
+involving bearer"), one candidate is of that kind and outside the skirmish, acted on during it (Harmless 13_93, Q-0387).
+For "bearer" or "self" with a requirement ("if bearer is an archer"), the nearest invalid
+candidate is another card that meets the requirement (lint warns `if-is` where a clause with an "If <the thing
+named> is ..." sentence lists no `F`: 2_79's "If the Ring-bearer is then exhausted" wanted an exhausted companion
+beside a Ring-bearer who is not). That holds where the requirement is the condition of a
+trigger and not of an ability: for "While Boromir is the Ring-bearer, at the start of each skirmish involving him"
+it is the real Ring-bearer in a skirmish of his own while Boromir is a plain companion (59_31).
+Where the condition is on the card an effect acts on ("make an [isengard] Orc strength +2 (and heal it if mounted)",
+5_68), the chosen card fails it while another card of the kind meets it beside it, or a check that spots any such
+card in place of the chosen one passes. Where the requirement
+stands on a Skirmish ability ("Skirmish: If bearer is an unbound Hobbit, discard this possession to ..."), a bearer who
+meets it outside the skirmish is a valid candidate (the text names no skirmish), and the requirement owes the culture
+spread of "Bearer must be a Hobbit" (11_171: Pippin, Trollslayer beside Merry); for "unbound" the invalid candidates
+are a Ring-bound companion who is not the Ring-bearer (Sam; the Ring-bearer alone lets `not(ringBearer)` written
+for `unbound` pass: 12_50) and an ally of the race (Bounder 1_286: only companions are unbound, CR 4.2). Where the
+text also asks a number no ally of the race has in print (vitality over 3), raise the ally's by hand (Q-0213: E), so
+that only "unbound" keeps him out (Everyone Knows 9_50). The same
+holds for "unbound" in a spot ("While you can spot an unbound Hobbit", Derndingle 4_330): lay the ally in the support
+area whatever his home site, since a spot does not ask where he stands, or `hobbit,not(ring-bound)` passes.
 
-### Activated (Phase Action)
+**A title of one card type; never two of one unique title; a candidate that looks impossible.** A title that has
+one card type only ("spot Gandalf") needs one card of the title, and its invalid candidate is a card of that
+culture with another title. That candidate fails the title alone: same culture, same type (a [gandalf] companion
+who is no Gandalf, Ent Avenger 6_27; a [gandalf] ally or a companion of another culture lets
+`culture(gandalf),companion` through, dec-b1_83). Where no printed card shares the title's culture and type (every [gollum]
+companion is a Sméagol), the board without the title is the miss, and Notes say so (It Burns Us 6_110). Never put two cards of one unique title in play at once, whatever their types (Ketura,
+2026-10-08: the cheats "short-circuit more-or-less legitimate setups"; Elrond the ally and Elrond the companion
+each get their own board). Before calling a candidate impossible to put on a table, look for a way: an ally's home
+may be on another block's sites (Gondorian Merchant 7_97, the only [gondor] ally, is at 3T).
+
+#### Which checks a clause lists
+
+Which checks a clause lists follows from its words, and the analyst is expected to justify leaving one out:
+
+- anything before "to" in "X to Y" is a cost → `C`, and `C-` where the board can make it unpayable. A sentence
+  of costs with no "to" before the sentences it buys ("exert this minion. Discard ...") is a cost too (Q-0058). A card
+  discarding itself as its only cost ("discard this condition to …") can always pay: no `C-`, and no `no C-:`
+  line. A spot before "to" pays nothing: it is a requirement (`-`), not `C` (shapes.md, Q-0085), and "Spot X" with
+  X from 0 can never fail, so it lists neither (A Task Now to Be Done 11_175). An exert cost's `C-` board is the one who must exert, exhausted (wounded before the skip into the phase read,
+  or refreshed after the wound: pitfalls, "A board changed under a pending decision"; 1_58); where the cost names a kind ("exert
+  your [isengard] Man"), the only one of that kind exhausted with others able to exert beside him (on an
+  `ExtraCost`, "To play, exert ...", this board is the clause's `-` and is not listed again as `C-`). A board with
+  nobody of the kind shows the filter (`F`) and cannot tell an exertion from a wound (92_2). An exert EFFECT ("make
+  the opponent exert 2 companions") owes the same under `F`: an exhausted candidate, not offered (1_137), and one that every other word of the
+  text admits (an exhausted Frodo beside "2 other companions" is kept out by "other" as well and shows nothing: 1_346).
+  A required exert of EACH such card ("each minion skirmishing Gandalf must exert") owes an exhausted one beside one
+  who exerts, read left unwounded: without it `wound` in the place of `exert` passes (8_21, dec-b8_17). A wound
+  EFFECT owes the reverse: an exhausted candidate, offered (an exert written in its place leaves him out: 1_164). A wound cost's `C-`
+  is a bar on wounds or a cap reached: Armor 1_92 ("takes no more than 1 wound during each skirmish phase") after
+  one wound that phase (Faramir 17_28). A `no C-` search for a wound cost takes in "no more than". An "add (or remove, or reinforce) a [culture] token" cost: Redhorn Pass 13_194 ("Culture tokens cannot be
+  added, removed, or reinforced") is its `C-` board (Scouring of the Shire 68_112; gemp-testing's `helpers.md`).
+  A cost of REMOVING a token "from here" has a nearer one, which is laid in its place: no token on the card while
+  a second copy holds one, which shows "from here" as well (Sudden Fury 12_132).
+  An "add a burden" cost: no printed card stops a burden being added, but a hindered Ring-bearer does
+  (CR 5.0 "hinder"), so its `C-` board is `scn.HinderCard(<the Ring-bearer>)` (103_115). That board is a V-set
+  card's: a Decipher card owes no hindered board, this one included (Q-0237), nor does a Hobbit-set card (no HDG card
+  hinders, so no HDG game has a hindered card), and its ledger writes `no C-:` with that reason, which lint lists as a waived warning (an event's "Add a burden to ...", Seven We Had 4_318). Where the card must
+  itself be the Ring-bearer to pay (Sméagol 59_30's regroup ability), hindering him shuts its text off and no
+  board in play is left: a `no C-:` line. The One Ring's own "add a burden to wear" is NOT such a card: its
+  text stays on while its bearer is hindered, and the board holds (4_1: not offered in another companion's
+  skirmish, and offered there once the cost is changed in the definition). So too where the burden is the price of preventing something done to
+  the Ring-bearer (an assignment to him, 94_26): hindered, he cannot be assigned, and the prevention is never put
+  (Q-0114). No card is invented for the board (Q-0166: A; Q-0241). A hindered Ring-bearer is not spotted
+  either: where the action also spots or counts him, the board keeps that met without him (Get On and Get Away
+  54_304: Sméagol beside a hindered Galadriel). An "assign <this character> to a minion" cost: its `C-` board
+  is the character already assigned (CR 4.2 "assignment phase": both must be unassigned), by a minion's own
+  assignment action after the Free Peoples player's pass (Unexpected Visitor 7_126 and its
+  kin, in gemp-testing's `helpers.md`; Alcarin 5_31). A minion he must pay to assign and cannot is Q-0221's
+  check, under an `R` clause typed `Rule [+ -]` that names Q-0221 (Alcarin 5_31, Éowyn 17_96): `+` the price
+  paid once the minion is chosen, `-` the minion not his to name.
+- a noun phrase that picks things out ("a Dwarf", "each [moria] Orc", "another companion", "bearer") → `F`. Not
+  "the Ring-bearer" in a bare count of burdens ("for each burden on the Ring-bearer"): burdens lie on nobody
+  else, so there is no other candidate to lay (Q-0186). A NAMED bearer, "on Frodo", is a phrase like any other (Q-0103). "Bearer" in a cost ("exert bearer") as well: the
+  cost is paid once by a bearer of another kind (an ally beside the Ring-bearer), or `choose(companion,hasAttached(self))`
+  passes for `bearer` (Sting 18_113). Where the cost repeats ("exert bearer twice") and no such bearer has the
+  vitality, vitality given him by hand is fine, as printed cards give it (Gondorian Merchant 7_97 +2, 15_62)
+- "until", "this phase", "this turn", or a phase ability's or event's effect that names no duration (below) → `D`. Not where the words stand inside a condition and bound a COUNT ("if 3
+  or more [raider] minions have been played this phase", "has moved more than once this turn"): nothing is in
+  force to end, so no `D`. The bound is then the threshold's `-`: beside the short count, what nearly counts was
+  done just outside the window, in the phase before of the same turn for "this phase" (shapes.md, "A count "this
+  phase""), on the turn before for "this turn". A count the rules themselves keep and start again each turn
+  (the moves made, 92_11) owes a line in Notes and no later turn. A phase ability that changes something and names no duration has
+  one by rule (CR 4.2 "phase action": it lasts for the phase it is used in) → `D`; so has an event's, an archery
+  total included, read again once the phase is over (Elevated Fire 11_78). So has a trigger's effect:
+  by Ketura's ruling (Q-0018) it lasts to the end of the current phase → `D`. Each skirmish is a phase of its
+  own (CR 4.2 "skirmish phase(s)"): such an effect from one skirmish is gone in the next. Its "just before" is
+  read in the same skirmish at the decision that follows the use, and its "just after" in the next (Elven Sword 4_64);
+  it is already gone once that skirmish has resolved, so a reading at the choice of the next skirmish is no "just before"
+  (a skirmish event's bonus read after `PassSkirmishActions()` has resolved its skirmish: Fight for the Villagers 4_273)
+- "limit", "once per", "no more than", "up to", "at most" → `L`
+- an optional trigger or a special ability with no cost (a spot is no cost) → one `-` is the board on which its
+  whole effect would do nothing: not offered (Q-0034; shapes, "Spot X to <effect>"). The game withholds such an
+  offer itself (Q-0224): the test reads it absent, and no requirement is written for it unless the offer is still
+  made there (shapes, "An optional trigger or ability that costs nothing"). On a `Trigger` this `-` is owed beside
+  the neighbouring-event `-`, and neither stands in for the other (Heights of Isengard 11_244). For a draw that can come in its
+  player's fellowship phase the board is the Rule of 4 spent (Q-0262: B; an empty deck still asks, Q-0029); a trigger at the very start of the fellowship phase has nothing ahead of it that could spend the Rule, so the Notes say so (3_1); a Fellowship
+  EVENT that draws owes no such board (the rule's, shown with Delving 1_6 in mechanics/deck/RuleOfFourTests). A keyword given to a card that has it
+  already is not "nothing" and is offered (Q-0245: A, Band of Wild Men 4_4: "the effect still has potential to alter
+  that calculus"). That board is owed by every trigger or ability that gives a keyword, with a cost as without,
+  though it stands in this bullet (Úlairë Otsëa 1_235: a [wraith] minion printed fierce among the choices). Where a board can have the card hold that keyword already (the ability used once, then
+  offered again: Lurtz 1_127), that offer is owed and read. A numeric keyword (damage +1) is owed the board too, and adds: read the count after (Vicious Dunlending 13_100). With a cost it is offered there and used for
+  nothing, which is read under `F` or `+` as for an event, and is no `-`; the board is owed all the same, with the
+  cost payable at the second offer (Uruk-hai Rampage 1_159: (3) in the pool again for the fierce win). A play of a card after
+  the "to" is itself a cost (Q-0062): "add a burden to play a [shire] tale" with no tale in hand that can be
+  played is not offered, and that board is its `C-`
+- "may" → `O`. A response or any other special ability is the player's to use or not without the text saying
+  so; list `O` for one only where declining has a consequence worth showing. A "you may" that opens a special
+  ability's own sentence ("Skirmish: You may remove 2 [rohan] tokens to exhaust ...", Snowmane 13_136) is that
+  use or not, and lists no `O` (dec-b13_134)
+- "for each", "X" → `S` (and for an X, the zero case). "For each X you spot" is the player's count: he decides how
+  many, and where the effect is a choice of cards it is asked as a choice of 0 to N of them with no number prompt
+  (Q-0248, Aragorn, Wingfoot 4_364: "as a 0-N choice of cards to wound"; shapes.md, "<do> a companion for each
+  <thing>"). "Make each X you spot" outside a count is the same: a choice of any number of X, from 0 (CR 4.2
+  "spot"; Advance Scout 10_78), never every X in play. An X read off the card a cost acts on ("a Dwarf who is damage +X ... exert that Dwarf") is what it was
+  when spotted, before the cost (Q-0256: A)
+- "each time" → `R`
+- "or", "choose one" → `B`; so is an "or" between two printed phases ("Fellowship or Regroup:"), each phase taken in a test
+  (from set 7 the phases are printed on the type line, not in the text: no clause holds them, so each is taken in
+  the tests of the effect's clauses and named in Notes; Well-traveled 11_66). A conditional parenthesis ("(or 2 Dwarf
+  companions if you spot Elrond)") is no choice and lists no `B`: its condition met and unmet are the clause's boards
+  (Q-0035, Q-0389; Lore of Imladris 30_13). One with its own price the player elects is a choice (Q-0089).
+- "make each…", "make all… until…" on an event or a special ability → a `Rule` clause citing CR 4.2 "event"
+  (some effects affect only what was there when they were used): a test that a card which becomes one of them
+  afterwards is not affected. The game writes this into each definition, not into the engine, so it is each
+  card's to show. (For an EVENT it is the rule. For an ability of a card in play Ketura has ruled it card by card: a
+  snapshot where the cards it names are on the table when it is used, the standing filter where its text could do
+  nothing as a snapshot, as Not Feared in Sunlight 52_107, F-0217: `lookup.py "make each"`. A trigger of a card in
+  play that lays "each X is ... until ..." is read as an ability is: Madril 15_64. A Skirmish ability on "each minion
+  skirmishing him" owes the clause, the minions being there: Anárion 0_58, with Controlled By The Ring 15_41.
+  An event's bar on a kind for a time is the same snapshot: "prevent Hobbits from being assigned to skirmishes
+  until the regroup phase", Depart Silently 3_31, F-0558.) Where no printed card can bring one of them into play
+  inside the window, the clause lists no checks (`[]`) with a `no +:` line naming the search, and lint's `waived`
+  warning is expected (Connected By Fate 15_40).
+- "lose…", "cannot…" for a time → a `Ruling` clause: "can't" beats "can", so what was lost is not given back
+  by another card before the time is up. Where the card's own text says so ("loses fierce and cannot gain fierce
+  until ...", Prized Lagan 68_110), the "cannot gain" half may stand as an `Effect` clause of its own listing
+  `+ - D` in place of the `Ruling` clause; the tests owed are the same (a gain refused before the time, allowed after).
+  On a standing "While ..., ... loses <keyword> and is unable to gain <keyword>" the second half is a `Restriction`
+  `[+ -]`: a gain refused where it would otherwise happen, and the same gain made outside the scope (17_97).
+  An event that names no time lasts the phase (Q-0018), and that is "for a time"; where what is lost is a kind of
+  bonus ("all strength bonuses from possessions"), the gain refused is a new card of that kind arriving (18_19)
+- a search of a draw deck ("from your draw deck", when the whole deck is looked through) → a `Rule` clause citing
+  CR 4.2 "draw deck", whether or not the card says "shuffle": `+` is one more shuffle of that deck (two where a card is
+  PLAYED out of the deck looked through, one where nothing is: see gemp-testing; read as that exact number, not as `>`) and none of the other player's, read with the shuffle count; `-` is no shuffle on any alternative
+  that does not look through the deck ("or discard pile"), and none when the player declines before looking. Like
+  the snapshot, this is a rule tested card by card because the game writes it into each definition. Where the
+  card prints "Shuffle your draw deck." as a sentence, that sentence's clause owes these claims (on an optional trigger,
+  its `-` is the offer declined: Boromir 18_40) and stands for the Rule clause (Saved From the Fire 8_20), and so where it follows a reveal of the TOP cards, which is no search
+  (Q-0013): one shuffle after the reveal, none when declined (Faramir 8_34); where the card always looks, with no other pile and nothing to
+  decline first, there is no `-`, and the clause carries a `no -:` line saying so (Sudden Strike 15_51); an Activated ability whose effect plays a card from the deck is the same shape, and lint's `waived` warning on its `no -` is expected (Corsair Boatswain 10_37)
+- "reveal" → the card is shown to the other player, who has a decision to dismiss. One test reads the showing
+  for each player (the shown card listed and not selectable, a card not revealed absent); the others only
+  dismiss (the dismiss methods fail the test when that player is being shown nothing). A reveal from a hand is
+  shown to the other players only: assert once that the hand's owner is shown nothing. A reveal from a draw deck,
+  the player's own included, is shown to BOTH players, and one `DismissRevealedCards()` clears both (Card_06_016_Tests). A card taken from a draw
+  deck by its type, where the text does not say "reveal", is shown to nobody and named in the game log (Q-0025):
+  one test of the taking marks the log and reads that the cards taken are named and one left in the deck is not
+  (gemp-testing, "A card made known by the game log alone")
+- a threshold ("if you can spot 3…") → `+` at exactly the threshold and `-` one short of it, with something
+  beside the short count that nearly counts (a third ring of another culture). "While <this> is not exhausted"
+  and "has at least N vitality" are thresholds too: vitality left exactly 2 (or N) against exactly 1 (or N-1)
+- "play…on", "stack", "place…in the dead pile", "put…on top of" and the like → `Z`; so does "play the
+  fellowship's next site" (the site laid on the path, and a site it replaces back in its owner's adventure deck)
+
+### Clause types
+
+The type says what kind of statement the clause is, and sets the checks it must list at the very least.
+
+| Type | The clause is | At least | Notes |
+|---|---|---|---|
+| `Keyword` | a keyword line: "Ranger.", "Damage +1.", "Fierce." | `K` | Its id is a `C` like every clause's, `K` its check: `C1 Keyword [K] Damage +1.` How the keyword works is the rules' business and is tested once, as a mechanic. The sentence "Plays to your support area." is a clause of this type, claimed by the stats test's Support Area reading (Q-0279: B). Only where the game text prints it: a card whose sheet subtype is Support Area and whose text has no such sentence (Gladden Homestead 13_49, Rally the Host 7_308, set 11's conditions and many of set 13's, Weapons of Control 13_177 and Always Threatening 13_103 among them; a file started from a set 1 reprint drops the clause and its header line) has no such clause, and the stats test's Support Area reading there claims nothing. A keyword the text grants under a condition is a `Modifier`. A keyword the card has by rule and not in print (every Sam is Ring-bound) is an `R` clause of this type. A follower's "Aid - (N)." is of this type, its reminder in brackets left out; the Aid's cost is an `aidCost` effect and no keyword: where it is twilight the stats test reads the N with `scn.GetAidTwilightCost(card)` (G-0051), and where it is anything else (a burden, a threat, an exertion) nothing reads it and the header carries it. Either way `K` is claimed by the stats test and by a test that takes the Aid and reads what was paid, the pool N higher (Robin Smallburrow 68_111). An Aid cost that chooses a card ("Aid - Exert a [gondor] companion", Elendil's Army 18_47) is a cost like any other: the clause lists `C`, `C-` and `F` for its noun phrase beside `K`. |
+| `ToPlay` | "To play, spot…" | `+ -` | Show the change: not playable, then one legal play later, playable. A spot of a noun phrase ("a [rohan] Man") lists `F` as well, by the bullet on noun phrases: a candidate missing each word (Brego 4_263). |
+| `ExtraCost` | "To play, exert…" / "add a burden" | `+ - C` | `-` is the cost being unpayable, and that board is the cost's `C-` as well: `C-` is not listed again beside it (a ledger that does list it claims it on the same test and is not wrong). A cost another player must pay to do something with this card while it is in play ("The Free Peoples player must add a burden to assign this minion to …") is a `Modifier` that lists `C` and `C-` as well (69_38). A Decipher "To play, add a burden" has no `-` board at all (its only one, a hindered Ring-bearer, is waived by Q-0237: the "add a burden" cost bullet above): a `no -:` line (19_11). A Decipher event's "You may <pay> to play this event during the <other> phase" (For the Mark 12_114, Diversion 12_120: each lists the other phase among its timewords, without which the play is never offered, F-0647) is an `ExtraCost` too, with no `O`: the player who declines simply does not play it, and the other phase's `-` is the unpayable cost (dec-b12_112). |
+| `PlayOn` | "Bearer must be…", "Plays on…" | `F` | Two valid bearers offered, an invalid one not (a unique title as bearer: Q-0239, under "Give choices something to choose from"). |
+| `Activated` | "Phase: cost to effect." on a card in play | `+ -` | For `-`, prefer in this order: a requirement in the text unmet; the cost unpayable; a phase the text does not name. The `-` is one board, the first of these the text allows: an ability with a requirement ("Regroup: If you have initiative, ...") takes the requirement's board and owes no phase board beside it (7_214, 7_216, 7_217). Where the text has no requirement, the test of the unpayable cost claims `-` and `C-` both. The phase is one next to the card's own in which that player is asked for actions, before it or after it, not any phase: for a Skirmish event or ability, the assignment actions of its player: the Free Peoples player's (4_282, 4_299), or for a Shadow card the Shadow player's, after the Free Peoples player passes (1_216) (reached by `SkipToPhase(Phase.ASSIGNMENT)`: `SkipToAssignments()` passes them, so `PassCurrentPhaseActions()` comes before the assigning; 10_13); for a Maneuver event, the archery phase; for an event printed with two phases, the phase next to each (Stout and Sturdy 1_315, "Maneuver or Skirmish": the archery and the assignment phase, since an Assignment timeword written in survived the archery phase alone; "Fellowship or Maneuver": the archery phase and the regroup phase of the same turn, a Regroup timeword having survived the archery phase alone, 3_26; "Fellowship or Regroup": the maneuver phase, which both lines below name, and Still Far Ahead 8_29 lays the assignment phase too); for a Fellowship action, the maneuver phase with a minion laid so that there is one (the Free Peoples player is asked nothing in the Shadow phase); for a Regroup ability of either player, the maneuver phase of the same turn, with a minion laid so that there is one, and for the Shadow player not a phase of his next turn, where the roles are reversed (8_103, 58_103; the Free Peoples Fortress Never Fallen 4_276). One such phase is enough, before or after: a Free Peoples Maneuver ability may take the fellowship phase (the Shadow phase between asks him nothing; 4_276) or the archery phase (4_126). A condition that stands after the "to" ("Exert Galadriel to play the fellowship's next site if it is a forest") is part of the effect and no requirement (F-0022): where it fails the ability is still offered and its cost paid for nothing (Q-0034, an ability with a cost), and that board is read under `F`, not as the `-` (3_17). An effect with no stated duration owes `D` (CR 4.2 "phase action"); for a Skirmish ability it is read in the next skirmish, each skirmish being a phase of its own (10_24). So does a target after the "to" that nothing on the board matches ("to make a [rohan] Man skirmishing an exhausted minion strength +2" with only a [gondor] Man skirmishing: 6_97), or a count after it that comes to none ("strength +1 for each other Uruk-hai you spot" with none: 1_145, under `S`): the ability is offered, the cost paid, and nothing more happens. A Skirmish ability that strengthens its own character, with no word of his skirmish ("Add a burden to make Sméagol strength +2"), is offered to him unassigned as well: that board is read too, and notices an `inSkirmish` requirement written in (5_29). A minion's own no-cost ability that assigns "this minion" owes a further `-`: the minion already assigned, with a candidate still unassigned (shapes.md, "Each minion gains this ability", F-0388; 8_95). |
+| `Event` | the text of an event card | `+ -` | `+` includes the event leaving the hand. `-` as for `Activated`; "the cost" there is a cost the TEXT prints, so a pool short of the card's printed twilight cost is no `-`, and an event whose text has no requirement and no cost takes the phase (Whistling Death 11_104). Where the event's one requirement is its own "To play, ..." clause (a `ToPlay` row), that row's test is the `-` and the Event row writes `no -:` naming it (Sting of Shelob 18_35). An event that needs initiative does not count itself toward it (F-0464: A): its `-` is a hand of exactly four with the event among them, its `+` a fifth card (shapes.md, "If you have initiative"). An opening "If <a state of the game>," (initiative, "N or more <cards> in your discard pile") is a requirement (shapes.md). A spot the text prints ("Spot a Dwarf. For each wound on that Dwarf ...") is a requirement, not a target (F-0599). An event's target is not a requirement: a board with nothing to target is read under `F` or `+` (the event is played for nothing, CR 4.2 "effect"), not as the `-`; that board is still owed (the `F` row; missed on 4_61). The clause is copied from the definition's `gametext`: its timeword (`<b>Skirmish:</b>`) is in the clause only where the definition prints it (3_70 does, 10_61 does not). An effect it makes that names no duration lasts the phase and owes `D` (the bullet on "until" under the checks a clause lists). |
+| `Effect` | a further sentence of an event or special ability, with no phase, requirement or cost of its own ("Then…", "If you do, …", a second sentence) | `+` | Its `-` is the first sentence's. It lists whatever else its own wording calls for. A rider "The Free Peoples player may X to prevent this." is of this type and lists `+ O C C-`: `+` is the thing prevented with the first sentence's cost still paid (CR 4.2 "cost"), `O` the other player declining, `C` and `C-` that player's cost. It lists `-` as well where the card can reach a board on which the thing prevented cannot happen (the prevention is then not asked: Q-0114), and that test is owed on the card though a `mechanics/` class lays the same board with it (Flee in Terror 2_33); where it can reach none, Notes say why. A choice of prevention costs one of whose branches is "add N doubts" has no `C-` at a Hobbit table, as an "add a burden" cost has none (Check C): its ledger writes `no C-:` with that reason (Sauron 32_45). |
+| `Trigger` | "Each time…", "When…", "At the start of…" | `+ -` | `-` is the nearest event that should not set it off. Where the trigger names a phase ("if the fellowship moves during the regroup phase"), that is the same event in another phase of the same turn; this holds for a response event as well. A requirement or threshold not met ("for each companion over 4" with four) is another `-` and does not stand in for the neighbouring event (another card of the kind played while this one is in play), which an active test reads even where the tests that would also notice it are parked (1_234). For a trigger on the card's OWN play ("When you play X"), that other card is played AFTER X, once X's trigger exists: played before, a wider filter cannot show (19_38); and it is of X's own kind where a printed one can be played (another Nazgûl after a Nazgûl: with an Orc played after Úlairë Attëa 2_82, `filter: nazgul` survived). A COMPANION's "When you play" owes as well a `Rule` clause for CR 4.2 "starting fellowship" ("You may use 'When you play' game text on a starting companion"), though every such companion obeys it (Q-0305: "valid to check on everyone (where possible)"): he is chosen from the "Starting fellowship" choice the scenario rests at, and what the trigger does is read there (Pippin 1_307, the bid burden). Where it has nothing to act on there (no minion, no wound and an empty dead pile before the first turn: Aragorn 10_25, Erkenbrand 102_47), Notes say so and no clause is written; a text that excepts the starting fellowship has that board as its `-` instead (Gandalf 17_17), and "during the fellowship phase" is such a text, the starting fellowship coming before turn 1 (Dwarven Warrior 12_7). For "is killed", "is discarded" and "is wounded" the nearest event is the neighbouring word: a companion discarded from play is the `-` of "killed" (CR 4.2 "killed"; Slag Mounds 7_363), and a kill that of "discarded" (F-0444). That `-` is owed in the card's own file though a `mechanics/` class lays it on this very card (Mordor Guard 7_287 in `mechanics/actions/OwnRemovalTriggerTests`). Exerting and wounding are not owed as each other's `-`: an exertion beside "takes a wound" (Q-0265: A) and a wound beside "each time X exerts" (Q-0315: A) are each shown once, in `mechanics/wounds/` (`AWoundThatIsNotTakenTests`, `AWoundIsNoExertionTests`). For "wins a skirmish" it is the same character LOSING a skirmish, and living through it (vitality 2 or more, the winner given strength by `ApplyAdHocModifier`: a bearer killed by the loss takes the card and its trigger with him, and `losesSkirmish` cannot be told from `winsSkirmish`; 4_36): a trigger on the end of any skirmish he is in passed every other test of 11_35 and 12_35; for a trigger on the card's OWN win that loss is what is owed, and another card of its kind winning is not (Q-0309: A, Úlairë Toldëa 6_88). A required "each time X wins (loses) a skirmish" is ordered with the rule's skirmish damage, kill or no kill: until `FreepsResolveRuleFirst()` neither is carried out (pitfalls, "When a wound or an overwhelm kills and something answers it"; Isildur 18_54). Where the effect acts on a card the neighbouring event does not touch ("you may heal bearer"), lay that card so the effect could reach it (bearer wounded), or the offer is withheld as doing nothing whatever set it off (Q-0224) and the `-` shows nothing (Brego 4_263). A site's trigger owes no `R` for the site left behind, and one that names the site by its title is shapes.md's "A site whose text names the site by its title" (Midgewater Marshes 1_332). |
+| `Response` | "Response: If…" | `+ -` | `+` shows the response offered and its effect; for a prevention, that the prevented thing did not happen. |
+| `Modifier` | a standing effect: "Bearer is strength +2.", "While…, …" | `+ -` | `-` is the condition not holding, or a card just outside its scope. Read the value with and without. A modifier on the card itself or its bearer still owes F's other card of its kind, one that meets the condition and is read as untouched. For a twilight cost modifier on the card itself ("Éomer's twilight cost is -1"), that card is a second card of its type in the HAND, its cost read beside the card's (4_267). Where two sentences between them take in every card of a kind ("each of your minions is +1 ... each of your opponent's minions is -1", 94_23), no card is outside both: each sentence's `-` is the other's card, read at the other's number, and the printed number is the control. Where a wider sentence of the same card gives the same thing wherever a narrower one's condition fails (13_155: muster to the bearer in region 1, to [shire] companions in region 2, to every character in region 3), the narrower one's `-` is its card just outside the scope, and Notes say that its condition has no board of its own (no `no` line). A site's continuous text (a plain `modifier`) also owes an `R` clause: the same board with the site left behind (CR 4.2 "active", LR 3; shapes.md, "A site's continuous text"); one that names the site by its title, "A site whose text names the site by its title"). "Is not overwhelmed unless his strength is tripled" is of this type, `+ - F` (Boromir 1_96; Coat of Mail 51_101's ledger, which types it `Restriction`, owes the same checks). A damage bonus or fierce given under a condition is read with `GetKeywordCount`/`HasKeyword`, no skirmish fought unless the card's text or a check D needs one (pitfalls, "Damage bonuses add up"). |
+| `Restriction` | "may not", "cannot" | `+ -` | `+` is the forbidden thing refused; `-` is the same thing allowed on the same board without this card. Without that control the refusal proves nothing. A bar on the card itself (`minion: self`) owes, as a modifier on itself does, another card of its kind on the board read as not barred (19_18), and so lists `F` and claims that reading (lint's `self-bar`); where the card's own text clears every such card off the board (Watcher in the Water 19_21 discards every minion but tentacles, and no tentacle may bear possessions), the control is the same thing shown allowed on another card before this one comes in, and a `no F:` line says why. Others being offered in the very choice that leaves this one out is a control too, provided nothing else about them explains the difference. A Restriction that names its doers or its objects by a filter ("cannot be removed by Free Peoples cards") lists `F` and owes F's spread of valid candidates as a choice does: for a bare side word, a character, an item and a card that is neither (10_47: beside an ally and a possession alone, `side(free people)` narrowed to those two kinds passed). An object named by a bare type word ("Possessions borne by this minion") owes its non-X too: where no doer of the barred side can choose both, a separate doer that chooses the non-X is the control (Seclusion 12_23 discarding a condition the Entranced Uruk 13_163 bears). Where the text names the doers ALLOWED ("may be exerted only by Shadow cards"), the barred side owes that spread too, and a card of neither side is among the barred: a site (Ettenmoors 1_331 for Throw Yourself in Next Time 2_71, F-0551). A card that bars an ACT ("may not look at or reveal", "cannot take wounds") is tested on ONE act it stops and its control, not on every way the act is done: that each definition word doing the act asks the bar is shown in a mechanics class (Q-0264: B2; Ketura: "mechanic tests should exist that do such a thing ... which will then ensure that future cards using the bar only need to act as A"; shapes.md, "A card that bars an act", names the classes). |
+| `Choice` | a sentence that is only a choice between alternatives | `B` | Usually a choice is part of another clause, which then lists `B`. |
+| `Ruling` | an entry in Section Three of the rules that names this card | `+` | Reproduce the ruling's situation. A glossary entry's example (CR 4.2 "transfer" naming Strange-looking Men 11_100) is no `Ruling`, though `packet.py` lists it under "Rulings that name this card": it is an `Interaction` or a `Rule`. An entry under this card that only points at another's ("See My Axe Is Notched") is this card's `Ruling` too, that ruling read for this card's own text (Final Count 4_69, dec-b4_69). |
+| `Rule` | a glossary entry that bears on this card in a way its text does not show | `+` | For example, the entry "Sam": a Sam who can become the Ring-bearer when Frodo dies can only do so if Frodo was the Ring-bearer. Cite the entry. Not for rules that every card of the kind obeys, which are mechanics. |
+| `Interaction` | a rules example that names this card with another | `+` | Not an entry that gives two cards as separate examples, neither acting on the other: that is a `Rule` clause in each card's file (CR 4.2 "event", Eregion's Trails 1_104). Lives in the file of the card named first (a title twin cards share names each of them, so each twin's file holds it: The Ruling Ring 1_2, 4_2, 7_1; Q-0220: H; a twin is any card of the title named, whatever its subtitle or text: the CR 5.0 "hinder" example's "Shadowfax" is owed by every Shadowfax: 4_100, 8_21, 11_40, 13_40, 17_24, 67_24, 103_5); the other card's ledger mentions it under `Notes:` and writes no clause for it (no `Interaction` or `Rule` clause, not even one with a `no +:` line). Where the example's situation is also a check of the other card's own text (the nearest miss of its response: Sapling of the White Tree 59_35), that card's file tests it as that check, with any card that brings the situation about, and writes no `Interaction` clause. Where the other card's file was landed first and already holds the example as a clause of its own (Goblin Runner 1_178's R1, the CR 4.2 "discard" example with Watcher in the Water 2_73), the example stays there: the card named first cites that test under `Sources:` and writes no clause of it. A card the example names that is neither the one named first nor the file holding it (Southron Explorer 4_250, second in CR 5.0 "restore", held by Desert Wind Stalker 103_49's R1) cites the landed test the same way and writes no clause. ("That card" is the other card: the card named first keeps its `Interaction` clause. Nor does the waiver reach a `Ruling` clause: a Section Three ruling that names this card is reproduced in this card's file, though the other card's file lays the same board for a check of its own: Fortress Never Fallen 4_276 beside Siege Engine 5_60.) |
+| `FormatRule` | behaviour that differs by format | `+ -` | One scenario method per format. See `references/format-rules.md`. |
+
+A sentence that is several of these at once takes the type of its main verb and lists the checks of all of them.
+
+**A check the type asks for and the clause cannot have** is written under the clause, in place of a claim, as
+`no <check>: <why>`:
 
 ```
-"Maneuver: Exert self to make a companion strength +3 until the regroup phase."
+C2 Trigger    [+ F R]    At the start of each of your turns, heal every ally whose home is site 3.
+     no -: the only turns that are not yours are ones on which this card is not active
 ```
 
-Tests needed:
-1. **Availability**: Action appears during correct phase
-2. **Unavailability**: Action does NOT appear during other phases (or when requirements unmet)
-3. **Cost verification**: Exertion actually happens (pre/post wound check)
-4. **Effect verification**: Strength actually changes by correct amount
-5. **Filter specificity**: Only valid targets are chooseable (with N+1 valid targets)
-6. **Duration**: Effect persists through skirmish, expires at regroup
-7. **Limit**: If `limitPerPhase` or `limitPerTurn`, second use is blocked
+The conformance check accepts it and counts it, and the reviewer reads every one. It is for a check that cannot
+be shown at all, not for one that is awkward to arrange. A `no` line's reason may run on to the lines below it.
+Where the reason, or a line in Notes or `Dropped:`, is that no printed card makes the board, it names the search of the
+`gametext:` lines that found none, made for the shape of words wanted ("wound a companion") and not for one card.
+The Hobbit sets (30 to 33) carry `gametext:` since engine pass 77, and `--find` matches it; a search by field as
+well (`race:`, `type:`, `itemclass:`) still finds what no text says (67_24: Glamdring 30_29, an artifact hand weapon).
+The check is then left out of the clause's brackets: a clause that lists a check and also has a `no` line for it
+is refused.
+A claim line ends at the test's name, and only claim, `no` and `waits` lines stand below one: the conformance
+check reports a claim with words after it, or a remark below a claim, by its line in the ledger. Remarks go in
+Notes.
 
-```java
-@Test
-public void ManeuverAbilityExertsAndBoostsStrength() {
-    var scn = GetScenario();
-    var card = scn.GetFreepsCard("card");
-    var comp1 = scn.GetFreepsCard("comp1");
-    var comp2 = scn.GetFreepsCard("comp2");
-    var minion = scn.GetShadowCard("minion");
-
-    scn.MoveCompanionsToTable(card, comp1, comp2);
-    scn.StartGame();
-    scn.MoveMinionsToTable(minion);
-    scn.SkipToPhase(Phase.MANEUVER);
-
-    // Pre-check
-    assertTrue(scn.FreepsActionAvailable(card));
-    assertEquals(0, scn.GetWoundsOn(card));
-    assertEquals(7, scn.GetStrength(comp1));
-
-    // Act
-    scn.FreepsUseCardAction(card);
-    scn.FreepsChooseCard(comp1);
-
-    // Post-check
-    assertEquals(1, scn.GetWoundsOn(card));    // cost paid
-    assertEquals(10, scn.GetStrength(comp1));   // +3 applied
-    assertEquals(7, scn.GetStrength(comp2));    // other companion unchanged
-    assertTrue(scn.AwaitingFreepsManeuverPhaseActions());  // bookend
-}
-```
-
-### Modifier (Passive)
+**A check the rig cannot show yet** is written the same way, as `waits <check>: <the rig request> <what the rig
+lacks>`. It is no waiver: the check is still owed, and the card is parked on the request until it is built.
 
 ```
-"Bearer is strength +2 while bearer is a Dwarf."
+C1 Modifier   [+ - F]    Bill the Pony cannot be assigned to a skirmish against a Nazgul.
+     waits F: G-0000 no reading of whether one character may be assigned to one minion
 ```
 
-Tests needed:
-1. **Bonus applies**: Attach to Dwarf, verify strength includes bonus
-2. **Bonus doesn't apply**: Attach to non-Dwarf, verify no bonus
-3. **Dynamic update**: If condition can change mid-game, bonus adjusts
+### The stats test
 
-Modifiers require no action — just set up the board state and check. Put both valid and invalid bearers in the same test when possible, or use separate `GetScenario()` setups if attachment constraints prevent it.
+`<Name>StatsAndKeywordsAreCorrect` asserts every printed field of the card against the blueprint: title,
+subtitle, uniqueness, side, culture, type, race or item class, twilight cost, strength, vitality, resistance,
+signet, site number or home, and each keyword with its number. A possession or artifact that prints no item class
+reads null: `assertNull(getPossessionClasses())` (Bill the Pony 3_106, The Mirror of Galadriel 1_55). An ally's home
+is a "Home:" header line and `assertTrue(card.getBlueprint().hasAllyHome(new AllyHome(SitesBlock.FELLOWSHIP, 3)))`
+(`SitesBlock.HOBBIT` for "3H": Lindir 33_14); there is no `getAllyHomeSiteNumbers()`. A site's fields are its block (`getSiteBlock()`),
+its Shadow number (`getTwilightCost()`), its direction, and its site number, which a Shadows-block site does not
+print (`getSiteNumber()` is 0 there). `<Name>` is the title in letters only: a stub's name built from markup or an accent is cleaned (`WeAretheFightingUrukhai`, not `WeArethebrFightingUrukhai`; `Grima` for Gríma; dec-b4_209). Its header comment reproduces the card. A site's header has Block, Site Number (where
+printed), Shadow Number and Direction lines in place of the generated stub's empty Side, Culture and Subtype
+(Card_04_329_Tests). A support-area card's Subtype line may stay blank as generated or read "Support Area", and a
+Response event's blank or "Response" (1_247, 1_214): both are landed and no assertion hangs on it. The
+expected values are the sheet's; `reconcile.py <id>` (Decipher cards) and the packet's "Sheet against
+definition" section (every card) show any field where the sheet and the definition disagree (see "When the sheet
+and the definition disagree" above). A strength, vitality or other bonus printed on a card that is borne (a
+possession's +2) is a printed field: asserted here, with no clause of its own; that it reaches the bearer is
+`mechanics/inplay/BorneItemsTests`'. Its line of the header is written as the sheet prints it ("Vitality: +2") or as the bare
+number ("Vitality: 2"): the landed files have both, lint takes both, and no assertion hangs on it. A site number printed on a card that is no site (Soldier's Cache 18_58's +3 for its bearer) gets a "Site Number:" line and its `getSiteNumber()` assertion all the same. Timewords are not a printed field: they are how a
+definition says when an event may be played, and a definition may carry more of them than the card prints. Where a stats test reads one, it is `scn.HasTimeword(card, Timeword.SKIRMISH)`: `Keyword` has no timewords.
+A Race to Mount Doom modifier's intensity is one: its header has an `Intensity:` line and the test reads
+`getBlueprint().getIntensity()`, at the definition's value (no sheet has these cards); lint asks for both.
 
-### Trigger (Each Time)
+On a PC card the header comment already in the file often describes an earlier version of the card, above
+assertions that are current. Rewrite it from the packet; never keep it on trust. The V-set and errata sheets have
+no resistance column, so resistance is asserted at the definition's value. No sheet has a site's direction
+either: assert the definition's value, and on an erratum compare it with the original's `direction:`; where the
+two differ it is a finding, and the two card images say which was printed (Doorway to Doom 68_134, F-0302).
+It is a `LotroCardBlueprint.Direction` (`LotroCardBlueprint.Direction.LEFT`, with an import of
+`com.gempukku.lotro.game.LotroCardBlueprint`; a bare `Direction` does not compile: `Card_13_185_Tests`).
+A definition with no `direction:` line (every Hobbit-set site) reads null: assert `assertNull(getSiteDirection())`
+until the card is transcribed from its image (`Card_30_051_Tests`).
 
-```
-"Each time you play a [moria] weapon, add (1)."
-```
+## Rules every test follows
 
-Tests needed:
-1. **Trigger fires on matching event**: Play correct card type, effect happens
-2. **Trigger doesn't fire on non-matching event**: Play wrong card type, no effect
-3. **Optional vs mandatory**: If `optional: true`, verify choice is presented; if false, effect just happens
-4. **Multiple fires**: Trigger works repeatedly, not just once
+**Its own table.** A test's first statement gets a table from a `Get...Scenario()` method. Tests share nothing.
 
-### Response (About To)
+**Arrange by cheating, act by playing.** Put the board where it needs to be with the rig's cheats, then do the
+thing under test the way a player would. Never cheat the thing under test, and never play out something that is
+only set-up. That takes in the card under test: where its text does not bear on its own play, it is cheated into
+play ahead of a reading of its standing text, not played from hand (Merry 1_303, Glóin 2_7). Where a clause counts something ("strength +2 while he bears 3 items"), changing the counted thing
+is part of the act: do it by legal play in one test, which shows the modifier switching on as the count is
+reached, and cheat it in the others. Where the text reads a state of other cards (their wounds, an exhausted
+companion), the card is still cheated in and the legal act is that change, an exertion by an ability (12_151,
+12_153). That is for a standing text, which has to be seen to switch on. Where nothing the
+text bars can happen in the phase the count is changed in (a bar on Shadow acts, reached by playing a companion),
+the play comes ahead of the act and the act is read refused; the test without the count is the reading of it off
+(4_301). A trigger or a one-off effect that counts at its moment ("add (1) for each burden", "for each Free
+Peoples possession") reads the board once: its counts are cheated, at the two counts `S` asks for (92_25, 92_26).
 
-```
-"Response: If a companion is about to take a wound, discard this to prevent that wound."
-```
+**Read before and after.** An assertion after an action means little without the same reading before it. If an
+ability exerts, read 0 wounds, act, read 1; that holds for a helper's own cost too, where its reading is the evidence that the helper's action was taken (an Explorer's exertion). A state the test laid by a cheat (wounds added, burdens or threats added, an item attached, a card put in a zone, the top or bottom of a draw deck included, where lint counts only `assertInZone(Zone.DECK, card)` and not a top- or bottom-of-deck reading such as `GetFreepsBottomOfDeck()`: 15_36) is read too, before the action that changes it and before the game first moves on after the cheat (a pass, a skip, `StartGame`: lint's `read-before`, 1_123, 1_129) or, for a state cheated before `StartGame()` that nothing at the start of the turn can touch (no start-of-turn trigger pending), straight after it (Card_11_017_Tests; dec-b12_17), and so is one the action must leave alone (a control's cheated wounds, a copy cheated onto a bearer that a declined offer leaves there, a card cheated into the hand a reveal must not show): "unchanged" after means nothing without the reading before (dec-b7_354). A card cheated into a zone the action takes it from is put there early enough to be read there first (a Nazgûl cheated into the discard pile he is then played from); the one state not read before is one the action removes at once, an item discarded as soon as it is attached (Q-0307). Where the amount is not in the wording ("heal a minion", "wound a companion"), the target
+carries more than the effect should change: one wound healed from two reads 1, which "heal two" would not.
+Where the target's vitality holds only one wound and no printed card raises it (a Hobbit ally healing itself), its vitality is
+raised by hand, `VitalityModifier` after it is in play: a number that only arranges the board (Q-0213: E; 1_297).
 
-Tests needed:
-1. **Response offered**: When matching card about to be wounded, response is available
-2. **Prevention works**: Wound is actually prevented (pre/post check)
-3. **Cost paid**: Card is discarded (assertInDiscard)
-4. **Filter specificity**: Doesn't trigger for non-matching targets (e.g., not for minions)
+**Give choices something to choose from.** One more valid candidate than the choice needs, and an invalid one
+beside them (see "One candidate is chosen for you" in gemp-testing). Assert the offer with
+`FreepsHasCardChoiceAvailable(...)` and `FreepsHasCardChoiceNotAvailable(...)` before choosing (singular names,
+each taking several cards: a plural `...Choices...` does not compile). A choice the game
+carries out unasked, because one valid card is there, shows nothing of the invalid card beside it: a second valid
+candidate is laid and the invalid one read "not offered" (Q-0266: B; Ketura: "Yeah I think B is the way to go.").
+That is owed by the test that claims the choice's `F`, once: a later use of the same choice in that test, carried
+out unasked because an earlier use exhausted the other candidate, owes nothing more (3_114); a `-`/`C-` test whose choice goes unasked because only one
+candidate can be paid for owes nothing more there (8_30).
+Q-0266 is about choices of cards, an effect's own ("exert Faramir to wound that minion", 4_118) as well as a bearer's or
+a target's: "<do X> or <do Y>" carried out unasked because one branch cannot be done in full
+is the board F-0310 owes (shapes.md, "<Do X> or <do Y>"), and the reading there.
+Where the text allows only one valid candidate ("the losing character": one skirmish has one, Blade Tip 1_209),
+the invalid ones are laid all the same, the game going on unasked is the reading, and Notes say why.
+So is "a companion (character) it is skirmishing" in a minion's own Skirmish ability: a minion skirmishes one
+Free Peoples character (15_98, 15_100).
+A bearer named by a unique title ("Bearer must be Legolas") is such a text (Q-0239): one board for each card type
+of the title that is laid, and the invalid candidate read as the play refused on a board without him (1_33).
+Where the invalid candidate is the Ring-bearer and the effect a discard, the reading shows nothing either way, since
+he is never discarded (Q-0109): the bearer in such a test is another (Sam bearing Sting 8_113). Where the text
+says neither "may" nor "up to", read the minimum of one such choice (`FreepsGetChoiceMin()`; a play from a draw
+deck is 0 to 1 by Q-0019 whatever the text says: pitfalls, "A "play ... from your draw deck" action"; a play
+from a discard pile is 1 to 1, 12_176; a TAKE into hand from a draw deck is 0 to N by F-0049): a choice that has
+wrongly become optional looks the same otherwise. A "may" that the game asks as a yes/no ("a minion may exert
+to prevent this") is answered by the yes: the choice of who does it has its minimum read too (5_89); so does the choice after an optional
+trigger's yes ("When you play this minion, you may heal a [moria] minion": 1_187, 2_63). A text with two choices (one for its cost, another for its
+effect, a card and then the bearer it is played on: Goblin Scavengers 1_179, or a bearer and then its own "when you play"
+trigger's choice: Relentless Warg 17_89) has the minimum of each read, once;
+a card played on a bearer has its bearer choice's minimum read even where that is its only choice (17_24, 18_26, 11_171).
+"Only choice" means the text's only choice, not one candidate: with one legal bearer the card goes on him unasked
+and nothing is read (a unique title's bearer, 9_18; pitfalls, "One candidate is chosen for you").
 
-### ToPlay / ExtraCost
+**Say what the game is waiting for.** After a test's last action, assert the decision the game has come to rest
+on: `AwaitingFellowshipPhaseActions()` and its kin, a named decision, a pending optional trigger, or
+`GameIsFinished()`. In a phase both players act in, a Free Peoples action leaves the game on the Shadow player's
+decision (`AwaitingShadowRegroupPhaseActions()`; pitfalls, "Both players act in most phases"). After the last assignment,
+even with one skirmish, it is `FreepsAwaitingSkirmishChoice()` (pitfalls, "The moment after the assignments"). This is what catches a trigger left dangling or a response window nobody expected, and it is
+the proof in a test that something did *not* happen. The conformance check also takes the phase read on its own
+(`assertEquals(Phase.REGROUP, scn.GetCurrentPhase())`), which says less: it does not show that nothing is pending.
+A test that makes no play and gives no answer after `StartGame()` (a standing modifier read in the fellowship
+phase), or whose last rig call is a skip to a phase followed only by readings, owes none: there is no last
+action for the game to have come to rest after. Adding one does no harm. What such a test may not do is read an
+offer as ABSENT with nothing beside it that shows the player was being asked (the conformance check's `not-asked`
+warning): put his `Awaiting...PhaseActions()` or his decision beside that reading.
 
-```
-"To play, spot 2 Elves."  /  "To play, exert a [gondor] companion."
-```
+**Expected values come from the text.** Work out what should happen, write it down, then run it. Do not run the
+game and copy what it did. Where a number is a sum, the comment spells the sum:
+`// 5 to play + 2 roaming + 4 tax`. The words the game uses to present a choice or an action ("Remove (4)",
+"draw deck") are not expectations; take those from the game as they are.
 
-Tests needed:
-1. **Playable when met**: Card appears as playable with requirements satisfied
-2. **Unplayable when not met**: Card does NOT appear as playable without requirements
-3. **ExtraCost paid**: For ExtraCost, the exertion/discard actually happens upon playing
+**A reading that could not have come out otherwise shows nothing.** A before and an after that are equal, or an
+assertion that would hold on that board whatever the card did, is not a check. Arrange the board so that the
+right behaviour and the nearest wrong one give different readings. Where the card both takes and gives the same
+amount on every board it can reach (Mordor Fiend 60_91, roaming, pays 5 and adds 5), the equal reading is a check:
+its comment says what each wrong behaviour would read, and another board shows the cost by itself.
 
----
+**One behaviour, shown once.** A positive and a negative case that the same board shows belong in one test.
+Stages that build on each other belong in one test. Two tests that would pass or fail together are one test.
 
-## Duration Testing
+**A switch is shown once on each side.** A card that switches something on other cards (The White Council 101_18
+and Saruman's Staff 4_174, on the first sentence of Saruman's text) is tested with ONE card that answers the
+switch, and each card that answers a switch shows in its own tests that it does (Ketura on Q-0236: "we only need to
+ensure that the *outgoing* mechanism has been enabled, and it's up to each of those individual cards to check their
+side responds to the *incoming* mechanism"). shapes.md, "A ruling that a switching card has NO effect", has the
+boards and the ledger's clause.
 
-When an effect has a duration (`until`), test both sides of the boundary:
+**Names say what happens.** `HealsOnlyAlliesWhoseHomeIsSite3`, not `TestTrigger` or `Site3Test2`.
 
-```java
-// "Make X strength +3 until the regroup phase"
-scn.FreepsUseCardAction(card);
-assertEquals(10, scn.GetStrength(target));  // bonus active in maneuver
+**Known cards only.** Every card in a scenario is there for a reason, has a comment naming it, and has had its
+definition read. Prefer cards with no text.
 
-// ... advance through archery, assignment, skirmish ...
-assertEquals(10, scn.GetStrength(target));  // STILL active during skirmish
+**Cards that exist.** A test shows what a card that exists does (Ketura, 2026-10-11: "We've got 3,000 cards that
+exist, that's a big enough burden without adding cards that *don't* exist. Remember, we're trying to make the
+cards robust, not *necessarily* the design language they're built in"). No card is invented: none with an id of
+its own is added to any definition file for a test, and no definition text is stapled onto a card to stand in for
+a card there is not. Where no printed card can make a board, the check is not shown, and Notes say what could not
+be. A definition word no card uses is not tested; a word one card uses is tested as far as that card goes and no
+further. The one exception is Ketura's, and is a mechanic's and not a card's: a guard for a thing no card should be
+able to do ("not being able to discard the One Ring, not being able to hinder Maps") is laid with the rig's ad-hoc
+staplers (`AdHocEffects`) on a card with no usual text (Frodo, or a minion, by side), in the test itself, which
+"establishes the artificial test nature of the card while also including its creation right there"
+(`lookup.py Q-0241`). The one place definition TEXT is made up for a test is the account-name check (`PlayerIs`,
+Race Text 94_5's): it is shown once, card-agnostic, in `mechanics/actions/PlayerIsRequirementTests`, the requirement built
+from text written in the test and asked at a table seated under made-up names (Q-0271: C, "Yeah do C", on the
+strength of Q-0190).
 
-scn.SkipToPhase(Phase.REGROUP);
-assertEquals(7, scn.GetStrength(target));   // bonus GONE at regroup
-```
+**A board a game could reach.** The cheats shorten a set-up; they do not make a board no game arrives at (Ketura
+on Q-0213, 2026-10-10: `lookup.py Q-0213`). No card is given a culture or a race, and none a keyword that no
+printed card of its kind has: the printed card that is the thing stands there (gemp-testing's `helpers.md`), and
+where there is none the candidate is not asked for. A keyword or a number that only arranges the board (fierce
+for a second skirmish, an archer, a strength that keeps someone alive) may be given by hand; a new test takes the
+printed card that gives it where `helpers.md` has one. A terrain is a real site of that terrain in the path,
+never a keyword given to a site. No more copies of a title in play than its dots allow, counted by title whatever
+the subtitle, hindered copies included (Ketura on Q-0239: "no cheating in more copies of a card than their
+uniqueness level allows"): never two cards of one unique title, never a third of a two-dot title, and a board that
+needs more is no board (lint warns `copies` where a test's cheats, as far as it can follow them, lay one). Items are cheated only onto bearers
+their text allows, one of each class to a bearer: for "bears 3 cards" or "each weapon", items of different classes.
+No culture token is put on a card that nothing gives tokens to. A site of another block may stand in a path where
+its own text is what the test reads. The tests that landed with such a board before the ruling are relaid by a
+pass of their own (`orchestrator/engine-pass-24/relay-list.tsv`), not by whoever next opens the file. A lone
+test in the file of a card not yet landed is not one of them: the batch that works the card relays its board
+(shapes.md, "An old test kept and put in form"; two Dwarven Armors on Gimli in Card_03_096_Tests, dec-b3_94).
+WHEN a card is laid is another matter: cards that stand in play together later in the turn may be laid earlier in
+it, so a minion cheated onto the table in the fellowship phase, to read a standing text on it before and after a
+Free Peoples card is played there, is a shortening (Q-0228; Ketura, 2026-10-08: the cheats "short-circuit
+more-or-less legitimate setups"). So is a minion cheated in at the start of the regroup phase, where minions that lived
+through the skirmishes stand (Sting of Shelob 18_35, every Shelob being fierce). It is still no candidate for anything chosen or done in that phase (check `F`), a cost it pays included: a minion that stands as one is laid in the Shadow phase and lives through the assignment and skirmishes. Cheated in after `StartGame()`, it wants `FreepsRefreshDecision()` before a card is played or an offer read
+(lint's `stale`; pitfalls, "A board changed under a pending decision").
 
-Common duration boundaries:
-- `end(current)` → expires at end of the phase it was used in
-- `start(Regroup)` → "until the regroup phase" — active through skirmish, gone at regroup start
-- `endOfTurn` → survives all phases, gone next turn (test by moving to next turn if needed)
+**Only the rig.** No `scn.game()`, `scn.gameState()`, `getModifiersQuerying`, raw `FreepsDecided("0")`, decision
+parameters, reflection, sleeping or randomness. (The rig's own getters for a decision's bounds,
+`FreepsGetChoiceMin()` and `FreepsGetChoiceMax()`, and for the number a question comes filled in with,
+`FreepsGetChoiceDefault()`, are the rig and are fine.) An empty answer, `FreepsChoose("")`, is a raw
+string too: `FreepsDeclineChoosing()` chooses nothing. `ApplyAdHocModifier` is allowed for arranging a board (a strength
+the test needs, a keyword that printed cards of the kind have: "A board a game could reach"). Any other ad hoc effect (`carryOutEffectInPhaseActionByPlayer` among them) needs its
+reason on the same line as a `// lint-ok: ...` comment, which the reviewer reads.
 
----
+## Rulings, interactions and formats
 
-## Limit Testing
+`packet.py <id>` lists every individual ruling that names the card and every rules example that mentions it.
+Each becomes an `R` clause and a test, unless it only restates the printed text (a "Clarification" whose wording
+the spreadsheet already has): say so under `Sources:` instead. Rulings on other cards that only have this card's
+title in their text (another Galadriel, "the Legolas Starter Deck"), and council pages about another card, come
+under a heading of their own: read them for whether they bear on the card; they are not its rulings.
+An entry that names the card's title only as another version's (CR 4.2 "unique" on Gandalf's Staff, Walking Stick and the
+Gandalf's Staff with no subtitle, printed for Gandalf's Staff, Ash-staff 11_34) owes no `R` clause: a line under `Sources:`.
+So too one that names the card only as another card's bearer (Sword of Dol Guldur's Clarification "While bearer is
+Úlairë Toldëa ...", on 11_225): it rules the other card's text, and is that card's (dec-b11_221).
+A council page on the card with no decision section ("Discussion", "no decision yet") rules nothing and owes no `R`
+clause: its question, where it is a real doubt, is a question for Ketura, with the printed reading tested as built (Q-0363).
 
-```java
-// "Limit 1 per phase"
-assertTrue(scn.FreepsActionAvailable(card));
-scn.FreepsUseCardAction(card);
-// ... resolve ...
-assertFalse(scn.FreepsActionAvailable(card));  // blocked on second use
-```
+Format is mostly a matter of which decks may sit down at a table and seldom changes how a card plays, so tests do
+not have to use the format a card was printed for. The exceptions are rules that a format switches on or off.
+`references/format-rules.md` lists them and the wording that brings each into play; `packet.py` flags a card whose
+text touches one. Such a card gets a `FormatRule` clause and is tested under both settings. The best-known case:
+whether a skirmish involving the Ring-bearer can be cancelled depends on the format, so a card that cancels
+skirmishes is tested with the Ring-bearer in the skirmish under a format that allows it and under one that does
+not.
 
-For `limitPerTurn`, verify the action is unavailable after use even in a subsequent phase of the same turn.
+A card whose text names sites of a particular block is tested on that block's path. Each sentence of the card
+that names a site number owes this for itself: on Hobbit Farmer 1_295 "your site 1" and "opponent's site 1" are
+two filters, and the second wants the opponent's site 1 of another block under the fellowship (the second
+player's Farmer on a Tower path: his action is not offered).
 
----
+Which formats carry an erratum is deck validation, not play, and no card owes a test of it. Where a card's file
+already has one (Final Strike 60_20, the only errata file that does), it stays there: an `R` clause of type
+`FormatRule`, `+ -`, citing the format definitions, with one `Get...Scenario()` method per format that returns a
+`DeckValidationScenario`.
 
-## Scaling Value Testing
+The no-effect flag is not asserted for every card. It is tested as a mechanic (`mechanics/actions/NoEffectFlagTests`, the
+common cases) and asserted in a card's own tests only in three cases: the definition declares `noEffectUnless` (a
+convenience guard that was converted: Breaching Shot 102_21); the rulings log names the card for it (Trail of
+Savagery 102_31); or the card has an ability or optional trigger with a cost and a limit on what its effect gives, which
+therefore stays on offer at its limit (Ketura on Q-0041 and Q-0093; an `effectLimitPerPhase` or
+`effectLimitPerTurn` field beside a `cost`; a cap written inside the effect, as `limitPerCardThisPhase`, is the
+mechanic's and gets no such clause: shapes.md, "Limits on uses versus limits on what the effect gives"). Such a card gets an `R` clause of type `Ruling`, checks `+ -`, citing Ketura's ruling of 2026-10-06 on
+the no-effect flag, or on Q-0041 for a limit. `+` is the word read with `FreepsActionNoEffect` /
+`ShadowActionNoEffect`: `"effect"` on each board the old guard shut, in the test that already takes the action
+there; `"limit"` at the limit, in the test of the `L` check, which then takes the action. `-` is `"false"` on the
+nearest board where the action does something: for a limit, before the first use. One assertion a test, one claim
+line each; no new test is needed. A card whose tests merely happen to offer a flagged action asserts nothing about
+it; neither does one with a limit on uses ("limit once per phase", a `limitPerPhase` or `limitPerTurn` field),
+which is withheld at its limit and has no flag to read; and neither does one whose cap is written inside its
+effect and not on the ability (a `CardPhaseLimit` or `CardAffectedLimitPerPhase` amount, `limitPerCardThisPhase`):
+the game flags some of those at the cap and not others (hjson-reference, "Limits"), and which is the
+mechanic's to show, not the card's. A printed "(limit +N)" with a cost can be either: stage 1, blind to the
+definition, may plan the `R` clause for the flag, and stage 2 keeps it or drops it by the field the definition
+writes (Hrethel 6_95, a `cardPhaseLimit`, has none). An ability
+or optional trigger with no cost that is offered though it would do nothing is not a flag matter: by Q-0034 it
+is withheld, and since Q-0224 the game withholds it wherever its effects can say that they will do nothing
+(shapes, "An optional trigger or ability that costs nothing", has the kinds). The card's test reads the offer
+absent on that board; a requirement is not written for it. Where the offer is still made, the effect is of a
+kind the game cannot ask: that is a finding, which names the kind, and is corrected by a requirement as before. So is a "you may" with no cost of its own inside an
+event's or ability's text that is asked when yes would do nothing: the event is still offered, the question
+inside it is not (shapes, F-0379).
 
-For "strength +1 for each X you spot":
+## When something is in the way
 
-Test at least two different counts to confirm scaling, not just a fixed bonus.
+Stop work on the card, record what is in the way, and move to the next. Do not find a way round.
 
-```java
-// With 2 matching cards in play
-scn.MoveCompanionsToTable(match1, match2, nonMatch);
-scn.StartGame();
-assertEquals(baseStr + 2, scn.GetStrength(card));  // scales with count
-```
+- **The rig cannot express a check.** Write a rig request (what the test needed, the signature proposed, the
+  interface it belongs in) and leave the check untested. No helper method, no reaching past the rig, and no
+  assertion that the rig or the game throws: a card test never relies on an exception (`assertThrows`, a `try`;
+  Ketura, 2026-10-08). The check is written in the ledger as `waits <check>: G-0000 <what the rig lacks>`, and the
+  card is parked on the request until the rig can show it.
+- **The text and rules leave a real doubt.** Write the question for Ketura, with the two readings and what each
+  would mean for the test, and put its id on the ledger's `Findings:` line. If an existing test already takes one
+  reading, keep that test active: it is the best evidence there is of what was meant. (One the repository
+  already had switched off with a bare `@Ignore`, and the game fails, cannot be: keep it line for line, parked
+  on the question's number, beside the parked test of the other reading.) Otherwise, if one reading
+  is clearly likelier, write the test for it and park it with `@Ignore("Q-0000: ...")`. Where the existing
+  test's reading goes against the plain text, do both: the existing reading stays active and a test of the
+  text's reading is written and parked, ready to go live on a ruling. The parked test may claim a check an active
+  test already claims. **Parking is for a test the game fails**, and fails at a reading of the thing it is parked for:
+  read that state before acting past it, or the test fails on the rig refusing a later answer and shows nothing of
+  the finding (94_17). A test of the likelier reading that the game
+  already passes stays active, with the question on the ledger's `Findings:` line: switched off, it would take
+  away the one thing that notices a mistake there. A doubt that no reachable board can raise (two cards of one
+  title, possible only with sets outside the campaign) is a line in Notes and not a question. So is a doubt the
+  glossary settles once two entries are read together (where the game departs from what they settle, that is a
+  finding), or one whose two readings leave the players the same
+  outcomes (an offer made or withheld is an outcome: Q-0034). A doubt that hangs on a question already open is a rider to that question, not a new one. It hangs on it only where that
+  question's answer would settle it: the same kind of doubt about another card's sentence is reported as a question
+  that names the open one, and the lander says whether it takes a number of its own (8_119 beside Q-0255).
+  Where a general ruling in the log reaches the card by its own scope, the game departs from it on this card,
+  and the card's old test asserts what the game does, it is still a question: the old test is evidence that the
+  departure was meant. Park the ruling's reading, keep the old reading active, and name the other cards built
+  the same way so that one answer covers them. Not so where shapes.md names the card ITSELF as built against the
+  shape (Above the Battlement 7_262 under F-0222): that is a finding with its correction shown, the old reading is
+  dropped, and the report says whose test read otherwise and when, for the landing to put to Ketura (F-0465, Q-0254).
+- **Only a card outside the campaign's order shows it.** A disagreement between game and text that takes a
+  Hobbit-set card to show (those sets come last) is still a finding, filed against the
+  card whose definition is at fault, with its test parked in the file of the card whose text it is. A mere doubt
+  of that kind is a rider to the nearest open question, or a line in Notes.
+- **The card turns on a PC mechanic that neither rules document covers.** What the card's own text says happens
+  can be asserted. What the mechanic then *does* is a question for Ketura: park any assertion that depends on it
+  with a `Q-`. (Hinder, restore, relentless and items are covered: `rules.py term hinder`.)
+- **The game disagrees with the text.** Keep the test asserting what the text says. Park it with
+  `@Ignore("F-0000: ...")`, and record the finding with what was expected, what happened, and which of these it
+  looks like: a typo in the definition, an oversight in the implementation, wrong displayed text, an engine bug, a
+  rig bug, a wrong spreadsheet row. Do not edit the definition or the engine. A wrong label on an ability (its
+  `text:` misspelt, while the ability works) is filed with its correction and parks no test, since the game's
+  wording is no expectation; `mutate.py --replace` alone shows the correction harms nothing: SURVIVED (6_50, F-0522).
 
-If the HJSON uses `limit`, test the cap too — provide more matches than the limit and confirm the value doesn't exceed it.
+A parked card is committed as far as it got and marked parked, with the id that is holding it. `@Ignore` stands
+on a line of its own, above or below `@Test` (the tools that count and switch on parked tests look for it there, and
+lint refuses it on `@Test`'s line). A parked test whose failure is that the game never returns is written
+`@Test(timeout = 20000)` and keeps the limit once it is live (shapes.md, F-0322).
 
----
+## Tests that are not about a card
 
-## Skirmish Testing Pattern
+Some behaviour belongs to the rules and not to any card: how fierce works, the Rule of 4, what happens to a
+skirmish when a side is removed. A card may be how it was noticed, but the test is not that card's. These go in
+`gemp-lotr-server/src/test/java/com/gempukku/lotro/mechanics/`, beside `cards/`, one class per mechanic, named for
+it (`FierceTests`, `RuleOfFourTests`). The folder is sorted by subject into `keywords/`, `hinder/`, `choices/`,
+`actions/`, `skirmishes/`, `costs/`, `wounds/`, `ring/`, `sites/`, `deck/`, `inplay/` and `game/` (engine pass 33,
+package `com.gempukku.lotro.mechanics.<folder>`): a new class goes in the folder of its subject, and a new folder
+is made only when none fits. They follow every rule above except the ledger; the class comment cites
+the rules section instead. `lint.py --form <file.java>` holds such a class to those rules (how a test is written,
+the `copies` warning included, with nothing of ledger, stats test or card), and with `--only <Test,Test>` a lone
+test added to a card's file that has no ledger. The old tests under `at/` were rewritten into one place or the
+other; the folder and its base class are gone (2026-10-10).
 
-Many cards interact with skirmishes. Standard flow:
+A test of the DEFINITION LANGUAGE (whether a definition is loaded or refused, what a blueprint keeps of a field:
+a word the builder must refuse, a time that names no phase, a follower's Aid cost) plays no game and is no
+mechanic test. It is plain JUnit in the server module, in
+`gemp-lotr-server/src/test/java/com/gempukku/lotro/definitions/`, one class for each thing the language says,
+named `...DefinitionTests` (Q-0233: C; `UnknownPhaseInADefinitionTests`, `PlayerIsRequirementDefinitionTests`).
+It hands `LotroCardBlueprintLibrary.loadCardsFromFile` a few definitions written in the test itself (set-0 ids,
+`0_9101` on) and reads what was kept; its helper methods may stay. What the same word then DOES in a game is a
+mechanic test, in `mechanics/`, and each names the other in its class comment. `mechanics/` holds tests of the
+game only. Such a class is for a word that a card which exists uses, as far as that card goes: a word no card
+uses is not tested at all (Ketura, 2026-10-11; rulings log, "The campaign tests cards, not the definition
+language").
 
-```java
-scn.SkipToPhase(Phase.ASSIGNMENT);
-scn.PassAssignmentActions();
-scn.FreepsAssignAndResolve(companion, minion);
+A test of a server class that no player sees and no rule describes (the league-placement arithmetic, a decision
+checking its own answer) is neither kind: it is plain JUnit beside the class it tests, in that class's module
+(`RTMDGameInfoTest`, `MultipleChoiceAwaitingDecisionTest`), or, where it must have a game, in the server module
+under the class's package and on the rig (`logic/GameUtilsAllPlayersTests`). One that needs the real card, format
+or product library and no game (a league, a tournament, a merchant, a pack, a format definition) extends
+`framework/LoadedLibraries`, which loads the three once. The rules above and `--form` are for
+tests of the game (a class under `definitions/` and the rig's own tests under `virtualtable/` are not held to
+them): only in a unit test whose subject IS a class's exception does `assertThrows` belong.
 
-// Skirmish actions phase — play events or use abilities here
-scn.PassSkirmishActions();  // both pass → skirmish resolves, wounds applied
+Where each kind is, and what runs it: a card's tests under `cards/`, a rule's under `mechanics/`, the definition
+language's under `definitions/` and the rig's own under `virtualtable/` are what `cardtest.py suite` runs with no
+word after it; everything else in the server module (leagues, tournaments, the hall, packs, formats, scenarios)
+is run with them by `cardtest.py suite all` (gemp-testing, "Running tests").
 
-// Handle Ruling Ring optional trigger if using default ring
-scn.FreepsDeclineOptionalTrigger();
+What every card of a kind obeys is a mechanic and is not retested card by card: that exerting is not taking a
+wound and a wound is not an exertion, that an exhausted character cannot exert, how a keyword works. So an
+exertion is not owed as the nearest miss of a "takes a wound" or "is about to take a wound" trigger: it is shown
+once, in `mechanics/wounds/AWoundThatIsNotTakenTests` (Q-0265: A); nor is a wound owed as the nearest miss of an
+"each time X exerts" trigger: it is shown once, in `mechanics/wounds/AWoundIsNoExertionTests` (Q-0315: A). A keyword a card GRANTS ("Bearer is damage +1") is read on the
+bearer and on a card outside the scope; what the keyword then does in a skirmish is the mechanic's (Ranger's Sword 1_112).
 
-// Now assert skirmish results
-```
+## Earlier iterations of PC cards
 
-If testing a skirmish event card, play it between `FreepsAssignAndResolve` and `PassSkirmishActions`.
+`Card_..._Tests.java.old` and its numbered kin hold the tests of superseded versions of PC cards, kept for a
+future mode that shows how a card used to play. They are not compiled. When a live file is changed in a way that
+would stop its dormant siblings compiling (a rig method renamed, say), make the same change in them. Do nothing
+else to them.
 
----
+## What a reviewer checks that the conformance check cannot
 
-## Common Test Smells
+Run `lint.py <id> --ledger` first (while the ledger exists; see "The ledger"); it settles layout, the ledger's claims, coverage of listed checks, forbidden calls and
+bookends, and that none of the ledger has leaked into the test file. Its warnings are yours to settle one by one:
+`not-asked`, `not-in-hand` and `conditional` each mark a reading or an answer that may show nothing (shapes.md,
+"lint's `not-asked`, `not-in-hand` and `conditional` warnings"). Then:
 
-### Smell: No Invalid Target Test
-If your card targets "a Dwarf" and your test only has Dwarves in play, you haven't tested the filter. Add an Elf and assert it's not chooseable.
-
-### Smell: Only One Valid Target
-If your card says "choose a companion" and there's only one companion (plus the Ring-bearer who might be auto-excluded), the engine auto-selects. You can't call `HasCardChoiceAvailable` on an auto-resolved decision. Add another companion so the choice is real and inspectable.
-
-### Smell: Missing Phase Bookend
-If you perform an action and just assert the effect without checking `AwaitingXPhaseActions()`, you don't know if a trigger is dangling or a response window is unexpectedly open.
-
-### Smell: Cheating Where You Should Act
-If you `AddWoundsToChar()` to "test" that an exertion happened, you're not testing the exertion — you're just placing wounds. Let the ability exert the character, then check the wound.
-
-### Smell: Testing Implementation Instead of Behavior
-Don't test that the HJSON produces a specific Java object. Test that the card *behaves* correctly in a game scenario. The HJSON is the implementation; the behavior is the contract.
-
----
-
-## Test File Template
-
-```java
-package com.gempukku.lotro.cards.unofficial.pc.vsets.set_vXX;
-
-import com.gempukku.lotro.cards.unofficial.pc.vsets.VSetTests;
-import com.gempukku.lotro.framework.*;
-import com.gempukku.lotro.common.*;
-import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import org.junit.Test;
-
-import java.util.HashMap;
-
-import static com.gempukku.lotro.framework.Assertions.*;
-import static org.junit.Assert.*;
-
-public class Card_VXX_NNN_Tests extends VSetTests {
-
-    protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
-        return new VirtualTableScenario(
-            new HashMap<>() {{
-                put("card", "XX_NNN");      // card under test
-                put("comp1", "1_89");        // Aragorn — helper
-                put("comp2", "1_7");         // Dwarf Guard — helper
-                put("minion", "1_177");      // Goblin Patrol Troop — clean minion
-            }}
-        );
-    }
-
-    @Test
-    public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = GetScenario();
-        var card = scn.GetFreepsCard("card");
-
-        // Verify all blueprint fields from HJSON
-    }
-
-    @Test
-    public void AbilityNameDescribesWhatIsBeingTested()
-            throws DecisionResultInvalidException, CardNotFoundException {
-        var scn = GetScenario();
-        var card = scn.GetFreepsCard("card");
-        var comp1 = scn.GetFreepsCard("comp1");
-        var comp2 = scn.GetFreepsCard("comp2");
-        var minion = scn.GetShadowCard("minion");
-
-        // Arrange
-        scn.MoveCompanionsToTable(card, comp1, comp2);
-        scn.StartGame();
-        scn.MoveMinionsToTable(minion);
-        scn.SkipToPhase(Phase.MANEUVER);
-
-        // Pre-check
-        assertEquals(0, scn.GetWoundsOn(card));
-        assertEquals(7, scn.GetStrength(comp1));
-
-        // Act
-        scn.FreepsUseCardAction(card);
-        scn.FreepsChooseCard(comp1);
-
-        // Post-check
-        assertEquals(1, scn.GetWoundsOn(card));
-        assertEquals(10, scn.GetStrength(comp1));
-        assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
-    }
-}
-```
-
----
-
-## Naming Tests
-
-Test method names should describe the *behavior* being verified, not the implementation detail:
-
-```java
-// GOOD — describes behavior
-public void ExertsSelfAndMakesCompanionStrengthPlus3()
-public void DoesNotTriggerOnNonMoriaWeapons()
-public void BonusExpiresAtStartOfRegroupPhase()
-public void CannotActivateIfAlreadyExhausted()
-public void TargetsMinionButNotCompanion()
-public void StrengthBonusScalesWithOrcCount()
-
-// BAD — describes implementation
-public void TestModifyStrengthSubaction()
-public void TestTriggerWithFilter()
-public void CheckRequirements()
-public void Test1()
-```
+1. Is the ledger right? Each clause's type, and above all whether a check was left off that the wording calls
+   for. Read the card, not the tests.
+2. Does each test really show the check it claims? A `-` that is not the *nearest* miss, an `F` with one
+   candidate, a `D` that only looks at one side of the boundary, all pass the conformance check. So does a
+   card that is not unique and says "this condition" or "here" with no second copy in play in the test where
+   it matters: the check warns (`second-copy`) only where no scenario has two aliases of the card at all.
+   A comment that says a thing is "untouched" or "still there", or that an event is "still being played" (in
+   `Zone.VOID`: pitfalls, "An event is in the void"), with no assertion under it shows nothing either
+   (lint does not read comments): take the words out, or add the reading where a rule or ruling settles it.
+   Nor does lint see a pool read after a helper's play made only to meet a requirement: E2 takes it out (1_165, 9_47).
+   Nor does it see the card under test played out where its play is only set-up ("Arrange by cheating, act by
+   playing"): Merry 1_303 played legally ahead of a modifier test, cheated on at review.
+3. Would the test fail if the card were wrong? Imagine the filter one word wider and one word narrower, the
+   number one off, the trigger on the neighbouring event, the effect's verb its neighbour (a wound read as an
+   exertion: lay a character the wound kills; an exertion read as a wound: lay one with a single vitality left,
+   not offered or not exerted, 1_130 and 1_134). If the test would still pass, it is not testing that.
+   Reading settles most of these (is there a candidate on the table that tells the two apart?);
+   `mutate.py <id> --replace <old> <new>` tries one mistake where reading does not (sparingly: the run of
+   stock mistakes, `mutate.py <id>` on its own, is no longer part of the campaign); and
+   `cardtest.py probe <file.java>` runs a throwaway test from `/tmp` to see what the game really does.
+4. Did an expectation come from the definition or from running the game?
+5. Is any helper card doing something the test does not account for? Where a helper's own ability is what a
+   test reads as NOT working (a question's reading included), a control shows it working without the card under
+   test (Gwemegil 1_47's +1 against a minion that is no Troop of Uruk-hai, Card_01_143_Tests). That holds in a
+   `+` test too, where a helper event the card cancels or prevents is read as having no effect: the control is
+   the same board with the response offered and not taken (Relentless 1_194 and Depart Silently 3_31).
+6. For a failure: is the test wrong, or is it a finding? Check the rules before deciding, and ask if unsure.
+7. Does the definition say one thing twice? Where it repeats an effect in two branches (the same blocks under
+   an `If`'s true and false), tests written from the text tend to hold one copy only. A mistake that survives in
+   one copy is a gap. A second, near-identical test is right where the card's text gives the second copy a
+   clause of its own; `mutate.py --replace old new --nth 2` reaches the second copy. Two triggers in one list
+   that differ in a phase word are this too (60_20, "a maneuver or archery special ability"): each has its own
+   invalid doer, in its own phase.
+   One sentence built as one modifier per phase is this too ("no assignment and skirmish phases", Buckleberry
+   Ferry 1_330): the later phase's condition is read only on a board that goes on into that phase.
+   Two guards of one thing in different places are this too (a `CanSpot self, zone(SUPPORT)` requirement beside
+   `fromSupport: true`, Lost in the Woods 11_212): neither alone shows, so replace both in one mutate.py run.
+   So is a trigger's filter written again in an effect that reaches only that skirmish (18_123): shapes.md, "A
+   phrase the definition writes twice".
+   A choice whose filter has a branch of its own is this too: each branch's guard word is a filter word owed a
+   board (Gwaihir 17_20's `and(wizard,canWound)` beside `and(not(wizard),canExert)`: an exhausted Wizard minion).
+   A loop written out as nested copies is this too (Mithril Shaft 1_22: its "go on?" `optional` and `addTwilight`
+   at each of four depths): name the copies in the ledger's Notes and give each a board that reaches it (F-0529).

@@ -1,6 +1,6 @@
 package com.gempukku.lotro.league;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.CardCollection;
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 
-public class LeaguePrizesTest extends AbstractAtTest {
+public class LeaguePrizesTest extends LoadedLibraries {
     @Test
     public void test() {
         LeaguePrizes leaguePrizes = new FixedLeaguePrizes(_productLibrary);

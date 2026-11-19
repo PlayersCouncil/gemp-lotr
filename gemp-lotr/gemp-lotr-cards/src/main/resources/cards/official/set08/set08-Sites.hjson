@@ -202,6 +202,9 @@
 						filter: companion
 						count: 6
 					}
+					{
+						type: canMove
+					}
 				]
 				effect: {
 					type: addModifier

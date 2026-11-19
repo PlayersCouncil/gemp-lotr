@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set12;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -14,14 +13,18 @@ import static org.junit.Assert.*;
 public class Card_12_113_Tests
 {
 
+	// The Towers path: Eastemnet Gullies 4_325 (site 1, no terrain), Eastfold 4_331 (site 2, plains and no
+	// battleground), Barrows of Edoras 4_337 (site 3, a sanctuary, no terrain), White Rocks 4_346 (site 4, a
+	// battleground and no plains).
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "12_113");
-					// put other cards in here as needed for the test case
+					put("warrior", "12_113");
+					put("warrior2", "12_113");
+					put("guard", "5_83");       // Household Guard: a [rohan] Man companion, strength 6, valiant and nothing else
 				}},
-				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.TowersSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,33 +50,74 @@ public class Card_12_113_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var warrior = scn.GetFreepsCard("warrior");
 
-		assertEquals("Éored Warrior", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
-		assertEquals(Culture.ROHAN, card.getBlueprint().getCulture());
-		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(6, card.getBlueprint().getResistance());
+		assertEquals("Éored Warrior", warrior.getBlueprint().getTitle());
+		assertNull(warrior.getBlueprint().getSubtitle());
+		assertFalse(warrior.getBlueprint().isUnique());
+		assertEquals(Side.FREE_PEOPLE, warrior.getBlueprint().getSide());
+		assertEquals(Culture.ROHAN, warrior.getBlueprint().getCulture());
+		assertEquals(CardType.COMPANION, warrior.getBlueprint().getCardType());
+		assertEquals(Race.MAN, warrior.getBlueprint().getRace());
+		assertEquals(2, warrior.getBlueprint().getTwilightCost());
+		assertEquals(5, warrior.getBlueprint().getStrength());
+		assertEquals(3, warrior.getBlueprint().getVitality());
+		assertEquals(6, warrior.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EoredWarriorTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AtAPlainsEachEoredWarriorIsStrengthPlus3ForHimselfAlone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var warrior = scn.GetFreepsCard("warrior");
+		var warrior2 = scn.GetFreepsCard("warrior2");
+		var guard = scn.GetFreepsCard("guard");
+		scn.MoveCompanionsToTable(warrior, warrior2, guard);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		// Eastemnet Gullies, site 1: neither a battleground nor a plains.
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(5, scn.GetStrength(warrior));
+		assertEquals(5, scn.GetStrength(warrior2));
+		assertEquals(6, scn.GetStrength(guard));
+
+		// The move to Eastfold, site 2, a plains: each copy is +3 by its own text and not +6 by both; the other
+		// [rohan] Man companion is not touched.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(8, scn.GetStrength(warrior));
+		assertEquals(8, scn.GetStrength(warrior2));
+		assertEquals(6, scn.GetStrength(guard));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AtABattlegroundHeIsStrengthPlus3AndAtASanctuaryNot() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var warrior = scn.GetFreepsCard("warrior");
+		scn.MoveCompanionsToTable(warrior);
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+
+		// Barrows of Edoras, site 3: a sanctuary, neither a battleground nor a plains.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(5, scn.GetStrength(warrior));
+
+		// The move to White Rocks, site 4, a battleground and no plains.
+		scn.FreepsPass();
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(8, scn.GetStrength(warrior));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -240,7 +240,7 @@
 				}
 				effect: {
 					type: putStackedCardsIntoHand
-					select: choose(culture(dwarven))
+					select: choose(any)
 					on: self
 				}
 			}
@@ -365,7 +365,7 @@
 				}
 			}
 		]
-		gametext: Damage +1.\ While Gimli bears 2 items, he is damage +1.\While Gimli bears 3 items, he is strength +2. 
+		gametext: Damage +1. While Gimli bears 2 items, he is damage +1. While Gimli bears 3 items, he is strength +2. 
 		lore: "'...there is one dwarf in Moria who still draws breath!'"
 		promotext: ""
 		alts: {
@@ -457,31 +457,23 @@
 					times: 1
 				}
 				{
-					type: memorizenumber
-					memory: originalItemCount
-					amount: {
-						type: forEachYouCanSpot
-						filter: item,attachedTo(memory(chosenDwarf))
-					}
+					type: chooseActiveCards
+					count: 0-50
+					select: choose(item,attachedTo(memory(chosenDwarf)))
+					memorize: returnedItems
+					text: Choose items on that Dwarf to return to their owners' hands
 				}
 				{
 					type: returntohand
-					select: choose(item,attachedTo(memory(chosenDwarf)))
+					select: memory(returnedItems)
 					count: 0-50
 				}
 				{
 					type: wound
 					select: choose(minion)
 					count: {
-						type: subtract
-						firstNumber: {
-							type: fromMemory
-							memory: originalItemCount
-						}
-						secondNumber: {
-							type: forEachYouCanSpot
-							filter: item,attachedTo(memory(chosenDwarf))
-						}
+						type: forEachInMemory
+						memory: returnedItems
 					}
 				}
 			]

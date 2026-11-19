@@ -15,6 +15,29 @@
 		timewords: Shadow
 		effects: {
 			type: event
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: Playable
+						fromZone: STACKED
+						filter: besieger,stackedOn(controlledSite)
+					}
+					{
+						type: And
+						requires: [
+							{
+								type: CanSpotBurdens
+							}
+							{
+								type: Playable
+								fromZone: DISCARD
+								filter: culture(sauron),orc
+							}
+						]
+					}
+				]
+			}
 			effect: {
 				type: choice
 				texts: [
@@ -346,8 +369,7 @@
 				phase: regroup
 				cost: {
 					type: spot
-					select: choose(culture(sauron),minion)
-					memorize: spottedMinion
+					filter: culture(sauron),minion
 				}
 				effect: [
 					{
@@ -355,9 +377,8 @@
 						count: {
 							type: Conditional
 							requires: {
-								type: memoryMatches
-								memory: spottedMinion
-								filter: besieger
+								type: canSpot
+								filter: culture(sauron),minion,besieger
 							}
 							true: 2
 							false: 1
@@ -414,7 +435,7 @@
 						type: canSpotThreats
 						amount: 3
 					}
-					filter: culture(sauron),orc
+					filter: culture(sauron),orc,not(roaming)
 					amount: 1
 				}
 			}
@@ -972,7 +993,7 @@
 				}
 				effect: {
 					type: discard
-					select: choose(condition,side(free people),zone(support))
+					select: choose(condition,support(free people))
 				}
 			}
 		]
@@ -1592,16 +1613,24 @@
 					type: discardFromHand
 					forced: false
 				}
-				effect: {
-					type: modifyStrength
-					select: choose(companion,inSkirmishAgainst(self))
-					amount: {
-						type: ForEachYouCanSpot
+				effect: [
+					{
+						type: chooseHowManyToSpot
 						filter: other,culture(sauron),Orc
-						multiplier: -1
+						text: Choose how many other {sauron} Orcs to spot
+						memorize: spotCount
 					}
-					limitPerCardThisPhase: 3
-				}
+					{
+						type: modifyStrength
+						select: choose(companion,inSkirmishAgainst(self))
+						amount: {
+							type: fromMemory
+							memory: spotCount
+							multiplier: -1
+						}
+						limitPerCardThisPhase: 3
+					}
+				]
 			}
 		]
 		gametext: <b>Skirmish:</b> Discard a card from your hand to make a companion skirmishing this minion strength -1 for each other [sauron] Orc you spot (limit -3).
@@ -2361,13 +2390,13 @@
 				filter: culture(sauron),orc
 				count: 2
 			}
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: any
+				memorize: shadowDiscardedCards
+			}
 			effect: [
-				{
-					type: discardFromHand
-					forced: false
-					count: any
-					memorize: shadowDiscardedCards
-				}
 				{
 					type: discardFromHand
 					forced: false
@@ -2635,8 +2664,7 @@
 					culture: sauron
 					select: self
 				}
-				limitPerPhase: 1
-				phase: regroup
+				limitPerSite: 1
 			}
 			{
 				type: activated

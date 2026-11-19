@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.decisions;
 
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.logic.GameSeed;
 import com.gempukku.lotro.logic.timing.Action;
 
 import java.util.List;
@@ -13,11 +14,11 @@ public abstract class ActionSelectionDecision extends AbstractAwaitingDecision {
     public ActionSelectionDecision(LotroGame game, int decisionId, String text, List<? extends Action> actions) {
         super(decisionId, text, AwaitingDecisionType.ACTION_CHOICE);
         _game = game;
-        _actions = actions;
+        _actions = GameSeed.stableActionOrder(game, actions);
 
-        setParam("actionId", getActionIds(actions));
-        setParam("blueprintId", getBlueprintIds(actions));
-        setParam("actionText", getActionTexts(actions));
+        setParam("actionId", getActionIds(_actions));
+        setParam("blueprintId", getBlueprintIds(_actions));
+        setParam("actionText", getActionTexts(_actions));
     }
 
     private String[] getActionIds(List<? extends Action> actions) {
@@ -40,10 +41,8 @@ public abstract class ActionSelectionDecision extends AbstractAwaitingDecision {
     }
 
     private String[] getActionTexts(List<? extends Action> actions) {
-        String[] result = new String[actions.size()];
-        for (int i = 0; i < result.length; i++)
-            result[i] = actions.get(i).getText(_game);
-        return result;
+        // Each as it words itself, and two offers of one action told apart by what each is for.
+        return OfferedActionTexts.of(_game, actions);
     }
 
     protected Action getSelectedAction(String result) throws DecisionResultInvalidException {

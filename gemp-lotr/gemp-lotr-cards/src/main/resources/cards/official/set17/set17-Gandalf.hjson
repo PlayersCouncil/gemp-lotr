@@ -39,20 +39,25 @@
 						}
 						secondNumber: 0
 					}
-					true: [
-						{
-							type: revealHand
-							hand: shadowPlayer
-							memorize: revealedCards
-						}
-						{
-							type: discardFromHand
-							hand: shadowPlayer
-							forced: true
-							player: you
-							select: choose(memory(revealedCards),minion)
-						}
-					]
+					true: {
+						type: optional
+						text: Would you like to reveal the Shadow player's hand and discard a minion found there?
+						effect: [
+							{
+								type: revealHand
+								hand: shadowPlayer
+								memorize: revealedCards
+							}
+							{
+								type: discardFromHand
+								hand: shadowPlayer
+								forced: true
+								player: you
+								select: choose(memory(revealedCards),minion)
+								count: 0-1
+							}
+						]
+					}
 				}
 			]
 		}
@@ -92,7 +97,7 @@
 					filter: self
 					amount: {
 						type: forEachYouCanSpot
-						filter: culture(gandalf),follower,attachedTo(any)
+						filter: culture(gandalf),follower,attachedTo(self)
 					}
 				}
 			}
@@ -514,6 +519,7 @@
 					{
 						type: chooseYesOrNo
 						text: Choose Free Peoples cards?
+						player: shadowPlayer
 						memorize: chosenFP
 					}
 					{
@@ -616,11 +622,11 @@
 				}
 				requires: {
 					type: canSpot
-					filter: another,or(possession,weapon),attachedTo(bearer)
+					filter: another,possession,attachedTo(bearer)
 				}
 				effect: {
 					type: discard
-					select: all(other,or(possession,weapon),attachedTo(bearer))
+					select: all(other,possession,attachedTo(bearer))
 				}
 			}
 			{

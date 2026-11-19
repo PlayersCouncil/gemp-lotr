@@ -17,8 +17,11 @@ public class Card_03_122_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "3_122");
-					// put other cards in here as needed for the test case
+					put("boromir", "3_122");
+					// Aragorn, Ranger of the North: a [gondor] Man ranger companion like Boromir, vitality 4; his
+					// maneuver ability is used only on purpose
+					put("aragorn", "1_89");
+					put("runner", "1_178");     // Goblin Runner: a minion with no standing text, so that there is a maneuver phase
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +50,7 @@ public class Card_03_122_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("boromir");
 
 		assertEquals("Boromir", card.getBlueprint().getTitle());
 		assertEquals("Defender of Minas Tirith", card.getBlueprint().getSubtitle());
@@ -64,18 +67,59 @@ public class Card_03_122_Tests
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void BoromirTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void FellowshipAbilityAdds2ToHealBoromirAndNoOtherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var boromir = scn.GetFreepsCard("boromir");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(boromir, aragorn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.AddWoundsToChar(boromir, 2);
+		scn.AddWoundsToChar(aragorn, 1);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(0, scn.GetTwilight());
+		assertEquals(2, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsActionAvailable(boromir));
+		scn.FreepsUseCardAction(boromir);
+		// Nothing is asked: the heal is Boromir's, and Aragorn, wounded beside him, keeps his wound.
+		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+
+		scn.FreepsUseCardAction(boromir);
+		assertEquals(4, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+
+		// Unwounded, he is still offered the ability, which has a cost: (2) is added and nobody is healed.
+		assertTrue(scn.FreepsActionAvailable(boromir));
+		scn.FreepsUseCardAction(boromir);
+		assertEquals(6, scn.GetTwilight());
+		assertEquals(0, scn.GetWoundsOn(boromir));
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AbilityIsNotOfferedInTheManeuverPhase() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var boromir = scn.GetFreepsCard("boromir");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(boromir);
+
+		scn.StartGame();
+		scn.AddWoundsToChar(boromir, 1);
+		assertTrue(scn.FreepsActionAvailable(boromir));
+
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(boromir));
+		assertEquals(1, scn.GetWoundsOn(boromir));
 	}
 }

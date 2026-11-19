@@ -68,7 +68,7 @@ public class Card_V2_005_Tests
 
 		scn.SetTwilight(15);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertEquals(18, scn.GetTwilight());
 
 		assertTrue(scn.ShadowPlayAvailable(insurance));
@@ -94,7 +94,7 @@ public class Card_V2_005_Tests
 		scn.StartGame();
 		scn.SetTwilight(15);
 		scn.AddTokensToCard(insurance, 1);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 
@@ -115,7 +115,7 @@ public class Card_V2_005_Tests
 		scn.SkipToSite(3);
 
 		scn.SetTwilight(14);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(4, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -131,7 +131,7 @@ public class Card_V2_005_Tests
 		scn.SkipToSite(6);
 		scn.SetTwilight(11);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -155,7 +155,7 @@ public class Card_V2_005_Tests
 		scn.SkipToSite(6);
 
 		scn.SetTwilight(18);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(25, scn.GetTwilight());
@@ -184,7 +184,7 @@ public class Card_V2_005_Tests
 		scn.StartGame();
 		scn.AddTokensToCard(insurance, 1);
 		scn.SkipToSite(6);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertFalse(scn.ShadowActionAvailable("Remove (7) to add a"));
 		assertTrue(scn.ShadowActionAvailable("Discard this to take control of 2 sites"));
@@ -213,7 +213,7 @@ public class Card_V2_005_Tests
 
 		scn.SetTwilight(17);
 		scn.MoveCardsToTopOfDeck(insurance);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(18, scn.GetTwilight());
 		//It's an ability being activated and not a "play", which is only true for cards
@@ -232,7 +232,7 @@ public class Card_V2_005_Tests
 		scn.SetTwilight(11);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(5, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());
@@ -245,7 +245,7 @@ public class Card_V2_005_Tests
 		scn.SetTwilight(11);
 		scn.MoveCardsToTopOfDeck(insurance);
 
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(7, scn.GetCurrentSiteNumber());
 		assertEquals(18, scn.GetTwilight());

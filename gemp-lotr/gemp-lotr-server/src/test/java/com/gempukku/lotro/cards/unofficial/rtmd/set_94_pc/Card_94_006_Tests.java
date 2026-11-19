@@ -11,14 +11,14 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_94_006_Tests {
-
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		put("aragorn", "1_89"); // Aragorn, Ranger of the North: board filler, wound target for sanctuary healing
-	}};
-
+public class Card_94_006_Tests
+{
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: board filler, wound target for sanctuary healing
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -27,7 +27,11 @@ public class Card_94_006_Tests {
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: board filler, wound target for sanctuary healing
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -36,7 +40,11 @@ public class Card_94_006_Tests {
 	}
 
 	protected VirtualTableScenario GetControlScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: board filler, wound target for sanctuary healing
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
@@ -45,15 +53,17 @@ public class Card_94_006_Tests {
 
 	@Test
 	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
-		var scn = GetFreepsScenario();
-		var mod = scn.GetFreepsCard("mod");
-
 		/**
 		 * Set: RTMD 94
 		 * Name: Race Text 94_6
 		 * Type: MetaSite
+		 * Intensity: -2
 		 * Game Text: Site 8 is a sanctuary.
 		 */
+
+		var scn = GetFreepsScenario();
+
+		var mod = scn.GetFreepsCard("mod");
 
 		assertEquals("Race Text 94_6", mod.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, mod.getBlueprint().getCardType());
@@ -71,6 +81,12 @@ public class Card_94_006_Tests {
 		scn.SkipToSite(8);
 		assertEquals(8, scn.GetCurrentSiteNumber());
 		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
+
+		// The fellowship phase is passed and the fellowship moves on to site 9, the Shadow phase there.
+		scn.FreepsPass();
+		assertEquals(9, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.SANCTUARY));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 
 	@Test
@@ -113,5 +129,7 @@ public class Card_94_006_Tests {
 		scn.FreepsChooseCard(aragorn);
 
 		assertEquals(0, scn.GetWoundsOn(aragorn));
+		// Nobody is left to heal, so the four heals that remain are not asked about.
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

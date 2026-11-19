@@ -22,8 +22,7 @@ public class FellowshipPlayerChoosesToMoveOrStayGameProcess implements GameProce
     public void process(final LotroGame game) {
         final GameState gameState = game.getGameState();
         final String currentPlayerId = gameState.getCurrentPlayerId();
-        if (!game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_MOVE)
-                && gameState.getMoveCount() < RuleUtils.calculateMoveLimit(game)) {
+        if (RuleUtils.canChooseToMoveAgain(game)) {
             if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.HAS_TO_MOVE_IF_POSSIBLE)) {
                 playerMoves(game);
             } else {
@@ -40,6 +39,10 @@ public class FellowshipPlayerChoosesToMoveOrStayGameProcess implements GameProce
                         });
             }
         } else {
+            // CR 5.0 "hinder": with no unhindered companion the Free Peoples player cannot choose to move.  The
+            // player is not asked, and is told why, since the move limit alone would not explain it.
+            if (!RuleUtils.fellowshipHasUnhinderedCompanion(game))
+                gameState.sendMessage(currentPlayerId + " has no unhindered companion and cannot choose to move again.");
             playerStays(game);
         }
     }

@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_07_288_Tests
@@ -18,8 +19,16 @@ public class Card_07_288_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_288");
-					// put other cards in here as needed for the test case
+					put("regular", "7_288");
+					put("regular2", "7_288");
+					// Cirith Ungol Guard: [sauron] Uruk-hai, a [sauron] minion who is no Orc; Damage +1 is its whole text
+					put("uruk", "10_81");
+					put("morgul", "7_199");     // Morgul Soldier: a [wraith] Orc; Nazgul are strength +1 (none in play)
+					// Strength Born of Fear: [sauron] support-area condition, a [sauron] card that is no minion; its
+					// skirmish ability costs (3) and the pool is empty
+					put("fear", "1_278");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: strength 8, vitality 4; a maneuver ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +56,7 @@ public class Card_07_288_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("regular");
 
 		assertEquals("Mordor Regular", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +71,130 @@ public class Card_07_288_Tests
 		assertEquals(6, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MordorRegularTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void SkirmishAbilityExertsThisMinionToAddAThreatWithASauronUrukHaiToSpot() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var regular = scn.GetShadowCard("regular");
+		var uruk = scn.GetShadowCard("uruk");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(regular, uruk);
 
-		assertEquals(3, scn.GetTwilight());
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, regular);
+		// The Uruk-hai is left in no skirmish: spotting asks nothing of where he stands.
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		// Two companions, so a second threat would show.
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(regular));
+		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertTrue(scn.ShadowActionAvailable(regular));
+
+		scn.ShadowUseCardAction(regular);
+
+		assertEquals(1, scn.GetWoundsOn(regular));
+		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ASecondMordorRegularInTheSameSkirmishIsAnotherSauronMinionAndIsNotExerted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var regular = scn.GetShadowCard("regular");
+		var regular2 = scn.GetShadowCard("regular2");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(regular, regular2);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, regular);
+		scn.ShadowAssignToMinions(aragorn, regular2);
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(regular));
+		assertEquals(0, scn.GetWoundsOn(regular2));
+		assertTrue(scn.ShadowActionAvailable(regular));
+
+		scn.ShadowUseCardAction(regular);
+
+		assertEquals(1, scn.GetWoundsOn(regular));
+		assertEquals(0, scn.GetWoundsOn(regular2));
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void SkirmishAbilityIsNotOfferedWithOnlyASauronConditionAndAWraithOrcBesideIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var regular = scn.GetShadowCard("regular");
+		var morgul = scn.GetShadowCard("morgul");
+		var fear = scn.GetShadowCard("fear");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(regular, morgul);
+		scn.MoveCardsToSupportArea(fear);
+		assertInZone(Zone.SUPPORT, fear);
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, regular);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		// Regular can exert; "another" leaves Regular himself out, and neither the condition nor the [wraith]
+		// Orc is a [sauron] minion.
+		assertInZone(Zone.SUPPORT, fear);
+		assertInZone(Zone.SHADOW_CHARACTERS, morgul);
+		assertEquals(0, scn.GetWoundsOn(regular));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(regular));
+	}
+
+	@Test
+	public void SkirmishAbilityIsNotOfferedWhileThisMinionIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+
+		var regular = scn.GetShadowCard("regular");
+		var uruk = scn.GetShadowCard("uruk");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(regular, uruk);
+		// Vitality 2 with 1 wound: exhausted.
+		scn.AddWoundsToChar(regular, 1);
+		assertEquals(1, scn.GetWoundsOn(regular));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(aragorn, regular);
+		scn.ShadowDeclineAssignments();
+		scn.FreepsResolveSkirmish(aragorn);
+		scn.FreepsPass();
+
+		// The Uruk-hai beside him could exert, but the cost is this minion's own.
+		assertEquals(0, scn.GetWoundsOn(uruk));
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowSkirmishPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(regular));
 	}
 }

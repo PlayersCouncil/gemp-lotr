@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_06_074_Tests
@@ -17,8 +18,11 @@ public class Card_06_074_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "6_74");
-					// put other cards in here as needed for the test case
+					put("sharku", "6_74");
+					put("warwarg", "5_64");     // War-warg: [isengard] mount on a warg-rider, strength +4, vitality +2; a skirmish Response
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, strength 13, vitality 3
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion; a Maneuver ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,12 +45,14 @@ public class Card_06_074_Tests
 		 * Strength: 7
 		 * Vitality: 2
 		 * Site Number: 4
-		 * Game Text: <b>Warg-rider</b>.<br>While Sharku is not exhausted, he is <b>fierce</b>.<br><b>Regroup:</b> Exert Sharku to add (1).
+		 * Game Text: <b>Warg-rider</b>.
+		 * While Sharku is not exhausted, he is <b>fierce</b>.
+		 * <b>Regroup:</b> Exert Sharku to add (1).
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sharku");
 
 		assertEquals("Sharku", card.getBlueprint().getTitle());
 		assertEquals("Vile Marauder", card.getBlueprint().getSubtitle());
@@ -62,18 +68,100 @@ public class Card_06_074_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SharkuTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void RegroupAbilityExertsSharkuToAddOneAndLeavesHimExhaustedAndNotFierce() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sharku = scn.GetShadowCard("sharku");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(sharku);
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+		scn.SetTwilight(1);
+		scn.ShadowRefreshDecision();
 
+		// Unwounded, vitality 2: not exhausted, and fierce.
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertEquals(0, scn.GetWoundsOn(sharku));
+		assertEquals(1, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(sharku, Keyword.FIERCE));
+		assertTrue(scn.ShadowActionAvailable(sharku));
+
+		scn.ShadowUseCardAction(sharku);
+
+		assertEquals(1, scn.GetWoundsOn(sharku));
+		// 1 + 1
 		assertEquals(2, scn.GetTwilight());
+		// Vitality 2 with 1 wound: the exertion has exhausted him, and he is fierce no longer.
+		assertTrue(scn.IsExhausted(sharku));
+		assertFalse(scn.HasKeyword(sharku, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+	}
+
+	@Test
+	public void ExhaustedSharkuIsNotOfferedHisRegroupAbility() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sharku = scn.GetShadowCard("sharku");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(sharku);
+		scn.AddWoundsToChar(sharku, 1);
+		assertEquals(1, scn.GetWoundsOn(sharku));
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.FreepsPass();
+		scn.SetTwilight(1);
+		scn.ShadowRefreshDecision();
+
+		// Vitality 2 with 1 wound: exhausted, so he cannot exert.
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+		assertEquals(1, scn.GetWoundsOn(sharku));
+		assertTrue(scn.IsExhausted(sharku));
+		assertFalse(scn.ShadowActionAvailable(sharku));
+		assertEquals(1, scn.GetTwilight());
+	}
+
+	@Test
+	public void ExhaustedHeIsNotFierceUntilAWarWargPlayedOnHimRaisesHisVitality() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sharku = scn.GetShadowCard("sharku");
+		var warwarg = scn.GetShadowCard("warwarg");
+		var troop = scn.GetShadowCard("troop");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(warwarg);
+		assertInHand(warwarg);
+
+		scn.StartGame();
+		scn.SetTwilight(4);
+		scn.MoveMinionsToTable(sharku, troop);
+		// Unwounded he has vitality 2, one above exhausted, and is fierce.
+		assertEquals(0, scn.GetWoundsOn(sharku));
+		assertEquals(2, scn.GetVitality(sharku));
+		assertFalse(scn.IsExhausted(sharku));
+		assertTrue(scn.HasKeyword(sharku, Keyword.FIERCE));
+		scn.AddWoundsToChar(sharku, 1);
+		assertEquals(1, scn.GetWoundsOn(sharku));
+		scn.FreepsPass();
+
+		// Vitality 2 with 1 wound: exhausted, and not fierce; the Troop beside him is neither.
+		assertEquals(1, scn.GetWoundsOn(sharku));
+		assertTrue(scn.IsExhausted(sharku));
+		assertFalse(scn.HasKeyword(sharku, Keyword.FIERCE));
+		assertFalse(scn.IsExhausted(troop));
+		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
+
+		// He is the one warg-rider on the table.
+		scn.ShadowPlayCard(warwarg);
+		assertAttachedTo(warwarg, sharku);
+
+		// 2 + 2 less 1 wound: 3 left, still wounded but not exhausted, and fierce.
+		assertEquals(1, scn.GetWoundsOn(sharku));
+		assertEquals(3, scn.GetVitality(sharku));
+		assertTrue(scn.HasKeyword(sharku, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(troop, Keyword.FIERCE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

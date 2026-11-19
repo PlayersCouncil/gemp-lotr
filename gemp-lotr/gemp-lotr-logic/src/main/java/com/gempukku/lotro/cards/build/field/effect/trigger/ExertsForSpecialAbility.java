@@ -41,7 +41,12 @@ public class ExertsForSpecialAbility implements TriggerCheckerProducer {
                 if (result) {
                     ExertResult exertResult = (ExertResult) actionContext.getEffectResult();
                     final Action exertingAction = exertResult.getAction();
-                    if (itsOwn) {
+                    // "Exerts as a cost of its special ability": an exertion that is an EFFECT of the ability is
+                    // not answered (F-0478; Lavastone Giant 33_44 exerts as the cost of its ability and again
+                    // as its effect).
+                    if (!exertResult.isPaidAsCost()) {
+                        result = false;
+                    } else if (itsOwn) {
                         PhysicalCard exertedCard = exertResult.getExertedCard();
                         if (exertingAction == null || exertingAction.getType() != Action.Type.SPECIAL_ABILITY
                                 || exertedCard != exertingAction.getActionSource())

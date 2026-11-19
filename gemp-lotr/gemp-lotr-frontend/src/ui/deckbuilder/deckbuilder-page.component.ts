@@ -18,6 +18,8 @@ import { PackDialogsComponent } from './dialogs/pack-dialogs.component';
 import { NotifierDialogComponent } from '../shared/notifier/notifier-dialog.component';
 import { NoPressFocusDirective } from '../shared/no-press-focus/no-press-focus.directive';
 import { DragHandlers, PointerDragDirective } from '../shared/pointer-drag/pointer-drag.directive';
+import { SwipeDirective } from '../shared/swipe/swipe.directive';
+import { CollectionBrowser } from '../../core/collection/collection-browser.service';
 
 /** Arrow keys on the resizer move it by this much (px). */
 export const RESIZE_STEP = 10;
@@ -59,6 +61,8 @@ const TOGGLE_SLIDE_MS = 400;
  * 0 to 1): the deck is above the collection (or left of it), and the separator (`aria-orientation` horizontal for rows,
  * with `aria-valuenow` = the share in %, and no toggle) moves the split by dragging or with the arrow keys. The split is remembered on the device (SPLIT_COOKIE). The
  * collection is always shown, with its bar (`gd-collection-menu`: the menu and the filter's parts) instead of the filter.
+ * A sideways swipe on the collection (SwipeDirective) presses the pager's button on that side: right is the next page,
+ * left the previous one. The page takes no double tap as a zoom (`touch-action`), so quick taps on the pager page on.
  */
 @Component({
   selector: 'deckbuilder-app',
@@ -67,6 +71,7 @@ const TOGGLE_SLIDE_MS = 400;
   imports: [
     PointerDragDirective,
     NoPressFocusDirective,
+    SwipeDirective,
     DeckAreaComponent,
     CollectionFilterComponent,
     CollectionGridComponent,
@@ -119,7 +124,15 @@ const TOGGLE_SLIDE_MS = 400;
     @if (dragWidth() !== null) {
       <div #dragPreview class="gd-page__drag-preview" aria-hidden="true" title="Resize"></div>
     }
-    <section class="gd-page__collection" aria-label="Collection" [hidden]="!collectionOpen() && !compact()">
+    <section
+      class="gd-page__collection"
+      aria-label="Collection"
+      [hidden]="!collectionOpen() && !compact()"
+      gdSwipe
+      [gdSwipeEnabled]="compact()"
+      (swipeLeft)="browser.previousPage()"
+      (swipeRight)="browser.nextPage()"
+    >
       @if (compact()) {
         <gd-collection-menu />
       } @else {
@@ -148,6 +161,7 @@ export class DeckbuilderPageComponent {
   private readonly app = inject(ApplicationRef);
   private readonly document = inject(DOCUMENT);
   protected readonly compact = inject(CompactLayout).active;
+  protected readonly browser = inject(CollectionBrowser);
   protected readonly sideBySide = inject(CompactLayout).sideBySide;
   /** The compact layout's split: the deck's share of the page's height, in %. */
   protected readonly split = signal(readSplit(this.document.cookie));

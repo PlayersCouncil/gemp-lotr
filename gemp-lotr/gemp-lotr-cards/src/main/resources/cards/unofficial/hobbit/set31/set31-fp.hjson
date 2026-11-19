@@ -6,6 +6,8 @@
 			rarity: _
 		}
 		title: Dwarven Axe
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: possession
@@ -16,15 +18,21 @@
 			type: modifier
 			modifier: {
 				type: addKeyword
-				filter: bearer
-				requires: {
-					type: location
-					filter: mountain
-				}
+				filter: bearer,atSite(mountain)
 				keyword: damage+1
 			}
 		}
+		gametext: Bearer must be a [dwarven] character.<br>While bearer is at a mountain site, he is <b>damage +1</b>.
+		lore: "'Buckler and corslet, axe and sword / And shining spears were laid in hoard.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_2: {
 		cardInfo: {
 			image: hobbit/HDG312.jpg
@@ -32,12 +40,31 @@
 			rarity: _
 		}
 		title: Dwarven Song
+		unique: false
+		side: Free Peoples
 		culture: dwarven
 		twilight: 3
 		type: event
-		timeword: fellowship
+		timewords: fellowship
 		effects: {
 			type: event
+			// At sites 1 to 5 it is played only with a [dwarven] card (except an event) that can be played from the
+			// draw deck: a Hobbit-set play from the draw deck with nothing it could play is withheld (Q-0019; the
+			// orchestrator on Q-0406 and Q-0418).  The play sits in an If, which does not gate the event itself.
+			requires: {
+				type: or
+				requires: [
+					{
+						type: location
+						filter: not(siteNumber(1-5),siteBlock(hobbit))
+					}
+					{
+						type: playable
+						fromZone: DECK
+						filter: culture(dwarven),not(event)
+					}
+				]
+			}
 			cost: {
 				type: choice
 				texts: [
@@ -101,7 +128,17 @@
 				}
 			]
 		}
+		gametext: At sites 1 to 5, discard a [dwarven] follower with a twilight cost of X to play X [dwarven] cards (except events) from your draw deck. At any other site, heal Thorin twice.
+		lore: "'Far over the misty mountains cold. To dungeons deep and caverns old...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_3: {
 		cardInfo: {
 			image: hobbit/HDG313.jpg
@@ -110,10 +147,11 @@
 		}
 		title: Emeralds of Girion
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: artifact
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: activated
@@ -142,7 +180,17 @@
 				}
 			}
 		]
+		gametext: <b>Fellowship:</b> Add (1) to take a card stacked here into hand.<br><b>Regroup:</b> Exert an [elven] ally to stack an [elven] event (or Lore of Imladris) from your discard pile on Emeralds of Girion.
+		lore: "'The Necklace of Girion, Lord of Dale, made of five hundred emeralds green as grass...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_4: {
 		cardInfo: {
 			image: hobbit/HDG314.jpg
@@ -151,10 +199,11 @@
 		}
 		title: Great Barricade
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: possession
-		keyword: [
+		keywords: [
 			support area
 			fortification
 		]
@@ -194,18 +243,30 @@
 				}
 			}
 		]
+		gametext: <b>Fortification</b>. To play, exert a [dwarven] companion.<br>If the fellowship moves during the regroup phase, discard this possession.<br>At sites 7 and 8, each minion skirmishing a [dwarven] companion is strength -3.
+		lore: "Thorin barricades himself in the mountain."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_5: {
 		cardInfo: {
 			image: hobbit/HDG315.jpg
 			collInfo: 31_5
 			rarity: _
 		}
-		title: Mithril-coat
+		title: Mithril Coat
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: artifact
+		itemclass: Armor
 		vitality: 1
 		target: name(Bilbo)
 		effects: [
@@ -230,7 +291,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be Bilbo.<br>The minion archery total is -1.<br>While Bilbo is skirmishing, the twilight cost of each Shadow event is +2.
+		lore: "'...its worth was greater than the value of the whole Shire and everything in it.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_6: {
 		cardInfo: {
 			image: hobbit/HDG316.jpg
@@ -239,6 +310,7 @@
 		}
 		title: Oakenshield
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 1
 		type: possession
@@ -277,7 +349,17 @@
 				}
 			}
 		]
+		gametext: Bearer must be Thorin.<br>The twilight cost of each [dwarven] event is -1.<br><b>Response:</b> If Thorin is about to take a wound, discard this possession to prevent that wound.
+		lore: "'...his armour rent, wielding nothing but an oaken branch as a shield...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_7: {
 		cardInfo: {
 			image: hobbit/HDG317.jpg
@@ -286,10 +368,11 @@
 		}
 		title: The Arkenstone
 		unique: true
+		side: Free Peoples
 		culture: dwarven
 		twilight: 2
 		type: artifact
-		keyword: support area
+		keywords: support area
 		effects: [
 			{
 				type: activated
@@ -306,33 +389,31 @@
 			{
 				type: activated
 				phase: regroup
+				limitPerPhase: 1
 				cost: {
 					type: exert
 					select: choose(culture(dwarven),companion)
 				}
 				effect: {
-					type: If
-					check: {
-						type: perPhaseLimit
-						limit: 1
-					}
-					true: [
-						{
-							type: incrementPerPhaseLimit
-							limit: 1
-						}
-						{
-							type: stackCardsFromDeck
-							select: choose(culture(dwarven),event)
-							where: self
-							shuffle: true
-							showAll: true
-						}
-					]
+					type: stackCardsFromDeck
+					select: choose(culture(dwarven),event)
+					where: self
+					shuffle: true
+					showAll: true
 				}
 			}
 		]
+		gametext: <b>Fellowship:</b> Add (1) to take a card stacked here into hand.<br><b>Regroup:</b> Exert a [dwarven] companion to stack a [dwarven] event from your draw deck on the Arkenstone (limit once per phase).
+		lore: "'It was a globe with a thousand facets; it shone like silver in the firelight... like rain upon the Moon!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_8: {
 		cardInfo: {
 			image: hobbit/HDG318.jpg
@@ -341,6 +422,7 @@
 		}
 		title: Elf Army
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 3
 		type: ally
@@ -348,7 +430,7 @@
 		race: elf
 		strength: 7
 		vitality: 4
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: activated
 			phase: maneuver
@@ -373,7 +455,17 @@
 				until: start(regroup)
 			}
 		}
+		gametext: <b>Archer</b>.<br><b>Maneuver:</b> If you can spot more minions than companions, exert Elf Army to allow it to participate in archery fire and skirmishes until the regroup phase.
+		lore: "'I have spent enough Elvish blood... No more!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_9: {
 		cardInfo: {
 			image: hobbit/HDG319.jpg
@@ -383,6 +475,7 @@
 		title: Legolas
 		subtitle: Prince of Mirkwood
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 2
 		type: ally
@@ -390,7 +483,7 @@
 		race: elf
 		strength: 6
 		vitality: 3
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: activated
 			phase: archery
@@ -416,7 +509,17 @@
 				}
 			}
 		}
+		gametext: <b>Archer</b>.<br><b>Archery:</b> Spot an Orc and exert Legolas to make the fellowship archery total +1 (or +2 if at a river or forest).
+		lore: "'These bats are bred for one purpose... for war!'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_10: {
 		cardInfo: {
 			image: hobbit/HDG3110.jpg
@@ -426,6 +529,7 @@
 		title: Tauriel
 		subtitle: Staunch Defender
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 2
 		type: ally
@@ -433,7 +537,7 @@
 		race: elf
 		strength: 6
 		vitality: 3
-		keyword: archer
+		keywords: archer
 		effects: {
 			type: activated
 			phase: maneuver
@@ -446,7 +550,17 @@
 				select: choose(orc,MaxStrength(7))
 			}
 		}
+		gametext: <b>Archer</b>.<br><b>Maneuver:</b> Exert Tauriel to return an Orc with strength 7 or less to its owner's hand.
+		lore: "'It is our fight. It will not end here. With every victory this evil will grow.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_11: {
 		cardInfo: {
 			image: hobbit/HDG3111.jpg
@@ -454,10 +568,12 @@
 			rarity: _
 		}
 		title: The Evil Becomes Stronger
+		unique: false
+		side: Free Peoples
 		culture: elven
 		twilight: 2
 		type: event
-		timeword: archery
+		timewords: archery
 		effects: {
 			type: event
 			cost: {
@@ -483,7 +599,17 @@
 				}
 			]
 		}
+		gametext: Spot an [elven] archer ally to exert a minion. Until the regroup phase, that ally is strength +2 and participates in archery fire and skirmishes.
+		lore: "'Are we are not part of this world? Tell me, mellon, when did we let evil become stronger than us?'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_12: {
 		cardInfo: {
 			image: hobbit/HDG3112.jpg
@@ -493,6 +619,7 @@
 		title: Thranduil
 		subtitle: Elven King
 		unique: true
+		side: Free Peoples
 		culture: elven
 		twilight: 4
 		type: ally
@@ -522,12 +649,22 @@
 				]
 			}
 			effect: {
-				type: EnableParticipationInArcheryFireAndSkirmishes
+				type: EnableParticipationInSkirmishes
 				select: self
 				until: start(regroup)
 			}
 		}
+		gametext: <b>Maneuver:</b> Exert Thorin twice or discard a [dwarven] artifact to allow Thranduil to participate in skirmishes until the regroup phase.
+		lore: "'I came to reclaim something of mine.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_13: {
 		cardInfo: {
 			image: hobbit/HDG3113.jpg
@@ -537,6 +674,7 @@
 		title: Beorn
 		subtitle: Skin-Changer
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		twilight: 3
 		type: follower
@@ -576,7 +714,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Exert Gandalf.<br>While Beorn is attached, he cannot be discarded by Shadow cards.<br>Each time bearer wins a skirmish, you may take a [gandalf] card from your discard pile into hand.
+		lore: "'My people were the first to live in the mountains.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_14: {
 		cardInfo: {
 			image: hobbit/HDG3114.jpg
@@ -584,13 +732,13 @@
 			rarity: _
 		}
 		title: The Eagles Are Coming
+		unique: false
+		side: Free Peoples
 		culture: gandalf
 		twilight: 3
 		type: event
-		timeword: skirmish
-		keyword: [
-			spell
-		]
+		timewords: skirmish
+		keywords: spell
 		effects: {
 			type: event
 			cost: {
@@ -610,6 +758,7 @@
 							select: choose(culture(gandalf),follower)
 							showAll: true
 							shuffle: true
+							mustExist: true
 						}
 						{
 							type: playCardFromDiscard
@@ -628,7 +777,17 @@
 				}
 			]
 		}
+		gametext: <b>Spell</b>.<br>Exert Gandalf to play a [gandalf] follower from your draw deck or discard pile.<br>You may attach a [gandalf] follower from your support area to a companion (without paying the aid cost).
+		lore: "'...the rush of their wide wings was like a gale...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_15: {
 		cardInfo: {
 			image: hobbit/HDG3115.jpg
@@ -638,6 +797,7 @@
 		title: Gwaihir
 		subtitle: Lord of the Eagles
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		twilight: 1
 		type: follower
@@ -683,7 +843,17 @@
 				}
 			}
 		]
+		gametext: <b>Aid</b> – Discard a [gandalf] card from hand.<br><b>Skirmish:</b> Transfer Gwaihir to your support area to cancel a skirmish involving bearer and a mounted Orc.
+		lore: "'The Lord of the Eagles hears this as he looks down from the mountains.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_16: {
 		cardInfo: {
 			image: hobbit/HDG3116.jpg
@@ -691,13 +861,13 @@
 			rarity: _
 		}
 		title: His Wrath Was Redoubled
+		unique: false
+		side: Free Peoples
 		culture: gandalf
 		twilight: 3
 		type: event
-		timeword: assignment
-		keyword: [
-			spell
-		]
+		timewords: assignment
+		keywords: spell
 		effects: {
 			type: event
 			effect: [
@@ -715,7 +885,17 @@
 				}
 			]
 		}
+		gametext: <b>Spell</b>.<br>Each [dwarven] companion bearing a follower is strength +2 (and <b>defender +1</b> if it is a [gandalf] follower) until the regroup phase.
+		lore: "'The roar of his voice was like drums... he tossed wolves and goblins from his path like straws and feathers.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_17: {
 		cardInfo: {
 			image: hobbit/HDG3117.jpg
@@ -725,6 +905,7 @@
 		title: Radagast
 		subtitle: The Brown
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		type: ally
 		allyHome: 5H
@@ -732,7 +913,7 @@
 		twilight: 4
 		strength: 8
 		vitality: 4
-		keyword: wise
+		keywords: wise
 		effects: {
 			type: activated
 			phase: fellowship
@@ -760,7 +941,17 @@
 				}
 			]
 		}
+		gametext: <b>Wise</b>.<br><b>Fellowship:</b> Play Gandalf from your discard pile to make the move limit for this turn +1. Choose an opponent who may draw 2 cards.
+		lore: "'The Greenwood is sick, Gandalf. Nothing grows anymore, at least nothing good.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_18: {
 		cardInfo: {
 			image: hobbit/HDG3118.jpg
@@ -769,6 +960,7 @@
 		}
 		title: Wizard Staff
 		unique: true
+		side: Free Peoples
 		culture: gandalf
 		twilight: 2
 		type: artifact
@@ -780,6 +972,12 @@
 			optional: true
 			trigger: {
 				type: startOfTurn
+			}
+			// A Hobbit-set take from the draw deck with nothing to take is withheld (Q-0019; the orchestrator on
+			// Q-0406 and Q-0418): asked before the cost, as Old Thrush 31_42 has it.
+			requires: {
+				type: hasCardInDrawDeck
+				filter: culture(gandalf),spell
 			}
 			cost: {
 				type: exert
@@ -793,14 +991,26 @@
 				showAll: true
 			}
 		}
+		gametext: Bearer must be a Wizard.<br>At the start of each of your turns, you may exert bearer to take a [gandalf] spell from your draw deck into your hand.
+		lore: "'The staff in the hand of a Wizard may be more than a prop for age...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_38: {
 		cardInfo: {
 			image: hobbit/HDG3138.jpg
 			collInfo: 31_38
 			rarity: _
 		}
-		title: An Acorn from Beorn's House
+		title: An Acorn from Beorn's house
+		unique: false
+		side: Free Peoples
 		culture: shire
 		twilight: 1
 		type: possession
@@ -820,180 +1030,288 @@
 				{
 					type: discard
 					select: choose(side(shadow),condition)
-			  }
-	  ]
-	}
-  }
-  31_39: {
-	title: An Invisible Ring
-	culture: shire
-	type: event
-	timeword: skirmish
-	twilight: 1
-	effects: {
-	  type: event
-	  requires: {
-		type: ringIsOn
-	  }
-	  effect: [
-		{
-		  type: wound
-		  select: all(minion,inSkirmishAgainst(ring bearer))
+				}
+			]
 		}
-		{
-		  type: removefromthegame
-		  select: self
-		}
-	  ]
-	}
-  }
-  31_40: {
-	title: Barrels
-	culture: shire
-	type: event
-	timeword: regroup
-	twilight: 1
-	effects: {
-	  type: event
-	  cost: {
-		type: exert
-		count: 2
-		select: choose(culture(dwarven),companion)
-	  }
-	  effect: [
-		{
-		  type: discard
-		  count: 0-2
-		  select: choose(minion,not(name(Smaug)))
-		}
-		{
-		  type: drawCards
-		  count: 3
-		}
-		{
-		  type: If
-		  check: {
-			type: location
-			filter: river
-		  }
-		  true: {
-			type: addModifier
-			modifier: {
-			  type: modifyMoveLimit
-			  amount: 1
+		gametext: Bearer must be Bilbo.<br><b>Regroup:</b> Discard this possession to remove a doubt and discard a Shadow condition.
+		lore: "'One day I'll remember everything: the good, the bad, those who survived... and those that did not.'"
+		promotext: ""
+		alts: {
+			promos: {
 			}
-			until: endOfTurn
-		  }
+			errata: {
+			}
 		}
-	  ]
 	}
-  }
-  31_41: {
-	title: Burglar's Contract
+
+	31_39: {
+		cardInfo: {
+			image: hobbit/HDG3139.jpg
+			collInfo: 31_39
+			rarity: _
+		}
+		title: An Invisible Ring
+		unique: false
+		side: Free Peoples
+		culture: shire
+		type: event
+		timewords: skirmish
+		twilight: 1
+		effects: {
+			type: event
+			requires: {
+				type: ringIsOn
+			}
+			effect: [
+				{
+					type: wound
+					select: all(minion,inSkirmishAgainst(ring bearer))
+				}
+				{
+					type: RemovePlayedEventFromTheGame
+					filter: self
+				}
+			]
+		}
+		gametext: If Bilbo wears the One Ring, wound each minion he is skirmishing. Then remove this event from the game.
+		lore: "'...not a fair fight. He was invisible now.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_40: {
+		cardInfo: {
+			image: hobbit/HDG3140.jpg
+			collInfo: 31_40
+			rarity: _
+		}
+		title: Barrels
+		unique: false
+		side: Free Peoples
+		culture: shire
+		type: event
+		timewords: regroup
+		twilight: 1
+		effects: {
+			type: event
+			cost: {
+				type: exert
+				count: 2
+				select: choose(culture(dwarven),companion)
+			}
+			effect: [
+				{
+					type: discard
+					count: 0-2
+					select: choose(minion,not(name(Smaug)))
+				}
+				{
+					type: drawCards
+					count: 3
+				}
+				{
+					type: If
+					check: {
+						type: location
+						filter: river
+					}
+					true: {
+						type: addModifier
+						modifier: {
+							type: modifyMoveLimit
+							amount: 1
+						}
+						until: endOfTurn
+					}
+				}
+			]
+		}
+		gametext: Exert 2 [dwarven] companions to discard up to 2 minions (except Smaug) and draw 3 cards. If the fellowship is at a river, make the move limit +1 for this turn.
+		lore: "'I am the friend of bears and the guest of eagles. I am Ringwinner and Luckwearer; and I am Barrel-rider.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
+
+	31_41: {
+		cardInfo: {
+			image: hobbit/HDG3141.jpg
+			collInfo: 31_41
+			rarity: _
+		}
+		title: Burglar's Contract
 		unique: true
-	culture: shire
-	type: possession
-	twilight: 1
-	resistance: 1
-	target: name(Bilbo)
-	effects: {
-	  type: activated
-	  phase: skirmish
-	  cost: [
-		{
-		  type: addBurdens
-		  amount: 1
+		side: Free Peoples
+		culture: shire
+		type: possession
+		twilight: 1
+		resistance: 1
+		target: name(Bilbo)
+		effects: {
+			type: activated
+			phase: skirmish
+			cost: [
+				{
+					type: addBurdens
+					amount: 1
+				}
+				{
+					type: exert
+					select: bearer
+				}
+			]
+			effect: {
+				type: modifyStrength
+				select: choose(not(bearer),companion)
+				amount: {
+					type: cardAffectedLimitPerPhase
+					limit: 4
+					source: 2
+				}
+			}
 		}
-		{
-		  type: exert
-		  select: bearer
+		gametext: Bearer must be Bilbo.<br><b>Skirmish:</b> Add a doubt and exert Bilbo to make another companion strength +2 (limit +4).
+		lore: "'Thorin and Company to Burglar Bilbo greeting! For your hospitality our sincerest thanks...'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  ]
-	  effect: {
-		type: modifyStrength
-		select: choose(not(bearer),companion)
-		amount: {
-		  type: cardAffectedLimitPerPhase
-		  limit: 4
-		  source: 2
-		}
-	  }
 	}
-  }
-  31_42: {
-	title: Old Thrush
+
+	31_42: {
+		cardInfo: {
+			image: hobbit/HDG3142.jpg
+			collInfo: 31_42
+			rarity: _
+		}
+		title: Old Thrush
+		subtitle: Messenger Bird
 		unique: true
-	culture: shire
-	type: follower
-	race: bird
-	twilight: 1
-	strength: 1
-	effects: [
-	  {
-		type: aidCost
-		cost: {
-		  type: exert
-		  select: choose(name(Bilbo))
-		}
-	  }
-	  {
-		type: activated
-		phase: maneuver
-		requires: {
-		  type: canSpot
-		  filter: self,attachedTo(any)
-		}
-		cost: {
-		  type: discard
-		  select: self
-		}
-		effect: {
-		  type: choice
-		  texts: [
-			Take a card from your draw deck into hand
-			Take a card from your discard into hand
-		  ]
-		  effects: [
+		side: Free Peoples
+		culture: shire
+		type: follower
+		race: bird
+		twilight: 1
+		strength: 1
+		effects: [
 			{
-			  type: putCardsFromDeckIntoHand
-			  select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
-				reveal: true
-				shuffle: true
-				showAll: true
+				type: aidCost
+				cost: {
+					type: exert
+					select: choose(name(Bilbo))
+				}
 			}
 			{
-			  type: putCardsFromDiscardIntoHand
-			  select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+				type: activated
+				phase: maneuver
+				requires: [
+					{
+						type: canSpot
+						filter: self,attachedTo(any)
+					}
+					{
+						type: or
+						requires: [
+							{
+								type: hasCardInDrawDeck
+								filter: side(free people),not(or(culture(gandalf),culture(elven)))
+							}
+							{
+								type: hasCardInDiscard
+								filter: side(free people),not(or(culture(gandalf),culture(elven)))
+							}
+						]
+					}
+				]
+				cost: {
+					type: discard
+					select: self
+				}
+				effect: {
+					type: choice
+					texts: [
+						Take a card from your draw deck into hand
+						Take a card from your discard into hand
+					]
+					effects: [
+						{
+							type: putCardsFromDeckIntoHand
+							select: choose(side(free people),not(or(culture(gandalf),culture(elven))))
+							reveal: true
+							shuffle: true
+							showAll: true
+						}
+						{
+							type: putCardsFromDiscardIntoHand
+							select: choose(side(free people),not(or(culture(gandalf),culture(elven))),not(self))
+						}
+					]
+				}
 			}
-		  ]
+		]
+		gametext: <b>Aid</b> – Exert Bilbo.<br><b>Maneuver:</b> If Old Thrush is attached, discard him to take into hand a Free Peoples card (except [gandalf] or [elven]) from your draw deck or discard pile.
+		lore: "The Men of Dale understand the language of birds."
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
-	  }
-	]
-  }
-  31_43: {
-	title: Skillful Negociator
-	culture: shire
-	type: event
-	timeword: maneuver
-	twilight: 1
-	effects: {
-	  type: event
-	  cost: [
-		{
-		  type: spot
-		  select: choose(ally)
-		  memorize: chosenAlly
-		}
-		{
-		  type: exert
-		  select: choose(name(Bilbo))
-		}
-	  ]
-	  effect: {
-		type: EnableParticipationInArcheryFireAndSkirmishes
-		select: memory(chosenAlly)
-		until: start(regroup)
-	  }
 	}
-  }
+
+	31_43: {
+		cardInfo: {
+			image: hobbit/HDG3143.jpg
+			collInfo: 31_43
+			rarity: _
+		}
+		title: Skillful Negotiator
+		unique: false
+		side: Free Peoples
+		culture: shire
+		type: event
+		timewords: maneuver
+		twilight: 1
+		effects: {
+			type: event
+			cost: [
+				{
+					type: spot
+					select: choose(ally)
+					memorize: chosenAlly
+				}
+				{
+					type: exert
+					select: choose(name(Bilbo))
+				}
+			]
+			effect: {
+				type: EnableParticipationInArcheryFireAndSkirmishes
+				select: memory(chosenAlly)
+				until: start(regroup)
+			}
+		}
+		gametext: Spot an ally and exert Bilbo to allow that ally to participate in archery fire and skirmishes until the regroup phase.
+		lore: "'If I am not mistaken, this is the Halfing who stole the keys right from under the nose of my guards.'"
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
+	}
 }

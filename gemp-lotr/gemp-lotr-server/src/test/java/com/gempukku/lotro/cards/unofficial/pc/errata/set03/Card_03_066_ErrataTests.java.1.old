@@ -90,7 +90,7 @@ public class Card_03_066_ErrataTests
 		scn.AddBurdens(4);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 4 burdens and 4 Isengard cards — neither threshold met
 		assertFalse(scn.ShadowActionAvailable(berserker));
@@ -112,7 +112,7 @@ public class Card_03_066_ErrataTests
 		scn.AddBurdens(5);
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertEquals(0, scn.GetWoundsOn(berserker));
 		assertTrue(scn.ShadowActionAvailable(berserker));
@@ -156,7 +156,7 @@ public class Card_03_066_ErrataTests
 		// No burdens added — proving the Isengard path works independently
 
 		scn.SkipToPhase(Phase.MANEUVER);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		assertTrue(scn.ShadowActionAvailable(berserker));
 		scn.ShadowUseCardAction(berserker);

@@ -89,7 +89,7 @@
 					filter: culture(raider),man
 					count: 2
 				}
-				limitPerPhase: 1
+				effectLimitPerPhase: 1
 				cost: {
 					type: removeTwilight
 					amount: 3
@@ -826,6 +826,10 @@
 					type: winsSkirmish
 					filter: self
 				}
+				requires: {
+					type: canSpotBurdens
+					amount: 1
+				}
 				effect: {
 					type: addTwilight
 					amount: {
@@ -1115,13 +1119,13 @@
 				filter: culture(raider),man
 				count: 2
 			},
+			cost: {
+				type: discardFromHand
+				forced: false
+				count: any
+				memorize: shadowDiscardedCards
+			}
 			effect: [
-				{
-					type: discardFromHand
-					forced: false
-					count: any
-					memorize: shadowDiscardedCards
-				}
 				{
 					type: discardFromHand
 					forced: false
@@ -2165,10 +2169,27 @@
 			requires: {
 				type: canSpotThreats
 			}
+			// X is also the number exerted, so it runs from 1 (Q-0076, Q-0333; as They Will Find the Ring 2_81, F-0553),
+			// filled in with all there are (Q-0341). The min keeps the range from 1 to 0 when no [raider] Man can be spotted.
 			cost: {
-				type: chooseHowManyToSpot
-				filter: culture(raider),man
+				type: chooseANumber
 				text: How many {raider} Men would you like to spot?
+				from: {
+					type: min
+					firstNumber: 1
+					secondNumber: {
+						type: forEachYouCanSpot
+						filter: culture(raider),man
+					}
+				}
+				to: {
+					type: forEachYouCanSpot
+					filter: culture(raider),man
+				}
+				default: {
+					type: forEachYouCanSpot
+					filter: culture(raider),man
+				}
 				memorize: spotCount
 			}
 			effect: [

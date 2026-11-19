@@ -17,8 +17,10 @@ public class Card_11_172_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_172");
-					// put other cards in here as needed for the test case
+					put("sam", "11_172");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion, resistance 6; a maneuver ability used only on purpose
+					put("barliman", "1_70");    // Barliman Butterbur: [gandalf] Man ally (resistance 0); a fellowship ability used only on purpose
+					put("runner", "1_178");     // Goblin Runner: [moria] Orc minion; its play trigger is not set off by a cheat
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,12 +43,13 @@ public class Card_11_172_Tests
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 10
-		 * Game Text: <b>Ring-bound</b>.<br>Each other companion is resistance +1.
+		 * Game Text: <b>Ring-bound</b>.
+		 * Each other companion is resistance +1.
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("sam");
 
 		assertEquals("Sam", card.getBlueprint().getTitle());
 		assertEquals("Steadfast Friend", card.getBlueprint().getSubtitle());
@@ -62,18 +65,35 @@ public class Card_11_172_Tests
 		assertEquals(10, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SamTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachOtherCompanionIsResistancePlus1AndNeitherSamNorAnAllyNorAMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var barliman = scn.GetFreepsCard("barliman");
+		var runner = scn.GetShadowCard("runner");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(barliman);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// The minion is laid early, to stand on the table beside the fellowship as Sam comes in.
+		scn.MoveMinionsToTable(runner);
 
-		assertEquals(2, scn.GetTwilight());
+		// Without Sam: printed resistance.
+		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(6, scn.GetResistance(aragorn));
+		assertEquals(0, scn.GetResistance(barliman));
+		assertEquals(0, scn.GetResistance(runner));
+
+		scn.MoveCompanionsToTable(sam);
+
+		// A [shire] Hobbit and a [gondor] Man, each +1; Sam himself, the ally and the minion are not.
+		assertEquals(11, scn.GetResistance(frodo));
+		assertEquals(7, scn.GetResistance(aragorn));
+		assertEquals(10, scn.GetResistance(sam));
+		assertEquals(0, scn.GetResistance(barliman));
+		assertEquals(0, scn.GetResistance(runner));
 	}
 }

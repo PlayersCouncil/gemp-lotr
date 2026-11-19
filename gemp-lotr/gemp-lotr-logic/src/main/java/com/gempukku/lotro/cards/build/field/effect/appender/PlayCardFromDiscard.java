@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.CardResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.common.Filterable;
@@ -12,6 +13,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.PlayUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
+import com.gempukku.lotro.logic.actions.PlayPermanentAction;
 import com.gempukku.lotro.logic.effects.StackActionEffect;
 import com.gempukku.lotro.logic.modifiers.ModifierFlag;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
@@ -27,7 +29,7 @@ import java.util.Collection;
 public class PlayCardFromDiscard implements EffectAppenderProducer {
     @Override
     public EffectAppender createEffectAppender(boolean cost, JSONObject effectObject, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
-        FieldUtils.validateAllowedFields(effectObject,  "player", "select", "on", "discount", "maxDiscount", "removedTwilight", "optional", "extraEffects", "memorize");
+        FieldUtils.validateAllowedFields(effectObject,  "player", "select", "on", "discount", "maxDiscount", "removedTwilight", "optional", "extraEffects", "memorize", "exhausted");
 
         final String player = FieldUtils.getString(effectObject.get("player"), "player", "you");
         final String select = FieldUtils.getString(effectObject.get("select"), "select");
@@ -39,18 +41,18 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
 
         final boolean optional = FieldUtils.getBoolean(effectObject.get("optional"), "optional", false);
         final String memorize = FieldUtils.getString(effectObject.get("memorize"), "memorize", "_temp");
+        // "It comes into play exhausted" (F-0500): the card is placed exhausted, before its play is answered.  Only a
+        // card played to the table can be a character; anything else is played as it would be.
+        final boolean exhausted = FieldUtils.getBoolean(effectObject.get("exhausted"), "exhausted", false);
 
         final JSONObject[] extraEffectsArray = FieldUtils.getObjectArray(effectObject.get("extraEffects"), "extraEffects");
         final EffectAppender[] extraEffectsAppenders = environment.getEffectAppenderFactory().getEffectAppenders(cost, extraEffectsArray, environment);
 
         final FilterableSource onFilterableSource = (onFilter != null) ? environment.getFilterFactory().generateFilter(onFilter, environment) : null;
 
-        MultiEffectAppender result = new MultiEffectAppender();
-        result.setPlayabilityCheckedForEffect(true);
-
         Evaluator countEvaluator = optional ? new RangeEvaluator(0, 1) : new ConstantEvaluator(1);
 
-        result.addEffectAppender(
+        final EffectAppender cardToPlay =
                 CardResolver.resolveCardsInDiscard(select,
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
@@ -65,14 +67,34 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                         (actionContext) -> {
                             final LotroGame game = actionContext.getGame();
                             final int maxDiscountModifier = maxDiscountSource.getEvaluator(actionContext).evaluateExpression(game, actionContext.getSource());
+                            // This filter is the one asked BEFORE the action is paid for, so whatever the action
+                            // will take from the pool first is counted as gone: the twilight an ability removes as
+                            // its own cost (which its definition states) and the twilight cost of an event that is
+                            // about to be played (which the context knows).  Playing from the discard pile as an
+                            // effect is to be treated as a cost: both have to be payable.  The filter above is the
+                            // one used when the effect is carried out; by then the pool is what is left.
+                            final int twilightGoneFirst = removedTwilight + actionContext.getUnpaidTwilightCost();
+                            // Likewise the threats the action will add as its own cost.
+                            final int threatsAddedFirst = actionContext.getUnpaidThreatCost();
                             if (onFilterableSource != null) {
                                 final Filterable onFilterable = onFilterableSource.getFilterable(actionContext);
-                                return Filters.and(Filters.playable(maxDiscountModifier, removedTwilight, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
+                                return Filters.and(Filters.playable(maxDiscountModifier, twilightGoneFirst, threatsAddedFirst, false, false, true), ExtraFilters.attachableTo(actionContext.getGame(), maxDiscountModifier, onFilterable));
                             }
 
-                            return Filters.playable(maxDiscountModifier, removedTwilight, false, false, true);
+                            return Filters.playable(maxDiscountModifier, twilightGoneFirst, threatsAddedFirst, false, false, true);
                         },
-                        actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment));
+                        actionContext -> countEvaluator, memorize, player, "Choose card to play from discard", environment);
+
+        // As a branch of a choice: with no card in the discard pile that can be played, nothing is played.
+        MultiEffectAppender result = new MultiEffectAppender() {
+            @Override
+            public boolean isCertainToDoNothingIfChosen(ActionContext actionContext) {
+                return EffectForecast.findsNoCardNow(actionContext, cardToPlay);
+            }
+        };
+        result.setPlayabilityCheckedForEffect(true);
+
+        result.addEffectAppender(cardToPlay);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -84,6 +106,8 @@ public class PlayCardFromDiscard implements EffectAppenderProducer {
                             Filterable onFilterable = (onFilterableSource != null) ? onFilterableSource.getFilterable(actionContext) : Filters.any;
 
                             final CostToEffectAction playCardAction = PlayUtils.getPlayCardAction(game, cardsToPlay.iterator().next(), costModifier, onFilterable, false);
+                            if (exhausted && playCardAction instanceof PlayPermanentAction playPermanentAction)
+                                playPermanentAction.setComesIntoPlayExhausted();
                             for (EffectAppender extraEffectsAppender : extraEffectsAppenders) {
                                 extraEffectsAppender.appendEffect(false, playCardAction, actionContext);
                             }

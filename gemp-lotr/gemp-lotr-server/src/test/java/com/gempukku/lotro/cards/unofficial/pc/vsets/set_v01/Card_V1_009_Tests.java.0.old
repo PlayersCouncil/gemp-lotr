@@ -102,7 +102,7 @@ public class Card_V1_009_Tests
 		assertEquals(1, scn.GetFreepsArcheryTotal());
 		assertEquals(8, scn.GetStrength(legolas));
 
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 
 		assertFalse(scn.FreepsAnyActionsAvailable()); // No gorn bow
 	}

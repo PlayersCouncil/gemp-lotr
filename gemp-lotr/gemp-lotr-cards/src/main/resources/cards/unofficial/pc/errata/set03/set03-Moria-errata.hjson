@@ -1,20 +1,22 @@
 {
 	53_79: {
 		cardInfo: {
-			//id: 3_79.1
+			//id: 53_79.1
 			parent: 3_79
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN03E079.1.jpg
 			collInfo: 3U79
 			rarity: U
 		}
 		title: Malice
-		culture: moria
+		unique: false
+		side: Shadow
+		culture: Moria
 		twilight: 0
-		type: event
-		timeword: maneuver
+		type: Event
+		timewords: Maneuver
 		effects: {
 			type: event
 			requires: [
@@ -26,16 +28,22 @@
 					type: CanSpot
 					filter: culture(sauron),Orc
 				}
+				{
+					type: HasCardInDiscard
+					filter: item,or(culture(sauron),culture(moria)),Playable
+				}
 			]
 			effect: [
 				{
 					type: playCardFromDiscard
 					select: choose(item,or(culture(sauron),culture(moria)))
+					optional: true
 					memorize: item1
 				}
 				{
 					type: playCardFromDiscard
 					select: choose(item,or(culture(sauron),culture(moria)))
+					optional: true
 					memorize: item2
 				}
 				{
@@ -226,7 +234,7 @@
 	
 	53_80: {
 		cardInfo: {
-			//id: 3_80.3
+			//id: 53_80.3
 			parent: 3_80
 			variant: ERRATA
 			variantPath: errata/pc
@@ -245,7 +253,6 @@
 		effects: [
 			{
 				type: Trigger
-				optional: false
 				optional: false
 				trigger: {
 					type: StartOfPhase

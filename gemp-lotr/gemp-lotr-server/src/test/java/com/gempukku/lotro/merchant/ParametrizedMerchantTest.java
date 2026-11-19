@@ -1,6 +1,6 @@
 package com.gempukku.lotro.merchant;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.db.MerchantDAO;
 import org.junit.Test;
 
@@ -8,7 +8,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertTrue;
 
-public class ParametrizedMerchantTest extends AbstractAtTest {
+public class ParametrizedMerchantTest extends LoadedLibraries {
     @Test
     public void checkTransactionRevertsPriceAfterFiveDays() {
         Date setupDate = new Date(-1000 * 60 * 60 * 24 * 50L);

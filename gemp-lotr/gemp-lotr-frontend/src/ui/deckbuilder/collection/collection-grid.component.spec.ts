@@ -85,6 +85,7 @@ describe('CollectionGridComponent', () => {
     el.querySelector<HTMLButtonElement>('.gd-card')!.click();
     expect(activate).toHaveBeenCalledWith(
       expect.objectContaining({ kind: 'collection', role: 'card', blueprintId: '1_1' }),
+      expect.any(MouseEvent),
     );
   });
 

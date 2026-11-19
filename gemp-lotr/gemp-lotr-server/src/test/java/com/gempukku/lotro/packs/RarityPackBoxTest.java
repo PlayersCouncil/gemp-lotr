@@ -1,12 +1,12 @@
 package com.gempukku.lotro.packs;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.game.CardCollection;
 import org.junit.Test;
 
 import java.util.List;
 
-public class RarityPackBoxTest extends AbstractAtTest {
+public class RarityPackBoxTest extends LoadedLibraries {
     @Test
     public void openingPacks() {
         RarityPackBox fellowshipBox = new RarityPackBox(_cardLibrary.getSetDefinitions().get("1"));

@@ -278,6 +278,13 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
                         var bp = _library.getLotroCardBlueprint(metasites.get(i));
                         if (bp != null) {
                             siteElem.setAttribute("name", bp.getFullName());
+                            // These are the caller's own meta-sites, the ones his deck is validated under
+                            // (LeagueService.buildDeckValidationContext), so the deck builder opens its site
+                            // list to every block only for a player who has such a meta-site now.
+                            var overrides = bp.getDeckBuildingOverrides();
+                            if (overrides != null && overrides.shouldSkipSiteBlockValidation()) {
+                                siteElem.setAttribute("siteOverride", "true");
+                            }
                         }
                     } catch (Exception ignored) {}
                     leagueElem.appendChild(siteElem);

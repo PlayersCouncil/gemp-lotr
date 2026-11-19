@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set17;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class Card_17_084_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_84");
-					// put other cards in here as needed for the test case
+					put("scout", "17_84");
+					put("scout2", "17_84");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +46,7 @@ public class Card_17_084_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetShadowCard("scout");
 
 		assertEquals("Orkish Scout", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +61,59 @@ public class Card_17_084_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void OrkishScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AtBalinsTombTheShadowAbilityExertsThisScoutToAdd3AndThenItIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var scout = scn.GetShadowCard("scout");
+		var scout2 = scn.GetShadowCard("scout2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(scout, scout2);
+		assertEquals(0, scn.GetWoundsOn(scout));
+		assertEquals(0, scn.GetWoundsOn(scout2));
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
+		// Balin's Tomb: site 4, Shadow number 3.  Neither its site number (4) nor the Shadow number of the site
+		// before (0) or after it (6) is 3.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(3, scn.GetTwilightCost(scn.GetCurrentSite()));
+		int pool = scn.GetTwilight();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(scout));
+		scn.ShadowUseCardAction(scout);
+
+		assertEquals(1, scn.GetWoundsOn(scout));
+		assertEquals(0, scn.GetWoundsOn(scout2));
+		assertEquals(pool + 3, scn.GetTwilight());
+		// Vitality 2 with 1 wound: this Scout cannot exert again; the other copy still pays for its own.
+		assertFalse(scn.ShadowActionAvailable(scout));
+		assertTrue(scn.ShadowActionAvailable(scout2));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AtTheBridgeOfKhazadDumTheShadowAbilityAdds6() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout = scn.GetShadowCard("scout");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveMinionsToTable(scout);
+		assertEquals(0, scn.GetWoundsOn(scout));
+		scn.FreepsPass();
+
+		// The Bridge of Khazad-dum: site 5, Shadow number 6.
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertEquals(6, scn.GetTwilightCost(scn.GetCurrentSite()));
+		int pool = scn.GetTwilight();
+		assertTrue(scn.ShadowActionAvailable(scout));
+		scn.ShadowUseCardAction(scout);
+
+		assertEquals(1, scn.GetWoundsOn(scout));
+		assertEquals(pool + 6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

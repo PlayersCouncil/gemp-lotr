@@ -17,8 +17,7 @@ public class Card_17_122_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_122");
-					// put other cards in here as needed for the test case
+					put("butcher", "17_122");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_17_122_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetShadowCard("butcher");
 
 		assertEquals("White Hand Butcher", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -61,20 +60,5 @@ public class Card_17_122_Tests
 		assertEquals(5, card.getBlueprint().getStrength());
 		assertEquals(2, card.getBlueprint().getVitality());
 		assertEquals(5, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WhiteHandButcherTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
 	}
 }

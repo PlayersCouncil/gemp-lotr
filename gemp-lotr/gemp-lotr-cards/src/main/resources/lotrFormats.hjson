@@ -4,7 +4,7 @@
 		code: debug
 		sites: MULTIPATH
 		maximumSameName: 100
-		minDeckSize: 1
+		minimumDeckSize: 1
 		blocks: [
 			fotr_block
 		]
@@ -301,7 +301,7 @@
 	}
 	{
 		name: Towers Block - Sets 4-5
-		code: ttt2_block"
+		code: ttt2_block
 		order: 12
 		sites: TWO_TOWERS
 		cancelRingBearerSkirmish: true

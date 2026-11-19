@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_168_Tests
@@ -17,8 +18,12 @@ public class Card_13_168_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "13_168");
-					// put other cards in here as needed for the test case
+					put("aggressor", "13_168");
+					put("aggressor2", "13_168");
+					put("sentry", "10_84");      // Cirith Ungol Sentry: [sauron] Uruk-hai minion, damage +1 only
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: resistance 6; a maneuver ability only
+					put("sam", "1_311");         // Sam, Son of Hamfast: resistance 5; a fellowship ability and a response when Frodo dies
+					put("elrond", "1_40");       // Elrond, Lord of Rivendell: ally, so of resistance 0; a start-of-turn heal and a fellowship ability
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +51,7 @@ public class Card_13_168_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aggressor");
 
 		assertEquals("Uruk Aggressor", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +68,90 @@ public class Card_13_168_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukAggressorTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WithACompanionOfResistance0ToSpotItCostsTwoLess() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(sam, aragorn);
+
+		var aggressor = scn.GetShadowCard("aggressor");
+		scn.MoveCardsToHand(aggressor);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Five burdens: Sam 5 - 5 = 0, Aragorn 6 - 5 = 1.
+		scn.AddBurdens(5);
+		assertEquals(0, scn.GetResistance(sam));
+		assertEquals(1, scn.GetResistance(aragorn));
+		assertInHand(aggressor);
+		scn.FreepsPass();
 
-		assertEquals(3, scn.GetTwilight());
+		// At site 2 a site 5 minion is roaming: 3 to play - 2 for Sam + 2 roaming = 3; with no discount, 5.
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(aggressor));
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(aggressor));
+		scn.ShadowPlayCard(aggressor);
+
+		// Nothing is asked: the discount is taken.
+		assertInZone(Zone.SHADOW_CHARACTERS, aggressor);
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnAllyOrAMinionOrACompanionOfResistance1GivesNoDiscountAndACompanionAtResistance0Does() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var elrond = scn.GetFreepsCard("elrond");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveAlliesToTable(elrond);
+
+		var aggressor = scn.GetShadowCard("aggressor");
+		var aggressor2 = scn.GetShadowCard("aggressor2");
+		var sentry = scn.GetShadowCard("sentry");
+		scn.MoveCardsToHand(aggressor, aggressor2);
+
+		scn.StartGame();
+		scn.AddBurdens(5);
+		assertEquals(1, scn.GetResistance(aragorn));
+		assertEquals(0, scn.GetResistance(elrond));
+		scn.MoveMinionsToTable(sentry);
+		assertInHand(aggressor, aggressor2);
+		scn.FreepsPass();
+
+		// Aragorn at resistance 1, an ally and a minion beside him: 3 to play + 2 roaming = 5.
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertFalse(scn.ShadowPlayAvailable(aggressor));
+
+		scn.SetTwilight(5);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(aggressor));
+		scn.ShadowPlayCard(aggressor);
+		assertInZone(Zone.SHADOW_CHARACTERS, aggressor);
+		assertEquals(0, scn.GetTwilight());
+
+		// A sixth burden puts Aragorn at 0: the second copy costs 3 - 2 + 2 roaming = 3.
+		scn.AddBurdens(1);
+		assertEquals(0, scn.GetResistance(aragorn));
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertFalse(scn.ShadowPlayAvailable(aggressor2));
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(aggressor2));
+		scn.ShadowPlayCard(aggressor2);
+		assertInZone(Zone.SHADOW_CHARACTERS, aggressor2);
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import {
   afterRenderEffect,
   Component,
@@ -46,12 +46,13 @@ function isMetaSiteModifier(blueprintId: string): boolean {
  * `input[type=range].gd-card-info__zoom` (focused when the dialog opens, as the legacy one focused its handle),
  * `.gd-card-info__card` (`data-orientation`, `data-flipped` = back or
  * upside-down, `data-flippable`, `data-foil`) holding `img.gd-card-info__image`, `img.gd-card-info__overlay` and
- * `img.gd-card-info__foil`, then `a.gd-card-info__wiki` when the card has a wiki page.
+ * `img.gd-card-info__foil`, then `a.gd-card-info__wiki` when the card has a wiki page. With details from the page
+ * (CardInfoService.details), the card and `.gd-card-info__details` side by side in `.gd-card-info__inner`.
  */
 @Component({
   selector: 'gd-card-info',
   styleUrl: './card-info.component.css',
-  imports: [DocumentPressDirective],
+  imports: [DocumentPressDirective, NgTemplateOutlet],
   host: { style: 'display: contents' },
   template: `
     <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -- a <dialog> takes the focus -->
@@ -60,7 +61,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
       class="gd-card-info"
       aria-labelledby="gd-card-info-title"
       [style.--gd-card-info-zoom]="zoom()"
-      (close)="info.close()"
+      (close)="nativeClose()"
       (keydown.escape)="escape($event)"
       (gdDocumentPress)="documentPress($event)"
       (mousedown)="keepFocus($event)"
@@ -68,7 +69,7 @@ function isMetaSiteModifier(blueprintId: string): boolean {
     >
       @if (view(); as v) {
         <header class="gd-card-info__header">
-          <h2 id="gd-card-info-title" class="gd-card-info__title">Card Information</h2>
+          <h2 id="gd-card-info-title" class="gd-card-info__title" data-dialog-title>Card Information</h2>
           <button type="button" class="gd-card-info__close" aria-label="Close" (click)="info.close()"></button>
         </header>
         <input
@@ -87,27 +88,37 @@ function isMetaSiteModifier(blueprintId: string): boolean {
           (pointerup)="slideStopped()"
           (pointercancel)="slideStopped()"
         />
-        <div
-          class="gd-card-info__card"
-          [attr.data-orientation]="v.data.horizontal ? 'horizontal' : 'vertical'"
-          [attr.data-flipped]="flipped() ? (v.data.back ? 'back' : 'upside-down') : null"
-          [attr.data-flippable]="v.flippable ? '' : null"
-          [attr.data-foil]="v.data.foil ? '' : null"
-        >
-          <img class="gd-card-info__image" [src]="flipped() && v.data.back ? v.data.back : v.data.image" alt="" />
-          @if (v.data.overlayImage; as overlay) {
-            <img class="gd-card-info__overlay" [src]="overlay" alt="" />
-          }
-          @if (v.data.foil) {
-            <img class="gd-card-info__foil" [src]="holoImage" alt="" />
-          }
-          <span class="gd-card-info__flip"></span>
-        </div>
+        @if (info.details() !== null) {
+          <div class="gd-card-info__inner">
+            <ng-container [ngTemplateOutlet]="cardTemplate" [ngTemplateOutletContext]="{ $implicit: v }" />
+            <div class="gd-card-info__details" [innerHTML]="info.details()"></div>
+          </div>
+        } @else {
+          <ng-container [ngTemplateOutlet]="cardTemplate" [ngTemplateOutletContext]="{ $implicit: v }" />
+        }
         @if (v.wikiUrl) {
           <a class="gd-card-info__wiki" [href]="v.wikiUrl" target="_blank" rel="noopener noreferrer">Go to Wiki Page</a>
         }
       }
     </dialog>
+    <ng-template #cardTemplate let-v>
+      <div
+        class="gd-card-info__card"
+        [attr.data-orientation]="v.data.horizontal ? 'horizontal' : 'vertical'"
+        [attr.data-flipped]="flipped() ? (v.data.back ? 'back' : 'upside-down') : null"
+        [attr.data-flippable]="v.flippable ? '' : null"
+        [attr.data-foil]="v.data.foil ? '' : null"
+      >
+        <img class="gd-card-info__image" [src]="flipped() && v.data.back ? v.data.back : v.data.image" alt="" />
+        @if (v.data.overlayImage; as overlay) {
+          <img class="gd-card-info__overlay" [src]="overlay" alt="" />
+        }
+        @if (v.data.foil) {
+          <img class="gd-card-info__foil" [src]="holoImage" alt="" />
+        }
+        <span class="gd-card-info__flip"></span>
+      </div>
+    </ng-template>
   `,
 })
 export class CardInfoComponent {
@@ -143,6 +154,9 @@ export class CardInfoComponent {
   /** A newly shown card starts face up. */
   protected readonly flipped = linkedSignal({ source: this.info.card, computation: () => false });
 
+  /** The dialog is being closed by us (its close event is still to come). */
+  private closing = false;
+
   constructor() {
     // After rendering, so the dialog's content is there when showModal focuses the size slider
     afterRenderEffect(() => {
@@ -159,6 +173,8 @@ export class CardInfoComponent {
         }
       } else if (!open && dialog.open) {
         if (typeof dialog.close === 'function') {
+          // Its close event comes a moment later: by then another card may be shown, which must stay
+          this.closing = true;
           dialog.close();
         } else {
           dialog.removeAttribute('open');
@@ -209,6 +225,15 @@ export class CardInfoComponent {
     if (!(event.target as Element).closest('button, input, select, textarea, a')) {
       event.preventDefault();
     }
+  }
+
+  /** Our own close done, or the browser closed the dialog by itself: then the card information is closed too. */
+  protected nativeClose(): void {
+    if (this.closing) {
+      this.closing = false;
+      return;
+    }
+    this.info.close();
   }
 
   protected escape(event: Event): void {

@@ -18,8 +18,16 @@ public class Card_17_043_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_43");
-					// put other cards in here as needed for the test case
+					put("sneak", "17_43");
+
+					// Squad of Haradrim: a [men] Man of another title; its Regroup ability is used only on purpose
+					put("squad", "11_99");
+					// Ted Sandyman, Chief's Men's Ally: a [men] minion who is no Man (a Hobbit), strength 3; his
+					// abilities are used only on purpose
+					put("ted", "18_75");
+					// Southron Explorer: a [raider] Man, strength 5, vitality 3.  "Regroup: Exert this minion and
+					// remove (5) to take control of a site."
+					put("explorer", "4_250");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,33 +55,84 @@ public class Card_17_043_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var sneak = scn.GetFreepsCard("sneak");
 
-		assertEquals("Easterling Sneak", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertTrue(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.MEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertEquals(6, card.getBlueprint().getTwilightCost());
-		assertEquals(15, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Easterling Sneak", sneak.getBlueprint().getTitle());
+		assertNull(sneak.getBlueprint().getSubtitle());
+		assertTrue(sneak.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, sneak.getBlueprint().getSide());
+		assertEquals(Culture.MEN, sneak.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, sneak.getBlueprint().getCardType());
+		assertEquals(Race.MAN, sneak.getBlueprint().getRace());
+		assertEquals(6, sneak.getBlueprint().getTwilightCost());
+		assertEquals(15, sneak.getBlueprint().getStrength());
+		assertEquals(3, sneak.getBlueprint().getVitality());
+		assertEquals(4, sneak.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EasterlingSneakTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsFierceFromTwoSitesAndEveryMenMinionIsStrengthPlus1AndFierceFromFour() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sneak = scn.GetShadowCard("sneak");
+		var squad = scn.GetShadowCard("squad");
+		var ted = scn.GetShadowCard("ted");
+		var explorer = scn.GetShadowCard("explorer");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Both markers are on site 6: sites 1 to 5 are behind every marker.
+		scn.SkipToSite(6);
+		var site3 = scn.GetSite(3);
+		var site4 = scn.GetSite(4);
+		var site5 = scn.GetSite(5);
+		// One site of the other player's, which "you control" does not count, and one of the Shadow player's.
+		scn.FreepsTakeControlOfSite(scn.GetSite(1));
+		scn.ShadowTakeControlOfSite(scn.GetSite(2));
 
-		assertEquals(6, scn.GetTwilight());
+		// The move to site 7, with no minion in play: straight on to the regroup phase.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(sneak, squad, ted, explorer);
+		scn.SetTwilight(10);
+		scn.FreepsRefreshDecision();
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
+		assertFalse(scn.HasKeyword(sneak, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(squad, Keyword.FIERCE));
+
+		// A second site, by the Explorer: the Sneak is fierce, and the other [men] minion is not.
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(explorer);
+		assertTrue(scn.ShadowControls(site3));
+		assertEquals(2, scn.GetShadowControlledSiteCount());
+		assertTrue(scn.HasKeyword(sneak, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(squad, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(ted, Keyword.FIERCE));
+
+		// A third site, with the other player's one beside it (four controlled in all): no bonus yet for each [men] minion.
+		scn.ShadowTakeControlOfSite(site4);
+		assertEquals(3, scn.GetShadowControlledSiteCount());
+		assertEquals(15, scn.GetStrength(sneak));
+		assertEquals(9, scn.GetStrength(squad));
+		assertEquals(3, scn.GetStrength(ted));
+		assertEquals(5, scn.GetStrength(explorer));
+		assertTrue(scn.HasKeyword(sneak, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(squad, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(ted, Keyword.FIERCE));
+
+		// A fourth, by the Explorer: each [men] minion, the Hobbit among them, is strength +1 and fierce; the
+		// [raider] Man is neither.
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(explorer);
+		assertTrue(scn.ShadowControls(site5));
+		assertEquals(4, scn.GetShadowControlledSiteCount());
+		assertEquals(16, scn.GetStrength(sneak));
+		assertEquals(10, scn.GetStrength(squad));
+		assertEquals(4, scn.GetStrength(ted));
+		assertEquals(5, scn.GetStrength(explorer));
+		assertTrue(scn.HasKeyword(sneak, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(squad, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(ted, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(explorer, Keyword.FIERCE));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

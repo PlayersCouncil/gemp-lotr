@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_04_253_Tests
@@ -17,8 +18,8 @@ public class Card_04_253_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_253");
-					// put other cards in here as needed for the test case
+					put("sentry", "4_253");
+					put("sentry2", "4_253");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,34 +47,136 @@ public class Card_04_253_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var sentry = scn.GetFreepsCard("sentry");
 
-		assertEquals("Southron Sentry", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(9, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Southron Sentry", sentry.getBlueprint().getTitle());
+		assertNull(sentry.getBlueprint().getSubtitle());
+		assertFalse(sentry.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, sentry.getBlueprint().getSide());
+		assertEquals(Culture.RAIDER, sentry.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, sentry.getBlueprint().getCardType());
+		assertEquals(Race.MAN, sentry.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(sentry, Keyword.SOUTHRON));
+		assertEquals(4, sentry.getBlueprint().getTwilightCost());
+		assertEquals(9, sentry.getBlueprint().getStrength());
+		assertEquals(2, sentry.getBlueprint().getVitality());
+		assertEquals(4, sentry.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SouthronSentryTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ManeuverAbilityExertsItToAddTwoForEachOfTheTwoSitesItsPlayerControls() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var sentry = scn.GetShadowCard("sentry");
+		var sentry2 = scn.GetShadowCard("sentry2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(4);
+		// Site 1 to the Free Peoples player, sites 2 and 3 to the Shadow player.
+		scn.FreepsTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.FreepsControls(scn.GetSite(1)));
+		assertTrue(scn.ShadowControls(scn.GetSite(2)));
+		assertTrue(scn.ShadowControls(scn.GetSite(3)));
 
-		assertEquals(4, scn.GetTwilight());
+		scn.MoveMinionsToTable(sentry, sentry2);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		int pool = scn.GetTwilight();
+		assertEquals(0, scn.GetWoundsOn(sentry));
+		assertEquals(0, scn.GetWoundsOn(sentry2));
+		assertTrue(scn.ShadowActionAvailable(sentry));
+
+		scn.ShadowUseCardAction(sentry);
+
+		// (2) for each of the two sites the Shadow player controls; the Free Peoples player's site 1 is not counted.
+		assertEquals(pool + 4, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(sentry));
+		assertEquals(0, scn.GetWoundsOn(sentry2));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithOneSiteControlledItAddsTwo() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sentry = scn.GetShadowCard("sentry");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		// Site 1 to the Free Peoples player, site 2 to the Shadow player.
+		scn.FreepsTakeControlOfSite();
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.FreepsControls(scn.GetSite(1)));
+		assertTrue(scn.ShadowControls(scn.GetSite(2)));
+
+		scn.MoveMinionsToTable(sentry);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		int pool = scn.GetTwilight();
+		assertEquals(0, scn.GetWoundsOn(sentry));
+		assertTrue(scn.ShadowActionAvailable(sentry));
+
+		scn.ShadowUseCardAction(sentry);
+
+		assertEquals(pool + 2, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(sentry));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void WithNoSiteOfItsPlayersItIsOfferedAndExertsItForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sentry = scn.GetShadowCard("sentry");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		// Only the Free Peoples player controls a site.
+		scn.FreepsTakeControlOfSite();
+		assertTrue(scn.FreepsControls(scn.GetSite(1)));
+		assertFalse(scn.ShadowControls(scn.GetSite(2)));
+
+		scn.MoveMinionsToTable(sentry);
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		int pool = scn.GetTwilight();
+		assertEquals(0, scn.GetWoundsOn(sentry));
+		assertTrue(scn.ShadowActionAvailable(sentry));
+
+		scn.ShadowUseCardAction(sentry);
+
+		assertEquals(pool, scn.GetTwilight());
+		assertEquals(1, scn.GetWoundsOn(sentry));
+		assertTrue(scn.AwaitingFreepsManeuverPhaseActions());
+	}
+
+	@Test
+	public void ExhaustedItIsNotOfferedWhileAnotherCopyIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var sentry = scn.GetShadowCard("sentry");
+		var sentry2 = scn.GetShadowCard("sentry2");
+
+		scn.StartGame();
+		scn.SkipToSite(3);
+		scn.ShadowTakeControlOfSite();
+		assertTrue(scn.ShadowControls(scn.GetSite(1)));
+
+		scn.MoveMinionsToTable(sentry, sentry2);
+		// Vitality 2 with 1 wound: exhausted, and unable to exert.
+		scn.AddWoundsToChar(sentry, 1);
+		assertEquals(1, scn.GetWoundsOn(sentry));
+		assertEquals(0, scn.GetWoundsOn(sentry2));
+		scn.SkipToPhase(Phase.MANEUVER);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(sentry));
+		assertTrue(scn.ShadowActionAvailable(sentry2));
 	}
 }

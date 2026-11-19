@@ -19,7 +19,7 @@
 				optional: true
 				trigger: {
 					type: usesSpecialAbility
-					filter: side(shadow)
+					player: shadow
 					phase: skirmish
 				}
 				requires: [
@@ -488,15 +488,6 @@
 			}
 		]
 		gametext: Spot Sméagol to prevent a Ring-bound Hobbit from being overwhelmed unless his or her strength is tripled.<br>While this card is in your discard pile, Sméagol is resistance +1.
-		lore: If you let them go, your life will be forfeit.
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-		gametext: Spot Sméagol to prevent a Ring-bound Hobbit from being overwhelmed unless his or her strength is tripled.<br>While this card is in your discard pile, Sméagol is resistance +1.
 		lore: "If you let them go, your life will be forfeit."
 		promotext: ""
 		alts: {
@@ -609,6 +600,10 @@
 					true: {
 						type: optional
 						text: Would you like to make an opponent place a random card from hand beneath draw deck?
+						requires: {
+							type: HasCardInHand
+							player: shadow
+						}
 						effect: {
 							type: putCardsFromHandOnBottomOfDeck
 							player: shadow

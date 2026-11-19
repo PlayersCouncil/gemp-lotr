@@ -250,24 +250,16 @@
 				against: bearer
 				memorize: losingMinion
 			}
-			effect: [
-				{
-					type: If
-					check: {
-						type: perPhaseLimit
-						limit: 1
-					}
-					true: {
-						type: discardTopCardsFromDeck
-						deck: ownerFromMemory(losingMinion)
-						forced: true
-					}
-				}
-				{
-					type: incrementPerPhaseLimit
-					limit: 1
-				}				
-			]
+			// "This card can trigger only once for each Shadow player with a minion in that skirmish, regardless
+			// of how many minions that player had" (Comprehensive Rules 4.2, Section Three, DWARVEN AXE).  Each
+			// skirmish is a phase of its own.  As a limit on the trigger, the trigger raised for a second minion
+			// is dropped, and not put to the player to be ordered (F-0199).
+			limitPerPhase: 1
+			effect: {
+				type: discardTopCardsFromDeck
+				deck: ownerFromMemory(losingMinion)
+				forced: true
+			}
 		}
 		gametext: Bearer must be a Dwarf.<br>Each time a player's minion loses a skirmish to bearer, that player discards the top card from his or her draw deck.
 		lore: "'Buckler and corslet, axe and sword / And shining spears were laid in hoard.'"
@@ -301,22 +293,23 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					filter: bearer,wounded
+				}
 				effect: [
 					{
-						type: optional
-						text: Would you like to heal bearer?
-						effect: {
-							type: heal
-							select: bearer
-						}
+						type: ChooseANumber
+						text: Choose how many times to heal bearer
+						from: 0
+						to: 2
+						default: 2
+						memorize: healing
 					}
 					{
-						type: optional
-						text: Would you like to heal bearer?
-						effect: {
-							type: heal
-							select: bearer
-						}
+						type: heal
+						select: bearer
+						times: memory(healing)
 					}
 				]
 			}
@@ -728,6 +721,11 @@
 						{
 							type: optional
 							text: Would you like to discard 1 Shadow card revealed?
+							requires: {
+								type: MemoryMatches
+								memory: revealedFreepsCards
+								filter: side(shadow)
+							}
 							effect: {
 								type: discardCardsFromDrawDeck
 								select: choose(side(shadow),memory(revealedFreepsCards))
@@ -759,6 +757,11 @@
 						{
 							type: optional
 							text: Would you like to discard 1 Shadow card revealed?
+							requires: {
+								type: MemoryMatches
+								memory: revealedShadowCards
+								filter: side(shadow)
+							}
 							effect: {
 								type: discardCardsFromDrawDeck
 								deck: shadow
@@ -826,17 +829,11 @@
 							select: choose(orc)
 						}
 						{
-							type: chooseActiveCards
-							memorize: chosenOrc
+							type: wound
 							select: choose(orc)
-							text: Choose an Orc to wound twice
+							times: 2
 						}
 					]
-				}
-				{
-					type: wound
-					select: memory(chosenOrc)
-					times: 2
 				}
 			]
 		}
@@ -961,10 +958,17 @@
 				}
 				{
 					type: addTwilight
+					amount: {
+						type: forEachInMemory
+						memory: discardedCard
+					}
 				}
 				{
 					type: optional
 					text: Would you like to continue discarding?
+					requires: {
+						type: HasCardInDrawDeck
+					}
 					effect: [
 						{
 							type: discardTopCardsFromDeck
@@ -973,10 +977,17 @@
 						}
 						{
 							type: addTwilight
+							amount: {
+								type: forEachInMemory
+								memory: discardedCard
+							}
 						}
 						{
 							type: optional
 							text: Would you like to continue discarding?
+							requires: {
+								type: HasCardInDrawDeck
+							}
 							effect: [
 								{
 									type: discardTopCardsFromDeck
@@ -985,10 +996,17 @@
 								}
 								{
 									type: addTwilight
+									amount: {
+										type: forEachInMemory
+										memory: discardedCard
+									}
 								}
 								{
 									type: optional
 									text: Would you like to continue discarding?
+									requires: {
+										type: HasCardInDrawDeck
+									}
 									effect: [
 										{
 											type: discardTopCardsFromDeck
@@ -997,10 +1015,17 @@
 										}
 										{
 											type: addTwilight
+											amount: {
+												type: forEachInMemory
+												memory: discardedCard
+											}
 										}
 										{
 											type: optional
 											text: Would you like to continue discarding?
+											requires: {
+												type: HasCardInDrawDeck
+											}
 											effect: [
 												{
 													type: discardTopCardsFromDeck
@@ -1009,6 +1034,10 @@
 												}
 												{
 													type: addTwilight
+													amount: {
+														type: forEachInMemory
+														memory: discardedCard
+													}
 												}
 											]
 										}
@@ -1161,11 +1190,13 @@
 			effect: {
 				type: modifyStrength
 				select: choose(dwarf)
+				memorize: chosenDwarf
 				amount: {
 					type: Conditional
 					requires: {
-						type: location
-						filter: underground
+						type: memoryMatches
+						memory: chosenDwarf
+						filter: atSite(underground)
 					}
 					true: 4
 					false: 2

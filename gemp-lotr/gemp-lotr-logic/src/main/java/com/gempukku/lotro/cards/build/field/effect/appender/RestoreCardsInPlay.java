@@ -36,11 +36,11 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
 
         MultiEffectAppender result = new MultiEffectAppender();
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select,
+        final EffectAppender cardResolver = CardResolver.resolveCards(select,
                         SpotOverride.INCLUDE_HINDERED,
                         (actionContext) -> Filters.canBeRestored(actionContext.getSource()),
-                        count, memory, player, "Choose cards to hinder", environment));
+                        count, memory, player, "Choose cards to restore", environment);
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
@@ -54,7 +54,10 @@ public class RestoreCardsInPlay implements EffectAppenderProducer {
                     }
                 });
 
-        return result;
+        // Taught for Q-0224 (IdleOffers): with no card that can be restored nothing is restored.
+        // No test exercises this (engine pass 27): where a printed card has it in an offer that pays nothing
+        // (Desert Wind Scout 103_48), a requirement written by hand answers first (IdleOffers).
+        return TaughtForecast.actsOnWhatItFinds(result, cardResolver);
     }
 
 }

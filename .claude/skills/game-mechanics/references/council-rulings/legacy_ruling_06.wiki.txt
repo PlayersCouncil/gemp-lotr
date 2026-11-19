@@ -1,0 +1,103 @@
+{{CardSplashImage|Saruman's Staff, Wizard's Device}}
+'''Status: Voting Complete (2025-05-03)'''
+= Saruman's Staff and Sentences =
+
+__TOC__
+
+
+
+{{Card|Saruman's Staff, Wizard's Device}} reads:
+
+{{CardText|Saruman's Staff, Wizard's Device}}
+
+The issue is that "sentence", which has a specific grammatical meaning in English that encompasses a number of structures, is not well-defined for the purposes of the LOTR-TCG.  
+
+The card was clearly designed with early versions of Saruman in mind, such as {{Card|Saruman, Servant of the Eye}}:
+
+{{CardText|Saruman, Servant of the Eye}}
+
+In all such Sarumen, the first line of game text is a self-contained sentence that has to do with not participating in skirmishes, which the Staff is clearly meant to turn off so that Saruman may skirmish.
+
+However, in later sets of the game (notably around the time that Towers Block rotated out, taking the Staff with it), Sarumen were printed that did not take this card into consideration at all, and so now we are left with a conundrum as to how it should be interpreted when played on such individuals.
+
+== Compatible Sarumen ==
+
+The below cards have a clear first sentence and have no interpretation issues (even if some would be of poor strategic compatibility with the Staff):
+
+{{ListTable
+|filter= C.Title = 'Saruman' AND (CR.GameText RLIKE 'assigned to a skirmish' OR C.SetNum = '17') AND C.CollInfo != '17R38' AND {{PromoFilter}} AND {{HobbitFilter}}
+|sort= {{StandardSort}}
+|columns=3
+}}
+
+
+== Problematic Sarumen ==
+
+The below cards are somewhat less clear how they should interact with Saruman's Staff:
+
+{{ListTable
+|filter= C.Title = 'Saruman' AND (CR.GameText NOT RLIKE 'assigned to a skirmish' AND (C.CollInfo = '17R38' OR C.SetNum != '17')) AND {{PromoFilter}} AND {{HobbitFilter}}
+|sort= {{StandardSort}}
+|columns=3
+}}
+
+
+{{Card|Saruman, Servant of Sauron}} can perhaps be discounted due to the following rule:
+
+  Followers can't bear other cards, including possessions or conditions. 
+
+However for the other two, there are various ways to apply "sentence":
+
+* Consider a single keyword to be a complete sentence
+** Of Many Colours would thus lose '''damage +1''' 
+** Agent of the Dark Lord would lose '''lurker'''.
+* Skip one-word keywords as not sentences, and consider the next batch of game text as a complete concept.
+** Of Many Colours would thus lose nothing, as the "name a culture" sentence would have already been carried out.
+** Agent of the Dark Lord would lose his '''Skirmish:''' ability but not his Each Time trigger.
+* Skip one-word keywords as not sentences, and skip special abilities, thus only considering standalong English sentences as sentences.
+** Of Many Colours behaves as in the previous bullet point.
+** Agent of the Dark Lord would lose his Each Time trigger, but keep his skirmish special ability.
+
+== Ramifications ==
+
+We could issue rulings just on the two relevant cards, or we could attempt to make a ruling on what "sentence" means in general.  While the PC has utilized the "sentence" term, it was on {{Card|The White Council}}, which was essentially binding itself to how Saruman's Staff works and is not a further evolution of the concept.  The PC can easily avoid using the terminology in the future if the Rules Council decides to avoid making a general ruling.
+
+
+== The Question ==
+
+Do we:
+
+* '''A''': Make Saruman's Staff deactivate the first keyword if there are no clear first sentences.
+
+* '''B''': Make Saruman's Staff deactivate the first Special Ability.
+
+* '''C''': Make Saruman's Staff skip special abilities and only target non-ability sentences.
+
+
+In addition, the Legacy Team must decide whether to:
+
+* '''D''': Rule on each Saruman individually
+
+* '''E''': Add a new rules entry on "sentence"
+
+
+== 2025-05-01 Decision ==
+
+The Legacy Rules Team opted for option D, but rather than any of A-C they opted to rule that Saruman's Staff does not interact with these two copies of Saruman at all.  The Comprehensive Rules 4.2 will have the following individual card ruling added:
+  
+{{Quote|title={{Card|Saruman's Staff}}|text=
+* '''Ruling Type''': Ruling
+* '''Ruling Text''': The ability on Saruman's Staff does not have any effect when used on {{Card|Saruman, Of Many Colours}} or {{Card|Saruman, Agent of the Dark Lord}}
+  
+}}
+
+The Modern Rules Team has opted to avoid using the "sentence" verbiage in the future to avoid similar issues.
+
+
+=== Clarifying Opinion ===
+The overwhelming opinion was that the intention of Saruman's Staff was to permit Saruman to participate in archery fire and skirmishes, and so any copies of Saruman whose first sentence does not involve such a restriction are likely not really intended to interact with Staff at all (especially considering that the ability is an optional one that does not need to be activated if it is not beneficial to the Shadow player).  Due to each of the various interpretations all being awkward in one way or another, Legacy Rules prefers to just say that it doesn't have any effect at all, and thus avoid any possible issues with precedent.
+
+----
+
+
+{{Rules_Table}}

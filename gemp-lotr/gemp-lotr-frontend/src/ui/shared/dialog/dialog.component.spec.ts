@@ -55,6 +55,8 @@ describe('DialogComponent', () => {
       'gd-dialog__header',
       'gd-dialog__body',
       'actions',
+      // jQuery UI's resize grip, drawn on touch screens only
+      'gd-dialog__grip',
     ]);
     const title = dialog.querySelector('header.gd-dialog__header > h2.gd-dialog__title')!;
     expect(title.textContent).toBe('A title');

@@ -611,28 +611,21 @@
 				phase: regroup
 				cost: [
 					{
-						type: choice
-						texts: [
-							Discard this minion from play
-							Exert this minion
-						]
-						effects: [
-							{
-								type: discard
-								select: self
-							}
-							{
-								type: If
-								check: {
-									type: canSpot
-									filter: nextSite,underground
-								}
-								true: {
-									type: exert
-									select: self
-								}
-							}
-						]
+						// Ketura (Q-0389): with the next site underground the exertion is the only price (CR 4.2
+						// "effect", read as written), so an exhausted Runner cannot use the ability there.
+						type: If
+						check: {
+							type: canSpot
+							filter: nextSite,underground
+						}
+						true: {
+							type: exert
+							select: self
+						}
+						false: {
+							type: discard
+							select: self
+						}
 					}
 					{
 						type: spot
@@ -678,7 +671,7 @@
 				type: toPlay
 				requires: {
 					type: canSpot
-					filter: culture(orc),your,zone(support)
+					filter: culture(orc),support(you)
 				}
 			}
 			{

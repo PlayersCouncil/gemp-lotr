@@ -128,13 +128,19 @@
 			type: modifier
 			modifier: {
 				type: modifyCost
-				requires: {
-					type: not
-					requires: {
-						type: playedCardThisPhase
-						filter: culture(moria),archer
+				requires: [
+					{
+						type: phase
+						phase: shadow
 					}
-				}
+					{
+						type: not
+						requires: {
+							type: playedCardThisPhase
+							filter: culture(moria),archer
+						}
+					}
+				]
 				filter: culture(moria),archer
 				amount: -2
 			}
@@ -205,7 +211,8 @@
 			optional: true
 			trigger: {
 				type: movesTo
-				filter: self
+				# "to Valley of the Silverlode" names the site: a card that has this text (Uruviel) answers the same move.
+				filter: name(Valley of the Silverlode)
 			}
 			effect: {
 				type: heal

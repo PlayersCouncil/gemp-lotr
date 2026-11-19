@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_021_Tests
@@ -17,8 +18,18 @@ public class Card_17_021_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_21");
-					// put other cards in here as needed for the test case
+					put("pipe", "17_21");
+					put("pipe2", "17_21");
+					put("ship", "18_27");       // Ship of Smoke: a [gandalf] pipeweed condition, cost 0; its trigger needs Gandalf, who is never in play here
+					put("toby", "1_305");       // Old Toby: a [shire] pipeweed possession in the support area; its draw is never offered (it is never played)
+					put("bilbospipe", "1_285"); // Bilbo's Pipe: a [shire] pipe possession on a Hobbit, no pipeweed; its ability is never used
+
+					// In the draw deck.
+					put("avenger", "6_27");     // Ent Avenger: a [gandalf] companion
+					put("sleep", "1_84");       // Sleep, Caradhras: a [gandalf] event
+					put("leaf", "17_106");      // Halfling Leaf: a [shire] condition
+
+					put("weary", "4_212");      // Weary: an [isengard] condition on a companion; its trigger needs an [isengard] tracker, and there is none
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -43,7 +54,7 @@ public class Card_17_021_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("pipe");
 
 		assertEquals("Long-stemmed Pipe", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -56,18 +67,162 @@ public class Card_17_021_Tests
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LongstemmedPipeTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WhenPlayedItSearchesTheDeckForAGandalfCardAndPutsItInTheDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var pipe = scn.GetFreepsCard("pipe");
+		var avenger = scn.GetFreepsCard("avenger");
+		var sleep = scn.GetFreepsCard("sleep");
+		var leaf = scn.GetFreepsCard("leaf");
+		scn.MoveCardsToHand(pipe);
+		assertInHand(pipe);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		assertInZone(Zone.DECK, avenger, sleep, leaf);
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+		int shadowShuffles = scn.GetShadowDeckShuffleCount();
 
-		assertEquals(2, scn.GetTwilight());
+		scn.FreepsPlayCard(pipe);
+		assertInZone(Zone.SUPPORT, pipe);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pipe));
+		scn.FreepsAcceptOptionalTrigger();
+
+		// The whole deck is shown first, the [shire] card with it; then the [gandalf] cards of two types may be
+		// chosen and the [shire] card is not among them.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(leaf, false));
+		scn.FreepsDismissRevealedCards();
+		assertTrue(scn.FreepsHasCardChoiceAvailable(avenger, true));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(sleep, true));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(leaf));
+		scn.FreepsChooseCardBPFromSelection(sleep);
+
+		assertInDiscard(sleep);
+		assertEquals(1, scn.GetFreepsDiscardCount());
+		assertInZone(Zone.DECK, avenger, leaf);
+		// A deck that was looked through is shuffled (CR 4.2 "draw deck"), and the other player's is not.
+		assertEquals(shuffles + 1, scn.GetFreepsDeckShuffleCount());
+		assertEquals(shadowShuffles, scn.GetShadowDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheSearchMayBeDeclinedAndTheDeckIsNotShuffled() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var avenger = scn.GetFreepsCard("avenger");
+		var sleep = scn.GetFreepsCard("sleep");
+		scn.MoveCardsToHand(pipe);
+		assertInHand(pipe);
+
+		scn.StartGame();
+		assertInZone(Zone.DECK, avenger, sleep);
+		int deck = scn.GetFreepsDeckCount();
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.FreepsPlayCard(pipe);
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(pipe));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertInZone(Zone.SUPPORT, pipe);
+		assertInZone(Zone.DECK, avenger, sleep);
+		assertEquals(deck, scn.GetFreepsDeckCount());
+		assertEquals(0, scn.GetFreepsDiscardCount());
+		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AnotherPipeweedPlayedAfterItDoesNotSetItOff() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var ship = scn.GetFreepsCard("ship");
+		scn.MoveCardsToSupportArea(pipe);
+		scn.MoveCardsToHand(ship);
+		assertInZone(Zone.SUPPORT, pipe);
+		assertInHand(ship);
+
+		scn.StartGame();
+		int shuffles = scn.GetFreepsDeckShuffleCount();
+
+		scn.FreepsPlayCard(ship);
+		assertInZone(Zone.SUPPORT, ship);
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(pipe));
+		assertEquals(shuffles, scn.GetFreepsDeckShuffleCount());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void RegroupAbilityDiscardsAnotherPipeweedToDiscardAConditionAndThenItself() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var pipe2 = scn.GetFreepsCard("pipe2");
+		var ship = scn.GetFreepsCard("ship");
+		var toby = scn.GetFreepsCard("toby");
+		var bilbospipe = scn.GetFreepsCard("bilbospipe");
+		var weary = scn.GetShadowCard("weary");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCardsToSupportArea(pipe, pipe2, ship, toby);
+		scn.AttachCardsTo(frodo, bilbospipe);
+		scn.AttachCardsTo(frodo, weary);
+		assertInZone(Zone.SUPPORT, pipe, pipe2, ship, toby);
+		assertAttachedTo(bilbospipe, frodo);
+		assertAttachedTo(weary, frodo);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+		assertTrue(scn.FreepsActionAvailable(pipe));
+
+		scn.FreepsUseCardAction(pipe);
+		// Another pipeweed from play, a condition or a possession, of either culture; not this one, and not a pipe.
+		assertEquals(3, scn.FreepsGetCardChoiceCount());
+		assertTrue(scn.FreepsHasCardChoiceAvailable(pipe2, ship, toby));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(pipe, bilbospipe));
+		scn.FreepsChooseCard(toby);
+		assertInDiscard(toby);
+
+		// A condition of either side, this one among them; not a possession.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(weary, pipe2, ship, pipe));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(bilbospipe));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		scn.FreepsChooseCard(weary);
+
+		assertInDiscard(weary);
+		// This copy is discarded; the other copy stays.
+		assertInDiscard(pipe);
+		assertInZone(Zone.SUPPORT, pipe2, ship);
+		assertAttachedTo(bilbospipe, frodo);
+		assertTrue(scn.AwaitingShadowRegroupPhaseActions());
+	}
+
+	@Test
+	public void WithNoOtherPipeweedInPlayTheRegroupAbilityIsNotOffered() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var pipe = scn.GetFreepsCard("pipe");
+		var toby = scn.GetFreepsCard("toby");
+		var bilbospipe = scn.GetFreepsCard("bilbospipe");
+		var weary = scn.GetShadowCard("weary");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCardsToSupportArea(pipe);
+		scn.AttachCardsTo(frodo, bilbospipe);
+		scn.AttachCardsTo(frodo, weary);
+		// A pipeweed in hand is not in play.
+		scn.MoveCardsToHand(toby);
+		assertInZone(Zone.SUPPORT, pipe);
+		assertAttachedTo(bilbospipe, frodo);
+		assertAttachedTo(weary, frodo);
+		assertInHand(toby);
+
+		scn.StartGame();
+		scn.SkipToPhase(Phase.REGROUP);
+
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(pipe));
+		assertAttachedTo(weary, frodo);
 	}
 }

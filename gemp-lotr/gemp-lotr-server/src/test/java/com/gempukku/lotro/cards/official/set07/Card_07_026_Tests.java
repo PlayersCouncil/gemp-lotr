@@ -17,8 +17,9 @@ public class Card_07_026_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_26");
-					// put other cards in here as needed for the test case
+					put("legolas", "7_26");
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] companion; a maneuver ability used only on purpose
+					put("savage", "1_151");     // Uruk Savage: an [isengard] Uruk-hai, vitality 3, Damage +1 and no other text
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +48,7 @@ public class Card_07_026_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("legolas");
 
 		assertEquals("Legolas", card.getBlueprint().getTitle());
 		assertEquals("Nimble Warrior", card.getBlueprint().getSubtitle());
@@ -61,21 +62,68 @@ public class Card_07_026_Tests
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.THEODEN, card.getBlueprint().getSignet());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LegolasTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WithNoThreatAddsOneToMakeTheFellowshipArcheryTotalPlusOneForThePhaseAndThenIsNotOfferedAgain() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(legolas, aragorn);
+
+		var savage = scn.GetShadowCard("savage");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(savage);
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(2, scn.GetTwilight());
+		// Legolas is the one archer; three companions, so up to three threats can be laid.
+		assertEquals(0, scn.GetThreats());
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(0, scn.GetShadowArcheryTotal());
+		assertTrue(scn.FreepsActionAvailable(legolas));
+
+		scn.FreepsUseCardAction(legolas);
+		assertEquals(1, scn.GetThreats());
+		assertEquals(2, scn.GetFreepsArcheryTotal());
+		assertEquals(0, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetWoundsOn(legolas));
+
+		// With a threat to spot it is not offered again, though a second threat could be added.
+		scn.ShadowPass();
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(legolas));
+
+		// The two archery wounds go on the one minion; once the archery phase is over the total is Legolas's 1 again.
+		assertEquals(0, scn.GetWoundsOn(savage));
+		scn.FreepsPass();
+		assertEquals(2, scn.GetWoundsOn(savage));
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertEquals(1, scn.GetThreats());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void NotOfferedWhileAThreatCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		scn.MoveCompanionsToTable(legolas, aragorn);
+
+		var savage = scn.GetShadowCard("savage");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(savage);
+		scn.AddThreats(1);
+		scn.SkipToPhase(Phase.ARCHERY);
+
+		// One threat of three possible: another could be added, but one can be spotted.
+		assertEquals(1, scn.GetThreats());
+		assertEquals(1, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertFalse(scn.FreepsActionAvailable(legolas));
 	}
 }

@@ -83,7 +83,7 @@ public class Card_V1_031_Tests
 		scn.StartGame();
 		scn.SetTwilight(8);
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(purpose);
 		scn.ShadowPlayCard(ftentacle1);
 		scn.ShadowDeclineOptionalTrigger();
@@ -91,9 +91,9 @@ public class Card_V1_031_Tests
 		scn.ShadowDeclineOptionalTrigger();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertFalse(scn.ShadowActionAvailable("One Purpose"));
-		scn.ShadowPassCurrentPhaseAction();
+		scn.ShadowPass();
 		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{merry, ftentacle1}, new PhysicalCardImpl[]{aragorn,ftentacle2});
 
 		scn.FreepsResolveSkirmish(merry);
@@ -127,12 +127,12 @@ public class Card_V1_031_Tests
 		scn.StartGame();
 		scn.SetTwilight(4);
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(htentacle);
 		scn.ShadowDeclineOptionalTrigger();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable("One Purpose"));
 		scn.ShadowUseCardAction(purpose);
 
@@ -161,12 +161,12 @@ public class Card_V1_031_Tests
 		scn.StartGame();
 		scn.SetTwilight(4);
         scn.ApplyAdHocModifier(new AddKeywordModifier(null, Filters.siteNumber(2), null, Keyword.MARSH));
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		scn.ShadowPlayCard(htentacle);
 		scn.ShadowDeclineOptionalTrigger();
 
 		scn.SkipToPhase(Phase.ASSIGNMENT);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 		assertTrue(scn.ShadowActionAvailable("One Purpose"));
 		scn.ShadowUseCardAction(purpose);
 

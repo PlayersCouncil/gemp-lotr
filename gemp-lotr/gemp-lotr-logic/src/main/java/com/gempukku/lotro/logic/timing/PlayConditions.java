@@ -15,6 +15,18 @@ public class PlayConditions {
         return siteToLiberate != null && game.getModifiersQuerying().canBeLiberated(game, performingPlayer, siteToLiberate, source);
     }
 
+    /**
+     * Whether a site a player has chosen to liberate can be: it is a site on the path that a player controls, and
+     * no modifier stops its liberation. This is the reading of a {@code liberateSite} with a {@code select}, which
+     * lets the player pick among the sites its filter finds instead of taking the rules' highest-first site
+     * (Ketura's ruling on Q-0370: a card's "liberate a site" takes a site of its own player's, of his choice).
+     */
+    public static boolean canLiberateChosenSite(LotroGame game, String performingPlayer, PhysicalCard source, PhysicalCard site) {
+        return site.getBlueprint().getCardType() == CardType.SITE && site.getCardController() != null
+                && site.getZone() != null && site.getZone().isInPlay()
+                && game.getModifiersQuerying().canBeLiberated(game, performingPlayer, site, source);
+    }
+
     private static PhysicalCard getSiteToLiberate(LotroGame game, String controlledByPlayerId) {
         int maxUnoccupiedSite = Integer.MAX_VALUE;
         for (String playerId : game.getGameState().getPlayerOrder().getAllPlayers())
@@ -65,7 +77,7 @@ public class PlayConditions {
 
     public static int getMaxAddThreatCount(LotroGame game) {
         int threatLimit = getThreatLimit(game);
-        return threatLimit - game.getGameState().getThreats();
+        return threatLimit - game.getGameState().getThreats() - game.getGameState().getThreatsToCome();
     }
 
     public static int getThreatLimit(LotroGame game) {
@@ -75,9 +87,18 @@ public class PlayConditions {
     }
 
     public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, Filterable... filters) {
+        return canPlayFromDiscard(playerId, game, modifier, 0, filters);
+    }
+
+    /**
+     * @param withTwilightRemoved twilight that will have left the pool before the card is played: the cost of
+     *                            the event that plays it, while that event is asked whether it can be played
+     */
+    public static boolean canPlayFromDiscard(String playerId, LotroGame game, int modifier, int withTwilightRemoved, Filterable... filters) {
         if (game.getModifiersQuerying().hasFlagActive(game, ModifierFlag.CANT_PLAY_FROM_DISCARD_OR_DECK, playerId))
             return false;
-        return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId), Filters.and(filters, Filters.playable(modifier)));
+        return Filters.acceptsAny(game, game.getGameState().getDiscard(playerId),
+                Filters.and(filters, Filters.playable(modifier, withTwilightRemoved, false, false, true)));
     }
 
     public static boolean canPlayFromDrawDeck(String playerId, LotroGame game, int modifier, Filterable... filters) {
@@ -101,6 +122,10 @@ public class PlayConditions {
 
     public static boolean checkTurnLimit(LotroGame game, PhysicalCard card, int max) {
         return game.getModifiersQuerying().getUntilEndOfTurnLimitCounter(card).getUsedLimit() < max;
+    }
+
+    public static boolean checkSiteLimit(LotroGame game, PhysicalCard card, int max) {
+        return game.getModifiersQuerying().getSiteLimitCounter(card).getUsedLimit() < max;
     }
 
     public static boolean checkPhaseLimit(LotroGame game, PhysicalCard card, Phase phase, int max) {

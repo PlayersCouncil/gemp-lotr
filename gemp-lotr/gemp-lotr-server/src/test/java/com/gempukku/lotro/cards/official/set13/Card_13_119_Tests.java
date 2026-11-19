@@ -3,12 +3,12 @@ package com.gempukku.lotro.cards.official.set13;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_13_119_Tests
@@ -18,10 +18,36 @@ public class Card_13_119_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "13_119");
-					// put other cards in here as needed for the test case
+					put("underdeeps", "13_119");
+
+					put("troop", "1_177");       // Goblin Patrol Troop: a [moria] Orc, vitality 3, no text
+					put("troop2", "1_177");
+
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a [gondor] Man, vitality 4; a maneuver ability used only on purpose
+					put("defend", "4_115");      // Defend It and Hope: [gondor] Maneuver event, cost 0: exert a [gondor] Man to wound a minion
+					                             // once (or twice if that minion is an Uruk-hai)
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The King path, for its site 3, The Dimholt: underground, and a sanctuary as well.
+	protected VirtualTableScenario GetKingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("underdeeps", "13_119");
+
+					put("troop", "1_177");       // Goblin Patrol Troop: a [moria] Orc, vitality 3, no text
+					put("troop2", "1_177");
+
+					put("aragorn", "1_89");      // Aragorn, Ranger of the North: a [gondor] Man, vitality 4; a maneuver ability used only on purpose
+					put("defend", "4_115");      // Defend It and Hope: [gondor] Maneuver event, cost 0: exert a [gondor] Man to wound a minion
+					                             // once (or twice if that minion is an Uruk-hai)
+				}},
+				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,33 +73,117 @@ public class Card_13_119_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var underdeeps = scn.GetFreepsCard("underdeeps");
 
-		assertEquals("Underdeeps Denizen", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ORC, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.ORC, card.getBlueprint().getRace());
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
+		assertEquals("Underdeeps Denizen", underdeeps.getBlueprint().getTitle());
+		assertNull(underdeeps.getBlueprint().getSubtitle());
+		assertFalse(underdeeps.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, underdeeps.getBlueprint().getSide());
+		assertEquals(Culture.ORC, underdeeps.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, underdeeps.getBlueprint().getCardType());
+		assertEquals(Race.ORC, underdeeps.getBlueprint().getRace());
+		assertEquals(2, underdeeps.getBlueprint().getTwilightCost());
+		assertEquals(6, underdeeps.getBlueprint().getStrength());
+		assertEquals(1, underdeeps.getBlueprint().getVitality());
+		assertEquals(4, underdeeps.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UnderdeepsDenizenTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void AtBalinsTombItCannotBeWoundedWhileOtherMinionsCan() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var defend = scn.GetFreepsCard("defend");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(defend);
+
+		var underdeeps = scn.GetShadowCard("underdeeps");
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(underdeeps, troop, troop2);
 
-		assertEquals(2, scn.GetTwilight());
+		// On to Balin's Tomb, site 4: underground.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(underdeeps));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		// Aragorn, the one [gondor] Man, exerts; the wound is offered on either Troop and not on this minion.
+		scn.FreepsPlayCard(defend);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, troop2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(underdeeps));
+		scn.FreepsChooseCard(troop);
+
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(underdeeps));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void AtTheDimholtItCannotBeWoundedEither() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKingScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var defend = scn.GetFreepsCard("defend");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(defend);
+
+		var underdeeps = scn.GetShadowCard("underdeeps");
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(underdeeps, troop, troop2);
+
+		// On to The Dimholt, site 3 of the King path: underground and a sanctuary.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(underdeeps));
+		assertEquals(0, scn.GetWoundsOn(troop));
+
+		scn.FreepsPlayCard(defend);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertTrue(scn.FreepsHasCardChoiceAvailable(troop, troop2));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(underdeeps));
+		scn.FreepsChooseCard(troop);
+
+		assertEquals(1, scn.GetWoundsOn(troop));
+		assertEquals(0, scn.GetWoundsOn(underdeeps));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
+	}
+
+	@Test
+	public void AtEttenmoorsItIsWoundedAndKilledAsAnyMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var defend = scn.GetFreepsCard("defend");
+		scn.MoveCompanionsToTable(aragorn);
+		scn.MoveCardsToHand(defend);
+
+		var underdeeps = scn.GetShadowCard("underdeeps");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(underdeeps, troop);
+
+		// The move to Ettenmoors, site 2: a plains, no underground.
+		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(0, scn.GetWoundsOn(underdeeps));
+
+		scn.FreepsPlayCard(defend);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(underdeeps, troop));
+		scn.FreepsChooseCard(underdeeps);
+
+		// Vitality 1: the wound kills it.
+		assertInDiscard(underdeeps);
+		assertEquals(0, scn.GetWoundsOn(troop));
+		assertTrue(scn.AwaitingShadowManeuverPhaseActions());
 	}
 }

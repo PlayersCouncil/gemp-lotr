@@ -230,6 +230,19 @@
 		timewords: Skirmish
 		effects: {
 			type: event
+			requires: {
+				type: or
+				requires: [
+					{
+						type: canSpot
+						filter: name(Aragorn),canExert
+					}
+					{
+						type: canSpot
+						filter: name(Arwen),canExert
+					}
+				]
+			}
 			effect: {
 				type: choice
 				texts: [
@@ -1334,6 +1347,10 @@
 			optional: true
 			trigger: {
 				type: startOfTurn
+			}
+			requires: {
+				type: canSpot
+				filter: another,companion,signet(Aragorn),wounded
 			}
 			effect: {
 				type: heal

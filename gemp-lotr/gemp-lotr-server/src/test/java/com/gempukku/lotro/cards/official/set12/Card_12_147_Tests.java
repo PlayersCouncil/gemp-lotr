@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_12_147_Tests
@@ -17,11 +18,17 @@ public class Card_12_147_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "12_147");
-					// put other cards in here as needed for the test case
+					put("suppressing", "12_147");
+
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man, resistance 6; a maneuver ability never used here
+					put("gimli", "1_13");       // Gimli, Son of Gloin: [dwarven] Dwarf, resistance 6; a skirmish ability never used here
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer, resistance 5
+					put("merry", "1_302");      // Merry, Friend to Sam: [shire] Hobbit, strength 3; a skirmish ability never used here
+					put("legolas", "1_50");     // Legolas, Greenleaf: [elven] Elf; an archery ability never used here
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally; an archery ability never used here
 				}},
 				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.FOTRFrodo,     // Frodo 1_290, the Ring-bearer: resistance 10
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -46,7 +53,7 @@ public class Card_12_147_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("suppressing");
 
 		assertEquals("Suppressing Uruk", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +70,79 @@ public class Card_12_147_Tests
 		assertEquals(5, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SuppressingUrukTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void OnceItKillsACompanionEachUnboundCompanionIsResistanceMinus4() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var suppressing = scn.GetShadowCard("suppressing");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var merry = scn.GetFreepsCard("merry");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveCompanionsToTable(aragorn, gimli, sam, merry);
+		scn.MoveMinionsToTable(suppressing);
 
-		assertEquals(4, scn.GetTwilight());
+		scn.FreepsPass();
+		scn.SkipToAssignments();
+		assertEquals(0, scn.GetFreepsDeadCount());
+		assertEquals(6, scn.GetResistance(aragorn));
+		assertEquals(6, scn.GetResistance(gimli));
+		assertEquals(5, scn.GetResistance(sam));
+		assertEquals(10, scn.GetResistance(frodo));
+
+		// Strength 11 against Merry's 3: more than double, so he is overwhelmed and killed.
+		scn.FreepsAssignToMinions(merry, suppressing);
+		scn.FreepsResolveSkirmish(merry);
+		scn.PassSkirmishActions();
+
+		assertInZone(Zone.DEAD, merry);
+		assertEquals(1, scn.GetFreepsDeadCount());
+		// The two unbound companions lose 4; the Ring-bearer and Sam, both Ring-bound, keep theirs.
+		assertEquals(2, scn.GetResistance(aragorn));
+		assertEquals(2, scn.GetResistance(gimli));
+		assertEquals(5, scn.GetResistance(sam));
+		assertEquals(10, scn.GetResistance(frodo));
+		assertEquals(Phase.REGROUP, scn.GetCurrentPhase());
+	}
+
+	@Test
+	public void AnAllyInTheDeadPileOrACompanionInTheShadowPlayersOwnDoesNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var suppressing = scn.GetShadowCard("suppressing");
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var gimli = scn.GetFreepsCard("gimli");
+		var sam = scn.GetFreepsCard("sam");
+		var orophin = scn.GetFreepsCard("orophin");
+		var legolas = scn.GetFreepsCard("legolas");
+		var shadowLegolas = scn.GetShadowCard("legolas");
+
+		scn.StartGame();
+		scn.MoveCompanionsToTable(aragorn, gimli, sam);
+		scn.MoveMinionsToTable(suppressing);
+		// An ally in the dead pile, and a companion in the Shadow player's own dead pile: "the dead pile" is the
+		// Free Peoples player's (Q-0131).
+		scn.MoveCardsToDeadPile(orophin, shadowLegolas);
+		assertInZone(Zone.DEAD, orophin, shadowLegolas);
+		assertEquals(1, scn.GetFreepsDeadCount());
+
+		assertEquals(6, scn.GetResistance(aragorn));
+		assertEquals(6, scn.GetResistance(gimli));
+		assertEquals(5, scn.GetResistance(sam));
+		assertEquals(10, scn.GetResistance(frodo));
+
+		// A companion of the Free Peoples player's own in his dead pile switches it on.
+		scn.MoveCardsToDeadPile(legolas);
+		assertEquals(2, scn.GetFreepsDeadCount());
+
+		assertEquals(2, scn.GetResistance(aragorn));
+		assertEquals(2, scn.GetResistance(gimli));
+		assertEquals(5, scn.GetResistance(sam));
+		assertEquals(10, scn.GetResistance(frodo));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -17,8 +17,7 @@ public class Card_15_005_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "15_5");
-					// put other cards in here as needed for the test case
+					put("gimli", "15_5");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +45,7 @@ public class Card_15_005_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("gimli");
 
 		assertEquals("Gimli", card.getBlueprint().getTitle());
 		assertEquals("Eager Hunter", card.getBlueprint().getSubtitle());
@@ -63,20 +62,5 @@ public class Card_15_005_Tests
 		assertEquals(6, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GimliTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
 	}
 }

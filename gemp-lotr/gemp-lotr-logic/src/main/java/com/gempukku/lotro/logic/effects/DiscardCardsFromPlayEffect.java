@@ -14,7 +14,7 @@ import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,9 +61,12 @@ public class DiscardCardsFromPlayEffect extends AbstractPreventableCardEffect {
 
     @Override
     protected void playoutEffectOn(LotroGame game, Collection<PhysicalCard> cards) {
-        Set<PhysicalCard> discardedCards = new HashSet<>();
+        // Both in the order the cards are met: for each card, in the order of card ids, what it bears and what is
+        // stacked on it, and then the cards themselves.  That is the order they are laid on the discard pile and the
+        // order they are named and announced in, the same in every run (Ketura on Q-0142).
+        Set<PhysicalCard> discardedCards = new LinkedHashSet<>();
 
-        Set<PhysicalCard> toMoveFromZoneToDiscard = new HashSet<>();
+        Set<PhysicalCard> toMoveFromZoneToDiscard = new LinkedHashSet<>();
 
         GameState gameState = game.getGameState();
 

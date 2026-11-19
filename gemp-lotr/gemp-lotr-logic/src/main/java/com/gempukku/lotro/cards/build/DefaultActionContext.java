@@ -4,7 +4,7 @@ import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
-import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 import java.util.Collection;
@@ -12,7 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultActionContext implements ActionContext {
-    private final Multimap<String, PhysicalCard> cardMemory = HashMultimap.create();
+    // Cards are remembered in the order they were handed over, and given back in it: an effect that then deals with
+    // them one at a time ("wound each minion") takes them in the order they were found (Ketura on Q-0142).  The
+    // order of a hash set stood here before, which differs from one run of the same game to the next.
+    private final Multimap<String, PhysicalCard> cardMemory = LinkedHashMultimap.create();
     private final Map<String, String> valueMemory = new HashMap<>();
 
     private final String performingPlayer;

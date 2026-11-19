@@ -1,7 +1,10 @@
 {
 	67_15: {
 		cardInfo: {
-			//id: 7_15.1
+			//id: 67_15.1
+			parent: 17_15
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN17E015.1.jpg
 			collInfo: 17U15
@@ -9,12 +12,13 @@
 		}
 		title: A New Light
 		unique: false
-		culture: gandalf
+		side: Free Peoples
+		culture: Gandalf
 		twilight: 1
-		type: event
-		timeword: fellowship
-		keyword: [
-			spell
+		type: Event
+		timewords: Fellowship
+		keywords: [
+			Spell
 		]
 		effects: [
 			{
@@ -40,7 +44,7 @@
 								type: ForEachInMemory
 								memory: chosenMinions
 							}
-							secondNumber: 0
+							secondNumber: 1
 						}
 						true: [
 							{
@@ -61,7 +65,7 @@
 			}
 		]
 		
-		gametext: <b>Spell.</b>\Spot a [gandalf] Wizard to return 2 minions to a Shadow player's hand from their discard pile. Reveal their hand and discard a minion revealed.
+		gametext: <b>Spell.</b> Spot a [gandalf] Wizard to search a Shadow player's discard pile and choose 2 minions, then return those minions to their owner's hand. If you do, reveal that hand and discard a revealed minion.
 		lore: "'I once knew every spell in all the tongues of Men or Elves or Orcs...'"
 		promotext: ""
 		alts: {
@@ -72,10 +76,89 @@
 		}
 	}
 	
+	# History: revision 1 (errata sheet date 2024.04.21, batch "07: 2023 Yuletide"). Recovered from git, 187275eebf^: revision 2 (2025.04.18, for Legacy Ruling 1) was written over this block by 187275eebf and 58f107ebbb without keeping it.
+	# 67_24: {
+	# 	cardInfo: {
+	# 		//id: 7_24.1
+	# 		revision: 1
+	# 		image: errata/LOTR-EN17E024.1_card.jpg
+	# 		collInfo: 17R24
+	# 		rarity: R
+	# 	}
+	# 	title: Shadowfax
+	# 	subtitle: Greatest of the Mearas
+	# 	unique: true
+	# 	side: Free Peoples
+	# 	culture: Gandalf
+	# 	twilight: 2
+	# 	type: Possession
+	# 	strength: 1
+	# 	vitality: 1
+	# 	resistance: 1
+	# 	itemclass: Mount
+	# 	target: culture(gandalf),wizard
+	# 	effects: [
+	# 		{
+	# 			type: Trigger
+	# 			optional: false
+	# 			optional: false
+	# 			trigger: {
+	# 				type: Played
+	# 				filter: self
+	# 			}
+	# 			effect: {
+	# 				type: Discard
+	# 				select: all(attachedTo(bearer),or(possession,weapon),another)
+	# 			}
+	# 		}
+	# 		{
+	# 			type: modifier
+	# 			modifier: {
+	# 				type: CantBear
+	# 				filter: bearer
+	# 				cardFilter: hand weapon
+	# 			}
+	# 		}
+	# 		{
+	# 			type: Trigger
+	# 			optional: true
+	# 			trigger: {
+	# 				type: Moves
+	# 			}
+	# 			cost: [
+	# 				{
+	# 					type: exert
+	# 					select: bearer
+	# 					times: 1
+	# 				}
+	# 				{
+	# 					type: AddThreats
+	# 					amount: 1
+	# 				}
+	# 			]
+	# 			effect: {
+	# 				type: RemoveBurdens
+	# 				amount: 1
+	# 			}
+	# 		}
+	# 	]
+	# 	gametext: Bearer must be a [gandalf] Wizard.<br>When you play this, discard all other possessions and weapons on bearer. Bearer may not bear a hand weapon.<br>Each time the fellowship moves, you may exert bearer and add a threat to remove a burden.
+	# 	lore: ""
+	# 	promotext: ""
+	# 	alts: {
+	# 		promos: {
+	# 		}
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 	67_24: {
 		cardInfo: {
-			//id: 7_24.1
-			revision: 1
+			//id: 67_24.2
+			parent: 17_24
+			variant: ERRATA
+			variantPath: errata/pc
+			revision: 2
 			image: errata/LOTR-EN17E024.1_card.jpg
 			collInfo: 17R24
 			rarity: R
@@ -131,8 +214,8 @@
 				}
 			}
 		]
-		gametext: Bearer must be a [gandalf] Wizard.<br>When you play this, discard all other possessions and weapons on bearer. Bearer may not bear a hand weapon.<br>Each time the fellowship moves, you may exert bearer and add a threat to remove a burden.
-		lore: ""
+		gametext: Bearer must be a [gandalf] Wizard.<br>Discard all other possessions and weapons on bearer.<br>Each time the fellowship moves, you may exert bearer and add a threat to remove a burden.
+		lore: "There are no horses like those that are bred in that great vale between the Misty Mountains and the White."
 		promotext: ""
 		alts: {
 			promos: {

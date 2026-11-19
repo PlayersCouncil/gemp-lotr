@@ -26,7 +26,7 @@
 				{
 					type: chooseANumber
 					text: Choose how many times to exert your companion
-					from: 0
+					from: 1
 					to: {
 						type: subtract
 						firstNumber: {
@@ -426,7 +426,8 @@
 				}
 				{
 					type: canSpot
-					filter: unbound,companion,inSkirmishAgainst(minion)
+					// Ketura (Q-0398: B): Gandalf and the companion are two cards
+					filter: unbound,companion,not(name(Gandalf)),inSkirmishAgainst(minion)
 				}
 			]
 			effect: [
@@ -711,7 +712,7 @@
 				trigger: {
 					type: winsSkirmish
 					filter: self
-					memorizeLoser: losers
+					memorizeLoserStrength: losersStrength
 				}
 				effect: {
 					type: exert
@@ -725,9 +726,11 @@
 								type: forEachStrength
 								filter: self
 							}
+							// The strength the losing character had as the skirmish resolved, though it has left
+							// play since (F-0480: A)
 							secondNumber: {
-								type: forEachStrength
-								filter: memory(losers)
+								type: fromMemory
+								memory: losersStrength
 							}
 						}
 					}

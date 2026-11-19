@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_02_067_Tests
@@ -17,8 +18,15 @@ public class Card_02_067_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "2_67");
-					// put other cards in here as needed for the test case
+					put("troop", "2_67");
+					put("troop2", "2_67");
+					// Goblin Marksman: a [moria] Orc archer, cost 3; Archer is its whole text.
+					put("marksman", "1_176");
+					put("marksman2", "1_176");
+					// Goblin Runner: a [moria] Orc who is no archer; "may add (2)" when played, and it is cheated in.
+					put("runner", "1_178");
+					// Orthanc Assassin: an [isengard] Uruk-hai archer; "Archer. Damage +1" is its whole text.
+					put("assassin", "1_131");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +54,7 @@ public class Card_02_067_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("troop");
 
 		assertEquals("Moria Archer Troop", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +70,65 @@ public class Card_02_067_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void MoriaArcherTroopTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WithAnotherMoriaArcherOneIsAddedToTheMinionArcheryTotalAndNoMore() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var troop = scn.GetShadowCard("troop");
+		var marksman = scn.GetShadowCard("marksman");
+		var marksman2 = scn.GetShadowCard("marksman2");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(troop, marksman);
+		scn.SkipToPhase(Phase.ARCHERY);
 
-		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+		assertInZone(Zone.SHADOW_CHARACTERS, troop, marksman);
+		// 1 for the Troop + 1 for the Marksman, both archers, + 1 for the Troop's text.  The fellowship's total is
+		// untouched.
+		assertEquals(3, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		// A third archer adds its own 1, and the Troop's text still adds 1: it is 1, not 1 for each [moria] archer.
+		scn.MoveMinionsToTable(marksman2);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop, marksman, marksman2);
+		assertEquals(4, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
+	}
+
+	@Test
+	public void NothingIsAddedBesideAMoriaOrcWhoIsNoArcherAndAnIsengardArcherUntilASecondTroopIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var troop = scn.GetShadowCard("troop");
+		var troop2 = scn.GetShadowCard("troop2");
+		var runner = scn.GetShadowCard("runner");
+		var assassin = scn.GetShadowCard("assassin");
+		scn.MoveCardsToHand(troop2);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(troop, runner, assassin);
+		// 10 set + 1 for Frodo + 2 for Ettenmoors: enough for the second Troop, 6 and 2 for roaming.
+		scn.SetTwilight(10);
+		assertInHand(troop2);
+		scn.FreepsPass();
+
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		assertInZone(Zone.SHADOW_CHARACTERS, troop, runner, assassin);
+		// A [moria] Orc who is no archer, an archer of another culture, and the Troop itself, which is not
+		// "another": 1 for the Troop + 1 for the Assassin, and nothing from the Troop's text.
+		assertEquals(2, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		// A second copy is another [moria] archer, and each Troop spots the other: 3 archers + 1 + 1.
+		scn.ShadowPlayCard(troop2);
+		assertInZone(Zone.SHADOW_CHARACTERS, troop2);
+		assertEquals(5, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetFreepsArcheryTotal());
+
+		scn.SkipToPhase(Phase.ARCHERY);
+		assertEquals(5, scn.GetShadowArcheryTotal());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 }

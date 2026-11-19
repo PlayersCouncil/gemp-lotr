@@ -90,8 +90,53 @@ public interface TestConstants {
 		put("site9", "17_146");
 	}};
 
+	/**
+	 * The Hobbit path (Hobbit Draft Game, set 30), each site under the key of its printed number: Bag End, The Troll
+	 * Hoard, Rivendell, Goblin Town, Mirkwood, Esgaroth, Erebor, Smaug's Den, Battle of the Five Armies.  Not benign
+	 * as the other paths are: the HDG has no other nine, and most of them have texts that reach a test.  Bag End 1 has
+	 * a fellowship action (play a [dwarven] follower to draw); The Troll Hoard 2 (forest, underground) an optional
+	 * trigger at the start of its owner's fellowship phase; Rivendell 3 and Esgaroth 6 are sanctuaries; Goblin Town 4
+	 * a maneuver action (play The One Ring from the draw deck); Mirkwood 5 discards Gandalf as the fellowship moves
+	 * there; Erebor 7, Smaug's Den 8 and Battle of the Five Armies 9 Shadow actions.  Site 9 is the path's only
+	 * battleground.  The default path of a table in the HobbitDraft format.
+	 */
+	HashMap<String, String> HobbitSites = new HashMap<>() {{
+		put("site1", "30_49");
+		put("site2", "30_50");
+		put("site3", "30_51");
+		put("site4", "30_52");
+		put("site5", "30_53");
+		put("site6", "30_54");
+		put("site7", "30_55");
+		put("site8", "30_56");
+		put("site9", "30_57");
+	}};
+
+	/*
+	 * The Maps of the three Movie-block site paths (PC, set V2).  A Map announces which site path its deck uses and
+	 * does nothing else: it lies in its owner's support area from before the game begins.  A format that uses Maps
+	 * (PCMovie) wants one in every deck; a table in such a format gives each deck the Map of its sites' path unless
+	 * the constructor names one.
+	 */
+
+	/**
+	 * Path of the Fellowship: "Your adventure deck must only contain cards from the Fellowship site path."
+	 */
+	String FellowshipMap = "102_74";
+	/**
+	 * Road to the Towers: "Your adventure deck must only contain cards from the Towers site path."
+	 */
+	String TowersMap = "102_75";
+	/**
+	 * Journey of the King: "Your adventure deck must only contain cards from the King site path."
+	 */
+	String KingMap = "102_76";
+
 	/*
 	 * Some useful Ring-bearer and One Ring references.  This list can be expanded as needed.
+	 *
+	 * Each is the Decipher card.  The errata of a Ring-bearer (59_4, 59_14, 59_30) have no constants: a table
+	 * whose Ring-bearer is to be an erratum is given its blueprint id as the constructor's ringBearerID.
 	 */
 
 	/**
@@ -105,7 +150,8 @@ public interface TestConstants {
 	String FOTRFrodo = "1_290";
 	String MDFrodo = "10_121";
 	/**
-	 * Gimli, Bearer of Grudges
+	 * Gimli, Bearer of Grudges, the Decipher original 9_4: his erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_4" as the constructor's ringBearerID.
 	 * 6 strength
 	 * 3 vitality
 	 * 4 resistance
@@ -115,19 +161,21 @@ public interface TestConstants {
 	 */
 	String GimliRB = "9_4";
 	/**
-	 * Galadriel, Bearer of Wisdom
+	 * Galadriel, Bearer of Wisdom, the Decipher original 9_14: her erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_14" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 3 vitality
-	 * 4 resistance
+	 * 3 resistance (it reads 4 while she bears the Ring: she is an [Elven] companion herself)
 	 * While Galadriel bears an artifact or The One Ring, she is resistance +1 for each [Elven] companion you can spot.
 	 */
 	String GaladrielRB = "9_14";
 
 	/**
-	 * Smeagol, Bearer of Great Secrets
+	 * Smeagol, Bearer of Great Secrets, the Decipher original 9_30: his erratum has no constant, and a table whose
+	 * Ring-bearer is to be the erratum is given "59_30" as the constructor's ringBearerID.
 	 * 3 strength
 	 * 4 vitality
-	 * 8 resistance
+	 * 7 resistance
 	 * Ring-bound. To play, add a burden.
 	 * Each time the fellowship moves, place an unbound companion in the dead pile.
 	 * Regroup: If Sméagol is the Ring-bearer, add 2 burdens to discard each minion.
@@ -144,6 +192,19 @@ public interface TestConstants {
 	 * Regroup: Exert Sam and transfer a follower he is bearing to your support area to discard a minion from play.
 	 */
 	String SamRB = "13_156";
+
+	/**
+	 * Bilbo, Reliable Companion, the Hobbit Draft Game's Ring-bearer (each of the four Bilbos 30_43 to 30_46 has
+	 * canStartWithRing; this is the one whose text least reaches a test), and the default Ring-bearer of a table in
+	 * the HobbitDraft format.  The HDG's One Ring is not in the Ring slot: see HobbitRing.
+	 * 3 strength
+	 * 4 vitality
+	 * 8 resistance
+	 * Burglar.
+	 * Bilbo cannot be overwhelmed by Smaug or Gollum unless his strength is tripled.
+	 * Skirmish: Play a [Dwarven] skirmish event to draw 2 cards (or 4 cards if Bilbo is skirmishing).
+	 */
+	String BilboRB = "30_46";
 
 	/**
 	 * The One Ring, The Ruling Ring
@@ -173,6 +234,19 @@ public interface TestConstants {
 	 * Maneuver: Wear The One Ring until the regroup phase. Skirmish: Add a burden to make the Ring-bearer strength +3.
 	 */
 	String GreatRing = "19_1";
+	/**
+	 * The One Ring of the Hobbit Draft Game, 30_48: a [shire] artifact (item class ring, cost 0) and a card of the
+	 * draw deck, not a card for the Ring slot, which a table in the HobbitDraft format leaves empty.  A test names it
+	 * in its card map like any other card and puts it on Bilbo by legal play (it is played from hand, or by Goblin
+	 * Town 30_52 from the draw deck) or with AttachCardsTo(GetRingBearer(), ring).  GetRing() reads the Ring slot
+	 * and so is null at such a table.
+	 * +1 vitality, +1 resistance
+	 * Bearer must be Bilbo.
+	 * While wearing The One Ring, Bilbo is strength +2, and each time he is about to take a wound in a skirmish, add a
+	 * doubt (a burden) instead.
+	 * Skirmish: Add a doubt to wear The One Ring until the regroup phase.
+	 */
+	String HobbitRing = "30_48";
 
 
 	/*
@@ -208,4 +282,14 @@ public interface TestConstants {
 	 * Ring-bearer skirmish can be canceled: no
 	 */
 	String Shadows = "expanded";
+	/**
+	 * The Hobbit Draft Game format.
+	 * Allowed sets: 30-33
+	 * Sites: Hobbit path
+	 * Ring-bearer skirmish can be canceled: yes
+	 * A table in this format (or any whose sites are the Hobbit path) is laid on the HDG's rules: HobbitSites and
+	 * BilboRB unless others are named, and no card in the Ring slot (the HDG's One Ring is HobbitRing, a card of
+	 * the draw deck); a ringID given to such a table is refused.
+	 */
+	String HobbitDraft = "hobbit";
 }

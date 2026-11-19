@@ -190,15 +190,6 @@
 			}
 		]
 		gametext: While this card is stacked on a [dwarven] condition, Gimli is strength +1.<br><b>Fellowship:</b> Place this card or another [dwarven] card from hand on top of or beneath your draw deck.
-		lore: Don't tell the Elf.'
-		promotext: ""
-		alts: {
-			promos: {
-			}
-			errata: {
-			}
-		}
-		gametext: While this card is stacked on a [dwarven] condition, Gimli is strength +1.<br><b>Fellowship:</b> Place this card or another [dwarven] card from hand on top of or beneath your draw deck.
 		lore: "'Don't tell the Elf.'"
 		promotext: ""
 		alts: {

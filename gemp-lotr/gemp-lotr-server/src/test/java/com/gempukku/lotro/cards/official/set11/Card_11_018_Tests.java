@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set11;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,11 @@ public class Card_11_018_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_18");
-					// put other cards in here as needed for the test case
+					put("scout", "11_18");
+					put("scout2", "11_18");
+					put("legolas", "1_50");     // Legolas, Greenleaf: Elf companion, cost 2, nothing needed to play him; an archery ability never used here
+					put("orophin", "1_56");     // Orophin, Lorien Bowman: Elf ally; an archery ability never used here
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] Man companion, no Elf; a maneuver ability never used here
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +49,7 @@ public class Card_11_018_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("scout");
 
 		assertEquals("Elven Scout", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +64,57 @@ public class Card_11_018_Tests
 		assertEquals(7, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void ElvenScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void HasNoMusterBesideCompanionsWhoAreNoElvesAndGainsItWhenAnElfCompanionIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var scout = scn.GetFreepsCard("scout");
+		var legolas = scn.GetFreepsCard("legolas");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var frodo = scn.GetRingBearer();
+		scn.MoveCompanionsToTable(scout, aragorn);
+		scn.MoveCardsToHand(legolas);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		// Frodo and Aragorn are no Elves, and the Scout does not spot himself.
+		assertFalse(scn.HasKeyword(scout, Keyword.MUSTER));
+
+		scn.FreepsPlayCard(legolas);
+		assertTrue(scn.HasKeyword(scout, Keyword.MUSTER));
+		// The muster is the Scout's own, and goes to nobody else.
+		assertFalse(scn.HasKeyword(legolas, Keyword.MUSTER));
+		assertFalse(scn.HasKeyword(aragorn, Keyword.MUSTER));
+		assertFalse(scn.HasKeyword(frodo, Keyword.MUSTER));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void HasMusterWhileAnElfAllyIsTheOtherElf() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout = scn.GetFreepsCard("scout");
+		var orophin = scn.GetFreepsCard("orophin");
+		scn.MoveCompanionsToTable(scout);
+		scn.MoveAlliesToTable(orophin);
+
+		scn.StartGame();
+
+		assertTrue(scn.HasKeyword(scout, Keyword.MUSTER));
+		assertFalse(scn.HasKeyword(orophin, Keyword.MUSTER));
+	}
+
+	@Test
+	public void TwoElvenScoutsEachSpotTheOtherAndBothHaveMuster() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout = scn.GetFreepsCard("scout");
+		var scout2 = scn.GetFreepsCard("scout2");
+		scn.MoveCompanionsToTable(scout, scout2);
+
+		scn.StartGame();
+
+		assertTrue(scn.HasKeyword(scout, Keyword.MUSTER));
+		assertTrue(scn.HasKeyword(scout2, Keyword.MUSTER));
 	}
 }

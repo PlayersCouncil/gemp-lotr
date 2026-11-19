@@ -4,6 +4,7 @@ import com.gempukku.lotro.cards.build.*;
 import com.gempukku.lotro.cards.build.field.FieldUtils;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppender;
 import com.gempukku.lotro.cards.build.field.effect.EffectAppenderProducer;
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.PlayerResolver;
 import com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver;
 import com.gempukku.lotro.game.PhysicalCard;
@@ -32,6 +33,15 @@ public class RevealBottomCardsOfDrawDeck implements EffectAppenderProducer {
                 final int count = valueSource.getEvaluator(actionContext).evaluateExpression(actionContext.getGame(), null);
 
                 return actionContext.getGame().getGameState().getDeck(deckId).size() >= count;
+            }
+
+            // From an empty draw deck nothing is revealed.  How many cards it would reveal is not worked out: a
+            // deck shorter than that still shows what is there.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                final String deckId = playerSource.getPlayer(actionContext);
+                return actionContext.getGame().getGameState().getDeck(deckId).isEmpty()
+                        ? EffectForecast.NOTHING_FROM_A_DRAW_DECK : EffectForecast.UNKNOWN;
             }
 
             @Override

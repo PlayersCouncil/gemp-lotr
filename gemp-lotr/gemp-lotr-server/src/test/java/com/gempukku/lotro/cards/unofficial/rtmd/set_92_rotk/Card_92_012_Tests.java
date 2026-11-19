@@ -13,13 +13,13 @@ import static org.junit.Assert.*;
 
 public class Card_92_012_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Goblin Runner (1_178): Moria Orc minion, twilight 0, strength 5, vitality 1
-		put("runner", "1_178");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Goblin Runner: [moria] Orc minion, strength 5, vitality 1 (its text answers only its own play)
+					put("runner", "1_178");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -28,7 +28,12 @@ public class Card_92_012_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					// Goblin Runner: [moria] Orc minion, strength 5, vitality 1 (its text answers only its own play)
+					put("runner", "1_178");
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -42,6 +47,7 @@ public class Card_92_012_Tests
 		 * Set: RTMD 92
 		 * Name: Race Text 92_12
 		 * Type: MetaSite
+		 * Intensity: -2
 		 * Game Text: While you are the Shadow player, skip the archery phase.
 		 */
 
@@ -51,6 +57,7 @@ public class Card_92_012_Tests
 
 		assertEquals("Race Text 92_12", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-2, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -62,10 +69,33 @@ public class Card_92_012_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
 		scn.PassCurrentPhaseActions();
 
 		// Should skip archery and land in assignment
 		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void ArcheryPhaseSkippedOnPlayerTwosTurnWhenOwnedByPlayerOne() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var runner = scn.GetFreepsCard("runner");
+
+		scn.StartGame();
+
+		// Player 2's turn: player 1, who owns the modifier, is now the Shadow player.
+		scn.SkipToOtherPlayersTurn();
+		scn.ShadowPass(); // player 2's fellowship moves
+		scn.MoveMinionsToTable(runner);
+		scn.SkipToPhaseInverted(Phase.MANEUVER);
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
+		scn.PassCurrentPhaseActions();
+
+		assertEquals(Phase.ASSIGNMENT, scn.GetCurrentPhase());
+		// Player 2, the Free Peoples player of this turn, is asked first in the assignment phase.
+		assertTrue(scn.ShadowDecisionAvailable("Play Assignment action or Pass"));
 	}
 
 	@Test
@@ -77,9 +107,11 @@ public class Card_92_012_Tests
 
 		scn.StartGame();
 		scn.SkipToPhase(Phase.MANEUVER);
+		assertEquals(Phase.MANEUVER, scn.GetCurrentPhase());
 		scn.PassCurrentPhaseActions();
 
 		// Archery should NOT be skipped — freeps owns the modifier
 		assertEquals(Phase.ARCHERY, scn.GetCurrentPhase());
+		assertTrue(scn.AwaitingFreepsArcheryPhaseActions());
 	}
 }

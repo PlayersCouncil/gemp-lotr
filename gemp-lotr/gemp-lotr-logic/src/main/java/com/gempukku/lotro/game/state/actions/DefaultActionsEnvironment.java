@@ -2,8 +2,10 @@ package com.gempukku.lotro.game.state.actions;
 
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.common.Timeword;
+import com.gempukku.lotro.common.Zone;
 import com.gempukku.lotro.game.ActionProxy;
 import com.gempukku.lotro.game.ActionsEnvironment;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.OptionalTriggerAction;
 import com.gempukku.lotro.logic.actions.RequiredTriggerAction;
@@ -11,6 +13,8 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.ActionStack;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
+import com.gempukku.lotro.logic.timing.loops.LoopTracker;
+import com.gempukku.lotro.logic.timing.results.PlayCardResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +34,12 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
     private final List<EffectResult> turnEffectResults = new LinkedList<>();
     private final List<EffectResult> phaseEffectResults = new LinkedList<>();
 
+    // Cards played from hand that are in play with their play not yet announced.
+    private final Set<PhysicalCard> _enteringPlayFromHand = new HashSet<>();
+
+    // The abilities a voluntary loop has used, barred until the end of the phase (CR 4.2 "loops", LoopRun).
+    private final List<LoopTracker.Ability> _barredUntilEndOfPhase = new LinkedList<>();
+
     public DefaultActionsEnvironment(LotroGame lotroGame, ActionStack actionStack) {
         _lotroGame = lotroGame;
         _actionStack = actionStack;
@@ -41,9 +51,40 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
 
     @Override
     public void emitEffectResult(EffectResult effectResult) {
+        // Every play is recorded with the site the fellowship is at, for PlayedCardThisTurn's atCurrentSite.
+        if (effectResult instanceof PlayCardResult playResult)
+            playResult.setPlayedAtSite(_lotroGame.getGameState().getCurrentSite());
+
         _effectResults.add(effectResult);
         turnEffectResults.add(effectResult);
         phaseEffectResults.add(effectResult);
+    }
+
+    @Override
+    public void retractEffectResult(EffectResult effectResult) {
+        turnEffectResults.remove(effectResult);
+        phaseEffectResults.remove(effectResult);
+    }
+
+    @Override
+    public void noteCardEnteringPlay(PhysicalCard card, Zone playedFrom) {
+        if (playedFrom == Zone.HAND)
+            _enteringPlayFromHand.add(card);
+    }
+
+    @Override
+    public void noteCardEnteredPlay(PhysicalCard card) {
+        _enteringPlayFromHand.remove(card);
+    }
+
+    @Override
+    public int countCardsEnteringPlayFromHand(String playerId) {
+        int count = 0;
+        for (PhysicalCard card : _enteringPlayFromHand) {
+            if (card.getOwner().equals(playerId))
+                count++;
+        }
+        return count;
     }
 
     public Set<EffectResult> consumeEffectResults() {
@@ -72,12 +113,15 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
             list.clear();
         }
         phaseEffectResults.clear();
+        _barredUntilEndOfPhase.clear();
     }
 
     public void signalEndOfTurn() {
         _actionProxies.removeAll(_untilEndOfTurnActionProxies);
         _untilEndOfTurnActionProxies.clear();
+        _barredUntilEndOfPhase.clear();
         turnEffectResults.clear();
+        _enteringPlayFromHand.clear();
     }
 
     @Override
@@ -214,6 +258,9 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         if (effectResults != null) {
             for (ActionProxy actionProxy : _actionProxies) {
                 for (EffectResult effectResult : effectResults) {
+                    // A response is not offered to something that has already been cancelled.
+                    if (effectResult.isCancelled())
+                        continue;
                     List<? extends Action> actions = actionProxy.getOptionalAfterActions(playerId, _lotroGame, effectResult);
                     if (actions != null) {
                         for (Action action : actions) {
@@ -247,6 +294,19 @@ public class DefaultActionsEnvironment implements ActionsEnvironment {
         }
 
         return result;
+    }
+
+    @Override
+    public void barUntilEndOfPhase(LoopTracker.Ability ability) {
+        if (!_barredUntilEndOfPhase.contains(ability))
+            _barredUntilEndOfPhase.add(ability);
+    }
+
+    @Override
+    public boolean isLoopBanned(Action action) {
+        if (_barredUntilEndOfPhase.isEmpty())
+            return false;
+        return _barredUntilEndOfPhase.contains(LoopTracker.Ability.of(_lotroGame, action));
     }
 
     @Override

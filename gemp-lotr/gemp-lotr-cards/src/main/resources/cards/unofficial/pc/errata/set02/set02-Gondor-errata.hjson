@@ -83,20 +83,21 @@
 
 	52_32: {
 		cardInfo: {
-			//id: 2_32.2
+			//id: 52_32.2
 			parent: 2_32
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 2
 			image: errata/LOTR-EN02E032.2.jpg
 			collInfo: 2R32
 			rarity: R
 		}
 		title: Flaming Brand
-		side: free_people
+		unique: false
+		side: Free Peoples
 		culture: Gondor
-		type: possession
-		itemclass: Hand Weapon
+		type: Possession
+		itemclass: Hand weapon
 		twilight: 1
 		strength: 1
 		target: ranger
@@ -170,10 +171,10 @@
 	
 	52_38: {
 		cardInfo: {
-			//id: 2_38.1
+			//id: 52_38.1
 			parent: 2_38
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN02E038.1.jpg
 			collInfo: 2R38
@@ -208,6 +209,10 @@
 			{
 				type: activated
 				phase: skirmish
+				requires: {
+					type: canSpot
+					filter: bearer,name(Boromir)
+				}
 				cost: [
 					{
 						type: memorize
@@ -232,7 +237,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be a [gondor] companion.<br>The minion archery total is -1.<br>If bearer is Boromir, each minion skirmishing him does not gain strength bonuses from weapons.\Skirmish: If bearer is Boromir, discard this to make him take no wounds.
+		gametext: Bearer must be a [gondor] companion.<br>The minion archery total is -1.<br>If bearer is Boromir, each minion skirmishing him does not gain strength bonuses from weapons. Skirmish: If bearer is Boromir, discard this to make him take no wounds.
 		lore: "Boromir bore the heirlooms of the Steward's house with pride."
 		promotext: ""
 		alts: {

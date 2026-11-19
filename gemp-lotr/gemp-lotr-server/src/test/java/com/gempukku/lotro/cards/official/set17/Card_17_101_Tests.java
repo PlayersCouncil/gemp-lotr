@@ -18,12 +18,20 @@ public class Card_17_101_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_101");
-					// put other cards in here as needed for the test case
+					put("soldier1", "17_101");
+					put("soldier2", "17_101");
+
+					put("guard", "7_246");       // Rohirrim Guard: [rohan] Man companion, strength 6; a skirmish ability used only on purpose
+					put("sam", "1_311");         // Sam, Son of Hamfast: Ring-bound and not the Ring-bearer
+
+					put("runner1", "1_178");     // Goblin Runner: strength 5, vitality 1
+					put("runner2", "1_178");
+					put("runner3", "1_178");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
-				VirtualTableScenario.RulingRing
+				// The Great Ring adds no strength and, not worn, answers no wound: Frodo is strength 3 and takes his wounds
+				VirtualTableScenario.GreatRing
 		);
 	}
 
@@ -47,7 +55,7 @@ public class Card_17_101_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("soldier1");
 
 		assertEquals("Soldier of Rohan", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +70,76 @@ public class Card_17_101_Tests
 		assertEquals(5, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SoldierofRohanTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus2WhileTheRingBearerIsAssignedAndNotOnceHisSkirmishIsOver() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var soldier1 = scn.GetFreepsCard("soldier1");
+		var soldier2 = scn.GetFreepsCard("soldier2");
+		var guard = scn.GetFreepsCard("guard");
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		var runner3 = scn.GetShadowCard("runner3");
+		scn.MoveCompanionsToTable(soldier1, soldier2, guard);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(runner1, runner2, runner3);
+		scn.SkipToAssignments();
 
-		assertEquals(2, scn.GetTwilight());
+		// Nobody is assigned yet.
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertEquals(5, scn.GetStrength(soldier1));
+		assertEquals(5, scn.GetStrength(soldier2));
+		assertEquals(6, scn.GetStrength(guard));
+
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{soldier1, runner1}, new PhysicalCardImpl[]{frodo, runner2},
+				new PhysicalCardImpl[]{soldier2, runner3});
+
+		// Each copy has its own +2 and no more; the Rohirrim Guard, another [rohan] Man companion, is untouched.
+		assertTrue(scn.IsCharAssigned(frodo));
+		assertEquals(5 + 2, scn.GetStrength(soldier1));
+		assertEquals(5 + 2, scn.GetStrength(soldier2));
+		assertEquals(6, scn.GetStrength(guard));
+
+		// A Soldier's own skirmish, with Frodo's still waiting
+		scn.FreepsResolveSkirmish(soldier1);
+		assertTrue(scn.IsCharAssigned(frodo));
+		assertEquals(5 + 2, scn.GetStrength(soldier1));
+		scn.PassCurrentPhaseActions();
+		assertEquals(0, scn.GetWoundsOn(soldier1));
+
+		// Frodo's skirmish: he is assigned to it while it is fought.
+		scn.FreepsResolveSkirmish(frodo);
+		assertEquals(5 + 2, scn.GetStrength(soldier2));
+		scn.PassCurrentPhaseActions();
+		assertEquals(1, scn.GetWoundsOn(frodo));
+
+		// His skirmish is over: he is assigned to none.
+		scn.FreepsResolveSkirmish(soldier2);
+		assertEquals(5, scn.GetStrength(soldier2));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void ARingBoundCompanionWhoIsNotTheRingBearerBeingAssignedDoesNotStrengthenHim() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var soldier1 = scn.GetFreepsCard("soldier1");
+		var sam = scn.GetFreepsCard("sam");
+		var runner1 = scn.GetShadowCard("runner1");
+		var runner2 = scn.GetShadowCard("runner2");
+		scn.MoveCompanionsToTable(soldier1, sam);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(runner1, runner2);
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[]{soldier1, runner1}, new PhysicalCardImpl[]{sam, runner2});
+
+		assertTrue(scn.IsCharAssigned(sam));
+		assertFalse(scn.IsCharAssigned(frodo));
+		assertEquals(5, scn.GetStrength(soldier1));
+		assertTrue(scn.FreepsAwaitingSkirmishChoice());
 	}
 }

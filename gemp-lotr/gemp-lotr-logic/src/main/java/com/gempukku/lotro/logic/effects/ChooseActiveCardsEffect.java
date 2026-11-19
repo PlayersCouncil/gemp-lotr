@@ -87,7 +87,12 @@ public abstract class ChooseActiveCardsEffect extends AbstractEffect {
                     new CardsSelectionDecision(1, _choiceText, matchingCards, minimum, maximum) {
                         @Override
                         public void decisionMade(String result) throws DecisionResultInvalidException {
-                            Set<PhysicalCard> selectedCards = getSelectedCardsByResponse(result);
+                            // Cards in play that are taken together are taken in the order of their card ids,
+                            // whether an effect reached each of them or a player picked them out (Ketura on
+                            // Q-0142): the order they were clicked in decides nothing.
+                            List<PhysicalCard> inIdOrder = new ArrayList<>(getSelectedCardsByResponse(result));
+                            inIdOrder.sort(Comparator.comparingInt(PhysicalCard::getCardId));
+                            Set<PhysicalCard> selectedCards = new LinkedHashSet<>(inIdOrder);
                             if (_source != null && selectedCards.size() > 0)
                                 game.getGameState().cardAffectsCard(_playerId, _source, selectedCards);
                             cardsSelected(game, selectedCards);

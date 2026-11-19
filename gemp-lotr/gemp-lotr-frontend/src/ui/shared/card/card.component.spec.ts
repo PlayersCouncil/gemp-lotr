@@ -114,7 +114,7 @@ describe('CardComponent', () => {
     it('click (or Enter/Space, which click a button) activates the card', async () => {
       const { el } = await render();
       el.click();
-      expect(actions.activate).toHaveBeenCalledWith(CARD.ref);
+      expect(actions.activate).toHaveBeenCalledWith(CARD.ref, expect.any(MouseEvent));
       expect(actions.showInfo).not.toHaveBeenCalled();
     });
 

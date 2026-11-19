@@ -533,20 +533,34 @@
 					]
 				}
 				effect: {
-					type: choice
-					texts: [
-						Remove (2)
-						Draw a card
-					]
-					effects: [
-						{
-							type: removeTwilight
-							amount: 2
-						}
-						{
-							type: drawCards
-						}
-					]
+					type: If
+					check: {
+						type: Or
+						requires: [
+							{
+								type: CanSpotTwilight
+							}
+							{
+								type: HasCardInDrawDeck
+							}
+						]
+					}
+					true: {
+						type: choice
+						texts: [
+							Remove (2)
+							Draw a card
+						]
+						effects: [
+							{
+								type: removeTwilight
+								amount: 2
+							}
+							{
+								type: drawCards
+							}
+						]
+					}
 				}
 			}
 		]

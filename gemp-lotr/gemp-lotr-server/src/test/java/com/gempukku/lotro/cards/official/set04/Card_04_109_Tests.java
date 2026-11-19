@@ -17,8 +17,7 @@ public class Card_04_109_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_109");
-					// put other cards in here as needed for the test case
+					put("aragorn", "4_109");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +46,7 @@ public class Card_04_109_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("aragorn");
 
 		assertEquals("Aragorn", card.getBlueprint().getTitle());
 		assertEquals("Heir of Elendil", card.getBlueprint().getSubtitle());
@@ -62,21 +61,6 @@ public class Card_04_109_Tests
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void AragornTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(4, scn.GetTwilight());
+		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet());
 	}
 }

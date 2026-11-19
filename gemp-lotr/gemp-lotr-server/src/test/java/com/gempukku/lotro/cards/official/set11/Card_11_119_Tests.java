@@ -3,6 +3,7 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -17,8 +18,12 @@ public class Card_11_119_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_119");
-					// put other cards in here as needed for the test case
+					put("orc", "11_119");
+					put("orc2", "11_119");
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: [gondor] Man companion; a maneuver ability only
+					put("boromir", "1_97");     // Boromir, Son of Denethor: [gondor] Man companion; a skirmish ability only
+					put("bounder", "1_286");    // Bounder: a Hobbit ALLY, home site 2; a skirmish ability used only on purpose
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +51,7 @@ public class Card_11_119_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("orc");
 
 		assertEquals("Emboldened Orc", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +67,70 @@ public class Card_11_119_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void EmboldenedOrcTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CountsEachCompanionNotAssignedToASkirmishAndNoOtherCardAsTheAssignmentsAreMadeAndTheSkirmishesEnd() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var boromir = scn.GetFreepsCard("boromir");
+		var bounder = scn.GetFreepsCard("bounder");
+		var orc = scn.GetShadowCard("orc");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.MoveCompanionsToTable(aragorn, boromir);
+		scn.MoveAlliesToTable(bounder);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(orc, troop);
 
-		assertEquals(4, scn.GetTwilight());
+		// 11 + 3: Frodo, Aragorn and Boromir; not Bounder, an ally, nor the Troop, a minion, though neither is assigned.
+		assertEquals(14, scn.GetStrength(orc));
+		assertEquals(13, scn.GetStrength(troop));
+
+		scn.SkipToAssignments();
+		scn.FreepsAssignToMinions(new PhysicalCardImpl[] { aragorn, orc }, new PhysicalCardImpl[] { boromir, troop });
+
+		assertTrue(scn.IsCharAssignedAgainst(aragorn, orc));
+		assertTrue(scn.IsCharAssignedAgainst(boromir, troop));
+		assertFalse(scn.IsCharAssigned(frodo));
+		// 11 + 1: Frodo alone is not assigned.
+		assertEquals(12, scn.GetStrength(orc));
+
+		// The lurker's skirmish comes last: Boromir's first.
+		scn.FreepsResolveSkirmish(boromir);
+		assertTrue(scn.IsCharSkirmishingAgainst(boromir, troop));
+		assertEquals(12, scn.GetStrength(orc));
+		assertEquals(0, scn.GetWoundsOn(boromir));
+
+		scn.PassSkirmishActions();
+		// Boromir, 7 against 13, loses and lives; his skirmish is over and he is no longer assigned
+		// (CR 4.2 "skirmish phase(s)").
+		assertEquals(1, scn.GetWoundsOn(boromir));
+
+		scn.FreepsResolveSkirmish(aragorn);
+		assertTrue(scn.IsCharSkirmishingAgainst(aragorn, orc));
+		// 11 + 2: Frodo and Boromir.
+		assertEquals(13, scn.GetStrength(orc));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingFreepsSkirmishPhaseActions());
+	}
+
+	@Test
+	public void EachCopyIsStrengthenedForItselfAlone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var orc = scn.GetShadowCard("orc");
+		var orc2 = scn.GetShadowCard("orc2");
+
+		scn.MoveCompanionsToTable(aragorn);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(orc, orc2);
+
+		// 11 + 2 (Frodo and Aragorn) each: a second copy adds nothing to the first.
+		assertEquals(13, scn.GetStrength(orc));
+		assertEquals(13, scn.GetStrength(orc2));
 	}
 }

@@ -24,6 +24,8 @@ public class KilledTriggerEffectProcessor implements EffectProcessor {
             triggerActionSource.setPlayingPlayer(playerSource);
         }
 
+        // Q-0224 (IdleOffers): an optional trigger.
+        triggerActionSource.setWithheldWhenIdle(optional);
         EffectUtils.processRequirementsCostsAndEffects(value, environment, triggerActionSource);
         if (optional)
             blueprint.setKilledOptionalTriggerAction(triggerActionSource);

@@ -17,8 +17,7 @@ public class Card_01_151_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_151");
-					// put other cards in here as needed for the test case
+					put("savage", "1_151");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,35 +45,20 @@ public class Card_01_151_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var savage = scn.GetFreepsCard("savage");
 
-		assertEquals("Uruk Savage", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.ISENGARD, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UrukSavageTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
+		assertEquals("Uruk Savage", savage.getBlueprint().getTitle());
+		assertNull(savage.getBlueprint().getSubtitle());
+		assertFalse(savage.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, savage.getBlueprint().getSide());
+		assertEquals(Culture.ISENGARD, savage.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, savage.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, savage.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(savage, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(savage, Keyword.DAMAGE));
+		assertEquals(2, savage.getBlueprint().getTwilightCost());
+		assertEquals(5, savage.getBlueprint().getStrength());
+		assertEquals(3, savage.getBlueprint().getVitality());
+		assertEquals(5, savage.getBlueprint().getSiteNumber());
 	}
 }

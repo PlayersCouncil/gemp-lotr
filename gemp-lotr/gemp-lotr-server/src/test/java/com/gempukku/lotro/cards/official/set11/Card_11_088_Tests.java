@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_11_088_Tests
@@ -17,8 +18,15 @@ public class Card_11_088_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_88");
-					// put other cards in here as needed for the test case
+					put("legion", "11_88");
+
+					// Axeman of Harad: a [men] Man minion, vitality 3.  Its text only lowers its own cost in hand.
+					put("axeman", "11_69");
+					// Ted Sandyman, Chief's Men's Ally: a [men] minion who is a Hobbit, vitality 4, site 2.  His
+					// maneuver and regroup abilities are never used.
+					put("ted", "18_75");
+					// Goblin Patrol Troop: a [moria] minion with no text, vitality 3: one who could exert, of another culture.
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,7 +54,7 @@ public class Card_11_088_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("legion");
 
 		assertEquals("Legion of Harad", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +71,53 @@ public class Card_11_088_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LegionofHaradTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ToilTakesTwoOffItsCostForEachMenCharacterExertedAsItIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var legion = scn.GetShadowCard("legion");
+		var axeman = scn.GetShadowCard("axeman");
+		var ted = scn.GetShadowCard("ted");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
+		scn.SetShadowHand(legion);
+		scn.MoveMinionsToTable(axeman, ted, troop);
+		assertEquals(0, scn.GetWoundsOn(axeman));
+		assertEquals(0, scn.GetWoundsOn(ted));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		scn.FreepsPass();
+		// Site 4 is its site number: it is not roaming.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 
-		assertEquals(6, scn.GetTwilight());
+		// 6 - 2 - 2 is the least it can cost, with both [men] minions exerted; the [moria] Troop does not count.
+		// Toil 1 would want 4, and toil 3 (or the Troop counted) would let 1 do.
+		scn.SetTwilight(1);
+		scn.ShadowRefreshDecision();
+		assertFalse(scn.ShadowPlayAvailable(legion));
+		scn.SetTwilight(2);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(legion));
+
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		scn.ShadowPlayCard(legion);
+		// The pool is 2 short of its 6: one exertion is owed, and the second is the Shadow player's to make or
+		// not.  Toil 1 would owe two.
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		assertEquals(2, scn.ShadowGetChoiceMax());
+		assertTrue(scn.ShadowHasCardChoiceAvailable(axeman, ted));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(troop));
+
+		scn.ShadowChooseCard(ted);
+		assertInZone(Zone.SHADOW_CHARACTERS, legion);
+		assertEquals(0, scn.GetWoundsOn(axeman));
+		assertEquals(1, scn.GetWoundsOn(ted));
+		assertEquals(0, scn.GetWoundsOn(troop));
+		// 4 - (6 - 2)
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

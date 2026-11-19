@@ -212,6 +212,7 @@
 			{
 				type: activatedInDiscard
 				phase: skirmish
+				specialAbility: false
 				cost: {
 					type: removeCardsInDiscardFromGame
 					select: choose(other,culture(dwarven))
@@ -342,6 +343,10 @@
 				{
 					type: optional
 					text: Would you like to reinforce {dwarven} token
+					requires: {
+						type: canSpot
+						filter: hasCultureToken(dwarven)
+					}
 					effect: {
 						type: reinforceTokens
 						culture: dwarven
@@ -431,9 +436,19 @@
 					type: AddCultureTokens
 					culture: dwarven
 					select: self
+					// Ketura (Q-0383: A, 2026-10-28): two counts added together, so a site of both kinds adds two
 					count: {
-						type: forEachYouCanSpot
-						filter: or(mountain,underground),zone(adventure path)
+						type: sum
+						source: [
+							{
+								type: forEachYouCanSpot
+								filter: mountain,zone(adventure path)
+							}
+							{
+								type: forEachYouCanSpot
+								filter: underground,zone(adventure path)
+							}
+						]
 					}
 				}
 			}

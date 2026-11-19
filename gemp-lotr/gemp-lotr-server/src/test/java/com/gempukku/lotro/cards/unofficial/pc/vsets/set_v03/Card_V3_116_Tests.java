@@ -8,21 +8,24 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_V3_116_Tests
 {
-
 	protected VirtualTableScenario GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
 					put("smeagol", "103_116");
-					put("sam", "1_311");
-					put("aragorn", "1_89");
-
-					put("raider", "1_158");  // Cost 4
-					put("hunter", "1_256");  // Cost 5
+					put("sam", "1_311");        // Sam, Son of Hamfast: a [shire] Hobbit companion
+					put("merry", "103_85");     // Merry, Master Holbytla: a Hobbit companion who is [rohan], not [shire]; his texts need a [rohan] Man or a skirmish
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a [gondor] companion
+					put("thrarin", "1_27");     // Thrarin, Dwarven Smith: a [dwarven] ally; a maneuver ability never used here
+					put("raider", "1_158");     // Uruk-hai Raiding Party: [isengard] minion, twilight cost 4; damage +1 and nothing else
+					put("hunter", "1_256");     // Morgul Hunter: [sauron] minion, twilight cost 5; stronger for each companion and nothing else
+					put("troop", "1_177");      // Goblin Patrol Troop: [moria] minion with no text
+					put("armory", "1_173");     // Goblin Armory: a Shadow condition in the support area
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -41,14 +44,16 @@ public class Card_V3_116_Tests
 		 * Culture: Shire
 		 * Twilight Cost: 1
 		 * Type: Companion
-		 * Subtype: 
+		 * Subtype:
 		 * Strength: 3
 		 * Vitality: 4
 		 * Resistance: 6
 		 * Signet: Frodo
 		 * Game Text: Ring-bound. To play, add a burden.
-		* 	Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or more) to hinder that minion.
-		*/
+		 * 	Assignment: If you cannot spot a companion with a culture other than [shire], exert Smeagol and
+		 * 	hinder him to spot a minion.  Add (2) (and add 2 threats if that minion is twilight cost 5 or
+		 * 	more) to hinder that minion.
+		 */
 
 		var scn = GetScenario();
 
@@ -60,20 +65,18 @@ public class Card_V3_116_Tests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.SHIRE, card.getBlueprint().getCulture());
 		assertEquals(CardType.COMPANION, card.getBlueprint().getCardType());
+		// No Smeagol has a race
+		assertNull(card.getBlueprint().getRace());
 		assertTrue(scn.HasKeyword(card, Keyword.RING_BOUND));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(6, card.getBlueprint().getResistance());
-		assertEquals(Signet.FRODO, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.FRODO, card.getBlueprint().getSignet());
 	}
 
-
-// ======== EXTRA COST TO PLAY TEST ========
-
 	@Test
-	public void SmeagolAddsABurdenToPlay() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void PlayedFromHandForOneTwilightAndABurden() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
@@ -82,219 +85,315 @@ public class Card_V3_116_Tests
 		scn.StartGame();
 
 		assertEquals(0, scn.GetBurdens());
+		assertEquals(0, scn.GetTwilight());
+		assertTrue(scn.FreepsPlayAvailable(smeagol));
 
 		scn.FreepsPlayCard(smeagol);
-
 		assertEquals(1, scn.GetBurdens());
+		assertEquals(1, scn.GetTwilight());
+		assertInZone(Zone.FREE_CHARACTERS, smeagol);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
-// ======== REQUIREMENT TESTS ========
-
 	@Test
-	public void SmeagolAbilityNotAvailableWithNonShireCompanion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void CannotBePlayedWhileNoBurdenCanBeAdded() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
+		var frodo = scn.GetRingBearer();
 		var smeagol = scn.GetFreepsCard("smeagol");
-		var aragorn = scn.GetFreepsCard("aragorn");
-		var hunter = scn.GetShadowCard("hunter");
-
-		scn.MoveCompanionsToTable(smeagol, aragorn);
-		scn.MoveMinionsToTable(hunter);
+		scn.MoveCardsToHand(smeagol);
 
 		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		// Aragorn is Gondor, not Shire - ability should not be available
-		assertFalse(scn.FreepsActionAvailable(smeagol));
+		// No burden can be added while the Ring-bearer is hindered
+		scn.HinderCard(frodo);
+		scn.FreepsRefreshDecision();
+		assertFalse(scn.FreepsPlayAvailable(smeagol));
+
+		scn.RestoreCard(frodo);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsPlayAvailable(smeagol));
+
+		assertEquals(0, scn.GetBurdens());
+		scn.FreepsPlayCard(smeagol);
+		assertEquals(1, scn.GetBurdens());
+		assertInZone(Zone.FREE_CHARACTERS, smeagol);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
-	public void SmeagolAbilityAvailableWithOnlyShireCompanions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AbilityIsOfferedUnlessACompanionOfAnotherCultureCanBeSpotted() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
 		var sam = scn.GetFreepsCard("sam");
-		var hunter = scn.GetShadowCard("hunter");
-
-		// Frodo (RB) + Smeagol + Sam = all Shire
+		var merry = scn.GetFreepsCard("merry");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var thrarin = scn.GetFreepsCard("thrarin");
 		scn.MoveCompanionsToTable(smeagol, sam);
-		scn.MoveMinionsToTable(hunter);
+		scn.MoveAlliesToTable(thrarin);
 
 		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		scn.MoveMinionsToTable(raider);
+
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
+		// Frodo, Sam and Smeagol are the companions, all [shire]; Thrarin is [dwarven], but an ally.
 		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		// Merry is a Hobbit, and a [rohan] companion.
+		scn.MoveCompanionsToTable(merry);
+		scn.FreepsRefreshDecision();
+		assertFalse(scn.FreepsActionAvailable(smeagol));
+
+		// A hindered companion cannot be spotted.
+		scn.HinderCard(merry);
+		scn.FreepsRefreshDecision();
+		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		scn.MoveCompanionsToTable(aragorn);
+		scn.FreepsRefreshDecision();
+		assertFalse(scn.FreepsActionAvailable(smeagol));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
 	}
 
-// ======== BASIC EXECUTION TEST ========
-
 	@Test
-	public void SmeagolAbilityExertsAndHindersSelfAddsTwilightAndHindersMinion() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void AbilityExertsAndHindersSmeagolToSpotOneMinionAndHinderItForTwoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		var raider = scn.GetShadowCard("raider");  // Cost 4, below threshold
-
-		scn.MoveCompanionsToTable(smeagol);
-		scn.MoveMinionsToTable(raider);
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(smeagol, sam);
 
 		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		var hunter = scn.GetShadowCard("hunter");
+		var troop = scn.GetShadowCard("troop");
+		var armory = scn.GetShadowCard("armory");
+		scn.MoveMinionsToTable(raider, hunter, troop);
+		scn.MoveCardsToSupportArea(armory);
+		scn.HinderCard(troop);
+
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
-		int twilightBefore = scn.GetTwilight();
-
+		int twilight = scn.GetTwilight();
+		assertEquals(0, scn.GetThreats());
 		assertEquals(0, scn.GetWoundsOn(smeagol));
 		assertFalse(scn.IsHindered(smeagol));
-		assertFalse(scn.IsHindered(raider));
-		assertEquals(0, scn.GetThreats());
-
-		scn.FreepsUseCardAction(smeagol);
-		// Single minion, auto-selected
-
-		// Costs paid: Smeagol exerted and hindered
-		assertEquals(1, scn.GetWoundsOn(smeagol));
-		assertTrue(scn.IsHindered(smeagol));
-
-		// Effect: twilight added, minion hindered, no threats (cost 4 < 5)
-		assertEquals(twilightBefore + 2, scn.GetTwilight());
-		assertTrue(scn.IsHindered(raider));
-		assertEquals(0, scn.GetThreats());
-	}
-
-// ======== THREAT THRESHOLD TESTS ========
-
-	@Test
-	public void SmeagolAbilityAdds2ThreatsForMinionCosting5OrMore() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var smeagol = scn.GetFreepsCard("smeagol");
-		var hunter = scn.GetShadowCard("hunter");  // Cost 5, at threshold
-
-		// Frodo + Smeagol = 2 companions = 2 threat limit
-		scn.MoveCompanionsToTable(smeagol);
-		scn.MoveMinionsToTable(hunter);
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		assertEquals(0, scn.GetThreats());
-
-		scn.FreepsUseCardAction(smeagol);
-
-		// With cost 5 minion, should add 2 threats
-		assertEquals(2, scn.GetThreats());
-		assertTrue(scn.IsHindered(hunter));
-	}
-
-	@Test
-	public void SmeagolAbilityFailsOn5CostMinionIfOnlyRoomFor1Threat() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var smeagol = scn.GetFreepsCard("smeagol");
-		var hunter = scn.GetShadowCard("hunter");  // Cost 5
-
-		// Frodo + Smeagol = 2 companions = 2 threat limit
-		scn.MoveCompanionsToTable(smeagol);
-		scn.MoveMinionsToTable(hunter);
-		scn.AddThreats(1);  // Now at 1/2 threats
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		assertEquals(1, scn.GetThreats());
-
-		scn.FreepsUseCardAction(smeagol);
-
-		// With cost 5 minion, couldn't add 2 threats and so Smeagol got hindered but the Hunter did not
-		assertEquals(1, scn.GetThreats());
-		assertTrue(scn.IsHindered(smeagol));
-		assertFalse(scn.IsHindered(hunter));
-	}
-
-	@Test
-	public void SmeagolAbilityFailsToHinderMinionOn5CostMinionIfAtThreatCap() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var smeagol = scn.GetFreepsCard("smeagol");
-		var hunter = scn.GetShadowCard("hunter");  // Cost 5
-
-		// Frodo + Smeagol = 2 companions = 2 threat limit
-		scn.MoveCompanionsToTable(smeagol);
-		scn.MoveMinionsToTable(hunter);
-		scn.AddThreats(2);  // At max threats
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		assertEquals(2, scn.GetThreats());
-
-		scn.FreepsUseCardAction(smeagol);
-
-		// With cost 5 minion, couldn't add 2 threats and so Smeagol got hindered but the Hunter did not
-		assertTrue(scn.IsHindered(smeagol));
-		assertFalse(scn.IsHindered(hunter));
-	}
-
-	@Test
-	public void SmeagolAbilityWorksOn4CostMinionEvenAtThreatCap() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var smeagol = scn.GetFreepsCard("smeagol");
-		var raider = scn.GetShadowCard("raider");  // Cost 4, below threshold
-
-		scn.MoveCompanionsToTable(smeagol);
-		scn.MoveMinionsToTable(raider);
-		scn.AddThreats(2);  // At max threats
-
-		scn.StartGame();
-		scn.SkipToPhase(Phase.ASSIGNMENT);
-
-		assertEquals(2, scn.GetThreats());
-
-		// Ability should work - no threats needed for cost 4 minion
 		assertTrue(scn.FreepsActionAvailable(smeagol));
 
 		scn.FreepsUseCardAction(smeagol);
+		assertEquals(1, scn.GetWoundsOn(smeagol));
+		assertTrue(scn.IsHindered(smeagol));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertFalse(scn.IsHindered(sam));
 
-		// Threats unchanged (no threat cost for <5)
-		assertEquals(2, scn.GetThreats());
+		// One minion is spotted: not a minion already hindered, not a Shadow condition, not a companion.
+		assertTrue(scn.FreepsHasCardChoiceAvailable(raider, hunter));
+		assertTrue(scn.FreepsHasCardChoiceNotAvailable(troop, armory, sam));
+		assertEquals(1, scn.FreepsGetChoiceMin());
+		assertEquals(1, scn.FreepsGetChoiceMax());
+		assertEquals(twilight, scn.GetTwilight());
+
+		// The Raiding Party costs 4: (2) and no threats.
+		scn.FreepsChooseCard(raider);
+		assertEquals(twilight + 2, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
 		assertTrue(scn.IsHindered(raider));
+		assertFalse(scn.IsHindered(hunter));
+		assertFalse(scn.IsHindered(armory));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 
 	@Test
-	public void SmeagolAbilityOffersChoiceWhenMultipleMinions() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	public void MinionCostingFiveIsHinderedForTwoTwilightAndTwoThreats() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var smeagol = scn.GetFreepsCard("smeagol");
-		var raider = scn.GetShadowCard("raider");   // Cost 4
-		var hunter = scn.GetShadowCard("hunter");   // Cost 5
-
 		scn.MoveCompanionsToTable(smeagol);
-		scn.MoveMinionsToTable(raider, hunter);
 
 		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		var hunter = scn.GetShadowCard("hunter");
+		scn.MoveMinionsToTable(raider, hunter);
+
 		scn.SkipToPhase(Phase.ASSIGNMENT);
 
+		// Frodo and Smeagol: room for 2 threats, which Smeagol still counts towards once he is hindered.
+		int twilight = scn.GetTwilight();
 		assertEquals(0, scn.GetThreats());
 
 		scn.FreepsUseCardAction(smeagol);
-
-		// Should be asked to choose which minion to target
+		assertTrue(scn.IsHindered(smeagol));
 		assertTrue(scn.FreepsHasCardChoiceAvailable(raider, hunter));
 
-		// Choose the hunter (costs 5)
+		// The Morgul Hunter costs exactly 5.
 		scn.FreepsChooseCard(hunter);
-
+		assertEquals(twilight + 2, scn.GetTwilight());
 		assertEquals(2, scn.GetThreats());
 		assertTrue(scn.IsHindered(hunter));
 		assertFalse(scn.IsHindered(raider));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void TwoThreatsAndNoMoreAreAddedWhereThereIsRoomForThree() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(smeagol, sam);
+
+		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		var hunter = scn.GetShadowCard("hunter");
+		scn.MoveMinionsToTable(raider, hunter);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		// Frodo, Sam and Smeagol: room for 3 threats, where the board with Frodo and Smeagol alone has room
+		// for no more than the 2 the text asks for.
+		assertEquals(3, scn.GetThreatLimit());
+		assertEquals(0, scn.GetThreats());
+
+		scn.FreepsUseCardAction(smeagol);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(raider, hunter));
+
+		scn.FreepsChooseCard(hunter);
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.IsHindered(hunter));
+		assertFalse(scn.IsHindered(raider));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void MinionCostingFourIsHinderedWithNoRoomForThreats() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+
+		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		var hunter = scn.GetShadowCard("hunter");
+		scn.MoveMinionsToTable(raider, hunter);
+		// 2 companions and 2 threats: no more can be added.
+		scn.AddThreats(2);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		int twilight = scn.GetTwilight();
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		scn.FreepsUseCardAction(smeagol);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(raider, hunter));
+
+		scn.FreepsChooseCard(raider);
+		assertEquals(twilight + 2, scn.GetTwilight());
+		assertEquals(2, scn.GetThreats());
+		assertTrue(scn.IsHindered(raider));
+		assertFalse(scn.IsHindered(hunter));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void MinionCostingFiveIsNotHinderedAndNothingIsAddedWithRoomForOnlyOneThreat() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+
+		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		var hunter = scn.GetShadowCard("hunter");
+		scn.MoveMinionsToTable(raider, hunter);
+		// 2 companions and 1 threat: one more can be added, not two.
+		scn.AddThreats(1);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		int twilight = scn.GetTwilight();
+		assertEquals(1, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		scn.FreepsUseCardAction(smeagol);
+		assertTrue(scn.FreepsHasCardChoiceAvailable(raider, hunter));
+
+		scn.FreepsChooseCard(hunter);
+		// Smeagol has paid; the price of hindering the Hunter cannot be paid in full, so none of it is.
+		assertEquals(1, scn.GetWoundsOn(smeagol));
+		assertTrue(scn.IsHindered(smeagol));
+		assertEquals(twilight, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		assertFalse(scn.IsHindered(hunter));
+		assertFalse(scn.IsHindered(raider));
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
+	}
+
+	@Test
+	public void AbilityIsNotOfferedOnceSmeagolIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+		scn.AddWoundsToChar(smeagol, 2);
+
+		scn.StartGame();
+
+		var raider = scn.GetShadowCard("raider");
+		scn.MoveMinionsToTable(raider);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		// Vitality 4 with 2 wounds: one exertion left.
+		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		scn.AddWoundsToChar(smeagol, 1);
+		scn.FreepsRefreshDecision();
+		assertFalse(scn.FreepsActionAvailable(smeagol));
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+	}
+
+	@Test
+	public void WithNoMinionToSpotSmeagolStillPaysAndTwoTwilightIsAddedForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var smeagol = scn.GetFreepsCard("smeagol");
+		scn.MoveCompanionsToTable(smeagol);
+
+		scn.StartGame();
+
+		var hunter = scn.GetShadowCard("hunter");
+		scn.MoveMinionsToTable(hunter);
+
+		scn.SkipToPhase(Phase.ASSIGNMENT);
+
+		// The only minion is hindered once the phase has begun (with none to fight, the phase would be
+		// skipped), and a hindered card cannot be spotted as a minion.
+		scn.HinderCard(hunter);
+		scn.FreepsRefreshDecision();
+
+		int twilight = scn.GetTwilight();
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetWoundsOn(smeagol));
+		// Spotting a minion comes after "to": the ability is offered while Smeagol can pay.
+		assertTrue(scn.FreepsActionAvailable(smeagol));
+
+		scn.FreepsUseCardAction(smeagol);
+		assertEquals(1, scn.GetWoundsOn(smeagol));
+		assertTrue(scn.IsHindered(smeagol));
+		// No minion is spotted, so there is none whose cost could call for threats; the (2) is added all the same.
+		assertEquals(twilight + 2, scn.GetTwilight());
+		assertEquals(0, scn.GetThreats());
+		assertTrue(scn.AwaitingShadowAssignmentPhaseActions());
 	}
 }

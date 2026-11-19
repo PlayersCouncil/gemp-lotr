@@ -27,6 +27,7 @@
 					amount: {
 						type: forEachHasAttached
 						filter: any
+						hindered: true
 						multiplier: -1
 					}
 				}
@@ -149,10 +150,16 @@
 					player: you
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,nazgul
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,nazgul
+					}
+					{
+						type: canSpot
+						filter: wounded,companion
+					}
+				]
 				effect: {
 					type: drawCards
 					count: {
@@ -345,18 +352,56 @@
 					type: winsSkirmish
 					filter: self, InFierceSkirmish
 				}
-				effect: {
-					type: repeat
-					times: {
-						type: forEachYouCanSpot
-						filter: companion
-						over: 4
+				requires: {
+					type: canSpot
+					filter: companion
+					count: 5
+				}
+				// "You may exert a companion for each companion you can spot over 4": after the yes, each exertion
+				// is a choice of a companion or of none, one companion may take more than one of them (CR 4.2 "for
+				// each"), and the first none forfeits the rest, as Aragorn, Wingfoot 4_364's wounds (Q-0248, Q-0397;
+				// Q-0399).
+				effect: [
+					{
+						type: memorizeNumber
+						amount: {
+							type: forEachYouCanSpot
+							filter: companion
+							over: 4
+						}
+						memory: exertionCount
 					}
-					effect: {
+					{
 						type: exert
 						select: choose(companion)
+						count: 0-1
+						memorize: exertedCompanion
 					}
-				}
+					{
+						type: Repeat
+						times: {
+							type: subtract
+							firstNumber: {
+								type: fromMemory
+								memory: exertionCount
+							}
+							secondNumber: 1
+						}
+						effect: {
+							type: If
+							check: {
+								type: HasCardInMemory
+								memory: exertedCompanion
+							}
+							true: {
+								type: exert
+								select: choose(companion)
+								count: 0-1
+								memorize: exertedCompanion
+							}
+						}
+					}
+				]
 			}
 		]
 		gametext: <b>Fierce</b>.<br>Each time the Witch-king wins a fierce skirmish, you may exert a companion for each companion you can spot over 4.

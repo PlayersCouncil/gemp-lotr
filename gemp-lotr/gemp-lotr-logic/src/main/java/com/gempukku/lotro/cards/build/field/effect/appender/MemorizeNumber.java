@@ -26,7 +26,7 @@ public class MemorizeNumber implements EffectAppenderProducer {
 
         final ValueSource amountSource = ValueResolver.resolveEvaluator(effectObject.get("amount"), environment);
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new UnrespondableEffect() {

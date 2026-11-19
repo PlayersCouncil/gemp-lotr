@@ -87,7 +87,7 @@ public class Card_V3_095_Tests
 
 		scn.StartGame();
 		scn.SetTwilight(20);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No twilight conditions in play - can't play
 		assertFalse(scn.ShadowPlayAvailable(horror));
@@ -132,7 +132,7 @@ public class Card_V3_095_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, orc);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int orcStrengthBefore = scn.GetStrength(orc);
 		int orcWoundsBefore = scn.GetWoundsOn(orc);
@@ -167,7 +167,7 @@ public class Card_V3_095_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, troll);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int trollStrengthBefore = scn.GetStrength(troll);
 		int trollWoundsBefore = scn.GetWoundsOn(troll);
@@ -197,7 +197,7 @@ public class Card_V3_095_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, uruk);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// No Orc or Troll to exert - ability not available
 		assertFalse(scn.ShadowActionAvailable(horror));
@@ -218,7 +218,7 @@ public class Card_V3_095_Tests
 		scn.SkipToAssignments();
 		scn.FreepsAssignToMinions(aragorn, orc);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Only 1 unhindered twilight condition - can't afford cost of 2
 		assertFalse(scn.ShadowActionAvailable(horror));
@@ -244,7 +244,7 @@ public class Card_V3_095_Tests
 		scn.AddWoundsToChar(orc, orcVit - 1);
 		scn.FreepsAssignToMinions(aragorn, orc);
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// Orc is exhausted, can't exert - ability not available
 		assertFalse(scn.ShadowActionAvailable(horror));
@@ -270,7 +270,7 @@ public class Card_V3_095_Tests
 		scn.FreepsAssignToMinions(aragorn, orc);
 		scn.ShadowDeclineAssignments();
 		scn.FreepsResolveSkirmish(aragorn);
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		int trollStrengthBefore = scn.GetStrength(troll);
 		int trollWoundsBefore = scn.GetWoundsOn(troll);

@@ -115,7 +115,7 @@ public class Card_01_316_ErrataTests
 		scn.AttachCardsTo(merry, talent1);
 
 		scn.StartGame();
-		scn.FreepsPassCurrentPhaseAction();
+		scn.FreepsPass();
 
 		// 2 for Frodo/Merry, 2 for the site, -1 for Talent
 		assertEquals(3, scn.GetTwilight());

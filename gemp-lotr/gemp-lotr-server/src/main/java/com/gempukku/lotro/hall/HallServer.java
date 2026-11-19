@@ -20,6 +20,7 @@ import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueScheduleService;
 import com.gempukku.lotro.league.LeagueService;
+import com.gempukku.lotro.logic.GameSeed;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -398,6 +399,11 @@ public class HallServer extends AbstractServer {
         CollectionType collectionType = _defaultCollectionType;
         LotroFormat format = _formatLibrary.getHallFormats().get(type);
         GameTimer gameTimer = GameTimer.ResolveTimer(timer);
+
+        // Seeded test servers (GameRandom) also play the formats the hall doesn't offer, such as Debug, whose small
+        // decks let a test start with exactly the cards it needs
+        if (format == null && GameSeed.isSeeded())
+            format = _formatLibrary.getFormat(type);
 
         if (format == null) {
             // Maybe it's a league format?
@@ -918,6 +924,10 @@ public class HallServer extends AbstractServer {
             players.add(new LotroGameParticipant(BotService.GENERAL_BOT_NAME, botDeck));
         }
         LotroGameParticipant[] participants = players.toArray(new LotroGameParticipant[0]);
+        if (GameSeed.isSeeded()) {
+            // Seeded test servers: the same players give the same game, so their order can't depend on object hashes
+            Arrays.sort(participants, Comparator.comparing(LotroGameParticipant::getPlayerId));
+        }
         final League league = gameTable.getGameSettings().league();
         final LeagueSerieInfo leagueSerie = gameTable.getGameSettings().leagueSerie();
 

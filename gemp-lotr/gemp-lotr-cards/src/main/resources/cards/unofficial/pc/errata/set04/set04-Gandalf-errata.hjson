@@ -187,19 +187,28 @@
 			}
 			effect: [
 				{
-					type: Choice
-					texts: [
-						Discard a Shadow possession
-						Hinder a Shadow artifact
-					]
-					effects: [
+					type: If
+					check: {
+						type: CanSpot
+						filter: side(shadow),or(possession,artifact)
+					}
+					true: [
 						{
-							type: Discard
-							select: choose(side(shadow),possession)
-						}
-						{
-							type: Hinder
-							select: choose(side(shadow),artifact)
+							type: Choice
+							texts: [
+								Discard a Shadow possession
+								Hinder a Shadow artifact
+							]
+							effects: [
+								{
+									type: Discard
+									select: choose(side(shadow),possession)
+								}
+								{
+									type: Hinder
+									select: choose(side(shadow),artifact)
+								}
+							]
 						}
 					]
 				}

@@ -17,8 +17,7 @@ public class Card_04_252_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_252");
-					// put other cards in here as needed for the test case
+					put("scout", "4_252");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,36 +45,21 @@ public class Card_04_252_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var scout = scn.GetFreepsCard("scout");
 
-		assertEquals("Southron Scout", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.RAIDER, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.MAN, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.SOUTHRON));
-		assertTrue(scn.HasKeyword(card, Keyword.AMBUSH));
-		assertEquals(2, scn.GetKeywordCount(card, Keyword.AMBUSH));
-		assertEquals(1, card.getBlueprint().getTwilightCost());
-		assertEquals(3, card.getBlueprint().getStrength());
-		assertEquals(1, card.getBlueprint().getVitality());
-		assertEquals(4, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void SouthronScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(1, scn.GetTwilight());
+		assertEquals("Southron Scout", scout.getBlueprint().getTitle());
+		assertNull(scout.getBlueprint().getSubtitle());
+		assertFalse(scout.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, scout.getBlueprint().getSide());
+		assertEquals(Culture.RAIDER, scout.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, scout.getBlueprint().getCardType());
+		assertEquals(Race.MAN, scout.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(scout, Keyword.SOUTHRON));
+		assertTrue(scn.HasKeyword(scout, Keyword.AMBUSH));
+		assertEquals(2, scn.GetKeywordCount(scout, Keyword.AMBUSH));
+		assertEquals(1, scout.getBlueprint().getTwilightCost());
+		assertEquals(3, scout.getBlueprint().getStrength());
+		assertEquals(1, scout.getBlueprint().getVitality());
+		assertEquals(4, scout.getBlueprint().getSiteNumber());
 	}
 }

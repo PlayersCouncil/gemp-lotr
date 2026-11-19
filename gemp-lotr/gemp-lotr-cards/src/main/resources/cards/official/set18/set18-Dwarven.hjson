@@ -33,18 +33,19 @@
 					type: addThreats
 				}
 				effect: {
-					type: wound
-					select: choose(minion)
-					memorize: chosenMinion
-					times: {
-						type: Conditional
-						requires: {
-							type: memoryMatches
-							memory: chosenMinion
-							filter: hunter,minion
-						}
-						true: 2
-						false: 1
+					type: If
+					check: {
+						type: canSpot
+						filter: hunter,minion
+					}
+					true: {
+						type: wound
+						select: choose(hunter,minion)
+						times: 2
+					}
+					false: {
+						type: wound
+						select: choose(minion)
 					}
 				}
 			}

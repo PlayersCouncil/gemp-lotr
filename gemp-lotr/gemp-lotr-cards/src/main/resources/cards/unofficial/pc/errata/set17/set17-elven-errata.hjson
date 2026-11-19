@@ -2,6 +2,9 @@
 	67_7: {
 		cardInfo: {
 			//id: 67_7.1
+			parent: 17_7
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN17E007.1_card.jpg
 			collInfo: 17S7
@@ -43,7 +46,7 @@
 				}
 			}
 		]
-		gametext: <b>Valiant.</b> <br><b>Hunter 1.</b> <i>(While skirmishing a non-hunter character, this character is strength +1.)</i><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
+		gametext: <b>Valiant.</b> <br><b>Hunter 1.</b><br>While this companion is skirmishing a wounded minion, he is strength +2.<br><b>Maneuver:</b> Exert this companion to heal another hunter.
 		lore: We are proud to fight alongside Men, once more
 		promotext: ""
 		alts: {
@@ -56,7 +59,10 @@
 	
 	67_10: {
 		cardInfo: {
-			//id: 7_10.1
+			//id: 67_10.1
+			parent: 17_10
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN17E010.1.jpg
 			collInfo: 17U10
@@ -64,10 +70,11 @@
 		}
 		title: Namárië
 		unique: true
-		culture: elven
+		side: Free Peoples
+		culture: Elven
 		twilight: 2
-		type: condition
-		keyword: [
+		type: Condition
+		keywords: [
 			Support Area
 		]
 		effects: [
@@ -146,7 +153,7 @@
 			}
 		]
 		
-		gametext: When you play this, add an [elven] token here for each hunter you can spot (limit 3).\<b>Maneuver:</b> Remove an [elven] token from here (or discard this) and discard a card from hand to discard a condition.
+		gametext: When you play this, add an [elven] token here for each hunter you can spot (limit 3). <b>Maneuver:</b> Discard this condition (or remove a token from here) and discard a card from hand to discard a condition.
 		lore: "'We shall not meet again, Elessar.'"
 		promotext: ""
 		alts: {

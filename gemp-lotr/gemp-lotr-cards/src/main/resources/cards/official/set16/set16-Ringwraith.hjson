@@ -233,6 +233,8 @@
 						filter: another,culture(wraith),wraith
 					}
 					filter: any
+					// "(except by Wraiths)" closes both halves (Ketura's ruling, Q-0357): a Wraith's own text may still heal
+					by: not(wraith)
 				}
 			}
 			{

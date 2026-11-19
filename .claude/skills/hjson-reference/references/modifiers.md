@@ -50,7 +50,7 @@ In general, although the names of modifiers are case-insensitive, the names of t
     * unloaded
       default: false
 * AddNoTwilightForCompanionMove
- Companions matching `filter` add 0 twilight when moving instead of the default 1.  Used by the obsolete Second Edition and the nascent PC concealed keyword.
+ Companions matching `filter` add 0 twilight when moving instead of the default 1.  Used by the obsolete Second Edition.
     * filter
       required
 * AddCulture
@@ -232,8 +232,14 @@ In general, although the names of modifiers are case-insensitive, the names of t
       optional
 * CantHeal
   Prevents cards matching `filter` from healing, so long as the `requires` requirements are met.
+  If `player` is given, only that player's heals of those cards are prevented (the other player heals them as before); if not, every heal is.
+  If `by` is given, only heals made by the text of a card it matches are prevented ("except by Wraiths": `by: not(wraith)`); a heal made by no card is prevented whatever it says.
     * filter
       required
+    * player
+      optional
+    * by
+      optional
     * requires [ ]
       optional
 * CantLookOrRevealHand
@@ -322,6 +328,14 @@ In general, although the names of modifiers are case-insensitive, the names of t
       required
     * requires [ ]
       optional
+* CantTakeCardsIntoHandFromDeckOrDiscardPile
+  Prevents `player` from taking cards into hand from that player's own draw deck or discard pile, so long as the `requires` requirements are met.  See Race Text 94_30.
+  A card drawn is a card taken into hand from the draw deck: the player's draws draw nothing, except those of a reconcile.  The bar is on the player doing the taking: another player's card that returns that player's card to hand still does.
+  If `player` is omitted, the bar is on every player.
+    * player
+      optional
+    * requires [ ]
+      optional
 * CantTakeMoreWoundsThan
   Makes cards matching `filter` take no more than `amount` wounds during the given `phase`, so long as the `requires` requirements are met.
   Used for cards which cause a character to "take no more than X wounds".  This is different from preventing wounds, as it disallows wounds from even being assigned (such as from archery or threats).  See Armor).
@@ -361,6 +375,12 @@ In general, although the names of modifiers are case-insensitive, the names of t
       optional
     * requires [ ]
       optional
+* ComesIntoPlayExhausted
+  A character matching `filter` comes into play exhausted while the `requires` requirements are met: as it is played, it is placed with the wounds that leave it 1 vitality, before anything answers its play, and the wounds are no exertions (Q-0302, F-0501).  Read only as a card is placed; it does nothing to a card already in play.
+    * filter
+      required
+    * requires [ ]
+      optional
 * DisableGameText
   Prevents the game text of cards matching `filter` from being used, so long as the given `requires` requirements are met.  See Helpless).
     * filter
@@ -392,6 +412,16 @@ In general, although the names of modifiers are case-insensitive, the names of t
       required; only "self" or "memory()"
     * requires [ ]
       optional
+* ExtraCostToAssign
+ Adds a `cost` the Free Peoples player must pay to assign a `minion` to a skirmish, so long as the `requires` requirements are met ("the Free Peoples player must exert a companion to assign this minion to a skirmish").  At the Free Peoples player's own assigning the cost is paid ahead, offered on the minion as he starts assigning, and a minion not paid for is not his to assign; where a card has him assign, it is paid as the assignment is made; while it cannot be paid he may not make the assignment, and if it is not paid in full the assignment is not made.  Assignments the Shadow player makes are never charged.  See Morgul Spawn).
+    * minion
+      required; the minions charged for (usually "self")
+    * fpCharacter
+      optional; charges only for assignments against characters matching this filter (default: any character)
+    * cost [ ]
+      required; 1 or more costs, written with `player: fp`
+    * requires [ ]
+      optional
 * ExtraCostToPlay
  Adds an additional play `cost` to cards matching `filter`, so long as the `requires` requirements are met.  See Wrath of Harad).
     * filter
@@ -410,8 +440,12 @@ In general, although the names of modifiers are case-insensitive, the names of t
       required
     * requires [ ]
       optional
+* GandalfFirstSentenceInactive
+  Disables the first sentence of Gandalf's game text, so long as the `requires` requirements are met.  As with SarumanFirstSentenceInactive this is not automated: only the Gandalfs whose definitions gate that sentence on GandalfFirstSentenceActive (the Hobbit Draft Game's 30_25 to 30_28) answer it.  See Dark Sorcery 33_61 (F-0037, engine pass 79).
+    * requires [ ]
+      optional
 * HasToMoveIfAble
-  Forces the active Free Peoples player to choose to move, so long as the `requires` requirements are met.  The move limit must still permit a move.
+  Forces the active Free Peoples player to choose to move, so long as the `requires` requirements are met.  The move limit must still permit a move, and the fellowship must have an unhindered companion (CR 5.0 "hinder": with none the player cannot choose to move, and stays).
     * requires [ ]
       optional
 * ItemClassSpot

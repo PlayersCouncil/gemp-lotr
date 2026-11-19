@@ -1,6 +1,6 @@
 package com.gempukku.lotro.merchant;
 
-import com.gempukku.lotro.at.AbstractAtTest;
+import com.gempukku.lotro.framework.LoadedLibraries;
 import com.gempukku.lotro.db.MerchantDAO;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class StorageBasedMerchantTest extends AbstractAtTest {
+public class StorageBasedMerchantTest extends LoadedLibraries {
     private StorageBasedMerchant _merchant;
     private static final long DAY = 1000 * 60 * 60 * 24;
     private MockMerchantDAO _merchantDao;

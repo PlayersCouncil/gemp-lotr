@@ -17,16 +17,26 @@ public abstract class RevealTopCardsOfDrawDeckEffect extends AbstractEffect {
     private final PhysicalCard _source;
     private final String _deck;
     private final int _count;
+    private final boolean _allowFewer;
 
-    public RevealTopCardsOfDrawDeckEffect(PhysicalCard source, String deck, int count) {
+    /**
+     * @param allowFewer whether a draw deck holding at least one card, but fewer than {@code count}, carries the
+     *                   reveal out in full: true for a reveal done only to count the cards revealed (Q-0378)
+     */
+    public RevealTopCardsOfDrawDeckEffect(PhysicalCard source, String deck, int count, boolean allowFewer) {
         _source = source;
         _deck = deck;
         _count = count;
+        _allowFewer = allowFewer;
+    }
+
+    private int countNeeded() {
+        return _allowFewer ? Math.min(_count, 1) : _count;
     }
 
     @Override
     public boolean isPlayableInFull(LotroGame game) {
-        return game.getGameState().getDeck(_deck).size() >= _count;
+        return game.getGameState().getDeck(_deck).size() >= countNeeded();
     }
 
     @Override
@@ -63,7 +73,7 @@ public abstract class RevealTopCardsOfDrawDeckEffect extends AbstractEffect {
             }
         }
         cardsRevealed(topCards);
-        return new FullEffectResult(topCards.size() == _count);
+        return new FullEffectResult(topCards.size() >= countNeeded());
     }
 
     protected abstract void cardsRevealed(List<PhysicalCard> revealedCards);

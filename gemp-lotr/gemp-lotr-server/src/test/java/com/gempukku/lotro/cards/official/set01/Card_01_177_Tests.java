@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set01;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,7 @@ public class Card_01_177_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "1_177");
-					// put other cards in here as needed for the test case
+					put("troop", "1_177");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +40,12 @@ public class Card_01_177_Tests
 		 * Strength: 13
 		 * Vitality: 3
 		 * Site Number: 4
-		 * Game Text: &nbsp;
+		 * Game Text: (none)
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("troop");
 
 		assertEquals("Goblin Patrol Troop", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,20 +58,5 @@ public class Card_01_177_Tests
 		assertEquals(13, card.getBlueprint().getStrength());
 		assertEquals(3, card.getBlueprint().getVitality());
 		assertEquals(4, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void GoblinPatrolTroopTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(6, scn.GetTwilight());
 	}
 }

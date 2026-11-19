@@ -1,5 +1,6 @@
 # A throwaway Gemp server for the visual check (see ../README.md): its own project, port and in-memory database, so it
-# never touches the development server. Started and stopped by ../local-server.mjs.
+# never touches the development server. Started and stopped by ../local-server.mjs (and by ../game/local.mjs, under its
+# own project name and port). Every game gets the same random seed (GameRandom), so the same moves give the same game.
 name: gemp-visual-check
 
 services:
@@ -33,4 +34,5 @@ services:
       - ${CHECK_STATE_DIR}/ng/browser:/etc/gemp-lotr/web/ng:ro
     command: >-
       java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
+      -Dgemp.game.randomSeed=${CHECK_GAME_SEED:-20261112}
       /etc/gemp-lotr/gemp-lotr-async/target/web.jar

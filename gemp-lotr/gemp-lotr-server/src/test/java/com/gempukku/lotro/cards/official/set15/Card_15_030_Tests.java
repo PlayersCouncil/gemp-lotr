@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_15_030_Tests
@@ -18,8 +19,14 @@ public class Card_15_030_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "15_30");
-					// put other cards in here as needed for the test case
+					put("leaflock", "15_30");
+					// Ent Avenger: Ent companion, cost 4, not unique; strength +2 only with 3 Ents. One to play
+					// and one to sit in the hand beside Leaflock, its cost changed by nothing
+					put("avenger", "6_27");
+					put("avenger2", "6_27");
+					put("treebeard", "4_104");  // Treebeard, Oldest Living Thing: the Ent who is an ally
+					put("onod", "17_26");       // Woodland Onod: Ent companion, strength 7; a skirmish ability used only on purpose
+					put("gandalf", "1_72");     // Gandalf, Friend of the Shirefolk: a [gandalf] companion who is no Ent
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +54,7 @@ public class Card_15_030_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("leaflock");
 
 		assertEquals("Leaflock", card.getBlueprint().getTitle());
 		assertEquals("Finglas", card.getBlueprint().getSubtitle());
@@ -62,18 +69,73 @@ public class Card_15_030_Tests
 		assertEquals(6, card.getBlueprint().getResistance());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void LeaflockTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void CostsOneLessForEachEntCompanionOrAllyInPlayAndNothingForAnotherCompanion() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var leaflock = scn.GetFreepsCard("leaflock");
+		var avenger = scn.GetFreepsCard("avenger");
+		var avenger2 = scn.GetFreepsCard("avenger2");
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToHand(leaflock, avenger, avenger2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
 
-		assertEquals(7, scn.GetTwilight());
+		// Frodo and Gandalf are no Ents: nothing off. The Ent Avenger in the same hand costs its printed 4.
+		assertEquals(7, scn.GetTwilightCost(leaflock));
+		assertEquals(4, scn.GetTwilightCost(avenger2));
+
+		scn.FreepsPlayCard(avenger);
+		assertInZone(Zone.FREE_CHARACTERS, avenger);
+
+		// One Ent companion in play.
+		assertEquals(6, scn.GetTwilightCost(leaflock));
+		assertEquals(4, scn.GetTwilightCost(avenger2));
+
+		scn.MoveAlliesToTable(treebeard);
+		scn.FreepsRefreshDecision();
+
+		// An Ent companion and an Ent ally.
+		assertEquals(5, scn.GetTwilightCost(leaflock));
+		assertEquals(4, scn.GetTwilightCost(avenger2));
+
+		assertEquals(4, scn.GetTwilight());
+		scn.FreepsPlayCard(leaflock);
+		// 4 from the Ent Avenger + (7 - 2)
+		assertEquals(9, scn.GetTwilight());
+		assertInZone(Zone.FREE_CHARACTERS, leaflock);
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void IsStrengthPlus4OnceAFourthOtherEntIsPlayed() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var leaflock = scn.GetFreepsCard("leaflock");
+		var avenger = scn.GetFreepsCard("avenger");
+		var avenger2 = scn.GetFreepsCard("avenger2");
+		var treebeard = scn.GetFreepsCard("treebeard");
+		var onod = scn.GetFreepsCard("onod");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		scn.MoveCompanionsToTable(leaflock, avenger, onod, gandalf);
+		scn.MoveAlliesToTable(treebeard);
+		scn.MoveCardsToHand(avenger2);
+
+		scn.StartGame();
+
+		// Four Ents counting Leaflock himself, three other: an Ent Avenger, Woodland Onod and Treebeard the ally.
+		// Gandalf is no Ent.
+		assertEquals(8, scn.GetStrength(leaflock));
+		assertEquals(7, scn.GetStrength(onod));
+
+		scn.FreepsPlayCard(avenger2);
+		assertInZone(Zone.FREE_CHARACTERS, avenger2);
+
+		// Four other Ents, the ally among them. The bonus is Leaflock's alone.
+		assertEquals(12, scn.GetStrength(leaflock));
+		assertEquals(7, scn.GetStrength(onod));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

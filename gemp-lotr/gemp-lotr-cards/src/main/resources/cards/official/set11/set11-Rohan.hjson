@@ -576,6 +576,7 @@
 						type: modifyMoveLimit
 						amount: 1
 					}
+					until: endOfTurn
 				}
 				limitPerTurn: 1
 			}
@@ -634,11 +635,7 @@
 				type: modifier
 				modifier: {
 					type: addKeyword
-					requires: {
-						type: location
-						filter: plains
-					}
-					filter: bearer
+					filter: bearer,atSite(plains)
 					keyword: defender
 					amount: 1
 				}
@@ -682,6 +679,10 @@
 				trigger: {
 					type: played
 					filter: side(shadow),condition
+				}
+				requires: {
+					type: canSpot
+					filter: minion,canExert
 				}
 				effect: {
 					type: exert
@@ -743,15 +744,23 @@
 					filter: culture(rohan),possession
 					memorize: discardedPossession
 				}
-				requires: {
-					type: not
-					requires: {
-						type: hasCardStacked
-						filter: possession
-						on: self
-						count: 2
+				requires: [
+					{
+						type: not
+						requires: {
+							type: hasCardStacked
+							filter: possession
+							on: self
+							count: 2
+						}
 					}
-				}
+					# Once the possession has been stacked (here or on another copy) it is no longer in the
+					# discard pile, and the response is not offered for it again
+					{
+						type: HasCardInDiscard
+						filter: memory(discardedPossession)
+					}
+				]
 				effect: {
 					type: stackCardsFromDiscard
 					select: memory(discardedPossession)

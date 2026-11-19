@@ -1,5 +1,6 @@
 package com.gempukku.lotro.cards.build.field.effect.appender;
 
+import com.gempukku.lotro.cards.build.field.effect.EffectForecast;
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.CardGenerationEnvironment;
 import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
@@ -20,6 +21,8 @@ import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class RemoveKeyword implements EffectAppenderProducer {
     @Override
@@ -36,20 +39,37 @@ public class RemoveKeyword implements EffectAppenderProducer {
         if (keywords.isEmpty() && keywordFromMemory == null)
             throw new InvalidCardDefinitionException("Keyword or keywordFromMemory is required");
 
-        MultiEffectAppender result = new MultiEffectAppender();
+        final EffectAppender cardResolver =
+                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to remove keyword from", environment);
 
-        result.addEffectAppender(
-                CardResolver.resolveCards(select, valueSource, memory, "you", "Choose cards to remove keyword from", environment));
+        MultiEffectAppender result = new MultiEffectAppender() {
+            // About to be carried out with no card to take the keyword from, it does nothing.
+            @Override
+            public EffectForecast forecast(ActionContext actionContext) {
+                return EffectForecast.foundAtResolution(actionContext, cardResolver);
+            }
+        };
+
+        result.addEffectAppender(cardResolver);
         result.addEffectAppender(
                 new DelayedAppender() {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory(memory);
+                        // The keywords of THIS use: the definition's own and the one named into memory. The
+                        // definition's set is shared by every use in every game and is never written to (F-0487).
+                        final Set<Keyword> keywordsOfThisUse = EnumSet.noneOf(Keyword.class);
+                        keywordsOfThisUse.addAll(keywords);
                         if (keywordFromMemory != null) {
-                            keywords.add(Keyword.parse(actionContext.getValueFromMemory(keywordFromMemory)));
+                            // "" is no keyword named (chooseAKeyword's noneOption; Q-0282).
+                            final String named = actionContext.getValueFromMemory(keywordFromMemory);
+                            if (!named.isEmpty())
+                                keywordsOfThisUse.add(Keyword.parse(named));
                         }
+                        if (keywordsOfThisUse.isEmpty())
+                            return null;
                         return new AddUntilModifierEffect(
-                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keywords), until);
+                                new RemoveKeywordModifier(actionContext.getSource(), Filters.in(cardsFromMemory), null, keywordsOfThisUse), until);
                     }
                 });
 

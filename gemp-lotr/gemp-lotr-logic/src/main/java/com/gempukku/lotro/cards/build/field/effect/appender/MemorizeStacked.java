@@ -35,7 +35,7 @@ public class MemorizeStacked implements EffectAppenderProducer {
         final FilterableSource filterSource = environment.getFilterFactory().generateFilter(filter, environment);
         final FilterableSource onFilterSource = environment.getFilterFactory().generateFilter(on, environment);
 
-        return new DelayedAppender() {
+        return new BookkeepingAppender() {
             @Override
             protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                 return new UnrespondableEffect() {

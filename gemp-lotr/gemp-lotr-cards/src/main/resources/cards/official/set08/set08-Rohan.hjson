@@ -22,11 +22,12 @@
 			cost: {
 				type: discard
 				select: choose(culture(rohan),possession)
+				memorize: discardedPossession
 			},
 			effect: [
 				{
 					type: playCardFromDiscard
-					select: choose(culture(rohan),possession)
+					select: choose(culture(rohan),possession,not(memory(discardedPossession)))
 				}
 			]
 		}
@@ -126,13 +127,19 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: not
-					requires: {
-						type: phase
-						phase: play starting fellowship
+				// Withheld with the draw deck empty: there is nothing to reveal (Ketura's ruling, Q-0348, folded into this card 2026-10-26).
+				requires: [
+					{
+						type: not
+						requires: {
+							type: phase
+							phase: play starting fellowship
+						}
 					}
-				}
+					{
+						type: HasCardInDrawDeck
+					}
+				]
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck

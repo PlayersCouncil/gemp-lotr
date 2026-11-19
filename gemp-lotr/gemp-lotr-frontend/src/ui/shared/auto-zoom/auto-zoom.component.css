@@ -3,8 +3,9 @@
 .gd-zoom {
   --long: max(var(--gd-zoom-width), var(--gd-zoom-height));
   position: fixed;
-  left: var(--gd-zoom-left);
-  top: var(--gd-zoom-top);
+  /* A page may draw it shifted from where it is placed (the legacy game page drew it inside its body's 8px margin) */
+  left: calc(var(--gd-zoom-left) + var(--gd-zoom-shift, 0px));
+  top: calc(var(--gd-zoom-top) + var(--gd-zoom-shift, 0px));
   z-index: 1099;
   /* Without the browser's own look for popovers */
   right: auto;
@@ -17,6 +18,12 @@
   width: var(--gd-zoom-width);
   height: var(--gd-zoom-height);
   pointer-events: none;
+}
+
+/* Kept in the page (not a popover): placed in the page, not fixed, so the browser draws it as the page (its own layer
+ * would lose the text's subpixel colours) */
+.gd-zoom[data-in-page] {
+  position: absolute;
 }
 
 .gd-zoom > img {

@@ -17,11 +17,15 @@
 			type: event
 			effect: [
 				{
-					type: modifyStrength
-					select: choose(hobbit)
-					amount: {
+					type: repeat
+					times: {
 						type: forEachYouCanSpot
 						filter: or(dwelling,forest),zone(adventure path)
+					}
+					effect: {
+						type: modifyStrength
+						select: choose(hobbit)
+						amount: 1
 					}
 				}
 			]

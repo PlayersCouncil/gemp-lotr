@@ -273,10 +273,14 @@ public class OpenAndPlayFromBoosterPack implements EffectAppenderProducer {
                         }
                     });
 
-            // Also show to opponent (non-interactive reveal)
-            String opponent = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_player, false).getNextPlayer();
-            if (opponent != null && !opponent.equals(_player)) {
-                game.getUserFeedback().sendAwaitingDecision(opponent,
+            // Also show to every other player (non-interactive reveal).  The play order starts with _player,
+            // so the first name it gives is skipped, not taken for the opponent.
+            var playOrder = game.getGameState().getPlayerOrder().getCounterClockwisePlayOrder(_player, false);
+            String otherPlayer;
+            while ((otherPlayer = playOrder.getNextPlayer()) != null) {
+                if (otherPlayer.equals(_player))
+                    continue;
+                game.getUserFeedback().sendAwaitingDecision(otherPlayer,
                         new ArbitraryCardsSelectionDecision(1, _player + " reveals booster pack contents",
                                 displayCards, Collections.emptyList(), 0, 0) {
                             @Override

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_17_130_Tests
@@ -17,8 +18,20 @@ public class Card_17_130_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "17_130");
-					// put other cards in here as needed for the test case
+					// White Hand Scout: cost 2, site number 5
+					put("scout1", "17_130");
+					put("scout2", "17_130");   // not unique: the penalty is lowered once for each copy in play
+					put("scout3", "17_130");
+					// White Hand Butcher: an [uruk-hai] Uruk-hai, cost 4, site number 5; Hunter 6 is its whole text
+					put("butcher1", "17_122");
+					put("butcher2", "17_122");
+					// Saruman, Master of the White Hand: an [uruk-hai] minion who is no Uruk-hai (a Wizard), cost 4,
+					// site number 4; each companion resistance -1, and a skirmish ability
+					put("saruman", "17_116");
+					// Tracking Uruk: an [uruk-hai] Uruk-hai, cost 5, site number 5; Hunter 1 is its whole text
+					put("tracker", "15_171");
+					// Uruk Savage: an [isengard] Uruk-hai, cost 2, site number 5; Damage +1 is its whole text
+					put("savage", "1_151");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -46,37 +59,119 @@ public class Card_17_130_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var scout = scn.GetFreepsCard("scout1");
 
-		assertEquals("White Hand Scout", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertTrue(scn.HasKeyword(card, Keyword.HUNTER));
-		assertEquals(2, scn.GetKeywordCount(card, Keyword.HUNTER));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
-		assertEquals(5, card.getBlueprint().getStrength());
-		assertEquals(3, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		assertEquals("White Hand Scout", scout.getBlueprint().getTitle());
+		assertNull(scout.getBlueprint().getSubtitle());
+		assertFalse(scout.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, scout.getBlueprint().getSide());
+		assertEquals(Culture.URUK_HAI, scout.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, scout.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, scout.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(scout, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(scout, Keyword.DAMAGE));
+		assertTrue(scn.HasKeyword(scout, Keyword.HUNTER));
+		assertEquals(2, scn.GetKeywordCount(scout, Keyword.HUNTER));
+		assertEquals(2, scout.getBlueprint().getTwilightCost());
+		assertEquals(5, scout.getBlueprint().getStrength());
+		assertEquals(3, scout.getBlueprint().getVitality());
+		assertEquals(5, scout.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WhiteHandScoutTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void TheNextUrukHaiMinionPaysOneLessForRoamingAndTheScoutItselfPaysThePenaltyInFull() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var scout1 = scn.GetShadowCard("scout1");
+		var scout2 = scn.GetShadowCard("scout2");
+		var scout3 = scn.GetShadowCard("scout3");
+		var butcher1 = scn.GetShadowCard("butcher1");
+		var butcher2 = scn.GetShadowCard("butcher2");
+		var saruman = scn.GetShadowCard("saruman");
+		var tracker = scn.GetShadowCard("tracker");
+		var savage = scn.GetShadowCard("savage");
+		scn.MoveCardsToHand(scout1, scout2, scout3, butcher1, butcher2, saruman, tracker, savage);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(40);
+		scn.FreepsPass();
 
-		assertEquals(2, scn.GetTwilight());
+		// Site 2: every minion here is roaming, and the penalty is 2.
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		// 40 set + 1 companion + 2 for Ettenmoors
+		assertEquals(43, scn.GetTwilight());
+
+		scn.ShadowPlayCard(scout1);
+		// 2 to play + 2 roaming: its own text is not in force while it is being played
+		assertEquals(39, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, scout1);
+
+		scn.ShadowPlayCard(butcher1);
+		// An [uruk-hai] Uruk-hai: 4 to play + 2 roaming - 1 for the Scout.  The penalty is less; the minion is no less roaming.
+		assertEquals(34, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(butcher1, Keyword.ROAMING));
+
+		scn.ShadowPlayCard(saruman);
+		// An [uruk-hai] minion who is no Uruk-hai, roaming below his site 4: 4 to play + 2 roaming - 1
+		assertEquals(29, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(saruman, Keyword.ROAMING));
+
+		scn.ShadowPlayCard(savage);
+		// An [isengard] Uruk-hai: 2 to play + 2 roaming
+		assertEquals(25, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, savage);
+
+		scn.ShadowPlayCard(scout2);
+		// 2 to play + 2 roaming - 1 for the first Scout, and nothing for itself
+		assertEquals(22, scn.GetTwilight());
+		assertInZone(Zone.SHADOW_CHARACTERS, scout2);
+
+		scn.ShadowPlayCard(tracker);
+		// Two Scouts in play: 5 to play + 2 roaming - 2
+		assertEquals(17, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(tracker, Keyword.ROAMING));
+
+		scn.ShadowPlayCard(scout3);
+		// 2 to play + 2 roaming - 2
+		assertEquals(15, scn.GetTwilight());
+
+		scn.ShadowPlayCard(butcher2);
+		// Three Scouts in play take the penalty of 2 to nothing and no lower: 4 to play, not 4 - 1
+		assertEquals(11, scn.GetTwilight());
+		assertTrue(scn.HasKeyword(butcher2, Keyword.ROAMING));
+		assertInZone(Zone.SHADOW_CHARACTERS, butcher2);
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AnUrukHaiMinionWhoIsNotRoamingPaysHisPrintedCostAndNoLess() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var scout1 = scn.GetShadowCard("scout1");
+		var butcher1 = scn.GetShadowCard("butcher1");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.FreepsPass();
+
+		// Site 5, the site number of the Butcher: he pays no roaming penalty for the Scout to make less.
+		assertEquals(5, scn.GetCurrentSiteNumber());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		scn.MoveMinionsToTable(scout1);
+		scn.SetShadowHand(butcher1);
+
+		scn.SetTwilight(3);
+		scn.ShadowRefreshDecision();
+		assertFalse(scn.ShadowPlayAvailable(butcher1));
+
+		scn.SetTwilight(4);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowPlayAvailable(butcher1));
+
+		scn.ShadowPlayCard(butcher1);
+		assertEquals(0, scn.GetTwilight());
+		assertFalse(scn.HasKeyword(butcher1, Keyword.ROAMING));
+		assertInZone(Zone.SHADOW_CHARACTERS, butcher1);
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -59,6 +59,12 @@ public class Discarded implements TriggerCheckerProducer {
 
                     if(result) {
                         var discardResult = (DiscardCardsFromPlayResult) actionContext.getEffectResult();
+                        // A character that was killed was not discarded, though it is reported as having gone
+                        // to the discard pile (CR 4.2 "killed": "Cards that trigger when a character is killed
+                        // will not trigger when a character is discarded, and vice-versa"; F-0444).  A text
+                        // that says "killed or discarded" has a `killed` trigger beside this one.
+                        if (discardResult.isKilled())
+                            return false;
                         source = discardResult.getSource();
                         //TODO: Add proper forcefulness detection to in-play discards
                         forced = false;

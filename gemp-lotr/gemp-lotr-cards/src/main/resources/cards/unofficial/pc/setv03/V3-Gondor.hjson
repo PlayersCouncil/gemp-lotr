@@ -61,7 +61,7 @@
 				}
 			}
 		]
-		gametext: Bearer must be Aragorn.  He is <b>damage +1</b>.<br>Response: If an unbound companion is about to take a wound (except Aragorn),<br>add 2 threats to hinder that companion.<br>Add (2) unless that companion was [gondor] or a Man.
+		gametext: Bearer must be Aragorn.  He is <b>damage +1</b>.<br>Response: If an unbound companion (except Aragorn) is about to take a wound,<br>add 2 threats to hinder that companion.<br>Add (2) unless that companion was [gondor] or a Man.
 		lore: "'Here is the Sword that was Broken and is forged again! Will you aid me or thwart me? Choose swiftly!'"
 		promotext: ""
 		alts: {
@@ -233,7 +233,7 @@
 				}
 			}
 		]
-		gametext: Aragorn is strength +1 for each culture among other Men you can spot.\Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
+		gametext: Aragorn is strength +1 for each culture among other Men you can spot. Each time the fellowship moves, you may exert Aragorn and hinder another unbound Man to remove a threat or a burden.
 		lore: "Out from the beleaguered hills knights of Gondor, Riders of Rohan, Dúnedain of the North, close-serried companies, drove against their wavering foes..."
 		promotext: ""
 		alts: {
@@ -354,10 +354,14 @@
 					type: WinsSkirmish
 					filter: bearer
 				}
+				requires: {
+					type: CanSpot
+					filter: Wraith,canExert
+				}
 				effect: [
 					{
 						type: Exert
-						select: choose(your,Wraith)
+						select: choose(Wraith)
 						memorize: exertedWraith
 					}
 					{
@@ -430,7 +434,7 @@
 					amount: 2
 					requires: {
 						type: CanSpot
-						filter: Wraith
+						filter: culture(gondor),Wraith
 						count: 2
 					}
 				}
@@ -517,7 +521,8 @@
 				}
 			}
 			{
-				type: Response
+				type: Trigger
+				optional: true
 				trigger: {
 					type: UsesSpecialAbility
 					filter: side(Shadow)
@@ -535,10 +540,6 @@
 					}
 					{
 						type: CostToEffect
-						requires: {
-							type: CanSpot
-							filter: NameFromMemory(activatedCard),not(memory(activatedCard))
-						}
 						cost: {
 							type: Exert
 							select: choose(knight)
@@ -546,15 +547,8 @@
 								type: Range
 								from: 0
 								to: {
-									type: Min
-									firstNumber: {
-										type: ForEachYouCanSpot
-										filter: knight,CanExert
-									}
-									secondNumber: {
-										type: ForEachYouCanSpot
-										filter: NameFromMemory(activatedCard),not(memory(activatedCard))
-									}
+									type: ForEachYouCanSpot
+									filter: knight,CanExert
 								}
 							}
 							memorize: exertedKnights
@@ -1191,6 +1185,11 @@
 			{
 				type: Activated
 				phase: Archery
+				requires: {
+					type: CanSpot
+					filter: or(and(hinderable,beacon),and(or(Gondor,Rohan),or(condition,possession)))
+					count: 2
+				}
 				cost: [
 					{
 						type: Hinder
@@ -1199,8 +1198,16 @@
 							type: Range
 							from: 1
 							to: {
-								type: ForEachYouCanSpot
-								filter: hinderable, beacon
+								type: Min
+								firstNumber: {
+									type: ForEachYouCanSpot
+									filter: hinderable, beacon
+								}
+								secondNumber: {
+									type: ForEachYouCanSpot
+									filter: or(and(hinderable,beacon),and(or(Gondor,Rohan),or(condition,possession)))
+									divider: 2
+								}
 							}
 						}
 						memorize: hinderedBeacons
@@ -1297,7 +1304,7 @@
 				]
 			}
 		]
-		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords until the regroup phase.
+		gametext: Knight. Enduring. To play, spot a [gondor] companion.<br>Skirmish: Exert Pippin twice to make a minion he is skirmishing lose all keywords (except race) until the regroup phase.
 		lore: "'But now I must do my best...then almost I should draw level with old Merry. Well, I'll smite some of this beastly brood before the end.'"
 		promotext: ""
 		alts: {
@@ -1334,19 +1341,28 @@
 			{
 				type: extraCost
 				cost: {
-					type: If
-					check: {
-						type: CanSpotThreats
-						amount: 2
-					}
-					true: {
-						type: Spot
-						filter: any
-					}
-					false: {
-						type: addThreats
-						amount: 2
-					}
+					type: Choice
+					texts: [
+						Spot 2 threats
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: If
+							check: {
+								type: CanSpotThreats
+								amount: 2
+							}
+							true: {
+								type: Spot
+								filter: any
+							}
+						}
+						{
+							type: addThreats
+							amount: 2
+						}
+					]
 				}
 			}
 			{
@@ -1838,6 +1854,7 @@
 						{
 							type: Discard
 							select: choose(side(Shadow), condition)
+							memorize: chosenForDiscard
 						}
 						{
 							type: Optional
@@ -1848,7 +1865,7 @@
 							}
 							effect: {
 								type: Hinder
-								select: choose(side(Shadow), condition)
+								select: choose(side(Shadow), condition, not(memory(chosenForDiscard)))
 							}
 						}
 					]

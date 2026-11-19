@@ -181,10 +181,16 @@
 					type: startOfPhase
 					phase: skirmish
 				}
-				requires: {
-					type: canSpot
-					filter: self,inSkirmish
-				}
+				// Withheld with the draw deck empty: there is nothing to reveal (Ketura's ruling, Q-0348, as Q-0148).
+				requires: [
+					{
+						type: canSpot
+						filter: self,inSkirmish
+					}
+					{
+						type: HasCardInDrawDeck
+					}
+				]
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck
@@ -314,10 +320,16 @@
 					type: startOfPhase
 					phase: skirmish
 				}
-				requires: {
-					type: canSpot
-					filter: self,inSkirmish
-				}
+				// Withheld with the draw deck empty: there is nothing to reveal (Ketura's ruling, Q-0348, as Q-0148).
+				requires: [
+					{
+						type: canSpot
+						filter: self,inSkirmish
+					}
+					{
+						type: HasCardInDrawDeck
+					}
+				]
 				effect: [
 					{
 						type: revealTopCardsOfDrawDeck

@@ -17,10 +17,29 @@ public class Card_18_124_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "18_124");
-					// put other cards in here as needed for the test case
+					put("attacker", "18_124");
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	// The Towers path: site 1 (Eastemnet Gullies) has no terrain, site 2 (Uruk Camp) is a battleground and a plains,
+	// site 4 (White Rocks) a battleground and no plains.
+	protected VirtualTableScenario GetTowersScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("attacker", "18_124");
+					put("attacker2", "18_124");
+					put("legion", "11_88");     // Legion of Harad: a [men] Man minion with no text but toil, strength 14
+				}},
+				new HashMap<>()
+				{{
+					putAll(VirtualTableScenario.TowersSites);
+					put("site2", "4_335");      // Uruk Camp: Battleground. Plains. Exerts each Uruk-hai played; none is played here
+				}},
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -46,36 +65,71 @@ public class Card_18_124_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var attacker = scn.GetFreepsCard("attacker");
 
-		//Decipher screwed up and also assigned this name to 17C120
-		assertEquals("White Hand Attacker(2)", card.getBlueprint().getTitle());
-		assertNull(card.getBlueprint().getSubtitle());
-		assertFalse(card.getBlueprint().isUnique());
-		assertEquals(Side.SHADOW, card.getBlueprint().getSide());
-		assertEquals(Culture.URUK_HAI, card.getBlueprint().getCulture());
-		assertEquals(CardType.MINION, card.getBlueprint().getCardType());
-		assertEquals(Race.URUK_HAI, card.getBlueprint().getRace());
-		assertTrue(scn.HasKeyword(card, Keyword.DAMAGE));
-		assertEquals(1, scn.GetKeywordCount(card, Keyword.DAMAGE));
-		assertEquals(3, card.getBlueprint().getTwilightCost());
-		assertEquals(8, card.getBlueprint().getStrength());
-		assertEquals(2, card.getBlueprint().getVitality());
-		assertEquals(5, card.getBlueprint().getSiteNumber());
+		// Decipher also gave this title to White Hand Attacker 17_120; the two are ruled separate titles (F-0004),
+		// and the "(2)" is never shown to players.
+		assertEquals("White Hand Attacker(2)", attacker.getBlueprint().getTitle());
+		assertNull(attacker.getBlueprint().getSubtitle());
+		assertFalse(attacker.getBlueprint().isUnique());
+		assertEquals(Side.SHADOW, attacker.getBlueprint().getSide());
+		assertEquals(Culture.URUK_HAI, attacker.getBlueprint().getCulture());
+		assertEquals(CardType.MINION, attacker.getBlueprint().getCardType());
+		assertEquals(Race.URUK_HAI, attacker.getBlueprint().getRace());
+		assertTrue(scn.HasKeyword(attacker, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(attacker, Keyword.DAMAGE));
+		assertEquals(3, attacker.getBlueprint().getTwilightCost());
+		assertEquals(8, attacker.getBlueprint().getStrength());
+		assertEquals(2, attacker.getBlueprint().getVitality());
+		assertEquals(5, attacker.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void WhiteHandAttackerTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
+	@Test
+	public void IsStrengthPlus2OnceTheFellowshipIsAtABattlegroundAndNoOtherMinionIs() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var attacker = scn.GetShadowCard("attacker");
+		var attacker2 = scn.GetShadowCard("attacker2");
+		var legion = scn.GetShadowCard("legion");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Laid early, in the fellowship phase at site 1, to be read before and after the move.
+		scn.MoveMinionsToTable(attacker, attacker2, legion);
 
-		assertEquals(3, scn.GetTwilight());
+		assertEquals(1, scn.GetCurrentSiteNumber());
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertEquals(8, scn.GetStrength(attacker));
+		assertEquals(8, scn.GetStrength(attacker2));
+		assertEquals(14, scn.GetStrength(legion));
+
+		// The fellowship moves to Uruk Camp.
+		scn.FreepsPass();
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		// 8 + 2 on each copy, for itself alone (not 8 + 4); another minion at the same battleground is not strengthened.
+		assertEquals(10, scn.GetStrength(attacker));
+		assertEquals(10, scn.GetStrength(attacker2));
+		assertEquals(14, scn.GetStrength(legion));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsStrengthPlus2AtABattlegroundThatIsNoPlains() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetTowersScenario();
+
+		var attacker = scn.GetShadowCard("attacker");
+		var legion = scn.GetShadowCard("legion");
+
+		scn.StartGame();
+		scn.SkipToSite(4);
+		scn.MoveMinionsToTable(attacker, legion);
+
+		// White Rocks.
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		assertTrue(scn.HasKeyword(scn.GetCurrentSite(), Keyword.BATTLEGROUND));
+		assertFalse(scn.HasKeyword(scn.GetCurrentSite(), Keyword.PLAINS));
+		assertEquals(10, scn.GetStrength(attacker));
+		assertEquals(14, scn.GetStrength(legion));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

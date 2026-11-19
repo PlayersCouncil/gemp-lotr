@@ -1,9 +1,8 @@
 package com.gempukku.lotro.cards.official.set07;
 
-import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
+import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,8 +17,19 @@ public class Card_07_213_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_213");
-					// put other cards in here as needed for the test case
+					put("lemenya", "7_213");
+					// Úlairë Cantëa, Lieutenant of Dol Guldur: [wraith] Nazgûl, strength 10, fierce; a skirmish ability
+					// used only on purpose
+					put("cantea", "1_230");
+					// In Twilight: [wraith] condition, no minion; bearer must be a [wraith] minion, strength +2; its
+					// triggers answer its play and its bearer's win
+					put("twilight", "19_34");
+					// Ulaire Attea, Khamul of the East: a Nazgûl minion of [raider], strength 12; his text needs burdens
+					put("khamul", "103_61");
+					// Morgul Hound: [wraith] Orc, cost 2, site 4, strength 5; +4 and fierce only at 2 wounds on the
+					// Ring-bearer
+					put("hound1", "7_192");
+					put("hound2", "7_192");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +57,7 @@ public class Card_07_213_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lemenya");
 
 		assertEquals("Úlairë Lemenya", card.getBlueprint().getTitle());
 		assertEquals("Assailing Minion", card.getBlueprint().getSubtitle());
@@ -62,18 +72,55 @@ public class Card_07_213_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void UlaireLemenyaTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void StrengthFierceAndDamageGrowWithTheWraithMinionsSpottedAsTheyArePlayed() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var lemenya = scn.GetShadowCard("lemenya");
+		var cantea = scn.GetShadowCard("cantea");
+		var twilight = scn.GetShadowCard("twilight");
+		var khamul = scn.GetShadowCard("khamul");
+		var hound1 = scn.GetShadowCard("hound1");
+		var hound2 = scn.GetShadowCard("hound2");
+		scn.MoveCardsToHand(hound1, hound2);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SetTwilight(20);
+		scn.MoveMinionsToTable(lemenya, cantea, khamul);
+		scn.AttachCardsTo(cantea, twilight);
+		scn.FreepsPass();
 
-		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+		// 9 + 1: Cantëa is the one other [wraith] minion.  Khamûl (a Nazgûl, but [raider]) and In Twilight (a
+		// [wraith] card, but no minion) are not counted, nor is Lemenya himself.
+		assertEquals(10, scn.GetStrength(lemenya));
+		// Two [wraith] minions, himself included.
+		assertFalse(scn.HasKeyword(lemenya, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(lemenya, Keyword.DAMAGE));
+		// 10 + 2 for In Twilight
+		assertEquals(12, scn.GetStrength(cantea));
+		assertEquals(12, scn.GetStrength(khamul));
+
+		scn.ShadowPlayCard(hound1);
+		// 9 + 2, and three [wraith] minions
+		assertEquals(11, scn.GetStrength(lemenya));
+		assertTrue(scn.HasKeyword(lemenya, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(lemenya, Keyword.DAMAGE));
+		assertEquals(5, scn.GetStrength(hound1));
+		assertFalse(scn.HasKeyword(hound1, Keyword.FIERCE));
+
+		scn.ShadowPlayCard(hound2);
+		// 9 + 3, and four [wraith] minions
+		assertEquals(12, scn.GetStrength(lemenya));
+		assertTrue(scn.HasKeyword(lemenya, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(lemenya, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(lemenya, Keyword.DAMAGE));
+		// The others are untouched.
+		assertEquals(12, scn.GetStrength(cantea));
+		assertEquals(12, scn.GetStrength(khamul));
+		assertEquals(5, scn.GetStrength(hound1));
+		assertFalse(scn.HasKeyword(hound1, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(hound1, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -6,6 +6,11 @@ import { CardView } from './card-view';
 export class CardInfoService {
   readonly card = signal<CardView | null>(null);
   /**
+   * What the page says about the card beside it (HTML; a game's modifiers on the card), or null for nothing. The view
+   * sanitizes it.
+   */
+  readonly details = signal<string | null>(null);
+  /**
    * Shown by a gesture (dragging a card up, or a long press on a touch screen): the click that ends it, and the context
    * menu a touch browser sends for a long press, don't close it.
    */
@@ -16,11 +21,13 @@ export class CardInfoService {
   }
 
   show(card: CardView): void {
+    this.details.set(null);
     this.card.set(card);
   }
 
   showDragged(card: CardView): void {
     this.dragRelease = true;
+    this.details.set(null);
     this.card.set(card);
   }
 
@@ -43,5 +50,6 @@ export class CardInfoService {
 
   close(): void {
     this.card.set(null);
+    this.details.set(null);
   }
 }

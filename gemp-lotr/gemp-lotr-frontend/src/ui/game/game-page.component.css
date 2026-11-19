@@ -1,0 +1,377 @@
+/*
+ * The game page's frame (gameUi.js layoutUI). The legacy page computed every box from the window; here the same
+ * sizes are a grid:
+ * - columns: the adventure path (150px in a 1px border), the game state (145px), the table (the rest), 3px apart
+ *   (the legacy 5px between boxes, less their borders);
+ * - the table's rows share the height in the legacy proportions (--u is one share);
+ * - the tab box is as high as the hand's row (at least 175px; a spectator has no hand: 200px).
+ */
+
+:host {
+  /* The shared colour slots in the game's own colours (themes.css: the same in classic, Middle-earth in modern) */
+  --theme-text: var(--theme-game-ui-text);
+  --theme-widget-text: var(--theme-game-ui-widget-text);
+  --theme-page-bg: var(--theme-game-ui-page-bg);
+  --theme-content-bg: var(--theme-game-ui-content-bg);
+  --theme-default-bg: var(--theme-game-ui-default-bg);
+  --theme-hover-bg: var(--theme-game-ui-hover-bg);
+  --theme-header-bg: var(--theme-game-ui-header-bg);
+  --theme-content-border: var(--theme-game-ui-content-border);
+  --theme-header-border: var(--theme-game-ui-header-border);
+  --theme-separator: var(--theme-game-ui-separator);
+  --theme-widget-border: var(--theme-game-ui-widget-border);
+  --theme-hover-border: var(--theme-game-ui-hover-border);
+  --theme-active-border: var(--theme-game-ui-active-border);
+  --theme-active-bg: var(--theme-game-ui-active-bg);
+  --theme-focus-ring-inner: var(--theme-game-ui-focus-ring-inner);
+  --theme-focus-ring-outer: var(--theme-game-ui-focus-ring-outer);
+  --theme-backdrop: var(--theme-game-ui-backdrop);
+  --theme-field-bg: var(--theme-game-ui-field-bg);
+  --theme-field-border-light: var(--theme-game-ui-field-border-light);
+  --theme-field-border-dark: var(--theme-game-ui-field-border-dark);
+  --theme-link-visited: var(--theme-game-ui-link-visited);
+  --theme-slider-fill: var(--theme-game-ui-slider-fill);
+  --theme-scrollbar-thumb: var(--theme-game-ui-scrollbar-thumb);
+  --theme-scrollbar-track: var(--theme-game-ui-scrollbar-track);
+  --theme-scrollbar-button: var(--theme-game-ui-scrollbar-button);
+  --theme-frame-shadow: var(--theme-game-ui-frame-shadow);
+  --u: calc((var(--gd-window-height, 100vh) - 35px) / 49);
+  --tabs: max(175px, 10 * var(--u));
+  /* The rows' shares of the height */
+  --r1: 5;
+  --r2: 9;
+  --r3: 9;
+  --r4: 10;
+  --r5: 6;
+  --r6: 10;
+  /* Not fixed: that would draw the page's dialogs on a layer of their own, without subpixel text */
+  position: absolute;
+  inset: 0;
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: 152px 147px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) 36px calc(var(--tabs) + 2px);
+  grid-template-areas:
+    'path state table'
+    'stats state table'
+    'tabs tabs table';
+  gap: 3px;
+  padding: 5px 3px 3px 5px;
+  overflow: hidden;
+  background: var(--theme-page-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-text);
+  font-size: 12px;
+  /* game.css coloured the links in its dialogs */
+  --gd-card-info-link: var(--theme-game-text-link);
+  --gd-card-info-hint: var(--theme-game-card-hint);
+  --gd-card-info-link-visited: var(--theme-game-text-link-visited);
+  /*
+   * The size slider's handle, focused as it opens, looked as under the mouse there; the browser drew its ring only
+   * after the keyboard (a shift click)
+   */
+  --gd-card-info-quiet-focus-border: var(--theme-hover-border);
+  --gd-card-info-quiet-focus-ring: none;
+  /* game.html kept the browser's 8px body margin, inside which its hover zoom was drawn */
+  --gd-zoom-shift: 8px;
+}
+
+:host([data-spectator]) {
+  --u: calc((var(--gd-window-height, 100vh) - 30px) / 42);
+  --tabs: 200px;
+  --r1: 6;
+  --r2: 10;
+  --r3: 10;
+  --r4: 10;
+  --r5: 6;
+}
+
+.gd-game__path,
+.gd-game__row,
+.gd-game__fight {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-frame-shadow);
+  background: var(--theme-content-bg);
+}
+
+/* Before the game: in the page's corner, as on the legacy page, over the grid */
+.gd-game__pregame {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/*
+ * The adventure path, placed as the legacy page computed it in one step from the window's height (advPathGroup:
+ * height - 3 paddings - the tab box - 34 - a padding, in its 1px border): as "the rest" of the grid the browser rounded
+ * its foot a 64th of a pixel differently, which a phone's zoomed-out page shows as an edge one device pixel off.
+ */
+.gd-game__path {
+  /* From the page's corner (an absolutely placed box with a grid area is placed from that area) */
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 152px;
+  height: calc(var(--gd-window-height, 100vh) - 52px - var(--tabs));
+}
+
+/* CardGroup.setBounds: the cards 3px in from the box's place, which is its border's outer edge */
+.gd-game__path > gd-game-path,
+.gd-game__row > gd-game-cards {
+  position: absolute;
+  inset: 2px 4px 4px 2px;
+}
+
+/*
+ * The boxes whose place depends on the tab box's height are put where the legacy page computed them, each from the
+ * window's height in one step: the grid's tracks add up to the same places, but each sum can end a 64th of a pixel
+ * off, which moves a line of text by a whole pixel now and then. They are placed from the page's corner (an absolutely
+ * placed box with a grid area would be placed from that area); the grid still keeps their room.
+ */
+.gd-game__stats {
+  position: absolute;
+  left: 5px;
+  top: calc(var(--gd-window-height, 100vh) - 44px - var(--tabs));
+  width: 152px;
+  height: 36px;
+}
+
+/* The state panel over the alert box (180px in its border) */
+.gd-game__state {
+  position: absolute;
+  left: 160px;
+  top: 5px;
+  width: 147px;
+  height: calc(var(--gd-window-height, 100vh) - 198px - var(--tabs));
+}
+
+.gd-game__alert {
+  position: absolute;
+  left: 160px;
+  top: calc(var(--gd-window-height, 100vh) - 190px - var(--tabs));
+  width: 147px;
+  height: 182px;
+}
+
+/* Framed for a waiting choice, the legacy box kept its inner size: it grew by the wider frame, right and down */
+.gd-game__alert[data-frame] {
+  width: 149px;
+  height: 184px;
+}
+
+.gd-game__tabs {
+  position: absolute;
+  left: 5px;
+  top: calc(var(--gd-window-height, 100vh) - 5px - var(--tabs));
+  width: 302px;
+  height: calc(var(--tabs) - 5px);
+}
+
+/*
+ * The table: a row per kind of card. The characters and minions fighting lie in boxes right of the minions' row: the
+ * rows beside them keep 2 shares of the width and each box gets 1. The boxes are as high as the minions' row and the
+ * row of the characters whose player's turn it isn't; the other characters' row keeps the full width.
+ */
+.gd-game__table {
+  grid-area: table;
+  /* The rows are placed in it (an absolutely placed box takes its grid area only from a positioned grid) */
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  /* A hair more than the exact share: the browser's arithmetic otherwise lands a 64th of a pixel under a whole one */
+  grid-template-columns: calc((100% - 2px) * 2 / (2 + var(--gd-game-fights, 0)) + 2.005px);
+  grid-auto-columns: minmax(0, 1fr);
+  grid-template-rows:
+    calc(var(--r1) * var(--u) + 2px) calc(var(--r2) * var(--u) + 2px) calc(var(--r3) * var(--u) + 2px)
+    calc(var(--r4) * var(--u) + 2px) calc(var(--r5) * var(--u) + 2px) calc(var(--r6) * var(--u) + 2px);
+  gap: 3px;
+}
+
+:host([data-spectator]) .gd-game__table {
+  grid-template-rows:
+    calc(var(--r1) * var(--u) + 2px) calc(var(--r2) * var(--u) + 2px) calc(var(--r3) * var(--u) + 2px)
+    calc(var(--r4) * var(--u) + 2px) calc(var(--r5) * var(--u) + 2px);
+}
+
+/*
+ * Each row placed where the legacy page computed it (setBounds), from the table's top in one step: its 5px gaps above it
+ * and the shares of the rows above it. The grid's tracks add up to the same places, but Firefox rounds each track to a
+ * 60th of a pixel, which put the lower rows a 60th or two higher and moved their background pattern by a pixel. A row
+ * spans every track, so the grid only gives it its columns.
+ */
+/* Holds the rows' first column (they are placed out of the grid's flow), so the fight boxes come after it */
+.gd-game__table::before {
+  content: '';
+  grid-column: 1;
+  grid-row: 1 / -1;
+}
+
+.gd-game__row {
+  --k: 1;
+  --y: 0;
+  --h: var(--r1);
+  position: absolute;
+  /* As wide as the table (an absolutely placed box with no column lines is placed from the grid's edges) */
+  grid-row: 1 / -1;
+  grid-column: auto;
+  left: 0;
+  right: 0;
+  top: calc((var(--k) - 1) * 5px + var(--y) * var(--u) + var(--gd-round-nearest));
+  /* Its inside as high as its shares, the border around it (setBounds sized the inside, which the browser rounds) */
+  box-sizing: content-box;
+  height: calc(var(--h) * var(--u) + var(--gd-round-nearest));
+}
+
+/*
+ * Firefox rounds a length the legacy page set from JavaScript to the nearest 60th of a pixel, but cuts a computed one
+ * down: just under half a 60th more makes the cut land where the rounding did. Chromium cuts both alike.
+ */
+:host {
+  --gd-round-nearest: 0px;
+}
+
+@supports (-moz-appearance: none) {
+  :host {
+    --gd-round-nearest: 0.008px;
+  }
+}
+
+.gd-game__row[data-row='characters-opponent'] {
+  --k: 2;
+  --y: var(--r1);
+  --h: var(--r2);
+}
+
+.gd-game__row[data-row='shadow'] {
+  --k: 3;
+  --y: calc(var(--r1) + var(--r2));
+  --h: var(--r3);
+  grid-column: 1 / 2;
+}
+
+.gd-game__row[data-row='characters-player'] {
+  --k: 4;
+  --y: calc(var(--r1) + var(--r2) + var(--r3));
+  --h: var(--r4);
+}
+
+.gd-game__row[data-row='support-player'] {
+  --k: 5;
+  --y: calc(var(--r1) + var(--r2) + var(--r3) + var(--r4));
+  --h: var(--r5);
+}
+
+.gd-game__row[data-row='hand'] {
+  --k: 6;
+  --y: calc(var(--r1) + var(--r2) + var(--r3) + var(--r4) + var(--r5));
+  --h: var(--r6);
+}
+
+/* The characters' row beside the fights: the first column only */
+:host([data-turn='bottom']) .gd-game__row[data-row='characters-player'],
+:host([data-turn='top']) .gd-game__row[data-row='characters-opponent'] {
+  grid-column: 1 / 2;
+}
+
+/*
+ * A box of a fight: the two sides one over the other, each 6px in from the box's place and its row's 6px smaller
+ * than the table's row beside it (two nested legacy groups). On the bottom player's turn the minions are on top.
+ */
+.gd-game__fight {
+  --top: var(--r2);
+  --bottom: var(--r3);
+  grid-row: 2 / span 2;
+  display: grid;
+  grid-template-rows: calc(var(--top) * var(--u) - 12px) calc(var(--bottom) * var(--u) - 12px);
+  row-gap: 17px;
+  padding: 5px 7px 7px 5px;
+}
+
+:host([data-turn='bottom']) .gd-game__fight {
+  --top: var(--r3);
+  --bottom: var(--r4);
+  grid-row: 3 / span 2;
+}
+
+.gd-game__fight[data-fight='skirmish'] {
+  border-color: var(--theme-game-fight-border);
+}
+
+:host([data-turn='bottom']) .gd-game__side[data-side='shadow'],
+:host([data-turn='top']) .gd-game__side[data-side='free-peoples'] {
+  grid-row: 1;
+}
+
+:host([data-turn='bottom']) .gd-game__side[data-side='free-peoples'],
+:host([data-turn='top']) .gd-game__side[data-side='shadow'] {
+  grid-row: 2;
+}
+
+/* The skirmish's totals: strength in the corner of its side, the damage bonus left of it */
+.gd-game__strength,
+.gd-game__damage {
+  position: absolute;
+  z-index: 50;
+  border-radius: 6px;
+  color: var(--theme-game-strength-text);
+  text-align: center;
+  opacity: 0.7;
+}
+
+.gd-game__strength {
+  right: 2px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--theme-game-strength-bg);
+  font-size: 300%;
+}
+
+.gd-game__strength[data-overwhelmed] {
+  background-color: var(--theme-game-strength-overwhelmed-bg);
+}
+
+.gd-game__damage {
+  right: 42px;
+  width: 30px;
+  height: 30px;
+  background-color: var(--theme-game-damage-bg);
+  font-size: 180%;
+}
+
+.gd-game__damage[data-none] {
+  visibility: hidden;
+}
+
+:host([data-turn='bottom']) [data-side='shadow']:is(.gd-game__strength, .gd-game__damage),
+:host([data-turn='top']) [data-side='free-peoples']:is(.gd-game__strength, .gd-game__damage) {
+  top: 2px;
+}
+
+:host([data-turn='bottom']) [data-side='free-peoples']:is(.gd-game__strength, .gd-game__damage),
+:host([data-turn='top']) [data-side='shadow']:is(.gd-game__strength, .gd-game__damage) {
+  bottom: 2px;
+}
+
+/* The replay's controls: in the page's bottom right corner (66 x 97, 4px further in than 5px, over everything) */
+.gd-game__replay {
+  position: absolute;
+  left: calc(100vw - 75px);
+  top: calc(var(--gd-window-height, 100vh) - 104px);
+  z-index: 1000;
+  width: 66px;
+  height: 97px;
+}
+
+/* The theme button (GAME_THEME_PICKER): in the table's top right corner, over the opponent's support */
+.gd-game__theme {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 60;
+}

@@ -2,33 +2,42 @@ package com.gempukku.lotro.framework;
 
 import com.gempukku.lotro.cards.build.ActionContext;
 import com.gempukku.lotro.cards.build.DefaultActionContext;
+import com.gempukku.lotro.common.SitesBlock;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.game.state.GameCommunicationChannel;
+import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.lotro.game.state.GameExtraInfo;
-import com.gempukku.lotro.game.state.GameState;
 import com.gempukku.lotro.game.state.RTMDGameInfo;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
-import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.PackBox;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.packs.ProductLibraryPackOpener;
+import com.gempukku.lotro.virtualtable.VirtualTable;
+import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class VirtualTableScenario implements TestBase, TestConstants, Actions, AdHocEffects, CardProperties, Choices, Decisions,
-        GameProcedures, GameProperties, PileProperties, Skirmishes, ZoneManipulation {
+/**
+ * The unit test rig: a virtual table with two made-up players, where every card the tester names is put in both
+ * players' decks so that either side can reach it.  All of the table's actual machinery lives in VirtualTable and the
+ * interfaces it implements (see com.gempukku.lotro.virtualtable); what is here is only what makes it a test rig.
+ */
+public class VirtualTableScenario extends VirtualTable implements TestConstants, AdHocEffects {
 
     protected static LotroCardBlueprintLibrary _cardLibrary;
     protected static LotroFormatLibrary _formatLibrary;
     protected static ProductLibrary _productLibrary;
 
     static {
+        // The printed cards and nothing else: no card is invented for a test (Ketura, 2026-10-11).
         _cardLibrary = new LotroCardBlueprintLibrary();
         _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
         _productLibrary = new ProductLibrary(_cardLibrary);
@@ -46,22 +55,42 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
         return _productLibrary.GetProduct(name);
     }
 
-    // Player key, then name/card
-    private Map<String, Map<String, PhysicalCardImpl>> Cards = new HashMap<>();
-    private DefaultLotroGame _game;
-    private GameState _gameState;
-    private DefaultUserFeedback _userFeedback;
-    private final ActionContext _freepsFilterContext = new DefaultActionContext(P1, _game, null, null, null);
-    private final ActionContext _shadowFilterContext = new DefaultActionContext(P2, _game, null, null, null);
+    // The account names the two players are seated under: the constants P1 and P2 unless the test chose others.
+    private final String _freepsPlayerName;
+    private final String _shadowPlayerName;
 
-    /*
-     * These functions are all used by the various interfaces and not so much in tests or in this class itself.
-     */
-    public DefaultLotroGame game() { return _game; }
-    public GameState gameState() { return _gameState; }
-    public DefaultUserFeedback userFeedback() { return _userFeedback; }
+    private final ActionContext _freepsFilterContext;
+    private final ActionContext _shadowFilterContext;
+
     public ActionContext FreepsFilterContext() { return _freepsFilterContext; }
     public ActionContext ShadowFilterContext() { return _shadowFilterContext; }
+
+    /*
+     * The two players at a test table are the same made-up pair, the constants P1 and P2, unless the test seated
+     * them under names of its choosing (the constructor that takes the two names).  Everything the table keys by
+     * player goes by these two methods, never by the constants.
+     */
+    @Override
+    public String P1() { return _freepsPlayerName; }
+    @Override
+    public String P2() { return _shadowPlayerName; }
+
+    /**
+     * In a test, a failed sanity check inside the rig is a test failure like any other.
+     */
+    @Override
+    public void Verify(boolean condition, String message) {
+        Assert.assertTrue(message, condition);
+    }
+
+    /**
+     * A test table has no client at either seat, so it keeps a channel of its own to each: what a seat has been
+     * sent is then there to be read (FreepsHandIsRevealed, ShadowSeesCardInHand and their kin).
+     */
+    @Override
+    protected void BeforeGameStarts() {
+        KeepSeatChannels();
+    }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs) throws CardNotFoundException, DecisionResultInvalidException {
         this(cardIDs, null, null, null, Multipath, null, null, null);
@@ -71,11 +100,33 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
         this(cardIDs, siteIDs, ringBearerID, ringID, Multipath, null,null, null);
     }
 
+    /**
+     * A table in the format given.  In a format whose sites are the Hobbit path (HobbitDraft) the table is laid on
+     * the Hobbit Draft Game's rules: siteIDs null is HobbitSites, ringBearerID null is BilboRB, and the Ring slot is
+     * left empty, so ringID must be null (another is refused with IllegalArgumentException).  The HDG's One Ring,
+     * HobbitRing 30_48, is a card of the draw deck: the test names it in cardIDs.
+     * @param format The format's code (Multipath, HobbitDraft, ...).
+     */
     public VirtualTableScenario(HashMap<String, String> cardIDs,
             HashMap<String, String> siteIDs,
             String ringBearerID, String ringID,
             String format) throws CardNotFoundException, DecisionResultInvalidException {
         this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, null);
+    }
+
+    /**
+     * A table in a format that uses Maps (PCMovie), with each player's Map named.  Both decks still hold the same
+     * sites, whatever the Maps say: the game does not hold a deck to its Map, deck validation does.  In a format
+     * that does not use Maps the Maps named are in the decks and the game leaves them out.
+     * @param freepsMapId Blueprint ID of the Map in player 1's deck, or null for the Map of the sites' path.
+     * @param shadowMapId Blueprint ID of the Map in player 2's deck, or null for the Map of the sites' path.
+     */
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMapId, String shadowMapId) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, freepsMapId, shadowMapId, null, null, null, null, null, null);
     }
 
     public VirtualTableScenario(HashMap<String, String> cardIDs,
@@ -113,46 +164,138 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
             String freepsMetaSiteId, String shadowMetaSiteId,
             Consumer<VirtualTableScenario> bidHandler,
             Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, freepsMetaSiteId, shadowMetaSiteId, bidHandler, playerPlacements, null, null);
+    }
+
+    /**
+     * A table whose players are seated under account names of the test's choosing, for a test of something that
+     * reads a player's name (the requirement PlayerIs).  At every other table the two players are P1, "Free Peoples
+     * Player", and P2, "Shadow Player".  The names given are the players' names to the game and to everything the
+     * table keys by player: P1() and P2() return them, each player's cards, deck and meta-site are his under them,
+     * and the Freeps and Shadow methods act for them as at any table.  The constants P1 and P2 are then not the
+     * players: a test at such a table names a player with scn.P1() or scn.P2().
+     * @param playerPlacements Race to Mount Doom league placements per player, or else null.  Keyed by the names
+     *                         the players are seated under.
+     * @param freepsPlayerName The account name player 1 is seated under, or null for the usual one (P1).
+     * @param shadowPlayerName The account name player 2 is seated under, or null for the usual one (P2).  The game
+     *                         tells its players apart by name, so two seats under one name are refused.
+     */
+    public VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler,
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements,
+            String freepsPlayerName, String shadowPlayerName) throws CardNotFoundException, DecisionResultInvalidException {
+        this(cardIDs, siteIDs, ringBearerID, ringID, format, null, null, freepsMetaSiteId, shadowMetaSiteId, bidHandler, playerPlacements,
+                freepsPlayerName, shadowPlayerName);
+    }
+
+    /**
+     * The constructor every other one comes to.
+     * @param freepsMapId Blueprint ID of the Map in player 1's deck, or null.  See the constructor that names Maps.
+     * @param shadowMapId Blueprint ID of the Map in player 2's deck, or null.
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null.
+     * @param freepsPlayerName The account name player 1 is seated under, or null for P1.  See the constructor that
+     *                         names the players.
+     * @param shadowPlayerName The account name player 2 is seated under, or null for P2.
+     */
+    private VirtualTableScenario(HashMap<String, String> cardIDs,
+            HashMap<String, String> siteIDs,
+            String ringBearerID, String ringID,
+            String format,
+            String freepsMapId, String shadowMapId,
+            String freepsMetaSiteId, String shadowMetaSiteId,
+            Consumer<VirtualTableScenario> bidHandler,
+            Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements,
+            String freepsPlayerName, String shadowPlayerName) throws CardNotFoundException, DecisionResultInvalidException {
+
+        _freepsPlayerName = freepsPlayerName != null ? freepsPlayerName : P1;
+        _shadowPlayerName = shadowPlayerName != null ? shadowPlayerName : P2;
+        if(_freepsPlayerName.equals(_shadowPlayerName)) {
+            throw new IllegalArgumentException("Both players cannot be seated under one name (\"" + _freepsPlayerName
+                    + "\"): the game tells its players apart by name.");
+        }
+        // As they have always been made: before the game exists, so neither holds one.
+        _freepsFilterContext = new DefaultActionContext(_freepsPlayerName, _game, null, null, null);
+        _shadowFilterContext = new DefaultActionContext(_shadowPlayerName, _game, null, null, null);
+
+        // A table in the Hobbit Draft Game (any format whose sites are the Hobbit path, as HobbitDraft's are) is laid
+        // on that format's rules: the format needs no One Ring in a deck (DefaultLotroFormat.validateRing), and the
+        // HDG's One Ring, HobbitRing 30_48, is a [shire] artifact of the draw deck that a test names like any other
+        // card.  The Ring slot is left empty, as a drafted deck leaves it; a Ring named for it is refused rather
+        // than put where no HDG deck has one.  The other defaults are the HDG's own path and a Bilbo.
+        boolean hobbitDraft = _formatLibrary.getFormat(format).getSiteBlock() == SitesBlock.HOBBIT;
 
         if(siteIDs == null ) {
-            siteIDs = KingSites;
+            siteIDs = hobbitDraft ? HobbitSites : KingSites;
         }
 
         if(ringBearerID == null ) {
-            ringBearerID = MDFrodo;
+            ringBearerID = hobbitDraft ? BilboRB : MDFrodo;
         }
 
-        if(ringID == null) {
+        if(hobbitDraft) {
+            if(ringID != null) {
+                throw new IllegalArgumentException("A table in the Hobbit Draft Game has no card in the Ring slot, and "
+                        + ringID + " was named for it: give null.  The HDG's One Ring is HobbitRing (30_48), a card of the "
+                        + "draw deck: name it in the card map and put it on Bilbo by playing it or with AttachCardsTo.");
+            }
+        }
+        else if(ringID == null) {
             ringID = RulingRing;
         }
 
         Map<String, LotroDeck> decks = new HashMap<>();
-        decks.put(P1, new LotroDeck(P1 + "'s deck"));
-        decks.put(P2, new LotroDeck(P2 + "'s deck"));
+        decks.put(P1(), new LotroDeck(P1() + "'s deck"));
+        decks.put(P2(), new LotroDeck(P2() + "'s deck"));
 
         // Strictly speaking, the names don't matter all that much, but in the event that the tester wants to retrieve
         // a specific card from deck by name, then if there are any duplicates the one returned will be random, which
         // can lead to stochastic tests that randomly fail.
 
-        for(String name : siteIDs.keySet()) {
-            String id = siteIDs.get(name);
-            decks.get(P1).addSite(id);
-            decks.get(P2).addSite(id);
+        final HashMap<String, String> siteMap = siteIDs;
+        final List<String> siteKeys = SiteKeysInDeckOrder(siteMap);
+        for(String name : siteKeys) {
+            String id = siteMap.get(name);
+            decks.get(P1()).addSite(id);
+            decks.get(P2()).addSite(id);
         }
 
         for(String name : cardIDs.keySet()) {
             String id = cardIDs.get(name);
-            decks.get(P1).addCard(id);
-            decks.get(P2).addCard(id);
+            decks.get(P1()).addCard(id);
+            decks.get(P2()).addCard(id);
         }
 
         // Now that all the helper parameters have been stuffed into the decklist, we now populate an actual deck for each player.
 
-        decks.get(P1).setRingBearer(ringBearerID);
-        decks.get(P2).setRingBearer(ringBearerID);
+        decks.get(P1()).setRingBearer(ringBearerID);
+        decks.get(P2()).setRingBearer(ringBearerID);
 
-        decks.get(P1).setRing(ringID);
-        decks.get(P2).setRing(ringID);
+        decks.get(P1()).setRing(ringID);
+        decks.get(P2()).setRing(ringID);
+
+        // A format that uses Maps cannot seat a deck that has none.  A Map only announces its deck's site path, so
+        // where the tester names none each deck gets the Map of the path its sites are on.
+        if(freepsMapId == null && shadowMapId == null) {
+            if(_formatLibrary.getFormat(format).usesMaps()) {
+                freepsMapId = shadowMapId = MapOfSitePath(siteIDs);
+            }
+        }
+        else {
+            if(freepsMapId == null) {
+                freepsMapId = MapOfSitePath(siteIDs);
+            }
+            if(shadowMapId == null) {
+                shadowMapId = MapOfSitePath(siteIDs);
+            }
+        }
+        decks.get(P1()).setMap(freepsMapId);
+        decks.get(P2()).setMap(shadowMapId);
+
+        RequireASiteToStartAt(decks.get(P1()).getSites(), siteIDs);
 
         InitializeGameWithDecks(decks, format, freepsMetaSiteId, shadowMetaSiteId, playerPlacements);
 
@@ -164,142 +307,189 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
             BidAndSeatPlayers();
         }
 
-        Cards.put(P1, new HashMap<>());
-        Cards.put(P2, new HashMap<>());
+        Cards.put(P1(), new HashMap<>());
+        Cards.put(P2(), new HashMap<>());
 
         // Now that the game has been initialized, we reset any automatic drawing that was performed as part of startup
-        for(var card : _gameState.getHand(P2).stream().toList()) {
+        for(var card : _gameState.getHand(P2()).stream().toList()) {
             MoveCardsToTopOfDeck((PhysicalCardImpl)card);
         }
 
         // Next we associate all the physically-instantiated cards with the human-readable names they were given by the
         // tester.  This will now permit us to nab the exact card from anywhere without searching or collisions.
         if(cardIDs != null) {
-            for(var card : _game.getGameState().getHand(P1).stream().toList()) {
+            for(var card : _game.getGameState().getHand(P1()).stream().toList()) {
                 MoveCardsToTopOfDeck((PhysicalCardImpl)card);
             }
 
-            for (var card : _game.getGameState().getDeck(P1)) {
+            for (var card : _game.getGameState().getDeck(P1())) {
                 String name = cardIDs.entrySet()
                         .stream()
-                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1).containsKey(x.getKey()))
+                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1()).containsKey(x.getKey()))
                         .map(Map.Entry::getKey)
                         .findFirst().get();
 
-                Cards.get(P1).put(name, (PhysicalCardImpl) card);
+                Cards.get(P1()).put(name, (PhysicalCardImpl) card);
             }
 
-            for(var card : _game.getGameState().getHand(P2).stream().toList()) {
+            for(var card : _game.getGameState().getHand(P2()).stream().toList()) {
                 MoveCardsToTopOfDeck((PhysicalCardImpl)card);
             }
 
-            for (var card : _game.getGameState().getDeck(P2)) {
+            for (var card : _game.getGameState().getDeck(P2())) {
                 String name = cardIDs.entrySet()
                         .stream()
-                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2).containsKey(x.getKey()))
+                        .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2()).containsKey(x.getKey()))
                         .map(Map.Entry::getKey)
                         .findFirst().get();
 
-                Cards.get(P2).put(name, (PhysicalCardImpl) card);
+                Cards.get(P2()).put(name, (PhysicalCardImpl) card);
             }
         }
 
         if(siteIDs != null) {
-            for (var card : _game.getGameState().getAdventureDeck(P1)) {
+            for (var card : _game.getGameState().getAdventureDeck(P1())) {
                 String name = null;
 
                 if(cardIDs != null) {
                     name = cardIDs.entrySet()
                             .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1).containsKey(x.getKey()))
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P1()).containsKey(x.getKey()))
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null);
                 }
 
                 if(name == null) {
-                    name = siteIDs.entrySet()
-                            .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()))
-                            .map(Map.Entry::getKey)
+                    // Each key names one site: a key already given is passed over, so two keys that hold one
+                    // blueprint name its two copies.
+                    name = siteKeys.stream()
+                            .filter(key -> siteMap.get(key).equals(card.getBlueprintId()) && !Cards.get(P1()).containsKey(key))
                             .findFirst().get();
                 }
 
-                Cards.get(P1).put(name, (PhysicalCardImpl) card);
+                Cards.get(P1()).put(name, (PhysicalCardImpl) card);
             }
 
-            for (var card : _game.getGameState().getAdventureDeck(P2)) {
+            for (var card : _game.getGameState().getAdventureDeck(P2())) {
                 String name = null;
 
                 if(cardIDs != null) {
                     name = cardIDs.entrySet()
                             .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2).containsKey(x.getKey()))
+                            .filter(x -> x.getValue().equals(card.getBlueprintId()) && !Cards.get(P2()).containsKey(x.getKey()))
                             .map(Map.Entry::getKey)
                             .findFirst().orElse(null);
                 }
 
                 if(name == null) {
-                    name = siteIDs.entrySet()
-                            .stream()
-                            .filter(x -> x.getValue().equals(card.getBlueprintId()))
-                            .map(Map.Entry::getKey)
+                    // Each key names one site: a key already given is passed over, so two keys that hold one
+                    // blueprint name its two copies.
+                    name = siteKeys.stream()
+                            .filter(key -> siteMap.get(key).equals(card.getBlueprintId()) && !Cards.get(P2()).containsKey(key))
                             .findFirst().get();
                 }
 
-                Cards.get(P2).put(name, (PhysicalCardImpl) card);
+                Cards.get(P2()).put(name, (PhysicalCardImpl) card);
             }
         }
 
         // Create and place meta-site modifiers in SUPPORT zone if provided
         if (freepsMetaSiteId != null) {
-            var freepsMod = _gameState.getMetaSites(P1).getFirst();
-            Cards.get(P1).put("mod", (PhysicalCardImpl)freepsMod);
+            var freepsMod = _gameState.getMetaSites(P1()).getFirst();
+            Cards.get(P1()).put("mod", (PhysicalCardImpl)freepsMod);
         }
         if (shadowMetaSiteId != null) {
-            var shadowMod = _gameState.getMetaSites(P2).getFirst();
-            Cards.get(P2).put("mod", (PhysicalCardImpl)shadowMod);
+            var shadowMod = _gameState.getMetaSites(P2()).getFirst();
+            Cards.get(P2()).put("mod", (PhysicalCardImpl)shadowMod);
         }
     }
 
+
     /**
-     * Returns a card from the Free Peoples player's deck by its human-readable test alias.
-     * @param cardName The human-readable name assigned at the top of each test class.
-     * @return The physical card that was instantiated for the game.
+     * The keys of a site map in the order their sites go into each adventure deck: the sites printed with a site
+     * number first, then the sites printed with none (the Shadows-block sites), each group in the order the map
+     * gives its keys.  The game takes a player's sites as unordered, to be laid by choice, whenever the FIRST card
+     * of the adventure deck has no printed number (GameState.usesUnorderedSites, which is asked again at every
+     * move), and a HashMap gives its keys in an order no tester chose: a Shadows-block site standing on a numbered
+     * path under a key that happened to come out first made the whole path unordered, and the game then rested on
+     * "Choose site to play" where a site 1 was expected.  With the numbered sites first a path that has any is laid
+     * by number for as long as one is left in the deck; a path of Shadows-block sites alone is as it was.
+     * @param siteIDs The site map the tester gave.
+     * @return Its keys, numbered sites first.
      */
-    public PhysicalCardImpl GetFreepsCard(String cardName) {
-        var card =  Cards.get(P1).get(cardName);
-        if(card == null) {
-            throw new NullPointerException("Card '" + cardName + "' does not exist for Free Peoples.");
+    private static List<String> SiteKeysInDeckOrder(HashMap<String, String> siteIDs) throws CardNotFoundException {
+        List<String> numbered = new java.util.ArrayList<>();
+        List<String> unnumbered = new java.util.ArrayList<>();
+        for(String name : siteIDs.keySet()) {
+            if(_cardLibrary.getLotroCardBlueprint(siteIDs.get(name)).getSiteNumber() != 0) {
+                numbered.add(name);
+            }
+            else {
+                unnumbered.add(name);
+            }
         }
-        return card;
+        numbered.addAll(unnumbered);
+        return numbered;
     }
+
     /**
-     * Returns a card from the Shadow player's deck by its human-readable test alias.
-     * @param cardName The human-readable name assigned at the top of each test class.
-     * @return The physical card that was instantiated for the game.
+     * Refuses a set of sites of which the game could lay none as site 1.  The game lays each site by its printed
+     * site number unless the first card of the adventure deck has none (GameState.usesUnorderedSites, which goes
+     * by the deck and not by the format); deck validation, which a test table does not go through, is what keeps a
+     * player's deck to one site path.  With no site printed as site 1 the game's set-up lays nothing and falls
+     * over two steps later (a NullPointerException out of CheckForCorruptionGameProcess), with nothing to say why.
+     * @param adventureDeck The blueprint IDs of the sites, in the order the game will have them in each
+     *                      adventure deck.
+     * @param siteIDs The site map the tester gave, for naming what is under the key "site1".
      */
-    public PhysicalCardImpl GetShadowCard(String cardName) {
-        var card =  Cards.get(P2).get(cardName);
-        if(card == null) {
-            throw new NullPointerException("Card '" + cardName + "' does not exist for Shadow.");
+    private static void RequireASiteToStartAt(List<String> adventureDeck, HashMap<String, String> siteIDs) throws CardNotFoundException {
+        if(adventureDeck.isEmpty())
+            return;
+        var first = _cardLibrary.getLotroCardBlueprint(adventureDeck.getFirst());
+        if(first.getSiteNumber() == 0)
+            return;
+        for(String id : adventureDeck) {
+            if(_cardLibrary.getLotroCardBlueprint(id).getSiteNumber() == 1)
+                return;
         }
-        return card;
+
+        String message = "These sites cannot be set up: the game would lay no site 1.  The first card of the adventure deck ("
+                + first.getTitle() + ", " + adventureDeck.getFirst() + ") has a printed site number, so the game lays "
+                + "each site by its printed number, and none of these sites is printed as site 1.  (The table puts "
+                + "the sites that have a printed number into the adventure deck ahead of those that have none.)";
+        String atSite1 = siteIDs.get("site1");
+        if(atSite1 != null) {
+            var blueprint = _cardLibrary.getLotroCardBlueprint(atSite1);
+            message += "  The key \"site1\" holds " + blueprint.getTitle() + " (" + atSite1 + "), which "
+                    + (blueprint.getSiteNumber() != 0 ? "is printed as site " + blueprint.getSiteNumber() + "."
+                    : "has no printed site number: such a site cannot stand as site 1 of a numbered path (see "
+                            + "\"A Shadows-block site path\" in the gemp-testing pitfalls).");
+        }
+        throw new IllegalArgumentException(message);
     }
+
     /**
-     * Returns a given player's card by its human-readable test alias.
-     * @param player The player to look up a card for.
-     * @param cardName The human-readable name assigned at the top of each test class.
-     * @return The physical card that was instantiated for the game.
+     * The Map of the site path that a set of sites is on, for a deck whose Map the tester did not name.
+     * @param siteIDs The sites going into the deck.
+     * @return The blueprint ID of that path's Map.
      */
-    public PhysicalCardImpl GetCard(String player, String cardName) { return Cards.get(player).get(cardName); }
-    public PhysicalCardImpl GetFreepsCardByID(String id) { return GetCardByID(P1, Integer.parseInt(id)); }
-    public PhysicalCardImpl GetFreepsCardByID(int id) { return GetCardByID(P1, id); }
-    public PhysicalCardImpl GetShadowCardByID(String id) { return GetCardByID(P2, Integer.parseInt(id)); }
-    public PhysicalCardImpl GetShadowCardByID(int id) { return GetCardByID(P2, id); }
-    public PhysicalCardImpl GetCardByID(String player, int id) {
-        return Cards.get(player).values().stream()
-                .filter(x -> x.getCardId() == id)
-                .findFirst().orElse(null);
+    private static String MapOfSitePath(HashMap<String, String> siteIDs) throws CardNotFoundException {
+        var paths = new java.util.HashSet<SitesBlock>();
+        for(String id : siteIDs.values()) {
+            paths.add(_cardLibrary.getLotroCardBlueprint(id).getSiteBlock());
+        }
+
+        if(paths.size() == 1) {
+            switch (paths.iterator().next()) {
+                case FELLOWSHIP: return FellowshipMap;
+                case TWO_TOWERS: return TowersMap;
+                case KING: return KingMap;
+                default: break;
+            }
+        }
+
+        throw new IllegalArgumentException("This table's decks need a Map and no Map goes with their sites (" + paths
+                + "): there is one for each of the Fellowship, Towers and King paths.  Name each player's Map in the constructor.");
     }
 
     /**
@@ -321,31 +511,26 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
      * @param formatName Name of the format this table should be following.
      * @param freepsMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 1, or else null
      * @param shadowMetaSiteId Blueprint ID of the Race to Mount Doom meta-sites used by player 2, or else null
-     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1 / P2), or else null
+     * @param playerPlacements Race to Mount Doom league placements per player (keyed by P1() / P2()), or else null
      */
     public void InitializeGameWithDecks(Map<String, LotroDeck> decks, String formatName, String freepsMetaSiteId, String shadowMetaSiteId,
             Map<String, RTMDGameInfo.LeaguePlacement> playerPlacements) {
-        _userFeedback = new DefaultUserFeedback();
-
         var format = _formatLibrary.getFormat(formatName);
 
         GameExtraInfo info = null;
         if(freepsMetaSiteId != null || shadowMetaSiteId != null) {
             var playerMetaSites = new HashMap<String, List<RTMDGameInfo.MetaSitePair>>();
             if(freepsMetaSiteId != null) {
-                playerMetaSites.put(P1, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", freepsMetaSiteId)));
+                playerMetaSites.put(P1(), Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", freepsMetaSiteId)));
             }
             if(shadowMetaSiteId != null) {
-                playerMetaSites.put(P2, Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
+                playerMetaSites.put(P2(), Collections.singletonList(new RTMDGameInfo.MetaSitePair("90_1", shadowMetaSiteId)));
             }
             info = new RTMDGameInfo(playerMetaSites, playerPlacements);
         }
 
-        _game = new DefaultLotroGame(format, decks, _userFeedback, _cardLibrary, info);
-        _userFeedback.setGame(_game);
-        _game.startGame();
+        InitializeGame(format, decks, _cardLibrary, info);
         _game.setPackOpener(new ProductLibraryPackOpener(_productLibrary));
-        _gameState = _game.getGameState();
     }
 
     /**
@@ -356,164 +541,68 @@ public class VirtualTableScenario implements TestBase, TestConstants, Actions, A
         _game.setPackOpener(new TestPackOpener(_productLibrary));
     }
 
-    private final List<PhysicalCardImpl> _createdCards = new java.util.ArrayList<>();
-
     /**
-     * Registers a callback on the game state that captures any cards created dynamically
-     * mid-game (e.g. from booster pack opening). Call this before the effect that creates cards.
-     * Retrieved cards can be accessed via {@link #GetCreatedCards()} or {@link #GetLastCreatedCard()}.
+     * Has the game's pack opener offer one pack, "Test - Booster", whose contents are exactly the cards given, in
+     * the order given, every time it is opened: the pack for a test that needs a card the fixed test pack of
+     * UseTestBoosters() does not hold.  The pack is offered and opened as any other (the owner chooses it by its
+     * name, the other player is shown its cards, the owner chooses among them); the same blueprint may be given
+     * more than once.  A later call, or UseTestBoosters(), takes this pack's place.  Fails if no card is given, or
+     * if one of the ids is no card.
+     * @param blueprintIds The blueprint ids of the pack's cards, first to last.
      */
-    public void StartCardCapture() {
-        _createdCards.clear();
-        _gameState.setCardCreationCallback(card -> _createdCards.add((PhysicalCardImpl) card));
-    }
-
-    /**
-     * Stops capturing dynamically created cards and clears the callback.
-     */
-    public void StopCardCapture() {
-        _gameState.setCardCreationCallback(null);
-    }
-
-    /**
-     * Returns all cards captured since the last {@link #StartCardCapture()} call.
-     */
-    public List<PhysicalCardImpl> GetCreatedCards() {
-        return java.util.Collections.unmodifiableList(_createdCards);
-    }
-
-    /**
-     * Returns the most recently captured card, or null if none were captured.
-     */
-    public PhysicalCardImpl GetLastCreatedCard() {
-        return _createdCards.isEmpty() ? null : _createdCards.getLast();
-    }
-
-    /**
-     * Handles the bidding and seating placement of both players, then removes the burdens that were bid for consistency.
-     */
-    public void BidAndSeatPlayers() {
-        FreepsDecided("1");
-        ShadowDecided( "0");
-
-        // Seating choice
-        FreepsDecided("0");
-    }
-
-    /**
-     * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
-     * Fellowship phase.  Resets the hand so that the only cards in hand are those the tester defines manually
-     * before calling this function.
-     */
-    public void StartGame() {
-        StartGame(true);
-    }
-
-    /**
-     * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
-     * Fellowship phase.  Auto-selects the provided site as the first site 1; this is only useful when using the
-     * Shadow path.  Will reset the hand back to replace the initial drawn hand.
-     * @param site1 The site that Free Peoples should start on.
-     */
-    public void StartGame(PhysicalCardImpl site1) {
-        FreepsChooseCardBPFromSelection(site1);
-        StartGame(true);
-    }
-
-    /**
-     * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
-     * Fellowship phase.
-     * @param resetHand If true, any cards drawn at the start of the game will be placed back on top of the draw deck,
-     *                  ensuring that each player only has the cards in their hand that the tester manually places
-     *                  before calling StartGame.  This ensures that there are no confounding variables.
-     *                  If false, the default drawn hand will remain untouched.
-     */
-    public void StartGame(boolean resetHand) {
-        StartGame(resetHand, true);
-    }
-
-    /**
-     * Passes through certain setup steps at the start of the game so our test may begin at the Free Peoples player's
-     * Fellowship phase.
-     * @param resetHand If true, any cards drawn at the start of the game will be placed back on top of the draw deck.
-     * @param skipStartingFellowships If true, auto-skips the starting fellowship selection for both players.
-     *                                 If false, the test must handle starting fellowship selection manually before
-     *                                 this method proceeds to mulligans.
-     */
-    public void StartGame(boolean resetHand, boolean skipStartingFellowships) {
-        var freepsHand = GetFreepsHand().stream().toList();
-        var shadowHand = GetShadowHand().stream().toList();
-
-        if (skipStartingFellowships) {
-            SkipStartingFellowships();
-        }
-
-        // As a convenience, we want the tester to be able to stack their hand and other piles before the game begins.
-        // However, since a new hand will be drawn, this tramples over the careful stacking, so we will reset the
-        // state of the deck + hand to what they were before the card draw.
-        if(resetHand) {
-            for(var card : GetFreepsHand().stream().toList().reversed()) {
-                if(!freepsHand.contains(card)) {
-                    MoveCardsToTopOfDeck((PhysicalCardImpl) card);
-                }
+    public void UseBoosterOf(String... blueprintIds) {
+        Verify(blueprintIds != null && blueprintIds.length > 0, "UseBoosterOf was given no cards: a pack holds at least one.");
+        for (String blueprintId : blueprintIds) {
+            boolean known;
+            try {
+                known = blueprintId != null && _cardLibrary.getLotroCardBlueprint(blueprintId) != null;
+            } catch (CardNotFoundException notFound) {
+                known = false;
             }
-
-            for(var card : GetShadowHand().stream().toList().reversed()) {
-                if(!shadowHand.contains(card)) {
-                    MoveCardsToTopOfDeck((PhysicalCardImpl) card);
-                }
-            }
+            Verify(known, "UseBoosterOf was given '" + blueprintId + "', which is not the blueprint id of any card.");
         }
-
-        SkipMulligans();
-        //Get rid of the bidded burden so that tests don't have to remember it exists all the time
-        RemoveBurdens(1);
+        _game.setPackOpener(new NamedPackOpener(List.of(blueprintIds)));
     }
 
-    /**
-     * When both players are asked to select a starting fellowship, this can be used to skip past the prompt and choose
-     * 0 companions to go down (since you can cheat in any companions you may need for the test scenario anyway).
-     */
-    public void SkipStartingFellowships() {
-        if(FreepsDecisionAvailable("Starting fellowship")) {
-            FreepsChoose("");
-        }
-        if(ShadowDecisionAvailable("Starting fellowship")) {
-            ShadowChoose("");
-        }
-    }
+
+    // Each seat's channel joined by MarkGameEvents(), and the events it has been sent since
+    private final Map<String, GameCommunicationChannel> _eventMarkChannels = new HashMap<>();
+    private final Map<String, List<GameEvent>> _eventsSinceMark = new HashMap<>();
 
     /**
-     * When both players are prompted to mulligan their hand, this can be used to choose "no" for both players.
+     * Starts reading what the game sends from here: joins, for each seat, a channel to the game as the replay
+     * recorder joins one for each player (GameRecorder.recordGame: a GameCommunicationChannel that is no live
+     * connection, so it cuts nobody off), and drops any joined by an earlier call.  The state each is sent as it
+     * joins is not counted.  What a client and a replay are sent from then on is what these channels are sent:
+     * every one of them is a listener of the game the same way (GameState.addGameStateListener).
      */
-    public void SkipMulligans() {
-        if(FreepsDecisionAvailable("Do you wish to mulligan")) {
-            FreepsChooseNo();
-        }
-        if(ShadowDecisionAvailable("Do you wish to mulligan")) {
-            ShadowChooseNo();
+    public void MarkGameEvents() {
+        for (GameCommunicationChannel channel : _eventMarkChannels.values())
+            _game.removeGameStateListener(channel);
+        _eventMarkChannels.clear();
+        _eventsSinceMark.clear();
+        for (String player : List.of(P1(), P2())) {
+            var channel = new GameCommunicationChannel(player, 0, false, _game.getFormat());
+            _game.addGameStateListener(player, channel);
+            channel.consumeGameEvents();
+            _eventMarkChannels.put(player, channel);
+            _eventsSinceMark.put(player, new ArrayList<>());
         }
     }
 
     /**
-     * Low-level function used by the rest of the test rig to return a decision result back to the server.  This is the
-     * beating heart of what is essentially a headless client.  You do not need to call this manually during tests.
-     * @param player The player making the decision
-     * @param answer What decision is being returned to the server
+     * @param player The seat asked about (P1() or P2()).
+     * @return Every event the game has sent that seat since MarkGameEvents() was last called, oldest first, as a
+     * client or the replay would be sent them.
      */
-    public void PlayerDecided(String player, String answer) {
-        var decision = userFeedback().getAwaitingDecision(player);
-        userFeedback().participantDecided(player);
-        try {
-            decision.decisionMade(answer);
-        } catch (DecisionResultInvalidException exp) {
-            userFeedback().sendAwaitingDecision(player, decision);
-            throw new RuntimeException(exp);
-        }
-        game().carryOutPendingActionsUntilDecisionNeeded();
+    public List<GameEvent> GetGameEventsSinceMark(String player) {
+        var channel = _eventMarkChannels.get(player);
+        Verify(channel != null, "What the game sends is not being read for " + player + ": call MarkGameEvents() first.");
+        if (channel == null)
+            return List.of();
+        var events = _eventsSinceMark.get(player);
+        events.addAll(channel.consumeGameEvents());
+        return List.copyOf(events);
     }
-
-
-
 
 }

@@ -2,7 +2,10 @@
 
 	60_52: {
 		cardInfo: {
-			//id: 0_52.1
+			//id: 60_52.1
+			parent: 10_52
+			variant: ERRATA
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN10E052.1_card.jpg
 			collInfo: 10C52
@@ -14,7 +17,7 @@
 		culture: Raider
 		twilight: 1
 		type: Condition
-		keyword: support area
+		keywords: Support Area
 		effects: [
 			{
 				type: activated

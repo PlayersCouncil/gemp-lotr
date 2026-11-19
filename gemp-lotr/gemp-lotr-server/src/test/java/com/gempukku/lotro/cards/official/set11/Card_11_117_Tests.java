@@ -3,7 +3,6 @@ package com.gempukku.lotro.cards.official.set11;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
-import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import org.junit.Test;
 
@@ -18,10 +17,25 @@ public class Card_11_117_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "11_117");
-					// put other cards in here as needed for the test case
+					put("denizen", "11_117");
+					put("denizen2", "11_117");
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text, the other minion at the same sites
 				}},
 				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
+	protected VirtualTableScenario GetKingScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("denizen", "11_117");
+					put("troop", "1_177");      // Goblin Patrol Troop: a minion with no text
+				}},
+				// Site 3 of the King block's path is The Dimholt 8_117: underground and a sanctuary.
+				VirtualTableScenario.KingSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing
 		);
@@ -47,7 +61,7 @@ public class Card_11_117_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("denizen");
 
 		assertEquals("Denizen of the Black Pit", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +76,56 @@ public class Card_11_117_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DenizenoftheBlackPitTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void IsStrengthPlus2AtBalinsTombAndNotAtRivendellValleyEachCopyForItselfAlone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var denizen = scn.GetShadowCard("denizen");
+		var denizen2 = scn.GetShadowCard("denizen2");
+		var troop = scn.GetShadowCard("troop");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.SkipToSite(3);
+		scn.MoveMinionsToTable(denizen, denizen2, troop);
 
-		assertEquals(4, scn.GetTwilight());
+		// Rivendell Valley is no underground site: the printed numbers.
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(10, scn.GetStrength(denizen));
+		assertEquals(10, scn.GetStrength(denizen2));
+		assertEquals(13, scn.GetStrength(troop));
+
+		// The move to Balin's Tomb, underground.
+		scn.FreepsPass();
+
+		assertEquals(4, scn.GetCurrentSiteNumber());
+		// 10 + 2, each copy for itself: a second copy adds nothing to the first, and the Troop is untouched.
+		assertEquals(12, scn.GetStrength(denizen));
+		assertEquals(12, scn.GetStrength(denizen2));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void IsStrengthPlus2AtTheDimholtAnUndergroundSanctuary() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetKingScenario();
+
+		var denizen = scn.GetShadowCard("denizen");
+		var troop = scn.GetShadowCard("troop");
+
+		scn.StartGame();
+		scn.SkipToSite(2);
+		scn.MoveMinionsToTable(denizen, troop);
+
+		assertEquals(2, scn.GetCurrentSiteNumber());
+		assertEquals(10, scn.GetStrength(denizen));
+		assertEquals(13, scn.GetStrength(troop));
+
+		// The move to The Dimholt.
+		scn.FreepsPass();
+
+		assertEquals(3, scn.GetCurrentSiteNumber());
+		assertEquals(12, scn.GetStrength(denizen));
+		assertEquals(13, scn.GetStrength(troop));
+		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

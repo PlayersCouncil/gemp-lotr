@@ -18,8 +18,7 @@ public class Card_04_010_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_10");
-					// put other cards in here as needed for the test case
+					put("brigand", "4_10");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,12 +41,12 @@ public class Card_04_010_Tests
 		 * Strength: 8
 		 * Vitality: 1
 		 * Site Number: 3
-		 * Game Text: &nbsp; &nbsp;
+		 * Game Text: (none)
 		*/
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("brigand");
 
 		assertEquals("Dunlending Brigand", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -60,20 +59,5 @@ public class Card_04_010_Tests
 		assertEquals(8, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
 		assertEquals(3, card.getBlueprint().getSiteNumber());
-	}
-
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingBrigandTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
-		var scn = GetScenario();
-
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
-
-		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
-		assertEquals(2, scn.GetTwilight());
 	}
 }

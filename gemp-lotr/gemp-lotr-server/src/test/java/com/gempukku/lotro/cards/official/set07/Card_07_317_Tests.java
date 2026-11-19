@@ -17,11 +17,12 @@ public class Card_07_317_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "7_317");
-					// put other cards in here as needed for the test case
+					// Sam, Son of Hamfast: a second companion, so that two threats can lie on the dead pile
+					put("sam", "1_311");
 				}},
 				VirtualTableScenario.FellowshipSites,
-				VirtualTableScenario.FOTRFrodo,
+				// Frodo, Hope of Free Peoples is the card under test, laid as the table's Ring-bearer.
+				"7_317",
 				VirtualTableScenario.RulingRing
 		);
 	}
@@ -47,7 +48,7 @@ public class Card_07_317_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetRingBearer();
 
 		assertEquals("Frodo", card.getBlueprint().getTitle());
 		assertEquals("Hope of Free Peoples", card.getBlueprint().getSubtitle());
@@ -61,21 +62,111 @@ public class Card_07_317_Tests
 		assertEquals(3, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		assertEquals(10, card.getBlueprint().getResistance());
-		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet()); 
+		assertEquals(Signet.ARAGORN, card.getBlueprint().getSignet());
+		assertTrue(card.getBlueprint().canStartWithRing());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void FrodoTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void EachMoveOfTheTurnOffersToAddThreeToRemoveAThreat() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
-
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
 		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsPass();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(frodo));
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(1, scn.GetThreats());
+		// 3 added by Frodo, then 2 for Ettenmoors and 2 for the companions
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+
+		// The regroup move of the same turn: offered again.
+		scn.SkipToMovementDecision();
+		scn.SetTwilight(1);
+		assertEquals(1, scn.GetTwilight());
+		assertEquals(1, scn.GetThreats());
+		scn.FreepsChooseToMove();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(frodo));
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetThreats());
+		// 1 + 3 added by Frodo, then 0 for Rivendell Valley and 2 for the companions
+		assertEquals(6, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void DecliningLeavesTheThreatsAndAddsNoTwilight() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsPass();
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(frodo));
+		scn.FreepsDeclineOptionalTrigger();
+
+		assertEquals(2, scn.GetThreats());
+		// 2 for Ettenmoors and 2 for the companions, and nothing from Frodo
+		assertEquals(4, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void WithNoThreatTheOfferIsStillMadeAndTakingItAddsTheTwilightForNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		assertEquals(0, scn.GetThreats());
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsPass();
+		// The (3) is a cost: the offer is made though nothing can be removed (Q-0034).
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(frodo));
+		scn.FreepsAcceptOptionalTrigger();
+
+		assertEquals(0, scn.GetThreats());
+		// 3 added by Frodo, then 2 for Ettenmoors and 2 for the companions
+		assertEquals(7, scn.GetTwilight());
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void StayingAtTheRegroupMoveDecisionOffersNothing() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		scn.MoveCompanionsToTable(sam);
+
+		scn.StartGame();
+		scn.AddThreats(2);
+		assertEquals(2, scn.GetThreats());
+
+		// The move that ends the fellowship phase is declined on the way.
+		scn.SkipToMovementDecision();
+		assertEquals(2, scn.GetThreats());
+		scn.FreepsChooseToStay();
+
+		assertFalse(scn.FreepsHasOptionalTriggerAvailable(frodo));
+		assertTrue(scn.ShadowDecisionAvailable("Play Fellowship action or Pass"));
 	}
 }

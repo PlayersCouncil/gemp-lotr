@@ -201,11 +201,16 @@
 					type: played
 					filter: self
 				}
-				requires: {
-					type: canSpot
-					filter: another,culture(dunland),man
-					count: 2
-				}
+				requires: [
+					{
+						type: canSpot
+						filter: another,culture(dunland),man
+						count: 2
+					}
+					{
+						type: SiteAvailableToControl
+					}
+				]
 				effect: {
 					type: preventable
 					player: fp

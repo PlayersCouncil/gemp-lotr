@@ -6,6 +6,7 @@
 			rarity: _
 		}
 		title: Beorn's House
+		unique: false
 		type: site
 		block: hobbit
 		site: 4
@@ -29,6 +30,7 @@
 						select: choose(culture(gandalf),staff)
 						showAll: true
 						shuffle: true
+						mustExist: true
 					}
 				]
 			}
@@ -49,7 +51,17 @@
 				}
 			]
 		}
+		gametext: <b>Fellowship:</b> Spot a [gandalf] staff or play it from your draw deck to prevent Gandalf from being discarded until the end of turn.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_45: {
 		cardInfo: {
 			image: hobbit/HDG3145.jpg
@@ -57,11 +69,12 @@
 			rarity: _
 		}
 		title: Underground Lake
+		unique: false
 		twilight: 2
 		type: site
 		block: hobbit
 		site: 4
-		keyword: [
+		keywords: [
 			underground
 			river
 		]
@@ -83,9 +96,20 @@
 				select: choose(or(and(side(shadow),condition),name(The One Ring)))
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: <b>Underground</b>. <b>River</b>. <b>Maneuver:</b> Play a Shadow condition or the One Ring from your draw deck (limit once per player).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	31_46: {
 		cardInfo: {
 			image: hobbit/HDG3146.jpg
@@ -93,11 +117,12 @@
 			rarity: _
 		}
 		title: Forest River
+		unique: false
 		type: site
 		block: hobbit
 		site: 5
 		twilight: 7
-		keyword: [
+		keywords: [
 			forest
 			river
 		]
@@ -115,7 +140,17 @@
 				}
 			]
 		}
+		gametext: <b>Forest</b>. <b>River</b>. <b>Assignment:</b> Exert your Orc to prevent Gandalf or an [elven] ally from being assigned to a skirmish.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	31_47: {
 		cardInfo: {
 			image: hobbit/HDG3147.jpg
@@ -123,11 +158,12 @@
 			rarity: _
 		}
 		title: Thrór's Throne
+		unique: false
 		type: site
 		block: hobbit
 		site: 9
 		twilight: 9
-		keyword: [
+		keywords: [
 			mountain
 			underground
 		]
@@ -141,6 +177,15 @@
 					filter: culture(dwarven),name(The Arkenstone)
 				}
 				amount: -1
+			}
+		}
+		gametext: <b>Mountain</b>. <b>Underground</b>. If you cannot spot the [dwarven] Arkenstone, the twilight cost of each minion is -1.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}

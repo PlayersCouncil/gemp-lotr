@@ -4,27 +4,27 @@ import com.gempukku.lotro.common.CardType;
 import com.gempukku.lotro.framework.VirtualTableScenario;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
+import com.gempukku.lotro.logic.modifiers.TwilightCostModifier;
+import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import org.junit.Test;
 
 import java.util.HashMap;
 
+import static com.gempukku.lotro.framework.Assertions.*;
 import static org.junit.Assert.*;
 
 public class Card_92_006_Tests
 {
-	private final HashMap<String, String> cards = new HashMap<>() {{
-		// Eomer, Third Marshal of Riddermark (4_267): Rohan Man companion, twilight 3
-		put("eomer", "4_267");
-		// Firefoot (4_274): Rohan mount, twilight 2, bearer must be Rohan Man
-		put("firefoot", "4_274");
-		// Foul Horde (5_50): Isengard warg-rider minion, twilight 5
-		put("horde", "5_50");
-		// Sharku's Warg (5_59): Isengard mount, twilight 2, bearer must be warg-rider
-		put("warg", "5_59");
-	}};
-
 	protected VirtualTableScenario GetFreepsScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eomer", "4_267");      // Eomer, Third Marshal of Riddermark: [rohan] Man companion, who may bear the mount and the spear
+					put("firefoot", "4_274");   // Firefoot: [rohan] possession, mount, cost 2; bearer must be a [rohan] Man
+					put("spear", "4_288");      // Rider's Spear: [rohan] possession, hand weapon, cost 1; bearer must be a [rohan] Man. No mount
+					put("horde", "5_50");       // Foul Horde: [isengard] Orc minion, warg-rider, cost 4
+					put("warg", "5_59");        // Sharku's Warg: [isengard] possession, mount, cost 5; bearer must be a warg-rider
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -33,7 +33,15 @@ public class Card_92_006_Tests
 	}
 
 	protected VirtualTableScenario GetShadowScenario() throws CardNotFoundException, DecisionResultInvalidException {
-		return new VirtualTableScenario(cards,
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("eomer", "4_267");      // Eomer, Third Marshal of Riddermark: [rohan] Man companion, who may bear the mount and the spear
+					put("firefoot", "4_274");   // Firefoot: [rohan] possession, mount, cost 2; bearer must be a [rohan] Man
+					put("spear", "4_288");      // Rider's Spear: [rohan] possession, hand weapon, cost 1; bearer must be a [rohan] Man. No mount
+					put("horde", "5_50");       // Foul Horde: [isengard] Orc minion, warg-rider, cost 4
+					put("warg", "5_59");        // Sharku's Warg: [isengard] possession, mount, cost 5; bearer must be a warg-rider
+				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
 				VirtualTableScenario.RulingRing,
@@ -42,11 +50,12 @@ public class Card_92_006_Tests
 	}
 
 	@Test
-	public void StatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
+	public void MountDiscountStatsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 		/**
 		 * Set: RTMD 92
 		 * Name: Race Text 92_6
 		 * Type: MetaSite
+		 * Intensity: -3
 		 * Game Text: The twilight cost of each of your mounts is -5.
 		 */
 
@@ -56,6 +65,7 @@ public class Card_92_006_Tests
 
 		assertEquals("Race Text 92_6", card.getBlueprint().getTitle());
 		assertEquals(CardType.METASITE, card.getBlueprint().getCardType());
+		assertEquals(-3, card.getBlueprint().getIntensity());
 	}
 
 	@Test
@@ -75,6 +85,36 @@ public class Card_92_006_Tests
 
 		// Firefoot normally costs 2, reduced by 5 = 0
 		assertEquals(0, scn.GetTwilightCost(firefoot));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void TheDiscountIsFiveAndOnlyAMountHasIt() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetFreepsScenario();
+
+		var eomer = scn.GetFreepsCard("eomer");
+		var firefoot = scn.GetFreepsCard("firefoot");
+		var spear = scn.GetFreepsCard("spear");
+
+		scn.MoveCompanionsToTable(eomer);
+		scn.MoveCardsToHand(firefoot, spear);
+		// A cost never reads below 0, so a mount of cost 2 hides the size of the discount.  Each possession is
+		// made twilight cost +6 here, as East Road makes each companion +2.
+		scn.ApplyAdHocModifier(new TwilightCostModifier(null, CardType.POSSESSION, null, new ConstantEvaluator(6)));
+
+		scn.StartGame();
+
+		// 2 printed + 6 - 5
+		assertEquals(3, scn.GetTwilightCost(firefoot));
+		// 1 printed + 6: a possession the same Man may bear, and no mount
+		assertEquals(7, scn.GetTwilightCost(spear));
+		assertEquals(0, scn.GetTwilight());
+
+		scn.FreepsPlayCard(firefoot);
+
+		assertAttachedTo(firefoot, eomer);
+		assertEquals(3, scn.GetTwilight());
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -85,14 +125,22 @@ public class Card_92_006_Tests
 
 		var horde = scn.GetShadowCard("horde");
 		var warg = scn.GetShadowCard("warg");
+		var eomer = scn.GetFreepsCard("eomer");
+		var firefoot = scn.GetFreepsCard("firefoot");
 
 		scn.MoveMinionsToTable(horde);
 		scn.MoveCardsToShadowHand("warg");
+		// The other player's mount, with a Man in play who may bear it
+		scn.MoveCompanionsToTable(eomer);
+		scn.MoveCardsToHand(firefoot);
 
 		scn.StartGame();
 
-		// Sharku's Warg normally costs 2, reduced by 5 = 0
+		// Sharku's Warg normally costs 5, reduced by 5 = 0
 		assertEquals(0, scn.GetTwilightCost(warg));
+		// "Your mounts": the Free Peoples player's Firefoot keeps its cost of 2
+		assertEquals(2, scn.GetTwilightCost(firefoot));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 
 	@Test
@@ -112,5 +160,6 @@ public class Card_92_006_Tests
 
 		// Shadow's Sharku's Warg should still cost 5 (not reduced by Freeps' copy)
 		assertEquals(5, scn.GetTwilightCost(warg));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

@@ -17,8 +17,12 @@ public class Card_04_219_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "4_219");
-					// put other cards in here as needed for the test case
+					put("lord", "4_219");
+
+					put("marksman", "1_176");   // Goblin Marksman: [moria] Orc archer; Archer is its whole text
+					put("sam", "1_311");        // Sam, Son of Hamfast: Ring-bound, not the Ring-bearer; abilities used only on purpose
+					put("aragorn", "1_89");     // Aragorn, Ranger of the North: a maneuver ability used only on purpose
+					put("celeborn", "1_34");    // Celeborn, Lord of Lórien: an ally; a fellowship ability only
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -42,11 +46,11 @@ public class Card_04_219_Tests
 		 * Vitality: 3
 		 * Site Number: 4
 		 * Game Text: <b>Southron</b>. <b>Archer</b>.<br><b>Archery:</b> Exert Desert Lord to exert a companion (except the Ring-bearer); Desert Lord does not add to the minion archery total.
-		*/
+		 */
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("lord");
 
 		assertEquals("Desert Lord", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -63,18 +67,82 @@ public class Card_04_219_Tests
 		assertEquals(4, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DesertLordTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void ArcheryAbilityExertsHimToExertACompanionAndHeDoesNotAddToTheArcheryTotalThatPhase() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var lord = scn.GetShadowCard("lord");
+		var marksman = scn.GetShadowCard("marksman");
+		var frodo = scn.GetRingBearer();
+		var sam = scn.GetFreepsCard("sam");
+		var aragorn = scn.GetFreepsCard("aragorn");
+		var celeborn = scn.GetFreepsCard("celeborn");
+		scn.MoveCompanionsToTable(sam, aragorn);
+		scn.MoveAlliesToTable(celeborn);
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		scn.MoveMinionsToTable(lord, marksman);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
 
-		assertEquals(6, scn.GetTwilight());
+		// Two archers: Desert Lord and the Marksman.
+		assertEquals(2, scn.GetShadowArcheryTotal());
+		assertEquals(0, scn.GetWoundsOn(lord));
+		assertEquals(0, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertTrue(scn.ShadowActionAvailable(lord));
+
+		scn.ShadowUseCardAction(lord);
+		assertEquals(1, scn.GetWoundsOn(lord));
+		// Companions of two cultures, one of them Ring-bound; not the Ring-bearer, nor an ally.
+		assertTrue(scn.ShadowHasCardChoiceAvailable(sam, aragorn));
+		assertTrue(scn.ShadowHasCardChoiceNotAvailable(frodo, celeborn, marksman));
+		assertEquals(1, scn.ShadowGetChoiceMin());
+		scn.ShadowChooseCard(sam);
+
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(aragorn));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+		assertEquals(0, scn.GetWoundsOn(celeborn));
+		// He no longer adds to it; the Marksman still does.
+		assertEquals(1, scn.GetShadowArcheryTotal());
+
+		scn.PassArcheryActions();
+		// One archery wound to place, and only one.
+		scn.FreepsChooseCard(aragorn);
+		assertEquals(1, scn.GetWoundsOn(aragorn));
+		assertEquals(1, scn.GetWoundsOn(sam));
+		assertEquals(0, scn.GetWoundsOn(frodo));
+
+		// The effect lasted the archery phase: in the assignment phase he is counted again.
+		assertTrue(scn.AwaitingFreepsAssignmentPhaseActions());
+		assertEquals(2, scn.GetShadowArcheryTotal());
+	}
+
+	@Test
+	public void ArcheryAbilityIsNotOfferedWhileDesertLordIsExhausted() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var lord = scn.GetShadowCard("lord");
+		var marksman = scn.GetShadowCard("marksman");
+		scn.MoveCompanionsToTable("sam", "aragorn");
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(lord, marksman);
+		// Vitality 3 with 2 wounds: exhausted, with two companions he could exert.
+		scn.AddWoundsToChar(lord, 2);
+		scn.SkipToPhase(Phase.ARCHERY);
+		scn.FreepsPass();
+
+		assertEquals(2, scn.GetWoundsOn(lord));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
+		assertFalse(scn.ShadowActionAvailable(lord));
+
+		scn.RemoveWoundsFromChar(lord, 1);
+		scn.ShadowRefreshDecision();
+		assertTrue(scn.ShadowActionAvailable(lord));
+		assertTrue(scn.AwaitingShadowArcheryPhaseActions());
 	}
 }

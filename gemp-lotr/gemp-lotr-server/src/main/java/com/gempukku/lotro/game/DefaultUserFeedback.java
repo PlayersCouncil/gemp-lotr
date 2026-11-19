@@ -17,6 +17,15 @@ public class DefaultUserFeedback implements UserFeedback {
         _game = game;
     }
 
+    /**
+     * To be called once a decision has taken an answer without complaint, and before the game is told to carry on.
+     * The game's own feedback keeps the answer if a loop being run needs it (LoopFeedback).
+     */
+    public void decisionAccepted(String playerId, AwaitingDecision decision, String answer) {
+        if (_game != null && _game.getUserFeedback() != this)
+            _game.getUserFeedback().decisionAnswered(playerId, decision, answer);
+    }
+
     public void participantDecided(String playerId) {
         _awaitingDecisionMap.remove(playerId);
         _game.getGameState().playerDecisionFinished(playerId);

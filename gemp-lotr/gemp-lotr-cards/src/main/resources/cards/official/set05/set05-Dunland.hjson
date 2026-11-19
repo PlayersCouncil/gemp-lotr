@@ -21,8 +21,7 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: EntersPlay
 				}
 				effect: {
 					type: optional
@@ -74,13 +73,12 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: EntersPlay
 				}
 				effect: {
 					type: optional
 					player: fp
-					text: Would you like to discard 2 cards from hand to discard Dunlending Rampager?
+					text: Would you like to discard 2 cards from hand to discard Dunlending Renegade?
 					cost: {
 						type: discardFromHand
 						forced: false
@@ -191,8 +189,7 @@
 				type: Trigger
 				optional: false
 				trigger: {
-					type: played
-					filter: self
+					type: EntersPlay
 				}
 				effect: {
 					type: optional

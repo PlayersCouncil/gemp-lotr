@@ -1,0 +1,103 @@
+{{CardSplashImage|Mount Doom}}
+'''Status: Ruling Enacted on Gemp (2025-04-18)'''
+= Mount Doom =
+
+__TOC__
+
+{{Card|Mount Doom}} is currently implemented on Gemp in a way that is surprising compared to how it is played in the paper game; namely that if you play Mount Doom on a site besides the one the fellowship is currently inhabiting (using {{Card|Traveled Leader}} or {{Card|One Good Turn Deserves Another}} etc), the "cannot be replaced" game text does not kick in until the fellowship has physically stepped on the site.  This means that Mount Doom (and sites in its region) can in fact be replaced contrary to the attestation of its game text up until the moment a player steps on the site and activates it.
+
+The basic argument for this point of view can be found [https://lotrtcgwiki.com/forums/index.php?topic=2592.0 in this thread on TLHH].
+
+== Rules References ==
+
+In the [[Comprehensive_Rules_4.1#active]], we find this section:
+
+  During your turn, only these cards in play are active:
+  
+  * sites on the adventure path,
+  * sites in any player's support area,
+  * your Free Peoples cards,
+  * your copy of The One Ring, and
+  * your opponents' Shadow cards.
+  
+  All other cards in play are inactive. Inactive cards are not affected by the game and do not affect the game. Any tokens on them are ignored (such as burdens, culture tokens, threats, and wounds). 
+
+And later in the same section:
+
+  Sites are always active. A site's game text cannot be used unless the fellowship is there, although some cards may copy and use that game text.
+  
+  ''If the game text of a site has a Shadow special ability, you may use that special ability only when the active fellowship is at that site and you are a Shadow player.''
+  
+  Exception: Site text is not active when the starting fellowships are played. 
+
+The crux comes down to the distinction that "Sites are always active" / "A site's game text cannot be used unless the fellowship is there."  The argument goes that since Mount Doom can't be "used", the text cannot be treated as in force until the fellowship causes it to become usable.  
+
+The main trouble is that "used" is not defined anywhere in the rulebook.  "Game Text" is however:
+
+  Game text includes all the text in the box below the card type line except for helper text, lore, collector's info, and marketing text (such as "DGMA Premier Series – France"). On a site card, this box is located below the image (there is no card type line on a site). On The One Ring cards, there is no box around the game text, but the concept is the same.
+  
+  Any boldfaced keyword that appears in this box (such as '''Easterling''', '''Fierce''', or '''Defender +1''') is game text. 
+
+Again, there is no definition for "use", but it seems reasonable to assume that "use" in the case of keywords (which are game text) would mean "spot" (as there's almost nothing else you can do with them).  Following this logic to the hilt, game text being "active" but not "usable" would mean that keywords would be unspottable for the likes of {{Card|Lost in the Woods}} besides the immediate site the fellowship is inhabiting, which is clearly counter to intention.  
+
+Regardless of how Mount Doom is ruled to behave, "use" as pertains to sites will need fleshed out
+
+
+
+== History ==
+In the first iteration of the rules in the Fellowship of the Ring starter rulebook, sites were originally determined to only be active when the active fellowship was there:
+
+  Sites are active only when the fellowship is at that site. Site text is not active when the starting fellowships are played.
+
+However this was soon altered to the form that we see quoted above, possibly due to the influence of the development of cards like {{Card|Dark Places}} that needed the ability to spot a site (to spot a card it must be "in play and active"), or more specifically the keywords on those sites.  Thus sites needed to be active...but we don't want the abilities on site 1 to be available on site 9, so they are declared to not be "usable", a vague distinction from 'active" that wasn't much more than kicking the can down the road.  (It was however a very solid kick that apparently didn't cause any problems for 14 sets, so credit where credit is due.)
+
+
+== The Question(s) ==
+
+There are two separate but related questions to answer with this ruling.
+
+How does Mount Doom behave?
+
+* A - Upon play, Mount Doom and all sites in its region immediately are barred from being replaced.
+* B - Mount Doom's text only becomes used once an active fellowship has arrived at it--if it is placed ahead of the farthest player or behind all players, the text remains unutilized and thus it can be replaced unless and until a player arrives at it.
+
+How do sites and all their forms of game text behave?
+
+* The specifics of this answer depend on how we determine Mount Doom ''should'' work, but the Active entry needs partially rewritten to, at a minimum, define "use" or else abolish it and define how triggers, special abilities, effects, and keywords work.  Don't forget use cases like {{Card|Nurn}} and {{Card|Steward's Tomb}}.
+
+
+== 2025-04-14 Decision ==
+
+On the question of Mount Doom's behavior in specific, the Legacy Rules team opted for option A.  The Comprehensive Rules 4.2 will have the following individual card ruling added: 
+{{Quote|text=
+* '''Card''': Mount Doom (15 R 193)
+** '''Ruling Type''': Ruling
+** '''Ruling Text''': The game text on this card goes into effect the moment it enters play, even if no player has yet moved to it.
+}}
+
+On the question of the Active entry, there is much groundwork that needs to be done on the rulebook in general for some of the entries here to be sufficiently clarified.  While waiting for that work to be done, the following alterations will go into effect:
+
+{{Quote|title= active|text=
+Sites are always active. '''A site's keywords are thus always available to be spotted while on the adventure path.'''  A site's '''non-keyword''' game text '''does not apply''' unless the fellowship is '''at that site''', although some cards may copy and use that game text. 
+}}
+
+
+{{Quote|title= active|text=
+''Exception'': Site text '''does not apply''' when the starting fellowships are played.
+}}
+
+
+{{Quote|title= control|text=
+The '''non-keyword''' game text of a controlled site '''does not apply unless that game text mentions that site being controlled'''. The keywords of a controlled site '''continue to''' apply.
+}}
+
+
+The intended gameplay of Mount Doom seems to be self-evident based on the text of the card itself, and the "cannot use" interpretation is a modern one based on a top-down reading of the rules.  To rectify this, the Rule Council is issuing an individual card ruling similar to the one issued by Decipher for Nurn.  
+
+To address future issues concerning similar sites, the wording of the applicable rules is being altered to consolidate terminology, replacing the vague "use" with the less vague (albeit still undefined) "does not apply", which is used throughout the game on cards like {{Card|Helpless}} to indicate text that is in play, active, and nonetheless ignored.  Future work will need to add a specific entry for that verbiage, as well as add definitions for the half-dozen terms used in the Active section that are not defined anywhere, but for now this will do.
+
+
+----
+
+
+{{Rules_Table}}

@@ -6,6 +6,7 @@
 			rarity: _
 		}
 		title: Bag End
+		unique: false
 		type: site
 		block: hobbit
 		site: 1
@@ -22,7 +23,17 @@
 				count: 1
 			}
 		}
+		gametext: <b>Fellowship:</b> Play a [dwarven] follower to draw a card.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_50: {
 		cardInfo: {
 			image: hobbit/HDG3050.jpg
@@ -30,11 +41,12 @@
 			rarity: _
 		}
 		title: The Troll Hoard
+		unique: false
 		twilight: 3
 		type: site
 		block: hobbit
 		site: 2
-		keyword: [
+		keywords: [
 			forest
 			underground
 		]
@@ -54,9 +66,20 @@
 				select: choose(hand weapon)
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: <b>Forest</b>. <b>Underground</b>. At the start of your fellowship phase, you may play a hand weapon from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_51: {
 		cardInfo: {
 			image: hobbit/HDG3051.jpg
@@ -64,10 +87,12 @@
 			rarity: _
 		}
 		title: Rivendell
+		unique: false
 		twilight: 1
 		type: site
 		block: hobbit
 		site: 3
+		keywords: sanctuary
 		effects: {
 			type: modifier
 			modifier: {
@@ -75,7 +100,17 @@
 				filter: troll
 			}
 		}
+		gametext: <b>Sanctuary</b>. Trolls cannot be played at Rivendell.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_52: {
 		cardInfo: {
 			image: hobbit/HDG3052.jpg
@@ -83,11 +118,12 @@
 			rarity: _
 		}
 		title: Goblin Town
+		unique: false
 		twilight: 4
 		type: site
 		block: hobbit
 		site: 4
-		keyword: underground
+		keywords: underground
 		effects: {
 			type: activated
 			phase: maneuver
@@ -100,9 +136,20 @@
 				select: choose(name(The One Ring))
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: <b>Underground</b>. <b>Maneuver:</b> Play the One Ring from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_53: {
 		cardInfo: {
 			image: hobbit/HDG3053.jpg
@@ -110,11 +157,12 @@
 			rarity: _
 		}
 		title: Mirkwood
+		unique: false
 		twilight: 6
 		type: site
 		block: hobbit
 		site: 5
-		keyword: forest
+		keywords: forest
 		effects: {
 			type: Trigger
 			optional: false
@@ -127,7 +175,17 @@
 				select: all(name(Gandalf))
 			}
 		}
+		gametext: <b>Forest</b>. When the fellowship moves to Mirkwood, discard Gandalf.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_54: {
 		cardInfo: {
 			image: hobbit/HDG3054.jpg
@@ -135,11 +193,15 @@
 			rarity: _
 		}
 		title: Esgaroth
+		unique: false
 		twilight: 3
 		type: site
 		block: hobbit
 		site: 6
-		keyword: river
+		keywords: [
+			river
+			sanctuary
+		]
 		effects: {
 			type: Trigger
 			optional: true
@@ -156,9 +218,20 @@
 				select: choose(or(culture(esgaroth),culture(dwarven)),ally)
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: <b>River</b>. <b>Sanctuary</b>. At the start of the regroup phase, you may play a [esgaroth] or [dwarven] ally from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_55: {
 		cardInfo: {
 			image: hobbit/HDG3055.jpg
@@ -166,11 +239,12 @@
 			rarity: _
 		}
 		title: Erebor
+		unique: false
 		twilight: 6
 		type: site
 		block: hobbit
 		site: 7
-		keyword: [
+		keywords: [
 			mountain
 			river
 		]
@@ -192,7 +266,17 @@
 				count: 2
 			}
 		}
+		gametext: <b>Mountain</b>. <b>River</b>. <b>Shadow:</b> Exert 2 minions and spot 6 companions to draw 2 cards.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_56: {
 		cardInfo: {
 			image: hobbit/HDG3056.jpg
@@ -200,11 +284,12 @@
 			rarity: _
 		}
 		title: Smaug's Den
+		unique: false
 		twilight: 8
 		type: site
 		block: hobbit
 		site: 8
-		keyword: [
+		keywords: [
 			mountain
 			underground
 		]
@@ -223,6 +308,7 @@
 						select: choose(name(Smaug))
 						showAll: true
 						shuffle: true
+						mustExist: true
 					}
 					{
 						type: playCardFromDiscard
@@ -231,7 +317,17 @@
 				]
 			}
 		}
+		gametext: <b>Mountain</b>. <b>Underground</b>. <b>Shadow:</b> Play Smaug from your draw deck or discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_57: {
 		cardInfo: {
 			image: hobbit/HDG3057.jpg
@@ -239,11 +335,12 @@
 			rarity: _
 		}
 		title: Battle of the Five Armies
+		unique: false
 		twilight: 9
 		type: site
 		block: hobbit
 		site: 9
-		keyword: [
+		keywords: [
 			mountain
 			battleground
 		]
@@ -259,7 +356,17 @@
 				select: choose(minion,not(name(Smaug)))
 			}
 		}
+		gametext: <b>Mountain</b>. <b>Battleground</b>. <b>Shadow:</b> Remove 2 doubts to play a minion from your discard pile (except Smaug).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_58: {
 		cardInfo: {
 			image: hobbit/HDG3058.jpg
@@ -267,6 +374,7 @@
 			rarity: _
 		}
 		title: Bilbo's Kitchen
+		unique: false
 		twilight: 0
 		type: site
 		block: hobbit
@@ -291,9 +399,20 @@
 				select: choose(culture(dwarven),follower)
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: At the start of your fellowship phase, you may exert a companion to play a [dwarven] follower from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_59: {
 		cardInfo: {
 			image: hobbit/HDG3059.jpg
@@ -301,11 +420,12 @@
 			rarity: _
 		}
 		title: Trollshaw Forest
+		unique: false
 		twilight: 2
 		type: site
 		block: hobbit
 		site: 2
-		keyword: forest
+		keywords: forest
 		effects: {
 			type: Trigger
 			optional: false
@@ -315,30 +435,30 @@
 			}
 			effect: {
 				type:forEachPlayer
-				effect: [
-					{
-						type: chooseYesOrNo
-						text: Would you like to play a hand weapon?
-						memorize: choice
+				effect: {
+					type: optional
+					text: Would you like to play a hand weapon?
+					effect: {
+						type: playCardFromDrawDeck
+						select: choose(hand weapon)
+						showAll: true
+						shuffle: true
+						mustExist: true
 					}
-					{
-						type: If
-						check: {
-							type: memoryIs
-							memory: choice
-							value: yes
-						}
-						true: {
-							type: playCardFromDrawDeck
-							select: choose(hand weapon)
-							showAll: true
-							shuffle: true
-						}
-					}
-				]
+				}
+			}
+		}
+		gametext: <b>Forest</b>. At the start of the maneuver phase, each player may play a hand weapon from his or her draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_60: {
 		cardInfo: {
 			image: hobbit/HDG3060.jpg
@@ -346,11 +466,15 @@
 			rarity: _
 		}
 		title: Rhudaur
+		unique: false
 		twilight: 1
 		type: site
 		block: hobbit
 		site: 3
-		keyword: plains
+		keywords: [
+			plains
+			sanctuary
+		]
 		effects: {
 			type: activated
 			phase: shadow
@@ -364,9 +488,20 @@
 				select: choose(condition)
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: <b>Plains</b>. <b>Sanctuary</b>. <b>Shadow:</b> Exert your fierce minion to play a condition from your draw deck (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	30_61: {
 		cardInfo: {
 			image: hobbit/HDG3061.jpg
@@ -374,11 +509,12 @@
 			rarity: _
 		}
 		title: Wooded Steep Cliff
+		unique: false
 		twilight: 3
 		type: site
 		block: hobbit
 		site: 4
-		keyword: [
+		keywords: [
 			mountain
 			forest
 		]
@@ -409,7 +545,17 @@
 				]
 			}
 		}
+		gametext: <b>Mountain</b>. <b>Forest</b>. When the fellowship moves to Wooded Steep Cliff, Thorin or 2 other companions must exert.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_62: {
 		cardInfo: {
 			image: hobbit/HDG3062.jpg
@@ -417,11 +563,12 @@
 			rarity: _
 		}
 		title: Old Forest Road
-		twilight: 5
+		unique: false
+		twilight: 6
 		type: site
 		block: hobbit
 		site: 5
-		keyword: forest
+		keywords: forest
 		effects: {
 			type: Trigger
 			optional: true
@@ -442,7 +589,17 @@
 				select: choose(minion)
 			}
 		}
+		gametext: <b>Forest</b>. At the start of the Shadow phase, you may discard Gandalf to play a minion from your discard pile.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_63: {
 		cardInfo: {
 			image: hobbit/HDG3063.jpg
@@ -450,17 +607,22 @@
 			rarity: _
 		}
 		title: Lake-Town
+		unique: false
 		twilight: 3
 		type: site
 		block: hobbit
 		site: 6
+		keywords: [
+			river
+			sanctuary
+		]
 		effects: [
 			{
 				type: modifier
 				modifier: {
 					type: modifyCost
 					requires: {
-						type: perPhaseLimit
+						type: perTurnLimit
 						limit: 1
 					}
 					filter: orc
@@ -475,16 +637,26 @@
 					filter: orc
 				}
 				requires: {
-						type: perPhaseLimit
-						limit: 1
-					}
+					type: perTurnLimit
+					limit: 1
+				}
 				effect: {
-					type: incrementPerPhaseLimit
+					type: incrementPerTurnLimit
 					limit: 1
 				}
 			}
 		]
+		gametext: <b>River</b>. <b>Sanctuary</b>. The twilight cost of the first Orc played at Lake-Town each turn is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_64: {
 		cardInfo: {
 			image: hobbit/HDG3064.jpg
@@ -492,11 +664,12 @@
 			rarity: _
 		}
 		title: Dale
+		unique: false
 		twilight: 6
 		type: site
 		block: hobbit
 		site: 7
-		keyword: mountain
+		keywords: mountain
 		effects: {
 			type: activated
 			phase: regroup
@@ -510,6 +683,9 @@
 					count: 6
 					filter: companion
 				}
+				{
+					type: canMove
+				}
 			]
 			effect: {
 				type: addModifier
@@ -518,7 +694,17 @@
 				}
 			}
 		}
+		gametext: <b>Mountain</b>. <b>Regroup:</b> Spot your minion and 6 companions to make the fellowship move again this turn (if the move limit allows).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	30_65: {
 		cardInfo: {
 			image: hobbit/HDG3065.jpg
@@ -526,11 +712,12 @@
 			rarity: _
 		}
 		title: Ravenhill
+		unique: false
 		twilight: 8
 		type: site
 		block: hobbit
 		site: 9
-		keyword: mountain
+		keywords: mountain
 		effects: {
 			type: activated
 			phase: maneuver
@@ -542,6 +729,15 @@
 				type: playCardFromDiscard
 				select: choose(minion)
 				discount: -2
+			}
+		}
+		gametext: <b>Mountain</b>. <b>Maneuver:</b> Remove your minion from the game to play a minion from your discard pile. Its twilight cost is -2.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}

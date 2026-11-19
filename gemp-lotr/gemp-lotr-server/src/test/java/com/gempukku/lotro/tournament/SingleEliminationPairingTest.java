@@ -2,12 +2,11 @@ package com.gempukku.lotro.tournament;
 
 import static org.junit.Assert.*;
 
-import com.gempukku.lotro.at.AbstractAtTest;
 import org.junit.Test;
 
 import java.util.*;
 
-public class SingleEliminationPairingTest extends AbstractAtTest {
+public class SingleEliminationPairingTest {
     private final SingleEliminationPairing _pairing = new SingleEliminationPairing("single-elimination");
 
     @Test

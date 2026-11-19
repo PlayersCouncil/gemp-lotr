@@ -18,8 +18,12 @@ public class Card_06_002_Tests
 		return new VirtualTableScenario(
 				new HashMap<>()
 				{{
-					put("card", "6_2");
-					// put other cards in here as needed for the test case
+					put("elder1", "6_2");
+					put("elder2", "6_2");
+					put("savage", "4_17");      // Dunlending Savage: a [dunland] Man, strength 11, with no text
+					// Southron Explorer: a [raider] Man, vitality 3.  "Regroup: Exert this minion and remove (5) to
+					// take control of a site": the legal way to a second and a third site.
+					put("explorer", "4_250");
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -47,7 +51,7 @@ public class Card_06_002_Tests
 
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
+		var card = scn.GetFreepsCard("elder1");
 
 		assertEquals("Dunlending Elder", card.getBlueprint().getTitle());
 		assertNull(card.getBlueprint().getSubtitle());
@@ -62,18 +66,64 @@ public class Card_06_002_Tests
 		assertEquals(3, card.getBlueprint().getSiteNumber());
 	}
 
-	// Uncomment any @Test markers below once this is ready to be used
-	//@Test
-	public void DunlendingElderTest1() throws DecisionResultInvalidException, CardNotFoundException {
-		//Pre-game setup
+	@Test
+	public void WhileItsOwnerControlsTwoSitesEachElderIsStrengthPlusFiveFierceAndDamagePlusOne() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
-		var card = scn.GetFreepsCard("card");
-		scn.MoveCardsToHand(card);
+		var elder1 = scn.GetShadowCard("elder1");
+		var elder2 = scn.GetShadowCard("elder2");
+		var savage = scn.GetShadowCard("savage");
+		var explorer = scn.GetShadowCard("explorer");
 
 		scn.StartGame();
-		scn.FreepsPlayCard(card);
+		// Both markers are on site 5: sites 1 to 4 are behind every marker.
+		scn.SkipToSite(5);
+		var site3 = scn.GetSite(3);
+		var site4 = scn.GetSite(4);
+		// One site of the other player's, and one of the Shadow player's: two controlled, one of them his.
+		scn.FreepsTakeControlOfSite(scn.GetSite(1));
+		scn.ShadowTakeControlOfSite(scn.GetSite(2));
 
-		assertEquals(2, scn.GetTwilight());
+		// The move to site 6, with no minion in play: straight on to the regroup phase.
+		scn.SkipToPhase(Phase.REGROUP);
+		scn.MoveMinionsToTable(elder1, elder2, savage, explorer);
+		scn.SetTwilight(10);
+		assertEquals(1, scn.GetShadowControlledSiteCount());
+		assertEquals(1, scn.GetFreepsControlledSiteCount());
+		assertEquals(7, scn.GetStrength(elder1));
+		assertEquals(7, scn.GetStrength(elder2));
+		assertFalse(scn.HasKeyword(elder1, Keyword.FIERCE));
+		assertFalse(scn.HasKeyword(elder2, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(elder1, Keyword.DAMAGE));
+		assertEquals(0, scn.GetKeywordCount(elder2, Keyword.DAMAGE));
+		assertEquals(11, scn.GetStrength(savage));
+		assertEquals(0, scn.GetWoundsOn(explorer));
+
+		// A second site of his own, by the Explorer: each Elder is 7 + 5, fierce and damage +1 (once each,
+		// not once for every Elder), and the Savage, another [dunland] Man, is as he was.
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(explorer);
+		assertEquals(1, scn.GetWoundsOn(explorer));
+		assertTrue(scn.ShadowControls(site3));
+		assertEquals(2, scn.GetShadowControlledSiteCount());
+		assertEquals(12, scn.GetStrength(elder1));
+		assertEquals(12, scn.GetStrength(elder2));
+		assertTrue(scn.HasKeyword(elder1, Keyword.FIERCE));
+		assertTrue(scn.HasKeyword(elder2, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(elder1, Keyword.DAMAGE));
+		assertEquals(1, scn.GetKeywordCount(elder2, Keyword.DAMAGE));
+		assertEquals(11, scn.GetStrength(savage));
+		assertFalse(scn.HasKeyword(savage, Keyword.FIERCE));
+		assertEquals(0, scn.GetKeywordCount(savage, Keyword.DAMAGE));
+
+		// A third: two sites or more, and no more than the one bonus.
+		scn.FreepsPass();
+		scn.ShadowUseCardAction(explorer);
+		assertTrue(scn.ShadowControls(site4));
+		assertEquals(3, scn.GetShadowControlledSiteCount());
+		assertEquals(12, scn.GetStrength(elder1));
+		assertTrue(scn.HasKeyword(elder1, Keyword.FIERCE));
+		assertEquals(1, scn.GetKeywordCount(elder1, Keyword.DAMAGE));
+		assertTrue(scn.AwaitingFreepsRegroupPhaseActions());
 	}
 }

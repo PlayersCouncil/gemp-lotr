@@ -80,7 +80,7 @@
 					type: choice
 					texts: [
 						Assign a {wraith} minion to a companion who has resistance 0
-						Have a {wraith} minion lose fierce and gain huner 2 until the regroup phase
+						Have a {wraith} minion lose fierce and gain hunter 2 until the regroup phase
 					]
 					effects: [
 						{

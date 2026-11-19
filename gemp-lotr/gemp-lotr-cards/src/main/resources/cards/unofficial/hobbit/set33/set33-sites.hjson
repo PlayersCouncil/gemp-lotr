@@ -6,6 +6,7 @@
 			rarity: _
 		}
 		title: Prancing Pony
+		unique: false
 		twilight: 0
 		type: site
 		block: hobbit
@@ -17,10 +18,18 @@
 				type: startOfPhase
 				phase: fellowship
 			}
-			requires: {
-				type: isSide
-				side: free people
-			}
+			// A Hobbit-set take from the draw deck with nothing to take is withheld (Q-0019; the orchestrator on
+			// Q-0406 and Q-0418): asked before the cost, as Old Thrush 31_42 has it.
+			requires: [
+				{
+					type: isSide
+					side: free people
+				}
+				{
+					type: hasCardInDrawDeck
+					filter: or(culture(gandalf),culture(shire))
+				}
+			]
 			cost: {
 				type: addTwilight
 				amount: 2
@@ -33,7 +42,17 @@
 				showAll: true
 			}
 		}
+		gametext: At the start of your fellowship phase, you may add (2) to take a [gandalf] or [shire] card into hand from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_56: {
 		cardInfo: {
 			image: hobbit/HDG3356.jpg
@@ -41,11 +60,12 @@
 			rarity: _
 		}
 		title: Great East Road
+		unique: false
 		twilight: 4
 		type: site
 		block: hobbit
 		site: 2
-		keyword: forest
+		keywords: forest
 		effects: {
 			type: Trigger
 			optional: true
@@ -60,11 +80,22 @@
 			effect: {
 				type: playCardFromDrawDeck
 				select: choose(or(possession,artifact))
+				mustExist: true
 				showAll: true
 				shuffle: true
 			}
 		}
+		gametext: <b>Forest</b>. At the start of your fellowship phase, you may play a possession or artifact from your draw deck.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
+		}
 	}
+
 	33_57: {
 		cardInfo: {
 			image: hobbit/HDG3357.jpg
@@ -72,10 +103,12 @@
 			rarity: _
 		}
 		title: The Last Homely House
+		unique: false
 		twilight: 1
 		type: site
 		block: hobbit
 		site: 3
+		keywords: sanctuary
 		effects: {
 			type: activated
 			phase: fellowship
@@ -85,9 +118,20 @@
 				select: choose(ally,allyHome(hobbit,3))
 				showAll: true
 				shuffle: true
+				mustExist: true
+			}
+		}
+		gametext: <b>Sanctuary</b>. <b>Fellowship:</b> Play an ally whose home is site 3 from your draw deck (limit once per turn).
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
 			}
 		}
 	}
+
 	33_58: {
 		cardInfo: {
 			image: hobbit/HDG3358.jpg
@@ -95,11 +139,12 @@
 			rarity: _
 		}
 		title: Front Gate of Erebor
+		unique: false
 		twilight: 8
 		type: site
 		block: hobbit
 		site: 7
-		keyword: [
+		keywords: [
 			mountain
 			river
 		]
@@ -110,6 +155,16 @@
 				type: startOfPhase
 				phase: maneuver
 			}
+			requires: [
+				{
+					type: canSpot
+					filter: culture(dwarven),follower
+				}
+				{
+					type: canSpot
+					filter: culture(dwarven),companion
+				}
+			]
 			effect: [
 				{
 					type: chooseYesOrNo
@@ -193,6 +248,15 @@
 					]
 				}
 			]
+		}
+		gametext: <b>Mountain</b>. <b>River</b>. [dwarven] followers may be attached to [dwarven] companions without paying the aid cost.
+		lore: ""
+		promotext: ""
+		alts: {
+			promos: {
+			}
+			errata: {
+			}
 		}
 	}
 }

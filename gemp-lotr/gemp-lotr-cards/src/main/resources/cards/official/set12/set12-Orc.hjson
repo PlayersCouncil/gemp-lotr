@@ -883,6 +883,11 @@
 					type: played
 					filter: self
 				}
+				requires: {
+					type: canSpot
+					count: 5
+					filter: companion
+				}
 				effect: {
 					type: repeat
 					times: {
@@ -1101,6 +1106,8 @@
 		timewords: Skirmish
 		effects: {
 			type: event
+			// The reveal is done only to count the [orc] cards: a draw deck of fewer than 5 (7) cards pays it with
+			// what it holds, and an empty one does not (Ketura's ruling, Q-0378: A).
 			cost: {
 				type: revealTopCardsOfDrawDeck
 				count: {
@@ -1112,6 +1119,7 @@
 					true: 7
 					false: 5
 				}
+				allowFewer: true
 				memorize: revealedCards
 			}
 			effect: [

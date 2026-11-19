@@ -126,23 +126,23 @@
 	
 	52_43: {
 		cardInfo: {
-			//id: 2_43.1
+			//id: 52_43.1
 			parent: 2_43
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN02E043.1.jpg
 			collInfo: 2R43
 			rarity: R
 		}
-		side: shadow
+		side: Shadow
 		twilight: 1
 		strength: 2
 		culture: Isengard
-		itemclass: Hand Weapon
+		itemclass: Hand weapon
 		title: Lurtz's Sword
 		unique: true
-		type: possession
+		type: Possession
 		target: uruk-hai,unique
 		effects: [
 			{
@@ -199,21 +199,22 @@
 	
 	52_44: {
 		cardInfo: {
-			//id: 2_44.1
+			//id: 52_44.1
 			parent: 2_44
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN02E044.1.jpg
 			collInfo: 2C44
 			rarity: C
 		}
-		side: shadow
+		unique: false
+		side: Shadow
 		twilight: 3
 		culture: Isengard
 		title: No Business of Ours
-		type: condition
-		keyword: Support Area
+		type: Condition
+		keywords: Support Area
 		effects: [
 			{
 				type: ModifyOwnCost
@@ -232,7 +233,7 @@
 				}
 			}
 		]
-		gametext: While you can spot an [isengard] minion, this card is twilight cost -3.\The Free Peoples player may not look at or reveal cards in any Shadow player's hand.
+		gametext: While you can spot an [isengard] minion, this card is twilight cost -3. The Free Peoples player may not look at or reveal cards in any Shadow player's hand.
 		lore: "'Goblins? Cobblers! Far-off tales and children's stories, that's all that is!'"
 		promotext: ""
 		alts: {
@@ -245,21 +246,22 @@
 	
 	52_45: {
 		cardInfo: {
-			//id: 2_45.1
+			//id: 52_45.1
 			parent: 2_45
 			variant: ERRATA
-			variantPath: promos/pc
+			variantPath: errata/pc
 			revision: 1
 			image: errata/LOTR-EN02E045.1.jpg
 			collInfo: 2R45
 			rarity: R
 		}
-		side: shadow
+		unique: false
+		side: Shadow
 		twilight: 1
 		culture: Isengard
 		title: Too Much Attention
-		type: event
-		timeword: response
+		type: Event
+		timewords: Response
 		effects: {
 			type: responseEvent
 			requires: {
@@ -273,31 +275,43 @@
 				{
 					type: ChooseCardsFromDrawDeck
 					select: choose(minion)
-					count: 1
+					# A minion looked for in the draw deck need not be found.
+					count: 0-1
 					memorize: chosenCard
 					showAll: true
 				}
 				{
-					type: preventable
-					player: freeps
-					cost: {
-						type: DiscardTopCardsFromDeck
-						count: 6
-						forced: false
-						deck: freeps
+					type: If
+					check: {
+						type: HasCardInMemory
+						memory: chosenCard
 					}
-					text: Discard the top 6 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
-					effect: {
-						type: PutCardsFromDeckIntoHand
-						select: memory(chosenCard)
-						reveal: true
-						shuffle: false
-						showAll: false
+					true: {
+						type: preventable
+						player: freeps
+						cost: {
+							type: DiscardTopCardsFromDeck
+							count: 5
+							forced: false
+							deck: freeps
+						}
+						text: Discard the top 5 cards of your draw deck to prevent your opponent taking {chosenCard} into hand
+						effect: {
+							type: PutCardsFromDeckIntoHand
+							select: memory(chosenCard)
+							reveal: true
+							shuffle: false
+							showAll: false
+						}
 					}
+				}
+				# The draw deck has been looked through, so it is reshuffled, whether or not the card was taken.
+				{
+					type: shuffleDeck
 				}
 			]	
 		}
-		gametext: If the Ring-bearer puts on The One Ring, spot an [isengard] minion to take a minion into hand from your draw deck.  The Free Peoples player may discard the top 6 cards of their draw deck to prevent this.
+		gametext: If the Ring-bearer puts on The One Ring, spot an [isengard] minion to take a minion into hand from your draw deck.  The Free Peoples player may discard the top 5 cards of their draw deck to prevent this.
 		lore: "'A little more caution from you – that is not a trinket you carry.'"
 		promotext: ""
 		alts: {
@@ -397,6 +411,7 @@
 			effect: {
 				type: playCardFromDiscard
 				select: choose(uruk-hai)
+				removedTwilight: 1
 			}
 		}
 		gametext: <b>Damage +1</b>.<br><b>Shadow:</b> Remove (1) and exert a unique Uruk-hai to play an Uruk-hai from your discard pile.

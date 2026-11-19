@@ -134,6 +134,7 @@
 				optional: false
 				trigger: {
 					type: played
+					player: you
 					filter: name(Saruman)
 				}
 				requires: {
