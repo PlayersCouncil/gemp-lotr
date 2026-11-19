@@ -8,7 +8,11 @@ the other, and compares the pages after every step:
   chat's times masked in magenta;
 - what the page sent the server: every decision answered (id and value), card information asked for, concede and
   cancel, chat messages. The long polls aren't compared: when they are sent depends on timing;
-- the browser's own dialogs, with their text (the check accepts them);
+- the browser's own dialogs, with their text (the check accepts them); the Angular page asks "At least one minion has
+  not been assigned" in a dialog of its own (`ANGULAR_CONTRACT.unassignedQuestion`), which the check answers the same
+  way after Done on an assignment and records in the same words (`run.mjs` `answerUnassignedQuestion`). It asks only
+  while more minions could have been assigned (the server's `maxAssignable`), game.html about any minion left: a
+  step where only game.html asked is accepted (`GAME_ACCEPTED`, Ketura 2026-11-19);
 - the game as the page shows it (`controls.mjs` `readGameState`): twilight, phase, initiative, rule of 4, the decision's
   text and buttons, open dialogs, the action menu, every player counter, and every card with its zone and assignment;
 - page errors.
@@ -339,7 +343,7 @@ plays it), where the hand is the whole deck once the starting fellowship is out,
 | `opening`                        | Bid (the spinner), starting fellowship (a card in the dialog, then Done), no mulligan                       |
 | `fellowship-play`                | A companion played, a possession played and put on its bearer, a card's action, moving                      |
 | `minions-and-skirmish`           | The opponent plays a minion; it is assigned to Frodo, the skirmish chosen, its action passed, Frodo's wound |
-| `minions-unassigned`             | Done with a minion unassigned: the browser's confirmation                                                   |
+| `minions-unassigned`             | Done with a minion unassigned: the page asks to confirm (game.html: the browser's confirm)                  |
 | `skirmish-event`                 | A minion assigned, unassigned and assigned again; Axe Strike played in the skirmish                         |
 | `shadow-turn`                    | The player's shadow phase: a minion played, the phase passed, reconcile                                     |
 | `reconcile-discard`              | Without auto-accept: a card chosen in reconcile, Reset choice, chosen again and discarded; the discard pile |

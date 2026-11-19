@@ -212,8 +212,13 @@ async function makeGesture(
           if (find(page, card(minion))?.dataset['assign'] !== character) await assign(page, minion, character);
         }
       }
+      // The page asks (its own dialog, through the Notifier) only while more minions could have been assigned
+      // (maxAssignable), unlike the legacy page's browser confirm: an answer it didn't take mustn't answer a later
+      // question
+      const queued = page.answers.length;
       page.answers.push(true);
       await click(page, button('Done'));
+      if (page.answers.length > queued) page.answers.splice(queued, 1);
       return;
     }
     default: {

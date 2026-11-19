@@ -26,6 +26,13 @@ export const ANGULAR_CONTRACT = {
   chatInput: '[data-chat-input]',
   replay: (name) => `[data-replay="${name}"]`,
   button: (name) => `[data-button="${name}"]`,
+  // The page's own question before an assignment is sent with a minion left unassigned (only while more minions could
+  // have been assigned: maxAssignable), where the legacy page asks with the browser's confirm: the dialog (titled
+  // unassignedTitle), its message, and its buttons by `data-action` (ok "Proceed", cancel "Go back")
+  unassignedQuestion: 'dialog.gd-dialog[open][data-dialog="confirm"]',
+  unassignedTitle: 'Unassigned minions',
+  questionMessage: '.gd-notifier__message',
+  questionAnswer: (action) => `button[data-action="${action}"]`,
   // Changes over time on its own: left out of the screenshots
   masks: ['[data-clock]', '[data-chat-time]'],
   // What the legacy page had nothing like, hidden in the screenshots (the owner put it there, 2026-11-15): the theme

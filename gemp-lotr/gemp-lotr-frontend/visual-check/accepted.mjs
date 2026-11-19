@@ -470,15 +470,28 @@ export const GAME_ACCEPTED = [
     // improvement wanted on the Angular page. game.html no longer sizes these windows to their cards (it was put back
     // as it was), so every step where one is open differs on purpose: the dialog of cards a decision shows
     // (ARBITRARY_CARDS, ACTION_CHOICE) and a revealed hand's (no scenario opens one). These are exactly the steps of
-    // `check:game:table` (2026-11-19, 18 of 300 at 3 sizes) that differ because of it; `check:game` takes and shows the
-    // same steps. The whole screen may differ: the legacy dialog takes 80% of the window, the Angular one is sized to
-    // its cards, so they differ wherever either one is. (Not after a reload, which compares the Angular page with
+    // `check:game:table` (2026-11-19, 18 of 300 at 3 sizes) that differ because of it, and the one more step of
+    // `check:game` that shows such a dialog (settings: a card chosen, then cleared; every scenario run on a real
+    // server at 1366x768 with --pages legacy,angular). The whole screen may differ: the legacy dialog takes 80% of the
+    // window, the Angular one is sized to its cards, so they differ wherever either one is. (Not after a reload, which compares the Angular page with
     // itself: there it must still be the same.)
     decision: null,
     scenarios: ['opening', 'settings', 'effects-skirmish'],
     problem:
-      /^(bid|starting fellowship: Gimli|going first, from the list|starting fellowship: chosen again, then Done|two required responses at once|one of them chosen first): screen: \d+ px differ$/,
+      /^(bid|starting fellowship: Gimli|going first, from the list|starting fellowship: a card chosen, then cleared|starting fellowship: chosen again, then Done|two required responses at once|one of them chosen first): screen: \d+ px differ$/,
     reason: 'Ketura, 2026-11-19: card windows sized to their cards, in both themes',
+  },
+  {
+    // Ketura's decision of 2026-11-19 (no number in trymarz/gemp-lotr-private#27 yet), in check:game: the Angular page
+    // asks "At least one minion has not been assigned" (in its own dialog, run.mjs answerUnassignedQuestion) only while
+    // more minions could have been assigned (the server's maxAssignable); game.html asks (the browser's confirm)
+    // about any minion left unassigned. So a step where the legacy page asked and the Angular page had no reason to
+    // differs in its dialogs, and only so: the answer sent is the same. Never the other way round. Not seen in the
+    // runs of 2026-11-19 (every scenario at 1366x768, on a seeded server started by hand, not through Docker).
+    decision: null,
+    scenarios: [/./],
+    problem: /: dialogs: A \["confirm: At least one minion has not been assigned, do you want to proceed\?"\], B \[\]$/,
+    reason: 'Ketura, 2026-11-19: the unassigned minion question only when more minions could have been assigned',
   },
 ];
 

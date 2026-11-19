@@ -296,6 +296,38 @@ function inPage(page, fn, arg) {
   return page.evaluate(([source, arg]) => new Function(`return (${source})`)()(arg), [fn.toString(), arg]);
 }
 
+/**
+ * The Angular page's own question after Done on an assignment with a minion left unassigned ("At least one minion has
+ * not been assigned, do you want to proceed?", ANGULAR_CONTRACT.unassignedQuestion), answered as the legacy page's
+ * browser confirm is (the page's `dialog` handler, see openPage): recorded among the page's dialogs in the same words
+ * ("confirm: <message>"), so the two pages compare the same when both ask; counted as the question asked for the
+ * coverage ('browser confirm', whichever page asked it); and answered `answer` (ok: "Proceed", as the handler accepts
+ * the browser's; cancel: "Go back", which no scenario does yet).
+ *
+ * The page asks only while more minions could have been assigned (the server's maxAssignable), where the legacy page
+ * asks about any minion left: not asked, there is nothing to answer, and the dialogs differ on purpose (GAME_ACCEPTED,
+ * Ketura 2026-11-19). It opens at once after the click (in the next frame), so a short wait tells.
+ *
+ * Tried on 2026-11-19 against a seeded server started by hand, not the check's own Docker one (which couldn't run
+ * there): every scenario at 1366x768 with --pages legacy,angular, minions-unassigned also with angular,legacy.
+ */
+async function answerUnassignedQuestion(page, use, used, answer = 'ok') {
+  const question = page.locator(ANGULAR_CONTRACT.unassignedQuestion).filter({
+    has: page.locator('[data-dialog-title]', { hasText: ANGULAR_CONTRACT.unassignedTitle }),
+  });
+  const asked = await question.waitFor({ state: 'visible', timeout: 1000 }).then(
+    () => true,
+    () => false,
+  );
+  if (!asked) return false;
+  used.add('browser confirm');
+  const message = (await question.locator(ANGULAR_CONTRACT.questionMessage).textContent()) ?? '';
+  page.__dialogs?.push(`confirm: ${message}`);
+  await use(question.locator(ANGULAR_CONTRACT.questionAnswer(answer)));
+  await question.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => undefined);
+  return true;
+}
+
 /** The gestures a step is made of, on one kind of page. */
 function gestures(page, kind, used) {
   const select = kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT;
@@ -363,9 +395,15 @@ function gestures(page, kind, used) {
       for (let i = 1; i <= 10; i++) await page.mouse.move(point.x + (dx * i) / 10, point.y + (dy * i) / 10);
       await page.mouse.up();
     },
-    async clickButton(label) {
+    /**
+     * `assignment`: Done on an assignment (ASSIGN_MINIONS), which may ask first whether to go on with a minion left
+     * unassigned. The legacy page asks with the browser's confirm, which the page's `dialog` handler accepts and records
+     * (see openPage); the Angular page asks in a dialog of its own, answered here (answerUnassignedQuestion).
+     */
+    async clickButton(label, { assignment = false } = {}) {
       used.add(label === 'OK' ? 'OK button' : label);
       await use(decisionButton(label));
+      if (assignment && label === 'Done' && kind === 'angular') await answerUnassignedQuestion(page, use, used);
     },
     hasButton: (label) =>
       decisionButton(label)
@@ -436,8 +474,9 @@ async function answerByPolicy(act, decision, traffic, used) {
     case 'ACTION_CHOICE':
       return pickCards(act, decision, [0], traffic, used);
     case 'ASSIGN_MINIONS':
-      // Done with nothing assigned: the browser asks to confirm when there are minions
-      return act.clickButton('Done');
+      // Done with nothing assigned: the page asks first when there are minions (the legacy page's browser confirm, the
+      // Angular page's own dialog: see clickButton)
+      return act.clickButton('Done', { assignment: true });
     default:
       return pickCards(
         act,
@@ -461,7 +500,8 @@ async function pickCards(act, decision, indexes, traffic, used) {
   await sleep(300);
   if (traffic && traffic.answered(decision)) return;
   if (indexes.length === 0 && decision.type === 'CARD_ACTION_CHOICE') return act.clickButton('Pass');
-  if (await act.hasButton('Done')) await act.clickButton('Done');
+  // (a pass on an assignment is Done with nothing assigned, which may ask first: see clickButton)
+  if (await act.hasButton('Done')) await act.clickButton('Done', { assignment: decision.type === 'ASSIGN_MINIONS' });
 }
 
 /** The blueprint of a card the page was told about, by its id. */
@@ -542,13 +582,14 @@ async function doStep(page, kind, step, traffic, used) {
         used.add('Escape');
         return page.keyboard.press('Escape');
       }
-      return act.clickButton(step.then);
+      return act.clickButton(step.then, { assignment: d.type === 'ASSIGN_MINIONS' });
     }
     return pickCards(act, d, step.pick, traffic, used);
   }
   if (step.pass) return pickCards(act, needs('a pass'), [], traffic, used);
-  if (step.done) return act.clickButton('Done');
-  if ('press' in step) return act.clickButton(step.press);
+  // (Done on an assignment may ask first: see clickButton)
+  if (step.done) return act.clickButton('Done', { assignment: decision?.type === 'ASSIGN_MINIONS' });
+  if ('press' in step) return act.clickButton(step.press, { assignment: decision?.type === 'ASSIGN_MINIONS' });
   if ('assign' in step) {
     // A minion, then the character it goes to (by their place in the decision's lists, or by blueprint)
     const d = needs('an assignment');
@@ -623,7 +664,8 @@ async function doStep(page, kind, step, traffic, used) {
           await act.clickCard(characters[i % characters.length]);
           await sleep(250);
         }
-        await act.clickButton('Done');
+        // (every minion has a character: neither page asks, but a minion that couldn't be given one would)
+        await act.clickButton('Done', { assignment: true });
       } else if (wanted !== undefined && d.type === 'CARD_ACTION_CHOICE') {
         await playAction(act, d, wanted, traffic, used);
       } else if (picked !== undefined && (d.type === 'ARBITRARY_CARDS' || d.type === 'ACTION_CHOICE')) {
@@ -809,6 +851,8 @@ async function play(kind, scenario, size, pair, label) {
   page.__touch = Boolean(size.profile?.hasTouch);
   const errors = [];
   const dialogs = [];
+  // The Angular page's own question is recorded here too, as the browser's dialogs are (answerUnassignedQuestion)
+  page.__dialogs = dialogs;
   const snapshots = [];
   // After each step, the page loaded again (--reload)
   const reloads = [];
@@ -862,6 +906,8 @@ async function play(kind, scenario, size, pair, label) {
     });
     page.on('pageerror', (error) => errors.push(error.message));
     if (options.console) page.on('console', (message) => console.log(`console ${kind}: ${message.text()}`));
+    // The browser's own dialogs, accepted: on the legacy page the question before an assignment with a minion left
+    // unassigned is one (the Angular page asks in a dialog of its own: answerUnassignedQuestion, which records it the same)
     page.on('dialog', async (dialog) => {
       if (dialog.type() === 'confirm') used.add('browser confirm');
       dialogs.push(`${dialog.type()}: ${dialog.message()}`);

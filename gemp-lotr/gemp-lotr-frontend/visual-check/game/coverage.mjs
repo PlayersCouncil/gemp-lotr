@@ -22,7 +22,9 @@ export const GAME_CONTROLS = {
   'Clear selection': 'the Clear selection button (choosing in a dialog without auto-accept)',
   'assign minion': 'a minion, then the character it goes to',
   'unassign minion': 'a minion clicked twice',
-  'browser confirm': 'the browser asking to confirm (Done with a minion left unassigned)',
+  // (the name is the legacy page's: the Angular page asks in its own dialog, counted the same, run.mjs
+  // answerUnassignedQuestion)
+  'browser confirm': 'the page asking to confirm (Done with a minion left unassigned): the browser on the legacy page',
   // Cards
   'card info: right click': 'card information by a right click',
   'card info: shift click': 'card information by a shift click',
