@@ -404,6 +404,20 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   takes the room back; every tab can be shown.
 - **timeline**: the script's rows; ▶ on a row is a fresh game played to it, the panel back as it was.
 - **leave**: leaving with changes in no file asks first; Stay stays, Discard closes the draft.
+- **scenario-title**: a new title goes into the game in hand (no fresh game); the panel's head and the scenario's menu
+  follow; a field half typed in is left alone.
+- **scenario-save**: a new draft saved from the Scenario tab (its file written, the saved notice, the star and the red
+  head gone, the report), then saved as a copy through the filing form, the name tidied as the form says (an empty
+  one marked, nothing sent); both files are deleted afterwards.
+- **scenario-rules**: a skipped phase and a hand size added and taken back, each a fresh game back on the Scenario
+  tab; with nothing left, `rules` goes.
+- **scenario-outcome**: losing also when a companion is killed, and what the player is told.
+- **scenario-settings**: the player's settings the draft fixes (an animation speed, the deck reveal, auto-accept), seen
+  on the table's Settings tab; the player's own speed again takes the part out.
+- **scenario-parts**: a part of the rest of the file applied as HJSON; a mistake in it refused in the server's words,
+  the text kept, no fresh game.
+- **scenario-check**: Check reports; See the file and Put that away; Submit for review asks first and Cancel submits
+  nothing (submitting is never checked: it locks the file for an admin's review); Close the draft asks first.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
