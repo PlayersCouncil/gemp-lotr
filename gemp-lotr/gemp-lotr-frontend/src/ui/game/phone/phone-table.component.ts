@@ -36,8 +36,8 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
  * DOM contract: `gd-phone-table` holding `section.gd-phone-zone` (`data-zone`: path, support-opponent,
  * characters-opponent, shadow, pairs, characters-player, support-player; `data-side`), each with `.gd-phone-zone__label`
  * and its `gd-phone-cards` (or `.gd-phone-path` with a `.gd-phone-site` per place: `data-site`, `data-here`, a site's
- * `button.gd-card`, or `button.gd-phone-site__empty` opening the adventure deck; `data-own` on the site where the
- * player looking stands, shown big and brought to the road's middle); or `.gd-phone-pair` per fight with
+ * `button.gd-card`, or `button.gd-phone-site__empty` opening the adventure deck; `data-big` on the site where the
+ * game is happening (the turn's player stands there), shown big and brought to the road's middle); or `.gd-phone-pair` per fight with
  * `data-pair` skirmish or assignment: upright, its minions, the Shadow's and the Free Peoples' strengths, its characters;
  * `data-reversed` the other way up, for the Shadow player).
  */
@@ -59,7 +59,7 @@ const HALF_ROW = 3;
             class="gd-phone-site"
             [attr.data-site]="site.number"
             [attr.data-here]="site.here ? '' : null"
-            [attr.data-own]="site.own ? '' : null"
+            [attr.data-big]="site.here ? '' : null"
             [attr.data-ahead]="site.ahead ? '' : null"
           >
             @if (site.card; as card) {
@@ -247,8 +247,8 @@ export class PhoneTableComponent {
     const current = this.session.model().currentPlayer;
     return current !== null && this.table().bottom !== null && this.table().bottom !== current;
   });
-  /** The site where the player looking stands (shown big), by its number. */
-  private readonly ownSite = computed(() => this.phone().path.find((site) => site.own)?.number ?? null);
+  /** The site where the game is happening (shown big), by its number. */
+  private readonly bigSite = computed(() => this.phone().path.find((site) => site.here)?.number ?? null);
   private readonly road = viewChild.required<ElementRef<HTMLElement>>('road');
 
   constructor() {
@@ -271,17 +271,17 @@ export class PhoneTableComponent {
       },
     });
 
-    // The player's own site in the road's middle: at first, and whenever their fellowship moves (the road scrolls freely
-    // in between)
+    // The site where the game is happening in the road's middle: at first, and whenever it changes (the road scrolls
+    // freely in between)
     let centred: number | null = null;
     afterRenderEffect({
       write: () => {
-        const own = this.ownSite();
-        if (own === null || own === centred) return;
+        const big = this.bigSite();
+        if (big === null || big === centred) return;
         const road = this.road().nativeElement;
-        const site = road.querySelector<HTMLElement>('.gd-phone-site[data-own]');
+        const site = road.querySelector<HTMLElement>('.gd-phone-site[data-big]');
         if (!site) return;
-        centred = own;
+        centred = big;
         road.scrollLeft = Math.max(0, site.offsetLeft - (road.clientWidth - site.offsetWidth) / 2);
       },
     });

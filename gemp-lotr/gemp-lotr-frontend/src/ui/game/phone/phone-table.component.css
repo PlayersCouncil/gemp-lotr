@@ -240,10 +240,10 @@
 }
 
 /*
- * The site where the player looking stands: as big as a card in the rows, lying down (the owner, 2026-11-18); the
- * others stay small on either side, and the road scrolls
+ * The site where the game is happening (the turn's player stands there): as big as a card in the rows, lying down (the
+ * owner, 2026-11-18, 2026-11-19); the others stay small on either side, and the road scrolls
  */
-.gd-phone-site[data-own] > .gd-card {
+.gd-phone-site[data-big] > .gd-card {
   --gd-card-height: var(--gd-phone-card, 100px);
 }
 
@@ -330,7 +330,7 @@
 
 /* Where each player stands: their number on a heraldic shield, as in their chip */
 /* A small site has no room for both on its left: who stands there on its right */
-.gd-phone-site:not([data-own]) > .gd-phone-site__markers {
+.gd-phone-site:not([data-big]) > .gd-phone-site__markers {
   left: auto;
   right: 3px;
 }
