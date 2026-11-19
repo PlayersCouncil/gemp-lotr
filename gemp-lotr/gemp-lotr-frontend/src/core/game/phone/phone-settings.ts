@@ -62,7 +62,8 @@ export class PhoneSettings {
   private readonly split = signal(parseSplit(this.cookies.read(PHONE_COOKIES.split)));
 
   /** The device the compact layout is on, or null outside it. */
-  readonly device = inject(CompactLayout).device;
+  readonly device = inject(CompactLayout).gameDevice;
+  private readonly tallSideways = inject(CompactLayout).tallSideways;
   /** The table's card size (%). */
   readonly cardSize = signal(clampSize(Number(this.cookies.read(PHONE_COOKIES.cardSize) ?? '100')));
   readonly moveVibrate = signal(this.cookies.read(PHONE_COOKIES.moveVibrate) !== 'false');
@@ -74,13 +75,17 @@ export class PhoneSettings {
   /** The hand's height on this device (px), or "hidden". */
   readonly hand = computed<number | 'hidden'>(() => {
     const device = this.device() ?? 'phone';
-    return this.split()[device] ?? DEFAULT_HAND[device];
+    return this.split()[device] ?? this.defaultHand();
   });
   readonly handHidden = computed(() => this.hand() === 'hidden');
   /** The hand's height at first on this device (px). */
-  readonly defaultHand = computed(() => DEFAULT_HAND[this.device() ?? 'phone']);
+  readonly defaultHand = computed(() =>
+    this.tallSideways() ? DEFAULT_HAND.tablet : DEFAULT_HAND[this.device() ?? 'phone'],
+  );
   /** The table's cards' height (px). */
-  readonly cardHeight = computed(() => (CARD_HEIGHT[this.device() ?? 'phone'] * this.cardSize()) / 100);
+  readonly cardHeight = computed(
+    () => ((this.tallSideways() ? CARD_HEIGHT.tablet : CARD_HEIGHT[this.device() ?? 'phone']) * this.cardSize()) / 100,
+  );
 
   /** The divider dropped: the hand this high (px), or hidden. */
   setHand(height: number | 'hidden'): void {
@@ -92,7 +97,7 @@ export class PhoneSettings {
 
   /** The hand shown again at its last height (an offer of cards needs it). */
   showHand(): void {
-    if (this.handHidden()) this.setHand(DEFAULT_HAND[this.device() ?? 'phone']);
+    if (this.handHidden()) this.setHand(this.defaultHand());
   }
 
   setCardSize(percent: number): void {
