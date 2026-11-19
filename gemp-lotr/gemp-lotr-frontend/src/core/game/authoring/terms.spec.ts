@@ -1,4 +1,4 @@
-import { splitTerms, whenParts } from './terms';
+import { nextUntil, pickersOf, putTerm, rank, splitTerms, untilFromNext, whenParts, writtenInFull } from './terms';
 
 describe('splitTerms', () => {
   it('splits at the commas that are not inside parentheses, trimmed, blanks dropped', () => {
@@ -44,5 +44,54 @@ describe('whenParts', () => {
     expect(whenParts([{ type: 'x' }])).toBeNull();
     expect(whenParts({ seat: 'freeps' })).toBeNull();
     expect(whenParts({ seat: 'freeps', require: { type: 'x' }, odd: 1 })).toBeNull();
+  });
+});
+
+describe('the When composer', () => {
+  it('tells a When written out in full from a line of terms', () => {
+    expect(writtenInFull('{ seat: freeps }')).toBe(true);
+    expect(writtenInFull('  [ {type: x} ]')).toBe(true);
+    expect(writtenInFull('when: freeps')).toBe(true);
+    expect(writtenInFull('freeps, action')).toBe(false);
+    expect(writtenInFull(undefined)).toBe(false);
+  });
+
+  it('reads the pickers off a line of terms, and has none for one written out in full', () => {
+    expect(pickersOf('Freeps, ACTION, phase(shadow), turn(3), text(x)')).toEqual({
+      seat: 'freeps',
+      kind: 'action',
+      phase: 'shadow',
+      turn: '3',
+    });
+    expect(pickersOf('actionchoice')).toEqual({ seat: '', kind: 'actionChoice', phase: '', turn: '' });
+    expect(pickersOf(undefined)).toEqual({ seat: '', kind: '', phase: '', turn: '' });
+    expect(pickersOf('{ seat: freeps }')).toBeNull();
+  });
+
+  it("puts a picker's term in its place, keeps the other terms, and orders the line as a person says it", () => {
+    expect(putTerm('text(x), phase(shadow), freeps', 'turn', '2')).toBe('freeps, phase(shadow), turn(2), text(x)');
+    expect(putTerm('freeps, action', 'seat', 'shadow')).toBe('shadow, action');
+    expect(putTerm('freeps, action, phase(shadow)', 'phase', '')).toBe('freeps, action');
+    expect(putTerm('skirmish(1), freeps', 'kind', 'assign')).toBe('freeps, assign, skirmish(1)');
+    expect(putTerm('', 'phase', 'between_turns')).toBe('phase(between_turns)');
+    expect([rank('human'), rank('cards'), rank('phase(x)'), rank('turn(1)'), rank('skirmish(2)'), rank('x')]).toEqual([
+      0, 1, 2, 3, 4, 5,
+    ]);
+  });
+
+  it('guesses what a step that repeats goes on until: the next phase, else the next turn', () => {
+    expect(nextUntil('freeps, phase(fellowship), turn(2)')).toBe('phase(shadow)');
+    expect(nextUntil('freeps, phase(regroup), turn(2)')).toBe('turn(3)');
+    expect(nextUntil('phase(nowhere)')).toBe('');
+    expect(nextUntil(null)).toBe('');
+  });
+
+  it('takes what a step repeats until from the next step that waits for something else', () => {
+    const steps = [{ when: 'a' }, { when: 'a' }, {}, { when: { seat: 'x' } }];
+    expect(untilFromNext(steps, 0)).toBe('{\n\t"seat": "x"\n}');
+    expect(untilFromNext([{ when: 'a' }, { when: 'b' }], 0)).toBe('b');
+    expect(untilFromNext(steps, 3)).toBeNull();
+    expect(untilFromNext(steps, -1)).toBeNull();
+    expect(untilFromNext(steps, 9)).toBeNull();
   });
 });
