@@ -13,6 +13,7 @@ import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 import com.gempukku.lotro.logic.timing.GameStats;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Collections;
@@ -44,6 +45,22 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
 
     private record Barrier(int cause, String what) { }
 
+    /** How a player came to see something they had not seen: the kind of hidden information, never which card. */
+    public enum Revealed {
+        DRAWN("card drawn"), OPPONENTS("opponent's card seen"), OWN("own card revealed"), SITE("site revealed"),
+        LOOKED("cards looked at");
+
+        private final String _words;
+
+        Revealed(String words) {
+            _words = words;
+        }
+
+        public String words() {
+            return _words;
+        }
+    }
+
     private final List<String> _players;
     private final LotroFormat _format;
     private final GameJournal _journal;
@@ -56,6 +73,8 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
     private final Map<String, Set<PhysicalCard>> _known = new HashMap<>();
     /** For each player: the answers (by where they sit in the journal) that showed them something new, soonest first. */
     private final Map<String, List<Integer>> _learnedAt = new HashMap<>();
+    /** For each player and each of those answers: the kinds of thing it showed them. */
+    private final Map<String, Map<Integer, EnumSet<Revealed>>> _revealedAt = new HashMap<>();
     private final List<Barrier> _barriers = new ArrayList<>();
     /** Where in the journal the answer sits that the game is now working through; -1 before any answer. */
     private int _cause = -1;
@@ -67,6 +86,7 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
         for (String player : _players) {
             _known.put(player, Collections.newSetFromMap(new IdentityHashMap<>()));
             _learnedAt.put(player, new ArrayList<>());
+            _revealedAt.put(player, new HashMap<>());
         }
     }
 
@@ -133,23 +153,35 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
             }
         }
         boolean learned = false;
+        EnumSet<Revealed> revealed = EnumSet.noneOf(Revealed.class);
         List<Integer> learnedAt = _learnedAt.get(requester);
         if (learnedAt == null)
             learned = true;
-        else if (!learnedAt.isEmpty() && learnedAt.get(learnedAt.size() - 1) >= entryCount)
+        else if (!learnedAt.isEmpty() && learnedAt.get(learnedAt.size() - 1) >= entryCount) {
             learned = true;
+            for (Map.Entry<Integer, EnumSet<Revealed>> at : _revealedAt.get(requester).entrySet())
+                if (at.getKey() >= entryCount)
+                    revealed.addAll(at.getValue());
+        }
 
         String barrier = barrierSince(entryCount);
 
+        //Short, and the same for whoever reads them: the asker in their list, the others in the request.  The kind
+        // of thing that was seen is said, never the card: the others are to judge the request by it, and whoever asks
+        // is not to have pointed out to them what they may have missed
         List<String> reasons = new ArrayList<>();
-        if (learned)
-            reasons.add(requester + " has seen cards since then that they had not seen before");
+        if (learned) {
+            List<String> kinds = new ArrayList<>();
+            for (Revealed kind : revealed)
+                kinds.add(kind.words());
+            reasons.add("Hidden information revealed" + (kinds.isEmpty() ? "" : ": " + String.join(", ", kinds)));
+        }
         if (picked)
-            reasons.add("cards have been picked at random since then");
+            reasons.add("Random outcome");
         if (othersAnswers > 0)
-            reasons.add("another player has made " + othersAnswers + (othersAnswers == 1 ? " choice" : " choices") + " since then");
+            reasons.add("Opponent replays " + othersAnswers + (othersAnswers == 1 ? " choice" : " choices"));
         if (shuffled)
-            reasons.add("a deck has been shuffled since then");
+            reasons.add("Deck shuffled");
         RevertAssessment.Tier tier = learned || picked ? RevertAssessment.Tier.RED
                 : othersAnswers > 0 || shuffled ? RevertAssessment.Tier.YELLOW
                 : RevertAssessment.Tier.GREEN;
@@ -167,15 +199,23 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
         return null;
     }
 
-    private void learned(String player) {
+    private void learned(String player, Revealed how) {
         List<Integer> learnedAt = _learnedAt.get(player);
         if (learnedAt.isEmpty() || learnedAt.get(learnedAt.size() - 1) != _cause)
             learnedAt.add(_cause);
+        _revealedAt.get(player).computeIfAbsent(_cause, cause -> EnumSet.noneOf(Revealed.class)).add(how);
     }
 
-    private void shown(String player, PhysicalCard card) {
+    private void shown(String player, PhysicalCard card, Revealed how) {
         if (_known.get(player).add(card))
-            learned(player);
+            learned(player, how);
+    }
+
+    /** A card put where this player can see it: their own into their hand is a card drawn. */
+    private static Revealed seen(String player, PhysicalCard card) {
+        if (!player.equals(card.getOwner()))
+            return Revealed.OPPONENTS;
+        return card.getZone() == Zone.HAND ? Revealed.DRAWN : Revealed.OWN;
     }
 
     /* ---- what the game does ---- */
@@ -184,21 +224,21 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
     public void cardCreated(PhysicalCard card, boolean overrideOwnerVisibility, boolean forceVisible) {
         for (String player : _players)
             if (GameCommunicationChannel.showsCard(player, card, _format, overrideOwnerVisibility, forceVisible))
-                shown(player, card);
+                shown(player, card, seen(player, card));
     }
 
     @Override
     public void setSite(PhysicalCard card) {
         //A site laid on the adventure path is announced this way and not as a card created
         for (String player : _players)
-            shown(player, card);
+            shown(player, card, Revealed.SITE);
     }
 
     @Override
     public void eventPlayed(PhysicalCard card) {
         //An event is put on everybody's screen as it is played, from wherever it was
         for (String player : _players)
-            shown(player, card);
+            shown(player, card, player.equals(card.getOwner()) ? Revealed.OWN : Revealed.OPPONENTS);
     }
 
     @Override
@@ -217,7 +257,7 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
         Collection<? extends PhysicalCard> cards = decision instanceof ArbitraryCardsSelectionDecision arbitrary ? arbitrary.getPhysicalCards() : null;
         if (cards == null) {
             //A list of cards with nothing to say which cards they are or where from: taken to be news
-            learned(playerId);
+            learned(playerId, Revealed.LOOKED);
             return;
         }
         boolean fellowships = _game != null && _game.getGameState().getCurrentPhase() == Phase.PLAY_STARTING_FELLOWSHIP;
@@ -227,7 +267,7 @@ public class InformationLedger implements GameStateListener, DecisionObserver {
             if (fellowships && card.getZone() == Zone.DECK && playerId.equals(card.getOwner()))
                 _known.get(playerId).add(card);
             else
-                shown(playerId, card);
+                shown(playerId, card, Revealed.LOOKED);
         }
     }
 

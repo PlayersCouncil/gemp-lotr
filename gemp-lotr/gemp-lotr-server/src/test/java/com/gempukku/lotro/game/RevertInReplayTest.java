@@ -88,7 +88,7 @@ public class RevertInReplayTest {
         assertNotNull("The recording says the game was taken back", mark);
         assertEquals(player, mark.getParticipantId());
         assertEquals("GREEN", mark.getTier());
-        assertTrue(mark.getMessage(), mark.getMessage().contains("took the game back"));
+        assertTrue(mark.getMessage(), mark.getMessage().startsWith(player + " undid: Played "));
         assertTrue("...and where the undone play began", mark.getIndex() > 0 && mark.getIndex() < markAt);
         boolean tableSentAgain = false;
         for (int i = mark.getIndex(); i < markAt; i++)
@@ -121,6 +121,6 @@ public class RevertInReplayTest {
         assertEquals(entriesBefore, GameJournal.read(parts[1], GameJournal.PlayerKeys.NAMES).entries().size());
         assertEquals(entriesAfter, GameJournal.read(parts[2], GameJournal.PlayerKeys.NAMES).entries().size());
         assertTrue(kept, kept.contains("# The game as it ended\n"));
-        assertTrue(kept.startsWith("# " + player + " took the game back"));
+        assertTrue(kept.startsWith("# " + player + " undid: Played "));
     }
 }

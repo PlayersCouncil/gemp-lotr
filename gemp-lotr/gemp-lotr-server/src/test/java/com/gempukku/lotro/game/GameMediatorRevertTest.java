@@ -136,7 +136,7 @@ public class GameMediatorRevertTest {
         assertEquals("The table is laid out again from nothing", GameEvent.Type.PARTICIPANTS, sent.get(0).getType());
         assertTrue(sent.stream().anyMatch(event -> event.getType() == GameEvent.Type.PUT_CARD_INTO_PLAY));
         assertTrue(sent.stream().anyMatch(event -> event.getType() == GameEvent.Type.SEND_MESSAGE
-                && event.getMessage() != null && event.getMessage().contains("taken back")));
+                && event.getMessage() != null && event.getMessage().contains("reverted")));
 
         sitting.play(10);
         assertFalse("What happens next at the rebuilt game is sent as well", channel.consumeGameEvents().isEmpty());

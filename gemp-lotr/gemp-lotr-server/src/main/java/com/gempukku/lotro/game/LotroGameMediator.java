@@ -521,7 +521,7 @@ public class LotroGameMediator {
      * @return Null if the game was taken back; otherwise why it could not be.
      */
     public String revertTo(int entryCount) {
-        return revertTo(entryCount, "The game was taken back to an earlier point", "", "", "");
+        return revertTo(entryCount, "The game was reverted to an earlier point", "", "", "");
     }
 
     private String revertTo(int entryCount, String announcement, String requester, String tier, String label) {
@@ -536,7 +536,7 @@ public class LotroGameMediator {
                 return "The game's journal has no entry " + entryCount;
             String barrier = _ledger.barrierSince(entryCount);
             if (barrier != null)
-                return "The game cannot be taken back that far: " + barrier;
+                return "Cannot go back that far: " + barrier;
             GameJournal prefix = _journal.upTo(entryCount);
 
             final LiveScenario again = _scenario == null ? null : _scenario.Again(prefix);
@@ -806,20 +806,19 @@ public class LotroGameMediator {
      */
     private String unavailable(String requester, RevertAssessment assessment) {
         if (!assessment.possible())
-            return "The game cannot be taken back that far: " + assessment.barrier();
+            return "Cannot go back that far: " + assessment.barrier();
         if (!_undoPolicy.allows(assessment.tier()))
-            return assessment.tier() == RevertAssessment.Tier.GREEN ? "Taking back is turned off in this game"
-                    : "In this game only your own choices can be taken back, and only while nobody else has acted on them";
+            return assessment.tier() == RevertAssessment.Tier.GREEN ? "Undo is off in this game" : "Only Undo is allowed in this game";
         if (assessment.tier() == RevertAssessment.Tier.GREEN) {
             int taken = phaseNow().equals(_ownUndoPhase) ? _ownUndos.getOrDefault(requester, 0) : 0;
             if (_undoPolicy.greenPerPhase() > 0 && taken >= _undoPolicy.greenPerPhase())
-                return "You have already taken back " + taken + " of your choices this phase";
+                return "Undo limit reached this phase (" + _undoPolicy.greenPerPhase() + ")";
             return null;
         }
         if (!_undoPolicy.othersAgreeAtOnce())
             for (String other : othersThan(requester))
                 if (!isBot(other) && _autoDecline.contains(other))
-                    return other + " is declining all requests to take this game back";
+                    return other + " is auto-declining reverts";
         return null;
     }
 
@@ -858,7 +857,9 @@ public class LotroGameMediator {
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("requestId", pending.id());
             result.put("requester", pending.requester());
-            result.put("label", pending.point().label());
+            result.put("label", pending.point().publicLabel());
+            result.put("turn", pending.point().turn());
+            result.put("phase", pending.point().phase() == null ? "" : pending.point().phase().getHumanReadable());
             result.put("tier", pending.assessment().tier().name());
             result.put("reasons", pending.assessment().reasons());
             result.put("waitingOn", new ArrayList<>(pending.waitingOn()));
@@ -883,20 +884,20 @@ public class LotroGameMediator {
         _writeLock.lock();
         try {
             if (!_playersPlaying.contains(requester))
-                return new UndoReply("refused", "Only somebody playing the game can ask for it to be taken back", 0);
+                return new UndoReply("refused", "Only players can ask", 0);
             if (_restorePoints == null)
-                return new UndoReply("refused", "This kind of game cannot be taken back yet", 0);
+                return new UndoReply("refused", "This game cannot be reverted", 0);
             if (_lotroGame.isFinished())
                 return new UndoReply("refused", "The game is over", 0);
             if (_pendingUndo != null)
-                return new UndoReply("refused", "A request to take the game back is already waiting for an answer", 0);
+                return new UndoReply("refused", "A revert request is already pending", 0);
 
             RestorePoints.Point point = null;
             for (RestorePoints.Point offered : _restorePoints.offered(requester, _undoPolicy))
                 if (point == null && (entryCount == null || offered.entryCount() == entryCount))
                     point = offered;
             if (point == null)
-                return new UndoReply("refused", entryCount == null ? "You have nothing to take back" : "That is not something you can go back to now", 0);
+                return new UndoReply("refused", entryCount == null ? "Nothing to undo" : "No longer available", 0);
 
             RevertAssessment assessment = _ledger.assess(point.entryCount(), requester);
             String unavailable = unavailable(requester, assessment);
@@ -916,12 +917,14 @@ public class LotroGameMediator {
                 addTimeSpentOnDecisionToUserClock(player);
             PendingUndo pending = new PendingUndo(_nextUndoId++, requester, point, assessment, toAsk, System.currentTimeMillis());
             _pendingUndo = pending;
-            _lotroGame.getGameState().sendMessage(requester + " asks for the game to be taken back to \"" + point.label() + "\" ("
-                    + assessment.tier().name().toLowerCase() + ": " + String.join("; ", assessment.reasons()) + ")");
+            _lotroGame.getGameState().sendMessage(requester + " asks to revert: " + point.publicLabel()
+                    + " (" + String.join("; ", assessment.reasons()) + ")");
             Map<String, String> fields = new LinkedHashMap<>();
             fields.put("requestId", String.valueOf(pending.id()));
             fields.put("requester", requester);
-            fields.put("label", point.label());
+            fields.put("label", point.publicLabel());
+            fields.put("turn", String.valueOf(point.turn()));
+            fields.put("phase", point.phase() == null ? "" : point.phase().getHumanReadable());
             fields.put("tier", assessment.tier().name());
             fields.put("reasons", String.join("; ", assessment.reasons()));
             fields.put("seconds", String.valueOf(_undoPolicy.timeoutSeconds()));
@@ -942,10 +945,10 @@ public class LotroGameMediator {
         try {
             PendingUndo pending = _pendingUndo;
             if (pending == null || pending.id() != requestId)
-                return new UndoReply("refused", "That request is no longer waiting for an answer", 0);
+                return new UndoReply("refused", "That request is no longer pending", 0);
             if (reply.equals("cancel")) {
                 if (!player.equals(pending.requester()))
-                    return new UndoReply("refused", "Only whoever asked can withdraw the request", 0);
+                    return new UndoReply("refused", "Only the asker can withdraw", 0);
                 return settlePendingUndo("cancelled", player);
             }
             if (!pending.waitingOn().contains(player))
@@ -988,9 +991,9 @@ public class LotroGameMediator {
             return carryOutUndo(pending.requester(), pending.point(), pending.assessment(), String.valueOf(pending.id()));
 
         String said = switch (outcome) {
-            case "declined" -> by + " declined " + pending.requester() + "'s request to take the game back";
-            case "cancelled" -> pending.requester() + " withdrew the request to take the game back";
-            default -> pending.requester() + "'s request to take the game back went unanswered and is refused";
+            case "declined" -> by + " declined the revert";
+            case "cancelled" -> pending.requester() + " withdrew the revert request";
+            default -> "Revert request timed out";
         };
         _lotroGame.getGameState().sendMessage(said);
         Map<String, String> fields = new LinkedHashMap<>();
@@ -1004,14 +1007,16 @@ public class LotroGameMediator {
 
     private UndoReply carryOutUndo(String requester, RestorePoints.Point point, RevertAssessment assessment, String requestId) {
         String phase = phaseNow();
-        String said = requester + " took the game back to \"" + point.label() + "\" (" + assessment.tier().name().toLowerCase() + ")";
-        String problem = revertTo(point.entryCount(), said, requester, assessment.tier().name(), point.label());
+        //An undo is of one's own choice, which nobody else was touched by; anything more is a revert
+        String said = assessment.tier() == RevertAssessment.Tier.GREEN ? requester + " undid: " + point.publicLabel()
+                : requester + " reverted: " + point.publicLabel();
+        String problem = revertTo(point.entryCount(), said, requester, assessment.tier().name(), point.publicLabel());
         Map<String, String> fields = new LinkedHashMap<>();
         fields.put("requestId", requestId);
         fields.put("requester", requester);
         fields.put("tier", assessment.tier().name());
         if (problem != null) {
-            String failed = "The game could not be taken back and continues as it was";
+            String failed = "Revert failed; the game continues as it was";
             _lotroGame.getGameState().sendMessage(failed);
             fields.put("outcome", "failed");
             fields.put("message", failed);
@@ -1321,7 +1326,7 @@ public class LotroGameMediator {
                     AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(playerName);
                     if (awaitingDecision != null && _pendingUndo != null) {
                         //The game stands still while a request to take it back is waiting for an answer
-                        _lotroGame.getGameState().sendWarning(playerName, "The game is waiting on a request to take it back");
+                        _lotroGame.getGameState().sendWarning(playerName, "Waiting on a revert request");
                     } else if (awaitingDecision != null) {
                         if (awaitingDecision.getAwaitingDecisionId() == decisionId && !_lotroGame.isFinished()) {
                             long startedAt = System.currentTimeMillis();

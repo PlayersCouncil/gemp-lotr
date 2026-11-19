@@ -2,9 +2,13 @@ package com.gempukku.lotro.game;
 
 import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.state.LotroGame;
+import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.logic.decisions.ArbitraryCardsSelectionDecision;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +34,11 @@ public class RestorePoints implements DecisionObserver {
      * @param entryCount How many entries the journal held when the answer was given.
      * @param turn The number of the turn it was given in; 0 before the first.
      */
-    public record Point(int entryCount, String player, String label, int turn, Phase phase, Kind kind) { }
+    /**
+     * @param label What the player did there, in a few words ("Played Gimli", "Passed"), as the player is told it.
+     * @param publicLabel The same as anybody else may be told it: without the name of a card they could not see.
+     */
+    public record Point(int entryCount, String player, String label, String publicLabel, int turn, Phase phase, Kind kind) { }
 
     private static final List<Phase> FROM_MANEUVER = List.of(Phase.MANEUVER, Phase.ARCHERY, Phase.ASSIGNMENT, Phase.SKIRMISH, Phase.REGROUP);
 
@@ -38,6 +46,10 @@ public class RestorePoints implements DecisionObserver {
     private LotroGame _game;
     private final List<Point> _points = new ArrayList<>();
 
+    private record Offered(String title, Zone zone) { }
+
+    /** The cards the decision being answered offers, by the id it offers each under. */
+    private final Map<String, Offered> _offered = new HashMap<>();
     private int _answeringAt = -1;
     private int _answeringTurn;
     private Phase _answeringPhase;
@@ -68,6 +80,20 @@ public class RestorePoints implements DecisionObserver {
         _answeringAt = _journal.entries().size();
         _answeringTurn = _game.getGameState().getTurnNumber();
         _answeringPhase = _game.getGameState().getCurrentPhase();
+        //What the cards on offer are and where they lie, before the answer moves any of them
+        _offered.clear();
+        String[] ids = decision.getDecisionParameters().get("cardId");
+        if (ids != null && decision instanceof ArbitraryCardsSelectionDecision arbitrary) {
+            List<PhysicalCard> cards = new ArrayList<>(arbitrary.getPhysicalCards());
+            for (int i = 0; i < ids.length && i < cards.size(); i++)
+                _offered.put(ids[i], new Offered(cards.get(i).getBlueprint().getTitle(), cards.get(i).getZone()));
+        } else if (ids != null && decision.getDecisionType() == AwaitingDecisionType.CARD_SELECTION) {
+            for (String id : ids) {
+                PhysicalCard card = _game.getGameState().findCardById(Integer.parseInt(id));
+                if (card != null)
+                    _offered.put(id, new Offered(card.getBlueprint().getTitle(), card.getZone()));
+            }
+        }
     }
 
     @Override
@@ -78,7 +104,9 @@ public class RestorePoints implements DecisionObserver {
         Kind kind = _answeringTurn > 0 ? Kind.PLAY
                 : decision.getText() != null && decision.getText().startsWith("Starting fellowship") ? Kind.STARTING_FELLOWSHIP
                 : Kind.SETUP;
-        _points.add(new Point(_answeringAt, playerId, label(decision, answer == null ? "" : answer), _answeringTurn, _answeringPhase, kind));
+        String given = answer == null ? "" : answer;
+        _points.add(new Point(_answeringAt, playerId, label(decision, given, kind, false), label(decision, given, kind, true),
+                _answeringTurn, _answeringPhase, kind));
         _answeringAt = -1;
     }
 
@@ -127,29 +155,51 @@ public class RestorePoints implements DecisionObserver {
         return -1;
     }
 
-    /** What was asked and what was chosen, in words a player would know it by. */
-    private String label(AwaitingDecision decision, String answer) {
+    /**
+     * What the player did, in a few words: these go on buttons and in one line of a list.
+     * @param forOthers Whether this is for somebody else to read, who is not to learn from it which card was chosen
+     *                  from where they cannot see.
+     */
+    private String label(AwaitingDecision decision, String answer, Kind kind, boolean forOthers) {
         Map<String, String[]> parameters = decision.getDecisionParameters();
-        String asked = plain(decision.getText());
-        String chosen;
         try {
-            chosen = switch (decision.getDecisionType()) {
+            return switch (decision.getDecisionType()) {
                 case CARD_ACTION_CHOICE, ACTION_CHOICE -> {
                     if (answer.isEmpty())
-                        yield "Pass";
+                        yield "Passed";
                     int index = indexOf(parameters.get("actionId"), answer);
-                    yield index < 0 ? asked : plain(parameters.get("actionText")[index]);
+                    yield index < 0 ? "Acted" : done(plain(parameters.get("actionText")[index]));
                 }
-                case MULTIPLE_CHOICE -> asked + ": " + plain(parameters.get("results")[Integer.parseInt(answer)]);
-                case INTEGER -> asked + ": " + answer;
-                case ARBITRARY_CARDS, CARD_SELECTION -> answer.isEmpty() ? asked + ": none"
-                        : asked + ": " + answer.split(",").length + (answer.split(",").length == 1 ? " card" : " cards");
-                default -> asked;
+                case MULTIPLE_CHOICE -> "Chose \"" + plain(parameters.get("results")[Integer.parseInt(answer)]) + "\"";
+                case INTEGER -> "Chose " + answer;
+                case ARBITRARY_CARDS, CARD_SELECTION -> cards(decision, answer, kind, forOthers);
+                case ASSIGN_MINIONS -> answer.isEmpty() ? "Assigned no minions" : "Assigned minions";
+                default -> "Answered";
             };
         } catch (RuntimeException exp) {
-            chosen = asked;
+            return "Answered";
         }
-        String when = _answeringTurn > 0 ? "Turn " + _answeringTurn + ", " : "";
-        return when + (_answeringPhase == null ? "" : _answeringPhase.getHumanReadable() + ": ") + chosen;
+    }
+
+    /** "Play Gimli" as something done: "Played Gimli". */
+    private static String done(String action) {
+        if (action.startsWith("Play "))
+            return "Played " + action.substring(5);
+        if (action.startsWith("Use "))
+            return "Used " + action.substring(4);
+        return action;
+    }
+
+    private String cards(AwaitingDecision decision, String answer, Kind kind, boolean forOthers) {
+        boolean fellowship = kind == Kind.STARTING_FELLOWSHIP;
+        if (answer.isEmpty())
+            return fellowship ? "Pressed DONE" : "Chose nothing";
+        String[] chosen = answer.split(",");
+        Offered first = _offered.get(chosen[0]);
+        //A card for a starting fellowship goes onto the table; any other is named to others only if it lay in the open
+        boolean named = first != null && (!forOthers || fellowship || (first.zone() != null && first.zone().isPublic()));
+        String what = !named ? (chosen.length == 1 ? "a card" : chosen.length + " cards")
+                : first.title() + (chosen.length == 1 ? "" : " +" + (chosen.length - 1));
+        return (fellowship ? "Played " : "Chose ") + what;
     }
 }

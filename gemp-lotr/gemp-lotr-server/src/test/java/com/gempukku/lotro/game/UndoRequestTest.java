@@ -234,7 +234,7 @@ public class UndoRequestTest {
         assertTrue(sitting.waiting(), sitting.asked(first, "Starting fellowship"));
         List<LotroGameMediator.RestorePointView> points = sitting.mediator.getRestorePoints(first);
         assertEquals(1, points.size());
-        assertTrue(points.get(0).label(), points.get(0).label().contains("Starting fellowship"));
+        assertTrue(points.get(0).label(), points.get(0).label().startsWith("Played "));
 
         String mulligans = sitting.toMulligans();
         for (String player : MediatorSitting.PLAYERS)
