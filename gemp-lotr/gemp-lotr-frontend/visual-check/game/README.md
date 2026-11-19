@@ -142,6 +142,55 @@ npm run check:game:phone -- --shots --only opening        screenshots of a recor
 
 Differences are written to `report-game-phone` (the view before and after, and the differing pixels in red).
 
+## Tutorials (scripted games)
+
+`npm run check:game:tutorial` (`tutorial.mjs`, against a game check server kept up, as the undo check) plays the
+tutorials that ship with the server (`gemp-lotr-cards/.../scenarios/tutorials`) on the Angular game page. A tutorial
+is started with `POST /scenarios/start` by `GamePlayer0` alone: the opponent is played by the server's script. The
+check follows the bubbles as a player would (`follow`): the bubble's Next, the choice of the guided path (`help`), a
+click on what is outlined as next (on the part of it that shows, if something covers its centre), a right click on
+the card a message waits to have opened and Escape to close it, and, where a step takes any answer, the first card
+or button the game offers (an assignment: each minion to a companion of its own, then Done). Each check plays its own
+game:
+
+- **t1**: tutorial 1 (`basics-01`) played through to the end panel "Complete". It fails if it gets stuck (saying the
+  decision's text and the bubble's, with the server's step in `t1-<theme>-stuck-step.json`), if the page logs an
+  error, or if it ends any other way. On the way: while a message with Next is up nothing is outlined as next; the
+  opponent is shown under the scenario's name, never "~Scenario"; the bubble stays in the window and off what is to
+  be clicked; what is outlined as next is what lies at the outline's centre. The end panel's "Report it" link names
+  the game's replay.
+- **t2**: tutorial 2 (`basics-02-items-damage`) the same way.
+- **refuse**: while a message is read, Pass is refused: the buttons under it shake (`data-nudge`) and nothing is sent;
+  later, while a step is answered, a card the game would take but the step doesn't (`data-scenario="notnow"`) shows
+  its hint beside it, and no decision is sent (the page's requests are watched).
+- **bubble**: Space and Escape read on; dragged by its head the bubble stays where it is put; folded and unfolded
+  (Space leaves a folded message be); after reading on, and after answering a step whose bubble was folded and
+  moved, the next message is whole and where the page puts it.
+- **menu**: "Start again" asks in the page's own dialog; Cancel changes nothing, OK opens a new game at its first
+  message; "Leave" asks, then the page is the Game Hall.
+- **small**: 1000×600 shows no panel; 999×700, 1200×599 and 900×550 show "This needs a bigger screen", and "Carry on
+  anyway" takes it away.
+- **phone**: the modern theme on a phone (`device-profiles.mjs` `phone`) shows only the "cannot be played on mobile
+  devices" panel (no message, menu or outline), whose button leads to the Game Hall.
+- **replay**: the replay of a finished tutorial 1 game (this run's t1 game, or one it plays itself; its id from the
+  end panel's link, else from the server's thanks in the chat) shows its messages one after another as it plays,
+  with no buttons, and no scenario menu.
+
+Every check runs in both themes (`--theme classic` or `--theme modern` for one), phone in the modern theme only.
+
+```
+npm run check:game -- --only start --sizes 1366x768 --keep     a game check server, kept up
+npm run check:game:tutorial                                    every check in both themes (about 6 minutes)
+npm run check:game:tutorial -- --only t1,refuse --theme modern
+npm run check:game:tutorial -- --only t2 --verbose             every move as it is made
+npm run check:game:down
+```
+
+The report is `report-tutorial/` (`--out`): a screenshot of every step worth seeing (each message that points at
+something, a card shown large, a choice, the page's dialogs, the end), a text file per check with what it found and
+every move it made, and `summary.txt`. `--page angular` (the default) is the only page in `PAGES`: game.html's
+overlay would need an entry of its own.
+
 ## The table check
 
 `npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:
