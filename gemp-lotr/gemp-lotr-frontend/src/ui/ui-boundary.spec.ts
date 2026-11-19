@@ -41,7 +41,7 @@ describe('ui boundary', () => {
   it('finds the ui sources', () => {
     expect(files.length).toBeGreaterThanOrEqual(8);
     // The app shell, the pages and their shared parts
-    for (const folder of ['ui/app/', 'ui/deckbuilder/', 'ui/shared/']) {
+    for (const folder of ['ui/app/', 'ui/deckbuilder/', 'ui/game/', 'ui/shared/']) {
       expect(files.some(({ name }) => name.startsWith(folder))).toBe(true);
     }
   });
@@ -69,6 +69,8 @@ describe('ui boundary', () => {
       'core/delivery/',
       'core/actions/',
       'core/deckbuilder-state',
+      'ui/game/',
+      'core/game/',
     ];
     const tied = files
       .filter(({ name }) => name.startsWith('ui/shared/'))

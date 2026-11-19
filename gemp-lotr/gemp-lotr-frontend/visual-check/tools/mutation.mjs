@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Mutation testing of the deck builder's logic: changes one small thing in the code at a time (a comparison, a
+// Mutation testing of the deck builder's and the game screen's logic: changes one small thing in the code at a time (a comparison, a
 // condition, a constant, a message) and runs the unit tests of that file. A change no test notices (a survivor) is a
 // place the tests don't pin down.
 //
@@ -56,6 +56,27 @@ export const TARGETS = [
   'src/core/packs/packs.service.ts',
   'src/ui/shared/auto-zoom/zoom-placement.ts',
   'src/ui/shared/fit-cards/fit-cards.ts',
+  // The game screen (G5 of trymarz/gemp-lotr-private#27): what the game page decides from the server's events
+  'src/core/game/clock/game-attention.service.ts',
+  'src/core/game/clock/game-clocks.service.ts',
+  'src/core/game/clock/timer-cues.ts',
+  'src/core/game/decision/decision-view.ts',
+  'src/core/game/decision/game-decisions.service.ts',
+  'src/core/game/protocol/game-xml.ts',
+  'src/core/game/session/event-pacing.ts',
+  'src/core/game/session/game-log.ts',
+  'src/core/game/session/game-restore.ts',
+  'src/core/game/session/game-session.service.ts',
+  'src/core/game/session/game-view-state.ts',
+  'src/core/game/settings/game-settings.ts',
+  'src/core/game/state/apply-event.ts',
+  'src/core/game/state/local-choices.ts',
+  'src/core/game/table/game-card-actions.ts',
+  'src/core/game/table/game-card-info.ts',
+  'src/core/game/table/game-card-views.ts',
+  'src/core/game/table/game-table.service.ts',
+  'src/core/game/table/game-table.ts',
+  'src/core/game/table/pre-game.ts',
 ];
 
 /**
@@ -184,7 +205,15 @@ function makeCopy(dir) {
   for (const entry of fs.readdirSync(FRONTEND).filter((f) => /^(angular|package|tsconfig.*)\.json$/.test(f))) {
     fs.copyFileSync(path.join(FRONTEND, entry), path.join(frontend, entry));
   }
-  for (const entry of ['controls.mjs', 'controls.d.mts']) {
+  // What the tests read from the browser checks: their controls (and the game page's)
+  fs.mkdirSync(path.join(frontend, 'visual-check', 'game'));
+  fs.mkdirSync(path.join(frontend, 'visual-check', 'deckbuilder'));
+  for (const entry of [
+    'deckbuilder/controls.mjs',
+    'deckbuilder/controls.d.mts',
+    'game/controls.mjs',
+    'game/controls.d.mts',
+  ]) {
     fs.copyFileSync(path.join(VISUAL_CHECK, entry), path.join(frontend, 'visual-check', entry));
   }
   fs.symlinkSync(path.join(FRONTEND, 'node_modules'), path.join(frontend, 'node_modules'));

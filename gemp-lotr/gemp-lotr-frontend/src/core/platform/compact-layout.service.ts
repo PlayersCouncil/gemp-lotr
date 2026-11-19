@@ -12,6 +12,18 @@ export const COMPACT_QUERY = '(max-width: 825px), (orientation: portrait) and (m
 /** Where the compact layout puts the deck and the collection side by side rather than one above the other. */
 export const SIDE_BY_SIDE_QUERY = '(orientation: landscape)';
 
+/** A screen at least a small tablet's width (the game's phone layout gives a tablet bigger cards). */
+export const TABLET_QUERY = '(min-width: 600px)';
+
+/**
+ * A touch tablet held sideways: wide enough for the computer layout, but a finger, not a mouse. The game shows it its
+ * phone layout held sideways (the owner, 2026-11-19); the deck builder keeps the computer layout there.
+ */
+export const TOUCH_TABLET_QUERY = '(pointer: coarse) and (orientation: landscape) and (max-width: 1400px)';
+
+/** A screen high enough for a tablet's cards when held sideways (a phone's is lower). */
+export const TALL_QUERY = '(min-height: 600px)';
+
 /**
  * Whether the page uses its compact layout: the modern theme on a portrait, narrow or low screen (COMPACT_QUERY), and
  * whether it puts the halves side by side (a landscape screen). The classic theme never does, as the legacy page
@@ -22,10 +34,29 @@ export class CompactLayout {
   private readonly theme = inject(ThemeService).theme;
   private readonly narrow = signal(false);
   private readonly landscape = signal(false);
+  private readonly wide = signal(false);
+  private readonly touchTablet = signal(false);
+  private readonly tall = signal(false);
 
   readonly active = computed(() => this.theme() === 'modern' && this.narrow());
   /** The compact layout on a landscape screen: the deck left, the collection right. */
   readonly sideBySide = computed(() => this.active() && this.landscape());
+  /**
+   * What the compact layout is shown on: a phone held upright, a phone held sideways (any landscape screen), or a
+   * tablet held upright; null outside the compact layout.
+   */
+  readonly device = computed<'phone' | 'sideways' | 'tablet' | null>(() =>
+    !this.active() ? null : this.landscape() ? 'sideways' : this.wide() ? 'tablet' : 'phone',
+  );
+
+  /** The game's phone layout: the compact layout's screens, and a touch tablet held sideways (TOUCH_TABLET_QUERY). */
+  readonly gameActive = computed(() => this.theme() === 'modern' && (this.narrow() || this.touchTablet()));
+  /** What the game's phone layout is shown on (as `device`, for gameActive). */
+  readonly gameDevice = computed<'phone' | 'sideways' | 'tablet' | null>(() =>
+    !this.gameActive() ? null : this.landscape() ? 'sideways' : this.wide() ? 'tablet' : 'phone',
+  );
+  /** Held sideways on a screen a tablet's height: the game's cards at a tablet's size. */
+  readonly tallSideways = computed(() => this.gameDevice() === 'sideways' && this.tall());
 
   constructor() {
     const window = inject(DOCUMENT).defaultView;
@@ -39,5 +70,8 @@ export class CompactLayout {
     };
     follow(COMPACT_QUERY, this.narrow);
     follow(SIDE_BY_SIDE_QUERY, this.landscape);
+    follow(TABLET_QUERY, this.wide);
+    follow(TOUCH_TABLET_QUERY, this.touchTablet);
+    follow(TALL_QUERY, this.tall);
   }
 }

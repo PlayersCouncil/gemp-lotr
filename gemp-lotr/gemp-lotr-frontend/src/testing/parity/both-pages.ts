@@ -2,7 +2,7 @@
  * Test-only: the legacy page and the Angular page side by side, each with a server of its own, and what a test compares
  * after each gesture: what each asked its server, what it shows and what it left saved.
  */
-import { CONTROLS } from '../../../visual-check/controls.mjs';
+import { CONTROLS } from '../../../visual-check/deckbuilder/controls.mjs';
 import { AngularPage, openAngularPage } from './angular-page';
 import { Failure, FakeGempServer, Writing } from './fake-gemp-server';
 import { DialogAnswer, LegacyPage, openLegacyPage } from './legacy-page';

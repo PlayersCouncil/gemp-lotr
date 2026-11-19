@@ -13,7 +13,8 @@ The first page being ported is the **deck builder**. The hall's Deck-builder but
 ## One app, one page per route
 
 The frontend is one Angular app, served under `/gemp-lotr/ng/`; each ported page is a lazy route of it,
-`/gemp-lotr/ng/<page>/` (for now only `deckbuilder`; `/gemp-lotr/ng/` and unknown paths go to it).
+`/gemp-lotr/ng/<page>/`: `deckbuilder` (`/gemp-lotr/ng/` and unknown paths go to it) and `game` (the game table,
+being ported: see "The game page" below; nothing links to it yet, `game.html` is still what the hall opens).
 
 - `src/main.ts` starts `AppComponent` (`src/ui/app/`, element `<gemp-app>`: just the `<router-outlet>`, with
   `display: contents`, so a page lays itself out as a child of `body`) with `ui/app/app.config.ts`: the providers every
@@ -82,7 +83,9 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/actions/`                     | `DeckbuilderActions`: the deck builder's `CardActions` (add a card, remove it, open a pack), and `deckbuilder-card-ref.ts`, what a card on that page stands for.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `src/core/notifier/`                    | `Notifier`: messages and questions to the player (the legacy alert/confirm/prompt), all asynchronous. The view provides it: `ui/shared/notifier/WindowNotifier`, the browser's own dialogs, as on the legacy page. `DialogNotifier` (shown by `gd-notifier`, in the page's own dialogs) is kept for the redesign. Tests use `src/testing/fake-notifier.ts`.                                                                                                                                                                                                                                                                                                                                                      |
 | `src/core/session/`                     | `SessionService`: the optional `?participantId=` (admins acting as a player).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `src/core/platform/`                    | The browser, behind services: cookies, the page's query string, image preloading, opening links, and `ThemeService` (see Themes below).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `src/core/game/`                        | The game page's state, without view code. `protocol/` parses the server's XML into typed `GameEvent`s and decisions; `state/` holds `GameModel` and the pure `applyEvent` and `local-choices.ts` (assignments and selections not yet sent); `api/GameApi` makes every game call; `session/GameSession` opens the game, long-polls and answers as the legacy page does, and `GameRestore` keeps the page-only state per game in the tab's session storage so a reload shows the game as it was left; `settings/GameSettings` keeps the legacy game cookies. A page gets all of it with `provideGameState`.                                                                                                        |
+| `src/core/chat/`                        | `ChatRoom`: one chat room (join, news every few seconds, messages sent in order) and `parseChat`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `src/core/platform/`                    | The browser, behind services: cookies, the page's query string, the tab's session storage (`SessionStore`), image preloading, opening links, and `ThemeService` (see Themes below).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `src/styles/`                           | The global stylesheets: `themes.css` (each theme's values), `base.css` (the document, links, scrollbars) and `controls.css` (the button and slider several components use). See Themes below.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `src/ui/`                               | The view (see "The UI and its DOM contract" below): `ui/app/` (the app shell, see One app below), `ui/deckbuilder/` (the page component `DeckbuilderPageComponent`, element `<deckbuilder-app>`, the route `deckbuilder`; the page frame, the deck side, the collection filter and cards, the dialogs) and `ui/shared/` (what any page can use: the card and its hover reporting, the card information, the hover zoom, `fitCards`, the dialog, the notifier; `ui-boundary.spec.ts` keeps it free of any one page). Each component has its own stylesheet (`*.component.css`), drawn with the theme values. `ui-boundary.spec.ts` checks it imports only core and ui, has no inline styles and names no colours. |
 | `src/testing/`                          | Test helpers and `server-responses/`, real server responses the parser tests run against. `parity/` runs the legacy page and the Angular page side by side (see below).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -245,6 +248,83 @@ The rules:
 | Notifier (`gd-notifier`)         | `p.gd-notifier__message` (line breaks kept), `input.gd-notifier__input` (prompt; focused, selected; Enter is OK), `.gd-dialog__actions` with `button.gd-button[data-action=ok]` and, for confirm and prompt, `[data-action=cancel]`. Escape and the close button are Cancel. One at a time, in the order asked.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `div.gd-zoom`                    | The hover zoom: `aria-hidden`, `hidden` when nothing is zoomed; `--gd-zoom-left`/`-top`/`-width`/`-height` (px; placed and sized as the legacy AutoZoom did), `data-orientation`, `data-flipped` (back; Shift), `data-foil`; `img.gd-zoom__image`, `__overlay`, `__foil`. Shown after the mouse rests 500ms on a card (at once within 500ms of the last zoom); hidden by a press, when the toolbar's magnifier is off (`AutoZoomSetting`, legacy cookie) or the card information is open.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
+## The game page
+
+`/gemp-lotr/ng/game?gameId=<id>` is the Angular port of `game.html`, built phase by phase
+(trymarz/gemp-lotr-private#27). A game can be **played** on it: the table, every decision, the clocks and the tab box
+behave as on the legacy page, with card information, the pile dialogs, the hover zoom, dragging cards, the animations
+and replays (G4). Nothing links to it yet.
+
+- **Core** (`src/core/game/`, see Code layout): the game's state from the server's events. `table/game-table.ts` sorts
+  the cards into the table's boxes (the legacy card groups' rules: rows by zone and side, what is attached to and
+  stacked on each card, the assignments, the skirmish), `table/pre-game.ts` reads the pre-game information,
+  `session/GameLog` keeps the chat box's lines (the room's chat and the game's messages, in the order they came) and
+  `session/GameViewState` what only the view holds (the open tab, the opened piles, a card's open menu, how far the
+  panels are scrolled). `decision/decision-view.ts` is what a waiting decision shows (pure: the alert box's text,
+  frame and buttons, how each card is offered, the dialogs) and `decision/GameDecisions` what each gesture does
+  (choosing cards, a card's action or its menu, assigning minions, the buttons, Escape, the 200 ms bounce guard,
+  auto-accept, the deck reveal skipped). `clock/GameClocks` counts the player's clock and the decision's while a
+  decision waits, with the legacy colour bands, pulses, expiry and alert sounds (`clock/timer-cues.ts`);
+  `clock/GameAttention` flashes the tab's title and plays the decision sound. The sounds, title and navigation are
+  the browser's: `core/platform/page-cues.ts`. `session/event-pacing.ts` says how long each event holds the page (the
+  legacy animation queue's durations, times the speed setting) and `GameSession` applies the events one by one by it;
+  a replay (`?replayId=`) is played the same way. `table/GameCardInfo` adds the server's modifiers to the card
+  information.
+- **Coming back (D10).** A reload, or opening the game again in the tab, shows the page exactly as it was: the
+  server sends the game, and the tab's session storage keeps the rest per game: the choices not sent yet, the view's
+  state above (also the open pile dialogs, the card shown in the card information and the order of dragged cards), the
+  chat box's lines in their order (the room's greetings on joining again are left out), and what
+  the page made of the game that the server's full state doesn't say again (each character's last numbers, the
+  turn's inactive cards, the Rule of 4 count, a decision the end of the game closed).
+- **View** (`src/ui/game/`): `GamePageComponent` (element `<gemp-game>`) is the frame, a CSS grid with the legacy
+  page's proportions (`game-page.component.css` explains each number). `table/` draws the cards: `gd-game-cards` is a
+  row (the shared `fitCards` with the `rows` fit, cards on whole pixels of the page), `gd-game-path` the adventure
+  path, `gd-game-card-layers` what a game draws on a card (tokens, strength, vitality, site number or resistance;
+  sizes are shares of the card, in CSS). `panel/` holds the game state panel, the stats bar and the alert box, `tabs/`
+  the tab box (chat, settings with the timer alert rules, options, players), `pregame/` the panel shown until the
+  players are known, `decision/` the decisions' dialogs (a number's spinner, a choice's buttons or list, cards to
+  choose from) and a card's menu of actions, `dialogs/` the pile dialogs, the end-of-game feedback dialog and the
+  dialog for a game that can't go on (no connection, not logged in, ...). `table/gd-game-animation` plays the event
+  holding the page, `table/gdReorder` moves a card dragged sideways in its row, `table/gdCardHints` shows a card named
+  in a text, `panel/gd-game-replay` has the replay's buttons.
+- **Theme.** The game page has its own choice (`gempGameTheme` cookie, `PAGE_THEMES` in `theme.service.ts`); a player
+  who hasn't chosen gets `modern` (the owner, 2026-11-16), one who chose `classic` keeps it. Its colours are the
+  `--theme-game-*` values of `themes.css`.
+- **Legacy quirks kept in classic**, so the page matches `game.html`: until the players are known the timer switch is
+  a plain button that does nothing; a spectator still has the Options tab; the Rule of 4 line keeps its last count
+  while hidden; a character the server's stats leave out keeps the numbers it last had; Shift doesn't flip the zoomed
+  card; the page asks for news after the game's end too.
+- **Modern** (the default; `?theme=modern`, remembered in `gempGameTheme`): the deck builder's dark
+  gray with the game's own values (`--theme-game-*` in `themes.css`), laid out as the legacy page on a computer
+  (`npm run check:game:modern`: the same games, every card and panel within 2px). The red theme button
+  (`GameThemeButtonComponent`, in the table's top right corner) is off until the owner accepts its place
+  (`GAME_THEME_PICKER`).
+- **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
+  layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
+  status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's
+  support and characters, the minions or the skirmish and assignments as pairs, the player's characters and support;
+  support rows Free Peoples first, from `src/generated/card-sides.json`, which `scripts/extract-card-data.mjs` makes
+  from the card definitions by the server's rule: a card's culture decides its side, Gollum's and culture-less cards
+  say it themselves; the same side as the deck builder's Side filter, compared by `visual-check/game/card-sides.mjs`), each row scrolling sideways with its cards at one size (`PhoneSettings`: 100px on a phone,
+  80 sideways, 130 on a tablet, times the card size setting), the divider with the decision and its buttons (dragged;
+  its place per device in `gempGameSplit`; at the bottom it hides the hand) and the hand, where cards a decision offers
+  from off the table are shown under a label. A tap acts only in a decision; a long press opens a card's details.
+  A player's chip opens their piles: dead pile and removed pile for everyone, the adventure deck only its owner's,
+  the discard pile its owner's unless the format makes it public (`discardPublic`, as the server decides).
+  Sheets (`GameSheets`) stack: closing one shows the one below as it was. The open sheets, the scrolled table and rows
+  and the hand's place are kept with the game (`GameViewState`, D10). "Your move" buzzes and plays a sound
+  (`gempGameMoveVibrate`, `gempGameMoveSound`, on by default). Checked by `npm run check:game:phone`.
+- **Checked** (see `visual-check/game/README.md`): `npm run check:game:table` shows every state of the recorded games
+  on both pages, with the decision waiting at each, pixel by pixel; `npm run check:game -- --pages legacy,angular
+--reload` plays real games on both pages with the same gestures, and reloads the Angular page after every step;
+  `src/parity/game/angular-game.parity.spec.ts` replays every recording on the page in jsdom, which must send exactly
+  the recorded requests; `src/parity/game/generated-games.parity.spec.ts` plays games made up from a seed
+  (`src/testing/game/generated-game.ts`: random events that fit together and decisions of every kind, answered with the
+  page's gestures) on the legacy page and then on the Angular page in jsdom, which must send the same answers and hold
+  the same game after every step (4 games with the unit tests, 200 in `test:parity`; `PARITY_GAME_SEED=<seed>
+PARITY_GAMES=1` repeats one); `npm run check:game:matrix` makes every gesture on every control on both pages.
+  Differences the owner accepts go into `GAME_ACCEPTED` in `visual-check/accepted.mjs`.
+
 ## Tests and the visual check
 
 ```
@@ -258,7 +338,7 @@ npm run build               # the app, with styles.css (src/styles) and the comp
 
 `src/parity/` runs the legacy deck builder itself (`deckBuild.html` and its scripts, unchanged) in jsdom next to the
 Angular page, each against its own `FakeGempServer` (`src/testing/parity/`), with clocks the test moves. The same
-gestures go to both through the selectors of `visual-check/controls.mjs`, and after each one the test compares what
+gestures go to both through the selectors of `visual-check/deckbuilder/controls.mjs`, and after each one the test compares what
 each page asked its server, shows (deck name, filter fields, cards in each place, dialogs and messages, disabled
 buttons, hidden cultures) and left saved.
 
@@ -278,7 +358,8 @@ test:parity` repeats it.
 
 ### Mutation testing
 
-`npm run check:mutation` in `visual-check` changes one thing at a time in the deck builder's logic (a comparison, a
+`npm run check:mutation` in `visual-check` changes one thing at a time in the deck builder's and the game screen's
+logic (a comparison, a
 condition, a constant, a message) and runs the unit tests of that file; a change no test notices is listed in
 `visual-check/report-mutation/survivors.md`. It works on copies in `visual-check/.local-server/mutation/`, so the
 `frontend` container never rebuilds from a mutated file. `--files <part of a path>` limits it, `--with-parity` adds
@@ -286,7 +367,9 @@ condition, a constant, a message) and runs the unit tests of that file; a change
 
 ### The visual check
 
-`visual-check/` is a Playwright check, separate from the Maven build (see `visual-check/README.md`):
+`visual-check/` holds the Playwright checks, separate from the Maven build (see `visual-check/README.md`): the deck
+builder's in `visual-check/deckbuilder/`, the game screen's in `visual-check/game/`.
 
 - `npm run check:stubbed` compares both pages with no server or login, using placeholder card art;
-- `run.mjs` (`npm run check`) compares both pages against a running server; it still uses the legacy element IDs.
+- `deckbuilder/run.mjs` (`npm run check`) compares both pages against a running server; it still uses the legacy element
+  IDs.

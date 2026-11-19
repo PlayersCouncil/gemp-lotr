@@ -103,7 +103,8 @@ public class GameState {
 
     private int _nextCardId = 0;
 
-    private GameRandom _random = GameRandom.DEFAULT;
+    // The default, or a seeded one on a test server started with a seed (GameSeed)
+    private GameRandom _random = com.gempukku.lotro.logic.GameSeed.newGameRandom();
     private String _fixedFreePeoplePlayer;
 
     private GameStats _mostRecentGameStats = null;

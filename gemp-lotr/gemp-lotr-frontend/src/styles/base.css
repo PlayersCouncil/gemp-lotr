@@ -8,6 +8,77 @@
   display: none !important;
 }
 
+/*
+ * The game's Middle-earth fonts in the modern theme (themes.css --theme-game-phone-font-*): Cinzel for titles, EB
+ * Garamond for text, both SIL Open Font License (public/themes/modern/fonts/OFL-*.txt), served with the app; a browser
+ * downloads one only when a page uses it, and Latin Extended only for the letters that need it
+ */
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url('/gemp-lotr/ng/themes/modern/fonts/cinzel-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url('/gemp-lotr/ng/themes/modern/fonts/cinzel-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/gemp-lotr/ng/themes/modern/fonts/eb-garamond-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/gemp-lotr/ng/themes/modern/fonts/eb-garamond-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/gemp-lotr/ng/themes/modern/fonts/eb-garamond-italic-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/gemp-lotr/ng/themes/modern/fonts/eb-garamond-italic-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 html,
 body {
   margin: 0;
@@ -16,6 +87,23 @@ body {
   overflow: hidden;
   background: var(--theme-page-bg);
   font-size: 12px;
+}
+
+/*
+ * The game page's document: game.html left it unset (the browser's white), which shows only in the fraction of a pixel
+ * a phone's zoomed-out page has under its layout (the classic theme); the modern theme keeps its page colour
+ */
+html:has(gemp-game),
+html:has(gemp-game) body {
+  background: var(--theme-game-document-bg, var(--theme-page-bg));
+}
+
+/*
+ * The game's phone layout: no pull-to-refresh, which a swipe down (closing a card's details, scrolling the table back to
+ * its top) would otherwise start, reloading the game
+ */
+html:has(gd-game-phone) {
+  overscroll-behavior: none;
 }
 
 /* A theme's page font. Classic sets none: the browser's default, as on the legacy page (an unset value is ignored) */

@@ -461,13 +461,14 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    concede:function (errorMap) {
+    concede:function (errorMap, callback) {
         $.ajax({
             type:"POST",
             url:this.url + "/game/" + getUrlParam("gameId") + "/concede",
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
+            success:callback,
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });

@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { FIXTURE_DECK } from './scenarios.mjs';
+import { FIXTURE_DECK } from './deckbuilder/scenarios.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const FRONTEND = path.resolve(HERE, '..');
@@ -16,8 +16,8 @@ const RESPONSES = path.join(FRONTEND, 'src/testing/server-responses');
 export const STUB_ORIGIN = 'http://gemp.test';
 
 const TYPES = {
-  '.html': 'text/html',
-  '.js': 'text/javascript',
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript',
   '.css': 'text/css',
   '.png': 'image/png',
@@ -62,7 +62,7 @@ function collectionXml(url) {
 }
 
 /** A card-sized placeholder with the image's name, so cards can be told apart. */
-function placeholder(url) {
+export function placeholder(url) {
   const name = decodeURIComponent(url.pathname.split('/').pop());
   let hash = 0;
   for (const c of name) hash = (hash * 31 + c.charCodeAt(0)) >>> 0;

@@ -23,7 +23,7 @@ export const DRAG_UP_FOR_INFO = 20;
  * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply, `data-tap-once` on a pack
  * (a double tap opens one: SecondTapGuard); inside,
  * `img.gd-card__image`, then `.gd-card__errata`, `img.gd-card__foil`, `img.gd-card__overlay` and `.gd-card__count`
- * when they apply. Its group sizes it with `--gd-card-height` (from fitCards); it draws its border and layers.
+ * when they apply, then whatever layers its page puts in it (projected content: a game's tokens and numbers). Its group sizes it with `--gd-card-height` (from fitCards); it draws its border and layers.
  */
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector -- a real <button>, so a card is focusable and clickable
@@ -64,6 +64,7 @@ export const DRAG_UP_FOR_INFO = 20;
     @if (card().count !== null) {
       <span class="gd-card__count">{{ card().count }}</span>
     }
+    <ng-content />
   `,
 })
 export class CardComponent {
@@ -104,7 +105,7 @@ export class CardComponent {
     if (event.shiftKey) {
       this.info.show(this.card());
     } else {
-      this.actions.activate(this.card().ref);
+      this.actions.activate(this.card().ref, event);
     }
   }
 
@@ -176,7 +177,9 @@ export class CardComponent {
   protected onPointerUp(event: PointerEvent): void {
     const press = this.press;
     this.cancelPress();
-    if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO) {
+    // Not when the card is being moved sideways in its row (an ancestor marks that with data-dragging)
+    const sideways = (event.currentTarget as Element | null)?.closest('[data-dragging]') ?? null;
+    if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO && sideways === null) {
       this.swallowClick = true;
       this.info.showDragged(this.card());
     }

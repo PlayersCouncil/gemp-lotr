@@ -27,6 +27,7 @@
   padding: 0.2em;
   border: 1px solid var(--theme-content-border);
   border-radius: var(--theme-radius);
+  box-shadow: var(--theme-frame-shadow);
   background: var(--theme-content-bg);
   color: var(--theme-text);
   font-family: var(--theme-font-widget);
@@ -40,13 +41,25 @@
   flex-direction: column;
 }
 
-/* Placed at whole pixels, as jQuery UI did: half the free space around the whole-pixel box, rounded */
+/*
+ * Placed at whole pixels, as jQuery UI did: half the free space around the whole-pixel box, rounded; in the window's
+ * height as the page measures it (--gd-window-height, whole pixels as jQuery's: on a phone 100vh has a fraction)
+ */
 .gd-dialog:not([data-placed]) {
   inset: auto;
   left: round(calc((100vw - var(--dialog-outer-width)) / 2), 1px);
   top: max(
     0px,
-    round(calc((100vh - round(calc(var(--dialog-centred-height, var(--dialog-height)) + 0.4em + 2px), 1px)) / 2), 1px)
+    round(
+      calc(
+        (
+            var(--gd-window-height, 100vh) -
+              round(calc(var(--dialog-centred-height, var(--dialog-height)) + 0.4em + 2px), 1px)
+          ) /
+          2
+      ),
+      1px
+    )
   );
   margin: 0;
 }
@@ -86,6 +99,40 @@
 /* The resize grip (.ui-resizable-se: the grip icon in the corner) */
 .gd-dialog::-webkit-resizer {
   background: var(--theme-icons) -82px -226px no-repeat;
+}
+
+/*
+ * On a touch screen the browser draws no grip for CSS resize; the legacy pages drew jQuery UI's there too (an element:
+ * .ui-dialog .ui-resizable-se, 14px, 3px in from the corner, the grip-diagonal-se icon), which a finger can't drag
+ * either. Drawn the same, on the dialogs that can be resized.
+ */
+.gd-dialog__grip {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* No CSS resizing under a finger (it can't drag it): the browser would still paint its corner over the grip */
+  .gd-dialog {
+    resize: none;
+  }
+
+  .gd-dialog:not(
+      [data-dialog='decision'],
+      [data-dialog='game-problem'],
+      [data-dialog='alert'],
+      [data-dialog='confirm'],
+      [data-dialog='prompt']
+    )
+    > .gd-dialog__grip {
+    display: block;
+    position: absolute;
+    right: 3px;
+    bottom: 3px;
+    width: 14px;
+    height: 14px;
+    background: var(--theme-icons) -80px -224px no-repeat;
+    pointer-events: none;
+  }
 }
 
 .gd-dialog__header {
@@ -181,6 +228,41 @@
   height: calc(var(--dialog-height) - 0.39px);
 }
 
+/* A page's message with a link (the game's feedback dialog): 300 x 200 */
+.gd-dialog[data-dialog='feedback'] {
+  --dialog-height: 200px;
+  height: calc(var(--dialog-height) - 0.39px);
+}
+
+.gd-dialog[data-dialog='feedback'] a {
+  color: var(--theme-dialog-link);
+}
+
+.gd-dialog[data-dialog='feedback'] a:visited {
+  color: var(--theme-dialog-link-visited);
+}
+
+/* A game's question (a number, a choice): 400 x 200, not resizable */
+.gd-dialog[data-dialog='decision'] {
+  --dialog-width: 400px;
+  --dialog-height: 200px;
+  /* jQuery UI's height option, less the fraction it lost to the title bar (it measured in whole pixels) */
+  height: calc(var(--dialog-height) - 0.39px);
+  resize: none;
+}
+
+/* With a row of buttons, whose fraction makes up for most of that */
+.gd-dialog[data-dialog='decision']:has([gdDialogActions]) {
+  height: calc(var(--dialog-height) - 0.08px);
+}
+
+/* A game that can't go on (the game page's error dialog): 300 x 160, not resizable */
+.gd-dialog[data-dialog='game-problem'] {
+  --dialog-height: 160px;
+  height: calc(var(--dialog-height) - 0.39px);
+  resize: none;
+}
+
 /* Import: opened before it had content, so placed as a 150px high dialog (its minimum), then grown downwards */
 .gd-dialog[data-dialog='import'] {
   --dialog-height: 150px;
@@ -192,7 +274,12 @@
 }
 
 /* Selection pack and new items: 80% of the window the first time (openSizeDialog) */
-.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) {
+.gd-dialog:is(
+  [data-dialog='selection'],
+  [data-dialog='delivery'],
+  [data-dialog='decision-cards'],
+  [data-dialog='pile']
+) {
   --dialog-width: round(down, 80vw, 0.01px);
   --dialog-height: round(down, 80vh, 0.01px);
   /* The height it really gets (below): a whole pixel can depend on those 0.39px */
@@ -204,10 +291,29 @@
  * The cards (a NormalCardGroup over the content: from 5px in from its padding box's top left, as large as the
  * content box)
  */
-.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery']) .gd-dialog__body {
+.gd-dialog:is([data-dialog='selection'], [data-dialog='delivery'], [data-dialog='decision-cards'], [data-dialog='pile'])
+  .gd-dialog__body {
   display: flex;
   padding: 5px calc(2em - 5px) calc(1em - 5px) 5px;
   overflow: hidden;
+}
+
+/* A game's cards to choose from, or a pile: the title bar's and the button row's fractions, as for its questions */
+.gd-dialog:is([data-dialog='decision-cards'], [data-dialog='pile']) {
+  --dialog-centred-height: calc(var(--dialog-height) - 0.39px);
+  /* A hair wider: the browser otherwise keeps a 64th of a pixel less than the legacy page's 80% */
+  width: calc(var(--dialog-width) + 0.01px);
+  height: calc(var(--dialog-height) - 0.39px);
+}
+
+.gd-dialog[data-dialog='decision-cards']:has([gdDialogActions]) {
+  --dialog-centred-height: calc(var(--dialog-height) - 0.05px);
+  height: calc(var(--dialog-height) - 0.05px);
+}
+
+/* A game's cards to choose from: its group starts 8px in and is 6px smaller than the content box */
+.gd-dialog:is([data-dialog='decision-cards'], [data-dialog='pile']) .gd-dialog__body {
+  padding: 8px calc(2em - 2px) calc(1em - 2px) 8px;
 }
 
 /* The notifier: the browser's alert, confirm and prompt had no jQuery UI look; drawn as a dialog */

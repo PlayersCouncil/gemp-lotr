@@ -19,6 +19,11 @@ export interface FitCard {
   horizontal: boolean;
   /** One entry per copy behind it: whether it is landscape. */
   behind?: readonly boolean[];
+  /**
+   * One entry per copy behind it: the share of its width left showing (default a fifth). Only where the card is drawn:
+   * the row height is always worked out with a fifth, as the legacy groups did.
+   */
+  behindShown?: readonly number[];
 }
 
 /** One entry per card, for cards with nothing drawn behind them. */
@@ -49,7 +54,7 @@ export function cardWidth(horizontal: boolean, rowHeight: number): number {
 /** The width a card and the copies behind it take in a row. */
 export function stackWidth(card: FitCard, rowHeight: number): number {
   const behind = (card.behind ?? []).reduce(
-    (sum, landscape) => sum + Math.floor(cardWidth(landscape, rowHeight) * BEHIND_SHOWN),
+    (sum, landscape, i) => sum + Math.floor(cardWidth(landscape, rowHeight) * (card.behindShown?.[i] ?? BEHIND_SHOWN)),
     0,
   );
   return behind + cardWidth(card.horizontal, rowHeight);
@@ -125,9 +130,18 @@ export function rowLayout(
  * How far each card's row moves so it starts on a whole pixel, as the legacy groups rounded each row's position down
  * (`rows` fit only: a fractional row height would otherwise put some rows a pixel lower). One entry per card.
  */
-export function rowSnaps(cards: readonly FitCard[], rowHeight: number, width: number, gap: number): number[] {
+export function rowSnaps(
+  cards: readonly FitCard[],
+  rowHeight: number,
+  width: number,
+  gap: number,
+  origin = 0,
+): number[] {
   const step = rowHeight + gap;
-  return rowLayout(cards, rowHeight, width, gap).map(({ row }) => Math.floor(row * step) - row * step);
+  // `origin`: the fraction of a pixel the box itself starts at, when its cards go on the page's whole pixels
+  return rowLayout(cards, rowHeight, width, gap).map(
+    ({ row }) => Math.floor(origin + row * step) - (origin + row * step),
+  );
 }
 
 /** The row height (fitCardHeight) and where the rows start. */

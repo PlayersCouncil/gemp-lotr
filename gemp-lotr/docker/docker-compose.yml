@@ -48,7 +48,8 @@ services:
     command: nohup java -jar -Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector /etc/gemp-lotr/gemp-lotr-async/target/web.jar &> /logs/nohup.out &
 
 
-  # Rebuilds the Angular frontend into gemp-lotr-async/src/main/web/ng/ whenever its sources change (e.g. after a
+  # Rebuilds the Angular frontend (one app: the deck builder, /gemp-lotr/ng/deckbuilder/, and the game,
+  # /gemp-lotr/ng/game) into gemp-lotr-async/src/main/web/ng/ whenever its sources change (e.g. after a
   # `git pull`), so the app container serves the new version without a restart. See frontend-watch.sh.
   frontend:
     container_name: gemp_frontend_${SERVID}
