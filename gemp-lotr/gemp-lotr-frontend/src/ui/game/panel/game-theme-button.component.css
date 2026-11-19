@@ -1,0 +1,32 @@
+:host {
+  display: contents;
+}
+
+.gd-game-theme {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  /* Bright red in every theme, so players notice they can switch (as the deck builder's, owner 2026-11-11) */
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-bg);
+}
+
+.gd-game-theme:is(:hover, :focus, :active) {
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-hover-bg);
+}
+
+.gd-game-theme[data-icon='theme']::before,
+.gd-game-theme[data-icon='theme']:is(:hover, :focus-visible, :active)::before {
+  background-image: var(--theme-attention-icons);
+  background-position: -128px -128px;
+}
+
+/* In the phone layout's status bar: a finger's size, a round seal (dark red with a gold ring in the modern theme) */
+:host-context(gd-phone-status) .gd-game-theme {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border-color: var(--theme-game-phone-accent);
+  background: var(--theme-game-phone-seal-bg);
+}

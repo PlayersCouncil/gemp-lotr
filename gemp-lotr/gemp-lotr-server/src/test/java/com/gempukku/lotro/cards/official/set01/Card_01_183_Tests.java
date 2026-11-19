@@ -191,7 +191,7 @@ public class Card_01_183_Tests
 	}
 
 	@Test
-	public void OnlyAMoriaOrcThatWonThatSkirmishCanBeStacked() throws DecisionResultInvalidException, CardNotFoundException {
+	public void EachMoriaOrcThatWonHasAnOfferOfItsOwnThatStacksThatOrc() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetScenario();
 
 		var swarms = scn.GetShadowCard("swarms");
@@ -217,20 +217,22 @@ public class Card_01_183_Tests
 		scn.FreepsResolveSkirmish(aragorn);
 		scn.PassSkirmishActions();
 
+		// "If your [moria] Orc wins a skirmish, stack that Orc here": one offer for each [moria] Orc that won, each
+		// naming its Orc, and none for the Troll, the [wraith] Orc or the Orc whose skirmish has not begun.
 		assertInZone(Zone.DEAD, aragorn);
-		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms));
-		scn.ShadowChooseOptionalTrigger(swarms);
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms, "Moria Scout"));
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms, "Goblin Patrol Troop"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(swarms, "Cave Troll"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(swarms, "Morgul Hound"));
+		assertFalse(scn.ShadowHasOptionalTriggerAvailable(swarms, "Goblin Runner"));
 
-		assertEquals(1, scn.ShadowGetChoiceMin());
-		assertTrue(scn.ShadowHasCardChoiceAvailable(troop, scout));
-		assertTrue(scn.ShadowHasCardChoiceNotAvailable(troll, hound, runner));
-		scn.ShadowChooseCard(scout);
-
+		// Taking the Scout's offer stacks the Scout at once: no second choice of which Orc.
+		scn.ShadowChooseOptionalTrigger(swarms, "Moria Scout");
 		assertTrue(scn.GetStackedCards(swarms).contains(scout));
 		assertEquals(1, scn.GetStackedCards(swarms).size());
 		assertInZone(Zone.SHADOW_CHARACTERS, troop, troll, hound, runner);
 
-		// The Troop won as well, and the response may be used again for it; declined, Gimli's skirmish is next.
+		// The Troop's offer is still there; declined, Gimli's skirmish is next.
 		assertTrue(scn.ShadowHasOptionalTriggerAvailable(swarms));
 		scn.ShadowDeclineOptionalTrigger();
 		assertInZone(Zone.SHADOW_CHARACTERS, troop);

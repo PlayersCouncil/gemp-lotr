@@ -1,0 +1,229 @@
+/*
+ * The divider: drag handle, the decision and its buttons (G7). A parchment sheet with dark ink in the modern theme
+ * (the owner, 2026-11-17): its fields and buttons take the sheet's colours
+ */
+
+:host {
+  --theme-text: var(--theme-game-phone-on-sheet);
+  --theme-separator: var(--theme-game-phone-sheet-line);
+  --theme-field-bg: var(--theme-game-phone-sheet-chip);
+  --theme-game-phone-muted: var(--theme-game-phone-sheet-line);
+  --theme-game-phone-dim: var(--theme-game-phone-sheet-line);
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 12px 12px 10px;
+  background: var(--theme-game-phone-sheet-bg);
+  color: var(--theme-text);
+  border-top: 2px solid var(--theme-game-phone-sheet-line);
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -6px 16px var(--theme-game-phone-shade);
+  touch-action: none;
+  cursor: ns-resize;
+  user-select: none;
+  min-width: 0;
+}
+
+/* The handle */
+:host::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  width: 36px;
+  height: 3px;
+  margin-left: -18px;
+  border-radius: 3px;
+  background: var(--theme-game-phone-dim);
+}
+
+:host([data-deciding]) {
+  border-top-color: var(--theme-game-phone-accent);
+}
+
+/*
+ * Waiting for the opponent: a quiet dark strip instead of the parchment, so the parchment means "your move" (the
+ * layout review, 2026-11-19)
+ */
+:host(:not([data-deciding])) {
+  --theme-text: var(--theme-game-phone-on-wait);
+  --theme-separator: var(--theme-game-phone-wait-line);
+  --theme-game-phone-muted: var(--theme-game-phone-on-wait);
+  --theme-game-phone-dim: var(--theme-game-phone-wait-line);
+  background: var(--theme-game-phone-wait-bg);
+  border-top-color: var(--theme-game-phone-wait-line);
+  box-shadow: none;
+}
+
+:host(:not([data-deciding])) .gd-phone-divider__text {
+  font-style: italic;
+}
+
+:host(:not([data-deciding])) .gd-phone-divider__clock {
+  background: var(--theme-game-phone-wait-line);
+  color: var(--theme-game-phone-on-wait);
+}
+
+.gd-phone-divider__question {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.gd-phone-divider__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+:host(:not([data-deciding])) .gd-phone-divider__text {
+  font-size: 15px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-divider__clock {
+  flex: none;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--theme-game-phone-sheet-chip);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-phone-divider__clock[data-band='warn'] {
+  color: var(--theme-modified);
+}
+
+.gd-phone-divider__clock[data-band='danger'] {
+  color: var(--theme-error);
+}
+
+.gd-phone-divider__hand-hint {
+  justify-self: center;
+  font-size: 13px;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-divider__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  cursor: default;
+}
+
+/* Pills: the answer outlined in ink, the main one (Pass, Done, OK) ink with gold letters */
+/* A button pressed shows it at once (the layout review, 2026-11-19) */
+.gd-phone-button:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
+
+.gd-phone-button {
+  flex: 0 1 auto;
+  min-height: 44px;
+  padding: 4px 16px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.gd-phone-button[data-primary] {
+  padding-inline: 22px;
+  background: var(--theme-game-main-bg);
+  border-color: var(--theme-game-main-edge);
+  box-shadow: var(--theme-game-main-shadow);
+  color: var(--theme-game-main-text);
+  font-family: var(--theme-game-main-font);
+  font-weight: var(--theme-game-main-weight);
+  font-size: 15px;
+  letter-spacing: var(--theme-game-main-spacing);
+  text-transform: var(--theme-game-main-case);
+}
+
+.gd-phone-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gd-phone-spinner > .gd-phone-button {
+  flex: none;
+  min-width: 44px;
+  font-size: 18px;
+}
+
+.gd-phone-spinner > output {
+  min-width: 2.5em;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.gd-phone-select {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 14px;
+}
+
+/* Sideways: the question beside its buttons, in the panel on the right; a smaller question, the timer under it */
+:host-context([data-device='sideways']) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__question {
+  flex-direction: column;
+  gap: 2px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__text {
+  font-size: 15px;
+}
+
+/* A low screen held sideways (a phone under its browser's bars): a tighter decision, more room for the hand */
+@media (max-height: 420px) {
+  :host-context([data-device='sideways']) {
+    gap: 4px;
+    padding: 8px 10px 6px;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-divider__text {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-button {
+    min-height: 36px;
+    padding: 2px 12px;
+  }
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__buttons {
+  flex-wrap: nowrap;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__hand-hint {
+  grid-column: 1 / -1;
+}
+
+/* Reached by the keyboard: the arrows move it */
+:host(:focus-visible) {
+  outline: 2px solid var(--theme-focus-ring-outer);
+  outline-offset: -2px;
+}

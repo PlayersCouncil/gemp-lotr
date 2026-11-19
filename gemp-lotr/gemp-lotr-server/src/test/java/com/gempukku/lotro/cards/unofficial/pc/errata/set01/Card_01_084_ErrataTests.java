@@ -27,6 +27,8 @@ public class Card_01_084_ErrataTests
 					put("stairs", "1_24");      // Stairs of Khazad-dum: [dwarven] Free Peoples condition, support area
 					put("saga", "1_114");       // The Saga of Elendil: [gondor] Free Peoples condition on a [gondor] companion
 					put("poison", "8_28");      // Spider Poison: Shadow possession borne by a companion
+					put("deceit", "18_29");     // Deceit: [gollum] Shadow condition; remove (1) to prevent a Free Peoples card discarding your other [gollum] condition
+					put("avoided", "18_32");    // Not Easily Avoided: [gollum] Shadow condition, support area
 				}},
 				VirtualTableScenario.FellowshipSites,
 				VirtualTableScenario.FOTRFrodo,
@@ -176,6 +178,40 @@ public class Card_01_084_ErrataTests
 		assertFalse(scn.FreepsPlayAvailable(card));
 		assertFalse(scn.IsHindered(stairs));
 		assertFalse(scn.IsHindered(pinned));
+		assertTrue(scn.AwaitingFellowshipPhaseActions());
+	}
+
+	@Test
+	public void AChosenConditionWhoseDiscardIsPreventedIsNotHinderedWithTheOthers() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var card = scn.GetFreepsCard("sleep");
+		var gandalf = scn.GetFreepsCard("gandalf");
+		var stairs = scn.GetFreepsCard("stairs");
+		var pinned = scn.GetShadowCard("pinned");
+		var deceit = scn.GetShadowCard("deceit");
+		var avoided = scn.GetShadowCard("avoided");
+		scn.MoveCardsToHand(card);
+		scn.MoveCompanionsToTable(gandalf);
+		scn.MoveCardsToSupportArea(stairs, pinned, deceit, avoided);
+
+		scn.StartGame();
+		scn.SetTwilight(2);
+
+		scn.FreepsPlayCard(card);
+		scn.FreepsChooseCard(avoided);
+
+		// Deceit saves Not Easily Avoided from the discard.
+		assertTrue(scn.ShadowHasOptionalTriggerAvailable(deceit));
+		scn.ShadowChooseOptionalTrigger(deceit);
+		assertInZone(Zone.SUPPORT, avoided);
+
+		// "Hinder all other conditions": every condition but the one chosen, Deceit among them.
+		assertFalse(scn.IsHindered(avoided));
+		assertTrue(scn.IsHindered(deceit));
+		assertTrue(scn.IsHindered(pinned));
+		assertTrue(scn.IsHindered(stairs));
+		assertInDiscard(card);
 		assertTrue(scn.AwaitingFellowshipPhaseActions());
 	}
 }

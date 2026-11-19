@@ -1,0 +1,377 @@
+/* The phone layout's top: the status bar and the players' chips (G7) */
+
+:host {
+  display: grid;
+  gap: 5px;
+  padding: 5px 6px 6px;
+  background: var(--theme-content-bg);
+  border-bottom: 1px solid var(--theme-content-border);
+  min-width: 0;
+}
+
+.gd-phone-status__bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gd-phone-icon {
+  position: relative;
+  flex: none;
+  min-width: 34px;
+  height: 32px;
+  padding: 0 6px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-default-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 15px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.gd-phone-unread {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: var(--theme-error);
+  color: var(--theme-game-phone-on-dark);
+  font-size: 10px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+/* A long phase ("Play starting fellowship") wraps inside its own box, never pushing the bar's buttons to a new line */
+.gd-phone-status__phase {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-family: var(--theme-game-phone-font-display);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  color: var(--theme-game-phone-accent);
+}
+
+.gd-phone-status__twilight {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* The twilight pool as a cut gem */
+.gd-phone-status__gem {
+  flex: none;
+}
+
+.gd-phone-status__gem-stone {
+  fill: var(--theme-game-phone-gem);
+  stroke: var(--theme-game-phone-gem-edge);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.gd-phone-status__gem-facets {
+  fill: none;
+  stroke: var(--theme-game-phone-gem-facet);
+  stroke-width: 0.7;
+}
+
+.gd-phone-status__move {
+  flex: none;
+  padding: 2px 9px;
+  border-radius: 99px;
+  background: var(--theme-game-phone-accent);
+  color: var(--theme-game-phone-on-accent);
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.gd-phone-status__gap {
+  flex: 0 0 0;
+}
+
+.gd-phone-status__bar:has(> .gd-phone-status__pills[hidden]) .gd-phone-status__gap {
+  flex: 1;
+}
+
+/*
+ * Beside the phase the pills take the bar's free space (no width of their own), right aligned; when they don't fit
+ * there the ones on a line of their own under the bar show instead (data-place line) and the gap takes the free space,
+ * which says whether they would fit again (PhoneStatusComponent.fitPills)
+ */
+.gd-phone-status__pills {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 0;
+  overflow: hidden;
+}
+
+/* On a line of their own under the bar, when they don't fit beside the phase */
+.gd-phone-status__pills[data-place='line'] {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+.gd-phone-pill {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: none;
+  border: 1px solid var(--theme-separator);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.gd-phone-pill__line {
+  flex: none;
+  fill: none;
+  stroke: var(--theme-game-phone-accent);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The archery totals: the computer layout's icons, on the private mobile page's plates */
+.gd-phone-pill[data-pill$='-archery'] {
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.gd-phone-pill[data-pill='fp-archery'] {
+  background: var(--theme-game-phone-fp-archery-bg);
+  color: var(--theme-game-phone-on-fp-archery);
+}
+
+.gd-phone-pill[data-pill='shadow-archery'] {
+  background: var(--theme-game-phone-shadow-archery-bg);
+  color: var(--theme-game-phone-on-shadow-archery);
+}
+
+.gd-phone-pill__icon {
+  width: 14px;
+  height: 14px;
+  background: no-repeat center / contain;
+}
+
+[data-pill='fp-archery'] > .gd-phone-pill__icon {
+  background-image: var(--theme-game-icon-fp-archery);
+}
+
+[data-pill='shadow-archery'] > .gd-phone-pill__icon {
+  background-image: var(--theme-game-icon-shadow-archery);
+}
+
+.gd-phone-pill[data-warn] {
+  border-color: var(--theme-warning);
+  color: var(--theme-warning);
+}
+
+.gd-phone-players {
+  display: flex;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gd-phone-player {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1px 5px;
+  position: relative;
+  padding: 4px 8px 4px 10px;
+  /* A double bronze frame: the border, and a fine line inside it (::after; an inset shadow on a rounded box was
+     blended differently each time a sheet had been over it) */
+  border: 1px solid var(--theme-game-phone-frame);
+  border-radius: 10px;
+  background: var(--theme-content-bg);
+  color: var(--theme-text);
+  font: inherit;
+  text-align: left;
+}
+
+.gd-phone-player::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--theme-game-phone-frame-inner);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* Whose turn it is: a gold bar on the chip's left, not a whole outline */
+.gd-phone-player[data-current] {
+  background: var(--theme-default-bg);
+}
+
+.gd-phone-player[data-current]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 9px 0 0 9px;
+  background: var(--theme-game-phone-accent);
+  pointer-events: none;
+}
+
+/* The player's number on a heraldic shield: the player's colour inside a gold edge */
+.gd-phone-player__no {
+  --gd-shield: var(--theme-game-phone-player-1);
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  padding-bottom: 3px;
+  box-sizing: border-box;
+  clip-path: path('M0 0H18V9C18 15 13 19 9 21C5 19 0 15 0 9Z');
+  background: var(--theme-game-phone-accent);
+  font-family: var(--theme-game-phone-font-text);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--theme-game-phone-on-dark);
+  isolation: isolate;
+}
+
+.gd-phone-player__no::before {
+  content: '';
+  position: absolute;
+  left: 1.5px;
+  top: 1.5px;
+  width: 15px;
+  height: 18px;
+  clip-path: path('M0 0H15V7.5C15 12.5 11 16 7.5 18C4 16 0 12.5 0 7.5Z');
+  background: var(--gd-shield);
+  z-index: -1;
+}
+
+.gd-phone-player__no[data-no='2'] {
+  --gd-shield: var(--theme-game-phone-player-2);
+}
+
+.gd-phone-player__name {
+  min-width: 0;
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 14px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-phone-player__clock {
+  flex: none;
+  margin-left: auto;
+  color: var(--theme-game-phone-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-phone-player__clock[data-band='warn'] {
+  color: var(--theme-modified);
+  font-weight: 700;
+}
+
+.gd-phone-player__clock[data-band='danger'] {
+  color: var(--theme-error);
+  font-weight: 700;
+}
+
+.gd-phone-player__counts {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-player__counts > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* The counters' icons: the computer layout's (the theme's), at the line's height */
+.gd-phone-player__icon {
+  width: 15px;
+  height: 15px;
+  background: no-repeat center / contain;
+}
+
+[data-count='hand'] > .gd-phone-player__icon {
+  background-image: var(--theme-game-icon-hand);
+}
+
+[data-count='deck'] > .gd-phone-player__icon {
+  background-image: var(--theme-game-icon-deck);
+}
+
+[data-count='threats'] > .gd-phone-player__icon {
+  background-image: var(--theme-game-icon-threats);
+}
+
+/* Sideways the bar shares its line with the players: tighter pills */
+:host-context([data-device='sideways']) .gd-phone-pill {
+  gap: 3px;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+/* Sideways: one line at the top, the chips shrunk into it */
+:host-context([data-device='sideways']) {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding: 3px 6px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-player {
+  flex: none;
+  max-width: 132px;
+  padding: 3px 7px 3px 9px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-player__name {
+  font-size: 13px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-status__phase {
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+:host-context([data-device='sideways']) .gd-phone-status__move {
+  padding: 2px 7px;
+  font-size: 10px;
+  letter-spacing: 0.03em;
+}
+
+:host-context([data-device='sideways']) .gd-phone-player__counts {
+  display: none;
+}

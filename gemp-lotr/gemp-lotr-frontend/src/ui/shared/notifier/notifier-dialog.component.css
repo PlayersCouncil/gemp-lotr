@@ -1,0 +1,24 @@
+/* The notifier's dialog: the message, the prompt's field and the buttons (.ui-dialog-buttonpane) */
+
+.gd-notifier__message {
+  margin: 0.5em 0;
+  white-space: pre-line;
+}
+
+.gd-notifier__input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.gd-dialog__actions {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5em 0 0;
+  padding: 0.3em 1em 0.5em 0.4em;
+  border-top: 1px solid var(--theme-content-border);
+}
+
+.gd-dialog__actions .gd-button {
+  margin: 0.5em 0.4em 0.5em 0;
+}

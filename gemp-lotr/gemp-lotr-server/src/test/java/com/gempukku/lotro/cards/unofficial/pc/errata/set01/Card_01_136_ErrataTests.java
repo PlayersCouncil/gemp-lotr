@@ -32,6 +32,8 @@ public class Card_01_136_ErrataTests
 					put("bow", "1_41");         // Elven Bow: Free Peoples possession borne by an Elf; bearer is an archer
 
 					put("armory", "1_157");     // Uruk-hai Armory: Shadow condition in the support area; touches only the archery total
+					put("gimli", "7_7");        // Gimli, Feared Axeman: exert a Dwarf to prevent an opponent discarding a [dwarven] condition
+					put("stairs", "1_24");      // Stairs of Khazad-dum: [dwarven] Free Peoples condition, support area
 					put("throw", "2_71");       // Throw Yourself in Next Time: Shadow condition on a Hobbit companion; bearer may be exerted only by Shadow cards
 				}},
 				VirtualTableScenario.FellowshipSites,
@@ -214,6 +216,44 @@ public class Card_01_136_ErrataTests
 		assertEquals(2, scn.GetWoundsOn(savage));
 		assertEquals(0, scn.GetWoundsOn(goblins));
 		assertFalse(scn.IsHindered(songs));
+		assertTrue(scn.AwaitingShadowPhaseActions());
+	}
+
+	@Test
+	public void AChosenConditionWhoseDiscardIsPreventedIsNotHinderedWithTheOthers() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetScenario();
+
+		var power = scn.GetShadowCard("power");
+		var servant = scn.GetShadowCard("servant");
+		var armory = scn.GetShadowCard("armory");
+		scn.MoveCardsToHand(power);
+		scn.MoveCardsToSupportArea(armory);
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var stairs = scn.GetFreepsCard("stairs");
+		var songs = scn.GetFreepsCard("songs");
+		scn.MoveCompanionsToTable(gimli);
+		scn.MoveCardsToSupportArea(stairs, songs);
+
+		scn.StartGame();
+		scn.MoveMinionsToTable(servant);
+		scn.SetTwilight(10);
+		scn.FreepsPass();
+
+		scn.ShadowPlayCard(power);
+		scn.ShadowChooseCard(stairs);
+
+		// Gimli exerts to save Stairs of Khazad-dum from the discard.
+		assertTrue(scn.FreepsHasOptionalTriggerAvailable(gimli));
+		scn.FreepsChooseOptionalTrigger(gimli);
+		assertEquals(1, scn.GetWoundsOn(gimli));
+		assertInZone(Zone.SUPPORT, stairs);
+
+		// "Hinder all other conditions": every condition but the one chosen.
+		assertFalse(scn.IsHindered(stairs));
+		assertTrue(scn.IsHindered(songs));
+		assertTrue(scn.IsHindered(armory));
+		assertInDiscard(power);
 		assertTrue(scn.AwaitingShadowPhaseActions());
 	}
 }

@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.decisions;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.logic.GameSeed;
 
 import java.util.*;
 
@@ -19,8 +20,8 @@ public abstract class PlayerAssignMinionsDecision extends AbstractAwaitingDecisi
      */
     public PlayerAssignMinionsDecision(int id, String text, Collection<PhysicalCard> freeCharacters, Collection<PhysicalCard> minions, Integer maxAssignable) {
         super(id, text, AwaitingDecisionType.ASSIGN_MINIONS);
-        _freeCharacters = new LinkedList<>(freeCharacters);
-        _minions = new LinkedList<>(minions);
+        _freeCharacters = GameSeed.stableOrder(freeCharacters);
+        _minions = GameSeed.stableOrder(minions);
         setParam("freeCharacters", getCardIds(_freeCharacters));
         setParam("minions", getCardIds(_minions));
         if (maxAssignable != null)
