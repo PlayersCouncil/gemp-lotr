@@ -77,6 +77,10 @@ describe('GempHttp', () => {
     const json = firstValueFrom(http.postJson<{ a: number }>('/deck/formats'));
     backend.expectOne('/gemp-lotr-server/deck/formats').flush('{"a":1}');
     expect(await json).toEqual({ a: 1 });
+
+    const got = firstValueFrom(http.getJson<{ b: number }>('/game/1/restorePoints'));
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/game/1/restorePoints' && r.method === 'GET').flush('{"b":2}');
+    expect(await got).toEqual({ b: 2 });
   });
 
   it('turns HTTP failures into ApiError with the status', async () => {

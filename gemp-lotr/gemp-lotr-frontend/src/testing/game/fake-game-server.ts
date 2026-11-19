@@ -54,6 +54,10 @@ export class FakeGameServer implements AnswersRequests {
         .sort(([a], [b]) => a.localeCompare(b)),
     );
     const asked = describeExchange({ method: request.method, path, params });
+    if (UNDO_PATHS.some((end) => path === `/game/<id>/${end}`)) {
+      // Taking a game back is not in the recordings: nothing can be taken back, and no notice ever comes
+      return this.undoAnswer(path, params, asked);
+    }
     // The page's own requests (its first state, its polls) and the player's (answers, concede, cancel) each come in
     // the recorded order. A poll can be sent before a gesture and answered after it (a cancel while the page polls):
     // it is answered once everything recorded before its answer has been.
@@ -89,6 +93,35 @@ export class FakeGameServer implements AnswersRequests {
     this.answered.add(index);
     return { status: exchange.status, body: exchange.body, contentType: exchange.contentType };
   }
+
+  /**
+   * The undo calls both pages make on their own (the places to go back to, whenever the game moves; the notices' long
+   * poll): answered as a game where nothing can be taken back. Asking for an undo or answering a request is a problem.
+   */
+  private undoAnswer(path: string, params: Record<string, string>, asked: string): ServerAnswer | null {
+    if (path.endsWith('/restorePoints')) {
+      return json({
+        points: [],
+        policy: { green: false, yellow: false, red: false, asks: false, timeoutSeconds: 0, greenPerPhase: 0 },
+        autoDecline: false,
+        declining: [],
+        pending: null,
+      });
+    }
+    if (path.endsWith('/notices')) {
+      // Where to start from at once; after that, held like a long poll with nothing new
+      return params['after'] === '-1' ? json({ notices: [], latest: 0 }) : null;
+    }
+    this.problems.push(`not in the recording: ${asked}`);
+    return null;
+  }
+}
+
+/** The undo calls (GameRequestHandler, "taking a game back"), by the end of their path. */
+const UNDO_PATHS = ['restorePoints', 'notices', 'undo', 'undoReply', 'autoDecline'];
+
+function json(body: unknown): ServerAnswer {
+  return { status: 200, body: JSON.stringify(body), contentType: 'application/json; charset=UTF-8' };
 }
 
 function chat(): ServerAnswer {

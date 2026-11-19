@@ -27,6 +27,7 @@ describe('GameSettings', () => {
     expect(s.alwaysDropDown()).toBe(false);
     expect(s.autoPassPhases()).toEqual(['FELLOWSHIP', 'MANEUVER', 'ARCHERY', 'ASSIGNMENT', 'REGROUP']);
     expect(s.autoDismissDeckReveal()).toBe(false);
+    expect(s.skipConfirmations()).toBe(false);
     expect(s.oldStackVisuals()).toBe(false);
     expect(s.animationSpeed()).toBe(0);
     expect(s.timerAudioMuted()).toBe(false);
@@ -43,6 +44,7 @@ describe('GameSettings', () => {
       alwaysDropDown: 'true',
       autoPassPhases: 'SHADOW0SKIRMISH',
       autoDismissDeckReveal: 'true',
+      skipConfirmations: 'true',
       'use-old-stack': 'true',
       'animation-speed': '-2',
       timerAudioMuted: 'true',
@@ -52,6 +54,7 @@ describe('GameSettings', () => {
     expect(s.alwaysDropDown()).toBe(true);
     expect(s.autoPassPhases()).toEqual(['SHADOW', 'SKIRMISH']);
     expect(s.autoDismissDeckReveal()).toBe(true);
+    expect(s.skipConfirmations()).toBe(true);
     expect(s.oldStackVisuals()).toBe(true);
     expect(s.animationSpeed()).toBe(-2);
     expect(s.timerAudioMuted()).toBe(true);
@@ -82,6 +85,7 @@ describe('GameSettings', () => {
     s.setAutoPass('SHADOW', true);
     s.setAutoPass('FELLOWSHIP', false);
     s.setAutoDismissDeckReveal(true);
+    s.setSkipConfirmations(true);
     s.setOldStackVisuals(true);
     s.setAnimationSpeed(9);
     s.setTimerAudioMuted(true);
@@ -92,6 +96,7 @@ describe('GameSettings', () => {
       [COOKIES.autoPassPhases]: 'SHADOW0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP',
       [`${SERVER_COOKIE_PATH}:${COOKIES.autoPassPhases}`]: 'SHADOW0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP',
       [COOKIES.autoDismissDeckReveal]: 'true',
+      [COOKIES.skipConfirmations]: 'true',
       [COOKIES.oldStack]: 'true',
       [COOKIES.animationSpeed]: '4',
       [COOKIES.timerAudioMuted]: 'true',

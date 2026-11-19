@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SessionStore } from '../../platform/session-store';
 import { Decision } from '../protocol/game-events';
 import { emptyGame, GameModel } from '../state/game-model';
-import { decisionKey, GameRestore, mergeMessages } from './game-restore';
+import { continuedMessages, decisionKey, GameRestore, mergeMessages } from './game-restore';
 
 class FakeStore {
   readonly values = new Map<string, unknown>();
@@ -134,5 +134,22 @@ describe('mergeMessages', () => {
 
   it('a warning and a message of the same text are different', () => {
     expect(mergeMessages([m('a')], [{ kind: 'warning', text: 'a' }])).toHaveLength(2);
+  });
+});
+
+describe('continuedMessages', () => {
+  it("after a revert: what was shown, then the new game's from its line about the revert (the last such) on", () => {
+    expect(continuedMessages([m('1'), m('2'), m('3')], [m('1'), m('r'), m('4'), m('r'), m('5')], 'r')).toEqual([
+      m('1'),
+      m('2'),
+      m('3'),
+      m('r'),
+      m('5'),
+    ]);
+  });
+
+  it('without that line, merges the two as after a reload', () => {
+    expect(continuedMessages([m('1'), m('2')], [m('2'), m('3')], 'gone')).toEqual([m('1'), m('2'), m('3')]);
+    expect(continuedMessages([m('1')], [m('1'), m('2')], null)).toEqual([m('1'), m('2')]);
   });
 });

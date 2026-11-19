@@ -6,6 +6,7 @@ import { decisionKey } from '../session/game-restore';
 import { GameSession } from '../session/game-session.service';
 import { GameSettings } from '../settings/game-settings';
 import { GameCardRef } from '../table/game-card-views';
+import { GameUndo } from '../undo/game-undo.service';
 import { GameSheets } from './game-sheets';
 import { PhoneSettings } from './phone-settings';
 
@@ -13,7 +14,8 @@ import { PhoneSettings } from './phone-settings';
  * What the phone layout does on its own with the game's events (G7 of trymarz/gemp-lotr-private#27):
  * - a card's details asked for (a long press) open as a sheet over the one shown, instead of the computer's dialog;
  * - answering a decision closes every sheet;
- * - a decision coming makes the phone buzz and plays a sound ("Your move", both on unless the player turned them off).
+ * - a decision coming makes the phone buzz and plays a sound ("Your move", both on unless the player turned them off);
+ * - a revert request, or the list of places to go back to, closes every sheet (they would hide its dialog).
  * Nothing outside the phone layout. Page-scoped.
  */
 @Injectable()
@@ -24,8 +26,16 @@ export class PhoneBridge {
   private readonly info = inject(CardInfoService);
   private readonly cues = inject(PageCues);
   private readonly settings = inject(GameSettings);
+  private readonly undo = inject(GameUndo);
 
   constructor() {
+    effect(() => {
+      const shown = this.undo.pending() !== null || this.undo.list() !== null;
+      untracked(() => {
+        if (shown && this.phone.device() !== null) this.sheets.closeAll();
+      });
+    });
+
     effect(() => {
       const card = this.info.card();
       const device = this.phone.device();

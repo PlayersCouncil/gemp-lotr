@@ -19,6 +19,7 @@ export const COOKIES = {
   alwaysDropDown: 'alwaysDropDown',
   autoPassPhases: 'autoPassPhases',
   autoDismissDeckReveal: 'autoDismissDeckReveal',
+  skipConfirmations: 'skipConfirmations',
   oldStack: 'use-old-stack',
   animationSpeed: 'animation-speed',
   timerAudioMuted: 'timerAudioMuted',
@@ -65,6 +66,11 @@ export class GameSettings {
   );
   /** Searching one's own deck skips the window showing the whole deck (default off). */
   readonly autoDismissDeckReveal = signal(this.cookies.read(COOKIES.autoDismissDeckReveal) === 'true');
+  /**
+   * A decision that only asks to be confirmed (`confirmOnly`: DONE on a starting fellowship nothing more fits into) is
+   * answered for the player (default off: the choice before it can't be undone then).
+   */
+  readonly skipConfirmations = signal(this.cookies.read(COOKIES.skipConfirmations) === 'true');
   /** Stacked cards drawn the old way (default off). */
   readonly oldStackVisuals = signal(this.cookies.read(COOKIES.oldStack) === 'true');
   /** The phone layout's button under a card others lie under (default shown). */
@@ -105,6 +111,11 @@ export class GameSettings {
   setAutoDismissDeckReveal(value: boolean): void {
     this.autoDismissDeckReveal.set(value);
     this.cookies.write(COOKIES.autoDismissDeckReveal, String(value));
+  }
+
+  setSkipConfirmations(value: boolean): void {
+    this.skipConfirmations.set(value);
+    this.cookies.write(COOKIES.skipConfirmations, String(value));
   }
 
   setOldStackVisuals(value: boolean): void {

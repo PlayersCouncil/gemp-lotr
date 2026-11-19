@@ -68,6 +68,14 @@ describe('applyEvent', () => {
     expect(play({ type: 'ES' }, { type: 'ES' }).eventCount).toBe(2);
   });
 
+  it('changes nothing for the game being taken back: the table was sent again before it', () => {
+    const before = play({ type: 'TP', count: 3 });
+    expect(applyEvent(before, { type: 'GR', participantId: 'bob', tier: 'RED', message: 'm' })).toEqual({
+      ...before,
+      eventCount: before.eventCount + 1,
+    });
+  });
+
   it('keeps the pre-game information, the phase, the twilight, the turn and positions', () => {
     const model = play(
       { type: 'PGS', participantId: null, allParticipantIds: [], summary: 's', notes: 'n', maps: 'm', metaSites: 'x' },

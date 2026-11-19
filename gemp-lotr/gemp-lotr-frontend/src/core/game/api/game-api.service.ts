@@ -4,6 +4,15 @@ import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { GempHttp } from '../../api/gemp-http.service';
 import { GameEvent, GameUpdate } from '../protocol/game-events';
 import { parseGameUpdate, parseReplay } from '../protocol/game-xml';
+import {
+  GameNotices,
+  readGameNotices,
+  readRestorePoints,
+  readUndoReply,
+  RestorePoints,
+  UndoAnswer,
+  UndoReply,
+} from '../undo/undo-protocol';
 
 function update(doc: Document): GameUpdate {
   const parsed = parseGameUpdate(doc);
@@ -49,6 +58,48 @@ export class GameApi {
   /** Asks the opponent to cancel the game (it ends only if they ask too). */
   cancel(gameId: string): Observable<void> {
     return this.http.postText(`/game/${encodeURIComponent(gameId)}/cancel`).pipe(map(() => undefined));
+  }
+
+  /** Where the player may take the game back to, and how things stand with requests (undo.js getRestorePoints). */
+  restorePoints(gameId: string): Observable<RestorePoints> {
+    return this.http.getJson<unknown>(`/game/${encodeURIComponent(gameId)}/restorePoints`).pipe(map(readRestorePoints));
+  }
+
+  /**
+   * Asks for the game to be taken back to a place (its entryCount; null for the player's last choice). `ownOnly`: the
+   * Undo button's, refused rather than asked of the opponent if it is no longer the player's own business.
+   */
+  undo(gameId: string, entryCount: number | null, ownOnly: boolean): Observable<UndoReply> {
+    return this.http
+      .postJson<unknown>(`/game/${encodeURIComponent(gameId)}/undo`, {
+        entryCount: entryCount === null ? '' : String(entryCount),
+        ownOnly: String(ownOnly),
+      })
+      .pipe(map(readUndoReply));
+  }
+
+  /** Answers a request: approve, decline, declineAll (this and every later one), or cancel (the asker withdraws). */
+  undoReply(gameId: string, requestId: number, reply: UndoAnswer): Observable<UndoReply> {
+    return this.http
+      .postJson<unknown>(`/game/${encodeURIComponent(gameId)}/undoReply`, { requestId: String(requestId), reply })
+      .pipe(map(readUndoReply));
+  }
+
+  /** Declines every request in this game without asking the player (or stops doing so). */
+  autoDecline(gameId: string, on: boolean): Observable<void> {
+    return this.http
+      .postJson<unknown>(`/game/${encodeURIComponent(gameId)}/autoDecline`, { on: String(on) })
+      .pipe(map(() => undefined));
+  }
+
+  /**
+   * The game's notices after number `after`: a long poll of its own, apart from the game's, so that a request or the
+   * game's end reaches a player who is looking at a decision. `after` -1 answers at once with where to start from.
+   */
+  notices(gameId: string, after: number): Observable<GameNotices> {
+    return this.http
+      .postJson<unknown>(`/game/${encodeURIComponent(gameId)}/notices`, { after: String(after) })
+      .pipe(map(readGameNotices));
   }
 
   /** getReplay: every event of a finished game. replayId is "player$recording", sent as it is. */

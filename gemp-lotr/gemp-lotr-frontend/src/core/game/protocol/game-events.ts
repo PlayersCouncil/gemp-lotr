@@ -112,7 +112,12 @@ export type GameEvent =
   | ({ type: 'CAC'; affectedCardIds: readonly string[] } & CardRef)
   | ({ type: 'EP' } & CardRef)
   | ({ type: 'CA' } & CardRef)
-  | { type: 'D'; decision: Decision };
+  | { type: 'D'; decision: Decision }
+  /**
+   * The game was taken back to an earlier point (GAME_REVERTED), sent after the whole table has been sent again: who
+   * asked, the tier of what was undone (GREEN, YELLOW, RED; empty when nobody asked), and what the game says of it.
+   */
+  | { type: 'GR'; participantId: string; tier: string; message: string };
 
 /** Clock values: per participant the seconds left in their bank; also the decision's clock and limit. */
 export type Clocks = Readonly<Record<string, number>>;

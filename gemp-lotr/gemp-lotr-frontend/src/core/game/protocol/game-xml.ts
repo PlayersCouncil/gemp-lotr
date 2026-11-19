@@ -200,6 +200,13 @@ export function parseGameEvent(element: Element): GameEvent | null {
       const parsed = decision(element);
       return parsed ? { type: 'D', decision: parsed } : null;
     }
+    case 'GR':
+      return {
+        type: 'GR',
+        participantId: text(element, 'participantId'),
+        tier: text(element, 'tier'),
+        message: text(element, 'message'),
+      };
     default:
       return null;
   }
