@@ -216,6 +216,11 @@
   padding: 4px 0;
 }
 
+/* A touch shows at once: a card pressed dims a moment, before the server answers (the layout review, 2026-11-19) */
+.gd-card:active {
+  opacity: 0.82;
+}
+
 /* A card that isn't active this turn: dimmed, in a dark frame */
 .gd-card[data-inactive] {
   --gd-card-image-filter: var(--theme-game-inactive-filter);

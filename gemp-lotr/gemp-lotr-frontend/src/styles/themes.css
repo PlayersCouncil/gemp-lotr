@@ -189,6 +189,12 @@
   --theme-game-phone-font-display: var(--theme-font-text);
   --theme-game-phone-font-text: var(--theme-font-text);
   --theme-game-phone-sheet-bg: #222;
+  /* The decision's strip while the player waits, the rows' quiet line, the table's grain (the layout review, 2026-11-19) */
+  --theme-game-phone-wait-bg: #1a1a1a;
+  --theme-game-phone-on-wait: #bbb;
+  --theme-game-phone-wait-line: #444;
+  --theme-game-phone-rule-quiet: #333;
+  --theme-game-phone-table-grain: none;
   --theme-game-phone-on-sheet: #fff;
   --theme-game-phone-sheet-chip: #333;
   --theme-game-phone-sheet-line: #666;
@@ -421,6 +427,22 @@
   --theme-game-phone-font-display: Cinzel, 'EB Garamond', Georgia, serif;
   --theme-game-phone-font-text: 'EB Garamond', Georgia, serif;
   --theme-game-phone-sheet-bg: #ecdfc0;
+  /* The decision's strip while the player waits: dark and quiet, so "Your move" stands out when it comes */
+  --theme-game-phone-wait-bg: #221b13;
+  --theme-game-phone-on-wait: #c9b88e;
+  --theme-game-phone-wait-line: #4a3d26;
+  /* Between ordinary rows a hairline; the gold rule with curls only beside the minions and the fights */
+  --theme-game-phone-rule-quiet: rgb(201 162 74 / 0.16);
+  /* A faint wood grain under the table, in its own browns */
+  --theme-game-phone-table-grain:
+    repeating-linear-gradient(
+      93deg,
+      rgb(255 236 200 / 0.018) 0 2px,
+      transparent 2px 7px,
+      rgb(0 0 0 / 0.05) 7px 8px,
+      transparent 8px 19px
+    ),
+    linear-gradient(180deg, rgb(255 220 160 / 0.025), transparent 40%);
   --theme-game-phone-on-sheet: #2b2115;
   --theme-game-phone-sheet-chip: #d9c99f;
   --theme-game-phone-sheet-line: #6b5a36;

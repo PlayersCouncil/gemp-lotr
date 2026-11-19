@@ -4,6 +4,9 @@
   position: relative;
   display: block;
   min-height: 0;
+  /* A faint wood grain under the rows (the layout review, 2026-11-19), scrolling with them */
+  background: var(--theme-game-phone-table-grain);
+  background-attachment: local;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -18,12 +21,20 @@
   padding: 6px 0 4px;
 }
 
-/* Between rows: a fine gold line with curled ends (the owner's pick, 2026-11-17) */
+/* Between rows: a quiet hairline (the layout review, 2026-11-19) */
 .gd-phone-zone + .gd-phone-zone::before {
   content: '';
   display: block;
   height: 10px;
-  margin: -6px 10px 2px;
+  margin: -6px 12px 2px;
+  background: linear-gradient(var(--theme-game-phone-rule-quiet), var(--theme-game-phone-rule-quiet)) center / 100% 1px
+    no-repeat;
+}
+
+/* Beside the minions and the fights, where the game happens: the fine gold line with curled ends (2026-11-17) */
+.gd-phone-zone + .gd-phone-zone:is([data-side='minions'], [data-side='fight'])::before,
+.gd-phone-zone:is([data-side='minions'], [data-side='fight']) + .gd-phone-zone::before {
+  margin-inline: 10px;
   background:
     var(--theme-game-phone-curl-left-small) left center no-repeat,
     var(--theme-game-phone-curl-right-small) right center no-repeat,
