@@ -3,9 +3,11 @@
  * what a test cares about changed, and the result a change answers with.
  */
 import {
+  AuthoringBoard,
   AuthoringDecision,
   AuthoringPosition,
   AuthoringResult,
+  BoardCard,
   DraftState,
   DraftStep,
 } from '../core/game/authoring/authoring-state';
@@ -142,4 +144,63 @@ export function draftGameXml(info: Partial<typeof AUTHOR_INFO> = {}): string {
     '<parameter name="actionId" value="12"/><parameter name="actionText" value="Use"/></ge>' +
     '</gameState>'
   );
+}
+
+/** A card of the board (Frodo, in the Free Peoples' characters, unless said otherwise). */
+export function boardCard(alias: string, extra: Partial<BoardCard> = {}): BoardCard {
+  return {
+    alias,
+    blueprintId: '10_121',
+    name: 'Frodo, Resolute Hobbit',
+    type: 'COMPANION',
+    owner: 'freeps',
+    cardId: 25,
+    zone: 'characters',
+    at: null,
+    wounds: 0,
+    tokens: 0,
+    on: null,
+    ...extra,
+  };
+}
+
+/** The board of a new draft (Frodo and the Ring for each seat, the stock path of 3 sites), and two cards in hand. */
+export function draftBoard(extra: Partial<AuthoringBoard> = {}): AuthoringBoard {
+  const path = (opp: string) =>
+    ['1_323', '1_329', '1_341'].map((id, at) => ({
+      number: at + 1,
+      id,
+      alias: `site${at + 1}${opp}`,
+      name: `Site ${id}`,
+    }));
+  return {
+    cards: [
+      boardCard('frodo'),
+      boardCard('ring', {
+        blueprintId: '1_2',
+        name: 'The One Ring, The Ruling Ring',
+        type: 'THE_ONE_RING',
+        cardId: 26,
+        zone: 'attached',
+        on: 'frodo',
+      }),
+      boardCard('sam', { blueprintId: '1_311', name: 'Sam, Son of Hamfast', cardId: 30, zone: 'hand', at: 0 }),
+      boardCard('merry', { blueprintId: '1_303', name: 'Merry, Friend to Sam', cardId: 31, zone: 'hand', at: 1 }),
+      boardCard('oppFrodo', { owner: 'shadow', cardId: 27 }),
+      boardCard('orc', {
+        blueprintId: '1_191',
+        name: 'Goblin Runner',
+        type: 'MINION',
+        owner: 'shadow',
+        cardId: 32,
+        zone: 'hand',
+        at: 0,
+      }),
+    ],
+    twilight: 0,
+    burdens: 1,
+    threats: 0,
+    sites: { freeps: path(''), shadow: path('opp') },
+    ...extra,
+  };
 }
