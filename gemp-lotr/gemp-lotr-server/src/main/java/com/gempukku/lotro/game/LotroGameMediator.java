@@ -265,7 +265,8 @@ public class LotroGameMediator {
         restorePoints.setGame(game);
         if (toRepeat != null)
             journal.replayRandomFrom(toRepeat);
-        game.getGameState().setRandom(journal.random(ledger.watching(GameRandom.DEFAULT)));
+        //(GameSeed: the game's own draws, which a test server started with a seed makes the same for every game)
+        game.getGameState().setRandom(journal.random(ledger.watching(GameSeed.newGameRandom())));
         game.addGameStateListener(InformationLedger.LISTENER_NAME, ledger);
         return new Built(feedback, game, journal, ledger, restorePoints);
     }
