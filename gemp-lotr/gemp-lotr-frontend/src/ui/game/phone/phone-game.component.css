@@ -42,7 +42,8 @@ gd-phone-hand {
 /*
  * Held sideways: two columns, nothing over anything (the owner, 2026-11-19). The table scrolls on the left, down to the
  * bottom; on the right, a panel docked to the edge: the decision on top, the hand (or the cards offered in its place)
- * under it in rows scrolled down. Dragging the hand's grip or the divider sizes the hand's cards, as upright.
+ * under it in rows scrolled down, its cards one size (Settings › Display card size). Dragging the decision or the
+ * hand's grip down hides the hand, up shows it, as upright.
  */
 :host([data-device='sideways']) {
   --gd-phone-rail: clamp(250px, 40%, 460px);
@@ -74,7 +75,18 @@ gd-phone-hand {
   border-left: 1px solid var(--theme-separator);
 }
 
-/* The hand hidden: the panel holds the decision alone, on the hand's background */
+/*
+ * The hand hidden (the divider dragged down): the decision at the bottom of the panel, the table keeping its width (the
+ * owner, 2026-11-19); the panel's empty top on the hand's background
+ */
+:host([data-device='sideways'][data-hand-hidden]) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'top top'
+    'table hand'
+    'table divider';
+}
+
 :host([data-device='sideways'][data-hand-hidden])::after {
   content: '';
   grid-area: hand;

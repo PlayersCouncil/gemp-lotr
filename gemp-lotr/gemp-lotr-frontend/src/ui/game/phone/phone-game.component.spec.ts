@@ -50,7 +50,7 @@ describe('the game on a phone (G7)', () => {
   });
 
   /** The page with the compact layout on (the modern theme on a phone: CompactLayout) or off. */
-  async function open(body: string, { compact = true, device = 'phone' as 'phone' | 'tablet' } = {}) {
+  async function open(body: string, { compact = true, device = 'phone' as 'phone' | 'tablet' | 'sideways' } = {}) {
     cues = { vibrate: vi.fn(), play: vi.fn(), toggleFullscreen: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
@@ -220,6 +220,28 @@ describe('the game on a phone (G7)', () => {
     TestBed.resetTestingModule();
     const phone = await open(game());
     expect(half(phone.el)).toEqual([]);
+  });
+
+  it("held sideways, hides the hand by the keyboard's Down and shows it by Up; its cards keep one size", async () => {
+    const { el, fixture, stable } = await open(game(), { device: 'sideways' });
+    const phone = fixture.debugElement.injector.get(PhoneSettings);
+    const size = () =>
+      (el.querySelector('gd-game-phone') as HTMLElement).style.getPropertyValue('--gd-phone-hand-card');
+    const divider = el.querySelector<HTMLElement>('gd-phone-divider');
+    const key = async (key: string) => {
+      divider?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      await stable();
+    };
+    const before = size();
+    expect(phone.handHidden()).toBe(false);
+    await key('ArrowDown');
+    expect(phone.handHidden()).toBe(true);
+    await key('ArrowUp');
+    expect(phone.handHidden()).toBe(false);
+    // Up again: the hand doesn't grow, nor do its cards
+    await key('ArrowUp');
+    expect(size()).toBe(before);
+    document.cookie = 'gempGameSplit=; path=/; max-age=0';
   });
 
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
