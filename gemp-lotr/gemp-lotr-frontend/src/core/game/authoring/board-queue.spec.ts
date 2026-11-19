@@ -1,6 +1,7 @@
 import { AuthoringBoard, BoardCard, Draft } from './authoring-state';
 import { GatheredBoard, GatheredCard } from './authoring-ui-store';
 import {
+  ADD_PLACES,
   addAliasProblem,
   addCard,
   addedText,
@@ -18,6 +19,9 @@ import {
   gatheredCount,
   gatheredOf,
   keepCard,
+  ON_PLACES,
+  ORDERED,
+  PLACED,
   opText,
   pathIds,
   pruneGathered,
@@ -35,6 +39,7 @@ import {
   undoAdded,
   undoOp,
   undoRemoved,
+  ZONES,
 } from './board-queue';
 
 function card(alias: string, extra: Partial<BoardCard> = {}): BoardCard {
@@ -109,6 +114,48 @@ function gathering(...changes: [string, ...(string | number)[]][]) {
 }
 
 describe('the Board tab model', () => {
+  it("knows the legacy tab's places: where a card moves, how the lists are headed, where a card is added", () => {
+    expect(ZONES).toEqual([
+      'characters',
+      'support',
+      'minions',
+      'hand',
+      'deck.top',
+      'deck.bottom',
+      'discard',
+      'deadPile',
+      'removed',
+    ]);
+    expect(PLACED).toEqual([
+      ['characters', 'Characters'],
+      ['minions', 'Minions'],
+      ['support', 'Support area'],
+      ['attached', 'On another card'],
+      ['stacked', 'Stacked on another card'],
+      ['hand', 'Hand'],
+      ['deck', 'Deck, top first'],
+      ['discard', 'Discard pile, top first'],
+      ['deadPile', 'Dead pile'],
+      ['removed', 'Removed from the game'],
+    ]);
+    expect(ORDERED).toEqual(['hand', 'deck', 'discard', 'deadPile']);
+    expect(ADD_PLACES.map(([zone]) => zone)).toEqual([
+      '',
+      'hand',
+      'characters',
+      'support',
+      'minions',
+      'discard',
+      'deadPile',
+    ]);
+    expect(ADD_PLACES[0]).toEqual(['', 'deck (bottom)']);
+    expect(ADD_PLACES.slice(1).every(([zone, label]) => zone === label)).toBe(true);
+    expect(ON_PLACES).toEqual([
+      ['attach', 'attached to…'],
+      ['stack', 'stacked on…'],
+    ]);
+  });
+
   describe('what has been gathered', () => {
     it("is the draft's own: another draft's, or one not understood, is nothing", () => {
       const saved = none({ removed: ['sam'] });
