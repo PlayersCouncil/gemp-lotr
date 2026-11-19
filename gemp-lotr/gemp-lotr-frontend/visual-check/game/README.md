@@ -404,6 +404,16 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   takes the room back; every tab can be shown.
 - **timeline**: the script's rows; ▶ on a row is a fresh game played to it, the panel back as it was.
 - **leave**: leaving with changes in no file asks first; Stay stays, Discard closes the draft.
+- **opponent**: the opponent's decision held for the author ("Ask me for the opponent"): the Opponent tab asks for
+  attention, a card played from it is written into the script as a step, and the game goes on.
+- **opponent-pass**: with "write it into the script" unticked, Pass from the tab is the opponent's this once: the game
+  goes on and the script is as it was.
+- **opponent-assign**: the opponent's assignment, made in the tab (a minion to a character), is written as `assign(…)`.
+- **picking**: Pick on the table from a message's anchor fields: the crosshair, the notice, the box and label round
+  what the pointer is on; a click takes it (and a part of the card); Escape and a click in the panel take nothing;
+  + Pick adds a card under another, a site, a row, a pile, the twilight pool and a button to the outlines, each then
+  drawn round where it was picked. Waiting for the Step tab's anchor fields (`gd-author-anchor[data-field]`): until
+  then it passes with a note.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
