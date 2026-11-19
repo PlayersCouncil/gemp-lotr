@@ -13,8 +13,8 @@ The first page being ported is the **deck builder**. The hall's Deck-builder but
 ## One app, one page per route
 
 The frontend is one Angular app, served under `/gemp-lotr/ng/`; each ported page is a lazy route of it,
-`/gemp-lotr/ng/<page>/`: `deckbuilder` (`/gemp-lotr/ng/` and unknown paths go to it) and `game` (the game table,
-being ported: see "The game page" below; nothing links to it yet, `game.html` is still what the hall opens).
+`/gemp-lotr/ng/<page>/`: `deckbuilder` (`/gemp-lotr/ng/` and unknown paths go to it) and `game` (the game table: see
+"The game page" below; the hall opens games there, the game history replays).
 
 - `src/main.ts` starts `AppComponent` (`src/ui/app/`, element `<gemp-app>`: just the `<router-outlet>`, with
   `display: contents`, so a page lays itself out as a child of `body`) with `ui/app/app.config.ts`: the providers every
@@ -81,7 +81,7 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/deck/`                        | The deck being edited: `DeckDraft` (its state), `DeckFormatSelection` (the format list), `DeckChanges` (what follows a change), `DeckStatsRefresher`, `DeckEditing` (cards, slots, notes), `DeckOpener` (open, import, convert), `DeckSaver` (New, Save, Rename, Copy, the save prompts), `DeckStartup` and `DeckLibraryService` (the deck list and library). `deck-model.ts` holds the pure deck rules.                                                                                                                                                                                                                                                                                                         |
 | `src/core/delivery/`, `src/core/packs/` | `PackDeliveryService`: the opened-pack "New items" contents. `PacksService`: opening packs, the selection-pack choice and the open "New items" dialogs; `shown-cards.ts` gives their cards.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `src/core/actions/`                     | `DeckbuilderActions`: the deck builder's `CardActions` (add a card, remove it, open a pack), and `deckbuilder-card-ref.ts`, what a card on that page stands for.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `src/core/notifier/`                    | `Notifier`: messages and questions to the player (the legacy alert/confirm/prompt), all asynchronous. The view provides it: `ui/shared/notifier/WindowNotifier`, the browser's own dialogs, as on the legacy page. `DialogNotifier` (shown by `gd-notifier`, in the page's own dialogs) is kept for the redesign. Tests use `src/testing/fake-notifier.ts`.                                                                                                                                                                                                                                                                                                                                                      |
+| `src/core/notifier/`                    | `Notifier`: messages and questions to the player (the legacy alert/confirm/prompt), all asynchronous. The view provides it: `ui/shared/notifier/WindowNotifier`, the browser's own dialogs, as on the legacy page. `DialogNotifier` (shown by `gd-notifier`, in the page's own dialogs) is the game page's (its route's providers: e.g. the question before an assignment with a minion left unassigned). Tests use `src/testing/fake-notifier.ts`.                                                                                                                                                                                                                                                              |
 | `src/core/session/`                     | `SessionService`: the optional `?participantId=` (admins acting as a player).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `src/core/game/`                        | The game page's state, without view code. `protocol/` parses the server's XML into typed `GameEvent`s and decisions; `state/` holds `GameModel` and the pure `applyEvent` and `local-choices.ts` (assignments and selections not yet sent); `api/GameApi` makes every game call; `session/GameSession` opens the game, long-polls and answers as the legacy page does, and `GameRestore` keeps the page-only state per game in the tab's session storage so a reload shows the game as it was left; `settings/GameSettings` keeps the legacy game cookies. A page gets all of it with `provideGameState`.                                                                                                        |
 | `src/core/chat/`                        | `ChatRoom`: one chat room (join, news every few seconds, messages sent in order) and `parseChat`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -253,7 +253,8 @@ The rules:
 `/gemp-lotr/ng/game?gameId=<id>` is the Angular port of `game.html`, built phase by phase
 (trymarz/gemp-lotr-private#27). A game can be **played** on it: the table, every decision, the clocks and the tab box
 behave as on the legacy page, with card information, the pile dialogs, the hover zoom, dragging cards, the animations
-and replays (G4). Nothing links to it yet.
+and replays (G4). The hall opens games on it (`hallUi.js`), and the game history replays (`gameHistoryUi.js`);
+`game.html` is still there, unchanged, by its address.
 
 - **Core** (`src/core/game/`, see Code layout): the game's state from the server's events. `table/game-table.ts` sorts
   the cards into the table's boxes (the legacy card groups' rules: rows by zone and side, what is attached to and
@@ -283,7 +284,7 @@ and replays (G4). Nothing links to it yet.
   sizes are shares of the card, in CSS). `panel/` holds the game state panel, the stats bar and the alert box, `tabs/`
   the tab box (chat, settings with the timer alert rules, options, players), `pregame/` the panel shown until the
   players are known, `decision/` the decisions' dialogs (a number's spinner, a choice's buttons or list, cards to
-  choose from) and a card's menu of actions, `dialogs/` the pile dialogs, the end-of-game feedback dialog and the
+  choose from, sized to their cards as a revealed hand's is: `gdCardWindow`) and a card's menu of actions, `dialogs/` the pile dialogs, the end-of-game feedback dialog and the
   dialog for a game that can't go on (no connection, not logged in, ...). `table/gd-game-animation` plays the event
   holding the page, `table/gdReorder` moves a card dragged sideways in its row, `table/gdCardHints` shows a card named
   in a text, `panel/gd-game-replay` has the replay's buttons.
@@ -334,6 +335,37 @@ and replays (G4). Nothing links to it yet.
   the same game after every step (4 games with the unit tests, 200 in `test:parity`; `PARITY_GAME_SEED=<seed>
 PARITY_GAMES=1` repeats one); `npm run check:game:matrix` makes every gesture on every control on both pages.
   Differences the owner accepts go into `GAME_ACCEPTED` in `visual-check/accepted.mjs`.
+
+### Scripted games (scenarios)
+
+A tutorial or a puzzle is a game the server plays from a script (started with `POST /scenarios/start`); the hall
+opens it on this page, which shows the script's messages over the game. `game.html` has no scenario support.
+
+- **Core** (`core/game/scenario/`): `scenario-events.ts` reads what the script tells the page (who it is and how it
+  plays, each step's messages and the answers it takes, leaving the script, the ending: JSON in the game's events of
+  type S); `scenario-state.ts` keeps it in the game's model (`GameModel.scenario`, null in an ordinary game);
+  `scenario-plan.ts` works out what a step lets the player do next (pure);
+  `ScenarioGuide` is the game as the person plays it: which message is up, whether the decision may be answered yet,
+  telling the server a step was read (`ScenarioApi`), starting over and leaving. Its messages also go into the chat
+  box under the opponent's name (`GameLog.say`). `bubble-placement.ts` and `zoom-layout.ts` are the geometry of a
+  bubble and of a card shown large; `ScenarioRoom` the room a panel docked at the right takes.
+- **Decision gates** (`core/game/decision/decision-gate.ts`): `GameDecisions` asks every gate of the page's
+  `DecisionGates` before it carries out a gesture (a card, an action, a button, a number, a choice, Escape) and tells
+  them after it; a gesture goes ahead only if every gate allows it, and the gate that refuses tells the player. Any
+  feature can add one (a request that freezes the decision, say); `ScenarioGuide` is one: a step takes only its
+  answers, and the decision waits while a message is to be read.
+- **Settings a game fixes** (`GameSettings.fix`): a script fixes auto-accept, the deck reveal and the animation speed
+  for its game (its text says what a click will do); the page plays by them and shows them, the player's own stay in
+  their cookies, and `fix({})` gives them back. A replay keeps the watcher's own.
+- **View** (`ui/game/scenario/`): `gd-game-scenario` draws over the page (the bubble, joined to what a message is
+  about by an arrow or lines; outlines round it and round what is to be clicked next; a hint at a click the step
+  doesn't take; a card shown large), placed each frame against the page's DOM contract (`scenario-anchors.ts`);
+  `gd-game-scenario-panels` the scenario's menu (Start again, Leave, Report a Bug), its ending's panel, and the
+  notices that it can't be played here: the phone layout shows only "cannot be played on mobile devices" with a way
+  to the hall, a window under 1000×600 offers to carry on anyway, and a hall open in another tab. A replay of a
+  scripted game shows its messages in turn, without buttons or menu.
+- **Checked** by `npm run check:game:tutorial` (`visual-check/game/tutorial.mjs`, against a game check server kept up):
+  the tutorials played through on this page in both themes, their bubbles, menu, panels and replay.
 
 ## Tests and the visual check
 
