@@ -1,0 +1,20 @@
+/* "repeat until", under When: the box, the Until it gives, and what is said about it (the legacy .sa-repeat) */
+
+:host {
+  display: block;
+}
+
+.gd-author-repeat__line {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-repeat__line .gd-author-check {
+  flex: 0 0 auto;
+}
+
+.gd-author-repeat__more {
+  margin: 0 0 4px 22px;
+}

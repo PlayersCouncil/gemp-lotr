@@ -7,7 +7,8 @@ import { PageCues } from '../../platform/page-cues';
 import { PageExit } from '../../platform/page-exit';
 import { PageLifetime } from '../../platform/page-lifetime.service';
 import { DecisionGate, DecisionGates } from '../decision/decision-gate';
-import { ScenarioGuide } from '../scenario/scenario-guide.service';
+import { ScenarioStep } from '../scenario/scenario-events';
+import { ScenarioGuide, TriedPlace } from '../scenario/scenario-guide.service';
 import { GameSession } from '../session/game-session.service';
 import { PendingDecision } from '../state/game-model';
 import { AuthoringApi, AuthoringSettings, DraftPatch } from './authoring-api.service';
@@ -49,6 +50,15 @@ export interface StepTabHooks {
   engaged(): boolean;
   /** The form is to be made afresh from the next state (a change to the steps has been sent). */
   reset(): void;
+  /** The page is going to a fresh game: what the form has not sent is kept for the next page's form. */
+  carry?(): void;
+}
+
+/** A message of a step, as the Step tab and the guide know it: the step (from 1), which of a block's (from 1; 0 none), which message (from 0). */
+export interface MessageAt {
+  step: number;
+  sub: number;
+  index: number;
 }
 
 const NO_STEP_TAB: StepTabHooks = {
@@ -222,6 +232,7 @@ export class Authoring {
       }),
       restart: (fromCheckpoint) => this.restart(fromCheckpoint),
       leaving: () => this.leaving(),
+      stepShown: (step) => this.stepShown(step),
     });
     // The server is told when this page goes away, so that the Game Hall does not go on offering a draft that has
     // been saved and left (going on to a fresh game of the draft is not going away)
@@ -284,6 +295,7 @@ export class Authoring {
 
   /** To the page of another game of the draft (a full page load: the panel comes back as it was, from the ui). */
   go(gameId: string): void {
+    this.stepTab.carry?.();
     this.store.remember();
     this.gone.set(true);
     // The game being left is given up by the server, and its ending is not news
@@ -744,6 +756,29 @@ export class Authoring {
 
   private leaveFailed(): void {
     this.leaveQuestion.set({ busy: false, said: this.problem() ?? 'That could not be done.' });
+  }
+
+  /* ---------------------------------------------------------------- the Step tab's message on the screen */
+
+  /** The message the author last worked on in the Step tab: put up again whenever its step is (legacy focusMessage). */
+  readonly focusMessage = signal<MessageAt | null>(null);
+
+  /** A message of the Step tab's has the focus: it is put up now if its step is on the screen, and again each time it is. */
+  focusOn(at: MessageAt | null): void {
+    this.focusMessage.set(at);
+    if (at) this.guide.preview(at.step, at.sub, at.index);
+  }
+
+  /** Where a message's bubble sits, tried on the screen at once if that message of that step is up (legacy tryOnScreen). */
+  tryPlace(at: MessageAt, place: TriedPlace): boolean {
+    const shown = this.guide.step();
+    return shown !== null && shown.step === at.step && shown.sub === at.sub && this.guide.tryPlace(at.index, place);
+  }
+
+  /** A step put on the screen: the message the author was working on in it is put up (legacy stepShown). */
+  private stepShown(step: ScenarioStep): void {
+    const at = this.focusMessage();
+    if (at?.step === step.step && at.sub === step.sub) this.guide.preview(at.step, at.sub, at.index);
   }
 
   /** The draft state's steps, or none. */

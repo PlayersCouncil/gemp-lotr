@@ -348,3 +348,18 @@ export function untilInPlay(human: string, plays: readonly string[]): string {
 export function inPlayWords(plays: readonly string[]): string {
   return plays.length === 0 ? 'they are' : `${plays.join(' and ')} ${plays.length === 1 ? 'is' : 'are'}`;
 }
+
+/** The names the scenario gives what is on the table: its cards', then the sites' (both seats'). */
+export function tableAliases(state: DraftState): string[] {
+  const board = state.board;
+  if (!board) return [];
+  return [
+    ...board.cards.map((card) => card.alias),
+    ...[...board.sites.freeps, ...board.sites.shadow].flatMap((site) => (site.alias ? [site.alias] : [])),
+  ];
+}
+
+/** Whether the form's step is the opening (see isOpening). */
+export function isOpeningWork(work: WorkStep): boolean {
+  return (work.when ?? '').trim().toLowerCase() === 'opening';
+}

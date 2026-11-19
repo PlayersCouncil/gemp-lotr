@@ -1,0 +1,85 @@
+/* A message of a step, as a card (the legacy .sa-message): its head, its text, its rows of what it points at */
+
+:host {
+  display: block;
+}
+
+.gd-author-message {
+  margin-bottom: 6px;
+  padding: 5px 6px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 5px;
+  background: var(--theme-game-author-message-bg);
+}
+
+.gd-author-message:focus-within {
+  border-color: var(--theme-game-author-primary-border);
+}
+
+.gd-author-message__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gd-author-message__num {
+  width: 20px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+.gd-author-message__text {
+  display: block;
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.35;
+  resize: vertical;
+}
+
+.gd-author-message__row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-message__label {
+  flex: 0 0 82px;
+  color: var(--theme-game-author-muted);
+  font-size: 12px;
+  cursor: help;
+}
+
+.gd-author-message__label[data-inline] {
+  flex: 0 0 auto;
+  margin-left: 6px;
+}
+
+.gd-author-message__side {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.gd-author-message__more {
+  margin: 4px 0;
+}
+
+.gd-author-message__more > summary {
+  color: var(--theme-game-author-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.gd-author-message__choices {
+  margin: 4px 0;
+}
+
+.gd-author-message__name {
+  color: var(--theme-game-author-who-you);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
+
+[data-choice-name][data-bad] {
+  border-color: var(--theme-game-author-bad-border);
+}

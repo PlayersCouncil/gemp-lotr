@@ -248,6 +248,15 @@
   --theme-game-author-phase-between-turns: #7d7d7d;
   --theme-game-author-phase-block: #4f8fc4;
   --theme-game-author-phase-none: #4a4130;
+  /* The Step tab: its sticky head, the message cards, a block's sections, a name that will not do */
+  --theme-game-author-step-head-rule: #4d4226;
+  --theme-game-author-step-head-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.6);
+  --theme-game-author-message-bg: #211d14;
+  --theme-game-author-panel-bg: #1b1811;
+  --theme-game-author-panel-head-bg: #262117;
+  --theme-game-author-panel-hover-bg: #322b1c;
+  --theme-game-author-panel-mark: #6b5c36;
+  --theme-game-author-bad-border: #e0584a;
   /* The menu of a card's actions (jquery.contextMenu.css) */
   --theme-game-menu-bg: #eee;
   --theme-game-menu-border: #ccc;
@@ -535,6 +544,12 @@
   --theme-game-author-who-read: #e2c271;
   --theme-game-author-group-bg: #1f1912;
   --theme-game-author-group-rule: #3a2f20;
+  --theme-game-author-step-head-rule: #3a2f20;
+  --theme-game-author-message-bg: #201a13;
+  --theme-game-author-panel-bg: #1d1711;
+  --theme-game-author-panel-head-bg: #2a2219;
+  --theme-game-author-panel-hover-bg: #342a1d;
+  --theme-game-author-panel-mark: #5a4a2c;
   --theme-game-menu-bg: #241d15;
   --theme-game-menu-border: #5a4a2c;
   --theme-game-menu-text: #ece2cc;

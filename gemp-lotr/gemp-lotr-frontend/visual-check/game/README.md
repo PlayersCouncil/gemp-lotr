@@ -404,6 +404,16 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   takes the room back; every tab can be shown.
 - **timeline**: the script's rows; ▶ on a row is a fresh game played to it, the panel back as it was.
 - **leave**: leaving with changes in no file asks first; Stay stays, Discard closes the draft.
+- **step-type**: a message's text typed in the Step tab is on the server soon after the typing stops, with the focus
+  and the caret where they were and the bubble on the table saying it.
+- **step-inflight**: typing goes on while sends are on their way (a slow server): nothing typed meanwhile is lost.
+- **step-when**: the When composer's phase and turn go into the When, in their places, and to the server.
+- **step-refuse**: a refused Allow sent with a message: the message goes in, the refusal is said, the Allow field keeps
+  what was typed; put right, it goes.
+- **step-order**: a step moved later, and one taken out after the page's own question.
+- **step-block**: a step turned into a block (its Until guessed), and a step added on the block's page.
+- **step-fresh**: a change to a step the game has been through brings a fresh game; the page comes back on the same
+  step and tab, the focus in the field that had it.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up

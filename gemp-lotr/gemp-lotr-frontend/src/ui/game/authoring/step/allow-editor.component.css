@@ -1,0 +1,39 @@
+/* What is done at a step: the terms on offer as a row of chips, the wrong clicks folded away, the hints by card */
+
+:host {
+  display: block;
+}
+
+.gd-author-allow__offered {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0 0 4px;
+}
+
+.gd-author-allow__more {
+  margin: 4px 0;
+}
+
+.gd-author-allow__more > summary {
+  color: var(--theme-game-author-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.gd-author-allow__hints {
+  margin: 4px 0;
+}
+
+.gd-author-allow__hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-allow__alias {
+  color: var(--theme-game-author-who-you);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
