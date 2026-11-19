@@ -387,3 +387,29 @@ minutes), 10 items not covered (so the run fails until they are); the 17 recordi
 catches 6 of 6 deliberate bugs.
 
 Masks are drawn over everything, so a clock under an open dialog also hides that part of the dialog.
+
+## The authoring checks
+
+`npm run check:game:author` (`author.mjs`, against a game check server kept up, as the tutorial check) writes
+scenarios in the authoring panel docked beside the Angular game page, in both themes. Every check opens a new draft
+of the player's own (`scenarios/author/open` with `new=true`), sets its script up over HTTP where that is not what is
+being checked, works the panel as an author would, and closes the draft; none saves over a scenario the server ships.
+A check fails on what it looks for, and on any page error, console error, refused authoring call it did not expect,
+or dialog of the browser's own.
+
+The checks are in `author/*.mjs`, one file per part of the panel, each exporting `checks` (`author/lib.mjs` has the
+panel's selectors, the author's page and the waiting helpers); `author.mjs` puts them together.
+
+- **dock**: the panel at the window's right, the table and the message bubble keeping to the rest; folded, the table
+  takes the room back; every tab can be shown.
+- **timeline**: the script's rows; ▶ on a row is a fresh game played to it, the panel back as it was.
+- **leave**: leaving with changes in no file asks first; Stay stays, Discard closes the draft.
+
+```
+npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
+npm run check:game:author                                      every check in both themes
+npm run check:game:author -- --only timeline --theme modern --verbose
+npm run check:game:down
+```
+
+The report is `report-author/` (`--out`): the screenshots a check takes, and its moves and problems per check.

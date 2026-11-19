@@ -13,6 +13,9 @@ and writes its report to a `report-*` folder here.
 - **`game/tutorial.mjs`**: tutorials (scripted games) played through on the Angular game page, their bubbles, menu
   and panels: `npm run check:game:tutorial`, against a game check server kept up. See
   [`game/README.md`](game/README.md#tutorials-scripted-games).
+- **`game/author.mjs`**: the scenario authoring panel docked beside the Angular game page, writing drafts of its own:
+  `npm run check:game:author`, against a game check server kept up. See
+  [`game/README.md`](game/README.md#the-authoring-checks).
 - **`npm run check:all`** (`tools/check-all.mjs`) runs the important checks of both.
 - **`npm run check:failed`** (`check:all --failed`) runs again only what failed in the last `check:all`: the parts
   that passed are left out, and each failed part runs only its failed scenarios (or `--checks` parts). It builds the
