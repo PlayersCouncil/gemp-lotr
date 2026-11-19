@@ -29,7 +29,15 @@ import { cardShape, layoutZoom, ZoomLayout } from '../../../core/game/scenario/z
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/pointer-drag.directive';
 import { CardHintsDirective } from '../table/card-hints.directive';
-import { AnchorContext, cardElement, cardRect, rectAround, rectOf, resolveAnchor } from './scenario-anchors';
+import {
+  AnchorContext,
+  cardElement,
+  cardRect,
+  pageAnchorContext,
+  rectAround,
+  rectOf,
+  resolveAnchor,
+} from './scenario-anchors';
 import { ScenarioRoom } from '../../../core/game/scenario/scenario-room';
 
 /** An outline round something on the page: what a message is about, or (`next`) what is to be clicked next. */
@@ -352,23 +360,12 @@ export class ScenarioLayerComponent {
   }
 
   private context(): AnchorContext {
-    const model = this.session.model();
     const step = this.guide.step();
-    const self = model.participantId === null ? -1 : model.players.indexOf(model.participantId);
-    const opponent = model.players.findIndex((player) => player !== model.participantId);
-    return {
-      root: this.document,
+    return pageAnchorContext(this.document, this.session.model(), {
       cards: step?.cards ?? {},
       parts: step?.parts ?? {},
-      sites: Object.fromEntries(
-        Object.values(model.cards).flatMap((card) =>
-          card.zone === 'ADVENTURE_PATH' && card.index !== null ? [[card.index, card.id] as const] : [],
-        ),
-      ),
-      self: self < 0 ? null : self,
-      opponent: opponent < 0 ? null : opponent,
       humanSeat: this.guide.info()?.humanSeat ?? 'freeps',
-    };
+    });
   }
 
   /** Where everything is now; drawn again only if anything has moved. */

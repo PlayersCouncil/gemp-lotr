@@ -13,6 +13,8 @@ import { ScenarioTabComponent } from './scenario-tab.component';
 import { StepTabComponent } from './step-tab.component';
 import { TimelineTabComponent } from './timeline-tab.component';
 import { AuthorButtonDirective } from './widgets/author-button.directive';
+import { PickBoxComponent } from './pick-box.component';
+import { TablePicker } from './table-picker.service';
 
 /** The panel's tabs, in order, with what their buttons say. */
 export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
@@ -44,7 +46,7 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
  * `.gd-author__body` holding the tab shown (`gd-game-author-timeline`, `-step`, `-opponent`, `-board`, `-scenario`);
  * for a test `.gd-author__body` with `.gd-author-note` and `button[data-author=resume]`, `button[data-author=test-again]`;
  * elsewhere `.gd-author__body` with `.gd-author-note` and `button[data-author=go]` (the draft's game). The leave dialog
- * is `gd-game-author-leave`.
+ * is `gd-game-author-leave`. After the section, `gd-game-author-pickbox` (picking on the table, TablePicker).
  */
 @Component({
   selector: 'gd-game-author',
@@ -59,7 +61,9 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
     OpponentTabComponent,
     BoardTabComponent,
     ScenarioTabComponent,
+    PickBoxComponent,
   ],
+  providers: [TablePicker],
   host: {
     style: 'display: contents',
     // Typing in the panel is not for the page's shortcuts to hear (the scenario's skip [data-own-keys])
@@ -194,6 +198,7 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
       }
       <gd-game-author-leave />
     </section>
+    <gd-game-author-pickbox />
   `,
 })
 export class AuthoringPanelComponent {
