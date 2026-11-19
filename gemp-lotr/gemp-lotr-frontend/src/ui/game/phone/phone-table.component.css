@@ -21,6 +21,25 @@
   padding: 6px 0 4px;
 }
 
+/*
+ * An upright tablet: two columns, every row across both, except a player's two short rows, side by side (data-half;
+ * the layout review, 2026-11-19)
+ */
+:host-context([data-device='tablet']) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+}
+
+:host-context([data-device='tablet']) .gd-phone-zone {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+:host-context([data-device='tablet']) .gd-phone-zone[data-half] {
+  grid-column: auto;
+}
+
 /* Between rows: a quiet hairline (the layout review, 2026-11-19) */
 .gd-phone-zone + .gd-phone-zone::before {
   content: '';

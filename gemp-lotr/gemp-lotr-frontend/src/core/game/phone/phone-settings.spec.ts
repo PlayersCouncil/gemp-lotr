@@ -61,7 +61,8 @@ describe('PhoneSettings', () => {
     const settings = create();
     expect(settings.cardHeight()).toBe(120);
     device.set('tablet');
-    expect(settings.cardHeight()).toBe(156);
+    // A tablet's cards at 100% are CARD_HEIGHT.tablet: 120% of them
+    expect(settings.cardHeight()).toBe(CARD_HEIGHT.tablet * 1.2);
     settings.setCardSize(400);
     expect(settings.cardSize()).toBe(150);
     expect(cookies[PHONE_COOKIES.cardSize]).toBe('150');

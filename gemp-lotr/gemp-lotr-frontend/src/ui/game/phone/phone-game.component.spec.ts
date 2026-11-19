@@ -50,7 +50,7 @@ describe('the game on a phone (G7)', () => {
   });
 
   /** The page with the compact layout on (the modern theme on a phone: CompactLayout) or off. */
-  async function open(body: string, { compact = true } = {}) {
+  async function open(body: string, { compact = true, device = 'phone' as 'phone' | 'tablet' } = {}) {
     cues = { vibrate: vi.fn(), play: vi.fn(), toggleFullscreen: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
@@ -76,9 +76,9 @@ describe('the game on a phone (G7)', () => {
           useValue: {
             active: signal(compact),
             sideBySide: signal(false),
-            device: signal(compact ? 'phone' : null),
+            device: signal(compact ? device : null),
             gameActive: signal(compact),
-            gameDevice: signal(compact ? 'phone' : null),
+            gameDevice: signal(compact ? device : null),
             tallSideways: signal(false),
           },
         },
@@ -202,6 +202,24 @@ describe('the game on a phone (G7)', () => {
       game('<ge type="TC" participantId="bob" otherCardIds=""/><ge type="AA" cardId="1" otherCardIds="5"/>'),
     );
     expect(shadow.el.querySelector(pair)?.hasAttribute('data-reversed')).toBe(true);
+  });
+
+  it("sets a player's short support and characters side by side on an upright tablet, not on a phone", async () => {
+    const half = (el: HTMLElement) =>
+      Array.from(el.querySelectorAll('gd-phone-table .gd-phone-zone[data-half]'), (zone) =>
+        zone.getAttribute('data-zone'),
+      );
+    const tablet = await open(game(), { device: 'tablet' });
+    expect(half(tablet.el)).toEqual(['support-opponent', 'characters-opponent', 'characters-player', 'support-player']);
+    TestBed.resetTestingModule();
+    // Four of the player's characters: their row needs the whole width
+    const crowded = await open(game(['21', '22', '23', '24'].map((id) => card(id, 'FREE_CHARACTERS')).join('')), {
+      device: 'tablet',
+    });
+    expect(half(crowded.el)).toEqual(['support-opponent', 'characters-opponent']);
+    TestBed.resetTestingModule();
+    const phone = await open(game());
+    expect(half(phone.el)).toEqual([]);
   });
 
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {

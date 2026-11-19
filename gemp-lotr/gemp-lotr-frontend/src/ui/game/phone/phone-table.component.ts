@@ -21,6 +21,7 @@ import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { GameTableState } from '../../../core/game/table/game-table.service';
+import { PhoneSettings } from '../../../core/game/phone/phone-settings';
 import { CardComponent } from '../../shared/card/card.component';
 import { GameCardDirective } from '../table/game-card.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
@@ -40,6 +41,9 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
  * `data-pair` skirmish or assignment: upright, its minions, the Shadow's and the Free Peoples' strengths, its characters;
  * `data-reversed` the other way up, for the Shadow player).
  */
+/** The most cards each of two short rows holds to stand side by side on an upright tablet. */
+const HALF_ROW = 3;
+
 @Component({
   selector: 'gd-phone-table',
   styleUrl: './phone-table.component.css',
@@ -139,6 +143,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         class="gd-phone-zone"
         [attr.data-zone]="row.key"
         [attr.data-side]="row.side"
+        [attr.data-half]="halves().has(row.key) ? '' : null"
         [attr.aria-label]="row.label"
       >
         <!-- An empty row is one line: its label and "none" (the owner, 2026-11-17) -->
@@ -187,6 +192,7 @@ export class PhoneTableComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   protected readonly views = inject(GameCardViews);
   private readonly table = inject(GameTableState).table;
+  private readonly phoneSettings = inject(PhoneSettings);
 
   protected readonly phone = computed(() => phoneTable(this.table(), this.session.model()));
   /** The rows above the fights; an empty minions' row only while no fight takes its place. */
@@ -197,6 +203,26 @@ export class PhoneTableComponent {
   protected readonly pairsLabel = computed(() =>
     this.phone().pairs[0]?.kind === 'skirmish' ? 'Skirmish' : 'Assignments',
   );
+  /**
+   * On an upright tablet, a player's support and characters side by side when both are short (up to HALF_ROW cards
+   * each): its width was mostly empty (the layout review, 2026-11-19).
+   */
+  protected readonly halves = computed(() => {
+    const halves = new Set<string>();
+    if (this.phoneSettings.device() !== 'tablet') return halves;
+    const rows = [...this.phone().above, ...this.phone().below];
+    const short = (key: string) => {
+      const row = rows.find((r) => r.key === key);
+      return row !== undefined && row.cards.length <= HALF_ROW;
+    };
+    for (const pair of [
+      ['support-opponent', 'characters-opponent'],
+      ['characters-player', 'support-player'],
+    ]) {
+      if (pair.every(short)) pair.forEach((key) => halves.add(key));
+    }
+    return halves;
+  });
   /** The rows whose cards not active this turn the player opened, this turn. */
   protected readonly unfolded = computed(() => this.viewState.phone().unfolded);
   /** Each row's folding (phoneFolding), by its key: the title line holds the opponent's button. */

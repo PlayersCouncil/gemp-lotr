@@ -26,7 +26,8 @@ export type ChoicesScroll = 'sideways' | 'down';
 /** The hand's height at first, on each device (px); held sideways it is a panel in the right half, about half high. */
 export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, sideways: 150, tablet: 180 };
 /** The table's cards' height on each device at 100% (px): one readable size, never shrunk to fit (the owner). */
-export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, sideways: 80, tablet: 130 };
+// A tablet's 156 (was 130): its width was mostly empty (the layout review, 2026-11-19)
+export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, sideways: 80, tablet: 156 };
 export const CARD_SIZE_MIN = 70;
 export const CARD_SIZE_MAX = 150;
 /** The least height a shown hand keeps (px); dragged lower than HIDE_BELOW it hides. */
