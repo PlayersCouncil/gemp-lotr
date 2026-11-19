@@ -147,9 +147,29 @@ with each player on a page of their own and checks taking a game back as the pla
 - **concede**: the opponent concedes while this player's decision waits, and the page shows the end without the
   decision being answered first.
 
-It runs on `game.html` (`UNDO.legacy` in `undo.mjs` is where that page keeps each thing); the Angular game page has
-no undo yet, and gets an entry of its own there. `--only own,approve` runs some of them; a screenshot of each step is
-saved in `report-undo/` (`--out`).
+`UNDO` in `undo.mjs` is where each kind of page keeps each thing: `legacy` (`game.html`, by its own markup) and
+`angular` (the Angular game page, by its DOM contract: `data-undo`, `data-dialog=undo-list` and `undo-request`,
+`data-undo-reply`, `data-decision-button`, ...). `--page angular` runs them on the Angular page (`npm run build` first),
+in its classic theme or with `--theme modern`; `--page legacy,angular` mixes them, as players on the two pages meet:
+the first seat on one kind and the second on the other, then the other way round, so each check runs twice and says
+which page asked and which answered. `--only own,approve` runs some of them; a screenshot of each step is saved in
+`report-undo/` (`--out`; mixed, the kind of page is in each file's name).
+
+```
+node game/undo.mjs                                       game.html
+node game/undo.mjs --page angular                        the Angular page, classic
+node game/undo.mjs --page angular --theme modern         the Angular page, modern
+node game/undo.mjs --page legacy,angular --only approve,decline,own
+```
+
+Result on 2026-11-19: 8 of 8 on `game.html`; on the Angular page 7 of 8 in classic and in modern, and 15 of 16 mixed:
+`own` fails where the Angular page asks, at pressing the Undo button, which lies under the starting fellowship's card
+dialog (80% of the window there; the legacy page's card dialogs now fit their cards and leave the alert box free).
+Pressed by script, the rest of `own` passes on the Angular page (neither page loads again).
+
+The game check (`run.mjs`) leaves undo's own requests out, as it does the game's long poll: the notices' long poll is
+always open and asked again whenever the server lets it go, and what can be taken back is asked whenever an answer
+brings events. Neither is compared, waited for or recorded (`watchTraffic`, `undoTiming`).
 
 Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
 `npm run check:game:down`):
