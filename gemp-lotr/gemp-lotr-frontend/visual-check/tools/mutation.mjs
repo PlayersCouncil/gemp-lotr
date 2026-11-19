@@ -60,9 +60,18 @@ export const TARGETS = [
   'src/core/game/clock/game-attention.service.ts',
   'src/core/game/clock/game-clocks.service.ts',
   'src/core/game/clock/timer-cues.ts',
+  'src/core/game/decision/decision-gate.ts',
   'src/core/game/decision/decision-view.ts',
   'src/core/game/decision/game-decisions.service.ts',
   'src/core/game/protocol/game-xml.ts',
+  // Scenarios on the game page: the script's events, what a step allows, the guide, and where its bubble goes
+  'src/core/game/scenario/bubble-placement.ts',
+  'src/core/game/scenario/scenario-api.service.ts',
+  'src/core/game/scenario/scenario-events.ts',
+  'src/core/game/scenario/scenario-guide.service.ts',
+  'src/core/game/scenario/scenario-plan.ts',
+  'src/core/game/scenario/scenario-state.ts',
+  'src/core/game/scenario/zoom-layout.ts',
   'src/core/game/session/event-pacing.ts',
   'src/core/game/session/game-log.ts',
   'src/core/game/session/game-restore.ts',
@@ -77,6 +86,8 @@ export const TARGETS = [
   'src/core/game/table/game-table.service.ts',
   'src/core/game/table/game-table.ts',
   'src/core/game/table/pre-game.ts',
+  'src/core/platform/hall-tab.service.ts',
+  'src/ui/game/scenario/scenario-anchors.ts',
 ];
 
 /**

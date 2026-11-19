@@ -101,6 +101,29 @@ describe('GameSettings', () => {
     expect(s.animationSpeed()).toBe(4);
   });
 
+  it("plays by the settings a game fixes and shows them, keeping the player's own in their cookies", () => {
+    const { settings: s, cookies } = settings({ autoAccept: 'false', 'animation-speed': '-1' });
+    expect(s.fixed()).toEqual({});
+    s.fix({ autoAccept: true, autoDismissDeckReveal: true, animationSpeed: 3 });
+    expect(s.autoAccept()).toBe(true);
+    expect(s.autoDismissDeckReveal()).toBe(true);
+    expect(s.animationSpeed()).toBe(3);
+    // A change while fixed is the player's own, kept for later; what the game fixes still counts
+    s.setAutoAccept(false);
+    s.setAnimationSpeed(2);
+    expect(cookies.values.get(COOKIES.autoAccept)).toBe('false');
+    expect(cookies.values.get(COOKIES.animationSpeed)).toBe('2');
+    expect(s.autoAccept()).toBe(true);
+    expect(s.animationSpeed()).toBe(3);
+    // Null fixes nothing; {} gives the player's own back
+    s.fix({ autoAccept: null, animationSpeed: null });
+    expect(s.autoAccept()).toBe(false);
+    expect(s.animationSpeed()).toBe(2);
+    expect(s.autoDismissDeckReveal()).toBe(false);
+    s.fix({});
+    expect(s.fixed()).toEqual({});
+  });
+
   it("keeps the phone layout's button under a card in its own cookie: shown by default, unknown values ignored", () => {
     expect(settings().settings.underButton()).toBe('button');
     TestBed.resetTestingModule();

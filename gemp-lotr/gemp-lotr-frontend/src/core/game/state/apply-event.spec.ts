@@ -1,4 +1,5 @@
 import { CardRef, Decision, GameEvent, GameStats } from '../protocol/game-events';
+import { ScenarioInfo } from '../scenario/scenario-events';
 import { applyEvent, applyEvents } from './apply-event';
 import { emptyGame, NO_SKIRMISH_NUMBERS, GameModel } from './game-model';
 
@@ -223,6 +224,38 @@ describe('applyEvent', () => {
     expect(play({ type: 'M', message: 'a' }, { type: 'W', message: 'b' }).messages).toEqual([
       { kind: 'message', text: 'a' },
       { kind: 'warning', text: 'b' },
+    ]);
+  });
+
+  it("keeps a scripted game's own state, and its messages with the scripted opponent under its shown name", () => {
+    const info: ScenarioInfo = {
+      type: 'info',
+      id: 'basics-01',
+      kind: 'tutorial',
+      title: 'The Basics',
+      humanSeat: 'freeps',
+      opponent: '~Scenario',
+      opponentName: 'Basic Shadow',
+      settings: { autoAccept: null, autoDismissDeckReveal: null, animationSpeed: null },
+      bubbleGap: null,
+      resumedAt: null,
+      campaign: null,
+      author: false,
+      draftTest: false,
+    };
+    expect(play({ type: 'M', message: '~Scenario passes' }).scenario).toBeNull();
+    const model = play(
+      { type: 'S', scenario: info },
+      // (one the page can't read changes nothing)
+      { type: 'S', scenario: null },
+      { type: 'M', message: '~Scenario plays an orc' },
+      { type: 'W', message: '~Scenario is waiting' },
+    );
+    expect(model.scenario).toEqual({ info, step: null, shown: 0, notice: null, end: null });
+    expect(model.eventCount).toBe(4);
+    expect(model.messages).toEqual([
+      { kind: 'message', text: 'Basic Shadow plays an orc' },
+      { kind: 'warning', text: 'Basic Shadow is waiting' },
     ]);
   });
 

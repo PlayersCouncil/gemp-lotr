@@ -136,8 +136,9 @@ export class ScenarioGuide implements DecisionGate {
     const message = this.message();
     if (!message || this.session.replaying() || message.choices.length > 0) return null;
     if (this.phase() === 'notice') return 'OK';
-    if (message.advance !== 'next') return null;
+    // (also under a message that waits for a card's information: it can't be told again by opening the card)
     if (this.acknowledgeFailed()) return 'Try again';
+    if (message.advance !== 'next') return null;
     return this.phase() === 'waiting' && this.read() === this.opening().length - 1 ? 'Continue' : 'Next';
   });
 

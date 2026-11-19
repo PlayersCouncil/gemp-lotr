@@ -609,6 +609,142 @@ describe('GamePageComponent', () => {
   });
 });
 
+describe('GamePageComponent in a scripted game', () => {
+  let backend: HttpTestingController;
+  const saved = { frame: window.requestAnimationFrame, cancel: window.cancelAnimationFrame };
+
+  beforeEach(() => {
+    sessionStorage.clear();
+    // A window large enough for a scenario; the bubble's measuring is the layer's own spec's business
+    Object.defineProperty(document.documentElement, 'clientWidth', { configurable: true, get: () => 1280 });
+    Object.defineProperty(document.documentElement, 'clientHeight', { configurable: true, get: () => 800 });
+    window.requestAnimationFrame = () => 1;
+    window.cancelAnimationFrame = () => undefined;
+  });
+
+  afterEach(() => {
+    backend.match(() => true);
+    delete (document.documentElement as { clientWidth?: number }).clientWidth;
+    delete (document.documentElement as { clientHeight?: number }).clientHeight;
+    window.requestAnimationFrame = saved.frame;
+    window.cancelAnimationFrame = saved.cancel;
+  });
+
+  const json = (value: unknown) =>
+    JSON.stringify(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const S = (event: unknown) => `<ge type="S" scenario="${json(event)}"/>`;
+  const INFO = {
+    type: 'info',
+    id: 'basics-01',
+    kind: 'tutorial',
+    title: 'The Basics',
+    humanSeat: 'freeps',
+    opponent: 'bob',
+    opponentName: 'Basic Shadow',
+    autoAccept: true,
+    autoDismissDeckReveal: true,
+    animationSpeed: null,
+    campaign: null,
+  };
+  const STEP = {
+    type: 'step',
+    step: 1,
+    sub: 0,
+    seat: 'human',
+    pause: false,
+    messages: [{ header: 'Welcome', html: '<p>Play Gimli.</p>', anchors: ['card:gimli'], advance: 'next' }],
+    allow: { answers: ['10'], pass: false, otherwise: null, hints: { other: '<p>Not that one.</p>' } },
+    cards: { gimli: 1, other: 6 },
+  };
+  const ACTIONS =
+    '<ge type="D" id="3" decisionType="CARD_ACTION_CHOICE" participantId="alice" text="Play">' +
+    '<parameter name="cardId" value="1"/><parameter name="cardId" value="6"/>' +
+    '<parameter name="blueprintId" value="inPlay"/><parameter name="blueprintId" value="inPlay"/>' +
+    '<parameter name="actionId" value="10"/><parameter name="actionId" value="11"/>' +
+    '<parameter name="actionText" value="Use"/><parameter name="actionText" value="Use"/></ge>';
+
+  async function open(events: string) {
+    TestBed.configureTestingModule({
+      providers: [
+        provideGempHttp(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '?gameId=7' },
+        { provide: GAME_THEME_PICKER, useValue: false },
+      ],
+    });
+    backend = TestBed.inject(HttpTestingController);
+    TestBed.inject(ThemeService).select('classic');
+    TestBed.inject(PlayerInfo).load().subscribe();
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush('{"name":"alice"}');
+    const fixture = TestBed.createComponent(GamePageComponent);
+    const el = fixture.nativeElement as HTMLElement;
+    backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(state(events));
+    const stable = async () => {
+      await fixture.whenStable();
+      fixture.detectChanges();
+    };
+    await stable();
+    return { el, stable };
+  }
+
+  it("draws the scenario over the page: its bubble, its menu, the cards as the step takes them, the opponent's name", async () => {
+    const { el, stable } = await open(TABLE + STATS + S(INFO) + S(STEP) + ACTIONS);
+    expect(el.getAttribute('data-scenario')).toBe('tutorial');
+    expect(el.querySelector('gd-game-scenario .gd-scenario-bubble__title')?.textContent).toBe('Welcome');
+    expect(el.querySelector('nav.gd-scenario-menu .gd-scenario-menu__title')?.textContent).toBe('The Basics');
+    expect(el.querySelector('section.gd-scenario-panel')).toBeNull();
+    const card = (id: string) => el.querySelector<HTMLElement>(`gd-game-cards [data-card-id="${id}"]`);
+    expect(card('1')?.dataset['scenario']).toBe('live');
+    expect(card('6')?.dataset['scenario']).toBe('notnow');
+    expect(card('5')?.hasAttribute('data-scenario')).toBe(false);
+    // The scripted opponent under its shown name: in the state panel, the messages and the chat box
+    expect(el.querySelector('gd-game-state')?.textContent).toContain('Basic Shadow');
+    expect(el.querySelector('gd-game-state')?.textContent).not.toContain('bob');
+    const said = el.querySelector<HTMLElement>('.gd-game-chat__line[data-said]');
+    expect(said?.textContent.replace(/\s+/g, ' ').trim()).toBe('Basic Shadow: Play Gimli.');
+    expect(el.querySelectorAll('.gd-game-chat__line[data-said]')).toHaveLength(1);
+
+    // Read first, then Gimli's action; the other card gets its hint
+    el.querySelector<HTMLButtonElement>('[data-scenario="next"]')?.click();
+    await stable();
+    expect(el.querySelector('.gd-scenario-bubble')).toBeNull();
+    card('6')?.click();
+    await stable();
+    expect(el.querySelector('.gd-scenario-hint')?.innerHTML).toBe('<p>Not that one.</p>');
+    backend.expectNone((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'));
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    card('1')?.click();
+    await stable();
+    const answer = backend.expectOne((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'));
+    expect(answer.request.body?.get('decisionValue')).toBe('10');
+  });
+
+  it('names a pile of the scripted opponent by its shown name, and has no feedback dialog at the end', async () => {
+    const { el, stable } = await open(TABLE + STATS + S(INFO));
+    (el.querySelector('[data-stats-toggle="1"]') as HTMLElement | null)?.click();
+    await stable();
+    (el.querySelector('[data-stat="hand1"]') as HTMLElement).click();
+    await stable();
+    expect(el.querySelector('dialog[data-dialog="pile"] [data-dialog-title]')?.textContent).toBe(
+      'Revealed Hand - Basic Shadow',
+    );
+    await new Promise((resolve) => setTimeout(resolve, POLL_DELAY_MS + 10));
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush(
+        update(
+          '<ge type="M" message="Thank you for playing! &lt;a href=\'x\'&gt;using this form.&lt;/a&gt;"/><ge type="EG"/>' +
+            S({ type: 'end', result: 'complete', messages: [], message: null, checkpoint: null }),
+        ),
+      );
+    await stable();
+    expect(el.querySelector('dialog[data-dialog="feedback"][open]')).toBeNull();
+    expect(el.querySelector('section.gd-scenario-panel')?.getAttribute('data-result')).toBe('complete');
+    expect(el.querySelector('.gd-scenario-panel__report a')?.getAttribute('href')).toBe('x');
+  });
+});
+
 describe('mentionOf', () => {
   it('tells a call ("@name") from a mention (the name, or everyone)', () => {
     expect(mentionOf('hi @alice!', 'alice')).toBe('ping');
