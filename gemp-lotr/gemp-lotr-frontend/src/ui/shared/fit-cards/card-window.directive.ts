@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { afterNextRender, afterRenderEffect, DestroyRef, Directive, ElementRef, inject, input } from '@angular/core';
 import { cardWindowSize } from './card-window';
+import { pageRight } from '../page-room';
 import { FitCard, parsePx } from './fit-cards';
 
 /**
@@ -9,8 +10,6 @@ import { FitCard, parsePx } from './fit-cards';
  * for buttons to come is then below them).
  */
 export const CARD_WINDOW_ATTRIBUTE = 'data-card-window';
-/** The room's right edge is this far in from the window's (a panel docked there), on the document element (px). */
-export const PAGE_RIGHT_PROPERTY = '--gd-page-right';
 /** What the window's cards' box gets beyond the plan, against fractions of a pixel in the window's own sizes. */
 const SLACK = 1;
 
@@ -92,15 +91,11 @@ export class CardWindowDirective {
     const outer = dialog.getBoundingClientRect();
     const style = view.getComputedStyle(dialog);
     const noActions = dialog.querySelector('[gdDialogActions]') === null;
-    const pageRight = parsePx(
-      view.getComputedStyle(this.document.documentElement).getPropertyValue(PAGE_RIGHT_PROPERTY),
-      0,
-    );
     const size = cardWindowSize({
       cards,
       gap: parsePx(view.getComputedStyle(this.host).getPropertyValue('--gd-card-gap'), 5),
       label,
-      room: { width: view.innerWidth - pageRight, height: view.innerHeight },
+      room: { width: view.innerWidth - pageRight(this.document), height: view.innerHeight },
       chrome: { width: outer.width - box.width, height: outer.height - box.height + (noActions ? actions : 0) },
     });
     if (size.cardHeight === null) {
