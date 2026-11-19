@@ -265,6 +265,8 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 - `boolean AwaitingFreepsRegroupPhaseActions()`
 - `boolean AwaitingShadowRegroupPhaseActions()`
 - `Boolean AnyDecisionsAvailable(String player)` — Returns whether the given player is currently presented with any decision at all.
+- `boolean FreepsIsAskedOnlyToConfirm()  ·  ShadowIsAskedOnlyToConfirm` — Determines whether that player is being asked only to confirm: a decision that has nothing in it to choose and takes the empty answer alone, which the game marks as such (the parameter PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY).
+- `boolean IsAskedOnlyToConfirm(String player)` — Determines whether the given player is being asked only to confirm (see `FreepsIsAskedOnlyToConfirm()`).
 - `void FreepsPass()  ·  ShadowPass`
 - `void FreepsPass(String text)  ·  ShadowPass`
 - `void PlayerPass(String player)` — Causes the given player to pass whatever decision they are currently being presented with, if any.
@@ -296,6 +298,8 @@ A set of functions within the test rig that pertain to decisions.  Decisions in 
 Decisions will always come with at least one choice, even if that single choice is "pass".  These functions will let you inspect the choices available and offer shortcuts for e.g. selecting a physical card which you have previously stored.
 
 - `void FreepsDeclineChoosing()  ·  ShadowDeclineChoosing` — Causes that player to choose no card at a choice of cards whose minimum is 0, and fails, saying what is being asked, at any other decision.
+- `void FreepsConfirm()  ·  ShadowConfirm` — Causes that player to confirm (press DONE) at a decision that asks only for that, and fails, saying what is being asked, at any other decision: it is the answer to what `Decisions#FreepsIsAskedOnlyToConfirm()` reads.
+- `void Confirm(String player)` — Causes the given player to confirm at a decision that asks only for that (see `FreepsConfirm()`).
 - `void FreepsDeclineSanctuaryHealing()` — Declines every sanctuary heal the Free Peoples player (player 1) has still to choose: while that player is being asked "Sanctuary healing - Choose companion to heal", no companion is chosen, and it stops at the first decision that is anything else, which it leaves unanswered.
 - `Boolean FreepsChoiceAvailable(String choice)  ·  ShadowChoiceAvailable` — Determines whether that player has any choices on the current decision whose description matches the provided search text.
 - `Boolean ChoiceAvailable(String player, String choice)` — Determines whether the given player has any choices on the current decision whose description matches the provided search text.
@@ -581,4 +585,4 @@ This interface holds the handful of accessors that every other virtual table int
 - `void Verify(boolean condition, String message)` — A sanity check on the table's own bookkeeping, used where a procedure has to end up in a known state for whatever follows it to make sense.
 
 ---
-473 entries, 212 of them with no description in the source.
+477 entries, 212 of them with no description in the source.

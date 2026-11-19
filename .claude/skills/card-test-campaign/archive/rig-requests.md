@@ -40,6 +40,12 @@ Not numbered and not to be built unless a test turns out to need one. For Ketura
 
 ## Done
 
+### G-0066 A decision that asks only to be confirmed: FreepsIsAskedOnlyToConfirm() / ShadowIsAskedOnlyToConfirm() and FreepsConfirm() / ShadowConfirm() (built 2026-11-18)
+
+From the undo work (branch undo/done-ask): Ketura decided that a starting fellowship no longer ends by itself once nothing more can go into it. After a pick, with nothing more that fits, the game asks "Starting fellowship - Nothing more can be added: press DONE", an ARBITRARY_CARDS decision with no cards, min 0 and max 0, marked with the parameter `PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY` ("confirmOnly" = "true"); only the empty answer is taken. A test has to read that the player is asked only that, which is a decision parameter (barred to tests by the Standard), and answer it in a way that shows it was that ask and not a choice that still offered cards (`FreepsDeclineChoosing()` answers either). For information.
+
+**Built.** In `virtualtable/Decisions`: `FreepsIsAskedOnlyToConfirm()`, `ShadowIsAskedOnlyToConfirm()` and the player-neutral `IsAskedOnlyToConfirm(player)`, true where the pending decision carries `confirmOnly` = `true`. In `virtualtable/Choices`: `FreepsConfirm()`, `ShadowConfirm()` and `Confirm(player)`, which Verify that reading and then give the empty answer through `PlayerDecided`, failing and answering nothing otherwise. Tested in `virtualtable/ConfirmOnlyTests` (2 tests). Used by `mechanics/game/StartingFellowshipTests` and by every card and mechanics test that plays a starting fellowship to its limit (the sweep that followed the engine change). The scenario system calls none of it.
+
 ### G-0065 SkipToSite cannot pass Esgaroth 30_54 (site 6) on the Hobbit path: its start-of-regroup offer is left pending: SkipCurrentSite declines a start-of-regroup optional trigger for either seat (built 2026-11-05, engine pass 78)
 
 Batch hobb-b30_44 (Bilbo 30_43 to 30_46, the Hobbit table).

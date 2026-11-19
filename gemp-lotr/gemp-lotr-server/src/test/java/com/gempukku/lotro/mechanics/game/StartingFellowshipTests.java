@@ -26,15 +26,26 @@ import static org.junit.Assert.*;
  * sum past it is not offered, and one who has gone down is on the table for the next: he is spotted for a later
  * companion's "To play, spot ..." and for a later companion's discount.
  *
- * The game asks for one companion at a time and stops asking when no companion in the draw deck can be played.
+ * The game asks for one companion at a time, and a player may press DONE at any choice to stop there.  Once a
+ * player has played a companion and no companion left in the draw deck can be played, nothing more is offered:
+ * the player is asked only to press DONE ("Starting fellowship - Nothing more can be added: press DONE", a
+ * decision with no cards in it that asks only to be confirmed), and the fellowship is complete only once he has.
+ * Until then his last companion is his own business, and the undo system lets him take it back without asking
+ * anybody (Ketura's decision: the fellowship had ended by itself, so that the last pick handed the game on at
+ * once, to the other player or to the dealing of the hands, and could no longer be taken back freely).  A player
+ * who never had a companion he could play is not asked, and one who presses DONE early is not asked again.
+ *
  * It keeps the running total in the twilight pool while a player chooses, begins the next player's total at
  * nothing, and empties the pool as the first turn begins.  So "don't place any tokens" is read here in the first
  * fellowship phase, after BOTH players have played companions, and nowhere before it.  Both players at a test
- * table have the same deck: when the first has done the second is asked, and the question about a mulligan comes
- * after both.
+ * table have the same deck: when the first has done the second is asked, and the opening hands are dealt and the
+ * question about a mulligan comes after both.
  *
  * That only Free Peoples cards go into a starting fellowship is StartingFellowshipIsFreePeoplesCardsTests; that
- * a Frodo is kept out of another Ring-bearer's is FrodoCannotJoinAnotherRingBearerTests.
+ * a Frodo is kept out of another Ring-bearer's is FrodoCannotJoinAnotherRingBearerTests.  That the DONE ask
+ * refuses an answer naming a card is a test of the decision itself, in the server module's
+ * logic/timing/processes/pregame/PlayerPlaysStartingFellowshipGameProcessTests; the rig's reading of the ask and
+ * its answer are virtualtable/ConfirmOnlyTests.
  */
 public class StartingFellowshipTests
 {
@@ -99,8 +110,22 @@ public class StartingFellowshipTests
 		);
 	}
 
+	// A companion in the draw deck who can never be played into the starting fellowship: with no Elf beside him
+	// there is nothing to choose
+	protected VirtualTableScenario GetNothingToPlayScenario() throws CardNotFoundException, DecisionResultInvalidException {
+		return new VirtualTableScenario(
+				new HashMap<>()
+				{{
+					put("haldir", "1_48");      // Haldir, Elf of the Golden Wood: cost 2.  "To play, spot an Elf."
+				}},
+				VirtualTableScenario.FellowshipSites,
+				VirtualTableScenario.FOTRFrodo,
+				VirtualTableScenario.RulingRing
+		);
+	}
+
 	@Test
-	public void CompanionsArePlayedFromTheDrawDeckUntilTheirCostsReachFourAndThenTheChoiceEnds() throws DecisionResultInvalidException, CardNotFoundException {
+	public void CompanionsArePlayedFromTheDrawDeckUntilTheirCostsReachFourAndThenThePlayerIsAskedOnlyToPressDone() throws DecisionResultInvalidException, CardNotFoundException {
 		var scn = GetLimitScenario();
 
 		var gimli = scn.GetFreepsCard("gimli");
@@ -123,21 +148,37 @@ public class StartingFellowshipTests
 
 		scn.FreepsChooseCard(legolas);
 
-		// 2 + 2 is the 4.  Pippin's 1 would make it 5: nobody is left to offer, and the player is asked nothing
-		// more.  The other player is choosing now.
+		// 2 + 2 is the 4.  Pippin's 1 would make it 5: nobody is left to offer, and the player is asked only to
+		// press DONE, a choice with no card in it that takes no card
 		assertInZone(Zone.FREE_CHARACTERS, legolas);
 		assertInZone(Zone.DECK, pippin);
-		assertFalse(scn.FreepsAnyDecisionsAvailable());
-		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
+		assertTrue(scn.FreepsDecisionAvailable("Starting fellowship - Nothing more can be added"));
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		assertEquals(0, scn.FreepsGetCardChoiceCount());
+		assertEquals(0, scn.FreepsGetChoiceMin());
+		assertEquals(0, scn.FreepsGetChoiceMax());
+		// His fellowship is not complete until he does: the other player is not choosing yet
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 
-		// The other player plays a companion of his own and stops there, so that his total is the last the game
-		// kept
+		scn.FreepsConfirm();
+
+		// Complete: he is asked nothing more, and the other player is choosing now
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship - Choose next character"));
+
+		// The other player plays a companion of his own and presses DONE while Legolas and Pippin still fit, so
+		// that his total is the last the game kept.  Pressing DONE early ends his choice: he is not asked again,
+		// and the game goes on.
 		var hisGimli = scn.GetShadowCard("gimli");
+		var hisLegolas = scn.GetShadowCard("legolas");
+		var hisPippin = scn.GetShadowCard("pippin");
 		scn.ShadowChooseCard(hisGimli);
 		assertInZone(Zone.FREE_CHARACTERS, hisGimli);
+		assertTrue(scn.ShadowHasCardChoiceAvailable(hisLegolas, hisPippin));
 		scn.ShadowDeclineChoosing();
 
 		// Both have chosen, and the game goes on to the mulligans
+		assertFalse(scn.ShadowDecisionAvailable("Starting fellowship"));
 		assertTrue(scn.FreepsDecisionAvailable("Do you wish to mulligan"));
 
 		scn.StartGame(true, false);
@@ -168,9 +209,14 @@ public class StartingFellowshipTests
 		scn.FreepsChooseCard(pippin);
 
 		// 2 + 1 is 3, one short of the limit, and Legolas' 2 would make it 5.  He is the only companion left
-		// in the draw deck, so the choice is over with the total at 3.
+		// in the draw deck, so nothing more is offered with the total at 3: the player is asked only to press DONE.
 		assertInZone(Zone.FREE_CHARACTERS, gimli, pippin);
 		assertInZone(Zone.DECK, legolas);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsConfirm();
+
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
@@ -200,9 +246,14 @@ public class StartingFellowshipTests
 
 		scn.FreepsChooseCard(legolas);
 
-		// The whole 4 was there to spend on the others
+		// The whole 4 was there to spend on the others: it is spent, and nothing more is offered
 		assertInZone(Zone.FREE_CHARACTERS, legolas);
 		assertInZone(Zone.DECK, pippin);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsConfirm();
+
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
@@ -233,9 +284,14 @@ public class StartingFellowshipTests
 
 		scn.FreepsChooseCard(eomer);
 
-		// The 4 is spent, and Gimli's 2 is not offered
+		// The 4 is spent, and Gimli's 2 is not offered: the player is asked only to press DONE
 		assertInZone(Zone.FREE_CHARACTERS, eomer);
 		assertInZone(Zone.DECK, gimli);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsConfirm();
+
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 
@@ -267,9 +323,15 @@ public class StartingFellowshipTests
 
 		scn.FreepsChooseCard(rider);
 
-		// There is a [rohan] Man to spot now, but 2 + 2 is the 4 and Éomer at any cost is past it
+		// There is a [rohan] Man to spot now, but 2 + 2 is the 4 and Éomer at any cost is past it: nothing more
+		// is offered, and the player is asked only to press DONE
 		assertInZone(Zone.FREE_CHARACTERS, rider);
 		assertInZone(Zone.DECK, eomer);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsConfirm();
+
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
@@ -295,12 +357,79 @@ public class StartingFellowshipTests
 
 		scn.FreepsChooseCard(haldir);
 
+		// No companion is left in the deck: the player is asked only to press DONE
 		assertInZone(Zone.FREE_CHARACTERS, haldir);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
+
+		scn.FreepsConfirm();
+
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 
 		scn.ShadowDeclineChoosing();
 
+		assertTrue(scn.FreepsDecisionAvailable("Do you wish to mulligan"));
+	}
+
+	@Test
+	public void TheSecondPlayersFellowshipIsCompleteAndTheHandsAreDealtOnlyOnceHePressesDone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetLimitScenario();
+
+		var gimli = scn.GetFreepsCard("gimli");
+		var legolas = scn.GetFreepsCard("legolas");
+		var pippin = scn.GetFreepsCard("pippin");
+		var hisGimli = scn.GetShadowCard("gimli");
+		var hisLegolas = scn.GetShadowCard("legolas");
+		var hisPippin = scn.GetShadowCard("pippin");
+
+		// The first player takes Gimli and stops there
+		scn.FreepsChooseCard(gimli);
+		scn.FreepsDeclineChoosing();
+
+		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship - Choose next character"));
+		assertTrue(scn.ShadowHasCardChoiceAvailable(hisGimli, hisLegolas, hisPippin));
+
+		scn.ShadowChooseCard(hisGimli);
+		scn.ShadowChooseCard(hisLegolas);
+
+		// 2 + 2 is his 4 and Pippin's 1 would make it 5: he is asked only to press DONE.  Until he does, his is
+		// the last pick of the starting fellowships and nothing has followed it: no hand is dealt and nobody is
+		// asked about a mulligan.
+		assertInZone(Zone.FREE_CHARACTERS, hisGimli, hisLegolas);
+		assertInZone(Zone.DECK, hisPippin);
+		assertTrue(scn.ShadowIsAskedOnlyToConfirm());
+		assertEquals(0, scn.ShadowGetCardChoiceCount());
+		assertFalse(scn.FreepsAnyDecisionsAvailable());
+		assertEquals(0, scn.GetFreepsHandCount());
+		assertEquals(0, scn.GetShadowHandCount());
+
+		scn.ShadowConfirm();
+
+		// Both fellowships are complete: the opening hands are dealt, and the mulligans come.  A table's decks
+		// hold only the cards it names, so each hand is what that player's fellowship left in his deck.
+		assertFalse(scn.ShadowDecisionAvailable("Starting fellowship"));
+		assertInZone(Zone.HAND, legolas, pippin, hisPippin);
+		assertEquals(2, scn.GetFreepsHandCount());
+		assertEquals(1, scn.GetShadowHandCount());
+		assertTrue(scn.FreepsDecisionAvailable("Do you wish to mulligan"));
+	}
+
+	@Test
+	public void APlayerWhoNeverHadACompanionHeCouldPlayIsNotAskedToPressDone() throws DecisionResultInvalidException, CardNotFoundException {
+		var scn = GetNothingToPlayScenario();
+
+		var haldir = scn.GetFreepsCard("haldir");
+		var hisHaldir = scn.GetShadowCard("haldir");
+
+		// Haldir is the one companion in either deck, and there is no Elf on the table for him to spot.  Neither
+		// player has anything to choose: neither is asked for a starting fellowship, nor to press DONE for one,
+		// and the game has gone on to the mulligans.
+		assertInZone(Zone.DECK, haldir);
+		assertInZone(Zone.DECK, hisHaldir);
+		assertFalse(scn.FreepsIsAskedOnlyToConfirm());
+		assertFalse(scn.FreepsDecisionAvailable("Starting fellowship"));
+		assertFalse(scn.ShadowAnyDecisionsAvailable());
 		assertTrue(scn.FreepsDecisionAvailable("Do you wish to mulligan"));
 	}
 }
