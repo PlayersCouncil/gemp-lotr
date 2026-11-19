@@ -465,6 +465,21 @@ export const GAME_ACCEPTED = [
     maxPixels: 150,
     reason: "Firefox draws its own resize grip in a dialog's corner, which CSS cannot style (accepted 2026-11-15)",
   },
+  {
+    // Ketura's decision of 2026-11-19 (no number in trymarz/gemp-lotr-private#27 yet): the October game-screen
+    // improvement wanted on the Angular page. game.html no longer sizes these windows to their cards (it was put back
+    // as it was), so every step where one is open differs on purpose: the dialog of cards a decision shows
+    // (ARBITRARY_CARDS, ACTION_CHOICE) and a revealed hand's (no scenario opens one). These are exactly the steps of
+    // `check:game:table` (2026-11-19, 18 of 300 at 3 sizes) that differ because of it; `check:game` takes and shows the
+    // same steps. The whole screen may differ: the legacy dialog takes 80% of the window, the Angular one is sized to
+    // its cards, so they differ wherever either one is. (Not after a reload, which compares the Angular page with
+    // itself: there it must still be the same.)
+    decision: null,
+    scenarios: ['opening', 'settings', 'effects-skirmish'],
+    problem:
+      /^(bid|starting fellowship: Gimli|going first, from the list|starting fellowship: chosen again, then Done|two required responses at once|one of them chosen first): screen: \d+ px differ$/,
+    reason: 'Ketura, 2026-11-19: card windows sized to their cards, in both themes',
+  },
 ];
 
 /** Whether the owner accepted this problem of a game scenario at this window size. */

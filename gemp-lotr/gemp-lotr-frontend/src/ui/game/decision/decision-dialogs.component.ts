@@ -7,8 +7,18 @@ import { CardComponent } from '../../shared/card/card.component';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
+import { CardWindowDirective } from '../../shared/fit-cards/card-window.directive';
+import { GameSession } from '../../../core/game/session/game-session.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 import { GameCardDirective } from '../table/game-card.directive';
+
+/** The room under each card for its action's text, px (legacy gameUi.js: 36). */
+const ACTION_TEXT = 36;
+/**
+ * The height of the dialog's row of buttons (`.gd-game-decision__actions`, 62.3px in both themes, its margin included),
+ * px, kept free while it has none yet.
+ */
+const ACTIONS_ROOM = 63;
 
 interface ShownCard {
   card: GameCard;
@@ -29,12 +39,20 @@ export function choiceLabel(html: string): string {
  * then `.gd-game-spinner` holding `button[data-decision="integer-down"]`, `output[data-decision="integer"]` and
  * `button[data-decision="integer-up"]`; or `select[data-decision="choice"]`; or `button[data-decision-choice]` (the
  * answer's index) per answer. In the large one: `.gd-game-decision__cards` with a `button.gd-card` per card (see
- * GameCardDirective; `data-zone` SPECIAL). The buttons under either: `button[data-decision-button]`.
+ * GameCardDirective; `data-zone` SPECIAL); the large one is sized to its cards (CardWindowDirective; Ketura,
+ * 2026-11-19), with room for each action's text under its card. The buttons under either: `button[data-decision-button]`.
  */
 @Component({
   selector: 'gd-game-decision-dialogs',
   styleUrl: './decision-dialogs.component.css',
-  imports: [DialogComponent, CardComponent, FitCardsDirective, GameCardDirective, CardHintsDirective],
+  imports: [
+    DialogComponent,
+    CardComponent,
+    FitCardsDirective,
+    CardWindowDirective,
+    GameCardDirective,
+    CardHintsDirective,
+  ],
   host: { style: 'display: contents' },
   template: `
     <gd-dialog
@@ -110,7 +128,14 @@ export function choiceLabel(html: string): string {
       [open]="cards() !== null"
     >
       @if (cards(); as dialog) {
-        <div class="gd-game-decision__cards" [gdFitCards]="fit()" [gdFitCardsRoundedFrom]="roundedFrom">
+        <div
+          class="gd-game-decision__cards"
+          [gdFitCards]="fit()"
+          [gdFitCardsRoundedFrom]="roundedFrom"
+          [gdCardWindow]="fit()"
+          [gdCardWindowLabel]="textRoom()"
+          [gdCardWindowActions]="actionsRoom()"
+        >
           @for (shown of shownCards(); track shown.card.id) {
             <button [gdCard]="views.of(shown.card)" [gdGameCard]="shown.card">
               @if (shown.text !== null) {
@@ -193,6 +218,13 @@ export class DecisionDialogsComponent {
       text: card.text,
     })),
   );
+  /** Room under each row of cards for the actions' texts (legacy: 36px), where the cards have texts. */
+  protected readonly textRoom = computed(() =>
+    this.shownCards().some((shown) => shown.text !== null) ? ACTION_TEXT : 0,
+  );
+  /** Room kept for the row of buttons a choice brings (none in a replay, which answers nothing). */
+  protected readonly actionsRoom = computed(() => (this.session.replaying() ? 0 : ACTIONS_ROOM));
+  private readonly session = inject(GameSession);
   protected readonly fit = computed<FitCard[]>(() =>
     this.shownCards().map(({ card }) => ({ horizontal: this.views.of(card).horizontal })),
   );

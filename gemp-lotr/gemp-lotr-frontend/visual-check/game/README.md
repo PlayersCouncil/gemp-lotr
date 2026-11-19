@@ -198,7 +198,9 @@ both pages are served from disk (`../stub-server.mjs`: the legacy web root and t
 recorded game (see "Recordings") answer by answer, as its server sent it, up to one step; the decisions are left out,
 so no dialog is open and no card is offered, and each page asks for the next answer at once. Then the pages are
 compared: the screen (at most `--tolerance` pixels, default 60) and the game as shown (`controls.mjs`
-`readGameState`). Every step of every recording, at 1280x800, 1366x768 and 1920x1080.
+`readGameState`). Every step of every recording, at 1280x800, 1366x768 and 1920x1080. What the owner accepted
+(`GAME_ACCEPTED` in `../accepted.mjs`, worded as the game check words a problem) doesn't count: e.g. the steps where a
+dialog of cards is open, which the Angular page sizes to its cards (Ketura, 2026-11-19) and `game.html` doesn't.
 
 On the last state of two recordings (`WITH_VIEWS`: a player's and a spectator's) it also compares what the table
 doesn't show: each tab of the tab box and each player's other piles opened. Then it loads the Angular page again,

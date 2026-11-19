@@ -317,6 +317,19 @@
   padding: 8px calc(2em - 2px) calc(1em - 2px) 8px;
 }
 
+/*
+ * A window of cards sized to its cards (gdCardWindow, data-card-window; Ketura, 2026-11-19): exactly the size it was
+ * given, centred in the room left of a panel docked at the window's right (--gd-page-right) until moved
+ */
+.gd-dialog[data-dialog][data-card-window] {
+  --dialog-centred-height: var(--dialog-height);
+  height: var(--dialog-height);
+}
+
+.gd-dialog[data-dialog][data-card-window]:not([data-placed]) {
+  left: max(0px, round(calc((100vw - var(--gd-page-right, 0px) - var(--dialog-outer-width)) / 2), 1px));
+}
+
 /* The notifier: the browser's alert, confirm and prompt had no jQuery UI look; drawn as a dialog */
 .gd-dialog:is([data-dialog='alert'], [data-dialog='confirm'], [data-dialog='prompt']) {
   --dialog-width: 400px;
