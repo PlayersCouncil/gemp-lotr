@@ -18,6 +18,7 @@ import { settle } from './selection';
 import { blockGoto, insertOp, rewriteOps, StepOp, stepsGoto } from './step-ops';
 import { isThisGame, settingsOf, stepsOf } from './steps';
 import { lastCheckpoint } from './timeline';
+import { checkReport, offScriptReport } from './scenario-settings';
 
 /** The panel docked at the window's right (px), and folded away to a strip. */
 export const PANEL_WIDTH = 430;
@@ -222,6 +223,13 @@ export class Authoring {
       }),
       restart: (fromCheckpoint) => this.restart(fromCheckpoint),
       leaving: () => this.leaving(),
+      // (a new title goes into the game in hand, which says nothing of it: the scenario's menu follows the draft)
+      title: computed(() => {
+        const draft = this.draft();
+        if (!draft || !this.here() || draft.mode !== 'author') return null;
+        // (a title left blank is none: the scenario is called by its id)
+        return draft.draft.title?.trim() ? draft.draft.title : draft.draft.id;
+      }),
     });
     // The server is told when this page goes away, so that the Game Hall does not go on offering a draft that has
     // been saved and left (going on to a fresh game of the draft is not going away)
@@ -750,5 +758,74 @@ export class Authoring {
   steps(): readonly DraftStep[] {
     const draft: DraftState | null = this.draft();
     return draft ? stepsOf(draft) : [];
+  }
+
+  /* ---------------------------------------------------------------- the Scenario tab's */
+
+  /**
+   * Save as (`copy`: a scenario of its own, which the draft is from here on) or Rename (the file moved; what is not
+   * saved stays unsaved), to a tidy path (filing.ts). Resolves true when it was done.
+   */
+  async saveAs(how: 'copy' | 'rename', path: string, canonical: boolean): Promise<boolean> {
+    const unsent = await this.flushForSave();
+    const result = await this.call(this.api.save({ as: how, path, canonical }), true);
+    if (!result) return false;
+    if (how === 'copy') {
+      this.afterSave(result, unsent);
+      return true;
+    }
+    const tail = unsent === null ? '' : ` ${unsent}`;
+    this.saved.set({
+      good: unsent === null,
+      why: false,
+      stays: true,
+      text: `The file is now ${result.renamed}.${tail}`,
+    });
+    if (unsent !== null) this.problem.set(this.unsentProblem);
+    return true;
+  }
+
+  /**
+   * Submits the draft's file for review (the author has been asked): saved first if it needs to be, and submitted
+   * only if that save plays through with nothing left unsent (otherwise what the save says is said, and nothing is
+   * submitted). Submitting closes the draft: the page goes back to the Game Hall's My Scenarios.
+   */
+  async submit(): Promise<boolean> {
+    const draft = this.draft();
+    if (!draft) return false;
+    if (draft.dirty || !draft.onDisk) {
+      if (!(await this.mayOverwrite())) return false;
+      const unsent = await this.flushForSave();
+      const result = await this.call(this.api.save(), true);
+      if (!result) return false;
+      const saved = result.saved;
+      if (!saved || saved.errors.length > 0 || !saved.verified || unsent !== null) {
+        this.afterSave(result, unsent);
+        return false;
+      }
+    }
+    if (!(await this.call(this.api.submit(), true))) return false;
+    this.gone.set(true);
+    this.hall.go('#account/scenarios');
+    return true;
+  }
+
+  /** Check: the draft played through with nobody at the table, as the server does before it offers a scenario. */
+  async check(): Promise<void> {
+    const result = await this.call(this.api.check(), true);
+    if (result) this.report.set(checkReport(result));
+  }
+
+  /** Try other answers: every other answer the player could give, played up to the script's next step. Slow. */
+  async offScript(): Promise<void> {
+    this.report.set('Trying other answers...');
+    const result = await this.call(this.api.offScript(), true);
+    this.report.set(result ? offScriptReport(result) : null);
+  }
+
+  /** See the file: the draft as the file it would be saved as. */
+  async seeFile(): Promise<void> {
+    const result = await this.call(this.api.source(), false);
+    if (result) this.report.set(result.source);
   }
 }

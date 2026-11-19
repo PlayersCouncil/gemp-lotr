@@ -90,7 +90,7 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
     @if (guide.playing()) {
       @if (!phone()) {
         <nav class="gd-scenario-menu" aria-label="Scenario" [style.--gd-reserved]="room.reservedRight() + 'px'">
-          <span class="gd-scenario-menu__title">{{ guide.info()?.title }}</span>
+          <span class="gd-scenario-menu__title">{{ guide.title() }}</span>
           <button type="button" data-scenario-menu="restart" (click)="guide.askRestart()">Start again</button>
           <button type="button" data-scenario-menu="leave" (click)="guide.leave()">Leave</button>
           <a
