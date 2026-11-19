@@ -248,6 +248,16 @@
   --theme-game-author-phase-between-turns: #7d7d7d;
   --theme-game-author-phase-block: #4f8fc4;
   --theme-game-author-phase-none: #4a4130;
+  /* The authoring panel's Board tab (the legacy .sa-section, .sa-changed, .sa-tag, .sa-zonehead, .sa-alias, .sa-bad) */
+  --theme-game-author-section-rule: #3a3322;
+  --theme-game-author-changed-mark: #d8b24a;
+  --theme-game-author-tag-bg: #d8b24a;
+  --theme-game-author-tag-text: #17150f;
+  --theme-game-author-place-rule: #4d4226;
+  --theme-game-author-alias: #9cc7ff;
+  --theme-game-author-hint-rule: #5d7fa8;
+  --theme-game-author-pending-text: #ffe9b0;
+  --theme-game-author-bad-border: #e0584a;
   /* The menu of a card's actions (jquery.contextMenu.css) */
   --theme-game-menu-bg: #eee;
   --theme-game-menu-border: #ccc;
@@ -535,6 +545,11 @@
   --theme-game-author-who-read: #e2c271;
   --theme-game-author-group-bg: #1f1912;
   --theme-game-author-group-rule: #3a2f20;
+  --theme-game-author-section-rule: #3a2f20;
+  --theme-game-author-changed-mark: #c9a24a;
+  --theme-game-author-tag-bg: #c9a24a;
+  --theme-game-author-tag-text: #1a140c;
+  --theme-game-author-place-rule: #3a2f20;
   --theme-game-menu-bg: #241d15;
   --theme-game-menu-border: #5a4a2c;
   --theme-game-menu-text: #ece2cc;

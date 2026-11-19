@@ -1,0 +1,34 @@
+/* The Board tab's totals (the legacy counters' .sa-row, marked .sa-changed) */
+
+:host {
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-section-rule);
+}
+
+.gd-author-board-counters__row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-board-counters__row[data-changed] {
+  padding-left: 4px;
+  border-left: 3px solid var(--theme-game-author-changed-mark);
+}
+
+.gd-author-board-counters__row .gd-author-label {
+  flex: 0 0 70px;
+  font-size: 12px;
+}
+
+.gd-author-board-counters__row .gd-author-input {
+  flex: 0 0 76px;
+  width: 76px;
+}
+
+.gd-author-board-counters__row .gd-author-button {
+  margin-bottom: 0;
+}
