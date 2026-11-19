@@ -20,13 +20,11 @@ export interface PhoneSite {
   number: number;
   card: GameCard | null;
   players: readonly { number: number; name: string; current: boolean }[];
-  /** Where the fellowship of the player whose turn it is stands. */
-  here: boolean;
   /**
-   * Where the fellowship of the player looking stands (a spectator: the player at the bottom): the road shows this
-   * site big, the others small (the owner, 2026-11-18). Each player sees their own.
+   * Where the fellowship of the player whose turn it is stands: where the game is happening, the road's big site for
+   * everyone (the owner, 2026-11-19: not the site of the player looking).
    */
-  own: boolean;
+  here: boolean;
   /** Not reached yet by the fellowship whose turn it is. */
   ahead: boolean;
 }
@@ -130,7 +128,6 @@ export function phoneTable(table: GameTable, model: GameModel): PhoneTable {
   const ownLabel = (what: string) => (table.spectator ? `${own}'s ${what}` : `${own} ${what}`);
   const current = model.currentPlayer;
   const currentAt = current === null ? null : (model.positions[current] ?? null);
-  const ownAt = bottom === null ? null : (model.positions[bottom] ?? null);
 
   const sites = new Map<number, TableStack>();
   for (const site of table.sites) if (site.card.index !== null) sites.set(site.card.index, site);
@@ -144,7 +141,6 @@ export function phoneTable(table: GameTable, model: GameModel): PhoneTable {
         model.positions[name] === number ? [{ number: i + 1, name, current: name === current }] : [],
       ),
       here: currentAt === number,
-      own: ownAt === number,
       ahead: currentAt !== null && number > currentAt,
     });
   }

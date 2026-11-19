@@ -21,6 +21,7 @@ import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { GameTableState } from '../../../core/game/table/game-table.service';
+import { PhoneSettings } from '../../../core/game/phone/phone-settings';
 import { CardComponent } from '../../shared/card/card.component';
 import { GameCardDirective } from '../table/game-card.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
@@ -35,11 +36,14 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
  * DOM contract: `gd-phone-table` holding `section.gd-phone-zone` (`data-zone`: path, support-opponent,
  * characters-opponent, shadow, pairs, characters-player, support-player; `data-side`), each with `.gd-phone-zone__label`
  * and its `gd-phone-cards` (or `.gd-phone-path` with a `.gd-phone-site` per place: `data-site`, `data-here`, a site's
- * `button.gd-card`, or `button.gd-phone-site__empty` opening the adventure deck; `data-own` on the site where the
- * player looking stands, shown big and brought to the road's middle); or `.gd-phone-pair` per fight with
+ * `button.gd-card`, or `button.gd-phone-site__empty` opening the adventure deck; `data-big` on the site where the
+ * game is happening (the turn's player stands there), shown big and brought to the road's middle); or `.gd-phone-pair` per fight with
  * `data-pair` skirmish or assignment: upright, its minions, the Shadow's and the Free Peoples' strengths, its characters;
  * `data-reversed` the other way up, for the Shadow player).
  */
+/** The most cards each of two short rows holds to stand side by side on an upright tablet. */
+const HALF_ROW = 3;
+
 @Component({
   selector: 'gd-phone-table',
   styleUrl: './phone-table.component.css',
@@ -55,7 +59,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
             class="gd-phone-site"
             [attr.data-site]="site.number"
             [attr.data-here]="site.here ? '' : null"
-            [attr.data-own]="site.own ? '' : null"
+            [attr.data-big]="site.here ? '' : null"
             [attr.data-ahead]="site.ahead ? '' : null"
           >
             @if (site.card; as card) {
@@ -98,6 +102,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
             <div class="gd-phone-pair" [attr.data-pair]="pair.kind" [attr.data-reversed]="shadowSide() ? '' : null">
               <gd-phone-cards [cards]="pair.minions" empty="" [layered]="true" />
               @if (pair.kind === 'skirmish') {
+                <!-- Each strength next to its side: the Shadow's by the minions, the Free Peoples' by the companions -->
                 <span
                   class="gd-phone-strength"
                   data-side="shadow"
@@ -136,6 +141,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
         class="gd-phone-zone"
         [attr.data-zone]="row.key"
         [attr.data-side]="row.side"
+        [attr.data-half]="halves().has(row.key) ? '' : null"
         [attr.aria-label]="row.label"
       >
         <!-- An empty row is one line: its label and "none" (the owner, 2026-11-17) -->
@@ -184,6 +190,7 @@ export class PhoneTableComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   protected readonly views = inject(GameCardViews);
   private readonly table = inject(GameTableState).table;
+  private readonly phoneSettings = inject(PhoneSettings);
 
   protected readonly phone = computed(() => phoneTable(this.table(), this.session.model()));
   /** The rows above the fights; an empty minions' row only while no fight takes its place. */
@@ -194,6 +201,26 @@ export class PhoneTableComponent {
   protected readonly pairsLabel = computed(() =>
     this.phone().pairs[0]?.kind === 'skirmish' ? 'Skirmish' : 'Assignments',
   );
+  /**
+   * On an upright tablet, a player's support and characters side by side when both are short (up to HALF_ROW cards
+   * each): its width was mostly empty (the layout review, 2026-11-19).
+   */
+  protected readonly halves = computed(() => {
+    const halves = new Set<string>();
+    if (this.phoneSettings.device() !== 'tablet') return halves;
+    const rows = [...this.phone().above, ...this.phone().below];
+    const short = (key: string) => {
+      const row = rows.find((r) => r.key === key);
+      return row !== undefined && row.cards.length <= HALF_ROW;
+    };
+    for (const pair of [
+      ['support-opponent', 'characters-opponent'],
+      ['characters-player', 'support-player'],
+    ]) {
+      if (pair.every(short)) pair.forEach((key) => halves.add(key));
+    }
+    return halves;
+  });
   /** The rows whose cards not active this turn the player opened, this turn. */
   protected readonly unfolded = computed(() => this.viewState.phone().unfolded);
   /** Each row's folding (phoneFolding), by its key: the title line holds the opponent's button. */
@@ -218,8 +245,8 @@ export class PhoneTableComponent {
     const current = this.session.model().currentPlayer;
     return current !== null && this.table().bottom !== null && this.table().bottom !== current;
   });
-  /** The site where the player looking stands (shown big), by its number. */
-  private readonly ownSite = computed(() => this.phone().path.find((site) => site.own)?.number ?? null);
+  /** The site where the game is happening (shown big), by its number. */
+  private readonly bigSite = computed(() => this.phone().path.find((site) => site.here)?.number ?? null);
   private readonly road = viewChild.required<ElementRef<HTMLElement>>('road');
 
   constructor() {
@@ -242,19 +269,35 @@ export class PhoneTableComponent {
       },
     });
 
-    // The player's own site in the road's middle: at first, and whenever their fellowship moves (the road scrolls freely
-    // in between)
+    // The site where the game is happening in the road's middle: at first, and whenever it changes (the road scrolls
+    // freely in between)
     let centred: number | null = null;
     afterRenderEffect({
       write: () => {
-        const own = this.ownSite();
-        if (own === null || own === centred) return;
+        const big = this.bigSite();
+        if (big === null || big === centred) return;
         const road = this.road().nativeElement;
-        const site = road.querySelector<HTMLElement>('.gd-phone-site[data-own]');
+        const site = road.querySelector<HTMLElement>('.gd-phone-site[data-big]');
         if (!site) return;
-        centred = own;
+        centred = big;
         road.scrollLeft = Math.max(0, site.offsetLeft - (road.clientWidth - site.offsetWidth) / 2);
       },
+    });
+
+    // New fights (assignments made, a skirmish begun) brought into view once, at the table's top; not the first seen
+    // (after a reload the table is where the player left it), nor while replaying (the owner, 2026-11-19)
+    let lastFights: string | undefined;
+    effect(() => {
+      const fights = this.phone()
+        .pairs.map((pair) => `${pair.kind}:${pair.key}`)
+        .join(',');
+      untracked(() => {
+        const first = lastFights === undefined;
+        const changed = fights !== lastFights;
+        lastFights = fights;
+        if (first || !changed || fights === '' || this.session.replaying()) return;
+        afterNextRender({ write: () => this.showFights() }, { injector });
+      });
     });
 
     // A new turn folds the cards not active in it again (the first turn seen, after a reload too, keeps them)
@@ -317,6 +360,12 @@ export class PhoneTableComponent {
   protected keepScroll(): void {
     const top = Math.round(this.host.scrollTop);
     this.viewState.phone.update((phone) => (phone.tableTop === top ? phone : { ...phone, tableTop: top }));
+  }
+
+  /** The fights at the table's top (or as near as the table scrolls). */
+  private showFights(): void {
+    const fights = this.host.querySelector<HTMLElement>('.gd-phone-zone[data-zone="pairs"]');
+    if (fights) this.host.scrollTop = Math.max(0, fights.offsetTop - 4);
   }
 
   /** The first offered card's row in view (below the path, unless the path holds it), and the card in its row. */

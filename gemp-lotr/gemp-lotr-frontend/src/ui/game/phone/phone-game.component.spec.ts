@@ -50,7 +50,7 @@ describe('the game on a phone (G7)', () => {
   });
 
   /** The page with the compact layout on (the modern theme on a phone: CompactLayout) or off. */
-  async function open(body: string, { compact = true } = {}) {
+  async function open(body: string, { compact = true, device = 'phone' as 'phone' | 'tablet' | 'sideways' } = {}) {
     cues = { vibrate: vi.fn(), play: vi.fn(), toggleFullscreen: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
@@ -76,7 +76,10 @@ describe('the game on a phone (G7)', () => {
           useValue: {
             active: signal(compact),
             sideBySide: signal(false),
-            device: signal(compact ? 'phone' : null),
+            device: signal(compact ? device : null),
+            gameActive: signal(compact),
+            gameDevice: signal(compact ? device : null),
+            tallSideways: signal(false),
           },
         },
       ],
@@ -199,6 +202,46 @@ describe('the game on a phone (G7)', () => {
       game('<ge type="TC" participantId="bob" otherCardIds=""/><ge type="AA" cardId="1" otherCardIds="5"/>'),
     );
     expect(shadow.el.querySelector(pair)?.hasAttribute('data-reversed')).toBe(true);
+  });
+
+  it("sets a player's short support and characters side by side on an upright tablet, not on a phone", async () => {
+    const half = (el: HTMLElement) =>
+      Array.from(el.querySelectorAll('gd-phone-table .gd-phone-zone[data-half]'), (zone) =>
+        zone.getAttribute('data-zone'),
+      );
+    const tablet = await open(game(), { device: 'tablet' });
+    expect(half(tablet.el)).toEqual(['support-opponent', 'characters-opponent', 'characters-player', 'support-player']);
+    TestBed.resetTestingModule();
+    // Four of the player's characters: their row needs the whole width
+    const crowded = await open(game(['21', '22', '23', '24'].map((id) => card(id, 'FREE_CHARACTERS')).join('')), {
+      device: 'tablet',
+    });
+    expect(half(crowded.el)).toEqual(['support-opponent', 'characters-opponent']);
+    TestBed.resetTestingModule();
+    const phone = await open(game());
+    expect(half(phone.el)).toEqual([]);
+  });
+
+  it("held sideways, hides the hand by the keyboard's Down and shows it by Up; its cards keep one size", async () => {
+    const { el, fixture, stable } = await open(game(), { device: 'sideways' });
+    const phone = fixture.debugElement.injector.get(PhoneSettings);
+    const size = () =>
+      (el.querySelector('gd-game-phone') as HTMLElement).style.getPropertyValue('--gd-phone-hand-card');
+    const divider = el.querySelector<HTMLElement>('gd-phone-divider');
+    const key = async (key: string) => {
+      divider?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+      await stable();
+    };
+    const before = size();
+    expect(phone.handHidden()).toBe(false);
+    await key('ArrowDown');
+    expect(phone.handHidden()).toBe(true);
+    await key('ArrowUp');
+    expect(phone.handHidden()).toBe(false);
+    // Up again: the hand doesn't grow, nor do its cards
+    await key('ArrowUp');
+    expect(size()).toBe(before);
+    document.cookie = 'gempGameSplit=; path=/; max-age=0';
   });
 
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
@@ -710,6 +753,42 @@ describe('the game on a phone (G7)', () => {
     expect(hand()?.getAttribute('data-place')).toBe('hand');
     await click('[data-phone="show-choices"]');
     expect(hand()?.getAttribute('data-place')).toBe('choices');
+  });
+
+  it('scrolls offered cards down in rows when the player chooses it in the settings; the hand stays sideways', async () => {
+    const { el, click, fixture, stable } = await open(
+      game(
+        decision(
+          'ARBITRARY_CARDS',
+          param('cardId', 'a', 'b') +
+            param('blueprintId', '1_1', '1_2') +
+            param('selectable', 'true', 'true') +
+            param('min', '1') +
+            param('max', '1'),
+          'Choose a card from your deck',
+        ),
+      ),
+    );
+    const phone = fixture.debugElement.injector.get(PhoneSettings);
+    const hand = () => el.querySelector('gd-phone-hand');
+    // Sideways by default
+    expect(hand()?.hasAttribute('data-scroll')).toBe(false);
+    await click('[data-phone="menu"]');
+    await click('[data-menu="settings"]');
+    await click('[data-settings-tab="display"]');
+    try {
+      el.querySelector('[data-setting="choicesScroll"][value="down"]')?.dispatchEvent(new Event('change'));
+      await stable();
+      expect(phone.choicesScroll()).toBe('down');
+      expect(hand()?.getAttribute('data-scroll')).toBe('down');
+      // The player's own hand keeps scrolling sideways
+      await click('[data-phone="sheet-close"]');
+      await click('[data-phone="close-choices"]');
+      expect(hand()?.getAttribute('data-place')).toBe('hand');
+      expect(hand()?.hasAttribute('data-scroll')).toBe(false);
+    } finally {
+      for (const path of ['/', '/gemp-lotr']) document.cookie = `gempGameChoicesScroll=; path=${path}; max-age=0`;
+    }
   });
 
   it('a tap acts only in a decision: an offered card is chosen, another does nothing', async () => {

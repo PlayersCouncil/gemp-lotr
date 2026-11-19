@@ -18,14 +18,17 @@ const HAND_STEP = 24;
 const TABLE_MIN = 90;
 /** The hand's head and its row's padding: the hand's cards are as high as the rest (px). */
 const HAND_CHROME = 26 + 12;
+/** Held sideways, how far a drag goes (px) to hide the hand or show it again. */
+const SIDEWAYS_SWIPE = 40;
 
 /**
  * The game in the modern theme on a phone or an upright tablet (G7 of trymarz/gemp-lotr-private#27; CompactLayout):
  * the status bar and the players' chips at the top, the table scrolling up and down, the divider with the decision,
  * and the hand under it. The divider's place is kept per device in a cookie (PhoneSettings); dragged to the bottom it
- * hides the hand (shown again while a decision offers cards in its place). Held sideways the table takes the whole
- * width, the divider the right half of the bottom, and the hand is a panel in the right half standing on it, which its
- * grip slides up as far as the status bar (the owner, 2026-11-16, 2026-11-17). Sheets open over everything.
+ * hides the hand (shown again while a decision offers cards in its place). Held sideways the screen has two columns
+ * (the owner, 2026-11-19): the table on the left, and a panel docked on the right with the divider on top and the hand
+ * filling the rest, its cards in rows, one size; dragging down hides the hand (the decision then at the panel's
+ * bottom), up shows it. Sheets open over everything.
  *
  * DOM contract: `gd-game-phone` with `data-device` (phone, sideways, tablet), `data-hand-hidden`, `--gd-phone-card`
  * (the table's cards' height), `--gd-phone-hand` (the hand's height), holding `gd-phone-status`, `gd-phone-table`,
@@ -103,7 +106,15 @@ export class PhoneGameComponent {
     const hand = this.phone.hand();
     return hand === 'hidden' ? (this.offerOpen() ? this.phone.defaultHand() : 0) : hand;
   });
-  protected readonly handCard = computed(() => Math.max(48, this.handHeight() - HAND_CHROME));
+  /**
+   * The hand's cards' height: upright, as high as the hand allows; held sideways one size, from the card size setting
+   * (the hand fills the panel; dragging only hides and shows it, the owner 2026-11-19).
+   */
+  protected readonly handCard = computed(() =>
+    this.phone.device() === 'sideways'
+      ? Math.round(((this.phone.defaultHand() - HAND_CHROME) * this.phone.cardSize()) / 100)
+      : Math.max(48, this.handHeight() - HAND_CHROME),
+  );
 
   /**
    * Dragging the divider (anywhere but its buttons and fields) or the hand's grip: the hand grows by as much as the
@@ -113,6 +124,7 @@ export class PhoneGameComponent {
     const target = event.target as Element | null;
     if (target?.closest('button, select, input, a, output, gd-game-replay')) return null;
     const start = event.clientY;
+    if (this.phone.device() === 'sideways') return this.sidewaysDrag(start);
     const from = this.handHidden() ? 0 : this.handHeight();
     const at = (e: PointerEvent) => this.clamp(from + start - e.clientY);
     return {
@@ -135,11 +147,32 @@ export class PhoneGameComponent {
     const step = event.key === 'ArrowUp' ? HAND_STEP : event.key === 'ArrowDown' ? -HAND_STEP : 0;
     if (!step) return;
     event.preventDefault();
+    // Held sideways: Down hides the hand, Up shows it
+    if (this.phone.device() === 'sideways') {
+      this.phone.setHand(step < 0 ? 'hidden' : this.phone.defaultHand());
+      return;
+    }
     // A hidden hand comes back at its least height (a step up from nothing would still be hidden); a step down from its
     // least height hides it (the clamp would put it back at the least height, so the keys could never hide it)
     const next = this.handHidden() ? (step > 0 ? HAND_MIN : 0) : this.handHeight() + step;
     const height = step < 0 && next < HAND_MIN ? 0 : this.clamp(next);
     this.phone.setHand(height === 0 ? 'hidden' : height);
+  }
+
+  /**
+   * Held sideways, dragging the divider or the hand's grip down hides the hand and up shows it again, as upright (the
+   * owner, 2026-11-19: resizing the cards by it felt unnatural); nothing moves while dragging.
+   */
+  private sidewaysDrag(start: number): DragHandlers {
+    return {
+      move: () => undefined,
+      end: (e) => {
+        const down = e.clientY - start;
+        if (down > SIDEWAYS_SWIPE && !this.handHidden()) this.phone.setHand('hidden');
+        else if (down < -SIDEWAYS_SWIPE && this.handHidden()) this.phone.setHand(this.phone.defaultHand());
+      },
+      cancel: () => undefined,
+    };
   }
 
   /**
