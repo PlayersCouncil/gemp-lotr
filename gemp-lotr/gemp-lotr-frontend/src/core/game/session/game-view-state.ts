@@ -58,7 +58,7 @@ export class GameViewState {
   readonly cardInfo = signal<{ cardId: string | null; blueprintId: string } | null>(null);
   /** Card ids in the order the player arranged them by dragging (the others follow in the server's order). */
   readonly cardOrder = signal<readonly string[]>([]);
-  /** How far the chat box's list is scrolled (px), or null at its end. */
+  /** How far the chat box's list is scrolled from its oldest lines (px), or null at its newest. */
   readonly chatScroll = signal<number | null>(null);
   /** The phone layout's sheets, the one shown last (GameSheets). */
   readonly sheets = signal<readonly SheetEntry[]>([]);

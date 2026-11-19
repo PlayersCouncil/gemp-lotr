@@ -1,5 +1,4 @@
 import {
-  afterNextRender,
   afterRenderEffect,
   DestroyRef,
   Component,
@@ -18,6 +17,7 @@ import { GameViewState } from '../../../core/game/session/game-view-state';
 import { PlayerInfo } from '../../../core/session/player-info.service';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
+import { LogPin } from './log-pin';
 
 /** A line that names the player is marked: "@name" calls them (ping), their name or "@everyone" mentions them. */
 export function mentionOf(html: string, name: string | null): 'ping' | 'mention' | null {
@@ -67,8 +67,8 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
 }
 
 /**
- * The game's chat box: the room's chat and the game's messages in one list, which stays at its end as lines come
- * unless the player scrolled up, and the field to say something (Enter sends it).
+ * The game's chat box: the room's chat and the game's messages in one list, which stays at its newest lines as they
+ * come unless the player scrolled away from them (LogPin), and the field to say something (Enter sends it).
  *
  * DOM contract: `gd-game-chat` holding `.gd-game-chat__lines` with one `.gd-game-chat__line` per line (`data-kind`
  * chat, system, message, warning; `data-mention` ping or mention when it names the player; `data-said` on a line the
@@ -145,78 +145,59 @@ export class GameChatComponent {
   /** The lines in the order shown. */
   protected readonly shownLines = computed(() => (this.newestFirst() ? [...this.views()].reverse() : this.views()));
 
-  /**
-   * Whether the list goes to its end when lines come: decided before they are drawn, from where the list stands (legacy
-   * appendMessage): at its end or within 30px of scrolling at all, or not scrollable (also while its tab is closed),
-   * and always for a warning.
-   */
-  private follow = true;
-  private shown = 0;
+  private pin: LogPin | null = null;
 
   constructor() {
-    // Before the new lines are drawn
+    const destroyRef = inject(DestroyRef);
+    // Before the new lines are drawn: whether they are followed was decided by where the player left the list (LogPin)
+    let shown = 0;
+    let warned = false;
     effect(() => {
       const views = this.views();
-      const box = this.lines()?.nativeElement;
-      const most = box ? box.scrollHeight - box.offsetHeight : 0;
-      const warned = views.slice(this.shown).some((line) => line.kind === 'warning');
-      this.shown = views.length;
-      this.follow = warned || most <= 30 || (box?.scrollTop ?? 0) / most >= 0.999;
+      warned ||= views.slice(shown).some((line) => line.kind === 'warning');
+      shown = views.length;
+      untracked(() => this.pin?.drawing());
     });
-    // Only when lines were added, as the legacy page did. While its tab is closed nothing moves it: it opens again where
-    // it was (the browser kept an element's place over a closed tab; here it is kept explicitly)
-    let drawn = 0;
-    let kept: number | null = null;
-    // After a reload: where the list was (null: at its end)
+    // After a reload: where the list was (null: at its newest lines), taken up once its first lines are drawn
     let restoring = true;
     afterRenderEffect(() => {
       const count = this.views().length;
+      // (the theme switched: a pinned list goes to its newest lines at their other end)
+      this.newestFirst();
       const box = this.lines()?.nativeElement;
-      // Newest first: new lines come at the top, and the browser keeps what the player reads where it is
-      if (box && count > drawn && this.follow && !untracked(this.newestFirst)) {
-        // Not while its tab is closed: it opens again where it was
-        if (box.clientHeight > 0) box.scrollTop = box.scrollHeight;
-      }
-      if (box && restoring && count > 0) {
+      if (!box) return;
+      const pin = (this.pin ??= this.pinFor(box, destroyRef));
+      if (restoring) {
+        if (count === 0) return;
         restoring = false;
-        const saved = untracked(this.viewState.chatScroll);
-        if (saved !== null) {
-          if (box.clientHeight > 0) box.scrollTop = saved;
-          else kept = saved;
-        }
+        warned = false;
+        pin.restore(untracked(this.viewState.chatScroll));
+        return;
       }
-      drawn = count;
+      // A warning always shows, the list then follows its newest lines again
+      pin.drawn(warned);
+      warned = false;
     });
-    const destroyRef = inject(DestroyRef);
-    afterNextRender(() => {
-      const box = this.lines()?.nativeElement;
-      const Observer = box?.ownerDocument.defaultView?.ResizeObserver;
-      if (!box || !Observer) return;
-      let last = box.scrollTop;
-      box.addEventListener('scroll', () => {
-        if (restoring) return;
-        last = box.scrollTop;
-        // null: at the newest lines (the end, or the top when they come first)
-        const atNewest = this.newestFirst()
-          ? box.scrollTop < 1
-          : box.scrollHeight - box.clientHeight - box.scrollTop < 1;
-        this.viewState.chatScroll.set(atNewest ? null : box.scrollTop);
-      });
-      const observer = new Observer(() => {
-        if (box.clientHeight === 0) {
-          // (not before the place kept over a reload is taken up)
-          if (restoring) return;
-          kept ??= last;
-          this.viewState.chatScroll.set(kept);
-        } else if (kept !== null) {
-          box.scrollTop = kept;
-          kept = null;
-          last = box.scrollTop;
-        }
-      });
-      observer.observe(box);
-      destroyRef.onDestroy(() => observer.disconnect());
+  }
+
+  /** The list's pin: told of the player's scrolling, of images loading in it, and of its size changing. */
+  private pinFor(box: HTMLElement, destroyRef: DestroyRef): LogPin {
+    const pin = new LogPin(
+      box,
+      () => (untracked(this.newestFirst) ? 'start' : 'end'),
+      (scroll) => this.viewState.chatScroll.set(scroll),
+    );
+    box.addEventListener('scroll', () => pin.scrolled());
+    // (load doesn't bubble: caught on its way down)
+    box.addEventListener('load', () => pin.repin(), true);
+    const Observer = box.ownerDocument.defaultView?.ResizeObserver;
+    const observer = Observer ? new Observer(() => pin.resized()) : null;
+    observer?.observe(box);
+    destroyRef.onDestroy(() => {
+      observer?.disconnect();
+      pin.dispose();
     });
+    return pin;
   }
 
   protected send(event: Event): void {
