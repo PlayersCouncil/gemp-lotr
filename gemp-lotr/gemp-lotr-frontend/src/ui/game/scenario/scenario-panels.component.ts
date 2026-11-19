@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { ScenarioEnd, ScenarioInfo } from '../../../core/game/scenario/scenario-events';
 import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
 import { ScenarioRoom } from '../../../core/game/scenario/scenario-room';
@@ -78,6 +78,9 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
 @Component({
   selector: 'gd-game-scenario-panels',
   styleUrl: './scenario-panels.component.css',
+  // An ending's words are the server's HTML, which a scoped stylesheet wouldn't reach; and the buttons' look is
+  // shared with the bubble's (gd-game-scenario). Every rule starts at a .gd-scenario class
+  encapsulation: ViewEncapsulation.None,
   imports: [CardHintsDirective],
   host: {
     style: 'display: contents',
@@ -155,7 +158,7 @@ export class ScenarioPanelsComponent {
 
   /** The feedback form's address, with this game's replay filled in: the server names it at the end of the game. */
   protected readonly report = computed(
-    () => /<a\b[^>]*\bhref=["']([^"']+)["']/.exec(this.log.feedback() ?? '')?.[1] ?? null,
+    () => /<a\b[^>]*\bhref\s*=\s*["']([^"']+)["']/.exec(this.log.feedback() ?? '')?.[1] ?? null,
   );
 
   protected readonly panel = computed<Panel | null>(() => {

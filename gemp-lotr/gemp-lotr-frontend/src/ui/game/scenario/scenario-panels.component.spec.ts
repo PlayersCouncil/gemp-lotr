@@ -294,6 +294,14 @@ describe('ScenarioPanelsComponent', () => {
       expect(el.querySelector<HTMLAnchorElement>('.gd-scenario-panel__report a')?.href).toBe(
         'https://forms.example/form?replay=asdf$123',
       );
+      // As the server writes it: single quotes, and a space after href=
+      feedback.set(
+        "Thank you for playing! <a href= 'https://forms.example/form?replay=asdf$456' target='_blank'>form</a>",
+      );
+      refresh();
+      expect(el.querySelector<HTMLAnchorElement>('.gd-scenario-panel__report a')?.href).toBe(
+        'https://forms.example/form?replay=asdf$456',
+      );
       // Not a link the page can read: no report
       feedback.set('Thank you for playing!');
       refresh();

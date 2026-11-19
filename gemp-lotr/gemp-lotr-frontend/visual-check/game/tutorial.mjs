@@ -803,7 +803,12 @@ const CHECKS = {
 
     // Dragged by its head
     const head = await page.locator(ui.bubbleHead).boundingBox();
-    const by = { x: -220, y: 140 };
+    // (towards the middle of the window: a bubble can't be dragged off the screen)
+    const size = page.viewportSize();
+    const by = {
+      x: head.x + head.width / 2 < size.width / 2 ? 220 : -220,
+      y: head.y < size.height / 2 ? 140 : -140,
+    };
     await page.mouse.move(head.x + 30, head.y + head.height / 2);
     await page.mouse.down();
     await page.mouse.move(head.x + 30 + by.x, head.y + head.height / 2 + by.y, { steps: 8 });

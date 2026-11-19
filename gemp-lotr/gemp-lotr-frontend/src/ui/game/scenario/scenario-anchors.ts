@@ -101,6 +101,39 @@ export function cardElement(root: ParentNode, cardId: string): Element | null {
   return inDialog.at(-1) ?? shown.at(-1) ?? null;
 }
 
+/** What is left of a rectangle beside another that covers part of it: the largest strip clear of it. */
+function clearOf(rect: Rect, cover: Rect): Rect {
+  const right = rect.left + rect.width;
+  const bottom = rect.top + rect.height;
+  const coverRight = cover.left + cover.width;
+  const coverBottom = cover.top + cover.height;
+  if (cover.left >= right || coverRight <= rect.left || cover.top >= bottom || coverBottom <= rect.top) return rect;
+  const strips: Rect[] = [
+    { left: rect.left, top: rect.top, width: cover.left - rect.left, height: rect.height },
+    { left: coverRight, top: rect.top, width: right - coverRight, height: rect.height },
+    { left: rect.left, top: rect.top, width: rect.width, height: cover.top - rect.top },
+    { left: rect.left, top: coverBottom, width: rect.width, height: bottom - coverBottom },
+  ].filter((strip) => strip.width > 0 && strip.height > 0);
+  const largest = strips.sort((a, b) => b.width * b.height - a.width * a.height).at(0);
+  // (wholly covered: there is nothing better to point at than where it is)
+  return largest ?? rect;
+}
+
+/**
+ * Where a card shows on the screen. A card lying under another (attached to it, stacked on it) only peeks out from
+ * under it: what points at such a card, or says to click it, means the part that can be seen and clicked.
+ */
+export function cardRect(card: Element | null | undefined): Rect | null {
+  let shown = rectOf(card);
+  if (!card || !shown || !card.hasAttribute('data-under')) return shown;
+  // (the cards drawn after it in its stack lie over it)
+  for (let above = card.nextElementSibling; above; above = above.nextElementSibling) {
+    const cover = above.hasAttribute('data-card-id') ? rectOf(above) : null;
+    if (cover) shown = clearOf(shown, cover);
+  }
+  return shown;
+}
+
 function all(root: ParentNode, selector: string): Rect | null {
   return rectAround(root.querySelectorAll(selector));
 }
@@ -202,7 +235,7 @@ export function resolveAnchor(context: AnchorContext, anchor: string, onCards = 
     case 'card': {
       if (rest[1] !== undefined) return cardPart(context, name, rest[1].toLowerCase());
       const cardId = context.cards[name];
-      return cardId === undefined ? null : rectOf(cardElement(context.root, cardId));
+      return cardId === undefined ? null : cardRect(cardElement(context.root, cardId));
     }
     case 'zone': {
       const row = context.root.querySelector(`.gd-game__row[data-row="${ROWS[name.toLowerCase()] ?? ''}"]`);

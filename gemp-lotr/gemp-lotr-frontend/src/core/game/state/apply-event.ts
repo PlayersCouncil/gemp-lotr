@@ -260,7 +260,11 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'D':
       return {
         ...next,
-        decision: { decision: event.decision, arrivedAt: model.eventCount },
+        // (its text can name the opponent: "Hand of ...")
+        decision: {
+          decision: { ...event.decision, text: renameOpponent(model.scenario, event.decision.text) },
+          arrivedAt: model.eventCount,
+        },
         local: NO_CHOICES,
         alertAsked: model.alertAsked || ALERT_DECISIONS.includes(event.decision.type),
       };

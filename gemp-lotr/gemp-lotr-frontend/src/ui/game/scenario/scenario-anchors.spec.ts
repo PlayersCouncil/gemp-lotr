@@ -1,4 +1,4 @@
-import { AnchorContext, cardElement, rectAround, rectOf, resolveAnchor } from './scenario-anchors';
+import { AnchorContext, cardElement, cardRect, rectAround, rectOf, resolveAnchor } from './scenario-anchors';
 
 /**
  * A piece of the game page by its DOM contract, each element on the screen where its `data-box` says
@@ -85,6 +85,30 @@ describe('scenario anchors', () => {
   afterEach(() => {
     root.remove();
     vi.restoreAllMocks();
+  });
+
+  it('takes a card lying under another to be the part of it that shows', () => {
+    const stack = document.createElement('div');
+    // A sword attached to a companion peeks out on its left; a card wholly under another; one clear of it
+    stack.innerHTML = `
+      <button data-card-id="61" data-under="attached" data-box="100,100,100,140"></button>
+      <button data-card-id="62" data-under="stacked" data-box="130,110,90,100"></button>
+      <button data-card-id="63" data-under="attached" data-box="300,100,50,50"></button>
+      <span data-box="0,0,500,500"></span>
+      <button data-card-id="60" data-box="120,100,100,140"></button>`;
+    root.appendChild(stack);
+    const card = (id: string) => stack.querySelector(`[data-card-id="${id}"]`);
+    // The strip left of what lies over it (the widest part clear of both cards above)
+    expect(cardRect(card('61'))).toEqual(box(100, 100, 20, 140));
+    // Nothing of it shows: where it is
+    expect(cardRect(card('62'))).toEqual(box(130, 110, 90, 100));
+    // Nothing lies over it
+    expect(cardRect(card('63'))).toEqual(box(300, 100, 50, 50));
+    // A card that lies under nothing is itself, whatever comes after it
+    expect(cardRect(card('60'))).toEqual(box(120, 100, 100, 140));
+    expect(cardRect(null)).toBeNull();
+    // An anchor on the card means the same
+    expect(at('card:sword', false, { cards: { sword: '61' } })).toEqual(box(100, 100, 20, 140));
   });
 
   it('measures an element on the screen, and none that takes no room', () => {

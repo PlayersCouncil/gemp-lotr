@@ -29,7 +29,7 @@ import { cardShape, layoutZoom, ZoomLayout } from '../../../core/game/scenario/z
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/pointer-drag.directive';
 import { CardHintsDirective } from '../table/card-hints.directive';
-import { AnchorContext, cardElement, rectAround, rectOf, resolveAnchor } from './scenario-anchors';
+import { AnchorContext, cardElement, cardRect, rectAround, rectOf, resolveAnchor } from './scenario-anchors';
 import { ScenarioRoom } from '../../../core/game/scenario/scenario-room';
 
 /** An outline round something on the page: what a message is about, or (`next`) what is to be clicked next. */
@@ -339,8 +339,12 @@ export class ScenarioLayerComponent {
     const frame = () => {
       this.frameRequest = null;
       if (!this.showing()) return;
-      this.measure();
-      this.frameRequest = view.requestAnimationFrame(frame);
+      // (whatever a frame trips over, the next one measures again: the page moves on)
+      try {
+        this.measure();
+      } finally {
+        this.frameRequest = view.requestAnimationFrame(frame);
+      }
     };
     this.frameRequest = view.requestAnimationFrame(frame);
   }
@@ -424,6 +428,9 @@ export class ScenarioLayerComponent {
         // something the player has just asked to see (a bubble about something in a dialog sits over part of it)
         const buttons = rectAround(this.document.querySelectorAll('gd-game-alert button[data-decision-button]'));
         if (buttons) keepClear.push(buttons);
+        // The scenario's own menu, and the theme button beside it in the table's corner
+        const corner = rectAround(this.document.querySelectorAll('.gd-scenario-menu, .gd-game__theme'));
+        if (corner) keepClear.push(corner);
         for (const dialog of this.document.querySelectorAll('dialog.gd-dialog[open], dialog.gd-card-info[open]')) {
           const rect = rectOf(dialog);
           if (rect && (!anchor || overlap(anchor, rect) === 0)) keepClear.push(rect);
@@ -479,7 +486,7 @@ export class ScenarioLayerComponent {
       elements.push(...this.document.querySelectorAll(`button[data-decision-choice="${option}"]`));
     }
     return elements.flatMap((element) => {
-      const rect = rectOf(element);
+      const rect = cardRect(element);
       return rect ? [rect] : [];
     });
   }
@@ -497,7 +504,7 @@ export class ScenarioLayerComponent {
           : hint.option !== null
             ? context.root.querySelector(`button[data-decision-choice="${hint.option}"]`)
             : null;
-    const at = rectOf(clicked);
+    const at = cardRect(clicked);
     const width = box.offsetWidth;
     const height = box.offsetHeight;
     let left = at ? at.left + at.width / 2 - width / 2 : viewWidth / 2 - width / 2;
@@ -515,7 +522,13 @@ export class ScenarioLayerComponent {
     const box = bubble.getBoundingClientRect();
     const dx = event.clientX - box.left;
     const dy = event.clientY - box.top;
-    const move = (moved: PointerEvent) => this.moved.set({ left: moved.clientX - dx, top: moved.clientY - dy });
+    // (it stays on the screen, where it can be taken hold of again)
+    const page = this.document.documentElement;
+    const move = (moved: PointerEvent) =>
+      this.moved.set({
+        left: Math.max(0, Math.min(moved.clientX - dx, page.clientWidth - box.width)),
+        top: Math.max(0, Math.min(moved.clientY - dy, page.clientHeight - box.height)),
+      });
     return { move, end: move };
   };
 

@@ -386,76 +386,10 @@
   box-shadow: 0 0 14px 3px var(--theme-game-scenario-outline);
 }
 
-/* ---- the buttons of everything a scenario draws ---- */
-
-.gd-scenario-button {
-  padding: 5px 16px;
-  border: 1px solid var(--theme-game-scenario-border);
-  border-radius: 6px;
-  background: var(--theme-game-scenario-button-bg);
-  color: var(--theme-game-scenario-text);
-  font: inherit;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.gd-scenario-button[data-main] {
-  background: var(--theme-game-scenario-main-bg);
-  color: var(--theme-game-scenario-main-text);
-  font-weight: bold;
-}
-
-.gd-scenario-button:hover {
-  filter: brightness(1.12);
-}
-
-.gd-scenario-button:disabled {
-  opacity: 0.55;
-  cursor: default;
-}
-
 /* ---- on the table ---- */
 
 /* A card the game would let the player choose, but which the step isn't using: still framed as a legal choice, only
    quieter. Clicking it says why. */
 gemp-game .gd-card[data-scenario='notnow'] {
   --gd-card-frame-style: dashed;
-}
-
-/* ---- what an ending says (the panel's words are the server's, as the bubble's are) ---- */
-
-.gd-scenario-panel__body p {
-  margin: 0 0 8px;
-}
-
-.gd-scenario-panel__body p:last-child {
-  margin-bottom: 0;
-}
-
-.gd-scenario-panel__body h3 {
-  margin: 10px 0 4px;
-  color: var(--theme-game-scenario-heading);
-  font-size: 16px;
-}
-
-.gd-scenario-panel__body strong {
-  color: var(--theme-game-scenario-strong);
-}
-
-.gd-scenario-panel__body .cardHint {
-  border-bottom: 1px dotted var(--theme-game-scenario-link);
-  color: var(--theme-game-scenario-link);
-  cursor: pointer;
-}
-
-.gd-scenario-panel__body img {
-  display: inline;
-  width: auto;
-  height: 1.15em;
-  margin: 0 0.1em;
-  vertical-align: -0.22em;
-}
-
-.gd-scenario-panel__body img[src*='/twilight_'] {
-  filter: invert(1);
 }

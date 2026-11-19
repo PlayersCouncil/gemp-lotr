@@ -250,9 +250,15 @@ describe('applyEvent', () => {
       { type: 'S', scenario: null },
       { type: 'M', message: '~Scenario plays an orc' },
       { type: 'W', message: '~Scenario is waiting' },
+      // (a decision's text can name the opponent too)
+      {
+        type: 'D',
+        decision: { id: '1', participantId: 'asdf', type: 'ARBITRARY_CARDS', text: 'Hand of ~Scenario', params: {} },
+      },
     );
     expect(model.scenario).toEqual({ info, step: null, shown: 0, notice: null, end: null });
-    expect(model.eventCount).toBe(4);
+    expect(model.eventCount).toBe(5);
+    expect(model.decision?.decision.text).toBe('Hand of Basic Shadow');
     expect(model.messages).toEqual([
       { kind: 'message', text: 'Basic Shadow plays an orc' },
       { kind: 'warning', text: 'Basic Shadow is waiting' },
