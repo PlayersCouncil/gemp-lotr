@@ -98,24 +98,27 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
             <div class="gd-phone-pair" [attr.data-pair]="pair.kind" [attr.data-reversed]="shadowSide() ? '' : null">
               <gd-phone-cards [cards]="pair.minions" empty="" [layered]="true" />
               @if (pair.kind === 'skirmish') {
-                <span
-                  class="gd-phone-strength"
-                  data-side="shadow"
-                  [attr.data-overwhelmed]="shadowOverwhelmed() ? '' : null"
-                  >{{ shown()?.shadowStrength ?? '–' }}
-                  @if (bonus(shown()?.shadowDamageBonus); as b) {
-                    <small>{{ b }}</small>
-                  }
-                </span>
-                <span class="gd-phone-pair__vs">vs</span>
-                <span
-                  class="gd-phone-strength"
-                  data-side="free-peoples"
-                  [attr.data-overwhelmed]="overwhelmed() ? '' : null"
-                  >{{ shown()?.fellowshipStrength ?? '–' }}
-                  @if (bonus(shown()?.fellowshipDamageBonus); as b) {
-                    <small>{{ b }}</small>
-                  }
+                <!-- The strengths on one line between the sides: a shorter fight (the owner, 2026-11-19) -->
+                <span class="gd-phone-pair__score">
+                  <span
+                    class="gd-phone-strength"
+                    data-side="shadow"
+                    [attr.data-overwhelmed]="shadowOverwhelmed() ? '' : null"
+                    >{{ shown()?.shadowStrength ?? '–' }}
+                    @if (bonus(shown()?.shadowDamageBonus); as b) {
+                      <small>{{ b }}</small>
+                    }
+                  </span>
+                  <span class="gd-phone-pair__vs">vs</span>
+                  <span
+                    class="gd-phone-strength"
+                    data-side="free-peoples"
+                    [attr.data-overwhelmed]="overwhelmed() ? '' : null"
+                    >{{ shown()?.fellowshipStrength ?? '–' }}
+                    @if (bonus(shown()?.fellowshipDamageBonus); as b) {
+                      <small>{{ b }}</small>
+                    }
+                  </span>
                 </span>
               } @else {
                 <span class="gd-phone-pair__vs">vs</span>
@@ -257,6 +260,22 @@ export class PhoneTableComponent {
       },
     });
 
+    // New fights (assignments made, a skirmish begun) brought into view once, at the table's top; not the first seen
+    // (after a reload the table is where the player left it), nor while replaying (the owner, 2026-11-19)
+    let lastFights: string | undefined;
+    effect(() => {
+      const fights = this.phone()
+        .pairs.map((pair) => `${pair.kind}:${pair.key}`)
+        .join(',');
+      untracked(() => {
+        const first = lastFights === undefined;
+        const changed = fights !== lastFights;
+        lastFights = fights;
+        if (first || !changed || fights === '' || this.session.replaying()) return;
+        afterNextRender({ write: () => this.showFights() }, { injector });
+      });
+    });
+
     // A new turn folds the cards not active in it again (the first turn seen, after a reload too, keeps them)
     let lastTurn: string | null = null;
     effect(() => {
@@ -317,6 +336,12 @@ export class PhoneTableComponent {
   protected keepScroll(): void {
     const top = Math.round(this.host.scrollTop);
     this.viewState.phone.update((phone) => (phone.tableTop === top ? phone : { ...phone, tableTop: top }));
+  }
+
+  /** The fights at the table's top (or as near as the table scrolls). */
+  private showFights(): void {
+    const fights = this.host.querySelector<HTMLElement>('.gd-phone-zone[data-zone="pairs"]');
+    if (fights) this.host.scrollTop = Math.max(0, fights.offsetTop - 4);
   }
 
   /** The first offered card's row in view (below the path, unless the path holds it), and the card in its row. */

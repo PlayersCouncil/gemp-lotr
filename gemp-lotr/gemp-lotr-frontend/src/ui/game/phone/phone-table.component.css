@@ -386,8 +386,23 @@
   flex-direction: column-reverse;
 }
 
-/* The strengths and "vs" under the middle of a card */
-.gd-phone-pair > .gd-phone-strength,
+/* The strengths and "vs" in one line under the middle of a card (an assignment's "vs" alone) */
+.gd-phone-pair__score {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.gd-phone-pair[data-reversed] > .gd-phone-pair__score {
+  flex-direction: row-reverse;
+}
+
+.gd-phone-pair > .gd-phone-pair__score {
+  align-self: flex-start;
+  padding-left: 2px;
+}
+
+/* An assignment's "vs" under the middle of a card */
 .gd-phone-pair > .gd-phone-pair__vs {
   align-self: flex-start;
   margin-left: calc(var(--gd-phone-card, 100px) * 350 / 490 / 2 + 2px);
