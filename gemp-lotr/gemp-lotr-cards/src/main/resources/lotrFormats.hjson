@@ -4,7 +4,7 @@
 		code: debug
 		sites: MULTIPATH
 		maximumSameName: 100
-		minDeckSize: 1
+		minimumDeckSize: 1
 		blocks: [
 			fotr_block
 		]

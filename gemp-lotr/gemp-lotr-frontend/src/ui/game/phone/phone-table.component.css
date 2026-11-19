@@ -1,0 +1,430 @@
+/* The phone layout's table: scrolled up and down, the path first, a row per kind of card (G7) */
+
+:host {
+  position: relative;
+  display: block;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+:host::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-phone-zone {
+  padding: 6px 0 4px;
+}
+
+/* Between rows: a fine gold line with curled ends (the owner's pick, 2026-11-17) */
+.gd-phone-zone + .gd-phone-zone::before {
+  content: '';
+  display: block;
+  height: 10px;
+  margin: -6px 10px 2px;
+  background:
+    var(--theme-game-phone-curl-left-small) left center no-repeat,
+    var(--theme-game-phone-curl-right-small) right center no-repeat,
+    linear-gradient(var(--theme-game-phone-rule), var(--theme-game-phone-rule)) center / calc(100% - 56px) 1px no-repeat;
+}
+
+.gd-phone-zone[data-side='fight'] {
+  background: color-mix(in srgb, var(--theme-game-fight-border) 8%, transparent);
+}
+
+.gd-phone-zone[data-zone='path'] {
+  background: var(--theme-game-phone-path-bg);
+}
+
+/* A row's title: small capitals, a diamond in its side's colour (theirs, the minions, yours, a fight) */
+.gd-phone-zone__label {
+  margin: 0 12px 2px;
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-zone__label::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--gd-phone-side, var(--theme-game-phone-accent));
+}
+
+.gd-phone-zone[data-side='them'] {
+  --gd-phone-side: var(--theme-game-phone-them);
+}
+
+.gd-phone-zone[data-side='mine'] {
+  --gd-phone-side: var(--theme-game-phone-mine);
+}
+
+.gd-phone-zone[data-side='minions'] {
+  --gd-phone-side: var(--theme-game-phone-minions);
+}
+
+.gd-phone-zone[data-side='fight'] {
+  --gd-phone-side: var(--theme-game-fight-border);
+}
+
+.gd-phone-zone__count {
+  min-width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  display: inline-grid;
+  place-items: center;
+  /* A gold ring */
+  border: 1px solid var(--theme-game-phone-ring);
+  box-shadow:
+    inset 0 0 0 1px var(--theme-page-bg),
+    inset 0 0 0 2px var(--theme-game-phone-frame-inner);
+  border-radius: 9px;
+  color: var(--theme-text);
+  font-family: var(--theme-game-phone-font-text);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.gd-phone-zone__none {
+  font-family: var(--theme-game-phone-font-text);
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--theme-game-phone-dim);
+}
+
+/* The battle line: the minions between the two sides, their title between flourished gold rules (no row lines) */
+.gd-phone-zone[data-side='minions']::before,
+.gd-phone-zone[data-side='minions'] + .gd-phone-zone::before {
+  visibility: hidden;
+}
+
+.gd-phone-zone[data-side='minions'] > .gd-phone-zone__label {
+  justify-content: center;
+  color: var(--theme-game-phone-minions);
+  letter-spacing: 0.14em;
+}
+
+.gd-phone-zone[data-side='minions'] > .gd-phone-zone__label::after {
+  content: '';
+  order: -2;
+  flex: 1;
+  height: 14px;
+  background:
+    var(--theme-game-phone-curl-left) left center / 46px 14px no-repeat,
+    linear-gradient(var(--theme-game-phone-ring), var(--theme-game-phone-ring)) right center / calc(100% - 44px) 1px
+      no-repeat;
+}
+
+.gd-phone-zone[data-side='minions'] > .gd-phone-zone__label::before {
+  order: -1;
+}
+
+/* Sideways the hand covers the table's right half: the title starts on the left, its rule after it */
+:host-context([data-device='sideways']) .gd-phone-zone[data-side='minions'] > .gd-phone-zone__label {
+  justify-content: flex-start;
+}
+
+:host-context([data-device='sideways']) .gd-phone-zone[data-side='minions'] > .gd-phone-zone__label::after {
+  display: none;
+}
+
+.gd-phone-zone__rule {
+  display: none;
+}
+
+/*
+ * The opponent's cards not active this turn, shown or hidden from the title line: one line for the row while they are
+ * hidden (the owner, 2026-11-18). A small pill next to the row's count (sideways, the line's end lies under the hand),
+ * tall enough for a finger
+ */
+.gd-phone-zone__fold {
+  flex: none;
+  min-height: 28px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 99px;
+  padding: 0 12px;
+  font: inherit;
+  font-family: var(--theme-game-phone-font-text);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  background: none;
+  color: var(--theme-game-phone-muted);
+  cursor: pointer;
+}
+
+.gd-phone-zone[data-side='minions'] .gd-phone-zone__rule {
+  display: block;
+  flex: 1;
+  height: 14px;
+  background:
+    var(--theme-game-phone-curl-right) right center / 46px 14px no-repeat,
+    linear-gradient(var(--theme-game-phone-ring), var(--theme-game-phone-ring)) left center / calc(100% - 44px) 1px
+      no-repeat;
+}
+
+/* The adventure path: site cards lying down, empty places as their number, the players' markers */
+.gd-phone-path {
+  /* The small sites (all but the player's own): half as high as the big one */
+  --gd-phone-site: calc(var(--gd-phone-card, 100px) * 0.36);
+  position: relative;
+  display: flex;
+  /* The small sites level with the big one's middle */
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 4px 10px 4px 12px;
+  scrollbar-width: none;
+}
+
+.gd-phone-path::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-phone-site {
+  position: relative;
+  flex: none;
+}
+
+.gd-phone-site > .gd-card {
+  /* A site lies on its side: as wide as this, 350/490 as high */
+  --gd-card-height: calc(var(--gd-phone-site) * 490 / 350);
+  touch-action: pan-x pan-y;
+}
+
+/*
+ * The site where the player looking stands: as big as a card in the rows, lying down (the owner, 2026-11-18); the
+ * others stay small on either side, and the road scrolls
+ */
+.gd-phone-site[data-own] > .gd-card {
+  --gd-card-height: var(--gd-phone-card, 100px);
+}
+
+.gd-phone-site[data-here] > .gd-card {
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 3px var(--theme-game-phone-accent);
+}
+
+/* A site the waiting decision offers, or one chosen for it: as the rows' cards (phone-cards) */
+.gd-phone-site > .gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-selected);
+}
+
+.gd-phone-site > .gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-selectable);
+  cursor: pointer;
+}
+
+.gd-phone-site > .gd-card[data-mark='actionable'] {
+  --gd-card-frame: var(--theme-game-actionable);
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px var(--theme-game-actionable);
+  cursor: pointer;
+}
+
+.gd-phone-site > .gd-card[data-mark='actionable'][data-no-effect] {
+  --gd-card-frame: var(--theme-game-no-effect);
+  --gd-card-frame-style: double;
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 3px var(--theme-game-no-effect),
+    0 0 0 4px var(--theme-page-bg),
+    0 0 0 5px var(--theme-game-no-effect);
+}
+
+.gd-phone-site[data-ahead] {
+  opacity: 0.75;
+}
+
+/* The places ahead: slim numbered slots, so the whole road usually fits (the owner, 2026-11-17) */
+.gd-phone-site__empty {
+  width: calc(var(--gd-phone-site) * 0.6);
+  height: var(--gd-phone-site);
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--theme-separator);
+  border-radius: 5px;
+  background: none;
+  color: var(--theme-game-phone-dim);
+  font: inherit;
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 13px;
+}
+
+/* On the site's left, where its own site number is printed: its right holds the Shadow number */
+.gd-phone-site__no {
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--theme-game-phone-on-dark);
+  text-shadow: 0 1px 1px var(--theme-game-phone-shade);
+  pointer-events: none;
+}
+
+.gd-phone-site__markers {
+  position: absolute;
+  left: 3px;
+  bottom: 3px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+}
+
+/* Where each player stands: their number on a heraldic shield, as in their chip */
+/* A small site has no room for both on its left: who stands there on its right */
+.gd-phone-site:not([data-own]) > .gd-phone-site__markers {
+  left: auto;
+  right: 3px;
+}
+
+.gd-phone-site__marker {
+  --gd-shield: var(--theme-game-phone-player-1);
+  position: relative;
+  isolation: isolate;
+  width: 16px;
+  height: 19px;
+  box-sizing: border-box;
+  padding-bottom: 3px;
+  display: grid;
+  place-items: center;
+  clip-path: path('M0 0H16V8C16 13.5 11.5 17 8 19C4.5 17 0 13.5 0 8Z');
+  background: var(--theme-game-phone-accent);
+  font-family: var(--theme-game-phone-font-text);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--theme-game-phone-on-dark);
+}
+
+.gd-phone-site__marker::before {
+  content: '';
+  position: absolute;
+  left: 1.5px;
+  top: 1.5px;
+  width: 13px;
+  height: 16px;
+  clip-path: path('M0 0H13V6.5C13 11 9.5 14 6.5 16C3.5 14 0 11 0 6.5Z');
+  background: var(--gd-shield);
+  z-index: -1;
+}
+
+.gd-phone-site__marker[data-no='2'] {
+  --gd-shield: var(--theme-game-phone-player-2);
+}
+
+/* The skirmish and the assignments: both sides of each fight */
+.gd-phone-pairs {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding: 6px 10px 3px 12px;
+  scrollbar-width: none;
+}
+
+.gd-phone-pairs::-webkit-scrollbar {
+  display: none;
+}
+
+/* A fight upright: the minions on top, the strengths between, the characters under them (the owner, 2026-11-18) */
+.gd-phone-pair {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  /* The cards in one line on the left: opened, the top minion stays above the companion (the owner, 2026-11-18) */
+  align-items: flex-start;
+  gap: 3px;
+  padding: 2px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 7px;
+  background: var(--theme-content-bg);
+}
+
+.gd-phone-pair[data-pair='assignment'] {
+  border-style: dashed;
+}
+
+.gd-phone-pair[data-pair='skirmish'] {
+  border: 2px solid var(--theme-game-fight-border);
+}
+
+/* The sides of a pair show all their cards: no scrolling inside a pair, the pairs' row scrolls */
+.gd-phone-pair > gd-phone-cards {
+  flex: none;
+}
+
+/* The Shadow player's view: the companions on top, the minions at the bottom near the player (the owner, 2026-11-18) */
+.gd-phone-pair[data-reversed] {
+  flex-direction: column-reverse;
+}
+
+/* The strengths and "vs" under the middle of a card */
+.gd-phone-pair > .gd-phone-strength,
+.gd-phone-pair > .gd-phone-pair__vs {
+  align-self: flex-start;
+  margin-left: calc(var(--gd-phone-card, 100px) * 350 / 490 / 2 + 2px);
+  transform: translateX(-50%);
+}
+
+.gd-phone-pair__vs {
+  color: var(--theme-game-phone-muted);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gd-phone-strength {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  line-height: 1;
+  font-size: 16px;
+  font-weight: 800;
+  background: var(--theme-default-bg);
+  border: 2px solid var(--theme-game-phone-accent);
+}
+
+.gd-phone-strength[data-side='shadow'] {
+  border-color: var(--theme-game-fight-border);
+}
+
+.gd-phone-strength[data-overwhelmed] {
+  color: var(--theme-game-fight-border);
+}
+
+.gd-phone-strength > small {
+  font-size: 9px;
+  color: var(--theme-warning);
+}

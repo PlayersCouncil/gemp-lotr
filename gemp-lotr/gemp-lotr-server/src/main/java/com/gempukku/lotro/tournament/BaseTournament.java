@@ -552,7 +552,7 @@ public abstract class BaseTournament implements Tournament {
                         }
 
                         String label = "Round " + i;
-                        String url = "https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=" +
+                        String url = "https://play.lotrtcgpc.net/gemp-lotr/ng/game?replayId=" +
                                 playerName.replace("_", "%5F") + "$" + replayId;
 
                         rounds.add(createEntry(label, url));
