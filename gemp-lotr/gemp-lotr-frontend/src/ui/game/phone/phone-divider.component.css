@@ -41,6 +41,29 @@
   border-top-color: var(--theme-game-phone-accent);
 }
 
+/*
+ * Waiting for the opponent: a quiet dark strip instead of the parchment, so the parchment means "your move" (the
+ * layout review, 2026-11-19)
+ */
+:host(:not([data-deciding])) {
+  --theme-text: var(--theme-game-phone-on-wait);
+  --theme-separator: var(--theme-game-phone-wait-line);
+  --theme-game-phone-muted: var(--theme-game-phone-on-wait);
+  --theme-game-phone-dim: var(--theme-game-phone-wait-line);
+  background: var(--theme-game-phone-wait-bg);
+  border-top-color: var(--theme-game-phone-wait-line);
+  box-shadow: none;
+}
+
+:host(:not([data-deciding])) .gd-phone-divider__text {
+  font-style: italic;
+}
+
+:host(:not([data-deciding])) .gd-phone-divider__clock {
+  background: var(--theme-game-phone-wait-line);
+  color: var(--theme-game-phone-on-wait);
+}
+
 .gd-phone-divider__question {
   display: flex;
   gap: 8px;
@@ -95,6 +118,12 @@
 }
 
 /* Pills: the answer outlined in ink, the main one (Pass, Done, OK) ink with gold letters */
+/* A button pressed shows it at once (the layout review, 2026-11-19) */
+.gd-phone-button:active {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
+
 .gd-phone-button {
   flex: 0 1 auto;
   min-height: 44px;
@@ -152,10 +181,37 @@
   font-size: 14px;
 }
 
-/* Sideways: the question beside its buttons */
+/* Sideways: the question beside its buttons, in the panel on the right; a smaller question, the timer under it */
 :host-context([data-device='sideways']) {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__question {
+  flex-direction: column;
+  gap: 2px;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__text {
+  font-size: 15px;
+}
+
+/* A low screen held sideways (a phone under its browser's bars): a tighter decision, more room for the hand */
+@media (max-height: 420px) {
+  :host-context([data-device='sideways']) {
+    gap: 4px;
+    padding: 8px 10px 6px;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-divider__text {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  :host-context([data-device='sideways']) .gd-phone-button {
+    min-height: 36px;
+    padding: 2px 12px;
+  }
 }
 
 :host-context([data-device='sideways']) .gd-phone-divider__buttons {

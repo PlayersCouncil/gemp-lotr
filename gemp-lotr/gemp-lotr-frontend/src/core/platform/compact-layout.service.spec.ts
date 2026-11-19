@@ -1,5 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { COMPACT_QUERY, CompactLayout, SIDE_BY_SIDE_QUERY } from './compact-layout.service';
+import {
+  COMPACT_QUERY,
+  CompactLayout,
+  SIDE_BY_SIDE_QUERY,
+  TALL_QUERY,
+  TOUCH_TABLET_QUERY,
+} from './compact-layout.service';
 import { PAGE_QUERY_STRING } from './page-location';
 import { ThemeService } from './theme.service';
 
@@ -74,5 +80,30 @@ describe('CompactLayout', () => {
     rotate(true);
     turn(false);
     expect(compact.sideBySide()).toBe(false);
+  });
+
+  it("gives a touch tablet held sideways the game's phone layout, and leaves the deck builder's alone", () => {
+    const queries = new Map<string, Query>([
+      [COMPACT_QUERY, { matches: false, onchange: null }],
+      [SIDE_BY_SIDE_QUERY, { matches: true, onchange: null }],
+      [TOUCH_TABLET_QUERY, { matches: true, onchange: null }],
+      [TALL_QUERY, { matches: true, onchange: null }],
+    ]);
+    Object.defineProperty(window, 'matchMedia', {
+      value: (media: string) => queries.get(media) ?? null,
+      configurable: true,
+      writable: true,
+    });
+    const compact = layout('modern');
+    // The deck builder: the computer layout, as before
+    expect(compact.active()).toBe(false);
+    expect(compact.device()).toBeNull();
+    // The game: its phone layout held sideways, with a tablet's cards
+    expect(compact.gameActive()).toBe(true);
+    expect(compact.gameDevice()).toBe('sideways');
+    expect(compact.tallSideways()).toBe(true);
+    // A mouse (no touch tablet): the computer layout for the game too
+    queries.get(TOUCH_TABLET_QUERY)!.onchange?.({ matches: false });
+    expect(compact.gameActive()).toBe(false);
   });
 });

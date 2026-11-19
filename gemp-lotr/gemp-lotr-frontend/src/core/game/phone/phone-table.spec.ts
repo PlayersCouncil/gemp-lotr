@@ -117,7 +117,7 @@ describe('phoneTable', () => {
     expect(path[2]?.ahead).toBe(true);
   });
 
-  it("shows the site of the player looking big, whoever's turn it is", () => {
+  it("marks the site where the turn's player stands, whoever looks", () => {
     const model = play(
       put('s1', { zone: 'ADVENTURE_PATH', index: 1, blueprintId: '1_319' }),
       put('s2', { zone: 'ADVENTURE_PATH', index: 2, blueprintId: '1_327' }),
@@ -126,9 +126,8 @@ describe('phoneTable', () => {
       { type: 'TC', participantId: 'bob', inactiveCardIds: [] },
     );
     const path = phone(model).path;
-    // Bob's turn at site 2; Alice looks, and her fellowship stands at site 1
-    expect(path.map((site) => site.own)).toEqual([true, false, false, false, false, false, false, false, false]);
-    expect(path[1]?.here).toBe(true);
+    // Bob's turn at site 2; Alice looks from site 1: the game happens at site 2
+    expect(path.map((site) => site.here)).toEqual([false, true, false, false, false, false, false, false, false]);
   });
 
   it('shows the skirmish first, then the assignments, as pairs; the minions fighting leave their row', () => {

@@ -13,12 +13,21 @@ export const PHONE_COOKIES = {
   /** "Your move" makes the phone buzz / plays a sound (default on, the owner 2026-11-16). */
   moveVibrate: 'gempGameMoveVibrate',
   moveSound: 'gempGameMoveSound',
+  /** How a deck or other cards to choose scroll in the hand's place: sideways (default) or down, in rows. */
+  choicesScroll: 'gempGameChoicesScroll',
 } as const;
+
+/**
+ * How cards offered from off the table (a deck, a pile) scroll in the hand's place (the owner, 2026-11-19): sideways
+ * in one row, or wrapped into rows scrolled down. The player's own hand always scrolls sideways.
+ */
+export type ChoicesScroll = 'sideways' | 'down';
 
 /** The hand's height at first, on each device (px); held sideways it is a panel in the right half, about half high. */
 export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, sideways: 150, tablet: 180 };
 /** The table's cards' height on each device at 100% (px): one readable size, never shrunk to fit (the owner). */
-export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, sideways: 80, tablet: 130 };
+// A tablet's 156 (was 130): its width was mostly empty (the layout review, 2026-11-19)
+export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, sideways: 80, tablet: 156 };
 export const CARD_SIZE_MIN = 70;
 export const CARD_SIZE_MAX = 150;
 /** The least height a shown hand keeps (px); dragged lower than HIDE_BELOW it hides. */
@@ -54,22 +63,30 @@ export class PhoneSettings {
   private readonly split = signal(parseSplit(this.cookies.read(PHONE_COOKIES.split)));
 
   /** The device the compact layout is on, or null outside it. */
-  readonly device = inject(CompactLayout).device;
+  readonly device = inject(CompactLayout).gameDevice;
+  private readonly tallSideways = inject(CompactLayout).tallSideways;
   /** The table's card size (%). */
   readonly cardSize = signal(clampSize(Number(this.cookies.read(PHONE_COOKIES.cardSize) ?? '100')));
   readonly moveVibrate = signal(this.cookies.read(PHONE_COOKIES.moveVibrate) !== 'false');
   readonly moveSound = signal(this.cookies.read(PHONE_COOKIES.moveSound) !== 'false');
+  readonly choicesScroll = signal<ChoicesScroll>(
+    this.cookies.read(PHONE_COOKIES.choicesScroll) === 'down' ? 'down' : 'sideways',
+  );
 
   /** The hand's height on this device (px), or "hidden". */
   readonly hand = computed<number | 'hidden'>(() => {
     const device = this.device() ?? 'phone';
-    return this.split()[device] ?? DEFAULT_HAND[device];
+    return this.split()[device] ?? this.defaultHand();
   });
   readonly handHidden = computed(() => this.hand() === 'hidden');
   /** The hand's height at first on this device (px). */
-  readonly defaultHand = computed(() => DEFAULT_HAND[this.device() ?? 'phone']);
+  readonly defaultHand = computed(() =>
+    this.tallSideways() ? DEFAULT_HAND.tablet : DEFAULT_HAND[this.device() ?? 'phone'],
+  );
   /** The table's cards' height (px). */
-  readonly cardHeight = computed(() => (CARD_HEIGHT[this.device() ?? 'phone'] * this.cardSize()) / 100);
+  readonly cardHeight = computed(
+    () => ((this.tallSideways() ? CARD_HEIGHT.tablet : CARD_HEIGHT[this.device() ?? 'phone']) * this.cardSize()) / 100,
+  );
 
   /** The divider dropped: the hand this high (px), or hidden. */
   setHand(height: number | 'hidden'): void {
@@ -81,7 +98,7 @@ export class PhoneSettings {
 
   /** The hand shown again at its last height (an offer of cards needs it). */
   showHand(): void {
-    if (this.handHidden()) this.setHand(DEFAULT_HAND[this.device() ?? 'phone']);
+    if (this.handHidden()) this.setHand(this.defaultHand());
   }
 
   setCardSize(percent: number): void {
@@ -92,6 +109,11 @@ export class PhoneSettings {
   setMoveVibrate(value: boolean): void {
     this.moveVibrate.set(value);
     this.cookies.write(PHONE_COOKIES.moveVibrate, String(value));
+  }
+
+  setChoicesScroll(value: ChoicesScroll): void {
+    this.choicesScroll.set(value);
+    this.cookies.write(PHONE_COOKIES.choicesScroll, value);
   }
 
   setMoveSound(value: boolean): void {

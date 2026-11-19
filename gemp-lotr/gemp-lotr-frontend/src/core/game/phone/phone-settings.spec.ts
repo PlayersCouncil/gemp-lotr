@@ -2,7 +2,7 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CompactLayout } from '../../platform/compact-layout.service';
 import { SettingCookies } from '../../platform/setting-cookies';
-import { formatSplit, parseSplit, PHONE_COOKIES, PhoneSettings } from './phone-settings';
+import { CARD_HEIGHT, DEFAULT_HAND, formatSplit, parseSplit, PHONE_COOKIES, PhoneSettings } from './phone-settings';
 
 describe('the divider places in gempGameSplit', () => {
   it('reads each device: a height or hidden, ignoring what it does not know', () => {
@@ -18,12 +18,13 @@ describe('the divider places in gempGameSplit', () => {
 describe('PhoneSettings', () => {
   let cookies: Record<string, string>;
   const device = signal<'phone' | 'sideways' | 'tablet' | null>('phone');
+  const tallSideways = signal(false);
 
   function create(): PhoneSettings {
     TestBed.configureTestingModule({
       providers: [
         PhoneSettings,
-        { provide: CompactLayout, useValue: { device } },
+        { provide: CompactLayout, useValue: { gameDevice: device, tallSideways } },
         {
           provide: SettingCookies,
           useValue: {
@@ -39,6 +40,7 @@ describe('PhoneSettings', () => {
   beforeEach(() => {
     cookies = {};
     device.set('phone');
+    tallSideways.set(false);
   });
 
   it("keeps the divider's place per device, the hand hidden too", () => {
@@ -59,7 +61,8 @@ describe('PhoneSettings', () => {
     const settings = create();
     expect(settings.cardHeight()).toBe(120);
     device.set('tablet');
-    expect(settings.cardHeight()).toBe(156);
+    // A tablet's cards at 100% are CARD_HEIGHT.tablet: 120% of them
+    expect(settings.cardHeight()).toBe(CARD_HEIGHT.tablet * 1.2);
     settings.setCardSize(400);
     expect(settings.cardSize()).toBe(150);
     expect(cookies[PHONE_COOKIES.cardSize]).toBe('150');
@@ -72,5 +75,29 @@ describe('PhoneSettings', () => {
     expect(settings.moveSound()).toBe(false);
     settings.setMoveVibrate(false);
     expect(cookies[PHONE_COOKIES.moveVibrate]).toBe('false');
+  });
+
+  it("gives a tablet held sideways a tablet's cards and hand, a phone sideways its own", () => {
+    device.set('sideways');
+    const settings = create();
+    expect(settings.cardHeight()).toBe(CARD_HEIGHT.sideways);
+    expect(settings.hand()).toBe(DEFAULT_HAND.sideways);
+    tallSideways.set(true);
+    expect(settings.cardHeight()).toBe(CARD_HEIGHT.tablet);
+    expect(settings.hand()).toBe(DEFAULT_HAND.tablet);
+  });
+
+  it('scrolls offered cards sideways unless the player chose rows scrolled down, kept in its cookie', () => {
+    expect(create().choicesScroll()).toBe('sideways');
+    TestBed.resetTestingModule();
+    cookies[PHONE_COOKIES.choicesScroll] = 'down';
+    const settings = create();
+    expect(settings.choicesScroll()).toBe('down');
+    settings.setChoicesScroll('sideways');
+    expect(settings.choicesScroll()).toBe('sideways');
+    expect(cookies[PHONE_COOKIES.choicesScroll]).toBe('sideways');
+    TestBed.resetTestingModule();
+    cookies[PHONE_COOKIES.choicesScroll] = 'diagonal';
+    expect(create().choicesScroll()).toBe('sideways');
   });
 });

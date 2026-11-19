@@ -199,7 +199,7 @@ export class GamePageComponent {
   protected readonly themePicker = inject(GAME_THEME_PICKER);
   private readonly themes = inject(ThemeService);
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
-  protected readonly phone = inject(CompactLayout).active;
+  protected readonly phone = inject(CompactLayout).gameActive;
   private readonly sheets = inject(GameSheets);
   private readonly document = inject(DOCUMENT);
   /**

@@ -15,7 +15,7 @@ import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { noEffectReason } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { chatLines, GameSheets } from '../../../core/game/phone/game-sheets';
-import { CARD_SIZE_MAX, CARD_SIZE_MIN, PhoneSettings } from '../../../core/game/phone/phone-settings';
+import { CARD_SIZE_MAX, CARD_SIZE_MIN, ChoicesScroll, PhoneSettings } from '../../../core/game/phone/phone-settings';
 import { PhoneCard } from '../../../core/game/phone/phone-table';
 import { Sheet } from '../../../core/game/phone/sheet';
 import { GameLog } from '../../../core/game/session/game-log';
@@ -223,6 +223,22 @@ const HALL = '/gemp-lotr/hall.html';
                       />
                       <span>Stacked cards upright<small>As the old look drew them.</small></span>
                     </label>
+                    <h3>A deck or other cards to choose, in the hand's place</h3>
+                    @for (choice of choicesScrollChoices; track choice.value) {
+                      <label class="gd-phone-toggle">
+                        <input
+                          type="radio"
+                          name="gd-phone-choices-scroll"
+                          data-setting="choicesScroll"
+                          [value]="choice.value"
+                          [checked]="phone.choicesScroll() === choice.value"
+                          (change)="phone.setChoicesScroll(choice.value)"
+                        />
+                        <span
+                          >{{ choice.label }}<small>{{ choice.note }}</small></span
+                        >
+                      </label>
+                    }
                     <h3>Under a card holding others</h3>
                     @for (choice of underChoices; track choice.value) {
                       <label class="gd-phone-toggle">
@@ -416,6 +432,11 @@ export class PhoneSheetsComponent {
   protected readonly sizeMin = CARD_SIZE_MIN;
   protected readonly sizeMax = CARD_SIZE_MAX;
   protected readonly phases = AUTO_PASS_PHASES;
+  /** How offered cards scroll in the hand's place (PhoneSettings.choicesScroll). */
+  protected readonly choicesScrollChoices: readonly { value: ChoicesScroll; label: string; note: string }[] = [
+    { value: 'sideways', label: 'Sideways', note: 'One row, swiped left and right, as your hand.' },
+    { value: 'down', label: 'Down, in rows', note: 'As many as fit in a row, the next ones below; swipe up and down.' },
+  ];
   /** The button under a card others lie under (GameSettings.underButton). */
   protected readonly underChoices: readonly { value: UnderButton; label: string; note: string }[] = [
     { value: 'button', label: 'A ▾ button', note: 'Opens the cards under it below it, big; ▴ puts them back.' },

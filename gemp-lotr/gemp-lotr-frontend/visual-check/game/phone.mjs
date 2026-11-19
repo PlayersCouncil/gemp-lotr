@@ -45,7 +45,7 @@ const { values: options } = parseArgs({
     tap: { type: 'string', multiple: true },
     // With --shots: one of the prepared states (STATES, e.g. underOffer) instead of the recordings' last steps
     state: { type: 'string' },
-    checks: { type: 'string', default: 'back,reload,touch,piles,animation,sites,fold,archery,stack' },
+    checks: { type: 'string', default: 'back,reload,touch,piles,animation,speed,sites,fold,archery,stack' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
     // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
@@ -220,6 +220,8 @@ function writeDiff(file, before, after) {
 const STATES = {
   /** The starting fellowship chosen from the deck: cards offered in the hand's place, the path, attached cards. */
   choices: { recording: 'effects-skirmish', count: 4 },
+  /** The same, with ten cards offered from off the table: rows when the player wants them scrolled down. */
+  manyChoices: { recording: 'effects-skirmish', count: 4, moreChoices: 8 },
   /** Minions assigned, the assignments as pairs; cards in every row. */
   assign: { recording: 'effects-skirmish', count: 14 },
   /** The skirmish being fought. */
@@ -311,7 +313,7 @@ function opponentCards(opponent) {
  */
 function recordingOf(state) {
   const base = recording(state.recording);
-  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer) return base;
+  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer && !state.moreChoices) return base;
   const publicDiscard = (body) =>
     state.discardPublic
       ? body
@@ -334,6 +336,16 @@ function recordingOf(state) {
       }
       if (i === last && state.lastEvents) {
         body = body.replace(/(<\/update>)/, `${state.lastEvents(opponent, base.participant)}$1`);
+      }
+      if (i === last && state.moreChoices) {
+        // More cards in a decision offering cards from off the table (cardId, blueprintId, selectable each)
+        const ids = Array.from({ length: state.moreChoices }, (_, n) => `x${n}`);
+        const params = [
+          ...ids.map((id) => `<parameter name="cardId" value="${id}"/>`),
+          ...ids.map(() => '<parameter name="blueprintId" value="1_7"/>'),
+          ...ids.map(() => '<parameter name="selectable" value="true"/>'),
+        ].join('');
+        body = body.replace(/(<ge\b[^>]*\btype="D"[^>]*>)/, `$1${params}`);
       }
       if (i === last && state.offer) {
         const params = state.offer.map((id) => `<parameter name="cardId" value="${id}"/>`).join('');
@@ -657,6 +669,57 @@ async function animationCheck(browser, devices) {
   }
   console.log(`animation: ${ok} of ${devices.length} devices show the opponent's cards whole`);
   return ok === devices.length;
+}
+
+/**
+ * How long the first card played is shown (ms) with the animation speed set to `speed` (the animation-speed cookie, as
+ * the settings write it), on a phone.
+ */
+async function playedFor(browser, speed) {
+  const state = STATES.late;
+  const shown = await openPhone(browser, 'phone', recordingOf(state), state.count, {
+    cookies: [['animation-speed', String(speed)]],
+  });
+  try {
+    await shown.page.evaluate(() => {
+      const seen = (window.__played = { from: null, to: null });
+      const frame = () => {
+        const image = document.querySelector('.gd-game-animation__card');
+        const visible =
+          image && image.getBoundingClientRect().width > 0 && Number(getComputedStyle(image).opacity) > 0.05;
+        if (visible && seen.from === null) seen.from = performance.now();
+        if (!visible && seen.from !== null && seen.to === null) seen.to = performance.now();
+        if (seen.to === null) requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    });
+    await shown.settle();
+    const { from, to } = await shown.page.evaluate(() => window.__played);
+    return from === null || to === null ? null : Math.round(to - from);
+  } finally {
+    await shown.close();
+  }
+}
+
+/**
+ * The animation speed setting (Settings › Display) on a phone: each step halves or doubles how long an animation
+ * lasts (2^-speed, as game.html), so speed -2 shows a played card 16 times as long as speed 2 (the owner, 2026-11-19:
+ * "animations play way too fast; does the setting do anything?").
+ */
+async function speedCheck(browser) {
+  const times = {};
+  for (const speed of [2, 0, -2]) times[speed] = await playedFor(browser, speed);
+  const problems = [];
+  if (Object.values(times).some((ms) => ms === null)) problems.push(`no played card shown: ${JSON.stringify(times)}`);
+  else {
+    if (!(times[0] > times[2] * 2.5))
+      problems.push(`speed 0 (${times[0]} ms) not slower than speed 2 (${times[2]} ms)`);
+    if (!(times[-2] > times[0] * 2.5))
+      problems.push(`speed -2 (${times[-2]} ms) not slower than speed 0 (${times[0]} ms)`);
+  }
+  console.log(`speed: a played card shown for ${times[2]} ms at speed 2, ${times[0]} ms at 0, ${times[-2]} ms at -2`);
+  if (problems.length) console.log(`  ✗ speed · phone: ${problems.join('; ')}`);
+  return problems.length === 0;
 }
 
 // --- Reload (D10) ---
@@ -990,51 +1053,63 @@ const TOUCH = [
     },
   },
   {
-    name: 'the divider is dragged up and kept per device',
+    // Held sideways, dragging only hides and shows the hand (the owner, 2026-11-19): the drag down is kept
+    name: 'the divider is dragged (upright up: a higher hand; sideways down: hidden) and kept per device',
     state: 'late',
     run: async (page, sent, device) => {
       const before = await page.locator('gd-phone-hand').boundingBox();
-      await dragDivider(page, -100);
-      const after = await page.locator('gd-phone-hand').boundingBox();
+      await dragDivider(page, device === 'sideways' ? 100 : -100);
       const cookies = await page.context().cookies();
       const split = decodeURIComponent(cookies.find((cookie) => cookie.name === 'gempGameSplit')?.value ?? '');
       const problems = [];
-      if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
-      if (!split.includes(`${device}:`)) problems.push(`cookie "${split}"`);
+      if (device === 'sideways') {
+        if (await page.locator('gd-phone-hand').count()) problems.push('dragged down, the hand is still shown');
+        if (!split.includes('sideways:hidden')) problems.push(`cookie "${split}"`);
+      } else {
+        const after = await page.locator('gd-phone-hand').boundingBox();
+        if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
+        if (!split.includes(`${device}:`)) problems.push(`cookie "${split}"`);
+      }
       return problems;
     },
   },
   {
-    name: "held sideways, the hand's grip slides it up as a panel in the right half, on the divider (hidden elsewhere)",
+    // The docked panel (the owner, 2026-11-19): nothing over the table; the grip hides the hand, the cards keep their size
+    name: 'held sideways, the decision and the hand are docked on the right beside the table; the grip hides the hand (hidden elsewhere)',
     state: 'late',
     run: async (page, sent, device) => {
       const grip = page.locator('[data-phone="hand-grip"]');
       if (device !== 'sideways') return (await grip.isVisible()) ? ['the grip shows'] : [];
-      const before = await page.locator('gd-phone-hand').boundingBox();
+      const width = page.viewportSize().width;
+      const table = await page.locator('gd-phone-table').boundingBox();
+      const divider = await page.locator('gd-phone-divider').boundingBox();
+      const hand = await page.locator('gd-phone-hand').boundingBox();
+      const card = await page.locator('gd-phone-hand .gd-card').first().boundingBox();
+      const problems = [];
+      if (table.x + table.width > divider.x + 1)
+        problems.push(`the table reaches ${table.x + table.width}, the panel starts at ${divider.x}`);
+      if (Math.abs(divider.x + divider.width - width) > 2 || Math.abs(hand.x - divider.x) > 2) {
+        problems.push(
+          `not docked on the right: the divider ${divider.x}–${divider.x + divider.width}, the hand at ${hand.x}`,
+        );
+      }
+      if (Math.abs(hand.y - (divider.y + divider.height)) > 2)
+        problems.push(`the hand starts at ${hand.y}, not under the decision`);
+      // Dragged up, nothing changes: the cards keep their size
       const box = await grip.boundingBox();
       const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
       await touchDrag(page, from, { x: from.x, y: from.y - 80 });
       await page.waitForTimeout(300);
-      const after = await page.locator('gd-phone-hand').boundingBox();
-      const width = page.viewportSize().width;
-      const problems = [];
-      if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
-      if (Math.abs(after.x - width / 2) > 2 || Math.abs(after.x + after.width - width) > 2) {
-        problems.push(`not the right half: ${after.x}–${after.x + after.width} of ${width}`);
-      }
-      // The divider in the right half too, the hand standing on it (the owner, 2026-11-17: it was in the left half)
-      const divider = await page.locator('gd-phone-divider').boundingBox();
-      if (Math.abs(divider.x - width / 2) > 2 || Math.abs(divider.x + divider.width - width) > 2) {
-        problems.push(`the divider in ${divider.x}–${divider.x + divider.width} of ${width}, not the right half`);
-      }
-      if (Math.abs(after.y + after.height - divider.y) > 2) {
-        problems.push(`the hand ends at ${after.y + after.height}, the divider starts at ${divider.y}`);
-      }
-      await touchDrag(page, { x: from.x, y: after.y + 8 }, { x: from.x, y: 2 });
+      const same = await page.locator('gd-phone-hand .gd-card').first().boundingBox();
+      if (Math.abs(same.height - card.height) > 1)
+        problems.push(`dragged up, the cards went from ${card.height} to ${same.height}`);
+      // Dragged down: hidden, the decision at the panel's bottom
+      await touchDrag(page, from, { x: from.x, y: from.y + 80 });
       await page.waitForTimeout(300);
-      const top = await page.locator('gd-phone-hand').boundingBox();
-      const status = await page.locator('gd-phone-status').boundingBox();
-      if (Math.abs(top.y - (status.y + status.height)) > 2) problems.push(`slid up to ${top.y}, not to the status bar`);
+      if (await page.locator('gd-phone-hand').count()) problems.push('dragged down, the hand is still shown');
+      const low = await page.locator('gd-phone-divider').boundingBox();
+      if (Math.abs(low.y + low.height - page.viewportSize().height) > 2)
+        problems.push(`hidden, the decision ends at ${low.y + low.height}`);
       return problems;
     },
   },
@@ -1354,6 +1429,7 @@ async function main() {
     await part('touch', () => touchCheck(browser, devices));
     await part('piles', () => pilesCheck(browser, devices));
     await part('animation', () => animationCheck(browser, devices));
+    await part('speed', () => speedCheck(browser));
     await part('sites', () => sitesCheck(browser, devices));
     await part('fold', () => foldCheck(browser, devices));
     await part('archery', () => archeryCheck(browser, devices));

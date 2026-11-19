@@ -40,18 +40,19 @@ gd-phone-hand {
 }
 
 /*
- * Held sideways: the table across the whole width and down to the bottom; the right half holds the divider at the
- * bottom and the hand a panel standing on it, as high as dragged (up to the status bar), over the table's right part.
- * Everything of the hand's is on the right, the hint to drag a hidden hand up too (the owner, 2026-11-17: on the phone
- * the divider in the left half looked like the hand on the left).
+ * Held sideways: two columns, nothing over anything (the owner, 2026-11-19). The table scrolls on the left, down to the
+ * bottom; on the right, a panel docked to the edge: the decision on top, the hand (or the cards offered in its place)
+ * under it in rows scrolled down, its cards one size (Settings › Display card size). Dragging the decision or the
+ * hand's grip down hides the hand, up shows it, as upright.
  */
 :host([data-device='sideways']) {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  --gd-phone-rail: clamp(250px, 40%, 460px);
+  grid-template-columns: minmax(0, 1fr) var(--gd-phone-rail);
+  grid-template-rows: auto auto minmax(0, 1fr);
   grid-template-areas:
     'top top'
-    'table table'
-    'table table';
+    'table divider'
+    'table hand';
 }
 
 :host([data-device='sideways']) > gd-phone-status {
@@ -63,22 +64,34 @@ gd-phone-hand {
 }
 
 :host([data-device='sideways']) > gd-phone-divider {
-  grid-column: 2;
-  grid-row: 3;
-  z-index: 5;
+  grid-area: divider;
   border-left: 1px solid var(--theme-separator);
 }
 
 :host([data-device='sideways']) > gd-phone-hand {
-  grid-column: 2;
-  grid-row: 2;
-  align-self: end;
-  z-index: 5;
-  max-height: 100%;
+  grid-area: hand;
+  height: auto;
+  min-height: 0;
   border-left: 1px solid var(--theme-separator);
-  border-top: 1px solid var(--theme-separator);
-  border-radius: 12px 0 0 0;
-  box-shadow: 0 -4px 14px var(--theme-game-phone-shade);
+}
+
+/*
+ * The hand hidden (the divider dragged down): the decision at the bottom of the panel, the table keeping its width (the
+ * owner, 2026-11-19); the panel's empty top on the hand's background
+ */
+:host([data-device='sideways'][data-hand-hidden]) {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'top top'
+    'table hand'
+    'table divider';
+}
+
+:host([data-device='sideways'][data-hand-hidden])::after {
+  content: '';
+  grid-area: hand;
+  border-left: 1px solid var(--theme-separator);
+  background: var(--theme-game-phone-hand-bg);
 }
 
 /* Before the game: the pre-game information in the table's place, scrolled up and down */

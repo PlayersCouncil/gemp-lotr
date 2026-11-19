@@ -4,6 +4,7 @@ import { offeredUnder, offTableChoices } from '../../../core/game/phone/hand-pla
 import { PhoneCard, phoneTable } from '../../../core/game/phone/phone-table';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
+import { PhoneSettings } from '../../../core/game/phone/phone-settings';
 import { GameTableState } from '../../../core/game/table/game-table.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
@@ -17,7 +18,8 @@ import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/po
  * attached to it) come first, smaller than its own, each
  * group after a small copy of the card they lie under.
  *
- * DOM contract: `gd-phone-hand` (`data-place`: hand, choices) holding `.gd-phone-hand__grip` (`data-phone=hand-grip`,
+ * DOM contract: `gd-phone-hand` (`data-place`: hand, choices; `data-scroll=down` when offered cards wrap into rows
+ * scrolled down, the player's setting) holding `.gd-phone-hand__grip` (`data-phone=hand-grip`,
  * shown sideways), `.gd-phone-hand__head` with the label
  * (`.gd-phone-hand__label`), `button[data-phone=close-choices]` (✕) or `button[data-phone=show-choices]`, then the
  * cards (`gd-phone-cards` with `data-row` hand or choices).
@@ -26,7 +28,11 @@ import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/po
   selector: 'gd-phone-hand',
   styleUrl: './phone-hand.component.css',
   imports: [PhoneCardsComponent, CardHintsDirective, PointerDragDirective],
-  host: { '[attr.data-place]': "showing() ? 'choices' : 'hand'" },
+  host: {
+    '[attr.data-place]': "showing() ? 'choices' : 'hand'",
+    // Offered cards in rows scrolled down, as the player chose (PhoneSettings.choicesScroll); the hand stays sideways
+    '[attr.data-scroll]': "showing() && phoneSettings.choicesScroll() === 'down' ? 'down' : null",
+  },
   template: `
     <!-- Held sideways the hand is a panel in the screen's right half: its grip slides it up and down -->
     <div
@@ -79,6 +85,7 @@ export class PhoneHandComponent {
   private readonly decisions = inject(GameDecisions);
   private readonly viewState = inject(GameViewState);
   private readonly table = inject(GameTableState).table;
+  protected readonly phoneSettings = inject(PhoneSettings);
 
   private readonly phone = computed(() => phoneTable(this.table(), this.session.model()));
   protected readonly hand = computed<readonly PhoneCard[]>(() => this.phone().hand);
