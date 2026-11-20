@@ -73,6 +73,8 @@ export interface ScenarioAuthorHooks {
   leaving(hash: string): boolean;
   /** A step has just been put on the screen, or put up again. */
   stepShown?(step: ScenarioStep): void;
+  /** What the draft is called now, as the panel has it (null: the scenario info's). */
+  readonly title?: Signal<string | null>;
 }
 
 /** Where the bubble of a message sits, tried on the screen before the change has been to the server and back. */
@@ -136,6 +138,8 @@ export class ScenarioGuide implements DecisionGate {
   private readonly author = signal<ScenarioAuthorHooks | null>(null);
   /** The author is picking something on the table: nothing on it answers the decision, and no key reads on. */
   readonly picking = computed(() => this.author()?.picking() ?? false);
+  /** What the scenario is called: a draft's as its author has just named it, else the scenario info's. */
+  readonly title = computed(() => this.author()?.title?.() ?? this.info()?.title ?? null);
   /** The author put this message up to look at (preview): the decision can be answered meanwhile. */
   private readonly previewing = signal<ScenarioMessage | null>(null);
   /** Where the author is trying the shown message's bubble (tryPlace): that message, and the place. */

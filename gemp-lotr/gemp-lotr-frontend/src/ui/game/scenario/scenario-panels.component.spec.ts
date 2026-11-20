@@ -54,6 +54,7 @@ describe('ScenarioPanelsComponent', () => {
     restart: ReturnType<typeof vi.fn>;
     startNext: ReturnType<typeof vi.fn>;
     backToHall: ReturnType<typeof vi.fn>;
+    title: () => string | null;
   };
   let hall: { elsewhere: ReturnType<typeof signal<string | null>>; openHere: ReturnType<typeof vi.fn> };
   const phone = signal(false);
@@ -82,6 +83,7 @@ describe('ScenarioPanelsComponent', () => {
       restart: vi.fn(),
       startNext: vi.fn(),
       backToHall: vi.fn(),
+      title: () => guide.info()?.title ?? null,
     };
     hall = { elsewhere: signal<string | null>(null), openHere: vi.fn() };
     TestBed.configureTestingModule({
