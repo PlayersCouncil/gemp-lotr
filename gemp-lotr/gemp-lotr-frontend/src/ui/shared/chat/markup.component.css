@@ -8,8 +8,31 @@
   display: contents;
 }
 
-.gd-markup__link {
+.gd-markup__link,
+.gd-markup__hall-link {
   color: var(--theme-hall-link);
+}
+
+/* A card's name reads as a link in the text (the legacy .cardHint) */
+.gd-markup__card {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--theme-hall-link);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* A culture icon sits in the line, as tall as its text */
+.gd-markup__image[data-icon] {
+  height: 1em;
+  vertical-align: middle;
+}
+
+.gd-markup__image:not([data-icon]) {
+  max-width: 100%;
 }
 
 .gd-markup__link:visited {

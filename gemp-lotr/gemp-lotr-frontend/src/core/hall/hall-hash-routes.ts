@@ -31,6 +31,7 @@ const ERRATA_KEYS = ['q', 'set', 'format', 'show'];
  * | `#patch-notes[/<slug>]`                           | `/info/patch-notes[/<slug>]`                   |
  * | `#account`, `#my-account`, `#account/<sub>`       | `/account`, `/account/<sub's path>`            |
  * | `#users`                                          | `/hall` (the tab is hidden)                    |
+ * | `#card-<id>`                                      | `/help?card=<id>` (the card, shown over Help)  |
  * | `#admin`, `#admin/<sub>`                          | page `LEGACY_HALL_URL#admin[/<sub>]`           |
  *
  * A sub-tab the tab doesn't have opens the tab (as the legacy router did). The sub-tabs' paths are in hall-tabs.ts
@@ -72,7 +73,8 @@ function namedRoute(fragment: string): HallAddress | undefined {
   }
   match = /^#patch-notes(?:\/([A-Za-z0-9_.-]+))?$/.exec(fragment);
   if (match) {
-    return { route: `/info/patch-notes${match[1] === undefined ? '' : `/${match[1]}`}` };
+    // GempPatchNotes.show: a note is named in lower case
+    return { route: `/info/patch-notes${match[1] === undefined ? '' : `/${match[1].toLowerCase()}`}` };
   }
   if (fragment === '#help/manual') {
     return { route: '/help/how-to-play#manual' };
@@ -84,6 +86,11 @@ function namedRoute(fragment: string): HallAddress | undefined {
   match = /^#tournament-([A-Za-z0-9_.-]+)$/.exec(fragment);
   if (match?.[1] !== undefined) {
     return { route: `/events/tournaments/${encodeURIComponent(match[1])}` };
+  }
+  match = /^#card-(\d{1,3}_\d{1,4})$/.exec(fragment);
+  if (match?.[1] !== undefined) {
+    // shareLinks.js CARD_HASH: the card shown over Help
+    return { route: `/help?card=${match[1]}` };
   }
   return undefined;
 }
