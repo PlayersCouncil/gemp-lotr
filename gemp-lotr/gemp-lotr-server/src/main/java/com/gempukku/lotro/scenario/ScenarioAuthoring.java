@@ -2074,9 +2074,48 @@ public class ScenarioAuthoring {
             case DRAW -> throw new AuthoringException("The starting board has no drawing: put the cards in the hand, or have a step draw them.");
             case BURDENS -> setup.burdens = Math.max(0, op.relative() ? setup.burdens + op.amount() : op.amount());
             case THREATS -> setup.threats = Math.max(0, op.relative() ? setup.threats + op.amount() : op.amount());
-            case TWILIGHT -> throw new AuthoringException("The starting board has no twilight pool to set: the first turn starts it at nothing.  "
-                    + "Set it on a step instead.");
+            case TWILIGHT -> setup.twilight = Math.max(0, op.relative() ? setup.twilight + op.amount() : op.amount());
+            case MARKER, CONTROL, LIBERATE -> putStartInSetup(def, op);
         }
+    }
+
+    /**
+     * A marker moved or a site's control changed, made part of where the story has got to when the game begins:
+     * setup.startAt.site (the Free Peoples seat's marker) and .opponentSite (the Shadow seat's), setup.controlled.
+     */
+    private static void putStartInSetup(ScenarioDefinition def, DoOp op) {
+        ScenarioDefinition.Setup setup = def.setup;
+        switch (op.kind()) {
+            case MARKER -> {
+                if (op.target().equals(Seat.FREEPS.key()))
+                    setup.site = op.amount();
+                else
+                    setup.opponentSite = op.amount();
+            }
+            case CONTROL -> {
+                String site = op.card() != null ? op.card() : String.valueOf(op.amount());
+                uncontrolled(def, site);
+                setup.controlled.computeIfAbsent(Seat.valueOf(op.target().toUpperCase(Locale.ROOT)), seat -> new ArrayList<>()).add(site);
+            }
+            case LIBERATE -> uncontrolled(def, op.card() != null ? op.card() : String.valueOf(op.amount()));
+            default -> { }
+        }
+    }
+
+    /** A site taken out of setup.controlled, however it is said there: by its number, or by the name of the site that is that number. */
+    private static void uncontrolled(ScenarioDefinition def, String site) {
+        Set<String> same = new HashSet<>(Set.of(site));
+        List<String> laid = new ArrayList<>(def.setup.path);
+        List<String> own = def.siteAliases.getOrDefault(Seat.FREEPS, List.of());
+        for (int at = laid.size(); at < own.size(); at++)
+            laid.add(own.get(at));
+        if (site.matches("\\d+") && Integer.parseInt(site) <= laid.size())
+            same.add(laid.get(Integer.parseInt(site) - 1));
+        if (laid.contains(site))
+            same.add(String.valueOf(laid.indexOf(site) + 1));
+        for (List<String> sites : def.setup.controlled.values())
+            sites.removeIf(same::contains);
+        def.setup.controlled.values().removeIf(List::isEmpty);
     }
 
     private static void takeOutOfSetup(ScenarioDefinition.Setup setup, String alias) {
@@ -2758,6 +2797,7 @@ public class ScenarioAuthoring {
             sitting.pending.forEach(op -> pending.add(op.source()));
             state.put("pending", pending);
             state.put("board", table.Arranged() ? describeBoard(sitting) : null);
+            state.put("start", describeStart(def));
             state.put("problems", live.Problems());
             return state;
         });
@@ -2819,7 +2859,82 @@ public class ScenarioAuthoring {
             sites.put(seat.key(), path);
         }
         board.put("sites", sites);
+        describeWhere(table, board);
         return board;
+    }
+
+    /**
+     * Where the game stands on the adventure path, for the Board tab: each seat's marker, the sites on the path (and
+     * whose each is, and who controls it), how many moves the fellowship has made this turn, and the skirmishes
+     * assigned.
+     */
+    private static void describeWhere(ScenarioTable table, Map<String, Object> board) {
+        Map<String, Object> markers = new LinkedHashMap<>();
+        for (Seat seat : Seat.values())
+            markers.put(seat.key(), table.gameState().getPlayerPosition(table.Player(seat)));
+        board.put("markers", markers);
+        board.put("currentSite", table.gameState().getCurrentSiteNumber());
+        board.put("moves", table.gameState().getMoveCount());
+        List<Map<String, Object>> path = new ArrayList<>();
+        for (int number = 1; number <= 9; number++) {
+            PhysicalCard site = table.gameState().getSite(number);
+            if (site == null)
+                continue;
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("number", number);
+            json.put("alias", table.AliasOf(site));
+            json.put("blueprintId", site.getBlueprintId());
+            json.put("name", GameUtils.getFullName(site));
+            json.put("owner", table.SeatOf(site.getOwner()).key());
+            json.put("controlledBy", site.getCardController() == null ? null : table.SeatOf(site.getCardController()).key());
+            path.add(json);
+        }
+        board.put("path", path);
+        Map<String, Object> skirmishes = new LinkedHashMap<>();
+        for (com.gempukku.lotro.game.state.Assignment assignment : table.gameState().getAssignments()) {
+            List<String> minions = new ArrayList<>();
+            for (PhysicalCard minion : assignment.getShadowCharacters())
+                minions.add(table.AliasOf(minion));
+            skirmishes.put(table.AliasOf(assignment.getFellowshipCharacter()), minions);
+        }
+        board.put("skirmishes", skirmishes);
+    }
+
+    /**
+     * Where the scenario's game begins, for the Setup's "where the story starts" part: the setup's start as it is
+     * (with its defaults filled in), and what the choices are.
+     */
+    private static Map<String, Object> describeStart(ScenarioDefinition def) {
+        ScenarioDefinition.Setup setup = def.setup;
+        Map<String, Object> start = new LinkedHashMap<>();
+        start.put("site", setup.site);
+        start.put("opponentSite", setup.opponentSite(def));
+        start.put("opponentSiteSet", setup.opponentSite != null);
+        start.put("phase", setup.phase.name().toLowerCase(Locale.ROOT));
+        start.put("turn", setup.turn);
+        start.put("twilight", setup.twilight);
+        start.put("moves", setup.moves());
+        start.put("movesSet", setup.moves != null);
+        //(whether the game is carried on from there, rather than begun: nothing already done happens again)
+        start.put("late", setup.lateStart());
+        start.put("skirmishes", new LinkedHashMap<>(setup.skirmishes));
+        Map<String, Object> controlled = new LinkedHashMap<>();
+        setup.controlled.forEach((seat, sites) -> controlled.put(seat.key(), new ArrayList<>(sites)));
+        start.put("controlled", controlled);
+        start.put("path", new ArrayList<>(setup.path));
+        start.put("markersTogether", def.markersTogether);
+        List<String> phases = new ArrayList<>();
+        for (com.gempukku.lotro.common.Phase phase : List.of(com.gempukku.lotro.common.Phase.FELLOWSHIP, com.gempukku.lotro.common.Phase.SHADOW,
+                com.gempukku.lotro.common.Phase.MANEUVER, com.gempukku.lotro.common.Phase.ARCHERY, com.gempukku.lotro.common.Phase.ASSIGNMENT,
+                com.gempukku.lotro.common.Phase.SKIRMISH, com.gempukku.lotro.common.Phase.REGROUP))
+            phases.add(phase.name().toLowerCase(Locale.ROOT));
+        start.put("phases", phases);
+        //(the furthest a marker can be put: as far as the longer of the seats' paths goes)
+        int longest = 0;
+        for (List<String> sites : def.sites.values())
+            longest = Math.max(longest, sites.size());
+        start.put("lastSite", Math.min(9, Math.max(longest, setup.path.size())));
+        return start;
     }
 
     private static String zoneOf(PhysicalCard card) {

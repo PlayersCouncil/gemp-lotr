@@ -95,6 +95,12 @@ public final class ScenarioDefinition {
     public final Map<Seat, String> rules = new EnumMap<>(Seat.class);
     /** The Free Peoples seat takes every turn; the Shadow seat never gets a turn of its own. */
     public boolean oneSided = false;
+    /**
+     * In a one-sided game (rules.markers: together): the Shadow seat's marker, which never moves of itself there,
+     * keeps level with the fellowship's, so that the sites behind them both can be controlled.  False: it stays
+     * where it is put (site 1, setup.startAt.opponentSite, or do: marker(...)), as it always has.
+     */
+    public boolean markersTogether = false;
 
     public final Setup setup = new Setup();
     public final List<RngEntry> rng = new ArrayList<>();
@@ -133,6 +139,56 @@ public final class ScenarioDefinition {
         public final Map<String, Integer> tokens = new LinkedHashMap<>();
         public int burdens = 0;
         public int threats = 0;
+
+        /*
+         * Where the story has got to when the game begins (setup.startAt, and setup.twilight).  A game that begins
+         * anywhere but the start of turn 1 at site 1 is carried on from there, not begun: see lateStart.
+         */
+        /** The site the fellowship whose turn it is (the Free Peoples seat's) is at. */
+        public int site = 1;
+        /** The Shadow seat's marker; null for the default (see opponentSite(def)). */
+        public Integer opponentSite;
+        /** What is in the twilight pool when play begins. */
+        public int twilight = 0;
+        /** How many times the fellowship has moved this turn already; null for the default (see moves()). */
+        public Integer moves;
+        /** Free Peoples character -> the minions it is assigned to skirmish, for a start at the assignments or skirmishes. */
+        public final Map<String, List<String>> skirmishes = new LinkedHashMap<>();
+        /** The sites each seat controls when the game begins: site numbers or sites' names, as written. */
+        public final Map<Seat, List<String>> controlled = new EnumMap<>(Seat.class);
+        /**
+         * The sites on the adventure path when the game begins, by name, site 1 first, where it matters whose they are
+         * (a card that cares who played a site).  Empty, and past its end: the Free Peoples seat's own sites.
+         */
+        public final List<String> path = new ArrayList<>();
+
+        /** Where the Shadow seat's marker is when the game begins. */
+        public int opponentSite(ScenarioDefinition def) {
+            if (opponentSite != null)
+                return opponentSite;
+            return def.oneSided && def.markersTogether ? site : 1;
+        }
+
+        /** How many moves the fellowship has made this turn when the game begins. */
+        public int moves() {
+            return moves != null ? moves : defaultMoves();
+        }
+
+        /** One move (to the site it is at) once the Fellowship phase is over; none before. */
+        public int defaultMoves() {
+            return phase == Phase.FELLOWSHIP ? 0 : 1;
+        }
+
+        /**
+         * Whether the game begins further on than the very start: on a later turn or site, past the start of the
+         * Fellowship phase, with twilight in the pool or skirmishes assigned.  Such a game is carried on from where it
+         * is (ScenarioTable.carryOn), and nothing the story has already been through happens again: no start of turn
+         * (so no sanctuary healing), no moving to the site the fellowship is at.
+         */
+        public boolean lateStart() {
+            return turn != 1 || phase != Phase.FELLOWSHIP || site != 1 || twilight != 0 || moves() != defaultMoves()
+                    || !skirmishes.isEmpty();
+        }
     }
 
     public enum RngKind { SHUFFLE, PICK }
@@ -241,7 +297,13 @@ public final class ScenarioDefinition {
      */
     public record Order(When when, List<Answer> answers, String source) { }
 
-    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW, ORDER }
+    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW, ORDER,
+        /** A seat's marker put on a site: target the seat, amount the site's number. */
+        MARKER,
+        /** A site controlled by a seat: card the site's name (or null), amount its number (or 0), target the seat. */
+        CONTROL,
+        /** A controlled site controlled by nobody again: card the site's name (or null), amount its number (or 0). */
+        LIBERATE }
 
     /**
      * Something the director does to the board directly.

@@ -1937,6 +1937,15 @@ public class GameState {
         }
     }
 
+    /**
+     * Begins a turn with the turn counter at the given number rather than at the next one.  For a game that begins
+     * part of the way through its story (see MidTurnStartGameProcess): its first turn is whichever turn it says.
+     */
+    public void startNumberedPlayerTurn(String playerId, int number) {
+        turnNumber = number - 1;
+        startPlayerTurn(playerId, true);
+    }
+
     public Set<PhysicalCard> getInactiveCards() {
         return Stream.concat(_inPlay.stream(), _stacked.values().stream().flatMap(Collection::stream))
                 .filter(x -> !isCardInPlayActive(x, false, false, false, true))

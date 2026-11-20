@@ -106,4 +106,46 @@ public class AliasRenameTest {
         assertEquals("Passing is not a card", "play(hand), option(play the hand), choose(ring, hand), assign(frodo: hand + ring)?, pass", step.getString("allow", null));
         assertEquals("ring, hand, servant", root.get("setup").asObject().get("freeps").asObject().getString("hand", null));
     }
+
+    @Test
+    public void whereTheStoryHasGotToNamesItsCardsAndSitesToo() {
+        JsonObject root = JsonValue.readHjson("""
+                {
+                	sites: {
+                		freeps: {
+                			bagEnd: 1_323
+                			shire: 1_331
+                		}
+                	}
+                	setup: {
+                		startAt: {
+                			site: 2
+                			phase: skirmish
+                		}
+                		skirmishes: {
+                			frodo: "runner + shadow"
+                		}
+                		controlled: {
+                			shadow: "bagEnd, 2"
+                		}
+                		path: "bagEnd, shire"
+                	}
+                	steps: [
+                		{
+                			do: "marker(shadow, 2), control(bagEnd, shadow), liberate(bagEnd)"
+                		}
+                	]
+                }
+                """).asObject();
+        AliasRename.rename(root, "bagEnd", "hobbiton");
+        AliasRename.rename(root, "frodo", "baggins");
+        //(a card that happens to be called after a seat: the seats keep their names)
+        AliasRename.rename(root, "shadow", "wraith");
+        JsonObject setup = root.get("setup").asObject();
+        assertEquals("runner + wraith", setup.get("skirmishes").asObject().getString("baggins", null));
+        assertEquals("hobbiton, 2", setup.get("controlled").asObject().getString("shadow", null));
+        assertEquals("hobbiton, shire", setup.getString("path", null));
+        assertEquals("marker(shadow, 2), control(hobbiton, shadow), liberate(hobbiton)",
+                root.get("steps").asArray().get(0).asObject().getString("do", null));
+    }
 }

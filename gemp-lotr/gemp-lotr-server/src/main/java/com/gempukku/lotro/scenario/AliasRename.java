@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
  * keeps a card called "ring" apart from the part of the file called ring, a card called "hand" apart from
  * freeps.hand, and either apart from the same word in a sentence a player reads.
  *
- *     cards, ringBearer, ring, setup            the name itself
+ *     cards, ringBearer, ring, setup            the name itself (setup.skirmishes: character: minion + minion;
+ *                                               setup.controlled and setup.path: the sites by name)
  *     rng, do, answer, allow, an order's answer the name as a word inside the (brackets) of a term: play(x), choose(x, y),
  *                                               assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
  *                                               game (text(...), option(...), the words after the card in use(x, ...))
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
  */
 final class AliasRename {
     private static final Set<String> QUOTED = Set.of("text", "option", "raw", "title", "name");
-    private static final Set<String> NO_CARDS = Set.of("draw", "twilight", "burdens", "threats", "number");
+    private static final Set<String> NO_CARDS = Set.of("draw", "twilight", "burdens", "threats", "number", "marker");
 
     private final String _from;
     private final String _to;
@@ -91,7 +92,28 @@ final class AliasRename {
                         setup.set(part, renamed == null ? value : renamed);
                     }
                     case "wounds", "tokens" -> setup.set(part, keys(value));
-                    case "startAt", "burdens", "threats" -> { }
+                    case "startAt", "burdens", "threats", "twilight" -> { }
+                    case "skirmishes" -> {
+                        //(character: minion + minion)
+                        JsonObject renamed = object(keys(value));
+                        if (renamed != null)
+                            for (String card : names(renamed))
+                                renamed.set(card, strings(renamed.get(card), text -> {
+                                    List<String> minions = new ArrayList<>();
+                                    for (String minion : text.split("\\+"))
+                                        minions.add(minion.trim().equals(_from) ? _to : minion.trim());
+                                    return String.join(" + ", minions);
+                                }));
+                        setup.set(part, renamed == null ? value : renamed);
+                    }
+                    case "controlled" -> {
+                        //(seat: sites, by number or by name)
+                        JsonObject seats = object(value);
+                        if (seats != null)
+                            for (String seat : names(seats))
+                                seats.set(seat, listed(seats.get(seat)));
+                    }
+                    case "path" -> setup.set(part, listed(value));
                     default -> {
                         //(a seat: each of its zones is a list of cards)
                         JsonObject zones = object(value);
@@ -296,6 +318,16 @@ final class AliasRename {
                 if (QUOTED.contains(name) || NO_CARDS.contains(name)) {
                     //Nothing in it names a card: it is left as it is, brackets and all
                     out.append(text, at, close + 1);
+                    at = close + 1;
+                    continue;
+                }
+                if (name.equals("control")) {
+                    //control(site, seat): the site, and not the seat after it (a card may be called shadow)
+                    String inside = text.substring(end + 1, close);
+                    int comma = inside.indexOf(',');
+                    String site = comma < 0 ? inside : inside.substring(0, comma);
+                    out.append(word).append('(').append(site.trim().equals(_from) ? site.replace(_from, _to) : site)
+                            .append(comma < 0 ? "" : inside.substring(comma)).append(text, close, Math.min(text.length(), close + 1));
                     at = close + 1;
                     continue;
                 }

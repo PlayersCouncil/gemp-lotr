@@ -125,6 +125,8 @@ public final class ScenarioWriter {
         JsonObject rules = new JsonObject();
         if (def.oneSided)
             rules.add("oneSided", true);
+        if (def.markersTogether)
+            rules.add("markers", "together");
         for (Seat seat : Seat.values())
             if (def.rules.containsKey(seat))
                 rules.add(seat.key(), JsonValue.readHjson(def.rules.get(seat)));
@@ -167,12 +169,9 @@ public final class ScenarioWriter {
     private static JsonObject setup(ScenarioDefinition def) {
         Setup from = def.setup;
         JsonObject setup = new JsonObject();
-        if (from.turn != 1 || from.phase != com.gempukku.lotro.common.Phase.FELLOWSHIP) {
-            JsonObject startAt = new JsonObject();
-            startAt.add("turn", from.turn);
-            startAt.add("phase", lower(from.phase));
+        JsonObject startAt = startAt(def);
+        if (!startAt.isEmpty())
             setup.add("startAt", startAt);
-        }
         for (Seat seat : Seat.values()) {
             Map<SetupZone, List<String>> zones = from.zones.get(seat);
             if (zones == null)
@@ -192,7 +191,53 @@ public final class ScenarioWriter {
             setup.add("burdens", from.burdens);
         if (from.threats != 0)
             setup.add("threats", from.threats);
+        //(a pool and nothing else of where the story is: beside the burdens and threats, where it is read most simply)
+        if (from.twilight != 0 && startAt.isEmpty())
+            setup.add("twilight", from.twilight);
+        startParts(def, setup);
         return setup;
+    }
+
+    /**
+     * setup.startAt: what of where the story has got to is not the start of the game, each part only if it is not.
+     * The twilight pool goes here only when something else does (otherwise it is setup.twilight).
+     */
+    private static JsonObject startAt(ScenarioDefinition def) {
+        Setup from = def.setup;
+        JsonObject startAt = new JsonObject();
+        if (from.site != 1)
+            startAt.add("site", from.site);
+        if (from.opponentSite != null)
+            startAt.add("opponentSite", from.opponentSite.intValue());
+        if (from.phase != com.gempukku.lotro.common.Phase.FELLOWSHIP)
+            startAt.add("phase", lower(from.phase));
+        if (from.turn != 1)
+            startAt.add("turn", from.turn);
+        if (from.moves != null)
+            startAt.add("moves", from.moves.intValue());
+        if (from.twilight != 0 && !startAt.isEmpty())
+            startAt.add("twilight", from.twilight);
+        return startAt;
+    }
+
+    /** The parts of the setup that go with where the story has got to: the skirmishes, the sites controlled, the path. */
+    private static void startParts(ScenarioDefinition def, JsonObject setup) {
+        Setup from = def.setup;
+        if (!from.skirmishes.isEmpty()) {
+            JsonObject skirmishes = new JsonObject();
+            from.skirmishes.forEach((character, minions) -> skirmishes.add(character, String.join(" + ", minions)));
+            setup.add("skirmishes", skirmishes);
+        }
+        if (!from.controlled.isEmpty()) {
+            JsonObject controlled = new JsonObject();
+            for (Seat seat : Seat.values())
+                if (from.controlled.containsKey(seat) && !from.controlled.get(seat).isEmpty())
+                    controlled.add(seat.key(), String.join(", ", from.controlled.get(seat)));
+            if (!controlled.isEmpty())
+                setup.add("controlled", controlled);
+        }
+        if (!from.path.isEmpty())
+            setup.add("path", String.join(", ", from.path));
     }
 
     public static String zoneName(SetupZone zone) {

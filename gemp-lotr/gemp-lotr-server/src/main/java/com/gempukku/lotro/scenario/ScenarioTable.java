@@ -377,6 +377,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             }
         }
         _game.getActionsEnvironment().addAlwaysOnActionProxy(new EndOfThePath());
+        if (_def.oneSided && _def.markersTogether)
+            _game.getActionsEnvironment().addAlwaysOnActionProxy(new MarkersTogether());
     }
 
     /**
@@ -396,25 +398,38 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     private class EndOfThePath extends AbstractActionProxy {
         @Override
         public List<? extends RequiredTriggerAction> getRequiredBeforeTriggers(LotroGame game, Effect effect) {
-            if (effect.getType() != Effect.Type.BEFORE_MOVE_FROM || _pathEnded != null)
+            //(this is asked once, as the effect is about to be played; what is done here is done there and then,
+            // rather than as a trigger, which would have the player asked to put it in order with any card's own)
+            if (effect.getType() != Effect.Type.BEFORE_MOVE_FROM || _pathEnded != null || game.getWinnerPlayerId() != null)
                 return null;
-            int next = game.getGameState().getCurrentSiteNumber() + 1;
-            if (game.getGameState().getSite(next) != null)
+            int at = game.getGameState().getCurrentSiteNumber();
+            if (game.getGameState().getSite(at + 1) != null)
                 return null;
-            RequiredTriggerAction action = new RequiredTriggerAction(null);
-            action.setText("The end of the scenario's path");
-            action.appendEffect(new com.gempukku.lotro.logic.timing.UnrespondableEffect() {
-                @Override
-                protected void doPlayEffect(LotroGame game) {
-                    int at = game.getGameState().getCurrentSiteNumber();
-                    _pathEnded = "the fellowship came to the end of the scenario's path: it is at site " + at
-                            + " and would have to move on to site " + (at + 1) + ", which nobody's adventure deck in the scenario has";
-                    game.getGameState().sendMessage("This scenario's path ends at site " + at + ": there is no site " + (at + 1)
-                            + " to move to, so the game is over.");
-                    game.playerLost(game.getGameState().getCurrentPlayerId(), "The scenario's path ends at site " + at);
-                }
-            });
-            return List.of(action);
+            _pathEnded = "the fellowship came to the end of the scenario's path: it is at site " + at
+                    + " and would have to move on to site " + (at + 1) + ", which nobody's adventure deck in the scenario has";
+            game.getGameState().sendMessage("This scenario's path ends at site " + at + ": there is no site " + (at + 1)
+                    + " to move to, so the game is over.");
+            game.playerLost(game.getGameState().getCurrentPlayerId(), "The scenario's path ends at site " + at);
+            return null;
+        }
+    }
+
+    /**
+     * rules.markers: together.  In a one-sided game the Shadow seat never takes a turn, so its marker never moves of
+     * itself, and a site is only controlled once every marker is past it.  This has the Shadow seat's marker go
+     * where the fellowship's has gone each time the fellowship moves, just after the marker moves and before
+     * anything that answers the fellowship moving to its new site.
+     */
+    private class MarkersTogether extends AbstractActionProxy {
+        @Override
+        public List<? extends RequiredTriggerAction> getRequiredBeforeTriggers(LotroGame game, Effect effect) {
+            //(done as it is asked, as EndOfThePath is, and for the same reason; it can be done any number of times)
+            if (effect.getType() == Effect.Type.BEFORE_MOVE_TO) {
+                int at = game.getGameState().getPlayerPosition(_freepsPlayer);
+                if (game.getGameState().getPlayerPosition(_shadowPlayer) < at)
+                    game.getGameState().setPlayerPosition(_shadowPlayer, at);
+            }
+            return null;
         }
     }
 
@@ -478,6 +493,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         if (_def.setup.threats > 0)
             AddThreats(_def.setup.threats);
 
+        arrangeStart();
+
         //How the table got to this point (the bid, the choice of seat) is not part of the scenario's story
         _gameState.forgetMessages();
         _arranged = true;
@@ -493,6 +510,159 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             };
             _userFeedback.sendAwaitingDecision(OpponentPlayer(), _opening);
         }
+    }
+
+    /**
+     * The part of the board that says where the story has got to (setup.startAt and what goes with it): the sites
+     * the fellowships have passed, laid on the path; each seat's marker; the sites controlled; the twilight pool; the
+     * skirmishes already assigned.  Each is put there the way the game itself puts it there, without any of the
+     * game's reactions to it (nobody "plays" a site or "moves" to one here).
+     */
+    private void arrangeStart() {
+        ScenarioDefinition.Setup setup = _def.setup;
+        int opponentSite = setup.opponentSite(_def);
+        layPath(Math.max(Math.max(setup.site, opponentSite), setup.path.size()), "setup.startAt");
+        _gameState.setPlayerPosition(_freepsPlayer, setup.site);
+        _gameState.setPlayerPosition(_shadowPlayer, opponentSite);
+
+        for (Map.Entry<Seat, List<String>> entry : setup.controlled.entrySet())
+            for (String site : entry.getValue()) {
+                PhysicalCard card = siteOnPath(site, "setup.controlled." + entry.getKey().key());
+                if (card != null)
+                    control(card, entry.getKey(), "setup.controlled." + entry.getKey().key());
+            }
+
+        if (setup.twilight > 0)
+            SetTwilight(setup.twilight);
+
+        //The same call the assignment phase makes for each pairing it settles
+        for (Map.Entry<String, List<String>> skirmish : setup.skirmishes.entrySet()) {
+            java.util.Set<PhysicalCard> minions = new java.util.LinkedHashSet<>();
+            for (String minion : skirmish.getValue())
+                minions.add(Card(minion));
+            _gameState.assignToSkirmishes(Card(skirmish.getKey()), minions);
+        }
+    }
+
+    /**
+     * Lays the adventure path out as far as a site, as the game lays a site when a fellowship first comes to it: the
+     * site goes from its owner's adventure deck to its place on the path.  Whose site goes where is setup.path's to
+     * say, and otherwise it is the Free Peoples seat's: its site of that number on a numbered path, its next listed
+     * site on one that is not.  Site 1 is there already, laid by the game's opening (a different one is put in its
+     * place, if setup.path says so).  Sites already on the path stay.
+     */
+    private void layPath(int last, String context) {
+        for (int number = 1; number <= last; number++) {
+            PhysicalCard there = _gameState.getSite(number);
+            String named = number <= _def.setup.path.size() ? _def.setup.path.get(number - 1) : null;
+            PhysicalCard wanted = named != null ? Card(named) : null;
+            if (there != null && (wanted == null || wanted == there || _arranged))
+                continue;
+            if (wanted == null)
+                wanted = siteToLay(number);
+            if (wanted == null) {
+                _problems.add(context + ": the path cannot be laid out to site " + number + ": the Free Peoples seat's sites have no site "
+                        + number + " (list one under sites, or say whose it is in setup.path)");
+                return;
+            }
+            if (wanted.getZone() != Zone.ADVENTURE_DECK) {
+                _problems.add(context + ": '" + AliasOf(wanted) + "' cannot be site " + number + ": it is already on the path");
+                return;
+            }
+            if (there != null) {
+                //(the site the opening laid goes back where it came from, as a replaced site does)
+                _gameState.removeCardsFromZone(there.getOwner(), List.of(there));
+                ((PhysicalCardImpl) there).setSiteNumber(null);
+                _gameState.addCardToZone(game(), there, Zone.ADVENTURE_DECK);
+            }
+            _gameState.removeCardsFromZone(wanted.getOwner(), List.of(wanted));
+            ((PhysicalCardImpl) wanted).setSiteNumber(number);
+            _gameState.addCardToZone(game(), wanted, Zone.ADVENTURE_PATH);
+        }
+    }
+
+    /** The Free Peoples seat's site that is laid as the site of that number when nothing says whose it is. */
+    private PhysicalCard siteToLay(int number) {
+        List<? extends PhysicalCard> deck = _gameState.getAdventureDeck(_freepsPlayer);
+        if (_gameState.usesUnorderedSites(_freepsPlayer)) {
+            //(on a path whose sites have no numbers, the seat's sites in the order the scenario lists them)
+            for (String alias : _def.siteAliases.getOrDefault(Seat.FREEPS, List.of())) {
+                PhysicalCard card = _aliases.get(alias);
+                if (card != null && card.getZone() == Zone.ADVENTURE_DECK)
+                    return card;
+            }
+            return null;
+        }
+        for (PhysicalCard candidate : deck)
+            if (candidate.getBlueprint().getSiteNumber() == number)
+                return candidate;
+        return null;
+    }
+
+    /**
+     * A site on the adventure path, said by its number or its name.
+     * @return Null, with the problem noted, if it is not on the path.
+     */
+    private PhysicalCard siteOnPath(String site, String context) {
+        PhysicalCard card = site.matches("\\d+") ? _gameState.getSite(Integer.parseInt(site)) : _aliases.get(site);
+        if (card == null || card.getZone() == null || !(card.getZone() == Zone.ADVENTURE_PATH || card.getCardController() != null)) {
+            _problems.add(context + ": " + (site.matches("\\d+") ? "there is no site " + site : "'" + site + "' is not")
+                    + " on the adventure path" + (site.matches("\\d+") ? "" : " (a site gets there by a fellowship coming to it)"));
+            return null;
+        }
+        return card;
+    }
+
+    /**
+     * A site controlled by a seat, the way the game has a site taken control of.  A site can only be controlled once
+     * every fellowship has passed it.
+     */
+    private void control(PhysicalCard site, Seat seat, String context) {
+        int number = site.getSiteNumber();
+        for (Seat other : Seat.values())
+            if (_gameState.getPlayerPosition(Player(other)) <= number) {
+                _problems.add(context + ": site " + number + " cannot be controlled: the " + other.key() + " seat's marker is at site "
+                        + _gameState.getPlayerPosition(Player(other)) + ", and a site is controlled only once every marker is past it"
+                        + " (put it further on: setup.startAt.opponentSite, do: marker(" + other.key() + ", n), or rules.markers: together)");
+                return;
+            }
+        if (site.getCardController() != null)
+            _gameState.loseControlOfCard(site, Zone.ADVENTURE_PATH);
+        _gameState.takeControlOfCard(Player(seat), game(), site, Zone.SUPPORT);
+        //Between turns nothing is affecting the game, and the start of the turn starts everything there is,
+        // controlled sites among them: one that was started here would be started twice
+        if (!_gameState.getCurrentPhase().isCardsAffectGame())
+            ((PhysicalCardImpl) site).stopAffectingGameControlledSite();
+    }
+
+    /**
+     * A seat's marker put on a site, the path laid out to it as needed: not a move (nothing that answers moving
+     * does), only where the marker is.  The site the fellowship whose turn it is stands at is the one whose text is
+     * in force, so its marker taking it elsewhere has the one site stop and the other start, as a move does.
+     */
+    private void putMarker(Seat seat, int site, String context) {
+        layPath(site, context);
+        if (_gameState.getSite(site) == null)
+            return;
+        String player = Player(seat);
+        boolean current = player.equals(_gameState.getCurrentPlayerId()) && _gameState.getCurrentPhase().isCardsAffectGame();
+        if (current && _gameState.getCurrentSite() != null)
+            ((PhysicalCardImpl) _gameState.getCurrentSite()).stopAffectingGame();
+        _gameState.setPlayerPosition(player, site);
+        if (current)
+            ((PhysicalCardImpl) _gameState.getCurrentSite()).startAffectingGame(game());
+    }
+
+    /**
+     * Called by the game once the board has been arranged (and the opening, if the scenario has one, read).  A game
+     * that begins further on than the start of turn 1 at site 1 is carried on from where its story has got to.
+     */
+    @Override
+    public com.gempukku.lotro.logic.timing.processes.GameProcess carryOn(LotroGame game) {
+        if (!_def.setup.lateStart())
+            return null;
+        return new com.gempukku.lotro.logic.timing.processes.pregame.MidTurnStartGameProcess(_freepsPlayer, _def.setup.turn,
+                _def.setup.phase, _def.setup.moves());
     }
 
     /** Whether this is the table's own question at the opening (see arrangeBoard), not one of the game's. */
@@ -624,6 +794,19 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                             settled++;
                     for (PhysicalCardImpl card : ordered.subList(settled, ordered.size()))
                         place(card, ref.seat(), ref.zone(), true);
+                }
+                case MARKER -> putMarker(Seat.valueOf(op.target().toUpperCase(java.util.Locale.ROOT)), op.amount(), op.source());
+                case CONTROL -> {
+                    PhysicalCard site = siteOnPath(op.card() != null ? op.card() : String.valueOf(op.amount()), op.source());
+                    if (site != null)
+                        control(site, Seat.valueOf(op.target().toUpperCase(java.util.Locale.ROOT)), op.source());
+                }
+                case LIBERATE -> {
+                    PhysicalCard site = siteOnPath(op.card() != null ? op.card() : String.valueOf(op.amount()), op.source());
+                    if (site != null && site.getCardController() == null)
+                        _problems.add(op.source() + ": site " + site.getSiteNumber() + " is controlled by nobody");
+                    else if (site != null)
+                        _gameState.loseControlOfCard(site, Zone.ADVENTURE_PATH);
                 }
                 case TWILIGHT -> SetTwilight(Math.max(0, op.relative() ? GetTwilight() + op.amount() : op.amount()));
                 case BURDENS -> setTotal(GetBurdens(), op, this::AddBurdens, this::RemoveBurdens);

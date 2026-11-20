@@ -27,6 +27,26 @@ import java.util.regex.Pattern;
  * so a comment has to go on a line of its own, and an object or a [list] cannot be closed on the line it was opened
  * on unless its values are quoted.
  *
+ * Where the story has got to when the game begins is part of the setup, and everything in it is optional:
+ *     setup: {
+ *         startAt: {
+ *             site: 4            the Free Peoples seat's fellowship (whose turn it is) is at site 4; default 1
+ *             opponentSite: 2    the Shadow seat's marker; default 1 (level with site under rules.markers: together)
+ *             phase: maneuver    a phase of a turn; default fellowship.  (startAt: maneuver says just this.)
+ *             turn: 3            what the game's turn counter says, and what turn(n) means; default 1
+ *             twilight: 4        the pool; default 0.  (setup.twilight says the same, where nothing else is said.)
+ *             moves: 1           moves made this turn; default 1 past the Fellowship phase, else 0
+ *         }
+ *         skirmishes: { frodo: runner1, aragorn: bowman + archer }    already assigned
+ *         controlled: { shadow: site1, 2 }                              by name or by number
+ *         path: site1, site2opp, site3      whose site is laid where; past its end, the Free Peoples seat's own
+ *     }
+ * A game whose start is anything but turn 1, site 1, the Fellowship phase, an empty pool and nothing assigned is
+ * carried on from there (see ScenarioTable.carryOn): nothing that already happened happens again (no start of
+ * turn, so no sanctuary healing; no moving to the site the fellowship is at).  rules.markers: together has the
+ * Shadow seat's marker in a one-sided game keep level with the fellowship's.  A step's do can say marker(seat, n),
+ * control(site, seat) and liberate(site), a site by its name or its number.
+ *
  * This checks the file's own shape only: that fields are known, values are of the right kind, and every card alias
  * that is used was declared.  Whether the blueprints and the format exist is for ScenarioValidator, and whether the
  * steps actually play out is for ScenarioRunner.
@@ -126,6 +146,8 @@ public final class ScenarioParser {
             for (String name : rules.names()) {
                 if (name.equalsIgnoreCase("oneSided")) {
                     def.oneSided = optionalBoolean(rules, name, false, "rules");
+                } else if (name.equalsIgnoreCase("markers")) {
+                    def.markersTogether = parseMarkers(scalar(rules.get(name), "rules.markers"));
                 } else {
                     def.rules.put(parseSeat(def, name, "rules"), jsonArrayText(rules.get(name), "rules." + name));
                 }
@@ -221,14 +243,32 @@ public final class ScenarioParser {
             return;
         Setup result = def.setup;
         Set<String> placed = new HashSet<>();
+        boolean twilightGiven = false;
+        JsonValue startAtValue = get(setup, "startAt");
+        if (startAtValue != null && startAtValue.isObject() && get(startAtValue.asObject(), "twilight") != null)
+            twilightGiven = true;
         for (String name : setup.names()) {
             JsonValue value = setup.get(name);
             switch (name.toLowerCase(Locale.ROOT)) {
-                case "startat" -> {
-                    JsonObject startAt = asObject(value, "setup.startAt");
-                    checkFields(startAt, "setup.startAt", "turn", "phase");
-                    result.turn = optionalInt(startAt, "turn", 1, "setup.startAt");
-                    result.phase = parsePhase(optionalString(startAt, "phase", "fellowship", "setup.startAt"), "setup.startAt.phase");
+                case "startat" -> parseStartAt(result, value);
+                case "twilight" -> {
+                    //(the same as startAt.twilight, for a game that is at the start of turn 1 but for its pool)
+                    if (twilightGiven)
+                        throw new ScenarioFormatException("setup.twilight: the twilight pool is given in setup.startAt as well; say it once");
+                    result.twilight = asInt(value, "setup.twilight");
+                    twilightGiven = true;
+                }
+                case "skirmishes" -> parseSkirmishes(def, value, result);
+                case "controlled" -> parseControlled(def, asObject(value, "setup.controlled"), result);
+                case "path" -> {
+                    for (String alias : list(value, "setup.path")) {
+                        if (!def.siteCards.containsKey(alias.trim()))
+                            throw new ScenarioFormatException("setup.path: '" + alias.trim() + "' is not one of the scenario's sites "
+                                    + "(the path is said by the sites' names, site 1 first: site1, site2opp, site3)");
+                        if (result.path.contains(alias.trim()))
+                            throw new ScenarioFormatException("setup.path: '" + alias.trim() + "' is there twice");
+                        result.path.add(alias.trim());
+                    }
                 }
                 case "attach" -> aliasMap(def, asObject(value, "setup.attach"), result.attach, "setup.attach");
                 case "stack" -> aliasMap(def, asObject(value, "setup.stack"), result.stack, "setup.stack");
@@ -263,6 +303,113 @@ public final class ScenarioParser {
         for (String alias : result.stack.keySet())
             if (!placed.add(alias))
                 throw new ScenarioFormatException("setup.stack: '" + alias + "' is also placed in a zone or attached");
+    }
+
+    /**
+     * setup.startAt: where the story has got to when the game begins.  { site, opponentSite, phase, turn, twilight,
+     * moves }, each optional; or just a phase.  See ScenarioDefinition.Setup.
+     */
+    private static void parseStartAt(Setup result, JsonValue value) throws ScenarioFormatException {
+        if (value != null && !value.isObject() && !value.isArray()) {
+            //(a phase by itself: "startAt: maneuver")
+            result.phase = startPhase(scalar(value, "setup.startAt"), "setup.startAt");
+            return;
+        }
+        JsonObject startAt = asObject(value, "setup.startAt");
+        checkFields(startAt, "setup.startAt", "turn", "phase", "site", "opponentSite", "twilight", "moves");
+        result.turn = optionalInt(startAt, "turn", 1, "setup.startAt");
+        if (result.turn < 1)
+            throw new ScenarioFormatException("setup.startAt.turn: turns are counted from 1");
+        result.phase = startPhase(optionalString(startAt, "phase", "fellowship", "setup.startAt"), "setup.startAt.phase");
+        result.site = optionalInt(startAt, "site", 1, "setup.startAt");
+        if (get(startAt, "opponentSite") != null)
+            result.opponentSite = optionalInt(startAt, "opponentSite", 1, "setup.startAt");
+        for (int at : result.opponentSite == null ? new int[] {result.site} : new int[] {result.site, result.opponentSite})
+            if (at < 1 || at > 9)
+                throw new ScenarioFormatException("setup.startAt: there is no site " + at + " on any adventure path (sites 1 to 9)");
+        result.twilight = optionalInt(startAt, "twilight", 0, "setup.startAt");
+        if (result.twilight < 0)
+            throw new ScenarioFormatException("setup.startAt.twilight: the pool cannot hold less than nothing");
+        if (get(startAt, "moves") != null) {
+            int moves = optionalInt(startAt, "moves", 0, "setup.startAt");
+            if (moves < 0)
+                throw new ScenarioFormatException("setup.startAt.moves: a number of moves, 0 or more");
+            //(what it would be anyway is not kept, so that the file written back says only what matters)
+            result.moves = moves == result.defaultMoves() ? null : moves;
+        }
+    }
+
+    /** A phase a game can begin in: one of a turn's. */
+    private static Phase startPhase(String name, String context) throws ScenarioFormatException {
+        Phase phase = parsePhase(name, context);
+        if (!com.gempukku.lotro.logic.timing.processes.pregame.MidTurnStartGameProcess.PHASES.contains(phase))
+            throw new ScenarioFormatException(context + ": a game cannot begin in the " + name.trim() + " phase.  It begins in one of "
+                    + "a turn's: fellowship, shadow, maneuver, archery, assignment, skirmish or regroup");
+        return phase;
+    }
+
+    /**
+     * setup.skirmishes: { character: minion + minion, ... }, the skirmishes already assigned when the game begins.
+     */
+    private static void parseSkirmishes(ScenarioDefinition def, JsonValue value, Setup result) throws ScenarioFormatException {
+        JsonObject skirmishes = asObject(value, "setup.skirmishes");
+        Set<String> minionsAssigned = new HashSet<>();
+        for (String name : skirmishes.names()) {
+            String context = "setup.skirmishes." + name;
+            CardDef character = card(def, name, "setup.skirmishes");
+            if (character.owner() != Seat.FREEPS)
+                throw new ScenarioFormatException("setup.skirmishes: '" + name + "' is the Shadow seat's: a skirmish is said by the "
+                        + "Free Peoples character in it (frodo: runner1 + runner2)");
+            List<String> minions = new ArrayList<>();
+            for (String line : lines(skirmishes.get(name), context))
+                for (String part : Terms.split(line, ',', context))
+                    for (String minion : part.split("\\+")) {
+                        if (minion.isBlank())
+                            continue;
+                        CardDef card = card(def, minion, context);
+                        if (card.owner() != Seat.SHADOW)
+                            throw new ScenarioFormatException(context + ": '" + card.alias() + "' is the Free Peoples seat's; what a character skirmishes is minions");
+                        if (!minionsAssigned.add(card.alias()))
+                            throw new ScenarioFormatException(context + ": '" + card.alias() + "' is assigned to two skirmishes");
+                        minions.add(card.alias());
+                    }
+            if (minions.isEmpty())
+                throw new ScenarioFormatException(context + ": names no minion (frodo: runner1, or frodo: runner1 + runner2)");
+            if (result.skirmishes.containsKey(character.alias()))
+                throw new ScenarioFormatException("setup.skirmishes: '" + name + "' is there twice");
+            result.skirmishes.put(character.alias(), minions);
+        }
+    }
+
+    /**
+     * setup.controlled: { seat: site, site }, each site by its number on the path or by its name.
+     */
+    private static void parseControlled(ScenarioDefinition def, JsonObject controlled, Setup result) throws ScenarioFormatException {
+        Set<String> seen = new HashSet<>();
+        for (String name : controlled.names()) {
+            Seat seat = parseSeat(def, name, "setup.controlled");
+            String context = "setup.controlled." + name;
+            List<String> sites = new ArrayList<>();
+            for (String site : list(controlled.get(name), context)) {
+                String written = site.trim();
+                if (!written.matches("[1-9]") && !def.siteCards.containsKey(written))
+                    throw new ScenarioFormatException(context + ": '" + written + "' is neither a site's number (1 to 9) nor the name of one of the scenario's sites");
+                if (!seen.add(written))
+                    throw new ScenarioFormatException(context + ": '" + written + "' is controlled twice");
+                sites.add(written);
+            }
+            result.controlled.computeIfAbsent(seat, key -> new ArrayList<>()).addAll(sites);
+        }
+    }
+
+    /** rules.markers: together, or apart (the default). */
+    private static boolean parseMarkers(String written) throws ScenarioFormatException {
+        return switch (written.trim().toLowerCase(Locale.ROOT)) {
+            case "together" -> true;
+            case "apart" -> false;
+            default -> throw new ScenarioFormatException("rules.markers: has to be together (in a one-sided game, the Shadow seat's marker "
+                    + "keeps level with the fellowship's) or apart (it stays where it is put; the default)");
+        };
     }
 
     /**
@@ -789,9 +936,37 @@ public final class ScenarioParser {
                 throw new ScenarioFormatException(context + ": " + term.raw() + ": needs the cards, in the order they are to come");
             return new DoOp(DoKind.ORDER, String.join(", ", cards), target, 0, false, term.raw());
         }
+        if (term.is("marker")) {
+            //marker(seat, n): that seat's marker on site n, the sites up to it laid on the path as needed
+            Seat seat = parseSeat(def, term.arg(0, context), context);
+            int site = parseInt(term.arg(1, context), context);
+            if (site < 1 || site > 9)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": a site from 1 to 9");
+            return new DoOp(DoKind.MARKER, null, seat.key(), site, false, term.raw());
+        }
+        if (term.is("control") || term.is("liberate")) {
+            //control(site, seat) and liberate(site): a site by its number on the path or by its name
+            String site = term.arg(0, context).trim();
+            String alias = null;
+            int number = 0;
+            if (site.matches("[1-9]"))
+                number = Integer.parseInt(site);
+            else if (def.siteCards.containsKey(site))
+                alias = site;
+            else
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + site + "' is neither a site's number (1 to 9) nor the name of one of the scenario's sites");
+            if (term.is("liberate")) {
+                if (term.args().size() > 1)
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": liberating a site says only which site (liberate(site2), liberate(2))");
+                return new DoOp(DoKind.LIBERATE, alias, null, number, false, term.raw());
+            }
+            Seat seat = parseSeat(def, term.arg(1, context), context);
+            return new DoOp(DoKind.CONTROL, alias, seat.key(), number, false, term.raw());
+        }
         throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of "
                 + "move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), heal(card, n), tokens(card, n), "
-                + "draw(n) or draw(seat, n), order(seat.zone, card, card), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it)");
+                + "draw(n) or draw(seat, n), order(seat.zone, card, card), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it), "
+                + "marker(seat, site), control(site, seat), liberate(site)");
     }
 
     /** The places whose cards come in an order that matters: a hand as it is shown, a pile from the top down. */

@@ -492,6 +492,50 @@ public class LiveScenarioTest {
     }
 
     @Test
+    public void ALateStartPicksUpAtItsCheckpoint() throws Exception {
+        //A game that begins at site 3 in the maneuver phase (ScenarioLateStartTest.CHECKPOINTED)
+        ScenarioDefinition def = ScenarioTesting.parse(ScenarioLateStartTest.CHECKPOINTED);
+        LiveScenario first = live(def);
+        Client client = new Client(start(first));
+        client.connect();
+        playUntil(client, 4);
+        assertEquals(3, first.LastCheckpoint());
+        GameJournal checkpoint = first.CheckpointJournal();
+        assertNotNull(checkpoint);
+        int twilightThen = first.Table().GetTwilight();
+
+        //The journal goes by way of text, as it would if it had been stored
+        LiveScenario second = live(def, GameJournal.read(checkpoint.write(), player -> player));
+        LotroGameMediator mediator = start(second);
+        assertNull(second.Table().FollowProblem());
+        Client again = new Client(mediator);
+        again.connect();
+        assertEquals(3, again.info.getIntValue("resumedAt"));
+        assertEquals(List.of(3), again.stepsSeen);
+        assertEquals(Phase.ASSIGNMENT, second.Table().GetCurrentPhase());
+        assertEquals(3, second.Table().gameState().getCurrentSiteNumber());
+        assertEquals(1, second.Table().gameState().getTurnNumber());
+        assertEquals(twilightThen, second.Table().GetTwilight());
+        for (int i = 0; i < 10 && again.end == null; i++) {
+            again.await();
+            if (again.decision != null)
+                again.answerAsAllowed();
+        }
+        again.poll();
+        assertNotNull(again.end);
+        assertEquals("complete", again.end.getString("result"));
+        assertEquals(List.of(), second.Problems());
+
+        //...and a game that follows the whole of the first one's journal comes to where the first one is
+        LiveScenario replay = live(def, first.Table().Journal());
+        start(replay);
+        assertNull(replay.Table().FollowProblem());
+        assertEquals(first.Table().GetCurrentPhase(), replay.Table().GetCurrentPhase());
+        assertEquals(first.Table().gameState().getCurrentSiteNumber(), replay.Table().gameState().getCurrentSiteNumber());
+        assertEquals(first.Table().GetTwilight(), replay.Table().GetTwilight());
+    }
+
+    @Test
     public void ANewGameCanPickUpAtACheckpoint() throws Exception {
         ScenarioDefinition def = opening();
         LiveScenario first = live(def);
