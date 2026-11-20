@@ -29,3 +29,11 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   `writeXmlResponse(null)`), `hall-table-error.xml` (their refusal, still status 200: `marshalException`) and
   `hall-formats.json` (POST /deck/formats, DeckRequestHandler.getAllFormats: `Formats` keyed by code, one not offered
   in the hall, and `HallTimers` from GameTimer.HALL_TIMERS with their describeLimits sentences).
+- Written by hand from the server code, for Help and Server Info (4.3): `format-definitions.json` (GET
+  /hall/formats/json, FormatDefinitions.describeAll serialized by JsonUtils.Serialize, which leaves nulls out: a PC
+  format with an X-list holding a V-set card without collector's info and a card the library doesn't know, Anything
+  Goes with PC cards legal, limits, an extra legal card and a title on the R-list, and a playtest format without
+  description or set summary), `server-stats.json` (GET /stats, JSONDefs.PlayHistoryStats), `patch-notes-page.json`
+  (GET /patchnotes?start=5: PatchNotesLibrary.pageJson with SerializeWithNulls; a note whose body has a card link, a
+  hall link, a screenshot and a web link, and whose summary has a culture icon, as PatchNoteRenderer and CultureIcons
+  write them; an announcement without title or summary) and `patch-notes-months.json` (GET /patchnotes/months).
