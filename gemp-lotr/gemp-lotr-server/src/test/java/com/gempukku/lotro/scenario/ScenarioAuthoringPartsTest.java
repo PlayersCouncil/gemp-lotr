@@ -92,6 +92,16 @@ public class ScenarioAuthoringPartsTest {
                 decision = event;
         }
 
+        /** Waits for the game to ask the author something (the opponent answers after its pause). */
+        void await() throws Exception {
+            long deadline = System.currentTimeMillis() + 10_000;
+            while (decision == null && System.currentTimeMillis() < deadline) {
+                poll();
+                if (decision == null)
+                    Thread.sleep(5);
+            }
+        }
+
         void answer(String answer) throws Exception {
             assertNotNull("The game is not asking the author anything", decision);
             GameEvent answering = decision;
@@ -281,5 +291,28 @@ public class ScenarioAuthoringPartsTest {
         assertEquals("pass", refuses.getJSONObject(0).getString("refusal"));
         assertEquals("refused", refuses.getJSONObject(0).getString("now"));
         assertEquals("allowed", refuses.getJSONObject(1).getString("now"));
+    }
+
+    @Test
+    public void theStateSaysWhatADecisionIsForAndNewStepsSayItToo() throws Exception {
+        open("\t\tfallback: pass");
+        //(the opponent does what it would do by itself, and is not waiting for the author)
+        authoring.settings(player, null, false, null);
+        Client client = new Client(games.getLast());
+        for (int i = 0; i < 20; i++) {
+            client.await();
+            JSONObject human = state().getJSONObject("waiting").getJSONObject("human");
+            if (human != null && human.getString("text").contains("another move"))
+                break;
+            assertTrue("A phase's own: " + human, human == null || "phaseActions".equals(human.getString("kind")) || human.get("kind") == null);
+            client.answer("");
+        }
+        JSONObject state = state();
+        assertEquals("anotherMove", state.getJSONObject("waiting").getJSONObject("human").getString("kind"));
+        assertEquals("freeps, choice, anotherMove, phase(regroup), turn(1)", state.getJSONObject("uncovered").getString("when"));
+        //Answered, it is written down with the term, and not with the words the game asks it in
+        client.answer("1");
+        JSONArray steps = state().getJSONObject("draft").getJSONArray("steps");
+        assertEquals("freeps, choice, anotherMove, phase(regroup), turn(1)", steps.getJSONObject(steps.size() - 1).getString("when"));
     }
 }

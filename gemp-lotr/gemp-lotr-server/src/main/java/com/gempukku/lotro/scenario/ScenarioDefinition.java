@@ -179,10 +179,23 @@ public final class ScenarioDefinition {
         public boolean opening;
         /** How it was written, for reports. */
         public String source = "";
+        /** What the decision has to be for (see DecisionKinds): nextSkirmish, archeryWound and the like. */
+        public List<DecisionKinds.Kind> kinds = new ArrayList<>();
+        /** What it must not be for: not(nextSkirmish). */
+        public List<DecisionKinds.Kind> notKinds = new ArrayList<>();
 
         public boolean isEmpty() {
             return seat == null && decision == null && text == null && phase == null && turn == null
-                    && skirmish == null && offers == null && fighting == null && after == null && require == null && !opening;
+                    && skirmish == null && offers == null && fighting == null && after == null && require == null && !opening
+                    && kinds.isEmpty() && notKinds.isEmpty();
+        }
+
+        /** Whether a decision that is (or is not, for null) of a kind fits what this says of kinds. */
+        public boolean fitsKind(DecisionKinds.Kind kind) {
+            for (DecisionKinds.Kind wanted : kinds)
+                if (wanted != kind)
+                    return false;
+            return kind == null || !notKinds.contains(kind);
         }
     }
 

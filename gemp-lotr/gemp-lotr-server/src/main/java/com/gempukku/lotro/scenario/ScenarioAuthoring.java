@@ -462,6 +462,13 @@ public class ScenarioAuthoring {
             ScenarioTable table = live.Table();
             StringBuilder when = new StringBuilder();
             when.append(table.SeatOf(player).key()).append(", ").append(AnswerCompiler.typeName(decision.getDecisionType()));
+            //What it is for, where that is one of the things a 'when' can name (the choice of the next skirmish, a
+            // card's trigger being offered): the same kind of decision, in the same phase of the same turn, as others
+            // that are for something else.  (A phase's own play-or-pass is what a decision of its kind is unless
+            // said otherwise, and is not said.)
+            DecisionKinds.Kind kind = DecisionKinds.of(decision);
+            if (kind != null && kind != DecisionKinds.Kind.PHASE_ACTIONS)
+                when.append(", ").append(kind.term);
             Phase phase = table.GetCurrentPhase();
             String name = phase.name().toLowerCase(Locale.ROOT);
             //In a block, a skirmish's decisions are that skirmish's (whichever comes first), and those between
@@ -478,18 +485,10 @@ public class ScenarioAuthoring {
                 when.append(", phase(").append(name).append(")");
             if (block == null || block.when.turn == null)
                 when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
-            //A card's trigger being offered ("Optional responses") is the same kind of decision, in the same phase
-            // of the same turn, as the phase's own "play something or pass": only what it says tells them apart
-            String said = decision.getText() == null ? "" : decision.getText().replaceAll("<[^>]*>", "").trim();
-            if (decision.getDecisionType() == AwaitingDecisionType.CARD_ACTION_CHOICE && said.matches("(?i)(optional|required) responses"))
-                when.append(", text(").append(said).append(")");
             if (fighting != null)
                 when.append(", inSkirmish(").append(fighting).append(")");
             if (after != null)
                 when.append(", after(").append(after).append(")");
-            //(which skirmish is next: in a block, told apart from the other choices of cards there)
-            if (block != null && said.toLowerCase(Locale.ROOT).contains("next skirmish"))
-                when.append(", text(next skirmish)");
             return when.toString();
         }
 
@@ -557,6 +556,10 @@ public class ScenarioAuthoring {
                 kept.after = until.after;
             if (until.text != null && fits(director, player, decision, part -> part.text = until.text))
                 kept.text = until.text;
+            if (!until.kinds.isEmpty() && fits(director, player, decision, part -> part.kinds = until.kinds))
+                kept.kinds = until.kinds;
+            if (!until.notKinds.isEmpty() && fits(director, player, decision, part -> part.notKinds = until.notKinds))
+                kept.notKinds = until.notKinds;
             When own = repeating.when;
             if (!apart(kept, own))
                 kept.seat = table.SeatOf(player);
@@ -574,6 +577,8 @@ public class ScenarioAuthoring {
                 terms.add(kept.seat.key());
             if (kept.decision != null)
                 terms.add(AnswerCompiler.typeName(kept.decision));
+            if (!ScenarioWriter.kinds(kept).isEmpty())
+                terms.add(ScenarioWriter.kinds(kept));
             if (kept.phase != null)
                 terms.add("phase(" + kept.phase.name().toLowerCase(Locale.ROOT) + ")");
             if (kept.turn != null)
@@ -3078,6 +3083,9 @@ public class ScenarioAuthoring {
         Map<String, Object> json = new LinkedHashMap<>();
         json.put("seat", table.SeatOf(player).key());
         json.put("type", AnswerCompiler.typeName(type));
+        //What it is for, as a 'when' says it (nextSkirmish, optionalResponses...; see DecisionKinds); null for none
+        DecisionKinds.Kind kind = DecisionKinds.of(decision);
+        json.put("kind", kind == null ? null : kind.term);
         json.put("text", decision.getText().replaceAll("<[^>]*>", ""));
         json.put("where", "turn " + table.gameState().getTurnNumber() + ", " + table.GetCurrentPhase().name().toLowerCase(Locale.ROOT));
         if (params.containsKey("min") && params.get("min").length > 0)

@@ -181,8 +181,8 @@ public class ScenarioDirector {
         Step before = null;
         if (step.when.after != null)
             for (Step child : block.children)
-                if (before == null && child.when.after == null && child.when.fighting == null && child.when.text != null
-                        && child.when.text.toLowerCase().contains("next skirmish"))
+                if (before == null && child.when.after == null && child.when.fighting == null && ((child.when.text != null
+                        && child.when.text.toLowerCase().contains("next skirmish")) || child.when.kinds.contains(DecisionKinds.Kind.NEXT_SKIRMISH)))
                     before = child;
         Step ahead = before;
         restructure(() -> {
@@ -385,6 +385,7 @@ public class ScenarioDirector {
                 && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
                 && (when.fighting == null || isFighting(when.fighting))
                 && (when.after == null || isAfter(when.after))
+                && when.fitsKind(DecisionKinds.Kind.PHASE_ACTIONS)
                 && (when.require == null || _table.Holds(when.require, player));
     }
 
@@ -579,6 +580,9 @@ public class ScenarioDirector {
         if (when.fighting != null && !isFighting(when.fighting))
             return false;
         if (when.after != null && !isAfter(when.after))
+            return false;
+        //(a pass made without asking is the phase's own play-or-pass)
+        if (!when.fitsKind(DecisionKinds.Kind.PHASE_ACTIONS))
             return false;
         return when.require == null || _table.Holds(when.require, player);
     }
@@ -1075,6 +1079,8 @@ public class ScenarioDirector {
         if (when.fighting != null && !isFighting(when.fighting))
             return false;
         if (when.after != null && !isAfter(when.after))
+            return false;
+        if ((!when.kinds.isEmpty() || !when.notKinds.isEmpty()) && !when.fitsKind(DecisionKinds.of(decision)))
             return false;
         return when.require == null || _table.Holds(when.require, player);
     }

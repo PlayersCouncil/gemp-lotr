@@ -324,8 +324,17 @@ public final class ScenarioWriter {
         addIfSet(json, "offers", when.offers);
         addIfSet(json, "inSkirmish", when.fighting);
         addIfSet(json, "after", when.after);
+        addIfSet(json, "kind", kinds(when));
         json.add("require", requirements(when.require));
         return json;
+    }
+
+    /** What a 'when' says the decision is for: "nextSkirmish", "not(reconcile)"; empty for nothing. */
+    static String kinds(When when) {
+        StringJoiner kinds = new StringJoiner(", ");
+        when.kinds.forEach(kind -> kinds.add(kind.term));
+        when.notKinds.forEach(kind -> kinds.add("not(" + kind.term + ")"));
+        return kinds.toString();
     }
 
     /** A 'when' without requirements, as terms. */
@@ -335,6 +344,9 @@ public final class ScenarioWriter {
             terms.add(when.seat.key());
         if (when.decision != null)
             terms.add(AnswerCompiler.typeName(when.decision));
+        String kinds = kinds(when);
+        if (!kinds.isEmpty())
+            terms.add(kinds);
         if (when.phase != null)
             terms.add("phase(" + lower(when.phase) + ")");
         if (when.turn != null)

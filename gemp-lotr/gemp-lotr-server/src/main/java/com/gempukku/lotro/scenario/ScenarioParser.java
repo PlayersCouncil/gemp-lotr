@@ -411,9 +411,11 @@ public final class ScenarioParser {
         //A pause about a skirmish that is over was once written for the choice of the next skirmish only
         // ("freeps, cards, after(x), text(next skirmish)"), which there is not after the last one.  It is for the first
         // decision after that skirmish, whatever it is.
-        if (step.pause && step.when.after != null && step.when.text != null && step.when.text.trim().equalsIgnoreCase("next skirmish")
+        if (step.pause && step.when.after != null && ((step.when.text != null && step.when.text.trim().equalsIgnoreCase("next skirmish"))
+                || (step.when.text == null && step.when.kinds.equals(List.of(DecisionKinds.Kind.NEXT_SKIRMISH))))
                 && step.when.require == null && !step.when.source.startsWith("{")) {
             step.when.text = null;
+            step.when.kinds = new ArrayList<>();
             if (step.when.decision == AwaitingDecisionType.CARD_SELECTION)
                 step.when.decision = null;
             step.when.source = ScenarioWriter.terms(step.when);
@@ -586,7 +588,7 @@ public final class ScenarioParser {
         When when = new When();
         if (value.isObject()) {
             JsonObject object = value.asObject();
-            checkFields(object, context, "terms", "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require");
+            checkFields(object, context, "terms", "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require", "kind");
             //(what can be said as terms can be, in 'terms': the rest of the object adds to it, its requirements above all)
             if (object.get("terms") != null) {
                 When said = parseWhen(def, JsonValue.valueOf(scalar(object.get("terms"), context + ".terms")), context + ".terms");
@@ -599,6 +601,8 @@ public final class ScenarioParser {
                 when.offers = said.offers;
                 when.fighting = said.fighting;
                 when.after = said.after;
+                when.kinds = said.kinds;
+                when.notKinds = said.notKinds;
                 if (said.opening)
                     throw new ScenarioFormatException(context + ": 'opening' stands by itself");
             }
@@ -624,6 +628,8 @@ public final class ScenarioParser {
                 when.after = card(def, scalar(object.get("after"), context + ".after"), context + ".after").alias();
             if (object.get("require") != null)
                 when.require = jsonArrayText(object.get("require"), context + ".require");
+            if (object.get("kind") != null)
+                kinds(when, scalar(object.get("kind"), context + ".kind"), context + ".kind");
             return when;
         }
 
@@ -660,17 +666,49 @@ public final class ScenarioParser {
                 when.text = term.wholeArg();
             else if (term.args().isEmpty() && term.is("opening"))
                 when.opening = true;
+            else if (kind(when, term))
+                continue;
             else
                 throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected a seat "
                         + "(freeps, shadow, human, opponent), a kind of decision (action, actionChoice, cards, arbitrary, choice, "
-                        + "number, assign), or one of phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(...)");
+                        + "number, assign), what it is for (" + String.join(", ", DecisionKinds.terms()) + ", or not(one of those)), "
+                        + "or one of phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(...)");
         }
         if (renamed)
             when.source = String.join(", ", written);
         if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null
-                || when.skirmish != null || when.offers != null || when.fighting != null || when.after != null))
+                || when.skirmish != null || when.offers != null || when.fighting != null || when.after != null || !when.kinds.isEmpty() || !when.notKinds.isEmpty()))
             throw new ScenarioFormatException(context + ": 'opening' is the moment before the first turn, and stands by itself");
         return when;
+    }
+
+    /**
+     * A term of a 'when' that says what the decision is for: one of DecisionKinds' names (nextSkirmish), or
+     * not(one of them).
+     * @return Whether it was one.
+     */
+    private static boolean kind(When when, Terms.Term term) {
+        if (term.args().isEmpty() && DecisionKinds.named(term.name()) != null) {
+            DecisionKinds.Kind kind = DecisionKinds.named(term.name());
+            if (!when.kinds.contains(kind))
+                when.kinds.add(kind);
+            return true;
+        }
+        if (term.is("not") && term.args().size() == 1 && DecisionKinds.named(term.args().getFirst()) != null) {
+            DecisionKinds.Kind kind = DecisionKinds.named(term.args().getFirst());
+            if (!when.notKinds.contains(kind))
+                when.notKinds.add(kind);
+            return true;
+        }
+        return false;
+    }
+
+    /** A 'when' object's 'kind': what the decision is for, as its terms say it ("nextSkirmish", "not(reconcile)"). */
+    private static void kinds(When when, String text, String context) throws ScenarioFormatException {
+        for (Terms.Term term : Terms.parse(text, context))
+            if (!kind(when, term))
+                throw new ScenarioFormatException(context + ": '" + term.raw() + "' is not what a decision can be for ("
+                        + String.join(", ", DecisionKinds.terms()) + ", or not(one of those))");
     }
 
     static Answer parseAnswer(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
