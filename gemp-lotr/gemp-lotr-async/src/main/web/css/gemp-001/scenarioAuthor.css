@@ -1,0 +1,1225 @@
+/*
+ * The scenario authoring panel: see js/gemp-022/scenario/scenarioAuthor.js.
+ *
+ * It is docked down the right-hand side of the game screen.  The game lays itself out in what is left (gameUi.js,
+ * reservedRight), and so does everything the scenario overlay draws.
+ */
+body.scenario-authoring {
+    --sa-width: 430px;
+}
+
+body.scenario-authoring #scenarioLayer {
+    width: calc(100% - var(--sa-width));
+}
+
+.sa {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    /* over the scenario layer (100000), under a card's enlarged picture (100010) */
+    z-index: 100005;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: #17150f;
+    color: #e9e0cb;
+    border-left: 2px solid #8c7436;
+    font: 13px/1.35 "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+.sa * {
+    box-sizing: border-box;
+}
+
+.sa-folded > *:not(.sa-head) {
+    display: none !important;
+}
+
+.sa-folded .sa-head > *:not(.sa-fold) {
+    display: none;
+}
+
+.sa-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px 4px 4px;
+    background: #231f15;
+}
+
+.sa-title {
+    flex: 1;
+    font-size: 15px;
+    font-weight: bold;
+    color: #f0cf6a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sa-busy {
+    color: #f0cf6a;
+    font-weight: bold;
+}
+
+.sa-where {
+    padding: 0 10px 6px 10px;
+    background: #231f15;
+    color: #b9ad8d;
+    font-size: 12px;
+}
+
+.sa-notices:empty {
+    display: none;
+}
+
+.sa-notice {
+    position: relative;
+    padding: 5px 26px 5px 10px;
+    font-size: 12px;
+    border-top: 1px solid #000;
+    white-space: pre-wrap;
+    max-height: 9em;
+    overflow-y: auto;
+}
+
+.sa-error {
+    background: #5a1d1a;
+    color: #ffe2dc;
+}
+
+.sa-warning {
+    background: #4a3a12;
+    color: #ffe9b0;
+}
+
+/* What was left out of a file with mistakes in it, so that it could be opened */
+.sa-notice.sa-leftout {
+    max-height: 16em;
+    white-space: normal;
+}
+
+.sa-leftout-head {
+    font-weight: bold;
+}
+
+.sa-leftout-row {
+    margin-top: 5px;
+    padding-top: 4px;
+    border-top: 1px solid #7a3a34;
+}
+
+.sa-leftout-where {
+    font-weight: bold;
+    color: #fff;
+}
+
+.sa-leftout-was {
+    margin: 3px 0 0 0;
+    padding: 3px 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: #ffd9d2;
+    font-family: Consolas, Menlo, monospace;
+    font-size: 11px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 7em;
+    overflow-y: auto;
+}
+
+.sa-tag.sa-mistake {
+    color: #ffb4a8;
+    border-color: #b0483c;
+}
+
+.sa-note.sa-mistaken {
+    margin: 2px 0 6px 0;
+    padding: 5px 8px;
+    background: #3a1714;
+    color: #ffe2dc;
+    box-shadow: inset 3px 0 0 #e0564a;
+}
+
+.sa-told {
+    background: #1d3a4a;
+    color: #d8f0ff;
+}
+
+.sa-good {
+    background: #1d4a26;
+    color: #dcffdf;
+}
+
+/* ---- the file: where it is, and the form for saving it elsewhere ---- */
+
+.sa-note.sa-path {
+    color: #e9e0cb;
+    word-break: break-all;
+}
+
+.sa-button.sa-on {
+    border-color: #d8b24a;
+    color: #f0cf6a;
+}
+
+.sa-filing {
+    margin: 4px 0 6px 0;
+    padding: 6px 8px;
+    background: #231f15;
+    border: 1px solid #4d4226;
+    border-radius: 4px;
+}
+
+/* a file's name, between the folder its kind puts it in and the ending it always has */
+.sa-named {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    min-width: 0;
+}
+
+.sa-named .sa-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.sa-affix {
+    color: #a99e80;
+    font-family: Consolas, Menlo, monospace;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* ---- pictures to choose from ---- */
+
+.sa-pictures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 6px 0;
+    padding: 6px;
+    max-height: 250px;
+    overflow-y: auto;
+    background: #100e09;
+    border: 1px solid #4d4226;
+    border-radius: 4px;
+}
+
+.sa-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 86px;
+    padding: 3px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sa-picture:hover {
+    border-color: #d8b24a;
+    background: #231f15;
+}
+
+.sa-picture img {
+    display: block;
+    max-width: 80px;
+    max-height: 100px;
+}
+
+.sa-picture span {
+    margin-top: 2px;
+    max-width: 84px;
+    font-size: 10px;
+    color: #b9ad8d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---- asked on the way out with something unsaved ---- */
+
+.sa-leave-shade {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100020;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.sa-leave {
+    position: fixed;
+    left: 50%;
+    top: 34%;
+    transform: translate(-50%, -50%);
+    z-index: 100021;
+    box-sizing: border-box;
+    width: 440px;
+    max-width: calc(100vw - 30px);
+    padding: 16px 20px 16px 20px;
+    background: #17150f;
+    color: #e9e0cb;
+    border: 2px solid #d8b24a;
+    border-radius: 8px;
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.9);
+    font: 14px/1.4 "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+.sa-leave h2 {
+    margin: 0 0 6px 0;
+    font-size: 19px;
+    color: #f0cf6a;
+}
+
+.sa-leave p {
+    margin: 0 0 12px 0;
+}
+
+.sa-leave-problem {
+    color: #ffb3a8;
+    white-space: pre-wrap;
+}
+
+.sa-leave-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.sa-leave-buttons .sa-button {
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.sa-leave-buttons .sa-button:last-child {
+    margin-left: auto;
+}
+
+/* A decision nobody has written a step for: what is being asked, and the button that writes one */
+.sa-notice.sa-uncovered {
+    padding: 7px 10px 8px 10px;
+    max-height: none;
+    white-space: normal;
+    background: #33240f;
+    color: #f3e6c8;
+    box-shadow: inset 4px 0 0 #ffb347;
+}
+
+.sa-uncovered-head {
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffcf8a;
+    margin-bottom: 2px;
+}
+
+.sa-uncovered-how {
+    margin-top: 6px;
+}
+
+.sa-uncovered-how .sa-button {
+    margin: 0 8px 2px 0;
+    padding: 3px 9px;
+    font-weight: bold;
+}
+
+.sa-uncovered-or {
+    margin-top: 4px;
+    color: #b9ad8d;
+}
+
+.sa-tag.sa-noanswer {
+    color: #ffcf8a;
+    border-color: #a8742a;
+}
+
+.sa-note.sa-awaiting {
+    margin: 2px 0 6px 0;
+    padding: 5px 8px;
+    background: #33240f;
+    color: #f3e6c8;
+    box-shadow: inset 3px 0 0 #ffb347;
+}
+
+.sa-button.sa-inline {
+    margin: 0 0 0 8px;
+    padding: 0 6px;
+}
+
+/* A draft with changes that are in no file: the whole head of the panel says so */
+.sa.sa-unsaved .sa-head {
+    background: #8a2a0e;
+    box-shadow: inset 0 -3px 0 #ff9a4a;
+}
+
+.sa.sa-unsaved .sa-title {
+    color: #fff;
+}
+
+.sa.sa-unsaved .sa-where {
+    background: #4a1a0c;
+    color: #ffd9b8;
+}
+
+.sa.sa-unsaved .sa-button.sa-save.sa-dirty {
+    background: #ffb347;
+    border-color: #fff;
+    color: #2a1400;
+    font-weight: bold;
+}
+
+.sa-dismiss {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+
+.sa-tabs {
+    display: flex;
+    background: #231f15;
+    border-bottom: 1px solid #8c7436;
+}
+
+.sa-button.sa-tabbutton {
+    flex: 1;
+    margin: 0;
+    padding: 5px 2px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 3px solid transparent;
+    background: none;
+    color: #b9ad8d;
+}
+
+.sa-button.sa-tabbutton.sa-active {
+    color: #f0cf6a;
+    border-bottom-color: #d8b24a;
+}
+
+.sa-button.sa-tabbutton.sa-attention {
+    color: #fff;
+    background: #7a3a12;
+}
+
+.sa-body {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+
+.sa-tab {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 6px 8px 14px 8px;
+}
+
+.sa-tab-timeline {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sa-button {
+    margin: 0 4px 3px 0;
+    padding: 2px 7px;
+    font: inherit;
+    font-size: 12px;
+    color: #e9e0cb;
+    background: #3a3322;
+    border: 1px solid #6b5a2c;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sa-button:hover:not(:disabled) {
+    background: #4d4430;
+}
+
+.sa-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.sa-button.sa-primary,
+.sa-button.sa-save.sa-dirty {
+    background: #7a6220;
+    border-color: #d8b24a;
+    color: #fff;
+}
+
+.sa-button.sa-danger {
+    border-color: #8a3a30;
+}
+
+.sa-button.sa-fold {
+    padding: 2px 5px;
+    margin: 0;
+}
+
+.sa-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 2px 0 4px 0;
+}
+
+.sa-options,
+.sa-way {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #cfc4a6;
+}
+
+.sa-check {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.sa-check.sa-block {
+    display: block;
+    white-space: normal;
+    margin: 2px 0;
+}
+
+.sa-note {
+    margin: 3px 0 6px 0;
+    color: #a99e80;
+    font-size: 12px;
+}
+
+.sa-pending {
+    color: #ffe9b0;
+}
+
+/* ---- the timeline ---- */
+
+.sa-steps {
+    flex: 1;
+    min-height: 60px;
+    overflow-y: auto;
+    border: 1px solid #3a3322;
+    background: #100f0b;
+    margin-bottom: 5px;
+}
+
+.sa-step {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 2px 4px;
+    border-bottom: 1px solid #25221a;
+    cursor: pointer;
+}
+
+.sa-step:hover {
+    background: #26221a;
+}
+
+.sa-step.sa-selected {
+    background: #3a3220;
+}
+
+/* Where the game is: plain to see among the rest */
+.sa-step.sa-current,
+.sa-end.sa-current {
+    background: #4d3f14 !important;
+    box-shadow: inset 0 0 0 1px #f0cf6a, inset 6px 0 0 #f0cf6a;
+    font-weight: bold;
+}
+
+.sa-step.sa-current .sa-when,
+.sa-step.sa-current .sa-act {
+    color: #fff;
+}
+
+.sa-step.sa-current .sa-num::before {
+    content: "\25b6\00a0";
+    color: #f0cf6a;
+}
+
+.sa-num {
+    width: 24px;
+    text-align: right;
+    color: #8f8468;
+    font-size: 11px;
+}
+
+.sa-status-matched .sa-num {
+    color: #8fd08a;
+}
+
+.sa-status-bypassed,
+.sa-status-skipped {
+    opacity: 0.45;
+}
+
+.sa-who {
+    width: 32px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.sa-who-you { color: #9cc7ff; }
+.sa-who-opp { color: #ff9a8a; }
+.sa-who-read { color: #f0cf6a; }
+.sa-who-any { color: #b9ad8d; }
+
+.sa-what {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sa-when {
+    color: #b9ad8d;
+}
+
+.sa-act {
+    margin-left: 6px;
+    color: #fff;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+}
+
+.sa-id {
+    margin-left: 6px;
+    color: #8f8468;
+    font-style: italic;
+}
+
+.sa-tags {
+    white-space: nowrap;
+}
+
+.sa-tag {
+    margin-left: 3px;
+    padding: 0 3px;
+    font-size: 10px;
+    color: #cfc4a6;
+    border: 1px solid #5a4d2a;
+    border-radius: 3px;
+}
+
+.sa-tag.sa-bubbles,
+.sa-tag.sa-flag {
+    color: #17150f;
+}
+
+.sa-button.sa-go {
+    margin: 0;
+    padding: 0 4px;
+    font-size: 10px;
+}
+
+/* a block, and under it the steps in it */
+.sa-step.sa-blockstep {
+    border-top: 1px solid #5a4d2a;
+}
+
+.sa-step.sa-substep {
+    padding-left: 14px;
+    background: #15130d;
+    box-shadow: inset 2px 0 0 #6d5a96;
+}
+
+.sa-step.sa-substep.sa-selected {
+    background: #3a3220;
+}
+
+.sa-step.sa-substep.sa-current {
+    box-shadow: inset 0 0 0 1px #f0cf6a, inset 6px 0 0 #f0cf6a;
+}
+
+.sa-step.sa-substep .sa-num {
+    width: 32px;
+}
+
+.sa-who-block {
+    width: auto;
+    color: #c9a6ff;
+}
+
+.sa-end {
+    padding: 6px 8px;
+    color: #a99e80;
+    font-size: 12px;
+}
+
+.sa-asked {
+    margin: 3px 0 5px 0;
+    color: #fff;
+}
+
+/* ---- forms ---- */
+
+.sa-section {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #3a3322;
+}
+
+.sa-heading {
+    margin: 2px 0 4px 0;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+/* Which step this is stays in sight however far down its messages the tab has been scrolled */
+.sa-stephead {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    position: sticky;
+    top: -6px;
+    z-index: 3;
+    margin: -6px -8px 4px -8px;
+    padding: 6px 8px 4px 8px;
+    background: #17150f;
+    border-bottom: 1px solid #4d4226;
+    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.6);
+}
+
+.sa-stepname {
+    font-size: 15px;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-stepwhere {
+    margin-left: auto;
+    font-size: 12px;
+    color: #a99e80;
+    opacity: 1;
+}
+
+.sa-stepwhere.sa-status-matched {
+    color: #8fd08a;
+}
+
+.sa-field,
+.sa-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 3px 0;
+}
+
+.sa-row.sa-wrap {
+    flex-wrap: wrap;
+}
+
+.sa-label {
+    flex: 0 0 82px;
+    color: #b9ad8d;
+    font-size: 12px;
+    cursor: help;
+}
+
+.sa-row > .sa-label {
+    flex-basis: auto;
+}
+
+.sa-anchor > .sa-label {
+    flex: 0 0 82px;
+}
+
+.sa-anchor > .sa-label.sa-inline {
+    flex: 0 0 auto;
+    margin-left: 6px;
+}
+
+.sa-input {
+    flex: 1;
+    min-width: 0;
+    padding: 2px 4px;
+    font: inherit;
+    font-size: 12px;
+    color: #f3ead6;
+    background: #0d0c09;
+    border: 1px solid #5a4d2a;
+    border-radius: 3px;
+}
+
+select.sa-input {
+    flex: 0 1 auto;
+    padding: 1px 2px;
+}
+
+.sa-input.sa-short {
+    flex: 0 0 76px;
+    width: 76px;
+}
+
+.sa-input.sa-bad {
+    border-color: #e0584a;
+}
+
+textarea.sa-input {
+    width: 100%;
+    resize: vertical;
+    line-height: 1.35;
+}
+
+textarea.sa-code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    /* A line wider than the box wraps (the box grows to show it: see "sa-fit"), rather than scrolling sideways with a
+       scrollbar as tall as a one-row box */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    overflow-x: hidden;
+    tab-size: 4;
+    -moz-tab-size: 4;
+}
+
+.sa-more {
+    margin: 4px 0;
+}
+
+.sa-more > summary {
+    color: #b9ad8d;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.sa-alias {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    color: #9cc7ff;
+}
+
+.sa-message {
+    margin-bottom: 6px;
+    padding: 5px 6px;
+    background: #211d14;
+    border: 1px solid #5a4d2a;
+    border-radius: 5px;
+}
+
+.sa-message:focus-within {
+    border-color: #d8b24a;
+}
+
+.sa-messagehead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.sa-messagenum {
+    width: 20px;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-text {
+    font-size: 13px !important;
+}
+
+/* ---- a block's page: a section for the block, and one for each of the steps in it ---- */
+
+.sa-panel {
+    margin-bottom: 7px;
+    background: #1b1811;
+    border: 1px solid #5a4d2a;
+    border-left: 4px solid #6b5c36;
+    border-radius: 5px;
+}
+
+.sa-panel.sa-panel-block {
+    border-left-color: #6d5a96;
+}
+
+.sa-panel.sa-open {
+    background: #17150f;
+    border-color: #d8b24a;
+}
+
+.sa-panelhead {
+    padding: 3px 6px 4px 6px;
+    background: #262117;
+    border-radius: 0 4px 4px 0;
+}
+
+.sa-panel.sa-open > .sa-panelhead {
+    background: #3a3220;
+    border-bottom: 1px solid #5a4d2a;
+    border-radius: 0 4px 0 0;
+}
+
+.sa-paneltitle {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.sa-panel:not(.sa-open) > .sa-panelhead:hover {
+    background: #322b1c;
+}
+
+.sa-panel.sa-open .sa-paneltitle {
+    cursor: default;
+}
+
+.sa-twist {
+    width: 10px;
+    color: #a99e80;
+}
+
+.sa-paneltitle .sa-num {
+    width: auto;
+    min-width: 30px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    color: #f0cf6a;
+}
+
+.sa-panelacts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.sa-panelacts:empty {
+    display: none;
+}
+
+.sa-panelacts .sa-button {
+    margin: 0 0 0 3px;
+    padding: 0 5px;
+    font-size: 11px;
+}
+
+.sa-panelwhere {
+    margin-right: auto;
+    padding-left: 15px;
+    font-size: 11px;
+    color: #a99e80;
+    opacity: 1;
+}
+
+.sa-panelwhere.sa-status-matched {
+    color: #8fd08a;
+}
+
+/* what a step that is not open says to the player */
+.sa-panelsays {
+    padding: 2px 8px 3px 21px;
+    font-size: 12px;
+    color: #cfc4a6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.sa-panelbody {
+    padding: 6px 7px 2px 7px;
+}
+
+.sa-panelbody > .sa-section:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.sa-heading.sa-substeps {
+    margin-top: 9px;
+}
+
+.sa-button.sa-rename {
+    margin-left: 6px;
+    padding: 0 4px;
+    font-size: 11px;
+}
+
+.sa-card {
+    padding: 3px 0;
+    border-bottom: 1px solid #25221a;
+}
+
+/* where the cards under it are: the table, a hand, a pile */
+.sa-zonehead {
+    margin-top: 7px;
+    padding: 1px 0;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #a99e80;
+    border-bottom: 1px solid #4d4226;
+}
+
+/* a card's name in the scenario: the pointer on it shows the card */
+.sa-alias.cardHint {
+    cursor: help;
+    border-bottom: 1px dotted #5d7fa8;
+}
+
+.sa-button.sa-order {
+    min-width: 22px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* The Board tab's Submit and Reset, kept in view as the tab is scrolled, and what it has gathered under them */
+.sa-section.sa-boardbar {
+    position: sticky;
+    top: -6px;
+    z-index: 3;
+    margin: -6px -8px 8px -8px;
+    padding: 6px 8px;
+    background: #17150f;
+    border-bottom: 1px solid #8c7436;
+}
+
+.sa-gathered {
+    max-height: 76px;
+    overflow-y: auto;
+    margin-top: 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    color: #ffe9b0;
+}
+
+.sa-gathered-row {
+    display: flex;
+    align-items: center;
+}
+
+.sa-button.sa-undo {
+    margin: 0 0 0 4px;
+    padding: 0 5px;
+}
+
+.sa-gathered-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* a card, or a total, with a change gathered and not yet sent */
+.sa-card.sa-changed,
+.sa-row.sa-changed {
+    border-left: 3px solid #d8b24a;
+    padding-left: 4px;
+}
+
+.sa-card.sa-removing .sa-cardname {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.sa-tag {
+    margin-left: 6px;
+    padding: 0 4px;
+    font-size: 10px;
+    color: #17150f;
+    background: #d8b24a;
+    border-radius: 3px;
+}
+
+.sa-cardname {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sa-count {
+    min-width: 22px;
+    text-align: center;
+}
+
+.sa-results {
+    max-height: 190px;
+    overflow-y: auto;
+}
+
+.sa-result {
+    padding: 2px 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.sa-result:hover {
+    background: #3a3220;
+}
+
+.sa-button.sa-answer {
+    display: block;
+    width: 100%;
+    margin: 0 0 3px 0;
+    padding: 4px 7px;
+    text-align: left;
+}
+
+.sa-report {
+    max-height: 300px;
+    overflow: auto;
+    margin: 6px 0;
+    padding: 6px;
+    background: #0d0c09;
+    border: 1px solid #3a3322;
+    font: 11px/1.35 Consolas, "Courier New", monospace;
+    white-space: pre-wrap;
+}
+
+/* ---- picking something on the table ---- */
+
+.sa-pickbox {
+    position: fixed;
+    z-index: 100020;
+    pointer-events: none;
+    border: 3px solid #4fd0ff;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #4fd0ff;
+}
+
+.sa-picklabel {
+    position: fixed;
+    z-index: 100021;
+    pointer-events: none;
+    padding: 1px 6px;
+    background: #0a2a3a;
+    color: #d8f0ff;
+    font: 12px Consolas, "Courier New", monospace;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+
+body.sa-picking,
+body.sa-picking * {
+    cursor: crosshair !important;
+}
+
+/* a bubble would be in the way of what is behind it */
+body.sa-picking .scenario-bubble,
+body.sa-picking .scenario-pointer {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+/* ---- a player's game of the draft: the table has the screen, and the way back floats over a corner of it ---- */
+
+.sa.sa-floating {
+    top: 38px;
+    right: 8px;
+    bottom: auto;
+    width: 270px;
+    border: 2px solid #8c7436;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75);
+}
+
+.sa.sa-floating .sa-body {
+    flex: none;
+}
+
+.sa.sa-floating .sa-tab {
+    position: static;
+}
+
+.sa.sa-floating .sa-fold {
+    display: none;
+}
+
+/* folded away, with the opponent waiting to be answered for */
+.sa.sa-folded.sa-wanted .sa-fold {
+    background: #7a3a12;
+    border-color: #d8b24a;
+    color: #fff;
+}
+
+/* "repeat until", under When: the box, the Until it gives, and what is said about it */
+.sa-repeat .sa-row .sa-check {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.sa-repeat .sa-until {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.sa-repeat-more {
+    margin: 0 0 4px 22px;
+}
+
+/* The timeline in groups: a heading where the turn or the phase changes, and each phase's colour down the rows' edge */
+.sa-tl-group {
+    padding: 3px 6px 2px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #d9cfb4;
+    background: #1d1a12;
+    border-top: 1px solid #4a4130;
+    border-left: 4px solid #6d6450;
+}
+
+.sa-tl-group.sa-turn-even {
+    background: #17191c;
+}
+
+.sa-step.sa-turn-even {
+    background: #121417;
+}
+
+.sa-step[class*="sa-ph-"] {
+    border-left: 4px solid transparent;
+}
+
+/* Neighbours in a turn (fellowship, shadow, maneuver, archery, assignment, skirmish, regroup, between turns) are told apart by hue */
+.sa-ph-opening { border-left-color: #9a9a9a !important; }
+.sa-ph-fellowship { border-left-color: #6fae63 !important; }
+.sa-ph-shadow { border-left-color: #9a72c8 !important; }
+.sa-ph-maneuver { border-left-color: #2fb5b0 !important; }
+.sa-ph-archery { border-left-color: #e8a33d !important; }
+.sa-ph-assignment { border-left-color: #c9a6ff !important; }
+.sa-ph-skirmish, .sa-ph-skirmishes { border-left-color: #d24b4b !important; }
+.sa-ph-regroup { border-left-color: #cdb184 !important; }
+.sa-ph-between_turns { border-left-color: #7d7d7d !important; }
+/* (a block of several phases, and what follows it until a phase is named; a skirmishes block is the skirmish's) */
+.sa-ph-block, .sa-ph-after-block { border-left-color: #4f8fc4 !important; }
+.sa-ph-none { border-left-color: #4a4130 !important; }
+
+.sa-stephead .sa-tocurrent {
+    letter-spacing: -4px;
+    padding-right: 8px;
+}
+
+.sa-step.sa-substep.sa-turn-even {
+    background: #14161a;
+}
+
+.sa-step.sa-turn-even:hover {
+    background: #26221a;
+}
+
+.sa-step.sa-turn-even.sa-selected,
+.sa-step.sa-substep.sa-turn-even.sa-selected {
+    background: #3a3220;
+}
+
+/* A step that is only a pass the game makes by itself: there, but quiet */
+.sa-step.sa-silent .sa-what,
+.sa-step.sa-silent .sa-who {
+    opacity: 0.55;
+}

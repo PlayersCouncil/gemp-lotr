@@ -1,0 +1,19 @@
+/* A tier's mark (game.css .undoMark): a small coloured box with its sign */
+:host {
+  display: inline-block;
+  width: 1.4em;
+  margin-right: 0.4em;
+  border-radius: var(--theme-game-undo-radius);
+  background: var(--theme-game-undo-own);
+  color: var(--theme-game-undo-on-tier);
+  font-weight: bold;
+  text-align: center;
+}
+
+:host([data-look='replays']) {
+  background: var(--theme-game-undo-replays);
+}
+
+:host([data-look='revealed']) {
+  background: var(--theme-game-undo-revealed);
+}

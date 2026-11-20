@@ -7,6 +7,18 @@ const ge = (attributes: string, children = '') =>
 const parse = (attributes: string, children = '') => parseGameEvent(ge(attributes, children));
 
 describe('game XML', () => {
+  it('reads the game being taken back (GR): who asked, the tier, what the game says', () => {
+    expect(parse('type="GR" participantId="bob" tier="YELLOW" message="bob reverted: Played Gimli" index="4"')).toEqual(
+      {
+        type: 'GR',
+        participantId: 'bob',
+        tier: 'YELLOW',
+        message: 'bob reverted: Played Gimli',
+      },
+    );
+    expect(parse('type="GR" message="The game was reverted to an earlier point"')).toMatchObject({ tier: '' });
+  });
+
   it('reads an update: its channel, its events in order and the clocks', () => {
     const update = parseGameUpdate(
       parseXml(

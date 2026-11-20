@@ -4,6 +4,7 @@ import { decisionKey } from '../session/game-restore';
 import { GameSession } from '../session/game-session.service';
 import { GameViewState } from '../session/game-view-state';
 import { GameSettings } from '../settings/game-settings';
+import { GameUndo } from '../undo/game-undo.service';
 import {
   assignMinion,
   assignmentAnswer,
@@ -32,13 +33,15 @@ export interface ActionMenu {
 /**
  * The waiting decision as the player answers it: what the page shows for it (`view`) and what each gesture does: a
  * card clicked, a button, an action of the menu, a number, an answer of a list, Escape. Choices that aren't sent yet
- * are kept with the game (GameSession), so a reload finds them. Page-scoped.
+ * are kept with the game (GameSession), so a reload finds them. While a revert request waits (GameUndo.frozen) no
+ * gesture does anything: the server would refuse the answer. Page-scoped.
  */
 @Injectable()
 export class GameDecisions {
   private readonly session = inject(GameSession);
   private readonly settings = inject(GameSettings);
   private readonly notifier = inject(Notifier);
+  private readonly undo = inject(GameUndo);
 
   readonly view = computed(() =>
     decisionView(this.session.model(), {
@@ -78,7 +81,20 @@ export class GameDecisions {
         ) {
           this.session.answer('');
         }
+        // A decision that only asks to be confirmed (confirmOnly: DONE on a full starting fellowship) is answered with
+        // nothing, if the player asked for that ("Skip extra confirmations"; legacy confirmsItself)
+        if (
+          waiting?.decision.params['confirmOnly']?.[0] === 'true' &&
+          this.settings.skipConfirmations() &&
+          !this.session.replaying()
+        ) {
+          this.session.answer('');
+        }
       });
+    });
+    // After the game was taken back and read again, a card's menu open before is for a game that is gone
+    effect(() => {
+      if (this.session.reopened() > 0) untracked(() => this.saved.set(null));
     });
   }
 
@@ -95,6 +111,7 @@ export class GameDecisions {
     const decision = this.decision;
     const mark = this.view().marks[cardId];
     if (!decision || this.session.replaying() || (mark !== 'selectable' && mark !== 'actionable')) return;
+    if (this.undo.frozen()) return;
     if (this.lastClick?.cardId === cardId && now - this.lastClick.at < SELECTION_DEBOUNCE_MS) return;
     this.lastClick = { cardId, at: now };
 
@@ -140,6 +157,7 @@ export class GameDecisions {
 
   /** An action chosen in the open menu. */
   chooseAction(actionId: string): void {
+    if (this.undo.frozen()) return;
     const menu = this.menu();
     this.saved.set(null);
     if (menu && this.decision?.type === 'CARD_ACTION_CHOICE') this.take(actionId, menu.cardId);
@@ -151,7 +169,7 @@ export class GameDecisions {
 
   async press(button: DecisionButton): Promise<void> {
     const decision = this.decision;
-    if (!decision) return;
+    if (!decision || this.undo.frozen()) return;
     switch (button) {
       case 'Pass':
         this.session.answer('');
@@ -175,17 +193,18 @@ export class GameDecisions {
 
   /** The number of an integer decision, as typed. */
   answerNumber(value: string): void {
-    if (this.decision?.type === 'INTEGER') this.session.answer(value);
+    if (this.decision?.type === 'INTEGER' && !this.undo.frozen()) this.session.answer(value);
   }
 
   /** The answer of a multiple choice, by its place in the list. */
   answerChoice(index: number): void {
-    if (this.decision?.type === 'MULTIPLE_CHOICE') this.session.answer(String(index));
+    if (this.decision?.type === 'MULTIPLE_CHOICE' && !this.undo.frozen()) this.session.answer(String(index));
   }
 
   /** Escape finishes a choice of cards shown in a dialog, if enough are chosen. */
   escape(): void {
     const decision = this.decision;
+    if (this.undo.frozen()) return;
     if (decision?.type === 'ARBITRARY_CARDS' && this.selected.length >= minimum(decision)) this.send();
   }
 

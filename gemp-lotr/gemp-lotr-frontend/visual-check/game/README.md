@@ -151,6 +151,53 @@ the format's discard pile made public for `STATES.opponentPilesPublic` (the P ev
   with the "old look for stacked cards" setting (cookie `use-old-stack`), on each device and on the computer layout of
   the same page (1366x768).
 
+## Taking a game back (undo)
+
+`npm run check:game:undo` (`undo.mjs`, against a game check server kept up, as the two checks below) plays real games
+with each player on a page of their own and checks taking a game back as the players see it:
+
+- **own**: after a choice nobody else has seen or answered, the Undo button is in the alert box and says what it
+  undoes; the list has the place as green, "Undo", with what was done ("Played Gimli"). The button takes it back at
+  once; both pages show the game as it was and say so, the button is gone, and the game goes on;
+- **done**: a starting fellowship nothing more fits into asks only for DONE; the last card is green meanwhile and
+  is taken back, offered again and chosen again, and after DONE the opponent goes on;
+- **skip**: with "Skip extra confirmations" on, the page presses that DONE itself;
+- **approve**: once the opponent has answered there is no Undo button and every place in the list is a revert with
+  its reasons; the "i" button explains the tiers. Asked, the asker waits (and may withdraw) and the opponent is
+  shown the same place, tier and reasons. Nothing in the request is the default (Enter does nothing, the first Tab
+  goes to Approve), and the opponent's own decision cannot be answered while it waits. Approved, both pages show
+  the game as it was at that place;
+- **decline**: the asker is told, nothing changes, the game goes on;
+- **decline-all**: the asker's list shows the reverts as off, with the reason; the asked player's "Auto-decline
+  revert requests" switch is on (the asker's is not), and turning it off lets requests through again;
+- **withdraw**: the opponent's request goes away, and their decision can be answered again;
+- **concede**: the opponent concedes while this player's decision waits, and the page shows the end without the
+  decision being answered first.
+
+`UNDO` in `undo.mjs` is where each kind of page keeps each thing: `legacy` (`game.html`, by its own markup) and
+`angular` (the Angular game page, by its DOM contract: `data-undo`, `data-dialog=undo-list` and `undo-request`,
+`data-undo-reply`, `data-decision-button`, ...). `--page angular` runs them on the Angular page (`npm run build` first),
+in its classic theme or with `--theme modern`; `--page legacy,angular` mixes them, as players on the two pages meet:
+the first seat on one kind and the second on the other, then the other way round, so each check runs twice and says
+which page asked and which answered. `--only own,approve` runs some of them; a screenshot of each step is saved in
+`report-undo/` (`--out`; mixed, the kind of page is in each file's name).
+
+```
+node game/undo.mjs                                       game.html
+node game/undo.mjs --page angular                        the Angular page, classic
+node game/undo.mjs --page angular --theme modern         the Angular page, modern
+node game/undo.mjs --page legacy,angular --only approve,decline,own
+```
+
+Result on 2026-11-19: 8 of 8 on `game.html`; on the Angular page 7 of 8 in classic and in modern, and 15 of 16 mixed:
+`own` fails where the Angular page asks, at pressing the Undo button, which lies under the starting fellowship's card
+dialog (80% of the window there; the legacy page's card dialogs now fit their cards and leave the alert box free).
+Pressed by script, the rest of `own` passes on the Angular page (neither page loads again).
+
+The game check (`run.mjs`) leaves undo's own requests out, as it does the game's long poll: the notices' long poll is
+always open and asked again whenever the server lets it go, and what can be taken back is asked whenever an answer
+brings events. Neither is compared, waited for or recorded (`watchTraffic`, `undoTiming`).
+
 Two checks against a game check server kept up (`npm run check:game -- --only start --sizes 1366x768 --keep`, then
 `npm run check:game:down`):
 

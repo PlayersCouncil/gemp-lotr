@@ -264,6 +264,272 @@
 	color: #aaa;
 }
 
+/* ---- Play > Scenarios ---- */
+/* folders on the left, the scenarios of the selected one on the right */
+.scenario-browser {
+	display: flex;
+	align-items: flex-start;
+	gap: 1em;
+}
+
+.scenario-folders {
+	flex: 0 0 13em;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #555;
+	background: #222;
+}
+
+.scenario-folder {
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+	padding: 0.45em 0.6em;
+	border: none;
+	border-bottom: 1px solid #3a3a3a;
+	background: none;
+	color: #ddd;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.scenario-folder:last-child {
+	border-bottom: none;
+}
+
+.scenario-folder:hover,
+.scenario-folder:focus-visible {
+	background: #303030;
+}
+
+.scenario-folder-selected,
+.scenario-folder-selected:hover {
+	background: #1f3d57;
+	color: #fff;
+}
+
+.scenario-folder-name {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.scenario-folder-count {
+	flex: 0 0 auto;
+	font-size: 85%;
+	color: #9a9a9a;
+}
+
+#scenario-list {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
+
+#scenario-list .scenario-kind:first-child {
+	margin-top: 0;
+}
+
+.scenario-kind {
+	margin: 0.6em 0 0 0;
+	font-size: 110%;
+	border-bottom: 1px solid #555;
+	padding-bottom: 0.2em;
+}
+
+.scenario-row,
+.scenario-current {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	padding: 0.6em 0.8em;
+	background: #2a2a2a;
+	border: 1px solid #555;
+}
+
+.scenario-current {
+	border-color: #c9a227;
+}
+
+.scenario-current[hidden] {
+	display: none;
+}
+
+.scenario-text,
+.scenario-current-text {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.scenario-title {
+	font-weight: bold;
+	font-size: 110%;
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+}
+
+/* the tag in front of a title: as wide whatever it says, so that the titles start in a line */
+.scenario-status {
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	min-width: 7.6em;
+	text-align: center;
+	font-size: 70%;
+	font-weight: normal;
+	padding: 0.1em 0.5em;
+	border-radius: 0.8em;
+	border: 1px solid currentColor;
+	white-space: nowrap;
+}
+
+.scenario-title-text {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.scenario-status-new { color: #b8b8b8; }
+.scenario-status-progress { color: #8ab4e8; }
+.scenario-status-complete { color: #7ecb7e; }
+.scenario-status-updated { color: #e0c060; }
+/* the one to play next stands out: filled, where the others are outlined */
+.scenario-status-next {
+	color: #1c1608;
+	background: #e8c14a;
+	border-color: #e8c14a;
+	font-weight: bold;
+}
+
+.scenario-summary {
+	margin-top: 0.2em;
+	color: #ccc;
+}
+
+.scenario-notes {
+	margin-top: 0.3em;
+	font-size: 85%;
+	color: #aaa;
+}
+
+.scenario-row button,
+.scenario-current button {
+	flex: 0 0 auto;
+	min-width: 7em;
+}
+
+/* Writing scenarios (those who may): a new one, and the button that brings the Edit buttons.  Under the list, and
+   set apart from it: the list is what the screen is for. */
+.scenario-author {
+	margin-top: 1.4em;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6em;
+	padding: 0.5em 0.8em;
+	border: 1px dashed #777;
+	color: #ccc;
+}
+
+.scenario-author[hidden] {
+	display: none;
+}
+
+.scenario-author input {
+	flex: 1 1 9em;
+	min-width: 0;
+}
+
+.scenario-author-draft {
+	flex: 1 1 auto;
+}
+
+.scenario-author-label {
+	flex: 0 0 auto;
+	font-weight: bold;
+}
+
+.scenario-author-note {
+	flex: 1 1 auto;
+	font-style: italic;
+}
+
+/* (the draft's line, then the new one's on a line of its own) */
+.scenario-author-break {
+	flex: 0 0 100%;
+	height: 0;
+}
+
+.scenario-row button.scenario-edit {
+	min-width: 4.5em;
+}
+
+.scenario-note {
+	border: 1px solid #a8893a;
+	color: #e8d9a8;
+	padding: 0.4em 0.8em;
+}
+
+.scenario-note[hidden] {
+	display: none;
+}
+
+/* Scenario files with mistakes in them, which cannot be played (admins see them all, a writer their own) */
+.scenario-unreadable {
+	border: 1px solid #a55;
+	color: #f2c4c4;
+	padding: 0.4em 0.8em;
+	max-height: 14em;
+	overflow-y: auto;
+}
+
+.scenario-unreadable[hidden] {
+	display: none;
+}
+
+.scenario-unreadable-heading {
+	font-weight: bold;
+}
+
+.scenario-unreadable-file {
+	margin-top: 0.4em;
+	display: flex;
+	align-items: flex-start;
+	gap: 1em;
+}
+
+.scenario-unreadable-text {
+	flex: 1;
+	min-width: 0;
+}
+
+.scenario-unreadable-note {
+	font-style: italic;
+	margin-top: 0.15em;
+}
+
+.scenario-unreadable-file code {
+	color: #fff;
+	overflow-wrap: anywhere;
+}
+
+.scenario-unreadable-file ul {
+	margin: 0.15em 0 0;
+	padding-left: 1.4em;
+}
+
+.scenario-unreadable-file li {
+	overflow-wrap: anywhere;
+}
+
+.scenario-empty {
+	padding: 1em;
+	text-align: center;
+	color: #aaa;
+}
+
 /* ---- narrow windows ---- */
 @media (max-width: 700px) {
 	#create-table-popup #create-table-selection {
@@ -289,4 +555,26 @@
 	.play-flow .table-blurb {
 		margin: 0;
 	}
+
+	/* the folders go above the list, as a row of chips */
+	.scenario-browser {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.scenario-folders {
+		flex: 0 0 auto;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.scenario-folder {
+		border-bottom: none;
+		border-right: 1px solid #3a3a3a;
+		padding-left: 0.6em !important;
+	}
+}
+
+.scenario-author select {
+	flex: 0 0 auto;
 }

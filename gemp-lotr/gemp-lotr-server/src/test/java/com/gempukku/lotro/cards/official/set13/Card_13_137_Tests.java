@@ -292,12 +292,15 @@ public class Card_13_137_Tests
 		var theodred = scn.GetShadowCard("theodred");
 
 		// The starting fellowships are what is tested here, so they are played and not skipped: player 1 takes
-		// nobody, and player 2 takes Théoden and Théodred.
+		// nobody, and player 2 takes Théoden and Théodred.  Nothing more fits beside them, so player 2 is asked
+		// only to press DONE, and does.
 		scn.FreepsDeclineChoosing();
 		scn.ShadowChooseCardBPFromSelection(theoden);
 		scn.ShadowChooseCardBPFromSelection(theodred);
 		assertInZone(Zone.FREE_CHARACTERS, theoden);
 		assertInZone(Zone.FREE_CHARACTERS, theodred);
+		assertTrue(scn.ShadowIsAskedOnlyToConfirm());
+		scn.ShadowConfirm();
 
 		scn.SkipMulligans();
 
@@ -315,10 +318,12 @@ public class Card_13_137_Tests
 		var eviltheoden = scn.GetShadowCard("theoden");
 		var eviltheodred = scn.GetShadowCard("theodred");
 
-		// Player 1 takes nobody into his starting fellowship, and player 2 takes Théoden and Théodred.
+		// Player 1 takes nobody into his starting fellowship, and player 2 takes Théoden and Théodred, beside whom
+		// nothing more fits, and presses DONE.
 		scn.FreepsDeclineChoosing();
 		scn.ShadowChooseCardBPFromSelection(eviltheoden);
 		scn.ShadowChooseCardBPFromSelection(eviltheodred);
+		scn.ShadowConfirm();
 
 		scn.SkipMulligans();
 		// A turn of each player: player 2's, with his pair, has been and gone.

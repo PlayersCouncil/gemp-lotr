@@ -1,6 +1,7 @@
 import { Component, computed, inject, linkedSignal } from '@angular/core';
 import { DecisionButton, DecisionCard, decisionCard, DecisionDialog } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
+import { GameUndo } from '../../../core/game/undo/game-undo.service';
 import { GameCard } from '../../../core/game/state/game-model';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { CardComponent } from '../../shared/card/card.component';
@@ -29,7 +30,8 @@ export function choiceLabel(html: string): string {
  * then `.gd-game-spinner` holding `button[data-decision="integer-down"]`, `output[data-decision="integer"]` and
  * `button[data-decision="integer-up"]`; or `select[data-decision="choice"]`; or `button[data-decision-choice]` (the
  * answer's index) per answer. In the large one: `.gd-game-decision__cards` with a `button.gd-card` per card (see
- * GameCardDirective; `data-zone` SPECIAL). The buttons under either: `button[data-decision-button]`.
+ * GameCardDirective; `data-zone` SPECIAL). The buttons under either: `button[data-decision-button]`. Both are `inert`
+ * (dimmed) while a revert request waits.
  */
 @Component({
   selector: 'gd-game-decision-dialogs',
@@ -43,6 +45,7 @@ export function choiceLabel(html: string): string {
       [modal]="false"
       [closable]="false"
       [focusSelf]="!listShown()"
+      [inert]="undo.frozen()"
       [open]="small() !== null"
     >
       @if (small(); as dialog) {
@@ -107,6 +110,7 @@ export function choiceLabel(html: string): string {
       [modal]="false"
       [closable]="false"
       [focusSelf]="true"
+      [inert]="undo.frozen()"
       [open]="cards() !== null"
     >
       @if (cards(); as dialog) {
@@ -146,6 +150,7 @@ export function choiceLabel(html: string): string {
 })
 export class DecisionDialogsComponent {
   protected readonly decisions = inject(GameDecisions);
+  protected readonly undo = inject(GameUndo);
   protected readonly views = inject(GameCardViews);
 
   private readonly dialog = computed(() => this.decisions.view().dialog);

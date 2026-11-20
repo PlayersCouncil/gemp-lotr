@@ -119,9 +119,13 @@ public class Card_05_031_Tests
 
 		scn.FreepsChooseCard(knight);
 
-		// 3 + 1 is the 4: the other knight's 1 no longer fits, and this player is asked nothing more.
+		// 3 + 1 is the 4: the other knight's 1 no longer fits, nothing more is offered, and this player is asked
+		// only to press DONE.
 		assertInZone(Zone.FREE_CHARACTERS, knight);
 		assertInZone(Zone.DECK, pippin);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 
 		// The other player's knights are no business of this Alcarin: his Knight costs him the printed 2.

@@ -58,6 +58,8 @@ public class DaoBuilder {
         CachedIpBanDAO ipBanDao = new CachedIpBanDAO(dbIpBanDao);
         objectMap.put(IpBanDAO.class, ipBanDao);
 
+        objectMap.put(ScenarioDAO.class, LoggingProxy.createLoggingProxy(ScenarioDAO.class, new DbScenarioDAO(dbAccess)));
+
         objectMap.put(RtmdFeedbackDAO.class, LoggingProxy.createLoggingProxy(RtmdFeedbackDAO.class, new DbRtmdFeedbackDAO(dbAccess)));
 
         objectMap.put(PrizePlaceholderDAO.class, LoggingProxy.createLoggingProxy(PrizePlaceholderDAO.class, new DbPrizePlaceholderDAO(dbAccess)));

@@ -157,6 +157,33 @@ public class DBDefs {
         public String winner; //45
     }
 
+    public static class ScenarioRun {
+        public int id;
+        public int player_id;
+        public String scenario_id; //191
+        public int version;
+        public LocalDateTime started;
+        public LocalDateTime ended;
+        public String result; //16
+        public Integer resumed_at;
+        public Integer last_step;
+        public String step_report; //JSON: step label -> matched / skipped / unreached
+        public String problems;
+        public String recording_id; //64
+        public String journal;
+    }
+
+    public static class ScenarioProgress {
+        public int player_id;
+        public String scenario_id; //191
+        public int version;
+        public String status; //16: started / complete
+        public int attempts;
+        public Integer best_score;
+        public LocalDateTime first_completed;
+        public LocalDateTime last_played;
+    }
+
     public static class LeagueSchedule {
         public int id;
         public String name; //45

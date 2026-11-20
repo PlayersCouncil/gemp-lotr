@@ -11,6 +11,9 @@
 
     <link rel="stylesheet" type="text/css" href="css/gemp-001/game.css">
     <link rel="stylesheet" type="text/css" href="css/gemp-001/autozoom.css">
+    <link rel="stylesheet" type="text/css" href="css/gemp-001/scenario.css">
+    <link rel="stylesheet" type="text/css" href="css/gemp-001/scenarioAuthor.css">
+    <link rel="stylesheet" type="text/css" href="css/gemp-001/scenarioShelf.css">
 
     <link rel="stylesheet" type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css">
     <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css">
@@ -51,6 +54,10 @@
     <script type="text/javascript" src="js/gemp-022/autoZoomHandler.js"></script>
     <script type="text/javascript" src="js/gemp-022/gameUi.js"></script>
     <script type="text/javascript" src="js/gemp-022/gameAnimations.js"></script>
+    <script type="text/javascript" src="js/gemp-022/undo.js"></script>
+    <script type="text/javascript" src="js/gemp-022/scenario/scenarioOverlay.js"></script>
+    <script type="text/javascript" src="js/gemp-022/scenario/scenarioAuthor.js"></script>
+    <script type="text/javascript" src="js/gemp-022/scenario/scenarioSubmit.js"></script>
     <script type="text/javascript" src="js/gemp-022/merchantUi.js"></script>
     
     <!-- Audio file downloaded from https://material.io/design/sound/sound-resources.html -->
@@ -112,6 +119,7 @@
                 <div class="setting-row"><input id="autoDismissDeckReveal" type="checkbox" value="selected" /><label for="autoDismissDeckReveal" title="When you search your own draw deck, skip the popup that shows its full contents and go straight to the choice">Auto-dismiss deck reveal when searching your own deck</label></div>
                 <div class="setting-row"><input id="use-old-stack-checkbox" type="checkbox" value="" /><label for="use-old-stack-checkbox">Use old visuals for stacked cards</label></div>
                 <div class="setting-row"><input id="alwaysDropDown" type="checkbox" value="selected" /><label for="alwaysDropDown">Always display drop-down in answer selection</label></div>
+                <div class="setting-row"><input id="skipConfirmations" type="checkbox" value="selected" /><label for="skipConfirmations" title="Answer for you any question that only asks you to confirm, such as pressing DONE on a starting fellowship that is already full. You can no longer undo the choice before it.">Skip extra confirmations</label></div>
                 <div class="setting-row setting-group">
                     <div class="setting-title">Phases when game auto-passes for you, if you have no phase actions to play</div>
                     <div class="setting-choices">
@@ -133,6 +141,8 @@
                 </div>
             </div>
             <div id="gameOptionsBox" class="slimPanel">
+                <div class="setting-row undoOptions" style="display:none"><button id="undoGame">Revert...</button>
+                    <input id="undoAutoDecline" type="checkbox" /><label for="undoAutoDecline" title="Decline every revert request in this game without being asked. Only for this game.">Auto-decline revert requests</label></div>
                 <div class="setting-row"><button id="concedeGame">Concede game</button></div>
                 <div class="setting-row"><button id="cancelGame">Request game cancel</button></div>
             </div>

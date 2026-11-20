@@ -17,6 +17,26 @@
 		hall: false
 	}
 	{
+		//The rules that scripted scenarios (tutorials, puzzles) are played under unless one names another format.
+		// Every set is in, and there are deliberately no errata sets: a lesson shows cards as they were printed.
+		name: Scenario
+		code: scenario
+		order: 1000
+		sites: FELLOWSHIP
+		cancelRingBearerSkirmish: true
+		maximumSameName: 100
+		minDeckSize: 1
+		blocks: [
+			fotr_block
+		]
+		sets: [
+			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+			30, 31, 32, 33
+			100, 101, 102, 103
+		]
+		hall: false
+	}
+	{
 		name: Anything Goes
 		code: rev_tow_sta
 		order: -1

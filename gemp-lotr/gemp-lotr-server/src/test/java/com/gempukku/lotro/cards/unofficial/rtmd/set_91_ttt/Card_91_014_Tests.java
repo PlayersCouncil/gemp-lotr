@@ -128,7 +128,10 @@ public class Card_91_014_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 		scn.FreepsChooseCard(merry);
 
-		// Done — no more companions fit under 3
+		// No more companions fit under 3: nothing more is offered, and the player is asked only to press DONE.
+		// Once he has, the other player is asked for his starting fellowship.
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsDecisionAvailable("Starting fellowship"));
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}

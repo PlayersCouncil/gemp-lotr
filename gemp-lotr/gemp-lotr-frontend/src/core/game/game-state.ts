@@ -15,6 +15,7 @@ import { GameSession } from './session/game-session.service';
 import { GameViewState } from './session/game-view-state';
 import { GameSettings } from './settings/game-settings';
 import { GameCardInfo } from './table/game-card-info';
+import { GameUndo } from './undo/game-undo.service';
 import { GameCardViews } from './table/game-card-views';
 import { GameTableState } from './table/game-table.service';
 
@@ -32,6 +33,7 @@ export function provideGameState(): Provider[] {
     GameSettings,
     ChatRoom,
     GameLog,
+    GameUndo,
     GameDecisions,
     GameClocks,
     GameAttention,

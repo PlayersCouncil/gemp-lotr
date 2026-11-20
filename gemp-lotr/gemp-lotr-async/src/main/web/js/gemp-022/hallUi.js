@@ -409,6 +409,25 @@ var GempLotrHallUI = Class.extend({
 		var deckManager = new DeckManager(this.comm);
 		var formatManager = new FormatManager(this.comm);
 		this.tableCreator = new CreateTable(this, this.comm, $("#create-table-popup"), formatManager, deckManager);
+
+		// A game tab that wants to come back here asks whether a hall is open before opening another one (two halls
+		// at once get a 409).  Answering lets it close itself instead: see backToHall in scenario/scenarioOverlay.js.
+		try {
+			this.hallChannel = new BroadcastChannel("gemp-lotr-hall");
+			this.hallChannel.onmessage = function (event) {
+				if (event.data != null && event.data.type == "anyone")
+					that.hallChannel.postMessage({type: "here"});
+				// a game tab that is closing itself asks for something to be shown here (My Scenarios, after a
+				// scenario was submitted from the authoring tool): only hall links, and the lists are fetched again
+				if (event.data != null && event.data.type == "go" && /^#[A-Za-z0-9\/_-]+$/.test(String(event.data.hash || ""))) {
+					if (window.GempLinks)
+						GempLinks.go(event.data.hash);
+					$(document).trigger("gemp:scenarios-changed");
+				}
+			};
+		} catch (e) {
+			// no such thing in this browser: the game tab opens the hall itself, as it always did
+		}
 		this.tableJoiner = new JoinTable(this, this.comm, $("#join-table-popup"), formatManager, deckManager);
 		$("#open-table-button").button().click(
 			function() {

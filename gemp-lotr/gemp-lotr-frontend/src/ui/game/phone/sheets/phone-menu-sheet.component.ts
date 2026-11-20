@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { GameSheets } from '../../../../core/game/phone/game-sheets';
 import { GameEnding } from '../../../../core/game/session/game-ending';
 import { GameSession } from '../../../../core/game/session/game-session.service';
+import { GameUndo } from '../../../../core/game/undo/game-undo.service';
 import { PageCues } from '../../../../core/platform/page-cues';
 import { GAME_THEME_PICKER, THEME_LABELS, THEMES, ThemeService } from '../../../../core/platform/theme.service';
 
@@ -10,10 +11,11 @@ const HALL = '/gemp-lotr/hall.html';
 
 /**
  * The phone layout's menu: the theme (red, first, as in the deck builder), the game's result once it ended, the chat,
- * the game's information, the settings, full screen, conceding or asking to cancel while the player plays, and back to
- * the hall.
+ * the game's information, the settings, full screen, Revert... (the list of places to go back to, UndoListComponent, as
+ * in the computer layout's Options tab), conceding or asking to cancel while the player plays, and back to the hall.
  *
- * DOM contract: `.gd-phone-menu` holding `button.gd-phone-menu__item[data-menu]` (`data-danger` on concede).
+ * DOM contract: `.gd-phone-menu` holding `button.gd-phone-menu__item[data-menu]` (`data-danger` on concede; `revert`
+ * opens the list).
  */
 @Component({
   selector: 'gd-phone-menu-sheet',
@@ -41,6 +43,7 @@ export class PhoneMenuSheetComponent {
   private readonly session = inject(GameSession);
   private readonly cues = inject(PageCues);
   private readonly ending = inject(GameEnding);
+  private readonly undo = inject(GameUndo);
   private readonly theme = inject(ThemeService);
   /** Players may switch themes (GAME_THEME_PICKER): the menu's first item does it. */
   private readonly themePicker = inject(GAME_THEME_PICKER);
@@ -65,6 +68,7 @@ export class PhoneMenuSheetComponent {
     if (this.cues.fullscreenAvailable()) {
       items.push({ key: 'fullscreen', label: this.cues.fullscreen() ? 'Leave full screen' : 'Full screen' });
     }
+    if (playing && !model.ended && this.undo.allowed()) items.push({ key: 'revert', label: 'Revert...' });
     if (playing && !model.ended) {
       items.push({ key: 'cancel', label: 'Request game cancel' }, { key: 'concede', label: 'Concede game' });
     }
@@ -87,6 +91,11 @@ export class PhoneMenuSheetComponent {
       case 'cancel':
       case 'concede':
         this.sheets.open({ kind: 'confirm', what: key });
+        break;
+      case 'revert':
+        // The list is a dialog over the table: the sheets go
+        this.sheets.closeAll();
+        this.undo.openList();
         break;
       case 'ended':
         this.sheets.closeAll();

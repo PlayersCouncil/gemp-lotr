@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A jigsaw piece.  Drawn for Gemp-LotR (the Play Scenario or Tutorial button). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <mask id="piece" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <!-- the piece: a body, a knob on top and one on the right -->
+      <rect x="36" y="140" width="344" height="344" rx="28" fill="#fff"/>
+      <rect x="180" y="106" width="56" height="52" fill="#fff"/>
+      <circle cx="208" cy="80" r="60" fill="#fff"/>
+      <rect x="362" y="284" width="52" height="56" fill="#fff"/>
+      <circle cx="440" cy="312" r="60" fill="#fff"/>
+      <!-- sockets on the left and the bottom -->
+      <rect x="20" y="288" width="40" height="48" fill="#000"/>
+      <circle cx="78" cy="312" r="46" fill="#000"/>
+      <rect x="184" y="462" width="48" height="40" fill="#000"/>
+      <circle cx="208" cy="442" r="46" fill="#000"/>
+    </mask>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" fill="#aab0ff" mask="url(#piece)"/>
+</svg>

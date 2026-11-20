@@ -12,6 +12,7 @@ import { DialogComponent } from './dialog.component';
       [open]="open()"
       [modal]="modal()"
       [focusSelf]="focusSelf()"
+      [inert]="inert()"
       (closed)="closed = closed + 1; open.set(false)"
     >
       <input class="first" />
@@ -23,6 +24,7 @@ class HostComponent {
   readonly open = signal(false);
   readonly modal = signal(true);
   readonly focusSelf = signal(false);
+  readonly inert = signal(false);
   closed = 0;
 }
 
@@ -75,6 +77,19 @@ describe('DialogComponent', () => {
     await fixture.whenStable();
     expect(dialog.open).toBe(false);
     expect(host.closed).toBe(0);
+  });
+
+  it('is inert while asked to be: it stays open, and nothing in it can be used', async () => {
+    const { fixture, host, dialog, show } = await render();
+    await show();
+    expect(dialog.hasAttribute('inert')).toBe(false);
+    host.inert.set(true);
+    await fixture.whenStable();
+    expect(dialog.hasAttribute('inert')).toBe(true);
+    expect(dialog.open).toBe(true);
+    host.inert.set(false);
+    await fixture.whenStable();
+    expect(dialog.hasAttribute('inert')).toBe(false);
   });
 
   it('reports a close by the close button', async () => {

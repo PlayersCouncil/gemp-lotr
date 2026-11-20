@@ -145,3 +145,20 @@ export function mergeMessages<T extends { kind: string; text: string }>(
   // Nothing shared (e.g. more than the server keeps happened while away): both, in order
   return [...earlier, ...server];
 }
+
+/**
+ * The game's messages after it was taken back and read again from nothing: those the page had shown, then the new
+ * game's from `announcement` (its own line about the revert, the last of that text) on. The new game's earlier messages
+ * repeat what was shown before the place it went back to. Without the line, what `mergeMessages` makes of the two.
+ */
+export function continuedMessages<T extends { kind: string; text: string }>(
+  earlier: readonly T[],
+  server: readonly T[],
+  announcement: string | null,
+): T[] {
+  let at = -1;
+  server.forEach((message, index) => {
+    if (message.text === announcement) at = index;
+  });
+  return at < 0 ? mergeMessages(earlier, server) : [...earlier, ...server.slice(at)];
+}

@@ -1,0 +1,17 @@
+/* The explanation of the tiers (game.css .undoHelp) */
+:host {
+  display: block;
+  margin: 0 0 0.6em;
+  padding: 0.5em;
+  border: 1px solid var(--theme-game-undo-line);
+  border-radius: var(--theme-game-undo-box-radius);
+  font-size: 110%;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host > div {
+  margin: 0.3em 0;
+}

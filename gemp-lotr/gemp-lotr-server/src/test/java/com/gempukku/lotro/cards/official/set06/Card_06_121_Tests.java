@@ -120,9 +120,14 @@ public class Card_06_121_Tests
 		scn.FreepsChooseCard(faramir);
 
 		assertInZone(Zone.FREE_CHARACTERS, faramir);
-		// The total stands at 4 and not at 3: Pippin's 1 no longer fits, nobody is left to offer and the choice
-		// ends.  The other player is choosing now.
+		// The total stands at 4 and not at 3: Pippin's 1 no longer fits, nobody is left to offer, and the player
+		// is asked only to press DONE.
 		assertInZone(Zone.DECK, pippin, boromir);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
+
+		// His fellowship is complete, and the other player is choosing now.
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}

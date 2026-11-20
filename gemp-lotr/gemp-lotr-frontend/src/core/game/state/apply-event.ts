@@ -257,9 +257,11 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
         local: NO_CHOICES,
         alertAsked: model.alertAsked || ALERT_DECISIONS.includes(event.decision.type),
       };
+    // The game being taken back (GR) changes nothing here: the table was sent again before it (GameSession says it)
     case 'CAC':
     case 'EP':
     case 'CA':
+    case 'GR':
       return next;
   }
 }

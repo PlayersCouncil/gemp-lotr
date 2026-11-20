@@ -6,6 +6,7 @@ import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake
 import { provideGameState } from '../game-state';
 import { GameSession } from '../session/game-session.service';
 import { GameSettings } from '../settings/game-settings';
+import { GameUndo } from '../undo/game-undo.service';
 import { GameDecisions, SELECTION_DEBOUNCE_MS, UNASSIGNED_QUESTION } from './game-decisions.service';
 
 const GAME = '/gemp-lotr-server/game/7';
@@ -192,6 +193,69 @@ describe('GameDecisions', () => {
     expect(session.model().local.assignments).toEqual({ '5': '2' });
     await decisions.press('Done');
     expect(answer()).toBe('1,2 5');
+  });
+
+  it('answers a decision that only asks to be confirmed, if the player asked to skip those (not otherwise)', () => {
+    open('CARD_SELECTION', param('min', '0') + param('max', '0') + param('confirmOnly', 'true'));
+    expect(answer()).toBeNull();
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        provideGempHttp(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: '' },
+        provideGameState(),
+      ],
+    });
+    decisions = TestBed.inject(GameDecisions);
+    session = TestBed.inject(GameSession);
+    backend = TestBed.inject(HttpTestingController);
+    TestBed.inject(GameSettings).setSkipConfirmations(true);
+    open('CARD_SELECTION', param('min', '0') + param('max', '0') + param('confirmOnly', 'true'));
+    expect(answer()).toBe('');
+  });
+
+  it('while a revert request waits, no gesture answers or chooses anything', async () => {
+    settings.setAutoAccept(false);
+    open('CARD_SELECTION', param('cardId', '1', '2') + param('min', '0') + param('max', '2'));
+    const undo = TestBed.inject(GameUndo);
+    undo.pending.set({
+      requestId: 1,
+      requester: 'bob',
+      label: 'x',
+      turn: 1,
+      phase: '',
+      tier: 'RED',
+      reasons: [],
+      secondsLeft: 60,
+    });
+    decisions.cardClicked('1', at, 1000);
+    decisions.chooseAction('1');
+    decisions.answerNumber('1');
+    decisions.answerChoice(0);
+    decisions.escape();
+    await decisions.press('Done');
+    expect(session.model().local.selectedCardIds).toEqual([]);
+    expect(answer()).toBeNull();
+    // Resolved: the decision is answered as ever
+    undo.pending.set(null);
+    decisions.cardClicked('1', at, 2000);
+    await decisions.press('Done');
+    expect(answer()).toBe('1');
+  });
+
+  it("closes a card's menu when the game was taken back and read again", () => {
+    const menu = param('cardId', '5', '5') + param('blueprintId', 'inPlay', 'inPlay') + param('actionId', 'a', 'b');
+    open('CARD_ACTION_CHOICE', menu + param('actionText', 'A', 'B'));
+    decisions.cardClicked('5', at, 1000);
+    expect(decisions.menu()).not.toBeNull();
+    session.reopen(null);
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'GET')
+      .flush(decision('CARD_ACTION_CHOICE', menu + param('actionText', 'A', 'B')));
+    TestBed.tick();
+    expect(decisions.menu()).toBeNull();
   });
 
   it('does nothing without a waiting decision', async () => {

@@ -9,7 +9,7 @@ import { eventPauses, EventPause, GameAnimation, speedFactor } from './event-pac
 import { emptyGame, GameModel } from '../state/game-model';
 import { assignMinion, clearSelection, decisionAnswered, selectCard, unassignMinion } from '../state/local-choices';
 import { GameLog } from './game-log';
-import { GameRestore } from './game-restore';
+import { continuedMessages, GameRestore } from './game-restore';
 
 /** How long after an answer the page asks for news again (the legacy page's 100 ms). */
 export const POLL_DELAY_MS = 100;
@@ -98,6 +98,15 @@ export class GameSession {
   /** A replay: whether it plays, and whether it has played to its end. */
   readonly replayPlaying = signal(false);
   readonly replayDone = signal(false);
+  /** How many answers of the server have brought events (not in a replay): what the player may take back changes. */
+  readonly moved = signal(0);
+  /**
+   * The game was taken back (a GR event, in a game or a replay): what the game says of it and its tier, with a count
+   * so that each one is seen. Null until it happens.
+   */
+  readonly reverted = signal<{ message: string; tier: string; count: number } | null>(null);
+  /** How many times the game was read again from nothing after it was taken back (reopen). */
+  readonly reopened = signal(0);
 
   private readonly settings = inject(GameSettings);
   /**
@@ -117,12 +126,24 @@ export class GameSession {
   /** What runs once the queue is empty (asking for news). */
   private afterQueue: (() => void)[] = [];
   private holding = false;
+  /** The hold now running: a hold's end that comes after the game was read again from nothing ends nothing. */
+  private holdToken = 0;
   private replayEvents: readonly GameEvent[] = [];
   private replayNext = 0;
+  /** A replay: whether its table has been laid out once, and whether it is being laid out again (after a revert). */
+  private replayTableLaid = false;
+  private replayLaying = false;
 
   private gameId: string | null = null;
   private channel: string | null = null;
   private polling = false;
+  /**
+   * Counts the times the game was read again from nothing (reopen): an answer to a request sent before that is for a
+   * game that is no longer there, and is dropped.
+   */
+  private generation = 0;
+  /** While the game read again is applied: its messages aren't news for the chat box (reopen says which are). */
+  private quiet = false;
   /** The view's own state, kept with the game for a reload (see GameRestore). */
   private view: Readonly<Record<string, unknown>> = {};
   /** True once the game is open and what the page held before was read back: only then is anything saved over it. */
@@ -134,8 +155,10 @@ export class GameSession {
    */
   open(gameId: string, opened?: () => void): void {
     this.gameId = gameId;
+    const generation = this.generation;
     this.lifetime.read(this.api.open(gameId), {
       next: (update) => {
+        if (generation !== this.generation) return;
         // What the page held is read back before anything is saved over it
         this.receive(update, false, false);
         this.state.update((model) => this.restore.restore(gameId, model));
@@ -146,7 +169,7 @@ export class GameSession {
         opened?.();
         this.keepCurrent(update);
       },
-      error: (error: unknown) => this.fail(error),
+      error: (error: unknown) => this.fail(error, generation),
     });
   }
 
@@ -167,13 +190,69 @@ export class GameSession {
     if (!waiting || !this.gameId || this.channel === null) return;
     this.state.update(decisionAnswered);
     this.save();
+    const generation = this.generation;
     this.lifetime.write(this.api.answer(this.gameId, this.channel, waiting.decision.id, value), {
       next: (update) => {
+        if (generation !== this.generation) return;
         this.receive(update);
         this.afterEvents(() => this.keepCurrent(update));
       },
-      error: (error: unknown) => this.fail(error),
+      error: (error: unknown) => this.fail(error, generation),
     });
+  }
+
+  /**
+   * The game was taken back (a revert): the server now plays another game behind the same id, and gives this page a new
+   * channel. The page doesn't load again: what it holds of the game is dropped (the events waiting, the choices not
+   * sent, what it made of the game that the server's full state doesn't say again) and the game is read again from
+   * nothing, as when it opens. The chat box keeps what it showed: the game's messages from `announcement` (the game's
+   * own line about the revert) on are added to it. Answers to requests sent before are dropped.
+   */
+  reopen(announcement: string | null): void {
+    const gameId = this.gameId;
+    if (!gameId || this.replaying()) return;
+    const generation = ++this.generation;
+    // A refusal of the old channel that came just before the notice was the revert, not another window
+    if (this.problem()?.status === 409) this.problem.set(null);
+    this.ready = false;
+    this.polling = false;
+    this.queue.length = 0;
+    this.afterQueue = [];
+    this.holding = false;
+    this.holdToken++;
+    this.animation.set(null);
+    this.busy.set(false);
+    this.lifetime.read(this.api.open(gameId), {
+      next: (update) => {
+        if (generation !== this.generation) return;
+        const kept = this.state().messages;
+        this.state.set(emptyGame());
+        this.quiet = true;
+        try {
+          this.receive(update, false, false);
+        } finally {
+          this.quiet = false;
+        }
+        const messages = continuedMessages(kept, this.state().messages, announcement);
+        this.log.game(messages.slice(kept.length));
+        this.state.update((model) => ({ ...model, messages }));
+        this.ready = true;
+        this.save();
+        this.reopened.update((count) => count + 1);
+        this.keepCurrent(update);
+      },
+      error: (error: unknown) => this.fail(error, generation),
+    });
+  }
+
+  /**
+   * Asks for news once while a decision waits for the player, when nothing else asks: something the player must see
+   * at once happened meanwhile (the game ended: the opponent conceded). As the legacy page's pollOnce, it starts no
+   * asking of its own while the decision still waits.
+   */
+  pollOnce(): void {
+    if (!this.gameId || this.channel === null || this.polling || !this.state().decision || this.replaying()) return;
+    this.poll(true);
   }
 
   /**
@@ -269,6 +348,7 @@ export class GameSession {
    */
   private receive(update: GameUpdate, save = true, animate = true): void {
     this.channel = update.channel ?? this.channel;
+    if (update.events.length > 0) this.moved.update((count) => count + 1);
     this.state.update((model) => ({ ...model, clocks: { ...model.clocks, ...update.clocks } }));
     for (const event of update.events) this.queue.push({ event, animate, stage: 0, applied: false });
     this.pump();
@@ -324,10 +404,12 @@ export class GameSession {
 
   private hold(pause: EventPause): void {
     const duration = pause.duration * this.speed();
+    const token = ++this.holdToken;
     this.holding = true;
     this.busy.set(true);
     this.animation.set({ animation: pause.animation, duration });
     this.lifetime.later(() => {
+      if (token !== this.holdToken) return;
       this.holding = false;
       this.animation.set(null);
       this.pump();
@@ -337,7 +419,10 @@ export class GameSession {
   private apply(event: GameEvent): void {
     const shown = this.state().messages.length;
     this.state.update((model) => applyEvent(model, event));
-    this.log.game(this.state().messages.slice(shown));
+    if (!this.quiet) this.log.game(this.state().messages.slice(shown));
+    if (event.type === 'GR') {
+      this.reverted.update((last) => ({ message: event.message, tier: event.tier, count: (last?.count ?? 0) + 1 }));
+    }
   }
 
   /** The replay's next event, while it plays: what the last one asked is put away first (legacy cleanupDecision). */
@@ -350,7 +435,16 @@ export class GameSession {
     }
     this.replayNext++;
     if (this.state().decision) this.state.update(decisionAnswered);
-    this.queue.push({ event, animate: true, stage: 0, applied: false });
+    if (event.type === 'P' && this.replayTableLaid) {
+      // The game was taken back here: the recording lays the table out again from nothing, at once, up to its GR
+      this.state.set(emptyGame());
+      this.log.restart(null, []);
+      this.replayLaying = true;
+    }
+    if (event.type === 'P') this.replayTableLaid = true;
+    const animate = !this.replayLaying;
+    if (event.type === 'GR') this.replayLaying = false;
+    this.queue.push({ event, animate, stage: 0, applied: false });
     this.busy.set(true);
     this.pump();
   }
@@ -367,23 +461,31 @@ export class GameSession {
     this.lifetime.later(() => this.poll(), POLL_DELAY_MS);
   }
 
-  private poll(): void {
+  /** `once`: asked over a waiting decision (pollOnce), which goes on asking only once no decision waits any more. */
+  private poll(once = false): void {
     if (!this.gameId || this.channel === null) return;
     this.polling = true;
+    const generation = this.generation;
     this.lifetime.read(this.api.poll(this.gameId, this.channel), {
       next: (update) => {
+        if (generation !== this.generation) return;
         this.polling = false;
         this.receive(update);
-        this.afterEvents(() => this.keepCurrent(update));
+        this.afterEvents(() => {
+          if (!once || !this.state().decision) this.keepCurrent(update);
+        });
       },
       error: (error: unknown) => {
+        if (generation !== this.generation) return;
         this.polling = false;
         this.fail(error);
       },
     });
   }
 
-  private fail(error: unknown): void {
+  /** `generation`: of the request that failed; one sent before the game was read again from nothing is no problem. */
+  private fail(error: unknown, generation = this.generation): void {
+    if (generation !== this.generation) return;
     const problem = problemFor(ApiError.from(error).status);
     this.problem.set(problem);
     // A problem with a title is a dialog; the others are warnings in the chat box, as on the legacy page

@@ -119,6 +119,20 @@
   --theme-game-selected: #009f9f;
   /* An action that would do nothing (game.css .noEffectCard, the new master of 2026-11-17) */
   --theme-game-no-effect: #e6d36f;
+  /* Taking a game back (game.css "Undo and revert"): the tiers' colours, the list's lines, the banner */
+  --theme-game-undo-own: #7ccf7c;
+  --theme-game-undo-replays: #f0d860;
+  --theme-game-undo-revealed: #ee7b7b;
+  --theme-game-undo-on-tier: #111;
+  --theme-game-undo-edge: rgb(0 0 0 / 0.5);
+  --theme-game-undo-radius: 0.3em;
+  --theme-game-undo-box-radius: 0.4em;
+  --theme-game-undo-line: rgb(128 128 128 / 0.6);
+  --theme-game-undo-rule: rgb(128 128 128 / 0.3);
+  --theme-game-undo-heading-bg: rgb(128 128 128 / 0.25);
+  --theme-game-undo-banner-bg: rgb(20 20 20 / 0.92);
+  --theme-game-undo-banner-text: #fff;
+  --theme-game-undo-banner-radius: 0.5em;
   /* A card's frame, and the frame an activated card flashes (game.css .highlightBorderOverlay) */
   --theme-game-card-frame: #000;
   --theme-game-highlight: #fff;
@@ -381,6 +395,17 @@
   /* The meanings of game.html's borders kept (the new master, 2026-11-17): green to choose, blue for an action, teal
      chosen, pale yellow double for an action that would do nothing; tones for the night and leather surfaces */
   --theme-game-no-effect: #e6d36f;
+  /* Taking a game back: the tiers in Middle-earth tones, the list's lines bronze, the banner leather */
+  --theme-game-undo-own: #8fc77a;
+  --theme-game-undo-replays: #e6d36f;
+  --theme-game-undo-revealed: #d8735f;
+  --theme-game-undo-on-tier: #1a140c;
+  --theme-game-undo-edge: #13100c;
+  --theme-game-undo-line: #5a4a2c;
+  --theme-game-undo-rule: #3a2f20;
+  --theme-game-undo-heading-bg: #241d15;
+  --theme-game-undo-banner-bg: rgb(28 23 18 / 0.96);
+  --theme-game-undo-banner-text: #ece2cc;
   --theme-game-menu-no-effect-text: #a89a7c;
   --theme-game-menu-no-effect-bar: #c9b24a;
   --theme-game-spinner-bg: #110e0a;

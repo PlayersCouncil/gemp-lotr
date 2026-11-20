@@ -191,8 +191,11 @@ public class Card_94_024_Tests
 
 		scn.FreepsChooseCard(gimli);
 
-		// 3 (Gimli) + 2 (Merry) = 5 > 4, and there is nothing else in the pool to pick:
-		// the decision auto-completes once nothing affordable remains.
+		// 3 (Gimli) + 2 (Merry) = 5 > 4, and there is nothing else in the pool to pick: once nothing affordable
+		// remains, Merry is not offered and the player is asked only to press DONE.
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsDecisionAvailable("Starting fellowship"));
 
 		scn.ShadowDeclineChoosing();
@@ -215,6 +218,8 @@ public class Card_94_024_Tests
 		scn.FreepsChooseCard(freepsGimli);
 		assertTrue(scn.FreepsHasCardChoiceAvailable(freepsMerry));
 		scn.FreepsChooseCard(freepsMerry);
+		// Nobody is left in his deck to offer: he presses DONE
+		scn.FreepsConfirm();
 
 		// Player 2 owns the mod: Gimli costs 3, Merry costs 2 (both +1 for region 1). Budget is 4.
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
@@ -222,7 +227,11 @@ public class Card_94_024_Tests
 
 		scn.ShadowChooseCard(gimli);
 
-		// 3 (Gimli) + 2 (Merry) = 5 > 4: nothing he can afford remains, and his choice is over.
+		// 3 (Gimli) + 2 (Merry) = 5 > 4: nothing he can afford remains, so Merry is not offered and he is asked
+		// only to press DONE.
+		assertTrue(scn.ShadowIsAskedOnlyToConfirm());
+
+		scn.ShadowConfirm();
 		assertFalse(scn.ShadowDecisionAvailable("Starting fellowship"));
 
 		scn.StartGame(true, false);
@@ -244,6 +253,10 @@ public class Card_94_024_Tests
 
 		assertTrue(scn.FreepsHasCardChoiceAvailable(merry));
 		scn.FreepsChooseCard(merry);
+
+		// Nobody is left in the deck to offer: he is asked only to press DONE
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 
 		scn.ShadowDeclineChoosing();
 		scn.StartGame(true, false);

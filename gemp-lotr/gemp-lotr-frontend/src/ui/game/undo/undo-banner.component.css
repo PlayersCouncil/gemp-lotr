@@ -1,0 +1,22 @@
+/* The banner (game.css .undoBanner): over the top of the window, in the middle */
+.gd-undo-banner {
+  position: fixed;
+  top: 0.6em;
+  left: 50%;
+  z-index: 2000;
+  max-width: 80%;
+  padding: 0.5em 1em;
+  border: 0;
+  border-radius: var(--theme-game-undo-banner-radius);
+  background: var(--theme-game-undo-banner-bg);
+  color: var(--theme-game-undo-banner-text);
+  font: inherit;
+  text-align: left;
+  transform: translateX(-50%);
+  cursor: pointer;
+  transition: opacity 1s;
+}
+
+.gd-undo-banner[data-fading] {
+  opacity: 0;
+}

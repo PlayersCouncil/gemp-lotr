@@ -223,3 +223,13 @@
   outline: 2px solid var(--theme-focus-ring-outer);
   outline-offset: -2px;
 }
+
+/* The Undo button: under the answers, on the right (the computer layout's is in the alert box's lower right) */
+.gd-phone-divider__undo {
+  justify-self: end;
+}
+
+/* While a revert request waits nothing in the game can be answered */
+.gd-phone-divider__buttons[data-frozen] {
+  opacity: 0.45;
+}

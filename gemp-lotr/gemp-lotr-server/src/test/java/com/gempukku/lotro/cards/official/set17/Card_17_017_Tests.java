@@ -350,11 +350,16 @@ public class Card_17_017_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(gandalf));
 		scn.FreepsChooseCard(gandalf);
 
-		// His 4 is the whole of the 4 allowed, so the choice is over; nothing is offered him, and the other
-		// player is choosing now.
+		// His 4 is the whole of the 4 allowed, so nobody is left to offer; nothing is offered him either: all he
+		// is asked is to press DONE.
 		assertInZone(Zone.FREE_CHARACTERS, gandalf);
 		assertEquals(0, scn.GetAttachedCards(gandalf).size());
 		assertFalse(scn.FreepsHasOptionalTriggerAvailable());
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
+
+		// His fellowship is complete with nothing offered on the way, and the other player is choosing now.
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}

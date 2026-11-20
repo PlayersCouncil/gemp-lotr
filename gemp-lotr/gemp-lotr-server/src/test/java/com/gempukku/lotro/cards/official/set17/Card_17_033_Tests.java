@@ -111,9 +111,15 @@ public class Card_17_033_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(knight));
 		scn.FreepsChooseCard(ranger1);
 
-		// 3 + 1 = 4: not even Merry fits, and player 2 is asked.  Had the Ranger cost 0, Merry would still be offered.
+		// 3 + 1 = 4: not even Merry fits, nobody is left to offer, and player 1 is asked only to press DONE.  Had
+		// the Ranger cost 0, Merry would still be offered.
 		assertInZone(Zone.FREE_CHARACTERS, madril, ranger1);
 		assertInZone(Zone.DECK, merry);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
+
+		// The fellowship is complete, and player 2 is asked.
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
@@ -134,8 +140,12 @@ public class Card_17_033_Tests
 		assertTrue(scn.FreepsHasCardChoiceAvailable(ranger1, merry));
 		scn.FreepsChooseCard(ranger1);
 
+		// 3 + 1 = 4 again: Merry does not fit, and player 1 is asked only to press DONE
 		assertInZone(Zone.FREE_CHARACTERS, dead, ranger1);
 		assertInZone(Zone.DECK, merry);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}

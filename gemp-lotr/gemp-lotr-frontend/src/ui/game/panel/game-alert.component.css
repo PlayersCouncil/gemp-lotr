@@ -60,6 +60,27 @@
   float: right;
 }
 
+/* The Undo button: lower right (Pass and Done are lower left), and a Done on the right moves over for it */
+.gd-game-alert__undo {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  margin: 0;
+}
+
+.gd-game-alert__undo > span {
+  padding: 0.2em 0.6em;
+}
+
+:host([data-undo]) .gd-game-alert__buttons {
+  right: 5.5em;
+}
+
+/* While a revert request waits nothing in the game can be answered */
+.gd-game-alert__buttons[data-frozen] {
+  opacity: 0.45;
+}
+
 /* The button that goes on with the game (Done, Pass, OK): a gold pill in the modern theme, as every button in classic */
 .gd-game-alert__button[data-main] {
   border-color: var(--theme-game-main-edge);

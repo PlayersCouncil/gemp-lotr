@@ -48,7 +48,8 @@ export class DialogLayers {
  * delivery, alert, confirm, prompt), `data-placed` once moved or pinned, with `--gd-dialog-left` and
  * `--gd-dialog-top` (px, its top left corner in the window), its last child `.gd-dialog__grip` (the resize grip drawn on
  * touch screens), and `--gd-dialog-layer` (a number that grows each time a
- * dialog opens or is pressed, for the stacking of non-modal dialogs). Inside: `header.gd-dialog__header` with
+ * dialog opens or is pressed, for the stacking of non-modal dialogs), `inert` while `[inert]` is set (what is in it can't
+ * be used: a game's decision while a revert request waits). Inside: `header.gd-dialog__header` with
  * `h2.gd-dialog__title[data-dialog-title]` and `button.gd-dialog__close` (unless `[closable]="false"`), `.gd-dialog__body` (the content), then the actions.
  */
 @Component({
@@ -67,6 +68,7 @@ export class DialogLayers {
       [attr.aria-labelledby]="titleId"
       [attr.autofocus]="focusSelf() ? '' : null"
       [attr.data-placed]="placed() ? '' : null"
+      [attr.inert]="inert() ? '' : null"
       [style.--gd-dialog-left]="placed() ? placed()!.left + 'px' : null"
       [style.--gd-dialog-top]="placed() ? placed()!.top + 'px' : null"
       [style.--gd-dialog-layer]="layer()"
@@ -111,6 +113,8 @@ export class DialogComponent {
   readonly closable = input(true);
   /** The heading is the server's markup (sanitized), not plain text. */
   readonly headingMarkup = input(false);
+  /** Nothing in it can be used for now (it stays open and shown, dimmed by the page's styles). */
+  readonly inert = input(false);
 
   /** Closed by the player (close button, Escape), not by `open` going false. */
   readonly closed = output();

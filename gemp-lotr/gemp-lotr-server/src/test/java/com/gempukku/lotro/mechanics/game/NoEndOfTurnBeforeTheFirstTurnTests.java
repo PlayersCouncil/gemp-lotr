@@ -73,11 +73,12 @@ public class NoEndOfTurnBeforeTheFirstTurnTests
 		var guardian = scn.GetShadowCard("guardian");
 		var enraged = scn.GetShadowCard("enraged");
 
-		// Player 1 takes nobody; player 2 puts down an Ent and Enraged on him
+		// Player 1 takes nobody; player 2 puts down an Ent and Enraged on him, which is his 4, and presses DONE
 		scn.FreepsDeclineChoosing();
 		scn.ShadowChooseCard(guardian);
 		scn.ShadowChooseCard(enraged);
 		assertAttachedTo(enraged, guardian);
+		scn.ShadowConfirm();
 
 		// The hands are dealt and both players keep them
 		assertTrue(scn.FreepsDecisionAvailable("Do you wish to mulligan"));
@@ -99,6 +100,7 @@ public class NoEndOfTurnBeforeTheFirstTurnTests
 		scn.FreepsDeclineChoosing();
 		scn.ShadowChooseCard(guardian);
 		scn.ShadowChooseCard(enraged);
+		scn.ShadowConfirm();
 		scn.StartGame(true, false);
 
 		// Turn 1 is player 1's: player 2's Free Peoples cards are not active in it.  Player 1 was dealt his
@@ -128,9 +130,10 @@ public class NoEndOfTurnBeforeTheFirstTurnTests
 		var guardian = scn.GetFreepsCard("guardian");
 		var enraged = scn.GetFreepsCard("enraged");
 
-		// Player 1 puts down an Ent and Enraged on him; player 2 takes nobody
+		// Player 1 puts down an Ent and Enraged on him, which is his 4, and presses DONE; player 2 takes nobody
 		scn.FreepsChooseCard(guardian);
 		scn.FreepsChooseCard(enraged);
+		scn.FreepsConfirm();
 		scn.ShadowDeclineChoosing();
 		scn.StartGame(true, false);
 

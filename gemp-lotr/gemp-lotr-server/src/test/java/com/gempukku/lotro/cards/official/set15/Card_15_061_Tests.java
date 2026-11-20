@@ -137,10 +137,15 @@ public class Card_15_061_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(aragorn));
 
 		scn.FreepsChooseCard(osgiliath);
-		// 2 + 2 = 4: not even Merry fits, and player 2 is asked. Had the Ranger of Osgiliath cost 1, Merry would
-		// still be offered.
+		// 2 + 2 = 4: not even Merry fits, nobody is left to offer, and player 1 is asked only to press DONE. Had
+		// the Ranger of Osgiliath cost 1, Merry would still be offered.
 		assertInZone(Zone.FREE_CHARACTERS, prowler, prowler2, osgiliath);
 		assertInZone(Zone.DECK, aragorn, merry);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
+
+		// The fellowship is complete, and player 2 is asked.
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}

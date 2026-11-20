@@ -1,8 +1,9 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { GameSheets } from '../../../../core/game/phone/game-sheets';
 import { CARD_SIZE_MAX, CARD_SIZE_MIN, ChoicesScroll, PhoneSettings } from '../../../../core/game/phone/phone-settings';
 import { Sheet } from '../../../../core/game/phone/sheet';
 import { AUTO_PASS_PHASES, GameSettings, UnderButton } from '../../../../core/game/settings/game-settings';
+import { GameUndo } from '../../../../core/game/undo/game-undo.service';
 import { phaseLabel } from '../phone-status.component';
 
 /**
@@ -11,7 +12,8 @@ import { phaseLabel } from '../phone-status.component';
  * offered cards' scrolling, the button under a card holding others).
  *
  * DOM contract: `.gd-phone-settings` holding `button.gd-phone-tab[data-settings-tab]` (`aria-selected`), and each
- * setting's `input[data-setting]`.
+ * setting's `input[data-setting]` (among them skipConfirmations; and undoAutoDecline under "This game", where anybody
+ * would be asked for a revert).
  */
 @Component({
   selector: 'gd-phone-settings-sheet',
@@ -163,6 +165,32 @@ import { phaseLabel } from '../phone-status.component';
           />
           <span>Skip the look at your own deck when searching it</span>
         </label>
+        <label class="gd-phone-toggle">
+          <input
+            type="checkbox"
+            data-setting="skipConfirmations"
+            [checked]="settings.skipConfirmations()"
+            (change)="settings.setSkipConfirmations(checked($event))"
+          />
+          <span
+            >Skip extra confirmations<small
+              >Answers a question that only asks you to confirm, such as DONE on a full starting fellowship. You can no
+              longer undo the choice before it.</small
+            ></span
+          >
+        </label>
+        @if (autoDeclineShown()) {
+          <h3>This game</h3>
+          <label class="gd-phone-toggle">
+            <input
+              type="checkbox"
+              data-setting="undoAutoDecline"
+              [checked]="undo.autoDeclining()"
+              (change)="undo.setAutoDecline(checked($event))"
+            />
+            <span>Auto-decline revert requests<small>Only for this game.</small></span>
+          </label>
+        }
         <h3>Alerts</h3>
         <label class="gd-phone-toggle">
           <input
@@ -201,6 +229,11 @@ export class PhoneSettingsSheetComponent {
   protected readonly sheets = inject(GameSheets);
   protected readonly settings = inject(GameSettings);
   protected readonly phone = inject(PhoneSettings);
+  protected readonly undo = inject(GameUndo);
+  /** "Auto-decline revert requests": for a player, where something can be taken back and anybody would be asked. */
+  protected readonly autoDeclineShown = computed(
+    () => this.undo.playing() && this.undo.allowed() && !!this.undo.policy()?.asks,
+  );
 
   protected readonly sizeMin = CARD_SIZE_MIN;
   protected readonly sizeMax = CARD_SIZE_MAX;

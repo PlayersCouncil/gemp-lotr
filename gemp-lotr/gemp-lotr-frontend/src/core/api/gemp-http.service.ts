@@ -68,6 +68,10 @@ export class GempHttp {
     return this.postText(path, data, options).pipe(map(toXml));
   }
 
+  getJson<T>(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<T> {
+    return this.getText(path, data, options).pipe(map((text) => toJson(text) as T));
+  }
+
   postJson<T>(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<T> {
     return this.postText(path, data, options).pipe(map((text) => toJson(text) as T));
   }

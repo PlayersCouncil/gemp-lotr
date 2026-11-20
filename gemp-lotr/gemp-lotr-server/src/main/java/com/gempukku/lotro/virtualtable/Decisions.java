@@ -4,6 +4,7 @@ import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.decisions.AwaitingDecision;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
+import com.gempukku.lotro.logic.timing.processes.pregame.PlayerPlaysStartingFellowshipGameProcess;
 
 import java.util.Arrays;
 import java.util.List;
@@ -238,6 +239,34 @@ public interface Decisions extends TableBase {
 	default Boolean AnyDecisionsAvailable(String player) {
 		var ad = GetAwaitingDecision(player);
 		return ad != null;
+	}
+
+	/**
+	 * Determines whether the Free Peoples player is being asked only to confirm: a decision that has nothing in it
+	 * to choose and takes the empty answer alone, which the game marks as such (the parameter
+	 * PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY).  The one the game asks is "Starting fellowship -
+	 * Nothing more can be added: press DONE", once a player has put a card into a starting fellowship and nothing
+	 * more can go into it.  See {@link Choices#FreepsConfirm()} for the answer.
+	 * @return False if that player is being asked nothing, or anything else.
+	 */
+	default boolean FreepsIsAskedOnlyToConfirm() { return IsAskedOnlyToConfirm(P1()); }
+	/**
+	 * Determines whether the Shadow player is being asked only to confirm: a decision that has nothing in it to
+	 * choose and takes the empty answer alone, which the game marks as such (the parameter
+	 * PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY).  The one the game asks is "Starting fellowship -
+	 * Nothing more can be added: press DONE", once a player has put a card into a starting fellowship and nothing
+	 * more can go into it.  See {@link Choices#ShadowConfirm()} for the answer.
+	 * @return False if that player is being asked nothing, or anything else.
+	 */
+	default boolean ShadowIsAskedOnlyToConfirm() { return IsAskedOnlyToConfirm(P2()); }
+	/**
+	 * Determines whether the given player is being asked only to confirm (see {@link #FreepsIsAskedOnlyToConfirm()}).
+	 * @param player The player to read.
+	 * @return False if that player is being asked nothing, or anything else.
+	 */
+	default boolean IsAskedOnlyToConfirm(String player) {
+		String[] marked = GetAwaitingDecisionParam(player, PlayerPlaysStartingFellowshipGameProcess.CONFIRM_ONLY);
+		return marked != null && Arrays.asList(marked).contains("true");
 	}
 
 	/**

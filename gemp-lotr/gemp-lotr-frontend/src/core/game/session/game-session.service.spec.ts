@@ -260,6 +260,144 @@ describe('GameSession', () => {
     expect(session.problem()).not.toBeNull();
   });
 
+  it('read again from nothing after a revert: drops the choices and what is on its way, and keeps the chat box', () => {
+    session.open('7');
+    backend
+      .expectOne((r) => r.url === GAME)
+      .flush(state('1', '<ge type="M" message="one"/><ge type="M" message="two"/>' + decision()));
+    session.assign('20', '10');
+    expect(session.model().local.assignments).toEqual({ '20': '10' });
+    session.reopen('alice reverted: Played Gimli');
+    expect(session.reopened()).toBe(0);
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'GET')
+      .flush(
+        state(
+          '5',
+          '<ge type="M" message="one"/><ge type="M" message="alice reverted: Played Gimli"/><ge type="TP" count="4"/>' +
+            decision(),
+        ),
+      );
+    expect(session.model().messages.map((m) => m.text)).toEqual(['one', 'two', 'alice reverted: Played Gimli']);
+    expect(session.model()).toMatchObject({ twilight: 4, local: { assignments: {} } });
+    expect(session.reopened()).toBe(1);
+    // The new channel is the one answered on
+    session.answer('10 20');
+    expect(
+      backend.expectOne((r) => r.method === 'POST' && r.body?.has('decisionId')).request.body?.get('channelNumber'),
+    ).toBe('5');
+  });
+
+  it('after a revert, an answer to a request sent before it is dropped, a refusal of the old channel too', () => {
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', '<ge type="TP" count="1"/>'));
+    const old = expectPoll('1');
+    // The old channel refused just before the notice came: that was the revert
+    session.reopen(null);
+    const again = backend.expectOne((r) => r.url === GAME && r.method === 'GET');
+    old.flush('', { status: 409, statusText: 'Conflict' });
+    expect(session.problem()).toBeNull();
+    again.flush(state('2', '<ge type="TP" count="3"/>' + decision()));
+    expect(session.model().twilight).toBe(3);
+  });
+
+  it('a refusal of the old channel that came before the notice is no problem once the game is read again', () => {
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', ''));
+    expectPoll('1').flush('', { status: 409, statusText: 'Conflict' });
+    expect(session.problem()?.status).toBe(409);
+    session.reopen(null);
+    expect(session.problem()).toBeNull();
+    backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(state('2', ''));
+    // Nothing waits for the player: the page asks for news on the new channel
+    expectPoll('2').flush(update('3', decision()));
+  });
+
+  it('an animation running when the game is read again ends nothing of the new game', () => {
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', ''));
+    expectPoll('1').flush(
+      update('2', '<ge type="PCIP" cardId="5" blueprintId="1_2" participantId="bob" zone="SHADOW_CHARACTERS"/>'),
+    );
+    expect(session.busy()).toBe(true);
+    session.reopen(null);
+    expect(session.busy()).toBe(false);
+    backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(state('3', decision()));
+    vi.advanceTimersByTime(60_000);
+    expect(session.animation()).toBeNull();
+    expect(session.model().cards['5']).toBeUndefined();
+  });
+
+  it('is read again only in a game: not in a replay, nor before a game opened', () => {
+    session.reopen(null);
+    session.openReplay('x');
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/replay/x').flush('<gameReplay></gameReplay>');
+    session.reopen(null);
+    expect(session.reopened()).toBe(0);
+  });
+
+  it('counts the answers that brought events, and says when the game was taken back (GR)', () => {
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', '<ge type="TP" count="1"/>'));
+    expect(session.moved()).toBe(1);
+    expectPoll('1').flush(update('2', ''));
+    expect(session.moved()).toBe(1);
+    expectPoll('2').flush(
+      update('3', '<ge type="GR" participantId="bob" tier="YELLOW" message="bob reverted: x"/>' + decision()),
+    );
+    expect(session.moved()).toBe(2);
+    expect(session.reverted()).toEqual({ message: 'bob reverted: x', tier: 'YELLOW', count: 1 });
+  });
+
+  it('asks for news once over a waiting decision (the game ended meanwhile), and starts no asking of its own', () => {
+    session.pollOnce();
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', decision()));
+    session.pollOnce();
+    session.pollOnce();
+    // Something else happened, not the end: the decision still waits, and nothing more is asked
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+      .flush(update('2', '<ge type="M" message="hm"/>'));
+    vi.advanceTimersByTime(POLL_DELAY_MS);
+    backend.expectNone((r) => r.url === GAME && r.method === 'POST');
+    session.pollOnce();
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+      .flush(update('3', '<ge type="EG"/>'));
+    expect(session.model()).toMatchObject({ ended: true, decision: null });
+    // With no decision waiting the page asks for news as usual (afterEach)
+  });
+
+  it('asks for nothing once when no decision waits: the usual asking is going on', () => {
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', ''));
+    const poll = expectPoll('1');
+    session.pollOnce();
+    backend.expectNone((r) => r.url === GAME && r.method === 'POST' && r !== poll.request);
+  });
+
+  it('a replay of a game taken back lays the table out again from nothing, at once, up to its GR', () => {
+    session.openReplay('alice$r');
+    const P = '<ge type="P" participantId="alice" allParticipantIds="alice,bob" discardPublic="false"/>';
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/replay/alice$r')
+      .flush(
+        `<gameReplay>${P}<ge type="M" message="before"/>` +
+          '<ge type="PCIP" cardId="1" blueprintId="1_2" participantId="alice" zone="FREE_CHARACTERS"/>' +
+          `${P}<ge type="M" message="again"/>` +
+          '<ge type="PCIP" cardId="2" blueprintId="1_2" participantId="alice" zone="FREE_CHARACTERS"/>' +
+          '<ge type="GR" participantId="alice" tier="GREEN" message="alice undid: x"/><ge type="TP" count="2"/>' +
+          '</gameReplay>',
+      );
+    session.togglePlay();
+    vi.advanceTimersByTime(60_000);
+    expect(Object.keys(session.model().cards)).toEqual(['2']);
+    expect(session.model().messages.map((m) => m.text)).toEqual(['again']);
+    expect(session.model().twilight).toBe(2);
+    expect(session.reverted()?.message).toBe('alice undid: x');
+  });
+
   it("the legacy page's messages for each failure", () => {
     expect(problemFor(0)).toMatchObject({ title: 'Server connection error', actions: ['reload'] });
     expect(problemFor(401)).toMatchObject({ title: 'Authentication error', actions: ['mainPage'] });

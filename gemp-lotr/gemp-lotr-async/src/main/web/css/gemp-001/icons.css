@@ -108,4 +108,10 @@
 	filter: invert(69%) sepia(31%) saturate(683%) hue-rotate(322deg) brightness(102%) contrast(101%);
 }
 
+/* drawn in its own colour (a light indigo), so no filter */
+.icon-scenario {
+	background-image: url("../../images/icons/puzzle-piece.svg");
+	filter: none;
+}
+
 

@@ -177,9 +177,17 @@ function watchTraffic(page, participant, gameId) {
   const traffic = { participant, events: [], answeredUpTo: -1, requests: [], ended: false, pending: 0, exchanges: [] };
   const lastDecisionIndex = () =>
     traffic.events.findLastIndex((event) => event.type === 'D' && event.participantId === participant);
+  /*
+   * Taking a game back (undo.js, GameUndo) is left out as the game's own long poll is: the notices' long poll is always
+   * open and asked again whenever the server lets it go, and what can be taken back is asked whenever an answer brings
+   * events, which depends on how the answers came. Neither is compared, counted as a request a step waits for, nor
+   * recorded (the jsdom tests' FakeGameServer answers them itself). The undo checks (undo.mjs) check them.
+   */
+  const undoTiming = (address) =>
+    /^\/gemp-lotr-server\/game\/[^/]+\/(notices|restorePoints)$/.test(new URL(address).pathname);
   page.on('request', (request) => {
     const url = new URL(request.url());
-    if (!url.pathname.startsWith('/gemp-lotr-server/')) return;
+    if (!url.pathname.startsWith('/gemp-lotr-server/') || undoTiming(request.url())) return;
     traffic.pending++;
     const body = new URLSearchParams(request.postData() ?? '');
     const where = url.pathname
@@ -200,6 +208,7 @@ function watchTraffic(page, participant, gameId) {
     }
   });
   const done = async (response) => {
+    if (undoTiming(response.url())) return;
     traffic.pending = Math.max(0, traffic.pending - 1);
     const url = new URL(response.url());
     if (options.record && url.pathname.startsWith('/gemp-lotr-server/') && !url.pathname.includes('/chat/')) {
@@ -231,7 +240,9 @@ function watchTraffic(page, participant, gameId) {
     if (events.some((event) => event.type === 'EG')) traffic.ended = true;
   };
   page.on('response', (response) => done(response));
-  page.on('requestfailed', () => (traffic.pending = Math.max(0, traffic.pending - 1)));
+  page.on('requestfailed', (request) => {
+    if (!undoTiming(request.url())) traffic.pending = Math.max(0, traffic.pending - 1);
+  });
   /** The decision waiting for the player that it hasn't answered yet, or null. */
   traffic.decision = () => {
     const index = lastDecisionIndex();

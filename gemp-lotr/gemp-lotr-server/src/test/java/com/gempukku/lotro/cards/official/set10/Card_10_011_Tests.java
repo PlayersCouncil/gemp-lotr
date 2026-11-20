@@ -120,8 +120,13 @@ public class Card_10_011_Tests
 		assertTrue(scn.FreepsHasCardChoiceNotAvailable(legolas, gimli));
 
 		scn.FreepsChooseCard(galadriel);
+		// 4 + 0 is still the 4: neither Legolas nor Gimli fits, nobody is left to offer, and the player is asked
+		// only to press DONE.  Once he has, his fellowship is complete and the other player is choosing.
 		assertInZone(Zone.FREE_CHARACTERS, aragorn, galadriel);
 		assertInZone(Zone.DECK, legolas, gimli);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 	}
