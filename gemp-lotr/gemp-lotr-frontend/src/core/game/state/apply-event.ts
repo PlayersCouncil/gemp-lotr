@@ -272,9 +272,18 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'EP':
     case 'CA':
       return next;
-    case 'S':
+    case 'S': {
       // (one the page can't read changes nothing)
-      return event.scenario ? { ...next, scenario: applyScenarioEvent(model.scenario, event.scenario) } : next;
+      if (!event.scenario) return next;
+      const scenario = applyScenarioEvent(model.scenario, event.scenario);
+      // A game's whole state has its log before the scenario says who it is (a game that played on before the page
+      // opened it): those lines name the scripted opponent as the scenario does from now on
+      const named = event.scenario.type === 'info' && !model.scenario?.info;
+      const messages = named
+        ? next.messages.map((message) => ({ ...message, text: renameOpponent(scenario, message.text) }))
+        : next.messages;
+      return { ...next, scenario, messages };
+    }
   }
 }
 

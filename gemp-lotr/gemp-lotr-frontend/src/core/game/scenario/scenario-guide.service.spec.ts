@@ -221,7 +221,7 @@ describe('ScenarioGuide', () => {
     expect(guide.message()).toBeNull();
     expect(guide.nextLabel()).toBeNull();
     expect(guide.cardMarks()).toEqual({});
-    expect(guide.nextClicks()).toEqual({ cardIds: [], button: null, options: [] });
+    expect(guide.nextClicks()).toEqual({ cardIds: [], button: null, options: [], numbers: [] });
     expect(guide.allows({ kind: 'card', cardId: '8' })).toBe(true);
     expect(settings.fixed()).toEqual({});
     expect(settings.autoAccept()).toBe(false);
@@ -273,7 +273,7 @@ describe('ScenarioGuide', () => {
     // (nothing more to read)
     guide.next();
     expect(guide.phase()).toBe('answering');
-    expect(guide.nextClicks()).toEqual({ cardIds: ['7'], button: null, options: [] });
+    expect(guide.nextClicks()).toEqual({ cardIds: ['7'], button: null, options: [], numbers: [] });
 
     // A card the step doesn't take: its own hint, at the card clicked, for a while
     click('extra8');
@@ -322,7 +322,7 @@ describe('ScenarioGuide', () => {
 
   it('says the stock line of a choice the step does not take, and takes the one it does', () => {
     open(S(INFO) + S(step({ allow: allow(['1']) })) + D('MULTIPLE_CHOICE', param('results', 'Yes', 'No')));
-    expect(guide.nextClicks()).toEqual({ cardIds: [], button: null, options: [1] });
+    expect(guide.nextClicks()).toEqual({ cardIds: [], button: null, options: [1], numbers: [] });
     decisions.answerChoice(0);
     expect(guide.hint()).toEqual({ html: STOCK_NOT_NOW, cardId: null, button: null, option: 0 });
     expect(answer()).toBeNull();
@@ -332,16 +332,18 @@ describe('ScenarioGuide', () => {
 
   it('takes only the allowed number', () => {
     open(S(INFO) + S(step({ allow: allow(['3']) })) + D('INTEGER', param('min', '0') + param('max', '5')));
+    expect(guide.nextClicks()).toEqual({ cardIds: [], button: null, options: [], numbers: [3] });
     decisions.answerNumber('2');
     expect(answer()).toBeNull();
-    expect(guide.hint()?.html).toBe(STOCK_NOT_NOW);
+    // (said beside the OK it was given with)
+    expect(guide.hint()).toMatchObject({ html: STOCK_NOT_NOW, button: 'OK', cardId: null });
     decisions.answerNumber('3');
     expect(answer()).toBe('3');
   });
 
   it('points at Pass when passing is all the step takes, and passes', async () => {
     open(S(INFO) + S(step({ allow: allow([], { pass: true }) })) + CARD_ACTIONS);
-    expect(guide.nextClicks()).toEqual({ cardIds: [], button: 'Pass', options: [] });
+    expect(guide.nextClicks()).toEqual({ cardIds: [], button: 'Pass', options: [], numbers: [] });
     expect(guide.cardMarks()).toEqual({ '7': 'notnow', extra8: 'notnow' });
     await decisions.press('Pass');
     expect(answer()).toBe('');
@@ -383,7 +385,7 @@ describe('ScenarioGuide', () => {
     expect(header()).toBe('Pick both');
     click('8');
     expect(header()).toBe('Ready');
-    expect(guide.nextClicks()).toEqual({ cardIds: [], button: 'Done', options: [] });
+    expect(guide.nextClicks()).toEqual({ cardIds: [], button: 'Done', options: [], numbers: [] });
     // Taken back: the moment's message goes with it
     await decisions.press('Reset choice');
     TestBed.tick();
@@ -603,6 +605,19 @@ describe('ScenarioGuide', () => {
     ]);
   });
 
+  it('logs each message by its place in the file, which a message left out by its condition does not change', () => {
+    open(
+      S(INFO) + S(step({ seat: 'opponent', messages: [message('One', { index: 0 }), message('Three', { index: 2 })] })),
+    );
+    // (counted as said: two, not the file's three)
+    expect(guide.count()).toEqual({ at: 1, of: 2 });
+    guide.next();
+    TestBed.tick();
+    expect(guide.count()).toEqual({ at: 2, of: 2 });
+    const said = log.entries().flatMap((entry) => (entry.kind === 'chat' && entry.said ? [entry.said] : []));
+    expect(said).toEqual(['scenario 1.0:0', 'scenario 1.0:2']);
+  });
+
   it('logs the notice too, and a step before the scenario said who it is under a stock name', () => {
     open(S(step({ messages: [message('Early')] })));
     expect(guide.playing()).toBe(false);
@@ -775,6 +790,40 @@ describe('ScenarioGuide', () => {
       expect(hall.go).toHaveBeenCalledWith('');
     });
 
+    it('offers the last checkpoint reached, kept between steps, and goes back to it once asked', async () => {
+      open(S(INFO) + S(step({ lastCheckpoint: null })) + CARD_ACTIONS);
+      expect(guide.checkpoint()).toBeNull();
+      await guide.askCheckpoint();
+      expect(notifier.dialogs).toEqual([]);
+      session.refresh();
+      news(S(step({ step: 5, lastCheckpoint: 5 })));
+      expect(guide.checkpoint()).toBe(5);
+      // (a step read, or one that doesn't say: still the one reached)
+      session.refresh();
+      news(S(step({ step: 6 })));
+      expect(guide.checkpoint()).toBe(5);
+      notifier.answers.push(false);
+      await guide.askCheckpoint();
+      expect(notifier.dialogs).toEqual(['confirm: Go back to the last checkpoint (step 5)?']);
+      expect(backend.match((r) => r.url === START)).toEqual([]);
+      notifier.answers.push(true);
+      await guide.askCheckpoint();
+      expect(start().request.body?.get('from')).toBe('checkpoint');
+    });
+
+    it('offers a checkpoint a game was brought back to, but none once it is over or in a test of a draft', () => {
+      open(S({ ...INFO, resumedAt: 3 }) + CARD_ACTIONS);
+      expect(guide.checkpoint()).toBe(3);
+      TestBed.resetTestingModule();
+      setUp();
+      open(S({ ...INFO, resumedAt: 3 }) + S({ type: 'end', result: 'failed', checkpoint: 3 }));
+      expect(guide.checkpoint()).toBeNull();
+      TestBed.resetTestingModule();
+      setUp();
+      open(S({ ...INFO, draftTest: true }) + S(step({ lastCheckpoint: 2 })) + CARD_ACTIONS);
+      expect(guide.checkpoint()).toBeNull();
+    });
+
     it('goes straight back to the hall from a scenario that is over, to a place in it if asked', async () => {
       open(S(INFO) + S({ type: 'end', result: 'failed', checkpoint: 2 }));
       await guide.leave();
@@ -801,6 +850,16 @@ describe('ScenarioGuide', () => {
       const typed: ScenarioAuthorHooks = author;
       return Object.assign(author, { typed });
     }
+
+    it('goes back to the last checkpoint of a game being written through the panel, as it starts it again', async () => {
+      open(S({ ...INFO, author: true }) + S(step({ lastCheckpoint: 2 })) + CARD_ACTIONS);
+      const author = hooks();
+      guide.attachAuthor(author);
+      notifier.answers.push(true);
+      await guide.askCheckpoint();
+      expect(author.restart).toHaveBeenCalledWith(true);
+      expect(backend.match((r) => r.url === START)).toEqual([]);
+    });
 
     it('starts again through the panel, and as ever once the panel has no say', () => {
       open(S({ ...INFO, author: true }) + CARD_ACTIONS);
@@ -892,6 +951,17 @@ describe('ScenarioGuide', () => {
       expect(guide.phase()).toBe('reading');
     });
 
+    it('knows the messages by their place in the file: one left out by its condition is not there to preview', () => {
+      const messages = [message('One', { index: 0 }), message('Three', { index: 2 })];
+      open(S({ ...INFO, author: true }) + S(step({ messages, allow: allow(['12']) })) + CARD_ACTIONS);
+      expect(guide.preview(1, 0, 1)).toBe(false);
+      expect(guide.preview(1, 0, 2)).toBe(true);
+      expect(header()).toBe('Three');
+      expect(guide.tryPlace(1, { side: 'left' })).toBe(false);
+      expect(guide.tryPlace(2, { side: 'left' })).toBe(true);
+      expect(guide.message()).toMatchObject({ header: 'Three', side: 'left' });
+    });
+
     it('previews a step that is only read without making anything answerable', () => {
       open(S({ ...INFO, author: true }) + S(step({ seat: 'opponent', messages: [message('One'), message('Two')] })));
       expect(guide.preview(1, 0, 1)).toBe(true);
@@ -924,6 +994,22 @@ describe('ScenarioGuide', () => {
       expect(guide.tryPlace(0, { side: 'left' })).toBe(false);
       expect(guide.preview(1, 0, 0)).toBe(false);
     });
+  });
+
+  it("plays the role the step says: in a two-sided game the Shadow player on the opponent's turn", () => {
+    open(S({ ...INFO, twoSided: true }) + CARD_ACTIONS);
+    // (no step yet: the seat's)
+    expect(guide.role()).toBe('freeps');
+    session.refresh();
+    news(S(step({ role: 'shadow', turnOf: 'opponent', turn: 2 })));
+    expect(guide.role()).toBe('shadow');
+    // (at a step that doesn't say: the last one said)
+    session.refresh();
+    news(S(step({ step: 2 })));
+    expect(guide.role()).toBe('shadow');
+    session.refresh();
+    news(S(step({ step: 3, role: 'freeps' })));
+    expect(guide.role()).toBe('freeps');
   });
 
   it('shows each opening message of a replay for as long as it takes to read, and fixes no settings there', () => {

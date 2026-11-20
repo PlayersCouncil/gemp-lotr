@@ -14,6 +14,7 @@ import { ScenarioLayerComponent } from './scenario-layer.component';
 const INFO = { type: 'info', id: 'basics-01', humanSeat: 'freeps', bubbleGap: null } as ScenarioInfo;
 
 const message = (extra: Partial<ScenarioMessage> = {}): ScenarioMessage => ({
+  index: 0,
   header: 'Frodo',
   html: '<p>This is <b>Frodo</b>.</p>',
   anchors: ['card:frodo'],
@@ -30,7 +31,7 @@ const message = (extra: Partial<ScenarioMessage> = {}): ScenarioMessage => ({
   ...extra,
 });
 
-const NO_CLICKS: NextClicks = { cardIds: [], button: null, options: [] };
+const NO_CLICKS: NextClicks = { cardIds: [], button: null, options: [], numbers: [] };
 
 /**
  * The page the layer draws over, by its DOM contract; each element on the screen where its `data-box` says
@@ -71,6 +72,7 @@ describe('ScenarioLayerComponent', () => {
     hint: signal<GuideHint | null>(null),
     nextClicks: signal<NextClicks>(NO_CLICKS),
     info: signal<ScenarioInfo | null>(INFO),
+    role: signal<'freeps' | 'shadow'>('freeps'),
     step: signal<{ cards: Record<string, string>; parts: Record<string, number[]> } | null>(null),
     count: signal<{ at: number; of: number } | null>(null),
     nextLabel: signal<string | null>('Next'),
@@ -122,6 +124,7 @@ describe('ScenarioLayerComponent', () => {
     guide.hint.set(null);
     guide.nextClicks.set(NO_CLICKS);
     guide.info.set(INFO);
+    guide.role.set('freeps');
     guide.step.set({ cards: { frodo: '7', sam: '8', gandalf: '9' }, parts: {} });
     guide.count.set(null);
     guide.nextLabel.set('Next');
@@ -217,6 +220,56 @@ describe('ScenarioLayerComponent', () => {
     expect(outlines()).toEqual(['gold 496px 416px 108px 148px']);
   });
 
+  it("outlines a skirmish's own side by the role the person plays now, not by their seat", () => {
+    page.insertAdjacentHTML(
+      'beforeend',
+      `<section class="gd-game__fight" data-fight="skirmish" data-box="300,200,300,150">
+        <span class="gd-game__strength" data-side="free-peoples" data-box="390,300,20,20"></span>
+        <span class="gd-game__strength" data-side="shadow" data-box="470,300,20,20"></span>
+      </section>`,
+    );
+    guide.message.set(message({ anchors: [], highlight: ['ui:skirmish:selfStrength'] }));
+    frame();
+    expect(outlines()).toEqual(['gold 386px 296px 28px 28px']);
+    // (the opponent's turn of a two-sided game: the person is the Shadow player, from the same seat)
+    guide.role.set('shadow');
+    frame();
+    expect(outlines()).toEqual(['gold 466px 296px 28px 28px']);
+  });
+
+  it("outlines nothing to click while the page's own question is open over the table", () => {
+    guide.nextClicks.set({ ...NO_CLICKS, button: 'Done' });
+    page.insertAdjacentHTML('beforeend', '<dialog class="gd-dialog" open data-dialog="confirm"></dialog>');
+    frame();
+    expect(outlines()).toEqual([]);
+    page.querySelector('[data-dialog="confirm"]')?.remove();
+    frame();
+    expect(outlines()).toEqual(['next 1096px 596px 68px 32px']);
+  });
+
+  it('points at the way to the number a step takes, then at OK', () => {
+    page.insertAdjacentHTML(
+      'beforeend',
+      `<button data-decision="integer-down" data-box="900,300,20,20"></button>
+      <output data-decision="integer" data-box="930,300,20,20">0</output>
+      <button data-decision="integer-up" data-box="960,300,20,20"></button>
+      <button data-decision-button="OK" data-box="930,340,40,20"></button>`,
+    );
+    guide.nextClicks.set({ ...NO_CLICKS, numbers: [1] });
+    frame();
+    expect(outlines()).toEqual(['next 956px 296px 28px 28px']);
+    page.querySelector('output')!.textContent = '3';
+    frame();
+    expect(outlines()).toEqual(['next 896px 296px 28px 28px']);
+    page.querySelector('output')!.textContent = '1';
+    frame();
+    expect(outlines()).toEqual(['next 926px 336px 48px 28px']);
+    // (no number asked for on the page: nothing to point at)
+    page.querySelector('output')!.remove();
+    frame();
+    expect(outlines()).toEqual([]);
+  });
+
   it('presses Next, or one of the choices a message ends in', () => {
     guide.message.set(message({ choices: [{ name: 'yes', label: 'Yes please' }] }));
     fixture.detectChanges();
@@ -248,7 +301,7 @@ describe('ScenarioLayerComponent', () => {
   });
 
   it('outlines what is to be clicked next: cards, the button, the choice', () => {
-    guide.nextClicks.set({ cardIds: ['8', '99'], button: 'Done', options: [1] });
+    guide.nextClicks.set({ cardIds: ['8', '99'], button: 'Done', options: [1], numbers: [] });
     frame();
     expect(bubble()).toBeNull();
     expect(outlines()).toEqual([
@@ -432,7 +485,7 @@ describe('ScenarioLayerComponent', () => {
 
     it('is drawn with what is in focus outlined, the bubble beside it pointing at that part, the table left out', () => {
       guide.message.set(message({ zoom: zoom(), highlight: ['card:frodo'] }));
-      guide.nextClicks.set({ cardIds: ['8'], button: null, options: [] });
+      guide.nextClicks.set({ cardIds: ['8'], button: null, options: [], numbers: [] });
       frame();
       const shown = el.querySelector<HTMLElement>('.gd-scenario-zoom');
       // Read before going on: it takes the pointer

@@ -61,7 +61,9 @@ const SIDEWAYS_SWIPE = 40;
       <gd-phone-table />
     } @else if (session.model().preGame; as preGame) {
       <!-- Before the players are known (the bid): the pre-game information, scrolled up and down -->
-      <div class="gd-phone-pregame"><gd-game-pregame [info]="preGame" /></div>
+      <div class="gd-phone-pregame">
+        <gd-game-pregame [info]="preGame" [scenario]="session.model().scenario" />
+      </div>
     }
     <gd-phone-divider
       #divider

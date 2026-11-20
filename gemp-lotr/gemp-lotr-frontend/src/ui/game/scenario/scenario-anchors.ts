@@ -22,6 +22,12 @@ export interface AnchorContext {
   self: number | null;
   opponent: number | null;
   humanSeat: ScenarioSeat;
+  /**
+   * The role the person plays at this moment (the shown step's, else their seat's): in a two-sided game the Free
+   * Peoples player on their own turn and the Shadow player on the opponent's. What "self" and "opp" in a skirmish
+   * are.
+   */
+  humanRole: ScenarioSeat;
 }
 
 /**
@@ -32,7 +38,7 @@ export interface AnchorContext {
 export function pageAnchorContext(
   root: ParentNode,
   model: GameModel,
-  named: Pick<AnchorContext, 'cards' | 'parts' | 'humanSeat'>,
+  named: Pick<AnchorContext, 'cards' | 'parts' | 'humanSeat' | 'humanRole'>,
 ): AnchorContext {
   const self = model.participantId === null ? -1 : model.players.indexOf(model.participantId);
   const opponent = model.players.findIndex((player) => player !== model.participantId);
@@ -189,8 +195,9 @@ function cardPart(context: AnchorContext, alias: string, part: string): Rect | n
 function skirmish(context: AnchorContext, what: string | undefined): Rect | null {
   const fight = context.root.querySelector('.gd-game__fight[data-fight="skirmish"]');
   if (!fight) return null;
-  const own = context.humanSeat === 'freeps' ? 'free-peoples' : 'shadow';
-  const other = context.humanSeat === 'freeps' ? 'shadow' : 'free-peoples';
+  // (the sides of a skirmish are its roles: on the opponent's turn of a two-sided game the person's are the minions)
+  const own = context.humanRole === 'freeps' ? 'free-peoples' : 'shadow';
+  const other = context.humanRole === 'freeps' ? 'shadow' : 'free-peoples';
   switch (what) {
     case undefined:
       return rectOf(fight);

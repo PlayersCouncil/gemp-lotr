@@ -52,6 +52,15 @@ const STOCK: Readonly<Record<ScenarioEnd['result'], string>> = {
   error: '<p>The scenario could not carry on. What happened has been recorded.</p>',
 };
 
+/**
+ * The end panel's heading. A game that left its script is "not how this one goes", to be played again; one whose
+ * scenario counts leaving the script as failing (outcome.offScript.result: fail, the end event's `restart` false) is
+ * a failure like any other.
+ */
+export function endHeading(end: ScenarioEnd): string {
+  return end.result === 'off_script' && !end.restart ? HEADINGS.failed : HEADINGS[end.result];
+}
+
 const escapeHtml = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** What the end panel says: the scenario's own words for its ending, or the stock ones. */
@@ -66,11 +75,11 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
 
 /**
  * A scripted game's own corner of the page and the panels that stop play: its menu (the scenario's name, Start
- * again, Leave, Report a Bug), the panel it ends with, and the notices that it can't be played here (the phone
+ * again, Back to checkpoint, Leave, Report a Bug), the panel it ends with, and the notices that it can't be played here (the phone
  * layout; a window too small for what a scenario points at) or that the Game Hall is open in another tab.
  *
  * DOM contract: `gd-game-scenario-panels` holding `nav.gd-scenario-menu` (`.gd-scenario-menu__title`,
- * `button[data-scenario-menu]`: restart, leave; `a[data-scenario-menu=report]`) and, when one is up,
+ * `button[data-scenario-menu]`: restart, checkpoint (only while there is one to go back to), leave; `a[data-scenario-menu=report]`) and, when one is up,
  * `.gd-scenario-shade` with `section.gd-scenario-panel` (`data-panel`: end, small, phone, hall; an ending's
  * `data-result`) holding `h2`, `.gd-scenario-panel__body`, `.gd-scenario-panel__buttons` with
  * `button.gd-scenario-button[data-panel-button]` and, at an ending with a replay, `.gd-scenario-panel__report`.
@@ -92,6 +101,16 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
         <nav class="gd-scenario-menu" aria-label="Scenario" [style.--gd-reserved]="room.reservedRight() + 'px'">
           <span class="gd-scenario-menu__title">{{ guide.title() }}</span>
           <button type="button" data-scenario-menu="restart" (click)="guide.askRestart()">Start again</button>
+          @if (guide.checkpoint(); as checkpoint) {
+            <button
+              type="button"
+              data-scenario-menu="checkpoint"
+              [title]="'Go back to the last checkpoint: step ' + checkpoint"
+              (click)="guide.askCheckpoint()"
+            >
+              Back to checkpoint
+            </button>
+          }
           <button type="button" data-scenario-menu="leave" (click)="guide.leave()">Leave</button>
           <a
             data-scenario-menu="report"
@@ -187,7 +206,7 @@ export class ScenarioPanelsComponent {
       return {
         kind: 'end',
         result: end.result,
-        heading: HEADINGS[end.result],
+        heading: endHeading(end),
         body: endBody(end, this.guide.info()) + this.lastOfCampaign(end),
         buttons: this.endButtons(end),
       };

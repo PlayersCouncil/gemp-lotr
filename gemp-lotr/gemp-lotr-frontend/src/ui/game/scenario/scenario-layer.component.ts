@@ -56,6 +56,9 @@ interface Drawn {
 }
 
 const NOTHING: Drawn = { outlines: [], bubble: null, pointer: { kind: 'none' }, hint: null, zoom: null };
+/** The page's own question dialog (the notifier's), open. */
+const PAGE_QUESTION =
+  'dialog.gd-dialog[open][data-dialog="alert"], dialog.gd-dialog[open][data-dialog="confirm"], dialog.gd-dialog[open][data-dialog="prompt"]';
 /** An outline stands this far off what it is round (px). */
 const OUTLINE_PAD = 4;
 
@@ -267,7 +270,8 @@ export class ScenarioLayerComponent {
       this.guide.hint() !== null ||
       clicks.cardIds.length > 0 ||
       clicks.button !== null ||
-      clicks.options.length > 0
+      clicks.options.length > 0 ||
+      clicks.numbers.length > 0
     );
   });
 
@@ -365,6 +369,7 @@ export class ScenarioLayerComponent {
       cards: step?.cards ?? {},
       parts: step?.parts ?? {},
       humanSeat: this.guide.info()?.humanSeat ?? 'freeps',
+      humanRole: this.guide.role(),
     });
   }
 
@@ -474,8 +479,12 @@ export class ScenarioLayerComponent {
     }
   }
 
-  /** What is to be clicked next, where it is on the page. */
+  /**
+   * What is to be clicked next, where it is on the page. Nothing while the page asks its own question (an alert, a
+   * confirm, a prompt: "a minion has not been assigned, proceed?"), which lies over the table and is answered first.
+   */
   private nextClickRects(): Rect[] {
+    if (this.document.querySelector(PAGE_QUESTION)) return [];
     const clicks = this.guide.nextClicks();
     const elements: (Element | null)[] = clicks.cardIds.map((cardId) => cardElement(this.document, cardId));
     if (clicks.button !== null) {
@@ -484,10 +493,27 @@ export class ScenarioLayerComponent {
     for (const option of clicks.options) {
       elements.push(...this.document.querySelectorAll(`button[data-decision-choice="${option}"]`));
     }
+    elements.push(...this.numberClicks(clicks.numbers));
     return elements.flatMap((element) => {
       const rect = cardRect(element);
       return rect ? [rect] : [];
     });
+  }
+
+  /**
+   * Where a number is asked for (the spinner of the decision's dialog): its arrow towards the nearest number the step
+   * takes, or OK once the number shown is one.
+   */
+  private numberClicks(numbers: readonly number[]): Element[] {
+    const shown = this.document.querySelector('output[data-decision="integer"]');
+    if (numbers.length === 0 || !shown) return [];
+    const value = Number.parseInt(shown.textContent, 10);
+    if (numbers.includes(value)) return [...this.document.querySelectorAll('button[data-decision-button="OK"]')];
+    const nearest = [...numbers].sort((a, b) => Math.abs(a - value) - Math.abs(b - value))[0] ?? value;
+    const arrow = this.document.querySelector(
+      `button[data-decision="integer-${Number.isNaN(value) || nearest > value ? 'up' : 'down'}"]`,
+    );
+    return arrow ? [arrow] : [];
   }
 
   /** Beside what was clicked: above it, or below if there is no room above; in the window. */

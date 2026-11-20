@@ -181,7 +181,7 @@ describe('TablePicker', () => {
         TablePicker,
         { provide: Authoring, useValue: authoring },
         { provide: GameSession, useValue: { model } },
-        { provide: ScenarioGuide, useValue: { info: signal({ humanSeat: 'freeps' }) } },
+        { provide: ScenarioGuide, useValue: { info: signal({ humanSeat: 'freeps' }), role: signal('freeps') } },
       ],
     });
     picker = TestBed.inject(TablePicker);
@@ -260,6 +260,7 @@ describe('TablePicker', () => {
       cards: { frodo: '25', ring: '26', sam: '32', orc: '33', troll: '34', goblin: '35', merry: '36', gimli: '38' },
       parts: {},
       humanSeat: 'freeps',
+      humanRole: 'freeps',
     });
     for (const [x, y, anchor] of ROUND_TRIP) {
       expect(picker.thingAt(x, y)?.anchor, `${x},${y}`).toBe(anchor);

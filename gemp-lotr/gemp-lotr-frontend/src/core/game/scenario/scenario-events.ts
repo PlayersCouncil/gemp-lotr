@@ -42,6 +42,13 @@ export interface ScenarioInfo {
   bubbleGap: string | null;
   /** The checkpoint step the game was brought back to, or null for a game from the beginning. */
   resumedAt: number | null;
+  /**
+   * Both seats take turns: the person is the Free Peoples player on their own turns and a Shadow player on the
+   * opponent's (the step says which, `ScenarioStep.role`). False: the person always plays their seat's role.
+   */
+  twoSided: boolean;
+  /** How the game opens: the board laid out by the scenario, or the game's own opening played (the bid, ...). */
+  opening: 'board' | 'game';
   campaign: ScenarioCampaign | null;
   /** The person is writing the scenario as they play it (the authoring panel goes with this)... */
   author: boolean;
@@ -67,6 +74,12 @@ export interface ScenarioZoom {
 }
 
 export interface ScenarioMessage {
+  /**
+   * Its place among the messages of its step in the scenario's file, from 0. A message whose condition doesn't hold is
+   * left out of what the server sends, so this is not always its place in the list it came in (see messagePlace).
+   * Null where the server doesn't say: a closing message, or a game recorded before messages could be left out.
+   */
+  index: number | null;
   header: string | null;
   /** The message, as the server rendered it (HTML: paragraphs, card links, culture and twilight icons). */
   html: string;
@@ -113,6 +126,13 @@ export interface ScenarioStep {
   seat: 'human' | 'opponent';
   /** A step read before the person's own decision is asked. */
   pause: boolean;
+  /** The role the person plays at this moment (in a two-sided game, it changes with the turn); null: their seat's. */
+  role: ScenarioSeat | null;
+  /** Whose turn it is, and which (the game's own count; 0 in the game's own opening); null when not said. */
+  turnOf: 'human' | 'opponent' | null;
+  turn: number | null;
+  /** The last checkpoint step reached (this one, if it is one), which the game can be taken back to; null: none. */
+  lastCheckpoint: number | null;
   messages: readonly ScenarioMessage[];
   /** Where a printed part of a card is on it, by "name:part" in lower case. */
   parts: Readonly<Record<string, PartRect>>;
@@ -136,6 +156,11 @@ export interface ScenarioEnd {
   message: string | null;
   /** The last checkpoint step reached, or null. */
   checkpoint: number | null;
+  /**
+   * The game left its script and the scenario has it played again (outcome.offScript.result: restart, the default),
+   * rather than counting it a failure (`fail`). Only ever true with the result `off_script`.
+   */
+  restart: boolean;
 }
 
 export type ScenarioEvent = ScenarioInfo | ScenarioStep | ScenarioOffScript | ScenarioEnd;
@@ -185,7 +210,9 @@ function message(value: unknown): ScenarioMessage | null {
   const anchors = strings(value['anchors']);
   const anchor = string(value['anchor']);
   const choices = Array.isArray(value['choices']) ? value['choices'] : [];
+  const index = number(value['index']);
   return {
+    index: index !== null && Number.isInteger(index) && index >= 0 ? index : null,
     header: string(value['header']),
     html: html(value['html']) ?? '',
     // (a game recorded before a message could point at several things names the one)
@@ -268,6 +295,8 @@ function info(value: Json): ScenarioInfo | null {
     },
     bubbleGap: string(value['bubbleGap']),
     resumedAt: number(value['resumedAt']),
+    twoSided: boolean(value['twoSided']) ?? false,
+    opening: value['opening'] === 'game' ? 'game' : 'board',
     campaign: campaign(value['campaign']),
     author: boolean(value['author']) ?? false,
     draftTest: boolean(value['draftTest']) ?? false,
@@ -285,6 +314,10 @@ function step(value: Json): ScenarioStep | null {
     sub: number(value['sub']) ?? 0,
     seat: value['seat'] === 'opponent' ? 'opponent' : 'human',
     pause: boolean(value['pause']) ?? false,
+    role: value['role'] === 'freeps' || value['role'] === 'shadow' ? value['role'] : null,
+    turnOf: value['turnOf'] === 'human' || value['turnOf'] === 'opponent' ? value['turnOf'] : null,
+    turn: number(value['turn']),
+    lastCheckpoint: number(value['lastCheckpoint']),
     messages: messages(value['messages']),
     parts: Object.fromEntries(
       Object.entries(parts).flatMap(([name, rect]) => {
@@ -309,7 +342,17 @@ function end(value: Json): ScenarioEnd {
     messages: messages(value['messages']),
     message: html(value['message']),
     checkpoint: number(value['checkpoint']),
+    restart: boolean(value['restart']) ?? false,
   };
+}
+
+/**
+ * A message's place among its step's messages in the scenario's file: what it says (`index`), else its place in the
+ * list it came in (a game recorded before messages could be left out has every one in its place). -1: not one of them.
+ */
+export function messagePlace(messages: readonly ScenarioMessage[], message: ScenarioMessage): number {
+  const at = messages.indexOf(message);
+  return at < 0 ? -1 : (message.index ?? at);
 }
 
 /** A scenario event from its JSON; null for anything that isn't one (unreadable, or of a kind the page doesn't know). */

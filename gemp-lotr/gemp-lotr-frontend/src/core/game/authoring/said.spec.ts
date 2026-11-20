@@ -5,6 +5,10 @@ describe('messages left out on the table', () => {
     const left = leftOutOf([false, true, true], { indexes: [0, 2], count: 2 });
     expect([...left.places]).toEqual([1]);
     expect(left.sure).toBe(true);
+    // (none said: every one with a condition was left out)
+    expect(leftOutOf([true, true], { indexes: [], count: 0 })).toEqual({ places: new Set([0, 1]), sure: true });
+    // (one without a condition that isn't said is newer than the step on the table: not left out)
+    expect(leftOutOf([true, false, false], { indexes: [1], count: 1 })).toEqual({ places: new Set([0]), sure: true });
   });
 
   it('tells from how many were said only what can be told', () => {
@@ -21,10 +25,10 @@ describe('messages left out on the table', () => {
     expect(leftOutOf([true], null).places.size).toBe(0);
   });
 
-  it("reads the places off a step event's messages, if every one has one", () => {
+  it("reads the places in the file off a step event's messages", () => {
     expect(indexesOf([{ index: 0 }, { index: 2 }])).toEqual([0, 2]);
-    expect(indexesOf([{ index: 0 }, { html: 'x' }])).toBeNull();
-    expect(indexesOf([null])).toBeNull();
-    expect(indexesOf([])).toBeNull();
+    expect(indexesOf([])).toEqual([]);
+    // (an event from before the server said: not known)
+    expect(indexesOf([{ index: 0 }, { index: null }])).toBeNull();
   });
 });

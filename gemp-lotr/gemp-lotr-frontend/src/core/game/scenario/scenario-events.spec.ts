@@ -1,4 +1,4 @@
-import { parseScenarioEvent, ScenarioInfo, ScenarioMessage, ScenarioStep } from './scenario-events';
+import { messagePlace, parseScenarioEvent, ScenarioInfo, ScenarioMessage, ScenarioStep } from './scenario-events';
 
 /** An info event as the server sends it for the first tutorial. */
 const INFO = {
@@ -85,6 +85,8 @@ describe('parseScenarioEvent', () => {
       },
       author: false,
       draftTest: false,
+      twoSided: false,
+      opening: 'board',
     });
   });
 
@@ -103,6 +105,8 @@ describe('parseScenarioEvent', () => {
       campaign: null,
       author: false,
       draftTest: false,
+      twoSided: false,
+      opening: 'board',
     });
     expect(
       parse({
@@ -150,8 +154,13 @@ describe('parseScenarioEvent', () => {
       sub: 0,
       seat: 'human',
       pause: false,
+      role: null,
+      turnOf: null,
+      turn: null,
+      lastCheckpoint: null,
       messages: [
         {
+          index: null,
           header: 'Welcome',
           html: '<p>Hello</p>',
           anchors: ['card:frodo'],
@@ -257,6 +266,7 @@ describe('parseScenarioEvent', () => {
       ],
     }) as ScenarioStep;
     expect(step.messages[0]).toEqual<ScenarioMessage>({
+      index: null,
       header: null,
       html: "<img src='/gemp-lotr/images/icons/twilight.png'>",
       anchors: ['card:frodo', 'ui:twilightPool'],
@@ -296,6 +306,7 @@ describe('parseScenarioEvent', () => {
       ],
     }) as ScenarioStep;
     expect(step.messages[0]).toEqual<ScenarioMessage>({
+      index: null,
       header: null,
       html: '',
       anchors: [],
@@ -314,6 +325,53 @@ describe('parseScenarioEvent', () => {
     expect(step.messages[2]?.anchors).toEqual([]);
   });
 
+  it("reads a two-sided game, and one that plays the game's own opening", () => {
+    expect(parse({ ...INFO, twoSided: true, opening: 'game' })).toMatchObject({ twoSided: true, opening: 'game' });
+    // (anything else is the usual: one-sided, the board laid out)
+    expect(parse({ ...INFO, twoSided: 'yes', opening: 'bid' })).toMatchObject({ twoSided: false, opening: 'board' });
+  });
+
+  it('reads the role the person plays at the step, whose turn it is, which, and the last checkpoint reached', () => {
+    expect(parse({ ...STEP, role: 'shadow', turnOf: 'opponent', turn: 2, lastCheckpoint: 5 })).toMatchObject({
+      role: 'shadow',
+      turnOf: 'opponent',
+      turn: 2,
+      lastCheckpoint: 5,
+    });
+    expect(parse({ ...STEP, role: 'freeps', turnOf: 'human', turn: 0, lastCheckpoint: null })).toMatchObject({
+      role: 'freeps',
+      turnOf: 'human',
+      turn: 0,
+      lastCheckpoint: null,
+    });
+    // (a game recorded before these were said, or anything it can't read: not said)
+    expect(parse({ ...STEP, role: 'both', turnOf: 'me', turn: '2', lastCheckpoint: 'x' })).toMatchObject({
+      role: null,
+      turnOf: null,
+      turn: null,
+      lastCheckpoint: null,
+    });
+  });
+
+  it("knows each message by its place in the file, which the step's list no longer is once one is left out", () => {
+    const step = parse({
+      ...STEP,
+      messages: [
+        { ...MESSAGE, index: 1 },
+        { ...MESSAGE, index: 3 },
+      ],
+    }) as ScenarioStep;
+    expect(step.messages.map((message) => message.index)).toEqual([1, 3]);
+    expect(step.messages.map((message) => messagePlace(step.messages, message))).toEqual([1, 3]);
+    // A game recorded before a message could be left out says nothing (nor what can't be read): each is in its place
+    const old = parse({ ...STEP, messages: [MESSAGE, { ...MESSAGE, index: -1 }, { ...MESSAGE, index: 1.5 }] });
+    const messages = (old as ScenarioStep).messages;
+    expect(messages.map((message) => message.index)).toEqual([null, null, null]);
+    expect(messages.map((message) => messagePlace(messages, message))).toEqual([0, 1, 2]);
+    // (one that isn't among them has no place)
+    expect(messagePlace(messages, step.messages[0]!)).toBe(-1);
+  });
+
   it('reads that the game has left its script, with or without a word of its own', () => {
     expect(parse({ type: 'offscript', message: "<p>Off <img src='images/x.png'/></p>" })).toEqual({
       type: 'offscript',
@@ -325,13 +383,16 @@ describe('parseScenarioEvent', () => {
   it('reads how the scenario ended: the result, its messages and the last checkpoint', () => {
     expect(
       parse({ type: 'end', result: 'complete', messages: [], message: null, restart: false, checkpoint: null }),
-    ).toEqual({ type: 'end', result: 'complete', messages: [], message: null, checkpoint: null });
+    ).toEqual({ type: 'end', result: 'complete', messages: [], message: null, checkpoint: null, restart: false });
     expect(
       parse({ type: 'end', result: 'failed', messages: [MESSAGE], message: '<p>Again?</p>', checkpoint: 5 }),
     ).toMatchObject({ result: 'failed', messages: [{ header: 'Welcome' }], message: '<p>Again?</p>', checkpoint: 5 });
     for (const result of ['off_script', 'abandoned', 'error']) {
-      expect(parse({ type: 'end', result })).toMatchObject({ result });
+      expect(parse({ type: 'end', result })).toMatchObject({ result, restart: false });
     }
+    // Left its script, to be played again (outcome.offScript.result: restart), or a failure (fail)
+    expect(parse({ type: 'end', result: 'off_script', restart: true })).toMatchObject({ restart: true });
+    expect(parse({ type: 'end', result: 'off_script', restart: 'yes' })).toMatchObject({ restart: false });
     // A result it doesn't know is an error
     expect(parse({ type: 'end', result: 'won' })).toMatchObject({ result: 'error', messages: [] });
   });

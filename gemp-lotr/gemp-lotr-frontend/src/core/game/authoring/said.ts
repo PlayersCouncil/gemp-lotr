@@ -1,8 +1,8 @@
 /**
  * Which of a step's messages were left out at the decision on the table because their condition (`require`, B6) did
  * not hold. The server leaves such a message out of the step it puts up and marks each one it does say with its place
- * among the step's messages (`index`); where the page's step event does not carry that, how many were said is all
- * there is, and it tells only some cases apart. Pure.
+ * among the step's messages in the file (`index`, which the page reads into ScenarioMessage.index). Where only how
+ * many were said is known, that tells only some cases apart. Pure.
  */
 
 /** What the table shows of the step: the places of the messages said, if known, and how many were said. */
@@ -29,7 +29,9 @@ export function leftOutOf(conditional: readonly boolean[], shown: ShownMessages 
   if (shown === null) return NONE;
   if (shown.indexes !== null) {
     const said = new Set(shown.indexes);
-    return { places: new Set(conditional.flatMap((_, i) => (said.has(i) ? [] : [i]))), sure: true };
+    // (only a message with a condition is ever left out: one without that isn't said is newer than the step on the
+    // table, which its author has just changed and the server has yet to put up again)
+    return { places: new Set(conditional.flatMap((has, i) => (has && !said.has(i) ? [i] : []))), sure: true };
   }
   const missing = conditional.length - shown.count;
   const withCondition = conditional.flatMap((has, i) => (has ? [i] : []));
@@ -38,13 +40,11 @@ export function leftOutOf(conditional: readonly boolean[], shown: ShownMessages 
 }
 
 /**
- * The places of a step event's messages, if every one of them carries its `index`; else null (none said says nothing
- * of which: the count tells what it can).
+ * The places in the file of the messages a step event said (ScenarioMessage.index): exact, also for a step that said
+ * none of them; null where a message doesn't say (an event from before messages could be left out: the count tells
+ * what it can).
  */
-export function indexesOf(messages: readonly unknown[]): number[] | null {
-  if (messages.length === 0) return null;
-  const places = messages.map((message) =>
-    message !== null && typeof message === 'object' ? (message as Readonly<Record<string, unknown>>)['index'] : null,
-  );
-  return places.every((place): place is number => typeof place === 'number') ? places : null;
+export function indexesOf(messages: readonly { readonly index: number | null }[]): number[] | null {
+  const places = messages.map((message) => message.index);
+  return places.every((place): place is number => place !== null) ? places : null;
 }

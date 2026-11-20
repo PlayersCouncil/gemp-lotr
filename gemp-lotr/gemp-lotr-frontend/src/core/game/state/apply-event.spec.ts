@@ -242,6 +242,8 @@ describe('applyEvent', () => {
       campaign: null,
       author: false,
       draftTest: false,
+      twoSided: false,
+      opening: 'board',
     };
     expect(play({ type: 'M', message: '~Scenario passes' }).scenario).toBeNull();
     const model = play(
@@ -256,13 +258,28 @@ describe('applyEvent', () => {
         decision: { id: '1', participantId: 'asdf', type: 'ARBITRARY_CARDS', text: 'Hand of ~Scenario', params: {} },
       },
     );
-    expect(model.scenario).toEqual({ info, step: null, shown: 0, notice: null, end: null });
+    expect(model.scenario).toEqual({
+      info,
+      step: null,
+      shown: 0,
+      notice: null,
+      end: null,
+      lastCheckpoint: null,
+      role: null,
+    });
     expect(model.eventCount).toBe(5);
     expect(model.decision?.decision.text).toBe('Hand of Basic Shadow');
     expect(model.messages).toEqual([
       { kind: 'message', text: 'Basic Shadow plays an orc' },
       { kind: 'warning', text: 'Basic Shadow is waiting' },
     ]);
+    // A game that played on before the page opened it: its log comes before the scenario says who it is
+    const late = play(
+      { type: 'M', message: '~Scenario plays a goblin' },
+      { type: 'S', scenario: info },
+      { type: 'S', scenario: { ...info, opponentName: 'Someone else' } },
+    );
+    expect(late.messages).toEqual([{ kind: 'message', text: 'Basic Shadow plays a goblin' }]);
   });
 
   it('keeps game stats; the revealed hands only when the stats name the players', () => {

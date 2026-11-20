@@ -180,7 +180,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
         }
       </div>
     } @else if (model().preGame; as preGame) {
-      <gd-game-pregame class="gd-game__pregame" [info]="preGame" />
+      <gd-game-pregame class="gd-game__pregame" [info]="preGame" [scenario]="model().scenario" />
     }
     @if (!phone()) {
       <gd-game-tabs class="gd-game__tabs" />

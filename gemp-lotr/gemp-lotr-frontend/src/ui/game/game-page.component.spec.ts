@@ -93,6 +93,18 @@ describe('GamePageComponent', () => {
     return { fixture, el, stable, news, cardOf, text };
   }
 
+  it("names a scripted game's opponent on the pre-game information as its scenario does", async () => {
+    const info = JSON.stringify({ type: 'info', id: 'opening', opponent: '~Scenario', opponentName: 'Tutorial' });
+    const { text } = await open(
+      state(
+        '<ge type="PGS" participantId="alice" allParticipantIds="~Scenario,alice" summary="Scenario"/>' +
+          `<ge type="S" scenario="${info.replace(/"/g, '&quot;')}"/>`,
+      ),
+    );
+    expect(text('[data-side="left"] .gd-game-pregame__name')).toBe('alice');
+    expect(text('[data-side="right"] .gd-game-pregame__name')).toBe('Tutorial');
+  });
+
   it('shows the pre-game information and the tab box until the players are known', async () => {
     const { el, text } = await open(
       state(

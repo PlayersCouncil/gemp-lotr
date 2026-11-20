@@ -30,6 +30,8 @@ const INFO: ScenarioInfo = {
   },
   author: false,
   draftTest: false,
+  twoSided: false,
+  opening: 'board',
 };
 
 const end = (result: ScenarioEnd['result'], extra: Partial<ScenarioEnd> = {}): ScenarioEnd => ({
@@ -38,6 +40,7 @@ const end = (result: ScenarioEnd['result'], extra: Partial<ScenarioEnd> = {}): S
   messages: [],
   message: null,
   checkpoint: null,
+  restart: false,
   ...extra,
 });
 
@@ -50,6 +53,8 @@ describe('ScenarioPanelsComponent', () => {
     end: ReturnType<typeof signal<ScenarioEnd | null>>;
     leaving: ReturnType<typeof signal<boolean>>;
     askRestart: ReturnType<typeof vi.fn>;
+    checkpoint: ReturnType<typeof signal<number | null>>;
+    askCheckpoint: ReturnType<typeof vi.fn>;
     leave: ReturnType<typeof vi.fn>;
     restart: ReturnType<typeof vi.fn>;
     startNext: ReturnType<typeof vi.fn>;
@@ -79,6 +84,8 @@ describe('ScenarioPanelsComponent', () => {
       end: signal<ScenarioEnd | null>(null),
       leaving: signal(false),
       askRestart: vi.fn(),
+      checkpoint: signal<number | null>(null),
+      askCheckpoint: vi.fn(),
       leave: vi.fn(),
       restart: vi.fn(),
       startNext: vi.fn(),
@@ -143,6 +150,25 @@ describe('ScenarioPanelsComponent', () => {
     TestBed.inject(ScenarioRoom).reservedRight.set(320);
     refresh();
     expect(el.querySelector<HTMLElement>('nav')?.style.getPropertyValue('--gd-reserved')).toBe('320px');
+  });
+
+  it('offers the way back to the last checkpoint in the menu while there is one', () => {
+    render();
+    const item = () => el.querySelector<HTMLButtonElement>('[data-scenario-menu="checkpoint"]');
+    expect(item()).toBeNull();
+    guide.checkpoint.set(4);
+    refresh();
+    expect(item()?.textContent.trim()).toBe('Back to checkpoint');
+    expect(item()?.title).toBe('Go back to the last checkpoint: step 4');
+    // (between Start again and Leave)
+    expect([...el.querySelectorAll('[data-scenario-menu]')].map((b) => b.getAttribute('data-scenario-menu'))).toEqual([
+      'restart',
+      'checkpoint',
+      'leave',
+      'report',
+    ]);
+    item()?.click();
+    expect(guide.askCheckpoint).toHaveBeenCalled();
   });
 
   it('says a window too small has no room for the scenario, and lets the player carry on anyway', () => {
@@ -252,8 +278,13 @@ describe('ScenarioPanelsComponent', () => {
       ending('failed');
       expect(buttons()).toEqual(['Start again (main)', 'Back to the Game Hall']);
       fixture.destroy();
-      ending('off_script');
+      ending('off_script', { restart: true });
       expect(text('h2')).toBe("That's not how this one goes");
+      expect(buttons()).toEqual(['Start again (main)', 'Back to the Game Hall']);
+      // (a scenario that counts leaving its script as failing: a failure)
+      fixture.destroy();
+      ending('off_script');
+      expect(text('h2')).toBe('Not this time');
       expect(buttons()).toEqual(['Start again (main)', 'Back to the Game Hall']);
     });
 

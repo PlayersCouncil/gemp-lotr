@@ -23,6 +23,8 @@ export interface ScenarioPlan {
   pass: boolean;
   /** The answers of a multiple choice that may be given (their places in the list). */
   options: readonly number[];
+  /** The numbers that may be given to a decision asking for one (the bid of the game's own opening, say). */
+  numbers: readonly number[];
 }
 
 /** What the plan needs of the page. */
@@ -142,6 +144,7 @@ export function scenarioPlan(context: PlanContext): ScenarioPlan {
     ready: ready(context),
     pass: allow.pass && !(choosesAction && chosen(local)),
     options: decision.type === 'MULTIPLE_CHOICE' ? allow.answers.map(Number).filter(Number.isInteger) : [],
+    numbers: decision.type === 'INTEGER' ? allow.answers.map(Number).filter(Number.isInteger) : [],
   };
 }
 

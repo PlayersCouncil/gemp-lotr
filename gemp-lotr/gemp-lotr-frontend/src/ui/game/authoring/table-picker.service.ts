@@ -138,6 +138,7 @@ export class TablePicker {
       cards: cardIdsOf(this.authoring.draft()?.board),
       parts: {},
       humanSeat: this.guide.info()?.humanSeat ?? 'freeps',
+      humanRole: this.guide.role(),
     });
   }
 

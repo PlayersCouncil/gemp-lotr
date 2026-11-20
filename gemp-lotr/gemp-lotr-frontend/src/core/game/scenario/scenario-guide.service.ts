@@ -15,8 +15,9 @@ import { GameSettings } from '../settings/game-settings';
 import { LocalChoices } from '../state/game-model';
 import { GameCardRef } from '../table/game-card-views';
 import { ScenarioApi } from './scenario-api.service';
-import { MessageSide, ScenarioMessage, ScenarioSettings, ScenarioStep } from './scenario-events';
+import { MessageSide, messagePlace, ScenarioMessage, ScenarioSettings, ScenarioStep } from './scenario-events';
 import { characterComplete, openingMessages, planAllows, PlanContext, scenarioPlan } from './scenario-plan';
+import { scenarioRole } from './scenario-state';
 
 /**
  * Where the player is with the step on the screen:
@@ -44,6 +45,8 @@ export interface NextClicks {
   cardIds: readonly string[];
   button: DecisionButton | null;
   options: readonly number[];
+  /** The numbers the step takes, where a number is asked for: the page points at the way to one, then at OK. */
+  numbers: readonly number[];
 }
 
 /** What is said of a click the step doesn't take when the step has nothing of its own to say. */
@@ -84,7 +87,7 @@ export interface TriedPlace {
   gap?: string | null;
 }
 
-const NO_CLICKS: NextClicks = { cardIds: [], button: null, options: [] };
+const NO_CLICKS: NextClicks = { cardIds: [], button: null, options: [], numbers: [] };
 
 /** A card that isn't on the table but has an action is shown under a made-up id ("extra12"): the card it stands for. */
 const realCard = (cardId: string) => (cardId.startsWith('extra') ? cardId.substring(5) : cardId);
@@ -117,6 +120,20 @@ export class ScenarioGuide implements DecisionGate {
   private readonly notice = computed(() => this.scenario()?.notice ?? null);
   /** Whether a scripted game is being played on this page (not: watched again in a replay). */
   readonly playing = computed(() => this.info() !== null && !this.session.replaying());
+  /**
+   * The role the person plays now (scenarioRole): what "self" and "opp" mean on the table at this moment. In a
+   * two-sided game the Free Peoples player on their own turn, the Shadow player on the opponent's.
+   */
+  readonly role = computed(() => scenarioRole(this.scenario() ?? null));
+  /**
+   * The checkpoint the game can be taken back to in the middle of it (the scenario's menu), or null. Not in a test of
+   * a draft: the panel starts a test again from where it began, never from a checkpoint.
+   */
+  readonly checkpoint = computed(() => {
+    const scenario = this.scenario();
+    if (!this.playing() || scenario?.info?.draftTest || this.end() || this.session.model().ended) return null;
+    return scenario?.lastCheckpoint ?? null;
+  });
 
   /** The messages the step opens with, and how many of them have been read. */
   private readonly opening = computed(() => {
@@ -225,6 +242,7 @@ export class ScenarioGuide implements DecisionGate {
       cardIds: plan.liveCards,
       button: plan.ready ? 'Done' : plan.liveCards.length === 0 && plan.pass ? 'Pass' : null,
       options: plan.options,
+      numbers: plan.numbers,
     };
   });
 
@@ -267,7 +285,8 @@ export class ScenarioGuide implements DecisionGate {
       const step = this.step();
       const info = this.info();
       if (!message || message.html === '') return;
-      const at = step ? `${step.step}.${step.sub}:${step.messages.indexOf(message)}` : 'notice';
+      // (by its place in the file: the same message is the same line, whatever else its step leaves out)
+      const at = step ? `${step.step}.${step.sub}:${messagePlace(step.messages, message)}` : 'notice';
       untracked(() => this.log.say(`scenario ${at}`, info?.opponentName ?? 'Scenario', message.html));
     });
 
@@ -414,7 +433,8 @@ export class ScenarioGuide implements DecisionGate {
     const hint: GuideHint = {
       html: (alias === undefined ? null : context.allow.hints[alias]) ?? context.allow.otherwise ?? STOCK_NOT_NOW,
       cardId,
-      button: gesture.kind === 'button' ? gesture.button : null,
+      // (a number is given with the OK under it: said there)
+      button: gesture.kind === 'button' ? gesture.button : gesture.kind === 'number' ? 'OK' : null,
       option: gesture.kind === 'choice' ? gesture.index : null,
     };
     this.hint.set(hint);
@@ -440,13 +460,14 @@ export class ScenarioGuide implements DecisionGate {
   }
 
   /**
-   * Puts message `index` of the step on the screen up, for its author to look at, if that step (`step`, and `sub` in a
-   * block) is the one on the screen; the decision can be answered meanwhile. False when it isn't (or has no such
-   * message). The next step put up (or this one again) starts afresh.
+   * Puts message `index` of the step on the screen up (its place among the step's messages in the file), for its
+   * author to look at, if that step (`step`, and `sub` in a block) is the one on the screen; the decision can be
+   * answered meanwhile. False when it isn't (or has no such message, or left it out: its condition doesn't hold). The
+   * next step put up (or this one again) starts afresh.
    */
   preview(step: number, sub: number, index: number): boolean {
     const shown = this.step();
-    const message = shown?.messages[index];
+    const message = shown?.messages.find((candidate) => messagePlace(shown.messages, candidate) === index);
     if (!shown || !message || shown.step !== step || shown.sub !== sub) return false;
     const at = this.opening().indexOf(message);
     if (at > -1) {
@@ -461,13 +482,14 @@ export class ScenarioGuide implements DecisionGate {
   }
 
   /**
-   * Shows the bubble of message `index` of the step on the screen where its author is trying it (its side, its
-   * gap), at once, if that message is the one up; the change itself comes back from the server as the step put up
-   * again. False when that message isn't up.
+   * Shows the bubble of message `index` of the step on the screen (its place in the file) where its author is trying
+   * it (its side, its gap), at once, if that message is the one up; the change itself comes back from the server as
+   * the step put up again. False when that message isn't up.
    */
   tryPlace(index: number, place: TriedPlace): boolean {
     const shown = this.shown();
-    if (!shown || this.step()?.messages[index] !== shown) return false;
+    const messages = this.step()?.messages ?? [];
+    if (!shown || messagePlace(messages, shown) !== index) return false;
     const was = this.tried();
     this.tried.set({ message: shown, place: { ...(was?.message === shown ? was.place : {}), ...place } });
     return true;
@@ -505,6 +527,16 @@ export class ScenarioGuide implements DecisionGate {
   }
 
   /**
+   * "Back to checkpoint" in the middle of a game: asked about first, then the scenario starts again from its last
+   * checkpoint (a draft being written: the panel plays the script to it, as its Start again plays it from the start).
+   */
+  async askCheckpoint(): Promise<void> {
+    const checkpoint = this.checkpoint();
+    if (checkpoint === null) return;
+    if (await this.notifier.confirm(`Go back to the last checkpoint (step ${checkpoint})?`)) this.restart(true);
+  }
+
+  /**
    * "Leave": the game is given up (asked about first) and the page goes back to the Game Hall. A draft's game being
    * written stays as it is, to be come back to.
    */
@@ -528,6 +560,7 @@ export class ScenarioGuide implements DecisionGate {
 
 function noticeMessage(html: string): ScenarioMessage {
   return {
+    index: null,
     header: null,
     html,
     anchors: [],

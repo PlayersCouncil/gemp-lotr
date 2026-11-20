@@ -66,6 +66,7 @@ describe('scenario anchors', () => {
     self: 0,
     opponent: 1,
     humanSeat: 'freeps',
+    humanRole: 'freeps',
     ...extra,
   });
   const at = (anchor: string, onCards = false, extra: Partial<AnchorContext> = {}) =>
@@ -203,7 +204,7 @@ describe('scenario anchors', () => {
     expect(at('ui:assignment')).toBeNull();
   });
 
-  it("finds the skirmish and its parts, the player's own side by the seat they play", () => {
+  it("finds the skirmish and its parts, the player's own side by the role they play now", () => {
     expect(at('ui:skirmish')).toEqual(box(500, 200, 300, 150));
     expect(at('ui:skirmish:freeps')).toEqual(box(500, 200, 80, 100));
     expect(at('ui:skirmish:shadow')).toEqual(box(700, 200, 80, 100));
@@ -211,13 +212,20 @@ describe('scenario anchors', () => {
     expect(at('ui:skirmish:shadowStrength')).toEqual(box(670, 300, 20, 20));
     expect(at('ui:skirmish:selfStrength')).toEqual(box(590, 300, 20, 20));
     expect(at('ui:skirmish:oppStrength')).toEqual(box(670, 300, 20, 20));
-    expect(at('ui:skirmish:selfStrength', false, { humanSeat: 'shadow' })).toEqual(box(670, 300, 20, 20));
-    expect(at('ui:skirmish:oppStrength', false, { humanSeat: 'shadow' })).toEqual(box(590, 300, 20, 20));
+    expect(at('ui:skirmish:selfStrength', false, { humanRole: 'shadow' })).toEqual(box(670, 300, 20, 20));
+    expect(at('ui:skirmish:oppStrength', false, { humanRole: 'shadow' })).toEqual(box(590, 300, 20, 20));
+    // (a two-sided game: the Free Peoples seat on the opponent's turn is the Shadow player, and the other way round)
+    const theirTurn = { humanSeat: 'freeps', humanRole: 'shadow' } as const;
+    expect(at('ui:skirmish:selfStrength', false, theirTurn)).toEqual(box(670, 300, 20, 20));
+    expect(at('ui:skirmish:fpStrength', false, theirTurn)).toEqual(box(590, 300, 20, 20));
+    const ownTurn = { humanSeat: 'shadow', humanRole: 'freeps' } as const;
+    expect(at('ui:skirmish:selfStrength', false, ownTurn)).toEqual(box(590, 300, 20, 20));
+    expect(at('ui:skirmish:oppStrength', false, ownTurn)).toEqual(box(670, 300, 20, 20));
     // A damage bonus of none isn't there to point at
     expect(at('ui:skirmish:selfDamage')).toBeNull();
     expect(at('ui:skirmish:oppDamage')).toEqual(box(670, 330, 20, 20));
-    expect(at('ui:skirmish:selfDamage', false, { humanSeat: 'shadow' })).toEqual(box(670, 330, 20, 20));
-    expect(at('ui:skirmish:oppDamage', false, { humanSeat: 'shadow' })).toBeNull();
+    expect(at('ui:skirmish:selfDamage', false, { humanRole: 'shadow' })).toEqual(box(670, 330, 20, 20));
+    expect(at('ui:skirmish:oppDamage', false, { humanRole: 'shadow' })).toBeNull();
     expect(at('ui:skirmish:winner')).toBeNull();
     root.querySelector('[data-fight="skirmish"]')?.remove();
     expect(at('ui:skirmish')).toBeNull();

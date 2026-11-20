@@ -35,6 +35,7 @@ function context(
 }
 
 const message = (on: ScenarioMessage['on'], html = ''): ScenarioMessage => ({
+  index: 0,
   header: null,
   html,
   anchors: [],
@@ -64,7 +65,7 @@ describe('scenario plan', () => {
 
     it('takes only the cards with an allowed action, and once one is taken, Done but no Pass', () => {
       const open = context('CARD_ACTION_CHOICE', allow(['11'], { pass: true }), {}, { actions });
-      expect(scenarioPlan(open)).toEqual({ liveCards: ['5'], ready: false, pass: true, options: [] });
+      expect(scenarioPlan(open)).toEqual({ liveCards: ['5'], ready: false, pass: true, options: [], numbers: [] });
       expect(planAllows(open, { kind: 'card', cardId: '5' })).toBe(true);
       expect(planAllows(open, { kind: 'card', cardId: '6' })).toBe(false);
       expect(planAllows(open, { kind: 'action', actionId: '11', cardId: '5' })).toBe(true);
@@ -78,7 +79,7 @@ describe('scenario plan', () => {
         { selectedCardIds: ['11'], markedCardIds: ['5'] },
         { actions },
       );
-      expect(scenarioPlan(taken)).toEqual({ liveCards: [], ready: true, pass: false, options: [] });
+      expect(scenarioPlan(taken)).toEqual({ liveCards: [], ready: true, pass: false, options: [], numbers: [] });
       expect(planAllows(taken, { kind: 'button', button: 'Done' })).toBe(true);
       expect(planAllows(taken, { kind: 'button', button: 'Pass' })).toBe(false);
       // Taking it back is always fine
@@ -191,14 +192,14 @@ describe('scenario plan', () => {
 
   it('takes the allowed places of a multiple choice', () => {
     const choice = context('MULTIPLE_CHOICE', allow(['0', '2', 'x']));
-    expect(scenarioPlan(choice)).toEqual({ liveCards: [], ready: false, pass: false, options: [0, 2] });
+    expect(scenarioPlan(choice)).toEqual({ liveCards: [], ready: false, pass: false, options: [0, 2], numbers: [] });
     expect(planAllows(choice, { kind: 'choice', index: 2 })).toBe(true);
     expect(planAllows(choice, { kind: 'choice', index: 1 })).toBe(false);
   });
 
   it('takes the allowed numbers, as the game reads them', () => {
     const number = context('INTEGER', allow(['3']));
-    expect(scenarioPlan(number)).toEqual({ liveCards: [], ready: false, pass: false, options: [] });
+    expect(scenarioPlan(number)).toEqual({ liveCards: [], ready: false, pass: false, options: [], numbers: [3] });
     expect(planAllows(number, { kind: 'number', value: '03' })).toBe(true);
     expect(planAllows(number, { kind: 'number', value: '3' })).toBe(true);
     expect(planAllows(number, { kind: 'number', value: '4' })).toBe(false);
