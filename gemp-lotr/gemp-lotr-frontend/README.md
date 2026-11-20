@@ -374,6 +374,26 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   scripted game shows its messages in turn, without buttons or menu.
 - **Checked** by `npm run check:game:tutorial` (`visual-check/game/tutorial.mjs`, against a game check server kept up):
   the tutorials played through on this page in both themes, their bubbles, menu, panels and replay.
+- **Two-sided games, the game's own opening** (e3's A3 and B10): each step event says the role the person plays at
+  that moment (`ScenarioStep.role`; in a two-sided game the Free Peoples player on their own turn, the Shadow player
+  on the opponent's), whose turn and which. `ScenarioGuide.role` (`scenarioRole`: the step's, else the last said, else
+  the seat) is what "self" and "opp" mean on the table: `AnchorContext.humanRole` gives the skirmish anchors
+  (`ui:skirmish:selfStrength` and the like) the person's side as they play it now, on the page and in the authoring
+  panel's picking. A number asked for (the bid) is guided like a click: the spinner's arrow towards the number the
+  step takes is outlined, then OK (`NextClicks.numbers`); OK with another number is refused beside OK. The panel shown
+  until the players are known, and the log lines the game wrote before the scenario said who it is, name the scripted
+  opponent as the scenario does. Nothing is outlined to click while the page asks its own question (a minion left
+  unassigned).
+- **Messages by their place in the file**: a message whose condition doesn't hold is left out of the step event, so
+  each message says its place among its step's messages in the file (`ScenarioMessage.index`, null for an older
+  recording; `messagePlace`). The guide's author hooks (`preview`, `tryPlace`) and the log's lines go by it; the
+  count on the bubble ("1 / 2") counts what is said. The authoring panel's "Not said here" reads it (`said.ts`).
+- **Back to checkpoint**: the menu offers it while the game has reached a checkpoint (`ScenarioState.lastCheckpoint`,
+  kept between steps; a game brought back to one is at it), after the page's own question; it starts the scenario
+  again `from=checkpoint`. In a draft's game being written the panel plays the script to that checkpoint (as its Start
+  again plays it from the start); a test of a draft has no such item (the panel starts a test again from where it
+  began). An ending's `restart` (outcome.offScript.result) is read: a game that left its script is "not how this one
+  goes" when the scenario has it played again (the default), a failure when it says `fail`.
 
 ## Tests and the visual check
 
