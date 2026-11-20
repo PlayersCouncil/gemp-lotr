@@ -42,3 +42,12 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   /tournament, getCurrentTournaments), `tournament-playing.xml` and `tournament-finished.xml` (GET /tournament/{id},
   getTournamentInfo) and `hall-format-definitions.json` (GET /hall/formats/json, FormatDefinitions.describeAll, cut
   down to one format and an entry without a code).
+- Written by hand from the server code, for the My Account tab (a fresh database has no games or scenarios; values
+  made up): `game-history.xml` (GET /gameHistory, GameHistoryRequestHandler.getGameHistory: the second page of a
+  filtered history, a won league game with a replay, a lost casual one without, and an old entry with no `result`,
+  `opponent` or times), `game-history-filters.json` (GET /gameHistory/filters), `player-stats.xml` (GET /playerStats,
+  PlayerStatsRequestHandler: casual entries, no competitive ones), `scenarios-mine.json` (GET /scenarios/mine,
+  ScenarioShelf.mine with ScenarioAuthoring.current: one in review in a campaign, one sent back that is a version of a
+  public one, one published, an unreadable one whose public scenario is gone, and a draft open with changes),
+  `scenarios-public.json` (GET /scenarios/public, ScenarioShelf.publicOnes) and `scenario-copy.json` (POST
+  /scenarios/mine/copy and copyPublic).
