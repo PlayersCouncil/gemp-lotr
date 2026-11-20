@@ -309,7 +309,11 @@ and replays (G4). The hall opens games on it (`hallUi.js`), and the game history
   a draft's game needs (`ScenarioGuide.attachAuthor`). The page leaves the panel its room with `--gd-page-right` on the
   document element (`ui/shared/page-room.ts`), which the page's host, the dialogs, the card information, the hover zoom,
   the animations and the replay controls keep to; it is unset, so nothing moves, when no panel is docked. The tabs are
-  one component each; the widgets they share are in `ui/game/authoring/widgets/`.
+  one component each (Timeline, Step, Opponent, Board, Scenario); the widgets they share are in
+  `ui/game/authoring/widgets/`. A message's anchors are picked on the table (`TablePicker`), by the same rules that
+  point the messages at them (`ui/game/scenario/scenario-anchors.ts`). Checked by `npm run check:game:author` (a real
+  browser writing drafts of its own; see `visual-check/game/README.md`). The legacy panel and overlay
+  (`scenarioAuthor.js`, `scenarioOverlay.js`) are gone: comments that name them say where a behaviour came from.
 - **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
   layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
   status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's

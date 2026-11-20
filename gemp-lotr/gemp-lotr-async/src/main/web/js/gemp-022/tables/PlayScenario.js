@@ -45,7 +45,8 @@ class PlayScenario extends TableFlow {
 	//What the Result box was last made to say about them (null if it says something else)
 	unreadableSaid = null;
 
-	// as GempScenarioOverlay.MIN_WIDTH / MIN_HEIGHT
+	// as MIN_WIDTH / MIN_HEIGHT of the Angular game page's scenario panels
+	// (gemp-lotr-frontend/src/ui/game/scenario/scenario-panels.component.ts)
 	static MIN_WIDTH = 1000;
 	static MIN_HEIGHT = 600;
 

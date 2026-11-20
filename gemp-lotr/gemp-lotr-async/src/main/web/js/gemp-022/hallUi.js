@@ -411,7 +411,8 @@ var GempLotrHallUI = Class.extend({
 		this.tableCreator = new CreateTable(this, this.comm, $("#create-table-popup"), formatManager, deckManager);
 
 		// A game tab that wants to come back here asks whether a hall is open before opening another one (two halls
-		// at once get a 409).  Answering lets it close itself instead: see backToHall in scenario/scenarioOverlay.js.
+		// at once get a 409).  Answering lets it close itself instead: see HallTab in the Angular game page
+		// (gemp-lotr-frontend/src/core/platform/hall-tab.service.ts).
 		try {
 			this.hallChannel = new BroadcastChannel("gemp-lotr-hall");
 			this.hallChannel.onmessage = function (event) {

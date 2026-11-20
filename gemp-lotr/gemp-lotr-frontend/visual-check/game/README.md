@@ -445,8 +445,7 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
 - **picking**: Pick on the table from a message's anchor fields: the crosshair, the notice, the box and label round
   what the pointer is on; a click takes it (and a part of the card); Escape and a click in the panel take nothing;
   `+ Pick` adds a card under another, a site, a row, a pile, the twilight pool and a button to the outlines, each then
-  drawn round where it was picked. Waiting for the Step tab's anchor fields (`gd-author-anchor[data-field]`): until
-  then it passes with a note.
+  drawn round where it was picked.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
