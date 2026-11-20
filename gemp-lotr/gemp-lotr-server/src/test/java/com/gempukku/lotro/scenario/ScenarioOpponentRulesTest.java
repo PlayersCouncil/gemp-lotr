@@ -478,4 +478,33 @@ public class ScenarioOpponentRulesTest {
         assertNull(result.def().leftovers);
         assertEquals(java.util.List.of("opponent.leftovers", "opponent.plays"), result.leftOut().stream().map(ScenarioSalvage.LeftOut::where).toList());
     }
+
+    @Test
+    public void thePlayersOwnAllowCanAssignByRule() throws Exception {
+        //The page is sent the answer it comes to now, as it is sent any allowed answer
+        ScenarioSession session = session("""
+                	options: {
+                		autoPass: true
+                	}
+                	setup: {
+                		freeps: {
+                			characters: aragorn
+                		}
+                		shadow: {
+                			minions: runner1, runner2
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, assign
+                			allow: assign(frodo: runner1, aragorn: rest)
+                			end: complete
+                		}
+                	]
+                """);
+        Ruling ruling = playTo(session, r -> assigning(r, ScenarioRunner.HUMAN));
+        assertEquals(1, ruling.shown().allowed().size());
+        assertEquals("assign(frodo: runner1, aragorn: runner2)",
+                AnswerCompiler.decompile(session.Table(), ruling.decision(), ruling.shown().allowed().getFirst()));
+    }
 }
