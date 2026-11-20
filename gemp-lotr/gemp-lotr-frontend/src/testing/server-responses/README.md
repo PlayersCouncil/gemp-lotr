@@ -30,3 +30,14 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   `writeXmlResponse(null)`), `hall-table-error.xml` (their refusal, still status 200: `marshalException`) and
   `hall-formats.json` (POST /deck/formats, DeckRequestHandler.getAllFormats: `Formats` keyed by code, one not offered
   in the hall, and `HallTimers` from GameTimer.HALL_TIMERS with their describeLimits sentences).
+- Written by hand from the server code, for the Events tab (a fresh database has no leagues, tournaments or
+  schedules; values made up): `events-calendar.json` (GET /calendar, CalendarRequestHandler: a league with two series
+  and a description holding a script, a scheduled tournament whose queue is open, a started one, two projected
+  leagues (event admin), one with an error, and an event of an unknown kind), `event-history-months.json` (GET
+  /eventHistory/months), `event-history-league.json` and `event-history-tournament.json` (GET /eventHistory,
+  EventHistoryService.getMonthEvents; the tournament month for an admin, with a report link and an unsafe one),
+  `league-detail.xml` and `league-detail-rtmd.xml` (GET /league/{code}, LeagueRequestHandler.getLeagueInformation:
+  series with matches and standings, one with a retired format; an RTMD league's path), `tournaments.xml` (GET
+  /tournament, getCurrentTournaments), `tournament-playing.xml` and `tournament-finished.xml` (GET /tournament/{id},
+  getTournamentInfo) and `hall-format-definitions.json` (GET /hall/formats/json, FormatDefinitions.describeAll, cut
+  down to one format and an entry without a code).
