@@ -1,23 +1,26 @@
 import { Component, computed, inject } from '@angular/core';
 import { BoardChanges } from '../../../../core/game/authoring/board-changes.service';
 import { addedText, opText } from '../../../../core/game/authoring/board-queue';
+import { StartPart, startParts, startText } from '../../../../core/game/authoring/board-start';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 
 /** A line of what has been gathered: what it says, and what its × undoes. */
 interface GatheredLine {
-  kind: 'removed' | 'added' | 'op';
+  kind: 'removed' | 'added' | 'op' | 'start';
   index: number;
   text: string;
+  /** A line of where the story starts: its part. */
+  part?: StartPart;
 }
 
 /**
  * The Board tab's bar, kept in view as the tab is scrolled: Submit changes (with how many are gathered) and Reset,
- * and under them what has been gathered, a line each (taking a card out, adding one, a change to the board) with a ×
- * that undoes it.
+ * and under them what has been gathered, a line each (taking a card out, adding one, a part of where the story
+ * starts, a change to the board) with a × that undoes it.
  *
  * DOM contract: `gd-author-board-gathered` holding `.gd-author-board-gathered__buttons` (`button[data-action]`:
  * submit, reset; `.gd-author-note` with nothing gathered), then `ul.gd-author-board-gathered__list` with an
- * `li.gd-author-board-gathered__line` per change (`data-kind`: removed, added, op) holding
+ * `li.gd-author-board-gathered__line` per change (`data-kind`: removed, added, start with `data-part`, op) holding
  * `.gd-author-board-gathered__text` and `button[data-action=undo]`.
  */
 @Component({
@@ -57,7 +60,7 @@ interface GatheredLine {
     @if (lines().length > 0) {
       <ul class="gd-author-board-gathered__list">
         @for (line of lines(); track line.kind + line.index) {
-          <li class="gd-author-board-gathered__line" [attr.data-kind]="line.kind">
+          <li class="gd-author-board-gathered__line" [attr.data-kind]="line.kind" [attr.data-part]="line.part ?? null">
             <span class="gd-author-board-gathered__text" [title]="line.text">{{ line.text }}</span>
             <button gdAuthorButton data-action="undo" title="Do not make this change" (click)="undo(line)">×</button>
           </li>
@@ -75,6 +78,12 @@ export class BoardGatheredComponent {
     return [
       ...gathered.removed.map((alias, index) => ({ kind: 'removed' as const, index, text: `take out ${alias}` })),
       ...gathered.added.map((add, index) => ({ kind: 'added' as const, index, text: addedText(add) })),
+      ...startParts(gathered).map((part, index) => ({
+        kind: 'start' as const,
+        index,
+        part,
+        text: startText(part, gathered.start ?? {}),
+      })),
       ...gathered.ops.map((op, index) => ({ kind: 'op' as const, index, text: opText(op) })),
     ];
   });
@@ -82,6 +91,7 @@ export class BoardGatheredComponent {
   protected undo(line: GatheredLine): void {
     if (line.kind === 'removed') this.changes.undoRemoved(line.index);
     else if (line.kind === 'added') this.changes.undoAdded(line.index);
+    else if (line.part !== undefined) this.changes.undoStart(line.part);
     else this.changes.undoOp(line.index);
   }
 }

@@ -5,8 +5,9 @@
  * they are sent, and the parts of the scenario a change to its cards, its sites or its Ring writes. Pure: every
  * function answers a new value and changes nothing it is given.
  */
-import { AuthoringBoard, BoardCard, Draft, DraftSeat } from './authoring-state';
+import { AuthoringBoard, BoardCard, Draft, DraftSeat, DraftStart, LaidSite } from './authoring-state';
 import { GatheredBoard, GatheredCard } from './authoring-ui-store';
+import { skirmishesWithout, startParts, startSetup, startWithout } from './board-start';
 import { splitTerms } from './terms';
 
 /** A change to the board as the Board tab gathers it ("wound", ["aragorn", 1]). */
@@ -73,6 +74,8 @@ const isTotal = (name: string): name is Total => (TOTALS as readonly string[]).i
 const OF_A_CARD = ['wound', 'heal', 'tokens', 'move'];
 /** The changes that put a card (first) on another (second). */
 const ON_A_CARD = ['attach', 'stack'];
+/** The changes of who controls a site (named first, by its number). */
+const isControl = (name: string) => name === 'control' || name === 'liberate';
 
 /** A number as the legacy panel read one (parseInt, nothing for what isn't one). */
 function int(value: BoardArg | undefined): number {
@@ -90,11 +93,13 @@ export function gatheredOf(saved: GatheredBoard | null | undefined, draft: strin
   if (saved?.draft !== draft) return empty(draft);
   const list = <T>(value: readonly T[] | undefined): readonly T[] =>
     Array.isArray(value) ? (value as readonly T[]) : [];
-  return { draft, ops: list(saved.ops), added: list(saved.added), removed: list(saved.removed) };
+  const kept = { draft, ops: list(saved.ops), added: list(saved.added), removed: list(saved.removed) };
+  const start: unknown = saved.start;
+  return start !== null && typeof start === 'object' && !Array.isArray(start) ? { ...kept, start } : kept;
 }
 
 export function gatheredCount(gathered: GatheredBoard): number {
-  return gathered.ops.length + gathered.added.length + gathered.removed.length;
+  return gathered.ops.length + gathered.added.length + gathered.removed.length + startParts(gathered).length;
 }
 
 /** A change to the board as the server reads it: "wound(aragorn, 1)". */
@@ -108,7 +113,12 @@ export function opText(op: BoardOp): string {
  * - a wound and a healing of the same card, one after the other: the two net out (and go if they come to nothing);
  * - tokens on the same card, one after the other: added up;
  * - a total (twilight, burdens, threats) set: every earlier setting of it goes, and so does this one if it sets it
- *   to what the board has.
+ *   to what the board has;
+ * - a seat's marker put on a site: every earlier one of that seat's goes, and so does this one if the marker is
+ *   there;
+ * - a site controlled or freed: every earlier change of who controls it goes, and so does this one if that is how
+ *   the site is.
+ * (`board` null: nothing is compared with the board, as for the board the scenario starts with.)
  */
 export function gather(
   gathered: GatheredBoard,
@@ -140,6 +150,13 @@ export function gather(
     // (a total is set to what it is to be, whatever it was set to before: and not at all if that is what it is)
     ops = ops.filter((each) => each.name !== name);
     if (board !== null && board[name] === parseInt(String(args[0]), 10)) return { ...gathered, ops };
+  } else if (name === 'marker') {
+    ops = ops.filter((each) => !(each.name === 'marker' && each.args[0] === target));
+    if (board?.markers?.[target as DraftSeat] === int(args[1])) return { ...gathered, ops };
+  } else if (name === 'control' || name === 'liberate') {
+    ops = ops.filter((each) => !(isControl(each.name) && String(each.args[0]) === String(target)));
+    const laid = board?.path?.find((site) => String(site.number) === String(target));
+    if (laid !== undefined && laid.controlledBy === (name === 'control' ? args[1] : null)) return { ...gathered, ops };
   }
   ops.push(op);
   return { ...gathered, ops };
@@ -159,7 +176,7 @@ export function forgetCard(gathered: GatheredBoard, alias: string): GatheredBoar
     }
     kept.push(op);
   }
-  return { ...gathered, ops: kept };
+  return startWithout({ ...gathered, ops: kept }, (each) => each !== alias);
 }
 
 /** A card has been given another name: what has been gathered says the new one. */
@@ -189,11 +206,12 @@ function cardsNamed(op: BoardOp): readonly BoardArg[] {
 export function pruneGathered(gathered: GatheredBoard, board: AuthoringBoard): GatheredBoard {
   const added = gathered.added.map((add) => add.alias);
   const known = new Set<BoardArg>([...board.cards.map((card) => card.alias), ...added]);
-  return {
+  const kept = {
     ...gathered,
     removed: gathered.removed.filter((alias) => known.has(alias) && !added.includes(alias)),
     ops: gathered.ops.filter((op) => cardsNamed(op).every((alias) => known.has(alias))),
   };
+  return startWithout(kept, (alias) => known.has(alias));
 }
 
 /** A card as the board will have it once what has been gathered is sent. */
@@ -208,11 +226,23 @@ export interface ViewCard extends Omit<BoardCard, 'cardId'> {
   removing: boolean;
 }
 
+/** A site on the adventure path as it will be. */
+export interface ViewSite extends LaidSite {
+  /** It is not on the path yet: a marker put there lays it. */
+  toBeLaid: boolean;
+  /** Who controls it is to change. */
+  touched: boolean;
+}
+
 export interface BoardView {
   twilight: number;
   burdens: number;
   threats: number;
   cards: readonly ViewCard[];
+  /** Where each seat's marker is to be. */
+  markers: Readonly<Record<DraftSeat, number>>;
+  /** The adventure path, by number, to the furthest marker. */
+  path: readonly ViewSite[];
 }
 
 const atOf = (card: { at: number | null }) => card.at ?? 9999;
@@ -302,7 +332,42 @@ export function boardView(board: AuthoringBoard, gathered: GatheredBoard): Board
       card.touched = true;
     }
   }
-  return { ...view, cards };
+  return { ...view, cards, ...pathView(board, gathered) };
+}
+
+/**
+ * The markers and the adventure path as they will be: each seat's marker where the last change put it, the path laid
+ * on to the furthest marker (with the Free Peoples seat's sites, as the game lays them unless the setup says
+ * otherwise), and who controls each site.
+ */
+function pathView(board: AuthoringBoard, gathered: GatheredBoard): Pick<BoardView, 'markers' | 'path'> {
+  const markers = { freeps: board.markers?.freeps ?? 1, shadow: board.markers?.shadow ?? 1 };
+  const path: ViewSite[] = (board.path ?? []).map((site) => ({ ...site, toBeLaid: false, touched: false }));
+  for (const op of gathered.ops) {
+    if (op.name === 'marker' && (op.args[0] === 'freeps' || op.args[0] === 'shadow'))
+      markers[op.args[0]] = int(op.args[1]);
+  }
+  for (let number = path.length + 1; number <= Math.max(markers.freeps, markers.shadow); number++) {
+    const own = board.sites.freeps[number - 1];
+    path.push({
+      number,
+      alias: own?.alias ?? null,
+      blueprintId: own?.id ?? '',
+      name: own?.name ?? null,
+      owner: 'freeps',
+      controlledBy: null,
+      toBeLaid: true,
+      touched: false,
+    });
+  }
+  for (const op of gathered.ops) {
+    if (!isControl(op.name)) continue;
+    const site = path.find((each) => String(each.number) === String(op.args[0]) || each.alias === op.args[0]);
+    if (site === undefined) continue;
+    site.controlledBy = op.name === 'control' ? (op.args[1] as DraftSeat) : null;
+    site.touched = true;
+  }
+  return { markers, path };
 }
 
 /** The names of the sites, both seats' (site1, site1opp, or the names they have been given). */
@@ -337,18 +402,21 @@ const mapOf = (bag: unknown) =>
 
 /** The scenario's parts a change to its cards writes (POST edit top). */
 export interface CardChange {
-  cards: CardsPart;
+  /** Absent: no card is put in or taken out. */
+  cards?: CardsPart;
   /** Null: the scenario has no setup left. */
   setup: Bag | null;
 }
 
 /**
- * The cards gathered to be put in and taken out as the scenario's parts: a card taken out is out of its seat's cards
- * and out of every place the setup puts it; a card put in is in its seat's cards and where it was put (the bottom of
- * the deck is where the setup puts nothing). Null when nothing of the kind has been gathered.
+ * The cards gathered to be put in and taken out, and where the story starts, as the scenario's parts: a card taken
+ * out is out of its seat's cards and out of every place the setup puts it (a skirmish already assigned too); a card
+ * put in is in its seat's cards and where it was put (the bottom of the deck is where the setup puts nothing); the
+ * start as startSetup writes it. Null when nothing of the kind has been gathered.
  */
-export function cardChange(draft: Draft, gathered: GatheredBoard): CardChange | null {
-  if (gathered.added.length === 0 && gathered.removed.length === 0) return null;
+export function cardChange(draft: Draft, gathered: GatheredBoard, start: DraftStart | null = null): CardChange | null {
+  const starting = start !== null && startParts(gathered).length > 0;
+  if (gathered.added.length === 0 && gathered.removed.length === 0 && !starting) return null;
   const cards = new Map(BOARD_SEATS.map((seat) => [seat, mapOf(draft.cards?.[seat])] as const));
   const setup = mapOf(draft.setup);
   /** A part of the setup that names cards (a seat's places, attach...), as a map; it goes when it is empty. */
@@ -373,6 +441,11 @@ export function cardChange(draft: Draft, gathered: GatheredBoard): CardChange | 
     for (const name of ['attach', 'stack', 'wounds', 'tokens']) {
       if (setup.has(name)) change(name, (named) => named.delete(alias));
     }
+    if (setup.has('skirmishes')) {
+      const fights = skirmishesWithout(setup.get('skirmishes'), alias);
+      if (fights === null) setup.delete('skirmishes');
+      else setup.set('skirmishes', fights);
+    }
   };
   for (const alias of gathered.removed) take(alias);
   const seated = new Set<DraftSeat>(BOARD_SEATS.filter((seat) => draft.cards?.[seat] !== undefined));
@@ -394,7 +467,16 @@ export function cardChange(draft: Draft, gathered: GatheredBoard): CardChange | 
   for (const seat of BOARD_SEATS) {
     if (seated.has(seat)) written[seat] = Object.fromEntries(cards.get(seat) ?? []) as Record<string, string>;
   }
-  return { cards: written, setup: setup.size === 0 ? null : Object.fromEntries(setup) };
+  const cardsSetup = setup.size === 0 ? null : Object.fromEntries(setup);
+  if (!starting) return { cards: written, setup: cardsSetup };
+  // (a card taken out is in no skirmish the start has)
+  const out = new Set(gathered.removed);
+  const left = Object.entries(start.skirmishes)
+    .filter(([character]) => !out.has(character))
+    .map(([character, minions]) => [character, minions.filter((minion) => !out.has(minion))] as const);
+  const setupStart = startSetup(cardsSetup, { ...start, skirmishes: Object.fromEntries(left) }, gathered);
+  const cardsChanged = gathered.added.length > 0 || gathered.removed.length > 0;
+  return { ...(cardsChanged ? { cards: written } : {}), setup: setupStart };
 }
 
 /** One of the scenario's cards made another (by its blueprint), keeping its name and its place; null if it has none. */
@@ -420,6 +502,31 @@ export function sitesTop(
     return named ? Object.fromEntries(names.map((alias, at) => [alias, ids[at]])) : ids.join(', ');
   };
   return { sites: { freeps: path('freeps', freeps), shadow: path('shadow', shadow) } };
+}
+
+/**
+ * The seats' paths with the site at `at` put at `to` in each of `seats`' (the other's as it is), every site keeping
+ * its name: written with the names once any is not its place's own.
+ */
+export function sitesReordered(
+  board: AuthoringBoard,
+  human: DraftSeat,
+  seats: readonly DraftSeat[],
+  at: number,
+  to: number,
+) {
+  const path = (seat: DraftSeat) => {
+    const sites = board.sites[seat].map((site) => ({
+      alias: site.alias ?? defaultSiteAlias(human, seat, site.number),
+      id: site.id,
+    }));
+    if (seats.includes(seat)) sites.splice(to, 0, ...sites.splice(at, 1));
+    const named = sites.some((site, place) => site.alias !== defaultSiteAlias(human, seat, place + 1));
+    return named
+      ? Object.fromEntries(sites.map((site) => [site.alias, site.id]))
+      : sites.map((site) => site.id).join(', ');
+  };
+  return { sites: { freeps: path('freeps'), shadow: path('shadow') } };
 }
 
 /** The seat's Ring-bearer or Ring chosen (`""`: none), as the scenario writes the part (null when no seat has one). */

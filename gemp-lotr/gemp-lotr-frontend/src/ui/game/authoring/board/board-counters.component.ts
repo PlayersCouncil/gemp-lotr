@@ -11,8 +11,8 @@ const COUNTERS: readonly { name: Counter; label: string }[] = [
 ];
 
 /**
- * The Board tab's totals: the twilight (not in the setup, which has no twilight pool), the burdens and the threats,
- * each a number and Set, which gathers it. A total a change has been gathered for is marked. What the author has
+ * The Board tab's totals: the twilight, the burdens and the threats, each a number and Set, which gathers it (for
+ * the setup, the twilight is the pool when play begins). A total a change has been gathered for is marked. What the author has
  * typed stays in its field until it is set, whatever the state that comes meanwhile says.
  *
  * DOM contract: `gd-author-board-counters` holding a `.gd-author-board-counters__row` per total (`data-counter`:
@@ -44,7 +44,6 @@ const COUNTERS: readonly { name: Counter; label: string }[] = [
             gdAuthorButton
             data-action="set"
             title="Gathered with the other changes, and made when they are submitted"
-            [disabled]="counter.name === 'twilight' && changes.inSetup()"
             (click)="set(counter.name, view[counter.name])"
           >
             Set

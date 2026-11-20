@@ -27,6 +27,24 @@ export interface GatheredBoard {
   added: readonly GatheredCard[];
   /** Aliases of cards to take out. */
   removed: readonly string[];
+  /** Where the story starts, the parts changed. */
+  start?: StartChange;
+}
+
+/**
+ * What the Board tab has gathered of where the story starts (setup.startAt and the parts that go with it): only the
+ * parts changed; null is the part's default.
+ */
+export interface StartChange {
+  site?: number;
+  opponentSite?: number | null;
+  phase?: string;
+  turn?: number;
+  twilight?: number;
+  moves?: number | null;
+  skirmishes?: Readonly<Record<string, readonly string[]>>;
+  controlled?: Partial<Record<DraftSeat, readonly string[]>>;
+  path?: readonly string[];
 }
 
 /**

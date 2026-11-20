@@ -126,6 +126,16 @@ export interface DraftOptions {
   bubbleGap?: string;
 }
 
+/** Where the story starts (setup.startAt), each part left out at its default. */
+export interface DraftStartAt {
+  site?: number;
+  opponentSite?: number;
+  phase?: string;
+  turn?: number;
+  moves?: number;
+  twilight?: number;
+}
+
 /** The scenario as its file has it (defaults left out). */
 export interface Draft {
   id: string;
@@ -155,9 +165,11 @@ export interface Draft {
     oneSided?: boolean;
     freeps?: readonly DraftRequirement[];
     shadow?: readonly DraftRequirement[];
+    /** One-sided games only: the Shadow seat's marker is put level with the fellowship's at each move. */
+    markers?: 'together' | 'apart';
   };
   setup?: {
-    startAt?: { turn?: number; phase?: string };
+    startAt?: DraftStartAt;
     freeps?: Readonly<Record<string, string>>;
     shadow?: Readonly<Record<string, string>>;
     attach?: Readonly<Record<string, string>>;
@@ -166,6 +178,14 @@ export interface Draft {
     tokens?: Readonly<Record<string, number>>;
     burdens?: number;
     threats?: number;
+    /** The pool when play begins, when nothing else of where the story starts is said (else startAt.twilight). */
+    twilight?: number;
+    /** Skirmishes already assigned: a Free Peoples character's alias to "minion + minion". */
+    skirmishes?: Readonly<Record<string, string>>;
+    /** Sites a seat controls: "1, site2" (numbers or names). */
+    controlled?: Partial<Record<DraftSeat, string>>;
+    /** Whose site is laid where, site 1 first: "site1, site2opp". */
+    path?: string;
   };
   rng?: string | readonly string[];
   outcome?: {
@@ -292,6 +312,54 @@ export interface AuthoringBoard {
   burdens: number;
   threats: number;
   sites: Readonly<Record<DraftSeat, readonly BoardSite[]>>;
+  /** Where each seat's marker is. */
+  markers?: Readonly<Record<DraftSeat, number>>;
+  /** The fellowship's site, whose turn it is. */
+  currentSite?: number;
+  /** Moves made this turn. */
+  moves?: number;
+  /** The sites on the adventure path, by number. */
+  path?: readonly LaidSite[];
+  /** Skirmishes assigned: a character's alias to its minions'. */
+  skirmishes?: Readonly<Record<string, readonly string[]>>;
+}
+
+/** A site on the adventure path of the game as it stands. */
+export interface LaidSite {
+  number: number;
+  alias: string | null;
+  blueprintId: string;
+  name: string | null;
+  /** Whose adventure deck it came from. */
+  owner: DraftSeat;
+  controlledBy: DraftSeat | null;
+}
+
+/** Where the story starts, as the draft says it (describe's `start`), every part filled in. */
+export interface DraftStart {
+  site: number;
+  opponentSite: number;
+  /** The file says opponentSite (else it is the default). */
+  opponentSiteSet: boolean;
+  phase: string;
+  turn: number;
+  twilight: number;
+  moves: number;
+  /** The file says moves (else it is the default). */
+  movesSet: boolean;
+  /** Anything but the very start of a game: nothing earlier in the turn happens. */
+  late: boolean;
+  /** A character's alias to its minions'. */
+  skirmishes: Readonly<Record<string, readonly string[]>>;
+  /** As written: numbers as strings, or site names. */
+  controlled: Partial<Record<DraftSeat, readonly string[]>>;
+  /** setup.path: the sites' names, site 1 first. */
+  path: readonly string[];
+  markersTogether: boolean;
+  /** The phases a start can be in. */
+  phases: readonly string[];
+  /** The longest seat path (at most 9). */
+  lastSite: number;
 }
 
 /** A part of the file that was left out so that it could be opened at all. */
@@ -390,6 +458,8 @@ export interface DraftState {
   board: AuthoringBoard | null;
   /** What has gone wrong with the script in this game, oldest first. */
   problems: readonly string[];
+  /** Where the story starts (the server always sends it; tests may not). */
+  start?: DraftStart;
 }
 
 export type AuthoringState = NoDraft | DraftState;
