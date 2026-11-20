@@ -1548,6 +1548,8 @@ public class ScenarioAuthoring {
                             throw new AuthoringException("Steps are changed one at a time, not all at once.");
                         if (member.getValue().isNull())
                             json.remove(member.getName());
+                        else if (member.getName().equals("outcome"))
+                            json.set("outcome", typedOutcome(member.getValue()));
                         else
                             json.set(member.getName(), member.getValue());
                     }
@@ -1799,20 +1801,56 @@ public class ScenarioAuthoring {
             step.set("allow", read);
         }
         //(a message's condition, typed in as the file has it)
-        org.hjson.JsonValue messages = step.get("messages");
-        if (messages != null && messages.isArray()) {
-            org.hjson.JsonArray read = new org.hjson.JsonArray();
-            for (org.hjson.JsonValue message : messages.asArray()) {
-                if (message.isObject() && message.asObject().get("require") != null) {
-                    JsonObject one = new JsonObject(message.asObject());
-                    one.set("require", typed("require", one.get("require")));
-                    read.add(one);
-                } else {
-                    read.add(message);
-                }
-            }
-            step.set("messages", read);
+        typedMessages(step, "messages");
+        //(and a closing message's, the ones said as the step ends the scenario)
+        org.hjson.JsonValue end = step.get("end");
+        if (end != null && end.isObject()) {
+            JsonObject read = new JsonObject(end.asObject());
+            typedMessages(read, "messages");
+            step.set("end", read);
         }
+    }
+
+    /**
+     * The conditions of the messages under one name of a part (a step's messages, its end's, an outcome's closing
+     * messages), typed in as the file has them: each message's 'require' read as HJSON where it is text.
+     */
+    private static void typedMessages(JsonObject part, String name) throws AuthoringException {
+        org.hjson.JsonValue messages = part.get(name);
+        if (messages == null || !messages.isArray())
+            return;
+        org.hjson.JsonArray read = new org.hjson.JsonArray();
+        for (org.hjson.JsonValue message : messages.asArray()) {
+            if (message.isObject() && message.asObject().get("require") != null) {
+                JsonObject one = new JsonObject(message.asObject());
+                one.set("require", typed("require", one.get("require")));
+                read.add(one);
+            } else {
+                read.add(message);
+            }
+        }
+        part.set(name, read);
+    }
+
+    /**
+     * The outcome as the Scenario tab sends it whole: the conditions of its closing messages (winMessages,
+     * loseMessages, and those of gameWon and gameLost) typed in as the file has them, as a step's are.
+     */
+    private static org.hjson.JsonValue typedOutcome(org.hjson.JsonValue outcome) throws AuthoringException {
+        if (!outcome.isObject())
+            return outcome;
+        JsonObject read = new JsonObject(outcome.asObject());
+        typedMessages(read, "winMessages");
+        typedMessages(read, "loseMessages");
+        for (String ending : List.of("gameWon", "gameLost")) {
+            org.hjson.JsonValue value = read.get(ending);
+            if (value != null && value.isObject()) {
+                JsonObject one = new JsonObject(value.asObject());
+                typedMessages(one, "messages");
+                read.set(ending, one);
+            }
+        }
+        return read;
     }
 
     private static org.hjson.JsonValue typed(String name, org.hjson.JsonValue value) throws AuthoringException {
@@ -2399,14 +2437,24 @@ public class ScenarioAuthoring {
             }
             if (recording != null)
                 session.recording = recording;
-            if (askOpponent != null)
+            boolean released = false;
+            if (askOpponent != null) {
                 session.askOpponent = askOpponent;
+                //The opponent's decision held for the author is the opponent's own again: it is ruled on afresh, and
+                // answered as the opponent answers what is not held (its step, its orders, its fallback).  Without
+                // this it would wait for the author until the next fresh game.
+                if (!askOpponent) {
+                    Sitting sitting = session.sitting;
+                    released = sitting.mediator.scenarioLocked(() -> sitting.live.Held() != null
+                            && sitting.live.Session().Reroute(sitting.live.OpponentPlayer()));
+                }
+            }
             if (way != null) {
                 session.way.clear();
                 session.way.addAll(way);
             }
             session.revision.incrementAndGet();
-            return result(session, false, false);
+            return result(session, released, false);
         }
     }
 
@@ -2802,10 +2850,26 @@ public class ScenarioAuthoring {
                 for (int i = 0; i < step.messages.size(); i++)
                     if (step.messages.get(i).require != null)
                         parts.put("messages." + i + ".require", ScenarioWriter.text(JsonValue.readHjson(step.messages.get(i).require)));
+                //(and those of the messages it ends the scenario with: "end.messages.0.require")
+                if (step.end != null)
+                    for (int i = 0; i < step.end.messages.size(); i++)
+                        if (step.end.messages.get(i).require != null)
+                            parts.put("end.messages." + i + ".require", ScenarioWriter.text(JsonValue.readHjson(step.end.messages.get(i).require)));
                 if (!parts.isEmpty())
                     texts.put(sitting.uid(step), parts);
             }
             state.put("texts", texts);
+            //The conditions of the outcome's closing messages, as the file has them, for the Scenario tab's endings:
+            // "winMessages.0.require", "gameLost.messages.1.require" (the outcome itself is in 'parts')
+            Map<String, String> outcomeTexts = new LinkedHashMap<>();
+            ScenarioDefinition.Outcome outcome = def.outcome;
+            conditionTexts(outcomeTexts, "winMessages.", outcome.winMessages);
+            conditionTexts(outcomeTexts, "loseMessages.", outcome.loseMessages);
+            if (outcome.gameWon != null)
+                conditionTexts(outcomeTexts, "gameWon.messages.", outcome.gameWon.messages);
+            if (outcome.gameLost != null)
+                conditionTexts(outcomeTexts, "gameLost.messages.", outcome.gameLost.messages);
+            state.put("outcomeTexts", outcomeTexts);
 
             Step inHand = sitting.inHand();
             Map<String, Object> position = new LinkedHashMap<>();
@@ -2844,6 +2908,10 @@ public class ScenarioAuthoring {
                     described.put("sub", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().sub : 0);
                     described.put("held", !human && live.Held() != null && live.Held().decision() == decision);
                     described.put("refuses", human && ruling != null && ruling.decision() == decision ? refusalsNow(sitting, ruling) : List.of());
+                    //(which of its step's decisions this is, from 1, as a refusal's "2: ..." and the runner count them;
+                    // 0 when no step has it)
+                    described.put("at", ruling != null && ruling.decision() == decision && ruling.step() != null
+                            ? director.timesFor(ruling.step()) + 1 : 0);
                 }
                 waiting.put(human ? "human" : "opponent", described);
             }
@@ -2892,6 +2960,13 @@ public class ScenarioAuthoring {
      * runner fails), "notOffered" (the game does not offer it here) or "elsewhere" (it is about another of the step's
      * decisions).
      */
+    /** Each message's condition among some, as the file has it, by "<prefix><its place, from 0>.require". */
+    private static void conditionTexts(Map<String, String> texts, String prefix, List<ScenarioDefinition.Message> messages) {
+        for (int i = 0; i < messages.size(); i++)
+            if (messages.get(i).require != null)
+                texts.put(prefix + i + ".require", ScenarioWriter.text(JsonValue.readHjson(messages.get(i).require)));
+    }
+
     private static List<Map<String, Object>> refusalsNow(Sitting sitting, Ruling ruling) {
         List<Map<String, Object>> all = new ArrayList<>();
         Step step = ruling.step();
@@ -3159,9 +3234,13 @@ public class ScenarioAuthoring {
                 List<String> aliases = sitting.def.siteAliases.getOrDefault(seat, List.of());
                 site.put("alias", number <= aliases.size() ? aliases.get(number - 1) : null);
                 try {
-                    site.put("name", GameUtils.getFullName(_library.getLotroCardBlueprint(id)));
+                    LotroCardBlueprint blueprint = _library.getLotroCardBlueprint(id);
+                    site.put("name", GameUtils.getFullName(blueprint));
+                    //(the number printed on it: 0 for a site of the Shadows block on, which has none)
+                    site.put("printed", blueprint.getSiteNumber());
                 } catch (CardNotFoundException exp) {
                     site.put("name", null);
+                    site.put("printed", 0);
                 }
                 path.add(site);
             }
@@ -3194,6 +3273,7 @@ public class ScenarioAuthoring {
             json.put("alias", table.AliasOf(site));
             json.put("blueprintId", site.getBlueprintId());
             json.put("name", GameUtils.getFullName(site));
+            json.put("printed", site.getBlueprint().getSiteNumber());
             json.put("owner", table.SeatOf(site.getOwner()).key());
             json.put("controlledBy", site.getCardController() == null ? null : table.SeatOf(site.getCardController()).key());
             path.add(json);
