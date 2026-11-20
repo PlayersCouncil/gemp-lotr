@@ -1,19 +1,17 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
-import { catchError, concatMap, EMPTY, firstValueFrom, Observable, Subject, Subscription } from 'rxjs';
+import { firstValueFrom, Observable, Subject } from 'rxjs';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../api/api-error';
 import { LocalSettings } from '../platform/local-settings.service';
 import { TimerHandle, Timers } from '../platform/timers';
 import { PlayerInfo } from '../session/player-info.service';
 import { ChatApi } from './chat-api.service';
+import { ChatConnection } from './chat-connection';
 import { displayedSender, highlightOf, isIgnored, orderUsers, tournamentAnnouncement } from './chat-format';
 import {
   CHAT_CHOICE_KEY,
-  CHAT_CONNECTION_LOST,
-  CHAT_INACTIVE,
-  CHAT_NO_PERMISSION,
   CHAT_NOT_LOGGED_IN,
-  CHAT_ROOM_CLOSED,
   chatProblem,
+  chatWarning,
   HALL_CHAT_ROOM,
   ignoredStatus,
   STATUS_IGNORE_FAILED,
@@ -39,7 +37,8 @@ export const USER_LIST_STATUS_MS = 6000;
  * system-message toggle). start() joins the room (GET /chat/{room}) and then long-polls it (POST) until stop() or
  * a failure: any failed join or poll adds its warning and stops the chat (`stopped`), as the legacy chat did.
  * Messages go out one at a time, in the order typed. The user list offers ignoring players and the viewer's own
- * incognito switch. See README.md for what differs from the legacy chat.
+ * incognito switch. The calls' order and timing are ChatConnection's, shared with the game page's ChatRoom; the
+ * models and the parser are shared too. See README.md for what differs from the legacy chat and from the game page.
  */
 @Injectable()
 export class ChatService {
@@ -81,35 +80,14 @@ export class ChatService {
   /** Tournament messages, for their dialog (part 4.2 decides who sees it: hallUi.js tournamentCallback). */
   readonly tournamentAnnouncements$: Observable<TournamentAnnouncement> = this.announcements.asObservable();
 
-  /** Joined and updating (start() was called, and neither stop() nor a failure has ended it). */
-  private running = false;
+  private readonly connection = new ChatConnection();
   private nextId = 1;
   private lastWarning: string | null = null;
-  private timer: TimerHandle | null = null;
   private statusTimer: TimerHandle | null = null;
-  private request: Subscription | null = null;
   private ignoresRequested = false;
-  private readonly outgoing = new Subject<string>();
-  private readonly sending: Subscription;
 
   constructor() {
-    this.sending = this.outgoing
-      .pipe(
-        concatMap((message) =>
-          this.api.send(this.room, message).pipe(
-            catchError((error: unknown) => {
-              this.failed(error, false);
-              return EMPTY;
-            }),
-          ),
-        ),
-      )
-      .subscribe();
-    inject(DestroyRef).onDestroy(() => {
-      this.stop();
-      this.sending.unsubscribe();
-      this.timers.clear(this.statusTimer);
-    });
+    inject(DestroyRef).onDestroy(() => this.timers.clear(this.statusTimer));
   }
 
   /**
@@ -117,7 +95,7 @@ export class ChatService {
    * joins afresh: the room's history comes again, so the lines shown before go.
    */
   start(): void {
-    if (this.running) {
+    if (this.connection.open) {
       return;
     }
     if (this.started()) {
@@ -126,22 +104,17 @@ export class ChatService {
       this.stopped.set(false);
       this.lastWarning = null;
     }
-    this.running = true;
     this.started.set(true);
     this.loggedOut.set(false);
-    this.request = this.api.join(this.room).subscribe({
-      next: (snapshot) => this.received(snapshot),
-      error: (error: unknown) => this.failed(error, true),
+    this.connection.connect(this.room, CHAT_POLL_DELAY_MS, {
+      received: (snapshot) => this.received(snapshot),
+      failed: (error, polling) => this.failed(error, polling),
     });
   }
 
   /** Stops the updates (the page is left, or a failure); the lines stay until start() joins again. */
   stop(): void {
-    this.running = false;
-    this.timers.clear(this.timer);
-    this.timer = null;
-    this.request?.unsubscribe();
-    this.request = null;
+    this.connection.close();
   }
 
   /** A visitor who is not logged in (before start()): the warning with its login link, and no talking. */
@@ -158,7 +131,7 @@ export class ChatService {
     if (!this.canSend() || text.trim() === '') {
       return;
     }
-    this.outgoing.next(text);
+    this.connection.send(text);
   }
 
   /** A warning line (the hall's <error>/<response> answers are added this way too: hallUi.js processResponse). */
@@ -222,64 +195,39 @@ export class ChatService {
     }
   }
 
-  private poll(): void {
-    this.timer = null;
-    this.request = this.api.poll(this.room).subscribe({
-      next: (snapshot) => this.received(snapshot),
-      error: (error: unknown) => this.failed(error, true),
-    });
-  }
-
   private received(snapshot: ChatSnapshot): void {
-    this.request = null;
-    try {
-      const userName = this.player.player()?.name ?? null;
-      for (const message of snapshot.messages) {
-        const announcement = tournamentAnnouncement(message.from, message.html);
-        if (announcement) {
-          this.announcements.next(announcement);
-        }
-        this.append({
-          kind: message.from === 'System' ? 'system' : 'chat',
-          from: displayedSender(message.from),
-          date: message.date,
-          html: message.html,
-          highlight: highlightOf(message.html, userName),
-          loginLink: false,
-        });
+    const userName = this.player.player()?.name ?? null;
+    for (const message of snapshot.messages) {
+      const announcement = tournamentAnnouncement(message.from, message.html);
+      if (announcement) {
+        this.announcements.next(announcement);
       }
-      this.users_.set([...snapshot.users]);
-      this.loadIgnoresOnce();
-    } finally {
-      if (!this.stopped()) {
-        this.timer = this.timers.after(CHAT_POLL_DELAY_MS, () => this.poll());
-      }
+      this.append({
+        kind: message.system ? 'system' : 'chat',
+        from: displayedSender(message.from),
+        date: message.date,
+        html: message.html,
+        highlight: highlightOf(message.html, userName),
+        loginLink: false,
+      });
     }
+    this.users_.set([...snapshot.users]);
+    this.loadIgnoresOnce();
   }
 
   /**
-   * chatErrorMap: the warning (once), and the chat stops. Other statuses only say so; after a failed join or poll the
-   * chat stops all the same (the legacy chat then stopped updating but left the box enabled).
+   * chatErrorMap (chatWarning): the warning (once), and the chat stops. Other statuses only say so; after a failed
+   * join or poll the chat stops all the same (the legacy chat then stopped updating but left the box enabled).
    */
   private failed(error: unknown, polling: boolean): void {
-    if (polling) {
-      this.request = null;
-    }
     const status = error instanceof ApiError ? error.status : INVALID_RESPONSE_STATUS;
-    const warnings: Record<number, string> = {
-      0: CHAT_CONNECTION_LOST,
-      401: CHAT_NOT_LOGGED_IN,
-      403: CHAT_NO_PERMISSION,
-      404: CHAT_ROOM_CLOSED,
-      410: CHAT_INACTIVE,
-    };
-    const warning = warnings[status];
-    if (warning) {
+    const warning = chatWarning(status);
+    if (warning.stops) {
       this.stopped.set(true);
       this.stop();
-      this.appendWarningOnce(warning, status === 401);
+      this.appendWarningOnce(warning.text, warning.loginLink);
     } else {
-      this.appendWarning(chatProblem(status));
+      this.appendWarning(warning.text);
       if (polling) {
         this.stopped.set(true);
       }

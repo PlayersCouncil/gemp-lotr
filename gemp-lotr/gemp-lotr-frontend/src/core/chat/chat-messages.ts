@@ -13,6 +13,34 @@ export const CHAT_INACTIVE =
 /** Any other failure (the legacy text read "occured"). */
 export const chatProblem = (status: number) => `Unknown chat problem occurred (error=${status})`;
 
+/** What a page's chat says about a failed call, and what follows. */
+export interface ChatWarning {
+  readonly text: string;
+  /** Followed by the "Click here to register or log in." link (401). */
+  readonly loginLink: boolean;
+  /** One of chatErrorMap's statuses: the chat stops (chatMalfunction). Any other status only says so. */
+  readonly stops: boolean;
+}
+
+const STOPPING: Readonly<Record<number, string>> = {
+  0: CHAT_CONNECTION_LOST,
+  401: CHAT_NOT_LOGGED_IN,
+  403: CHAT_NO_PERMISSION,
+  404: CHAT_ROOM_CLOSED,
+  410: CHAT_INACTIVE,
+};
+
+/**
+ * The warning for a failed chat call (chat.js chatErrorMap, and the communication's own error callback for any other
+ * status), the same in the hall and on the game page.
+ */
+export function chatWarning(status: number): ChatWarning {
+  const text = STOPPING[status];
+  return text === undefined
+    ? { text: chatProblem(status), loginLink: false, stops: false }
+    : { text, loginLink: status === 401, stops: true };
+}
+
 /** The message box. */
 export const CHAT_PLACEHOLDER = 'Message the game hall...';
 export const CHAT_PLACEHOLDER_LOGGED_OUT = 'Log in to chat';

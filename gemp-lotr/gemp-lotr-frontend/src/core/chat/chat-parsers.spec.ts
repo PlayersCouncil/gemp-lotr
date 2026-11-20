@@ -16,6 +16,7 @@ describe('chat parsers', () => {
     expect(chat.messages[1]).toEqual({
       from: 'bob',
       date: 1794232860000,
+      system: false,
       html: '<p>hi @alice, see <a href="https://wiki.lotrtcgpc.net" target="_blank">https://wiki.lotrtcgpc.net</a></p>',
     });
     expect(chat.users).toEqual([
@@ -32,6 +33,31 @@ describe('chat parsers', () => {
       role: 'admin',
     });
     expect(parseChat(parseXml('<hall/>'))).toBeNull();
+  });
+
+  it("reads the game page's rooms the same way (ChatRoom): roles from the old marks, no date as null", () => {
+    expect(
+      parseChat(
+        parseXml(
+          '<chat><message from="System" date="5">alice joined</message><message from="bob">hi &lt;b&gt;</message>' +
+            '<user role="admin" self="true">alice</user><user>* carol</user><user>+ dave</user>' +
+            '<user incognito="true">eve</user></chat>',
+        ),
+      ),
+    ).toEqual({
+      room: '',
+      messages: [
+        { from: 'System', html: 'alice joined', date: 5, system: true },
+        { from: 'bob', html: 'hi <b>', date: null, system: false },
+      ],
+      users: [
+        { name: 'alice', role: 'admin', self: true, incognito: false },
+        { name: 'carol', role: 'admin', self: false, incognito: false },
+        { name: 'dave', role: 'leagueAdmin', self: false, incognito: false },
+        { name: 'eve', role: null, self: false, incognito: true },
+      ],
+    });
+    expect(parseChat(parseXml('<chat><message>no sender</message></chat>'))?.messages[0]?.from).toBe('');
   });
 
   it('reads the ignore list and the answers of ignoring and going incognito', () => {

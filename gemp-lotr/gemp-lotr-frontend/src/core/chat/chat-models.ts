@@ -11,23 +11,25 @@ export interface ChatUser {
   readonly incognito: boolean;
 }
 
-/** A <message> as the server sent it. */
-export interface ChatServerMessage {
+/** A <message> as the server sent it: the one message model of every page's chat (the hall's and the game's). */
+export interface ChatMessage {
   /** "System", "TournamentSystem", "TournamentSystemTo:<name>;<name>", or a player's name. */
   readonly from: string;
-  /** Epoch ms. */
-  readonly date: number;
   /**
    * The message as server markup: a player's text rendered from markdown with HTML escaped (MarkdownParser, links
    * written out), or a system text with simple tags such as <br />. See README.md for how it is shown.
    */
   readonly html: string;
+  /** Epoch ms; null if the server didn't say. */
+  readonly date: number | null;
+  /** From "System" (joins, leaves, the welcome, command answers). */
+  readonly system: boolean;
 }
 
 /** One answer of GET or POST /chat/{room}: the new messages and the whole user list. */
 export interface ChatSnapshot {
   readonly room: string;
-  readonly messages: readonly ChatServerMessage[];
+  readonly messages: readonly ChatMessage[];
   readonly users: readonly ChatUser[];
 }
 

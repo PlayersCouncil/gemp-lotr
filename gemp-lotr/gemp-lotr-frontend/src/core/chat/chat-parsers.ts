@@ -1,7 +1,8 @@
 import { attr, childElements, rootElement } from '../api/xml';
-import { ChatRole, ChatServerMessage, ChatSnapshot, ChatUser, IgnoreResult } from './chat-models';
+import { ChatMessage, ChatRole, ChatSnapshot, ChatUser, IgnoreResult } from './chat-models';
 
 /**
+ * The one reader of the `<chat>` answer, for every page's chat (ChatService in the hall, ChatRoom on the game page):
  * <chat roomName><message from date>text</message>*<user [role] [self] [incognito]>name</user>*</chat>. Null for any
  * other root (the legacy chat ignored it).
  */
@@ -10,11 +11,11 @@ export function parseChat(doc: Document): ChatSnapshot | null {
   if (!root) {
     return null;
   }
-  const messages = childElements(root, 'message').map((message): ChatServerMessage => ({
-    from: attr(message, 'from') ?? '',
-    date: parseInt(attr(message, 'date') ?? '', 10) || 0,
-    html: message.textContent,
-  }));
+  const messages = childElements(root, 'message').map((message): ChatMessage => {
+    const from = attr(message, 'from') ?? '';
+    const date = Number(attr(message, 'date') ?? Number.NaN);
+    return { from, html: message.textContent, date: Number.isFinite(date) ? date : null, system: from === 'System' };
+  });
   return { room: attr(root, 'roomName') ?? '', messages, users: childElements(root, 'user').map(readUser) };
 }
 
