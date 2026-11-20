@@ -14,6 +14,9 @@ import { TYPING_SEND_MS } from '../widgets/author-send.directive';
 import { ScenarioGuide } from '../../../../core/game/scenario/scenario-guide.service';
 import { indexesOf, LeftOut, leftOutOf } from '../../../../core/game/authoring/said';
 import { messagesOf } from '../../../../core/game/authoring/steps';
+import { valueAt } from '../../../../core/game/authoring/step-model';
+import { WhenFacts, whenFacts } from '../../../../core/game/authoring/terms';
+import { WhenHost } from './when-host';
 
 /** Where the form's unsent parts are kept while the page goes to a fresh game (the next page's form takes them). */
 export const STEP_CARRY_KEY = 'gemp-author-step-unsent';
@@ -44,7 +47,7 @@ export interface FormPlace {
  * "messages.0.text"); `data-field` on each says which it is.
  */
 @Injectable()
-export class StepEditor {
+export class StepEditor implements WhenHost {
   readonly authoring = inject(Authoring);
   private readonly store = inject(SessionStore);
   private readonly document = inject(DOCUMENT);
@@ -313,6 +316,27 @@ export class StepEditor {
     if (!draft) return;
     this.authoring.showTab('step');
     await this.authoring.changeBlock([childInsertOp(draft, index, at, step, awaiting)], index, at);
+  }
+
+  /* ---------------------------------------------------------------- the When composer's host (WhenHost) */
+
+  whenText(path: string): string | null {
+    const work = this.work();
+    if (!work) return null;
+    const value = valueAt(work, path);
+    return typeof value === 'string' ? value : '';
+  }
+
+  putWhen(path: string, value: string): void {
+    this.put(path, value);
+  }
+
+  pickedWhen(): void {
+    this.now();
+  }
+
+  whenFacts(): WhenFacts {
+    return whenFacts(this.authoring.draft());
   }
 
   /** Asks the author, in the page's own dialog. */

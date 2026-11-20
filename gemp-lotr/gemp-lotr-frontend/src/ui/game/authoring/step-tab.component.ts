@@ -4,6 +4,7 @@ import { BlockPageComponent } from './step/block-page.component';
 import { SkirmishPageComponent } from './step/skirmish-page.component';
 import { StepActionsComponent } from './step/step-actions.component';
 import { StepEditor } from './step/step-editor';
+import { WhenHost } from './step/when-host';
 import { StepFieldsComponent } from './step/step-fields.component';
 import { StepHeadComponent } from './step/step-head.component';
 
@@ -30,7 +31,7 @@ export const CATCH_UP_MS = 300;
   selector: 'gd-game-author-step',
   styleUrl: './step-tab.component.css',
   encapsulation: ViewEncapsulation.None,
-  providers: [StepEditor],
+  providers: [StepEditor, { provide: WhenHost, useExisting: StepEditor }],
   imports: [StepHeadComponent, StepActionsComponent, StepFieldsComponent, BlockPageComponent, SkirmishPageComponent],
   host: {
     '[attr.data-uid]': 'editor.form()?.uid ?? null',

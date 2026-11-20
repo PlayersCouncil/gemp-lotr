@@ -6,32 +6,42 @@ import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorKeepDirective } from '../widgets/author-keep.directive';
 import { HjsonAreaDirective } from '../widgets/hjson-area.directive';
 import { OrdersEditor } from './orders-editor';
+import { OrderWhenHost } from './order-when-host';
+import { WhenHost } from '../step/when-host';
+import { WhenPickersComponent } from '../step/when-pickers.component';
+import { splitTerms } from '../../../../core/game/authoring/terms';
 
 const WHEN_HINT =
   "The opponent's decisions it answers, as a step's When: kind of decision, phase(...), turn(...), inSkirmish(card), text(...), ... " +
   'Or written out in full, in HJSON: { terms: "...", require: { ... } }.';
 const ANSWER_HINT =
   'What it answers with, as a step’s answer: play(card), use(card), choose(card), assign(frodo: orc, ringBearer: rest), pass. ' +
+  'In assign(...), ringBearer is whoever bears the Ring, and rest (or all) every minion still to be given out. ' +
   'Several, comma-separated: the first the decision takes is used.';
+/** An assignment's own words, offered for an order's answer as a step's Answer offers it. */
+const ASSIGN_REST = 'assign(ringBearer: rest)';
 
 /**
  * One of the opponent's standing orders (or a new one, `order` null): a line saying what it answers and with what,
- * its tags (once, used up in this game, its name), ↑ ↓ ✕; open, a small form of its parts (name, When, answer, once,
- * note), sent whole with Apply (Enter in a one-line field) and put back with Cancel. A refusal is said on it in the
- * server's words, and what was typed stays.
+ * its tags (once, used up in this game, its name), ↑ ↓ ✕; open, a small form of its parts (name, When with the When
+ * composer's pickers, answer, once, note), sent whole with Apply (Enter in a one-line field) and put back with Cancel.
+ * For an assignment (its When says assign, or the opponent's waiting decision is one), the Answer offers "the rest to
+ * the Ring-bearer". A refusal is said on it in the server's words, and what was typed stays.
  *
  * DOM contract: `li.gd-author-order` (`data-index`, `data-id`, `data-open`, `data-spent`, `data-new`) holding
  * `.gd-author-order__head` with `button.gd-author-order__summary` (`aria-expanded`; `.gd-author-order__number`,
  * `.gd-author-order__when`, `.gd-author-order__answer`), `.gd-author-order__tag` (`data-tag` once, spent, id) and
- * `button[data-author]` up, down, delete; open, `.gd-author-order__form` with `[data-part]` id, when, answer, note
- * (`input`, the When a `textarea`), `input[data-part=once]`, `p.gd-author-order__refusal` and `button[data-author]`
+ * `button[data-author]` up, down, delete; open, `.gd-author-order__form` with `gd-author-when-pickers`, `[data-part]`
+ * id, when, answer, note (`input`, the When a `textarea`), `button[data-author=answer-rest]` for an assignment,
+ * `input[data-part=once]`, `p.gd-author-order__refusal` and `button[data-author]`
  * apply, cancel.
  */
 @Component({
   selector: 'gd-author-order',
   styleUrl: './order-card.component.css',
   host: { style: 'display: contents' },
-  imports: [AuthorButtonDirective, AuthorFieldComponent, AuthorKeepDirective, HjsonAreaDirective],
+  providers: [{ provide: WhenHost, useClass: OrderWhenHost }],
+  imports: [AuthorButtonDirective, AuthorFieldComponent, AuthorKeepDirective, HjsonAreaDirective, WhenPickersComponent],
   template: `
     <li
       class="gd-author-order"
@@ -95,6 +105,7 @@ const ANSWER_HINT =
       }
       @if (open() && editor.form(); as form) {
         <div class="gd-author-order__form">
+          <gd-author-when-pickers />
           <gd-author-field label="When" [hint]="whenHint">
             <textarea
               gdHjsonArea
@@ -120,6 +131,18 @@ const ANSWER_HINT =
               (keydown.enter)="apply()"
             />
           </gd-author-field>
+          @if (restOffer(form); as offer) {
+            <div class="gd-author-bar">
+              <button
+                gdAuthorButton="inline"
+                data-author="answer-rest"
+                title="Every minion still to be given out, to whoever bears the Ring"
+                (click)="addAnswer(form, offer)"
+              >
+                + {{ offer }}
+              </button>
+            </div>
+          }
           <div class="gd-author-order__line">
             <label class="gd-author-check" title="It answers one decision, then is done with for the game">
               <input type="checkbox" data-part="once" [checked]="form.once" (change)="tick($event)" />
@@ -202,6 +225,20 @@ export class OrderCardComponent {
 
   protected type(part: 'when' | 'answer' | 'id' | 'note', event: Event): void {
     this.editor.type({ [part]: (event.target as HTMLInputElement | HTMLTextAreaElement).value });
+  }
+
+  /** "The rest to the Ring-bearer", for an order about an assignment that does not say it yet. */
+  protected restOffer(form: OrderForm): string | null {
+    const asked = this.editor.authoring.draft()?.waiting.opponent;
+    const assigning =
+      splitTerms(form.when).some((term) => term.toLowerCase() === 'assign') ||
+      /(^|[\s,{])decision\s*:\s*assign\b/i.test(form.when) ||
+      asked?.type === 'assign';
+    return assigning && !splitTerms(form.answer).includes(ASSIGN_REST) ? ASSIGN_REST : null;
+  }
+
+  protected addAnswer(form: OrderForm, term: string): void {
+    this.editor.type({ answer: [...splitTerms(form.answer), term].join(', ') });
   }
 
   protected tick(event: Event): void {

@@ -208,4 +208,27 @@ describe('OutcomeSectionComponent: endings', () => {
     await settle();
     expect(backend.match((r) => r.url === `${AUTHOR}edit`)).toEqual([]);
   });
+
+  it('edits each closing message’s condition as the file has it, sending it as typed (Say only if)', async () => {
+    const alas = { text: 'Alas.', require: [{ type: 'x' }] };
+    const given: Draft['outcome'] = {
+      winMessages: [{ text: 'Won.', require: { type: 'canSpot' } }],
+      gameLost: { result: 'fail', messages: ['Lost.', alas] },
+    };
+    await show({ ...withOutcome(given), outcomeTexts: { 'winMessages.0.require': '{\n\ttype: canSpot\n}' } });
+    const condition = (kind: string, index: number) =>
+      find<HTMLTextAreaElement>(`${ending(kind)} li[data-index="${index}"] textarea[data-part=require]`);
+    expect(condition('winMessages', 0).value).toBe('{\n\ttype: canSpot\n}');
+    expect(condition('gameLost', 0).value).toBe('');
+    // (no text from the server: as JSON)
+    expect(condition('gameLost', 1).value).toBe('[\n\t{\n\t\t"type": "x"\n\t}\n]');
+    await type(`${ending('gameLost')} li[data-index="0"] textarea[data-part=require]`, '{ "type": "y" }');
+    expect(outcome()).toEqual({
+      ...given,
+      gameLost: { result: 'fail', messages: [{ text: 'Lost.', require: '{ "type": "y" }' }, alas] },
+    });
+    await show(withOutcome(given));
+    await type(`${ending('winMessages')} li[data-index="0"] textarea[data-part=require]`, ' ');
+    expect(outcome()).toEqual({ ...given, winMessages: ['Won.'] });
+  });
 });

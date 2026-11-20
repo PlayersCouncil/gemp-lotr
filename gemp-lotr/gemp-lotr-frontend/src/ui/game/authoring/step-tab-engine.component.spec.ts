@@ -13,6 +13,7 @@ import { PageExit } from '../../../core/platform/page-exit';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { decision, draftGameXml, draftState, result } from '../../../testing/authoring';
 import { provideFakeNotifier, settle } from '../../../testing/fake-notifier';
+import { START_DEFAULT } from '../../../core/game/authoring/board-start';
 import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
 import { StepTabComponent } from './step-tab.component';
 import { TablePicker } from './table-picker.service';
@@ -531,6 +532,94 @@ describe('StepTabComponent and the engine’s newer parts', () => {
       area.dispatchEvent(new Event('change', { bubbles: true }));
       await wait(0);
       expect(sentOps()[0]).toMatchObject({ set: { end: { result: 'fail', messages: [{ text: 'Lost{turn}' }] } } });
+    });
+  });
+
+  describe('the last pass: roles, the opening, closing conditions, numbered refusals', () => {
+    it('offers the role in a game of two sides, putting as(...) after the turn, in Until and Skip when too', async () => {
+      await open(
+        withSteps(
+          [
+            {
+              when: 'human, action, phase(regroup), turn(2)',
+              until: 'turn(3)',
+              skipWhen: 'phase(shadow)',
+              allow: 'pass',
+            },
+          ],
+          { twoSided: true },
+        ),
+      );
+      await choose('gd-author-when gd-author-select[data-picker=role][data-path=when]', 'shadow');
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({ set: { when: 'human, action, phase(regroup), turn(2), as(shadow)' } });
+      await answer(withFirst({ when: 'human, action, phase(regroup), turn(2), as(shadow)' }));
+      expect(find<HTMLSelectElement>('gd-author-select[data-picker=role][data-path=when] select').value).toBe('shadow');
+      await choose('gd-author-select[data-picker=role][data-path=until]', 'freeps');
+      await choose('gd-author-select[data-picker=role][data-path=skipWhen]', 'shadow');
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({
+        set: { until: 'turn(3), as(freeps)', skipWhen: 'phase(shadow), as(shadow)' },
+      });
+    });
+
+    it('offers no role in a one-sided game unless the When says one, and reads it from a When written out', async () => {
+      await open(withSteps([{ when: 'human, action', allow: 'pass' }]));
+      expect(el.querySelector('gd-author-select[data-picker=role]')).toBeNull();
+      await update(withSteps([{ when: { seat: 'human', as: 'shadow', require: { type: 'canSpot' } }, allow: 'pass' }]));
+      expect(find<HTMLSelectElement>('gd-author-select[data-picker=role][data-path=when] select').value).toBe('shadow');
+    });
+
+    it('offers the opening’s decisions only where the game plays its own opening, or the When names one', async () => {
+      await open(withSteps([{ when: 'human, number', allow: 'number(1)' }]));
+      const offered = () =>
+        [...el.querySelectorAll<HTMLOptionElement>('gd-author-when [data-picker=asked] option')].map(
+          (one) => one.value,
+        );
+      expect(offered()).not.toContain('bid');
+      await update(
+        withSteps([{ when: 'human, number', allow: 'number(1)' }], { start: { ...START_DEFAULT, opening: 'game' } }),
+      );
+      expect(offered()).toEqual(expect.arrayContaining(['bid', 'goFirst', 'startingFellowship', 'mulligan']));
+      await choose('gd-author-when [data-picker=asked]', 'bid');
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({ set: { when: 'human, number, bid' } });
+      await answer(withFirst({ when: 'human, number, bid' }));
+      await update(withSteps([{ when: 'human, number, bid', allow: 'number(1)' }]));
+      expect(offered()).toContain('bid');
+    });
+
+    it('edits a closing message’s condition as the server gives its text', async () => {
+      await open(
+        draftState({
+          draft: {
+            ...draftState().draft,
+            steps: [
+              {
+                when: 'freeps, action',
+                allow: 'pass',
+                end: { result: 'complete', messages: [{ text: 'With him.', require: [{ type: 'canSpot' }] }] },
+              },
+            ],
+          },
+          texts: { s1: { 'end.messages.0.require': '[\n\t{\n\t\ttype: canSpot\n\t}\n]' } },
+        }),
+      );
+      expect(field<HTMLTextAreaElement>('end.messages.0.require').value).toBe('[\n\t{\n\t\ttype: canSpot\n\t}\n]');
+    });
+
+    it('numbers a refusal by the decision in hand on a step that repeats', async () => {
+      await open(
+        withSteps([{ when: 'freeps, action', until: 'phase(shadow)', allow: 'play(sword)' }], {
+          waiting: { human: decision({ at: 2 }), opponent: null },
+        }),
+      );
+      TestBed.inject(ScenarioGuide).hint.set({ html: 'Not now.', cardId: null, button: 'Pass', option: null });
+      await render();
+      expect(text('[data-act=add-refusal]')).toBe('+ refuses 2: pass');
+      await click('[data-act=add-refusal]');
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({ set: { refuses: '2: pass' } });
     });
   });
 });

@@ -337,4 +337,96 @@ public class ScenarioAuthoringPartsTest {
         assertEquals("canSpot", message.getJSONObject("require").getString("type"));
         assertTrue(state.getJSONObject("texts").toString(), state.getJSONObject("texts").getJSONObject(uid).getString("messages.1.require").contains("type: canSpot"));
     }
+
+    @Test
+    public void aClosingMessagesConditionIsTypedInAndShownAsTheFileHasIt() throws Exception {
+        open("\t\tfallback: pass", """
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: play(aragorn)
+                		}
+                	]
+                """);
+        String uid = state().getJSONArray("uids").getString(0);
+        String require = "{\\n\\ttype: canSpot\\n\\tfilter: name(Aragorn)\\n}";
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + uid + "\", \"set\": {\"end\": {\"result\": \"complete\", "
+                + "\"messages\": [\"Done.\", {\"text\": \"With Aragorn.\", \"require\": \"" + require + "\"}]}}}]}", null);
+        JSONObject state = state();
+        JSONObject message = state.getJSONObject("draft").getJSONArray("steps").getJSONObject(0).getJSONObject("end")
+                .getJSONArray("messages").getJSONObject(1);
+        assertEquals("canSpot", message.getJSONObject("require").getString("type"));
+        assertTrue(state.getJSONObject("texts").toString(),
+                state.getJSONObject("texts").getJSONObject(uid).getString("end.messages.1.require").contains("type: canSpot"));
+        //The outcome's closing messages, sent whole as the Scenario tab sends it
+        authoring.edit(player, "{\"top\": {\"outcome\": {\"winMessages\": [{\"text\": \"Won.\", \"require\": \"" + require + "\"}], "
+                + "\"gameLost\": {\"result\": \"fail\", \"messages\": [\"Lost.\", {\"text\": \"Without him.\", \"require\": \"" + require + "\"}]}}}}", null);
+        state = state();
+        JSONObject outcome = state.getJSONObject("draft").getJSONObject("outcome");
+        assertEquals("canSpot", outcome.getJSONArray("winMessages").getJSONObject(0).getJSONObject("require").getString("type"));
+        assertEquals("canSpot", outcome.getJSONObject("gameLost").getJSONArray("messages").getJSONObject(1).getJSONObject("require").getString("type"));
+        JSONObject texts = state.getJSONObject("outcomeTexts");
+        assertTrue(texts.toString(), texts.getString("winMessages.0.require").contains("type: canSpot"));
+        assertTrue(texts.toString(), texts.getString("gameLost.messages.1.require").contains("type: canSpot"));
+        assertNull(texts.toString(), texts.get("gameLost.messages.0.require"));
+        //(a mistake in one is the author's to put right, in the server's words)
+        try {
+            authoring.edit(player, "{\"top\": {\"outcome\": {\"winMessages\": [{\"text\": \"Won.\", \"require\": \"{ type: \"}]}}}", null);
+            fail("A condition that is not HJSON is refused");
+        } catch (ScenarioAuthoring.AuthoringException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().startsWith("require: that is not HJSON"));
+        }
+    }
+
+    @Test
+    public void theDecisionInHandSaysWhichOfItsStepsDecisionsItIs() throws Exception {
+        open("\t\tfallback: pass", """
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			until: phase(shadow)
+                			allow: play(aragorn), pass
+                		}
+                	]
+                """);
+        authoring.settings(player, false, false, null);
+        JSONObject human = state().getJSONObject("waiting").getJSONObject("human");
+        assertEquals(1, human.getIntValue("at"));
+        Client client = new Client(games.getLast());
+        client.await();
+        //(Aragorn played: the step's second decision is the next Fellowship action)
+        client.answer(client.decision.getAwaitingDecision().getDecisionParameters().get("actionId")[0]);
+        client.await();
+        assertEquals(2, state().getJSONObject("waiting").getJSONObject("human").getIntValue("at"));
+        //(and the number printed on each site, for the Board tab)
+        JSONObject board = state().getJSONObject("board");
+        assertEquals(1, board.getJSONObject("sites").getJSONArray("freeps").getJSONObject(0).getIntValue("printed"));
+        assertEquals(1, board.getJSONArray("path").getJSONObject(0).getIntValue("printed"));
+    }
+
+    @Test
+    public void anOpponentsDecisionHeldForTheAuthorIsLetGoWhenTheAuthorStopsAnsweringForIt() throws Exception {
+        open("\t\tfallback: pass");
+        Client client = new Client(games.getLast());
+        client.await();
+        //(the person passes the Fellowship phase: the opponent's Shadow phase is held for the author)
+        client.answer("");
+        long deadline = System.currentTimeMillis() + 10_000;
+        while (!heldNow() && System.currentTimeMillis() < deadline)
+            Thread.sleep(10);
+        assertTrue("The opponent's decision is held: " + state().getJSONObject("waiting"), heldNow());
+        Map<String, Object> result = authoring.settings(player, null, false, null);
+        assertEquals(Boolean.TRUE, result.get("events"));
+        assertFalse(heldNow());
+        //It is answered as the opponent answers by itself (its fallback passes), and the game goes on to the person
+        deadline = System.currentTimeMillis() + 10_000;
+        while (state().getJSONObject("waiting").get("opponent") != null && System.currentTimeMillis() < deadline)
+            Thread.sleep(10);
+        assertNull(state().getJSONObject("waiting").get("opponent"));
+    }
+
+    private boolean heldNow() {
+        JSONObject opponent = state().getJSONObject("waiting").getJSONObject("opponent");
+        return opponent != null && opponent.getBooleanValue("held");
+    }
 }

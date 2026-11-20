@@ -504,6 +504,29 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
 - **scenario-game-lost** (`author/endings.mjs`): a heading and a text written for "Game lost" in the Scenario tab
   (the heading alone sends nothing); the draft and the file have them, and the end panel says them when Frodo dies.
 - **scenario-outcome-kept**: an outcome with every part set keeps every other part when one closing message changes.
+- **step-role** (`author/sides.mjs`): in a two-sided draft the When composer's role, "as Shadow" picked for a step on
+  the opponent's turn: `as(shadow)` after the turn on the server and in the file; a When written out with `as` shows it;
+  the Timeline heads each turn "(yours)" or "(theirs)" and marks the row; the same after a reload.
+- **scenario-auto-pass-roles**: the phases passed through "for each role": the object form on the server and in the
+  file after each tick, shown after a reload, and one list again after the page's question.
+- **sides-play**: a two-sided draft written by playing it into the opponent's turn: the where-line, the Opponent tab
+  and the Timeline say whose turn it is and the person's role; the step written there says `as(shadow)`; a fresh game
+  played to it is on the opponent's turn.
+- **board-opening**: how the game opens, set to the game's own opening in the Board tab after the page's question
+  saying what goes: the setup keeps only its decks, the tab says there are no cards yet, a reload shows it; and back.
+- **step-opening-asked**: the opening's decisions offered in "what is being asked" for a draft that plays its own
+  opening, `bid` picked into the When, a Timeline group of their own before turn 1, no "+ Opening".
+- **opening-play**: a draft's own opening written by playing it (the bid, going first, the mulligans, the opponent's
+  from the Opponent tab) to the first turn; a fresh game played by the script to a step after it; to the setup, only
+  a deck's order offered.
+- **opponent-order-when**: an opponent's order's When changed with the When composer (nothing sent before Apply), then
+  applied; a new order for an assignment answered "the rest to the Ring-bearer"; the same after a reload.
+- **closing-say-if**: "Say only if" on a step's closing message and on a Scenario tab ending: on the server, in the
+  file, and shown as the file has it after a reload.
+- **step-refuses-at**: on a step that repeats, at its second decision, a click it does not take offered as
+  "+ refuses 2: pass", written with its number.
+- **opponent-let-go**: "it plays by its orders" chosen while the opponent's decision is held for the author: the
+  opponent answers by itself at once, in the same game.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up

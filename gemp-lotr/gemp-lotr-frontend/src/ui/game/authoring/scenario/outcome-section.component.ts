@@ -92,6 +92,7 @@ import { sendTop } from './top';
           <gd-author-closing-messages
             [name]="'outcome.' + ending.kind"
             [messages]="messagesOf(ending)"
+            [conditions]="conditionsOf(ending)"
             (changed)="messages(ending, $event)"
           />
         </div>
@@ -127,6 +128,14 @@ export class OutcomeSectionComponent {
 
   protected messagesOf(ending: Ending): DraftMessage[] {
     return endingMessages(this.state().draft.outcome, ending.kind);
+  }
+
+  /** The server's text of each closing message's condition (outcomeTexts), by its place. */
+  protected conditionsOf(ending: Ending): (string | undefined)[] {
+    const texts = this.state().outcomeTexts ?? {};
+    const prefix =
+      ending.kind === 'winMessages' || ending.kind === 'loseMessages' ? ending.kind : `${ending.kind}.messages`;
+    return this.messagesOf(ending).map((_, at) => texts[`${prefix}.${at}.require`]);
   }
 
   protected result(ending: Ending, chosen: string): void {

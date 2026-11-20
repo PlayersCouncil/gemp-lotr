@@ -34,7 +34,8 @@ const CURRENT_MARGIN = 60;
  * number, `data-status`, `data-phase`, `data-even`, `data-sub` for a block's step, `data-block`, `data-current`,
  * `data-selected`, `data-silent`) each with `button.gd-author-timeline__pick` (`.gd-author-timeline__num`,
  * `.gd-author-timeline__who[data-who]`, `.gd-author-timeline__what` with `__when`, `__act`, `__id`;
- * `.gd-author-timeline__tags` with a `.gd-author-timeline__tag[data-tag]` per mark) and `button.gd-author-timeline__go`
+ * `.gd-author-timeline__tags` with a `.gd-author-timeline__tag[data-tag]` per mark, `data-tag=role` first in a game
+ * of two sides where the step's seat plays the role its name does not say) and `button.gd-author-timeline__go`
  * (▶); then `.gd-author-timeline__end` (`data-current` past the script's end; `button[data-author=add-here]`), and
  * `.gd-author-timeline__foot` (`button[data-add]`: opening, pause, step, block, skirmishes; `button[data-author]`:
  * rewrite, test-here, test-start).
@@ -165,6 +166,18 @@ const CURRENT_MARGIN = 60;
                   }
                 </span>
                 <span class="gd-author-timeline__tags">
+                  @if (item.role) {
+                    <span
+                      class="gd-author-timeline__tag"
+                      data-tag="role"
+                      [title]="
+                        item.role === 'shadow'
+                          ? 'Played as the Shadow player: on the other seat’s turn'
+                          : 'Played as the Free Peoples player: on this seat’s own turn'
+                      "
+                      >as {{ item.role === 'shadow' ? 'Shadow' : 'FP' }}</span
+                    >
+                  }
                   @for (tag of item.tags; track tag.kind) {
                     <span class="gd-author-timeline__tag" [attr.data-tag]="tag.kind" [title]="tag.title">{{
                       tag.text

@@ -1,7 +1,8 @@
 import { Component, computed, inject } from '@angular/core';
-import { refusalBadge, refuses, refusalTerm, withRefusal } from '../../../../core/game/authoring/refusals';
+import { refusalBadge, refusalTerm, refusesAt, withRefusalAt } from '../../../../core/game/authoring/refusals';
 import { ScenarioGuide } from '../../../../core/game/scenario/scenario-guide.service';
 import { AskedPickerComponent } from './asked-picker.component';
+import { RolePickerComponent } from './role-picker.component';
 import { tableAliases, WorkStep } from '../../../../core/game/authoring/step-model';
 import { isHumanSeat } from '../../../../core/game/authoring/steps';
 import { SEATS, splitTerms } from '../../../../core/game/authoring/terms';
@@ -36,7 +37,7 @@ const DO_HINT =
  * (`data-field` allow.answers, refuses, answer, do, allow.otherwise, allow.passWhen, allow.hints.<alias>, skipWhen),
  * for the step in hand `.gd-author-allow__refusals` with a `.gd-author-allow__refusal[data-now]` per refusal (refused,
  * allowed, notOffered, elsewhere) and, after a click on the table the step did not take, `button[data-act=add-refusal]`,
- * `gd-author-asked` for Skip when,
+ * `gd-author-asked` and `gd-author-role` for Skip when,
  * `.gd-author-allow__offered` with a `button[data-term]` per term on offer, and `details.gd-author-allow__more`
  * holding `.gd-author-allow__hints` (a `.gd-author-allow__hint[data-alias]` per hint, with its ×) and
  * `gd-author-select[data-act=add-hint]`.
@@ -51,6 +52,7 @@ const DO_HINT =
     HjsonAreaDirective,
     StepFieldDirective,
     AskedPickerComponent,
+    RolePickerComponent,
   ],
   template: `
     @if (view(); as view) {
@@ -109,10 +111,15 @@ const DO_HINT =
               <button
                 gdAuthorButton="inline"
                 data-act="add-refusal"
-                [title]="'Not taken on the table just now: add ' + clicked + ' to what the step must refuse'"
-                (click)="refuse(view.work.refuses, clicked)"
+                [title]="
+                  'Not taken on the table just now: add ' +
+                  clicked +
+                  ' to what the step must refuse' +
+                  (view.at > 0 ? ', at its decision ' + view.at : '')
+                "
+                (click)="refuse(view.work.refuses, clicked, view.at)"
               >
-                + refuses {{ clicked }}
+                + refuses {{ view.at > 0 ? view.at + ': ' : '' }}{{ clicked }}
               </button>
             </div>
           }
@@ -133,7 +140,7 @@ const DO_HINT =
           </gd-author-field>
           <gd-author-field
             label="Pass when"
-            hint="Requirements (as on a card) that have to hold before Pass is allowed, as the file has them, in HJSON: { type: canSpot, filter: alias(aragorn) }"
+            hint='Requirements (as on a card) that have to hold before Pass is allowed, as the file has them, in HJSON (a line to each part), or JSON on one line: { "type": "canSpot", "filter": "alias(aragorn)" }'
           >
             <textarea gdHjsonArea gdStepField="allow.passWhen" rows="1" [text]="view.passWhen"></textarea>
           </gd-author-field>
@@ -164,7 +171,10 @@ const DO_HINT =
             <gd-author-field label="Skip when" hint="Given up on if a decision that fits this arrives first">
               <textarea gdHjsonArea gdStepField="skipWhen" rows="1" [text]="view.skipWhen"></textarea>
             </gd-author-field>
-            <div class="gd-author-step__block"><gd-author-asked path="skipWhen" /></div>
+            <div class="gd-author-step__block">
+              <gd-author-asked path="skipWhen" />
+              <gd-author-role path="skipWhen" />
+            </div>
           }
         </details>
       </div>
@@ -206,6 +216,9 @@ export class AllowEditorComponent {
     // (a click on the table the step did not take, just now: it can be made one of the step's refusals)
     const hint = players && inHandNow && mayRefuse ? this.guide.hint() : null;
     const clicked = refusalTerm(asked, hint);
+    // (a step that repeats: the refusal is about the decision in hand, counted as the runner counts them)
+    const repeats = child ? work.once !== true && work.pause !== true : (work.until ?? '').trim() !== '';
+    const at = repeats && inHandNow ? (asked?.at ?? 0) : 0;
     const hints = Object.keys(work.allow.hints);
     return {
       work,
@@ -217,7 +230,8 @@ export class AllowEditorComponent {
       refuses: work.refuses ?? '',
       mayRefuse,
       refusals: inHandNow ? (asked?.refuses ?? []).map((refusal) => ({ ...refusal, ...refusalBadge(refusal) })) : [],
-      clicked: clicked !== null && refuses(work.refuses, clicked) ? null : clicked,
+      clicked: clicked !== null && refusesAt(work.refuses, clicked, at) ? null : clicked,
+      at,
       skipWhen: work.skipWhen ?? '',
       hints,
       aliases: [
@@ -244,8 +258,8 @@ export class AllowEditorComponent {
   }
 
   /** A click the step did not take, added to what it must refuse. */
-  protected refuse(refuses: string | undefined, term: string): void {
-    this.editor.put('refuses', withRefusal(refuses, term));
+  protected refuse(refuses: string | undefined, term: string, at: number): void {
+    this.editor.put('refuses', withRefusalAt(refuses, term, at));
     this.editor.now();
   }
 

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { DraftSeat, DraftState } from '../../../../core/game/authoring/authoring-state';
 import { Authoring } from '../../../../core/game/authoring/authoring.service';
 import {
@@ -9,7 +9,15 @@ import {
   skipWith,
 } from '../../../../core/game/authoring/scenario-settings';
 import { PHASES } from '../../../../core/game/authoring/terms';
-import { formatChoices, formatOf, rulesOneSided, rulesWithMarkers } from '../../../../core/game/authoring/game-rules';
+import {
+  formatChoices,
+  formatOf,
+  leftoversLost,
+  rulesOneSided,
+  rulesWithMarkers,
+} from '../../../../core/game/authoring/game-rules';
+import { Notifier } from '../../../../core/notifier/notifier';
+import { askAuthor } from '../widgets/author-confirm';
 import { AuthorCheckComponent } from '../widgets/author-check.component';
 import { AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
@@ -23,7 +31,9 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
 
 /**
  * The Scenario tab's "Rules": the format it is played in (the scenarios' two, and any other the file names), the
- * usual rules a scenario changes (legacy renderRules): whether the Free Peoples take every turn (and then whether
+ * usual rules a scenario changes (legacy renderRules): whether the Free Peoples take every turn (unticked, a game
+ * of two sides: the markers no longer keep together, and leftovers to a character the opponent then cannot give them
+ * to go, after the page's own question; and then whether
  * the Shadow seat's marker keeps level with the fellowship's), and per seat its hand size, the phases it skips, The One Ring's text switched off, and its minions'
  * roaming penalty. Each change sends the whole of `rules` (taken out when nothing is left in it); a seat's other
  * effects are kept as they are, and counted.
@@ -50,13 +60,15 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
         />
       </gd-author-field>
       <div class="gd-author-scenario__settings">
-        <gd-author-check
-          data-part="one-sided"
-          label="one-sided: the Free Peoples take every turn"
-          hint="The Shadow player never takes a turn of their own"
-          [checked]="state().draft.rules?.oneSided === true"
-          (changed)="oneSided($event)"
-        />
+        @for (shown of [kept()]; track shown) {
+          <gd-author-check
+            data-part="one-sided"
+            label="one-sided: the Free Peoples take every turn"
+            hint="The Shadow player never takes a turn of their own"
+            [checked]="state().draft.rules?.oneSided === true"
+            (changed)="oneSided($event)"
+          />
+        }
         <gd-author-check
           data-part="markers"
           label="markers keep together"
@@ -127,6 +139,9 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
 })
 export class RulesSectionComponent {
   protected readonly authoring = inject(Authoring);
+  private readonly notifier = inject(Notifier);
+  /** Bumped when the author says no to a change of sides: its tick is made afresh, as the draft has it. */
+  protected readonly kept = signal(0);
   readonly state = input.required<DraftState>();
   protected readonly phases = PHASES;
   protected readonly seats = computed(() => {
@@ -137,8 +152,26 @@ export class RulesSectionComponent {
   protected readonly formats = computed(() => formatChoices(this.state().draft.format));
   protected readonly format = computed(() => formatOf(this.state().draft));
 
-  protected oneSided(on: boolean): void {
-    void sendTop(this.authoring, 'rules', rulesOneSided(this.state().draft, on));
+  /**
+   * One-sided or two: the markers keeping together go with a game of two sides; leftovers to a character the other
+   * way's games cannot give them to go too, after the page's own question.
+   */
+  protected async oneSided(on: boolean): Promise<void> {
+    const draft = this.state().draft;
+    const rules = rulesOneSided(draft, on);
+    const lost = leftoversLost(draft, on);
+    if (lost === null) {
+      void sendTop(this.authoring, 'rules', rules);
+      return;
+    }
+    const question = `The opponent's leftovers to ${lost} go: in a ${on ? 'one-sided' : 'two-sided'} game they go to ${
+      on ? 'the Free Peoples seat' : "the player's"
+    } characters.`;
+    if (!(await askAuthor(this.notifier, question, on ? 'One-sided' : 'Two-sided'))) {
+      this.kept.update((count) => count + 1);
+      return;
+    }
+    await this.authoring.edit({ top: { rules }, opponent: { unset: ['leftovers'] } });
   }
 
   protected markers(together: boolean): void {

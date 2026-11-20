@@ -7,6 +7,7 @@ import { HjsonAreaDirective } from '../widgets/hjson-area.directive';
 import { StepEditor } from './step-editor';
 import { StepFieldDirective } from './step-field.directive';
 import { AskedPickerComponent } from './asked-picker.component';
+import { RolePickerComponent } from './role-picker.component';
 
 const blank = (value: string | undefined) => (value ?? '').trim() === '';
 
@@ -18,13 +19,13 @@ const blank = (value: string | undefined) => (value ?? '').trim() === '';
  * play (Pass when), or the step goes on until they are (Until written out with them).
  *
  * DOM contract: `gd-author-repeat` holding `.gd-author-repeat` with `input[data-flag=repeat]`, the Until field
- * (`data-field=until`), while it repeats `gd-author-asked` for it, and, while it repeats, `.gd-author-repeat__more` with `button[data-act]` pass-once,
+ * (`data-field=until`), while it repeats `gd-author-asked` and `gd-author-role` for it, and, while it repeats, `.gd-author-repeat__more` with `button[data-act]` pass-once,
  * until-in-play.
  */
 @Component({
   selector: 'gd-author-repeat',
   styleUrl: './repeat-row.component.css',
-  imports: [AuthorButtonDirective, HjsonAreaDirective, StepFieldDirective, AskedPickerComponent],
+  imports: [AuthorButtonDirective, HjsonAreaDirective, StepFieldDirective, AskedPickerComponent, RolePickerComponent],
   template: `
     @if (view(); as view) {
       <div class="gd-author-repeat">
@@ -49,6 +50,7 @@ const blank = (value: string | undefined) => (value ?? '').trim() === '';
         @if (view.on) {
           <div class="gd-author-repeat__line" data-line="asked">
             <gd-author-asked path="until" />
+            <gd-author-role path="until" />
           </div>
         }
         @if (view.on) {

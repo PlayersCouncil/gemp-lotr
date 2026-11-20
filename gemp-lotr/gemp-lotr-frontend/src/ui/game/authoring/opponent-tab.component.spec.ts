@@ -303,4 +303,22 @@ describe('OpponentTabComponent', () => {
     await render();
     expect(el.querySelector('section')).toBeNull();
   });
+
+  it('says the role of each seat’s decision in a game of two sides', async () => {
+    await open(
+      draftState({
+        twoSided: true,
+        waiting: {
+          human: decision({ role: 'shadow', where: 'turn 2, regroup' }),
+          opponent: decision({ seat: 'shadow', role: 'freeps', where: 'turn 2, regroup', held: true, step: null }),
+        },
+      }),
+    );
+    expect(text('[data-part=asked] .gd-author-opponent__asked')).toBe(
+      'Play Fellowship action or Pass (turn 2, regroup · as Free Peoples)',
+    );
+    expect(text('[data-part=yours] .gd-author-opponent__asked')).toBe(
+      'Play Fellowship action or Pass (turn 2, regroup · as Shadow)',
+    );
+  });
 });

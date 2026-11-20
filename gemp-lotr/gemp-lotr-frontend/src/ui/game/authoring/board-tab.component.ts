@@ -9,6 +9,7 @@ import { BoardGatheredComponent } from './board/board-gathered.component';
 import { BoardPathComponent } from './board/board-path.component';
 import { BoardSeatComponent } from './board/board-seat.component';
 import { BoardStartComponent } from './board/board-start.component';
+import { BoardOpeningComponent } from './board/board-opening.component';
 
 /** Where the Board's changes go, as the radios offer it: its words, and a short note with the rest as its tooltip. */
 interface WhereChoice {
@@ -27,10 +28,15 @@ interface WhereChoice {
  * and the names of cards and sites are changed at once. A card's name shows the card under the mouse and opens its
  * information on a click. Fields being typed in keep what is in them when the state comes again.
  *
- * DOM contract: `gd-game-author-board` holding `p.gd-author-note[data-empty]` until the board is laid out; else
+ * With the game's own opening (B10), the board is the cards as dealt, and none before the seats are chosen (then only
+ * how the game opens is shown); to the board the scenario starts with, only a deck's order can be changed.
+ *
+ * DOM contract: `gd-game-author-board` holding `p.gd-author-note[data-empty]` until the board is laid out (with the
+ * game's own opening, `gd-author-board-opening` under a `.gd-author-board__heading`); else
  * `.gd-author-board` (where a card's name opens its information) with `gd-author-board-gathered`, `.gd-author-board__where` (`.gd-author-board__heading`, a
  * `label.gd-author-board__choice` per place, `data-where`: now, setup, with `input[type=radio]` and
- * `.gd-author-note`; `.gd-author-board__pending` with changes waiting for a step), `gd-author-board-counters`,
+ * `.gd-author-note`; `.gd-author-board__pending` with changes waiting for a step), `gd-author-board-counters` (not
+ * where only a deck's order can be changed),
  * `gd-author-board-start`, `gd-author-board-path`, a `gd-author-board-seat` per seat and `gd-author-board-add`.
  */
 @Component({
@@ -45,11 +51,17 @@ interface WhereChoice {
     BoardPathComponent,
     BoardSeatComponent,
     BoardStartComponent,
+    BoardOpeningComponent,
   ],
   template: `
     @if (authoring.draft(); as draft) {
       @if (changes.board() === null) {
-        <p class="gd-author-note" data-empty>The board has not been laid out.</p>
+        @if (changes.opening() === 'game') {
+          <div class="gd-author-board__heading">Where the story starts</div>
+          <gd-author-board-opening />
+        } @else {
+          <p class="gd-author-note" data-empty>The board has not been laid out.</p>
+        }
       } @else {
         <div class="gd-author-board" gdCardHints>
           <gd-author-board-gathered />
@@ -76,7 +88,9 @@ interface WhereChoice {
               </p>
             }
           </div>
-          <gd-author-board-counters />
+          @if (!changes.deckOnly()) {
+            <gd-author-board-counters />
+          }
           <gd-author-board-start />
           <gd-author-board-path />
           @for (seat of seats; track seat) {

@@ -3,22 +3,27 @@ import { DraftMessage } from '../../../../core/game/authoring/authoring-state';
 import { AuthorButtonDirective } from './author-button.directive';
 import { AuthorKeepDirective } from './author-keep.directive';
 import { AuthorSendDirective } from './author-send.directive';
+import { AuthorFieldComponent } from './author-field.component';
+import { HjsonAreaDirective } from './hjson-area.directive';
+import { SAY_IF_HINT, SAY_IF_PLACEHOLDER } from './say-if';
 
 /**
- * A list of closing messages (said together on the panel that ends the scenario): each a heading and a text, sent
- * when a field is left; ↑ ↓ to reorder, ✕ to take one out, + Message to write another (it goes with its text). Any
- * other part a message has (a condition, a note) is kept as it is. The list says each change whole (`changed`); a
+ * A list of closing messages (said together on the panel that ends the scenario): each a heading, a text and what it
+ * is said only if (its `require`, typed as the file has it: `conditions` are the server's text of each, by its place),
+ * sent when a field is left; ↑ ↓ to reorder, ✕ to take one out, + Message to write another (it goes with its text).
+ * Any other part a message has (a note) is kept as it is. The list says each change whole (`changed`); a
  * fresh list from the server is taken only when it says something else, so a field being typed in is left alone.
  * `name` names its fields across a fresh game (gdAuthorKeep).
  *
  * DOM contract: `gd-author-closing-messages` holding `ol.gd-author-closing` (`data-count`) with an
  * `li.gd-author-closing__message` per message (`data-index`): `input[data-part=header]`, `textarea[data-part=text]`,
- * `button[data-author]` up, down, delete; then `button[data-author=add-message]`.
+ * `textarea[data-part=require]` (Say only if), `button[data-author]` up, down, delete; then
+ * `button[data-author=add-message]`.
  */
 @Component({
   selector: 'gd-author-closing-messages',
   styleUrl: './closing-messages.component.css',
-  imports: [AuthorButtonDirective, AuthorKeepDirective, AuthorSendDirective],
+  imports: [AuthorButtonDirective, AuthorFieldComponent, AuthorKeepDirective, AuthorSendDirective, HjsonAreaDirective],
   template: `
     <ol class="gd-author-closing" [attr.data-count]="rows().length">
       @for (row of rows(); track $index; let i = $index, last = $last) {
@@ -66,6 +71,21 @@ import { AuthorSendDirective } from './author-send.directive';
             gdAuthorSend
             (sent)="put(i, 'text', $event)"
           ></textarea>
+          @let condition = conditionOf(row, i);
+          <gd-author-field label="Say only if" [hint]="sayIfHint">
+            <textarea
+              gdHjsonArea
+              rows="1"
+              data-part="require"
+              aria-label="Say only if"
+              [placeholder]="sayIfPlaceholder"
+              [text]="condition"
+              [value]="condition"
+              [gdAuthorKeep]="name() + '.' + i + '.require'"
+              gdAuthorSend
+              (sent)="put(i, 'require', $event)"
+            ></textarea>
+          </gd-author-field>
         </li>
       }
     </ol>
@@ -84,6 +104,10 @@ export class ClosingMessagesComponent {
   /** Names the fields across a fresh game. */
   readonly name = input.required<string>();
   readonly changed = output<DraftMessage[]>();
+  /** The server's text of each message's condition, as the file has it (by its place); JSON where it has none. */
+  readonly conditions = input<readonly (string | undefined)[]>([]);
+  protected readonly sayIfHint = SAY_IF_HINT;
+  protected readonly sayIfPlaceholder = SAY_IF_PLACEHOLDER;
 
   /** What the server says (the list is made afresh only when that changes). */
   private readonly said = computed(() => JSON.stringify(this.messages()));
@@ -96,12 +120,20 @@ export class ClosingMessagesComponent {
     this.rows.update((rows) => [...rows, { text: '' }]);
   }
 
-  protected put(index: number, part: 'header' | 'text', typed: string): void {
+  /** A message's condition as the file has it: what was typed, the server's text of it, or JSON. */
+  protected conditionOf(row: DraftMessage, index: number): string {
+    const require: unknown = row.require;
+    if (require === undefined || require === null) return '';
+    if (typeof require === 'string') return require;
+    return this.conditions()[index] ?? JSON.stringify(require, null, '\t');
+  }
+
+  protected put(index: number, part: 'header' | 'text' | 'require', typed: string): void {
     this.rows.update((rows) =>
       rows.map((row, at) => {
         if (at !== index) return row;
         const next: Record<string, unknown> = { ...row, [part]: typed };
-        if (part === 'header' && typed.trim() === '') delete next['header'];
+        if ((part === 'header' || part === 'require') && typed.trim() === '') Reflect.deleteProperty(next, part);
         return next as unknown as DraftMessage;
       }),
     );

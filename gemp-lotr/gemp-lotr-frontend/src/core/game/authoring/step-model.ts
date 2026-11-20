@@ -146,7 +146,11 @@ export function working(step: DraftStep, texts: StepTexts = {}): WorkStep {
   work['end'] = {
     result: end?.result ?? '',
     messages:
-      end?.messages === undefined ? [] : messagesOf({ messages: end.messages }).map((message) => asMessage(message)),
+      end?.messages === undefined
+        ? []
+        : messagesOf({ messages: end.messages }).map((message, i) =>
+            asMessage(message, texts[`end.messages.${i}.require`]),
+          ),
   };
   return work as WorkStep;
 }

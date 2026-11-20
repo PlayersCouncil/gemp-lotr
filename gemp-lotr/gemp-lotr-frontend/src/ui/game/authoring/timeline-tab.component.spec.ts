@@ -363,4 +363,23 @@ describe('TimelineTabComponent', () => {
     expect(backend.match((r) => r.url === `${AUTHOR}edit`)).toEqual([]);
     expect(sent('settings')?.get('way')).toBe('plan');
   });
+
+  it('marks a row whose seat plays the role its name does not say, in a game of two sides', async () => {
+    await open(
+      draftState({
+        twoSided: true,
+        draft: {
+          ...draftState().draft,
+          steps: [
+            { when: 'freeps, action, phase(fellowship), turn(1)', allow: 'pass' },
+            { when: 'freeps, action, phase(regroup), turn(2)', allow: 'pass' },
+            { when: 'shadow, action, phase(regroup), turn(2)', answer: 'pass' },
+          ],
+        },
+      }),
+    );
+    const tags = [1, 2, 3].map((step) => text(`[data-step="${step}"] [data-tag=role]`));
+    expect(tags).toEqual([null, 'as Shadow', 'as FP']);
+    expect(text('.gd-author-timeline__group')).toBe('Turn 1 (yours) · Fellowship');
+  });
 });

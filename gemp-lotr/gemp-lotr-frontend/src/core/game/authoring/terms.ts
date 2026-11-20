@@ -1,7 +1,7 @@
 /**
  * The scenario's lines of terms ("freeps, action, phase(fellowship)"), as the panel reads them. Pure.
  */
-import { DraftCondition, DraftWhen } from './authoring-state';
+import { DraftCondition, DraftState, DraftWhen } from './authoring-state';
 
 /** The seats a When can start with. */
 export const SEATS = ['freeps', 'shadow', 'human', 'opponent'] as const;
@@ -28,7 +28,7 @@ export function splitTerms(text: string | null | undefined): string[] {
 }
 
 /** The parts of a When written out in full that a line of terms can say too, as `name(value)`. */
-const CALLED = ['phase', 'turn', 'skirmish', 'offers', 'inSkirmish', 'after', 'text'] as const;
+const CALLED = ['phase', 'turn', 'as', 'skirmish', 'offers', 'inSkirmish', 'after', 'text'] as const;
 const SIMPLE = new Set<string>(['seat', 'decision', 'fighting', 'terms', 'require', 'kind', ...CALLED]);
 
 /**
@@ -64,8 +64,11 @@ export function writtenInFull(text: string | null | undefined): boolean {
   return /^\s*([{[]|when\s*:)/.test(text ?? '');
 }
 
-/** The composer's pickers: the seat, the kind of decision, the phase and the turn. */
-export type WhenPicker = 'seat' | 'kind' | 'phase' | 'turn';
+/** The composer's pickers: the seat, the kind of decision, the phase, the turn and the role (A3: `as(shadow)`). */
+export type WhenPicker = 'seat' | 'kind' | 'phase' | 'turn' | 'role';
+
+/** The roles a seat can be playing (`as(freeps)`: the Free Peoples player, whose turn it is). */
+export const ROLES = ['freeps', 'shadow'] as const;
 
 const named =
   (names: readonly string[]) =>
@@ -82,6 +85,7 @@ const PICKED: Readonly<Record<WhenPicker, (term: string) => string | null>> = {
   kind: named(TYPES),
   phase: called('phase'),
   turn: called('turn'),
+  role: called('as'),
 };
 
 /** Where a term goes in a line of terms: seat, kind, phase, turn, skirmish, the rest (the order a person says them). */
@@ -92,6 +96,8 @@ export function rank(term: string): number {
   if (askedTerm(term) !== null) return 1.5;
   if (/^phase\(/i.test(term)) return 2;
   if (/^turn\(/i.test(term)) return 3;
+  // (the role after the turn, as the server writes it: Sitting.whenFor)
+  if (/^as\(/i.test(term)) return 3.5;
   if (/^skirmish\(/i.test(term)) return 4;
   return 5;
 }
@@ -102,7 +108,10 @@ export function rank(term: string): number {
  */
 export function putTerm(when: string | null | undefined, picker: WhenPicker, value: string): string {
   const kept = splitTerms(when).filter((term) => PICKED[picker](term) === null);
-  if (value !== '') kept.push(picker === 'phase' || picker === 'turn' ? `${picker}(${value})` : value);
+  if (value !== '')
+    kept.push(
+      picker === 'phase' || picker === 'turn' ? `${picker}(${value})` : picker === 'role' ? `as(${value})` : value,
+    );
   return [...kept].sort((a, b) => rank(a) - rank(b)).join(', ');
 }
 
@@ -117,12 +126,22 @@ export function pickersOf(when: string | null | undefined): Record<WhenPicker, s
     kind: TYPES.find((one) => one.toLowerCase() === kind.toLowerCase()) ?? '',
     phase: found('phase'),
     turn: found('turn'),
+    role: found('role').toLowerCase(),
   };
 }
 
 /** What a step that repeats is likely to repeat until: the phase after the one its When names, or the next turn. */
 export function nextUntil(when: string | null | undefined): string {
   const text = when ?? '';
+  // (the game's own opening, which has no phase or turn: its next decision, the same seat's; after a mulligan, turn 1)
+  const opening = splitTerms(text)
+    .map(askedTerm)
+    .find((one) => one !== null && !one.not && OPENING_ASKED.includes(one.asked));
+  if (opening) {
+    const next = OPENING_ASKED[OPENING_ASKED.indexOf(opening.asked) + 1];
+    const seat = splitTerms(text).find((term) => (SEATS as readonly string[]).includes(term.toLowerCase()));
+    return next === undefined ? 'phase(fellowship)' : [seat, next].filter(Boolean).join(', ');
+  }
   const phase = /phase\(\s*([a-z]+)\s*\)/i.exec(text);
   const turn = /turn\(\s*(\d+)\s*\)/i.exec(text);
   if (phase) {
@@ -161,6 +180,10 @@ export const ASKED = [
   'requiredResponses',
   'chooseSite',
   'phaseActions',
+  'bid',
+  'goFirst',
+  'startingFellowship',
+  'mulligan',
 ] as const;
 export type Asked = (typeof ASKED)[number];
 
@@ -175,7 +198,40 @@ export const ASKED_WORDS: Readonly<Record<Asked, string>> = {
   requiredResponses: 'required responses',
   chooseSite: 'choose a site',
   phaseActions: 'play or pass',
+  bid: 'the bid',
+  goFirst: 'go first?',
+  startingFellowship: 'starting fellowship',
+  mulligan: 'mulligan?',
 };
+
+/** What is asked in the game's own opening (B10: setup.opening: game), before turn 1, in the order it comes. */
+export const OPENING_ASKED: readonly Asked[] = ['bid', 'goFirst', 'startingFellowship', 'mulligan'];
+
+/** Whether a When (or an Until) is about a decision of the game's own opening: a bid, the seat choice, ... */
+export function opensTheGame(when: string | null | undefined): boolean {
+  return splitTerms(when).some((term) => {
+    const asked = askedTerm(term);
+    return asked !== null && !asked.not && OPENING_ASKED.includes(asked.asked);
+  });
+}
+
+/* ---------------------------------------------------------------- the role (A3) */
+
+/** What a role is called: the Free Peoples player (whose turn it is), or the Shadow player. */
+export const ROLE_WORDS: Readonly<Record<(typeof ROLES)[number], string>> = {
+  freeps: 'Free Peoples',
+  shadow: 'Shadow',
+};
+
+/** The role a When's `as(...)` names, or null for none. */
+export function roleOf(when: string | null | undefined): (typeof ROLES)[number] | null {
+  if (writtenInFull(when)) return null;
+  const role = splitTerms(when)
+    .map(PICKED.role)
+    .find((one) => one !== null)
+    ?.toLowerCase();
+  return ROLES.find((one) => one === role) ?? null;
+}
 
 /** One of them as named (any case), as the list writes it; null if it is none. */
 export function askedNamed(name: string | null | undefined): Asked | null {
@@ -218,4 +274,20 @@ export function putAsked(when: string | null | undefined, asked: Asked | '', not
 export function askedWords(term: string): string | null {
   const found = askedTerm(term);
   return found === null ? null : `${found.not ? 'not ' : ''}${ASKED_WORDS[found.asked]}`;
+}
+
+/* ---------------------------------------------------------------- what the composer offers */
+
+/** What the When composer needs to know of the draft: both seats take turns (A3), the game plays its own opening (B10). */
+export interface WhenFacts {
+  twoSided: boolean;
+  opening: boolean;
+}
+
+/** The draft's facts for the composer (none without a draft). */
+export function whenFacts(state: DraftState | null | undefined): WhenFacts {
+  return {
+    twoSided: state?.twoSided === true,
+    opening: (state?.start?.opening ?? state?.draft.setup?.opening) === 'game',
+  };
 }

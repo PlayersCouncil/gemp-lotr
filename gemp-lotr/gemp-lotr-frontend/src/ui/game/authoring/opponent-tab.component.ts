@@ -25,6 +25,7 @@ import {
   leftoversPatch,
   placeForAnswering,
 } from '../../../core/game/authoring/opponent-orders';
+import { decisionWhere } from '../../../core/game/authoring/notices';
 import { FallbackControlComponent } from './opponent/fallback-control.component';
 import { OrdersEditor } from './opponent/orders-editor';
 import { OrdersSectionComponent } from './opponent/orders-section.component';
@@ -79,7 +80,7 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
       <section class="gd-author-opponent__section" data-part="asked">
         @if (asked(); as asked) {
           <h3 class="gd-author-opponent__heading">The opponent is asked</h3>
-          <p class="gd-author-opponent__asked">{{ asked.text }} ({{ asked.where }})</p>
+          <p class="gd-author-opponent__asked">{{ asked.text }} ({{ whereOf(draft, asked) }})</p>
           @if (answering(); as answering) {
             @let rule = answeringLine(answering);
             <div class="gd-author-opponent__answering gd-author-bar" [attr.data-rule]="ruleOf(answering)">
@@ -254,7 +255,7 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
       <section class="gd-author-opponent__section" data-part="yours">
         <h3 class="gd-author-opponent__heading">You are asked</h3>
         @if (draft.waiting.human; as human) {
-          <p class="gd-author-opponent__asked">{{ human.text }} ({{ human.where }})</p>
+          <p class="gd-author-opponent__asked">{{ human.text }} ({{ whereOf(draft, human) }})</p>
           @let line = humanLine(human, draft.recording);
           <p class="gd-author-note" [title]="line.title">{{ line.text }}</p>
         } @else {
@@ -314,6 +315,8 @@ export class OpponentTabComponent {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   /** The scroll kept from the last page is put back once (when the tab first has the draft). */
   private scrolled = false;
+  /** Where a decision is, and its role in a game of two sides (" · as Shadow"). */
+  protected readonly whereOf = decisionWhere;
 
   protected readonly answering = computed(() => this.authoring.draft()?.opponent?.answering ?? null);
   protected readonly answeringLine = answeringLine;
