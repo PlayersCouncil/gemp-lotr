@@ -292,6 +292,17 @@ public final class ScenarioRunner {
                 //(answered another way, the game ending is the game handling it: the player is shown how it ended)
                 if (deviation != null)
                     return true;
+                //(the scenario can say what the game's own end counts as: outcome.gameWon, outcome.gameLost)
+                boolean won = winner != null && winner.equals(table.HumanPlayer());
+                ScenarioDefinition.End ending = won ? def.outcome.gameWon : def.outcome.gameLost;
+                if (ending != null && director.end() == null) {
+                    report.stopped += " (outcome." + (won ? "gameWon" : "gameLost") + ": " + ending.result.name().toLowerCase() + ")";
+                    if (ending.result == EndResult.FAIL) {
+                        report.failures.add("The scripted path ends in failure (" + report.stopped + ")");
+                        return false;
+                    }
+                    return true;
+                }
                 if (def.outcome.win == null && director.end() == null) {
                     report.failures.add("The game ended before the scenario did (" + report.stopped + ")");
                     return false;

@@ -128,6 +128,14 @@ final class AliasRename {
                     outcome.set(part, filters(outcome.get(part)));
             if (outcome.get("loseMessage") != null)
                 outcome.set("loseMessage", prose(outcome.get("loseMessage")));
+            for (String part : List.of("winMessages", "loseMessages"))
+                if (outcome.get(part) != null)
+                    outcome.set(part, messages(outcome.get(part)));
+            for (String part : List.of("gameWon", "gameLost")) {
+                JsonObject ending = object(outcome.get(part));
+                if (ending != null && ending.get("messages") != null)
+                    ending.set("messages", messages(ending.get("messages")));
+            }
             JsonObject offScript = object(outcome.get("offScript"));
             if (offScript != null && offScript.get("message") != null)
                 offScript.set("message", prose(offScript.get("message")));

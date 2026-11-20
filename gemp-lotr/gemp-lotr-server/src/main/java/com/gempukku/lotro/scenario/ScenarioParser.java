@@ -166,7 +166,8 @@ public final class ScenarioParser {
 
         JsonObject outcome = optionalObject(object, "outcome", "scenario");
         if (outcome != null) {
-            checkFields(outcome, "outcome", "win", "lose", "loseMessage", "offScript");
+            checkFields(outcome, "outcome", "win", "lose", "loseMessage", "offScript", "winMessages", "loseMessages", "gameWon", "gameLost");
+            parseEndings(def, outcome);
             def.outcome.loseMessage = optionalString(outcome, "loseMessage", null, "outcome");
             if (def.outcome.loseMessage != null)
                 Templates.check(def, def.outcome.loseMessage, "outcome.loseMessage");
@@ -185,6 +186,45 @@ public final class ScenarioParser {
         }
 
         return def;
+    }
+
+    /**
+     * What is said, and what it counts as, when the scenario ends other than by a step's 'end': winMessages and
+     * loseMessages for 'win' and 'lose' coming true; gameWon and gameLost ({ result, messages }, or just the result)
+     * for the game itself ending, the person having won or lost it.
+     */
+    private static void parseEndings(ScenarioDefinition def, JsonObject outcome) throws ScenarioFormatException {
+        if (get(outcome, "winMessages") != null)
+            def.outcome.winMessages = closingMessages(def, get(outcome, "winMessages"), "outcome.winMessages");
+        if (get(outcome, "loseMessages") != null)
+            def.outcome.loseMessages = closingMessages(def, get(outcome, "loseMessages"), "outcome.loseMessages");
+        if (get(outcome, "gameWon") != null)
+            def.outcome.gameWon = ending(def, get(outcome, "gameWon"), "outcome.gameWon");
+        if (get(outcome, "gameLost") != null)
+            def.outcome.gameLost = ending(def, get(outcome, "gameLost"), "outcome.gameLost");
+    }
+
+    /** An ending: { result, messages }, or the result by itself (complete, fail). */
+    private static End ending(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        End end = new End();
+        if (value.isObject()) {
+            checkFields(value.asObject(), context, "result", "messages");
+            end.result = optionalEnum(value.asObject(), "result", EndResult.class, EndResult.COMPLETE, context);
+            if (value.asObject().get("messages") != null)
+                end.messages = closingMessages(def, value.asObject().get("messages"), context + ".messages");
+        } else {
+            end.result = parseEnum(scalar(value, context), EndResult.class, context);
+        }
+        return end;
+    }
+
+    /** Messages said on the panel that closes the scenario, all together: they wait for nothing and offer nothing. */
+    private static List<Message> closingMessages(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        List<Message> messages = parseMessages(def, value, context);
+        for (Message message : messages)
+            if (!message.choices.isEmpty() || message.on != null || message.advance == Advance.INSPECT || message.advance == Advance.CLOSE)
+                throw new ScenarioFormatException(context + ": closing messages are shown all together when the scenario is over; they cannot offer 'choices' or wait for anything ('on', 'advance')");
+        return messages;
     }
 
     private static void parseCards(ScenarioDefinition def, JsonObject cards) throws ScenarioFormatException {

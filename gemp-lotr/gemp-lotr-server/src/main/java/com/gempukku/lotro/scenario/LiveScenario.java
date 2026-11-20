@@ -617,9 +617,7 @@ public class LiveScenario implements ScenarioSession.Listener {
 
         if (_table.game().isFinished()) {
             //The game got there first: somebody won it by its own rules
-            String winner = _table.game().getWinnerPlayerId();
-            Result result = _table.game().isCancelled() ? Result.ERROR : _human.equals(winner) ? Result.COMPLETE : Result.FAILED;
-            finish(result, List.of(), result == Result.FAILED ? text(_def.outcome.loseMessage) : null, false, false);
+            gameEnded();
             return;
         }
 
@@ -646,10 +644,44 @@ public class LiveScenario implements ScenarioSession.Listener {
                         _def.outcome.offScriptResult == OffScriptResult.RESTART, true);
             }
         } else if (_def.outcome.lose != null && _table.Holds(_def.outcome.lose, _human)) {
-            finish(Result.FAILED, List.of(), text(_def.outcome.loseMessage), false, true);
+            finish(Result.FAILED, closing(_def.outcome.loseMessages), text(_def.outcome.loseMessage), false, true);
         } else if (_def.outcome.win != null && _table.Holds(_def.outcome.win, _human)) {
-            finish(Result.COMPLETE, List.of(), null, false, true);
+            finish(Result.COMPLETE, closing(_def.outcome.winMessages), null, false, true);
         }
+    }
+
+    /**
+     * The game has ended by its own rules: a Ring-bearer killed or corrupted, a fellowship surviving its last site.
+     * What that counts as, and what is said, is the scenario's outcome.gameWon or outcome.gameLost; without them, as
+     * it always was: complete if the person won, failed (with loseMessage) if they lost.  Where the scenario says
+     * nothing to say and its own 'win' (or 'lose') has come true with the game's end, its winMessages (loseMessages)
+     * are said.
+     */
+    private void gameEnded() {
+        if (_table.game().isCancelled()) {
+            finish(Result.ERROR, List.of(), null, false, false);
+            return;
+        }
+        boolean won = _human.equals(_table.game().getWinnerPlayerId());
+        ScenarioDefinition.End ending = won ? _def.outcome.gameWon : _def.outcome.gameLost;
+        Result result = ending != null ? (ending.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED)
+                : won ? Result.COMPLETE : Result.FAILED;
+        List<Message> said = ending != null ? ending.messages : List.of();
+        if (said.isEmpty() && won && _def.outcome.win != null && _table.Holds(_def.outcome.win, _human))
+            said = _def.outcome.winMessages;
+        else if (said.isEmpty() && !won && _def.outcome.lose != null && _table.Holds(_def.outcome.lose, _human))
+            said = _def.outcome.loseMessages;
+        finish(result, closing(said), result == Result.FAILED ? text(_def.outcome.loseMessage) : null, false, false);
+    }
+
+    /** Closing messages as the panel that ends the scenario shows them, filled in from the board as it is now. */
+    private List<Map<String, Object>> closing(List<Message> said) {
+        List<Map<String, Object>> messages = new ArrayList<>();
+        for (Message message : said)
+            messages.add(messageJson(new RenderedMessage(message,
+                    message.header == null ? null : Templates.render(_table, message.header),
+                    Templates.render(_table, message.text)), Advance.NEXT));
+        return messages;
     }
 
     /**

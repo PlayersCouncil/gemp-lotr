@@ -470,6 +470,21 @@ public final class ScenarioDefinition {
         public String loseMessage;
         public String offScriptMessage;
         public OffScriptResult offScriptResult = OffScriptResult.RESTART;
+        /** Closing messages said when 'win' comes true, as a step's end.messages are. */
+        public List<Message> winMessages = new ArrayList<>();
+        /** Closing messages said when 'lose' comes true (loseMessage, if there is one, is said after them, as it always was). */
+        public List<Message> loseMessages = new ArrayList<>();
+        /**
+         * How the scenario ends when the game itself ends with the person winning it (the Ring-bearer they are hunting
+         * killed or corrupted, their fellowship surviving its last site): what it counts as, and what is said.  Null
+         * for as before: complete, and nothing said.
+         */
+        public End gameWon;
+        /**
+         * The same when the game ends with the person losing it (their Ring-bearer killed or corrupted, the other
+         * fellowship surviving).  Null for as before: failed, with loseMessage.
+         */
+        public End gameLost;
     }
 
     /* ---- the opponent's answering by rule (assign by rule, leftovers, the sandbox) ---- */

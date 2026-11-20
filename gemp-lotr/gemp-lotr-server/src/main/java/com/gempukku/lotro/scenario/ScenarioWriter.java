@@ -151,6 +151,7 @@ public final class ScenarioWriter {
             offScript.add("result", lower(def.outcome.offScriptResult));
         if (!offScript.isEmpty())
             outcome.add("offScript", offScript);
+        endings(def, outcome);
         if (!outcome.isEmpty())
             root.add("outcome", outcome);
 
@@ -179,6 +180,28 @@ public final class ScenarioWriter {
             opponent.add("leftovers", def.leftovers.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : def.leftovers);
         if (!def.sandboxPlays.isEmpty())
             opponent.add("plays", String.join(", ", def.sandboxPlays));
+    }
+
+    /** What is said when the scenario ends by its outcome or by the game's own end (see ScenarioDefinition.Outcome). */
+    private static void endings(ScenarioDefinition def, JsonObject outcome) {
+        if (!def.outcome.winMessages.isEmpty())
+            outcome.add("winMessages", messages(def.outcome.winMessages));
+        if (!def.outcome.loseMessages.isEmpty())
+            outcome.add("loseMessages", messages(def.outcome.loseMessages));
+        if (def.outcome.gameWon != null)
+            outcome.add("gameWon", ending(def.outcome.gameWon));
+        if (def.outcome.gameLost != null)
+            outcome.add("gameLost", ending(def.outcome.gameLost));
+    }
+
+    /** An ending as a step's 'end' is written: the result by itself, or { result, messages }. */
+    private static JsonValue ending(End end) {
+        if (end.messages.isEmpty())
+            return JsonValue.valueOf(lower(end.result));
+        JsonObject json = new JsonObject();
+        json.add("result", lower(end.result));
+        json.add("messages", messages(end.messages));
+        return json;
     }
 
     private static JsonObject setup(ScenarioDefinition def) {
