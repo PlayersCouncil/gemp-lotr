@@ -72,7 +72,7 @@ public final class ScenarioParser {
 
         JsonObject opponent = optionalObject(object, "opponent", "scenario");
         if (opponent != null) {
-            checkFields(opponent, "opponent", "name", "fallback", "orders");
+            checkFields(opponent, "opponent", "name", "fallback", "orders", "leftovers", "plays");
             def.opponentName = optionalString(opponent, "name", null, "opponent");
             //It is shown wherever a player's name is, the game log among them, so it is held to what a name may be
             if (def.opponentName != null && !OPPONENT_NAME.matcher(def.opponentName).matches())
@@ -119,6 +119,8 @@ public final class ScenarioParser {
         //(after the cards and sites, because orders name them)
         if (opponent != null && get(opponent, "orders") != null)
             parseOrders(def, get(opponent, "orders"));
+        if (opponent != null)
+            parseOpponentRules(def, opponent);
 
 
         JsonObject rules = optionalObject(object, "rules", "scenario");
@@ -276,7 +278,7 @@ public final class ScenarioParser {
             index++;
             String context = "opponent.orders[" + index + "]";
             JsonObject order = asObject(entry, context);
-            checkFields(order, context, "when", "answer");
+            checkFields(order, context, "when", "answer", "once", "note", "id");
             if (order.get("when") == null || order.get("answer") == null)
                 throw new ScenarioFormatException(context + ": needs both a 'when' and an 'answer'");
             When when = parseWhen(def, order.get("when"), context + ".when");
@@ -289,7 +291,16 @@ public final class ScenarioParser {
                     answers.add(parseAnswer(def, term, context + ".answer"));
             if (answers.isEmpty())
                 throw new ScenarioFormatException(context + ".answer: is empty");
-            def.orders.add(new Order(when, answers, when.source));
+            //An order can have a name (for the authoring tool to say which it means), a note (for whoever reads the
+            // file), and be good for one decision only ('once': after it has answered one, it is done with)
+            String id = optionalString(order, "id", null, context);
+            if (id != null && !id.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                throw new ScenarioFormatException(context + ".id: '" + id + "' is not usable as an order's name (letters, digits, dashes and underscores; starting with a letter)");
+            for (Order other : def.orders)
+                if (id != null && id.equals(other.id()))
+                    throw new ScenarioFormatException(context + ".id: there are two orders called '" + id + "'");
+            boolean once = optionalBoolean(order, "once", false, context);
+            def.orders.add(new Order(when, answers, when.source, once, optionalString(order, "note", null, context), id));
         }
     }
 
@@ -621,14 +632,65 @@ public final class ScenarioParser {
                 if (colon >= 0)
                     for (String minion : pairing.substring(colon + 1).split("\\+"))
                         if (!minion.trim().isEmpty())
-                            minions.add(card(def, minion.trim(), context).alias());
-                assignments.put(card(def, character, context).alias(), minions);
+                            minions.add(assignedMinion(def, minion.trim(), term, context));
+                String assignee = assignedCharacter(def, character, context);
+                if (assignments.containsKey(assignee))
+                    throw new ScenarioFormatException(context + ": in '" + term.raw() + "', " + character + " is given minions twice: say them all in one pairing ("
+                            + character + ": a + b)");
+                assignments.put(assignee, minions);
             }
             return new Answer(AnswerKind.ASSIGN, List.of(), null, 0, assignments, term.raw());
         }
         throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of pass, "
                 + "play(card), use(card) or use(card, action text), choose(card, card), option(text) or option(#n), number(n), "
-                + "assign(character: minion + minion, character: minion), raw(text)");
+                + "assign(character: minion + minion, character: minion) (a character may be ringBearer, and its minions rest), raw(text)");
+    }
+
+    /**
+     * The character of one of assign(...)'s pairings: a card by its name in the scenario, or ringBearer for whichever
+     * character is the Free Peoples player's Ring-bearer when the answer is given.  (A card that is called ringBearer
+     * is that card.)
+     */
+    private static String assignedCharacter(ScenarioDefinition def, String word, String context) throws ScenarioFormatException {
+        if (!isAlias(def, word) && word.equalsIgnoreCase("ringBearer"))
+            return ScenarioDefinition.RING_BEARER;
+        return card(def, word, context).alias();
+    }
+
+    /**
+     * One of the minions of an assign(...) pairing: a card by its name in the scenario, or rest (or all) for every
+     * minion that is still unassigned once the minions the answer names have been given out (see
+     * AnswerCompiler.compile).  (A card that is called rest or all is that card.)
+     */
+    private static String assignedMinion(ScenarioDefinition def, String word, Terms.Term term, String context) throws ScenarioFormatException {
+        if (!isAlias(def, word) && (word.equalsIgnoreCase("rest") || word.equalsIgnoreCase("all")))
+            return ScenarioDefinition.REST;
+        return card(def, word, context).alias();
+    }
+
+    /**
+     * What the opponent does by rule where nothing in the script says: opponent.leftovers (a character, or
+     * ringBearer), which takes every minion it has left unassigned; and opponent.plays, the cards the sandbox
+     * fallback may play (see ScenarioDirector.sandbox).
+     */
+    private static void parseOpponentRules(ScenarioDefinition def, JsonObject opponent) throws ScenarioFormatException {
+        String leftovers = optionalString(opponent, "leftovers", null, "opponent");
+        if (leftovers != null && !leftovers.isBlank() && !leftovers.equalsIgnoreCase("none")) {
+            def.leftovers = assignedCharacter(def, leftovers.trim(), "opponent.leftovers");
+            if (!def.leftovers.equals(ScenarioDefinition.RING_BEARER) && card(def, def.leftovers, "opponent.leftovers").owner() != Seat.FREEPS)
+                throw new ScenarioFormatException("opponent.leftovers: '" + leftovers.trim() + "' is a Shadow card; minions are assigned to Free Peoples "
+                        + "characters (a companion or an ally by its name, or ringBearer)");
+        }
+        for (String alias : list(get(opponent, "plays"), "opponent.plays")) {
+            CardDef card = card(def, alias, "opponent.plays");
+            if (card.owner() == def.human)
+                throw new ScenarioFormatException("opponent.plays: '" + alias + "' is one of the player's own cards; the opponent plays its own");
+            if (def.sandboxPlays.contains(card.alias()))
+                throw new ScenarioFormatException("opponent.plays: '" + alias + "' is there twice");
+            def.sandboxPlays.add(card.alias());
+        }
+        if (!def.sandboxPlays.isEmpty() && def.fallback != Fallback.SANDBOX)
+            throw new ScenarioFormatException("opponent.plays: is the cards the sandbox opponent may play; it goes with 'fallback: sandbox'");
     }
 
     /**

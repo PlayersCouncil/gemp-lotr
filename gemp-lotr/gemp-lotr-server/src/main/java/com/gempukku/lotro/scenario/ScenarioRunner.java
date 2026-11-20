@@ -417,7 +417,10 @@ public final class ScenarioRunner {
                     }
                 } else if (ruling.answer() != null) {
                     answer = ruling.answer();
-                    note = "(no step covers this; one of the opponent's standing orders does)";
+                    ScenarioDirector.OrderMatch order = director.standingOrder(player, decision);
+                    note = order != null ? "(no step covers this; one of the opponent's standing orders does: " + order.order().label(order.index() + 1) + ")"
+                            : "(no step covers this; the opponent does it by rule: " + (decision.getDecisionType() == com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS
+                            ? "its leftovers" : "the sandbox") + ")";
                 } else if (explore) {
                     if (++unscripted > EXPLORE_LIMIT) {
                         report.stopped = "explored " + EXPLORE_LIMIT + " decisions beyond the script";
@@ -435,9 +438,9 @@ public final class ScenarioRunner {
                     else
                         report.reached = RunnerLevel.PREFIX;
                     return false;
-                } else if (def.fallback == Fallback.PASS) {
+                } else if (def.fallback == Fallback.PASS || def.fallback == Fallback.SANDBOX) {
                     answer = AnswerCompiler.leastAnswer(decision);
-                    note = "(opponent fallback: pass)";
+                    note = "(opponent fallback: " + (def.fallback == Fallback.PASS ? "pass" : "sandbox, with no rule for this: as little as it can") + ")";
                 } else {
                     report.decisions.add(new ScenarioRunReport.Decision(number, description, null, null, null));
                     report.stopped = "a decision for the opponent that no step covers";

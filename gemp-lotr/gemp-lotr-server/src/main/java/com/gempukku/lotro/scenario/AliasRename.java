@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
  * keeps a card called "ring" apart from the part of the file called ring, a card called "hand" apart from
  * freeps.hand, and either apart from the same word in a sentence a player reads.
  *
- *     cards, ringBearer, ring, setup            the name itself
+ *     cards, ringBearer, ring, setup,           the name itself
+ *     opponent.leftovers, opponent.plays
  *     rng, do, answer, allow, an order's answer the name as a word inside the (brackets) of a term: play(x), choose(x, y),
  *                                               assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
  *                                               game (text(...), option(...), the words after the card in use(x, ...))
@@ -118,6 +119,8 @@ final class AliasRename {
                     json.set("answer", terms(json.get("answer")));
             }
         }
+        if (opponent != null)
+            opponentRules(opponent);
         JsonObject outcome = object(root.get("outcome"));
         if (outcome != null) {
             for (String part : List.of("win", "lose"))
@@ -132,6 +135,14 @@ final class AliasRename {
         if (root.get("steps") != null && root.get("steps").isArray())
             for (JsonValue step : root.get("steps").asArray())
                 step(object(step));
+    }
+
+    /** What the opponent does by rule: the character it gives its leftovers to, and the cards its sandbox plays. */
+    private void opponentRules(JsonObject opponent) {
+        if (opponent.get("leftovers") != null)
+            opponent.set("leftovers", exact(opponent.get("leftovers")));
+        if (opponent.get("plays") != null)
+            opponent.set("plays", listed(opponent.get("plays")));
     }
 
     private void step(JsonObject step) {

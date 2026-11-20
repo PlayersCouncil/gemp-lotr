@@ -139,7 +139,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             try {
                 shown = writing(step, ruling.player()) ? _director.presentUnrestricted(step) : _director.present(step, ruling.player(), ruling.decision());
                 try {
-                    answer = _director.scriptedAnswer(step, ruling.decision());
+                    answer = ruling.player().equals(_table.HumanPlayer()) ? _director.scriptedAnswer(step, ruling.decision())
+                            : _director.opponentAnswer(step, ruling.decision());
                 } catch (ScenarioScriptException exp) {
                     if (ruling.player().equals(_table.HumanPlayer()))
                         noAnswer = exp.getMessage();
@@ -343,7 +344,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
                 }
                 if (problem == null) {
                     try {
-                        answer = _director.scriptedAnswer(step, decision);
+                        //(the opponent's assignment takes its leftovers as well: see ScenarioDirector.opponentAnswer)
+                        answer = player.equals(_table.HumanPlayer()) ? _director.scriptedAnswer(step, decision) : _director.opponentAnswer(step, decision);
                     } catch (ScenarioScriptException exp) {
                         //The opponent has nothing but the script's answer to go on.  The person has their own.
                         if (player.equals(_table.HumanPlayer()))
@@ -373,6 +375,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
 
     @Override
     public void decisionAnswered(String player, AwaitingDecision decision, String answer) {
+        //(an order of the opponent's that is good for one decision is used up by it)
+        _director.orderAnswered(decision, answer);
         Ruling ruling = _rulings.get(player);
         if (ruling == null || ruling.decision() != decision)
             return;

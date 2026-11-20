@@ -18,7 +18,7 @@ import java.util.Set;
 public final class ScenarioDefinition {
     public enum Kind { TUTORIAL, PUZZLE, SANDBOX }
     public enum Coverage { STRICT, GUIDED }
-    public enum Fallback { FAIL, PASS, BOT }
+    public enum Fallback { FAIL, PASS, BOT, SANDBOX }
     public enum RngDefault { IDENTITY, RANDOM }
     public enum RunnerLevel { SETUP, PREFIX, SOLUTION, FULL }
 
@@ -239,7 +239,16 @@ public final class ScenarioDefinition {
      * A standing order: what the opponent does whenever it is asked something that no step covers and this fits.
      * Orders are tried in the order they are written, and the first whose answer the decision offers is taken.
      */
-    public record Order(When when, List<Answer> answers, String source) { }
+    public record Order(When when, List<Answer> answers, String source, boolean once, String note, String id) {
+        public Order(When when, List<Answer> answers, String source) {
+            this(when, answers, source, false, null, null);
+        }
+
+        /** What the order is called in reports: its name if it has one, otherwise its place among the orders (from 1). */
+        public String label(int place) {
+            return id == null ? "order " + place : "order " + place + " (" + id + ")";
+        }
+    }
 
     public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW, ORDER }
 
@@ -462,6 +471,28 @@ public final class ScenarioDefinition {
         public String offScriptMessage;
         public OffScriptResult offScriptResult = OffScriptResult.RESTART;
     }
+
+    /* ---- the opponent's answering by rule (assign by rule, leftovers, the sandbox) ---- */
+
+    /**
+     * In assign(...): "every minion still unassigned", written rest or all, in place of a character's minions.  (The
+     * sentinels begin with a character no card's name can have, so that a card called "rest" is still that card.)
+     */
+    public static final String REST = "~rest";
+    /** In assign(...) and opponent.leftovers: whichever character is the Free Peoples player's Ring-bearer. */
+    public static final String RING_BEARER = "~ringBearer";
+
+    /**
+     * opponent.leftovers: the character the opponent assigns every minion still unassigned to, after whatever a step
+     * or one of its orders assigns, and when nothing answers its assignment at all: a card's name, or RING_BEARER.
+     * Null for none (the old way: what is not assigned stays unassigned).
+     */
+    public String leftovers;
+    /**
+     * opponent.plays, for the sandbox fallback: the cards it may play, in the order it tries them (minions first
+     * whatever the order).  Empty for every Shadow card it has.
+     */
+    public final List<String> sandboxPlays = new ArrayList<>();
 
     /**
      * @param label A step's label, as given by Step.label().

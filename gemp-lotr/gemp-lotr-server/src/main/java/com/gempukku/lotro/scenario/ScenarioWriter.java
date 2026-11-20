@@ -55,14 +55,11 @@ public final class ScenarioWriter {
             opponent.add("fallback", lower(def.fallback));
         if (!def.orders.isEmpty()) {
             JsonArray orders = new JsonArray();
-            for (Order order : def.orders) {
-                JsonObject json = new JsonObject();
-                json.add("when", when(order.when()));
-                json.add("answer", answers(order.answers()));
-                orders.add(json);
-            }
+            for (Order order : def.orders)
+                orders.add(order(order));
             opponent.add("orders", orders);
         }
+        opponentRules(def, opponent);
         if (!opponent.isEmpty())
             root.add("opponent", opponent);
         root.add("coverage", lower(def.coverage));
@@ -162,6 +159,26 @@ public final class ScenarioWriter {
             steps.add(step(step));
         root.add("steps", steps);
         return root;
+    }
+
+    /** One of the opponent's standing orders, as the file has it. */
+    public static JsonObject order(Order order) {
+        JsonObject json = new JsonObject();
+        addIfSet(json, "id", order.id());
+        addIfSet(json, "note", order.note());
+        if (order.once())
+            json.add("once", true);
+        json.add("when", when(order.when()));
+        json.add("answer", answers(order.answers()));
+        return json;
+    }
+
+    /** What the opponent does by rule: opponent.leftovers and opponent.plays. */
+    private static void opponentRules(ScenarioDefinition def, JsonObject opponent) {
+        if (def.leftovers != null)
+            opponent.add("leftovers", def.leftovers.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : def.leftovers);
+        if (!def.sandboxPlays.isEmpty())
+            opponent.add("plays", String.join(", ", def.sandboxPlays));
     }
 
     private static JsonObject setup(ScenarioDefinition def) {
