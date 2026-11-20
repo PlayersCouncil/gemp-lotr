@@ -87,7 +87,8 @@ public class RootUriRequestHandler implements UriRequestHandler {
             _webRequestHandler.handleRequest(uri.substring(_webContextPath.length()), request, context, responseWriter, remoteIp);
         } else if (uri.equals("/gemp-lotr")) {
             responseWriter.writeError(301, Collections.singletonMap("Location", "/gemp-lotr/"));
-        } else if (uri.equals(_serverContextPath)) {
+        } else if (uri.equals(_serverContextPath) || uri.equals(_serverContextPath + "status")) {
+            // public, no login: the server status (the legacy sentence, or /status as JSON)
             _statusRequestHandler.handleRequest(uri.substring(_serverContextPath.length()), request, context, responseWriter, remoteIp);
         } else {
             String origin = request.headers().get("Origin");
