@@ -144,6 +144,14 @@ const PARTS = [
             'report-game-phone',
           ),
         ],
+        // What cards do to each other, mechanic by mechanic, in the modern theme on every device (game/mechanics.mjs)
+        [
+          'Game screen: card mechanics in the modern theme',
+          reported(
+            npm(VISUAL_CHECK, 'run', 'check:game:mechanics', ...(quick ? ['--', '--devices', 'phone,computer'] : [])),
+            'report-game-mechanics',
+          ),
+        ],
       ]),
 ];
 

@@ -73,10 +73,37 @@ screen):
 
 Modern on a computer is `npm run check:game:modern` (where every card and panel is, against the legacy page).
 
+## The card mechanics check
+
+`npm run check:game:mechanics` (`mechanics.mjs`) goes through what cards do to each other, mechanic by mechanic, in the
+modern theme (the owner, 2026-11-20): each is a prepared state of a recorded game (`phone.mjs` `STATES`, the server's
+events added to the last answer as the server sends them), opened on a phone and a tablet upright (the phone layout), a
+computer and a phone held sideways (844x390, the computer layout on a low screen), and checked from what the page shows
+of each card (`data-card-id`: its zone, `data-hindered`, its picture, numbers and tokens, where it lies):
+
+- **hindered**: a companion, a minion, a possession in support and an attached card turned face down (FCIP): their
+  backs instead of their faces, the characters' numbers hidden;
+- **restored**: turned up again: numbers hidden until the stats name the card again (as game.html), then back;
+- **tokens**: wounds, burdens and culture tokens, as many as put there;
+- **moved**: an attached card moved to another character (MCIP): it lies by its new bearer;
+- **siteControlled**: a site the opponent controls (MCIP with `controllerId`): in the opponent's support row;
+- **threats**: threats and the Shadow's initiative in the status;
+- **revealedHand**: the opponent's hand revealed (`handRevealed`): its cards in the opponent's piles;
+- **metaSite**: an RTMD meta-site in support, drawn as game.html draws it (the visual card's picture with the
+  modifier's bottom over it, `Card.CreateSplitCardDiv`), against the same card with no pre-game setup naming it.
+
+It also checks that its list is whole, from the server's code: every attribute of a game event and of the game's stats
+(`EventSerializer.java`) is a mechanic here, shown by another check, or not shown by game.html either (`FIELDS`, each
+with its reason), so a field the server starts sending fails the check until it is looked at ("not covered"); and every
+token kind (`Token.java`) a card can add (`AddCultureTokens` in the cards' definitions) has a picture in `images/tokens`
+(the Hobbit Draft cultures have none, but no card adds them yet: printed as a note). The report holds a screenshot of
+each mechanic on each device, for looking at.
+
 ## The phone check
 
 `npm run check:game:phone` (`phone.mjs`) checks the **phone layout** (G7 of trymarz/gemp-lotr-private#27: the modern
-theme on a phone, a phone held sideways and an upright tablet, 390x844, 844x390 and 768x1024 with a touch screen) on the
+theme on a phone and a tablet held upright, 390x844 and 768x1024 with a touch screen; held sideways both get the
+computer layout, the owner 2026-11-20) on the
 recorded games served without a server, as the table check does (`stub-game.mjs`, shared with it). Nothing is compared
 with the legacy page; each check compares the Angular page with itself:
 
@@ -91,8 +118,8 @@ with the legacy page; each check compares the Angular page with itself:
   the same, and its screen within 60 pixels more than 10 shades off (the edges of rounded rings, shadows and the
   overlapping glows of offered cards are blended a few shades differently when everything is drawn anew).
 - **touch**: a tap on a card not offered does nothing, a tap on an offered card chooses it, the divider drags and is
-  kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back; held
-  sideways the divider and the hand are in the right half, the hand a panel standing on the divider whose grip slides it up to the status bar, and the hint to drag a hidden hand up is there too. Minions stacked on a
+  kept per device in `gempGameSplit`, dragged to the bottom it hides the hand and dragged up brings it back, and the
+  hint to drag a hidden hand up is there too. Minions stacked on a
   possession and offered by the decision (`STATES.underOffer`) show before the hand, smaller than its cards and bigger than the copy, behind a small copy of
   the possession, and a tap there chooses one (`under-offer-<device>.png`).
 
