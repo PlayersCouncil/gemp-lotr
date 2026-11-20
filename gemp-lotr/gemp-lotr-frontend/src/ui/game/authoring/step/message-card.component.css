@@ -83,3 +83,10 @@
 [data-choice-name][data-bad] {
   border-color: var(--theme-game-author-bad-border);
 }
+
+/* Outlines: the anchor field shares its row with the outline's style */
+.gd-author-message__row gd-author-anchor {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}

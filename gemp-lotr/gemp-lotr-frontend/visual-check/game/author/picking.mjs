@@ -1,8 +1,7 @@
 // Authoring checks: picking on the table for a message (the anchor fields, TablePicker; see ../author.mjs).
 //
-// WAITING FOR INTEGRATION: the anchor fields (`gd-author-anchor`) live in the Step tab's message cards, which wire
-// them in with `data-field` = anchor (Points at), highlight (Outlines), avoid (Keeps clear of), each sending what it
-// commits at once. Until the Step tab has them the check passes with a note saying it could not run.
+// The anchor fields (`gd-author-anchor`) are in the Step tab's message cards, with `data-field` = anchor (Points at),
+// highlight (Outlines), avoid (Keeps clear of); each sends what it commits at once.
 
 import { closeDraft, newDraft, sleep, ui, until } from './lib.mjs';
 
@@ -42,14 +41,7 @@ export const checks = {
     await newDraft(seat, { title: 'Picking check', steps: ONE_MESSAGE });
     const page = seat.page;
     await page.locator(`${ui.timeline} .gd-author-timeline__row[data-step="1"] .gd-author-timeline__pick`).click();
-    const ready = await until(async () => (await page.locator(field('highlight')).count()) > 0, 'anchor fields', 5000)
-      .then(() => true)
-      .catch(() => false);
-    if (!ready) {
-      table.note = '(waiting for integration: no anchor fields in the Step tab yet)';
-      await closeDraft(seat);
-      return;
-    }
+    await until(async () => (await page.locator(field('highlight')).count()) > 0, "the message's anchor fields", 5000);
     const board = (await seat.state()).board;
     const idOf = (alias) => String(board.cards.find((card) => card.alias === alias).cardId);
 

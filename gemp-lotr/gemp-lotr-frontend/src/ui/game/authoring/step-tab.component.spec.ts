@@ -15,6 +15,7 @@ import { decision, draftGameXml, draftState, position, result } from '../../../t
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { STEP_CARRY_KEY } from './step/step-editor';
 import { CATCH_UP_MS, StepTabComponent } from './step-tab.component';
+import { TablePicker } from './table-picker.service';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -53,6 +54,8 @@ describe('StepTabComponent', () => {
         provideFakeNotifier(),
         { provide: PAGE_QUERY_STRING, useValue: '' },
         provideGameState(),
+        // (the panel's, for the message cards' anchor fields)
+        TablePicker,
         CardInfoService,
         { provide: PageCues, useValue: { go: vi.fn() } },
         { provide: HallTab, useValue: { go: vi.fn(), elsewhere: signal(null) } },
@@ -806,6 +809,75 @@ describe('StepTabComponent', () => {
       await type('messages.0.zoom', 'card:frodo');
       expect(field('messages.0.focus').disabled).toBe(false);
       expect(field('messages.0.magnify').placeholder).toBe('1');
+    });
+
+    it('takes what a message points at as it is typed, or picked on the table; Outlines follows a pick while it is empty', async () => {
+      await open();
+      const first = '.gd-author-message[data-index="0"] gd-author-anchor';
+      const input = find<HTMLInputElement>(`${first}[data-field=anchor] input`);
+      input.focus();
+      input.value = 'ui:phase';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await wait(500);
+      expect(edits()).toEqual([]);
+      await wait(300);
+      expect(sentOps()[0]).toMatchObject({
+        set: { messages: [{ text: 'Hello', anchor: 'ui:phase' }, { text: 'Two' }] },
+      });
+      await answer(withFirst({ messages: [{ text: 'Hello', anchor: 'ui:phase' }, 'Two'] }));
+      expect(document.activeElement).toBe(input);
+
+      const picker = TestBed.inject(TablePicker);
+      vi.spyOn(picker, 'fightingSide').mockReturnValue(null);
+      vi.spyOn(picker, 'pick').mockResolvedValue('card:frodo');
+      await click(`${first}[data-field=anchor] button[data-pick=replace]`);
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({
+        set: { messages: [{ text: 'Hello', anchor: 'card:frodo', highlight: 'card:frodo' }, { text: 'Two' }] },
+      });
+      await answer(withFirst({ messages: [{ text: 'Hello', anchor: 'card:frodo', highlight: 'card:frodo' }, 'Two'] }));
+
+      // Outlines that says something of its own stays as it is; + Pick adds to it, and to what is kept clear of
+      vi.spyOn(picker, 'pick').mockResolvedValue('ui:twilightPool');
+      await click(`${first}[data-field=anchor] button[data-pick=replace]`);
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({
+        set: { messages: [{ anchor: 'ui:twilightPool', highlight: 'card:frodo' }, { text: 'Two' }] },
+      });
+      await answer(
+        withFirst({ messages: [{ text: 'Hello', anchor: 'ui:twilightPool', highlight: 'card:frodo' }, 'Two'] }),
+      );
+      await click(`${first}[data-field=highlight] button[data-pick=add]`);
+      await click(`${first}[data-field=avoid] button[data-pick=add]`);
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({
+        set: {
+          messages: [{ highlight: 'card:frodo, ui:twilightPool', avoid: 'ui:twilightPool' }, { text: 'Two' }],
+        },
+      });
+    });
+
+    it("chooses what a message shows large from the server's pictures", async () => {
+      await open();
+      const card = '.gd-author-message[data-index="0"]';
+      expect(el.querySelector('gd-author-pictures')).toBeNull();
+      await click(`${card} [data-act=pictures]`);
+      backend
+        .expectOne((r) => r.url === `${AUTHOR}images`)
+        .flush(JSON.stringify({ images: [{ name: 'a.png', url: '/gemp-lotr/images/scenarios/a.png' }] }));
+      await render();
+      await click(`${card} gd-author-pictures button[data-name="a.png"]`);
+      await wait(0);
+      expect(sentOps()[0]).toMatchObject({
+        set: { messages: [{ text: 'Hello', zoom: 'image:a.png' }, { text: 'Two' }] },
+      });
+      expect(el.querySelector('gd-author-pictures')).toBeNull();
+      expect(field('messages.0.zoom').value).toBe('image:a.png');
+      // (and Picture… again puts the chooser away)
+      await click(`${card} [data-act=pictures]`);
+      backend.match((r) => r.url === `${AUTHOR}images`);
+      await click(`${card} [data-act=pictures]`);
+      expect(el.querySelector('gd-author-pictures')).toBeNull();
     });
 
     it('ends the scenario, with messages of its own that point at nothing and go when a field is left', async () => {

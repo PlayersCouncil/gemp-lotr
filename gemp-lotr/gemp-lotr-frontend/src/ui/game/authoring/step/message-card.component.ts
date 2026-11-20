@@ -4,9 +4,11 @@ import { MessageSide } from '../../../../core/game/scenario/scenario-events';
 import { moveMessageOps, splitToPauseOps } from '../../../../core/game/authoring/step-ops';
 import { isOpeningWork, valueAt, WorkMessage, WorkStep, written } from '../../../../core/game/authoring/step-model';
 import { isBlock, stepsOf } from '../../../../core/game/authoring/steps';
+import { AnchorFieldComponent, AnchorPicked } from '../widgets/anchor-field.component';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
+import { PictureChooserComponent } from '../widgets/picture-chooser.component';
 import { FormPlace, StepEditor } from './step-editor';
 import { StepForm } from '../../../../core/game/authoring/send-queue';
 import { DraftState } from '../../../../core/game/authoring/authoring-state';
@@ -30,14 +32,23 @@ const PARTS =
  *
  * DOM contract: `gd-author-message` holding `.gd-author-message` (`data-index`, `data-closing`) with
  * `.gd-author-message__head` (`.gd-author-message__num`, `button[data-act]`: insert, earlier, later, pause, up, down,
- * delete), the fields (`data-field` messages.N.text, .header, .anchor, .highlight, .avoid, .gap, .advance, .on, .zoom,
- * .focus, .magnify, .note, .choices.<name>), `input[data-flag=once]`, `gd-author-select[data-pick]` side, style,
- * `details.gd-author-message__more` and, on a pause's last message, `.gd-author-message__choices`.
+ * delete, pictures), the fields (`data-field` messages.N.text, .header, .gap, .advance, .on, .zoom, .focus, .magnify,
+ * .note, .choices.<name>), a `gd-author-anchor` each for what it points at, outlines and keeps clear of (`data-field`
+ * anchor, highlight, avoid: picked on the table, or typed), `input[data-flag=once]`, `gd-author-select[data-pick]`
+ * side, style, `details.gd-author-message__more` (with `gd-author-pictures` while Picture… is on) and, on a pause's
+ * last message, `.gd-author-message__choices`.
  */
 @Component({
   selector: 'gd-author-message',
   styleUrl: './message-card.component.css',
-  imports: [AuthorButtonDirective, AuthorFieldComponent, AuthorSelectComponent, StepFieldDirective],
+  imports: [
+    AnchorFieldComponent,
+    AuthorButtonDirective,
+    AuthorFieldComponent,
+    AuthorSelectComponent,
+    PictureChooserComponent,
+    StepFieldDirective,
+  ],
   template: `
     @if (view(); as view) {
       <div
@@ -122,15 +133,16 @@ const PARTS =
             <input type="checkbox" data-flag="once" [checked]="view.message.once !== false" (change)="once($event)" />
             once
           </label>
-          <div class="gd-author-message__row">
-            <span
-              class="gd-author-message__label"
-              title="What the bubble sits beside and points at. Several things, separated by commas, and it points at each of them. Empty: the middle of the screen."
-              >Points at</span
-            >
-            <!-- anchor field: to become gd-author-anchor (Pick, +, the card's part) -->
-            <input class="gd-author-input" aria-label="Points at" [gdStepField]="base() + '.anchor'" sends="typing" />
-          </div>
+          <gd-author-anchor
+            data-field="anchor"
+            label="Points at"
+            hint="What the bubble sits beside and points at. Several things, separated by commas, and it points at each of them. Empty: the middle of the screen."
+            [many]="true"
+            [value]="view.message.anchor ?? ''"
+            (typed)="typed('anchor', $event)"
+            (committed)="put('anchor', $event)"
+            (picked)="anchorPicked($event)"
+          />
           <div class="gd-author-message__row">
             <span class="gd-author-message__label" title="Where the bubble goes, of what it points at">Sits</span>
             <span
@@ -163,11 +175,16 @@ const PARTS =
             />
           </div>
           <div class="gd-author-message__row">
-            <span class="gd-author-message__label" title="Things to draw an outline around, separated by commas"
-              >Outlines</span
-            >
-            <!-- highlight field: to become gd-author-anchor (+ Pick) -->
-            <input class="gd-author-input" aria-label="Outlines" [gdStepField]="base() + '.highlight'" sends="typing" />
+            <gd-author-anchor
+              data-field="highlight"
+              label="Outlines"
+              hint="Things to draw an outline around, separated by commas"
+              [many]="true"
+              [addOnly]="true"
+              [value]="view.message.highlight ?? ''"
+              (typed)="typed('highlight', $event)"
+              (committed)="put('highlight', $event)"
+            />
             <gd-author-select
               data-pick="style"
               label="Outline style"
@@ -181,16 +198,16 @@ const PARTS =
             <gd-author-field label="Heading" hint="Most messages have none">
               <input class="gd-author-input" [gdStepField]="base() + '.header'" sends="typing" />
             </gd-author-field>
-            <div class="gd-author-message__row">
-              <span class="gd-author-message__label" title="Things the bubble must not cover">Keeps clear of</span>
-              <!-- avoid field: to become gd-author-anchor (+ Pick) -->
-              <input
-                class="gd-author-input"
-                aria-label="Keeps clear of"
-                [gdStepField]="base() + '.avoid'"
-                sends="typing"
-              />
-            </div>
+            <gd-author-anchor
+              data-field="avoid"
+              label="Keeps clear of"
+              hint="Things the bubble must not cover"
+              [many]="true"
+              [addOnly]="true"
+              [value]="view.message.avoid ?? ''"
+              (typed)="typed('avoid', $event)"
+              (committed)="put('avoid', $event)"
+            />
             <gd-author-field
               label="Goes away on"
               hint="Empty: Next, except the step's last message, which stays up while the decision is answered. inspect: the player opens a card's information window; close: they close it."
@@ -222,7 +239,6 @@ const PARTS =
                 title="A card, or a picture, shown as large as the window allows while the message is up, with the bubble beside it. card:alias is one of the scenario's cards, site:3 a site on the path, blueprint:1_83 any card at all, image:file.png a picture from the server's images/scenarios folder."
                 >Shows large</span
               >
-              <!-- picture field: the picture chooser (Picture…) to come beside it -->
               <input
                 class="gd-author-input"
                 aria-label="Shows large"
@@ -230,7 +246,23 @@ const PARTS =
                 [gdStepField]="base() + '.zoom'"
                 sends="typing"
               />
+              <button
+                gdAuthorButton
+                data-act="pictures"
+                title="Choose one of the server's pictures"
+                [attr.aria-pressed]="pictures()"
+                (click)="pictures.set(!pictures())"
+              >
+                Picture…
+              </button>
             </div>
+            @if (pictures()) {
+              <gd-author-pictures
+                [value]="view.message.zoom ?? ''"
+                (chosen)="put('zoom', $event)"
+                (closed)="pictures.set(false)"
+              />
+            }
             <gd-author-field
               label="Its parts"
               [hint]="
@@ -333,6 +365,8 @@ export class MessageCardComponent {
   protected readonly outlines: readonly AuthorOption[] = [['', 'gold'], 'red', 'green', 'blue'];
   protected readonly newChoice = signal('');
   protected readonly badName = signal(false);
+  /** The picture chooser is open under Shows large. */
+  protected readonly pictures = signal(false);
 
   protected readonly base = computed(() => `${this.path()}.${this.index()}`);
   protected readonly sends = computed(() => (this.closing() ? 'change' : 'typing'));
@@ -384,6 +418,24 @@ export class MessageCardComponent {
   protected put(name: string, value: unknown): void {
     this.editor.put(`${this.base()}.${name}`, value === '' ? undefined : value);
     this.editor.now();
+  }
+
+  /** What is typed in an anchor field: into the working copy, and sent when typing pauses. */
+  protected typed(name: string, value: string): void {
+    this.editor.put(`${this.base()}.${name}`, value);
+    this.editor.later();
+  }
+
+  /**
+   * Something picked on the table for Points at (the field has sent it): Outlines follows while it says nothing of
+   * its own — empty, it takes what was picked; holding the card that "Whichever … is fighting" took the place of,
+   * it takes that place too.
+   */
+  protected anchorPicked(picked: AnchorPicked): void {
+    const outlines = (this.view()?.message.highlight ?? '').trim();
+    if (picked.replacing === null ? outlines === '' : outlines === picked.replacing) {
+      this.put('highlight', picked.anchor);
+    }
   }
 
   protected once(event: Event): void {
