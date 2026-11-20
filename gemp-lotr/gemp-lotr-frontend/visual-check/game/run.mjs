@@ -1094,6 +1094,16 @@ async function waitForFirst(traffic, max = 20000) {
   while (Date.now() - start < max && traffic.events.length === 0) await sleep(100);
 }
 
+/**
+ * The Angular page's dialogs as game.html would name them. In the modern theme the game's end is the result with the
+ * replay (the owner, 2026-11-20), which holds the server's feedback form that game.html shows as its own dialog; classic
+ * keeps game.html's dialog, so nothing is renamed there.
+ */
+function modernDialogs(dialogs) {
+  if (options.theme !== 'modern' || !Array.isArray(dialogs)) return dialogs;
+  return dialogs.map((title) => (title.endsWith("(the game's end, with the feedback)") ? 'Give us feedback!' : title));
+}
+
 function compareRuns(a, b, base, scenario, size) {
   const problems = [...a.problems, ...b.problems];
   if (a.errors.length || b.errors.length) {
@@ -1125,7 +1135,7 @@ function compareRuns(a, b, base, scenario, size) {
     };
     const show = (value) => JSON.stringify(value).slice(0, 300);
     for (const key of Object.keys({ ...sa.state, ...sb.state })) {
-      const [va, vb] = [sa.state[key], sb.state[key]];
+      const [va, vb] = [sa.state[key], key === 'dialogs' ? modernDialogs(sb.state[key]) : sb.state[key]];
       if (JSON.stringify(va) !== JSON.stringify(vb)) {
         if (Array.isArray(va) && Array.isArray(vb)) {
           // A long list: only what each page has that the other doesn't

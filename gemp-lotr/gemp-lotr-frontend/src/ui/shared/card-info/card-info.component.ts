@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { parseBlueprint } from '../../../core/cards/card-blueprint';
-import { cardDisplayData } from '../../../core/cards/card-display';
+import { asDrawn, cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { siteImage } from '../../../core/platform/app-paths';
@@ -145,7 +145,7 @@ export class CardInfoComponent {
     }
     const image = this.images.resolve(card.blueprintId, card.zone);
     return {
-      data: cardDisplayData(image, card.overlayImage),
+      data: asDrawn(cardDisplayData(image, card.overlayImage), card),
       wikiUrl: image.hasWiki ? image.wikiUrl : null,
       flippable: !isMetaSiteModifier(image.bareBlueprint),
     };

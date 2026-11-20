@@ -154,7 +154,7 @@ export class PhoneStatusComponent {
 
   /** The pills on a line of their own under the bar: upright, when they don't fit beside the phase. */
   protected readonly pillsWrapped = signal(false);
-  private readonly device = inject(CompactLayout).device;
+  private readonly device = inject(CompactLayout).gameDevice;
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly pillsInline = viewChild.required<ElementRef<HTMLElement>>('pillsInline');
   private readonly pillsLine = viewChild.required<ElementRef<HTMLElement>>('pillsLine');
@@ -183,15 +183,10 @@ export class PhoneStatusComponent {
   }
 
   /**
-   * Beside the phase while they fit; otherwise (upright only: sideways the bar shares its line with the players) on a
-   * line of their own, until the bar's free space holds them again.
+   * Beside the phase while they fit; otherwise on a line of their own, until the bar's free space holds them again.
    */
   private fitPills(): void {
     const box = (this.pillsWrapped() ? this.pillsLine() : this.pillsInline()).nativeElement;
-    if (this.device() === 'sideways') {
-      if (this.pillsWrapped()) this.pillsWrapped.set(false);
-      return;
-    }
     // The pills' own width: right aligned, an overflow goes left, where scrollWidth doesn't count it
     const pills = Array.from(box.children) as HTMLElement[];
     const needed = pills.reduce((width, pill) => width + pill.offsetWidth, 0) + 4 * Math.max(0, pills.length - 1);

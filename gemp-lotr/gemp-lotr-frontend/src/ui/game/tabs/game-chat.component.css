@@ -166,3 +166,15 @@ gd-game-chat[data-newest-first] .gd-game-chat__talk {
   padding: 0 8px;
   font-size: 15px;
 }
+
+/* A low screen in the modern theme (a narrower tab box): the lines and the field as wide as the box */
+@media (max-height: 520px) {
+  html[data-theme='modern'] .gd-game__tabs gd-game-chat .gd-game-chat__lines {
+    right: 4px;
+    width: auto;
+  }
+
+  html[data-theme='modern'] .gd-game__tabs gd-game-chat .gd-game-chat__talk {
+    width: calc(100% - 17px);
+  }
+}

@@ -15,7 +15,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { stripBlueprintId } from '../../../core/cards/card-blueprint';
-import { cardDisplayData } from '../../../core/cards/card-display';
+import { asDrawn, cardDisplayData } from '../../../core/cards/card-display';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
@@ -109,11 +109,9 @@ export class AutoZoomComponent {
     if (NO_ZOOM.has(image.bareBlueprint)) {
       return null;
     }
-    const data = cardDisplayData(
-      image,
-      card.overlayImage,
-      true,
-      this.images.imageUrl(stripBlueprintId(card.blueprintId)),
+    const data = asDrawn(
+      cardDisplayData(image, card.overlayImage, true, this.images.imageUrl(stripBlueprintId(card.blueprintId))),
+      card,
     );
     return {
       data,

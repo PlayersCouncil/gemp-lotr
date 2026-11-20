@@ -1,0 +1,23 @@
+@import './phone-sheet-parts.css';
+
+/* The theme: red in every theme with its icon, the menu's first item, as in the deck builder (owner, 2026-11-18) */
+.gd-phone-menu__item[data-menu='theme'] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-color: var(--theme-attention-border);
+  background: var(--theme-attention-bg);
+  color: var(--theme-game-phone-on-dark);
+}
+
+.gd-phone-menu__item[data-menu='theme']:is(:hover, :focus-visible, :active) {
+  background: var(--theme-attention-hover-bg);
+}
+
+.gd-phone-menu__item[data-menu='theme']::before,
+.gd-phone-menu__item[data-menu='theme']:is(:hover, :focus-visible, :active)::before {
+  flex: none;
+  margin: 0;
+  background-image: var(--theme-attention-icons);
+  background-position: -128px -128px;
+}

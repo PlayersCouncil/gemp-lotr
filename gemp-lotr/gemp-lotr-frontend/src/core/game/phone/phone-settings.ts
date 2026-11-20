@@ -2,11 +2,12 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { CompactLayout } from '../../platform/compact-layout.service';
 import { SettingCookies } from '../../platform/setting-cookies';
 
-export type PhoneDevice = 'phone' | 'sideways' | 'tablet';
+/** Where the phone layout is shown: a phone or a tablet, held upright (held sideways they get the computer layout). */
+export type PhoneDevice = 'phone' | 'tablet';
 
 /** The cookies of the phone layout's own settings (under /gemp-lotr, as the theme's gempGameTheme). */
 export const PHONE_COOKIES = {
-  /** The divider's place on each device: the hand's height (px) or "hidden", e.g. `phone:170|sideways:hidden`. */
+  /** The divider's place on each device: the hand's height (px) or "hidden", e.g. `phone:170|tablet:hidden`. */
   split: 'gempGameSplit',
   /** The table's card size, in % of the device's own (70 to 150). */
   cardSize: 'gempGameCardSize',
@@ -23,23 +24,26 @@ export const PHONE_COOKIES = {
  */
 export type ChoicesScroll = 'sideways' | 'down';
 
-/** The hand's height at first, on each device (px); held sideways it is a panel in the right half, about half high. */
-export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, sideways: 150, tablet: 180 };
+/** The hand's height at first, on each device (px). */
+export const DEFAULT_HAND: Readonly<Record<PhoneDevice, number>> = { phone: 170, tablet: 180 };
 /** The table's cards' height on each device at 100% (px): one readable size, never shrunk to fit (the owner). */
 // A tablet's 156 (was 130): its width was mostly empty (the layout review, 2026-11-19)
-export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, sideways: 80, tablet: 156 };
+export const CARD_HEIGHT: Readonly<Record<PhoneDevice, number>> = { phone: 100, tablet: 156 };
 export const CARD_SIZE_MIN = 70;
 export const CARD_SIZE_MAX = 150;
 /** The least height a shown hand keeps (px); dragged lower than HIDE_BELOW it hides. */
 export const HAND_MIN = 76;
 export const HIDE_BELOW = 50;
 
-/** The divider's places as kept in the cookie: per device, the hand's height or hidden. */
+/**
+ * The divider's places as kept in the cookie: per device, the hand's height or hidden. A place kept for a phone held
+ * sideways (`sideways:…`, before it got the computer layout) is dropped.
+ */
 export function parseSplit(text: string | null): Partial<Record<PhoneDevice, number | 'hidden'>> {
   const result: Partial<Record<PhoneDevice, number | 'hidden'>> = {};
   for (const part of (text ?? '').split('|')) {
     const [device, value] = part.split(':');
-    if (device !== 'phone' && device !== 'sideways' && device !== 'tablet') continue;
+    if (device !== 'phone' && device !== 'tablet') continue;
     if (value === 'hidden') result[device] = 'hidden';
     else if (value && Number.isFinite(Number(value)) && Number(value) > 0) result[device] = Math.round(Number(value));
   }
@@ -47,7 +51,7 @@ export function parseSplit(text: string | null): Partial<Record<PhoneDevice, num
 }
 
 export function formatSplit(split: Partial<Record<PhoneDevice, number | 'hidden'>>): string {
-  return (['phone', 'sideways', 'tablet'] as const)
+  return (['phone', 'tablet'] as const)
     .flatMap((device) => (split[device] === undefined ? [] : [`${device}:${split[device]}`]))
     .join('|');
 }
@@ -64,7 +68,6 @@ export class PhoneSettings {
 
   /** The device the compact layout is on, or null outside it. */
   readonly device = inject(CompactLayout).gameDevice;
-  private readonly tallSideways = inject(CompactLayout).tallSideways;
   /** The table's card size (%). */
   readonly cardSize = signal(clampSize(Number(this.cookies.read(PHONE_COOKIES.cardSize) ?? '100')));
   readonly moveVibrate = signal(this.cookies.read(PHONE_COOKIES.moveVibrate) !== 'false');
@@ -80,13 +83,9 @@ export class PhoneSettings {
   });
   readonly handHidden = computed(() => this.hand() === 'hidden');
   /** The hand's height at first on this device (px). */
-  readonly defaultHand = computed(() =>
-    this.tallSideways() ? DEFAULT_HAND.tablet : DEFAULT_HAND[this.device() ?? 'phone'],
-  );
+  readonly defaultHand = computed(() => DEFAULT_HAND[this.device() ?? 'phone']);
   /** The table's cards' height (px). */
-  readonly cardHeight = computed(
-    () => ((this.tallSideways() ? CARD_HEIGHT.tablet : CARD_HEIGHT[this.device() ?? 'phone']) * this.cardSize()) / 100,
-  );
+  readonly cardHeight = computed(() => (CARD_HEIGHT[this.device() ?? 'phone'] * this.cardSize()) / 100);
 
   /** The divider dropped: the hand this high (px), or hidden. */
   setHand(height: number | 'hidden'): void {

@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { ApiError } from '../../api/api-error';
 import { PageLifetime } from '../../platform/page-lifetime.service';
 import { GameApi } from '../api/game-api.service';
@@ -95,16 +95,17 @@ export class GameSession {
   readonly animation = signal<{ animation: GameAnimation; duration: number } | null>(null);
   /** True while events wait to be applied (an animation holds them). */
   readonly busy = signal(false);
-  /**
-   * The factor of the animations' durations: from the animation speed setting, and in a replay also its Slower and
-   * Faster buttons (as the legacy page shared one value).
-   */
-  readonly speed = signal(1);
   /** A replay: whether it plays, and whether it has played to its end. */
   readonly replayPlaying = signal(false);
   readonly replayDone = signal(false);
 
   private readonly settings = inject(GameSettings);
+  /**
+   * The factor of the animations' durations: from the animation speed setting (also during a replay, as the legacy
+   * slider did), and in a replay also its Slower and Faster buttons (as the legacy page shared one value) until the
+   * setting changes again.
+   */
+  readonly speed = linkedSignal(() => speedFactor(this.settings.animationSpeed()));
   /** Events waiting to be applied, each with whether it animates, its pauses, and how far it got. */
   private readonly queue: {
     event: GameEvent;
@@ -118,14 +119,6 @@ export class GameSession {
   private holding = false;
   private replayEvents: readonly GameEvent[] = [];
   private replayNext = 0;
-
-  constructor() {
-    // The setting changes the animations' speed (also during a replay, as the legacy slider did)
-    effect(() => {
-      const factor = speedFactor(this.settings.animationSpeed());
-      untracked(() => this.speed.set(factor));
-    });
-  }
 
   private gameId: string | null = null;
   private channel: string | null = null;

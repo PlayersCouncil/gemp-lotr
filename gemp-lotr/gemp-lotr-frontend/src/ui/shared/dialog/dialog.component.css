@@ -228,6 +228,24 @@
   height: calc(var(--dialog-height) - 0.39px);
 }
 
+/*
+ * The game's end (the modern theme's, the owner 2026-11-20): as tall as its content, centred, never larger than the
+ * window (its content scrolls on a low screen, a phone held sideways)
+ */
+.gd-dialog[data-dialog='game-ended'] {
+  --dialog-width: 400px;
+  box-sizing: border-box;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100dvh - 16px);
+  min-height: 0;
+  resize: none;
+}
+
+.gd-dialog[data-dialog='game-ended']:not([data-placed]) {
+  inset: 0;
+  margin: auto;
+}
+
 /* A page's message with a link (the game's feedback dialog): 300 x 200 */
 .gd-dialog[data-dialog='feedback'] {
   --dialog-height: 200px;

@@ -1,7 +1,8 @@
-// The game's phone layout (G7 of trymarz/gemp-lotr-private#27): the Angular game page in the modern theme on a phone,
-// a phone held sideways and an upright tablet, on the recorded games served without a server (stub-game.mjs).
+// The game's phone layout (G7 of trymarz/gemp-lotr-private#27): the Angular game page in the modern theme on a phone
+// and a tablet held upright (held sideways both get the computer layout, the owner 2026-11-20), on the recorded games
+// served without a server (stub-game.mjs).
 //
-//   node game/phone.mjs [--only <recording,...>] [--devices phone,sideways,tablet] [--out report-game-phone]
+//   node game/phone.mjs [--only <recording,...>] [--devices phone,tablet] [--out report-game-phone]
 //                       [--shots: only screenshots of each recording's last step, nothing checked]
 //                       [--checks back,reload,touch,piles,animation,sites,fold,archery,stack]
 //
@@ -37,7 +38,7 @@ const RECORDINGS = path.resolve(HERE, '../../src/testing/game-recordings');
 const { values: options } = parseArgs({
   options: {
     only: { type: 'string' },
-    devices: { type: 'string', default: 'phone,sideways,tablet' },
+    devices: { type: 'string', default: 'phone,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
     // With --shots: what to tap first (a selector, the first match), e.g. --tap '.gd-phone-slot__toggle'; given again,
@@ -48,15 +49,14 @@ const { values: options } = parseArgs({
     checks: { type: 'string', default: 'back,reload,touch,piles,animation,speed,sites,fold,archery,stack' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
-    // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
+    // A device's screen instead of its usual one, e.g. --devices phone --size 412x915 (a phone's own size)
     size: { type: 'string' },
   },
 });
 
-/** The devices: a phone upright, the same phone sideways, an upright tablet (all under COMPACT_QUERY). */
+/** The devices: a phone and a tablet, upright (CompactLayout.gameActive). */
 export const DEVICES = {
   phone: { viewport: { width: 390, height: 844 } },
-  sideways: { viewport: { width: 844, height: 390 } },
   tablet: { viewport: { width: 768, height: 1024 } },
   /** The computer layout of the same page, for what both layouts share (the stack check). */
   computer: { viewport: { width: 1366, height: 768 } },
@@ -74,8 +74,9 @@ function recordings() {
 }
 
 /** Opens the Angular page on a device on the game as it stood after `count` exchanges, in the modern theme. */
-export async function openPhone(browser, device, recording, count, { cookies = [] } = {}) {
-  const [width, height] = (device !== 'computer' && options.size?.split('x').map(Number)) || [];
+export async function openPhone(browser, device, recording, count, { cookies = [], viewport: size = null } = {}) {
+  const [width, height] =
+    (size && [size.width, size.height]) || (device !== 'computer' && options.size?.split('x').map(Number)) || [];
   const viewport = width && height ? { viewport: { width, height } } : DEVICES[device];
   const context = await browser.newContext({ ...PHONE_CONTEXT, ...viewport });
   const log = [];
@@ -175,8 +176,8 @@ const RENDERING_NOISE = 10;
 /**
  * After a reload every box is drawn anew: the anti-aliased edges of rounded borders, rings and shadows (the current
  * player's chip, the site's ring, the markers) land up to ~25 shades off in a few dozen pixels. The table check's
- * tolerance; what D10 asks for (sheets, scroll, divider, hand) is compared exactly in the data. Held sideways, the glows
- * of neighbouring offered cards where they overlap blend up to 10 shades differently in a full run (72 pixels): only
+ * tolerance; what D10 asks for (sheets, scroll, divider, hand) is compared exactly in the data. The glows of
+ * neighbouring offered cards where they overlap blend up to 10 shades differently in a full run (72 pixels): only
  * pixels more than RELOAD_SHADES off count (the owner's choice, 2026-11-17).
  */
 const RELOAD_NOISE = 60;
@@ -257,7 +258,130 @@ const STATES = {
    * Shadow): the recorded games pass that phase within one answer, so they never stay on screen.
    */
   archery: { recording: 'effects-skirmish', count: 25, lastEvents: () => archeryTotals('2', '1') },
+
+  // --- What cards do to each other, as the server sends it (the mechanics the MECHANICS check goes through) ---
+  // The cards of the late step: the player's Frodo 43 (the One Ring 44 on him), Gimli 47 (his axe 49 on him), Sam 48,
+  // the possession 50 in support; the opponent's minion 56 and condition 53 in support; sites 42, 51, 55 on the path.
+
+  /** Cards hindered (turned face down: FCIP hindered): a character, a minion, a possession in support, an attached card. */
+  hindered: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: () => flip(['47', '56', '50', '44'], true),
+    stats: (gs) =>
+      gs.replace(/hindered="[^"]*"/, 'hindered="47,56,50,44"').replace(/(\d+)=[^,"]*,?/g, keepStats('48,43')),
+  },
+  /**
+   * Cards hindered and turned up again (FCIP hindered false): Gimli 47 before the stats name him again (his numbers
+   * still hidden, as game.html hides them), the minion 56 after them (its numbers back).
+   */
+  restored: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: () => flip(['47', '56'], true) + flip(['47', '56'], false),
+    stats: (gs) => gs.replace(/(\d+)=[^,"]*,?/g, keepStats('48,43,56')),
+  },
+  /** Tokens: wounds on Gimli, burdens on Frodo, culture tokens on a possession and on a condition, several at once. */
+  tokens: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (opponent, player) =>
+      [
+        ['47', '1_12', player, 'WOUND', 2, 'FREE_CHARACTERS'],
+        ['43', '1_290', player, 'BURDEN', 3, 'FREE_CHARACTERS'],
+        ['50', '1_20', player, 'ELVEN', 2, 'SUPPORT'],
+        ['53', '1_183', opponent, 'SAURON', 4, 'SUPPORT'],
+      ]
+        .map(
+          ([cardId, blueprintId, owner, token, count, zone]) =>
+            `<ge blueprintId="${blueprintId}" cardId="${cardId}" count="${count}" hindered="false" ` +
+            `participantId="${owner}" timestamp="2026-11-20 00:00:00.0000" token="${token}" type="AT" zone="${zone}"/>`,
+        )
+        .join(''),
+  },
+  /** An attached card moved to another character (MCIP, as a possession is transferred): Gimli's axe 49 onto Sam 48. */
+  moved: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (_opponent, player) =>
+      `<ge blueprintId="1_9" cardId="49" hindered="false" participantId="${player}" targetCardId="48" ` +
+      `targetType="attached" timestamp="2026-11-20 00:00:00.0000" type="MCIP" zone="ATTACHED"/>`,
+  },
+  /** A site the opponent controls (MCIP with controllerId, into the controller's support): the player's site 42. */
+  siteControlled: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (opponent, player) =>
+      `<ge blueprintId="1_319" cardId="42" controllerId="${opponent}" hindered="false" participantId="${player}" ` +
+      `timestamp="2026-11-20 00:00:00.0000" type="MCIP" zone="SUPPORT"/>`,
+  },
+  /** Threats on the player (2 of the 3 the fellowship can take) and the Shadow holding the initiative. */
+  threats: {
+    recording: 'effects-skirmish',
+    count: 25,
+    stats: (gs, _opponent, player) =>
+      gs
+        .replace('initiative="FREE_PEOPLE"', 'initiative="SHADOW"')
+        .replace(new RegExp(`(<threats name="${player}" value=")\\d+`), '$12'),
+  },
+  /**
+   * The opponent's hand revealed: the server sends its cards (PCIP into HAND, forceVisible) and marks it in the stats
+   * (playerZones handRevealed).
+   */
+  revealedHand: {
+    recording: 'effects-skirmish',
+    count: 25,
+    stats: (gs, opponent) =>
+      gs.replace(new RegExp(`(<playerZones\\b[^>]*name="${opponent}")`), '$1 handRevealed="true"'),
+    lastEvents: (opponent) =>
+      [
+        ['9301', '1_178'],
+        ['9302', '1_183'],
+        ['9303', '1_12'],
+      ]
+        .map(
+          ([cardId, blueprintId]) =>
+            `<ge blueprintId="${blueprintId}" cardId="${cardId}" hindered="false" participantId="${opponent}" ` +
+            `timestamp="2026-11-20 00:00:00.0000" type="PCIP" zone="HAND"/>`,
+        )
+        .join(''),
+  },
+  /**
+   * An RTMD meta-site in the player's support (the server puts them there before the first site): the modifier card
+   * 91_1, drawn as game.html draws it once the pre-game setup names its visual card 90_1 (PGS metaSites): the visual
+   * card's picture with the modifier's bottom over it.
+   */
+  metaSite: {
+    recording: 'effects-skirmish',
+    count: 25,
+    events: (_opponent, player) => metaSiteCard(player),
+    preGame: (player) => `${player}:90_1|91_1`,
+  },
+  /** The same card with no pre-game setup naming it (what the modifier card alone looks like, for metaSite). */
+  metaSitePlain: { recording: 'effects-skirmish', count: 25, events: (_opponent, player) => metaSiteCard(player) },
 };
+
+/** The RTMD modifier card 91_1 in the player's support, as the server puts it there (PCIP). */
+function metaSiteCard(player) {
+  return (
+    `<ge blueprintId="91_1" cardId="9401" hindered="false" participantId="${player}" ` +
+    'timestamp="2026-11-20 00:00:00.0000" type="PCIP" zone="SUPPORT"/>'
+  );
+}
+
+/** Cards turned face down (hindered) or up again, as the server flips them (FCIP). */
+function flip(cardIds, hindered) {
+  return (
+    `<ge hindered="${hindered}" otherCardIds="${cardIds.join(',')}" timestamp="2026-11-20 00:00:00.0000" ` +
+    'type="FCIP"/>'
+  );
+}
+
+/** For a GS's charStats (`id=strength|vitality|...`): keeps the named cards' entries, drops the others. */
+function keepStats(ids) {
+  const kept = ids.split(',');
+  return (entry, id) => (kept.includes(id) ? entry : '');
+}
 
 /** The game's stats as the server sends them in the archery phase (GS), with these totals. */
 function archeryTotals(fp, shadow) {
@@ -313,7 +437,10 @@ function opponentCards(opponent) {
  */
 function recordingOf(state) {
   const base = recording(state.recording);
-  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer && !state.moreChoices) return base;
+  const changed = ['events', 'lastEvents', 'stats', 'discardPublic', 'offer', 'moreChoices', 'preGame'];
+  if (!changed.some((key) => state[key])) {
+    return base;
+  }
   const publicDiscard = (body) =>
     state.discardPublic
       ? body
@@ -331,11 +458,26 @@ function recordingOf(state) {
     exchanges: base.exchanges.map((exchange, i) => {
       if (exchange.path !== '/game/<id>' || typeof exchange.body !== 'string') return exchange;
       let body = publicDiscard(exchange.body);
+      if (state.preGame) {
+        // The pre-game setup (PGS) as the server sends it for this table: its meta-sites (an attribute the server
+        // leaves out when there are none)
+        const metaSites = `metaSites="${state.preGame(base.participant)}"`;
+        body = body.replace(/<ge\b[^>]*\btype="PGS"[^>]*>/, (pgs) =>
+          /\bmetaSites="/.test(pgs)
+            ? pgs.replace(/\bmetaSites="[^"]*"/, metaSites)
+            : pgs.replace(/\btype="PGS"/, `${metaSites} $&`),
+        );
+      }
       if (i === last && state.events) {
         body = body.replace(/(<update[^>]*>)/, `$1${state.events(opponent, base.participant)}`);
       }
       if (i === last && state.lastEvents) {
         body = body.replace(/(<\/update>)/, `${state.lastEvents(opponent, base.participant)}$1`);
+      }
+      if (i === last && state.stats) {
+        // The game's stats as the server sends them after the change: the last GS until then, changed
+        const gs = lastStats(base, state.count);
+        body = body.replace(/(<\/update>)/, `${state.stats(gs, opponent, base.participant)}$1`);
       }
       if (i === last && state.moreChoices) {
         // More cards in a decision offering cards from off the table (cardId, blueprintId, selectable each)
@@ -354,6 +496,16 @@ function recordingOf(state) {
       return { ...exchange, body };
     }),
   };
+}
+
+/** The last game stats (GS, whole) the server sent in a recording's first `count` exchanges. */
+function lastStats(base, count) {
+  let last = null;
+  for (const exchange of base.exchanges.slice(0, count)) {
+    for (const match of exchange.body?.matchAll?.(/<ge\b[^>]*\btype="GS"[^>]*>[\s\S]*?<\/ge>/g) ?? []) last = match[0];
+  }
+  if (!last) throw new Error(`no game stats in ${base.name}'s first ${count} exchanges`);
+  return last;
 }
 
 /** The other player of a recorded game: the one its events name who isn't the recording's participant. */
@@ -1053,90 +1205,32 @@ const TOUCH = [
     },
   },
   {
-    // Held sideways, dragging only hides and shows the hand (the owner, 2026-11-19): the drag down is kept
-    name: 'the divider is dragged (upright up: a higher hand; sideways down: hidden) and kept per device',
+    name: 'the divider dragged up makes the hand higher, kept per device',
     state: 'late',
     run: async (page, sent, device) => {
       const before = await page.locator('gd-phone-hand').boundingBox();
-      await dragDivider(page, device === 'sideways' ? 100 : -100);
+      await dragDivider(page, -100);
       const cookies = await page.context().cookies();
       const split = decodeURIComponent(cookies.find((cookie) => cookie.name === 'gempGameSplit')?.value ?? '');
       const problems = [];
-      if (device === 'sideways') {
-        if (await page.locator('gd-phone-hand').count()) problems.push('dragged down, the hand is still shown');
-        if (!split.includes('sideways:hidden')) problems.push(`cookie "${split}"`);
-      } else {
-        const after = await page.locator('gd-phone-hand').boundingBox();
-        if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
-        if (!split.includes(`${device}:`)) problems.push(`cookie "${split}"`);
-      }
+      const after = await page.locator('gd-phone-hand').boundingBox();
+      if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
+      if (!split.includes(`${device}:`)) problems.push(`cookie "${split}"`);
       return problems;
     },
   },
   {
-    // The docked panel (the owner, 2026-11-19): nothing over the table; the grip hides the hand, the cards keep their size
-    name: 'held sideways, the decision and the hand are docked on the right beside the table; the grip hides the hand (hidden elsewhere)',
+    name: 'the divider dragged to the bottom hides the hand; dragged up, it is back',
     state: 'late',
-    run: async (page, sent, device) => {
-      const grip = page.locator('[data-phone="hand-grip"]');
-      if (device !== 'sideways') return (await grip.isVisible()) ? ['the grip shows'] : [];
-      const width = page.viewportSize().width;
-      const table = await page.locator('gd-phone-table').boundingBox();
-      const divider = await page.locator('gd-phone-divider').boundingBox();
-      const hand = await page.locator('gd-phone-hand').boundingBox();
-      const card = await page.locator('gd-phone-hand .gd-card').first().boundingBox();
-      const problems = [];
-      if (table.x + table.width > divider.x + 1)
-        problems.push(`the table reaches ${table.x + table.width}, the panel starts at ${divider.x}`);
-      if (Math.abs(divider.x + divider.width - width) > 2 || Math.abs(hand.x - divider.x) > 2) {
-        problems.push(
-          `not docked on the right: the divider ${divider.x}–${divider.x + divider.width}, the hand at ${hand.x}`,
-        );
-      }
-      if (Math.abs(hand.y - (divider.y + divider.height)) > 2)
-        problems.push(`the hand starts at ${hand.y}, not under the decision`);
-      // Dragged up, nothing changes: the cards keep their size
-      const box = await grip.boundingBox();
-      const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-      await touchDrag(page, from, { x: from.x, y: from.y - 80 });
-      await page.waitForTimeout(300);
-      const same = await page.locator('gd-phone-hand .gd-card').first().boundingBox();
-      if (Math.abs(same.height - card.height) > 1)
-        problems.push(`dragged up, the cards went from ${card.height} to ${same.height}`);
-      // Dragged down: hidden, the decision at the panel's bottom
-      await touchDrag(page, from, { x: from.x, y: from.y + 80 });
-      await page.waitForTimeout(300);
-      if (await page.locator('gd-phone-hand').count()) problems.push('dragged down, the hand is still shown');
-      const low = await page.locator('gd-phone-divider').boundingBox();
-      if (Math.abs(low.y + low.height - page.viewportSize().height) > 2)
-        problems.push(`hidden, the decision ends at ${low.y + low.height}`);
-      return problems;
-    },
-  },
-  {
-    name: "the divider (held sideways: the hand's grip) dragged to the bottom hides the hand; dragged up, it is back",
-    state: 'late',
-    run: async (page, sent, device) => {
-      if (device === 'sideways') {
-        // The divider is at the bottom already, beside the hand: the hand's own grip slides it down
-        const box = await page.locator('[data-phone="hand-grip"]').boundingBox();
-        const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-        await touchDrag(page, from, { x: from.x, y: page.viewportSize().height - 1 });
-        await page.waitForTimeout(300);
-      } else {
-        await dragDivider(page, 2000);
-      }
+    run: async (page) => {
+      await dragDivider(page, 2000);
       const hidden = await page.locator('gd-game-phone[data-hand-hidden]').count();
       const hint = await page.locator('.gd-phone-divider__hand-hint').count();
-      // Held sideways, the hint to drag the hand up is in the right half, where the hand was
-      const hintBox = hint ? await page.locator('.gd-phone-divider__hand-hint').boundingBox() : null;
-      const leftOfHalf = device === 'sideways' && hintBox && hintBox.x < page.viewportSize().width / 2 - 2;
       await dragDivider(page, -200);
       const back = await page.locator('gd-phone-hand').count();
       return [
         ...(hidden ? [] : ['the hand is still shown']),
         ...(hint ? [] : ['no hint to drag it up']),
-        ...(leftOfHalf ? [`the hint to drag it up at x ${hintBox.x}, in the left half`] : []),
         ...(back ? [] : ["dragged up, the hand didn't come back"]),
       ];
     },
@@ -1445,4 +1539,11 @@ async function main() {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   await main();
+}
+
+/** A prepared state's recording (a copy), named after the state, with the count to open it at (for other tools). */
+export function mechanicState(name) {
+  const state = STATES[name];
+  if (!state) throw new Error(`no state ${name} (${Object.keys(STATES).join(', ')})`);
+  return { ...recordingOf(state), name, count: state.count };
 }

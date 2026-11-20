@@ -8,6 +8,7 @@ import { GameApi } from './api/game-api.service';
 import { GameAttention } from './clock/game-attention.service';
 import { GameClocks } from './clock/game-clocks.service';
 import { GameDecisions } from './decision/game-decisions.service';
+import { GameEnding } from './session/game-ending';
 import { GameLog } from './session/game-log';
 import { GameRestore } from './session/game-restore';
 import { GameSession } from './session/game-session.service';
@@ -26,6 +27,7 @@ export function provideGameState(): Provider[] {
     PageLifetime,
     GameApi,
     GameSession,
+    GameEnding,
     GameRestore,
     GameSettings,
     ChatRoom,

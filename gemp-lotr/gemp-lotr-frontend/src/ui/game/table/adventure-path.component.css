@@ -20,6 +20,25 @@
   top: var(--gd-path-top, round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px));
 }
 
+/*
+ * A low screen in the modern theme (the page's narrow path column, which scrolls): the sites one under the other 5px
+ * apart at the column's width, never squeezed, the path as high as they are
+ */
+@media (max-height: 520px) {
+  :host-context(html[data-theme='modern']) {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  :host-context(html[data-theme='modern']) .gd-card {
+    position: relative;
+    top: 0;
+    flex: none;
+  }
+}
+
 /* A card that isn't active this turn: dimmed, in a dark frame */
 .gd-card[data-inactive] {
   --gd-card-image-filter: var(--theme-game-inactive-filter);

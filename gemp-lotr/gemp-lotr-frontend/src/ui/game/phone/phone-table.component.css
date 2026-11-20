@@ -164,15 +164,6 @@
   order: -1;
 }
 
-/* Sideways the hand covers the table's right half: the title starts on the left, its rule after it */
-:host-context([data-device='sideways']) .gd-phone-zone[data-side='minions'] > .gd-phone-zone__label {
-  justify-content: flex-start;
-}
-
-:host-context([data-device='sideways']) .gd-phone-zone[data-side='minions'] > .gd-phone-zone__label::after {
-  display: none;
-}
-
 .gd-phone-zone__rule {
   display: none;
 }
