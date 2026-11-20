@@ -1,0 +1,407 @@
+/*
+ * A chat room (legacy hall.css: #chat's inside, #chatarea, #legacyChat, #chatMessages, .message, #userList,
+ * .chatUser and friends; the translation of kermit/feature/frontend-themes). The page places and sizes it; fonts are
+ * the page's.
+ */
+
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: 'room people';
+  column-gap: 3px;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--theme-chat-bg);
+}
+
+.gd-chat__room {
+  grid-area: room;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.gd-chat__room[hidden] {
+  display: none;
+}
+
+gd-discord-embed {
+  grid-area: room;
+  min-height: 0;
+  margin-top: 5px;
+}
+
+.gd-chat__messages {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: scroll;
+  border: 3px solid var(--theme-chat-messages-border);
+  padding: 2px;
+}
+
+.gd-chat__messages:focus-visible {
+  outline: 1px solid var(--theme-chat-outline);
+}
+
+.gd-chat__message {
+  display: flex;
+  gap: 2px;
+  align-items: flex-start;
+  color: var(--theme-chat-text);
+}
+
+.gd-chat__message[data-kind='system'] {
+  color: var(--theme-chat-system);
+}
+
+.gd-chat__message[data-kind='warning'] {
+  color: var(--theme-error);
+}
+
+.gd-chat__message[data-highlight='mention'] {
+  background-color: var(--theme-chat-mention-bg);
+}
+
+.gd-chat__message[data-highlight='mention'][data-kind='system'] {
+  color: var(--theme-text);
+}
+
+.gd-chat__message[data-highlight='ping'] {
+  background-color: var(--theme-chat-ping-bg);
+}
+
+/* .msg-identifier */
+.gd-chat__sender {
+  display: flex;
+  gap: 4px;
+  min-width: fit-content;
+  margin: 1px;
+}
+
+.gd-chat__time {
+  color: var(--theme-chat-time);
+}
+
+.gd-chat__message[data-kind='system'] .gd-chat__time {
+  color: var(--theme-chat-system);
+}
+
+/* .msg-content */
+.gd-chat__text {
+  flex-grow: 10;
+}
+
+.gd-chat__login,
+.gd-chat__login:visited {
+  color: var(--theme-hall-link);
+  text-decoration: underline;
+}
+
+/* A warning's text and its link sit 2px apart (as the legacy chat's flex row put them) */
+.gd-chat__message[data-kind='warning'] > .gd-chat__text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+/* #legacyChatInput */
+.gd-chat__form {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-end;
+  margin: 0;
+  padding-bottom: 2px;
+}
+
+.gd-chat__label,
+.gd-chat__ignored,
+.gd-chat__status:empty {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* #chatTalk: one line at rest; grows with what is typed up to about four lines */
+.gd-chat__input {
+  flex-grow: 1;
+  box-sizing: border-box;
+  field-sizing: content;
+  resize: none;
+  min-height: 2.25em;
+  max-height: 6.5em;
+  margin: 2px;
+  padding: 0.35em 0.5em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: 3px;
+  background-color: var(--theme-chat-input-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  line-height: 1.35;
+}
+
+.gd-chat__input:focus {
+  border-color: var(--theme-field-border-light);
+  outline: none;
+}
+
+/* A chat that stopped (a failed update) is drawn red */
+:host([data-stopped]) .gd-chat__input {
+  background-color: var(--theme-chat-stopped-bg);
+}
+
+/* #userListColumn */
+.gd-chat__people {
+  grid-area: people;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: fit-content;
+  max-width: 15em;
+  min-height: 0;
+}
+
+/* #userList */
+.gd-chat__users {
+  flex-grow: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border-left: 1px solid var(--theme-chat-column-border);
+}
+
+.gd-chat__user {
+  color: var(--theme-text);
+}
+
+/* .chatUser: one line per player; a long name ends in "…" */
+.gd-chat__user[data-self],
+.gd-chat__player {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.3em;
+  padding: 1px 2px;
+  border-radius: 3px;
+}
+
+.gd-chat__user[data-self] {
+  margin-bottom: 3px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--theme-widget-border);
+}
+
+/*
+ * The column keeps the width of the own entry at its widest (chat.js lockUserListWidth): the chip's cell also holds a
+ * hidden "incognito" chip
+ */
+.gd-chat__user[data-self] {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: start;
+  justify-items: start;
+  column-gap: 0;
+}
+
+.gd-chat__user[data-self] > .gd-chat__name {
+  grid-column: 1;
+  max-width: 100%;
+}
+
+.gd-chat__user[data-self] > .gd-chat__role {
+  grid-column: 2;
+  margin-left: 0.3em;
+}
+
+.gd-chat__user[data-self] > .gd-chat__visibility,
+.gd-chat__user[data-self]::after {
+  grid-column: 3;
+  grid-row: 1;
+  margin-left: 0.3em;
+}
+
+.gd-chat__user[data-self]::after {
+  content: 'incognito';
+  box-sizing: border-box;
+  max-height: 0;
+  padding: 0 0.4em;
+  border: solid transparent;
+  border-width: 0 1px;
+  overflow: hidden;
+  font-family: var(--theme-font-widget);
+  font-size: 70%;
+  visibility: hidden;
+}
+
+.gd-chat__player {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-chat__player:hover,
+.gd-chat__player:focus-visible,
+.gd-chat__player[aria-expanded='true'] {
+  background: var(--theme-chat-player-hover-bg);
+  outline: 1px solid var(--theme-chat-outline);
+}
+
+.gd-chat__player[aria-expanded='true'] {
+  anchor-name: --gd-chat-menu;
+}
+
+.gd-chat__name {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-chat__user[data-self] .gd-chat__name {
+  font-weight: bold;
+}
+
+.gd-chat__user[data-ignored] .gd-chat__name {
+  color: var(--theme-chat-ignored);
+  text-decoration: line-through;
+}
+
+/* .chatUser-badge: in a narrow column another player's name keeps its room first, their role badge gives way */
+.gd-chat__role {
+  flex: 0 1000 auto;
+  min-width: 2.6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 0.35em;
+  border: 1px solid var(--theme-chat-badge-border);
+  border-radius: 0.6em;
+  color: var(--theme-chat-text);
+  font-size: 70%;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.gd-chat__user[data-self] .gd-chat__role {
+  flex-shrink: 0;
+}
+
+.gd-chat__user[data-role='admin'] .gd-chat__role {
+  border-color: var(--theme-chat-admin-border);
+  color: var(--theme-chat-admin-text);
+}
+
+.gd-chat__user[data-role='leagueAdmin'] .gd-chat__role {
+  border-color: var(--theme-chat-league-admin-border);
+  color: var(--theme-chat-league-admin-text);
+}
+
+.gd-chat__visibility {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 0.4em;
+  border: 1px solid var(--theme-chat-online-border);
+  border-radius: 0.6em;
+  background: var(--theme-chat-online-bg);
+  color: var(--theme-chat-online-text);
+  font-family: var(--theme-font-widget);
+  font-size: 70%;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.gd-chat__visibility[data-incognito] {
+  border-color: var(--theme-chat-incognito-border);
+  background: var(--theme-chat-incognito-bg);
+  color: var(--theme-chat-incognito-text);
+}
+
+/* .chatUserMenu: beside the player on the left (the list is the rightmost column), flipped when it would leave the window */
+.gd-chat__menu {
+  position: fixed;
+  position-anchor: --gd-chat-menu;
+  top: anchor(top);
+  right: calc(anchor(left) + 4px);
+  position-try-fallbacks: flip-inline, flip-block;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  min-width: 10em;
+  padding: 3px 0;
+  border: 1px solid var(--theme-chat-outline);
+  border-radius: 4px;
+  background: var(--theme-chat-menu-bg);
+  box-shadow: 0 3px 10px var(--theme-chat-menu-shadow);
+  color: var(--theme-text);
+  font-family: var(--theme-font-widget);
+  font-size: 12px;
+}
+
+.gd-chat__menu-title {
+  margin: 0 0 2px;
+  padding: 2px 10px 4px;
+  border-bottom: 1px solid var(--theme-widget-border);
+  font-weight: bold;
+}
+
+.gd-chat__menu-item {
+  padding: 3px 10px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-chat__menu-item:hover,
+.gd-chat__menu-item:focus {
+  background: var(--theme-widget-border);
+  outline: none;
+}
+
+/* .chatUserStatus: as wide as the column, never wider */
+.gd-chat__status {
+  box-sizing: border-box;
+  width: 0;
+  min-width: 100%;
+  margin: 0;
+  padding: 3px 5px;
+  border-left: 1px solid var(--theme-chat-column-border);
+  color: var(--theme-chat-text);
+  font-size: 80%;
+  overflow-wrap: anywhere;
+}
+
+/* #toggleChatButt: takes the column's width and doesn't widen it (without an own entry, a visitor's, it does) */
+.gd-chat__switch.gd-button {
+  margin: 3px;
+  padding: 4px;
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+.gd-chat__people:has([data-self]) .gd-chat__switch {
+  contain: inline-size;
+}
