@@ -368,6 +368,27 @@
   height: 97px;
 }
 
+/*
+ * The modern theme's controls, a row as on a phone (Slower, play, Faster): as large as they are, in the same corner, on
+ * a panel of their own over the hand's cards
+ */
+.gd-game__replay[data-words] {
+  left: auto;
+  top: auto;
+  right: 9px;
+  bottom: 9px;
+  width: auto;
+  height: auto;
+  padding: 6px 12px 8px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+  box-shadow: var(--theme-frame-shadow);
+  color: var(--theme-text);
+  /* Over the replayed decisions' dialogs (from 1000 up), which would hide the speed and Slower */
+  z-index: 3000;
+}
+
 /* The theme button (GAME_THEME_PICKER): in the table's top right corner, over the opponent's support */
 .gd-game__theme {
   position: absolute;

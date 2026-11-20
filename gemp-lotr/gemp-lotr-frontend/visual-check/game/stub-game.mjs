@@ -63,6 +63,18 @@ export async function routeGame(context, recording, count, log, { decisions = tr
           `${users}</chat>`,
       });
     }
+    // The player's newest game, where the modern page finds the replay of a game that ended: this one, just over
+    if (call === 'GET /gameHistory') {
+      const players = /allParticipantIds="([^"]*)"/.exec(opening)?.[1]?.split(',') ?? [];
+      const opponent = players.find((name) => name !== recording.participant) ?? 'GameFoe1';
+      return route.fulfill({
+        contentType: 'application/xml; charset=UTF-8',
+        body:
+          '<?xml version="1.0" encoding="UTF-8"?><gameHistory count="1" total="1" start="0" pageSize="1">' +
+          `<historyEntry opponent="${opponent}" result="W" gameRecordingId="stubreplay" endMs="${Date.now()}"/>` +
+          '</gameHistory>',
+      });
+    }
     // The long poll and the chat's next question: the server holds them a while, then says nothing happened
     if (call === `POST /game/${GAME_ID}` || call === `POST /chat/Game${GAME_ID}`) {
       const nothing = call.includes('/chat/') ? `<chat>${users}</chat>` : '<update cn="1"/>';

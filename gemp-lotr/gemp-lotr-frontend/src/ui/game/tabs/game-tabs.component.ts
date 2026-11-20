@@ -4,6 +4,7 @@ import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { AUTO_PASS_PHASES, GameSettings } from '../../../core/game/settings/game-settings';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
+import { ThemeService } from '../../../core/platform/theme.service';
 import { GameChatComponent } from './game-chat.component';
 import { KeepScrollDirective } from './keep-scroll.directive';
 
@@ -148,6 +149,18 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
             (change)="settings.setOldStackVisuals(checked($event))"
           /><label for="gd-game-old-stack">Use old visuals for stacked cards</label>
         </div>
+        @if (modern()) {
+          <!-- The modern theme's chat order (the owner, 2026-11-20); classic keeps game.html's settings -->
+          <div class="gd-game-setting">
+            <input
+              id="gd-game-chat-newest"
+              type="checkbox"
+              data-setting="chatNewestFirst"
+              [checked]="settings.chatNewestFirst()"
+              (change)="settings.setChatNewestFirst(checked($event))"
+            /><label for="gd-game-chat-newest">Newest chat messages first</label>
+          </div>
+        }
         <div class="gd-game-setting">
           <input
             id="gd-game-drop-down"
@@ -234,6 +247,9 @@ const PHASE_LABELS: Readonly<Record<string, string>> = {
 export class GameTabsComponent {
   private readonly session = inject(GameSession);
   protected readonly settings = inject(GameSettings);
+  private readonly theme = inject(ThemeService).theme;
+  /** The modern theme's own settings (the chat's order); classic shows game.html's only. */
+  protected readonly modern = computed(() => this.theme() === 'modern');
   protected readonly zoom = inject(AutoZoomSetting);
   protected readonly chat = inject(ChatRoom);
 

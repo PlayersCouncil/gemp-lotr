@@ -15,12 +15,6 @@ export const SIDE_BY_SIDE_QUERY = '(orientation: landscape)';
 /** A screen at least a small tablet's width (the game's phone layout gives a tablet bigger cards). */
 export const TABLET_QUERY = '(min-width: 600px)';
 
-/**
- * A touch tablet held sideways: wide enough for the computer layout, but a finger, not a mouse. The game shows it its
- * phone layout held sideways (the owner, 2026-11-19); the deck builder keeps the computer layout there.
- */
-export const TOUCH_TABLET_QUERY = '(pointer: coarse) and (orientation: landscape) and (max-width: 1400px)';
-
 /** A screen high enough for a tablet's cards when held sideways (a phone's is lower). */
 export const TALL_QUERY = '(min-height: 600px)';
 
@@ -35,7 +29,6 @@ export class CompactLayout {
   private readonly narrow = signal(false);
   private readonly landscape = signal(false);
   private readonly wide = signal(false);
-  private readonly touchTablet = signal(false);
   private readonly tall = signal(false);
 
   readonly active = computed(() => this.theme() === 'modern' && this.narrow());
@@ -49,8 +42,11 @@ export class CompactLayout {
     !this.active() ? null : this.landscape() ? 'sideways' : this.wide() ? 'tablet' : 'phone',
   );
 
-  /** The game's phone layout: the compact layout's screens, and a touch tablet held sideways (TOUCH_TABLET_QUERY). */
-  readonly gameActive = computed(() => this.theme() === 'modern' && (this.narrow() || this.touchTablet()));
+  /**
+   * The game's phone layout: the compact layout's screens held upright only. A phone or a tablet held sideways gets the
+   * computer layout, as a computer does (the owner, 2026-11-20; it had the phone layout held sideways before).
+   */
+  readonly gameActive = computed(() => this.theme() === 'modern' && this.narrow() && !this.landscape());
   /** What the game's phone layout is shown on (as `device`, for gameActive). */
   readonly gameDevice = computed<'phone' | 'sideways' | 'tablet' | null>(() =>
     !this.gameActive() ? null : this.landscape() ? 'sideways' : this.wide() ? 'tablet' : 'phone',
@@ -71,7 +67,6 @@ export class CompactLayout {
     follow(COMPACT_QUERY, this.narrow);
     follow(SIDE_BY_SIDE_QUERY, this.landscape);
     follow(TABLET_QUERY, this.wide);
-    follow(TOUCH_TABLET_QUERY, this.touchTablet);
     follow(TALL_QUERY, this.tall);
   }
 }

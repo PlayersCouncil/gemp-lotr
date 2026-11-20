@@ -94,6 +94,24 @@ gd-phone-hand {
   background: var(--theme-game-phone-hand-bg);
 }
 
+/* A spectator held sideways: no hand, so no panel; the divider across the bottom (the owner, 2026-11-20) */
+:host([data-device='sideways'][data-watching]) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'top'
+    'table'
+    'divider';
+}
+
+:host([data-device='sideways'][data-watching])::after {
+  content: none;
+}
+
+:host([data-device='sideways'][data-watching]) > gd-phone-divider {
+  border-left: 0;
+}
+
 /* Before the game: the pre-game information in the table's place, scrolled up and down */
 .gd-phone-pregame {
   min-height: 0;

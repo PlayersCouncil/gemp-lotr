@@ -1,11 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  COMPACT_QUERY,
-  CompactLayout,
-  SIDE_BY_SIDE_QUERY,
-  TALL_QUERY,
-  TOUCH_TABLET_QUERY,
-} from './compact-layout.service';
+import { COMPACT_QUERY, CompactLayout, SIDE_BY_SIDE_QUERY } from './compact-layout.service';
 import { PAGE_QUERY_STRING } from './page-location';
 import { ThemeService } from './theme.service';
 
@@ -82,28 +76,19 @@ describe('CompactLayout', () => {
     expect(compact.sideBySide()).toBe(false);
   });
 
-  it("gives a touch tablet held sideways the game's phone layout, and leaves the deck builder's alone", () => {
-    const queries = new Map<string, Query>([
-      [COMPACT_QUERY, { matches: false, onchange: null }],
-      [SIDE_BY_SIDE_QUERY, { matches: true, onchange: null }],
-      [TOUCH_TABLET_QUERY, { matches: true, onchange: null }],
-      [TALL_QUERY, { matches: true, onchange: null }],
-    ]);
-    Object.defineProperty(window, 'matchMedia', {
-      value: (media: string) => queries.get(media) ?? null,
-      configurable: true,
-      writable: true,
-    });
+  it('gives the game its phone layout only upright: a phone or a tablet held sideways gets the computer layout', () => {
+    const { rotate, turn } = screen(true, false);
     const compact = layout('modern');
-    // The deck builder: the computer layout, as before
-    expect(compact.active()).toBe(false);
-    expect(compact.device()).toBeNull();
-    // The game: its phone layout held sideways, with a tablet's cards
     expect(compact.gameActive()).toBe(true);
-    expect(compact.gameDevice()).toBe('sideways');
-    expect(compact.tallSideways()).toBe(true);
-    // A mouse (no touch tablet): the computer layout for the game too
-    queries.get(TOUCH_TABLET_QUERY)!.onchange?.({ matches: false });
+    expect(compact.gameDevice()).not.toBeNull();
+    // Held sideways (the owner, 2026-11-20): the computer layout, the deck builder still compact
+    rotate(true);
+    expect(compact.gameActive()).toBe(false);
+    expect(compact.gameDevice()).toBeNull();
+    expect(compact.active()).toBe(true);
+    rotate(false);
+    expect(compact.gameActive()).toBe(true);
+    turn(false);
     expect(compact.gameActive()).toBe(false);
   });
 });

@@ -222,6 +222,32 @@
   grid-column: 1 / -1;
 }
 
+/* A spectator's: not dragged, no handle; the game's latest message under whose turn it is (the owner, 2026-11-20) */
+:host([data-watching]) {
+  cursor: default;
+  touch-action: auto;
+  user-select: text;
+}
+
+:host([data-watching])::before {
+  content: none;
+}
+
+.gd-phone-divider__latest {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+:host-context([data-device='sideways']) .gd-phone-divider__latest {
+  grid-column: 1 / -1;
+}
+
 /* Reached by the keyboard: the arrows move it */
 :host(:focus-visible) {
   outline: 2px solid var(--theme-focus-ring-outer);
