@@ -180,6 +180,28 @@ game:
   end panel's link, else from the server's thanks in the chat) shows its messages one after another as it plays,
   with no buttons, and no scenario menu.
 
+The checks below bring their own scenarios (`tutorial-scenarios.mjs`: the engine's test fixtures, given the `allow`s a
+person needs where the runner gives an `answer`): the check server has only the shipped ones, which are not added to.
+Each is written as the player's own scenario with the authoring calls every server has (`scenarios/author/open` with
+`new=true` and an id starting `check-tutorial-`, `edit`, `save`, `close`), started as a player starts one, and its
+file deleted afterwards (on this machine from `GEMP_SCENARIOS`, default `/etc/gemp-lotr/scenarios`, else with
+`scenarios/mine/delete`, which keeps a copy in the server's archive). Saved rather than tested as a draft so that it
+plays as a player's game: no authoring panel, and "Back to checkpoint" starts it again from the server's file.
+
+- **two-sided**: a two-sided game played through, the person in the first seat (Free Peoples on their own turns, Shadow
+  on the opponent's: a Shadow assignment made pairing by pairing, Freca taking control of site 1, a sanctuary); each
+  skirmish message's outline (`ui:skirmish:selfStrength`) is round the side the person plays then.
+- **second-seat**: the same from the second seat, beginning at site 3 (Shadow first, a fierce Uruk assigned twice).
+- **opening**: the game's own opening: at the bid the arrow towards 1 is outlined, OK only once the box says 1, and OK
+  with 0 is refused beside OK without sending anything; then "Go first", the starting fellowship's card window, the
+  mulligan, the first turn; the opponent is never "~Scenario", not even before the players are known.
+- **checkpoint**: "Back to checkpoint" is not in the menu before the checkpoint (the mulligan), is after it, asks in
+  the page's own dialog (Cancel changes nothing), and OK opens a new game at the checkpoint's message.
+- **left-out**: a step whose middle message's condition fails says the other two, counted "1 / 2" and "2 / 2", each
+  once in the chat; the one left out never shows.
+- **play** (only by name, with `--scenario <id>`): any scenario the player can start played through the same way, to
+  whatever end panel it shows.
+
 Every check runs in both themes (`--theme classic` or `--theme modern` for one), phone in the modern theme only.
 
 ```

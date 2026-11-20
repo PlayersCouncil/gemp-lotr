@@ -20,6 +20,7 @@ import { session } from '../local-server/seed.mjs';
 import { DEVICES } from './device-profiles.mjs';
 import { pairOf } from './players.mjs';
 import { parseGameXml } from './protocol.mjs';
+import { LEFT_OUT, REAL_OPENING, TWO_SIDED_FIRST, TWO_SIDED_SECOND } from './tutorial-scenarios.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CHECK_DIR = path.resolve(HERE, '..');
@@ -34,12 +35,16 @@ const OUT = path.resolve(CHECK_DIR, argument('out', 'report-tutorial'));
 const ONLY = argument('only', '').split(',').filter(Boolean);
 const THEMES = argument('theme', 'classic,modern').split(',').filter(Boolean);
 const VERBOSE = process.argv.includes('--verbose');
+/** For `play`: the scenario to play through (an id `scenarios/start` takes, a player's own as `<player>/<id>`). */
+const SCENARIO = argument('scenario', null);
 
 /** The tutorials the checks play (the server's `scenarios/tutorials/*.hjson`), by the id `scenarios/start` takes. */
 const TUTORIAL_1 = 'basics-01';
 const TUTORIAL_2 = 'basics-02-items-damage';
 /** Tutorial 1's one choice: `help` is the guided path, `plan` leaves the player to it. */
 const GUIDED = 'help';
+/** Where the server keeps its scenarios, when it runs on this machine (a scenario a check brought is deleted there). */
+const DATA = process.env.GEMP_SCENARIOS ?? '/etc/gemp-lotr/scenarios';
 
 /** Where a page keeps what a scripted game shows, per kind of page (only the Angular page has this DOM). */
 const PAGES = {
@@ -537,7 +542,9 @@ function whereToClick({ outline, bubble }) {
     );
   };
   const candidates = Array.from(
-    document.querySelectorAll('[data-scenario="live"], button[data-decision-button], button[data-decision-choice]'),
+    document.querySelectorAll(
+      '[data-scenario="live"], button[data-decision-button], button[data-decision-choice], button[data-decision^="integer-"]',
+    ),
   ).filter((el) => el.getBoundingClientRect().width > 0);
   const target = candidates.sort((a, b) => fit(a) - fit(b))[0];
   const cx = outline.x + outline.w / 2;
@@ -653,7 +660,7 @@ async function replayIdFromChat(seat) {
 }
 
 /** Tutorial `id` played through to its end on the guided path. */
-async function playThrough(table, problems, id) {
+async function playThrough(table, problems, id, { complete = true, watch = null } = {}) {
   const { seat, who } = table;
   const game = await startTutorial(who, id);
   table.gameId = game.gameId;
@@ -663,7 +670,9 @@ async function playThrough(table, problems, id) {
   if (!opponentName) problems.push('the server named no opponent for the scripted game');
   let result;
   try {
-    result = await follow(seat, problems, { opponentName });
+    // (`watch` looks at the page at every turn of the way, and never stops it)
+    const stop = watch ? async (st) => (await watch(st), false) : null;
+    result = await follow(seat, problems, { opponentName, stop });
   } catch (error) {
     if (error instanceof Stuck) {
       // What the server had asked at that point, for working out why
@@ -678,9 +687,74 @@ async function playThrough(table, problems, id) {
     throw error;
   }
   await seat.shot('end');
-  expectComplete(result, problems);
+  if (complete) expectComplete(result, problems);
   table.note = `${result.messages} messages, ${seat.answers()} decisions answered`;
   return result;
+}
+
+/**
+ * Brings a scenario of the check's own to the server (`tutorial-scenarios.mjs`): the check server has only the
+ * scenarios that ship with the game. It is written as the player's own scenario with the authoring calls any server
+ * has (a new draft, its parts, saved in the player's folder), so it plays as one a player started from the Game Hall:
+ * no draft's game, no authoring panel, and "Back to checkpoint" starts it again from the server's own file. Answers
+ * the id `scenarios/start` takes; the file is deleted when the check is done (`table.cleanup`).
+ */
+async function bring(table, name, scenario) {
+  const { who, player } = table;
+  const call = async (what, fields) => (await who.post(`/scenarios/author/${what}`, fields)).json();
+  await call('close', {}).catch(() => undefined);
+  const id = `check-tutorial-${name}-${Date.now().toString(36)}`;
+  await call('open', { new: 'true', id, title: scenario.title, canonical: 'false' });
+  const { steps = [], ...parts } = scenario;
+  // (a whole scenario takes the place of a new draft's own: the one-sided rule and the Ring it has go)
+  const top = scenario.cards ? { ring: null, rules: null, ...parts } : parts;
+  await call('edit', { patch: JSON.stringify({ top, steps: steps.map((step) => ({ op: 'insert', step })) }) });
+  const saved = await call('save', { path: `${id}.hjson`, canonical: 'false' });
+  await call('close', {});
+  const file = saved.state?.file;
+  if (!file) throw new Error(`the scenario "${name}" was not saved: ${JSON.stringify(saved).slice(0, 200)}`);
+  table.cleanup.push(async () => {
+    const own = path.join(DATA, 'users', player, file);
+    if (fs.existsSync(own)) fs.rmSync(own);
+    // (a server elsewhere: its own way, which keeps a copy in its archive)
+    else await who.post('/scenarios/mine/delete', { path: file }).catch(() => undefined);
+  });
+  return `${player}/${id}`;
+}
+
+/** Where the skirmish being fought shows a side's strength: `free-peoples` or `shadow`. */
+function strengthBox(side) {
+  const el = document.querySelector(`.gd-game__fight[data-fight="skirmish"] .gd-game__strength[data-side="${side}"]`);
+  const r = el?.getBoundingClientRect();
+  return r && r.width > 0
+    ? { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }
+    : null;
+}
+
+/**
+ * A watch for a two-sided scenario's skirmish messages, each outlining `ui:skirmish:selfStrength`: the outline must be
+ * round the side the person plays at that moment (`sides`: a message's first words and the side, free-peoples or
+ * shadow). Says at the end which never came (`missed`).
+ */
+function ownSide(seat, problems, sides) {
+  const seen = new Set();
+  const watch = async (st) => {
+    const text = st.bubble?.placed ? st.bubble.text : '';
+    const rule = sides.find(([start]) => text.startsWith(start));
+    if (!rule || seen.has(rule[0])) return;
+    seen.add(rule[0]);
+    const want = await seat.page.evaluate(strengthBox, rule[1]);
+    await seat.shot('own-side');
+    if (!want) {
+      problems.push(`"${short(text, 50)}": no ${rule[1]} strength in a skirmish on the table`);
+    } else if (!st.outlines.some((o) => Math.abs(o.x + 4 - want.x) <= 3 && Math.abs(o.y + 4 - want.y) <= 3)) {
+      problems.push(
+        `"${short(text, 50)}" outlines ${JSON.stringify(st.outlines)}, not the ${rule[1]} side's strength ${JSON.stringify(want)}`,
+      );
+    }
+  };
+  const missed = () => sides.filter(([start]) => !seen.has(start)).map(([start]) => `"${start}…"`);
+  return { watch, missed };
 }
 
 const CHECKS = {
@@ -696,6 +770,16 @@ const CHECKS = {
       );
     }
     if (replayId ?? said) finished[table.theme] = replayId ?? said;
+  },
+
+  /**
+   * Any scenario the player can start (`--scenario <id>`), played through the same way to its end panel, whatever it
+   * says: for looking at one that has no check of its own.
+   */
+  async play(table, problems) {
+    if (!SCENARIO) throw new Error('play: say which scenario with --scenario <id>');
+    const result = await playThrough(table, problems, SCENARIO, { complete: false });
+    table.note = `${table.note}; ended "${result.end?.heading}": ${short(result.end?.panelText, 160)}`;
   },
 
   /** Tutorial 2 played through the same way. */
@@ -1096,6 +1180,164 @@ const CHECKS = {
       problems.push(`the replay showed ${texts.length} message(s) as it played, not one after another`);
     table.note = `${from}: ${texts.length} messages in turn, first "${short(texts[0], 40)}"`;
   },
+
+  /**
+   * A two-sided scenario played through (the person in the first seat: Free Peoples on their own turns, Shadow on the
+   * opponent's, with a Shadow assignment made pairing by pairing, site control and a sanctuary); each skirmish message
+   * outlines the person's own side as they play it then.
+   */
+  async 'two-sided'(table, problems) {
+    const id = await bring(table, 'two-sided', TWO_SIDED_FIRST);
+    const sides = ownSide(table.seat, problems, [
+      ['Aragorn is', 'free-peoples'],
+      ['Your minion is', 'shadow'],
+    ]);
+    await playThrough(table, problems, id, { watch: sides.watch });
+    for (const missed of sides.missed()) problems.push(`the skirmish message ${missed} never came`);
+  },
+
+  /** The same from the second seat, down the path: Shadow first (a fierce Uruk assigned twice), then Free Peoples. */
+  async 'second-seat'(table, problems) {
+    const id = await bring(table, 'second-seat', TWO_SIDED_SECOND);
+    const sides = ownSide(table.seat, problems, [['The skirmish:', 'free-peoples']]);
+    await playThrough(table, problems, id, { watch: sides.watch });
+    for (const missed of sides.missed()) problems.push(`the skirmish message ${missed} never came`);
+  },
+
+  /**
+   * The game's own opening played through: at the bid the arrow towards the number the step takes is outlined (OK
+   * only once the box says it), OK with another number is refused by OK and sends nothing; then "Go first", the
+   * starting fellowship's card window, the mulligan and the first turn. The opponent is never "~Scenario", not even
+   * on the panel shown until the players are known.
+   */
+  async opening(table, problems) {
+    const id = await bring(table, 'opening', REAL_OPENING);
+    const { seat, who } = table;
+    const page = seat.page;
+    const game = await startTutorial(who, id);
+    table.gameId = game.gameId;
+    await page.goto(`${server}${ui.path}?gameId=${game.gameId}`);
+    const bid = await seat.firstMessage();
+    if (bid.scenarioName) problems.push(`the page names the scripted opponent "~Scenario": ${bid.scenarioName}`);
+    const box = async (selector) => {
+      const b = await page.locator(selector).first().boundingBox();
+      return b && { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height) };
+    };
+    const around = (outline, b) => b && Math.abs(outline.x + 4 - b.x) <= 3 && Math.abs(outline.y + 4 - b.y) <= 3;
+    const up = await box('button[data-decision="integer-up"]');
+    if (!up) throw new Error(`no number to bid at the first message (decision "${bid.decision}")`);
+    if (bid.nextOutlines.length !== 1 || !around(bid.nextOutlines[0], up)) {
+      problems.push(
+        `at the bid ${JSON.stringify(bid.nextOutlines)} is outlined as next, not the arrow up ${JSON.stringify(up)}`,
+      );
+    }
+    await seat.shot('bid');
+    const answered = seat.answers();
+    await page.locator(ui.decisionButton('OK')).click();
+    const hint = await until(async () => (await seat.read()).hint, 'the hint for OK with 0', 3000).catch(() => null);
+    await seat.shot('bid-refused');
+    const ok = await box(ui.decisionButton('OK'));
+    if (!hint) problems.push('OK with 0 burdens bid (the step takes 1): no hint');
+    else if (Math.abs(hint.box.x + hint.box.w / 2 - (ok.x + ok.w / 2)) > 150) problems.push('the hint is not by OK');
+    await sleep(700);
+    if (seat.answers() !== answered) problems.push('OK with 0 burdens bid was sent to the server');
+    await page.locator('button[data-decision="integer-up"]').click();
+    await sleep(500);
+    const one = await seat.read();
+    if (one.nextOutlines.length !== 1 || !around(one.nextOutlines[0], ok)) {
+      problems.push(`with 1 bid ${JSON.stringify(one.nextOutlines)} is outlined as next, not OK ${JSON.stringify(ok)}`);
+    }
+    const result = await follow(seat, problems, { opponentName: game.info?.opponentName });
+    await seat.shot('end');
+    expectComplete(result, problems);
+    table.note = `${result.messages} messages, ${seat.answers()} decisions answered`;
+  },
+
+  /**
+   * "Back to checkpoint" in the scenario's menu: not there before the game reaches its checkpoint; there after it;
+   * asked about in the page's own dialog (Cancel changes nothing); OK starts the scenario again at the checkpoint's
+   * message, still offering the way back to it.
+   */
+  async checkpoint(table, problems) {
+    const id = await bring(table, 'checkpoint', REAL_OPENING);
+    const { seat, who } = table;
+    const page = seat.page;
+    const item = page.locator(ui.menuButton('checkpoint'));
+    const game = await startTutorial(who, id);
+    table.gameId = game.gameId;
+    await page.goto(`${server}${ui.path}?gameId=${game.gameId}`);
+    await seat.firstMessage();
+    if (await item.count()) problems.push('"Back to checkpoint" is offered before the game has reached one');
+    const { stopped } = await follow(seat, problems, {
+      opponentName: game.info?.opponentName,
+      stop: (st) => (st.bubble?.text ?? '').startsWith('The first turn'),
+    });
+    if (!stopped) throw new Error('the scenario ended before its last step');
+    if (!(await item.isVisible())) throw new Error('past the checkpoint, the menu has no "Back to checkpoint"');
+    await seat.shot('menu');
+    await item.click();
+    const question = await until(
+      () => page.locator(ui.confirmText).textContent({ timeout: 500 }),
+      'the question in the page’s own dialog',
+      3000,
+    );
+    if (!/checkpoint/i.test(question)) problems.push(`"Back to checkpoint" asks: "${question}"`);
+    await page.locator(ui.confirmButton('cancel')).click();
+    await sleep(800);
+    if (seat.gameId() !== game.gameId) problems.push(`Cancel went to another game (${seat.gameId()})`);
+    if ((await seat.read()).bubble?.text !== stopped.bubble.text) problems.push('Cancel changed the message');
+    await item.click();
+    await page.locator(ui.confirm).waitFor({ timeout: 3000 });
+    await page.locator(ui.confirmButton('ok')).click();
+    const newId = await until(
+      async () => (seat.gameId() && seat.gameId() !== game.gameId ? seat.gameId() : null),
+      'a new game after OK',
+      15000,
+    );
+    table.gameId = newId;
+    const back = await seat.firstMessage();
+    await seat.shot('back-at-checkpoint');
+    if (!back.bubble.text.startsWith('Your opening hand is drawn')) {
+      problems.push(`back at the checkpoint, the first message is "${short(back.bubble.text)}"`);
+    }
+    if (!(await item.isVisible())) problems.push('back at the checkpoint, the menu no longer offers it');
+    const result = await follow(seat, problems, { opponentName: game.info?.opponentName });
+    expectComplete(result, problems);
+    table.note = `game ${game.gameId} → ${newId} at "${short(back.bubble.text, 40)}"`;
+  },
+
+  /**
+   * A message whose condition doesn't hold is left out: the step's other two are said, counted "1 / 2" and "2 / 2",
+   * and each goes into the chat once; the one left out never shows.
+   */
+  async 'left-out'(table, problems) {
+    const id = await bring(table, 'left-out', LEFT_OUT);
+    const { seat, who } = table;
+    const page = seat.page;
+    const game = await startTutorial(who, id);
+    table.gameId = game.gameId;
+    await page.goto(`${server}${ui.path}?gameId=${game.gameId}`);
+    const first = await seat.firstMessage();
+    await seat.shot('first');
+    if (first.bubble.count !== '1 / 2' || first.bubble.text !== 'The first of two.') {
+      problems.push(`the first message is ${first.bubble.count} "${first.bubble.text}"`);
+    }
+    const second = await nextMessage(seat, first.bubble.text, () => page.locator(ui.next).click());
+    await seat.shot('second');
+    if (second.bubble.count !== '2 / 2' || !second.bubble.text.startsWith('The second of two')) {
+      problems.push(`the second message is ${second.bubble.count} "${second.bubble.text}"`);
+    }
+    const chat = await page.locator(ui.chat).innerText();
+    if (/Never said/.test(chat)) problems.push('the message left out is in the chat');
+    for (const said of ['The first of two.', 'The second of two']) {
+      const times = chat.split(said).length - 1;
+      if (times !== 1) problems.push(`"${said}" is in the chat ${times} times`);
+    }
+    const result = await follow(seat, problems, { opponentName: game.info?.opponentName });
+    if (seat.moves.some((move) => move.includes('Never said'))) problems.push('the message left out was shown');
+    expectComplete(result, problems);
+    table.note = `"${first.bubble.count}" then "${second.bubble.count}"`;
+  },
 };
 
 /** Does `act()` and waits for a message other than `text` to be up and placed; returns the page then. */
@@ -1121,7 +1363,7 @@ async function run(name, theme) {
   const problems = [];
   const started = Date.now();
   const player = pairOf(0).player;
-  const table = { theme, note: '' };
+  const table = { theme, note: '', player, cleanup: [] };
   try {
     table.who = await session(server, player, password);
     table.seat = await openSeat(check, table.who, player, theme, name === 'phone' ? DEVICES.phone : DEVICES.pc);
@@ -1137,6 +1379,7 @@ async function run(name, theme) {
   if (table.gameId && table.who) {
     await table.who.post(`/game/${table.gameId}/concede`, {}).catch(() => undefined);
   }
+  for (const done of table.cleanup) await done().catch((error) => problems.push(`cleaning up: ${error.message}`));
   const seconds = Math.round((Date.now() - started) / 1000);
   const lines = [
     `${problems.length ? '  ✗' : '  ✓'} ${name} (${theme}, ${seconds}s)${table.note ? ` ${table.note}` : ''}`,
@@ -1150,7 +1393,11 @@ async function run(name, theme) {
   return { ok: problems.length === 0, lines };
 }
 
-const names = Object.keys(CHECKS).filter((name) => ONLY.length === 0 || ONLY.includes(name));
+/** Checks run only when asked for by name. */
+const ON_REQUEST = ['play'];
+const names = Object.keys(CHECKS).filter((name) =>
+  ONLY.length === 0 ? !ON_REQUEST.includes(name) : ONLY.includes(name),
+);
 const unknown = ONLY.filter((name) => !CHECKS[name]);
 if (unknown.length) throw new Error(`--only ${unknown.join(',')}: the checks are ${Object.keys(CHECKS).join(', ')}`);
 fs.rmSync(OUT, { recursive: true, force: true });
