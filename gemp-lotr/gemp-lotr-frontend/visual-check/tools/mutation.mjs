@@ -85,6 +85,8 @@ export const TARGETS = [
   'src/core/game/authoring/opponent-answer.ts',
   'src/core/game/authoring/picking.ts',
   'src/ui/game/authoring/table-picker.service.ts',
+  'src/core/game/authoring/board-start.ts',
+  'src/core/game/authoring/game-rules.ts',
   // Scenarios on the game page: the script's events, what a step allows, the guide, and where its bubble goes
   'src/core/game/scenario/bubble-placement.ts',
   'src/core/game/scenario/scenario-api.service.ts',
