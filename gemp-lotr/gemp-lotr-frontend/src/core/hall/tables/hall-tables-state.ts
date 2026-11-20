@@ -1,4 +1,5 @@
 import { HallItemChange } from '../hall-models';
+import { RowOrder } from '../hall-row-order';
 import { gameUrl, parseHallTable, tableAction, tableNote } from './hall-table-parsers';
 import { HallTable, HallTableRow, HallTableSections } from './hall-table-models';
 
@@ -14,17 +15,16 @@ interface Entry {
  * changed, moves it to the end of its new section; remove takes it away. Pure: HallTablesService holds it in a signal.
  */
 export class HallTablesState {
-  private constructor(
-    private readonly entries: ReadonlyMap<string, Entry>,
-    private readonly nextSeq: number,
-  ) {}
+  private constructor(private readonly entries: ReadonlyMap<string, Entry>) {}
 
-  static readonly EMPTY = new HallTablesState(new Map(), 1);
+  static readonly EMPTY = new HallTablesState(new Map());
 
-  /** The state after one hall answer's table changes (`full`: a snapshot, drawn on a cleared hall). */
-  apply(changes: readonly HallItemChange[], full: boolean): HallTablesState {
+  /**
+   * The state after one hall answer's table changes (`full`: a snapshot, drawn on a cleared hall). Rows take their
+   * places from `order` (shared with the queues and tournaments, see RowOrder).
+   */
+  apply(changes: readonly HallItemChange[], full: boolean, order: RowOrder): HallTablesState {
     const entries = new Map(full ? [] : this.entries);
-    let nextSeq = this.nextSeq;
     for (const change of changes) {
       if (change.action === 'remove') {
         entries.delete(change.id);
@@ -32,10 +32,10 @@ export class HallTablesState {
       }
       const table = parseHallTable(change);
       const old = entries.get(change.id);
-      const seq = old?.table.status === table.status ? old.seq : nextSeq++;
+      const seq = old?.table.status === table.status ? old.seq : order.take();
       entries.set(change.id, { table, seq });
     }
-    return new HallTablesState(entries, nextSeq);
+    return new HallTablesState(entries);
   }
 
   get(id: string): HallTable | null {
@@ -61,14 +61,17 @@ export class HallTablesState {
   sections(participantId: string | null): HallTableSections {
     const sorted = [...this.entries.values()].sort((a, b) => a.seq - b.seq);
     const rows = (status: string): HallTableRow[] =>
-      sorted.filter(({ table }) => table.status === status).map(({ table }) => tableRow(table, participantId));
+      sorted
+        .filter(({ table }) => table.status === status)
+        .map(({ table, seq }) => tableRow(table, participantId, seq));
     return { waiting: rows('WAITING'), playing: rows('PLAYING'), finished: rows('FINISHED') };
   }
 }
 
-export function tableRow(table: HallTable, participantId: string | null): HallTableRow {
+export function tableRow(table: HallTable, participantId: string | null, order = 0): HallTableRow {
   const action = tableAction(table);
   return {
+    order,
     table,
     action,
     note: tableNote(table),

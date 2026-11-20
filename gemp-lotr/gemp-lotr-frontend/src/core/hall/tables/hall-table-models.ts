@@ -34,6 +34,8 @@ export type HallTableAction = 'leave' | 'join' | 'play' | 'watch';
 
 /** A table as the hall lists it: the table, its action, its note and its place in its section. */
 export interface HallTableRow {
+  /** Its place in its section, among the queues and tournaments drawn there too (RowOrder). */
+  readonly order: number;
   readonly table: HallTable;
   readonly action: HallTableAction | null;
   /** The italic note after the tournament name ("Private match for user 'bob'."), or null. */
@@ -120,10 +122,4 @@ export interface TableResult {
 }
 
 /** Which flow a result belongs to. */
-export type TableFlow = 'casual' | 'bot' | 'join' | 'leave';
-
-/** A started game the browser would not open in a new tab: the "Your game is ready" prompt's link. */
-export interface ReadyGame {
-  readonly gameId: string;
-  readonly url: string;
-}
+export type TableFlow = 'casual' | 'bot' | 'leave';

@@ -17,7 +17,8 @@ No UI here: the sections, the Play popup and the Join dialog are 4.2's ui part.
   `update` replaces the row in place, or moves it to the end of its new section when the status changed; `remove`
   takes it away. The server sends every attribute again on an update (it compares the whole map), so an update
   replaces the table. There is no other sorting or grouping (no per-tournament groups for game tables).
-- Section open / closed state (the `hallSettings` cookie) is the view's (4.2 ui).
+- The rows are kept by `board/HallBoard` with the queues and tournaments (one order for all), and the open / closed
+  state by `board/HallSectionSettings` (see `queues/README.md`).
 
 ## Table data (`<table>`, `HallTable`)
 
@@ -33,7 +34,7 @@ and admins.
   "01:30" (`ageOf`, ticking every second on the server clock: our clock plus `HallComms.serverClockOffset`; tooltip
   "Open since … (server time)", `tableAgeTitle`); players ", "-joined; the action cell.
 - Action (`tableAction`): waiting and seated → **Leave Table**; waiting, not invite-only or invited → **Join Table**;
-  playing and seated → **Play Match**, watchable → **Spectate** (both links to `/gemp-lotr/game.html?gameId=`
+  playing and seated → **Play Match**, watchable → **Spectate** (both links to `/gemp-lotr/ng/game?gameId=`
   - participantId, new tab: `HallTableRow.gameUrl`); finished → the winner's name. The view marks rows the viewer
     sits at (`played`) and invitations for the viewer (`privateForPlayer`); updated rows flashed (view).
 
@@ -66,8 +67,8 @@ timer, desc` (the invitee on invite-only), `isPrivate, isInviteOnly`. Success cl
   (`requestInvite`, bare name; `invitee`).
 - **Bot** (`createBot`): format (Fellowship Block, `fotr_block`, unless "unlock" — view), your deck, the bot's deck
   ("" = "Random FotR Starter"); POST `/hall/solo` with `isPrivate=false`. "You must select a deck for you to use …".
-- Join Table (`openJoin`, `join`): the dialog refreshes the decks; "You must select a deck …"; POST `/hall/{id}` with
-  `deckName, deckSource`; success closes it (the game opens from the hall when it starts).
+- Join Table: the Join dialog (`play/JoinDialog`) refreshes the decks; "You must select a deck …"; POST `/hall/{id}`
+  with `deckName, deckSource`; success closes it (the game opens from the hall when it starts).
 - Leave Table (`leave`): POST `/hall/{id}/leave`; the row goes with the next poll answer.
 - Every answer through one reading (TableFlow.readResponse, `parseTableCallResult`): `<error message>` fails;
   `<response message>`, `<result>OK</result>`, empty or "OK" succeeds. HTTP failures in words
@@ -77,10 +78,10 @@ timer, desc` (the invitee on invite-only), `isPrivate, isInviteOnly`. Success cl
 
 ## Started games
 
-- `HallComms.startedGames$` gives each game once. It opens `/gemp-lotr/game.html?gameId=…` in a new tab
-  (`PageNavigation.openInNewTab`); when the browser blocks it, a "Your game is ready" prompt ("Your game has started,
-  but your browser blocked the new window.", "Open game") offers the link (`readyGames`) until used, or until its
-  table is removed or finished, or a snapshot no longer has it. The fanfare `/gemp-lotr/src/assets/fanfare_x.mp3`
+- `HallComms.startedGames$` gives each game once. It opens `/gemp-lotr/ng/game?gameId=…` in a new tab
+  (`ready/HallReadyOffers`); when the browser blocks it, a "Your game is ready" offer ("Your game has started, but
+  your browser blocked the new window.", "Open game") shows the link until used, or until its table is removed or
+  finished, or a snapshot no longer has it. The fanfare `/gemp-lotr/src/assets/fanfare_x.mp3`
   plays (`SoundPlayer`; refused autoplay is ignored).
 
 ## Differences from the legacy hall
@@ -92,9 +93,9 @@ timer, desc` (the invitee on invite-only), `isPrivate, isInviteOnly`. Success cl
   "Server error" dialog.
 - An update of an unknown status keeps the table (drawn nowhere); the legacy hall left the old row as it was.
 
-## Known gaps (4.2b and the ui part)
+- kermit's port opened games at `/gemp-lotr/game.html`; the legacy hall opens `/gemp-lotr/ng/game` today, and so
+  does this one (`gamePageUrl`).
 
-- Queues (Recurring / Scheduled / World Championship sections, join / leave / start, ready checks, prize breakdowns),
-  tournaments (Playing Tables rows, drop, late join, register deck, draft links, "Tournament Update" dialogs), the
-  League and Tournament flows of the Play popup, and the invitee search (GET `/hall/players`).
-- All markup, dialogs, section toggles and row animations.
+## Known gaps
+
+- All markup, dialogs, section toggles and row animations (the ui part, phase 2).

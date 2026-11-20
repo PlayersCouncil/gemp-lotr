@@ -1,4 +1,5 @@
 import { parseXml } from '../../api/xml';
+import { gamePageUrl } from '../../platform/app-paths';
 import { HallItemChange } from '../hall-models';
 import { formatServerTime } from '../hall-parsers';
 import { RESULT_OK, SERVER_REFUSED } from './hall-tables-messages';
@@ -9,12 +10,9 @@ function orElse<T>(value: string | null | undefined, fallback: T): string | T {
   return value === null || value === undefined || value === '' ? fallback : value;
 }
 
-/** The game page (hallUi.js: game.html?gameId=, plus the participantId an admin acts as). */
-export const GAME_PAGE = '/gemp-lotr/game.html';
-
+/** The game page (hallUi.js: ng/game?gameId=, plus the participantId an admin acts as). */
 export function gameUrl(gameId: string, participantId: string | null): string {
-  const participant = participantId !== null ? `&participantId=${encodeURIComponent(participantId)}` : '';
-  return `${GAME_PAGE}?gameId=${encodeURIComponent(gameId)}${participant}`;
+  return gamePageUrl(gameId, participantId);
 }
 
 /**

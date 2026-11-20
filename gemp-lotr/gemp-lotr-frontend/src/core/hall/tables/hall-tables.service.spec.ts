@@ -15,15 +15,16 @@ import { PlayerInfo } from '../../session/player-info.service';
 import { HallComms, NEXT_POLL_DELAY_MS } from '../hall-comms.service';
 import { HALL_SERVICES } from '../hall-services';
 import { HallSession } from '../hall-session.service';
+import { HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { CasualTableForm } from './hall-table-models';
 import {
   AGE_REFRESH_MS,
   BOT_DECK_FLOW,
+  JOIN_DECK_FLOW,
   CASUAL_FORMAT_COOKIE,
   CASUAL_TIMER_COOKIE,
   GAME_START_SOUND,
   HallTablesService,
-  JOIN_DECK_FLOW,
 } from './hall-tables.service';
 import {
   CANNOT_INVITE_SELF,
@@ -104,6 +105,7 @@ describe('HallTablesService', () => {
     const params = req.request.body as HttpParams;
     return Object.fromEntries(params.keys().map((key) => [key, params.get(key)]));
   };
+  const offers = () => TestBed.inject(HallReadyOffers);
   const ids = (rows: readonly { table: { id: string } }[]) => rows.map((row) => row.table.id);
 
   /** Signs up with hall.xml and leaves the first update poll open. */
@@ -158,7 +160,7 @@ describe('HallTablesService', () => {
     expect(ids(tables.sections().waiting)).toEqual(['13', '14']);
     expect(tables.sections().playing[0]).toMatchObject({
       action: 'play',
-      gameUrl: '/gemp-lotr/game.html?gameId=g-11&participantId=alice',
+      gameUrl: '/gemp-lotr/ng/game?gameId=g-11&participantId=alice',
     });
     expect(tables.sections().finished).toEqual([]);
   });
@@ -186,12 +188,12 @@ describe('HallTablesService', () => {
 
   it('opens a started game in a new tab once, with the fanfare', () => {
     connect();
-    expect(opened).toEqual(['/gemp-lotr/game.html?gameId=g-9&participantId=alice']);
+    expect(opened).toEqual(['/gemp-lotr/ng/game?gameId=g-9&participantId=alice']);
     expect(sounds).toEqual([GAME_START_SOUND]);
     poll('hall-update.xml');
     expect(opened.length).toBe(2);
     expect(opened[1]).toContain('gameId=g-11');
-    expect(tables.readyGames()).toEqual([]);
+    expect(offers().offers()).toEqual([]);
   });
 
   it('offers a blocked game in a prompt until its table goes', () => {
@@ -201,16 +203,31 @@ describe('HallTablesService', () => {
       readServerResponse('hall.xml').replace('<newGame id="g-9"/>', '<newGame id="g-12"/>'),
     );
     vi.advanceTimersByTime(NEXT_POLL_DELAY_MS);
-    expect(tables.readyGames()).toEqual([
-      { gameId: 'g-12', url: '/gemp-lotr/game.html?gameId=g-12&participantId=alice' },
+    expect(offers().offers()).toEqual([
+      {
+        key: 'game:g-12',
+        kind: 'game',
+        url: '/gemp-lotr/ng/game?gameId=g-12&participantId=alice',
+        title: 'Your game is ready',
+        text: 'Your game has started, but your browser blocked the new window.',
+        label: 'Open game',
+      },
     ]);
     poll('hall-update-empty.xml');
-    expect(tables.readyGames().length).toBe(1);
+    expect(offers().offers().length).toBe(1);
     // table 12 is removed; g-11 and g-9 (not announced by this snapshot) start
     poll('hall-update.xml');
-    expect(tables.readyGames().map((g) => g.gameId)).toEqual(['g-11', 'g-9']);
-    tables.dismissReadyGame('g-11');
-    expect(tables.readyGames().map((g) => g.gameId)).toEqual(['g-9']);
+    expect(
+      offers()
+        .offers()
+        .map((g) => g.key),
+    ).toEqual(['game:g-11', 'game:g-9']);
+    offers().dismiss('game:g-11');
+    expect(
+      offers()
+        .offers()
+        .map((g) => g.key),
+    ).toEqual(['game:g-9']);
   });
 
   it('loads the hall formats in order, the timers and both deck lists', async () => {
@@ -344,42 +361,6 @@ describe('HallTablesService', () => {
     req.flush('<result>OK</result>');
     expect(await creating).toBe(true);
     expect(JSON.parse(cookies.read('bot-table-decks')!).fotr_block).toEqual(['FotR Starter - Gandalf', 'library']);
-  });
-
-  it('joins a waiting table with a deck, and reports HTTP failures in words', async () => {
-    tables.openJoin();
-    request('/deck/list', 'GET').flush('<decks/>');
-    request('/deck/libraryList', 'GET').flush('<decks/>');
-    expect(await tables.join('13', null)).toBe(false);
-    expect(tables.results().join.message).toBe(MUST_SELECT_DECK);
-
-    let joining = tables.join('13', { name: 'Elves', source: 'player' });
-    const req = request('/hall/13');
-    expect(body(req)).toEqual({ participantId: 'alice', deckName: 'Elves', deckSource: 'player' });
-    req.flush('<result>OK</result>');
-    expect(await joining).toBe(true);
-    expect(JSON.parse(cookies.read('join-table-decks')!)).toEqual({ _: ['Elves', 'player'] });
-
-    joining = tables.join('13', { name: 'Elves', source: 'player' });
-    request('/hall/13').flush(JSON.stringify({ error: 'Your selected deck is not valid for this format' }), {
-      status: 400,
-      statusText: 'Bad Request',
-    });
-    expect(await joining).toBe(false);
-    expect(tables.results().join.message).toBe('Your selected deck is not valid for this format');
-
-    joining = tables.join('13', { name: 'Elves', source: 'player' });
-    request('/hall/13').flush('', { status: 400, statusText: 'Bad Request', headers: { message: 'No deck' } });
-    await joining;
-    expect(tables.results().join.message).toBe('No deck');
-
-    joining = tables.join('13', { name: 'Elves', source: 'player' });
-    request('/hall/13').flush('', { status: 401, statusText: 'Unauthorized' });
-    await joining;
-    expect(tables.results().join).toEqual({
-      kind: 'error',
-      message: 'You are not logged in. Log in again from the main page.',
-    });
   });
 
   it('leaves a waiting table', async () => {

@@ -1,11 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
-import { ApiError } from '../../api/api-error';
 import { DeckbuilderApi } from '../../api/deckbuilder-api.service';
 import { GempHttp } from '../../api/gemp-http.service';
 import { GempFormat } from '../../api/models';
-import { statusMessage } from './hall-tables-messages';
-import { parseHallTimers, parseTableCallResult } from './hall-table-parsers';
+import { asTableCall } from './hall-call';
+import { parseHallTimers } from './hall-table-parsers';
 import { HallDeckOption, HallDeckSource, HallTimer, TableCallResult } from './hall-table-models';
 
 /** POST /deck/formats as the Play popup reads it: the formats and the Casual timers. */
@@ -87,40 +86,6 @@ export class HallTablesApi {
   }
 
   private call(path: string, data: Record<string, string | boolean>): Observable<TableCallResult> {
-    return this.http.postText(path, data).pipe(
-      map(parseTableCallResult),
-      catchError((error: unknown) => of(failure(ApiError.from(error)))),
-    );
+    return asTableCall(this.http.postText(path, data));
   }
-}
-
-/** TableFlow.errorMap / errorDetail: a 400's JSON {"error"} or "message" header, else the status's sentence. */
-function failure(error: ApiError): TableCallResult {
-  if (error.status === 400) {
-    const detail = errorDetail(error.cause);
-    if (detail) {
-      return { ok: false, message: detail };
-    }
-  }
-  return { ok: false, message: statusMessage(error.status < 0 ? 0 : error.status) };
-}
-
-function errorDetail(cause: unknown): string | null {
-  if (cause === null || typeof cause !== 'object') {
-    return null;
-  }
-  const response = cause as { error?: unknown; headers?: { get(name: string): string | null } };
-  let body = response.error;
-  if (typeof body === 'string') {
-    try {
-      body = JSON.parse(body);
-    } catch {
-      body = null;
-    }
-  }
-  if (body !== null && typeof body === 'object' && 'error' in body && typeof body.error === 'string') {
-    return body.error;
-  }
-  const header = response.headers?.get('message');
-  return header === undefined || header === '' ? null : header;
 }

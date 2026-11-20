@@ -3,13 +3,14 @@ import { firstValueFrom } from 'rxjs';
 import { ApiError } from '../../api/api-error';
 import { IntervalTimer } from '../../platform/interval-timer';
 import { LegacyCookies } from '../../platform/legacy-cookies';
-import { PageNavigation } from '../../platform/page-navigation';
 import { SoundPlayer } from '../../platform/sound-player';
 import { Timers } from '../../platform/timers';
 import { PlayerInfo } from '../../session/player-info.service';
 import { SessionService } from '../../session/session.service';
 import { HallComms } from '../hall-comms.service';
-import { HallUpdate } from '../hall-models';
+import { FormatInfo, formatInfo, HallFormatDetails, readFormatDetails } from '../play/format-info';
+import { HallBoard, HallBoardChange } from '../board/hall-board.service';
+import { gameKey, HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { HallSession } from '../hall-session.service';
 import { defaultDeck, deckMemoryCookie, hasDeck, readDeckMemory, recallDeck, rememberDeck } from './hall-deck-memory';
 import { bareName, FALLBACK_TIMERS, formatTableAge, gameUrl, sameName } from './hall-table-parsers';
@@ -21,7 +22,6 @@ import {
   HallFormatOption,
   HallTable,
   HallTimer,
-  ReadyGame,
   TableCallResult,
   TableFlow,
   TableResult,
@@ -39,7 +39,6 @@ import {
   TABLE_CREATED_KEPT_OPEN,
 } from './hall-tables-messages';
 import { HallTablesApi } from './hall-tables-api.service';
-import { HallTablesState } from './hall-tables-state';
 
 /** The waiting tables' timers tick once a second (GempLotrHallUI.AGE_REFRESH_MS), with no request to the server. */
 export const AGE_REFRESH_MS = 1000;
@@ -60,27 +59,27 @@ export const JOIN_DECK_FLOW = 'join-table';
 const READY: TableResult = { kind: 'ready', message: RESULT_READY };
 
 /**
- * The Game Hall tab's tables (part 4.2a): the Waiting, Playing and Finished sections kept from the hall poll, the
- * waiting tables' timers, the Play popup's Casual and Bot flows, Join Table, Leave Table, and the started games
- * (opened in a new tab with the fanfare, or offered in a "Your game is ready" prompt when the browser blocked it).
- * Queues, tournaments, ready checks and the League / Tournament flows are 4.2b.
+ * The Game Hall tab's tables: the Waiting, Playing and Finished tables (kept by HallBoard), the waiting tables'
+ * timers, the Play overlay's Casual and Bot flows, the formats, timers and decks every flow picks from, Leave Table,
+ * and the started games (opened in a new tab with the fanfare, or offered by HallReadyOffers when the browser blocked
+ * it). Join Table is the Join dialog's (play/join-dialog.service.ts).
  */
 @Injectable()
 export class HallTablesService {
   private readonly comms = inject(HallComms);
   private readonly hallSession = inject(HallSession);
   private readonly api = inject(HallTablesApi);
-  private readonly navigation = inject(PageNavigation);
   private readonly sound = inject(SoundPlayer);
   private readonly cookies = inject(LegacyCookies);
   private readonly timers = inject(Timers);
   private readonly player = inject(PlayerInfo);
   private readonly participantId = inject(SessionService).participantId;
 
-  private readonly state = signal(HallTablesState.EMPTY);
-  /** The three sections, each in the order the legacy hall drew it. */
-  readonly sections = computed(() => this.state().sections(this.participantId));
-  /** The headers' counts: "Waiting Tables (3)". */
+  private readonly board = inject(HallBoard);
+  private readonly readyOffers = inject(HallReadyOffers);
+  /** The tables' own sections (the board merges them with the queues and tournaments: HallBoard.sections). */
+  readonly sections = computed(() => this.board.tables().sections(this.participantId));
+  /** The tables in each section (the headers count the board's rows: HallBoard.counts). */
   readonly counts = computed(() => {
     const { waiting, playing, finished } = this.sections();
     return { waiting: waiting.length, playing: playing.length, finished: finished.length };
@@ -100,11 +99,12 @@ export class HallTablesService {
   /** The formats could not be loaded (shown inline in the Play popup), else null. */
   readonly optionsError = signal<string | null>(null);
   private formatNames: Record<string, string> = {};
+  /** Every format's (i) details, by code (hall or not: a Constructed tournament offers the same formats). */
+  private readonly formatDetails = signal<Readonly<Record<string, HallFormatDetails>>>({});
 
   private readonly results_ = signal<Readonly<Record<TableFlow, TableResult>>>({
     casual: READY,
     bot: READY,
-    join: READY,
     leave: READY,
   });
   /** Each flow's result box. */
@@ -112,14 +112,11 @@ export class HallTablesService {
   /** A call is on its way. */
   readonly busy = computed(() => Object.values(this.results_()).some((result) => result.kind === 'pending'));
 
-  /** Started games the browser would not open: the "Your game is ready" prompts, oldest first. */
-  readonly readyGames = signal<readonly ReadyGame[]>([]);
-
   /** "Invite to table" from the chat's user list: the Casual form opens invite-only for this player (contract C1). */
   readonly invitee = signal<string | null>(null);
 
   constructor() {
-    const updates = this.comms.updates$.subscribe((update) => this.applyUpdate(update));
+    const updates = this.board.changes$.subscribe((change) => this.pruneOffers(change));
     const games = this.comms.startedGames$.subscribe((gameId) => this.gameStarted(gameId));
     const stopTicking = inject(IntervalTimer).every(AGE_REFRESH_MS, () => this.now.set(this.timers.now()));
     inject(DestroyRef).onDestroy(() => {
@@ -130,7 +127,7 @@ export class HallTablesService {
   }
 
   table(id: string): HallTable | null {
-    return this.state().get(id);
+    return this.board.tables().get(id);
   }
 
   /** "01:30": how long a waiting table has been open, on the server's clock; null when it has no createdAt. */
@@ -143,43 +140,24 @@ export class HallTablesService {
 
   // ---- the poll ----
 
-  private applyUpdate(update: HallUpdate): void {
-    const before = this.state();
-    const after = before.apply(update.tables, update.full);
-    this.state.set(after);
-    // a game's prompt goes with its table: removed, finished, or missing from a snapshot
-    const live = after.liveGameIds();
-    const gone = new Set<string>();
+  /** A game's prompt goes with its table: removed, finished, or missing from a snapshot (pruneReadyModals). */
+  private pruneOffers({ update, before, after }: HallBoardChange): void {
+    const live = after.tables.liveGameIds();
     if (update.full) {
-      for (const game of this.readyGames()) {
-        if (!live.has(game.gameId)) {
-          gone.add(game.gameId);
-        }
-      }
-    } else {
-      for (const change of update.tables) {
-        const gameId = (change.action === 'remove' ? before.get(change.id) : after.get(change.id))?.gameId;
-        if (gameId && !live.has(gameId)) {
-          gone.add(gameId);
-        }
-      }
+      this.readyOffers.keepOnly('game', new Set([...live].map(gameKey)));
+      return;
     }
-    if (gone.size > 0) {
-      this.readyGames.update((games) => games.filter((game) => !gone.has(game.gameId)));
+    for (const change of update.tables) {
+      const gameId = (change.action === 'remove' ? before.tables.get(change.id) : after.tables.get(change.id))?.gameId;
+      if (gameId && !live.has(gameId)) {
+        this.readyOffers.dismiss(gameKey(gameId));
+      }
     }
   }
 
   private gameStarted(gameId: string): void {
-    const url = gameUrl(gameId, this.participantId);
-    if (!this.navigation.openInNewTab(url) && !this.readyGames().some((game) => game.gameId === gameId)) {
-      this.readyGames.update((games) => [...games, { gameId, url }]);
-    }
+    this.readyOffers.openOrOffer(gameKey(gameId), 'game', gameUrl(gameId, this.participantId));
     this.sound.play(GAME_START_SOUND);
-  }
-
-  /** The prompt's link was followed, or it was closed. */
-  dismissReadyGame(gameId: string): void {
-    this.readyGames.update((games) => games.filter((game) => game.gameId !== gameId));
   }
 
   // ---- the Play popup ----
@@ -199,12 +177,6 @@ export class HallTablesService {
     return true;
   }
 
-  /** The Join dialog opens: a fresh result and fresh deck lists. */
-  openJoin(): void {
-    this.resetResult('join');
-    void this.loadDecks();
-  }
-
   resetResult(flow: TableFlow): void {
     this.setResult(flow, READY);
   }
@@ -222,6 +194,14 @@ export class HallTablesService {
         .filter((format) => format.hall)
         .sort((a, b) => a.order - b.order);
       this.formatNames = Object.fromEntries(Object.values(readout.formats).map((f) => [f.code, f.name]));
+      this.formatDetails.set(
+        Object.fromEntries(
+          Object.values(readout.formats).map((f) => [
+            f.code,
+            readFormatDetails(f as unknown as Record<string, unknown>),
+          ]),
+        ),
+      );
       this.formats.set(formats.map((format) => ({ code: format.code, name: format.name })));
       if (readout.timers.length > 0) {
         this.timersOffered.set(readout.timers);
@@ -232,7 +212,8 @@ export class HallTablesService {
     }
   }
 
-  private async loadDecks(): Promise<void> {
+  /** The player's and the Deck Library's decks again (DeckManager.updateDecks; a list that fails keeps the old one). */
+  async loadDecks(): Promise<void> {
     const decks = await firstValueFrom(this.api.decks());
     if (decks.player !== null) {
       this.playerDecks.set(decks.player);
@@ -240,6 +221,11 @@ export class HallTablesService {
     if (decks.library !== null) {
       this.libraryDecks.set(decks.library);
     }
+  }
+
+  /** The format (i) for `code` (TableFlow.renderFormatInfo); "Choose a format…" for none or an unknown one. */
+  formatInfo(code: string | null): FormatInfo {
+    return formatInfo(code === null ? null : (this.formatDetails()[code] ?? null));
   }
 
   /** The hall format whose name is the deck's format (decks carry the name), or null: picking a deck follows it. */
@@ -327,7 +313,7 @@ export class HallTablesService {
       return this.refuse('casual', MUST_SELECT_DECK);
     }
     const timer = form.timer || 'default';
-    this.remember(CASUAL_DECK_FLOW, form.deck, form.format);
+    this.rememberDeck(CASUAL_DECK_FLOW, form.deck, form.format);
     this.cookies.write(CASUAL_FORMAT_COOKIE, form.format);
     this.cookies.write(CASUAL_TIMER_COOKIE, timer);
     const result = await this.run(
@@ -360,7 +346,7 @@ export class HallTablesService {
     if (form.deck === null) {
       return this.refuse('bot', MUST_SELECT_OWN_DECK);
     }
-    this.remember(BOT_DECK_FLOW, form.deck, form.format);
+    this.rememberDeck(BOT_DECK_FLOW, form.deck, form.format);
     const result = await this.run(
       'bot',
       this.api.createSoloTable({
@@ -372,15 +358,6 @@ export class HallTablesService {
       }),
     );
     return result.ok;
-  }
-
-  /** Join Table with a deck. True when the dialog should close (the game opens from the hall when it starts). */
-  async join(tableId: string, deck: HallDeckChoice | null): Promise<boolean> {
-    if (deck === null) {
-      return this.refuse('join', MUST_SELECT_DECK);
-    }
-    this.remember(JOIN_DECK_FLOW, deck, null);
-    return (await this.run('join', this.api.joinTable(tableId, deck.name, deck.source))).ok;
   }
 
   /** Leave Table (the viewer's own waiting table); the row goes with the next poll answer. */
@@ -410,7 +387,8 @@ export class HallTablesService {
     return readDeckMemory(this.cookies.read(deckMemoryCookie(flow)));
   }
 
-  private remember(flow: string, deck: HallDeckChoice, key: string | null): void {
+  /** Remembers the deck used in a flow under `key` and as its last overall (SelectDeck.remember). */
+  rememberDeck(flow: string, deck: HallDeckChoice, key: string | null): void {
     this.cookies.write(deckMemoryCookie(flow), JSON.stringify(rememberDeck(this.deckMemory(flow), deck, key)));
   }
 }
