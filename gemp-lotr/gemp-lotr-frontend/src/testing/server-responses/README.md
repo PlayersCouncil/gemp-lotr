@@ -29,3 +29,12 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   `writeXmlResponse(null)`), `hall-table-error.xml` (their refusal, still status 200: `marshalException`) and
   `hall-formats.json` (POST /deck/formats, DeckRequestHandler.getAllFormats: `Formats` keyed by code, one not offered
   in the hall, and `HallTimers` from GameTimer.HALL_TIMERS with their describeLimits sentences).
+- Written by hand from the server code, for the Game Hall tab's queues and tournaments: `hall-queues.xml` (GET
+  /hall: queues from HallCommunicationChannel.visitTournamentQueue — a World Championship queue shown in Waiting
+  Tables, a recurring one with `prizesLabel` / `prizesLines` (the prizes as data, from the server change on
+  `feature/hall-angular`), a player-made live draft with only the old `prizes` HTML and a ready check running — and
+  tournaments from visitTournament: playing, a solo draft deck-building with 9 players and `timeRemaining`, and one
+  open to late joins), `tournament-formats.json` (GET /tournament/tournamentFormats,
+  JSONDefs.PlayerMadeTournamentAvailableFormats), `scenarios.json` (GET /scenarios, ScenarioRequestHandler.list,
+  serialized with nulls), `delivery-announcement.json` (GET /delivery/announcements, DBDefs.Announcement with its
+  content rendered by MarkdownParser) and `delivery-league.json` (GET /delivery/league, DBDefs.Transfer list).

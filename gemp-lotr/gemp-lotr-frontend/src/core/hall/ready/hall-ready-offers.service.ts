@@ -5,7 +5,7 @@ import { PageNavigation, ReservedTab } from '../../platform/page-navigation';
 export type ReadyKind = 'game' | 'draft';
 
 /**
- * A "your game is ready" prompt (hallUi.js showReadyModal): shown when the browser blocked the new tab, with the same
+ * A "your game is ready" prompt, after hallUi.js showReadyModal: shown when the browser blocked the new tab, with the same
  * page behind a real link (a click is a gesture). It has no close button; it goes when its link is followed, or when
  * its game or draft is over.
  */
@@ -65,7 +65,7 @@ export class HallReadyOffers {
     }
   }
 
-  /** Shows the prompt (once per key). */
+  /** Shows the prompt, once per key. */
   offer(key: string, kind: ReadyKind, url: string): void {
     if (this.offers_().some((offer) => offer.key === key)) {
       return;

@@ -77,7 +77,7 @@ The hall is split into five parts; 4.1a is the core of the frame and the chat, *
   until the connection changes. The popup opens on hover, focus or click (view: 4.1b).
 - Server clock offset (`serverClockOffset`): `serverTimeMs` minus our clock, for 4.2's waiting-table timers.
 - Responses may carry `Delivery-Service-Package`, `-Announcement`, `-League` headers (deliveryCheck): the legacy
-  page then fetched `/delivery/misc` and friends. Not handled here (4.4).
+  page then fetched `/delivery/misc` and friends: `deliveries/` (4.2b).
 
 ## Logged in or not (`HallSession`, GempHallSession)
 
@@ -151,10 +151,14 @@ The hall is split into five parts; 4.1a is the core of the frame and the chat, *
 - The "Unknown chat problem" warning reads "occurred" (legacy: "occured").
 - `HallComms.stop()` drops the request in flight and the pending poll (the legacy page never stopped).
 
-## Part 4.2a
+## Part 4.2: the Game Hall tab
 
-The tables core (sections, table data, Play popup's Casual and Bot flows, Join / Leave, started games) is in
-`tables/` with its own inventory: `tables/README.md`. `HallTablesService` is in `HALL_SERVICES`.
+- `board/`: the rows of every section in the legacy order, and their open / closed cookie; `queues/`: queues,
+  tournaments, the ready check (`queues/README.md`); `ready/`: "your game / draft is ready"; `tables/`: game tables
+  and the Casual / Bot flows (`tables/README.md`); `play/`: the Play overlay's flows and the Join dialog
+  (`play/README.md`); `deliveries/`: what the hall shows on arrival (`deliveries/README.md`); `hall-dialogs.service.ts`:
+  the hall's message dialogs. All are in `HALL_SERVICES`; the page calls `injectGameHall()` in its constructor so
+  those that follow the poll exist before its first answer.
 
 ## Known gaps
 
@@ -166,7 +170,6 @@ The tables core (sections, table data, Play popup's Casual and Bot flows, Join /
   user menu's place are the theme's (CSS), not layout math.
 - The route's injector outlives the page, so the page stops the poll and the chat when it goes (`HallSession.stop()`)
   and starts them afresh when shown again (`ChatService.start()` after `stop()` joins anew, its old lines cleared).
-- Play does nothing for a logged-in player yet (its popup is 4.2's); "Invite to table" in a player's menu waits for
-  4.2 too.
-- Delivery headers on hall answers are ignored (4.4). The chat does not rejoin after 410 by itself, as the legacy
+- "Invite to table" is `PlayOverlay.inviteToTable`.
+- The chat does not rejoin after 410 by itself, as the legacy
   chat (refresh the page).
