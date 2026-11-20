@@ -7,7 +7,8 @@ import { provideGameState } from '../game-state';
 import { GameSession } from '../session/game-session.service';
 import { GameSettings } from '../settings/game-settings';
 import { GameUndo } from '../undo/game-undo.service';
-import { GameDecisions, SELECTION_DEBOUNCE_MS, UNASSIGNED_QUESTION } from './game-decisions.service';
+import { DecisionGate, DecisionGates, DecisionGesture } from './decision-gate';
+import { GameDecisions, SELECTION_DEBOUNCE_MS, UNASSIGNED_QUESTION, UNASSIGNED_WORDS } from './game-decisions.service';
 
 const GAME = '/gemp-lotr-server/game/7';
 const param = (name: string, ...values: string[]) =>
@@ -187,6 +188,9 @@ describe('GameDecisions', () => {
     await decisions.press('Done');
     await settle();
     expect(notifier.dialogs).toEqual([`confirm: ${UNASSIGNED_QUESTION}`]);
+    // In the page's own dialog, with its own words
+    expect(notifier.words).toEqual([UNASSIGNED_WORDS]);
+    expect(UNASSIGNED_WORDS).toEqual({ title: 'Unassigned minions', ok: 'Proceed', cancel: 'Go back' });
     expect(answer()).toBeNull();
     decisions.cardClicked('5', at, 3000);
     decisions.cardClicked('2', at, 4000);
@@ -256,6 +260,106 @@ describe('GameDecisions', () => {
       .flush(decision('CARD_ACTION_CHOICE', menu + param('actionText', 'A', 'B')));
     TestBed.tick();
     expect(decisions.menu()).toBeNull();
+  });
+
+  it('asks without a word when no more minions could have been assigned (the decision says how many could)', async () => {
+    open('ASSIGN_MINIONS', param('freeCharacters', '1') + param('minions', '5', '6') + param('maxAssignable', '1'));
+    session.assign('5', '1');
+    await decisions.press('Done');
+    expect(notifier.dialogs).toEqual([]);
+    expect(answer()).toBe('1 5');
+  });
+
+  describe('with a gate', () => {
+    let refused: DecisionGesture['kind'][];
+    let asked: DecisionGesture[];
+    let done: DecisionGesture[];
+
+    beforeEach(() => {
+      refused = [];
+      asked = [];
+      done = [];
+      const gate: DecisionGate = {
+        allows: (gesture) => {
+          asked.push(gesture);
+          return !refused.includes(gesture.kind);
+        },
+        after: (gesture) => done.push(gesture),
+      };
+      TestBed.inject(DecisionGates).add(gate);
+    });
+
+    it('puts every gesture to it first, does nothing it refuses, and tells it what went ahead', async () => {
+      settings.setAutoAccept(false);
+      open('CARD_SELECTION', param('cardId', '1', '2') + param('min', '1') + param('max', '2'));
+      refused = ['card'];
+      decisions.cardClicked('1', at, 1000);
+      expect(session.model().local.selectedCardIds).toEqual([]);
+      expect(asked).toEqual([{ kind: 'card', cardId: '1' }]);
+      expect(done).toEqual([]);
+      refused = [];
+      decisions.cardClicked('1', at, 2000);
+      expect(session.model().local.selectedCardIds).toEqual(['1']);
+      expect(done).toEqual([{ kind: 'card', cardId: '1' }]);
+      refused = ['button'];
+      await decisions.press('Done');
+      expect(answer()).toBeNull();
+      refused = [];
+      await decisions.press('Reset choice');
+      expect(done.at(-1)).toEqual({ kind: 'button', button: 'Reset choice' });
+      expect(session.model().local.selectedCardIds).toEqual([]);
+    });
+
+    it("leaves a card's menu open for another of its actions when one is refused", () => {
+      open(
+        'CARD_ACTION_CHOICE',
+        param('cardId', '5', '5') +
+          param('blueprintId', 'inPlay', 'inPlay') +
+          param('actionId', '10', '11') +
+          param('actionText', 'Use', 'Exert'),
+      );
+      decisions.cardClicked('5', at, 1000);
+      refused = ['action'];
+      decisions.chooseAction('10');
+      expect(decisions.menu()?.cardId).toBe('5');
+      expect(answer()).toBeNull();
+      refused = [];
+      decisions.chooseAction('11');
+      expect(decisions.menu()).toBeNull();
+      expect(answer()).toBe('11');
+      expect(done.at(-1)).toEqual({ kind: 'action', actionId: '11', cardId: '5' });
+    });
+
+    it('puts a number, a choice and Escape to it', () => {
+      open('INTEGER', param('min', '0'));
+      refused = ['number'];
+      decisions.answerNumber('2');
+      expect(answer()).toBeNull();
+      refused = [];
+      decisions.answerNumber('2');
+      expect(answer()).toBe('2');
+
+      open('MULTIPLE_CHOICE', param('results', 'a', 'b'));
+      refused = ['choice'];
+      decisions.answerChoice(1);
+      expect(answer()).toBeNull();
+      refused = [];
+      decisions.answerChoice(1);
+      expect(answer()).toBe('1');
+
+      settings.setAutoAccept(false);
+      open(
+        'ARBITRARY_CARDS',
+        param('cardId', 'a') + param('selectable', 'true') + param('min', '0') + param('max', '1'),
+      );
+      refused = ['escape'];
+      decisions.escape();
+      expect(answer()).toBeNull();
+      refused = [];
+      decisions.escape();
+      expect(answer()).toBe('');
+      expect(done.map((gesture) => gesture.kind)).toEqual(['number', 'choice', 'escape']);
+    });
   });
 
   it('does nothing without a waiting decision', async () => {

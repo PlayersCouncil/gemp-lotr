@@ -67,6 +67,18 @@ describe('fit-cards sizing', () => {
       expect(fits(height + 1)).toBe(false);
     });
 
+    it('contain: leaves room for a label under each row, which the offset counts too', () => {
+      // Two cards of 200 in one row, 36px of label under it: 236 high
+      expect(fitCards({ ...base, cards: upright(2), height: 236, label: 36 })).toEqual({ height: 200, offset: 0 });
+      expect(fitCards({ ...base, cards: upright(2), height: 246, label: 36 })).toEqual({ height: 200, offset: 5 });
+      expect(fitCardHeight({ ...base, cards: upright(2), height: 235, label: 36 })).toBe(199);
+      // Only with contain
+      expect(fitCards({ ...base, cards: upright(2), height: 246, label: 36, fit: 'none' })).toEqual({
+        height: 200,
+        offset: 23,
+      });
+    });
+
     it('rows: the legacy NormalCardGroup sizes (fewest rows, each as high as the box allows)', () => {
       // The legacy collection box at 1440x900 with 12 cards: 3 rows of 154px don't fit 4 a row, so 4 rows of
       // (472 - 3 * 5) / 4 = 114.25px, a fraction as on the legacy page (cards are 81px wide either way)

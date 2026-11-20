@@ -1,4 +1,5 @@
 import { CardRef, Decision, GameEvent, GameStats } from '../protocol/game-events';
+import { ScenarioInfo } from '../scenario/scenario-events';
 import { applyEvent, applyEvents } from './apply-event';
 import { emptyGame, NO_SKIRMISH_NUMBERS, GameModel } from './game-model';
 
@@ -232,6 +233,61 @@ describe('applyEvent', () => {
       { kind: 'message', text: 'a' },
       { kind: 'warning', text: 'b' },
     ]);
+  });
+
+  it("keeps a scripted game's own state, and its messages with the scripted opponent under its shown name", () => {
+    const info: ScenarioInfo = {
+      type: 'info',
+      id: 'basics-01',
+      kind: 'tutorial',
+      title: 'The Basics',
+      humanSeat: 'freeps',
+      opponent: '~Scenario',
+      opponentName: 'Basic Shadow',
+      settings: { autoAccept: null, autoDismissDeckReveal: null, animationSpeed: null },
+      bubbleGap: null,
+      resumedAt: null,
+      campaign: null,
+      author: false,
+      draftTest: false,
+      twoSided: false,
+      opening: 'board',
+    };
+    expect(play({ type: 'M', message: '~Scenario passes' }).scenario).toBeNull();
+    const model = play(
+      { type: 'S', scenario: info },
+      // (one the page can't read changes nothing)
+      { type: 'S', scenario: null },
+      { type: 'M', message: '~Scenario plays an orc' },
+      { type: 'W', message: '~Scenario is waiting' },
+      // (a decision's text can name the opponent too)
+      {
+        type: 'D',
+        decision: { id: '1', participantId: 'asdf', type: 'ARBITRARY_CARDS', text: 'Hand of ~Scenario', params: {} },
+      },
+    );
+    expect(model.scenario).toEqual({
+      info,
+      step: null,
+      shown: 0,
+      notice: null,
+      end: null,
+      lastCheckpoint: null,
+      role: null,
+    });
+    expect(model.eventCount).toBe(5);
+    expect(model.decision?.decision.text).toBe('Hand of Basic Shadow');
+    expect(model.messages).toEqual([
+      { kind: 'message', text: 'Basic Shadow plays an orc' },
+      { kind: 'warning', text: 'Basic Shadow is waiting' },
+    ]);
+    // A game that played on before the page opened it: its log comes before the scenario says who it is
+    const late = play(
+      { type: 'M', message: '~Scenario plays a goblin' },
+      { type: 'S', scenario: info },
+      { type: 'S', scenario: { ...info, opponentName: 'Someone else' } },
+    );
+    expect(late.messages).toEqual([{ kind: 'message', text: 'Basic Shadow plays a goblin' }]);
   });
 
   it('keeps game stats; the revealed hands only when the stats name the players', () => {

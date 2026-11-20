@@ -18,9 +18,10 @@ import java.util.regex.Pattern;
  * keeps a card called "ring" apart from the part of the file called ring, a card called "hand" apart from
  * freeps.hand, and either apart from the same word in a sentence a player reads.
  *
- *     cards, ringBearer, ring, setup            the name itself
- *     rng, do, answer, allow, an order's answer the name as a word inside the (brackets) of a term: play(x), choose(x, y),
- *                                               assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
+ *     cards, ringBearer, ring, setup,           the name itself (setup.skirmishes: character: minion + minion;
+ *     opponent.leftovers, opponent.plays        setup.controlled and setup.path: the sites by name)
+ *     rng, do, answer, allow, refuses,          the name as a word inside the (brackets) of a term: play(x), choose(x, y),
+ *     an order's answer                         assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
  *                                               game (text(...), option(...), the words after the card in use(x, ...))
  *                                               is left as it is.
  *     when, until, skipWhen                     offers(x), inSkirmish(x) (or fighting(x)), after(x)
@@ -31,11 +32,12 @@ import java.util.regex.Pattern;
  *     what a player reads                       {strength:x} and the like; [[x]], which goes on showing the old name
  *                                               ([[y|x]]), and [[x|words]]
  *     requirements and rules (when.require,     alias(x), the card builder's filter for one of a scenario's cards,
- *     allow.passWhen, outcome, rules)           wherever in them it is written
+ *     allow.passWhen, outcome, rules, a         wherever in them it is written
+ *     message's require)
  */
 final class AliasRename {
     private static final Set<String> QUOTED = Set.of("text", "option", "raw", "title", "name");
-    private static final Set<String> NO_CARDS = Set.of("draw", "twilight", "burdens", "threats", "number");
+    private static final Set<String> NO_CARDS = Set.of("draw", "twilight", "burdens", "threats", "number", "marker");
 
     private final String _from;
     private final String _to;
@@ -91,7 +93,28 @@ final class AliasRename {
                         setup.set(part, renamed == null ? value : renamed);
                     }
                     case "wounds", "tokens" -> setup.set(part, keys(value));
-                    case "startAt", "burdens", "threats" -> { }
+                    case "startAt", "burdens", "threats", "twilight" -> { }
+                    case "skirmishes" -> {
+                        //(character: minion + minion)
+                        JsonObject renamed = object(keys(value));
+                        if (renamed != null)
+                            for (String card : names(renamed))
+                                renamed.set(card, strings(renamed.get(card), text -> {
+                                    List<String> minions = new ArrayList<>();
+                                    for (String minion : text.split("\\+"))
+                                        minions.add(minion.trim().equals(_from) ? _to : minion.trim());
+                                    return String.join(" + ", minions);
+                                }));
+                        setup.set(part, renamed == null ? value : renamed);
+                    }
+                    case "controlled" -> {
+                        //(seat: sites, by number or by name)
+                        JsonObject seats = object(value);
+                        if (seats != null)
+                            for (String seat : names(seats))
+                                seats.set(seat, listed(seats.get(seat)));
+                    }
+                    case "path" -> setup.set(part, listed(value));
                     default -> {
                         //(a seat: each of its zones is a list of cards)
                         JsonObject zones = object(value);
@@ -118,6 +141,8 @@ final class AliasRename {
                     json.set("answer", terms(json.get("answer")));
             }
         }
+        if (opponent != null)
+            opponentRules(opponent);
         JsonObject outcome = object(root.get("outcome"));
         if (outcome != null) {
             for (String part : List.of("win", "lose"))
@@ -125,6 +150,14 @@ final class AliasRename {
                     outcome.set(part, filters(outcome.get(part)));
             if (outcome.get("loseMessage") != null)
                 outcome.set("loseMessage", prose(outcome.get("loseMessage")));
+            for (String part : List.of("winMessages", "loseMessages"))
+                if (outcome.get(part) != null)
+                    outcome.set(part, messages(outcome.get(part)));
+            for (String part : List.of("gameWon", "gameLost")) {
+                JsonObject ending = object(outcome.get(part));
+                if (ending != null && ending.get("messages") != null)
+                    ending.set("messages", messages(ending.get("messages")));
+            }
             JsonObject offScript = object(outcome.get("offScript"));
             if (offScript != null && offScript.get("message") != null)
                 offScript.set("message", prose(offScript.get("message")));
@@ -134,13 +167,21 @@ final class AliasRename {
                 step(object(step));
     }
 
+    /** What the opponent does by rule: the character it gives its leftovers to, and the cards its sandbox plays. */
+    private void opponentRules(JsonObject opponent) {
+        if (opponent.get("leftovers") != null)
+            opponent.set("leftovers", exact(opponent.get("leftovers")));
+        if (opponent.get("plays") != null)
+            opponent.set("plays", listed(opponent.get("plays")));
+    }
+
     private void step(JsonObject step) {
         if (step == null)
             return;
         for (String part : List.of("when", "until", "skipWhen"))
             if (step.get(part) != null)
                 step.set(part, when(step.get(part)));
-        for (String part : List.of("do", "answer"))
+        for (String part : List.of("do", "answer", "refuses"))
             if (step.get(part) != null)
                 step.set(part, terms(step.get(part)));
         JsonValue allow = step.get("allow");
@@ -193,6 +234,8 @@ final class AliasRename {
         for (String part : List.of("advance", "on"))
             if (message.get(part) != null)
                 message.set(part, strings(message.get(part), text -> _bracketed.matcher(text).replaceAll(Matcher.quoteReplacement("(" + _to + ")"))));
+        if (message.get("require") != null)
+            message.set("require", filters(message.get("require")));
         return message;
     }
 
@@ -296,6 +339,16 @@ final class AliasRename {
                 if (QUOTED.contains(name) || NO_CARDS.contains(name)) {
                     //Nothing in it names a card: it is left as it is, brackets and all
                     out.append(text, at, close + 1);
+                    at = close + 1;
+                    continue;
+                }
+                if (name.equals("control")) {
+                    //control(site, seat): the site, and not the seat after it (a card may be called shadow)
+                    String inside = text.substring(end + 1, close);
+                    int comma = inside.indexOf(',');
+                    String site = comma < 0 ? inside : inside.substring(0, comma);
+                    out.append(word).append('(').append(site.trim().equals(_from) ? site.replace(_from, _to) : site)
+                            .append(comma < 0 ? "" : inside.substring(comma)).append(text, close, Math.min(text.length(), close + 1));
                     at = close + 1;
                     continue;
                 }

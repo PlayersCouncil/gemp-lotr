@@ -1,0 +1,9 @@
+/* A step's messages: the cards, one under another, and + Message after them */
+
+:host {
+  display: block;
+}
+
+.gd-author-messages {
+  margin: 2px 0 4px;
+}

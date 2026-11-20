@@ -1,0 +1,299 @@
+/* The Timeline tab (the legacy .sa-tab-timeline): the bars, and the list of steps filling what is left between them */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gd-author-timeline__options,
+.gd-author-timeline__way {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin-bottom: 5px;
+  color: var(--theme-game-author-options-text);
+  font-size: 12px;
+}
+
+.gd-author-timeline__list {
+  position: relative;
+  flex: 1;
+  min-height: 60px;
+  overflow-y: auto;
+  margin-bottom: 5px;
+  border: 1px solid var(--theme-game-author-button-bg);
+  background: var(--theme-game-author-list-bg);
+}
+
+/* ---- the headings: a turn and a phase, in the phase's colour down the edge ---- */
+
+.gd-author-timeline__group {
+  padding: 3px 6px 2px;
+  border-top: 1px solid var(--theme-game-author-group-rule);
+  border-left: 4px solid var(--gd-phase);
+  background: var(--theme-game-author-group-bg);
+  color: var(--theme-game-author-group-text);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.gd-author-timeline__group[data-even] {
+  background: var(--theme-game-author-group-even-bg);
+}
+
+[data-phase] {
+  --gd-phase: var(--theme-game-author-phase-none);
+}
+
+[data-phase='opening'] {
+  --gd-phase: var(--theme-game-author-phase-opening);
+}
+
+[data-phase='fellowship'] {
+  --gd-phase: var(--theme-game-author-phase-fellowship);
+}
+
+[data-phase='shadow'] {
+  --gd-phase: var(--theme-game-author-phase-shadow);
+}
+
+[data-phase='maneuver'] {
+  --gd-phase: var(--theme-game-author-phase-maneuver);
+}
+
+[data-phase='archery'] {
+  --gd-phase: var(--theme-game-author-phase-archery);
+}
+
+[data-phase='assignment'] {
+  --gd-phase: var(--theme-game-author-phase-assignment);
+}
+
+[data-phase='skirmish'],
+[data-phase='skirmishes'] {
+  --gd-phase: var(--theme-game-author-phase-skirmish);
+}
+
+[data-phase='regroup'] {
+  --gd-phase: var(--theme-game-author-phase-regroup);
+}
+
+[data-phase='between_turns'] {
+  --gd-phase: var(--theme-game-author-phase-between-turns);
+}
+
+/* (a block of several phases, and what follows it until a phase is named; a skirmishes block is the skirmish's) */
+[data-phase='block'],
+[data-phase='after-block'] {
+  --gd-phase: var(--theme-game-author-phase-block);
+}
+
+/* ---- a row ---- */
+
+.gd-author-timeline__row {
+  display: flex;
+  align-items: baseline;
+  border-bottom: 1px solid var(--theme-game-author-row-rule);
+  border-left: 4px solid var(--gd-phase);
+  background: var(--theme-game-author-list-bg);
+}
+
+.gd-author-timeline__row[data-even] {
+  background: var(--theme-game-author-row-even-bg);
+}
+
+.gd-author-timeline__row:hover {
+  background: var(--theme-game-author-row-hover-bg);
+}
+
+.gd-author-timeline__row[data-selected] {
+  background: var(--theme-game-author-row-selected-bg);
+}
+
+/* a block, and under it the steps in it */
+.gd-author-timeline__row[data-block] {
+  border-top: 1px solid var(--theme-game-author-tag-border);
+}
+
+.gd-author-timeline__row[data-sub] {
+  padding-left: 10px;
+  background: var(--theme-game-author-substep-bg);
+  box-shadow: inset 2px 0 0 var(--theme-game-author-substep-mark);
+}
+
+.gd-author-timeline__row[data-sub][data-even] {
+  background: var(--theme-game-author-substep-even-bg);
+}
+
+.gd-author-timeline__row[data-sub][data-selected] {
+  background: var(--theme-game-author-row-selected-bg);
+}
+
+/* Where the game is: plain to see among the rest */
+.gd-author-timeline__row[data-current],
+.gd-author-timeline__end[data-current] {
+  background: var(--theme-game-author-current-bg);
+  box-shadow:
+    inset 0 0 0 1px var(--theme-game-author-current-mark),
+    inset 6px 0 0 var(--theme-game-author-current-mark);
+  font-weight: bold;
+}
+
+.gd-author-timeline__pick {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  padding: 2px 4px;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-author-timeline__num {
+  flex: 0 0 auto;
+  width: 24px;
+  color: var(--theme-game-author-dim);
+  font-size: 11px;
+  text-align: right;
+}
+
+[data-sub] .gd-author-timeline__num {
+  width: 32px;
+}
+
+[data-status='matched'] .gd-author-timeline__num {
+  color: var(--theme-game-author-matched);
+}
+
+[data-current] .gd-author-timeline__num::before {
+  content: '▶\00a0';
+  color: var(--theme-game-author-current-mark);
+}
+
+.gd-author-timeline__row:is([data-status='bypassed'], [data-status='skipped']) {
+  opacity: 0.45;
+}
+
+.gd-author-timeline__who {
+  flex: 0 0 auto;
+  width: 32px;
+  color: var(--theme-game-author-muted);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.gd-author-timeline__who[data-who='You'] {
+  color: var(--theme-game-author-who-you);
+}
+
+.gd-author-timeline__who[data-who='Opp'] {
+  color: var(--theme-game-author-who-opp);
+}
+
+.gd-author-timeline__who[data-who='Read'] {
+  color: var(--theme-game-author-who-read);
+}
+
+.gd-author-timeline__who[data-who='Block'] {
+  width: auto;
+  color: var(--theme-game-author-who-block);
+}
+
+.gd-author-timeline__what {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gd-author-timeline__when {
+  color: var(--theme-game-author-muted);
+}
+
+.gd-author-timeline__act {
+  margin-left: 6px;
+  color: var(--theme-game-author-act);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
+
+[data-current] :is(.gd-author-timeline__when, .gd-author-timeline__act) {
+  color: var(--theme-game-author-current-text);
+}
+
+.gd-author-timeline__id {
+  margin-left: 6px;
+  color: var(--theme-game-author-dim);
+  font-style: italic;
+}
+
+/* A step that is only a pass the game makes by itself: there, but quiet */
+[data-silent] :is(.gd-author-timeline__what, .gd-author-timeline__who) {
+  opacity: 0.55;
+}
+
+.gd-author-timeline__tags {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.gd-author-timeline__tag {
+  margin-left: 3px;
+  padding: 0 3px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  color: var(--theme-game-author-options-text);
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.gd-author-timeline__tag[data-tag='awaiting'] {
+  border-color: var(--theme-game-author-tag-awaiting-border);
+  color: var(--theme-game-author-tag-awaiting);
+}
+
+.gd-author-timeline__tag[data-tag='left-out'] {
+  border-color: var(--theme-game-author-tag-mistake-border);
+  color: var(--theme-game-author-tag-mistake);
+}
+
+.gd-author-timeline__go.gd-author-button {
+  flex: 0 0 auto;
+  margin: 0 2px;
+  padding: 0 4px;
+  font-size: 10px;
+}
+
+/* ---- under the last row ---- */
+
+.gd-author-timeline__end {
+  padding: 6px 8px;
+  color: var(--theme-game-author-quiet);
+  font-size: 12px;
+}
+
+.gd-author-timeline__end[data-current] {
+  color: var(--theme-game-author-current-text);
+}
+
+.gd-author-timeline__end:empty {
+  display: none;
+}
+
+.gd-author-timeline__asked {
+  margin: 3px 0 5px;
+  color: var(--theme-game-author-current-text);
+}
+
+.gd-author-timeline__foot {
+  flex: 0 0 auto;
+}

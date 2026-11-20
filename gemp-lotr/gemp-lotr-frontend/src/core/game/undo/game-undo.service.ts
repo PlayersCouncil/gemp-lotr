@@ -1,6 +1,7 @@
 import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { PageLifetime } from '../../platform/page-lifetime.service';
 import { GameApi } from '../api/game-api.service';
+import { DecisionGates } from '../decision/decision-gate';
 import { GameSession } from '../session/game-session.service';
 import {
   GameNotice,
@@ -40,7 +41,7 @@ export interface UndoBanner {
  *   own choice, nobody else has answered or seen anything since), is what the Undo button takes back at once;
  * - the list of every place (Revert...), each green one an undo and each yellow or red one asked of the opponent;
  * - a request waiting: the asker may withdraw it, the player asked approves, declines or declines everything; while it
- *   waits nothing in the game is answered (`frozen`), and it counts down;
+ *   waits nothing in the game is answered (`frozen`: it is one of the page's DecisionGates), and it counts down;
  * - the game taken back: GameSession reads it again from nothing, and the banner says so.
  *
  * Started by the page once the game has opened (`start`), never for a replay. Page-scoped.
@@ -105,6 +106,9 @@ export class GameUndo {
   private requests = 0;
 
   constructor() {
+    // While a request waits nothing in the game is answered: no gesture gets through to the decision (the page's
+    // gates, which a scripted game's step uses too)
+    inject(DecisionGates).add({ allows: () => !this.frozen() });
     // What the player may take back changes as the game moves on (the legacy page asks on every answer with events
     // after it has started; the game's first answer is asked about by start)
     effect(() => {

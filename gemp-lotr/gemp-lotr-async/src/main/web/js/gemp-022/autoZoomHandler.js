@@ -283,9 +283,7 @@ class AutoZoom {
 	handleMouseOver(event, isDragging, infoDialogOpen) {
 		const that = this;
 		const target = $(event.target);
-		// In a scenario, the card a step has left as the only thing to click (scenario-live, see
-		// scenarioOverlay.js) is not previewed: the preview would come up over the click being asked for.
-		const tarIsCard = target.hasClass("actionArea") && target.closest(".scenario-live").length == 0;
+		const tarIsCard = target.hasClass("actionArea");
 		const tarIsHint = target.hasClass("cardHint");
 		
 		// Reasons to cancel the popup: we're on a touch device,

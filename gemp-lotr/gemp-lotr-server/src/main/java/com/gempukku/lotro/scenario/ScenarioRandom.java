@@ -101,9 +101,12 @@ public class ScenarioRandom implements GameRandom {
 
     @Override
     public void shufflePlayers(List<String> players) {
-        //Scenarios seat their players deliberately, so a tie is never left to chance.
+        //Scenarios seat their players deliberately, so a tie is never left to chance.  A tied bid (in a scenario that
+        // plays the game's own opening) goes to the Free Peoples seat, whoever placed their bid first.
         if (_trulyRandom)
             GameRandom.DEFAULT.shufflePlayers(players);
+        else
+            players.sort(java.util.Comparator.comparing(player -> _table.SeatOf(player) == Seat.FREEPS ? 0 : 1));
     }
 
     private RngEntry next(RngKind kind, String playerId, String zone) {

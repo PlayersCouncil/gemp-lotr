@@ -1228,4 +1228,64 @@ public class ScenarioEngineTest {
         order = report.decisions.stream().map(ScenarioRunReport.Decision::step).filter(java.util.Objects::nonNull).toList();
         assertEquals("The first skirmish's pass is the block's, though its step says only whose it is", List.of("1", "2", "3.4 (last)"), order);
     }
+
+    @Test
+    public void exploringStopsAtTheEndOfThePath() throws Exception {
+        //A step that never comes: exploring plays on past the script, passing, turn after turn, until the
+        // fellowship is at the last of the scenario's four sites and would have to move on
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	rules: {
+                		oneSided: true
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, turn(9)
+                			allow: pass
+                		}
+                	]
+                """);
+        ScenarioRunReport explored = ScenarioRunner.explore(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(explored.toString(), explored.stopped.contains("the end of the scenario's path: it is at site 4"));
+        assertTrue("It stopped cleanly, not on an exception:\n" + explored, explored.failures.isEmpty());
+        assertTrue(explored.toString(), explored.toString().contains("explored beyond its script.  Its own run: FAILED"));
+
+        //Its own run, which is what the test plays, says what is wrong
+        ScenarioRunReport run = ScenarioRunner.run(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertFalse(run.passed());
+
+        //A game with nobody following a script is ended with the reason in its log, never moved off the path
+        ScenarioTable table = ScenarioTesting.table("""
+                	rules: {
+                		oneSided: true
+                	}
+                """);
+        for (int i = 0; i < 60 && !table.GameIsFinished(); i++) {
+            String player = decider(table);
+            AwaitingDecision decision = table.userFeedback().getAwaitingDecision(player);
+            table.PlayerDecided(player, AnswerCompiler.leastAnswer(decision));
+        }
+        assertTrue(table.GameIsFinished());
+        assertEquals(4, table.gameState().getCurrentSiteNumber());
+        assertTrue(table.PathEnded(), table.PathEnded().contains("would have to move on to site 5"));
+    }
+
+    @Test
+    public void anExploringRunReportsTheScenariosOwnResult() throws Exception {
+        //A scenario whose test passes: exploring past its end is no failure of it
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: freeps, action
+                			allow: pass
+                			end: complete
+                		}
+                	]
+                """);
+        ScenarioRunReport explored = ScenarioRunner.explore(def, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(explored.toString(), explored.toString().startsWith("Scenario test: explored beyond its script.  Its own run: PASSED (proved: full, required: full"));
+        assertTrue(explored.exploring.passed());
+    }
 }

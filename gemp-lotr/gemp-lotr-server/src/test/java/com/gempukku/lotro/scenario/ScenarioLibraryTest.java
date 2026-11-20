@@ -267,7 +267,7 @@ public class ScenarioLibraryTest {
                 setup: {
                 		startAt: {
                 			turn: 1
-                			site: 3
+                			weather: rain
                 		}
                 	}
                 	steps: [
@@ -284,7 +284,7 @@ public class ScenarioLibraryTest {
         assertEquals(broken.errors().toString(), 3, broken.leftOut().size());
 
         assertEquals("setup.startAt", broken.leftOut().get(0).where());
-        assertEquals("site: 3", broken.leftOut().get(0).was());
+        assertEquals("weather: rain", broken.leftOut().get(0).was());
 
         ScenarioSalvage.LeftOut pause = broken.leftOut().get(1);
         assertEquals("step 1", pause.where());

@@ -1,0 +1,32 @@
+/* The Board tab (the legacy .sa-tab-board): its sections one under the other */
+
+:host {
+  display: block;
+}
+
+.gd-author-board__where {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-section-rule);
+}
+
+.gd-author-board__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+.gd-author-board__choice {
+  display: block;
+  margin: 2px 0;
+  cursor: pointer;
+}
+
+.gd-author-board__choice .gd-author-note {
+  display: block;
+  margin: 0 0 4px 20px;
+}
+
+.gd-author-board__pending {
+  color: var(--theme-game-author-pending-text);
+}

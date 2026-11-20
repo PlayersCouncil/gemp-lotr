@@ -1,22 +1,25 @@
 import { Injectable, Provider } from '@angular/core';
-import { Notifier } from '../core/notifier/notifier';
+import { ConfirmWords, Notifier } from '../core/notifier/notifier';
 
 /**
  * A Notifier for tests: records every message as "alert: ...", "confirm: ..." or "prompt: ..." in `dialogs`, and
- * answers confirm/askText from `answers` in order (confirm: true for OK; askText: the text, or null for Cancel).
+ * answers confirm/askText from `answers` in order (confirm: true for OK; askText: the text, or null for Cancel). The
+ * words each question gives its dialog (its title and buttons) are in `words`, one entry per confirm.
  */
 @Injectable()
 export class FakeNotifier extends Notifier {
   readonly dialogs: string[] = [];
   readonly answers: (boolean | string | null)[] = [];
+  readonly words: (ConfirmWords | undefined)[] = [];
 
   alert(message: string): Promise<void> {
     this.dialogs.push(`alert: ${message}`);
     return Promise.resolve();
   }
 
-  confirm(message: string): Promise<boolean> {
+  confirm(message: string, words?: ConfirmWords): Promise<boolean> {
     this.dialogs.push(`confirm: ${message}`);
+    this.words.push(words);
     return Promise.resolve(this.answers.shift() === true);
   }
 

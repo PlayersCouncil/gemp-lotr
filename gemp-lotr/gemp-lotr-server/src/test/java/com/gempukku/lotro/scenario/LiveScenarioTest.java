@@ -492,6 +492,93 @@ public class LiveScenarioTest {
     }
 
     @Test
+    public void AGameThatRunsOffTheEndOfItsPathEndsAsTheScenariosMistake() throws Exception {
+        //Free play on four sites, with nothing to end it: the fellowship comes to site 4 and has to move on
+        LiveScenario scenario = live(ScenarioTesting.parse("""
+                	options: {
+                		opponentDelayMs: 0
+                		autoPass: true
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	coverage: guided
+                	rules: {
+                		oneSided: true
+                	}
+                	setup: {
+                		startAt: {
+                			site: 4
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: pass
+                		}
+                	]
+                """));
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        for (int i = 0; i < 20 && !mediator.isFinished(); i++) {
+            client.await();
+            if (client.decision != null)
+                client.answer(AnswerCompiler.leastAnswer(client.decision.getAwaitingDecision()));
+        }
+        client.poll();
+        assertTrue(mediator.isFinished());
+        assertEquals(LiveScenario.Result.ERROR, scenario.Result());
+        assertNotNull(client.end);
+        assertTrue(client.end.toString(), client.end.getString("message").contains("adventure path has run out"));
+        assertTrue(scenario.Problems().toString(), scenario.Problems().getFirst().contains("would have to move on to site 5"));
+    }
+
+    @Test
+    public void ALateStartPicksUpAtItsCheckpoint() throws Exception {
+        //A game that begins at site 3 in the maneuver phase (ScenarioLateStartTest.CHECKPOINTED)
+        ScenarioDefinition def = ScenarioTesting.parse(ScenarioLateStartTest.CHECKPOINTED);
+        LiveScenario first = live(def);
+        Client client = new Client(start(first));
+        client.connect();
+        playUntil(client, 4);
+        assertEquals(3, first.LastCheckpoint());
+        GameJournal checkpoint = first.CheckpointJournal();
+        assertNotNull(checkpoint);
+        int twilightThen = first.Table().GetTwilight();
+
+        //The journal goes by way of text, as it would if it had been stored
+        LiveScenario second = live(def, GameJournal.read(checkpoint.write(), player -> player));
+        LotroGameMediator mediator = start(second);
+        assertNull(second.Table().FollowProblem());
+        Client again = new Client(mediator);
+        again.connect();
+        assertEquals(3, again.info.getIntValue("resumedAt"));
+        assertEquals(List.of(3), again.stepsSeen);
+        assertEquals(Phase.ASSIGNMENT, second.Table().GetCurrentPhase());
+        assertEquals(3, second.Table().gameState().getCurrentSiteNumber());
+        assertEquals(1, second.Table().gameState().getTurnNumber());
+        assertEquals(twilightThen, second.Table().GetTwilight());
+        for (int i = 0; i < 10 && again.end == null; i++) {
+            again.await();
+            if (again.decision != null)
+                again.answerAsAllowed();
+        }
+        again.poll();
+        assertNotNull(again.end);
+        assertEquals("complete", again.end.getString("result"));
+        assertEquals(List.of(), second.Problems());
+
+        //...and a game that follows the whole of the first one's journal comes to where the first one is
+        LiveScenario replay = live(def, first.Table().Journal());
+        start(replay);
+        assertNull(replay.Table().FollowProblem());
+        assertEquals(first.Table().GetCurrentPhase(), replay.Table().GetCurrentPhase());
+        assertEquals(first.Table().gameState().getCurrentSiteNumber(), replay.Table().gameState().getCurrentSiteNumber());
+        assertEquals(first.Table().GetTwilight(), replay.Table().GetTwilight());
+    }
+
+    @Test
     public void ANewGameCanPickUpAtACheckpoint() throws Exception {
         ScenarioDefinition def = opening();
         LiveScenario first = live(def);
@@ -1166,5 +1253,223 @@ public class LiveScenarioTest {
         assertEquals(List.of(), mediator.getRestorePoints(HUMAN));
         assertEquals("refused", mediator.requestUndo(HUMAN, null).status());
         assertTrue(mediator.getScenario() == scenario);
+    }
+
+    /**
+     * Plays the person's side as the script has it (what the step allows, or failing that its answer) until the step
+     * on screen is one of a step's (by its name), or (for null) the scenario ends.
+     */
+    private static void playUntilNamed(LiveScenario scenario, Client client, String name) throws Exception {
+        for (int i = 0; i < 120; i++) {
+            client.await();
+            if (name == null && (client.end != null || client.mediator.isFinished()))
+                return;
+            assertNotNull("The game ended before step " + name, client.step);
+            if (name != null && name.equals(client.step.getString("name")) && client.decision != null)
+                return;
+            if (client.decision != null && client.step.getJSONObject("allow") != null) {
+                client.answerAsAllowed();
+            } else if (client.decision != null) {
+                ScenarioSession.Ruling ruling = scenario.Session().Ruling(scenario.HumanPlayer());
+                assertNotNull("The step gives no answer: " + client.step, ruling == null ? null : ruling.answer());
+                client.answer(ruling.answer());
+            } else {
+                client.acknowledge();
+            }
+        }
+        fail("Step " + name + " never came");
+    }
+
+    @Test
+    public void TheStepEventSaysTheRoleWhoseTurnItIsAndTheLastCheckpoint() throws Exception {
+        ScenarioDefinition def = ScenarioTwoSidedTest.fixture("two-sided-first");
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+        assertTrue(client.info.getBooleanValue("twoSided"));
+        assertEquals("board", client.info.getString("opening"));
+        assertEquals("freeps", client.info.getString("humanSeat"));
+
+        //The person's own turn: the Free Peoples player, and no checkpoint reached yet
+        playUntilNamed(scenario, client, "firstAssign");
+        assertEquals("freeps", client.step.getString("role"));
+        assertEquals("human", client.step.getString("turnOf"));
+        assertEquals(1, client.step.getIntValue("turn"));
+        assertNull(client.step.get("lastCheckpoint"));
+        assertFalse(client.step.getBooleanValue("checkpoint"));
+
+        //The opponent's turn: the Shadow player, at the checkpoint step itself
+        playUntilNamed(scenario, client, "theirTurn");
+        assertEquals("shadow", client.step.getString("role"));
+        assertEquals("opponent", client.step.getString("turnOf"));
+        assertEquals(2, client.step.getIntValue("turn"));
+        assertTrue(client.step.getBooleanValue("checkpoint"));
+        assertEquals(5, client.step.getIntValue("lastCheckpoint"));
+
+        //...and it stays set at the steps after it
+        playUntilNamed(scenario, client, "control");
+        assertEquals(5, client.step.getIntValue("lastCheckpoint"));
+        assertFalse(client.step.getBooleanValue("checkpoint"));
+        assertEquals(List.of(), scenario.Problems());
+    }
+
+    @Test
+    public void AGameStillGoingCanBeTakenBackToItsCheckpoint() throws Exception {
+        //What starting the scenario with from=checkpoint does while the person is in the middle of it
+        // (LotroServer.createScenarioGame): the running game's checkpoint journal is taken, the running game is
+        // conceded, and a new game follows the journal
+        ScenarioDefinition def = ScenarioTwoSidedTest.fixture("two-sided-first");
+        LiveScenario first = live(def);
+        LotroGameMediator running = start(first);
+        Client client = new Client(running);
+        client.connect();
+        playUntilNamed(first, client, "control");
+        assertFalse(running.isFinished());
+        GameJournal checkpoint = running.checkpointJournal();
+        assertNotNull(checkpoint);
+        running.concede(client.player);
+        assertTrue(running.isFinished());
+        assertEquals(LiveScenario.Result.ABANDONED, first.Result());
+
+        LiveScenario second = live(def, checkpoint);
+        LotroGameMediator mediator = start(second);
+        assertNull(second.Table().FollowProblem());
+        Client again = new Client(mediator);
+        again.connect();
+        assertEquals(5, again.info.getIntValue("resumedAt"));
+        //Back on the opponent's turn, at the step the checkpoint is, the person the Shadow player again
+        assertEquals(List.of(5), again.stepsSeen);
+        assertEquals(2, second.Table().gameState().getTurnNumber());
+        assertEquals("shadow", again.step.getString("role"));
+        assertEquals(5, again.step.getIntValue("lastCheckpoint"));
+        //...and it plays on to its end
+        playUntilNamed(second, again, null);
+        again.poll();
+        assertNotNull(again.end);
+        assertEquals("complete", again.end.getString("result"));
+        assertEquals(List.of(), second.Problems());
+    }
+
+    @Test
+    public void AnOpeningThatSeatsThePlayersTheOtherWayRoundIsTheScenariosMistake() throws Exception {
+        //The person chooses to go second: the Shadow seat would take the first turn, which is not the scenario's game
+        ScenarioDefinition def = ScenarioParser.parse(Files.readString(new File("src/test/resources/scenarios/real-opening.hjson").toPath(),
+                StandardCharsets.UTF_8).replace("allow: option(Go first)", "allow: option(Go second)"));
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+        assertEquals("game", client.info.getString("opening"));
+        for (int i = 0; i < 10 && client.end == null; i++) {
+            client.await();
+            if (client.end != null)
+                break;
+            if (client.decision != null)
+                client.answerAsAllowed();
+            else
+                client.acknowledge();
+        }
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("error", client.end.getString("result"));
+        assertTrue(client.end.getString("message"), client.end.getString("message").contains("the Shadow seat was seated to go first"));
+        assertEquals(LiveScenario.Result.ERROR, scenario.Result());
+    }
+
+    @Test
+    public void TheGamesOwnOpeningIsPlayedWithAPersonInTheSeat() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(Files.readString(new File("src/test/resources/scenarios/real-opening.hjson").toPath(),
+                StandardCharsets.UTF_8));
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+        playUntilNamed(scenario, client, "bid");
+        assertEquals(1, client.step.getIntValue("step"));
+        playUntilNamed(scenario, client, "mulligan");
+        playUntilNamed(scenario, client, null);
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("complete", client.end.getString("result"));
+        assertEquals(List.of(), scenario.Problems());
+    }
+
+    /**
+     * Answers the person's decision on screen as the script has it (what the step allows, or failing that its
+     * answer), or reads the step that only waits to be read.
+     */
+    private static void playOn(LiveScenario scenario, Client client) throws Exception {
+        if (client.decision != null && client.step.getJSONObject("allow") != null) {
+            client.answerAsAllowed();
+        } else if (client.decision != null) {
+            ScenarioSession.Ruling ruling = scenario.Session().Ruling(scenario.HumanPlayer());
+            assertNotNull("The step gives no answer: " + client.step, ruling == null ? null : ruling.answer());
+            client.answer(ruling.answer());
+        } else {
+            client.acknowledge();
+        }
+    }
+
+    /**
+     * Taking a game back builds the scenario's game again from its journal, as picking it up at a checkpoint does.
+     * The kinds of scenario that came after that was written have to come back the same way: a two-sided game that
+     * begins down the path with the person in the second seat, and a game that plays its own opening.
+     */
+    @Test
+    public void AGameBegunLateOrFromItsOwnOpeningCanBeTakenBack() throws Exception {
+        for (String fixture : List.of("two-sided-second", "two-sided-first", "real-opening")) {
+            ScenarioDefinition def = ScenarioParser.parse(Files.readString(new File("src/test/resources/scenarios/" + fixture + ".hjson").toPath(),
+                    StandardCharsets.UTF_8));
+            LiveScenario scenario = live(def);
+            LotroGameMediator mediator = start(scenario);
+            String human = scenario.HumanPlayer();
+            Client client = new Client(mediator);
+            client.connect();
+
+            //The person's third decision is where the game will be taken back to; they answer it and two more.  (In
+            // the game's own opening that decision is a pick for the starting fellowship, which can be gone back to
+            // only until the hands are dealt, and the bid and the choice of seat never: so there it is taken back at
+            // once.)
+            int answers = fixture.equals("real-opening") ? 3 : 5;
+            int answered = 0, backTo = -1, stepThen = -1, subThen = -1;
+            for (int i = 0; i < 200 && answered < answers; i++) {
+                client.await();
+                assertNull(fixture + " ended early", client.end);
+                if (client.decision != null) {
+                    answered++;
+                    if (answered == 3) {
+                        backTo = mediator.journalSize();
+                        stepThen = client.step.getIntValue("step");
+                        subThen = client.step.getIntValue("sub");
+                    }
+                }
+                playOn(scenario, client);
+            }
+            assertEquals(fixture, answers, answered);
+
+            LotroGameMediator.UndoReply reply = mediator.requestUndo(human, backTo);
+            assertEquals(fixture + ": " + reply.message(), "done", reply.status());
+            assertEquals(fixture, backTo, mediator.journalSize());
+            LiveScenario again = mediator.getScenario();
+            assertTrue(fixture, again != scenario);
+            assertNull(fixture, again.Table().FollowProblem());
+
+            //The person's page starts over, and finds that same decision waiting at that same step
+            client.connect();
+            client.await();
+            assertNotNull(fixture, client.decision);
+            assertEquals(fixture, stepThen, client.step.getIntValue("step"));
+            assertEquals(fixture, subThen, client.step.getIntValue("sub"));
+
+            //...and the scenario plays through from there to its end
+            for (int i = 0; i < 300 && client.end == null && !mediator.isFinished(); i++) {
+                client.await();
+                if (client.end != null || mediator.isFinished())
+                    break;
+                playOn(again, client);
+            }
+            client.poll();
+            assertNotNull(fixture, client.end);
+            assertEquals(fixture, "complete", client.end.getString("result"));
+            assertEquals(fixture, List.of(), again.Problems());
+        }
     }
 }

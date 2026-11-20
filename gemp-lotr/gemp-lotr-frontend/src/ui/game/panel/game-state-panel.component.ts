@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
+import { displayName } from '../../../core/game/scenario/scenario-state';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { handRevealed, PileName } from '../../../core/game/table/game-table';
 import { GameViewState } from '../../../core/game/session/game-view-state';
@@ -9,6 +10,8 @@ import { PulseDirective } from './pulse.directive';
 interface PlayerView {
   index: number;
   name: string;
+  /** The name the page shows (a scripted opponent goes by its scenario's name for it). */
+  shown: string;
   current: boolean;
   own: boolean;
   clock: string | null;
@@ -52,7 +55,7 @@ const shown = (value: number | null | undefined) => (value === null || value ===
         [attr.data-open]="open().has(player.index) ? '' : null"
       >
         <span class="gd-game-player__no" [attr.data-no]="player.index + 1">{{ player.index + 1 }}</span
-        ><span class="gd-game-player__dot">. </span>{{ player.name
+        ><span class="gd-game-player__dot">. </span>{{ player.shown
         }}<span
           class="gd-game-player__clock"
           data-clock
@@ -216,6 +219,7 @@ export class GameStatePanelComponent {
       return {
         index,
         name,
+        shown: displayName(model.scenario, name),
         current: name === model.currentPlayer,
         own,
         clock: seconds === undefined ? null : clockText(seconds),

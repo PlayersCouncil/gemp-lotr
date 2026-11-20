@@ -198,4 +198,18 @@ describe('decisionView', () => {
     expect(minionUnassigned(waiting(d, { assignments: { '5': '1' } }, { cards: card }))).toBe(false);
     expect(minionUnassigned(emptyGame())).toBe(false);
   });
+
+  it('asks about a minion left over only when more could have been assigned than were (the server says how many)', () => {
+    const cards = { '5': { id: '5' }, '6': { id: '6' } } as unknown as GameModel['cards'];
+    const d = (most: string) =>
+      decision('ASSIGN_MINIONS', { freeCharacters: ['1'], minions: ['5', '6', '9'], maxAssignable: [most] });
+    // One character for two minions: one assigned is as many as can be
+    expect(minionUnassigned(waiting(d('1'), { assignments: { '5': '1' } }, { cards }))).toBe(false);
+    expect(minionUnassigned(waiting(d('1'), {}, { cards }))).toBe(true);
+    expect(minionUnassigned(waiting(d('2'), { assignments: { '5': '1' } }, { cards }))).toBe(true);
+    // A server that doesn't say (or says nonsense) is asked about any minion left
+    expect(minionUnassigned(waiting(d('many'), { assignments: { '5': '1' } }, { cards }))).toBe(true);
+    // (a minion not on the table, 9, doesn't count)
+    expect(minionUnassigned(waiting(d('1'), { assignments: { '5': '1', '6': '1' } }, { cards }))).toBe(false);
+  });
 });

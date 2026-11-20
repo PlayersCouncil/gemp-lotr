@@ -1,4 +1,5 @@
 import { Component, computed, ElementRef, inject, viewChild } from '@angular/core';
+import { ConfirmWords } from '../../../core/notifier/notifier';
 import { DialogComponent } from '../dialog/dialog.component';
 import { DialogNotifier } from './dialog-notifier';
 
@@ -7,8 +8,8 @@ const TITLES = { alert: 'Message', confirm: 'Please confirm', prompt: 'Please en
 /**
  * Shows the DialogNotifier's messages and questions (the legacy page used the browser's alert, confirm and prompt):
  * a modal `gd-dialog` (`data-dialog` = alert, confirm or prompt) with the message, a text field for a prompt, and OK
- * (and Cancel). Enter in the text field is OK; Escape or the close button is Cancel. Questions asked while one is
- * shown wait their turn.
+ * (and Cancel), or the words the question gives its title and buttons. Enter in the text field is OK; Escape or the
+ * close button is Cancel. Questions asked while one is shown wait their turn.
  *
  * DOM contract: inside the dialog, `p.gd-notifier__message` (line breaks kept), `input.gd-notifier__input` (prompt;
  * focused and selected when shown), and `.gd-dialog__actions` with `button.gd-button[data-action=ok]` (focused for
@@ -49,10 +50,12 @@ const TITLES = { alert: 'Message', confirm: 'Please confirm', prompt: 'Please en
           [attr.autofocus]="request()?.kind === 'prompt' ? null : ''"
           (click)="ok()"
         >
-          OK
+          {{ words().ok ?? 'OK' }}
         </button>
         @if (request()?.kind !== 'alert') {
-          <button type="button" class="gd-button" data-action="cancel" (click)="notifier.answer(false)">Cancel</button>
+          <button type="button" class="gd-button" data-action="cancel" (click)="notifier.answer(false)">
+            {{ words().cancel ?? 'Cancel' }}
+          </button>
         }
       </div>
     </gd-dialog>
@@ -65,7 +68,12 @@ export class NotifierDialogComponent {
     answer: (ok: boolean, text?: string) => this.dialogNotifier?.answer(ok, text),
   };
   protected readonly request = computed(() => this.dialogNotifier?.current() ?? null);
-  protected readonly title = computed(() => TITLES[this.request()?.kind ?? 'alert']);
+  /** What a question calls its dialog and its buttons, if it says. */
+  protected readonly words = computed<ConfirmWords>(() => {
+    const request = this.request();
+    return request?.kind === 'confirm' ? request.words : {};
+  });
+  protected readonly title = computed(() => this.words().title ?? TITLES[this.request()?.kind ?? 'alert']);
 
   private readonly input = viewChild<ElementRef<HTMLInputElement>>('text');
 

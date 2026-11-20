@@ -87,7 +87,7 @@ var ScenarioShelfCommon = {
     },
 
     openGame: function (win, gameId) {
-        var url = "/gemp-lotr/game.html?gameId=" + encodeURIComponent(gameId) + hall.participantIdParam();
+        var url = "/gemp-lotr/ng/game?gameId=" + encodeURIComponent(gameId) + hall.participantIdParam();
         if (win != null && !win.closed) {
             win.location.href = url;
             try {

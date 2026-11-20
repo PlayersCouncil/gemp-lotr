@@ -1,0 +1,21 @@
+/* "Insert a number from the game": its button, and the list it opens under the text */
+
+:host {
+  display: block;
+}
+
+.gd-author-templates__menu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  margin: 2px 0 4px;
+  padding: 3px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+}
+
+.gd-author-templates__name {
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}

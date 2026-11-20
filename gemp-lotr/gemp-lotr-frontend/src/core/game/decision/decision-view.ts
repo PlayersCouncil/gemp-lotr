@@ -347,11 +347,18 @@ function askedView(model: GameModel, settings: DecisionSettings): DecisionView {
   }
 }
 
-/** Whether a minion of the waiting assignment has no character yet (Done then asks first). */
+/**
+ * Whether Done on the waiting assignment asks first: a minion has no character yet, and more minions could have been
+ * given one than were. The server says how many at most can be assigned (`maxAssignable`: every minion, unless there
+ * are too few characters they may fight); with as many assigned as that, a minion left over is no oversight. A
+ * server that doesn't say (and a game recorded from one) is asked about any minion left.
+ */
 export function minionUnassigned(model: GameModel): boolean {
   const decision = model.decision?.decision;
-  return (
-    decision?.type === 'ASSIGN_MINIONS' &&
-    param(decision, 'minions').some((minion) => model.cards[minion] && assignmentOf(model, minion) === null)
-  );
+  if (decision?.type !== 'ASSIGN_MINIONS') return false;
+  const minions = param(decision, 'minions').filter((minion) => model.cards[minion]);
+  const assigned = minions.filter((minion) => assignmentOf(model, minion) !== null).length;
+  if (assigned === minions.length) return false;
+  const most = Number.parseInt(first(decision, 'maxAssignable') ?? '', 10);
+  return Number.isNaN(most) || assigned < most;
 }

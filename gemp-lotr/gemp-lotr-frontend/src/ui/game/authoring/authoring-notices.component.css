@@ -1,0 +1,104 @@
+/* What the authoring panel says above its tabs (the legacy .sa-notice and its kinds) */
+
+.gd-author-notice {
+  position: relative;
+  max-height: 9em;
+  overflow-y: auto;
+  padding: 5px 26px 5px 10px;
+  border-top: 1px solid var(--theme-game-author-notice-rule);
+  font-size: 12px;
+}
+
+.gd-author-notice__text {
+  white-space: pre-wrap;
+}
+
+.gd-author-notice[data-tone='error'] {
+  background: var(--theme-game-author-error-bg);
+  color: var(--theme-game-author-error-text);
+}
+
+.gd-author-notice[data-tone='warning'] {
+  background: var(--theme-game-author-warning-bg);
+  color: var(--theme-game-author-warning-text);
+}
+
+.gd-author-notice[data-tone='good'] {
+  background: var(--theme-game-author-good-bg);
+  color: var(--theme-game-author-good-text);
+}
+
+.gd-author-notice[data-tone='told'] {
+  background: var(--theme-game-author-told-bg);
+  color: var(--theme-game-author-told-text);
+}
+
+/* A decision nobody has written a step for: what is being asked, and the button that writes one */
+.gd-author-notice[data-tone='uncovered'] {
+  max-height: none;
+  padding: 7px 10px 8px;
+  background: var(--theme-game-author-uncovered-bg);
+  color: var(--theme-game-author-uncovered-text);
+  box-shadow: inset 4px 0 0 var(--theme-game-author-uncovered-mark);
+}
+
+.gd-author-notice[data-notice='uncovered'] .gd-author-notice__head {
+  margin-bottom: 2px;
+  font-size: 13px;
+  color: var(--theme-game-author-uncovered-head);
+}
+
+.gd-author-notice__how {
+  margin-top: 6px;
+}
+
+.gd-author-notice__how .gd-author-button {
+  margin: 0 8px 2px 0;
+  padding: 3px 9px;
+  font-weight: bold;
+}
+
+.gd-author-notice__or {
+  margin-top: 4px;
+  color: var(--theme-game-author-muted);
+}
+
+/* The parts of the file left out so that it could be opened */
+.gd-author-notice[data-notice='left-out'] {
+  max-height: 16em;
+}
+
+.gd-author-notice__head {
+  font-weight: bold;
+}
+
+.gd-author-notice__part {
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid var(--theme-game-author-error-rule);
+}
+
+.gd-author-notice__where {
+  font-weight: bold;
+  color: var(--theme-game-author-error-strong);
+}
+
+.gd-author-notice__was {
+  max-height: 7em;
+  overflow-y: auto;
+  margin: 3px 0 0;
+  padding: 3px 6px;
+  background: var(--theme-game-author-code-bg);
+  color: var(--theme-game-author-error-code);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.gd-author-notice__dismiss.gd-author-button {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  margin: 0;
+}

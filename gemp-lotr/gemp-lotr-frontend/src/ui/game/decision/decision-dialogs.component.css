@@ -85,12 +85,19 @@
   flex-wrap: wrap;
   align-content: flex-start;
   gap: var(--gd-card-gap);
+  /* A window sized to its cards leaves room under each row for the actions' texts (gdCardWindow) */
+  row-gap: calc(var(--gd-card-gap) + var(--gd-card-label, 0px));
 }
 
 .gd-game-decision__cards > .gd-card {
   /* Each row on a whole pixel, as the legacy group put it */
   top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
   margin-bottom: calc(var(--gd-card-height, 200px) - round(down, calc(var(--gd-card-width) * 490 / 350), 1px));
+}
+
+/* In a window sized to its cards, at its top: what is left below is the room kept for the buttons to come */
+.gd-game-decision__cards[data-card-window] > .gd-card {
+  top: 0;
 }
 
 /* A landscape card (a site) is as wide as the row is high */

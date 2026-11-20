@@ -221,7 +221,9 @@ export const GAME_SCENARIOS = [
   },
   {
     name: 'minions-unassigned',
-    note: 'Done with a minion left unassigned: the browser asks to confirm',
+    // The legacy page asks with the browser's confirm, the Angular page in its own dialog (run.mjs
+    // answerUnassignedQuestion answers both the same way: Proceed)
+    note: 'Done with a minion left unassigned: the page asks to confirm',
     foe: [...PLAYER_FIRST, ...FOE_PLAYS_MINIONS],
     steps: [
       ...TO_FELLOWSHIP,

@@ -86,6 +86,28 @@ describe('DialogNotifier', () => {
       expect(await again).toBe(true);
     });
 
+    it("names the question's dialog and its buttons with the words it gives, and only that question's", async () => {
+      const { dialog, stable } = await render();
+      const title = () => dialog.querySelector('.gd-dialog__title')?.textContent.trim();
+      const label = (action: string) => dialog.querySelector(`[data-action="${action}"]`)?.textContent.trim();
+      const answer = notifier.confirm('Proceed with a minion left?', {
+        title: 'Unassigned minions',
+        ok: 'Proceed',
+        cancel: 'Go back',
+      });
+      void notifier.confirm('Plain?');
+      void notifier.alert('Done');
+      await stable();
+      expect([title(), label('ok'), label('cancel')]).toEqual(['Unassigned minions', 'Proceed', 'Go back']);
+      dialog.querySelector<HTMLButtonElement>('[data-action="cancel"]')!.click();
+      expect(await answer).toBe(false);
+      await stable();
+      expect([title(), label('ok'), label('cancel')]).toEqual(['Please confirm', 'OK', 'Cancel']);
+      notifier.answer(true);
+      await stable();
+      expect([title(), label('ok')]).toEqual(['Message', 'OK']);
+    });
+
     it('asks for text: Enter is OK, the close button (or Escape, which closes it) is Cancel', async () => {
       const { dialog, stable } = await render();
       const name = notifier.askText('Deck name:', 'My deck');

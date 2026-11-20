@@ -111,6 +111,55 @@ describe('GameSession', () => {
     poll.flush(update('2', '<ge type="EG"/>'));
   });
 
+  it('knows the game it has open, and none in a replay', () => {
+    expect(session.openGame).toBeNull();
+    session.open('7');
+    expect(session.openGame).toBe('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', decision()));
+  });
+
+  it('asked to, asks once for news over a waiting decision, and not again while that decision waits', () => {
+    session.refresh();
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', decision()));
+    session.refresh();
+    const news = backend.expectOne((r) => r.url === GAME && r.method === 'POST');
+    expect(news.request.body?.get('channelNumber')).toBe('1');
+    // Already asking: not asked twice
+    session.refresh();
+    news.flush(update('2', '<ge type="TP" count="5"/>'));
+    expect(session.model().twilight).toBe(5);
+    vi.advanceTimersByTime(POLL_DELAY_MS * 5);
+    backend.expectNone((r) => r.url === GAME && r.method === 'POST');
+  });
+
+  it('asked to, asks for news once and goes on asking if the news answered the decision', () => {
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', decision()));
+    session.refresh();
+    backend.expectOne((r) => r.url === GAME && r.method === 'POST').flush(update('2', '<ge type="EG"/>'));
+    expect(session.model().decision).toBeNull();
+    expectPoll('2').flush(update('3', decision()));
+  });
+
+  it("keeps a scripted game's step until it is answered, read, or its notice read", () => {
+    const S = (json: string) => `<ge type="S" scenario="${json.replace(/"/g, '&quot;')}"/>`;
+    const step = (seat: string) => S(`{"type":"step","step":1,"seat":"${seat}","messages":[]}`);
+    session.open('7');
+    backend.expectOne((r) => r.url === GAME).flush(state('1', step('human') + decision()));
+    expect(session.model().scenario?.step?.step).toBe(1);
+    session.answer('10 20');
+    expect(session.model().scenario?.step).toBeNull();
+    backend.expectOne((r) => r.url === GAME && r.body?.has('decisionId')).flush(update('2', step('opponent')));
+    expect(session.model().scenario?.step?.seat).toBe('opponent');
+    session.stepRead();
+    expect(session.model().scenario?.step).toBeNull();
+    expectPoll('2').flush(update('3', S('{"type":"offscript","message":null}')));
+    expect(session.model().scenario?.notice).toEqual({ type: 'offscript', message: null });
+    session.noticeRead();
+    expect(session.model().scenario?.notice).toBeNull();
+  });
+
   it('asks the opponent to cancel', () => {
     session.open('7');
     backend.expectOne((r) => r.url === GAME).flush(state('1', decision()));

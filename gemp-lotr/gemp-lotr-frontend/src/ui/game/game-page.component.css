@@ -52,6 +52,8 @@
   /* Not fixed: that would draw the page's dialogs on a layer of their own, without subpixel text */
   position: absolute;
   inset: 0;
+  /* (a panel docked at the window's right, the scenario authoring panel, has the rest: see ui/shared/page-room.ts) */
+  right: var(--gd-page-right, 0px);
   display: grid;
   box-sizing: border-box;
   grid-template-columns: var(--path-w) var(--state-w) minmax(0, 1fr);
@@ -413,7 +415,7 @@
 /* The replay's controls: in the page's bottom right corner (66 x 97, 4px further in than 5px, over everything) */
 .gd-game__replay {
   position: absolute;
-  left: calc(100vw - 75px);
+  left: calc(100vw - var(--gd-page-right, 0px) - 75px);
   top: calc(var(--gd-window-height, 100vh) - 104px);
   z-index: 1000;
   width: 66px;

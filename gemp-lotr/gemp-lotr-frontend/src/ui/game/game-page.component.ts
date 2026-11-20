@@ -33,6 +33,12 @@ import { AdventurePathComponent } from './table/adventure-path.component';
 import { GameCardsComponent } from './table/game-cards.component';
 import { GameTabsComponent } from './tabs/game-tabs.component';
 import { PhoneGameComponent } from './phone/phone-game.component';
+import { ScenarioGuide } from '../../core/game/scenario/scenario-guide.service';
+import { NotifierDialogComponent } from '../shared/notifier/notifier-dialog.component';
+import { ScenarioLayerComponent } from './scenario/scenario-layer.component';
+import { ScenarioPanelsComponent } from './scenario/scenario-panels.component';
+import { AuthoringPanelComponent } from './authoring/authoring-panel.component';
+import { Authoring } from '../../core/game/authoring/authoring.service';
 import { CompactLayout } from '../../core/platform/compact-layout.service';
 import { GameSheets } from '../../core/game/phone/game-sheets';
 import { PhoneBridge } from '../../core/game/phone/phone-bridge';
@@ -59,6 +65,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
  * (`data-fight="skirmish"`) and assignment (`data-fight="assignment"`), each with `.gd-game__side`
  * (`data-side`: shadow, free-peoples). `data-animating` while an event holds the page (its animation). Cards: see GameCardDirective.
  * Taking the game back (in both layouts): `gd-undo-list`, `gd-undo-request` and `gd-undo-banner` (see ./undo).
+ * `data-scenario` (tutorial, puzzle, sandbox) in a scripted game, which draws over the page with `gd-game-scenario`
+ * and `gd-game-scenario-panels`; a draft's game adds `gd-game-author` (the authoring panel), the page leaving it the room
+ * at the window's right (`--gd-page-right` on the document element).
  */
 @Component({
   selector: 'gemp-game',
@@ -91,6 +100,10 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     UndoListComponent,
     UndoRequestComponent,
     UndoBannerComponent,
+    ScenarioLayerComponent,
+    ScenarioPanelsComponent,
+    AuthoringPanelComponent,
+    NotifierDialogComponent,
   ],
   host: {
     class: 'gd-game',
@@ -101,6 +114,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '[style.--gd-game-fights]': 'fights()',
     '[attr.data-animating]': "session.busy() ? '' : null",
     '[attr.data-layout]': "phone() ? 'phone' : null",
+    '[attr.data-scenario]': 'scenario.info()?.kind ?? null',
     '(document:keydown.escape)': 'escape()',
     '[style.--gd-window-height]': "windowHeight() + 'px'",
     '(window:resize)': 'measureWindow()',
@@ -177,7 +191,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
         }
       </div>
     } @else if (model().preGame; as preGame) {
-      <gd-game-pregame class="gd-game__pregame" [info]="preGame" />
+      <gd-game-pregame class="gd-game__pregame" [info]="preGame" [scenario]="model().scenario" />
     }
     @if (!phone()) {
       <gd-game-tabs class="gd-game__tabs" />
@@ -201,8 +215,19 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     <gd-undo-list />
     <gd-undo-request />
     <gd-undo-banner />
+    <!-- The page's questions (Done with a minion unassigned, leaving a scenario) -->
+    <gd-notifier />
     @if (!phone()) {
-      <gd-card-info gdCardHints />
+      <gd-game-scenario />
+    }
+    <gd-game-scenario-panels />
+    @if (!phone() && authoring.active()) {
+      <!-- A draft's game: the authoring panel, docked at the right (in a test, floating) -->
+      <gd-game-author />
+    }
+    @if (!phone()) {
+      <!-- (a scripted game's bubbles point at the card information too: it is never modal there) -->
+      <gd-card-info gdCardHints [plain]="scenario.playing()" />
       <!-- In the page: the dialogs it shows over are never modal here (the card information isn't, in classic) -->
       <gd-auto-zoom [topLayer]="false" [flipOnShift]="zoomFlipsOnShift()" />
     }
@@ -216,6 +241,10 @@ export class GamePageComponent {
   protected readonly table = inject(GameTableState).table;
   /** The theme button (GAME_THEME_PICKER, on). */
   protected readonly themePicker = inject(GAME_THEME_PICKER);
+  /** A scripted game (a scenario), if this is one: its messages, and the answers its steps take. */
+  protected readonly scenario = inject(ScenarioGuide);
+  /** A draft's game (the scenario says its player is writing it, or testing it): the authoring panel. */
+  protected readonly authoring = inject(Authoring);
   private readonly themes = inject(ThemeService);
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
   protected readonly phone = inject(CompactLayout).gameActive;

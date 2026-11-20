@@ -1,0 +1,43 @@
+/* The Board tab's "Add a card" (the legacy add section with .sa-results and .sa-chosen) */
+
+:host {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.gd-author-board__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+.gd-author-board-add__chosen {
+  margin-top: 4px;
+}
+
+.gd-author-board-add__card {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-author-board-add__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-board-add__row .gd-author-label {
+  font-size: 12px;
+}
+
+.gd-author-board-add__row input.gd-author-input {
+  flex: 0 0 90px;
+  width: 90px;
+}
+
+.gd-author-board-add__row .gd-author-button {
+  margin-bottom: 0;
+}

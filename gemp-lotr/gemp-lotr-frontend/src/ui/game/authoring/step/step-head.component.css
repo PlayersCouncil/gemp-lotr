@@ -1,0 +1,54 @@
+/* The Step tab's head (the legacy .sa-stephead): it stays in sight however far down the tab is scrolled */
+
+:host {
+  display: block;
+  position: sticky;
+  top: -6px;
+  z-index: 3;
+  margin: -6px -8px 4px;
+  padding: 6px 8px 4px;
+  border-bottom: 1px solid var(--theme-game-author-step-head-rule);
+  background: var(--theme-game-author-bg);
+  box-shadow: var(--theme-game-author-step-head-shadow);
+}
+
+.gd-author-step-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-author-step-head .gd-author-button {
+  margin: 0;
+}
+
+.gd-author-step-head__name {
+  color: var(--theme-game-author-title);
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.gd-author-step-head__where {
+  margin-left: auto;
+  color: var(--theme-game-author-quiet);
+  font-size: 12px;
+}
+
+.gd-author-step-head__where[data-status='matched'] {
+  color: var(--theme-game-author-matched);
+}
+
+/* What the decision waiting is for: a tag after where the step stands (the line wraps rather than overflows) */
+
+.gd-author-step-head:has(.gd-author-step-head__asked) {
+  flex-wrap: wrap;
+}
+
+.gd-author-step-head__asked {
+  padding: 0 3px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  color: var(--theme-game-author-options-text);
+  font-size: 11px;
+  white-space: nowrap;
+}

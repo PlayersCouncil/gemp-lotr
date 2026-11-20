@@ -14,6 +14,7 @@ import { PageCues } from '../../../core/platform/page-cues';
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { chatLines, GameSheets } from '../../../core/game/phone/game-sheets';
 import { GameLog } from '../../../core/game/session/game-log';
+import { displayName } from '../../../core/game/scenario/scenario-state';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { clockText } from '../panel/game-clock';
@@ -122,7 +123,7 @@ interface Pill {
           (click)="sheets.open({ kind: 'piles', player: player.name, focus: null })"
         >
           <span class="gd-phone-player__no" [attr.data-no]="player.number">{{ player.number }}</span>
-          <span class="gd-phone-player__name">{{ player.name }}</span>
+          <span class="gd-phone-player__name">{{ player.shown }}</span>
           <span class="gd-phone-player__clock" data-clock [attr.data-band]="player.band">{{ player.clock }}</span>
           <span class="gd-phone-player__counts">
             <!-- The computer layout's icons (the theme's), the dead pile's a cross -->
@@ -261,6 +262,8 @@ export class PhoneStatusComponent {
       const shown = (n: number | null | undefined) => (n === null || n === undefined ? '–' : String(n));
       return {
         name,
+        // (a scripted opponent goes by its scenario's name for it)
+        shown: displayName(model.scenario, name),
         number: i + 1,
         current: name === model.currentPlayer,
         clock: seconds === undefined ? '' : clockText(seconds),

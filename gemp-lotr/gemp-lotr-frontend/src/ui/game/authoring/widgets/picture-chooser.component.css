@@ -1,0 +1,64 @@
+/* The pictures a message can show large (the legacy .sa-pictures, .sa-picture). */
+
+:host {
+  display: block;
+}
+
+.gd-author-pictures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 6px;
+  padding: 6px;
+  max-height: 250px;
+  overflow-y: auto;
+  background: var(--theme-game-author-pictures-bg);
+  border: 1px solid var(--theme-game-author-pictures-border);
+  border-radius: 4px;
+}
+
+.gd-author-pictures .gd-author-note {
+  margin: 0;
+}
+
+.gd-author-pictures__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 86px;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-author-pictures__item:hover,
+.gd-author-pictures__item:focus-visible,
+.gd-author-pictures__item[aria-pressed='true'] {
+  border-color: var(--theme-game-author-picture-hover-border);
+  background: var(--theme-game-author-picture-hover-bg);
+}
+
+.gd-author-pictures__item[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 1px var(--theme-game-author-picture-hover-border);
+}
+
+.gd-author-pictures__image {
+  display: block;
+  max-width: 80px;
+  max-height: 100px;
+}
+
+.gd-author-pictures__name {
+  max-width: 84px;
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--theme-game-author-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
