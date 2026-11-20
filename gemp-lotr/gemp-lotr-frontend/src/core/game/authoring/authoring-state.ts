@@ -85,6 +85,16 @@ export interface DraftEnd {
   messages?: readonly DraftMessageValue[] | DraftMessageValue;
 }
 
+/** One of the opponent's standing orders, as the file has it. */
+export interface DraftOrder {
+  id?: string;
+  note?: string;
+  once?: boolean;
+  when: DraftCondition;
+  /** Its answers, as a step's: terms on a line, or a list of lines. */
+  answer: string | readonly string[];
+}
+
 export interface DraftStep {
   id?: string;
   note?: string;
@@ -141,8 +151,12 @@ export interface Draft {
   opponent?: {
     name?: string;
     /** Absent: fail. */
-    fallback?: 'pass';
-    orders?: readonly { when: DraftCondition; answer: string }[];
+    fallback?: string;
+    orders?: readonly DraftOrder[];
+    /** A Free Peoples character's name, or `ringBearer`; absent: none. */
+    leftovers?: string;
+    /** "a, b": the cards a sandbox fallback may play; absent: all. */
+    plays?: string;
   };
   coverage?: 'strict' | 'guided';
   options?: DraftOptions;
@@ -173,6 +187,12 @@ export interface Draft {
     lose?: DraftRequirement | readonly DraftRequirement[];
     loseMessage?: string;
     offScript?: { message?: string; result?: string };
+    /** Said when `win` / `lose` comes true. */
+    winMessages?: readonly DraftMessageValue[] | DraftMessageValue;
+    loseMessages?: readonly DraftMessageValue[] | DraftMessageValue;
+    /** The game ending by itself, the person having won or lost it: the result it counts as, and what is said. */
+    gameWon?: DraftEnd['result'] | DraftEnd;
+    gameLost?: DraftEnd['result'] | DraftEnd;
   };
   /** The server always sends it; the panel treats a missing one as none. */
   steps?: readonly DraftStep[];
@@ -390,6 +410,8 @@ export interface DraftState {
   board: AuthoringBoard | null;
   /** What has gone wrong with the script in this game, oldest first. */
   problems: readonly string[];
+  /** The opponent's rules and standing orders (absent from a server that does not say). */
+  opponent?: OpponentState;
 }
 
 export type AuthoringState = NoDraft | DraftState;
@@ -453,4 +475,51 @@ export interface OffScriptReport {
 /** Whether a draft is open. */
 export function hasDraft(state: AuthoringState | null): state is DraftState {
   return state?.session === true;
+}
+
+/* ------------------------------------------------------------------ the opponent (describeOpponent) */
+
+/** One of the opponent's standing orders, part by part. */
+export interface OpponentOrder {
+  /** Its place among the orders, from 0. */
+  index: number;
+  id: string | null;
+  note: string | null;
+  once: boolean;
+  /** Its When as the file has it: terms, or (with requirements) the { object } as HJSON text. */
+  when: string;
+  /** Each answer as written. */
+  answers: readonly string[];
+  /** A `once` that has answered its decision in the game in hand. */
+  spent: boolean;
+  /** The whole order as the file has it (HJSON text). */
+  text: string;
+}
+
+/** What of the opponent's own would answer its waiting decision, when no step has it. */
+export interface OpponentAnswering {
+  /** The order that would answer it (from 0), or null. */
+  order: number | null;
+  id: string | null;
+  /** Which of that order's answers, as written. */
+  answer: string | null;
+  /** What that comes to now, in the scenario's words. */
+  gives: string | null;
+  /** Answered by rule when no order does. */
+  rule: 'leftovers' | 'sandbox' | null;
+  /** A When for a new order that would take it. */
+  when: string;
+}
+
+/** The opponent, for the Opponent tab's editor. */
+export interface OpponentState {
+  fallback: string;
+  fallbacks: readonly string[];
+  /** `ringBearer`, a character's name, or null (none). */
+  leftovers: string | null;
+  leftoversChoices: readonly string[];
+  plays: readonly string[];
+  playsChoices: readonly string[];
+  orders: readonly OpponentOrder[];
+  answering: OpponentAnswering | null;
 }

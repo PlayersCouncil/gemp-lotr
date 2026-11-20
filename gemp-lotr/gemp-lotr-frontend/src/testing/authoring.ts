@@ -10,6 +10,8 @@ import {
   BoardCard,
   DraftState,
   DraftStep,
+  OpponentOrder,
+  OpponentState,
 } from '../core/game/authoring/authoring-state';
 
 /** Steps 1 (the player's, in turn 1's fellowship), 2 (the opponent's, shadow) and 3 (a block with two steps). */
@@ -201,6 +203,36 @@ export function draftBoard(extra: Partial<AuthoringBoard> = {}): AuthoringBoard 
     burdens: 1,
     threats: 0,
     sites: { freeps: path(''), shadow: path('opp') },
+    ...extra,
+  };
+}
+
+/** The opponent as describe gives it: fallback pass, no orders, Frodo and Sam for leftovers, two runners to play. */
+export function opponentState(extra: Partial<OpponentState> = {}): OpponentState {
+  return {
+    fallback: 'pass',
+    fallbacks: ['fail', 'pass', 'bot', 'sandbox'],
+    leftovers: null,
+    leftoversChoices: ['ringBearer', 'frodo', 'sam'],
+    plays: [],
+    playsChoices: ['orc', 'orc2'],
+    orders: [],
+    answering: null,
+    ...extra,
+  };
+}
+
+/** One of the opponent's standing orders as describe gives it (unnamed, at `index`, playing orc in its shadow phase). */
+export function opponentOrder(index: number, extra: Partial<OpponentOrder> = {}): OpponentOrder {
+  return {
+    index,
+    id: null,
+    note: null,
+    once: false,
+    when: 'shadow, action, phase(shadow)',
+    answers: ['play(orc)'],
+    spent: false,
+    text: '',
     ...extra,
   };
 }

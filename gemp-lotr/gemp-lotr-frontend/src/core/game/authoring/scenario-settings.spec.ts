@@ -16,8 +16,6 @@ import {
   loseOptions,
   movesNote,
   offScriptReport,
-  opponentWithFallback,
-  opponentWithName,
   optionsWith,
   optionsWithAutoPass,
   outcomeWithLose,
@@ -81,16 +79,6 @@ describe('the Scenario tab', () => {
   });
 
   describe('how it plays', () => {
-    it("names the opponent, and takes the part out when there's nothing left in it", () => {
-      expect(opponentWithName(draft(), 'Sauron')).toEqual({ name: 'Sauron' });
-      expect(opponentWithName(draft({ opponent: { name: 'Sauron', fallback: 'pass' } }), '')).toEqual({
-        fallback: 'pass',
-      });
-      expect(opponentWithName(draft({ opponent: { name: 'Sauron' } }), '')).toBeNull();
-      expect(opponentWithFallback(draft(), 'pass')).toEqual({ fallback: 'pass' });
-      expect(opponentWithFallback(draft({ opponent: { fallback: 'pass' } }), 'fail')).toBeNull();
-    });
-
     it('ticks the phases the player is passed through', () => {
       expect(autoPassOf(undefined)).toEqual([]);
       expect(autoPassOf({ autoPass: true })).toEqual([]);

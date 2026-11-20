@@ -94,6 +94,51 @@ export function assignTerm(
   return `raw(${pairs.map(([character, group]) => [character, ...group].map((one) => one.id ?? '').join(' ')).join(', ')})`;
 }
 
+/** "The rest to the Ring-bearer": whoever is the Free Peoples player's Ring-bearer when the answer is given. */
+export const RING_BEARER = 'ringBearer';
+
+/**
+ * Whether an assignment can be answered with "the rest to ...": every minion and character has a name in the scenario
+ * (`rest` is the scenario's word, and stands beside names only).
+ */
+export function restOffered(minions: readonly DecisionOffer[], characters: readonly DecisionOffer[]): boolean {
+  return [...minions, ...characters].every((offer) => offer.alias !== null);
+}
+
+/** The characters "the rest" can go to: the Ring-bearer, then each character by its name in the scenario. */
+export function restChoices(characters: readonly DecisionOffer[]): (readonly [string, string])[] {
+  return [
+    ['', 'nobody'],
+    [RING_BEARER, 'the Ring-bearer'],
+    ...characters
+      .filter((character) => character.alias !== null)
+      .map((character) => [character.alias ?? '', offerLabel(character)] as const),
+  ];
+}
+
+/**
+ * The answer to an assignment where the minions nobody is chosen for go to `rest` (a character's name, or
+ * RING_BEARER), written as the scenario says it: `assign(aragorn: orc1, frodo: rest)`, `assign(ringBearer: rest)`.
+ * The minions chosen are named; whatever is left when the answer is given goes to the rest's character. With no rest
+ * (''), or cards without names, it is assignTerm's answer.
+ */
+export function assignRestTerm(
+  minions: readonly DecisionOffer[],
+  characters: readonly DecisionOffer[],
+  fights: Readonly<Record<string, string>>,
+  rest: string,
+): string {
+  if (rest === '' || !restOffered(minions, characters)) return assignTerm(minions, characters, fights);
+  const groups = new Map<string, string[]>();
+  minions.forEach((minion, index) => {
+    const character = characters.find((one, at) => offerKey(one, at) === (fights[offerKey(minion, index)] ?? ''));
+    if (!character) return;
+    groups.set(character.alias ?? '', [...(groups.get(character.alias ?? '') ?? []), minion.alias ?? '']);
+  });
+  groups.set(rest, [...(groups.get(rest) ?? []), 'rest']);
+  return `assign(${[...groups].map(([character, group]) => `${character}: ${group.join(' + ')}`).join(', ')})`;
+}
+
 /** The answer that gives a number: `number(3)`; null for what is no whole number. */
 export function numberTerm(text: string): string | null {
   const number = text.trim();

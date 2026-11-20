@@ -4,6 +4,7 @@ import {
   answeredBy,
   answersByButton,
   answersByCards,
+  assignRestTerm,
   assignTerm,
   cardsTerm,
   chooseLine,
@@ -14,6 +15,9 @@ import {
   offerKey,
   offerLabel,
   offersPass,
+  restChoices,
+  restOffered,
+  RING_BEARER,
 } from './opponent-answer';
 
 const offer = (alias: string | null, id: string | null, label = alias ?? `card ${id}`): DecisionOffer => ({
@@ -116,5 +120,39 @@ describe('opponent-answer', () => {
   it("names the opponent's fallback", () => {
     expect(fallbackOf({ id: 'x' })).toBe('fail');
     expect(fallbackOf({ id: 'x', opponent: { fallback: 'pass' } })).toBe('pass');
+  });
+
+  describe('the rest', () => {
+    const frodo = offer('frodo', '1', 'Frodo');
+    const sam = offer('sam', '2', 'Sam');
+    const orc = offer('orc', '11');
+    const troll = offer('troll', '12');
+
+    it('is offered only where every card has a name, to the Ring-bearer or a character', () => {
+      expect(restOffered([orc], [frodo])).toBe(true);
+      expect(restOffered([orc, offer(null, '13')], [frodo])).toBe(false);
+      expect(restOffered([orc], [offer(null, '3')])).toBe(false);
+      expect(restChoices([frodo, offer(null, '3'), sam])).toEqual([
+        ['', 'nobody'],
+        [RING_BEARER, 'the Ring-bearer'],
+        ['frodo', 'Frodo (frodo)'],
+        ['sam', 'Sam (sam)'],
+      ]);
+    });
+
+    it('names the minions chosen and gives whatever is left to the rest', () => {
+      expect(assignRestTerm([orc, troll], [frodo, sam], {}, 'frodo')).toBe('assign(frodo: rest)');
+      expect(assignRestTerm([orc, troll], [frodo, sam], {}, RING_BEARER)).toBe('assign(ringBearer: rest)');
+      expect(assignRestTerm([orc, troll], [frodo, sam], { orc: 'sam' }, 'frodo')).toBe('assign(sam: orc, frodo: rest)');
+      expect(assignRestTerm([orc, troll], [frodo, sam], { orc: 'frodo' }, 'frodo')).toBe('assign(frodo: orc + rest)');
+      expect(assignRestTerm([orc, troll], [frodo, sam], { orc: 'nobody?' }, RING_BEARER)).toBe(
+        'assign(ringBearer: rest)',
+      );
+    });
+
+    it('is the plain assignment with no rest, or cards without names', () => {
+      expect(assignRestTerm([orc], [frodo], { orc: 'frodo' }, '')).toBe('assign(frodo: orc)');
+      expect(assignRestTerm([offer(null, '13')], [frodo], { '#13': 'frodo' }, 'frodo')).toBe('raw(1 13)');
+    });
   });
 });
