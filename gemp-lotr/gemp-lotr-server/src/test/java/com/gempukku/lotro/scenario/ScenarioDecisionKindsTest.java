@@ -41,7 +41,7 @@ public class ScenarioDecisionKindsTest {
      * for it fits the same decisions.
      * @return The kinds that were met.
      */
-    private static Set<Kind> meet(ScenarioDefinition def, java.util.function.BiPredicate<ScenarioTable, Ruling> enough) throws Exception {
+    static Set<Kind> meet(ScenarioDefinition def, java.util.function.BiPredicate<ScenarioTable, Ruling> enough) throws Exception {
         ScenarioSession session = ScenarioOpponentRulesTest.session(def);
         ScenarioDirector director = session.Director();
         Map<Kind, When> terms = new EnumMap<>(Kind.class);

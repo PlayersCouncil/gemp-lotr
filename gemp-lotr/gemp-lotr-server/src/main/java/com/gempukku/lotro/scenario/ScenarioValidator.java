@@ -64,6 +64,7 @@ public final class ScenarioValidator {
         }
 
         start(def, library, problems);
+        opening(def, problems);
 
         for (Step step : def.allSteps()) {
             String context = step.context();
@@ -124,6 +125,60 @@ public final class ScenarioValidator {
     }
 
     /**
+     * A scenario that plays the game's own opening (setup.opening: game) has its fellowships chosen, its hands drawn
+     * and its burdens bid in play, so the setup can say nothing of them: only the order of each deck (the opening
+     * draw comes off its top).  Nor can the game begin anywhere but at the start, and nothing waits for a board laid
+     * out before the first turn ('when: opening'): the first decision is the bid.
+     */
+    private static void opening(ScenarioDefinition def, List<String> problems) {
+        ScenarioDefinition.Setup setup = def.setup;
+        if (!setup.realOpening)
+            return;
+        String why = "with setup.opening: game the game's own opening is played, and ";
+        for (Map.Entry<Seat, Map<ScenarioDefinition.SetupZone, List<String>>> seat : setup.zones.entrySet())
+            for (ScenarioDefinition.SetupZone zone : seat.getValue().keySet())
+                if (zone != ScenarioDefinition.SetupZone.DECK && !seat.getValue().get(zone).isEmpty())
+                    problems.add("setup." + seat.getKey().key() + "." + zoneName(zone) + ": " + why + "the cards are where it puts them: the "
+                            + "starting fellowship is chosen, the hand drawn.  Only the order of the deck can be said (setup."
+                            + seat.getKey().key() + ".deck), which is what the opening draw is drawn from");
+        List<String> said = new ArrayList<>();
+        if (!setup.attach.isEmpty())
+            said.add("attach");
+        if (!setup.stack.isEmpty())
+            said.add("stack");
+        if (!setup.wounds.isEmpty())
+            said.add("wounds");
+        if (!setup.tokens.isEmpty())
+            said.add("tokens");
+        if (setup.burdens != 0)
+            said.add("burdens");
+        if (setup.threats != 0)
+            said.add("threats");
+        if (!setup.skirmishes.isEmpty())
+            said.add("skirmishes");
+        if (!setup.controlled.isEmpty())
+            said.add("controlled");
+        if (!setup.path.isEmpty())
+            said.add("path");
+        for (String part : said)
+            problems.add("setup." + part + ": " + why + "the game begins at its start, with nothing of the board said but the order of the decks"
+                    + (part.equals("burdens") ? " (the burdens are the ones bid)" : ""));
+        if (setup.lateStart() || setup.opponentSite != null)
+            problems.add("setup.startAt: " + why + "the game begins at its start: turn 1, site 1, the Fellowship phase.  "
+                    + "A game that begins further on has its board laid out (setup.opening: board)");
+        if (!def.steps.isEmpty() && def.steps.getFirst().when.opening)
+            problems.add("step 1: 'when: opening' waits for the board to be laid out before the first turn, and " + why
+                    + "its first decision is the bid (when: bid)");
+    }
+
+    private static String zoneName(ScenarioDefinition.SetupZone zone) {
+        return switch (zone) {
+            case DEAD_PILE -> "deadPile";
+            default -> zone.name().toLowerCase(java.util.Locale.ROOT);
+        };
+    }
+
+    /**
      * Whether where the story has got to when the game begins (setup.startAt and what goes with it) is a place a
      * game can be: the path reaches the markers, the phase fits how far the fellowship has come this turn, the
      * skirmishes are between cards that are on the table on their sides, and the sites controlled are behind every
@@ -136,6 +191,13 @@ public final class ScenarioValidator {
         if (def.markersTogether && !def.oneSided)
             problems.add("rules.markers: 'together' is for a one-sided game (rules.oneSided: true), where the Shadow seat never "
                     + "takes a turn to move its own marker");
+
+        //Minions on the table are the Shadow player's, and when the game begins that is the Shadow seat (the Free
+        // Peoples seat takes the first turn, however far down the path it is, in a one-sided game or a two-sided one)
+        List<String> freepsMinions = setup.zones.getOrDefault(Seat.FREEPS, Map.of()).getOrDefault(ScenarioDefinition.SetupZone.MINIONS, List.of());
+        if (!freepsMinions.isEmpty())
+            problems.add("setup.freeps.minions: the Free Peoples seat is the Free Peoples player when the game begins (the first turn is "
+                    + "its), so none of its minions can be on the table: the minions in play are the Shadow seat's (setup.shadow.minions)");
 
         //The path as it is laid out when the game begins, site 1 first: each site's name in the scenario, or null
         // where there is none to lay

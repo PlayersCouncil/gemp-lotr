@@ -1,5 +1,6 @@
 package com.gempukku.lotro.scenario;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -65,7 +67,21 @@ public final class ScenarioWriter {
         root.add("coverage", lower(def.coverage));
 
         JsonObject options = new JsonObject();
-        if (!def.autoPass.isEmpty()) {
+        if (def.autoPassByRole != null) {
+            //(said for each role: each role's phases on a line of its own, an empty one as false)
+            JsonObject byRole = new JsonObject();
+            for (com.gempukku.lotro.common.Side role : List.of(com.gempukku.lotro.common.Side.FREE_PEOPLE, com.gempukku.lotro.common.Side.SHADOW)) {
+                Set<Phase> phases = def.autoPassFor(role);
+                if (phases.isEmpty()) {
+                    byRole.add(ScenarioParser.roleName(role), false);
+                } else {
+                    StringJoiner written = new StringJoiner(", ");
+                    phases.forEach(phase -> written.add(lower(phase)));
+                    byRole.add(ScenarioParser.roleName(role), written.toString());
+                }
+            }
+            options.add("autoPass", byRole);
+        } else if (!def.autoPass.isEmpty()) {
             StringJoiner phases = new StringJoiner(", ");
             def.autoPass.forEach(phase -> phases.add(lower(phase)));
             options.add("autoPass", phases.toString());
@@ -209,6 +225,8 @@ public final class ScenarioWriter {
     private static JsonObject setup(ScenarioDefinition def) {
         Setup from = def.setup;
         JsonObject setup = new JsonObject();
+        if (from.realOpening)
+            setup.add("opening", "game");
         JsonObject startAt = startAt(def);
         if (!startAt.isEmpty())
             setup.add("startAt", startAt);
@@ -357,6 +375,8 @@ public final class ScenarioWriter {
         JsonObject json = new JsonObject();
         if (when.seat != null)
             json.add("seat", when.seat.key());
+        if (when.role != null)
+            json.add("as", ScenarioParser.roleName(when.role));
         if (when.decision != null)
             json.add("decision", AnswerCompiler.typeName(when.decision));
         addIfSet(json, "text", when.text);
@@ -396,6 +416,8 @@ public final class ScenarioWriter {
             terms.add("phase(" + lower(when.phase) + ")");
         if (when.turn != null)
             terms.add("turn(" + when.turn + ")");
+        if (when.role != null)
+            terms.add("as(" + ScenarioParser.roleName(when.role) + ")");
         if (when.skirmish != null)
             terms.add("skirmish(" + when.skirmish + ")");
         if (when.offers != null)

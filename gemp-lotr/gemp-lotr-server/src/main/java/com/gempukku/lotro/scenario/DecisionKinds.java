@@ -32,6 +32,14 @@ import java.util.Locale;
  *                                                                               come together, to be ordered
  *     chooseSite         arbitrary  "Choose site to play"                     PlaySiteEffect: a site of an
  *                                                                               unnumbered (Shadows) path
+ *     bid                number     "Choose a number of burdens to bid"       BiddingGameProcess: the game's own
+ *                                                                               opening (setup.opening: game)
+ *     goFirst            choice     "Choose one", offering "Go first"         ChooseSeatingOrderGameProcess: the
+ *                                                                               highest bidder's choice
+ *     startingFellowship arbitrary  "Starting fellowship - Choose next        PlayerPlaysStartingFellowshipGame-
+ *                                   character or press DONE"                  Process
+ *     mulligan           choice     "Do you wish to mulligan? ..."            MulliganProcess, if the format has the
+ *                                                                               mulligan rule
  *     phaseActions       action     "Play <phase> action or Pass";            PlayersPlayPhaseActionsInOrder-, Player-
  *                                   "Choose action to play or Pass"            PlaysPhaseActionsUntilPasses-
  *                                                                               GameProcess; SkirmishActionProcedure-
@@ -53,6 +61,17 @@ public final class DecisionKinds {
         OPTIONAL_RESPONSES("optionalResponses", List.of(AwaitingDecisionType.CARD_ACTION_CHOICE), List.of("Optional responses")),
         REQUIRED_RESPONSES("requiredResponses", List.of(AwaitingDecisionType.ACTION_CHOICE), List.of("Required responses")),
         CHOOSE_SITE("chooseSite", List.of(AwaitingDecisionType.ARBITRARY_CARDS), List.of("Choose site to play")),
+        BID("bid", List.of(AwaitingDecisionType.INTEGER), List.of("Choose a number of burdens to bid")),
+        GO_FIRST("goFirst", List.of(AwaitingDecisionType.MULTIPLE_CHOICE), List.of("Choose one")) {
+            //("Choose one" is any multiple choice's: it is the choice of seat by what it offers)
+            @Override
+            public boolean is(AwaitingDecision decision) {
+                String[] results = decision == null ? null : decision.getDecisionParameters().get("results");
+                return super.is(decision) && results != null && java.util.Arrays.asList(results).contains("Go first");
+            }
+        },
+        STARTING_FELLOWSHIP("startingFellowship", List.of(AwaitingDecisionType.ARBITRARY_CARDS), List.of("Starting fellowship")),
+        MULLIGAN("mulligan", List.of(AwaitingDecisionType.MULTIPLE_CHOICE), List.of("Do you wish to mulligan?")),
         PHASE_ACTIONS("phaseActions", List.of(AwaitingDecisionType.CARD_ACTION_CHOICE), List.of("Choose action to play or Pass")) {
             @Override
             boolean says(String text) {
@@ -76,6 +95,11 @@ public final class DecisionKinds {
                 if (text.startsWith(opening))
                     return true;
             return false;
+        }
+
+        /** Whether it is one of the game's own opening's (setup.opening: game), which come before any turn. */
+        public boolean opening() {
+            return this == BID || this == GO_FIRST || this == STARTING_FELLOWSHIP || this == MULLIGAN;
         }
 
         /** Whether a decision is one of these. */

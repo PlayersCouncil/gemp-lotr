@@ -311,7 +311,8 @@ public class ScenarioAuthoring {
             ScenarioTable table = live.Table();
             JsonObject json = new JsonObject();
             json.add("when", table.SeatOf(player).key() + ", action, phase(" + phase.name().toLowerCase(Locale.ROOT) + "), turn("
-                    + table.gameState().getTurnNumber() + ")");
+                    + table.gameState().getTurnNumber() + ")" + (!otherRole(table, player) || phase == Phase.FELLOWSHIP || phase == Phase.SHADOW ? ""
+                    : ", as(" + ScenarioParser.roleName(table.RoleOf(player)) + ")"));
             json.add(human ? "allow" : "answer", "pass");
             try {
                 director.record(ScenarioParser.parseStep(def, json, 0));
@@ -469,6 +470,10 @@ public class ScenarioAuthoring {
             DecisionKinds.Kind kind = DecisionKinds.of(decision);
             if (kind != null && kind != DecisionKinds.Kind.PHASE_ACTIONS)
                 when.append(", ").append(kind.term);
+            //(the game's own opening comes before the first turn, and what it asks says what it is: the bid, the
+            // choice of going first, a starting fellowship, a mulligan)
+            if (kind != null && kind.opening())
+                return when.toString();
             Phase phase = table.GetCurrentPhase();
             String name = phase.name().toLowerCase(Locale.ROOT);
             //In a block, a skirmish's decisions are that skirmish's (whichever comes first), and those between
@@ -485,11 +490,23 @@ public class ScenarioAuthoring {
                 when.append(", phase(").append(name).append(")");
             if (block == null || block.when.turn == null)
                 when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
+            //In a two-sided game each seat plays both roles.  Where it is playing the one its name does not say (the
+            // freeps seat as the Shadow player, on the other seat's turns), that is said, unless the phase says it
+            // (only the Free Peoples player acts in the Fellowship phase, only the Shadow player in the Shadow phase)
+            // or the block already does.  (The turn says it too, to somebody who counts whose turn each is; the term
+            // says it to somebody reading the step, and still does if the turn is taken out.)
+            if (otherRole(table, player) && (block == null || block.when.role == null) && phase != Phase.FELLOWSHIP && phase != Phase.SHADOW)
+                when.append(", as(").append(ScenarioParser.roleName(table.RoleOf(player))).append(")");
             if (fighting != null)
                 when.append(", inSkirmish(").append(fighting).append(")");
             if (after != null)
                 when.append(", after(").append(after).append(")");
             return when.toString();
+        }
+
+        /** Whether a seat is playing the role its name does not say: the freeps seat as the Shadow player, or the other way. */
+        boolean otherRole(ScenarioTable table, String player) {
+            return (table.SeatOf(player) == Seat.FREEPS) != (table.RoleOf(player) == com.gempukku.lotro.common.Side.FREE_PEOPLE);
         }
 
         /**
@@ -540,6 +557,8 @@ public class ScenarioAuthoring {
             When kept = new When();
             if (until.seat != null && fits(director, player, decision, part -> part.seat = until.seat))
                 kept.seat = until.seat;
+            if (until.role != null && fits(director, player, decision, part -> part.role = until.role))
+                kept.role = until.role;
             if (until.decision != null && fits(director, player, decision, part -> part.decision = until.decision))
                 kept.decision = until.decision;
             if (until.phase != null && fits(director, player, decision, part -> part.phase = until.phase))
@@ -563,6 +582,8 @@ public class ScenarioAuthoring {
             When own = repeating.when;
             if (!apart(kept, own))
                 kept.seat = table.SeatOf(player);
+            if (!apart(kept, own) && otherRole(table, player))
+                kept.role = table.RoleOf(player);
             if (!apart(kept, own))
                 kept.decision = decision.getDecisionType();
             if (!apart(kept, own))
@@ -583,6 +604,8 @@ public class ScenarioAuthoring {
                 terms.add("phase(" + kept.phase.name().toLowerCase(Locale.ROOT) + ")");
             if (kept.turn != null)
                 terms.add("turn(" + kept.turn + ")");
+            if (kept.role != null)
+                terms.add("as(" + ScenarioParser.roleName(kept.role) + ")");
             if (kept.skirmish != null)
                 terms.add("skirmish(" + kept.skirmish + ")");
             if (kept.offers != null)
@@ -605,6 +628,7 @@ public class ScenarioAuthoring {
         /** Whether no decision can fit both: they say different things about the same part of it. */
         private boolean apart(When one, When other) {
             return (one.seat != null && other.seat != null && one.seat != other.seat)
+                    || (one.role != null && other.role != null && one.role != other.role)
                     || (one.decision != null && other.decision != null && one.decision != other.decision)
                     || (one.phase != null && other.phase != null && one.phase != other.phase)
                     || (one.turn != null && other.turn != null && !one.turn.equals(other.turn))
@@ -2016,6 +2040,13 @@ public class ScenarioAuthoring {
 
     private static void putInSetup(ScenarioDefinition def, DoOp op) throws AuthoringException {
         ScenarioDefinition.Setup setup = def.setup;
+        //A scenario that plays the game's own opening has its fellowships chosen and its hands drawn in play: of the
+        // board it starts with, there is only the order of each deck to say
+        if (setup.realOpening && !deckOnly(def, op))
+            throw new AuthoringException("This scenario plays the game's own opening (setup.opening: game): the starting fellowships are chosen, "
+                    + "the hands drawn and the burdens bid in play, so the board it starts with is only its decks, in order.  Put cards in "
+                    + "order in a deck (the opening draw comes off the top), or change the board in the game, at a step.  To lay the board "
+                    + "out yourself, have the game open with the board (Setup tab: opening).");
         switch (op.kind()) {
             case ORDER -> {
                 ScenarioParser.ZoneRef ref;
@@ -2121,6 +2152,17 @@ public class ScenarioAuthoring {
             }
             case LIBERATE -> uncontrolled(def, op.card() != null ? op.card() : String.valueOf(op.amount()));
             default -> { }
+        }
+    }
+
+    /** Whether a change to the starting board is to the order of a deck (moving a card to a deck, or ordering one). */
+    private static boolean deckOnly(ScenarioDefinition def, DoOp op) {
+        if (op.kind() != ScenarioDefinition.DoKind.MOVE && op.kind() != ScenarioDefinition.DoKind.ORDER)
+            return false;
+        try {
+            return ScenarioParser.parseZoneRef(def, op.target(), "do").zone() == SetupZone.DECK;
+        } catch (ScenarioFormatException exp) {
+            return false;
         }
     }
 
@@ -2779,7 +2821,16 @@ public class ScenarioAuthoring {
             position.put("turn", table.Arranged() ? table.gameState().getTurnNumber() : 0);
             position.put("phase", table.Arranged() ? table.GetCurrentPhase().name().toLowerCase(Locale.ROOT) : null);
             position.put("chosen", new ArrayList<>(director.flags()));
+            //Whose turn it is, and the role each seat is playing now (in a two-sided game the seats take turns, the
+            // one whose turn it is being the Free Peoples player)
+            position.put("turnOf", table.TurnSeat() == def.human ? "human" : "opponent");
+            Map<String, Object> roles = new LinkedHashMap<>();
+            roles.put("human", ScenarioParser.roleName(table.RoleOf(live.HumanPlayer())));
+            roles.put("opponent", ScenarioParser.roleName(table.RoleOf(live.OpponentPlayer())));
+            position.put("roles", roles);
             state.put("position", position);
+            state.put("twoSided", !def.oneSided);
+            state.put("autoPass", describeAutoPass(def));
 
             Map<String, Object> waiting = new LinkedHashMap<>();
             for (String player : List.of(live.HumanPlayer(), live.OpponentPlayer())) {
@@ -2827,7 +2878,8 @@ public class ScenarioAuthoring {
             List<String> pending = new ArrayList<>();
             sitting.pending.forEach(op -> pending.add(op.source()));
             state.put("pending", pending);
-            state.put("board", table.Arranged() ? describeBoard(sitting) : null);
+            //(null until there is a board: in a game whose own opening is played, until the cards are dealt)
+            state.put("board", table.CardsDealt() ? describeBoard(sitting) : null);
             state.put("start", describeStart(def));
             state.put("problems", live.Problems());
             return state;
@@ -2884,11 +2936,12 @@ public class ScenarioAuthoring {
             fallbacks.add(one.name().toLowerCase(Locale.ROOT));
         json.put("fallbacks", fallbacks);
         json.put("leftovers", def.leftovers == null ? null : def.leftovers.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : def.leftovers);
-        //(what leftovers can be: the Ring-bearer, whoever that is, or any of the Free Peoples seat's characters)
+        //(what leftovers can be: the Ring-bearer, whoever that is, or any character of the fellowship the opponent
+        // assigns against: the Free Peoples seat's in a one-sided game, the person's in a two-sided one)
         List<String> characters = new ArrayList<>();
         characters.add("ringBearer");
         for (CardDef card : def.cards.values()) {
-            if (card.owner() != Seat.FREEPS)
+            if (card.owner() != def.leftoversSeat())
                 continue;
             try {
                 CardType type = _library.getLotroCardBlueprint(card.blueprintId()).getCardType();
@@ -3160,9 +3213,35 @@ public class ScenarioAuthoring {
      * Where the scenario's game begins, for the Setup's "where the story starts" part: the setup's start as it is
      * (with its defaults filled in), and what the choices are.
      */
+    /**
+     * options.autoPass, for the Scenario tab: whether it is said for each role ("byRole"), the phases of the one list
+     * ("all", when it is not), each role's ("freeps", "shadow": the one list's for both when it is not said for each),
+     * and the phases that can be passed through.
+     */
+    private static Map<String, Object> describeAutoPass(ScenarioDefinition def) {
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.put("byRole", def.autoPassByRole != null);
+        json.put("all", def.autoPassByRole != null ? null : phaseNames(def.autoPass));
+        json.put("freeps", phaseNames(def.autoPassFor(com.gempukku.lotro.common.Side.FREE_PEOPLE)));
+        json.put("shadow", phaseNames(def.autoPassFor(com.gempukku.lotro.common.Side.SHADOW)));
+        json.put("phases", List.of("fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"));
+        return json;
+    }
+
+    private static List<String> phaseNames(Set<Phase> phases) {
+        List<String> names = new ArrayList<>();
+        for (Phase phase : phases)
+            names.add(phase.name().toLowerCase(Locale.ROOT));
+        return names;
+    }
+
     private static Map<String, Object> describeStart(ScenarioDefinition def) {
         ScenarioDefinition.Setup setup = def.setup;
         Map<String, Object> start = new LinkedHashMap<>();
+        //How the game opens: "board" (laid out as the setup says) or "game" (the game's own opening is played, from
+        // the bid; the setup then says nothing but the order of the decks)
+        start.put("opening", setup.realOpening ? "game" : "board");
+        start.put("openings", List.of("board", "game"));
         start.put("site", setup.site);
         start.put("opponentSite", setup.opponentSite(def));
         start.put("opponentSiteSet", setup.opponentSite != null);
@@ -3218,6 +3297,8 @@ public class ScenarioAuthoring {
         AwaitingDecisionType type = decision.getDecisionType();
         Map<String, Object> json = new LinkedHashMap<>();
         json.put("seat", table.SeatOf(player).key());
+        //The role the seat is playing now (in a two-sided game the Free Peoples player on its own turns only)
+        json.put("role", ScenarioParser.roleName(table.RoleOf(player)));
         json.put("type", AnswerCompiler.typeName(type));
         //What it is for, as a 'when' says it (nextSkirmish, optionalResponses...; see DecisionKinds); null for none
         DecisionKinds.Kind kind = DecisionKinds.of(decision);

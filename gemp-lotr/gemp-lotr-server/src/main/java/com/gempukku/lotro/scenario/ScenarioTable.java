@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A virtual table laid out the way a scenario file says: each seat gets a deck made of exactly the cards the
@@ -111,10 +112,32 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     public String OpponentPlayer() { return Player(_def.human.other()); }
 
     /**
+     * The role a player is playing at this moment: the Free Peoples player is the one whose turn it is, the other is
+     * the Shadow player.  (In a one-sided game that is always the Free Peoples seat's turn; before the first turn,
+     * and while the game opens, the seat that is to take the first.)  A seat is a chair, and in a two-sided game it
+     * plays both roles in turn.
+     */
+    public com.gempukku.lotro.common.Side RoleOf(String player) {
+        //(before the first turn, whoever the game has as its current player while it opens, the seats are as named)
+        String current = _gameState == null || _gameState.getTurnNumber() < 1 ? null : _gameState.getCurrentPlayerId();
+        String freePeoples = current != null ? current : _freepsPlayer;
+        return player.equals(freePeoples) ? com.gempukku.lotro.common.Side.FREE_PEOPLE : com.gempukku.lotro.common.Side.SHADOW;
+    }
+
+    /** The seat whose turn it is (before the first turn, the seat that is to take it). */
+    public Seat TurnSeat() {
+        return RoleOf(_freepsPlayer) == com.gempukku.lotro.common.Side.FREE_PEOPLE ? Seat.FREEPS : Seat.SHADOW;
+    }
+
+    /**
      * @return The card a scenario alias refers to.
      */
     public PhysicalCardImpl Card(String alias) {
         PhysicalCardImpl card = _aliases.get(alias);
+        if (card == null && _def.setup.realOpening && !_dealt)
+            throw new IllegalStateException("The scenario's cards have no names yet: in the game's own opening (setup.opening: game) the "
+                    + "cards are dealt once the seats have been chosen, so nothing about the bid or the choice of going first can name one ('"
+                    + alias + "')");
         if (card == null)
             throw new IllegalStateException("The scenario has no card called '" + alias + "' on the table");
         return card;
@@ -271,11 +294,14 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         _game.startGame();
 
         //The Free Peoples seat outbids the other and elects to go first.  From there the game runs on its own
-        // through the first site and the Ring-bearers, into arrangeBoard below, and on to the first turn.
-        FreepsDecided("1");
-        ShadowDecided("0");
-        FreepsDecided("0");
-        answerOpeningSite();
+        // through the first site and the Ring-bearers, into arrangeBoard below, and on to the first turn.  (Unless
+        // the game's own opening is the scenario's to play: then every one of these is the script's to answer.)
+        if (!_def.setup.realOpening) {
+            FreepsDecided("1");
+            ShadowDecided("0");
+            FreepsDecided("0");
+            answerOpeningSite();
+        }
 
         if (_following != null)
             follow(_following);
@@ -366,9 +392,13 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         if (_arbiter != null)
             _userFeedback.setDecisionArbiter(_arbiter);
         //The table answers the bid and the choice of seat itself, the same way every time; they are not the game's story
+        // (unless the scenario plays the game's own opening, which is: see Dealt)
+        _arranged = _def.setup.realOpening;
         _userFeedback.addDecisionObserver(new DecisionObserver() {
             @Override
-            public void decisionIssued(String playerId, AwaitingDecision decision) { }
+            public void decisionIssued(String playerId, AwaitingDecision decision) {
+                Dealt();
+            }
 
             @Override
             public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) {
@@ -379,16 +409,25 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
 
         _random = new ScenarioRandom(this, _def);
         _gameState.setRandom(_journal.random(_random));
-        _gameState.setPregameSetup(this);
+        if (!_def.setup.realOpening)
+            _gameState.setPregameSetup(this);
         if (_def.oneSided)
             _gameState.setFixedFreePeoplePlayer(_freepsPlayer);
 
         //The person playing is asked to pass exactly where the scenario says, whatever their own settings are.  The
         // scripted opponent is only ever asked when it has something it could do.
-        _game.setPlayerAutoPassSettings(HumanPlayer(), EnumSet.copyOf(_def.autoPass.isEmpty() ? EnumSet.noneOf(Phase.class) : _def.autoPass));
+        Set<Phase> passed = EnumSet.noneOf(Phase.class);
+        passed.addAll(_def.autoPass);
+        if (_def.autoPassByRole != null)
+            _def.autoPassByRole.values().forEach(passed::addAll);
+        _game.setPlayerAutoPassSettings(HumanPlayer(), passed);
         _game.setPlayerAutoPassSettings(OpponentPlayer(), EnumSet.allOf(Phase.class));
-        //...except where the script's next step is about a pass: then whoever it is gets asked, to be passed by hand
-        _game.setAskToPass((player, phase) -> _arranged && _askToPass != null && _askToPass.test(player, phase));
+        //...except where the script's next step is about a pass: then whoever it is gets asked, to be passed by hand.
+        // And where autoPass is said for each role, a phase is passed through only in the role it is said for: the
+        // game knows one set of phases for a player, so it is given both roles' and asks in the role a phase is not
+        // the person's to be passed through in.
+        _game.setAskToPass((player, phase) -> _arranged && ((_askToPass != null && _askToPass.test(player, phase))
+                || (_def.autoPassByRole != null && player.equals(HumanPlayer()) && !_def.autoPassFor(RoleOf(player)).contains(phase))));
         _game.setAutoPassed((player, phase) -> {
             if (_arranged && _autoPassed != null)
                 _autoPassed.accept(player, phase);
@@ -699,6 +738,50 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         return new com.gempukku.lotro.logic.timing.processes.pregame.MidTurnStartGameProcess(_freepsPlayer, _def.setup.turn,
                 _def.setup.phase, _def.setup.moves());
     }
+
+    /** Set once the scenario's names are given to the game's cards (see Dealt). */
+    private boolean _dealt;
+    /** Why the game's own opening did not seat the players as the scenario declares them; null while it did. */
+    private String _seatingProblem;
+
+    /**
+     * In a game whose own opening is played (setup.opening: game), the game's cards do not exist until the seats have
+     * been chosen (the bid and the choice of going first come before them).  This gives them their names in the
+     * scenario as soon as they do, before any decision about them is ruled on, and puts the cards setup.<seat>.deck
+     * lists on top of their decks (the opening draw comes from there).  It is asked whenever a decision is about to
+     * be ruled on, and does it once.
+     */
+    public void Dealt() {
+        if (!_def.setup.realOpening || _dealt || _gameState == null || _gameState.getPlayerOrder() == null)
+            return;
+        _dealt = true;
+        for (Seat seat : Seat.values())
+            bindAliases(seat);
+        for (Seat seat : Seat.values())
+            for (String alias : _def.setup.zones.getOrDefault(seat, Map.of()).getOrDefault(SetupZone.DECK, List.of()).reversed())
+                MoveCardsToTopOfDeck(Card(alias));
+        //The seats are chairs the scenario declares: the Free Peoples seat is the one that goes first.  In the game's
+        // own opening who goes first is decided by the bid and the choice, which the script has to make come out so
+        String first = _gameState.getFirstPlayerId();
+        if (first != null && !first.equals(_freepsPlayer))
+            _seatingProblem = "the Shadow seat was seated to go first, but the scenario's Free Peoples seat (freeps) is the one that goes first: "
+                    + "the answers to the bid and to the choice of going first (the person's allow, the opponent's answer) have to have the "
+                    + "freeps seat bid more and choose to go first, or the shadow seat choose to go second";
+    }
+
+    /**
+     * Whether the scenario's cards have their names: always once the board is laid out; in a game whose own opening
+     * is played, once the seats have been chosen and the cards dealt (see Dealt).
+     */
+    public boolean CardsDealt() {
+        return _arranged && (!_def.setup.realOpening || _dealt);
+    }
+
+    /**
+     * Why the game's own opening seated the players otherwise than the scenario declares them (see Dealt); null if
+     * it did not (or the scenario does not play the game's opening).  A game that did is not the scenario's game.
+     */
+    public String SeatingProblem() { return _seatingProblem; }
 
     /** Whether this is the table's own question at the opening (see arrangeBoard), not one of the game's. */
     public boolean IsOpening(AwaitingDecision decision) {

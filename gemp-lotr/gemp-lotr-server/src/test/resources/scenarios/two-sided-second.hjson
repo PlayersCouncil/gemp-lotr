@@ -1,0 +1,147 @@
+{
+	id: two-sided-second
+	title: Two sides, the person second
+	note: Both seats take turns, down the path.  The person sits in the second seat: the Shadow player on turn 1 (with a fierce Uruk), the Free Peoples player on turn 2, where the opponent takes control of site 1 with Freca.
+	format: scenario
+	human: shadow
+	cards: {
+		freeps: {
+			oppFrodo: 10_121
+			boromir: 0_65
+			ravager: 4_15
+			freca: 9_2
+		}
+		shadow: {
+			frodo: 10_121
+			aragorn: 4_109
+			runner1: 1_178
+			uruk: 4_187
+		}
+	}
+	ringBearer: {
+		freeps: oppFrodo
+		shadow: frodo
+	}
+	sites: {
+		freeps: 1_323, 1_331, 1_340, 2_118, 1_349
+		shadow: 1_323, 1_331, 1_340, 2_118, 1_349
+	}
+	options: {
+		autoPass: {
+			freeps: maneuver, archery, assignment, regroup
+			shadow: maneuver, archery, assignment, regroup
+		}
+	}
+	opponent: {
+		fallback: pass
+		leftovers: ringBearer
+		orders: [
+			{
+				id: minions
+				note: The opponent's minions, on the person's turn.
+				when: opponent, action, phase(shadow), as(shadow)
+				answer: play(ravager), play(freca)
+			}
+			{
+				id: takeControl
+				once: true
+				when: opponent, optionalResponses, as(shadow)
+				answer: use(freca)
+			}
+		]
+	}
+	setup: {
+		startAt: {
+			site: 3
+			opponentSite: 2
+		}
+		freeps: {
+			characters: boromir
+			hand: ravager, freca
+		}
+		shadow: {
+			characters: aragorn
+			hand: runner1, uruk
+		}
+	}
+	steps: [
+		{
+			id: theirTurn
+			when: human, action, phase(shadow), as(shadow)
+			messages: [
+				The opponent's fellowship has moved on to site 4.  You are the Shadow player: play your Goblin and your Uruk.
+			]
+			allow: play(runner1)
+		}
+		{
+			when: human, action, phase(shadow), turn(1)
+			allow: play(uruk)
+		}
+		{
+			when: human, action, phase(shadow), turn(1)
+			allow: pass
+		}
+		{
+			when: human, assign, as(shadow), turn(1)
+			allow: assign(oppFrodo: uruk, boromir: runner1)
+		}
+		{
+			when: turn(1)
+			until: phase(regroup)
+			skirmishes: true
+			anyOrder: [
+				{
+					when: human, assign, as(shadow)
+					messages: [
+						The Uruk is fierce: it is assigned again.
+					]
+					allow: assign(boromir: uruk)
+				}
+				{
+					when: human, action, phase(skirmish)
+					answer: pass
+				}
+			]
+		}
+		{
+			id: ourTurn
+			checkpoint: true
+			when: human, action, phase(fellowship), as(freeps)
+			do: twilight(6)
+			messages: [
+				Your turn: you are the Free Peoples player now, at site 2.
+			]
+			allow: pass
+		}
+		{
+			id: assigning
+			when: human, assign, as(freeps)
+			messages: [
+				The opponent took control of site 1.  Aragorn takes Freca; Frodo the Ravager.
+			]
+			allow: assign(aragorn: freca, frodo: ravager)
+		}
+		{
+			when: turn(2)
+			until: phase(regroup)
+			anyOrder: [
+				{
+					when: human, nextSkirmish
+					answer: choose(aragorn), choose(frodo)
+				}
+				{
+					when: human, action, phase(skirmish), as(freeps)
+					messages: [
+						The skirmish: {selfStrength} against {oppStrength}.
+					]
+					answer: pass
+				}
+			]
+		}
+		{
+			when: human, anotherMove, turn(2)
+			allow: option(No)
+			end: complete
+		}
+	]
+}

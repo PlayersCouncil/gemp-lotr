@@ -108,6 +108,7 @@ public final class ScenarioRunner {
     private static boolean coveredBy(ScenarioDefinition.When one, ScenarioDefinition.When other) {
         return !other.opening
                 && (other.seat == null || other.seat == one.seat)
+                && (other.role == null || other.role == one.role)
                 && (other.decision == null || other.decision == one.decision)
                 && (other.text == null || (one.text != null && one.text.toLowerCase().contains(other.text.toLowerCase())))
                 && (other.phase == null || other.phase == one.phase)
@@ -335,6 +336,14 @@ public final class ScenarioRunner {
                 if (!explore)
                     report.failures.add("The game was stopped before the scenario ended: " + table.PathEnded()
                             + ".  Give the path more sites (sites), or have the scenario end before then (end, or outcome.win)");
+                return false;
+            }
+            if (table.SeatingProblem() != null) {
+                //The game's own opening seated the players otherwise than the scenario declares them: from here on
+                // nothing the script says of its seats is about the right chair
+                report.stopped = "the opening seated the players the other way round";
+                report.failures.add("The game's own opening (setup.opening: game) did not seat the players as the scenario declares them: "
+                        + table.SeatingProblem());
                 return false;
             }
             if (table.GameIsFinished()) {

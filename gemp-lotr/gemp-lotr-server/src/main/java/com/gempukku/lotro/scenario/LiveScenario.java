@@ -615,6 +615,13 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_result != null || !_begun)
             return;
 
+        if (_table.SeatingProblem() != null) {
+            //The game's own opening seated the players the other way round from the scenario's chairs: whatever the
+            // script says from here is about the wrong seat, so the game is not the scenario's.  The scenario's mistake.
+            problem(_table.SeatingProblem());
+            finish(Result.ERROR, List.of(), "This scenario's opening went wrong: " + _table.SeatingProblem() + ".", false, true);
+            return;
+        }
         if (_table.game().isFinished() && _table.PathEnded() != null) {
             //Not the game's own ending: the scenario's path ran out under the fellowship (ScenarioTable.EndOfThePath),
             // which is the scenario's mistake and not the person's
@@ -795,6 +802,10 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("coverage", _def.coverage.name().toLowerCase());
         event.put("human", _human);
         event.put("humanSeat", _def.human.key());
+        //Whether the seats take turns (each playing both roles), or the person's seat keeps its role all game
+        event.put("twoSided", !_def.oneSided);
+        //How the game opens: the board laid out ("board"), or the game's own opening played ("game")
+        event.put("opening", _def.setup.realOpening ? "game" : "board");
         event.put("opponent", _opponent);
         event.put("opponentName", _def.opponentDisplayName());
         event.put("autoAccept", _def.autoAccept);
@@ -835,6 +846,14 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("acknowledge", opponents || step.pause);
         event.put("pause", step.pause);
         event.put("checkpoint", step.checkpoint);
+        //Where the game is, for the person: the role they play now (in a two-sided game the Free Peoples player on
+        // their own turns, the Shadow player on the opponent's), whose turn it is, and which turn
+        event.put("role", ScenarioParser.roleName(_table.RoleOf(_human)));
+        event.put("turnOf", _table.TurnSeat() == _def.human ? "human" : "opponent");
+        event.put("turn", _table.gameState().getTurnNumber());
+        //The last checkpoint reached, this step's own included: while it is set, starting the scenario again with
+        // from=checkpoint picks up there.  Null before any has been reached.
+        event.put("lastCheckpoint", _lastCheckpoint == 0 ? null : _lastCheckpoint);
 
         //The last message shown when the decision arrives stays up while the person answers; the ones before it
         // each wait for "Next".  A message tied to a moment inside the answering is part of the answering.
@@ -949,7 +968,15 @@ public class LiveScenario implements ScenarioSession.Listener {
     private void noteCard(String alias, Map<String, Integer> cards) {
         if (alias == null)
             return;
-        PhysicalCard card = _table.Card(alias);
+        PhysicalCard card;
+        try {
+            card = _table.Card(alias);
+        } catch (IllegalStateException exp) {
+            //(a card named before the cards are dealt, in a game whose own opening is played: the scenario's mistake,
+            // and nothing to point at)
+            problem(exp.getMessage());
+            return;
+        }
         cards.put(alias, card.getCardId());
     }
 }

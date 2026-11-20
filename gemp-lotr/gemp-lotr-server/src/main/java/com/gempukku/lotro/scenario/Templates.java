@@ -16,7 +16,10 @@ import java.util.regex.Pattern;
  *     {hand:seat}                                                  ...or a seat: {hand:shadow}, {hand:freeps},
  *                                                                  {hand:opponent}, {hand:human}
  *     {selfStrength} {oppStrength}                                 the person's side's total in the skirmish being
- *                                                                  fought, and the other side's ({fpStrength} and
+ *                                                                  fought, and the other side's (the person's side
+ *                                                                  being the role they play now: in a two-sided game
+ *                                                                  the Shadow side on the other seat's turns;
+ *                                                                  {fpStrength} and
  *                                                                  {shadowStrength}, as they were once written, are
  *                                                                  read as these)
  *     {strength:x} {vitality:x} {resistance:x} {wounds:x}          a card, by alias
@@ -90,7 +93,9 @@ public final class Templates {
                     case "turn" -> String.valueOf(table.gameState().getTurnNumber());
                     case "hand" -> String.valueOf(table.gameState().getHand(table.HumanPlayer()).size());
                     case "fpstrength", "shadowstrength", "selfstrength", "oppstrength" -> {
-                        boolean selfIsFreeps = table.Definition().human == Seat.FREEPS;
+                        //(the person's side is the role they play now: in a two-sided game the Shadow side on the
+                        // other seat's turns)
+                        boolean selfIsFreeps = table.RoleOf(table.HumanPlayer()) == com.gempukku.lotro.common.Side.FREE_PEOPLE;
                         boolean freeps = switch (name) {
                             case "fpstrength" -> true;
                             case "shadowstrength" -> false;

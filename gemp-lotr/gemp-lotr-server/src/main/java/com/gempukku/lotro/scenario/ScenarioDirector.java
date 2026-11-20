@@ -380,6 +380,7 @@ public class ScenarioDirector {
             return false;
         return (when.phase == phase || (!phaseSaid && when.phase == null))
                 && (when.seat == null || when.seat == _table.SeatOf(player))
+                && (when.role == null || when.role == _table.RoleOf(player))
                 && (when.decision == null || when.decision == AwaitingDecisionType.CARD_ACTION_CHOICE)
                 && (when.turn == null || when.turn == _table.gameState().getTurnNumber())
                 && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
@@ -561,6 +562,8 @@ public class ScenarioDirector {
         if (when == null || when.opening)
             return false;
         if (when.seat != null && when.seat != _table.SeatOf(player))
+            return false;
+        if (when.role != null && when.role != _table.RoleOf(player))
             return false;
         if (when.decision != null && when.decision != AwaitingDecisionType.CARD_ACTION_CHOICE)
             return false;
@@ -878,12 +881,17 @@ public class ScenarioDirector {
 
     /**
      * The character the opponent gives every minion it has left unassigned: opponent.leftovers, or for the sandbox
-     * opponent assigning as the Shadow player, the Ring-bearer.  Null for none.
+     * opponent assigning as the Shadow player, the Ring-bearer.  Null for none.  In a two-sided game the opponent
+     * assigns leftovers only as the Shadow player (on the person's turns): on its own turns it is the Free Peoples
+     * player, whose assigning is of its own characters, and it does as its orders and its fallback say.
      */
     public String leftovers() {
+        com.gempukku.lotro.common.Side role = _table.RoleOf(_table.OpponentPlayer());
+        if (!_def.oneSided && role != com.gempukku.lotro.common.Side.SHADOW)
+            return null;
         if (_def.leftovers != null)
             return _def.leftovers;
-        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX && _def.human == Seat.FREEPS)
+        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX && role == com.gempukku.lotro.common.Side.SHADOW)
             return ScenarioDefinition.RING_BEARER;
         return null;
     }
@@ -944,15 +952,17 @@ public class ScenarioDirector {
      * choice), the same every time.
      */
     private String sandbox(String player, AwaitingDecision decision) {
-        if (decision.getDecisionType() != AwaitingDecisionType.CARD_ACTION_CHOICE || _table.SeatOf(player) != Seat.SHADOW
+        //(as the Shadow player: in a two-sided game, on the person's turns, whichever seat the opponent sits in)
+        if (decision.getDecisionType() != AwaitingDecisionType.CARD_ACTION_CHOICE || _table.RoleOf(player) != com.gempukku.lotro.common.Side.SHADOW
                 || _table.GetCurrentPhase() != Phase.SHADOW)
             return null;
+        Seat own = _table.SeatOf(player);
         List<String> candidates = new ArrayList<>();
         if (!_def.sandboxPlays.isEmpty()) {
             candidates.addAll(_def.sandboxPlays);
         } else {
             for (ScenarioDefinition.CardDef card : _def.cards.values())
-                if (card.owner() == Seat.SHADOW && !card.alias().equals(_def.ringBearer.get(Seat.SHADOW)) && !card.alias().equals(_def.ring.get(Seat.SHADOW)))
+                if (card.owner() == own && !card.alias().equals(_def.ringBearer.get(own)) && !card.alias().equals(_def.ring.get(own)))
                     candidates.add(card.alias());
         }
         List<String> ordered = new ArrayList<>();
@@ -1087,6 +1097,9 @@ public class ScenarioDirector {
         if (when.opening != _table.IsOpening(decision))
             return false;
         if (when.seat != null && when.seat != _table.SeatOf(player))
+            return false;
+        //(the role the seat plays at the moment: the Free Peoples player is the one whose turn it is)
+        if (when.role != null && when.role != _table.RoleOf(player))
             return false;
         if (when.decision != null && when.decision != decision.getDecisionType())
             return false;
@@ -1251,7 +1264,12 @@ public class ScenarioDirector {
      * @return Where things stand, for a report: the decision in the scenario's terms, with the game's clock.
      */
     public String describe(String player, AwaitingDecision decision) {
-        return _table.SeatOf(player).key() + ", " + AnswerCompiler.describe(_table, decision)
+        //(in a two-sided game, with the role the seat is playing where it is not the one its name says: "freeps as
+        // shadow", on the Shadow seat's turns)
+        Seat seat = _table.SeatOf(player);
+        boolean otherRole = (seat == Seat.FREEPS) != (_table.RoleOf(player) == com.gempukku.lotro.common.Side.FREE_PEOPLE);
+        return seat.key() + (otherRole ? " as " + ScenarioParser.roleName(_table.RoleOf(player)) : "")
+                + ", " + AnswerCompiler.describe(_table, decision)
                 + "  [turn " + _table.gameState().getTurnNumber() + ", " + _table.GetCurrentPhase().name().toLowerCase()
                 + (_table.gameState().getSkirmish() != null ? ", skirmish " + _skirmishOrdinal : "") + "]";
     }

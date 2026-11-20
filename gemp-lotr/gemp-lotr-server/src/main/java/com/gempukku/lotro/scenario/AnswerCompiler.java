@@ -161,8 +161,8 @@ public final class AnswerCompiler {
         }
         if (!resting.isEmpty()) {
             Set<String> given = new HashSet<>(named);
-            com.gempukku.lotro.common.Side side = table.SeatOf(table.PlayerOf(decision)) == Seat.FREEPS
-                    ? com.gempukku.lotro.common.Side.FREE_PEOPLE : com.gempukku.lotro.common.Side.SHADOW;
+            //(whoever is assigning, as the role they play now: a seat is the Free Peoples player on its own turns only)
+            com.gempukku.lotro.common.Side side = table.RoleOf(table.PlayerOf(decision));
             for (String characterId : resting) {
                 for (String minionId : minions) {
                     if (given.contains(minionId))

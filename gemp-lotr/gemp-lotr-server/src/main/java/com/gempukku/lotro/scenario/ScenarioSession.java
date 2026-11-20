@@ -264,6 +264,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
 
     @Override
     public List<String> release(Map<String, AwaitingDecision> waiting) {
+        //(in a game whose own opening is played, the cards get their names as soon as they are dealt)
+        _table.Dealt();
         //The bid and the choice of seat come before the scenario's board exists, and the table answers them itself
         if (!_table.Arranged())
             return new ArrayList<>(waiting.keySet());

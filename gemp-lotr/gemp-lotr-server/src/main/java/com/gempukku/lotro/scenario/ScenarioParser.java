@@ -47,6 +47,21 @@ import java.util.regex.Pattern;
  * Shadow seat's marker in a one-sided game keep level with the fellowship's.  A step's do can say marker(seat, n),
  * control(site, seat) and liberate(site), a site by its name or its number.
  *
+ * Two-sided games (rules.oneSided absent): the seats take turns, so each plays both roles, the Free Peoples player on
+ * its own turns and the Shadow player on the other's.  freeps and shadow in a 'when' are seats (chairs); as(freeps)
+ * and as(shadow) are the role the seat being asked is playing at that moment:
+ *     when: human, action, phase(maneuver), as(shadow)       the person's Maneuver action, on the opponent's turn
+ * options.autoPass can be said for each role the person plays:
+ *     autoPass: { freeps: fellowship, regroup  shadow: shadow, maneuver }      (each on a line of its own)
+ * (written as one list, it holds in whichever role they are playing, as it always has).
+ *
+ * The game's own opening can be played instead of the board being laid out:
+ *     setup: { opening: game }       the bid, the choice of going first, the starting fellowships, the opening draw
+ *                                    and the mulligans are decisions the script answers (when: bid, goFirst,
+ *                                    startingFellowship, mulligan); the decks are the declared cards in the declared
+ *                                    order (setup.<seat>.deck on top), so the opening draw is known.  Nothing else of
+ *                                    the setup can be said, and the script has to have the Free Peoples seat go first.
+ *
  * This checks the file's own shape only: that fields are known, values are of the right kind, and every card alias
  * that is used was declared.  Whether the blueprints and the format exist is for ScenarioValidator, and whether the
  * steps actually play out is for ScenarioRunner.
@@ -104,15 +119,17 @@ public final class ScenarioParser {
         if (options != null) {
             checkFields(options, "options", "autoPass", "autoAccept", "autoDismissDeckReveal", "animationSpeed", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap");
             JsonValue autoPass = get(options, "autoPass");
-            if (autoPass != null) {
-                String written = autoPass.isArray() ? "" : scalar(autoPass, "options.autoPass");
-                if (written.equalsIgnoreCase("true")) {
-                    //The same phases a player gets by default at an ordinary table
-                    def.autoPass = EnumSet.of(Phase.FELLOWSHIP, Phase.MANEUVER, Phase.ARCHERY, Phase.ASSIGNMENT, Phase.REGROUP);
-                } else if (!written.equalsIgnoreCase("false")) {
-                    for (String phase : list(autoPass, "options.autoPass"))
-                        def.autoPass.add(parsePhase(phase, "options.autoPass"));
+            if (autoPass != null && autoPass.isObject()) {
+                //For each role the person can play: { freeps: fellowship, regroup  shadow: shadow, maneuver }
+                checkFields(autoPass.asObject(), "options.autoPass", "freeps", "shadow");
+                def.autoPassByRole = new EnumMap<>(com.gempukku.lotro.common.Side.class);
+                for (String name : List.of("freeps", "shadow")) {
+                    JsonValue phases = get(autoPass.asObject(), name);
+                    def.autoPassByRole.put(name.equals("freeps") ? com.gempukku.lotro.common.Side.FREE_PEOPLE : com.gempukku.lotro.common.Side.SHADOW,
+                            phases == null ? EnumSet.noneOf(Phase.class) : autoPassPhases(phases, "options.autoPass." + name));
                 }
+            } else if (autoPass != null) {
+                def.autoPass = autoPassPhases(autoPass, "options.autoPass");
             }
             def.autoAccept = optionalBoolean(options, "autoAccept", true, "options");
             if (get(options, "autoDismissDeckReveal") != null)
@@ -155,6 +172,14 @@ public final class ScenarioParser {
                 }
             }
         }
+
+        //(after the rules: whose characters the leftovers can be depends on whether the game is one-sided)
+        if (def.leftovers != null && !def.leftovers.equals(ScenarioDefinition.RING_BEARER)
+                && card(def, def.leftovers, "opponent.leftovers").owner() != def.leftoversSeat())
+            throw new ScenarioFormatException("opponent.leftovers: '" + def.leftovers + "' is " + (def.leftoversSeat() == Seat.FREEPS
+                    ? "a Shadow card; minions are assigned to Free Peoples characters (a companion or an ally by its name, or ringBearer)"
+                    : "the opponent's own; in a two-sided game the opponent assigns its leftovers as the Shadow player, on the player's "
+                    + "turns, to the player's characters (one of the player's companions or allies by its name, or ringBearer)"));
 
         parseSetup(def, optionalObject(object, "setup", "scenario"));
 
@@ -208,6 +233,19 @@ public final class ScenarioParser {
         }
 
         return def;
+    }
+
+    /** Phases the person is passed through: a list of them, true (an ordinary table's), or false (none). */
+    private static Set<Phase> autoPassPhases(JsonValue value, String context) throws ScenarioFormatException {
+        String written = value.isArray() ? "" : scalar(value, context);
+        //The same phases a player gets by default at an ordinary table
+        if (written.equalsIgnoreCase("true"))
+            return EnumSet.of(Phase.FELLOWSHIP, Phase.MANEUVER, Phase.ARCHERY, Phase.ASSIGNMENT, Phase.REGROUP);
+        Set<Phase> phases = EnumSet.noneOf(Phase.class);
+        if (!written.equalsIgnoreCase("false"))
+            for (String phase : list(value, context))
+                phases.add(parsePhase(phase, context));
+        return phases;
     }
 
     /**
@@ -316,6 +354,14 @@ public final class ScenarioParser {
                 case "stack" -> aliasMap(def, asObject(value, "setup.stack"), result.stack, "setup.stack");
                 case "wounds" -> countMap(def, asObject(value, "setup.wounds"), result.wounds, "setup.wounds");
                 case "tokens" -> countMap(def, asObject(value, "setup.tokens"), result.tokens, "setup.tokens");
+                case "opening" -> {
+                    //(how the game opens: the board laid out as the setup says, or the game's own opening played)
+                    String opening = scalar(value, "setup.opening").trim().toLowerCase(Locale.ROOT);
+                    if (!opening.equals("board") && !opening.equals("game"))
+                        throw new ScenarioFormatException("setup.opening: has to be board (the board is laid out as the setup says; the default) "
+                                + "or game (the game's own opening is played: the bid, going first, the starting fellowships, the opening draw)");
+                    result.realOpening = opening.equals("game");
+                }
                 case "burdens" -> result.burdens = asInt(value, "setup.burdens");
                 case "threats" -> result.threats = asInt(value, "setup.threats");
                 default -> {
@@ -735,11 +781,12 @@ public final class ScenarioParser {
         When when = new When();
         if (value.isObject()) {
             JsonObject object = value.asObject();
-            checkFields(object, context, "terms", "seat", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require", "kind");
+            checkFields(object, context, "terms", "seat", "as", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require", "kind");
             //(what can be said as terms can be, in 'terms': the rest of the object adds to it, its requirements above all)
             if (object.get("terms") != null) {
                 When said = parseWhen(def, JsonValue.valueOf(scalar(object.get("terms"), context + ".terms")), context + ".terms");
                 when.seat = said.seat;
+                when.role = said.role;
                 when.decision = said.decision;
                 when.text = said.text;
                 when.phase = said.phase;
@@ -756,6 +803,8 @@ public final class ScenarioParser {
             when.source = object.toString();
             if (object.get("seat") != null)
                 when.seat = parseSeat(def, scalar(object.get("seat"), context + ".seat"), context + ".seat");
+            if (object.get("as") != null)
+                when.role = parseRole(scalar(object.get("as"), context + ".as"), context + ".as");
             if (object.get("decision") != null)
                 when.decision = parseDecisionType(scalar(object.get("decision"), context + ".decision"), context + ".decision");
             if (object.get("text") != null)
@@ -796,6 +845,8 @@ public final class ScenarioParser {
                 when.phase = parsePhase(term.arg(0, context), context);
             else if (term.is("turn"))
                 when.turn = parseInt(term.arg(0, context), context);
+            else if (term.is("as"))
+                when.role = parseRole(term.arg(0, context), context);
             else if (term.is("skirmish"))
                 when.skirmish = parseInt(term.arg(0, context), context);
             else if (term.is("offers"))
@@ -819,11 +870,11 @@ public final class ScenarioParser {
                 throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected a seat "
                         + "(freeps, shadow, human, opponent), a kind of decision (action, actionChoice, cards, arbitrary, choice, "
                         + "number, assign), what it is for (" + String.join(", ", DecisionKinds.terms()) + ", or not(one of those)), "
-                        + "or one of phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(...)");
+                        + "or one of phase(...), turn(...), as(freeps) or as(shadow), skirmish(n), inSkirmish(card), after(card), offers(card), text(...)");
         }
         if (renamed)
             when.source = String.join(", ", written);
-        if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null
+        if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null || when.role != null
                 || when.skirmish != null || when.offers != null || when.fighting != null || when.after != null || !when.kinds.isEmpty() || !when.notKinds.isEmpty()))
             throw new ScenarioFormatException(context + ": 'opening' is the moment before the first turn, and stands by itself");
         return when;
@@ -937,9 +988,6 @@ public final class ScenarioParser {
         String leftovers = optionalString(opponent, "leftovers", null, "opponent");
         if (leftovers != null && !leftovers.isBlank() && !leftovers.equalsIgnoreCase("none")) {
             def.leftovers = assignedCharacter(def, leftovers.trim(), "opponent.leftovers");
-            if (!def.leftovers.equals(ScenarioDefinition.RING_BEARER) && card(def, def.leftovers, "opponent.leftovers").owner() != Seat.FREEPS)
-                throw new ScenarioFormatException("opponent.leftovers: '" + leftovers.trim() + "' is a Shadow card; minions are assigned to Free Peoples "
-                        + "characters (a companion or an ally by its name, or ringBearer)");
         }
         for (String alias : list(get(opponent, "plays"), "opponent.plays")) {
             CardDef card = card(def, alias, "opponent.plays");
@@ -1263,8 +1311,10 @@ public final class ScenarioParser {
      * the new.
      */
     static String sidesNamed(ScenarioDefinition def, String text) {
-        if (text == null)
-            return null;
+        //(in a two-sided game the person is the Free Peoples player on their turns and the Shadow player on the
+        // other's, so the old names keep their meaning there: the Free Peoples side and the Shadow side, whoever's)
+        if (text == null || !def.oneSided)
+            return text;
         boolean freeps = def.human == Seat.FREEPS;
         return text.replaceAll("(?i)(ui:skirmish:)fpStrength\\b", "$1" + (freeps ? "selfStrength" : "oppStrength"))
                 .replaceAll("(?i)(ui:skirmish:)shadowStrength\\b", "$1" + (freeps ? "oppStrength" : "selfStrength"))
@@ -1500,6 +1550,24 @@ public final class ScenarioParser {
             case "opponent" -> def.human.other();
             default -> null;
         };
+    }
+
+    /**
+     * as(...) in a 'when': the role the seat being asked is playing at that moment, the Free Peoples player (whose turn
+     * it is) or the Shadow player.  Only the two roles: who sits where is the seat's to say (freeps, human...).
+     */
+    static com.gempukku.lotro.common.Side parseRole(String name, String context) throws ScenarioFormatException {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "freeps" -> com.gempukku.lotro.common.Side.FREE_PEOPLE;
+            case "shadow" -> com.gempukku.lotro.common.Side.SHADOW;
+            default -> throw new ScenarioFormatException(context + ": as(" + name.trim() + ") is not a role: as(freeps) is the Free Peoples "
+                    + "player (whose turn it is), as(shadow) the Shadow player");
+        };
+    }
+
+    /** A role as a 'when' writes it: freeps, shadow. */
+    static String roleName(com.gempukku.lotro.common.Side role) {
+        return role == com.gempukku.lotro.common.Side.FREE_PEOPLE ? "freeps" : "shadow";
     }
 
     private static Seat parseAbsoluteSeat(String name, String context) throws ScenarioFormatException {

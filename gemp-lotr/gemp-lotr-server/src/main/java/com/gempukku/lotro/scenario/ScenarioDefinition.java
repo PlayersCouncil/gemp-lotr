@@ -46,6 +46,20 @@ public final class ScenarioDefinition {
      */
     public Set<Phase> autoPass = EnumSet.noneOf(Phase.class);
     /**
+     * options.autoPass written for each role ({ freeps: [...], shadow: [...] }): the phases the person is passed
+     * through while they are the Free Peoples player (their own turn), and while they are the Shadow player (the
+     * other seat's turn, in a two-sided game).  Null when autoPass is written as one list, which holds whatever role
+     * the person is playing (autoPass above).
+     */
+    public Map<com.gempukku.lotro.common.Side, Set<Phase>> autoPassByRole;
+
+    /** The phases the person is passed through while playing a role: autoPassByRole's, or the one list. */
+    public Set<Phase> autoPassFor(com.gempukku.lotro.common.Side role) {
+        if (autoPassByRole == null)
+            return autoPass;
+        return autoPassByRole.getOrDefault(role, EnumSet.noneOf(Phase.class));
+    }
+    /**
      * Whether a click that completes a choice is sent at once, without a Done to confirm it.  It is fixed for the
      * game, whatever the person's own setting is, so that the scenario's text can say what will happen.
      */
@@ -102,6 +116,15 @@ public final class ScenarioDefinition {
      */
     public boolean markersTogether = false;
 
+    /**
+     * Whose characters the opponent's leftovers (and the sandbox's assigning) go to: the fellowship it assigns minions
+     * against.  In a one-sided game that is the Free Peoples seat's, whoever sits there (as it always was); in a
+     * two-sided game it is the person's, the opponent assigning as the Shadow player on the person's turns.
+     */
+    public Seat leftoversSeat() {
+        return oneSided ? Seat.FREEPS : human;
+    }
+
     public final Setup setup = new Setup();
     public final List<RngEntry> rng = new ArrayList<>();
     public final List<Step> steps = new ArrayList<>();
@@ -139,6 +162,13 @@ public final class ScenarioDefinition {
         public final Map<String, Integer> tokens = new LinkedHashMap<>();
         public int burdens = 0;
         public int threats = 0;
+        /**
+         * setup.opening: game.  The game's own opening is played, as decisions the script answers (the bid, the
+         * choice of going first, the starting fellowships, the mulligans), in place of the board being laid out: the
+         * decks are the declared cards in the declared order (with setup.<seat>.deck on top), and nothing else of
+         * the setup is said.  False (opening: board, the default): the board is prepared as the setup says.
+         */
+        public boolean realOpening = false;
 
         /*
          * Where the story has got to when the game begins (setup.startAt, and setup.twilight).  A game that begins
@@ -210,6 +240,12 @@ public final class ScenarioDefinition {
         public String text;
         public Phase phase;
         public Integer turn;
+        /**
+         * The role the seat being asked plays at that moment, written as(freeps) or as(shadow): the Free Peoples
+         * player is the one whose turn it is.  (A seat is a chair: in a two-sided game each seat plays both roles,
+         * one on its own turns and the other on the other seat's.)  Null for either.
+         */
+        public com.gempukku.lotro.common.Side role;
         /** Which skirmish of the turn is being fought, counting from 1. */
         public Integer skirmish;
         /** A card that has to be among the decision's options. */
@@ -241,7 +277,7 @@ public final class ScenarioDefinition {
         public List<DecisionKinds.Kind> notKinds = new ArrayList<>();
 
         public boolean isEmpty() {
-            return seat == null && decision == null && text == null && phase == null && turn == null
+            return seat == null && decision == null && text == null && phase == null && turn == null && role == null
                     && skirmish == null && offers == null && fighting == null && after == null && require == null && !opening
                     && kinds.isEmpty() && notKinds.isEmpty();
         }

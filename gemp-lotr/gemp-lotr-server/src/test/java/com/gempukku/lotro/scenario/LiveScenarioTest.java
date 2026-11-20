@@ -1132,4 +1132,141 @@ public class LiveScenarioTest {
         assertEquals(1, again.step.getIntValue("sub"));
         assertEquals(1, second.LastCheckpoint());
     }
+
+    /**
+     * Plays the person's side as the script has it (what the step allows, or failing that its answer) until the step
+     * on screen is one of a step's (by its name), or (for null) the scenario ends.
+     */
+    private static void playUntilNamed(LiveScenario scenario, Client client, String name) throws Exception {
+        for (int i = 0; i < 120; i++) {
+            client.await();
+            if (name == null && (client.end != null || client.mediator.isFinished()))
+                return;
+            assertNotNull("The game ended before step " + name, client.step);
+            if (name != null && name.equals(client.step.getString("name")) && client.decision != null)
+                return;
+            if (client.decision != null && client.step.getJSONObject("allow") != null) {
+                client.answerAsAllowed();
+            } else if (client.decision != null) {
+                ScenarioSession.Ruling ruling = scenario.Session().Ruling(scenario.HumanPlayer());
+                assertNotNull("The step gives no answer: " + client.step, ruling == null ? null : ruling.answer());
+                client.answer(ruling.answer());
+            } else {
+                client.acknowledge();
+            }
+        }
+        fail("Step " + name + " never came");
+    }
+
+    @Test
+    public void TheStepEventSaysTheRoleWhoseTurnItIsAndTheLastCheckpoint() throws Exception {
+        ScenarioDefinition def = ScenarioTwoSidedTest.fixture("two-sided-first");
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+        assertTrue(client.info.getBooleanValue("twoSided"));
+        assertEquals("board", client.info.getString("opening"));
+        assertEquals("freeps", client.info.getString("humanSeat"));
+
+        //The person's own turn: the Free Peoples player, and no checkpoint reached yet
+        playUntilNamed(scenario, client, "firstAssign");
+        assertEquals("freeps", client.step.getString("role"));
+        assertEquals("human", client.step.getString("turnOf"));
+        assertEquals(1, client.step.getIntValue("turn"));
+        assertNull(client.step.get("lastCheckpoint"));
+        assertFalse(client.step.getBooleanValue("checkpoint"));
+
+        //The opponent's turn: the Shadow player, at the checkpoint step itself
+        playUntilNamed(scenario, client, "theirTurn");
+        assertEquals("shadow", client.step.getString("role"));
+        assertEquals("opponent", client.step.getString("turnOf"));
+        assertEquals(2, client.step.getIntValue("turn"));
+        assertTrue(client.step.getBooleanValue("checkpoint"));
+        assertEquals(5, client.step.getIntValue("lastCheckpoint"));
+
+        //...and it stays set at the steps after it
+        playUntilNamed(scenario, client, "control");
+        assertEquals(5, client.step.getIntValue("lastCheckpoint"));
+        assertFalse(client.step.getBooleanValue("checkpoint"));
+        assertEquals(List.of(), scenario.Problems());
+    }
+
+    @Test
+    public void AGameStillGoingCanBeTakenBackToItsCheckpoint() throws Exception {
+        //What starting the scenario with from=checkpoint does while the person is in the middle of it
+        // (LotroServer.createScenarioGame): the running game's checkpoint journal is taken, the running game is
+        // conceded, and a new game follows the journal
+        ScenarioDefinition def = ScenarioTwoSidedTest.fixture("two-sided-first");
+        LiveScenario first = live(def);
+        LotroGameMediator running = start(first);
+        Client client = new Client(running);
+        client.connect();
+        playUntilNamed(first, client, "control");
+        assertFalse(running.isFinished());
+        GameJournal checkpoint = running.checkpointJournal();
+        assertNotNull(checkpoint);
+        running.concede(client.player);
+        assertTrue(running.isFinished());
+        assertEquals(LiveScenario.Result.ABANDONED, first.Result());
+
+        LiveScenario second = live(def, checkpoint);
+        LotroGameMediator mediator = start(second);
+        assertNull(second.Table().FollowProblem());
+        Client again = new Client(mediator);
+        again.connect();
+        assertEquals(5, again.info.getIntValue("resumedAt"));
+        //Back on the opponent's turn, at the step the checkpoint is, the person the Shadow player again
+        assertEquals(List.of(5), again.stepsSeen);
+        assertEquals(2, second.Table().gameState().getTurnNumber());
+        assertEquals("shadow", again.step.getString("role"));
+        assertEquals(5, again.step.getIntValue("lastCheckpoint"));
+        //...and it plays on to its end
+        playUntilNamed(second, again, null);
+        again.poll();
+        assertNotNull(again.end);
+        assertEquals("complete", again.end.getString("result"));
+        assertEquals(List.of(), second.Problems());
+    }
+
+    @Test
+    public void AnOpeningThatSeatsThePlayersTheOtherWayRoundIsTheScenariosMistake() throws Exception {
+        //The person chooses to go second: the Shadow seat would take the first turn, which is not the scenario's game
+        ScenarioDefinition def = ScenarioParser.parse(Files.readString(new File("src/test/resources/scenarios/real-opening.hjson").toPath(),
+                StandardCharsets.UTF_8).replace("allow: option(Go first)", "allow: option(Go second)"));
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+        assertEquals("game", client.info.getString("opening"));
+        for (int i = 0; i < 10 && client.end == null; i++) {
+            client.await();
+            if (client.end != null)
+                break;
+            if (client.decision != null)
+                client.answerAsAllowed();
+            else
+                client.acknowledge();
+        }
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("error", client.end.getString("result"));
+        assertTrue(client.end.getString("message"), client.end.getString("message").contains("the Shadow seat was seated to go first"));
+        assertEquals(LiveScenario.Result.ERROR, scenario.Result());
+    }
+
+    @Test
+    public void TheGamesOwnOpeningIsPlayedWithAPersonInTheSeat() throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(Files.readString(new File("src/test/resources/scenarios/real-opening.hjson").toPath(),
+                StandardCharsets.UTF_8));
+        LiveScenario scenario = live(def);
+        Client client = new Client(start(scenario));
+        client.connect();
+        playUntilNamed(scenario, client, "bid");
+        assertEquals(1, client.step.getIntValue("step"));
+        playUntilNamed(scenario, client, "mulligan");
+        playUntilNamed(scenario, client, null);
+        client.poll();
+        assertNotNull(client.end);
+        assertEquals("complete", client.end.getString("result"));
+        assertEquals(List.of(), scenario.Problems());
+    }
 }
