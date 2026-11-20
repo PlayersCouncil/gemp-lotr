@@ -522,6 +522,106 @@ public class ScenarioLateStartTest {
         assertEquals(3, read.def().setup.site);
     }
 
+    /* ------------------------------------------------------------------ a path whose sites have no numbers (A4) */
+
+    /** The test scenario on a Shadows-block path: three sites for each seat, none of them numbered. */
+    private static String shadowsPath(String rest) {
+        return ScenarioTesting.scenario(rest).replace("format: scenario", "format: scenario_shadows").replace("""
+                		freeps: 1_323, 1_331, 1_340, 2_118
+                		shadow: 1_323, 1_331, 1_340, 2_118
+                """.replace("                ", ""), """
+                		freeps: {
+                			road: 11_236
+                			silverlode: 11_261
+                			bog: 11_249
+                		}
+                		shadow: {
+                			oppRoad: 11_236
+                			inn: 11_242
+                			guardroom: 11_247
+                		}
+                """.replace("                ", ""));
+    }
+
+    private static ScenarioTable shadowsTable(String rest) throws Exception {
+        ScenarioDefinition def = ScenarioParser.parse(shadowsPath(rest));
+        assertEquals(List.of(), ScenarioValidator.validate(def, ScenarioTesting.library()));
+        ScenarioTable table = new ScenarioTable(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), ScenarioRunner.HUMAN, ScenarioRunner.OPPONENT);
+        table.Start();
+        return table;
+    }
+
+    @Test
+    public void aPathWithoutNumbersIsLaidOutByTheScenario() throws Exception {
+        assertFalse("The scenario format of the Shadows block is not offered in the hall", ScenarioTesting.format("scenario_shadows").isOrderedSites());
+
+        //The game's opening asks which site is site 1; the table answers it with the first site listed
+        ScenarioTable table = shadowsTable("");
+        assertTrue("The board was laid out: the opening did not wait for the site", table.Arranged());
+        assertEquals(List.of(), table.Problems());
+        assertSame(table.Card("road"), table.gameState().getSite(1));
+        assertEquals(Phase.FELLOWSHIP, table.GetCurrentPhase());
+        assertTrue(table.FreepsDecisionAvailable("Play Fellowship action or Pass"));
+
+        //A start further on lays the seat's sites in the order the scenario lists them
+        table = shadowsTable("\tsetup: {\n\t\tstartAt: {\n\t\t\tsite: 3\n\t\t}\n\t}");
+        assertEquals(List.of(), table.Problems());
+        assertSame(table.Card("road"), table.gameState().getSite(1));
+        assertSame(table.Card("silverlode"), table.gameState().getSite(2));
+        assertSame(table.Card("bog"), table.gameState().getSite(3));
+        assertSame(table.Card("bog"), table.gameState().getCurrentSite());
+
+        //...or the path says which, in which order
+        table = shadowsTable("\tsetup: {\n\t\tstartAt: {\n\t\t\tsite: 2\n\t\t}\n\t\tpath: bog, inn\n\t}");
+        assertEquals(List.of(), table.Problems());
+        assertSame("Site 1 is chosen as the path says", table.Card("bog"), table.gameState().getSite(1));
+        assertSame(table.Card("inn"), table.gameState().getSite(2));
+        assertEquals(table.P2(), table.gameState().getSite(2).getOwner());
+
+        //Past four sites of its own, a path with three runs out
+        assertProblem2(shadowsPath("\tsetup: {\n\t\tstartAt: {\n\t\t\tsite: 4\n\t\t}\n\t}"), "the Free Peoples seat's sites have no site 4");
+    }
+
+    private static void assertProblem2(String file, String fragment) throws Exception {
+        List<String> problems = ScenarioValidator.validate(ScenarioParser.parse(file), ScenarioTesting.library());
+        assertTrue("Expected a problem containing '" + fragment + "': " + problems, problems.stream().anyMatch(one -> one.contains(fragment)));
+    }
+
+    @Test
+    public void aSiteToPlayIsChosenByItsName() throws Exception {
+        //Moving on to a site that is not on the path has the Shadow seat play one, and choose which: choose(site)
+        ScenarioRunReport report = ScenarioRunner.run(ScenarioParser.parse(shadowsPath("""
+                	rules: {
+                		oneSided: true
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: pass
+                		}
+                		{
+                			when: opponent, arbitrary, text(Choose site to play)
+                			answer: choose(inn)
+                		}
+                		{
+                			when: {
+                				terms: freeps, action, phase(regroup)
+                				require: {
+                					type: canSpot
+                					filter: siteNumber(2),alias(inn)
+                				}
+                			}
+                			allow: pass
+                			end: complete
+                		}
+                	]
+                """)), ScenarioTesting.library(), ScenarioTesting.format("scenario_shadows"));
+        assertTrue(report.toString(), report.passed());
+    }
+
     /* ------------------------------------------------------------------ markers and site control (A2, A5) */
 
     @Test

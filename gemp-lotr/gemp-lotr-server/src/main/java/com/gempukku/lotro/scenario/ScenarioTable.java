@@ -275,9 +275,44 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         FreepsDecided("1");
         ShadowDecided("0");
         FreepsDecided("0");
+        answerOpeningSite();
 
         if (_following != null)
             follow(_following);
+    }
+
+    /**
+     * On a path whose sites have no numbers (from the Shadows block on), the game's opening has the first player
+     * choose which of their sites is site 1, before the board is laid out.  That is the table's to answer, as the bid
+     * and the seat are: the first site setup.path names, if it is one of the Free Peoples seat's, and otherwise the
+     * first site the scenario lists for that seat.
+     */
+    private void answerOpeningSite() {
+        AwaitingDecision decision = _userFeedback.getAwaitingDecision(_freepsPlayer);
+        if (_arranged || decision == null || decision.getDecisionType() != com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ARBITRARY_CARDS)
+            return;
+        List<String> wanted = new ArrayList<>();
+        if (!_def.setup.path.isEmpty())
+            wanted.add(_def.setup.path.getFirst());
+        wanted.addAll(_def.siteAliases.getOrDefault(Seat.FREEPS, List.of()));
+        String[] ids = decision.getDecisionParameters().get("cardId");
+        String[] blueprints = decision.getDecisionParameters().get("blueprintId");
+        List<String> blueprintsWanted = _def.sites.getOrDefault(Seat.FREEPS, List.of());
+        //(the aliases are bound only as the board is laid out, so the choice is known by its blueprint: the first
+        // listed site that is on offer, in the order the scenario lists them)
+        for (String alias : wanted) {
+            int at = _def.siteAliases.getOrDefault(Seat.FREEPS, List.of()).indexOf(alias);
+            if (at < 0 || ids == null || blueprints == null)
+                continue;
+            String blueprint = _format.applyErrata(blueprintsWanted.get(at));
+            for (int i = 0; i < blueprints.length; i++)
+                if (blueprints[i].equals(blueprint)) {
+                    FreepsDecided(ids[i]);
+                    return;
+                }
+        }
+        if (ids != null && ids.length > 0)
+            FreepsDecided(ids[0]);
     }
 
     private void follow(GameJournal earlier) {

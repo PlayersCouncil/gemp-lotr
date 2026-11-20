@@ -1,0 +1,68 @@
+{
+	id: shadows-path
+	title: A path whose sites have no numbers
+	note: "A test fixture: an adventure path from the Shadows block on, laid out by the scenario itself.  Site 1 is the first site listed for the Free Peoples seat, and each later site is chosen by whoever plays it, which the script answers by naming the site."
+	format: scenario_shadows
+	human: freeps
+	opponent: {
+		fallback: pass
+		orders: [
+			{
+				when: opponent, arbitrary, text(Choose site to play)
+				answer: choose(guardroom)
+			}
+		]
+	}
+	coverage: strict
+	cards: {
+		freeps: {
+			frodo: 10_121
+			aragorn: 4_109
+		}
+		shadow: {
+			oppFrodo: 10_121
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	sites: {
+		freeps: {
+			road: 11_236
+			silverlode: 11_261
+			bog: 11_249
+		}
+		shadow: {
+			oppRoad: 11_236
+			inn: 11_242
+			guardroom: 11_247
+		}
+	}
+	rules: {
+		oneSided: true
+	}
+	steps: [
+		{
+			when: freeps, action, phase(fellowship)
+			messages: [
+				{
+					text: "Your path starts at the East Road, which this scenario put down for you."
+					anchor: card:road
+				}
+			]
+			allow: pass
+		}
+		{
+			when: freeps, action, phase(regroup)
+			messages: [
+				{
+					text: "Your opponent chose the Moria Guardroom to be site 2."
+					anchor: card:guardroom
+				}
+			]
+			allow: pass
+			end: complete
+		}
+	]
+}
