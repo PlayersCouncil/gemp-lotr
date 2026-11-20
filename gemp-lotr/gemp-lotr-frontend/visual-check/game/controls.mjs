@@ -169,7 +169,14 @@ export function readGameState({ kind }) {
     ruleOf4: read('ruleof4'),
     alert: read('alert'),
     alertButtons: Array.from(document.querySelectorAll('[data-game="alert-buttons"] [data-decision-button]'), text),
-    dialogs: Array.from(document.querySelectorAll('[data-dialog-title]')).filter(shown).map(text),
+    // The modern theme's game's end (the owner, 2026-11-20) holds the server's feedback form, as game.html's dialog did
+    dialogs: Array.from(document.querySelectorAll('[data-dialog-title]'))
+      .filter(shown)
+      .map((el) =>
+        el.closest('[data-dialog="game-ended"]')?.querySelector('[data-ended="feedback"]')
+          ? `${text(el)} (the game's end, with the feedback)`
+          : text(el),
+      ),
     menu: Array.from(document.querySelectorAll('[data-action-id]'), text),
     stats,
     cards: cards.sort(),

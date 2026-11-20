@@ -74,8 +74,9 @@ function recordings() {
 }
 
 /** Opens the Angular page on a device on the game as it stood after `count` exchanges, in the modern theme. */
-export async function openPhone(browser, device, recording, count, { cookies = [] } = {}) {
-  const [width, height] = (device !== 'computer' && options.size?.split('x').map(Number)) || [];
+export async function openPhone(browser, device, recording, count, { cookies = [], viewport: size = null } = {}) {
+  const [width, height] =
+    (size && [size.width, size.height]) || (device !== 'computer' && options.size?.split('x').map(Number)) || [];
   const viewport = width && height ? { viewport: { width, height } } : DEVICES[device];
   const context = await browser.newContext({ ...PHONE_CONTEXT, ...viewport });
   const log = [];
@@ -257,7 +258,130 @@ const STATES = {
    * Shadow): the recorded games pass that phase within one answer, so they never stay on screen.
    */
   archery: { recording: 'effects-skirmish', count: 25, lastEvents: () => archeryTotals('2', '1') },
+
+  // --- What cards do to each other, as the server sends it (the mechanics the MECHANICS check goes through) ---
+  // The cards of the late step: the player's Frodo 43 (the One Ring 44 on him), Gimli 47 (his axe 49 on him), Sam 48,
+  // the possession 50 in support; the opponent's minion 56 and condition 53 in support; sites 42, 51, 55 on the path.
+
+  /** Cards hindered (turned face down: FCIP hindered): a character, a minion, a possession in support, an attached card. */
+  hindered: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: () => flip(['47', '56', '50', '44'], true),
+    stats: (gs) =>
+      gs.replace(/hindered="[^"]*"/, 'hindered="47,56,50,44"').replace(/(\d+)=[^,"]*,?/g, keepStats('48,43')),
+  },
+  /**
+   * Cards hindered and turned up again (FCIP hindered false): Gimli 47 before the stats name him again (his numbers
+   * still hidden, as game.html hides them), the minion 56 after them (its numbers back).
+   */
+  restored: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: () => flip(['47', '56'], true) + flip(['47', '56'], false),
+    stats: (gs) => gs.replace(/(\d+)=[^,"]*,?/g, keepStats('48,43,56')),
+  },
+  /** Tokens: wounds on Gimli, burdens on Frodo, culture tokens on a possession and on a condition, several at once. */
+  tokens: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (opponent, player) =>
+      [
+        ['47', '1_12', player, 'WOUND', 2, 'FREE_CHARACTERS'],
+        ['43', '1_290', player, 'BURDEN', 3, 'FREE_CHARACTERS'],
+        ['50', '1_20', player, 'ELVEN', 2, 'SUPPORT'],
+        ['53', '1_183', opponent, 'SAURON', 4, 'SUPPORT'],
+      ]
+        .map(
+          ([cardId, blueprintId, owner, token, count, zone]) =>
+            `<ge blueprintId="${blueprintId}" cardId="${cardId}" count="${count}" hindered="false" ` +
+            `participantId="${owner}" timestamp="2026-11-20 00:00:00.0000" token="${token}" type="AT" zone="${zone}"/>`,
+        )
+        .join(''),
+  },
+  /** An attached card moved to another character (MCIP, as a possession is transferred): Gimli's axe 49 onto Sam 48. */
+  moved: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (_opponent, player) =>
+      `<ge blueprintId="1_9" cardId="49" hindered="false" participantId="${player}" targetCardId="48" ` +
+      `targetType="attached" timestamp="2026-11-20 00:00:00.0000" type="MCIP" zone="ATTACHED"/>`,
+  },
+  /** A site the opponent controls (MCIP with controllerId, into the controller's support): the player's site 42. */
+  siteControlled: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (opponent, player) =>
+      `<ge blueprintId="1_319" cardId="42" controllerId="${opponent}" hindered="false" participantId="${player}" ` +
+      `timestamp="2026-11-20 00:00:00.0000" type="MCIP" zone="SUPPORT"/>`,
+  },
+  /** Threats on the player (2 of the 3 the fellowship can take) and the Shadow holding the initiative. */
+  threats: {
+    recording: 'effects-skirmish',
+    count: 25,
+    stats: (gs, _opponent, player) =>
+      gs
+        .replace('initiative="FREE_PEOPLE"', 'initiative="SHADOW"')
+        .replace(new RegExp(`(<threats name="${player}" value=")\\d+`), '$12'),
+  },
+  /**
+   * The opponent's hand revealed: the server sends its cards (PCIP into HAND, forceVisible) and marks it in the stats
+   * (playerZones handRevealed).
+   */
+  revealedHand: {
+    recording: 'effects-skirmish',
+    count: 25,
+    stats: (gs, opponent) =>
+      gs.replace(new RegExp(`(<playerZones\\b[^>]*name="${opponent}")`), '$1 handRevealed="true"'),
+    lastEvents: (opponent) =>
+      [
+        ['9301', '1_178'],
+        ['9302', '1_183'],
+        ['9303', '1_12'],
+      ]
+        .map(
+          ([cardId, blueprintId]) =>
+            `<ge blueprintId="${blueprintId}" cardId="${cardId}" hindered="false" participantId="${opponent}" ` +
+            `timestamp="2026-11-20 00:00:00.0000" type="PCIP" zone="HAND"/>`,
+        )
+        .join(''),
+  },
+  /**
+   * An RTMD meta-site in the player's support (the server puts them there before the first site): the modifier card
+   * 91_1, drawn as game.html draws it once the pre-game setup names its visual card 90_1 (PGS metaSites): the visual
+   * card's picture with the modifier's bottom over it.
+   */
+  metaSite: {
+    recording: 'effects-skirmish',
+    count: 25,
+    events: (_opponent, player) => metaSiteCard(player),
+    preGame: (player) => `${player}:90_1|91_1`,
+  },
+  /** The same card with no pre-game setup naming it (what the modifier card alone looks like, for metaSite). */
+  metaSitePlain: { recording: 'effects-skirmish', count: 25, events: (_opponent, player) => metaSiteCard(player) },
 };
+
+/** The RTMD modifier card 91_1 in the player's support, as the server puts it there (PCIP). */
+function metaSiteCard(player) {
+  return (
+    `<ge blueprintId="91_1" cardId="9401" hindered="false" participantId="${player}" ` +
+    'timestamp="2026-11-20 00:00:00.0000" type="PCIP" zone="SUPPORT"/>'
+  );
+}
+
+/** Cards turned face down (hindered) or up again, as the server flips them (FCIP). */
+function flip(cardIds, hindered) {
+  return (
+    `<ge hindered="${hindered}" otherCardIds="${cardIds.join(',')}" timestamp="2026-11-20 00:00:00.0000" ` +
+    'type="FCIP"/>'
+  );
+}
+
+/** For a GS's charStats (`id=strength|vitality|...`): keeps the named cards' entries, drops the others. */
+function keepStats(ids) {
+  const kept = ids.split(',');
+  return (entry, id) => (kept.includes(id) ? entry : '');
+}
 
 /** The game's stats as the server sends them in the archery phase (GS), with these totals. */
 function archeryTotals(fp, shadow) {
@@ -313,7 +437,10 @@ function opponentCards(opponent) {
  */
 function recordingOf(state) {
   const base = recording(state.recording);
-  if (!state.events && !state.lastEvents && !state.discardPublic && !state.offer && !state.moreChoices) return base;
+  const changed = ['events', 'lastEvents', 'stats', 'discardPublic', 'offer', 'moreChoices', 'preGame'];
+  if (!changed.some((key) => state[key])) {
+    return base;
+  }
   const publicDiscard = (body) =>
     state.discardPublic
       ? body
@@ -331,11 +458,26 @@ function recordingOf(state) {
     exchanges: base.exchanges.map((exchange, i) => {
       if (exchange.path !== '/game/<id>' || typeof exchange.body !== 'string') return exchange;
       let body = publicDiscard(exchange.body);
+      if (state.preGame) {
+        // The pre-game setup (PGS) as the server sends it for this table: its meta-sites (an attribute the server
+        // leaves out when there are none)
+        const metaSites = `metaSites="${state.preGame(base.participant)}"`;
+        body = body.replace(/<ge\b[^>]*\btype="PGS"[^>]*>/, (pgs) =>
+          /\bmetaSites="/.test(pgs)
+            ? pgs.replace(/\bmetaSites="[^"]*"/, metaSites)
+            : pgs.replace(/\btype="PGS"/, `${metaSites} $&`),
+        );
+      }
       if (i === last && state.events) {
         body = body.replace(/(<update[^>]*>)/, `$1${state.events(opponent, base.participant)}`);
       }
       if (i === last && state.lastEvents) {
         body = body.replace(/(<\/update>)/, `${state.lastEvents(opponent, base.participant)}$1`);
+      }
+      if (i === last && state.stats) {
+        // The game's stats as the server sends them after the change: the last GS until then, changed
+        const gs = lastStats(base, state.count);
+        body = body.replace(/(<\/update>)/, `${state.stats(gs, opponent, base.participant)}$1`);
       }
       if (i === last && state.moreChoices) {
         // More cards in a decision offering cards from off the table (cardId, blueprintId, selectable each)
@@ -354,6 +496,16 @@ function recordingOf(state) {
       return { ...exchange, body };
     }),
   };
+}
+
+/** The last game stats (GS, whole) the server sent in a recording's first `count` exchanges. */
+function lastStats(base, count) {
+  let last = null;
+  for (const exchange of base.exchanges.slice(0, count)) {
+    for (const match of exchange.body?.matchAll?.(/<ge\b[^>]*\btype="GS"[^>]*>[\s\S]*?<\/ge>/g) ?? []) last = match[0];
+  }
+  if (!last) throw new Error(`no game stats in ${base.name}'s first ${count} exchanges`);
+  return last;
 }
 
 /** The other player of a recorded game: the one its events name who isn't the recording's participant. */
@@ -1387,4 +1539,11 @@ async function main() {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   await main();
+}
+
+/** A prepared state's recording (a copy), named after the state, with the count to open it at (for other tools). */
+export function mechanicState(name) {
+  const state = STATES[name];
+  if (!state) throw new Error(`no state ${name} (${Object.keys(STATES).join(', ')})`);
+  return { ...recordingOf(state), name, count: state.count };
 }
