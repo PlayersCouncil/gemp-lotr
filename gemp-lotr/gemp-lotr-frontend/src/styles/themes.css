@@ -59,6 +59,92 @@
   --theme-login-link-visited: #a63f03;
   --theme-login-contact: orange;
 
+  /*
+   * The hall's frame (hall.css, icons.css; the hall's jQuery UI 1.13.2 "dark-hive" build, whose images differ from the
+   * deck builder's 1.8 ones and are in public/themes/classic/hall/). Icons are the site's own (images/icons)
+   */
+  --theme-hall-content-bg: #000 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_loop_25_000000_21x21.png') 50% 50% repeat;
+  --theme-hall-default-bg: #222 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_35_222222_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-hover-bg: #003147 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_33_003147_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-active-bg: #0972a5 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-hard_20_0972a5_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-header-bg: #444 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50%
+    repeat-x;
+  --theme-hall-panel-bg: linear-gradient(to top, #200902, #111 80%);
+  --theme-hall-info-bg: linear-gradient(to top, #333, #111 40%, #111);
+  --theme-hall-info-border: #bf8a4a;
+  --theme-hall-bar-bg: #333;
+  --theme-hall-bar-border: #aaa;
+  --theme-hall-play-bg: #540 linear-gradient(#845826, #1c1c1c);
+  --theme-hall-play-hover-bg: #540 linear-gradient(#bf8a4a, #1c1c1c);
+  --theme-hall-clock: #dd0;
+  --theme-hall-link: #e88104;
+  --theme-hall-link-hover: #ffa640;
+  --theme-hall-resizer: #777;
+  --theme-hall-resizer-grip: #999;
+  /* Black SVG icons drawn white; Play's drawn gold */
+  --theme-hall-icon-filter: brightness(0) invert(1);
+  --theme-hall-play-icon-filter: invert(74%) sepia(62%) saturate(1872%) hue-rotate(333deg) brightness(101%)
+    contrast(92%);
+  --theme-hall-icon-game-hall: url('/gemp-lotr/images/icons/swords.svg');
+  --theme-hall-icon-help: url('/gemp-lotr/images/icons/circle-question-solid.svg');
+  --theme-hall-icon-events: url('/gemp-lotr/images/icons/flag-solid.svg');
+  --theme-hall-icon-info: url('/gemp-lotr/images/icons/chart-line-solid.svg');
+  --theme-hall-icon-account: url('/gemp-lotr/images/icons/gear-solid.svg');
+  --theme-hall-icon-admin: url('/gemp-lotr/images/icons/toolbox-solid.svg');
+  --theme-hall-icon-bug: url('/gemp-lotr/images/icons/bug-solid.svg');
+  --theme-hall-icon-report: url('/gemp-lotr/images/icons/ban-solid.svg');
+  --theme-hall-icon-discord: url('/gemp-lotr/images/icons/discord-brands.svg');
+  --theme-hall-icon-wiki: url('/gemp-lotr/images/icons/book-open-solid.svg');
+  --theme-hall-icon-merchant: url('/gemp-lotr/images/icons/store-slash-solid.svg');
+  --theme-hall-icon-deckbuilder: url('/gemp-lotr/images/icons/hammer-solid.svg');
+  --theme-hall-icon-play: url('/gemp-lotr/images/icons/card-random.svg');
+  /* The connection readout and its popup (hallUi.js HallConnectionIndicator) */
+  --theme-hall-connection-text: #ccc;
+  --theme-hall-connection-hover-bg: #444;
+  --theme-hall-state-ring: #0006;
+  --theme-hall-state-connecting: #f08c28;
+  --theme-hall-state-connected: #3fbf5f;
+  --theme-hall-state-shutdown: #f5e030;
+  --theme-hall-state-shutdown-text: #f5e36a;
+  --theme-hall-state-disconnected: #e04040;
+  --theme-hall-state-disconnected-text: #ff8080;
+  --theme-hall-state-loggedout: #909090;
+  --theme-hall-popup-bg: #222;
+  --theme-hall-popup-border: #666;
+  --theme-hall-popup-shadow: #000a;
+
+  /* The hall's chat (hall.css #chat, #chatMessages, .message, #userList, .chatUser, .chatUserMenu) */
+  --theme-chat-bg: #121212;
+  --theme-chat-messages-border: #222;
+  --theme-chat-outline: #777;
+  --theme-chat-text: #ddd;
+  --theme-chat-system: #8a8a8a;
+  --theme-chat-time: #cfcfcf;
+  --theme-chat-mention-bg: #ff04;
+  --theme-chat-ping-bg: #f004;
+  --theme-chat-quote-border: #505050;
+  --theme-chat-input-bg: #1c1c1c;
+  --theme-chat-stopped-bg: #f99;
+  --theme-chat-column-border: #999;
+  --theme-chat-player-hover-bg: #333;
+  --theme-chat-ignored: #999;
+  --theme-chat-badge-border: #666;
+  --theme-chat-admin-border: #d4a93a;
+  --theme-chat-admin-text: #f0cf73;
+  --theme-chat-league-admin-border: #5e9bd6;
+  --theme-chat-league-admin-text: #9cc7ef;
+  --theme-chat-online-border: #4f8a4f;
+  --theme-chat-online-bg: #1e3a1e;
+  --theme-chat-online-text: #b6ecb6;
+  --theme-chat-incognito-border: #8a7a4f;
+  --theme-chat-incognito-bg: #3a3320;
+  --theme-chat-incognito-text: #f0dc9c;
+  --theme-chat-menu-bg: #262626;
+  --theme-chat-menu-shadow: #0009;
+
   /* Selects and text fields (hall.css) */
   --theme-field-bg: #222;
   --theme-field-hover-bg: #444;

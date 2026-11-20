@@ -1,0 +1,13 @@
+/* A tab's placeholder: the sub-tabs at the left (as the legacy tabs' .hall-tab flex-horiz), the empty content beside */
+
+:host {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 5px;
+  min-height: 0;
+}
+
+.gd-hall-placeholder__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}

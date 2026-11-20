@@ -1,0 +1,302 @@
+/*
+ * The hall's frame: the legacy hall.html #main (a jQuery UI 1.13 "dark-hive" tabs widget, at most 1400px wide in the
+ * body's 8px margin) holding the tab bar, the tab's panel (.hall-tab's gradient, stopping 1rem short of the bar), the
+ * main bar (.buttons-gutter), the chat (#chat: 300px high plus 5px, with the resize bar along its top) and the
+ * disclaimer. Sizes from css/gemp-001/{hall,icons}.css and the jQuery UI theme (the widget font, 1.1em of 12px);
+ * translated by kermit (kermit/feature/frontend-themes, themes/classic/hall.css).
+ */
+
+:host {
+  position: fixed;
+  inset: 8px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto 10px;
+  grid-template-areas: 'tabs' 'panel' 'bar' 'chat' 'disclaimer';
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-content-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+}
+
+/* ---------------------------------------------------------------- the tab bar (.ui-tabs-nav) */
+
+.gd-hall__tabs {
+  grid-area: tabs;
+  display: flex;
+  align-items: flex-start;
+  padding: 2.64px 2.64px 0;
+  border: 1px solid var(--theme-header-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-header-bg);
+}
+
+/* A tab: a 20px box with the text at its top, its icon (.custom-icon) 10px in */
+.gd-hall__tab {
+  position: relative;
+  box-sizing: content-box;
+  height: 17.16px;
+  margin: 1px 2.64px 0 0;
+  padding: 6.6px 13.2px 9.44px 35px;
+  border: 1px solid var(--theme-widget-border);
+  border-bottom-width: 0;
+  border-radius: var(--theme-radius) var(--theme-radius) 0 0;
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-text);
+  line-height: 17.16px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gd-hall__tab::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 6.6px;
+  width: 20px;
+  height: 20px;
+  background: no-repeat 0 0 / 100%;
+  filter: var(--theme-hall-icon-filter);
+}
+
+/* The Game Hall's icon is 25px */
+.gd-hall__tab[data-tab='game-hall']::before {
+  top: 4.1px;
+  width: 25px;
+  height: 25px;
+  background-image: var(--theme-hall-icon-game-hall);
+}
+
+.gd-hall__tab[data-tab='help']::before {
+  background-image: var(--theme-hall-icon-help);
+}
+
+.gd-hall__tab[data-tab='events']::before {
+  background-image: var(--theme-hall-icon-events);
+}
+
+.gd-hall__tab[data-tab='info']::before {
+  background-image: var(--theme-hall-icon-info);
+}
+
+.gd-hall__tab[data-tab='account']::before {
+  background-image: var(--theme-hall-icon-account);
+}
+
+.gd-hall__tab[data-tab='admin']::before {
+  background-image: var(--theme-hall-icon-admin);
+}
+
+.gd-hall__tab:hover,
+.gd-hall__tab:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  outline: none;
+}
+
+.gd-hall__tab[aria-current='page'] {
+  margin-bottom: -1px;
+  padding-bottom: 10.44px;
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+  cursor: text;
+}
+
+/* ---------------------------------------------------------------- the tab's panel (.hall-tab) */
+
+/* The panel's gradient stops 1rem short of the bar: the frame's background shows below it */
+.gd-hall__panel {
+  grid-area: panel;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: 12px;
+  overflow: hidden;
+  border-radius: 0 0 var(--theme-radius) var(--theme-radius);
+  background: var(--theme-hall-panel-bg) 0 0 / 100% calc(100% - 12px) no-repeat;
+}
+
+/* The tab's own component fills it */
+.gd-hall__panel > :not(router-outlet) {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------------- the main bar (.buttons-gutter) */
+
+.gd-hall__bar {
+  grid-area: bar;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 5px;
+  border-top: 1px solid var(--theme-hall-bar-border);
+  background-color: var(--theme-hall-bar-bg);
+}
+
+.gd-hall__bar > gd-hall-connection,
+.gd-hall__clock {
+  flex: 1 1 0;
+  min-width: max-content;
+}
+
+.gd-hall__actions {
+  display: flex;
+  flex: 0 1 auto;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+/* .play-buttons.ui-button: 15rem wide (the link's content box, the button's border box, as on the legacy page) */
+.gd-hall__action {
+  display: inline-block;
+  width: 180px;
+  margin-right: 1.32px;
+  padding: 5.28px 13.2px;
+  border: 1px solid var(--theme-hall-bar-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+
+a.gd-hall__action {
+  box-sizing: content-box;
+}
+
+button.gd-hall__action {
+  box-sizing: border-box;
+}
+
+.gd-hall__action:hover,
+.gd-hall__action:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-hall__action-label {
+  font-weight: bold;
+}
+
+/* The icon (.bigger-icon): an inline box 50px wide and 10px over the text, its 35px image cut to it */
+.gd-hall__action::before {
+  content: '';
+  padding: 10px 0 0 50px;
+  background: transparent no-repeat 0 0 / 35px;
+  filter: var(--theme-hall-icon-filter);
+  vertical-align: middle;
+}
+
+.gd-hall__action[data-action='deckbuilder']::before {
+  background-image: var(--theme-hall-icon-deckbuilder);
+}
+
+.gd-hall__action[data-action='play'] {
+  background: var(--theme-hall-play-bg);
+}
+
+.gd-hall__action[data-action='play']:hover,
+.gd-hall__action[data-action='play']:focus-visible {
+  background: var(--theme-hall-play-hover-bg);
+}
+
+.gd-hall__action[data-action='play']::before {
+  background-image: var(--theme-hall-icon-play);
+  filter: var(--theme-hall-play-icon-filter);
+}
+
+/* .server-time */
+.gd-hall__clock {
+  min-width: 10ch;
+  margin: 0;
+  padding: 5px;
+  color: var(--theme-hall-clock);
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------- the chat (#chat) and its resize bar */
+
+gd-chat {
+  grid-area: chat;
+  height: var(--gd-chat-height);
+  padding-top: 5px;
+}
+
+/* jQuery UI's .ui-resizable-n over the chat's top edge: 6px, a grip in the middle */
+.gd-hall__resizer {
+  grid-area: chat;
+  align-self: start;
+  position: relative;
+  z-index: 5;
+  height: 6px;
+  background-color: var(--theme-hall-resizer);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.gd-hall__resizer::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 45%;
+  width: 10%;
+  height: 8px;
+  background: var(--theme-hall-resizer-grip);
+}
+
+.gd-hall__resizer:focus-visible {
+  outline: 2px solid var(--theme-hall-link);
+  outline-offset: -1px;
+}
+
+/* While dragging, nothing under the pointer takes it (the Discord chat is an iframe) */
+:host:has(.gd-hall__resizer[data-dragging]) * {
+  cursor: ns-resize;
+  user-select: none;
+}
+
+:host:has(.gd-hall__resizer[data-dragging]) gd-chat {
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- the disclaimer */
+
+.gd-hall__disclaimer {
+  grid-area: disclaimer;
+  margin: 0;
+  color: var(--theme-text);
+  font-size: 70%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- the "Not logged in" dialog */
+
+.gd-hall__login-required {
+  margin: 0.3em 0;
+}
+
+.gd-dialog__actions .gd-button {
+  display: inline-block;
+  margin: 6.6px 5.28px 6.6px 0;
+  padding: 5.28px 13.2px;
+  font-size: 13.2px;
+  line-height: normal;
+  text-decoration: none;
+}

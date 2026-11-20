@@ -1,0 +1,97 @@
+/* The Game Hall tab (hall.css #gameHallMain, #serverInfo, #infoButtons, .toolbar-button, #motd) */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* #serverInfo: the link buttons and the message of the day */
+.gd-game-hall__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 1;
+  padding: 7px;
+  border-bottom: 3px solid var(--theme-hall-info-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-info-bg);
+}
+
+.gd-game-hall__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+/* .toolbar-button.ui-button */
+.gd-game-hall__link {
+  display: inline-block;
+  margin-right: 1.32px;
+  padding: 5.28px 10.56px;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gd-game-hall__link:hover,
+.gd-game-hall__link:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+/* The icon (.custom-icon): 20px, in a 30px box before the label, drawn white */
+.gd-game-hall__link::before {
+  content: '';
+  display: inline-block;
+  box-sizing: content-box;
+  width: 0;
+  height: 20px;
+  padding-left: 30px;
+  background: transparent no-repeat 0 0 / 20px;
+  filter: var(--theme-hall-icon-filter);
+  vertical-align: middle;
+}
+
+.gd-game-hall__link[data-link='bug']::before {
+  background-image: var(--theme-hall-icon-bug);
+}
+
+.gd-game-hall__link[data-link='report']::before {
+  background-image: var(--theme-hall-icon-report);
+}
+
+.gd-game-hall__link[data-link='discord']::before {
+  background-image: var(--theme-hall-icon-discord);
+}
+
+.gd-game-hall__link[data-link='wiki']::before {
+  background-image: var(--theme-hall-icon-wiki);
+}
+
+.gd-game-hall__link[data-link='merchant']::before {
+  background-image: var(--theme-hall-icon-merchant);
+}
+
+/* #motd: its links always the hall's link colour (#motd a) */
+.gd-game-hall__motd {
+  --gd-markup-visited: var(--theme-hall-link);
+  flex-grow: 1;
+  margin: 5px;
+  color: var(--theme-text);
+}
+
+gd-hall-placeholder {
+  flex: 1 1 auto;
+}

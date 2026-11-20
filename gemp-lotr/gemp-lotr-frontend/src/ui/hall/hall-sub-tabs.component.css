@@ -1,0 +1,53 @@
+/*
+ * The vertical sub-tabs (hall.css .sub-tabs and .ui-tabs-vertical, jQuery UI's .ui-tabs-nav): a header-coloured
+ * list at most 200px wide, sticky at the top of the tab, each sub-tab a full-width button-like link with its left
+ * corners rounded.
+ */
+
+:host {
+  position: sticky;
+  top: 5px;
+  align-self: flex-start;
+  flex: 0 0 auto;
+  margin: 4px;
+}
+
+.gd-hall-sub-tabs__list {
+  display: flex;
+  flex-direction: column;
+  max-width: 200px;
+  margin: 0;
+  padding: 0.2em 0.2em 0;
+  border: 1px solid var(--theme-header-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-header-bg);
+}
+
+.gd-hall-sub-tabs__tab {
+  display: block;
+  margin: 0 -1px 0.2em 0;
+  padding: 0.5em 1em;
+  border: 1px solid var(--theme-widget-border);
+  border-right-width: 0;
+  border-radius: var(--theme-radius) 0 0 var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.gd-hall-sub-tabs__tab:hover,
+.gd-hall-sub-tabs__tab:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-hall-sub-tabs__tab[aria-selected='true'] {
+  padding-right: calc(1em + 0.1em);
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+  color: var(--theme-text);
+  cursor: text;
+}

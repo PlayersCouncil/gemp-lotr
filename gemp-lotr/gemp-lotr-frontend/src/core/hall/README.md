@@ -158,15 +158,18 @@ The tables core (sections, table data, Play popup's Casual and Bot flows, Join /
 
 ## Known gaps
 
-- The UI (4.1b) is `ui/hall/` (the page, the connection readout, the tabs' placeholders) and the shared
-  `ui/shared/chat/` (`gd-chat`, drawn from `ChatLine`s and `ChatUser`s; message markup is read into nodes by
-  `chat-markup.ts` `parseServerMarkup` and drawn element by element, never as HTML). Deep links open their tab only (the
-  sub-pages' routes belong to their parts); the return-refresh is left to the parts with live data. The chat's height
-  is kept in localStorage (`gemp.hall.chatHeight`), not the legacy `chatResize` cookie. The user list's width and the
-  user menu's place are the theme's (CSS), not layout math.
+- The UI (4.1b) is `ui/hall/` (the frame `HallShellComponent`, the connection readout, the Game Hall tab's top, the
+  tabs' placeholders and the shared sub-tab bar `gd-hall-sub-tabs`) and the shared `ui/shared/chat/` (`gd-chat`, drawn
+  from `ChatLine`s and `ChatUser`s; message markup is read into nodes by `chat-markup.ts` `parseServerMarkup` and drawn
+  element by element, never as HTML). Each tab and sub-tab is a route; legacy fragments are mapped to them by
+  `hall-hash-routes.ts`. The return-refresh is left to the parts with live data. The chat's height is kept in the
+  legacy `chatResize` cookie, as the legacy hall. The user list's width and the user menu's place are CSS, not layout
+  math.
 - The route's injector outlives the page, so the page stops the poll and the chat when it goes (`HallSession.stop()`)
   and starts them afresh when shown again (`ChatService.start()` after `stop()` joins anew, its old lines cleared).
-- Play does nothing for a logged-in player yet (its popup is 4.2's); "Invite to table" in a player's menu waits for
-  4.2 too.
+- Play opens a placeholder dialog for a logged-in player (`gd-hall-play-dialog`, which 4.2 fills); "Invite to table"
+  in a player's menu waits for 4.2 too.
+- Another tab's `{type: 'go', hash}` (HallChannel) opens the hash's route; the legacy hall also fired
+  `gemp:scenarios-changed` then, for My Scenarios to fetch its lists again: 4.4 subscribes to `HallChannel.goes$`.
 - Delivery headers on hall answers are ignored (4.4). The chat does not rejoin after 410 by itself, as the legacy
   chat (refresh the page).
