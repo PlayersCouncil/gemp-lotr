@@ -3,14 +3,15 @@ import { DraftSeat, DraftState } from '../../../../core/game/authoring/authoring
 import { Authoring } from '../../../../core/game/authoring/authoring.service';
 import {
   ruleNumber,
-  rulesWithOneSided,
   rulesWithSeat,
   SeatRules,
   seatRulesOf,
   skipWith,
 } from '../../../../core/game/authoring/scenario-settings';
 import { PHASES } from '../../../../core/game/authoring/terms';
+import { formatChoices, formatOf, rulesOneSided, rulesWithMarkers } from '../../../../core/game/authoring/game-rules';
 import { AuthorCheckComponent } from '../widgets/author-check.component';
+import { AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorSendDirective } from '../widgets/author-send.directive';
 import { sendTop } from './top';
@@ -21,22 +22,33 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
 ];
 
 /**
- * The Scenario tab's "Rules": the usual rules a scenario changes (legacy renderRules): whether the Free Peoples take
- * every turn, and per seat its hand size, the phases it skips, The One Ring's text switched off, and its minions'
+ * The Scenario tab's "Rules": the format it is played in (the scenarios' two, and any other the file names), the
+ * usual rules a scenario changes (legacy renderRules): whether the Free Peoples take every turn (and then whether
+ * the Shadow seat's marker keeps level with the fellowship's), and per seat its hand size, the phases it skips, The One Ring's text switched off, and its minions'
  * roaming penalty. Each change sends the whole of `rules` (taken out when nothing is left in it); a seat's other
  * effects are kept as they are, and counted.
  *
- * DOM contract: `section.gd-author-scenario__section[data-section=rules]` with `gd-author-check[data-part=one-sided]`
+ * DOM contract: `section.gd-author-scenario__section[data-section=rules]` with `gd-author-select[data-part=format]`,
+ * `gd-author-check[data-part=one-sided]`, `gd-author-check[data-part=markers]`
  * and a `.gd-author-scenario__seat[data-seat]` per seat (`.gd-author-scenario__seathead`, `input[data-part]` hand,
  * roaming; `.gd-author-scenario__ticks[data-part=skip]` with a `gd-author-check[data-phase]` per phase,
  * `gd-author-check[data-part=ring]`, and `.gd-author-note[data-part=others]` when it has other effects).
  */
 @Component({
   selector: 'gd-game-author-scenario-rules',
-  imports: [AuthorCheckComponent, AuthorFieldComponent, AuthorSendDirective],
+  imports: [AuthorCheckComponent, AuthorFieldComponent, AuthorSelectComponent, AuthorSendDirective],
   template: `
     <section class="gd-author-scenario__section" data-section="rules">
       <h3 class="gd-author-scenario__heading">Rules</h3>
+      <gd-author-field label="Format" hint="The game's format: scenario_shadows is for a path of sites without numbers">
+        <gd-author-select
+          data-part="format"
+          label="Format"
+          [options]="formats()"
+          [value]="format()"
+          (changed)="setFormat($event)"
+        />
+      </gd-author-field>
       <div class="gd-author-scenario__settings">
         <gd-author-check
           data-part="one-sided"
@@ -44,6 +56,14 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
           hint="The Shadow player never takes a turn of their own"
           [checked]="state().draft.rules?.oneSided === true"
           (changed)="oneSided($event)"
+        />
+        <gd-author-check
+          data-part="markers"
+          label="markers keep together"
+          hint="One-sided games: the Shadow seat's marker moves with the fellowship, so sites behind it can be controlled"
+          [checked]="state().draft.rules?.markers === 'together'"
+          [disabled]="state().draft.rules?.oneSided !== true"
+          (changed)="markers($event)"
         />
       </div>
       @for (seat of seats(); track seat.seat) {
@@ -114,8 +134,19 @@ export class RulesSectionComponent {
     return SEATS.map(([seat, name]) => ({ seat, name, rules: seatRulesOf(rules, seat) }));
   });
 
+  protected readonly formats = computed(() => formatChoices(this.state().draft.format));
+  protected readonly format = computed(() => formatOf(this.state().draft));
+
   protected oneSided(on: boolean): void {
-    void sendTop(this.authoring, 'rules', rulesWithOneSided(this.state().draft, on));
+    void sendTop(this.authoring, 'rules', rulesOneSided(this.state().draft, on));
+  }
+
+  protected markers(together: boolean): void {
+    void sendTop(this.authoring, 'rules', rulesWithMarkers(this.state().draft, together));
+  }
+
+  protected setFormat(format: string): void {
+    if (format !== this.format()) void sendTop(this.authoring, 'format', format);
   }
 
   protected change(seat: DraftSeat, change: Partial<Omit<SeatRules, 'others'>>): void {
