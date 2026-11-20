@@ -80,24 +80,6 @@ export function aboutText(draft: Draft, name: AboutPart): string {
 
 /* ------------------------------------------------------------------ how it plays */
 
-type Opponent = NonNullable<Draft['opponent']>;
-
-/** The opponent's part with its name changed (blank: none). */
-export function opponentWithName(draft: Draft, name: string): Opponent | null {
-  const changed: { -readonly [K in keyof Opponent]: Opponent[K] } = { ...draft.opponent };
-  if (name === '') delete changed.name;
-  else changed.name = name;
-  return orNull(changed);
-}
-
-/** The opponent's part with what it does unscripted changed ("fail", the default, is left out). */
-export function opponentWithFallback(draft: Draft, fallback: string): Opponent | null {
-  const changed: { -readonly [K in keyof Opponent]: Opponent[K] } = { ...draft.opponent };
-  if (fallback === 'pass') changed.fallback = 'pass';
-  else delete changed.fallback;
-  return orNull(changed);
-}
-
 /** The phases the player is passed through (a file may say `true`, which the server writes back as the phases). */
 export function autoPassOf(options: DraftOptions | undefined): string[] {
   return typeof options?.autoPass === 'string' ? splitTerms(options.autoPass) : [];

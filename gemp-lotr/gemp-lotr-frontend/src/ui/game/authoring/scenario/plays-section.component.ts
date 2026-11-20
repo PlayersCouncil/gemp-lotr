@@ -5,8 +5,6 @@ import {
   autoAcceptValue,
   autoPassOf,
   bubbleGapValue,
-  opponentWithFallback,
-  opponentWithName,
   optionsWith,
   optionsWithAutoPass,
   revealValue,
@@ -21,9 +19,11 @@ import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorSendDirective } from '../widgets/author-send.directive';
 import { sendTop } from './top';
+import { FallbackControlComponent } from '../opponent/fallback-control.component';
 
 /**
- * The Scenario tab's "How it plays": what the opponent is called and does with a decision nothing covers, whether
+ * The Scenario tab's "How it plays": what the opponent is called and does with a decision nothing covers (the
+ * Opponent tab's own control, which leaves its standing orders alone), whether
  * the player's every decision needs a step, the player's seat, the phases the player is passed through, the player's
  * own settings the scenario fixes for its game (auto-accept; auto-dismissing a deck reveal, on for a tutorial unless
  * set otherwise; the animation speed, the player's own unless one is chosen), and the bubbles' gap. The ticks show the
@@ -31,13 +31,20 @@ import { sendTop } from './top';
  * scenario guide fixes them from the draft as it changes).
  *
  * DOM contract: `section.gd-author-scenario__section[data-section=plays]` with `input[data-part=opponent-name]`,
- * `gd-author-select[data-part]` (fallback, coverage, human, animation-speed), `.gd-author-scenario__ticks[data-part=
+ * `gd-author-fallback` (the fallback and the sandbox's cards: opponent/fallback-control),
+ * `gd-author-select[data-part]` (coverage, human, animation-speed), `.gd-author-scenario__ticks[data-part=
  * auto-pass]` with a `gd-author-check[data-phase]` per phase, `gd-author-check[data-part]` (auto-accept,
  * auto-dismiss-deck-reveal), and `input[data-part=bubble-gap]`.
  */
 @Component({
   selector: 'gd-game-author-scenario-plays',
-  imports: [AuthorCheckComponent, AuthorFieldComponent, AuthorSelectComponent, AuthorSendDirective],
+  imports: [
+    AuthorCheckComponent,
+    AuthorFieldComponent,
+    AuthorSelectComponent,
+    AuthorSendDirective,
+    FallbackControlComponent,
+  ],
   template: `
     <section class="gd-author-scenario__section" data-section="plays">
       <h3 class="gd-author-scenario__heading">How it plays</h3>
@@ -56,15 +63,9 @@ import { sendTop } from './top';
       </gd-author-field>
       <gd-author-field
         label="Opponent, unscripted"
-        hint="What the opponent does with a decision no step (and no standing order) covers. fail: that is leaving the script; pass: it does as little as it can."
+        hint="What the opponent does with a decision no step and no standing order covers; with the sandbox, the cards it may play (none ticked: all)"
       >
-        <gd-author-select
-          data-part="fallback"
-          label="Opponent, unscripted"
-          [options]="fallbacks"
-          [value]="state().draft.opponent?.fallback ?? 'fail'"
-          (changed)="fallback($event)"
-        />
+        <gd-author-fallback />
       </gd-author-field>
       <gd-author-field
         label="Player, unscripted"
@@ -156,10 +157,6 @@ export class PlaysSectionComponent {
   protected readonly phases = PHASES;
   protected readonly speeds = SPEEDS;
   protected readonly stockGap = STOCK_GAP;
-  protected readonly fallbacks: readonly AuthorOption[] = [
-    ['fail', 'fail: off the script'],
-    ['pass', 'pass: does least'],
-  ];
   protected readonly coverages: readonly AuthorOption[] = [
     ['strict', 'strict: a step for each'],
     ['guided', 'guided: free between steps'],
@@ -184,12 +181,10 @@ export class PlaysSectionComponent {
     this.top(name, make(this.draft()));
   }
 
+  /** The opponent's name, by the opponent patch (its standing orders are left as they are). */
   protected opponentName(name: string): void {
-    this.put('opponent', (draft) => opponentWithName(draft, name));
-  }
-
-  protected fallback(value: string): void {
-    this.put('opponent', (draft) => opponentWithFallback(draft, value));
+    const named = name.trim();
+    void this.authoring.edit({ opponent: named === '' ? { unset: ['name'] } : { set: { name: named } } });
   }
 
   protected autoPass(phase: string, on: boolean): void {

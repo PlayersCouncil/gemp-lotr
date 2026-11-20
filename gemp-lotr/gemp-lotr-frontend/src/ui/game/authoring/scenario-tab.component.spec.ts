@@ -117,7 +117,7 @@ describe('ScenarioTabComponent', () => {
   const posted = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
 
   /** The one edit sent: its patch. */
-  function patch(): { top?: Record<string, unknown>; topText?: Record<string, string> } {
+  function patch(): { top?: Record<string, unknown>; topText?: Record<string, string>; opponent?: unknown } {
     const requests = posted('edit');
     expect(requests).toHaveLength(1);
     return JSON.parse(requests[0]!.request.body.get('patch')) as { top?: Record<string, unknown> };
@@ -333,10 +333,13 @@ describe('ScenarioTabComponent', () => {
   describe('how it plays', () => {
     it('names the opponent and says what it and the player do unscripted, and where the player sits', async () => {
       await open(withDraft({ opponent: { fallback: 'pass' }, coverage: 'guided' }));
+      // (the opponent's own parts go by the opponent patch, which leaves its standing orders alone)
       await type('input[data-part=opponent-name]', 'Sauron');
-      expect(top()).toEqual({ opponent: { fallback: 'pass', name: 'Sauron' } });
+      expect(patch()).toEqual({ opponent: { set: { name: 'Sauron' } } });
+      await type('input[data-part=opponent-name]', ' ');
+      expect(patch()).toEqual({ opponent: { unset: ['name'] } });
       await choose('fallback', 'fail');
-      expect(top()).toEqual({ opponent: null });
+      expect(patch()).toEqual({ opponent: { unset: ['fallback', 'plays'] } });
       expect(find<HTMLSelectElement>('gd-author-select[data-part=coverage] select').value).toBe('guided');
       await choose('coverage', 'strict');
       expect(top()).toEqual({ coverage: 'strict' });

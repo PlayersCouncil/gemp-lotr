@@ -6,6 +6,7 @@ import { SERVER_URL } from '../../platform/app-paths';
 import { PageExit } from '../../platform/page-exit';
 import { AuthoringResult, AuthoringState, CheckReport, FoundCard, OffScriptReport } from './authoring-state';
 import { StepOp } from './step-ops';
+import { OpponentPatch } from './opponent-orders';
 
 const AUTHOR = '/scenarios/author';
 /**
@@ -19,6 +20,8 @@ export interface DraftPatch {
   top?: Readonly<Record<string, unknown>>;
   topText?: Readonly<Record<string, string>>;
   steps?: readonly StepOp[];
+  /** A change to the opponent that leaves the orders it does not name as they are (opponent-orders.ts). */
+  opponent?: OpponentPatch;
 }
 
 /** What `settings` changes: the panel's ticks, the forks' choices, and that the left-out parts have been seen. */

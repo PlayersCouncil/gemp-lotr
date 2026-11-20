@@ -314,6 +314,10 @@ and replays (G4). The hall opens games on it (`hallUi.js`), and the game history
   point the messages at them (`ui/game/scenario/scenario-anchors.ts`). Checked by `npm run check:game:author` (a real
   browser writing drafts of its own; see `visual-check/game/README.md`). The legacy panel and overlay
   (`scenarioAuthor.js`, `scenarioOverlay.js`) are gone: comments that name them say where a behaviour came from.
+  The Opponent tab's standing orders and rules are in `ui/game/authoring/opponent/` (`OrdersEditor` keeps the order
+  open, its unsent form and the scroll across a fresh game in `sessionStorage["gemp-author-opponent"]`); a field with
+  `gdAuthorKeep` (`widgets/author-keep.directive.ts`) keeps what is being typed in it, the focus and the caret across a
+  fresh game (`sessionStorage["gemp-author-keep"]`).
 - **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
   layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
   status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's
