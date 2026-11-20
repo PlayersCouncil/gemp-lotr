@@ -12,7 +12,8 @@
   written by hand from the server code, for a player with trophies.
 - Written by hand from the server code, for the login page: `login-ok.xml` (the body of a successful POST /login or
   /register: `writeXmlResponse(null, ...)` in GempukkuHttpRequestHandler writes `<result>OK</result>`; a 202 or an
-  error has an empty body) and `server-status.txt` (GET /, StatusRequestHandler, with made-up counts).
+  error has an empty body) and `server-status.json` (GET /status, StatusRequestHandler, with made-up counts) and `server-status.txt` (the line the
+  legacy page got from GET / for the same counts, which the login page words itself).
 - Written by hand from the server code, for the hall (a fresh database has no tables or queues): `hall.xml` (GET
   /hall, HallRequestHandler.getHall with SerializeHallInfoVisitor: `<hall channelNumber currency motd serverTime
 serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; attributes from

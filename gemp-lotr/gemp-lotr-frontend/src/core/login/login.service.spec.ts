@@ -96,9 +96,9 @@ describe('LoginService', () => {
 
   it('loads the status line, and alerts like the legacy page when it cannot', async () => {
     setUp();
-    const status = () => backend.expectOne((r) => r.url === '/gemp-lotr-server/' && r.method === 'GET');
+    const status = () => backend.expectOne((r) => r.url === '/gemp-lotr-server/status' && r.method === 'GET');
     let loaded = service.loadStatus();
-    status().flush(readServerResponse('server-status.txt'));
+    status().flush(readServerResponse('server-status.json'));
     await loaded;
     expect(service.serverStatus()).toBe(readServerResponse('server-status.txt'));
     loaded = service.loadStatus();

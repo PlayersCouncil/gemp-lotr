@@ -3,8 +3,10 @@
 Ported from `gemp-lotr-async/src/main/web/index.html`, `src/Login/login.js`, `includes/registrationForm.html` and the
 calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the UI shows it as given.
 
-- On load: GET `/gemp-lotr-server/` (StatusRequestHandler) gives one line of plain text ("Tables count: …, players in
-  hall: …, …"), shown above the form (`serverStatus`). If it fails, the legacy page alerts "Unable to contact the server".
+- On load: the legacy page got one line of plain text from GET `/gemp-lotr-server/` (StatusRequestHandler: "Tables
+  count: …, players in hall: …, …") and showed it above the form. This page asks GET `/gemp-lotr-server/status` for
+  the four counts and words the same line itself (`serverStatusLine`). If it fails, the legacy page alerts "Unable to
+  contact the server".
 - Login form: "Login below, or [Register]", Login (text), Password (password; Enter submits), [Login], and the link
   "Forgot your password? Contact ketura on the PC Discord." (FORGOT_PASSWORD). No client-side checks.
 - POST `/gemp-lotr-server/login` with `login`, `password`, `participantId` (form-encoded; the body is `<result>OK</result>`).

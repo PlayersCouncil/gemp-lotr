@@ -69,12 +69,12 @@ describe('LoginApi', () => {
     expect((error as ApiError).status).toBe(status);
   });
 
-  it('gets the status line with GET /, not cached', async () => {
+  it('gets the status line from GET /status, not cached', async () => {
     setUp();
     const result = firstValueFrom(api.serverStatus());
-    const request = backend.expectOne((r) => r.url === '/gemp-lotr-server/' && r.method === 'GET');
+    const request = backend.expectOne((r) => r.url === '/gemp-lotr-server/status' && r.method === 'GET');
     expect(request.request.params.has('_')).toBe(true);
-    request.flush(readServerResponse('server-status.txt') + '\n');
+    request.flush(readServerResponse('server-status.json'));
     await expect(result).resolves.toBe(readServerResponse('server-status.txt'));
   });
 });

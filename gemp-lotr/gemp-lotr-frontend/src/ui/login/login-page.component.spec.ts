@@ -38,7 +38,7 @@ describe('LoginPageComponent', () => {
 
   afterEach(() => backend.verify());
 
-  const statusRequest = () => backend.expectOne((r) => r.url === '/gemp-lotr-server/' && r.method === 'GET');
+  const statusRequest = () => backend.expectOne((r) => r.url === '/gemp-lotr-server/status' && r.method === 'GET');
   const expectPost = (path: string): TestRequest =>
     backend.expectOne((r) => r.url === '/gemp-lotr-server' + path && r.method === 'POST');
   const fail = (request: TestRequest, status: number) => request.flush('', { status, statusText: 'Error' });
@@ -50,7 +50,7 @@ describe('LoginPageComponent', () => {
     if (status) {
       fail(statusRequest(), status);
     } else {
-      statusRequest().flush(readServerResponse('server-status.txt'));
+      statusRequest().flush(readServerResponse('server-status.json'));
     }
     await settle();
     await fixture.whenStable();

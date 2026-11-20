@@ -54,3 +54,21 @@ export const FORGOT_PASSWORD: MessageLink = {
 export const LOGIN_BUTTON = 'Login';
 export const REGISTER_BUTTON = 'Register';
 export const UPDATE_PASSWORD_BUTTON = 'Update Password';
+
+/** The hall's counts, as GET /status answers them (StatusRequestHandler). */
+export interface ServerStatus {
+  tables: number;
+  playersInHall: number;
+  gamesLast24Hours: number;
+  activePlayersLastWeek: number;
+}
+
+/** The line above the form, worded as the legacy page's (which the server wrote out: GET /). */
+export function serverStatusLine(status: Partial<ServerStatus>): string {
+  const count = (value: number | undefined) => (typeof value === 'number' ? String(value) : '?');
+  return (
+    `Tables count: ${count(status.tables)}, players in hall: ${count(status.playersInHall)}, ` +
+    `games played in last 24 hours: ${count(status.gamesLast24Hours)}, ` +
+    `active players in last week: ${count(status.activePlayersLastWeek)}`
+  );
+}

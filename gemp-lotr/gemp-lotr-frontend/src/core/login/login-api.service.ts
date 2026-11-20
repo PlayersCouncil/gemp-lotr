@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { GempHttp } from '../api/gemp-http.service';
+import { ServerStatus, serverStatusLine } from './login-messages';
 
 /** What a successful POST /login means: logged in (200), or the password was reset and must be set again (202). */
 export type LoginOutcome = 'loggedIn' | 'passwordReset';
@@ -16,9 +17,11 @@ export type RegisterOutcome = 'registered' | 'passwordUpdated';
 export class LoginApi {
   private readonly http = inject(GempHttp);
 
-  /** GET / (StatusRequestHandler): one line of plain text about the hall. */
+  /** GET /status (StatusRequestHandler): the hall's counts, worded as the legacy page's line. */
   serverStatus(): Observable<string> {
-    return this.http.getText('/').pipe(map((text) => text.trim()));
+    return this.http
+      .getJson<Partial<ServerStatus> | null>('/status')
+      .pipe(map((status) => serverStatusLine(status ?? {})));
   }
 
   /** POST /login; the answer sets the loggedUser cookie. */
