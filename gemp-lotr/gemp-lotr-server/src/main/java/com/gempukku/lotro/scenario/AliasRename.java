@@ -32,7 +32,8 @@ import java.util.regex.Pattern;
  *     what a player reads                       {strength:x} and the like; [[x]], which goes on showing the old name
  *                                               ([[y|x]]), and [[x|words]]
  *     requirements and rules (when.require,     alias(x), the card builder's filter for one of a scenario's cards,
- *     allow.passWhen, outcome, rules)           wherever in them it is written
+ *     allow.passWhen, outcome, rules, a         wherever in them it is written
+ *     message's require)
  */
 final class AliasRename {
     private static final Set<String> QUOTED = Set.of("text", "option", "raw", "title", "name");
@@ -212,6 +213,8 @@ final class AliasRename {
         for (String part : List.of("advance", "on"))
             if (message.get(part) != null)
                 message.set(part, strings(message.get(part), text -> _bracketed.matcher(text).replaceAll(Matcher.quoteReplacement("(" + _to + ")"))));
+        if (message.get("require") != null)
+            message.set("require", filters(message.get("require")));
         return message;
     }
 

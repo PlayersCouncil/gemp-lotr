@@ -451,6 +451,8 @@ public final class ScenarioWriter {
             message.choices.forEach(choices::add);
             json.add("choices", choices);
         }
+        if (message.require != null)
+            json.add("require", requirements(message.require));
         //A message that is nothing but its text is written as just that
         if (json.size() == 1)
             return JsonValue.valueOf(message.text);

@@ -1010,7 +1010,7 @@ public final class ScenarioParser {
                 if (object.get("title") != null)
                     throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
                 checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "gap", "advance", "on",
-                        "zoom", "focus", "magnify", "choices", "once");
+                        "zoom", "focus", "magnify", "choices", "once", "require");
                 message.note = optionalString(object, "note", null, entryContext);
                 message.once = optionalBoolean(object, "once", true, entryContext);
                 message.header = sidesNamed(def, optionalString(object, "header", null, entryContext));
@@ -1047,6 +1047,12 @@ public final class ScenarioParser {
                 // kinds of message apart by whether there is a moment at all
                 if (message.on != null && message.on.kind() == MomentKind.START)
                     message.on = null;
+                if (object.get("require") != null) {
+                    message.require = jsonArrayText(object.get("require"), entryContext + ".require");
+                    //(a choice is what the steps after it go by, and has to be made: it is always offered)
+                    if (!message.choices.isEmpty())
+                        throw new ScenarioFormatException(entryContext + ".require: a message that offers 'choices' is always said; put the condition on the step ('if', 'unless', or its when's 'require')");
+                }
                 message.zoom = parseZoom(def, object, entryContext);
                 if (message.zoom != null) {
                     //A card shown large is in the way of the table, so it is read and then put away

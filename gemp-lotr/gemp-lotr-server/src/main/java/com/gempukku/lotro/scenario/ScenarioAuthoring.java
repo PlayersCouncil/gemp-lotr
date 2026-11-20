@@ -1774,6 +1774,21 @@ public class ScenarioAuthoring {
             read.set("passWhen", typed("passWhen", read.get("passWhen")));
             step.set("allow", read);
         }
+        //(a message's condition, typed in as the file has it)
+        org.hjson.JsonValue messages = step.get("messages");
+        if (messages != null && messages.isArray()) {
+            org.hjson.JsonArray read = new org.hjson.JsonArray();
+            for (org.hjson.JsonValue message : messages.asArray()) {
+                if (message.isObject() && message.asObject().get("require") != null) {
+                    JsonObject one = new JsonObject(message.asObject());
+                    one.set("require", typed("require", one.get("require")));
+                    read.add(one);
+                } else {
+                    read.add(message);
+                }
+            }
+            step.set("messages", read);
+        }
     }
 
     private static org.hjson.JsonValue typed(String name, org.hjson.JsonValue value) throws AuthoringException {
@@ -2702,6 +2717,10 @@ public class ScenarioAuthoring {
                 org.hjson.JsonValue allow = written.get("allow");
                 if (allow != null && allow.isObject() && allow.asObject().get("passWhen") != null)
                     parts.put("passWhen", ScenarioWriter.text(allow.asObject().get("passWhen")));
+                //(each message's condition, by its place among the step's messages from 0: "messages.2.require")
+                for (int i = 0; i < step.messages.size(); i++)
+                    if (step.messages.get(i).require != null)
+                        parts.put("messages." + i + ".require", ScenarioWriter.text(JsonValue.readHjson(step.messages.get(i).require)));
                 if (!parts.isEmpty())
                     texts.put(sitting.uid(step), parts);
             }

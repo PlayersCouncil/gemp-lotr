@@ -371,6 +371,13 @@ public final class ScenarioDefinition {
         public Moment on;
         /** A card to show large while this message is up; null for none. */
         public Zoom zoom;
+        /**
+         * Card-definition requirements (JSON array text) that have to hold for the message to be said; null for
+         * always.  They are looked at when the step is put up (see ScenarioDirector.render), which for a message
+         * tied to a moment ('on') is the same as when its moment comes: nothing in the game changes while the
+         * player builds their answer.  A 'once' message is said the first time its step applies with them holding.
+         */
+        public String require;
     }
 
     public static final class Allow {

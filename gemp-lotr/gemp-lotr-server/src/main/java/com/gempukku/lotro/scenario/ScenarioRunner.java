@@ -77,10 +77,47 @@ public final class ScenarioRunner {
                     report.warnings.add(def.findStep(entry.getKey()).describe() + " was skipped");
             }
         }
+        report.warnings.addAll(shadowedByTheirBlock(def));
         //(a step no way reaches is a failure, and a scenario with a failure in it has not been proved)
         if (!report.failures.isEmpty() && report.reached == RunnerLevel.FULL)
             report.reached = RunnerLevel.SETUP;
         return report;
+    }
+
+    /**
+     * The steps of a block that wait for nothing but what ends the block: every decision they could take fits the
+     * block's 'until' as well.  The decision that fits a block's 'until' is
+     * the next step's, not the block's (that is what lets a block end), so such a step is never come to; except one
+     * about a skirmish that is over ('after'), which is said at the block's last decision all the same (see
+     * ScenarioDirector.lingering).  As designed, then, but a step written so is a mistake, and is said to be one.
+     */
+    static List<String> shadowedByTheirBlock(ScenarioDefinition def) {
+        List<String> said = new java.util.ArrayList<>();
+        for (Step block : def.steps) {
+            if (!block.block)
+                continue;
+            for (Step child : block.children)
+                if (child.when.after == null && coveredBy(child.when, block.until))
+                    said.add(child.describe() + " waits for exactly what ends its block (until: " + block.until.source
+                            + "), and that decision is the step after the block's: it is never come to.  Put it after the block, as a step of its own.");
+        }
+        return said;
+    }
+
+    /** Whether every decision that fits one 'when' fits another: it says all the other says, and maybe more. */
+    private static boolean coveredBy(ScenarioDefinition.When one, ScenarioDefinition.When other) {
+        return !other.opening
+                && (other.seat == null || other.seat == one.seat)
+                && (other.decision == null || other.decision == one.decision)
+                && (other.text == null || (one.text != null && one.text.toLowerCase().contains(other.text.toLowerCase())))
+                && (other.phase == null || other.phase == one.phase)
+                && (other.turn == null || other.turn.equals(one.turn))
+                && (other.skirmish == null || other.skirmish.equals(one.skirmish))
+                && (other.offers == null || other.offers.equals(one.offers))
+                && (other.fighting == null || other.fighting.equals(one.fighting))
+                && (other.after == null || other.after.equals(one.after))
+                && one.kinds.containsAll(other.kinds) && one.notKinds.containsAll(other.notKinds)
+                && (other.require == null || other.require.equals(one.require));
     }
 
     /** A scenario with more ways through it than this is not played through all of them. */

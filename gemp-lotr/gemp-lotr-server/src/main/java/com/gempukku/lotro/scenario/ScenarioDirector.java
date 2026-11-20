@@ -602,7 +602,10 @@ public class ScenarioDirector {
         if (decision == _lastDecision)
             return _lastMatch;
         _lastDecision = decision;
+        observeFinish();
         _lastMatch = findStep(player, decision);
+        //(one more decision since the last skirmish was fought: see isAfter)
+        _sinceFinish++;
         if (_lastMatch != null)
             seen(_lastMatch);
         return _lastMatch;
@@ -1038,10 +1041,31 @@ public class ScenarioDirector {
      * is said about the one that is over is said at the first decision after it, whatever that is.)
      */
     private boolean isAfter(String alias) {
+        //Once the next skirmish has had a decision of its own, the moment after this one has passed: only its first
+        // decision can still be the first after the skirmish before it.  (Without this, what waits for after(x)
+        // and does not fit straight away went on waiting through the next skirmish, and could be said in the
+        // middle of it.)
+        observeFinish();
+        if (_table.gameState().getSkirmish() != null && _sinceFinish > 0)
+            return false;
         //(a minion's skirmish as much as a companion's: the last skirmish finished had it on either side)
         PhysicalCard card = _table.Card(alias);
         PhysicalCard last = _table.gameState().getLastSkirmishCharacter();
         return (last != null && last == card) || _table.gameState().getLastSkirmishMinions().contains(card);
+    }
+
+    /** The last skirmish finished this turn, as last seen: its Free Peoples character, its minions, the turn. */
+    private Object[] _finishSeen = new Object[3];
+    /** How many decisions have been asked since the last skirmish was finished (see isAfter). */
+    private int _sinceFinish = 0;
+
+    private void observeFinish() {
+        var state = _table.gameState();
+        Object[] finished = {state.getLastSkirmishCharacter(), state.getLastSkirmishMinions(), state.getTurnNumber()};
+        if (finished[0] != _finishSeen[0] || finished[1] != _finishSeen[1] || !finished[2].equals(_finishSeen[2])) {
+            _finishSeen = finished;
+            _sinceFinish = 0;
+        }
     }
 
     private void observeSkirmish() {
@@ -1141,7 +1165,13 @@ public class ScenarioDirector {
      * @throws ScenarioScriptException if the step allows nothing the decision offers.
      */
     public Presentation present(Step step, String player, AwaitingDecision decision) throws ScenarioScriptException {
-        List<RenderedMessage> messages = render(step);
+        _putUpFor = decision;
+        List<RenderedMessage> messages;
+        try {
+            messages = render(step);
+        } finally {
+            _putUpFor = null;
+        }
 
         List<String> allowed = null;
         boolean passAllowed = false;
@@ -1185,11 +1215,36 @@ public class ScenarioDirector {
         //(the first time the step applies, all of them; after that, those that are said every time)
         boolean again = isContinuing(step);
         for (Message message : step.messages)
-            if (!again || !message.once)
+            if (message.require != null ? said(message) : !again || !message.once)
                 messages.add(new RenderedMessage(message,
                         message.header == null ? null : Templates.render(_table, message.header),
                         Templates.render(_table, message.text)));
         return messages;
+    }
+
+    /**
+     * The decision a 'once' message with a condition was first said at (see Message.require): it is said there, and
+     * at no later decision.  (Kept by decision, so that a step put up again for the same decision says it again.)
+     */
+    private final Map<Message, AwaitingDecision> _saidAt = new java.util.IdentityHashMap<>();
+    /** The decision a step is being put up for; null when it is not known. */
+    private AwaitingDecision _putUpFor;
+
+    /** Whether a message with a condition is said now: its condition holds, and a 'once' has not been said before. */
+    private boolean said(Message message) {
+        AwaitingDecision at = _putUpFor != null ? _putUpFor : _lastDecision;
+        if (message.once && _saidAt.containsKey(message) && _saidAt.get(message) != at)
+            return false;
+        if (!_table.Holds(message.require, _table.HumanPlayer()))
+            return false;
+        if (message.once)
+            _saidAt.putIfAbsent(message, at);
+        return true;
+    }
+
+    /** Whether a message of the scenario's closing panel is said: its condition, if it has one, holds as the game ends. */
+    public boolean saysAtTheEnd(Message message) {
+        return message.require == null || _table.Holds(message.require, _table.HumanPlayer());
     }
 
     /**

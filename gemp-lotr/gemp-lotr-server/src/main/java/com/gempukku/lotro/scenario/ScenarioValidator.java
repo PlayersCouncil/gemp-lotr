@@ -100,6 +100,24 @@ public final class ScenarioValidator {
                         problems.add(context + ": " + anchor + ": " + problem);
                 }
             }
+        //(a message's condition, wherever messages are)
+        for (Step step : def.allSteps()) {
+            for (int i = 0; i < step.messages.size(); i++)
+                requirements(step.messages.get(i).require, step.context() + ".messages[" + (i + 1) + "].require", problems);
+            if (step.end != null)
+                for (int i = 0; i < step.end.messages.size(); i++)
+                    requirements(step.end.messages.get(i).require, step.context() + ".end.messages[" + (i + 1) + "].require", problems);
+        }
+        java.util.Map<String, List<ScenarioDefinition.Message>> closing = new java.util.LinkedHashMap<>();
+        closing.put("outcome.winMessages", def.outcome.winMessages);
+        closing.put("outcome.loseMessages", def.outcome.loseMessages);
+        if (def.outcome.gameWon != null)
+            closing.put("outcome.gameWon.messages", def.outcome.gameWon.messages);
+        if (def.outcome.gameLost != null)
+            closing.put("outcome.gameLost.messages", def.outcome.gameLost.messages);
+        for (Map.Entry<String, List<ScenarioDefinition.Message>> part : closing.entrySet())
+            for (int i = 0; i < part.getValue().size(); i++)
+                requirements(part.getValue().get(i).require, part.getKey() + "[" + (i + 1) + "].require", problems);
         for (int i = 0; i < def.orders.size(); i++)
             requirements(def.orders.get(i).when().require, "opponent.orders[" + (i + 1) + "].when.require", problems);
         requirements(def.outcome.win, "outcome.win", problems);

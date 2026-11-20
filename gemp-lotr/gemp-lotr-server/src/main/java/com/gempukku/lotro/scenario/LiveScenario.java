@@ -623,12 +623,7 @@ public class LiveScenario implements ScenarioSession.Listener {
 
         ScenarioDefinition.End end = _session.Director().end();
         if (end != null) {
-            List<Map<String, Object>> messages = new ArrayList<>();
-            for (Message message : end.messages)
-                messages.add(messageJson(new RenderedMessage(message,
-                        message.header == null ? null : Templates.render(_table, message.header),
-                        Templates.render(_table, message.text)), Advance.NEXT));
-            finish(end.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED, messages, null, false, true);
+            finish(end.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED, closing(end.messages), null, false, true);
         } else if (_offScript != null) {
             if (carriesOnOffScript()) {
                 //The person carries on with an ordinary game, and is told so once.  The script is still followed if
@@ -674,11 +669,13 @@ public class LiveScenario implements ScenarioSession.Listener {
         finish(result, closing(said), result == Result.FAILED ? text(_def.outcome.loseMessage) : null, false, false);
     }
 
-    /** Closing messages as the panel that ends the scenario shows them, filled in from the board as it is now. */
+    /** Closing messages as the panel that ends the scenario shows them, filled in from the board as it is now, and those with a condition only if it holds. */
     private List<Map<String, Object>> closing(List<Message> said) {
         List<Map<String, Object>> messages = new ArrayList<>();
         for (Message message : said)
-            messages.add(messageJson(new RenderedMessage(message,
+            //(one with a condition is said if it holds as the scenario ends)
+            if (_session.Director().saysAtTheEnd(message))
+                messages.add(messageJson(new RenderedMessage(message,
                     message.header == null ? null : Templates.render(_table, message.header),
                     Templates.render(_table, message.text)), Advance.NEXT));
         return messages;
@@ -849,6 +846,9 @@ public class LiveScenario implements ScenarioSession.Listener {
                 advance = message == lastAtStart || message.message().on != null ? Advance.DECISION : Advance.NEXT;
             }
             messages.add(messageJson(message, advance));
+            //Which of the step's messages it is, counting from 0 as the file has them: with conditions ('require'),
+            // some may not be said, and the authoring panel knows a message by its place in the file
+            messages.getLast().put("index", step.messages.indexOf(message.message()));
             noteCards(message.message(), cards);
             noteParts(message.message(), parts);
         }

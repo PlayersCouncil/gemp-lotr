@@ -296,6 +296,7 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             if (stepInHand)
                 break;
             Ruling ruling = rule(entry.getKey(), entry.getValue());
+            ruling = unsaid(ruling);
             if (ruling.step() != null) {
                 stepInHand = true;
                 accept(ruling, released);
@@ -309,6 +310,20 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             for (Ruling ruling : outsideTheScript)
                 accept(ruling, released);
         return released;
+    }
+
+    /**
+     * A pause whose messages all have conditions, none of which holds, has nothing to be read: it is read by itself,
+     * there and then, and the decision is ruled on for the step behind it.  (Nothing is written in the journal: a
+     * game that follows this one comes to the same pause with the same board, and reads it by itself the same way.)
+     */
+    private Ruling unsaid(Ruling ruling) {
+        while (ruling.step() != null && ruling.step().pause && ruling.problem() == null && ruling.shown() != null
+                && ruling.shown().messages().isEmpty() && _director.end() == null) {
+            _director.read(ruling.step(), null);
+            ruling = rule(ruling.player(), ruling.decision());
+        }
+        return ruling;
     }
 
     private void accept(Ruling ruling, List<String> released) {

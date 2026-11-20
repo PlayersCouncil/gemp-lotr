@@ -315,4 +315,26 @@ public class ScenarioAuthoringPartsTest {
         JSONArray steps = state().getJSONObject("draft").getJSONArray("steps");
         assertEquals("freeps, choice, anotherMove, phase(regroup), turn(1)", steps.getJSONObject(steps.size() - 1).getString("when"));
     }
+
+    @Test
+    public void aMessagesConditionIsTypedInAndShownAsTheFileHasIt() throws Exception {
+        open("\t\tfallback: pass", """
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			messages: [
+                				Always.
+                			]
+                			allow: play(aragorn)
+                		}
+                	]
+                """);
+        String uid = state().getJSONArray("uids").getString(0);
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + uid + "\", \"set\": {\"messages\": [\"Always.\", "
+                + "{\"text\": \"Only with Aragorn.\", \"require\": \"{\\n\\ttype: canSpot\\n\\tfilter: name(Aragorn)\\n}\"}]}}]}", null);
+        JSONObject state = state();
+        JSONObject message = state.getJSONObject("draft").getJSONArray("steps").getJSONObject(0).getJSONArray("messages").getJSONObject(1);
+        assertEquals("canSpot", message.getJSONObject("require").getString("type"));
+        assertTrue(state.getJSONObject("texts").toString(), state.getJSONObject("texts").getJSONObject(uid).getString("messages.1.require").contains("type: canSpot"));
+    }
 }
