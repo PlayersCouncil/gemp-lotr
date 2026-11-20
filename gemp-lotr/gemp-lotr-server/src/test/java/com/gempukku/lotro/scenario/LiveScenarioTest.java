@@ -492,6 +492,49 @@ public class LiveScenarioTest {
     }
 
     @Test
+    public void AGameThatRunsOffTheEndOfItsPathEndsAsTheScenariosMistake() throws Exception {
+        //Free play on four sites, with nothing to end it: the fellowship comes to site 4 and has to move on
+        LiveScenario scenario = live(ScenarioTesting.parse("""
+                	options: {
+                		opponentDelayMs: 0
+                		autoPass: true
+                	}
+                	opponent: {
+                		fallback: pass
+                	}
+                	coverage: guided
+                	rules: {
+                		oneSided: true
+                	}
+                	setup: {
+                		startAt: {
+                			site: 4
+                		}
+                	}
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: pass
+                		}
+                	]
+                """));
+        LotroGameMediator mediator = start(scenario);
+        Client client = new Client(mediator);
+        client.connect();
+        for (int i = 0; i < 20 && !mediator.isFinished(); i++) {
+            client.await();
+            if (client.decision != null)
+                client.answer(AnswerCompiler.leastAnswer(client.decision.getAwaitingDecision()));
+        }
+        client.poll();
+        assertTrue(mediator.isFinished());
+        assertEquals(LiveScenario.Result.ERROR, scenario.Result());
+        assertNotNull(client.end);
+        assertTrue(client.end.toString(), client.end.getString("message").contains("adventure path has run out"));
+        assertTrue(scenario.Problems().toString(), scenario.Problems().getFirst().contains("would have to move on to site 5"));
+    }
+
+    @Test
     public void ALateStartPicksUpAtItsCheckpoint() throws Exception {
         //A game that begins at site 3 in the maneuver phase (ScenarioLateStartTest.CHECKPOINTED)
         ScenarioDefinition def = ScenarioTesting.parse(ScenarioLateStartTest.CHECKPOINTED);
