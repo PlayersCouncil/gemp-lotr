@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { POLL_DELAY_MS } from '../../core/game/session/game-session.service';
+import { PageCues } from '../../core/platform/page-cues';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { GAME_THEME_PICKER, ThemeService } from '../../core/platform/theme.service';
 import { By } from '@angular/platform-browser';
@@ -259,6 +260,56 @@ describe('GamePageComponent', () => {
     );
     expect(lines).toEqual(['bob: hi', 'Careful', 'Plain message', 'Hello Gimli alice']);
     expect(el.querySelector('gd-game-chat')?.hasAttribute('data-newest-first')).toBe(true);
+  });
+
+  it("jumps to the newest line at the top with every new one, and the modern settings switch the chat's order", async () => {
+    const { el, stable, news, fixture } = await open(state(TABLE), '?gameId=7', true, 'modern');
+    backend.expectOne((r) => r.url === CHAT && r.method === 'GET').flush('<chat><user>alice</user></chat>');
+    await stable();
+    // jsdom lays nothing out: the list as a browser would have it, 100px high, 400px of lines
+    const box = el.querySelector<HTMLElement>('.gd-game-chat__lines')!;
+    let top = 0;
+    Object.defineProperty(box, 'clientHeight', { configurable: true, get: () => 100 });
+    Object.defineProperty(box, 'scrollHeight', { configurable: true, get: () => 400 });
+    Object.defineProperty(box, 'scrollTop', { configurable: true, get: () => top, set: (v: number) => (top = v) });
+    const lines = () =>
+      Array.from(el.querySelectorAll<HTMLElement>('.gd-game-chat__line'), (line) =>
+        line.textContent.replace(/\s+/g, ' ').trim(),
+      );
+    // Read down the list, then a new line: back at the top, where it is
+    top = 250;
+    await news('<ge type="M" message="Newest news"/>');
+    expect(lines()[0]).toBe('Newest news');
+    expect(top).toBe(0);
+
+    // The settings tab (modern only): oldest first, at the end
+    (el.querySelector('[data-tab="settings"]') as HTMLElement).click();
+    await stable();
+    const order = el.querySelector<HTMLInputElement>('[data-setting="chatNewestFirst"]')!;
+    expect(order.checked).toBe(true);
+    order.checked = false;
+    order.dispatchEvent(new Event('change'));
+    await stable();
+    expect(el.querySelector('gd-game-chat')?.hasAttribute('data-newest-first')).toBe(false);
+    expect(lines().at(-1)).toBe('Newest news');
+    expect(top).toBe(400);
+    expect(fixture.debugElement.injector.get(GameSettings).chatNewestFirst()).toBe(false);
+    order.checked = true;
+    order.dispatchEvent(new Event('change'));
+    await stable();
+    expect(lines()[0]).toBe('Newest news');
+    expect(top).toBe(0);
+    document.cookie = 'gempChatNewestFirst=; path=/gemp-lotr; max-age=0';
+    document.cookie = 'gempChatNewestFirst=; path=/; max-age=0';
+  });
+
+  it("offers no chat order in classic's settings: game.html's order, the newest last", async () => {
+    const { el, stable } = await open(state(TABLE));
+    (el.querySelector('[data-tab="settings"]') as HTMLElement).click();
+    await stable();
+    expect(el.querySelector('[data-panel="settings"]')).not.toBeNull();
+    expect(el.querySelector('[data-setting="chatNewestFirst"]')).toBeNull();
+    expect(el.querySelector('gd-game-chat')?.hasAttribute('data-newest-first')).toBe(false);
   });
 
   it('lists the chat and the game messages in the order they came, marking the ones that name the player', async () => {
@@ -549,6 +600,33 @@ describe('GamePageComponent', () => {
     expect(hand()).toEqual(['9', '10', '4']);
   });
 
+  it("writes out a replay's Slower and Faster in the modern theme, with how fast it plays, each off at its limit", async () => {
+    const { el, stable } = await open('', '?replayId=alice$abc', true, 'modern');
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/replay/alice$abc')
+      .flush(`<gameReplay>${PLAYERS}</gameReplay>`);
+    await stable();
+    const replay = el.querySelector('gd-game-replay')!;
+    const button = (which: string) => replay.querySelector<HTMLButtonElement>(`[data-replay="${which}"]`)!;
+    const speed = () => replay.querySelector('[data-replay="speed"]')?.textContent.trim();
+    expect(replay.hasAttribute('data-words')).toBe(true);
+    expect(button('slower').textContent.trim()).toBe('Slower');
+    expect(button('faster').textContent.trim()).toBe('Faster');
+    expect(speed()).toBe('×1');
+    button('faster').click();
+    await stable();
+    expect(speed()).toBe('×2');
+    for (let i = 0; i < 5; i++) button('faster').click();
+    await stable();
+    expect(speed()).toBe('×16');
+    expect(button('faster').disabled).toBe(true);
+    for (let i = 0; i < 9; i++) button('slower').click();
+    await stable();
+    expect(speed()).toBe('×1/16');
+    expect(button('slower').disabled).toBe(true);
+    expect(button('faster').disabled).toBe(false);
+  });
+
   it('plays a replay with its controls, and shows only the chat and the settings', async () => {
     document.cookie = 'animation-speed=4; path=/';
     try {
@@ -592,6 +670,114 @@ describe('GamePageComponent', () => {
     (dialog.querySelector('.gd-dialog__close') as HTMLElement).click();
     await stable();
     expect(dialog.open).toBe(false);
+  });
+
+  describe("the game's end with the replay (modern theme, the owner 2026-11-20)", () => {
+    const HISTORY = '/gemp-lotr-server/gameHistory';
+    const entry = (opponent: string, recording: string | null, endMs = Date.now()) =>
+      `<gameHistory><historyEntry opponent="${opponent}" result="W" endMs="${endMs}"` +
+      `${recording === null ? '' : ` gameRecordingId="${recording}"`}/></gameHistory>`;
+    const END =
+      '<ge type="M" message="alice is the winner due to: Surviving to Sanctuary"/>' +
+      '<ge type="M" message="Thank you for playing! &lt;a href=\'x\'&gt;using this form.&lt;/a&gt;"/><ge type="EG"/>';
+
+    it('says who won and why, with the replay to watch or copy, and the thanks; classic keeps its feedback', async () => {
+      const writeText = vi.fn(() => Promise.resolve());
+      Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+      const { el, news, stable, text } = await open(state(TABLE), '?gameId=7', true, 'modern');
+      expect(el.querySelector('dialog[data-dialog="game-ended"][open]')).toBeNull();
+      await news(END);
+      const dialog = el.querySelector<HTMLDialogElement>('dialog[data-dialog="game-ended"]')!;
+      expect(dialog.open).toBe(true);
+      expect(el.querySelector('dialog[data-dialog="feedback"]')).toBeNull();
+      expect(dialog.querySelector('[data-dialog-title]')?.textContent).toBe('You won!');
+      expect(text('[data-ended="result"]')).toBe('You won the game.');
+      expect(dialog.querySelector('[data-ended="result"]')?.hasAttribute('data-won')).toBe(true);
+      expect(text('[data-ended="reason"]')).toBe('Surviving to Sanctuary');
+      expect(dialog.querySelector('[data-ended="replay"]')?.getAttribute('data-state')).toBe('looking');
+      expect(dialog.querySelector('[data-ended="feedback"] a')?.textContent).toBe('using this form.');
+
+      backend.expectOne((r) => r.url === HISTORY).flush(entry('bob', 'r42'));
+      await stable();
+      expect(dialog.querySelector('[data-ended="replay"]')?.getAttribute('data-state')).toBe('found');
+      const link = `${location.origin}/gemp-lotr/ng/game?replayId=alice%24r42`;
+      expect(dialog.querySelector<HTMLInputElement>('[data-ended="link"]')?.value).toBe(link);
+      (dialog.querySelector('[data-ended="copy"]') as HTMLElement).click();
+      await stable();
+      await stable();
+      expect(writeText).toHaveBeenCalledWith(link);
+      expect(text('[data-ended="copy"]')).toBe('Link copied');
+
+      (dialog.querySelector('[data-ended="stay"]') as HTMLElement).click();
+      await stable();
+      expect(dialog.open).toBe(false);
+      // The alert box's button shows it again
+      (el.querySelector('gd-game-alert [data-game="ended"]') as HTMLElement).click();
+      await stable();
+      expect(dialog.open).toBe(true);
+    });
+
+    it("leaves classic as game.html: its feedback dialog, no game's end and no button for it", async () => {
+      const { el, news } = await open(state(TABLE));
+      await news(END);
+      expect(el.querySelector('dialog[data-dialog="feedback"]')?.hasAttribute('open')).toBe(true);
+      expect(el.querySelector('dialog[data-dialog="game-ended"]')).toBeNull();
+      expect(el.querySelector('[data-game="ended"]')).toBeNull();
+      backend.expectNone((r) => r.url === HISTORY);
+    });
+
+    it('opens the replay, and selects its link for the player to copy where the browser cannot copy it', async () => {
+      let page: HTMLElement | null = null;
+      for (const clipboard of [undefined, { writeText: () => Promise.reject(new Error('denied')) }]) {
+        TestBed.resetTestingModule();
+        Object.defineProperty(navigator, 'clipboard', { value: clipboard, configurable: true });
+        const { el, news, stable } = await open(state(TABLE), '?gameId=7', true, 'modern');
+        page = el;
+        await news(END);
+        backend.expectOne((r) => r.url === HISTORY).flush(entry('bob', 'r42'));
+        await stable();
+        const field = el.querySelector<HTMLInputElement>('[data-ended="link"]')!;
+        const select = vi.spyOn(field, 'select');
+        (el.querySelector('[data-ended="copy"]') as HTMLElement).click();
+        await stable();
+        await stable();
+        expect(select).toHaveBeenCalledTimes(1);
+        expect(el.querySelector('[data-ended="copy"]')?.hasAttribute('data-copied')).toBe(false);
+        field.dispatchEvent(new Event('focus'));
+        expect(select).toHaveBeenCalledTimes(2);
+      }
+      const go = vi.spyOn(TestBed.inject(PageCues), 'go').mockImplementation(() => undefined);
+      (page?.querySelector('[data-ended="watch"]') as HTMLElement).click();
+      expect(go).toHaveBeenCalledWith(`${location.origin}/gemp-lotr/ng/game?replayId=alice%24r42`);
+    });
+
+    it("tells a player who lost, and that the replay isn't found when the history hasn't got it", async () => {
+      vi.useFakeTimers({ toFake: ['setTimeout'] });
+      try {
+        const { el, stable, text, fixture } = await open(state(TABLE), '?gameId=7', true, 'modern');
+        await vi.advanceTimersByTimeAsync(POLL_DELAY_MS + 10);
+        backend
+          .expectOne((r) => r.url === GAME && r.method === 'POST')
+          .flush(update('<ge type="M" message="bob is the winner due to: Ring-bearer corrupted"/><ge type="EG"/>'));
+        await stable();
+        expect(text('dialog[data-dialog="game-ended"] [data-dialog-title]')).toBe('You lost');
+        expect(text('[data-ended="result"]')).toBe('bob won the game.');
+        // An earlier game against someone else, then one too old, then nothing, then a game without a recording
+        backend.expectOne((r) => r.url === HISTORY).flush(entry('carol', 'r1'));
+        await vi.advanceTimersByTimeAsync(1500);
+        backend.expectOne((r) => r.url === HISTORY).flush(entry('bob', 'r2', Date.now() - 60 * 60 * 1000));
+        await vi.advanceTimersByTimeAsync(1500);
+        backend.expectOne((r) => r.url === HISTORY).flush('<gameHistory/>');
+        await vi.advanceTimersByTimeAsync(1500);
+        backend.expectOne((r) => r.url === HISTORY).flush(entry('bob', null));
+        await stable();
+        fixture.detectChanges();
+        expect(el.querySelector('[data-ended="replay"]')?.getAttribute('data-state')).toBe('missing');
+        backend.expectNone((r) => r.url === HISTORY);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
   });
 
   it("writes a game problem without a dialog and the chat's problem in the chat box, as warnings", async () => {

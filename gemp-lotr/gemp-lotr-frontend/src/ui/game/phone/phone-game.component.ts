@@ -28,9 +28,10 @@ const SIDEWAYS_SWIPE = 40;
  * hides the hand (shown again while a decision offers cards in its place). Held sideways the screen has two columns
  * (the owner, 2026-11-19): the table on the left, and a panel docked on the right with the divider on top and the hand
  * filling the rest, its cards in rows, one size; dragging down hides the hand (the decision then at the panel's
- * bottom), up shows it. Sheets open over everything.
+ * bottom), up shows it. A spectator has no hand: the divider stays at the bottom, held sideways across the whole
+ * width. Sheets open over everything.
  *
- * DOM contract: `gd-game-phone` with `data-device` (phone, sideways, tablet), `data-hand-hidden`, `--gd-phone-card`
+ * DOM contract: `gd-game-phone` with `data-device` (phone, sideways, tablet), `data-hand-hidden`, `data-watching`, `--gd-phone-card`
  * (the table's cards' height), `--gd-phone-hand` (the hand's height), holding `gd-phone-status`, `gd-phone-table`,
  * `gd-phone-divider`, `gd-phone-hand` and `gd-phone-sheets`; before the players are known `.gd-phone-pregame` (holding
  * `gd-game-pregame`) in the table's place and no hand.
@@ -50,6 +51,7 @@ const SIDEWAYS_SWIPE = 40;
   host: {
     '[attr.data-device]': 'phone.device()',
     '[attr.data-hand-hidden]': "handHidden() ? '' : null",
+    '[attr.data-watching]': "watching() ? '' : null",
     '[style.--gd-phone-card]': "phone.cardHeight() + 'px'",
     '[style.--gd-phone-table-card]': "phone.cardHeight() + 'px'",
     '[style.--gd-phone-hand]': "handHeight() + 'px'",
@@ -62,14 +64,18 @@ const SIDEWAYS_SWIPE = 40;
     } @else if (session.model().preGame; as preGame) {
       <!-- Before the players are known (the bid): the pre-game information, scrolled up and down -->
       <div class="gd-phone-pregame"><gd-game-pregame [info]="preGame" /></div>
+    } @else {
+      <!-- A replay before it plays: the table's place stays, empty, so the divider is at the bottom -->
+      <div class="gd-phone-pregame" data-empty></div>
     }
     <gd-phone-divider
       #divider
-      tabindex="0"
+      [attr.tabindex]="watching() ? null : 0"
       [handHidden]="handHidden() && session.model().started"
+      [watching]="watching()"
       [gdPointerDrag]="handDrag"
-      [attr.aria-valuenow]="handHeight()"
-      aria-valuemin="0"
+      [attr.aria-valuenow]="watching() ? null : handHeight()"
+      [attr.aria-valuemin]="watching() ? null : 0"
       (keydown)="resizeWithKeys($event)"
     />
     @if (!handHidden() && session.model().started) {
@@ -90,12 +96,19 @@ export class PhoneGameComponent {
   /** The hand's height while the divider is being dragged (px; 0: hidden), or null. */
   private readonly dragging = signal<number | null>(null);
 
+  /**
+   * A spectator watching the game (not a replay, which shows its player's hand): no hand and no dragging, the divider
+   * at the bottom with the game's news (the owner, 2026-11-20).
+   */
+  protected readonly watching = computed(() => this.session.model().spectator && !this.session.replaying());
+
   /** A decision offering cards in the hand's place shows the hand even if it was hidden. */
   private readonly offerOpen = computed(() => {
     const offer = offTableChoices(this.decisions.view(), this.session.model());
     return offer !== null && offer.key !== this.viewState.phone().closedOffer;
   });
   protected readonly handHidden = computed(() => {
+    if (this.watching()) return true;
     const dragging = this.dragging();
     if (dragging !== null) return dragging === 0;
     return this.phone.handHidden() && !this.offerOpen();
@@ -121,6 +134,7 @@ export class PhoneGameComponent {
    * pointer goes up, wherever the divider is (held sideways it is under the hand), and its place is kept when let go.
    */
   protected readonly handDrag = (event: PointerEvent): DragHandlers | null => {
+    if (this.watching()) return null;
     const target = event.target as Element | null;
     if (target?.closest('button, select, input, a, output, gd-game-replay')) return null;
     const start = event.clientY;
@@ -143,7 +157,7 @@ export class PhoneGameComponent {
    * hidden). Only when the divider itself has the focus, not one of its buttons.
    */
   protected resizeWithKeys(event: KeyboardEvent): void {
-    if (event.target !== event.currentTarget) return;
+    if (event.target !== event.currentTarget || this.watching()) return;
     const step = event.key === 'ArrowUp' ? HAND_STEP : event.key === 'ArrowDown' ? -HAND_STEP : 0;
     if (!step) return;
     event.preventDefault();

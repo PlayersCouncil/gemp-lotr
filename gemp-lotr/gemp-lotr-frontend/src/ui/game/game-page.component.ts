@@ -20,6 +20,7 @@ import { CardHintsDirective } from './table/card-hints.directive';
 import { ActionMenuComponent } from './decision/action-menu.component';
 import { DecisionDialogsComponent } from './decision/decision-dialogs.component';
 import { FeedbackDialogComponent } from './dialogs/feedback-dialog.component';
+import { GameEndedDialogComponent } from './dialogs/game-ended-dialog.component';
 import { PileDialogsComponent } from './dialogs/pile-dialogs.component';
 import { ReplayControlsComponent } from './panel/replay-controls.component';
 import { GameAnimationComponent } from './table/game-animation.component';
@@ -70,6 +71,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     GameTabsComponent,
     PreGamePanelComponent,
     FeedbackDialogComponent,
+    GameEndedDialogComponent,
     ProblemDialogComponent,
     PileDialogsComponent,
     ReplayControlsComponent,
@@ -96,8 +98,9 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '(window:resize)': 'measureWindow()',
   },
   template: `
-    @if (phone() && (model().started || model().preGame)) {
-      <!-- The phone layout also before the game: the pre-game information scrolls, the bid is asked in its divider -->
+    @if (phone() && (model().started || model().preGame || session.replaying())) {
+      <!-- The phone layout also before the game: the pre-game information scrolls, the bid is asked in its divider; and
+           a replay before it plays, its controls in the divider (the owner, 2026-11-20: the page was empty) -->
       <gd-game-phone />
     } @else if (model().started) {
       <section class="gd-game__path" aria-label="Adventure path">
@@ -180,7 +183,12 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-action-menu />
       <gd-game-piles />
     }
-    <gd-game-feedback />
+    <!-- The game's end with the replay in the modern theme (it holds the server's thanks); game.html's feedback in classic -->
+    @if (modern()) {
+      <gd-game-ended />
+    } @else {
+      <gd-game-feedback />
+    }
     <gd-game-problem />
     @if (!phone()) {
       <gd-card-info gdCardHints />
@@ -212,7 +220,8 @@ export class GamePageComponent {
    * Shift flips the zoomed card in the modern view only, as the deck builder's zoom does; the legacy game page never
    * flipped it (its key handler got jQuery 1.6's event, which has no key), and classic keeps that (owner, 2026-11-15).
    */
-  protected readonly zoomFlipsOnShift = computed(() => this.themes.theme() === 'modern');
+  protected readonly modern = computed(() => this.themes.theme() === 'modern');
+  protected readonly zoomFlipsOnShift = this.modern;
 
   protected readonly stats = computed(() => this.model().stats);
   protected readonly fights = computed(() => this.table().assignments.length + (this.table().skirmish ? 1 : 0));

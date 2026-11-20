@@ -50,14 +50,17 @@ describe('the game on a phone (G7)', () => {
   });
 
   /** The page with the compact layout on (the modern theme on a phone: CompactLayout) or off. */
-  async function open(body: string, { compact = true, device = 'phone' as 'phone' | 'tablet' | 'sideways' } = {}) {
+  async function open(
+    body: string,
+    { compact = true, device = 'phone' as 'phone' | 'tablet' | 'sideways', query = '?gameId=7' } = {},
+  ) {
     cues = { vibrate: vi.fn(), play: vi.fn(), toggleFullscreen: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
         provideHttpClientTesting(),
         provideFakeNotifier(),
-        { provide: PAGE_QUERY_STRING, useValue: '?gameId=7' },
+        { provide: PAGE_QUERY_STRING, useValue: query },
         {
           provide: PageCues,
           useValue: {
@@ -87,7 +90,7 @@ describe('the game on a phone (G7)', () => {
     backend = TestBed.inject(HttpTestingController);
     const fixture = TestBed.createComponent(GamePageComponent);
     const el = fixture.nativeElement as HTMLElement;
-    backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(body);
+    if (query.includes('gameId')) backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(body);
     const stable = async () => {
       await fixture.whenStable();
       fixture.detectChanges();
@@ -374,6 +377,10 @@ describe('the game on a phone (G7)', () => {
     space?.dispatchEvent(new Event('change'));
     await stable();
     expect(settings.underButton()).toBe('space');
+    expect(settings.chatNewestFirst()).toBe(true);
+    el.querySelector('[data-setting="chatNewestFirst"][value="false"]')?.dispatchEvent(new Event('change'));
+    await stable();
+    expect(settings.chatNewestFirst()).toBe(false);
     // The cookies these wrote, gone again for the tests after this one
     for (const name of [
       'autoPassPhases',
@@ -387,6 +394,7 @@ describe('the game on a phone (G7)', () => {
       'gempGameMoveVibrate',
       'gempGameMoveSound',
       'gempGameCardSize',
+      'gempChatNewestFirst',
     ]) {
       for (const path of ['/', '/gemp-lotr', '/gemp-lotr-server'])
         document.cookie = `${name}=; path=${path}; max-age=0`;
@@ -986,6 +994,128 @@ describe('the game on a phone (G7)', () => {
     expect(slot('3')?.hasAttribute('data-shrunk')).toBe(false);
     expect(button('support-player')?.getAttribute('aria-expanded')).toBe('false');
     expect(slot('10')).not.toBeNull();
+  });
+
+  it('gives a spectator no hand and no buttons: the divider stays at the bottom with whose turn it is and the news', async () => {
+    const watched = game(
+      '<ge type="GS" fellowshipStrength="0" shadowStrength="0"><playerZones name="alice" HAND="2"/></ge>' +
+        '<ge type="M" message="bob played &lt;div class=\'cardHint\' value=\'1_7\'&gt;Gimli&lt;/div&gt;"/>',
+    ).replace('<ge type="P" participantId="alice"', '<ge type="P" participantId="carol"');
+    for (const device of ['phone', 'sideways'] as const) {
+      TestBed.resetTestingModule();
+      const { el, fixture } = await open(watched, { device });
+      const settings = fixture.debugElement.injector.get(PhoneSettings);
+      const before = settings.hand();
+      const phone = el.querySelector('gd-game-phone')!;
+      const divider = el.querySelector<HTMLElement>('gd-phone-divider')!;
+      expect(phone.hasAttribute('data-watching')).toBe(true);
+      expect(phone.hasAttribute('data-hand-hidden')).toBe(true);
+      expect(el.querySelector('gd-phone-hand')).toBeNull();
+      expect(divider.hasAttribute('data-watching')).toBe(true);
+      expect(divider.getAttribute('role')).toBe('status');
+      expect(divider.hasAttribute('tabindex')).toBe(false);
+      expect(divider.querySelector('.gd-phone-divider__hand-hint')).toBeNull();
+      expect(divider.querySelector('.gd-phone-divider__buttons')).toBeNull();
+      expect(divider.querySelector('.gd-phone-divider__latest')?.textContent).toBe('bob played Gimli');
+      // Dragging it or its keys change nothing: no place of the divider is kept
+      divider.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 0, clientY: 500 }));
+      divider.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, button: 0, clientY: 100 }));
+      divider.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      expect(settings.hand()).toBe(before);
+      expect(el.querySelector('gd-phone-hand')).toBeNull();
+    }
+  });
+
+  it('drags the divider: down hides the hand, up shows it; held sideways a drag down hides it and up shows it', async () => {
+    const drag = (divider: HTMLElement, from: number, to: number) => {
+      const at = (type: string, clientY: number) =>
+        divider.dispatchEvent(new PointerEvent(type, { bubbles: true, button: 0, clientY, pointerId: 1 }));
+      at('pointerdown', from);
+      at('pointermove', to);
+      at('pointerup', to);
+    };
+    for (const device of ['phone', 'sideways'] as const) {
+      TestBed.resetTestingModule();
+      const { el, stable, fixture } = await open(game(), { device });
+      const settings = fixture.debugElement.injector.get(PhoneSettings);
+      const phone = el.querySelector('gd-game-phone')!;
+      const divider = el.querySelector<HTMLElement>('gd-phone-divider')!;
+      expect(phone.hasAttribute('data-hand-hidden')).toBe(false);
+      drag(divider, 300, 700);
+      await stable();
+      expect(phone.hasAttribute('data-hand-hidden')).toBe(true);
+      expect(el.querySelector('gd-phone-hand')).toBeNull();
+      expect(settings.hand()).toBe('hidden');
+      drag(divider, 700, 300);
+      await stable();
+      expect(phone.hasAttribute('data-hand-hidden')).toBe(false);
+      expect(el.querySelector('gd-phone-hand')).not.toBeNull();
+      expect(settings.hand()).not.toBe('hidden');
+      // A small drag held sideways changes nothing
+      if (device === 'sideways') {
+        drag(divider, 300, 320);
+        await stable();
+        expect(phone.hasAttribute('data-hand-hidden')).toBe(false);
+      }
+    }
+  });
+
+  it("shows the game's end again from the divider and the menu once it is closed", async () => {
+    const { el, click, stable } = await open(game());
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush('<update cn="2"><ge type="M" message="alice is the winner due to: Surviving"/><ge type="EG"/></update>');
+    await stable();
+    const ended = () => el.querySelector<HTMLDialogElement>('dialog[data-dialog="game-ended"]');
+    expect(ended()?.open).toBe(true);
+    await click('[data-ended="stay"]');
+    expect(ended()?.open).toBe(false);
+    await click('[data-phone="game-ended"]');
+    expect(ended()?.open).toBe(true);
+    await click('[data-ended="stay"]');
+    await click('[data-phone="menu"]');
+    await click('[data-menu="ended"]');
+    expect(el.querySelector('.gd-phone-sheet')).toBeNull();
+    expect(ended()?.open).toBe(true);
+    await click('[data-ended="hall"]');
+    expect(TestBed.inject(PageCues).go).toHaveBeenCalledWith('/gemp-lotr/hall.html');
+  });
+
+  it('shows a replay before it plays: its controls in the divider, and plays it from there', async () => {
+    document.cookie = 'animation-speed=4; path=/';
+    const { el, stable } = await open('', { query: '?replayId=alice$abc' });
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/replay/alice$abc')
+      .flush(`<gameReplay>${TABLE}<ge type="TP" count="3"/></gameReplay>`);
+    await stable();
+    expect(el.querySelector('gd-game-phone')).not.toBeNull();
+    expect(el.querySelector('.gd-phone-pregame[data-empty]')).not.toBeNull();
+    expect(el.querySelector('gd-phone-divider [data-decision="text"]')?.textContent).toBe(
+      'A replay: press play to watch it.',
+    );
+    const controls = el.querySelector('gd-phone-divider gd-game-replay')!;
+    // One row: Slower, the speed above the play button, Faster
+    expect(controls.hasAttribute('data-words')).toBe(true);
+    expect(Array.from(controls.querySelectorAll('[data-replay]'), (c) => c.getAttribute('data-replay'))).toEqual([
+      'slower',
+      'speed',
+      'play',
+      'faster',
+    ]);
+    expect(controls.querySelector('[data-replay="speed"]')?.textContent.trim()).toBe('×16');
+    expect(controls.querySelector<HTMLButtonElement>('[data-replay="faster"]')?.disabled).toBe(true);
+    const play = controls.querySelector<HTMLElement>('[data-replay="play"]');
+    expect(play?.getAttribute('aria-label')).toBe('Play');
+    play?.click();
+    for (let i = 0; i < 100 && !el.querySelector('gd-game-replay')?.hasAttribute('data-replay-done'); i++) {
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      await stable();
+    }
+    expect(el.querySelector('gd-phone-table')).not.toBeNull();
+    expect(el.querySelector('gd-game-replay')?.hasAttribute('data-replay-done')).toBe(true);
+    expect(el.querySelector('[data-game="twilight"]')?.textContent).toContain('3');
+    document.cookie = 'animation-speed=; path=/; max-age=0';
   });
 
   it('buzzes and plays a sound when a decision comes, unless turned off', async () => {

@@ -127,7 +127,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
               {{ foldText() }}
             </button>
           }
-          @if (!(fold?.folded && fold?.how === 'hide' && fold?.ids?.has(slot.card.id))) {
+          @if (!(fold?.folded && fold?.how === 'hide' && fold?.ids.has(slot.card.id))) {
             <ng-container *ngTemplateOutlet="slotView; context: { $implicit: slot }" />
           }
         } @empty {
@@ -141,7 +141,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
       @let open = isOpen(slot);
       <div
         class="gd-phone-slot"
-        [attr.data-shrunk]="fold?.folded && fold?.ids?.has(slot.card.id) ? '' : null"
+        [attr.data-shrunk]="fold?.folded && fold?.ids.has(slot.card.id) ? '' : null"
         [attr.data-under-open]="open ? '' : null"
         [style.--gd-slot-columns]="columns(slot, open)"
       >

@@ -11,6 +11,27 @@ function update(doc: Document): GameUpdate {
   return parsed;
 }
 
+/** The newest game in the player's history (GET /gameHistory), as far as the game's end needs it. */
+export interface LatestGame {
+  opponent: string;
+  /** The player's own recording of it, or null when none was kept. */
+  recordingId: string | null;
+  /** When it ended (epoch ms), or null. */
+  endMs: number | null;
+}
+
+/** The first `historyEntry` of a game history, or null when there is none. */
+export function parseLatestGame(doc: Document): LatestGame | null {
+  const entry = doc.getElementsByTagName('historyEntry')[0];
+  if (!entry) return null;
+  const end = Number(entry.getAttribute('endMs'));
+  return {
+    opponent: entry.getAttribute('opponent') ?? '',
+    recordingId: entry.getAttribute('gameRecordingId'),
+    endMs: entry.hasAttribute('endMs') && Number.isFinite(end) ? end : null,
+  };
+}
+
 /**
  * Every server call the game page makes, typed (the legacy communication.js's game calls). The participant, the
  * cache buster and ApiError come from GempHttp's interceptors. Statuses the page reacts to: 0 (no connection), 401
@@ -49,6 +70,11 @@ export class GameApi {
   /** Asks the opponent to cancel the game (it ends only if they ask too). */
   cancel(gameId: string): Observable<void> {
     return this.http.postText(`/game/${encodeURIComponent(gameId)}/cancel`).pipe(map(() => undefined));
+  }
+
+  /** The player's newest game in their history: where the replay of the game that just ended is found. */
+  latestGame(): Observable<LatestGame | null> {
+    return this.http.getXml('/gameHistory', { start: '0', count: '1' }).pipe(map(parseLatestGame));
   }
 
   /** getReplay: every event of a finished game. replayId is "player$recording", sent as it is. */

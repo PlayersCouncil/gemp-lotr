@@ -57,3 +57,77 @@
 .gd-button[data-icon]:focus::before {
   background-image: var(--theme-icons-hover);
 }
+
+/*
+ * The modern theme (data-words), on a phone and a computer: one row, Slower left, the play button in the middle with
+ * the speed above it, Faster right; the play button in the main button's colours, the others the secondary ones' (the
+ * owner, 2026-11-20)
+ */
+:host([data-words]) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 14px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.gd-game-replay__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-game-replay__middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-game-replay__side {
+  min-height: 44px;
+  min-width: 92px;
+  padding: 4px 16px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--theme-text);
+  font: inherit;
+  line-height: 1.2;
+}
+
+.gd-game-replay__side[data-replay='slower'] {
+  justify-self: end;
+}
+
+.gd-game-replay__side[data-replay='faster'] {
+  justify-self: start;
+}
+
+.gd-game-replay__side:disabled {
+  opacity: 0.4;
+}
+
+.gd-game-replay__main {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: 1px solid var(--theme-game-main-edge);
+  border-radius: 50%;
+  background: var(--theme-game-main-bg);
+  box-shadow: var(--theme-game-main-shadow);
+  color: var(--theme-game-main-text);
+}
+
+.gd-game-replay__main > svg {
+  fill: currentColor;
+}
+
+/* Pressed shows at once, as the divider's buttons */
+:is(.gd-game-replay__side, .gd-game-replay__main):active:not(:disabled) {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
