@@ -37,3 +37,40 @@
   font-family: var(--theme-game-author-code-font);
   font-size: 12px;
 }
+
+/* The step's refusals as they stand at the decision in hand: a badge each */
+
+.gd-author-allow__refusals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 0 0 4px;
+}
+
+.gd-author-allow__refusal {
+  padding: 0 3px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  color: var(--theme-game-author-options-text);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 11px;
+}
+
+.gd-author-allow__refusal > b {
+  font-family: var(--theme-game-author-font);
+  font-weight: normal;
+}
+
+.gd-author-allow__refusal[data-now='refused'] > b {
+  color: var(--theme-game-author-who-you);
+}
+
+.gd-author-allow__refusal[data-now='allowed'] {
+  border-color: var(--theme-game-author-tag-mistake-border);
+  color: var(--theme-game-author-tag-mistake);
+}
+
+.gd-author-allow__refusal[data-now='notOffered'],
+.gd-author-allow__refusal[data-now='elsewhere'] {
+  color: var(--theme-game-author-dim);
+}

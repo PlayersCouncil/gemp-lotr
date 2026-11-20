@@ -1,4 +1,19 @@
-import { nextUntil, pickersOf, putTerm, rank, splitTerms, untilFromNext, whenParts, writtenInFull } from './terms';
+import {
+  askedNamed,
+  askedOf,
+  askedTerm,
+  askedText,
+  askedWords,
+  nextUntil,
+  pickersOf,
+  putAsked,
+  putTerm,
+  rank,
+  splitTerms,
+  untilFromNext,
+  whenParts,
+  writtenInFull,
+} from './terms';
 
 describe('splitTerms', () => {
   it('splits at the commas that are not inside parentheses, trimmed, blanks dropped', () => {
@@ -93,5 +108,59 @@ describe('the When composer', () => {
     expect(untilFromNext(steps, 3)).toBeNull();
     expect(untilFromNext(steps, -1)).toBeNull();
     expect(untilFromNext(steps, 9)).toBeNull();
+  });
+});
+
+describe('what is being asked', () => {
+  it('reads a term that says what the decision is for, or is not, in any case', () => {
+    expect(askedTerm('nextSkirmish')).toEqual({ asked: 'nextSkirmish', not: false });
+    expect(askedTerm(' NOT( reconcile ) ')).toEqual({ asked: 'reconcile', not: true });
+    expect(askedTerm('not(cards)')).toBeNull();
+    expect(askedTerm('cards')).toBeNull();
+    expect(askedTerm('phase(skirmish)')).toBeNull();
+    expect(askedNamed('ARCHERYWOUND')).toBe('archeryWound');
+    expect(askedNamed(null)).toBeNull();
+    expect(askedText('sanctuary', true)).toBe('not(sanctuary)');
+    expect(askedText('sanctuary', false)).toBe('sanctuary');
+    expect(askedWords('not(nextSkirmish)')).toBe('not next skirmish');
+    expect(askedWords('anotherMove')).toBe('another move?');
+    expect(askedWords('turn(2)')).toBeNull();
+  });
+
+  it('shows the first such term, nothing for a line without one, and has no picker for a When in full', () => {
+    expect(askedOf('freeps, cards, not(nextSkirmish), phase(skirmish), reconcile')).toEqual({
+      asked: 'nextSkirmish',
+      not: true,
+    });
+    expect(askedOf('freeps, cards')).toEqual({ asked: '', not: false });
+    expect(askedOf(undefined)).toEqual({ asked: '', not: false });
+    expect(askedOf('{ seat: freeps }')).toBeNull();
+  });
+
+  it("puts it in where the server writes a new step's When: after the kind of decision, before the phase", () => {
+    expect(putAsked('freeps, cards, phase(skirmish), turn(1)', 'nextSkirmish', false)).toBe(
+      'freeps, cards, nextSkirmish, phase(skirmish), turn(1)',
+    );
+    expect(putAsked('freeps, cards, nextSkirmish, after(gandalf)', 'nextSkirmish', true)).toBe(
+      'freeps, cards, not(nextSkirmish), after(gandalf)',
+    );
+    // (one at a time: any other such term goes; '' takes it out)
+    expect(putAsked('turn(2), reconcile, not(sanctuary), freeps', 'anotherMove', false)).toBe(
+      'freeps, anotherMove, turn(2)',
+    );
+    expect(putAsked('freeps, choice, anotherMove', '', true)).toBe('freeps, choice');
+    expect(putAsked('', 'chooseSite', false)).toBe('chooseSite');
+    expect(rank('not(reconcile)')).toBe(1.5);
+    // (the other pickers keep it in its place)
+    expect(putTerm('freeps, cards, nextSkirmish', 'phase', 'skirmish')).toBe(
+      'freeps, cards, nextSkirmish, phase(skirmish)',
+    );
+  });
+
+  it('reads the kind of a When written out with requirements as its terms', () => {
+    expect(whenParts({ seat: 'freeps', kind: 'not(reconcile)', require: { type: 'x' } })?.terms).toBe(
+      'freeps, not(reconcile)',
+    );
+    expect(whenParts({ seat: 'freeps', kind: '', require: { type: 'x' } })?.terms).toBe('freeps');
   });
 });

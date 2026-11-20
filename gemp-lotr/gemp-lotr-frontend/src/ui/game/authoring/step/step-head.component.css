@@ -37,3 +37,18 @@
 .gd-author-step-head__where[data-status='matched'] {
   color: var(--theme-game-author-matched);
 }
+
+/* What the decision waiting is for: a tag after where the step stands (the line wraps rather than overflows) */
+
+.gd-author-step-head:has(.gd-author-step-head__asked) {
+  flex-wrap: wrap;
+}
+
+.gd-author-step-head__asked {
+  padding: 0 3px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  color: var(--theme-game-author-options-text);
+  font-size: 11px;
+  white-space: nowrap;
+}

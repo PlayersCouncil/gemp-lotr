@@ -8,6 +8,18 @@ const THREE_STEPS = [
   { when: 'freeps, action, phase(fellowship), turn(3)', allow: 'pass' },
 ];
 
+/** The draft's own cards, and Gandalf (1_72) in the Free Peoples hand: something to play in the Fellowship phase. */
+const GANDALF_IN_HAND = {
+  cards: {
+    freeps: { frodo: '10_121', ring: '1_2', gandalf: '1_72' },
+    shadow: { oppFrodo: '10_121', oppRing: '1_2' },
+  },
+  setup: { freeps: { hand: 'gandalf' } },
+};
+
+/** The draft's file as the server would write it (GET scenarios/author/source). */
+const sourceOf = async (seat) => (await seat.who.get('/scenarios/author/source')).json();
+
 const step = {
   head: 'gd-author-step-head',
   name: '.gd-author-step-head__name',
@@ -234,6 +246,183 @@ export const checks = {
     const focus = await focusOf(page);
     if (focus.field !== 'messages.0.text') problems.push(`the focus came back on ${focus.field}`);
     await seat.shot('fresh');
+    await closeDraft(seat);
+  },
+
+  /**
+   * B5: "what is being asked" picked in the When composer and negated: the When on the server and in the file's text
+   * exactly as the server writes a new step's (seat, kind, what is asked, phase, turn), and still so after a reload.
+   */
+  async 'step-asked'({ seat }, problems) {
+    await newDraft(seat, { steps: THREE_STEPS });
+    const page = seat.page;
+    await turnTo(seat, 3);
+    await page.locator('gd-author-when gd-author-select[data-picker="asked"] select').selectOption('nextSkirmish');
+    await until(
+      async () =>
+        (await seat.state()).draft.steps[2].when === 'freeps, action, nextSkirmish, phase(fellowship), turn(3)',
+      'nextSkirmish in the When on the server',
+    );
+    await page.locator('gd-author-when input[data-picker="not"]').check();
+    const want = 'freeps, action, not(nextSkirmish), phase(fellowship), turn(3)';
+    await until(async () => (await seat.state()).draft.steps[2].when === want, `the When "${want}" on the server`);
+    const { source } = await sourceOf(seat);
+    if (!source.includes(`when: ${want}\n`)) problems.push(`the file's text has no "when: ${want}" line`);
+    await seat.shot('asked');
+    await seat.settled();
+    await seat.openGame(seat.gameId());
+    await turnTo(seat, 3);
+    const shown = await page.locator(step.field('when')).inputValue();
+    if (shown !== want) problems.push(`after a reload the When field says "${shown}"`);
+    const picked = await page.locator('gd-author-when gd-author-select[data-picker="asked"] select').inputValue();
+    if (picked !== 'nextSkirmish') problems.push(`after a reload the picker says "${picked}"`);
+    if (!(await page.locator('gd-author-when input[data-picker="not"]').isChecked()))
+      problems.push('after a reload "not" is not ticked');
+    await closeDraft(seat);
+  },
+
+  /**
+   * B6: a condition typed in a message's "Say only if": on the server and in the file; the step on the table put up
+   * again without that message (its condition does not hold), the bubble not saying it, the card saying it was left
+   * out; the condition still there after a reload.
+   */
+  async 'step-say-if'({ seat }, problems) {
+    const steps = [
+      { ...THREE_STEPS[0], messages: [{ text: 'Always said.' }, { text: 'Only with Gandalf.' }] },
+      ...THREE_STEPS.slice(1),
+    ];
+    await newDraft(seat, { steps });
+    const page = seat.page;
+    await turnTo(seat, 1);
+    const card = page.locator('.gd-author-message[data-index="1"]');
+    await card.locator('details.gd-author-message__more > summary').click();
+    const condition = page.locator(step.field('messages.1.require'));
+    await condition.fill('{\n\ttype: canSpot\n\tfilter: name(Gandalf)\n}');
+    // (Tab types a tab in a field of more than one line: the field is left by a click elsewhere)
+    await page.locator(step.field('messages.1.header')).click();
+    await until(async () => (await seat.state()).draft.steps[0].messages?.[1]?.require, 'the condition on the server');
+    await seat.settled();
+    await until(async () => (await card.getAttribute('data-said')) === 'no', 'the card saying it was left out');
+    const bubble = await page.locator(ui.bubble).innerText();
+    if (!bubble.includes('Always said.')) problems.push(`the bubble says "${bubble}"`);
+    if (bubble.includes('Only with Gandalf')) problems.push('the bubble says the message whose condition fails');
+    const { source } = await sourceOf(seat);
+    if (!/text: Only with Gandalf\.\s+require:/.test(source)) problems.push('the file has no require on the message');
+    await seat.shot('left-out');
+    await seat.openGame(seat.gameId());
+    await turnTo(seat, 1);
+    const kept = await page.locator(step.field('messages.1.require')).inputValue();
+    if (!/name\(Gandalf\)/.test(kept)) problems.push(`after a reload Say only if says "${kept}"`);
+    await closeDraft(seat);
+  },
+
+  /**
+   * B6: a mistake in "Say only if" typed with a change to the message's text: the condition refused in the server's
+   * words and kept in its field, the text on the server all the same.
+   */
+  async 'step-say-if-bad'({ seat }, problems) {
+    await newDraft(seat, { steps: THREE_STEPS });
+    seat.refusalsExpected.push(/\/scenarios\/author\/edit/);
+    const page = seat.page;
+    await turnTo(seat, 1);
+    await page.locator('.gd-author-message[data-index="0"] details.gd-author-message__more > summary').click();
+    const bad = '{ type: canSpot, filter: ';
+    await page.locator(step.field('messages.0.require')).fill(bad);
+    await page.locator(step.field('messages.0.text')).click();
+    await page.keyboard.press('End');
+    await page.keyboard.type(' Go on.', { delay: 30 });
+    await until(
+      async () => textOf((await seat.state()).draft.steps[0].messages?.[0]) === 'First, pass. Go on.',
+      'the text on the server, though the condition was refused',
+    );
+    await page.locator(step.problem).waitFor({ timeout: 10000 });
+    const said = await page.locator(step.problem).innerText();
+    if (!/require/i.test(said)) problems.push(`the refusal says "${said}"`);
+    const message = (await seat.state()).draft.steps[0].messages?.[0];
+    if (message?.require !== undefined)
+      problems.push(`the server took a condition: ${JSON.stringify(message.require)}`);
+    const kept = await page.locator(step.field('messages.0.require')).inputValue();
+    if (kept !== bad) problems.push(`the refused field now says "${kept}"`);
+    await seat.shot('refused');
+    await closeDraft(seat);
+  },
+
+  /**
+   * B3: a click on Pass the step does not take offers "+ refuses pass"; taken, the refusal is on the server and in the
+   * file, and its badge for the step in hand says it is refused.
+   */
+  async 'step-refuses'({ seat }, problems) {
+    await newDraft(seat, {
+      steps: [{ ...THREE_STEPS[0], allow: 'play(gandalf)' }, ...THREE_STEPS.slice(1)],
+      top: GANDALF_IN_HAND,
+    });
+    const page = seat.page;
+    await turnTo(seat, 1);
+    await page.locator(ui.decisionButton('Pass')).click();
+    const add = page.locator('gd-author-allow button[data-act="add-refusal"]');
+    await add.waitFor({ timeout: 5000 });
+    if ((await add.innerText()).trim() !== '+ refuses pass')
+      problems.push(`the button says "${await add.innerText()}"`);
+    await add.click();
+    await until(async () => (await seat.state()).draft.steps[0].refuses === 'pass', 'the refusal on the server');
+    await seat.settled();
+    const badge = page.locator('.gd-author-allow__refusal[data-now="refused"]');
+    await badge.waitFor({ timeout: 10000 });
+    if (!(await badge.innerText()).includes('pass')) problems.push(`the badge says "${await badge.innerText()}"`);
+    const { source } = await sourceOf(seat);
+    if (!/\n\t+refuses: pass\n/.test(source)) problems.push('the file has no "refuses: pass"');
+    await seat.shot('refuses');
+    // Typed a line each: the server writes refusals for every decision on one line, and the field takes that back
+    await page.locator(step.field('refuses')).fill('pass\nplay(frodo)');
+    // (Tab types a tab in a field of more than one line: the field is left by a click elsewhere)
+    await page.locator(step.field('answer')).click();
+    await until(
+      async () => (await seat.state()).draft.steps[0].refuses === 'pass, play(frodo)',
+      'two refusals on the server',
+    );
+    await until(
+      async () => (await page.locator(step.field('refuses')).inputValue()) === 'pass, play(frodo)',
+      "the field showing the server's way of writing them",
+    );
+    await page.locator('.gd-author-allow__refusal[data-now="notOffered"]').waitFor({ timeout: 10000 });
+    await closeDraft(seat);
+  },
+
+  /**
+   * B9: a number from the game put in at the caret in the middle of typed text from the menu beside it: the focus and
+   * the caret kept, the text sent once with it, the bubble on the table showing the number.
+   */
+  async 'step-template'({ seat }, problems) {
+    await newDraft(seat, { steps: THREE_STEPS });
+    const page = seat.page;
+    await turnTo(seat, 1);
+    const sends = [];
+    page.on('request', (request) => {
+      if (request.url().includes('/scenarios/author/edit') && (request.postData() ?? '').includes('%7Btwilight%7D'))
+        sends.push(request.postData());
+    });
+    await page.locator(step.field('messages.0.text')).click();
+    await page.keyboard.press('End');
+    await page.keyboard.type(' Pool:  now.', { delay: 20 });
+    for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowLeft');
+    await page.locator('.gd-author-message[data-index="0"] button[data-act="templates"]').click();
+    await page.locator('.gd-author-message[data-index="0"] button[data-template="twilight"]').click();
+    const want = 'First, pass. Pool: {twilight} now.';
+    const focus = await focusOf(page);
+    if (focus.field !== 'messages.0.text') problems.push(`the focus went to ${focus.field}`);
+    if (focus.value !== want) problems.push(`the field says "${focus.value}"`);
+    if (focus.caret !== want.indexOf(' now.')) problems.push(`the caret is at ${focus.caret}`);
+    await until(
+      async () => textOf((await seat.state()).draft.steps[0].messages?.[0]) === want,
+      'the text on the server',
+    );
+    await sleep(1500);
+    if (sends.length !== 1) problems.push(`the template went to the server ${sends.length} times`);
+    await until(
+      async () => /Pool: \d+ now\./.test(await page.locator(ui.bubble).innerText()),
+      'the bubble showing the pool as a number',
+    );
+    await seat.shot('template');
     await closeDraft(seat);
   },
 };

@@ -111,6 +111,9 @@ export const TARGETS = [
   'src/core/game/table/pre-game.ts',
   'src/core/platform/hall-tab.service.ts',
   'src/ui/game/scenario/scenario-anchors.ts',
+  'src/core/game/authoring/refusals.ts',
+  'src/core/game/authoring/said.ts',
+  'src/core/game/authoring/templates.ts',
 ];
 
 /**

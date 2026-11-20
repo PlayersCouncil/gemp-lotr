@@ -175,6 +175,8 @@ describe("the Step tab's ops", () => {
     expect(skirmishy({ when: { seat: 'freeps' } })).toBe(false);
     expect(skirmishy({ when: 'freeps, action, phase(shadow)' })).toBe(false);
     expect(skirmishy(undefined)).toBe(false);
+    expect(skirmishy({ when: 'freeps, cards, nextSkirmish' })).toBe(true);
+    expect(skirmishy({ when: 'freeps, cards, not(nextSkirmish)' })).toBe(false);
     const state = withSteps([{ when: 'a' }, { when: 'b' }, { when: 'freeps, assign' }]);
     expect(nearSkirmishes(state, 0)).toBe(false);
     expect(nearSkirmishes(state, 1)).toBe(true);

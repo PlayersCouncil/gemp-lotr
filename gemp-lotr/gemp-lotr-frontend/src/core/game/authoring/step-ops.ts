@@ -220,6 +220,8 @@ export function skirmishy(step: DraftStep | undefined): boolean {
     )
       return true;
     if (typeof value === 'string' && splitTerms(value).some((term) => term.toLowerCase() === 'assign')) return true;
+    // (the choice of the next skirmish, said as what it is for)
+    if (/\bnextSkirmish\b/i.test(text) && !/not\(\s*nextSkirmish\s*\)/i.test(text)) return true;
     if (typeof value === 'object' && !Array.isArray(value)) {
       const kind =
         (value as Readonly<Record<string, unknown>>)['type'] ?? (value as Readonly<Record<string, unknown>>)['kind'];

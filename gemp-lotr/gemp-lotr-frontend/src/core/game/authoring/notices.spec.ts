@@ -133,6 +133,11 @@ describe('the decision no step covers', () => {
     expect(
       uncoveredNotice(draftState({ waiting: { human: decision({ pass: undefined }), opponent: null } }), open).asked,
     ).toMatch(/\)\.$/);
+    // (what the decision is for, where a When can name it)
+    const kinded = draftState({ waiting: { human: decision({ kind: 'nextSkirmish' }), opponent: null } });
+    expect(uncoveredNotice(kinded, open).asked).toContain('(turn 1, fellowship; it is nextSkirmish)');
+    const unknown = draftState({ waiting: { human: decision({ kind: 'oddity' }), opponent: null } });
+    expect(uncoveredNotice(unknown, open).asked).toContain('(turn 1, fellowship).');
   });
 
   it('says where the step goes: into a block, in place of a blank step, or where a repeating step gives way', () => {

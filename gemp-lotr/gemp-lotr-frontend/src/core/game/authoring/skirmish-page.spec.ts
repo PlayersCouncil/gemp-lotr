@@ -53,6 +53,29 @@ describe('the skirmishes page', () => {
     expect(skirmishPart({})).toEqual({ part: 'before', who: null });
   });
 
+  it('knows the choice of the next skirmish said as what the decision is for, and not(...) as any other', () => {
+    expect(skirmishPart({ when: 'freeps, cards, nextSkirmish' })).toEqual({ part: 'first', who: null });
+    expect(skirmishPart({ when: 'freeps, cards, not(nextSkirmish), phase(skirmish)' })).toEqual({
+      part: 'every',
+      who: null,
+    });
+    expect(skirmishPart({ when: 'freeps, cards, nextSkirmish, after(gandalf)' })).toEqual({
+      part: 'after',
+      who: 'gandalf',
+    });
+    expect(skirmishPart({ when: { seat: 'freeps', kind: 'nextSkirmish' } })).toEqual({ part: 'first', who: null });
+    expect(skirmishPart({ when: { seat: 'freeps', kind: 'not(nextSkirmish)' } })).toEqual({
+      part: 'before',
+      who: null,
+    });
+    expect(skirmishPart({ when: { seat: 'freeps', kind: 3 } as never })).toEqual({ part: 'before', who: null });
+    // (the server writes the step for the first choice so: it is for the page's first-choice group)
+    const state = draftState({
+      uncovered: { ...UNCOVERED, when: 'freeps, cards, nextSkirmish, phase(assignment), turn(1)' },
+    });
+    expect(fitsHere(state, { when: 'freeps, cards, nextSkirmish' })).toBe(true);
+  });
+
   it('says whether the decision no step covers is the one a new step would be for', () => {
     const open = { ...draftState().uncovered, when: 'freeps, action, inSkirmish(frodo)' } as never;
     const state = draftState({ uncovered: open });
@@ -109,7 +132,7 @@ describe('the skirmishes page', () => {
     const { groups, offers } = skirmishGroups(draftState(), { anyOrder: [] }, []);
     expect(groups.map((group) => [group.kind, group.add?.at, group.add?.step])).toEqual([
       ['before', 0, { once: true, when: 'freeps, assign' }],
-      ['first', 0, { once: true, when: 'freeps, cards, text(next skirmish)' }],
+      ['first', 0, { once: true, when: 'freeps, cards, nextSkirmish' }],
     ]);
     expect(offers).toEqual([]);
     // (a fight with its own steps after the ones for every skirmish still has its next step before them)

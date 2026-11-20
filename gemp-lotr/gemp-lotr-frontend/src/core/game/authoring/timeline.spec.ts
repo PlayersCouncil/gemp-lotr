@@ -298,3 +298,36 @@ describe('timelineEnd', () => {
     expect(timelineEnd(draftState())).toEqual({ over: null, frontier: null, asked: null });
   });
 });
+
+describe('what is being asked, in a row', () => {
+  it('reads as what the decision is for, not as the kind of decision it comes as', () => {
+    expect(summary({ when: 'freeps, cards, nextSkirmish, after(gandalf)', allow: 'choose(gandalf)' }, human)).toEqual({
+      who: 'You',
+      when: 'next skirmish after(gandalf)',
+      act: 'choose(gandalf)',
+    });
+    // (not: a choice of cards that is anything but that one)
+    expect(summary({ when: 'freeps, cards, not(nextSkirmish), phase(skirmish)' }, human).when).toBe(
+      'cards not next skirmish skirmish',
+    );
+    expect(summary({ when: 'freeps, choice, anotherMove, phase(regroup), turn(1)' }, human).when).toBe(
+      'another move? regroup t1',
+    );
+    expect(summary({ when: 'shadow, assign', answer: 'assign(aragorn: orc1, ringBearer: rest)' }, human)).toEqual({
+      who: 'Opp',
+      when: 'assign',
+      act: 'assign(aragorn: orc1, ringBearer: rest)',
+    });
+  });
+
+  it('places a step by what is asked where that always comes in one phase', () => {
+    expect(placeOf({ when: 'freeps, cards, archeryWound' }, null).phase).toBe('archery');
+    expect(placeOf({ when: 'freeps, choice, anotherMove, turn(2)' }, null)).toEqual({ turn: 2, phase: 'regroup' });
+    expect(placeOf({ when: 'freeps, cards, reconcile' }, null).phase).toBe('regroup');
+    expect(placeOf({ when: 'freeps, cards, nextSkirmish' }, null).phase).toBe('assignment');
+    expect(placeOf({ when: 'freeps, cards, nextSkirmish, after(frodo)' }, null).phase).toBe('skirmish');
+    expect(placeOf({ when: 'freeps, cards, not(archeryWound)' }, null).phase).toBeNull();
+    expect(placeOf({ when: 'freeps, action, optionalResponses' }, null).phase).toBeNull();
+    expect(placeOf({ when: 'freeps, cards, archeryWound' }, { turn: 1, phase: 'shadow' }).phase).toBe('shadow');
+  });
+});

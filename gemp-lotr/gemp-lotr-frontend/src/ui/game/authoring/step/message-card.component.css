@@ -90,3 +90,14 @@
   min-width: 0;
   margin: 0;
 }
+
+/* Left out by the step on the table, its condition not holding: said so, and its text dimmed */
+
+.gd-author-message__left-out {
+  margin: 0 0 3px;
+  color: var(--theme-game-author-dim);
+}
+
+.gd-author-message[data-said='no'] .gd-author-message__text {
+  opacity: 0.6;
+}

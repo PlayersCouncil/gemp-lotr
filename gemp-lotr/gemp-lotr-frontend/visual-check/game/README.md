@@ -414,6 +414,16 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
 - **step-block**: a step turned into a block (its Until guessed), and a step added on the block's page.
 - **step-fresh**: a change to a step the game has been through brings a fresh game; the page comes back on the same
   step and tab, the focus in the field that had it.
+- **step-asked**: "what is being asked" picked in the When composer and negated (`not(nextSkirmish)`): the When on
+  the server and in the file's text as the server writes a new step's, and still so after a reload.
+- **step-say-if**: a condition typed in a message's "Say only if": on the server and in the file; the step on the
+  table put up without that message (its condition fails), the bubble not saying it, the card saying it was left out.
+- **step-say-if-bad**: a mistake in "Say only if" typed with a change to the message's text: refused in the server's
+  words and kept in its field, the text on the server all the same.
+- **step-refuses**: a click on Pass the step does not take offers "+ refuses pass"; taken, it is on the server and in
+  the file, its badge saying it is refused; two typed a line each come back as the server writes them.
+- **step-template**: `{twilight}` put in from the menu beside a message's text, at the caret in the middle of typed
+  text: the focus and caret kept, sent once, the bubble showing the number.
 - **board-add**: a card found by name in the Board tab and added to the setup's hand: a fresh game, the card on its
   board and in the draft's `cards` and `setup`.
 - **board-now**: the twilight set on the board as it stands: the table's twilight pool shows it, in the same game.

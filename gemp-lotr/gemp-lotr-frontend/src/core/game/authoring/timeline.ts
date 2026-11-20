@@ -5,7 +5,7 @@
  */
 import { DraftState, DraftStep, StepStatus } from './authoring-state';
 import { isAwaiting, isBlock, isHumanSeat, isOpening, kidsOf, leftOutOf, messagesOf, numberOf, stepsOf } from './steps';
-import { SEATS, splitTerms, whenParts } from './terms';
+import { askedTerm, askedWords, SEATS, splitTerms, TYPES, whenParts } from './terms';
 import { unscripted } from './notices';
 
 /** Who a step is about: read only (a pause, the opening), the player's, the opponent's, either's, or a block. */
@@ -54,13 +54,19 @@ export function summary(step: DraftStep, human: (seat: string) => boolean): Step
           : '';
   let seat: string | null = null;
   const rest: string[] = [];
-  for (const term of splitTerms(when)) {
+  const terms = splitTerms(when);
+  // (a When that says what the decision is for reads as that, not as the kind of decision it comes as: "next
+  // skirmish", not "cards")
+  const saysAsked = terms.some((term) => askedTerm(term)?.not === false);
+  for (const term of terms) {
     const phase = /^phase\((.*)\)$/i.exec(term);
     const turn = /^turn\((.*)\)$/i.exec(term);
+    const asked = askedWords(term);
     if ((SEATS as readonly string[]).includes(term.toLowerCase())) seat = term.toLowerCase();
     else if (phase) rest.push(phase[1] ?? '');
     else if (turn) rest.push(`t${turn[1] ?? ''}`);
-    else rest.push(term);
+    else if (asked !== null) rest.push(asked);
+    else if (!(saysAsked && (TYPES as readonly string[]).includes(term))) rest.push(term);
   }
   if (isBlock(step)) {
     const until = typeof step.until === 'string' ? step.until : '{...}';
@@ -99,7 +105,19 @@ export function placeOf(step: DraftStep, seen: StepWhere | null | undefined): St
   else if (said === null && seen) said = seen.phase;
   else if (said === null && /(^|,)\s*assign\s*(,|$)/i.test(when)) said = 'assignment';
   else if (said === null && /\b(inSkirmish|fighting)\(/i.test(when)) said = 'skirmish';
+  else said ??= askedPhase(when);
   return { turn: turn ? Number(turn[1]) : (seen?.turn ?? null), phase: said };
+}
+
+/** The phase a When's "what is asked" comes in, where it always comes in the same one; else null. */
+function askedPhase(when: string): string | null {
+  const terms = splitTerms(when);
+  const asked = terms.map(askedTerm).find((one) => one !== null && !one.not)?.asked;
+  if (asked === 'archeryWound') return 'archery';
+  if (asked === 'anotherMove' || asked === 'reconcile') return 'regroup';
+  // (the first choice of skirmish comes in the Assignment phase, the ones after a skirmish in the Skirmish phase)
+  if (asked === 'nextSkirmish') return terms.some((term) => /^after\(/i.test(term)) ? 'skirmish' : 'assignment';
+  return null;
 }
 
 const onlyPass = (text: string | undefined) => {

@@ -13,9 +13,14 @@ import { FormPlace, StepEditor } from './step-editor';
 import { StepForm } from '../../../../core/game/authoring/send-queue';
 import { DraftState } from '../../../../core/game/authoring/authoring-state';
 import { StepFieldDirective } from './step-field.directive';
+import { HjsonAreaDirective } from '../widgets/hjson-area.directive';
+import { TemplateMenuComponent } from './template-menu.component';
 
 const TEXT_HINT =
-  'What it says. **bold**, [[Card Name]] or [[alias]], [gondor], (2) for twilight, {strength:alias} and the like for numbers from the game.';
+  'What it says. **bold**, [[Card Name]] or [[alias]], [gondor], (2) for twilight, {strength:alias}, {twilight} and the like for numbers from the game ({…} puts one in at the caret).';
+const REQUIRE_HINT =
+  'Said only while these hold: requirements as cards write them, in HJSON as the file has them (one { ... } or a [ list ], all of which must hold), as the When’s Only while. ' +
+  '"You" is the person playing. A line to each part: type: cantSpot, then filter: name(Ulaire Enquea). Not on a message that ends in a choice.';
 const NAME = /^[A-Za-z][A-Za-z0-9_-]*$/;
 const PARTS =
   'strength, vitality, resistance, siteNumber, wounds, cost, title, culture, type, text, art, stats, signet, shadowNumber';
@@ -32,8 +37,9 @@ const PARTS =
  *
  * DOM contract: `gd-author-message` holding `.gd-author-message` (`data-index`, `data-closing`) with
  * `.gd-author-message__head` (`.gd-author-message__num`, `button[data-act]`: insert, earlier, later, pause, up, down,
- * delete, pictures), the fields (`data-field` messages.N.text, .header, .gap, .advance, .on, .zoom, .focus, .magnify,
- * .note, .choices.<name>), a `gd-author-anchor` each for what it points at, outlines and keeps clear of (`data-field`
+ * delete, pictures), `data-said` = no, maybe when the step on the table left it out (with
+ * `.gd-author-message__left-out`), the fields (`data-field` messages.N.text, .header, .require, .gap, .advance, .on,
+ * .zoom, .focus, .magnify, .note, .choices.<name>), `gd-author-templates` under the text, a `gd-author-anchor` each for what it points at, outlines and keeps clear of (`data-field`
  * anchor, highlight, avoid: picked on the table, or typed), `input[data-flag=once]`, `gd-author-select[data-pick]`
  * side, style, `details.gd-author-message__more` (with `gd-author-pictures` while Picture… is on) and, on a pause's
  * last message, `.gd-author-message__choices`.
@@ -48,6 +54,8 @@ const PARTS =
     AuthorSelectComponent,
     PictureChooserComponent,
     StepFieldDirective,
+    HjsonAreaDirective,
+    TemplateMenuComponent,
   ],
   template: `
     @if (view(); as view) {
@@ -55,6 +63,7 @@ const PARTS =
         class="gd-author-message"
         [attr.data-index]="index()"
         [attr.data-closing]="closing() ? '' : null"
+        [attr.data-said]="view.said"
         (focusin)="focused()"
       >
         <div class="gd-author-message__head">
@@ -112,7 +121,20 @@ const PARTS =
           </button>
           <button gdAuthorButton="danger" data-act="delete" title="Delete this message" (click)="remove()">×</button>
         </div>
+        @if (view.said !== null) {
+          <div
+            class="gd-author-note gd-author-message__left-out"
+            [title]="
+              view.said === 'no'
+                ? 'The step on the table left this message out: its Say only if does not hold there.'
+                : 'Fewer messages are on the table than the step has: this one, or another with a Say only if, was left out.'
+            "
+          >
+            {{ view.said === 'no' ? 'Not said here: its condition fails.' : 'Maybe not said here.' }}
+          </div>
+        }
         <textarea
+          #text
           class="gd-author-input gd-author-message__text"
           rows="4"
           placeholder="What it says: **bold**, [[Card]], [gondor], (2), {strength:alias}"
@@ -121,9 +143,19 @@ const PARTS =
           [gdStepField]="base() + '.text'"
           [sends]="sends()"
         ></textarea>
+        <gd-author-templates [target]="text" />
         @if (closing()) {
           <gd-author-field label="Heading">
             <input class="gd-author-input" [gdStepField]="base() + '.header'" />
+          </gd-author-field>
+          <gd-author-field label="Say only if" [hint]="requireHint">
+            <textarea
+              gdHjsonArea
+              rows="1"
+              [placeholder]="requirePlaceholder"
+              [gdStepField]="base() + '.require'"
+              [text]="view.message.require ?? ''"
+            ></textarea>
           </gd-author-field>
         } @else {
           <label
@@ -197,6 +229,16 @@ const PARTS =
             <summary title="Heading, what takes it away, a card or a picture shown large">More…</summary>
             <gd-author-field label="Heading" hint="Most messages have none">
               <input class="gd-author-input" [gdStepField]="base() + '.header'" sends="typing" />
+            </gd-author-field>
+            <gd-author-field label="Say only if" [hint]="requireHint">
+              <textarea
+                gdHjsonArea
+                rows="1"
+                [placeholder]="requirePlaceholder"
+                [gdStepField]="base() + '.require'"
+                [text]="view.message.require ?? ''"
+                [disabled]="view.choices !== null && (view.message.require ?? '') === ''"
+              ></textarea>
             </gd-author-field>
             <gd-author-anchor
               data-field="avoid"
@@ -354,6 +396,9 @@ export class MessageCardComponent {
 
   protected readonly editor = inject(StepEditor);
   protected readonly textHint = TEXT_HINT;
+  protected readonly requireHint = REQUIRE_HINT;
+  /** (JSON on one line is HJSON too; HJSON's own way would need a line to each part) */
+  protected readonly requirePlaceholder = '{ "type": "canSpot", "filter": "name(Aragorn)" }';
   protected readonly parts = PARTS;
   protected readonly sides: readonly AuthorOption[] = [
     ['', 'wherever fits best'],
@@ -400,9 +445,11 @@ export class MessageCardComponent {
       shownWhen: !pause && !opening,
       large: (message.zoom ?? '').trim() !== '',
       open:
-        ['header', 'side', 'avoid', 'advance', 'on', 'zoom', 'note'].some((name) => filled(name)) ||
+        ['header', 'side', 'avoid', 'advance', 'on', 'zoom', 'note', 'require'].some((name) => filled(name)) ||
         Object.keys(choices).length > 0,
       choices: pause && !this.closing() && this.index() === this.count() - 1 ? Object.keys(choices) : null,
+      // (left out by the step on the table, its condition not holding: 'no'; perhaps: 'maybe')
+      said: this.closing() ? null : this.editor.leftOut(this.index()),
     };
   });
 

@@ -1,0 +1,11 @@
+/* What is being asked: its select and its "not", kept together on a line */
+
+:host {
+  display: contents;
+}
+
+.gd-author-asked {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}

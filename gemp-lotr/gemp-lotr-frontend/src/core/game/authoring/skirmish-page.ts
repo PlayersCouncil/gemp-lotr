@@ -7,7 +7,7 @@
  */
 import { BoardCard, DraftState, DraftStep, DraftWhen } from './authoring-state';
 import { NEW_TEXT } from './step-ops';
-import { splitTerms } from './terms';
+import { askedTerm, splitTerms } from './terms';
 
 /** Where a step of a skirmishes block belongs, and whose skirmish it is (for a fight or what comes after one). */
 export interface SkirmishPart {
@@ -25,6 +25,9 @@ export function skirmishPart(step: DraftStep): SkirmishPart {
   if (typeof when === 'string') {
     for (const term of splitTerms(when)) {
       if (/^phase\(\s*skirmish\s*\)$/i.test(term)) skirmish = true;
+      // (the choice of the next skirmish, said as what it is for: not(nextSkirmish) is any other decision)
+      const asked = askedTerm(term);
+      if (asked?.asked === 'nextSkirmish' && !asked.not) next = true;
       const match = /^(fighting|inSkirmish|after|text)\((.*)\)$/i.exec(term);
       if (!match) continue;
       const what = (match[1] ?? '').toLowerCase();
@@ -37,7 +40,11 @@ export function skirmishPart(step: DraftStep): SkirmishPart {
     const written = when as DraftWhen;
     fighting = written.inSkirmish ?? written.fighting ?? null;
     after = written.after ?? null;
-    next = /next skirmish/i.test(written.text ?? '');
+    next =
+      /next skirmish/i.test(written.text ?? '') ||
+      splitTerms(typeof written['kind'] === 'string' ? written['kind'] : '').some(
+        (term) => askedTerm(term)?.asked === 'nextSkirmish' && !askedTerm(term)?.not,
+      );
     skirmish = /^skirmish$/i.test(written.phase ?? '');
   }
   if (fighting !== null) return { part: 'fight', who: fighting };
@@ -139,7 +146,7 @@ export function skirmishGroups(
           ? null
           : {
               at: count,
-              step: { once: true, when: `${human}, cards, text(next skirmish)` },
+              step: { once: true, when: `${human}, cards, nextSkirmish` },
               title: 'A step for the first choice of skirmish',
             },
     },

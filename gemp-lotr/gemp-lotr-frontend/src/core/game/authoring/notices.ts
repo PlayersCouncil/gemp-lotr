@@ -3,7 +3,8 @@
  * step covers, the parts of the file left out to open it, how a save went. Pure: the words, from the state.
  */
 import { ApiError } from '../../api/api-error';
-import { DraftState, LeftOutPart, SaveReport, UncoveredDecision } from './authoring-state';
+import { AuthoringDecision, DraftState, LeftOutPart, SaveReport, UncoveredDecision } from './authoring-state';
+import { askedNamed } from './terms';
 import { isBlock, stepsOf } from './steps';
 
 /** The line under the panel's title: where the game is in the script, and in the game. */
@@ -73,6 +74,12 @@ export interface UncoveredNotice {
   or: Said;
 }
 
+/** What a decision is for, where a When can name it, after where it is: ", for nextSkirmish". */
+function askedNote(asked: AuthoringDecision | null): string {
+  const kind = askedNamed(asked?.kind ?? null);
+  return kind === null ? '' : `; it is ${kind}`;
+}
+
 /** What is said of the decision no step covers: what is asked, what adding a step for it does, and the other ways. */
 export function uncoveredNotice(state: DraftState, open: UncoveredDecision): UncoveredNotice {
   const asked = (open.seat === 'human' ? state.waiting.human : state.waiting.opponent) ?? null;
@@ -114,7 +121,7 @@ export function uncoveredNotice(state: DraftState, open: UncoveredDecision): Unc
       state.stopped === 'uncovered'
         ? 'The script stopped here: no step covers this decision.'
         : 'No step covers this decision.',
-    asked: `${who} being asked "${asked?.text ?? ''}" (${(asked?.where ?? '').replace(/_/g, ' ')})${offered}`,
+    asked: `${who} being asked "${asked?.text ?? ''}" (${(asked?.where ?? '').replace(/_/g, ' ')}${askedNote(asked)})${offered}`,
     problem: open.problem === null ? null : `A step cannot be added for it as things stand: ${open.problem}`,
     how: open.problem === null ? how : null,
     or,

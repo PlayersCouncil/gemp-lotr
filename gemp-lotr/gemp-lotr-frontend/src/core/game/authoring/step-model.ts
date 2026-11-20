@@ -26,6 +26,8 @@ export interface WorkMessage {
   focus?: string;
   magnify?: string | number;
   choices?: Readonly<Record<string, string>>;
+  /** Said only if (its `require`), as the file has it: HJSON text. */
+  require?: string;
   /** What else a file's message can say, kept as it is. */
   readonly [other: string]: unknown;
 }
@@ -62,6 +64,8 @@ export interface WorkStep {
   do?: string;
   answer?: string;
   skirmishes?: boolean;
+  /** What its allow must refuse: one line of terms, or a line each (a list in the file). */
+  refuses?: string;
   messages: readonly WorkMessage[];
   allow: WorkAllow;
   end: WorkEnd;
@@ -95,9 +99,11 @@ export function canon(value: unknown): string {
   );
 }
 
-const asMessage = (message: DraftMessageValue): WorkMessage => {
+const asMessage = (message: DraftMessageValue, require?: string): WorkMessage => {
   if (typeof message === 'string') return { text: message };
   const work: Record<string, unknown> = { ...message };
+  // (its condition as the file writes it: the server's text of it, else as JSON)
+  if (message.require !== undefined) work['require'] = filed(message.require, require);
   // (lists of things on the table are edited as the line of text a file usually has them as)
   for (const name of ['anchor', 'highlight', 'avoid']) {
     const value = work[name];
@@ -125,7 +131,10 @@ export function working(step: DraftStep, texts: StepTexts = {}): WorkStep {
     work['whenRequire'] = texts.whenRequire ?? split.require;
   }
   work = Object.fromEntries(Object.entries(work).filter(([, value]) => value !== undefined));
-  work['messages'] = messagesOf(mine).map(asMessage);
+  work['messages'] = messagesOf(mine).map((message, i) => asMessage(message, texts[`messages.${i}.require`]));
+  if (mine.refuses !== undefined) {
+    work['refuses'] = typeof mine.refuses === 'string' ? mine.refuses : mine.refuses.join('\n');
+  }
   const allow = mine.allow === undefined ? {} : typeof mine.allow === 'string' ? { answers: mine.allow } : mine.allow;
   const passWhen = filed(allow.passWhen, texts.passWhen);
   work['allow'] = {
@@ -136,7 +145,8 @@ export function working(step: DraftStep, texts: StepTexts = {}): WorkStep {
   const end = mine.end === undefined ? null : typeof mine.end === 'string' ? { result: mine.end } : mine.end;
   work['end'] = {
     result: end?.result ?? '',
-    messages: end?.messages === undefined ? [] : messagesOf({ messages: end.messages }).map(asMessage),
+    messages:
+      end?.messages === undefined ? [] : messagesOf({ messages: end.messages }).map((message) => asMessage(message)),
   };
   return work as WorkStep;
 }
@@ -198,6 +208,9 @@ export function written(work: WorkStep): Written {
     step['allow'] = allow.answers;
   }
   if (!blank(work.answer)) step['answer'] = work.answer;
+  // (one line as the line it is, more as a list: the file's two ways of writing it)
+  const refuses = refusalLines(work.refuses);
+  if (refuses.length > 0) step['refuses'] = refuses.length === 1 ? refuses[0] : refuses;
   if (!blank(work.end.result)) {
     step['end'] =
       work.end.messages.length > 0
@@ -362,4 +375,44 @@ export function tableAliases(state: DraftState): string[] {
 /** Whether the form's step is the opening (see isOpening). */
 export function isOpeningWork(work: WorkStep): boolean {
   return (work.when ?? '').trim().toLowerCase() === 'opening';
+}
+
+/** What a step refuses, a line each, blank lines dropped. */
+export function refusalLines(text: string | undefined): string[] {
+  return (text ?? '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line !== '');
+}
+
+/**
+ * A step's messages (or its end, with its messages) as the file would have them, with each message's condition as
+ * `before` had it (the message at the same place; none if it had none): what can still go when a condition just
+ * typed is refused, so that the rest of what was typed in the messages is not held back. Null when that would be
+ * nothing new (no condition differs, or the rest is as it was).
+ */
+export function conditionsAsBefore(part: string, value: unknown, before: unknown): unknown {
+  if (part === 'end') {
+    if (value === null || typeof value !== 'object') return null;
+    const end = value as Readonly<Record<string, unknown>>;
+    const was = before !== null && typeof before === 'object' ? (before as Readonly<Record<string, unknown>>) : {};
+    const messages = conditionsAsBefore('messages', end['messages'], was['messages']);
+    return messages === null ? null : { ...end, messages };
+  }
+  if (part !== 'messages' || !Array.isArray(value)) return null;
+  const was = Array.isArray(before) ? (before as unknown[]) : [];
+  const conditionOf = (message: unknown) =>
+    message !== null && typeof message === 'object'
+      ? (message as Readonly<Record<string, unknown>>)['require']
+      : undefined;
+  const changed = (message: unknown, i: number) =>
+    message !== null && typeof message === 'object' && canon(conditionOf(message)) !== canon(conditionOf(was[i]));
+  if (!(value as unknown[]).some(changed)) return null;
+  const kept = (value as unknown[]).map((message, i) => {
+    if (!changed(message, i)) return message;
+    const had = conditionOf(was[i]);
+    const rest = without(message as Readonly<Record<string, unknown>>, 'require');
+    return had === undefined ? rest : { ...rest, require: had };
+  });
+  return canon(kept) !== canon(was) ? kept : null;
 }
