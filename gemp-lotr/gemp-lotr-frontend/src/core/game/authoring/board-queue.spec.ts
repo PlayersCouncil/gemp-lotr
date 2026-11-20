@@ -1,4 +1,5 @@
-import { AuthoringBoard, BoardCard, Draft } from './authoring-state';
+import { AuthoringBoard, BoardCard, Draft, LaidSite } from './authoring-state';
+import { START_DEFAULT } from './board-start';
 import { GatheredBoard, GatheredCard } from './authoring-ui-store';
 import {
   ADD_PLACES,
@@ -34,6 +35,7 @@ import {
   samePaths,
   seatCards,
   siteAliases,
+  sitesReordered,
   sitesTop,
   suggestAlias,
   undoAdded,
@@ -634,7 +636,7 @@ describe('the Board tab model', () => {
           ],
         }),
       )!;
-      expect(change.cards.freeps).toEqual({
+      expect(change.cards?.freeps).toEqual({
         frodo: '10_121',
         sam: '1_311',
         merry: '1_303',
@@ -642,7 +644,7 @@ describe('the Board tab model', () => {
         rope: '1_72',
         glamdring: '1_72',
       });
-      expect(change.cards.shadow).toEqual({ orc: '1_191', troll: '1_72', goblin: '1_72' });
+      expect(change.cards?.shadow).toEqual({ orc: '1_191', troll: '1_72', goblin: '1_72' });
       expect(change.setup).toMatchObject({
         freeps: { hand: 'sam, merry, gandalf', support: 'sam' },
         shadow: { hand: 'orc', discard: 'goblin' },
@@ -703,6 +705,132 @@ describe('the Board tab model', () => {
     it("offers a seat's cards of a type for the Ring-bearer and the Ring", () => {
       expect(ringChoices(board(), 'freeps', 'THE_ONE_RING')).toEqual([['ring', 'ring (ring)']]);
       expect(ringChoices(board(), 'shadow', 'COMPANION')).toEqual([]);
+    });
+  });
+});
+
+describe('the markers and the sites controlled', () => {
+  const laid = (number: number, controlledBy: LaidSite['controlledBy'] = null): LaidSite => ({
+    number,
+    alias: `site${number}`,
+    blueprintId: `1_${300 + number}`,
+    name: `Site 1_${300 + number}`,
+    owner: 'freeps',
+    controlledBy,
+  });
+  const onPath = (extra: Partial<AuthoringBoard> = {}) =>
+    board({ markers: { freeps: 3, shadow: 2 }, path: [laid(1, 'shadow'), laid(2), laid(3)], ...extra });
+  const ops = (gathered: GatheredBoard) => gathered.ops.map(opText);
+
+  it("puts a seat's marker once (the last said), and not where it is", () => {
+    let gathered = gather(none(), onPath(), 'marker', ['shadow', 3]);
+    gathered = gather(gathered, onPath(), 'marker', ['freeps', 4]);
+    gathered = gather(gathered, onPath(), 'marker', ['shadow', 2]);
+    expect(ops(gathered)).toEqual(['marker(freeps, 4)']);
+    // (for the setup nothing is compared with the board in hand)
+    expect(ops(gather(none(), null, 'marker', ['shadow', 2]))).toEqual(['marker(shadow, 2)']);
+  });
+
+  it('changes who controls a site once (the last said), and not to how it is', () => {
+    let gathered = gather(none(), onPath(), 'control', [2, 'shadow']);
+    gathered = gather(gathered, onPath(), 'liberate', [1]);
+    expect(ops(gathered)).toEqual(['control(2, shadow)', 'liberate(1)']);
+    gathered = gather(gathered, onPath(), 'liberate', [2]);
+    gathered = gather(gathered, onPath(), 'control', [1, 'shadow']);
+    expect(ops(gathered)).toEqual([]);
+    expect(ops(gather(none(), onPath(), 'control', [1, 'freeps']))).toEqual(['control(1, freeps)']);
+    expect(ops(gather(none(), null, 'liberate', [2]))).toEqual(['liberate(2)']);
+  });
+
+  it('shows the markers where they will be, the path laid on to the furthest, and who controls each site', () => {
+    const plain = boardView(board(), none());
+    expect(plain.markers).toEqual({ freeps: 1, shadow: 1 });
+    expect(plain.path.map((each) => [each.number, each.toBeLaid])).toEqual([[1, true]]);
+    const view = boardView(
+      onPath(),
+      none({
+        ops: [
+          { name: 'marker', args: ['freeps', 5] },
+          { name: 'liberate', args: [1] },
+          { name: 'control', args: ['site2', 'shadow'] },
+          { name: 'control', args: [9, 'shadow'] },
+        ],
+      }),
+    );
+    expect(view.markers).toEqual({ freeps: 5, shadow: 2 });
+    expect(view.path.map((each) => [each.number, each.alias, each.controlledBy, each.toBeLaid, each.touched])).toEqual([
+      [1, 'site1', null, false, true],
+      [2, 'site2', 'shadow', false, true],
+      [3, 'site3', null, false, false],
+      [4, null, null, true, false],
+      [5, null, null, true, false],
+    ]);
+    const laidOn = boardView(board({ path: [] }), none({ ops: [{ name: 'marker', args: ['shadow', 2] }] }));
+    expect(laidOn.path[1]).toMatchObject({ number: 2, alias: 'site2', blueprintId: '1_302', toBeLaid: true });
+  });
+
+  it('keeps and counts what is gathered of where the story starts', () => {
+    const saved = { ...none(), start: { site: 3, twilight: 2 } };
+    expect(gatheredOf(saved, 'test').start).toEqual({ site: 3, twilight: 2 });
+    expect(gatheredOf({ ...none(), start: [] as never }, 'test').start).toBeUndefined();
+    expect(gatheredCount(saved)).toBe(2);
+  });
+
+  it('lets go of a card dropped, or not known, from the skirmishes gathered', () => {
+    const fighting = none({ start: { skirmishes: { frodo: ['orc', 'ghost'] } } });
+    expect(forgetCard(fighting, 'orc').start?.skirmishes).toEqual({ frodo: ['ghost'] });
+    expect(pruneGathered(fighting, board()).start?.skirmishes).toEqual({ frodo: ['orc'] });
+  });
+
+  describe('the setup a change writes', () => {
+    const draft: Draft = {
+      id: 'test',
+      cards: { freeps: { frodo: '10_121', aragorn: '1_89' }, shadow: { orc: '1_191', troll: '1_165' } },
+      setup: {
+        freeps: { characters: 'aragorn' },
+        shadow: { minions: 'orc, troll' },
+        startAt: { phase: 'assignment', site: 2 },
+        skirmishes: { frodo: 'orc + troll', aragorn: 'troll' },
+      },
+    };
+    const fighting = { ...START_DEFAULT, site: 2, phase: 'assignment', skirmishes: { frodo: ['orc', 'troll'] } };
+
+    it('takes a card taken out of the skirmishes the setup has, or the draft would not be read', () => {
+      expect(cardChange(draft, none({ removed: ['troll'] }))!.setup!['skirmishes']).toEqual({ frodo: 'orc' });
+      expect(cardChange(draft, none({ removed: ['frodo'] }))!.setup!['skirmishes']).toEqual({ aragorn: 'troll' });
+      const gone = cardChange(draft, none({ removed: ['orc', 'troll'] }))!;
+      expect(gone.setup!['skirmishes']).toBeUndefined();
+    });
+
+    it('writes where the story starts with the cards, and alone (no cards then)', () => {
+      const started = cardChange(draft, none({ start: { twilight: 3 } }), fighting)!;
+      expect(started.cards).toBeUndefined();
+      expect(started.setup).toEqual({
+        freeps: { characters: 'aragorn' },
+        shadow: { minions: 'orc, troll' },
+        startAt: { site: 2, phase: 'assignment', twilight: 3 },
+        skirmishes: { frodo: 'orc + troll' },
+      });
+      const both = cardChange(draft, none({ removed: ['troll'], start: { turn: 2 } }), fighting)!;
+      expect(both.cards?.shadow).toEqual({ orc: '1_191' });
+      expect(both.setup!['skirmishes']).toEqual({ frodo: 'orc' });
+      expect(both.setup!['startAt']).toEqual({ site: 2, phase: 'assignment', turn: 2 });
+      expect(cardChange(draft, none({ start: { twilight: 3 } }))).toBeNull();
+    });
+  });
+
+  it('puts a site before another, every site keeping its name', () => {
+    const plain = board();
+    expect(sitesReordered(plain, 'freeps', ['freeps'], 1, 0)).toEqual({
+      sites: { freeps: { site2: '1_302', site1: '1_301' }, shadow: '1_301, 1_302' },
+    });
+    expect(sitesReordered(plain, 'freeps', ['freeps', 'shadow'], 1, 0).sites.shadow).toEqual({
+      site2opp: '1_302',
+      site1opp: '1_301',
+    });
+    const unnamed = board({ sites: { freeps: [site(1, null), site(2, null)], shadow: [] } });
+    expect(sitesReordered(unnamed, 'freeps', ['freeps'], 1, 1)).toEqual({
+      sites: { freeps: '1_301, 1_302', shadow: '' },
     });
   });
 });

@@ -8,6 +8,7 @@ import { BoardCountersComponent } from './board/board-counters.component';
 import { BoardGatheredComponent } from './board/board-gathered.component';
 import { BoardPathComponent } from './board/board-path.component';
 import { BoardSeatComponent } from './board/board-seat.component';
+import { BoardStartComponent } from './board/board-start.component';
 
 /** Where the Board's changes go, as the radios offer it: its words, and a short note with the rest as its tooltip. */
 interface WhereChoice {
@@ -19,7 +20,8 @@ interface WhereChoice {
 
 /**
  * The authoring panel's Board tab (the legacy scenarioAuthor.js renderBoard): what is on the table, changed. The
- * changes to the board (cards put in and taken out, moved, wounded, ordered; the totals) are gathered under the bar
+ * changes to the board (cards put in and taken out, moved, wounded, ordered; the totals; the markers and who
+ * controls a site; where the story starts) are gathered under the bar
  * at the top, shown as if made, and kept across fresh games until they are submitted (to the board as it stands, or
  * to the one the scenario starts with) or reset. The adventure path, the Ring-bearer and the Ring, a card's version
  * and the names of cards and sites are changed at once. A card's name shows the card under the mouse and opens its
@@ -29,7 +31,7 @@ interface WhereChoice {
  * `.gd-author-board` (where a card's name opens its information) with `gd-author-board-gathered`, `.gd-author-board__where` (`.gd-author-board__heading`, a
  * `label.gd-author-board__choice` per place, `data-where`: now, setup, with `input[type=radio]` and
  * `.gd-author-note`; `.gd-author-board__pending` with changes waiting for a step), `gd-author-board-counters`,
- * `gd-author-board-path`, a `gd-author-board-seat` per seat and `gd-author-board-add`.
+ * `gd-author-board-start`, `gd-author-board-path`, a `gd-author-board-seat` per seat and `gd-author-board-add`.
  */
 @Component({
   selector: 'gd-game-author-board',
@@ -42,6 +44,7 @@ interface WhereChoice {
     BoardGatheredComponent,
     BoardPathComponent,
     BoardSeatComponent,
+    BoardStartComponent,
   ],
   template: `
     @if (authoring.draft(); as draft) {
@@ -74,6 +77,7 @@ interface WhereChoice {
             }
           </div>
           <gd-author-board-counters />
+          <gd-author-board-start />
           <gd-author-board-path />
           @for (seat of seats; track seat) {
             <gd-author-board-seat [seat]="seat" />

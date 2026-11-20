@@ -96,11 +96,26 @@ describe('BoardTabComponent', () => {
     vi.useRealTimers();
   });
 
-  async function open(state: DraftState = withBoard()) {
+  /** The tab on the draft's game; the number printed on each path's first site looked up (`printed`, 0: none). */
+  async function open(state: DraftState = withBoard(), printed = 1) {
     TestBed.inject(GameSession).open('7');
     backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(draftGameXml());
     TestBed.tick();
     backend.expectOne((r) => r.url === `${AUTHOR}state`).flush(JSON.stringify(state));
+    await settle();
+    await redraw();
+    await lookUps(printed);
+  }
+
+  /** The sites looked up for their printed number (GET cards with the site's id), answered. */
+  async function lookUps(printed = 1) {
+    const ids = new Set(
+      Object.values(authoring.draft()?.board?.sites ?? {}).flatMap((path) => path.map((site) => site.id)),
+    );
+    for (const request of backend.match((r) => r.url === `${AUTHOR}cards` && ids.has(r.params.get('q') ?? ''))) {
+      const id = request.request.params.get('q')!;
+      request.flush(JSON.stringify({ cards: [{ ...GANDALF, id, type: 'site', site: printed }] }));
+    }
     await settle();
     await redraw();
   }
@@ -313,7 +328,7 @@ describe('BoardTabComponent', () => {
     expect(gathered()).toEqual([]);
   });
 
-  it('sets a total; what is typed stays while the state comes again; twilight is not set in the setup', async () => {
+  it('sets a total; what is typed stays while the state comes again; twilight is set in the setup too', async () => {
     await open();
     await type('[data-counter=burdens] input', '4');
     authoring.setState(withBoard({ revision: 2 }));
@@ -329,7 +344,10 @@ describe('BoardTabComponent', () => {
     expect(find<HTMLInputElement>('[data-counter=burdens] input').value).toBe('4');
     await click('[data-action=reset]');
     await click('[data-where=setup] input');
-    expect(find<HTMLButtonElement>('[data-counter=twilight] [data-action=set]').disabled).toBe(true);
+    expect(find<HTMLButtonElement>('[data-counter=twilight] [data-action=set]').disabled).toBe(false);
+    // (for the setup, what the board in hand has is no reason not to gather it: the setup may say another)
+    await click('[data-counter=twilight] [data-action=set]');
+    expect(gathered()).toEqual(['twilight(0)']);
   });
 
   it('refuses to change where changes go while changes are gathered, the radio staying', async () => {

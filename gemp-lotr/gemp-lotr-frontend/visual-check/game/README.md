@@ -446,6 +446,19 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   what the pointer is on; a click takes it (and a part of the card); Escape and a click in the panel take nothing;
   `+ Pick` adds a card under another, a site, a row, a pile, the twilight pool and a button to the outlines, each then
   drawn round where it was picked.
+- **start-late**: where the story starts set in the Board tab (site 3, the maneuver phase, twilight 4): a fresh game
+  with three sites on the table's path, both markers, the pool and the phase; `startAt` in the file's text; the same
+  once the page loads again.
+- **start-skirmishes**: skirmishes assigned at a Skirmish start: the game has them and asks which to fight; the file
+  says them; they are shown once the page loads again.
+- **start-markers**: markers put and a site controlled from the path on the table, to the board as it stands (the same
+  game, the site in the Shadow seat's support area) and to the setup (a fresh game, `setup.controlled` in the file,
+  ticked once the page loads again).
+- **start-refused**: a start the server refuses: its words shown in the start, the moves typed kept and gathered.
+- **start-drop**: a card in a skirmish already assigned taken out of the scenario: the draft is read, the skirmish
+  without it.
+- **start-shadows**: the format set to `scenario_shadows` in the Scenario tab, and a path of sites without numbers
+  built in the Board tab (a site found, "no number" first; another put first): the game lays it first, its name kept.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up

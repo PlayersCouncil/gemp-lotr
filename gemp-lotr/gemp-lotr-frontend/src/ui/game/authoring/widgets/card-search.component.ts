@@ -19,10 +19,10 @@ import { CardHoverDirective } from './card-hover.directive';
 /** How long after typing stops the search is made (ms). */
 export const SEARCH_MS = 300;
 
-/** How a card found is listed: "name · id · culture type (cost)", or for a site "name · id · site N". */
+/** How a card found is listed: "name · id · culture type (cost)", or for a site "name · id · site N" (or "no number"). */
 export function foundText(card: FoundCard, sites: boolean, current: string | null): string {
   const parts = sites
-    ? [card.name, card.id, `site ${card.site ?? '?'}`]
+    ? [card.name, card.id, card.site === 0 ? 'no number' : `site ${card.site ?? '?'}`]
     : [card.name, card.id, `${card.culture ?? ''} ${card.type}${card.cost !== null ? ` (${card.cost})` : ''}`.trim()];
   if (card.id === current) parts.push('this one');
   return parts.join('  ·  ');

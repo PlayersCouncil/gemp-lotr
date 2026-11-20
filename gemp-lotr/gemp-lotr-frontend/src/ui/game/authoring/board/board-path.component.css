@@ -81,3 +81,13 @@ gd-author-check {
 gd-author-card-search {
   margin: 3px 0 2px;
 }
+
+.gd-author-board-path__first {
+  margin-left: 6px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--theme-game-author-tag-bg);
+  color: var(--theme-game-author-tag-text);
+  font-size: 10px;
+  cursor: help;
+}

@@ -1,10 +1,26 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Notifier } from '../../notifier/notifier';
 import { AuthoringApi } from './authoring-api.service';
-import { BoardSite, DraftSeat, FoundCard } from './authoring-state';
-import { GatheredBoard } from './authoring-ui-store';
+import { BoardSite, DraftSeat, DraftStart, FoundCard } from './authoring-state';
+import { GatheredBoard, StartChange } from './authoring-ui-store';
 import { Authoring } from './authoring.service';
 import {
+  fightCards,
+  gatherControl,
+  gatherFight,
+  gatherPathSite,
+  gatherStart,
+  setupWithoutSite,
+  startOf,
+  StartPart,
+  startPartOf,
+  startParts,
+  startView,
+  undoStart,
+  withoutStart,
+} from './board-start';
+import {
+  BOARD_SEATS,
   addAliasProblem,
   addCard,
   bearersOf,
@@ -29,6 +45,7 @@ import {
   ringChoices,
   ringTop,
   samePaths,
+  sitesReordered,
   sitesTop,
   undoAdded,
   undoOp,
@@ -56,6 +73,8 @@ export class BoardChanges {
 
   /** The table as the scenario names it; null until it has been laid out. */
   readonly board = computed(() => this.authoring.draft()?.board ?? null);
+  /** The Free Peoples take every turn (rules.oneSided). */
+  readonly oneSided = computed(() => this.authoring.draft()?.draft.rules?.oneSided === true);
   /** Changes go to the board the scenario starts with (else to the board as it stands). */
   readonly inSetup = computed(() => this.authoring.ui().where === 'setup');
   /**
@@ -101,9 +120,73 @@ export class BoardChanges {
     if (gathered) this.authoring.remember({ board: how(gathered) });
   }
 
-  /** Gathers a change to the board ("wound", ["frodo", 1]); see gather. */
+  /**
+   * Gathers a change to the board ("wound", ["frodo", 1]); see gather. For the board the scenario starts with it is
+   * not compared with the board in hand (which the script may have got further than the setup), and a part of where
+   * the story starts that it says the same as is no longer gathered.
+   */
   queue(name: string, args: readonly BoardArg[]): void {
-    this.change((gathered) => gather(gathered, this.board(), name, args));
+    const inSetup = this.inSetup();
+    const part = inSetup ? startPartOf(name, args) : null;
+    this.change((gathered) => {
+      const made = gather(gathered, inSetup ? null : this.board(), name, args);
+      return part === null ? made : undoStart(made, part);
+    });
+  }
+
+  /* ---------------------------------------------------------------- where the story starts */
+
+  /** Where the draft's story starts (as the server says). */
+  readonly start = computed(() => {
+    const state = this.authoring.draft();
+    return state ? startOf(state) : null;
+  });
+  /** Where the story starts as it will be once what has been gathered is sent. */
+  readonly startView = computed(() => {
+    const start = this.start();
+    const gathered = this.gathered();
+    return start && gathered ? startView(start, gathered, this.inSetup(), this.board()) : null;
+  });
+  /** What a skirmish at the start can have (the setup's characters and minions, as they will be). */
+  readonly fightCards = computed(() => {
+    const draft = this.authoring.draft()?.draft;
+    const gathered = this.gathered();
+    return draft && gathered ? fightCards(draft, gathered) : { characters: [], minions: [] };
+  });
+  /** What the server said when the last submit with a change to where the story starts was refused. */
+  readonly startRefused = signal<string | null>(null);
+
+  private changeStart(how: (gathered: GatheredBoard, start: DraftStart) => GatheredBoard) {
+    const start = this.start();
+    if (!start) return;
+    this.startRefused.set(null);
+    this.change((gathered) => how(gathered, start));
+  }
+
+  /** Gathers a part of where the story starts (see gatherStart). */
+  setStart<K extends StartPart>(part: K, value: StartChange[K]): void {
+    this.changeStart((gathered, start) => gatherStart(gathered, start, this.board(), part, value, this.inSetup()));
+  }
+
+  /** A site ticked (or not) as a seat's at the start. */
+  setControl(seat: DraftSeat, number: number, on: boolean): void {
+    this.changeStart((gathered, start) =>
+      gatherControl(gathered, start, this.board(), seat, number, on, this.inSetup()),
+    );
+  }
+
+  /** A minion put in a character's skirmish at the start, or taken out of it. */
+  setFight(character: string, minion: string, on: boolean): void {
+    this.changeStart((gathered, start) => gatherFight(gathered, start, this.board(), character, minion, on));
+  }
+
+  /** The site laid at a place on the path ("" the Free Peoples seat's own). */
+  setPathSite(number: number, alias: string): void {
+    this.changeStart((gathered, start) => gatherPathSite(gathered, start, this.board(), number, alias));
+  }
+
+  undoStart(part: StartPart): void {
+    this.change((gathered) => undoStart(gathered, part));
   }
 
   undoRemoved(index: number): void {
@@ -135,10 +218,12 @@ export class BoardChanges {
 
   /**
    * Where changes are made. What has been gathered is for one of the two boards: it is sent, or let go of, before
-   * the other is chosen (false, and the author is told, if it hasn't been).
+   * the other is chosen (false, and the author is told, if it hasn't been). Where the story starts is the setup's
+   * whichever is chosen, and stays gathered.
    */
   setWhere(where: 'now' | 'setup'): boolean {
-    if (this.count() > 0) {
+    const gathered = this.gathered();
+    if (gathered && gatheredCount(gathered) > startParts(gathered).length) {
       this.authoring.problem.set(WHERE_REFUSED);
       return false;
     }
@@ -159,17 +244,21 @@ export class BoardChanges {
     const gathered = this.gathered();
     if (!draft || !gathered || gatheredCount(gathered) === 0) return;
     const inSetup = this.inSetup();
-    const change = cardChange(draft.draft, gathered);
+    const starting = startParts(gathered).length > 0;
+    const change = cardChange(draft.draft, gathered, this.start());
     const ops = gathered.ops.map(opText);
     if (!(await this.authoring.flush()).went) return;
     // (a fresh game that the cards bring is gone to once the changes to the board have been made to it)
     this.authoring.holdArrivals();
     if (change !== null) {
       if (!(await this.authoring.edit({ top: { ...change } }))) {
+        // (said where the start is changed too, what was typed there staying gathered)
+        if (starting) this.startRefused.set(this.authoring.problem());
         this.authoring.releaseArrivals();
         return;
       }
-      this.authoring.remember({ board: { ...this.stored(draft.draft.id), added: [], removed: [] } });
+      this.startRefused.set(null);
+      this.authoring.remember({ board: { ...withoutStart(this.stored(draft.draft.id)), added: [], removed: [] } });
     }
     if (ops.length === 0) {
       this.authoring.releaseArrivals();
@@ -223,20 +312,69 @@ export class BoardChanges {
     await this.authoring.edit({ top: sitesTop(draft.board, draft.draft.human ?? 'freeps', freeps, shadow) });
   }
 
-  /** A site of a seat's path changed (`id`), or taken off (null); with the paths the same, both seats'. */
+  /**
+   * A site of a seat's path changed (`id`), or taken off (null); with the paths the same, both seats'. A site taken
+   * off is taken out of the setup's sites controlled and its path too (the draft would not be read otherwise).
+   */
   async changeSite(seat: DraftSeat, at: number, id: string | null): Promise<void> {
+    const draft = this.authoring.draft();
     const board = this.board();
-    if (!board) return;
+    if (!draft || !board) return;
     const now = pathIds(board, seat);
     if (id === null) now.splice(at, 1);
     else now[at] = id;
-    if (!this.sitesApart()) await this.putSites(now, now);
-    else
-      await this.putSites(
-        seat === 'freeps' ? now : pathIds(board, 'freeps'),
-        seat === 'shadow' ? now : pathIds(board, 'shadow'),
-      );
+    const freeps = seat === 'freeps' || !this.sitesApart() ? now : pathIds(board, 'freeps');
+    const shadow = seat === 'shadow' || !this.sitesApart() ? now : pathIds(board, 'shadow');
+    const top: Record<string, unknown> = sitesTop(board, draft.draft.human ?? 'freeps', freeps, shadow);
+    if (id === null) {
+      const gone = BOARD_SEATS.filter((one) => one === seat || !this.sitesApart())
+        .map((one) => board.sites[one][at]?.alias)
+        .filter((alias): alias is string => !!alias);
+      let setup = draft.draft.setup ?? null;
+      for (const alias of gone) setup = setupWithoutSite(setup, alias);
+      if (JSON.stringify(setup) !== JSON.stringify(draft.draft.setup ?? null)) top['setup'] = setup;
+    }
+    await this.authoring.edit({ top });
   }
+
+  /**
+   * A site of a seat's path put before the one above it (with the paths the same, both seats'), keeping its name: on
+   * a path whose sites have no numbers, the first listed is the one laid first.
+   */
+  async raiseSite(seat: DraftSeat, at: number): Promise<void> {
+    const draft = this.authoring.draft();
+    const board = this.board();
+    if (!draft || !board || at < 1) return;
+    const seats = this.sitesApart() ? [seat] : BOARD_SEATS;
+    await this.authoring.edit({ top: sitesReordered(board, draft.draft.human ?? 'freeps', seats, at, at - 1) });
+  }
+
+  /* ---------------------------------------------------------------- sites without numbers */
+
+  /** The number printed on a site, by its blueprint (0: none), as far as it has been looked up. */
+  private readonly printed = signal<ReadonlyMap<string, number>>(new Map());
+  private readonly asked = new Set<string>();
+
+  /**
+   * Whether a seat's path is one whose sites have no numbers (the Shadows block on): as the game decides it, by the
+   * first site of the path. Looked up once per site (GET cards).
+   */
+  unnumbered(seat: DraftSeat): boolean {
+    const first = this.path(seat)[0]?.id;
+    return first !== undefined && this.printed().get(first) === 0;
+  }
+
+  private readonly lookUp = effect(() => {
+    for (const seat of BOARD_SEATS) {
+      const first = this.board()?.sites[seat][0]?.id;
+      if (first === undefined || this.asked.has(first)) continue;
+      this.asked.add(first);
+      void this.authoring.send(this.api.cards(first, true), false).then((found) => {
+        const card = found?.cards.find((one) => one.id === first);
+        if (card?.site !== undefined) this.printed.update((known) => new Map([...known, [first, card.site ?? 0]]));
+      });
+    }
+  });
 
   /** "The same sites for both seats": ticked with the paths apart, the Free Peoples' is the Shadow's too. */
   async samePath(same: boolean): Promise<void> {
