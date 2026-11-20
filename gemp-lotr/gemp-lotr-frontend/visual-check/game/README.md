@@ -446,6 +446,19 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   what the pointer is on; a click takes it (and a part of the card); Escape and a click in the panel take nothing;
   `+ Pick` adds a card under another, a site, a row, a pile, the twilight pool and a button to the outlines, each then
   drawn round where it was picked.
+- **opponent-orders** (`author/opponent-orders.mjs`): a standing order for the opponent's waiting decision started from
+  the tab (its When from the decision), added (it then plays the runner), made `once` with a note (used up), moved up
+  and deleted after the page's question, each a fresh game back on the Opponent tab with the order still open; after
+  each the draft and the file's text, the other two orders exactly as they were; a reload lists the same.
+- **opponent-order-refused**: an order's answer naming no card: the parser's words on the order, the text kept, no
+  fresh game, the draft as it was.
+- **opponent-leftovers**: the player assigns nobody; with leftovers to Sam or the Ring-bearer the runner is fought
+  (the next skirmish is chosen), with none there is no fight; the draft and the file's text after each.
+- **opponent-sandbox**: the sandbox fallback chosen in the Scenario tab with two of three runners ticked: the first
+  ticked is played, the unticked one stays in hand, the orders untouched; the Opponent tab shows the same fallback.
+- **scenario-game-lost** (`author/endings.mjs`): a heading and a text written for "Game lost" in the Scenario tab
+  (the heading alone sends nothing); the draft and the file have them, and the end panel says them when Frodo dies.
+- **scenario-outcome-kept**: an outcome with every part set keeps every other part when one closing message changes.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up

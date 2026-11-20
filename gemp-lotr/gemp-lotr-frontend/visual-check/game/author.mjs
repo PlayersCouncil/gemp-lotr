@@ -21,9 +21,11 @@ import { checks as board } from './author/board.mjs';
 import { checks as scenario } from './author/scenario.mjs';
 import { checks as opponent } from './author/opponent.mjs';
 import { checks as picking } from './author/picking.mjs';
+import { checks as opponentOrders } from './author/opponent-orders.mjs';
+import { checks as endings } from './author/endings.mjs';
 
 /** Every check by name; a part's file adds its own here. */
-const CHECKS = { ...shell, ...step, ...board, ...scenario, ...opponent, ...picking };
+const CHECKS = { ...shell, ...step, ...board, ...scenario, ...opponent, ...picking, ...opponentOrders, ...endings };
 
 const ONLY = argument('only', '').split(',').filter(Boolean);
 const THEMES = argument('theme', 'classic,modern').split(',').filter(Boolean);
