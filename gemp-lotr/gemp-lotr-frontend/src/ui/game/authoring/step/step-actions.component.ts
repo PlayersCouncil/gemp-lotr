@@ -10,6 +10,7 @@ import {
   laterOp,
   nearSkirmishes,
 } from '../../../../core/game/authoring/step-ops';
+import { DraftState } from '../../../../core/game/authoring/authoring-state';
 import { isBlock, isOpening, leftOutOf, stepsOf } from '../../../../core/game/authoring/steps';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorSelectComponent } from '../widgets/author-select.component';
@@ -47,7 +48,7 @@ import { StepEditor } from './step-editor';
           data-act="earlier"
           title="Move this step earlier"
           [disabled]="acts.index === 0"
-          (click)="move(-1)"
+          (click)="move(acts.index, -1)"
         >
           ↑
         </button>
@@ -56,7 +57,7 @@ import { StepEditor } from './step-editor';
           data-act="later"
           title="Move this step later"
           [disabled]="acts.index >= acts.count - 1"
-          (click)="move(1)"
+          (click)="move(acts.index, 1)"
         >
           ↓
         </button>
@@ -64,7 +65,7 @@ import { StepEditor } from './step-editor';
           gdAuthorButton
           data-act="before"
           title="A new step before this one. It says nothing yet: when the game comes to it, what you do there is written in as what it allows."
-          (click)="blank(acts.index)"
+          (click)="blank(acts.draft, acts.index)"
         >
           Before
         </button>
@@ -72,7 +73,7 @@ import { StepEditor } from './step-editor';
           gdAuthorButton
           data-act="after"
           title="A new step after this one. It says nothing yet: when the game comes to it, what you do there is written in as what it allows."
-          (click)="blank(acts.index + 1)"
+          (click)="blank(acts.draft, acts.index + 1)"
         >
           After
         </button>
@@ -82,7 +83,7 @@ import { StepEditor } from './step-editor';
           [title]="
             acts.block ? 'Take this block, and the steps in it, out of the script' : 'Take this step out of the script'
           "
-          (click)="remove()"
+          (click)="remove(acts)"
         >
           Delete
         </button>
@@ -95,7 +96,7 @@ import { StepEditor } from './step-editor';
               (acts.alike === 1 ? ' after this one waits' : 's after this one wait') +
               ' for the same as it does. Joined, this step repeats until the step after them comes: however many of these decisions there are, one or several, they are all this step’s. What each allowed it allows, and their answers are its answers, in order.'
             "
-            (click)="join(acts.alike)"
+            (click)="join(acts.index, acts.alike)"
           >
             Join next{{ acts.alike === 1 ? '' : ' ' + acts.alike }}
           </button>
@@ -105,7 +106,7 @@ import { StepEditor } from './step-editor';
             gdAuthorButton
             data-act="convert"
             title="Turn this step into a block, with this step as its first step: for a stretch of the game whose decisions come in no order the script can know. It waits for the turn (and phase) this step does, and ends where the step after it begins."
-            (click)="convert(false)"
+            (click)="convert(acts.index, false)"
           >
             Convert
           </button>
@@ -119,7 +120,7 @@ import { StepEditor } from './step-editor';
               label="Convert"
               [options]="convertOptions"
               value=""
-              (changed)="$event !== '' && convert($event === 'skirmishes')"
+              (changed)="$event !== '' && convert(acts.index, $event === 'skirmishes')"
             />
           </span>
         } @else if (acts.convert === 'skirmishes') {
@@ -127,7 +128,7 @@ import { StepEditor } from './step-editor';
             gdAuthorButton
             data-act="skirmishes"
             title="Show this block's steps skirmish by skirmish, as a turn's assignment and skirmishes are written: what it waits for and ends at stays as it is."
-            (click)="toSkirmishes()"
+            (click)="toSkirmishes(acts.index)"
           >
             Convert to Skirmishes
           </button>
@@ -137,7 +138,7 @@ import { StepEditor } from './step-editor';
             gdAuthorButton
             data-act="into-before"
             title="Make this step the last of the steps in the block before it"
-            (click)="into(acts.index - 1)"
+            (click)="into(acts.index, acts.index - 1)"
           >
             Into block {{ acts.index }}
           </button>
@@ -147,7 +148,7 @@ import { StepEditor } from './step-editor';
             gdAuthorButton
             data-act="into-after"
             title="Make this step the first of the steps in the block after it"
-            (click)="into(acts.index + 1)"
+            (click)="into(acts.index, acts.index + 1)"
           >
             Into block {{ acts.number + 1 }}
           </button>
@@ -193,8 +194,10 @@ export class StepActionsComponent {
             ? 'skirmishes'
             : null;
     return {
+      draft,
       index,
       number: index + 1,
+      kids: top.anyOrder?.length ?? 0,
       count: steps.length,
       block,
       alike: alikeAfter(draft, index),
@@ -208,17 +211,17 @@ export class StepActionsComponent {
     };
   });
 
-  /** Sends the form; then, if it went, does what was asked. */
-  private async then(action: () => Promise<unknown>): Promise<void> {
-    if (await this.editor.send()) await action();
+  /** Sends the form; then, if it went, does what was asked with the draft as it now is. */
+  private async then(action: (draft: DraftState) => Promise<unknown>): Promise<void> {
+    if (!(await this.editor.send())) return;
+    const draft = this.editor.authoring.draft();
+    if (draft) await action(draft);
   }
 
-  protected move(by: -1 | 1): void {
-    const draft = this.editor.authoring.draft();
-    const index = this.editor.place()?.index;
-    if (!draft || index === undefined) return;
+  /** The step at `index` (from 0) one earlier or later. */
+  protected move(index: number, by: -1 | 1): void {
     const number = index + 1;
-    void this.then(() =>
+    void this.then((draft) =>
       by < 0
         ? this.editor.authoring.changeSteps([earlierOp(draft, index)], number - 1, number - 1)
         : this.editor.authoring.changeSteps([laterOp(draft, index)], number, number + 1),
@@ -226,60 +229,42 @@ export class StepActionsComponent {
   }
 
   /** A new step at `at` (from 0): the step for the decision no step covers, where that is the place for it. */
-  protected blank(at: number): void {
-    const draft = this.editor.authoring.draft();
-    if (!draft) return;
+  protected blank(draft: DraftState, at: number): void {
     if (coversUncovered(draft, at)) void this.editor.authoring.stepHere();
     else void this.editor.authoring.insertStep(at, blankStep(draft), true);
   }
 
-  protected async remove(): Promise<void> {
-    const draft = this.editor.authoring.draft();
-    const index = this.editor.place()?.index;
-    const top = index === undefined ? undefined : draft?.draft.steps?.[index];
-    if (!draft || index === undefined || !top) return;
+  protected async remove(acts: { draft: DraftState; index: number; block: boolean; kids: number }): Promise<void> {
+    const index = acts.index;
     const number = index + 1;
-    const kids = top.anyOrder?.length ?? 0;
-    const question = isBlock(top)
-      ? `Take step ${number} out of the script, with the ${kids} step${kids === 1 ? '' : 's'} in it?`
+    const question = acts.block
+      ? `Take step ${number} out of the script, with the ${acts.kids} step${acts.kids === 1 ? '' : 's'} in it?`
       : `Take step ${number} out of the script?`;
     if (!(await this.editor.ask(question, 'Delete'))) return;
-    const uid = draft.uids[index] ?? '';
+    const uid = acts.draft.uids[index] ?? '';
     await this.editor.authoring.changeSteps([{ op: 'delete', uid }], number, Math.max(1, number - 1));
   }
 
-  protected join(count: number): void {
-    void this.then(async () => {
-      const draft = this.editor.authoring.draft();
-      const index = this.editor.place()?.index;
-      if (!draft || index === undefined) return;
-      await this.editor.authoring.changeSteps(joinOps(draft, index, count), index + 1, index + 1);
+  protected join(index: number, count: number): void {
+    void this.then((draft) => this.editor.authoring.changeSteps(joinOps(draft, index, count), index + 1, index + 1));
+  }
+
+  protected convert(index: number, skirmishes: boolean): void {
+    void this.then(async (draft) => {
+      const op = convertOp(draft, index, skirmishes);
+      if (op) await this.editor.authoring.changeSteps([op], index + 1, index + 1);
     });
   }
 
-  protected convert(skirmishes: boolean): void {
-    void this.then(async () => {
-      const draft = this.editor.authoring.draft();
-      const index = this.editor.place()?.index;
-      const op = draft && index !== undefined ? convertOp(draft, index, skirmishes) : null;
-      if (op && index !== undefined) await this.editor.authoring.changeSteps([op], index + 1, index + 1);
-    });
+  protected toSkirmishes(index: number): void {
+    void this.then((draft) =>
+      this.editor.authoring.edit({ steps: [{ op: 'merge', uid: draft.uids[index] ?? '', set: { skirmishes: true } }] }),
+    );
   }
 
-  protected toSkirmishes(): void {
-    void this.then(async () => {
-      const uid = this.editor.authoring.draft()?.uids[this.editor.place()?.index ?? -1];
-      if (uid !== undefined)
-        await this.editor.authoring.edit({ steps: [{ op: 'merge', uid, set: { skirmishes: true } }] });
-    });
-  }
-
-  /** Made one of the steps of the block at `toIndex` (from 0): its last (the block before), or its first (after). */
-  protected into(toIndex: number): void {
-    void this.then(async () => {
-      const draft = this.editor.authoring.draft();
-      const index = this.editor.place()?.index;
-      if (!draft || index === undefined) return;
+  /** The step at `index` made one of the steps of the block at `toIndex`: its last (the block before), or its first. */
+  protected into(index: number, toIndex: number): void {
+    void this.then(async (draft) => {
       const { op, blockAt, subAt, firstChanged } = intoBlockOp(draft, index, toIndex);
       this.editor.authoring.remember({ subAt });
       await this.editor.authoring.changeSteps([op], firstChanged, blockAt + 1);

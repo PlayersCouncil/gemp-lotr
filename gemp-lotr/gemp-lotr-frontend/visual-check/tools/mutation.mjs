@@ -74,6 +74,10 @@ export const TARGETS = [
   'src/core/game/authoring/steps.ts',
   'src/core/game/authoring/terms.ts',
   'src/core/game/authoring/timeline.ts',
+  // The Step tab's form: its model, how it goes to the server, the skirmishes page
+  'src/core/game/authoring/step-model.ts',
+  'src/core/game/authoring/send-queue.ts',
+  'src/core/game/authoring/skirmish-page.ts',
   // Scenarios on the game page: the script's events, what a step allows, the guide, and where its bubble goes
   'src/core/game/scenario/bubble-placement.ts',
   'src/core/game/scenario/scenario-api.service.ts',

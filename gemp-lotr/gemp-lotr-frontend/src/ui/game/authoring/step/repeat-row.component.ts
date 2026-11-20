@@ -32,7 +32,7 @@ const blank = (value: string | undefined) => (value ?? '').trim() === '';
             class="gd-author-check"
             title="Go on applying to every decision that fits When, not only the first, until a decision arrives that fits what is given here"
           >
-            <input type="checkbox" data-flag="repeat" [checked]="view.on" (change)="tick($event)" />
+            <input type="checkbox" data-flag="repeat" [checked]="view.on" (change)="tick(view.guess, $event)" />
             repeat until
           </label>
           <textarea
@@ -45,7 +45,7 @@ const blank = (value: string | undefined) => (value ?? '').trim() === '';
             [text]="view.until"
           ></textarea>
         </div>
-        @if (view.repeats) {
+        @if (view.on) {
           <div class="gd-author-repeat__more">
             <div
               class="gd-author-note"
@@ -99,17 +99,20 @@ export class RepeatRowComponent {
 
   protected readonly view = computed(() => {
     const work = this.editor.work();
-    if (!work) return null;
+    const place = this.editor.place();
+    const draft = this.editor.authoring.draft();
+    if (!work || !place || !draft) return null;
     const plays = playsOf(work);
     const until = work.until ?? '';
     return {
+      // (ticked: Until is filled in with what comes next, or what the When's phase or turn has after it)
+      guess: untilFromNext(stepsOf(draft), place.index) ?? nextUntil(work.when),
       until,
-      repeats: !blank(until),
       on: !blank(until) || this.ticked(),
       plays,
       words: inPlayWords(plays),
       passOnce: blank(work.allow.passWhen),
-      inPlay: untilInPlay(this.editor.authoring.draft()?.draft.human ?? 'freeps', plays),
+      inPlay: untilInPlay(draft.draft.human ?? 'freeps', plays),
     };
   });
 
@@ -121,25 +124,14 @@ export class RepeatRowComponent {
     });
   }
 
-  protected tick(event: Event): void {
+  protected tick(guess: string, event: Event): void {
     const on = (event.target as HTMLInputElement).checked;
-    const work = this.editor.work();
-    const place = this.editor.place();
-    const draft = this.editor.authoring.draft();
-    if (!work || !place || !draft) return;
     this.ticked.set(on);
-    if (!on) {
-      this.editor.put('until', '');
-      this.editor.now();
-      return;
-    }
-    if (!blank(work.until)) return;
-    const guess = untilFromNext(stepsOf(draft), place.index) ?? nextUntil(work.when);
-    if (blank(guess)) {
+    if (on && blank(guess)) {
       this.untilField()?.nativeElement.focus();
       return;
     }
-    this.editor.put('until', guess);
+    this.editor.put('until', on ? guess : '');
     this.editor.now();
   }
 

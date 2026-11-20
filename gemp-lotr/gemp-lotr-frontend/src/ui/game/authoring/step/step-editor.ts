@@ -180,7 +180,6 @@ export class StepEditor {
 
   private schedule(ms: number): void {
     this.stop();
-    if (!this.form()) return;
     this.timer = setTimeout(() => {
       this.timer = null;
       void this.form()?.send();

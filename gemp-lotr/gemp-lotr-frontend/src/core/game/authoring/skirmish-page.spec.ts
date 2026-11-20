@@ -1,6 +1,19 @@
-import { draftState } from '../../../testing/authoring';
+import { draftState, position } from '../../../testing/authoring';
 import { AuthoringBoard, BoardCard, DraftStep } from './authoring-state';
-import { fitsHere, skirmishGroups, skirmishPart } from './skirmish-page';
+import { fitsHere, skirmishGroups, skirmishPart, uncoveredIn } from './skirmish-page';
+
+const UNCOVERED = {
+  seat: 'human' as const,
+  after: 1,
+  when: 'x',
+  repeating: null,
+  until: null,
+  becomes: null,
+  problem: null,
+  block: null,
+  sub: 0,
+  reuses: null,
+};
 
 const card = (alias: string, name: string, owner: 'freeps' | 'shadow', type: string): BoardCard => ({
   alias,
@@ -109,5 +122,14 @@ describe('the skirmishes page', () => {
       at: 0,
       step: { when: 'shadow, action, inSkirmish(x)' },
     });
+  });
+
+  it('says whether the decision no step covers is for a block to have a step for', () => {
+    const open = { ...UNCOVERED, block: 2 };
+    expect(uncoveredIn(draftState({ uncovered: open }), 1)).toBe(true);
+    expect(uncoveredIn(draftState({ uncovered: open }), 0)).toBe(false);
+    expect(uncoveredIn(draftState({ uncovered: { ...open, problem: 'No.' } }), 1)).toBe(false);
+    expect(uncoveredIn(draftState({ uncovered: open, position: position({ over: true }) }), 1)).toBe(false);
+    expect(uncoveredIn(draftState(), 1)).toBe(false);
   });
 });

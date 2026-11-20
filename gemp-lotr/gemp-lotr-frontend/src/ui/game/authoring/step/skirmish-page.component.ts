@@ -1,10 +1,10 @@
 import { Component, computed, inject } from '@angular/core';
-import { fitsHere, SkirmishGroup, skirmishGroups } from '../../../../core/game/authoring/skirmish-page';
+import { fitsHere, SkirmishGroup, skirmishGroups, uncoveredIn } from '../../../../core/game/authoring/skirmish-page';
 import { childPause } from '../../../../core/game/authoring/step-ops';
 import { DraftStep } from '../../../../core/game/authoring/authoring-state';
-import { stepsOf } from '../../../../core/game/authoring/steps';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
+import { BlockAt } from './block-page.component';
 import { BlockPanelComponent, PanelOrder } from './block-panel.component';
 import { StepEditor } from './step-editor';
 
@@ -44,7 +44,7 @@ import { StepEditor } from './step-editor';
           }
           @if (group.add; as add) {
             <div class="gd-author-bar">
-              <button gdAuthorButton data-add="step" [title]="add.title" (click)="addStep(add.at, add.step)">
+              <button gdAuthorButton data-add="step" [title]="add.title" (click)="addStep(view, add.at, add.step)">
                 + Step
               </button>
             </div>
@@ -69,7 +69,7 @@ import { StepEditor } from './step-editor';
           gdAuthorButton
           data-add="pause"
           title="A step of this block that is only read: once, over the first of the player's decisions that fits it"
-          (click)="addPause()"
+          (click)="addPause(view)"
         >
           + Pause
         </button>
@@ -83,14 +83,14 @@ export class SkirmishPageComponent {
   protected readonly view = computed(() => {
     const draft = this.editor.authoring.draft();
     const place = this.editor.place();
-    const top = place && draft ? stepsOf(draft)[place.index] : undefined;
+    const top = this.editor.top();
     if (!draft || !place || !top) return null;
     const { groups, offers } = skirmishGroups(draft, top, this.editor.authoring.ui().newFights);
     const options: AuthorOption[] = [
       ['', '+ a skirmish for…'],
       ...offers.map((offer) => [offer.alias, offer.label] as const),
     ];
-    return { index: place.index, count: top.anyOrder?.length ?? 0, groups, offers: options };
+    return { draft, index: place.index, count: top.anyOrder?.length ?? 0, groups, offers: options };
   });
 
   protected orderOf(group: SkirmishGroup, at: number): PanelOrder {
@@ -98,27 +98,17 @@ export class SkirmishPageComponent {
   }
 
   /** A step for this group: the one for the decision waiting, where it is this group's; else one with no answer yet. */
-  protected addStep(at: number, step: DraftStep): void {
-    const draft = this.editor.authoring.draft();
-    const view = this.view();
-    if (!draft || !view) return;
-    const open = draft.uncovered;
-    if (open?.problem === null && open.block === view.index + 1 && !draft.position.over && fitsHere(draft, step)) {
-      void this.editor.authoring.stepHere();
-      return;
-    }
-    void this.editor.insertInBlock(view.index, at, step, true);
+  protected addStep(view: BlockAt, at: number, step: DraftStep): void {
+    if (uncoveredIn(view.draft, view.index) && fitsHere(view.draft, step)) void this.editor.authoring.stepHere();
+    else void this.editor.insertInBlock(view.index, at, step, true);
   }
 
   protected async addFight(who: string): Promise<void> {
-    if (who === '') return;
-    if (!(await this.editor.send())) return;
+    if (who === '' || !(await this.editor.send())) return;
     this.editor.authoring.remember({ newFights: [...this.editor.authoring.ui().newFights, who] });
   }
 
-  protected addPause(): void {
-    const draft = this.editor.authoring.draft();
-    const view = this.view();
-    if (draft && view) void this.editor.insertInBlock(view.index, view.count, childPause(draft));
+  protected addPause(view: BlockAt): void {
+    void this.editor.insertInBlock(view.index, view.count, childPause(view.draft));
   }
 }

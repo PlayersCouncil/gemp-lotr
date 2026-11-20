@@ -2,12 +2,14 @@ import { Component, computed, inject, input, output, signal } from '@angular/cor
 import { STOCK_GAP } from '../../../../core/game/scenario/bubble-placement';
 import { MessageSide } from '../../../../core/game/scenario/scenario-events';
 import { moveMessageOps, splitToPauseOps } from '../../../../core/game/authoring/step-ops';
-import { isOpeningWork, valueAt, WorkMessage, written } from '../../../../core/game/authoring/step-model';
+import { isOpeningWork, valueAt, WorkMessage, WorkStep, written } from '../../../../core/game/authoring/step-model';
 import { isBlock, stepsOf } from '../../../../core/game/authoring/steps';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
-import { StepEditor } from './step-editor';
+import { FormPlace, StepEditor } from './step-editor';
+import { StepForm } from '../../../../core/game/authoring/send-queue';
+import { DraftState } from '../../../../core/game/authoring/authoring-state';
 import { StepFieldDirective } from './step-field.directive';
 
 const TEXT_HINT =
@@ -56,7 +58,7 @@ const PARTS =
                 data-act="earlier"
                 title="Move this message to the step before"
                 [disabled]="!view.earlier"
-                (click)="moveTo(-1)"
+                (click)="moveTo(view, -1)"
               >
                 ◀ Earlier
               </button>
@@ -65,7 +67,7 @@ const PARTS =
                 data-act="later"
                 title="Move this message to the step after"
                 [disabled]="!view.later"
-                (click)="moveTo(1)"
+                (click)="moveTo(view, 1)"
               >
                 Later ▶
               </button>
@@ -74,7 +76,7 @@ const PARTS =
               gdAuthorButton
               data-act="pause"
               title="Take this message (and the ones before it in this step) out into a pause of their own, read before this step's decision is answered"
-              (click)="toPause()"
+              (click)="toPause(view)"
             >
               Before…
             </button>
@@ -286,13 +288,13 @@ const PARTS =
                     [attr.data-bad]="badName() ? '' : null"
                     [value]="newChoice()"
                     (input)="newChoice.set($any($event.target).value)"
-                    (keydown.enter)="addChoice()"
+                    (keydown.enter)="addChoice(view.message)"
                   />
                   <button
                     gdAuthorButton
                     data-act="add-choice"
                     title="A choice needs at least two"
-                    (click)="addChoice()"
+                    (click)="addChoice(view.message)"
                   >
                     + button
                   </button>
@@ -336,11 +338,12 @@ export class MessageCardComponent {
   protected readonly sends = computed(() => (this.closing() ? 'change' : 'typing'));
 
   protected readonly view = computed(() => {
+    const form = this.editor.form();
     const work = this.editor.work();
     const place = this.editor.place();
     const draft = this.editor.authoring.draft();
     const message = valueAt(work, this.base()) as WorkMessage | undefined;
-    if (!work || !place || !draft || !message) return null;
+    if (!form || !work || !place || !draft || !message) return null;
     const steps = stepsOf(draft);
     const pause = work.pause === true;
     const opening = isOpeningWork(work);
@@ -350,6 +353,10 @@ export class MessageCardComponent {
     };
     const choices = message.choices ?? {};
     return {
+      form,
+      place,
+      draft,
+      work,
       message,
       // (from one step of the script to the next: the steps in a block come in no order to move it along)
       script: place.sub < 0,
@@ -409,14 +416,12 @@ export class MessageCardComponent {
 
   private tryPlace(place: { side?: MessageSide; gap?: string | null }): void {
     const at = this.editor.messageAt(this.index());
-    if (at && !this.closing()) this.editor.authoring.tryPlace(at, place);
+    if (at) this.editor.authoring.tryPlace(at, place);
   }
 
   protected move(by: -1 | 1): void {
     const messages = this.messages();
-    const [moved] = messages.splice(this.index(), 1);
-    if (moved === undefined) return;
-    messages.splice(this.index() + by, 0, moved);
+    messages.splice(this.index() + by, 0, ...messages.splice(this.index(), 1));
     this.editor.put(this.path(), messages);
     this.editor.now();
   }
@@ -429,33 +434,26 @@ export class MessageCardComponent {
   }
 
   /** To the step before or after (`by`): the last thing that step says, or the first. */
-  protected moveTo(by: -1 | 1): void {
-    const form = this.editor.form();
-    const place = this.editor.place();
-    const draft = this.editor.authoring.draft();
-    const work = this.editor.work();
-    if (!form || !place || !draft || !work) return;
+  protected moveTo(view: CardAt, by: -1 | 1): void {
+    const { form, place, draft } = view;
     const toIndex = place.index + by;
-    const moved = moveMessageOps(draft, form.uid, written(work), form.dirty(), this.index(), place.index, toIndex);
+    const moved = moveMessageOps(draft, form.uid, written(view.work), form.dirty(), this.index(), place.index, toIndex);
     if (!moved) return;
     this.editor.authoring.focusMessage.set({ step: toIndex + 1, sub: 0, index: moved.at });
     void this.editor.authoring.changeSteps(moved.ops, Number.MAX_SAFE_INTEGER, toIndex + 1);
   }
 
   /** This message, and the ones before it, a pause of their own before the step (in a block, one of its steps). */
-  protected toPause(): void {
-    const form = this.editor.form();
-    const place = this.editor.place();
-    const work = this.editor.work();
-    if (!form || !place || !work) return;
-    const ops = splitToPauseOps(form.uid, written(work), form.dirty(), this.index());
+  protected toPause(view: CardAt): void {
+    const { form, place } = view;
+    const ops = splitToPauseOps(form.uid, written(view.work), form.dirty(), this.index());
     if (place.sub > -1) void this.editor.authoring.changeBlock(ops, place.index, place.sub);
     else void this.editor.authoring.changeSteps(ops, place.index + 1, place.index + 1);
   }
 
-  protected addChoice(): void {
+  protected addChoice(message: WorkMessage): void {
     const name = this.newChoice().trim();
-    const choices = this.view()?.message.choices ?? {};
+    const choices = message.choices ?? {};
     if (!NAME.test(name) || name in choices) {
       this.badName.set(true);
       return;
@@ -469,4 +467,12 @@ export class MessageCardComponent {
     this.editor.put(`${this.base()}.choices.${name}`, undefined);
     this.editor.now();
   }
+}
+
+/** What a card's moves need: the form, where its step is, the draft, the working copy. */
+interface CardAt {
+  form: StepForm;
+  place: FormPlace;
+  draft: DraftState;
+  work: WorkStep;
 }

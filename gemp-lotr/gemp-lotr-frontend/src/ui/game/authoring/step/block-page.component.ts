@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { childPause, childStep } from '../../../../core/game/authoring/step-ops';
-import { stepsOf } from '../../../../core/game/authoring/steps';
+import { DraftState } from '../../../../core/game/authoring/authoring-state';
+import { uncoveredIn } from '../../../../core/game/authoring/skirmish-page';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { BlockPanelComponent } from './block-panel.component';
 import { StepEditor } from './step-editor';
@@ -41,7 +42,7 @@ import { StepEditor } from './step-editor';
           gdAuthorButton="primary"
           data-add="step"
           title="Another step in this block, after the others. It says nothing yet: what you do at its decision is written in. (With the game in this block, and a decision waiting that none of its steps takes, it is the step for that decision.)"
-          (click)="addStep()"
+          (click)="addStep(view)"
         >
           + Step
         </button>
@@ -49,7 +50,7 @@ import { StepEditor } from './step-editor';
           gdAuthorButton
           data-add="pause"
           title="A step of this block that is only read: once, over the first of the player's decisions that fits it"
-          (click)="addPause()"
+          (click)="addPause(view)"
         >
           + Pause
         </button>
@@ -65,24 +66,23 @@ export class BlockPageComponent {
     const place = this.editor.place();
     if (!draft || !place) return null;
     const kids = draft.kids[place.index] ?? [];
-    return { index: place.index, count: stepsOf(draft)[place.index]?.anyOrder?.length ?? 0, kids };
+    return { draft, index: place.index, count: kids.length, kids };
   });
 
-  protected addStep(): void {
-    const draft = this.editor.authoring.draft();
-    const view = this.view();
-    if (!draft || !view) return;
-    const open = draft.uncovered;
-    if (open?.problem === null && open.block === view.index + 1 && !draft.position.over) {
-      void this.editor.authoring.stepHere();
-      return;
-    }
-    void this.editor.insertInBlock(view.index, view.count, childStep(draft), true);
+  /** + Step: for the decision waiting, where it is this block's; else a step with no answer yet, after the others. */
+  protected addStep(view: BlockAt): void {
+    if (uncoveredIn(view.draft, view.index)) void this.editor.authoring.stepHere();
+    else void this.editor.insertInBlock(view.index, view.count, childStep(view.draft), true);
   }
 
-  protected addPause(): void {
-    const draft = this.editor.authoring.draft();
-    const view = this.view();
-    if (draft && view) void this.editor.insertInBlock(view.index, view.count, childPause(draft));
+  protected addPause(view: BlockAt): void {
+    void this.editor.insertInBlock(view.index, view.count, childPause(view.draft));
   }
+}
+
+/** A block's page: the draft, the block (from 0), how many steps it has. */
+export interface BlockAt {
+  draft: DraftState;
+  index: number;
+  count: number;
 }

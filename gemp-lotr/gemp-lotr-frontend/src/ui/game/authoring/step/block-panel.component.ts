@@ -1,4 +1,5 @@
 import { afterRenderEffect, Component, computed, ElementRef, inject, input } from '@angular/core';
+import { DraftState } from '../../../../core/game/authoring/authoring-state';
 import { childMoveOp, childStep, outOfBlockOp } from '../../../../core/game/authoring/step-ops';
 import { whereOf } from '../../../../core/game/authoring/step-model';
 import { isHumanSeat, kidsOf, messagesOf, numberOf, stepsOf } from '../../../../core/game/authoring/steps';
@@ -45,7 +46,7 @@ export interface PanelOrder {
             class="gd-author-panel__title"
             [attr.aria-expanded]="view.open"
             [title]="view.open ? '' : 'Open this to change it'"
-            (click)="open()"
+            (click)="open(view.open)"
           >
             <span class="gd-author-panel__twist">{{ view.open ? '▾' : '▸' }}</span>
             @if (view.child) {
@@ -86,7 +87,7 @@ export interface PanelOrder {
                     ? 'A new step in the block, before this one, for the decision waiting now and no other (in a skirmish, that skirmish’s): it takes the decision from this step. Give it a message, then do what the player should, and that is written in as what it allows.'
                     : 'A new step in the block, before this one. It says nothing yet: what you do at its decision is written in.'
                 "
-                (click)="insert(view.holding)"
+                (click)="insert(view)"
               >
                 Insert
               </button>
@@ -95,7 +96,7 @@ export interface PanelOrder {
                 data-act="up"
                 title="Earlier in the block. (Where a step comes matters only when a decision fits more than one of them: it goes to the first.)"
                 [disabled]="view.prev === null || view.prev < 0"
-                (click)="up(view.prev)"
+                (click)="move(view, view.prev, view.prev)"
               >
                 ↑
               </button>
@@ -104,7 +105,7 @@ export interface PanelOrder {
                 data-act="down"
                 title="Later in the block"
                 [disabled]="view.next === null || view.next > view.kids - 1"
-                (click)="down(view.next)"
+                (click)="move(view, (view.next ?? 0) + 1, view.next)"
               >
                 ↓
               </button>
@@ -112,7 +113,7 @@ export interface PanelOrder {
                 gdAuthorButton
                 data-act="out"
                 title="Take this step out of the block, and make it the step of the script after the block"
-                (click)="out()"
+                (click)="out(view)"
               >
                 Out
               </button>
@@ -120,7 +121,7 @@ export interface PanelOrder {
                 gdAuthorButton="danger"
                 data-act="delete"
                 title="Take this step out of the script"
-                (click)="remove()"
+                (click)="remove(view)"
               >
                 ×
               </button>
@@ -131,7 +132,7 @@ export interface PanelOrder {
           <div class="gd-author-panel__body"><gd-author-step-fields /></div>
         } @else {
           @for (said of view.says; track $index) {
-            <button type="button" class="gd-author-panel__says" (click)="open()">{{ said }}</button>
+            <button type="button" class="gd-author-panel__says" (click)="open(false)">{{ said }}</button>
           }
         }
       </div>
@@ -171,6 +172,7 @@ export class BlockPanelComponent {
       ...(step.end ? [{ kind: 'end', text: 'end', title: '' }] : []),
     ];
     return {
+      draft,
       index,
       child,
       open: place.sub === sub,
@@ -201,54 +203,42 @@ export class BlockPanelComponent {
     });
   }
 
-  protected open(): void {
-    if (!this.view()?.open) this.editor.openPanel(this.sub());
+  protected open(open: boolean): void {
+    if (!open) this.editor.openPanel(this.sub());
   }
 
-  /** The block's index, and this step's name, for the ops. */
-  private who(): { index: number; uid: string } | null {
-    const view = this.view();
-    return view ? { index: view.index, uid: view.uid } : null;
-  }
-
-  protected async insert(holding: boolean): Promise<void> {
-    const at = this.who();
-    const draft = this.editor.authoring.draft();
-    if (!at || !draft) return;
-    if (holding) {
+  /** Insert: a step before this one; for the decision waiting, where this step holds it. */
+  protected async insert(view: PanelAt & { holding: boolean }): Promise<void> {
+    if (view.holding) {
       this.editor.authoring.remember({ jump: true, tab: 'step' });
       await this.editor.authoring.stepBefore();
       return;
     }
-    await this.editor.insertInBlock(at.index, this.sub(), childStep(draft), true);
+    await this.editor.insertInBlock(view.index, this.sub(), childStep(view.draft), true);
   }
 
-  protected async up(prev: number | null): Promise<void> {
-    const at = this.who();
-    const draft = this.editor.authoring.draft();
-    if (!at || !draft || prev === null || !(await this.editor.send())) return;
-    await this.editor.authoring.changeBlock([childMoveOp(draft, at.index, at.uid, prev)], at.index, prev);
+  /** ↑ ↓: before the block's step at `before` (from 0; past the last: last), turning to it where it lands (`at`). */
+  protected async move(view: PanelAt, before: number | null, at: number | null): Promise<void> {
+    if (before === null || !(await this.editor.send())) return;
+    await this.editor.authoring.changeBlock([childMoveOp(view.draft, view.index, view.uid, before)], view.index, at);
   }
 
-  protected async down(next: number | null): Promise<void> {
-    const at = this.who();
-    const draft = this.editor.authoring.draft();
-    if (!at || !draft || next === null || !(await this.editor.send())) return;
-    await this.editor.authoring.changeBlock([childMoveOp(draft, at.index, at.uid, next + 1)], at.index, next);
-  }
-
-  protected async out(): Promise<void> {
-    const at = this.who();
-    const draft = this.editor.authoring.draft();
-    if (!at || !draft || !(await this.editor.send())) return;
-    await this.editor.authoring.changeSteps([outOfBlockOp(draft, at.index, at.uid)], at.index + 1, at.index + 2);
-  }
-
-  protected async remove(): Promise<void> {
-    const at = this.who();
-    if (!at) return;
-    if (!(await this.editor.ask(`Take step ${numberOf(at.index, this.sub())} out of the script?`, 'Delete'))) return;
+  protected async out(view: PanelAt): Promise<void> {
     if (!(await this.editor.send())) return;
-    await this.editor.authoring.changeBlock([{ op: 'delete', uid: at.uid }], at.index, null);
+    const op = outOfBlockOp(view.draft, view.index, view.uid);
+    await this.editor.authoring.changeSteps([op], view.index + 1, view.index + 2);
   }
+
+  protected async remove(view: PanelAt): Promise<void> {
+    if (!(await this.editor.ask(`Take step ${numberOf(view.index, this.sub())} out of the script?`, 'Delete'))) return;
+    if (!(await this.editor.send())) return;
+    await this.editor.authoring.changeBlock([{ op: 'delete', uid: view.uid }], view.index, null);
+  }
+}
+
+/** Where a section's step is: the draft, the block (from 0), the step's name. */
+interface PanelAt {
+  draft: DraftState;
+  index: number;
+  uid: string;
 }

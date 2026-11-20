@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { tableAliases } from '../../../../core/game/authoring/step-model';
+import { tableAliases, WorkStep } from '../../../../core/game/authoring/step-model';
 import { isHumanSeat } from '../../../../core/game/authoring/steps';
 import { SEATS, splitTerms } from '../../../../core/game/authoring/terms';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
@@ -41,7 +41,7 @@ const DO_HINT =
             class="gd-author-check gd-author-step__block"
             title="Ticked, the step allows anything, and its Answer is only what the script plays when it plays itself (as Check does)"
           >
-            <input type="checkbox" data-flag="free" [checked]="view.free" (change)="free($event)" />
+            <input type="checkbox" data-flag="free" [checked]="view.free" (change)="free(view.work, $event)" />
             the player may do anything here
           </label>
         }
@@ -52,7 +52,12 @@ const DO_HINT =
           <div class="gd-author-note">Also on offer here:</div>
           <div class="gd-author-allow__offered">
             @for (term of view.offered; track term) {
-              <button gdAuthorButton="inline" title="Allow this as well" [attr.data-term]="term" (click)="offer(term)">
+              <button
+                gdAuthorButton="inline"
+                title="Allow this as well"
+                [attr.data-term]="term"
+                (click)="offer(view.work, term)"
+              >
                 + {{ term }}
               </button>
             }
@@ -142,6 +147,7 @@ export class AllowEditorComponent {
         : [];
     const hints = Object.keys(work.allow.hints);
     return {
+      work,
       child,
       players,
       free: (work.allow.answers ?? '').trim() === '' && (work.answer ?? '').trim() !== '',
@@ -162,9 +168,7 @@ export class AllowEditorComponent {
   });
 
   /** "The player may do anything here": what is allowed becomes only what the script plays, and back. */
-  protected free(event: Event): void {
-    const work = this.editor.work();
-    if (!work) return;
+  protected free(work: WorkStep, event: Event): void {
     if ((event.target as HTMLInputElement).checked) {
       if ((work.answer ?? '').trim() === '') this.editor.put('answer', work.allow.answers ?? '');
       this.editor.put('allow.answers', '');
@@ -174,15 +178,14 @@ export class AllowEditorComponent {
     this.editor.now();
   }
 
-  protected offer(term: string): void {
-    this.editor.put('allow.answers', [...splitTerms(this.editor.work()?.allow.answers), term].join(', '));
+  protected offer(work: WorkStep, term: string): void {
+    this.editor.put('allow.answers', [...splitTerms(work.allow.answers), term].join(', '));
     this.editor.now();
   }
 
   /** A hint for a card, to be written (it goes with its text). */
   protected addHint(alias: string): void {
-    if (alias !== '' && this.editor.work()?.allow.hints[alias] === undefined)
-      this.editor.put(`allow.hints.${alias}`, '');
+    if (alias !== '') this.editor.put(`allow.hints.${alias}`, '');
   }
 
   protected dropHint(alias: string): void {

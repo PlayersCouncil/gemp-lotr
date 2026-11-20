@@ -787,4 +787,42 @@ describe('Authoring', () => {
     await ready();
     expect(TestBed.inject(ScenarioRoom).reservedRight()).toBe(0);
   });
+
+  it("puts the Step tab's message up, and again whenever its step is; tries a bubble only on its own step", async () => {
+    const attach = vi.spyOn(guide, 'attachAuthor');
+    await ready();
+    const hooks = attach.mock.calls[0]![0];
+    const preview = vi.spyOn(guide, 'preview').mockReturnValue(true);
+    authoring.focusOn({ step: 2, sub: 0, index: 1 });
+    expect(preview).toHaveBeenCalledWith(2, 0, 1);
+    preview.mockClear();
+    hooks.stepShown!({ step: 1, sub: 0 } as never);
+    hooks.stepShown!({ step: 2, sub: 1 } as never);
+    expect(preview).not.toHaveBeenCalled();
+    hooks.stepShown!({ step: 2, sub: 0 } as never);
+    expect(preview).toHaveBeenCalledWith(2, 0, 1);
+    authoring.focusOn(null);
+    hooks.stepShown!({ step: 2, sub: 0 } as never);
+    expect(preview).toHaveBeenCalledTimes(1);
+    const tried = vi.spyOn(guide, 'tryPlace').mockReturnValue(true);
+    expect(authoring.tryPlace({ step: 2, sub: 0, index: 1 }, { side: 'left' })).toBe(false);
+    vi.spyOn(guide, 'step').mockReturnValue({ step: 2, sub: 0 } as never);
+    expect(authoring.tryPlace({ step: 2, sub: 0, index: 1 }, { side: 'left' })).toBe(true);
+    expect(authoring.tryPlace({ step: 2, sub: 1, index: 1 }, { side: 'left' })).toBe(false);
+    expect(authoring.tryPlace({ step: 1, sub: 0, index: 1 }, { gap: '3' })).toBe(false);
+    expect(tried).toHaveBeenCalledTimes(1);
+  });
+
+  it('has the Step tab keep what it has not sent when the page goes to a fresh game', async () => {
+    await ready();
+    const carry = vi.fn();
+    authoring.attachStepTab({
+      flush: () => Promise.resolve({ went: true }),
+      engaged: () => false,
+      reset: vi.fn(),
+      carry,
+    });
+    authoring.go('9');
+    expect(carry).toHaveBeenCalled();
+  });
 });

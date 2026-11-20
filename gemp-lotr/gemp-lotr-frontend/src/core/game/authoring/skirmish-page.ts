@@ -212,3 +212,9 @@ export function skirmishGroups(
     }));
   return { groups, offers };
 }
+
+/** Whether the decision waiting that no step covers is one for the block at `index` (from 0) to have a step for. */
+export function uncoveredIn(state: DraftState, index: number): boolean {
+  const open = state.uncovered;
+  return open?.problem === null && open.block === index + 1 && !state.position.over;
+}
