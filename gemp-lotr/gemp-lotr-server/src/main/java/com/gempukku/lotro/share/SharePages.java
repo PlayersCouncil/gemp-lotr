@@ -24,13 +24,14 @@ import java.util.regex.Pattern;
 /**
  * Share links: {@code /gemp-lotr/share/<kind>/<id>} answers with a tiny page that carries Open Graph / Twitter card
  * tags (so a link pasted into Discord, Facebook, a forum... previews with a title, a description and a picture) and
- * sends a person straight on to the real page (meta refresh plus script; they never see it).
+ * sends a person straight on to the real page (meta refresh plus script; they never see it).  The hall pages are the
+ * Angular hall's routes under {@code /gemp-lotr/ng/}, which replace {@code hall.html} and its {@code #fragments}.
  * <pre>
  *   kind         id                   goes to                                       preview picture
- *   patch-notes  [slug]               hall.html#patch-notes[/slug]                   the note's first screenshot
- *   errata       card id (1_5, 51_5)  hall.html#errata-&lt;id&gt;                       the errata's card image
- *   format       format code          hall.html#format-&lt;code&gt;                     the site picture
- *   card         blueprint id         hall.html#card-&lt;id&gt; (the card display)       the card image
+ *   patch-notes  [slug]               ng/info/patch-notes[/slug]                     the note's first screenshot
+ *   errata       card id (1_5, 51_5)  ng/help/errata/&lt;id&gt;                         the errata's card image
+ *   format       format code          ng/help/formats/&lt;code&gt;                       the site picture
+ *   card         blueprint id         ng/help?card=&lt;id&gt; (the card display)         the card image
  *   deck         share code           /gemp-lotr-server/deck/html?id=&lt;code&gt;        the Ring-bearer's image
  * </pre>
  * The deck kind takes the code the deck builder's "share" button makes today (base64 of {@code owner|deck name},
@@ -46,6 +47,8 @@ public class SharePages {
     public static final String DEFAULT_IMAGE = "images/splash.jpg";
     public static final String WEB_PATH = "/gemp-lotr/";
     public static final int DESCRIPTION_LENGTH = 200;
+    /** the Angular hall's Server Info › Patch Notes, relative to the web root */
+    private static final String PATCH_NOTES_ROUTE = "ng/info/patch-notes";
 
     private static final Pattern SLUG = PatchNotesLibrary.SLUG;
     private static final Pattern BLUEPRINT_ID = Pattern.compile("^\\d{1,3}_\\d{1,4}$");
@@ -62,7 +65,7 @@ public class SharePages {
      * @param title       og:title
      * @param description og:description (plain text)
      * @param image       og:image: an absolute URL, or a path relative to the web root
-     * @param target      where a person goes: a path relative to the web root (hall.html#...) or an absolute path
+     * @param target      where a person goes: a path relative to the web root (ng/help/...) or an absolute path
      * @param largeImage  true for a wide picture (a screenshot, the site picture): twitter:card summary_large_image
      */
     public record Page(String title, String description, String image, String target, boolean largeImage) {
@@ -107,10 +110,11 @@ public class SharePages {
     private Page patchNotePage(String slug) {
         if (slug.isEmpty() || _patchNotes == null)
             return new Page("GEMP patch notes", "What changed on GEMP, newest first.", DEFAULT_IMAGE,
-                    "hall.html#patch-notes", true);
+                    PATCH_NOTES_ROUTE, true);
         if (!SLUG.matcher(slug).matches())
             return null;
-        String target = "hall.html#patch-notes/" + slug;
+        // SLUG only matches lower-case slugs, which is how the hall's route spells them
+        String target = PATCH_NOTES_ROUTE + "/" + slug.toLowerCase(Locale.ROOT);
         PatchNote note = _patchNotes.get(slug);
         if (note == null)
             return new Page("GEMP patch notes", "What changed on GEMP, newest first.", DEFAULT_IMAGE, target, true);
@@ -147,7 +151,7 @@ public class SharePages {
     }
 
     private Page errataPage(String id) {
-        String target = "hall.html#errata-" + id;
+        String target = "ng/help/errata/" + id;
         String base = ErrataCatalog.errataBase(id);
         String errataId = base != null ? id : errataOf(id);
         String originalId = base != null ? base : id;
@@ -172,7 +176,7 @@ public class SharePages {
     }
 
     private Page formatPage(String code) {
-        String target = "hall.html#format-" + code;
+        String target = "ng/help/formats/" + code;
         LotroFormat format = _formats == null ? null : _formats.getFormat(code);
         if (format == null)
             return new Page("Format Definitions", "The sets, bans and errata of every GEMP format.", DEFAULT_IMAGE,
@@ -183,7 +187,7 @@ public class SharePages {
     }
 
     private Page cardPage(String id) {
-        String target = "hall.html#card-" + id;
+        String target = "ng/help?card=" + id;
         LotroCardBlueprint card = blueprint(id);
         if (card == null)
             return new Page("A GEMP card", "Lord of the Rings TCG cards on GEMP.", DEFAULT_IMAGE, target, true);
@@ -327,7 +331,7 @@ public class SharePages {
                 .append(escape(content)).append("\">\n");
     }
 
-    /** "hall.html#x" -> "/gemp-lotr/hall.html#x"; an absolute path stays as it is */
+    /** "ng/help/x" -> "/gemp-lotr/ng/help/x"; an absolute path stays as it is */
     static String absolutePath(String target) {
         return target.startsWith("/") ? target : WEB_PATH + target;
     }
