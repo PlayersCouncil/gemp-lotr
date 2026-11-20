@@ -16,8 +16,3 @@
 .gd-phone-detail__image[data-horizontal] {
   width: min(100%, 420px);
 }
-
-:host-context([data-device='sideways']) .gd-phone-detail__image {
-  max-height: 70vh;
-  width: auto;
-}

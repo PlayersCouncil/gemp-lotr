@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { siteImage } from '../../../core/platform/app-paths';
+import { CompactLayout } from '../../../core/platform/compact-layout.service';
 import { ThemeService } from '../../../core/platform/theme.service';
 
 /** The slowest and the fastest a replay plays: its pauses at most 16 times, at least a sixteenth of normal. */
@@ -17,11 +18,12 @@ export function speedText(factor: number): string {
  * buttons (triangles left and right). The modern theme, on a phone and a computer alike, lays them in one row: Slower,
  * the play button in the middle in the main button's colours with how fast it plays above it, and Faster, those two
  * written out in the secondary buttons' colours, each turned off at its limit (the owner, 2026-11-20: the triangles
- * read as previous and next).
+ * read as previous and next). In the phone layout they fold away while the replay plays: only the play button stays,
+ * small, at the row's right; pressing it (pause) brings the row back, both ways animated (the owner, 2026-11-20).
  *
  * DOM contract: `gd-game-replay` (`data-replay-done` once it has played to its end, `data-words` in the modern theme)
  * holding `button[data-replay]` slower, faster and play (`aria-pressed` while it plays), and in the modern theme
- * `output[data-replay=speed]`.
+ * `output[data-replay=speed]`; `data-compact` in the phone layout, `data-playing` while it plays there (folded).
  */
 @Component({
   selector: 'gd-game-replay',
@@ -29,6 +31,8 @@ export function speedText(factor: number): string {
   host: {
     '[attr.data-replay-done]': "session.replayDone() ? '' : null",
     '[attr.data-words]': "modern() ? '' : null",
+    '[attr.data-compact]': "compact() ? '' : null",
+    '[attr.data-playing]': "folded() ? '' : null",
   },
   template: `
     @if (modern()) {
@@ -110,6 +114,12 @@ export class ReplayControlsComponent {
   protected readonly session = inject(GameSession);
   private readonly theme = inject(ThemeService).theme;
   protected readonly modern = computed(() => this.theme() === 'modern');
+  /** The phone layout (its divider holds the controls). */
+  protected readonly compact = inject(CompactLayout).gameActive;
+  /** Folded to the small play button: in the phone layout, while the replay plays (not once it has played out). */
+  protected readonly folded = computed(
+    () => this.compact() && this.session.replayPlaying() && !this.session.replayDone(),
+  );
   protected readonly speed = computed(() => speedText(this.session.speed()));
   protected readonly slowest = SLOWEST;
   protected readonly fastest = FASTEST;

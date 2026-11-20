@@ -39,87 +39,10 @@ gd-phone-hand {
   height: var(--gd-phone-hand);
 }
 
-/*
- * Held sideways: two columns, nothing over anything (the owner, 2026-11-19). The table scrolls on the left, down to the
- * bottom; on the right, a panel docked to the edge: the decision on top, the hand (or the cards offered in its place)
- * under it in rows scrolled down, its cards one size (Settings › Display card size). Dragging the decision or the
- * hand's grip down hides the hand, up shows it, as upright.
- */
-:host([data-device='sideways']) {
-  --gd-phone-rail: clamp(250px, 40%, 460px);
-  grid-template-columns: minmax(0, 1fr) var(--gd-phone-rail);
-  grid-template-rows: auto auto minmax(0, 1fr);
-  grid-template-areas:
-    'top top'
-    'table divider'
-    'table hand';
-}
-
-:host([data-device='sideways']) > gd-phone-status {
-  grid-area: top;
-}
-
-:host([data-device='sideways']) > gd-phone-table {
-  grid-area: table;
-}
-
-:host([data-device='sideways']) > gd-phone-divider {
-  grid-area: divider;
-  border-left: 1px solid var(--theme-separator);
-}
-
-:host([data-device='sideways']) > gd-phone-hand {
-  grid-area: hand;
-  height: auto;
-  min-height: 0;
-  border-left: 1px solid var(--theme-separator);
-}
-
-/*
- * The hand hidden (the divider dragged down): the decision at the bottom of the panel, the table keeping its width (the
- * owner, 2026-11-19); the panel's empty top on the hand's background
- */
-:host([data-device='sideways'][data-hand-hidden]) {
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    'top top'
-    'table hand'
-    'table divider';
-}
-
-:host([data-device='sideways'][data-hand-hidden])::after {
-  content: '';
-  grid-area: hand;
-  border-left: 1px solid var(--theme-separator);
-  background: var(--theme-game-phone-hand-bg);
-}
-
-/* A spectator held sideways: no hand, so no panel; the divider across the bottom (the owner, 2026-11-20) */
-:host([data-device='sideways'][data-watching]) {
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    'top'
-    'table'
-    'divider';
-}
-
-:host([data-device='sideways'][data-watching])::after {
-  content: none;
-}
-
-:host([data-device='sideways'][data-watching]) > gd-phone-divider {
-  border-left: 0;
-}
-
 /* Before the game: the pre-game information in the table's place, scrolled up and down */
 .gd-phone-pregame {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 8px;
-}
-
-:host([data-device='sideways']) > .gd-phone-pregame {
-  grid-area: table;
 }

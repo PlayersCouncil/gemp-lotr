@@ -181,47 +181,6 @@
   font-size: 14px;
 }
 
-/* Sideways: the question beside its buttons, in the panel on the right; a smaller question, the timer under it */
-:host-context([data-device='sideways']) {
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-}
-
-:host-context([data-device='sideways']) .gd-phone-divider__question {
-  flex-direction: column;
-  gap: 2px;
-}
-
-:host-context([data-device='sideways']) .gd-phone-divider__text {
-  font-size: 15px;
-}
-
-/* A low screen held sideways (a phone under its browser's bars): a tighter decision, more room for the hand */
-@media (max-height: 420px) {
-  :host-context([data-device='sideways']) {
-    gap: 4px;
-    padding: 8px 10px 6px;
-  }
-
-  :host-context([data-device='sideways']) .gd-phone-divider__text {
-    font-size: 14px;
-    line-height: 1.2;
-  }
-
-  :host-context([data-device='sideways']) .gd-phone-button {
-    min-height: 36px;
-    padding: 2px 12px;
-  }
-}
-
-:host-context([data-device='sideways']) .gd-phone-divider__buttons {
-  flex-wrap: nowrap;
-}
-
-:host-context([data-device='sideways']) .gd-phone-divider__hand-hint {
-  grid-column: 1 / -1;
-}
-
 /* A spectator's: not dragged, no handle; the game's latest message under whose turn it is (the owner, 2026-11-20) */
 :host([data-watching]) {
   cursor: default;
@@ -244,8 +203,19 @@
   overflow-wrap: anywhere;
 }
 
-:host-context([data-device='sideways']) .gd-phone-divider__latest {
-  grid-column: 1 / -1;
+/* A replay playing: its small button sits at the end of the text's line (ReplayControlsComponent), clear of the text */
+.gd-phone-divider__question {
+  transition: padding-right 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:host(:has(gd-game-replay[data-playing])) .gd-phone-divider__question {
+  padding-right: 40px;
+}
+
+/* In a replay the line keeps the button's height, also before anyone's turn (no text yet): the button sits in it */
+:host(:has(gd-game-replay)) .gd-phone-divider__question {
+  min-height: 28px;
+  align-items: center;
 }
 
 /* Reached by the keyboard: the arrows move it */

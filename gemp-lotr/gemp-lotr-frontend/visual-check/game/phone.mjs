@@ -1,7 +1,8 @@
-// The game's phone layout (G7 of trymarz/gemp-lotr-private#27): the Angular game page in the modern theme on a phone,
-// a phone held sideways and an upright tablet, on the recorded games served without a server (stub-game.mjs).
+// The game's phone layout (G7 of trymarz/gemp-lotr-private#27): the Angular game page in the modern theme on a phone
+// and a tablet held upright (held sideways both get the computer layout, the owner 2026-11-20), on the recorded games
+// served without a server (stub-game.mjs).
 //
-//   node game/phone.mjs [--only <recording,...>] [--devices phone,sideways,tablet] [--out report-game-phone]
+//   node game/phone.mjs [--only <recording,...>] [--devices phone,tablet] [--out report-game-phone]
 //                       [--shots: only screenshots of each recording's last step, nothing checked]
 //                       [--checks back,reload,touch,piles,animation,sites,fold,archery,stack]
 //
@@ -37,7 +38,7 @@ const RECORDINGS = path.resolve(HERE, '../../src/testing/game-recordings');
 const { values: options } = parseArgs({
   options: {
     only: { type: 'string' },
-    devices: { type: 'string', default: 'phone,sideways,tablet' },
+    devices: { type: 'string', default: 'phone,tablet' },
     out: { type: 'string', default: 'report-game-phone' },
     shots: { type: 'boolean', default: false },
     // With --shots: what to tap first (a selector, the first match), e.g. --tap '.gd-phone-slot__toggle'; given again,
@@ -48,15 +49,14 @@ const { values: options } = parseArgs({
     checks: { type: 'string', default: 'back,reload,touch,piles,animation,speed,sites,fold,archery,stack' },
     // The step of each recording to open (its number of exchanges); the last by default
     step: { type: 'string' },
-    // A device's screen instead of its usual one, e.g. --devices sideways --size 915x412 (a phone's own size)
+    // A device's screen instead of its usual one, e.g. --devices phone --size 412x915 (a phone's own size)
     size: { type: 'string' },
   },
 });
 
-/** The devices: a phone upright, the same phone sideways, an upright tablet (all under COMPACT_QUERY). */
+/** The devices: a phone and a tablet, upright (CompactLayout.gameActive). */
 export const DEVICES = {
   phone: { viewport: { width: 390, height: 844 } },
-  sideways: { viewport: { width: 844, height: 390 } },
   tablet: { viewport: { width: 768, height: 1024 } },
   /** The computer layout of the same page, for what both layouts share (the stack check). */
   computer: { viewport: { width: 1366, height: 768 } },
@@ -175,8 +175,8 @@ const RENDERING_NOISE = 10;
 /**
  * After a reload every box is drawn anew: the anti-aliased edges of rounded borders, rings and shadows (the current
  * player's chip, the site's ring, the markers) land up to ~25 shades off in a few dozen pixels. The table check's
- * tolerance; what D10 asks for (sheets, scroll, divider, hand) is compared exactly in the data. Held sideways, the glows
- * of neighbouring offered cards where they overlap blend up to 10 shades differently in a full run (72 pixels): only
+ * tolerance; what D10 asks for (sheets, scroll, divider, hand) is compared exactly in the data. The glows of
+ * neighbouring offered cards where they overlap blend up to 10 shades differently in a full run (72 pixels): only
  * pixels more than RELOAD_SHADES off count (the owner's choice, 2026-11-17).
  */
 const RELOAD_NOISE = 60;
@@ -1053,90 +1053,32 @@ const TOUCH = [
     },
   },
   {
-    // Held sideways, dragging only hides and shows the hand (the owner, 2026-11-19): the drag down is kept
-    name: 'the divider is dragged (upright up: a higher hand; sideways down: hidden) and kept per device',
+    name: 'the divider dragged up makes the hand higher, kept per device',
     state: 'late',
     run: async (page, sent, device) => {
       const before = await page.locator('gd-phone-hand').boundingBox();
-      await dragDivider(page, device === 'sideways' ? 100 : -100);
+      await dragDivider(page, -100);
       const cookies = await page.context().cookies();
       const split = decodeURIComponent(cookies.find((cookie) => cookie.name === 'gempGameSplit')?.value ?? '');
       const problems = [];
-      if (device === 'sideways') {
-        if (await page.locator('gd-phone-hand').count()) problems.push('dragged down, the hand is still shown');
-        if (!split.includes('sideways:hidden')) problems.push(`cookie "${split}"`);
-      } else {
-        const after = await page.locator('gd-phone-hand').boundingBox();
-        if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
-        if (!split.includes(`${device}:`)) problems.push(`cookie "${split}"`);
-      }
+      const after = await page.locator('gd-phone-hand').boundingBox();
+      if (!(after.height > before.height + 50)) problems.push(`hand ${before.height} → ${after.height}`);
+      if (!split.includes(`${device}:`)) problems.push(`cookie "${split}"`);
       return problems;
     },
   },
   {
-    // The docked panel (the owner, 2026-11-19): nothing over the table; the grip hides the hand, the cards keep their size
-    name: 'held sideways, the decision and the hand are docked on the right beside the table; the grip hides the hand (hidden elsewhere)',
+    name: 'the divider dragged to the bottom hides the hand; dragged up, it is back',
     state: 'late',
-    run: async (page, sent, device) => {
-      const grip = page.locator('[data-phone="hand-grip"]');
-      if (device !== 'sideways') return (await grip.isVisible()) ? ['the grip shows'] : [];
-      const width = page.viewportSize().width;
-      const table = await page.locator('gd-phone-table').boundingBox();
-      const divider = await page.locator('gd-phone-divider').boundingBox();
-      const hand = await page.locator('gd-phone-hand').boundingBox();
-      const card = await page.locator('gd-phone-hand .gd-card').first().boundingBox();
-      const problems = [];
-      if (table.x + table.width > divider.x + 1)
-        problems.push(`the table reaches ${table.x + table.width}, the panel starts at ${divider.x}`);
-      if (Math.abs(divider.x + divider.width - width) > 2 || Math.abs(hand.x - divider.x) > 2) {
-        problems.push(
-          `not docked on the right: the divider ${divider.x}–${divider.x + divider.width}, the hand at ${hand.x}`,
-        );
-      }
-      if (Math.abs(hand.y - (divider.y + divider.height)) > 2)
-        problems.push(`the hand starts at ${hand.y}, not under the decision`);
-      // Dragged up, nothing changes: the cards keep their size
-      const box = await grip.boundingBox();
-      const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-      await touchDrag(page, from, { x: from.x, y: from.y - 80 });
-      await page.waitForTimeout(300);
-      const same = await page.locator('gd-phone-hand .gd-card').first().boundingBox();
-      if (Math.abs(same.height - card.height) > 1)
-        problems.push(`dragged up, the cards went from ${card.height} to ${same.height}`);
-      // Dragged down: hidden, the decision at the panel's bottom
-      await touchDrag(page, from, { x: from.x, y: from.y + 80 });
-      await page.waitForTimeout(300);
-      if (await page.locator('gd-phone-hand').count()) problems.push('dragged down, the hand is still shown');
-      const low = await page.locator('gd-phone-divider').boundingBox();
-      if (Math.abs(low.y + low.height - page.viewportSize().height) > 2)
-        problems.push(`hidden, the decision ends at ${low.y + low.height}`);
-      return problems;
-    },
-  },
-  {
-    name: "the divider (held sideways: the hand's grip) dragged to the bottom hides the hand; dragged up, it is back",
-    state: 'late',
-    run: async (page, sent, device) => {
-      if (device === 'sideways') {
-        // The divider is at the bottom already, beside the hand: the hand's own grip slides it down
-        const box = await page.locator('[data-phone="hand-grip"]').boundingBox();
-        const from = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-        await touchDrag(page, from, { x: from.x, y: page.viewportSize().height - 1 });
-        await page.waitForTimeout(300);
-      } else {
-        await dragDivider(page, 2000);
-      }
+    run: async (page) => {
+      await dragDivider(page, 2000);
       const hidden = await page.locator('gd-game-phone[data-hand-hidden]').count();
       const hint = await page.locator('.gd-phone-divider__hand-hint').count();
-      // Held sideways, the hint to drag the hand up is in the right half, where the hand was
-      const hintBox = hint ? await page.locator('.gd-phone-divider__hand-hint').boundingBox() : null;
-      const leftOfHalf = device === 'sideways' && hintBox && hintBox.x < page.viewportSize().width / 2 - 2;
       await dragDivider(page, -200);
       const back = await page.locator('gd-phone-hand').count();
       return [
         ...(hidden ? [] : ['the hand is still shown']),
         ...(hint ? [] : ['no hint to drag it up']),
-        ...(leftOfHalf ? [`the hint to drag it up at x ${hintBox.x}, in the left half`] : []),
         ...(back ? [] : ["dragged up, the hand didn't come back"]),
       ];
     },
