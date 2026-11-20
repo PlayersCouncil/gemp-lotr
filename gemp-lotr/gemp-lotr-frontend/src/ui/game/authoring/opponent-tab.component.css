@@ -70,3 +70,20 @@
 .gd-author-opponent__raw .gd-author-button {
   margin: 0;
 }
+
+.gd-author-opponent__answering {
+  gap: 2px 6px;
+  margin: 0 0 5px;
+}
+
+.gd-author-opponent__rule {
+  color: var(--theme-game-author-who-opp);
+  font-weight: bold;
+}
+
+.gd-author-opponent__gives {
+  min-width: 0;
+  color: var(--theme-game-author-alias);
+  font: 12px var(--theme-game-author-code-font);
+  overflow-wrap: anywhere;
+}

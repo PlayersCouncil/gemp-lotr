@@ -1,12 +1,12 @@
-import { Component, computed, inject, linkedSignal } from '@angular/core';
+import { afterRenderEffect, Component, computed, ElementRef, inject, linkedSignal } from '@angular/core';
 import { AuthoringApi } from '../../../core/game/authoring/authoring-api.service';
-import { AuthoringDecision, DecisionOffer } from '../../../core/game/authoring/authoring-state';
+import { AuthoringDecision, DecisionOffer, OpponentAnswering } from '../../../core/game/authoring/authoring-state';
 import { Authoring } from '../../../core/game/authoring/authoring.service';
 import {
   answeredBy,
   answersByButton,
+  assignRestTerm,
   answersByCards,
-  assignTerm,
   cardsTerm,
   chooseLine,
   decisionKey,
@@ -16,40 +16,88 @@ import {
   offerKey,
   offerLabel,
   offersPass,
+  restChoices,
+  restOffered,
 } from '../../../core/game/authoring/opponent-answer';
+import {
+  answeringLine,
+  leftoversOptions,
+  leftoversPatch,
+  placeForAnswering,
+} from '../../../core/game/authoring/opponent-orders';
+import { FallbackControlComponent } from './opponent/fallback-control.component';
+import { OrdersEditor } from './opponent/orders-editor';
+import { OrdersSectionComponent } from './opponent/orders-section.component';
+import { AuthorFieldComponent } from './widgets/author-field.component';
+import { AuthorSelectComponent } from './widgets/author-select.component';
+import { scrollerOf } from './widgets/scroller';
 import { AuthorButtonDirective } from './widgets/author-button.directive';
 import { AuthorCheckComponent } from './widgets/author-check.component';
 
 /**
- * The authoring panel's Opponent tab (the legacy scenarioAuthor.js renderOpponent): what the opponent is asked, and,
- * where the script holds it for the author ("Ask me for the opponent"), the answers for it: a button per action or
- * choice, cards to tick, who each minion fights, a number, Pass, an answer in the script's words, or the least it can
- * do; written into the script or not. Then what the player is asked and which step applies to it, and what the
- * opponent does where the script does not answer for it. What has been ticked or typed for a held decision stays
- * while the state comes and goes, and starts afresh with the next decision.
+ * The authoring panel's Opponent tab (the legacy scenarioAuthor.js renderOpponent): what the opponent is asked, what
+ * would answer it if the author did nothing (an order, its leftovers, its sandbox, or nothing) and what that comes
+ * to, and, where the script holds it for the author ("Ask me for the opponent"), the answers for it: a button per
+ * action or choice, cards to tick, who each minion fights (and who "the rest" fight, written as `rest`), a number,
+ * Pass, an answer in the script's words, or the least it can do; written into the script or not. Then its standing
+ * orders (opponent/: tried in order where no step answers it), what the player is asked and which step applies to
+ * it, and what the opponent does where the script does not answer for it (its fallback, the sandbox's cards, its
+ * leftovers). What has been ticked or typed for a held decision stays while the state comes and goes, and starts
+ * afresh with the next decision. Every change to the opponent brings a fresh game: the tab comes back as it was
+ * (OrdersEditor keeps the order open, its form, the scroll).
  *
- * DOM contract: `gd-game-author-opponent` holding three `section.gd-author-opponent__section`s (`data-part`: asked,
- * yours, how), each with `.gd-author-opponent__heading`. In `asked`: `.gd-author-opponent__asked` (the decision's
- * text and where), `.gd-author-note[data-author=answered-by]` when it is not held, `.gd-author-note[data-author=not-asked]`
- * when there is none; held, `.gd-author-opponent__answers` (`data-kind`: the decision's type) with
+ * DOM contract: `gd-game-author-opponent` holding four `section.gd-author-opponent__section`s (`data-part`: asked,
+ * orders, yours, how), each with `.gd-author-opponent__heading`. In `asked`: `.gd-author-opponent__asked` (the
+ * decision's text and where), `.gd-author-opponent__answering` (`data-rule`: order, leftovers, sandbox, nothing) with
+ * `.gd-author-opponent__rule`, `code.gd-author-opponent__gives` and `button[data-author=order-for]` when no step has
+ * it, `.gd-author-note[data-author=answered-by]` when it is not held, `.gd-author-note[data-author=not-asked]` when
+ * there is none; held, `.gd-author-opponent__answers` (`data-kind`: the decision's type) with
  * `button.gd-author-opponent__answer` per option (`data-term`) and for Pass; for cards a
  * `label.gd-author-opponent__card` per card (`data-key`; a checkbox) and `button[data-author=choose]`; for an
- * assignment a `.gd-author-opponent__fight` per minion (`.gd-author-opponent__minion`, `select[data-minion]`) and
+ * assignment `.gd-author-opponent__fight[data-author=rest]` (`select[data-rest]`) when every card has a name, a
+ * `.gd-author-opponent__fight` per minion (`.gd-author-opponent__minion`, `select[data-minion]`) and
  * `button[data-author=assign]`; for a number `input.gd-author-opponent__number` and `button[data-author=number]`. Then
  * `gd-author-check[data-option=record]`, `.gd-author-opponent__raw` (`input`, `button[data-author=send]`) and
- * `button[data-author=least]`. In `yours`: `.gd-author-opponent__asked` and a `.gd-author-note`. In `how`: two
- * `label.gd-author-opponent__how` with `input[type=radio][data-ask]` (`me`, `orders`).
+ * `button[data-author=least]`. In `orders`: `gd-author-orders` (opponent/orders-section). In `yours`:
+ * `.gd-author-opponent__asked` and a `.gd-author-note`. In `how`: two `label.gd-author-opponent__how` with
+ * `input[type=radio][data-ask]` (`me`, `orders`), `gd-author-fallback` and `gd-author-select[data-part=leftovers]`.
  */
 @Component({
   selector: 'gd-game-author-opponent',
   styleUrl: './opponent-tab.component.css',
-  imports: [AuthorButtonDirective, AuthorCheckComponent],
+  providers: [OrdersEditor],
+  imports: [
+    AuthorButtonDirective,
+    AuthorCheckComponent,
+    AuthorFieldComponent,
+    AuthorSelectComponent,
+    FallbackControlComponent,
+    OrdersSectionComponent,
+  ],
   template: `
     @if (authoring.draft(); as draft) {
       <section class="gd-author-opponent__section" data-part="asked">
         @if (asked(); as asked) {
           <h3 class="gd-author-opponent__heading">The opponent is asked</h3>
           <p class="gd-author-opponent__asked">{{ asked.text }} ({{ asked.where }})</p>
+          @if (answering(); as answering) {
+            @let rule = answeringLine(answering);
+            <div class="gd-author-opponent__answering gd-author-bar" [attr.data-rule]="ruleOf(answering)">
+              <span class="gd-author-label" title="What answers it if you do nothing">Answered by</span>
+              <span class="gd-author-opponent__rule" [title]="rule.title">{{ rule.text }}</span>
+              @if (answering.gives; as gives) {
+                <code class="gd-author-opponent__gives" title="What that comes to now">{{ gives }}</code>
+              }
+              <button
+                gdAuthorButton="inline"
+                data-author="order-for"
+                title="A standing order for this decision: its When from the decision, its answer what you give here"
+                (click)="orderFor(asked, answering)"
+              >
+                + Order
+              </button>
+            </div>
+          }
           @if (!asked.held) {
             @let line = answeredBy(asked);
             <p class="gd-author-note" data-author="answered-by" [title]="line.title">{{ line.text }}</p>
@@ -82,6 +130,25 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
                 <button gdAuthorButton="primary" data-author="choose" (click)="chooseCards(asked)">Choose these</button>
               } @else if (asked.type === 'assign') {
                 <p class="gd-author-note">Who each minion fights:</p>
+                @if (restOffered(asked.options, asked.characters ?? [])) {
+                  <div class="gd-author-opponent__fight" data-author="rest">
+                    <span
+                      class="gd-author-opponent__minion"
+                      title="The minions left at 'the rest' go to this character, written as rest: whatever is left when the answer is given"
+                      >the rest</span
+                    >
+                    <select
+                      class="gd-author-input"
+                      data-rest
+                      aria-label="Who the rest fight"
+                      (change)="rest.set($any($event.target).value)"
+                    >
+                      @for (choice of restChoices(asked.characters ?? []); track choice[0]) {
+                        <option [value]="choice[0]" [selected]="rest() === choice[0]">{{ choice[1] }}</option>
+                      }
+                    </select>
+                  </div>
+                }
                 @for (minion of asked.options; track keyOf(minion, $index)) {
                   @let minionKey = keyOf(minion, $index);
                   <div class="gd-author-opponent__fight">
@@ -92,7 +159,7 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
                       [attr.aria-label]="'Who ' + (minion.alias || minion.label) + ' fights'"
                       (change)="fight(minionKey, $any($event.target).value)"
                     >
-                      <option value="" [selected]="!fights()[minionKey]">nobody</option>
+                      <option value="" [selected]="!fights()[minionKey]">{{ rest() ? 'the rest' : 'nobody' }}</option>
                       @for (character of asked.characters ?? []; track keyOf(character, $index)) {
                         <option
                           [value]="keyOf(character, $index)"
@@ -172,6 +239,18 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
         }
       </section>
 
+      @if (draft.opponent) {
+        <section class="gd-author-opponent__section" data-part="orders">
+          <h3
+            class="gd-author-opponent__heading"
+            title="Where no step answers the opponent, the first of these whose When fits answers it"
+          >
+            Standing orders
+          </h3>
+          <gd-author-orders />
+        </section>
+      }
+
       <section class="gd-author-opponent__section" data-part="yours">
         <h3 class="gd-author-opponent__heading">You are asked</h3>
         @if (draft.waiting.human; as human) {
@@ -207,6 +286,23 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
           />
           it plays by its orders, then fallback: {{ fallbackOf(draft.draft) }}
         </label>
+        <gd-author-field label="Fallback" hint="What it does with a decision no step and no standing order covers">
+          <gd-author-fallback />
+        </gd-author-field>
+        @if (draft.opponent; as opponent) {
+          <gd-author-field
+            label="Leftovers"
+            hint="Whoever takes the minions it leaves unassigned: after any assignment of its own, and when nothing answers its assignment"
+          >
+            <gd-author-select
+              data-part="leftovers"
+              label="Leftovers"
+              [options]="leftoversOptions(opponent)"
+              [value]="opponent.leftovers ?? ''"
+              (changed)="leftovers($event)"
+            />
+          </gd-author-field>
+        }
       </section>
     }
   `,
@@ -214,6 +310,16 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
 export class OpponentTabComponent {
   protected readonly authoring = inject(Authoring);
   private readonly api = inject(AuthoringApi);
+  private readonly editor = inject(OrdersEditor);
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  /** The scroll kept from the last page is put back once (when the tab first has the draft). */
+  private scrolled = false;
+
+  protected readonly answering = computed(() => this.authoring.draft()?.opponent?.answering ?? null);
+  protected readonly answeringLine = answeringLine;
+  protected readonly leftoversOptions = leftoversOptions;
+  protected readonly restOffered = restOffered;
+  protected readonly restChoices = restChoices;
 
   protected readonly asked = computed(() => this.authoring.draft()?.waiting.opponent ?? null);
   private readonly key = computed(() => decisionKey(this.asked()));
@@ -241,6 +347,47 @@ export class OpponentTabComponent {
   });
   protected readonly record = linkedSignal<string, boolean>({ source: this.key, computation: () => true });
   protected readonly raw = linkedSignal<string, string>({ source: this.key, computation: () => '' });
+  /** Who the minions left at "the rest" go to ('' nobody: then they are left unassigned). */
+  protected readonly rest = linkedSignal<string, string>({ source: this.key, computation: () => '' });
+
+  constructor() {
+    afterRenderEffect(() => {
+      const memory = this.editor.memory();
+      if (this.scrolled || !this.authoring.draft()?.opponent || memory.draft === '') return;
+      this.scrolled = true;
+      this.editor.scroller = scrollerOf(this.element);
+      if (memory.scroll > 0) this.editor.scroller?.scrollTo({ top: memory.scroll });
+    });
+  }
+
+  protected ruleOf(answering: OpponentAnswering): string {
+    return answering.order !== null ? 'order' : (answering.rule ?? 'nothing');
+  }
+
+  /** The answer the author is giving in the tab, if any: typed, or the cards ticked, or who the minions fight. */
+  private given(asked: AuthoringDecision): string | null {
+    const raw = this.raw().trim();
+    if (raw !== '') return raw;
+    if (asked.type === 'assign' && (this.rest() !== '' || Object.values(this.fights()).some(Boolean))) {
+      return assignRestTerm(asked.options, asked.characters ?? [], this.fights(), this.rest());
+    }
+    if (answersByCards(asked) && this.chosen().size > 0) {
+      return cardsTerm(asked.options.filter((option, index) => this.chosen().has(offerKey(option, index))));
+    }
+    return null;
+  }
+
+  /** A new standing order for the decision waiting, before the order that answers it now (else at the end). */
+  protected orderFor(asked: AuthoringDecision, answering: OpponentAnswering): void {
+    this.editor.write(placeForAnswering(answering), {
+      when: answering.when,
+      answer: this.given(asked) ?? answering.gives ?? answering.answer ?? '',
+    });
+  }
+
+  protected leftovers(chosen: string): void {
+    void this.editor.patch(leftoversPatch(chosen));
+  }
   protected readonly numberAnswer = computed(() => numberTerm(this.number()));
 
   protected keyOf(offer: DecisionOffer, index: number): string {
@@ -275,7 +422,7 @@ export class OpponentTabComponent {
   }
 
   protected assign(asked: AuthoringDecision): void {
-    this.answer(assignTerm(asked.options, asked.characters ?? [], this.fights()));
+    this.answer(assignRestTerm(asked.options, asked.characters ?? [], this.fights(), this.rest()));
   }
 
   protected answerNumber(): void {
