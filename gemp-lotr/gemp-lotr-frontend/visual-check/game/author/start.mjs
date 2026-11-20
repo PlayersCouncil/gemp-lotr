@@ -87,7 +87,8 @@ export const checks = {
     const lines = await gathered(page);
     const wanted = ['start at site 3', 'start in the maneuver phase', 'twilight 4 at the start'];
     if (JSON.stringify(lines) !== JSON.stringify(wanted)) problems.push(`gathered: ${JSON.stringify(lines)}`);
-    if ((await page.locator(`${start} .gd-author-board-start__late`).count()) !== 1) problems.push('no late start said');
+    if ((await page.locator(`${start} .gd-author-board-start__late`).count()) !== 1)
+      problems.push('no late start said');
     await page.locator(start).scrollIntoViewIfNeeded();
     await seat.shot('gathered');
     await submitFresh(seat, 'submitting the start');
@@ -110,7 +111,8 @@ export const checks = {
     await page.locator(start).scrollIntoViewIfNeeded();
     await seat.shot('started');
     await reload(seat);
-    if ((await page.locator(at.pick('site')).inputValue()) !== '3') problems.push('after loading again, the site is not 3');
+    if ((await page.locator(at.pick('site')).inputValue()) !== '3')
+      problems.push('after loading again, the site is not 3');
     if ((await page.locator(at.pick('phase')).inputValue()) !== 'maneuver')
       problems.push('after loading again, the phase is not maneuver');
     await closeDraft(seat);
@@ -125,7 +127,8 @@ export const checks = {
     await page.locator(at.fight('frodo')).selectOption('runner');
     await page.locator(at.fight('aragorn')).selectOption('runner2');
     const lines = await gathered(page);
-    if (!lines.includes('skirmishes: frodo: runner; aragorn: runner2')) problems.push(`gathered: ${JSON.stringify(lines)}`);
+    if (!lines.includes('skirmishes: frodo: runner; aragorn: runner2'))
+      problems.push(`gathered: ${JSON.stringify(lines)}`);
     await page.locator(start).scrollIntoViewIfNeeded();
     await seat.shot('assigned');
     await submitFresh(seat, 'submitting the skirmishes');
@@ -175,7 +178,8 @@ export const checks = {
       'sites 2 and 3 on the path, site 1 controlled',
     ).catch(() => false);
     if (!laid) problems.push('the table does not show sites 2 and 3 on the path and site 1 controlled');
-    if ((await page.locator(at.control(1)).inputValue()) !== 'shadow') problems.push('the tab does not show site 1 controlled');
+    if ((await page.locator(at.control(1)).inputValue()) !== 'shadow')
+      problems.push('the tab does not show site 1 controlled');
     await seat.shot('made-now');
     // To the setup: a fresh game, the file says it
     await page.locator(at.where('setup')).check();
@@ -193,7 +197,8 @@ export const checks = {
     if (state.start.site !== 3 || state.start.opponentSite !== 3)
       problems.push(`the start: site ${state.start.site}, Shadow marker ${state.start.opponentSite}`);
     if (!/controlled: \{\s*shadow: 2\s*\}/.test(await source(seat))) problems.push("the file's text has no controlled");
-    if (state.board.path?.[1]?.controlledBy !== 'shadow') problems.push('the fresh game does not have site 2 controlled');
+    if (state.board.path?.[1]?.controlledBy !== 'shadow')
+      problems.push('the fresh game does not have site 2 controlled');
     await reload(seat);
     const tick = page.locator(`${start} [data-seat=shadow] gd-author-check[data-site="2"] input`);
     if (!(await tick.isChecked())) problems.push('after loading again, site 2 is not ticked controlled');
@@ -281,7 +286,8 @@ export const checks = {
       await freshGame(seat, from, 'putting a site first');
     }
     state = await seat.state();
-    if (state.board.sites.freeps[0]?.id !== '11_247') problems.push(`the first listed is ${state.board.sites.freeps[0]?.id}`);
+    if (state.board.sites.freeps[0]?.id !== '11_247')
+      problems.push(`the first listed is ${state.board.sites.freeps[0]?.id}`);
     if (state.board.path?.[0]?.blueprintId !== '11_247')
       problems.push(`the game laid ${state.board.path?.[0]?.blueprintId} first`);
     if (!/site3: 11_247/.test(await source(seat))) problems.push("the file's text does not keep the site's name");
