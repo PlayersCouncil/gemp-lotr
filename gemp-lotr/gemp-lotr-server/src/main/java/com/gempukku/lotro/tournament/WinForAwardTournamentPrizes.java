@@ -46,12 +46,10 @@ public class WinForAwardTournamentPrizes implements TournamentPrizes {
     }
 
     @Override
-    public String getPrizeDescription() {
-        return """
-                <div class='prizeHint' value='<ul>
-                    <li>4+ Players required for any prizes</li>
-                    <li>1 Event Award per win or bye</li>
-                    <li>1 Tengwar card for the tournament winner</li>
-                </ul>'>Prize Breakdown</div>""";
+    public PrizeSummary getPrizeSummary() {
+        return PrizeSummary.of("Prize Breakdown",
+                "4+ Players required for any prizes",
+                "1 Event Award per win or bye",
+                "1 Tengwar card for the tournament winner");
     }
 }

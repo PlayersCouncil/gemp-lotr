@@ -76,14 +76,11 @@ public class DailyTournamentPrizes implements TournamentPrizes {
     }
 
     @Override
-    public String getPrizeDescription() {
-        return """
-                <div class='prizeHint' value='<ul>
-                    <li>2+ Wins: Required for Event Awards and Tengwar cards</li>
-                    <li>Top 4: Get Tengwar cards (up to 4 for 1st place)</li>
-                    <li>Top 10: Get Event Award (up to 10 for 1st place)</li>
-                    <li>Top 32: Receive random foils (more for higher placement)</li>
-                </ul>'>Prize Breakdown</div>
-                """;
+    public PrizeSummary getPrizeSummary() {
+        return PrizeSummary.of("Prize Breakdown",
+                "2+ Wins: Required for Event Awards and Tengwar cards",
+                "Top 4: Get Tengwar cards (up to 4 for 1st place)",
+                "Top 10: Get Event Award (up to 10 for 1st place)",
+                "Top 32: Receive random foils (more for higher placement)");
     }
 }
