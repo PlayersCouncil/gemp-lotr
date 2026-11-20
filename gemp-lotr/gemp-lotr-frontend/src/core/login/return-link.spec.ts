@@ -1,17 +1,24 @@
-import { hallReturnLink, HALL_URL, loginTarget } from './return-link';
+import { loginTarget, returnPath } from './return-link';
 
-describe('hallReturnLink', () => {
-  it('keeps a hall link the visitor came from', () => {
-    expect(hallReturnLink('#events/leagues')).toBe('#events/leagues');
-    expect(hallReturnLink('#tab?x=1&y=a%20b.c+d-e_f')).toBe('#tab?x=1&y=a%20b.c+d-e_f');
-    expect(loginTarget('#events/leagues')).toBe('/gemp-lotr/hall.html#events/leagues');
+const asked = (path: string) => '?return=' + encodeURIComponent(path);
+
+describe('returnPath', () => {
+  it('keeps a place in the app the visitor came from', () => {
+    expect(returnPath(asked('/events/leagues'))).toBe('/events/leagues');
+    expect(returnPath(asked('/deckbuilder?theme=modern&x=a%20b.c+d-e_f'))).toBe(
+      '/deckbuilder?theme=modern&x=a%20b.c+d-e_f',
+    );
+    expect(loginTarget(asked('/events/leagues'))).toBe('/gemp-lotr/ng/events/leagues');
+    expect(loginTarget('?theme=modern&' + asked('/help').slice(1))).toBe('/gemp-lotr/ng/help');
   });
 
-  it('drops anything else', () => {
-    for (const hash of ['', '#', 'events', '#a b', '#<script>', '#"x"', '#' + 'a'.repeat(201)]) {
-      expect(hallReturnLink(hash)).toBe('');
+  it('drops anything else, and goes to the hall', () => {
+    for (const path of ['', 'events', '//evil.example', '/a b', '/<script>', '/"x"', '/' + 'a'.repeat(201), '/login']) {
+      expect(returnPath(asked(path))).toBe('');
     }
-    expect(hallReturnLink('#' + 'a'.repeat(200))).toHaveLength(201);
-    expect(loginTarget('#a b')).toBe(HALL_URL);
+    expect(returnPath('')).toBe('');
+    expect(returnPath(asked('/' + 'a'.repeat(200)))).toHaveLength(201);
+    expect(loginTarget(asked('https://evil.example/'))).toBe('/gemp-lotr/ng/');
+    expect(loginTarget('')).toBe('/gemp-lotr/ng/');
   });
 });

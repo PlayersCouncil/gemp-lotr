@@ -50,6 +50,15 @@
   /* The filled part of a slider */
   --theme-slider-fill: #757575;
 
+  /* The login page (src/Login/index.css): its picture, the bands across it, and its own link colours */
+  --theme-login-bg: #000 url('/gemp-lotr/ng/themes/classic/dwarrowdelf.jpg') center center / cover no-repeat;
+  --theme-login-band-bg: #222c;
+  --theme-login-banner: #d98e04;
+  --theme-login-error: #f00;
+  --theme-login-link: #bf6b04;
+  --theme-login-link-visited: #a63f03;
+  --theme-login-contact: orange;
+
   /* Selects and text fields (hall.css) */
   --theme-field-bg: #222;
   --theme-field-hover-bg: #444;

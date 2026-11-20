@@ -1,8 +1,11 @@
 /** Where the Gemp server answers. */
 export const SERVER_URL = '/gemp-lotr-server';
 
-/** The site's start page, where players log in. */
-export const LOGIN_PAGE_URL = '/gemp-lotr/';
+/** Where the app's pages are: `APP_URL + '/deckbuilder'`. */
+export const APP_URL = '/gemp-lotr/ng';
+
+/** The login page. */
+export const LOGIN_PAGE_URL = `${APP_URL}/login`;
 
 /** Where the legacy pages are: the server's HTML names its pictures relative to them (images/cultures/gondor.png). */
 const LEGACY_PAGES_URL = '/gemp-lotr/';

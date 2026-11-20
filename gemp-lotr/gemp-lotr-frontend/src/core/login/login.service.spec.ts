@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../testing/fake-notifier';
 import { readServerResponse } from '../../testing/files';
 import { Notifier } from '../notifier/notifier';
-import { PAGE_HASH, PAGE_QUERY_STRING } from '../platform/page-location';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageNavigation } from '../platform/page-navigation';
 import { PlayerInfo } from '../session/player-info.service';
 import {
@@ -46,15 +46,14 @@ describe('LoginService', () => {
   let navigation: FakeNavigation;
   let notifier: FakeNotifier;
 
-  function setUp(hash = '') {
+  function setUp(queryString = '') {
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
         provideHttpClientTesting(),
         LoginApi,
         provideFakeNotifier(),
-        { provide: PAGE_QUERY_STRING, useValue: '' },
-        { provide: PAGE_HASH, useValue: hash },
+        { provide: PAGE_QUERY_STRING, useValue: queryString },
         { provide: PageNavigation, useClass: FakeNavigation },
         ...LOGIN_SERVICES,
       ],
@@ -126,17 +125,17 @@ describe('LoginService', () => {
     expect(request.request.body.toString()).toBe('login=frodo&password=ring');
     await succeed(request, done);
     expect(players.player()?.name).toBe('frodo');
-    expect(service.redirectTarget()).toBe('/gemp-lotr/hall.html');
-    expect(navigation.visited).toEqual(['/gemp-lotr/hall.html']);
+    expect(service.redirectTarget()).toBe('/gemp-lotr/ng/');
+    expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
     expect(service.busy()).toBe(false);
   });
 
-  it('goes back to the hall link the visitor came from', async () => {
-    setUp('#events/leagues');
+  it('goes back to the place the visitor came from', async () => {
+    setUp('?return=%2Fevents%2Fleagues');
     fillLogin();
     const done = service.logIn();
     await succeed(expectPost('/login'), done);
-    expect(navigation.visited).toEqual(['/gemp-lotr/hall.html#events/leagues']);
+    expect(navigation.visited).toEqual(['/gemp-lotr/ng/events/leagues']);
   });
 
   it('still goes to the hall when the player refresh fails', async () => {
@@ -150,7 +149,7 @@ describe('LoginService', () => {
       500,
     );
     await done;
-    expect(navigation.visited).toEqual(['/gemp-lotr/hall.html']);
+    expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
     expect(notifier.dialogs).toEqual([]);
   });
 
@@ -237,7 +236,7 @@ describe('LoginService', () => {
     const request = expectPost('/register');
     expect(request.request.body.toString()).toBe('login=frodo&password=new');
     await succeed(request, registered);
-    expect(navigation.visited).toEqual(['/gemp-lotr/hall.html']);
+    expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
   });
 
   it('switches to an empty register form, clearing the old message, and back', async () => {
@@ -268,7 +267,7 @@ describe('LoginService', () => {
     const request = expectPost('/register');
     expect(request.request.body.toString()).toBe('login=new%2Buser&password=pw%261');
     await succeed(request, done);
-    expect(navigation.visited).toEqual(['/gemp-lotr/hall.html']);
+    expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
   });
 
   it('sends nothing when the passwords differ', async () => {

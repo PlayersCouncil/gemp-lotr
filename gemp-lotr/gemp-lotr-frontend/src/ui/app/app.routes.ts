@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { LOGIN_SERVICES } from '../../core/login/login-services';
 import { Notifier } from '../../core/notifier/notifier';
 import { loginRequired, loginRequiredUnlessReplay } from '../../core/session/login-required.guard';
 import { DialogNotifier } from '../shared/notifier/dialog-notifier';
@@ -24,6 +25,13 @@ export const APP_ROUTES: Routes = [
     // The game page asks its questions in dialogs of its own (gd-notifier), not the browser's
     providers: [DialogNotifier, { provide: Notifier, useExisting: DialogNotifier }],
     loadComponent: () => import('../game/game-page.component').then((m) => m.GamePageComponent),
+  },
+  {
+    path: 'login',
+    // As index.html's title
+    title: 'GEMP: LotR-TCG - Login',
+    providers: [...LOGIN_SERVICES],
+    loadComponent: () => import('../login/login-page.component').then((m) => m.LoginPageComponent),
   },
   { path: '', pathMatch: 'full', redirectTo: 'deckbuilder' },
   { path: '**', redirectTo: 'deckbuilder' },

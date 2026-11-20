@@ -10,7 +10,7 @@ import { PlayerInfo } from './player-info.service';
  * page is loaded. Any other failure (a server restarting, a lost connection) says nothing about the login, so the page
  * opens and reports its own errors as usual.
  */
-export const loginRequired: CanActivateFn = () => {
+export const loginRequired: CanActivateFn = (_route, state) => {
   const loginPage = inject(LoginPage);
   return inject(PlayerInfo)
     .load()
@@ -20,7 +20,7 @@ export const loginRequired: CanActivateFn = () => {
         if (!ApiError.from(error).is(401)) {
           return of(true);
         }
-        loginPage.open();
+        loginPage.open(state.url);
         return of(false);
       }),
     );

@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiError } from '../api/api-error';
 import { Notifier } from '../notifier/notifier';
-import { PAGE_HASH } from '../platform/page-location';
+import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageNavigation } from '../platform/page-navigation';
 import { PlayerInfo } from '../session/player-info.service';
 import { LoginApi } from './login-api.service';
@@ -44,7 +44,7 @@ export class LoginService {
   private readonly notifier = inject(Notifier);
   private readonly navigation = inject(PageNavigation);
   private readonly players = inject(PlayerInfo);
-  private readonly target = loginTarget(inject(PAGE_HASH));
+  private readonly target = loginTarget(inject(PAGE_QUERY_STRING));
 
   private readonly mode_ = signal<LoginMode>('login');
   private readonly passwordReset_ = signal(false);
