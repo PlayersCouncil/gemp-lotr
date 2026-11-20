@@ -55,14 +55,11 @@ public final class ScenarioWriter {
             opponent.add("fallback", lower(def.fallback));
         if (!def.orders.isEmpty()) {
             JsonArray orders = new JsonArray();
-            for (Order order : def.orders) {
-                JsonObject json = new JsonObject();
-                json.add("when", when(order.when()));
-                json.add("answer", answers(order.answers()));
-                orders.add(json);
-            }
+            for (Order order : def.orders)
+                orders.add(order(order));
             opponent.add("orders", orders);
         }
+        opponentRules(def, opponent);
         if (!opponent.isEmpty())
             root.add("opponent", opponent);
         root.add("coverage", lower(def.coverage));
@@ -156,6 +153,7 @@ public final class ScenarioWriter {
             offScript.add("result", lower(def.outcome.offScriptResult));
         if (!offScript.isEmpty())
             outcome.add("offScript", offScript);
+        endings(def, outcome);
         if (!outcome.isEmpty())
             root.add("outcome", outcome);
 
@@ -164,6 +162,48 @@ public final class ScenarioWriter {
             steps.add(step(step));
         root.add("steps", steps);
         return root;
+    }
+
+    /** One of the opponent's standing orders, as the file has it. */
+    public static JsonObject order(Order order) {
+        JsonObject json = new JsonObject();
+        addIfSet(json, "id", order.id());
+        addIfSet(json, "note", order.note());
+        if (order.once())
+            json.add("once", true);
+        json.add("when", when(order.when()));
+        json.add("answer", answers(order.answers()));
+        return json;
+    }
+
+    /** What the opponent does by rule: opponent.leftovers and opponent.plays. */
+    private static void opponentRules(ScenarioDefinition def, JsonObject opponent) {
+        if (def.leftovers != null)
+            opponent.add("leftovers", def.leftovers.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : def.leftovers);
+        if (!def.sandboxPlays.isEmpty())
+            opponent.add("plays", String.join(", ", def.sandboxPlays));
+    }
+
+    /** What is said when the scenario ends by its outcome or by the game's own end (see ScenarioDefinition.Outcome). */
+    private static void endings(ScenarioDefinition def, JsonObject outcome) {
+        if (!def.outcome.winMessages.isEmpty())
+            outcome.add("winMessages", messages(def.outcome.winMessages));
+        if (!def.outcome.loseMessages.isEmpty())
+            outcome.add("loseMessages", messages(def.outcome.loseMessages));
+        if (def.outcome.gameWon != null)
+            outcome.add("gameWon", ending(def.outcome.gameWon));
+        if (def.outcome.gameLost != null)
+            outcome.add("gameLost", ending(def.outcome.gameLost));
+    }
+
+    /** An ending as a step's 'end' is written: the result by itself, or { result, messages }. */
+    private static JsonValue ending(End end) {
+        if (end.messages.isEmpty())
+            return JsonValue.valueOf(lower(end.result));
+        JsonObject json = new JsonObject();
+        json.add("result", lower(end.result));
+        json.add("messages", messages(end.messages));
+        return json;
     }
 
     private static JsonObject setup(ScenarioDefinition def) {
@@ -285,6 +325,8 @@ public final class ScenarioWriter {
             json.add("allow", allow(step.allow));
         if (!step.answers.isEmpty())
             json.add("answer", answers(step.answers));
+        if (!step.refuses.isEmpty())
+            json.add("refuses", refusals(step.refuses));
         if (step.end != null) {
             if (step.end.messages.isEmpty()) {
                 json.add("end", lower(step.end.result));
@@ -327,8 +369,17 @@ public final class ScenarioWriter {
         addIfSet(json, "offers", when.offers);
         addIfSet(json, "inSkirmish", when.fighting);
         addIfSet(json, "after", when.after);
+        addIfSet(json, "kind", kinds(when));
         json.add("require", requirements(when.require));
         return json;
+    }
+
+    /** What a 'when' says the decision is for: "nextSkirmish", "not(reconcile)"; empty for nothing. */
+    static String kinds(When when) {
+        StringJoiner kinds = new StringJoiner(", ");
+        when.kinds.forEach(kind -> kinds.add(kind.term));
+        when.notKinds.forEach(kind -> kinds.add("not(" + kind.term + ")"));
+        return kinds.toString();
     }
 
     /** A 'when' without requirements, as terms. */
@@ -338,6 +389,9 @@ public final class ScenarioWriter {
             terms.add(when.seat.key());
         if (when.decision != null)
             terms.add(AnswerCompiler.typeName(when.decision));
+        String kinds = kinds(when);
+        if (!kinds.isEmpty())
+            terms.add(kinds);
         if (when.phase != null)
             terms.add("phase(" + lower(when.phase) + ")");
         if (when.turn != null)
@@ -361,6 +415,18 @@ public final class ScenarioWriter {
         StringJoiner terms = new StringJoiner(", ");
         answers.forEach(answer -> terms.add(answer.source()));
         return terms.toString();
+    }
+
+    /** What a step refuses: on one line where none is numbered, otherwise one line each ("2: choose(boromir)"). */
+    private static JsonValue refusals(List<Refusal> refusals) {
+        if (refusals.stream().allMatch(refusal -> refusal.at() == 0)) {
+            StringJoiner terms = new StringJoiner(", ");
+            refusals.forEach(refusal -> terms.add(refusal.source()));
+            return JsonValue.valueOf(terms.toString());
+        }
+        JsonArray lines = new JsonArray();
+        refusals.forEach(refusal -> lines.add(refusal.source()));
+        return lines;
     }
 
     private static JsonValue allow(Allow allow) {
@@ -430,6 +496,8 @@ public final class ScenarioWriter {
             message.choices.forEach(choices::add);
             json.add("choices", choices);
         }
+        if (message.require != null)
+            json.add("require", requirements(message.require));
         //A message that is nothing but its text is written as just that
         if (json.size() == 1)
             return JsonValue.valueOf(message.text);

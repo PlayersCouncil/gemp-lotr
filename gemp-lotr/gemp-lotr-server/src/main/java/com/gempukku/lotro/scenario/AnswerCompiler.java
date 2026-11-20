@@ -107,29 +107,123 @@ public final class AnswerCompiler {
             case ASSIGN: {
                 if (type != AwaitingDecisionType.ASSIGN_MINIONS)
                     throw mismatch(table, decision, answer, "this decision is not an assignment of minions");
-                Set<String> characters = new HashSet<>(Arrays.asList(params.get("freeCharacters")));
-                Set<String> minions = new HashSet<>(Arrays.asList(params.get("minions")));
-                StringJoiner groups = new StringJoiner(",");
-                for (Map.Entry<String, List<String>> entry : answer.assignments().entrySet()) {
-                    if (entry.getValue().isEmpty())
-                        continue;
-                    String characterId = String.valueOf(table.Card(entry.getKey()).getCardId());
-                    if (!characters.contains(characterId))
-                        throw mismatch(table, decision, answer, "'" + entry.getKey() + "' cannot be assigned to");
-                    StringJoiner group = new StringJoiner(" ");
-                    group.add(characterId);
-                    for (String minion : entry.getValue()) {
-                        String minionId = String.valueOf(table.Card(minion).getCardId());
-                        if (!minions.contains(minionId))
-                            throw mismatch(table, decision, answer, "'" + minion + "' cannot be assigned");
-                        group.add(minionId);
-                    }
-                    groups.add(group.toString());
-                }
-                return groups.toString();
+                return assignment(table, decision, answer);
             }
         }
         throw mismatch(table, decision, answer, "unknown kind of answer");
+    }
+
+    /**
+     * An assign(...) as the game takes it.  Each pairing gives its character the minions it names; a character can be
+     * ringBearer (the Free Peoples player's Ring-bearer, whoever that is), and its minions can be rest (or all).
+     *
+     * The minions an answer names are its own wherever they are written, so that rest never takes a minion that a
+     * later pairing names.  Then each pairing with rest, in the order they are written, is given every minion the
+     * decision offers that is not yet given out and that the character can take: what the game would refuse
+     * (a "cannot be assigned" modifier, a fierce minion's rules, a character who has no room for one more, which is
+     * the Free Peoples player's limit of one each without defender) is left for the next rest, or for nobody.  A rest
+     * that finds nothing left gives nothing, and the answer is still good; so is one whose character the decision
+     * does not offer.  A second rest therefore gets only what the first could not take.  A character given no
+     * minions at all is left out of the answer.
+     */
+    private static String assignment(ScenarioTable table, AwaitingDecision decision, Answer answer) throws ScenarioScriptException {
+        Map<String, String[]> params = decision.getDecisionParameters();
+        List<String> characters = Arrays.asList(params.get("freeCharacters"));
+        List<String> minions = Arrays.asList(params.get("minions"));
+        //Character -> its minions, by card ID, in the order the answer gives them
+        Map<String, List<String>> groups = new java.util.LinkedHashMap<>();
+        Set<String> named = new HashSet<>();
+        List<String> resting = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : answer.assignments().entrySet()) {
+            if (entry.getValue().isEmpty())
+                continue;
+            boolean rest = entry.getValue().contains(ScenarioDefinition.REST);
+            String characterId = assignee(table, entry.getKey());
+            if (characterId == null || !characters.contains(characterId)) {
+                //(nothing named for it: rest finds nothing it can give, and the answer stands)
+                if (entry.getValue().stream().allMatch(ScenarioDefinition.REST::equals))
+                    continue;
+                throw mismatch(table, decision, answer, "'" + said(entry.getKey()) + "' cannot be assigned to");
+            }
+            List<String> group = groups.computeIfAbsent(characterId, x -> new ArrayList<>());
+            for (String minion : entry.getValue()) {
+                if (minion.equals(ScenarioDefinition.REST))
+                    continue;
+                String minionId = String.valueOf(table.Card(minion).getCardId());
+                if (!minions.contains(minionId))
+                    throw mismatch(table, decision, answer, "'" + minion + "' cannot be assigned");
+                if (!named.add(minionId))
+                    throw mismatch(table, decision, answer, "'" + minion + "' is assigned twice");
+                group.add(minionId);
+            }
+            if (rest && !resting.contains(characterId))
+                resting.add(characterId);
+        }
+        if (!resting.isEmpty()) {
+            Set<String> given = new HashSet<>(named);
+            com.gempukku.lotro.common.Side side = table.SeatOf(table.PlayerOf(decision)) == Seat.FREEPS
+                    ? com.gempukku.lotro.common.Side.FREE_PEOPLE : com.gempukku.lotro.common.Side.SHADOW;
+            for (String characterId : resting) {
+                for (String minionId : minions) {
+                    if (given.contains(minionId))
+                        continue;
+                    List<String> group = groups.get(characterId);
+                    group.add(minionId);
+                    if (assignable(table, side, groups, characterId)) {
+                        given.add(minionId);
+                    } else {
+                        group.removeLast();
+                    }
+                }
+            }
+        }
+        StringJoiner written = new StringJoiner(",");
+        for (Map.Entry<String, List<String>> group : groups.entrySet()) {
+            if (group.getValue().isEmpty())
+                continue;
+            StringJoiner one = new StringJoiner(" ");
+            one.add(group.getKey());
+            group.getValue().forEach(one::add);
+            written.add(one.toString());
+        }
+        return written.toString();
+    }
+
+    /** A character of an assign(...), by card ID: the card, or the Free Peoples player's Ring-bearer.  Null if there is none. */
+    private static String assignee(ScenarioTable table, String character) {
+        if (!character.equals(ScenarioDefinition.RING_BEARER))
+            return String.valueOf(table.Card(character).getCardId());
+        var state = table.gameState();
+        //(in a game of two fellowships, the one whose turn it is: the Free Peoples player of the moment)
+        String freePeoples = state.getCurrentPlayerId() != null ? state.getCurrentPlayerId() : table.Player(Seat.FREEPS);
+        PhysicalCard ringBearer = state.getRingBearer(freePeoples);
+        return ringBearer == null ? null : String.valueOf(ringBearer.getCardId());
+    }
+
+    private static String said(String character) {
+        return character.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : character;
+    }
+
+    /**
+     * Whether the game would take what has been assigned so far, as far as one character's minions go: the rules and
+     * modifiers about who may fight whom, and (for the Free Peoples player's own assigning) how many each may take.
+     */
+    private static boolean assignable(ScenarioTable table, com.gempukku.lotro.common.Side side, Map<String, List<String>> groups, String characterId) {
+        var state = table.gameState();
+        Map<PhysicalCard, Set<PhysicalCard>> cards = new java.util.HashMap<>();
+        for (Map.Entry<String, List<String>> group : groups.entrySet()) {
+            if (group.getValue().isEmpty())
+                continue;
+            Set<PhysicalCard> fighting = new HashSet<>();
+            for (String minionId : group.getValue())
+                fighting.add(state.findCardById(Integer.parseInt(minionId)));
+            cards.put(state.findCardById(Integer.parseInt(group.getKey())), fighting);
+        }
+        PhysicalCard character = state.findCardById(Integer.parseInt(characterId));
+        if (side == com.gempukku.lotro.common.Side.FREE_PEOPLE
+                && !com.gempukku.lotro.logic.timing.RuleUtils.hasRoomForAssignments(table.game(), character, groups.get(characterId).size()))
+            return false;
+        return table.game().getModifiersQuerying().isValidAssignments(table.game(), side, cards);
     }
 
     private static boolean textMatches(String actionText, String wanted) {
@@ -231,7 +325,9 @@ public final class AnswerCompiler {
      * what somebody did at the table becomes a line of script (see ScenarioAuthoring).  What comes back is a guess at
      * the best wording, not a promise: whoever uses it should compile it again and see that it gives the same answer.
      * @return The answer as a term ("play(gandalf)", "assign(frodo: bowman)", "pass"); "raw(...)" when the scenario's
-     * own words cannot say it (a card the scenario has no name for).
+     * own words cannot say it (a card the scenario has no name for).  An assignment is said as it was, every minion
+     * by its name against every character by its: never with rest or ringBearer, which say a rule, and what was
+     * done is only ever one case of a rule.
      */
     public static String decompile(ScenarioTable table, AwaitingDecision decision, String answer) {
         Map<String, String[]> params = decision.getDecisionParameters();

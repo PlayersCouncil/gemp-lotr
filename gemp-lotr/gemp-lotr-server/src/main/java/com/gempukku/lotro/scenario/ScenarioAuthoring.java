@@ -462,6 +462,13 @@ public class ScenarioAuthoring {
             ScenarioTable table = live.Table();
             StringBuilder when = new StringBuilder();
             when.append(table.SeatOf(player).key()).append(", ").append(AnswerCompiler.typeName(decision.getDecisionType()));
+            //What it is for, where that is one of the things a 'when' can name (the choice of the next skirmish, a
+            // card's trigger being offered): the same kind of decision, in the same phase of the same turn, as others
+            // that are for something else.  (A phase's own play-or-pass is what a decision of its kind is unless
+            // said otherwise, and is not said.)
+            DecisionKinds.Kind kind = DecisionKinds.of(decision);
+            if (kind != null && kind != DecisionKinds.Kind.PHASE_ACTIONS)
+                when.append(", ").append(kind.term);
             Phase phase = table.GetCurrentPhase();
             String name = phase.name().toLowerCase(Locale.ROOT);
             //In a block, a skirmish's decisions are that skirmish's (whichever comes first), and those between
@@ -478,18 +485,10 @@ public class ScenarioAuthoring {
                 when.append(", phase(").append(name).append(")");
             if (block == null || block.when.turn == null)
                 when.append(", turn(").append(table.gameState().getTurnNumber()).append(")");
-            //A card's trigger being offered ("Optional responses") is the same kind of decision, in the same phase
-            // of the same turn, as the phase's own "play something or pass": only what it says tells them apart
-            String said = decision.getText() == null ? "" : decision.getText().replaceAll("<[^>]*>", "").trim();
-            if (decision.getDecisionType() == AwaitingDecisionType.CARD_ACTION_CHOICE && said.matches("(?i)(optional|required) responses"))
-                when.append(", text(").append(said).append(")");
             if (fighting != null)
                 when.append(", inSkirmish(").append(fighting).append(")");
             if (after != null)
                 when.append(", after(").append(after).append(")");
-            //(which skirmish is next: in a block, told apart from the other choices of cards there)
-            if (block != null && said.toLowerCase(Locale.ROOT).contains("next skirmish"))
-                when.append(", text(next skirmish)");
             return when.toString();
         }
 
@@ -557,6 +556,10 @@ public class ScenarioAuthoring {
                 kept.after = until.after;
             if (until.text != null && fits(director, player, decision, part -> part.text = until.text))
                 kept.text = until.text;
+            if (!until.kinds.isEmpty() && fits(director, player, decision, part -> part.kinds = until.kinds))
+                kept.kinds = until.kinds;
+            if (!until.notKinds.isEmpty() && fits(director, player, decision, part -> part.notKinds = until.notKinds))
+                kept.notKinds = until.notKinds;
             When own = repeating.when;
             if (!apart(kept, own))
                 kept.seat = table.SeatOf(player);
@@ -574,6 +577,8 @@ public class ScenarioAuthoring {
                 terms.add(kept.seat.key());
             if (kept.decision != null)
                 terms.add(AnswerCompiler.typeName(kept.decision));
+            if (!ScenarioWriter.kinds(kept).isEmpty())
+                terms.add(ScenarioWriter.kinds(kept));
             if (kept.phase != null)
                 terms.add("phase(" + kept.phase.name().toLowerCase(Locale.ROOT) + ")");
             if (kept.turn != null)
@@ -1546,6 +1551,8 @@ public class ScenarioAuthoring {
                         json.set(name, value);
                     }
                 }
+                if (patch.get("opponent") != null)
+                    opponentPatch(json, patch.get("opponent"));
                 if (patch.get("steps") == null)
                     return;
                 List<Node> nodes = new ArrayList<>();
@@ -1766,6 +1773,21 @@ public class ScenarioAuthoring {
             JsonObject read = new JsonObject(allow.asObject());
             read.set("passWhen", typed("passWhen", read.get("passWhen")));
             step.set("allow", read);
+        }
+        //(a message's condition, typed in as the file has it)
+        org.hjson.JsonValue messages = step.get("messages");
+        if (messages != null && messages.isArray()) {
+            org.hjson.JsonArray read = new org.hjson.JsonArray();
+            for (org.hjson.JsonValue message : messages.asArray()) {
+                if (message.isObject() && message.asObject().get("require") != null) {
+                    JsonObject one = new JsonObject(message.asObject());
+                    one.set("require", typed("require", one.get("require")));
+                    read.add(one);
+                } else {
+                    read.add(message);
+                }
+            }
+            step.set("messages", read);
         }
     }
 
@@ -2734,6 +2756,10 @@ public class ScenarioAuthoring {
                 org.hjson.JsonValue allow = written.get("allow");
                 if (allow != null && allow.isObject() && allow.asObject().get("passWhen") != null)
                     parts.put("passWhen", ScenarioWriter.text(allow.asObject().get("passWhen")));
+                //(each message's condition, by its place among the step's messages from 0: "messages.2.require")
+                for (int i = 0; i < step.messages.size(); i++)
+                    if (step.messages.get(i).require != null)
+                        parts.put("messages." + i + ".require", ScenarioWriter.text(JsonValue.readHjson(step.messages.get(i).require)));
                 if (!parts.isEmpty())
                     texts.put(sitting.uid(step), parts);
             }
@@ -2766,6 +2792,7 @@ public class ScenarioAuthoring {
                     described.put("step", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().number : null);
                     described.put("sub", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().sub : 0);
                     described.put("held", !human && live.Held() != null && live.Held().decision() == decision);
+                    described.put("refuses", human && ruling != null && ruling.decision() == decision ? refusalsNow(sitting, ruling) : List.of());
                 }
                 waiting.put(human ? "human" : "opponent", described);
             }
@@ -2793,6 +2820,10 @@ public class ScenarioAuthoring {
             }
             state.put("uncovered", uncovered);
 
+            state.put("opponent", describeOpponent(sitting));
+            //(what message text can quote from the game: see Templates)
+            state.put("templates", Templates.names());
+
             List<String> pending = new ArrayList<>();
             sitting.pending.forEach(op -> pending.add(op.source()));
             state.put("pending", pending);
@@ -2801,6 +2832,231 @@ public class ScenarioAuthoring {
             state.put("problems", live.Problems());
             return state;
         });
+    }
+
+    /**
+     * What the step in hand refuses, as each stands at the decision in front of the person (see ScenarioRunner, which
+     * proves them): [{refusal, at, now}], 'now' being "refused", "allowed" (the step's allow would let it through: the
+     * runner fails), "notOffered" (the game does not offer it here) or "elsewhere" (it is about another of the step's
+     * decisions).
+     */
+    private static List<Map<String, Object>> refusalsNow(Sitting sitting, Ruling ruling) {
+        List<Map<String, Object>> all = new ArrayList<>();
+        Step step = ruling.step();
+        if (step == null)
+            return all;
+        ScenarioDirector director = sitting.live.Session().Director();
+        int at = director.timesFor(step) + 1;
+        for (ScenarioDefinition.Refusal refusal : step.refuses) {
+            String now;
+            if (refusal.at() != 0 && refusal.at() != at) {
+                now = "elsewhere";
+            } else {
+                try {
+                    List<String> compiled = AnswerCompiler.compileAll(sitting.live.Table(), ruling.decision(), refusal.answer());
+                    now = compiled.stream().anyMatch(one -> ScenarioDirector.allowsAnswer(ruling.shown(), ruling.decision(), one)) ? "allowed" : "refused";
+                } catch (ScenarioScriptException exp) {
+                    now = "notOffered";
+                }
+            }
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("refusal", refusal.source());
+            json.put("at", refusal.at());
+            json.put("now", now);
+            all.add(json);
+        }
+        return all;
+    }
+
+    /**
+     * The opponent, for the Opponent tab's editor: how it answers where the script is silent (its fallback, its
+     * leftovers, the cards its sandbox plays), each of its standing orders part by part, and what would answer the
+     * opponent's decision that is waiting, if one is.
+     */
+    private Map<String, Object> describeOpponent(Sitting sitting) {
+        ScenarioDefinition def = sitting.def;
+        ScenarioTable table = sitting.live.Table();
+        ScenarioDirector director = sitting.live.Session().Director();
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.put("fallback", def.fallback.name().toLowerCase(Locale.ROOT));
+        List<String> fallbacks = new ArrayList<>();
+        for (ScenarioDefinition.Fallback one : ScenarioDefinition.Fallback.values())
+            fallbacks.add(one.name().toLowerCase(Locale.ROOT));
+        json.put("fallbacks", fallbacks);
+        json.put("leftovers", def.leftovers == null ? null : def.leftovers.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : def.leftovers);
+        //(what leftovers can be: the Ring-bearer, whoever that is, or any of the Free Peoples seat's characters)
+        List<String> characters = new ArrayList<>();
+        characters.add("ringBearer");
+        for (CardDef card : def.cards.values()) {
+            if (card.owner() != Seat.FREEPS)
+                continue;
+            try {
+                CardType type = _library.getLotroCardBlueprint(card.blueprintId()).getCardType();
+                if (type == CardType.COMPANION || type == CardType.ALLY)
+                    characters.add(card.alias());
+            } catch (CardNotFoundException exp) {
+                //Not a card the library has: not offered
+            }
+        }
+        json.put("leftoversChoices", characters);
+        json.put("plays", new ArrayList<>(def.sandboxPlays));
+        //(which cards the sandbox could be told to play: the opponent's own)
+        List<String> own = new ArrayList<>();
+        for (CardDef card : def.cards.values())
+            if (card.owner() == def.human.other())
+                own.add(card.alias());
+        json.put("playsChoices", own);
+
+        List<Map<String, Object>> orders = new ArrayList<>();
+        for (int index = 0; index < def.orders.size(); index++) {
+            ScenarioDefinition.Order order = def.orders.get(index);
+            JsonObject written = ScenarioWriter.order(order);
+            Map<String, Object> one = new LinkedHashMap<>();
+            one.put("index", index);
+            one.put("id", order.id());
+            one.put("note", order.note());
+            one.put("once", order.once());
+            //Its 'when' as the file has it: terms, or (with requirements) the { object } written out
+            one.put("when", written.get("when").isString() ? written.get("when").asString() : ScenarioWriter.text(written.get("when")));
+            List<String> answers = new ArrayList<>();
+            for (Answer answer : order.answers())
+                answers.add(answer.source());
+            one.put("answers", answers);
+            //Whether it is a 'once' that has answered its decision this game, and so answers nothing more
+            one.put("spent", director.ordersSpent().contains(index));
+            one.put("text", ScenarioWriter.text(written));
+            orders.add(one);
+        }
+        json.put("orders", orders);
+
+        //The opponent's decision that is waiting: what of the opponent's own would answer it (no step does)
+        Map<String, Object> answering = null;
+        String opponent = sitting.live.OpponentPlayer();
+        AwaitingDecision decision = sitting.over() || !table.Arranged() ? null : table.userFeedback().getAwaitingDecision(opponent);
+        Ruling ruling = sitting.live.Session().Ruling(opponent);
+        if (decision != null && (ruling == null || ruling.decision() != decision || ruling.step() == null)) {
+            answering = new LinkedHashMap<>();
+            ScenarioDirector.OrderMatch match = director.standingOrder(opponent, decision);
+            String rule = match != null ? null : director.byRule(opponent, decision);
+            answering.put("order", match == null ? null : match.index());
+            answering.put("id", match == null ? null : match.order().id());
+            answering.put("answer", match != null ? match.answer().source() : null);
+            //(what that comes to in the game, in the scenario's words: an assignment with its leftovers, say)
+            String compiled = match != null ? match.compiled() : rule;
+            answering.put("gives", compiled == null ? null : sitting.term(decision, compiled));
+            answering.put("rule", match != null || rule == null ? null
+                    : decision.getDecisionType() == AwaitingDecisionType.ASSIGN_MINIONS ? "leftovers" : "sandbox");
+            //(a 'when' for a new order that would take this decision, as tightly as it can be said)
+            answering.put("when", sitting.whenFor(opponent, decision, null));
+        }
+        json.put("answering", answering);
+        return json;
+    }
+
+    /**
+     * A change to the opponent that leaves the rest of it as it is: {set: {part: value}, unset: [parts], orders:
+     * [op, ...]}.  'set' and 'unset' are for its own parts (name, fallback, leftovers, plays).  Each of 'orders' is
+     * done in turn to the list of standing orders, an order being said by its 'id' (its name), or failing that by
+     * its 'index' (from 0) in the list as it stands when the op comes to it:
+     *     {op: insert, order: {...}, before: id or index}     (at the end without 'before')
+     *     {op: set, id or index, order: {...}}                 the order replaced whole
+     *     {op: merge, id or index, set: {part: value}, unset: [parts]}
+     *     {op: delete, id or index}
+     *     {op: move, id or index, to: index}                   taken out, and put in at 'to' (the end without it)
+     * The orders not named are left exactly as they were.
+     */
+    private static void opponentPatch(JsonObject json, org.hjson.JsonValue value) throws AuthoringException {
+        if (!value.isObject())
+            throw new AuthoringException("A change to the opponent is written as { set, unset, orders }.");
+        JsonObject patch = value.asObject();
+        JsonObject opponent = json.get("opponent") != null && json.get("opponent").isObject() ? new JsonObject(json.get("opponent").asObject()) : new JsonObject();
+        if (patch.get("set") != null)
+            for (JsonObject.Member member : patch.get("set").asObject()) {
+                if (member.getName().equals("orders"))
+                    throw new AuthoringException("Orders are changed one at a time (opponent.orders), not all at once.");
+                opponent.set(member.getName(), member.getValue());
+            }
+        if (patch.get("unset") != null)
+            for (org.hjson.JsonValue name : patch.get("unset").asArray())
+                opponent.remove(name.asString());
+        if (patch.get("orders") != null) {
+            List<org.hjson.JsonValue> orders = new ArrayList<>();
+            if (opponent.get("orders") != null && opponent.get("orders").isArray())
+                orders.addAll(opponent.get("orders").asArray().values());
+            for (org.hjson.JsonValue entry : patch.get("orders").asArray()) {
+                JsonObject op = entry.asObject();
+                String what = op.getString("op", "");
+                switch (what) {
+                    case "insert" -> {
+                        org.hjson.JsonValue order = op.get("order");
+                        if (order == null || !order.isObject())
+                            throw new AuthoringException("An order is written as { when, answer }.");
+                        int at = op.get("before") == null || op.get("before").isNull() ? orders.size() : orderAt(orders, op.get("before"));
+                        orders.add(at, order);
+                    }
+                    case "set" -> {
+                        org.hjson.JsonValue order = op.get("order");
+                        if (order == null || !order.isObject())
+                            throw new AuthoringException("An order is written as { when, answer }.");
+                        orders.set(orderAt(orders, op), order);
+                    }
+                    case "merge" -> {
+                        int at = orderAt(orders, op);
+                        JsonObject order = new JsonObject(orders.get(at).asObject());
+                        if (op.get("set") != null)
+                            for (JsonObject.Member member : op.get("set").asObject())
+                                order.set(member.getName(), member.getName().equals("when") ? typed("when", member.getValue()) : member.getValue());
+                        if (op.get("unset") != null)
+                            for (org.hjson.JsonValue name : op.get("unset").asArray())
+                                order.remove(name.asString());
+                        orders.set(at, order);
+                    }
+                    case "delete" -> orders.remove(orderAt(orders, op));
+                    case "move" -> {
+                        org.hjson.JsonValue order = orders.remove(orderAt(orders, op));
+                        int to = op.get("to") == null || op.get("to").isNull() ? orders.size() : op.get("to").asInt();
+                        if (to < 0 || to > orders.size())
+                            throw new AuthoringException("There is no place " + (to + 1) + " among the orders.");
+                        orders.add(to, order);
+                    }
+                    default -> throw new AuthoringException("'" + what + "' is not something that can be done to an order.");
+                }
+            }
+            org.hjson.JsonArray written = new org.hjson.JsonArray();
+            orders.forEach(written::add);
+            if (orders.isEmpty())
+                opponent.remove("orders");
+            else
+                opponent.set("orders", written);
+        }
+        if (opponent.isEmpty())
+            json.remove("opponent");
+        else
+            json.set("opponent", opponent);
+    }
+
+    /** Which order an op is about: the one with its 'id', or failing that the one at its 'index'. */
+    private static int orderAt(List<org.hjson.JsonValue> orders, JsonObject op) throws AuthoringException {
+        if (op.get("id") != null && !op.get("id").isNull())
+            return orderAt(orders, op.get("id"));
+        if (op.get("index") == null || op.get("index").isNull())
+            throw new AuthoringException("The change does not say which order it is for.");
+        return orderAt(orders, op.get("index"));
+    }
+
+    /** An order by its name (text) or its place (a number, from 0). */
+    private static int orderAt(List<org.hjson.JsonValue> orders, org.hjson.JsonValue said) throws AuthoringException {
+        if (said.isNumber()) {
+            int at = said.asInt();
+            if (at < 0 || at >= orders.size())
+                throw new AuthoringException("There is no order " + (at + 1) + ".");
+            return at;
+        }
+        String name = said.isString() ? said.asString() : said.toString();
+        for (int at = 0; at < orders.size(); at++)
+            if (orders.get(at).isObject() && name.equals(orders.get(at).asObject().getString("id", null)))
+                return at;
+        throw new AuthoringException("There is no order called '" + name + "': it has changed since this page last heard of it.");
     }
 
     private Map<String, Object> describeBoard(Sitting sitting) {
@@ -2963,6 +3219,9 @@ public class ScenarioAuthoring {
         Map<String, Object> json = new LinkedHashMap<>();
         json.put("seat", table.SeatOf(player).key());
         json.put("type", AnswerCompiler.typeName(type));
+        //What it is for, as a 'when' says it (nextSkirmish, optionalResponses...; see DecisionKinds); null for none
+        DecisionKinds.Kind kind = DecisionKinds.of(decision);
+        json.put("kind", kind == null ? null : kind.term);
         json.put("text", decision.getText().replaceAll("<[^>]*>", ""));
         json.put("where", "turn " + table.gameState().getTurnNumber() + ", " + table.GetCurrentPhase().name().toLowerCase(Locale.ROOT));
         if (params.containsKey("min") && params.get("min").length > 0)

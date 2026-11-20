@@ -480,7 +480,7 @@ public class ScenarioAuthoringTest {
         state = json(authoring.stepBefore(player)).getJSONObject("state");
         JSONArray kids = steps(state).getJSONObject(0).getJSONArray("anyOrder");
         JSONObject made = kids.getJSONObject(1);
-        assertEquals("freeps, cards, after(gandalf), text(next skirmish)", made.getString("when"));
+        assertEquals("freeps, cards, nextSkirmish, after(gandalf)", made.getString("when"));
         authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + state.getJSONArray("kids").getJSONArray(0).getString(1)
                 + "\", \"set\": {\"messages\": [\"Now Aragorn.\"]}}]}", null);
         client = new Client(game());

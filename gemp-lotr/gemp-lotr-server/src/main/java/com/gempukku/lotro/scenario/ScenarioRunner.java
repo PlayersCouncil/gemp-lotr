@@ -77,10 +77,47 @@ public final class ScenarioRunner {
                     report.warnings.add(def.findStep(entry.getKey()).describe() + " was skipped");
             }
         }
+        report.warnings.addAll(shadowedByTheirBlock(def));
         //(a step no way reaches is a failure, and a scenario with a failure in it has not been proved)
         if (!report.failures.isEmpty() && report.reached == RunnerLevel.FULL)
             report.reached = RunnerLevel.SETUP;
         return report;
+    }
+
+    /**
+     * The steps of a block that wait for nothing but what ends the block: every decision they could take fits the
+     * block's 'until' as well.  The decision that fits a block's 'until' is
+     * the next step's, not the block's (that is what lets a block end), so such a step is never come to; except one
+     * about a skirmish that is over ('after'), which is said at the block's last decision all the same (see
+     * ScenarioDirector.lingering).  As designed, then, but a step written so is a mistake, and is said to be one.
+     */
+    static List<String> shadowedByTheirBlock(ScenarioDefinition def) {
+        List<String> said = new java.util.ArrayList<>();
+        for (Step block : def.steps) {
+            if (!block.block)
+                continue;
+            for (Step child : block.children)
+                if (child.when.after == null && coveredBy(child.when, block.until))
+                    said.add(child.describe() + " waits for exactly what ends its block (until: " + block.until.source
+                            + "), and that decision is the step after the block's: it is never come to.  Put it after the block, as a step of its own.");
+        }
+        return said;
+    }
+
+    /** Whether every decision that fits one 'when' fits another: it says all the other says, and maybe more. */
+    private static boolean coveredBy(ScenarioDefinition.When one, ScenarioDefinition.When other) {
+        return !other.opening
+                && (other.seat == null || other.seat == one.seat)
+                && (other.decision == null || other.decision == one.decision)
+                && (other.text == null || (one.text != null && one.text.toLowerCase().contains(other.text.toLowerCase())))
+                && (other.phase == null || other.phase == one.phase)
+                && (other.turn == null || other.turn.equals(one.turn))
+                && (other.skirmish == null || other.skirmish.equals(one.skirmish))
+                && (other.offers == null || other.offers.equals(one.offers))
+                && (other.fighting == null || other.fighting.equals(one.fighting))
+                && (other.after == null || other.after.equals(one.after))
+                && one.kinds.containsAll(other.kinds) && one.notKinds.containsAll(other.notKinds)
+                && (other.require == null || other.require.equals(one.require));
     }
 
     /** A scenario with more ways through it than this is not played through all of them. */
@@ -270,6 +307,8 @@ public final class ScenarioRunner {
         for (String problem : table.Problems())
             report.failures.add(problem);
 
+        if (deviation == null && !explore && report.failures.isEmpty())
+            refusalsNotShown(def, report);
         if (completed && deviation == null)
             for (RngEntry entry : table.Random().remaining())
                 report.failures.add("rng: " + entry.kind().name().toLowerCase() + "(" + entry.seat().key() + "." + entry.zone()
@@ -304,6 +343,17 @@ public final class ScenarioRunner {
                 //(answered another way, the game ending is the game handling it: the player is shown how it ended)
                 if (deviation != null)
                     return true;
+                //(the scenario can say what the game's own end counts as: outcome.gameWon, outcome.gameLost)
+                boolean won = winner != null && winner.equals(table.HumanPlayer());
+                ScenarioDefinition.End ending = won ? def.outcome.gameWon : def.outcome.gameLost;
+                if (ending != null && director.end() == null) {
+                    report.stopped += " (outcome." + (won ? "gameWon" : "gameLost") + ": " + ending.result.name().toLowerCase() + ")";
+                    if (ending.result == EndResult.FAIL) {
+                        report.failures.add("The scripted path ends in failure (" + report.stopped + ")");
+                        return false;
+                    }
+                    return true;
+                }
                 if (def.outcome.win == null && director.end() == null) {
                     report.failures.add("The game ended before the scenario did (" + report.stopped + ")");
                     return false;
@@ -429,7 +479,10 @@ public final class ScenarioRunner {
                     }
                 } else if (ruling.answer() != null) {
                     answer = ruling.answer();
-                    note = "(no step covers this; one of the opponent's standing orders does)";
+                    ScenarioDirector.OrderMatch order = director.standingOrder(player, decision);
+                    note = order != null ? "(no step covers this; one of the opponent's standing orders does: " + order.order().label(order.index() + 1) + ")"
+                            : "(no step covers this; the opponent does it by rule: " + (decision.getDecisionType() == com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS
+                            ? "its leftovers" : "the sandbox") + ")";
                 } else if (explore) {
                     if (++unscripted > EXPLORE_LIMIT) {
                         report.stopped = "explored " + EXPLORE_LIMIT + " decisions beyond the script";
@@ -447,9 +500,9 @@ public final class ScenarioRunner {
                     else
                         report.reached = RunnerLevel.PREFIX;
                     return false;
-                } else if (def.fallback == Fallback.PASS) {
+                } else if (def.fallback == Fallback.PASS || def.fallback == Fallback.SANDBOX) {
                     answer = AnswerCompiler.leastAnswer(decision);
-                    note = "(opponent fallback: pass)";
+                    note = "(opponent fallback: " + (def.fallback == Fallback.PASS ? "pass" : "sandbox, with no rule for this: as little as it can") + ")";
                 } else {
                     report.decisions.add(new ScenarioRunReport.Decision(number, description, null, null, null));
                     report.stopped = "a decision for the opponent that no step covers";
@@ -466,6 +519,22 @@ public final class ScenarioRunner {
                 report.failures.add((step == null ? "" : "step " + step.label() + ": ") + exp.getMessage());
                 report.stopped = "the script does not fit the game";
                 return false;
+            }
+
+            //The player's scripted answer is held to what the page would let them do, and what the step refuses is
+            // shown to be refused
+            if (deviation == null && human && step != null && ruling.shown() != null && answer != null) {
+                String refused = refusals(table, director, step, ruling, report);
+                if (refused == null && !ScenarioDirector.allowsAnswer(ruling.shown(), decision, answer))
+                    refused = "its answer " + said(table, decision, answer) + " (the " + ordinal(director.timesFor(step) + 1)
+                            + " decision of the step) is not one its 'allow' lets the player give here, so the player's page would refuse it."
+                            + "  The step allows " + allowedSaid(table, decision, ruling.shown()) + ".  The decision is: " + description;
+                if (refused != null) {
+                    report.decisions.add(new ScenarioRunReport.Decision(number, description, step.label(), null, null));
+                    report.failures.add("step " + step.label() + ": " + refused);
+                    report.stopped = "the script does not fit the game";
+                    return false;
+                }
             }
 
             //Where the player could have done otherwise, as the step has it: for trying those other ways (see offScript)
@@ -542,6 +611,77 @@ public final class ScenarioRunner {
         report.failures.add("More than " + DECISION_LIMIT + " decisions: the script is probably going round in circles");
         report.stopped = "too many decisions";
         return false;
+    }
+
+    /**
+     * Shows what a step refuses at this decision to be refused (see ScenarioDefinition.Refusal), and notes each that
+     * is, in the report.
+     * @return Why one of them is not; null if they all are (or none is about this decision).
+     */
+    private static String refusals(ScenarioTable table, ScenarioDirector director, Step step, ScenarioSession.Ruling ruling, ScenarioRunReport report) {
+        int at = director.timesFor(step) + 1;
+        for (ScenarioDefinition.Refusal refusal : step.refuses) {
+            if (refusal.at() != 0 && refusal.at() != at)
+                continue;
+            List<String> compiled;
+            try {
+                compiled = AnswerCompiler.compileAll(table, ruling.decision(), refusal.answer());
+            } catch (ScenarioScriptException exp) {
+                //(said of every decision of the step: it need only be on offer at one of them)
+                if (refusal.at() == 0)
+                    continue;
+                return "it refuses '" + refusal.source() + "', but the game does not offer that at the step's " + ordinal(at)
+                        + " decision, so there is nothing to refuse: " + exp.getMessage();
+            }
+            for (String one : compiled)
+                if (ScenarioDirector.allowsAnswer(ruling.shown(), ruling.decision(), one))
+                    return "it refuses '" + refusal.source() + "', but at its " + ordinal(at) + " decision its 'allow' lets the player give "
+                            + said(table, ruling.decision(), one) + ".  The step allows " + allowedSaid(table, ruling.decision(), ruling.shown())
+                            + ".  The decision is: " + director.describe(ruling.player(), ruling.decision());
+            report.refusalsShown.add(step.label() + " " + refusal.source());
+        }
+        return null;
+    }
+
+    /** What a step's refusals came to over a whole run: each that it never got to show is a failure. */
+    private static void refusalsNotShown(ScenarioDefinition def, ScenarioRunReport report) {
+        for (Step step : def.allSteps()) {
+            if (step.refuses.isEmpty() || report.steps.get(step.label()) != ScenarioDirector.StepStatus.MATCHED)
+                continue;
+            for (ScenarioDefinition.Refusal refusal : step.refuses)
+                if (!report.refusalsShown.contains(step.label() + " " + refusal.source()))
+                    report.failures.add("step " + step.label() + ": it refuses '" + refusal.source() + "', which was never shown: "
+                            + (refusal.at() == 0 ? "the game never offered it at any of the step's decisions"
+                            : "the step never came to its " + ordinal(refusal.at()) + " decision (or the run stopped before it)"));
+        }
+    }
+
+    private static String said(ScenarioTable table, AwaitingDecision decision, String answer) {
+        try {
+            return "'" + AnswerCompiler.decompile(table, decision, answer) + "'";
+        } catch (RuntimeException exp) {
+            return "\"" + answer + "\"";
+        }
+    }
+
+    private static String allowedSaid(ScenarioTable table, AwaitingDecision decision, ScenarioDirector.Presentation shown) {
+        List<String> all = new java.util.ArrayList<>();
+        for (String one : shown.allowed())
+            all.add(said(table, decision, one));
+        if (shown.passAllowed())
+            all.add("'pass'");
+        return all.isEmpty() ? "nothing on offer" : String.join(", ", all);
+    }
+
+    private static String ordinal(int number) {
+        int lastTwo = number % 100;
+        String suffix = lastTwo >= 11 && lastTwo <= 13 ? "th" : switch (number % 10) {
+            case 1 -> "st";
+            case 2 -> "nd";
+            case 3 -> "rd";
+            default -> "th";
+        };
+        return number + suffix;
     }
 
     private static String rootCause(Throwable exp) {

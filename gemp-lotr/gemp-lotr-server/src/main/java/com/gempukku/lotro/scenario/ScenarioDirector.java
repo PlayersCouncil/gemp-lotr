@@ -181,8 +181,8 @@ public class ScenarioDirector {
         Step before = null;
         if (step.when.after != null)
             for (Step child : block.children)
-                if (before == null && child.when.after == null && child.when.fighting == null && child.when.text != null
-                        && child.when.text.toLowerCase().contains("next skirmish"))
+                if (before == null && child.when.after == null && child.when.fighting == null && ((child.when.text != null
+                        && child.when.text.toLowerCase().contains("next skirmish")) || child.when.kinds.contains(DecisionKinds.Kind.NEXT_SKIRMISH)))
                     before = child;
         Step ahead = before;
         restructure(() -> {
@@ -385,6 +385,7 @@ public class ScenarioDirector {
                 && (when.skirmish == null || (_table.gameState().getSkirmish() != null && when.skirmish == _skirmishOrdinal))
                 && (when.fighting == null || isFighting(when.fighting))
                 && (when.after == null || isAfter(when.after))
+                && when.fitsKind(DecisionKinds.Kind.PHASE_ACTIONS)
                 && (when.require == null || _table.Holds(when.require, player));
     }
 
@@ -580,6 +581,9 @@ public class ScenarioDirector {
             return false;
         if (when.after != null && !isAfter(when.after))
             return false;
+        //(a pass made without asking is the phase's own play-or-pass)
+        if (!when.fitsKind(DecisionKinds.Kind.PHASE_ACTIONS))
+            return false;
         return when.require == null || _table.Holds(when.require, player);
     }
 
@@ -598,7 +602,10 @@ public class ScenarioDirector {
         if (decision == _lastDecision)
             return _lastMatch;
         _lastDecision = decision;
+        observeFinish();
         _lastMatch = findStep(player, decision);
+        //(one more decision since the last skirmish was fought: see isAfter)
+        _sinceFinish++;
         if (_lastMatch != null)
             seen(_lastMatch);
         return _lastMatch;
@@ -745,18 +752,224 @@ public class ScenarioDirector {
 
     /**
      * @return What the opponent's standing orders say to a decision no step covers, in the game's own terms; null
-     * if none of them fits it.
+     * if none of them fits it, and nothing it does by rule (see byRule) answers it either.
      */
     public String order(String player, AwaitingDecision decision) {
-        for (ScenarioDefinition.Order order : _def.orders) {
-            if (!matches(order.when(), player, decision))
+        OrderMatch match = standingOrder(player, decision);
+        if (match != null) {
+            //(kept, so that an order that is good for one decision is used up when the game takes its answer)
+            _ordered.put(decision, match);
+            return match.compiled();
+        }
+        _ordered.remove(decision);
+        return byRule(player, decision);
+    }
+
+    /* ---- what the player may give, as the page judges it ---- */
+
+    /** How many of its decisions a step has answered so far (the one in hand not counted). */
+    public int timesFor(Step step) {
+        return times(step);
+    }
+
+    /**
+     * Whether a step lets the player give an answer, judged the way the person's page judges a click (see
+     * gemp-lotr-frontend's scenario-plan.ts): a live game refuses nothing itself, it sends the page the answers the
+     * step allows and the page lets through only those.  Cards chosen and minions assigned are a set (whatever order
+     * they are clicked in); a Pass is allowed if passing is; anything else is allowed if it is one of the answers.
+     * @param shown What the step shows for the decision; one that restricts nothing allows everything.
+     * @param answer The answer, as the game takes it.
+     */
+    public static boolean allowsAnswer(Presentation shown, AwaitingDecision decision, String answer) {
+        if (shown == null || shown.allowed() == null)
+            return true;
+        switch (decision.getDecisionType()) {
+            case CARD_SELECTION, ARBITRARY_CARDS -> {
+                Set<String> chosen = parts(answer, ",");
+                if (chosen.isEmpty())
+                    return shown.passAllowed() || shown.allowed().contains("");
+                return shown.allowed().stream().anyMatch(one -> parts(one, ",").equals(chosen));
+            }
+            case ASSIGN_MINIONS -> {
+                Set<String> pairs = pairings(answer);
+                if (pairs.isEmpty())
+                    return shown.passAllowed() || shown.allowed().stream().anyMatch(one -> pairings(one).isEmpty());
+                return shown.allowed().stream().anyMatch(one -> pairings(one).equals(pairs));
+            }
+            default -> {
+                if (answer.isEmpty() && shown.passAllowed())
+                    return true;
+                return shown.allowed().contains(answer);
+            }
+        }
+    }
+
+    private static Set<String> parts(String answer, String separator) {
+        Set<String> parts = new java.util.HashSet<>();
+        for (String part : answer.split(separator))
+            if (!part.trim().isEmpty())
+                parts.add(part.trim());
+        return parts;
+    }
+
+    /** An assignment as the game takes it ("12 30 31,14 32"), as the pairings the page has the player make: "30>12". */
+    private static Set<String> pairings(String answer) {
+        Set<String> pairs = new java.util.HashSet<>();
+        for (String group : answer.split(",")) {
+            String[] ids = group.trim().split(" +");
+            for (int i = 1; i < ids.length; i++)
+                pairs.add(ids[i] + ">" + ids[0]);
+        }
+        return pairs;
+    }
+
+    /* ---- the opponent's orders, and what it does by rule ---- */
+
+    /**
+     * Which of the opponent's standing orders answers a decision, and with what.
+     * @param index Where the order comes among the orders, counting from 0.
+     * @param answer The order's answer that is on offer (the first that is).
+     * @param compiled That answer in the game's terms, with opponent.leftovers added to an assignment.
+     */
+    public record OrderMatch(int index, ScenarioDefinition.Order order, Answer answer, String compiled) { }
+
+    /** The orders that were 'once' and have answered their decision: they are done with for the game. */
+    private final Set<Integer> _ordersSpent = new java.util.TreeSet<>();
+    /** The order each of the opponent's waiting decisions was ruled to be answered by, until it is answered. */
+    private final Map<AwaitingDecision, OrderMatch> _ordered = new java.util.IdentityHashMap<>();
+
+    /**
+     * The first of the opponent's standing orders (that is not done with) whose 'when' fits the decision and one of
+     * whose answers the decision offers; null if there is none.  Looking changes nothing: an order is only used up
+     * by the answer the game takes, when it was the order that gave it (see order and orderAnswered).
+     */
+    public OrderMatch standingOrder(String player, AwaitingDecision decision) {
+        for (int index = 0; index < _def.orders.size(); index++) {
+            ScenarioDefinition.Order order = _def.orders.get(index);
+            if (_ordersSpent.contains(index) || !matches(order.when(), player, decision))
                 continue;
             for (Answer answer : order.answers()) {
                 try {
-                    return AnswerCompiler.compile(_table, decision, answer);
+                    return new OrderMatch(index, order, answer, AnswerCompiler.compile(_table, decision, withLeftovers(answer)));
                 } catch (ScenarioScriptException exp) {
                     //Not on offer this time; an order is for whenever it is
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * A decision of the opponent's has been answered.  If one of its 'once' orders was what answered it (the answer
+     * given is that order's), that order is done with: it answers nothing more this game.  This happens as the game
+     * takes the answer, so a game that follows another's journal (a checkpoint, a fresh game of a draft) uses up the
+     * same orders at the same decisions.
+     */
+    public void orderAnswered(AwaitingDecision decision, String answer) {
+        OrderMatch match = _ordered.remove(decision);
+        if (match != null && match.order().once() && match.compiled().equals(answer))
+            _ordersSpent.add(match.index());
+    }
+
+    /** The orders that are done with, by where they come (from 0). */
+    public Set<Integer> ordersSpent() {
+        return java.util.Collections.unmodifiableSet(_ordersSpent);
+    }
+
+    /**
+     * The character the opponent gives every minion it has left unassigned: opponent.leftovers, or for the sandbox
+     * opponent assigning as the Shadow player, the Ring-bearer.  Null for none.
+     */
+    public String leftovers() {
+        if (_def.leftovers != null)
+            return _def.leftovers;
+        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX && _def.human == Seat.FREEPS)
+            return ScenarioDefinition.RING_BEARER;
+        return null;
+    }
+
+    /** An assignment of the opponent's with its leftovers added: their character also takes the rest.  Anything else as it is. */
+    public Answer withLeftovers(Answer answer) {
+        String character = leftovers();
+        if (character == null || answer.kind() != AnswerKind.ASSIGN)
+            return answer;
+        Map<String, List<String>> assignments = new LinkedHashMap<>();
+        answer.assignments().forEach((who, minions) -> assignments.put(who, new ArrayList<>(minions)));
+        List<String> minions = assignments.computeIfAbsent(character, x -> new ArrayList<>());
+        if (!minions.contains(ScenarioDefinition.REST))
+            minions.add(ScenarioDefinition.REST);
+        return new Answer(AnswerKind.ASSIGN, answer.cards(), answer.text(), answer.number(), assignments, answer.source(), answer.picks());
+    }
+
+    /**
+     * What a step of the opponent's answers, as scriptedAnswer has it, with its leftovers added to an assignment.  A
+     * step whose answer is 'pass' passes: that is the one way to have an opponent with leftovers assign nothing.
+     */
+    public String opponentAnswer(Step step, AwaitingDecision decision) throws ScenarioScriptException {
+        if (leftovers() == null || decision.getDecisionType() != AwaitingDecisionType.ASSIGN_MINIONS || step.answers.isEmpty()
+                || _table.IsOpening(decision))
+            return scriptedAnswer(step, decision);
+        int times = times(step);
+        Answer answer = times < step.answers.size() ? step.answers.get(times) : step.answers.size() == 1 ? step.answers.getFirst() : null;
+        if (answer == null)
+            return scriptedAnswer(step, decision);
+        return AnswerCompiler.compile(_table, decision, withLeftovers(answer));
+    }
+
+    /**
+     * What the opponent does where neither a step nor one of its orders says, before its fallback: it assigns its
+     * leftovers (see leftovers), and the sandbox opponent plays what it can in its Shadow phase (see sandbox).  Null
+     * where it has no rule for the decision.
+     */
+    public String byRule(String player, AwaitingDecision decision) {
+        if (decision.getDecisionType() == AwaitingDecisionType.ASSIGN_MINIONS && leftovers() != null) {
+            Map<String, List<String>> all = new LinkedHashMap<>();
+            all.put(leftovers(), List.of(ScenarioDefinition.REST));
+            try {
+                return AnswerCompiler.compile(_table, decision, new Answer(AnswerKind.ASSIGN, List.of(), null, 0, all, "leftovers"));
+            } catch (ScenarioScriptException exp) {
+                return null;
+            }
+        }
+        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX)
+            return sandbox(player, decision);
+        return null;
+    }
+
+    /**
+     * The sandbox opponent, as the Shadow player in its Shadow phase: plays the first card it can, minions first,
+     * from opponent.plays in that order (or, if that says nothing, from all its Shadow cards in the order the file
+     * declares them).  The game only offers what can be played and paid for, so the first that is on offer is one
+     * it can afford.  Null where it does nothing by rule: it then does as little as it can (its Pass, the least
+     * choice), the same every time.
+     */
+    private String sandbox(String player, AwaitingDecision decision) {
+        if (decision.getDecisionType() != AwaitingDecisionType.CARD_ACTION_CHOICE || _table.SeatOf(player) != Seat.SHADOW
+                || _table.GetCurrentPhase() != Phase.SHADOW)
+            return null;
+        List<String> candidates = new ArrayList<>();
+        if (!_def.sandboxPlays.isEmpty()) {
+            candidates.addAll(_def.sandboxPlays);
+        } else {
+            for (ScenarioDefinition.CardDef card : _def.cards.values())
+                if (card.owner() == Seat.SHADOW && !card.alias().equals(_def.ringBearer.get(Seat.SHADOW)) && !card.alias().equals(_def.ring.get(Seat.SHADOW)))
+                    candidates.add(card.alias());
+        }
+        List<String> ordered = new ArrayList<>();
+        for (boolean minions : List.of(true, false))
+            for (String alias : candidates) {
+                var blueprint = _table.Card(alias).getBlueprint();
+                if (blueprint.getSide() == com.gempukku.lotro.common.Side.SHADOW
+                        && (blueprint.getCardType() == com.gempukku.lotro.common.CardType.MINION) == minions)
+                    ordered.add(alias);
+            }
+        for (String alias : ordered) {
+            if (_table.Card(alias).getZone() != com.gempukku.lotro.common.Zone.HAND)
+                continue;
+            try {
+                return AnswerCompiler.compile(_table, decision, new Answer(AnswerKind.PLAY, List.of(alias), null, 0, Map.of(), "play(" + alias + ")"));
+            } catch (ScenarioScriptException exp) {
+                //Not playable now: the next
             }
         }
         return null;
@@ -828,10 +1041,31 @@ public class ScenarioDirector {
      * is said about the one that is over is said at the first decision after it, whatever that is.)
      */
     private boolean isAfter(String alias) {
+        //Once the next skirmish has had a decision of its own, the moment after this one has passed: only its first
+        // decision can still be the first after the skirmish before it.  (Without this, what waits for after(x)
+        // and does not fit straight away went on waiting through the next skirmish, and could be said in the
+        // middle of it.)
+        observeFinish();
+        if (_table.gameState().getSkirmish() != null && _sinceFinish > 0)
+            return false;
         //(a minion's skirmish as much as a companion's: the last skirmish finished had it on either side)
         PhysicalCard card = _table.Card(alias);
         PhysicalCard last = _table.gameState().getLastSkirmishCharacter();
         return (last != null && last == card) || _table.gameState().getLastSkirmishMinions().contains(card);
+    }
+
+    /** The last skirmish finished this turn, as last seen: its Free Peoples character, its minions, the turn. */
+    private Object[] _finishSeen = new Object[3];
+    /** How many decisions have been asked since the last skirmish was finished (see isAfter). */
+    private int _sinceFinish = 0;
+
+    private void observeFinish() {
+        var state = _table.gameState();
+        Object[] finished = {state.getLastSkirmishCharacter(), state.getLastSkirmishMinions(), state.getTurnNumber()};
+        if (finished[0] != _finishSeen[0] || finished[1] != _finishSeen[1] || !finished[2].equals(_finishSeen[2])) {
+            _finishSeen = finished;
+            _sinceFinish = 0;
+        }
     }
 
     private void observeSkirmish() {
@@ -869,6 +1103,8 @@ public class ScenarioDirector {
         if (when.fighting != null && !isFighting(when.fighting))
             return false;
         if (when.after != null && !isAfter(when.after))
+            return false;
+        if ((!when.kinds.isEmpty() || !when.notKinds.isEmpty()) && !when.fitsKind(DecisionKinds.of(decision)))
             return false;
         return when.require == null || _table.Holds(when.require, player);
     }
@@ -929,7 +1165,13 @@ public class ScenarioDirector {
      * @throws ScenarioScriptException if the step allows nothing the decision offers.
      */
     public Presentation present(Step step, String player, AwaitingDecision decision) throws ScenarioScriptException {
-        List<RenderedMessage> messages = render(step);
+        _putUpFor = decision;
+        List<RenderedMessage> messages;
+        try {
+            messages = render(step);
+        } finally {
+            _putUpFor = null;
+        }
 
         List<String> allowed = null;
         boolean passAllowed = false;
@@ -973,11 +1215,36 @@ public class ScenarioDirector {
         //(the first time the step applies, all of them; after that, those that are said every time)
         boolean again = isContinuing(step);
         for (Message message : step.messages)
-            if (!again || !message.once)
+            if (message.require != null ? said(message) : !again || !message.once)
                 messages.add(new RenderedMessage(message,
                         message.header == null ? null : Templates.render(_table, message.header),
                         Templates.render(_table, message.text)));
         return messages;
+    }
+
+    /**
+     * The decision a 'once' message with a condition was first said at (see Message.require): it is said there, and
+     * at no later decision.  (Kept by decision, so that a step put up again for the same decision says it again.)
+     */
+    private final Map<Message, AwaitingDecision> _saidAt = new java.util.IdentityHashMap<>();
+    /** The decision a step is being put up for; null when it is not known. */
+    private AwaitingDecision _putUpFor;
+
+    /** Whether a message with a condition is said now: its condition holds, and a 'once' has not been said before. */
+    private boolean said(Message message) {
+        AwaitingDecision at = _putUpFor != null ? _putUpFor : _lastDecision;
+        if (message.once && _saidAt.containsKey(message) && _saidAt.get(message) != at)
+            return false;
+        if (!_table.Holds(message.require, _table.HumanPlayer()))
+            return false;
+        if (message.once)
+            _saidAt.putIfAbsent(message, at);
+        return true;
+    }
+
+    /** Whether a message of the scenario's closing panel is said: its condition, if it has one, holds as the game ends. */
+    public boolean saysAtTheEnd(Message message) {
+        return message.require == null || _table.Holds(message.require, _table.HumanPlayer());
     }
 
     /**
