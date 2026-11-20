@@ -89,10 +89,6 @@ gd-discord-embed {
   color: var(--theme-chat-time);
 }
 
-.gd-chat__message[data-kind='system'] .gd-chat__time {
-  color: var(--theme-chat-system);
-}
-
 /* .msg-content */
 .gd-chat__text {
   flex-grow: 10;
@@ -244,7 +240,8 @@ gd-discord-embed {
   border-width: 0 1px;
   overflow: hidden;
   font-family: var(--theme-font-widget);
-  font-size: 70%;
+  font-size: 1em;
+  line-height: 1.3;
   visibility: hidden;
 }
 
@@ -326,7 +323,8 @@ gd-discord-embed {
   background: var(--theme-chat-online-bg);
   color: var(--theme-chat-online-text);
   font-family: var(--theme-font-widget);
-  font-size: 70%;
+  /* a button in the jQuery UI widget: 1em (.ui-widget button), not the badges' 70% */
+  font-size: 1em;
   line-height: 1.3;
   cursor: pointer;
 }

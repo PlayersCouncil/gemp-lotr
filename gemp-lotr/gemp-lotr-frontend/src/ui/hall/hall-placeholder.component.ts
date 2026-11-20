@@ -19,7 +19,7 @@ const CONTENT: Readonly<Record<string, string>> = {
  * (`data: { hallTab: '<slug>' }`); a tab with sub-tabs shows them (gd-hall-sub-tabs), so each sub-tab already has
  * its address. Each tab's own routes file replaces its placeholder with its own component.
  *
- * DOM contract: `gd-hall-placeholder.gd-hall-placeholder` (`data-tab`, `data-part`) holding, for a tab with
+ * DOM contract: `gd-hall-placeholder.gd-hall-placeholder` (`data-tab`, `data-part`, `data-sub-tabs` when it has them) holding, for a tab with
  * sub-tabs, `gd-hall-sub-tabs`, then `div.gd-hall-placeholder__content` (`role=region`, `aria-label` "Help — coming
  * in 4.3"; empty).
  */
@@ -31,6 +31,7 @@ const CONTENT: Readonly<Record<string, string>> = {
     class: 'gd-hall-placeholder',
     '[attr.data-tab]': 'tab.slug',
     '[attr.data-part]': 'tab.part',
+    '[attr.data-sub-tabs]': "tab.subTabs.length > 0 ? '' : null",
   },
   template: `
     @if (tab.subTabs.length > 0 && tab.path !== null) {

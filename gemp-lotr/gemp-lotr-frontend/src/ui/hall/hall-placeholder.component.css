@@ -7,6 +7,12 @@
   min-height: 0;
 }
 
+/* A tab with sub-tabs is a jQuery UI tabs widget of its own: framed (.ui-widget-content) */
+:host([data-sub-tabs]) {
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+}
+
 .gd-hall-placeholder__content {
   flex: 1 1 auto;
   min-width: 0;
