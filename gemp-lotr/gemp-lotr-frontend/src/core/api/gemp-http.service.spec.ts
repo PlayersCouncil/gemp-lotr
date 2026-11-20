@@ -68,6 +68,17 @@ describe('GempHttp', () => {
     req.flush('<ok/>');
   });
 
+  it('gives the status of a successful POST with its body', async () => {
+    setUp();
+    const answer = firstValueFrom(
+      http.postForStatus('/login', { login: 'bob', password: 'x' }, { participant: false }),
+    );
+    const req = backend.expectOne('/gemp-lotr-server/login');
+    expect(req.request.serializeBody()).toBe('login=bob&password=x');
+    req.flush('<ok/>', { status: 202, statusText: 'Accepted' });
+    expect(await answer).toEqual({ status: 202, body: '<ok/>' });
+  });
+
   it('parses XML and JSON responses', async () => {
     setUp();
     const xml = firstValueFrom(http.postXml('/deck'));

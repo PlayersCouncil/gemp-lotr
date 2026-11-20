@@ -7,6 +7,12 @@ export const PAGE_QUERY_STRING = new InjectionToken<string>('PAGE_QUERY_STRING',
   factory: () => inject(DOCUMENT).defaultView?.location.search ?? '',
 });
 
+/** The page's #fragment (e.g. "#events/leagues"); a token so tests can supply their own. */
+export const PAGE_HASH = new InjectionToken<string>('PAGE_HASH', {
+  providedIn: 'root',
+  factory: () => inject(DOCUMENT).defaultView?.location.hash ?? '',
+});
+
 /** The page's path (e.g. "/gemp-lotr/ng/game"); a token so tests can supply their own. */
 export const PAGE_PATH = new InjectionToken<string>('PAGE_PATH', {
   providedIn: 'root',

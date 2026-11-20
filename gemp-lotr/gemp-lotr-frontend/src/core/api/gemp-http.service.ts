@@ -14,6 +14,12 @@ export interface RequestOptions {
   noCache?: boolean;
 }
 
+/** A successful answer with its HTTP status (see GempHttp.postForStatus). */
+export interface StatusResponse {
+  status: number;
+  body: string;
+}
+
 function contextOf(options: RequestOptions): HttpContext {
   return new HttpContext()
     .set(SEND_PARTICIPANT, options.participant !== false)
@@ -58,6 +64,20 @@ export class GempHttp {
       responseType: 'text',
       context: contextOf(options),
     });
+  }
+
+  /**
+   * POSTs like postText, but also gives the status of a successful answer, for the calls whose 2xx status means
+   * something (POST /login answers 202 when the account's password was reset).
+   */
+  postForStatus(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<StatusResponse> {
+    return this.http
+      .post(SERVER_URL + path, toFormParams(data), {
+        responseType: 'text',
+        observe: 'response',
+        context: contextOf(options),
+      })
+      .pipe(map((response) => ({ status: response.status, body: response.body ?? '' })));
   }
 
   getXml(path: string, data: FormData = {}, options: RequestOptions = {}): Observable<Document> {
