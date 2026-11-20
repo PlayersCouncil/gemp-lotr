@@ -65,4 +65,8 @@ export interface TournamentAnnouncement {
 export interface IgnoreResult {
   readonly message: string | null;
   readonly ignored: readonly string[] | null;
+  /** The list changed (a name was added or removed). */
+  readonly changed: boolean;
+  /** The name was refused (not a valid name, yourself, no such player): `message` says why. */
+  readonly error: boolean;
 }
