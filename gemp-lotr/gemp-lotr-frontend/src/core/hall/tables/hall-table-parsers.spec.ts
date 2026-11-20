@@ -100,8 +100,8 @@ describe('hall table parsers', () => {
   });
 
   it('links the game page with the participant an admin acts as', () => {
-    expect(gameUrl('g 1', null)).toBe('/gemp-lotr/game.html?gameId=g%201');
-    expect(gameUrl('g1', 'bob&co')).toBe('/gemp-lotr/game.html?gameId=g1&participantId=bob%26co');
+    expect(gameUrl('g 1', null)).toBe('/gemp-lotr/ng/game?gameId=g%201');
+    expect(gameUrl('g1', 'bob&co')).toBe('/gemp-lotr/ng/game?gameId=g1&participantId=bob%26co');
   });
 
   it('reads what a table call answered', () => {
