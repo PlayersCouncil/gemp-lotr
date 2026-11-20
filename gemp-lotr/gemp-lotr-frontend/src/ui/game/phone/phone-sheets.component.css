@@ -1,6 +1,6 @@
 @import './sheets/phone-sheet-parts.css';
 
-/* The phone layout's sheets: from the bottom on an upright phone, in the middle on tablets and sideways (G7) */
+/* The phone layout's sheets: from the bottom on a phone, in the middle on a tablet (G7) */
 
 /* A modal <dialog> over the whole screen (the top layer); its own backdrop and panel are drawn inside it */
 .gd-phone-sheet {
@@ -51,8 +51,7 @@
   color: var(--theme-text);
 }
 
-:host-context([data-device='tablet']) .gd-phone-sheet__panel,
-:host-context([data-device='sideways']) .gd-phone-sheet__panel {
+:host-context([data-device='tablet']) .gd-phone-sheet__panel {
   left: 50%;
   right: auto;
   bottom: 50%;
@@ -89,7 +88,7 @@
   font-size: 18px;
 }
 
-/* Rows of cards keep their height in a short sheet (sideways): the sheet scrolls instead */
+/* Rows of cards keep their height in a short sheet: the sheet scrolls instead */
 .gd-phone-sheet__body {
   min-height: 0;
   overflow-y: auto;

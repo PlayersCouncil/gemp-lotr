@@ -1,4 +1,7 @@
-/* The alert box (gameUi.js alertBox): 150px of text over a 30px row of buttons */
+/*
+ * The alert box (gameUi.js alertBox): 150px of text over a 30px row of buttons; measured from the box's foot, so a
+ * smaller box (the modern theme on a low screen) keeps its buttons and gives up text
+ */
 
 :host {
   display: block;
@@ -28,12 +31,12 @@
 .gd-game-alert__text {
   position: absolute;
   inset: 0 0 auto;
-  height: 150px;
+  height: calc(100% - 30px);
 }
 
 .gd-game-alert__buttons {
   position: absolute;
-  inset: 150px 0 auto;
+  inset: auto 0 0;
   height: 30px;
 }
 
@@ -94,4 +97,17 @@
   border-color: var(--theme-hover-border);
   background: var(--theme-hover-bg);
   color: var(--theme-text);
+}
+
+/* The page may draw the alert box smaller as a whole (--gd-panel-zoom: a low screen in the modern theme) */
+:host > * {
+  zoom: var(--gd-panel-zoom, 1);
+}
+
+/* A low screen in the modern theme (the page's smallest alert box): a longer question scrolls */
+@media (max-height: 520px) {
+  :host-context(html[data-theme='modern']) .gd-game-alert__text {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
 }

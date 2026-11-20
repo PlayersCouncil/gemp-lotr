@@ -289,3 +289,15 @@
 .gd-button[data-icon]:focus::before {
   background-image: var(--theme-icons-hover);
 }
+
+/* The page may draw the tab box smaller as a whole (--gd-panel-zoom: a low screen in the modern theme) */
+:host > * {
+  zoom: var(--gd-panel-zoom, 1);
+}
+
+/* A low screen in the modern theme: the switches without their words (their titles say what they do) */
+@media (max-height: 520px) {
+  :host-context(html[data-theme='modern']) .gd-game-tabs__extra > span {
+    display: none;
+  }
+}

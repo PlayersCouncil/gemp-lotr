@@ -315,18 +315,3 @@
   scroll-snap-type: y proximity;
   overscroll-behavior-y: contain;
 }
-
-/* The hand held sideways: its cards wrap into rows, scrolled up and down in the hand's panel */
-:host-context([data-device='sideways'] gd-phone-hand) {
-  height: 100%;
-}
-
-:host-context([data-device='sideways'] gd-phone-hand) .gd-phone-cards__scroll {
-  height: 100%;
-  box-sizing: border-box;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scroll-snap-type: none;
-}

@@ -22,7 +22,7 @@ import { SwipeDownDirective } from './swipe-down.directive';
  * a player's piles, the menu, the chat with the game's messages, the settings (one column, finger-sized rows), the
  * game's information and the confirmations to concede or cancel; and over them all, a card's actions to choose from.
  * Closing (✕, ‹ when it goes back, Escape on the page, the backdrop) shows the sheet below as it was, scrolled to the
- * same place. Upright phones get them from the bottom; tablets and phones held sideways in the middle. This is the
+ * same place. Phones get them from the bottom; tablets in the middle. This is the
  * sheets' frame; what each shows is its own component (sheets/).
  *
  * DOM contract: `gd-phone-sheets` holding, while one is open, `dialog.gd-phone-sheet` (a modal: `data-sheet` the kind,

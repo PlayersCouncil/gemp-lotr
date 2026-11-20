@@ -15,9 +15,6 @@ export const SIDE_BY_SIDE_QUERY = '(orientation: landscape)';
 /** A screen at least a small tablet's width (the game's phone layout gives a tablet bigger cards). */
 export const TABLET_QUERY = '(min-width: 600px)';
 
-/** A screen high enough for a tablet's cards when held sideways (a phone's is lower). */
-export const TALL_QUERY = '(min-height: 600px)';
-
 /**
  * Whether the page uses its compact layout: the modern theme on a portrait, narrow or low screen (COMPACT_QUERY), and
  * whether it puts the halves side by side (a landscape screen). The classic theme never does, as the legacy page
@@ -29,7 +26,6 @@ export class CompactLayout {
   private readonly narrow = signal(false);
   private readonly landscape = signal(false);
   private readonly wide = signal(false);
-  private readonly tall = signal(false);
 
   readonly active = computed(() => this.theme() === 'modern' && this.narrow());
   /** The compact layout on a landscape screen: the deck left, the collection right. */
@@ -48,11 +44,9 @@ export class CompactLayout {
    */
   readonly gameActive = computed(() => this.theme() === 'modern' && this.narrow() && !this.landscape());
   /** What the game's phone layout is shown on (as `device`, for gameActive). */
-  readonly gameDevice = computed<'phone' | 'sideways' | 'tablet' | null>(() =>
-    !this.gameActive() ? null : this.landscape() ? 'sideways' : this.wide() ? 'tablet' : 'phone',
+  readonly gameDevice = computed<'phone' | 'tablet' | null>(() =>
+    !this.gameActive() ? null : this.wide() ? 'tablet' : 'phone',
   );
-  /** Held sideways on a screen a tablet's height: the game's cards at a tablet's size. */
-  readonly tallSideways = computed(() => this.gameDevice() === 'sideways' && this.tall());
 
   constructor() {
     const window = inject(DOCUMENT).defaultView;
@@ -67,6 +61,5 @@ export class CompactLayout {
     follow(COMPACT_QUERY, this.narrow);
     follow(SIDE_BY_SIDE_QUERY, this.landscape);
     follow(TABLET_QUERY, this.wide);
-    follow(TALL_QUERY, this.tall);
   }
 }

@@ -52,7 +52,7 @@ describe('the game on a phone (G7)', () => {
   /** The page with the compact layout on (the modern theme on a phone: CompactLayout) or off. */
   async function open(
     body: string,
-    { compact = true, device = 'phone' as 'phone' | 'tablet' | 'sideways', query = '?gameId=7' } = {},
+    { compact = true, device = 'phone' as 'phone' | 'tablet', query = '?gameId=7' } = {},
   ) {
     cues = { vibrate: vi.fn(), play: vi.fn(), toggleFullscreen: vi.fn() };
     TestBed.configureTestingModule({
@@ -82,7 +82,6 @@ describe('the game on a phone (G7)', () => {
             device: signal(compact ? device : null),
             gameActive: signal(compact),
             gameDevice: signal(compact ? device : null),
-            tallSideways: signal(false),
           },
         },
       ],
@@ -223,28 +222,6 @@ describe('the game on a phone (G7)', () => {
     TestBed.resetTestingModule();
     const phone = await open(game());
     expect(half(phone.el)).toEqual([]);
-  });
-
-  it("held sideways, hides the hand by the keyboard's Down and shows it by Up; its cards keep one size", async () => {
-    const { el, fixture, stable } = await open(game(), { device: 'sideways' });
-    const phone = fixture.debugElement.injector.get(PhoneSettings);
-    const size = () =>
-      (el.querySelector('gd-game-phone') as HTMLElement).style.getPropertyValue('--gd-phone-hand-card');
-    const divider = el.querySelector<HTMLElement>('gd-phone-divider');
-    const key = async (key: string) => {
-      divider?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
-      await stable();
-    };
-    const before = size();
-    expect(phone.handHidden()).toBe(false);
-    await key('ArrowDown');
-    expect(phone.handHidden()).toBe(true);
-    await key('ArrowUp');
-    expect(phone.handHidden()).toBe(false);
-    // Up again: the hand doesn't grow, nor do its cards
-    await key('ArrowUp');
-    expect(size()).toBe(before);
-    document.cookie = 'gempGameSplit=; path=/; max-age=0';
   });
 
   it('shows the pre-game information and asks the bid in the divider before the players are known', async () => {
@@ -1001,7 +978,7 @@ describe('the game on a phone (G7)', () => {
       '<ge type="GS" fellowshipStrength="0" shadowStrength="0"><playerZones name="alice" HAND="2"/></ge>' +
         '<ge type="M" message="bob played &lt;div class=\'cardHint\' value=\'1_7\'&gt;Gimli&lt;/div&gt;"/>',
     ).replace('<ge type="P" participantId="alice"', '<ge type="P" participantId="carol"');
-    for (const device of ['phone', 'sideways'] as const) {
+    for (const device of ['phone', 'tablet'] as const) {
       TestBed.resetTestingModule();
       const { el, fixture } = await open(watched, { device });
       const settings = fixture.debugElement.injector.get(PhoneSettings);
@@ -1026,7 +1003,7 @@ describe('the game on a phone (G7)', () => {
     }
   });
 
-  it('drags the divider: down hides the hand, up shows it; held sideways a drag down hides it and up shows it', async () => {
+  it('drags the divider: down hides the hand, up shows it, on a phone and a tablet', async () => {
     const drag = (divider: HTMLElement, from: number, to: number) => {
       const at = (type: string, clientY: number) =>
         divider.dispatchEvent(new PointerEvent(type, { bubbles: true, button: 0, clientY, pointerId: 1 }));
@@ -1034,7 +1011,7 @@ describe('the game on a phone (G7)', () => {
       at('pointermove', to);
       at('pointerup', to);
     };
-    for (const device of ['phone', 'sideways'] as const) {
+    for (const device of ['phone', 'tablet'] as const) {
       TestBed.resetTestingModule();
       const { el, stable, fixture } = await open(game(), { device });
       const settings = fixture.debugElement.injector.get(PhoneSettings);
@@ -1051,12 +1028,6 @@ describe('the game on a phone (G7)', () => {
       expect(phone.hasAttribute('data-hand-hidden')).toBe(false);
       expect(el.querySelector('gd-phone-hand')).not.toBeNull();
       expect(settings.hand()).not.toBe('hidden');
-      // A small drag held sideways changes nothing
-      if (device === 'sideways') {
-        drag(divider, 300, 320);
-        await stable();
-        expect(phone.hasAttribute('data-hand-hidden')).toBe(false);
-      }
     }
   });
 
@@ -1107,13 +1078,21 @@ describe('the game on a phone (G7)', () => {
     expect(controls.querySelector<HTMLButtonElement>('[data-replay="faster"]')?.disabled).toBe(true);
     const play = controls.querySelector<HTMLElement>('[data-replay="play"]');
     expect(play?.getAttribute('aria-label')).toBe('Play');
+    expect(controls.hasAttribute('data-compact')).toBe(true);
+    expect(controls.hasAttribute('data-playing')).toBe(false);
     play?.click();
+    await stable();
+    // Playing: folded to the small pause button
+    expect(controls.hasAttribute('data-playing')).toBe(true);
+    expect(play?.getAttribute('aria-label')).toBe('Pause');
     for (let i = 0; i < 100 && !el.querySelector('gd-game-replay')?.hasAttribute('data-replay-done'); i++) {
       await new Promise((resolve) => setTimeout(resolve, 20));
       await stable();
     }
     expect(el.querySelector('gd-phone-table')).not.toBeNull();
     expect(el.querySelector('gd-game-replay')?.hasAttribute('data-replay-done')).toBe(true);
+    // Played out: the whole row back
+    expect(el.querySelector('gd-game-replay')?.hasAttribute('data-playing')).toBe(false);
     expect(el.querySelector('[data-game="twilight"]')?.textContent).toContain('3');
     document.cookie = 'animation-speed=; path=/; max-age=0';
   });

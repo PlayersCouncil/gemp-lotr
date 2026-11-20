@@ -37,6 +37,11 @@
   --theme-frame-shadow: var(--theme-game-ui-frame-shadow);
   --u: calc((var(--gd-window-height, 100vh) - 35px) / 49);
   --tabs: max(175px, 10 * var(--u));
+  /* The alert box's height in its border (the legacy 180px; smaller on a low screen in the modern theme) */
+  --alert: 182px;
+  /* The left columns: the adventure path's and the state panel's widths (the legacy 152px and 147px in their borders) */
+  --path-w: 152px;
+  --state-w: 147px;
   /* The rows' shares of the height */
   --r1: 5;
   --r2: 9;
@@ -49,7 +54,7 @@
   inset: 0;
   display: grid;
   box-sizing: border-box;
-  grid-template-columns: 152px 147px minmax(0, 1fr);
+  grid-template-columns: var(--path-w) var(--state-w) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) 36px calc(var(--tabs) + 2px);
   grid-template-areas:
     'path state table'
@@ -86,6 +91,53 @@
   --r5: 6;
 }
 
+/*
+ * A low screen (a phone held sideways, which gets this layout in the modern theme, the owner 2026-11-20): the legacy
+ * sizes left the state panel no height at all (the alert box over it). The modern theme gives the chat box and the alert
+ * box less height, and the left columns much less width: the sites smaller, one under the other in a column that
+ * scrolls; the stats bar, the state panel and the alert box drawn smaller as a whole (--gd-panel-zoom, their own
+ * layout kept), the state panel scrolling. Classic keeps game.html's sizes.
+ */
+@media (max-height: 520px) {
+  :host-context(html[data-theme='modern']) {
+    --tabs: 104px;
+    /* The alert box as small as it goes (the owner, 2026-11-20): two lines of the question over its buttons, the rest
+       of the column for the state panel */
+    --alert: 54px;
+    --path-w: 76px;
+    --state-w: 104px;
+  }
+
+  :host-context(html[data-theme='modern']) .gd-game__path {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* The sites as high as they are: the column scrolls */
+  :host-context(html[data-theme='modern']) .gd-game__path > gd-game-path {
+    bottom: auto;
+  }
+
+  /* Each panel drawn at its column's share of the legacy width */
+  :host-context(html[data-theme='modern']) .gd-game__stats {
+    --gd-panel-zoom: calc(76 / 152);
+  }
+
+  :host-context(html[data-theme='modern']) :is(.gd-game__state, .gd-game__alert) {
+    --gd-panel-zoom: calc(104 / 147);
+  }
+
+  :host-context(html[data-theme='modern']) .gd-game__state {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* The tab box under the columns: a little smaller, its switches without their words, the chat as wide as the box */
+  :host-context(html[data-theme='modern']) .gd-game__tabs {
+    --gd-panel-zoom: 0.85;
+  }
+}
+
 .gd-game__path,
 .gd-game__row,
 .gd-game__fight {
@@ -116,7 +168,7 @@
   position: absolute;
   left: 5px;
   top: 5px;
-  width: 152px;
+  width: var(--path-w);
   height: calc(var(--gd-window-height, 100vh) - 52px - var(--tabs));
 }
 
@@ -137,38 +189,38 @@
   position: absolute;
   left: 5px;
   top: calc(var(--gd-window-height, 100vh) - 44px - var(--tabs));
-  width: 152px;
+  width: var(--path-w);
   height: 36px;
 }
 
 /* The state panel over the alert box (180px in its border) */
 .gd-game__state {
   position: absolute;
-  left: 160px;
+  left: calc(var(--path-w) + 8px);
   top: 5px;
-  width: 147px;
-  height: calc(var(--gd-window-height, 100vh) - 198px - var(--tabs));
+  width: var(--state-w);
+  height: calc(var(--gd-window-height, 100vh) - var(--alert) - 16px - var(--tabs));
 }
 
 .gd-game__alert {
   position: absolute;
-  left: 160px;
-  top: calc(var(--gd-window-height, 100vh) - 190px - var(--tabs));
-  width: 147px;
-  height: 182px;
+  left: calc(var(--path-w) + 8px);
+  top: calc(var(--gd-window-height, 100vh) - var(--alert) - 8px - var(--tabs));
+  width: var(--state-w);
+  height: var(--alert);
 }
 
 /* Framed for a waiting choice, the legacy box kept its inner size: it grew by the wider frame, right and down */
 .gd-game__alert[data-frame] {
-  width: 149px;
-  height: 184px;
+  width: calc(var(--state-w) + 2px);
+  height: calc(var(--alert) + 2px);
 }
 
 .gd-game__tabs {
   position: absolute;
   left: 5px;
   top: calc(var(--gd-window-height, 100vh) - 5px - var(--tabs));
-  width: 302px;
+  width: calc(var(--path-w) + var(--state-w) + 3px);
   height: calc(var(--tabs) - 5px);
 }
 
