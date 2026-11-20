@@ -1,0 +1,83 @@
+/* The Board tab's adventure path (the legacy .sa-sites with its .sa-card rows and .sa-sitename) */
+
+:host {
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-section-rule);
+}
+
+.gd-author-board__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+gd-author-check {
+  display: block;
+  margin: 2px 0;
+}
+
+.gd-author-board-path__seat {
+  margin-top: 7px;
+  padding: 1px 0;
+  border-bottom: 1px solid var(--theme-game-author-place-rule);
+  color: var(--theme-game-author-quiet);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gd-author-board-path__site {
+  padding: 3px 0;
+  border-bottom: 1px solid var(--theme-game-author-row-rule);
+}
+
+.gd-author-board-path__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-author-board-path__number,
+.gd-author-board-path__alias {
+  margin-right: 4px;
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
+
+.gd-author-board-path__alias {
+  margin-left: 6px;
+}
+
+.cardHint {
+  border-bottom: 1px dotted var(--theme-game-author-hint-rule);
+  cursor: help;
+}
+
+.gd-author-board-path__id {
+  margin-left: 4px;
+  color: var(--theme-game-author-quiet);
+  font-size: 12px;
+}
+
+.gd-author-board-path__name .gd-author-button {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 11px;
+}
+
+.gd-author-board-path__controls {
+  display: flex;
+  margin-top: 3px;
+}
+
+.gd-author-board-path__controls .gd-author-button,
+:host > .gd-author-button {
+  margin: 3px 4px 0 0;
+}
+
+gd-author-card-search {
+  margin: 3px 0 2px;
+}

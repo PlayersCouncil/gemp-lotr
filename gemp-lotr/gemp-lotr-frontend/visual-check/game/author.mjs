@@ -17,9 +17,10 @@ import { argument, closeDraft, OUT, password, Seat, server } from './author/lib.
 import { pairOf } from './players.mjs';
 import { checks as shell } from './author/shell.mjs';
 import { checks as step } from './author/step.mjs';
+import { checks as board } from './author/board.mjs';
 
 /** Every check by name; a part's file adds its own here. */
-const CHECKS = { ...shell, ...step };
+const CHECKS = { ...shell, ...step, ...board };
 
 const ONLY = argument('only', '').split(',').filter(Boolean);
 const THEMES = argument('theme', 'classic,modern').split(',').filter(Boolean);

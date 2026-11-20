@@ -7,7 +7,7 @@ export type AuthorOption = string | readonly [value: string, label: string];
  * A native select of the panel's, from a list of options; says the value chosen. A value that isn't one of the
  * options shows the first.
  *
- * DOM contract: `select.gd-author-input` (`aria-label`) with an `option` per option.
+ * DOM contract: `select.gd-author-input` (`aria-label`, `title`) with an `option` per option.
  */
 @Component({
   selector: 'gd-author-select',
@@ -16,6 +16,7 @@ export type AuthorOption = string | readonly [value: string, label: string];
     <select
       class="gd-author-input"
       [attr.aria-label]="label() || null"
+      [attr.title]="hint() || null"
       [disabled]="disabled()"
       (change)="changed.emit($any($event.target).value)"
     >
@@ -32,6 +33,8 @@ export class AuthorSelectComponent {
   readonly label = input('');
   readonly disabled = input(false);
   readonly changed = output<string>();
+  /** Its explanation, as its tooltip. */
+  readonly hint = input('');
 
   protected readonly choices = computed(() =>
     this.options().map((option) =>

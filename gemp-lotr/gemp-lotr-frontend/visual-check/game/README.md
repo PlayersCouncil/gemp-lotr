@@ -414,6 +414,15 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
 - **step-block**: a step turned into a block (its Until guessed), and a step added on the block's page.
 - **step-fresh**: a change to a step the game has been through brings a fresh game; the page comes back on the same
   step and tab, the focus in the field that had it.
+- **board-add**: a card found by name in the Board tab and added to the setup's hand: a fresh game, the card on its
+  board and in the draft's `cards` and `setup`.
+- **board-now**: the twilight set on the board as it stands: the table's twilight pool shows it, in the same game.
+- **board-rename**: a card renamed (a bad name refused first): a fresh game, and the change gathered about it says its
+  new name.
+- **board-path**: a site of the path changed by name: both seats' paths, in a fresh game.
+- **board-keep**: changes gathered are kept when the page loads again; Reset lets go of them.
+- **board-refused**: a submit refused part-way: to the setup, the card goes in, the board's changes stay gathered and
+  the problem is said on the fresh game's page; to the board as it stands, the rest is let go of and the panel says so.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up

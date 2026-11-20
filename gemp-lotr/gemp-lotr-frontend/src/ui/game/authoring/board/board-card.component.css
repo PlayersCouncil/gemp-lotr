@@ -1,0 +1,83 @@
+/* A card of the Board tab (the legacy .sa-card with .sa-cardname, .sa-alias.cardHint, .sa-tag, .sa-count) */
+
+:host {
+  display: block;
+}
+
+.gd-author-board-card {
+  padding: 3px 0;
+  border-bottom: 1px solid var(--theme-game-author-row-rule);
+}
+
+/* a card with a change gathered and not yet sent */
+.gd-author-board-card[data-changed] {
+  padding-left: 4px;
+  border-left: 3px solid var(--theme-game-author-changed-mark);
+}
+
+.gd-author-board-card[data-removing] .gd-author-board-card__name {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.gd-author-board-card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* its name in the scenario: the pointer on it shows the card */
+.gd-author-board-card__alias {
+  border-bottom: 1px dotted var(--theme-game-author-hint-rule);
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+  cursor: help;
+}
+
+.gd-author-board-card__name .gd-author-button {
+  margin: 0 0 0 6px;
+  padding: 0 4px;
+  font-size: 11px;
+}
+
+.gd-author-board-card__tag {
+  margin-left: 6px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--theme-game-author-tag-bg);
+  color: var(--theme-game-author-tag-text);
+  font-size: 10px;
+}
+
+.gd-author-board-card__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 2px;
+  margin: 3px 0 0;
+}
+
+.gd-author-board-card__controls .gd-author-button {
+  min-width: 22px;
+  margin: 0 2px 2px 0;
+  padding: 0 4px;
+}
+
+.gd-author-board-card__controls select.gd-author-input {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 150px;
+  margin: 0 4px 2px 0;
+  padding: 1px 2px;
+}
+
+.gd-author-board-card__count {
+  min-width: 22px;
+  text-align: center;
+  font-size: 12px;
+}
+
+gd-author-card-search {
+  margin: 3px 0 2px;
+}

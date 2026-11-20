@@ -1,0 +1,52 @@
+/* The Board tab's Submit and Reset, kept in view as the tab is scrolled, and what it has gathered under them
+   (the legacy .sa-boardbar and .sa-gathered) */
+
+:host {
+  position: sticky;
+  top: -6px;
+  z-index: 3;
+  display: block;
+  margin: -6px -8px 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--theme-game-author-edge);
+  background: var(--theme-game-author-bg);
+}
+
+.gd-author-board-gathered__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.gd-author-board-gathered__buttons .gd-author-note {
+  margin: 0 0 3px;
+}
+
+.gd-author-board-gathered__list {
+  max-height: 76px;
+  overflow-y: auto;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--theme-game-author-pending-text);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 11px;
+}
+
+.gd-author-board-gathered__line {
+  display: flex;
+  align-items: center;
+}
+
+.gd-author-board-gathered__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-author-board-gathered__line .gd-author-button {
+  margin: 0 0 0 4px;
+  padding: 0 5px;
+}

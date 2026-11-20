@@ -78,6 +78,8 @@ export const TARGETS = [
   'src/core/game/authoring/step-model.ts',
   'src/core/game/authoring/send-queue.ts',
   'src/core/game/authoring/skirmish-page.ts',
+  'src/core/game/authoring/board-queue.ts',
+  'src/core/game/authoring/board-changes.service.ts',
   // Scenarios on the game page: the script's events, what a step allows, the guide, and where its bubble goes
   'src/core/game/scenario/bubble-placement.ts',
   'src/core/game/scenario/scenario-api.service.ts',
