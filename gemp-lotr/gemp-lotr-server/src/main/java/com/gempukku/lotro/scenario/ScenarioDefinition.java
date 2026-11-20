@@ -433,6 +433,11 @@ public final class ScenarioDefinition {
          * every decision that fits it (and shows its messages at the first).
          */
         public boolean once;
+        /**
+         * Answers the step's 'allow' has to refuse, for the headless runner to prove (see Refusal).  A live game
+         * takes no notice of them.
+         */
+        public List<Refusal> refuses = new ArrayList<>();
 
         public boolean repeats() {
             return until != null;
@@ -459,6 +464,17 @@ public final class ScenarioDefinition {
             return "step " + label() + (when.source.isEmpty() ? "" : " [when: " + when.source + "]");
         }
     }
+
+    /**
+     * An answer that a step's 'allow' must refuse: "refuses: choose(boromir)".  The runner checks, at the step's
+     * decision, that the game offers the answer and that the step does not allow it (the page would not let the
+     * player give it).
+     * @param at Which of the step's decisions it is about, counting from 1 ("refuses: 2: choose(boromir)", for the
+     *           second arrow of an archery step that repeats); 0 for every decision of the step, of which the game
+     *           has to offer it at one at least.
+     * @param source The line as it was written, its "2: " included.
+     */
+    public record Refusal(int at, Answer answer, String source) { }
 
     public enum OffScriptResult { RESTART, FAIL, CONTINUE }
 

@@ -2729,6 +2729,7 @@ public class ScenarioAuthoring {
                     described.put("step", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().number : null);
                     described.put("sub", ruling != null && ruling.decision() == decision && ruling.step() != null ? ruling.step().sub : 0);
                     described.put("held", !human && live.Held() != null && live.Held().decision() == decision);
+                    described.put("refuses", human && ruling != null && ruling.decision() == decision ? refusalsNow(sitting, ruling) : List.of());
                 }
                 waiting.put(human ? "human" : "opponent", described);
             }
@@ -2765,6 +2766,40 @@ public class ScenarioAuthoring {
             state.put("problems", live.Problems());
             return state;
         });
+    }
+
+    /**
+     * What the step in hand refuses, as each stands at the decision in front of the person (see ScenarioRunner, which
+     * proves them): [{refusal, at, now}], 'now' being "refused", "allowed" (the step's allow would let it through: the
+     * runner fails), "notOffered" (the game does not offer it here) or "elsewhere" (it is about another of the step's
+     * decisions).
+     */
+    private static List<Map<String, Object>> refusalsNow(Sitting sitting, Ruling ruling) {
+        List<Map<String, Object>> all = new ArrayList<>();
+        Step step = ruling.step();
+        if (step == null)
+            return all;
+        ScenarioDirector director = sitting.live.Session().Director();
+        int at = director.timesFor(step) + 1;
+        for (ScenarioDefinition.Refusal refusal : step.refuses) {
+            String now;
+            if (refusal.at() != 0 && refusal.at() != at) {
+                now = "elsewhere";
+            } else {
+                try {
+                    List<String> compiled = AnswerCompiler.compileAll(sitting.live.Table(), ruling.decision(), refusal.answer());
+                    now = compiled.stream().anyMatch(one -> ScenarioDirector.allowsAnswer(ruling.shown(), ruling.decision(), one)) ? "allowed" : "refused";
+                } catch (ScenarioScriptException exp) {
+                    now = "notOffered";
+                }
+            }
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("refusal", refusal.source());
+            json.put("at", refusal.at());
+            json.put("now", now);
+            all.add(json);
+        }
+        return all;
     }
 
     /**

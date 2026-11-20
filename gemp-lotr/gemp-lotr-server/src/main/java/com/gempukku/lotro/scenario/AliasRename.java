@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
  *
  *     cards, ringBearer, ring, setup,           the name itself
  *     opponent.leftovers, opponent.plays
- *     rng, do, answer, allow, an order's answer the name as a word inside the (brackets) of a term: play(x), choose(x, y),
- *                                               assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
+ *     rng, do, answer, allow, refuses,          the name as a word inside the (brackets) of a term: play(x), choose(x, y),
+ *     an order's answer                         assign(x: y + z), move(x, freeps.hand).  What a term quotes from the
  *                                               game (text(...), option(...), the words after the card in use(x, ...))
  *                                               is left as it is.
  *     when, until, skipWhen                     offers(x), inSkirmish(x) (or fighting(x)), after(x)
@@ -159,7 +159,7 @@ final class AliasRename {
         for (String part : List.of("when", "until", "skipWhen"))
             if (step.get(part) != null)
                 step.set(part, when(step.get(part)));
-        for (String part : List.of("do", "answer"))
+        for (String part : List.of("do", "answer", "refuses"))
             if (step.get(part) != null)
                 step.set(part, terms(step.get(part)));
         JsonValue allow = step.get("allow");

@@ -280,6 +280,8 @@ public final class ScenarioWriter {
             json.add("allow", allow(step.allow));
         if (!step.answers.isEmpty())
             json.add("answer", answers(step.answers));
+        if (!step.refuses.isEmpty())
+            json.add("refuses", refusals(step.refuses));
         if (step.end != null) {
             if (step.end.messages.isEmpty()) {
                 json.add("end", lower(step.end.result));
@@ -356,6 +358,18 @@ public final class ScenarioWriter {
         StringJoiner terms = new StringJoiner(", ");
         answers.forEach(answer -> terms.add(answer.source()));
         return terms.toString();
+    }
+
+    /** What a step refuses: on one line where none is numbered, otherwise one line each ("2: choose(boromir)"). */
+    private static JsonValue refusals(List<Refusal> refusals) {
+        if (refusals.stream().allMatch(refusal -> refusal.at() == 0)) {
+            StringJoiner terms = new StringJoiner(", ");
+            refusals.forEach(refusal -> terms.add(refusal.source()));
+            return JsonValue.valueOf(terms.toString());
+        }
+        JsonArray lines = new JsonArray();
+        refusals.forEach(refusal -> lines.add(refusal.source()));
+        return lines;
     }
 
     private static JsonValue allow(Allow allow) {

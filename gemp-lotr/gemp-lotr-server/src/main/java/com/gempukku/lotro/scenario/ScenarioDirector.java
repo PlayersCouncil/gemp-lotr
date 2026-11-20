@@ -758,6 +758,64 @@ public class ScenarioDirector {
         return byRule(player, decision);
     }
 
+    /* ---- what the player may give, as the page judges it ---- */
+
+    /** How many of its decisions a step has answered so far (the one in hand not counted). */
+    public int timesFor(Step step) {
+        return times(step);
+    }
+
+    /**
+     * Whether a step lets the player give an answer, judged the way the person's page judges a click (see
+     * gemp-lotr-frontend's scenario-plan.ts): a live game refuses nothing itself, it sends the page the answers the
+     * step allows and the page lets through only those.  Cards chosen and minions assigned are a set (whatever order
+     * they are clicked in); a Pass is allowed if passing is; anything else is allowed if it is one of the answers.
+     * @param shown What the step shows for the decision; one that restricts nothing allows everything.
+     * @param answer The answer, as the game takes it.
+     */
+    public static boolean allowsAnswer(Presentation shown, AwaitingDecision decision, String answer) {
+        if (shown == null || shown.allowed() == null)
+            return true;
+        switch (decision.getDecisionType()) {
+            case CARD_SELECTION, ARBITRARY_CARDS -> {
+                Set<String> chosen = parts(answer, ",");
+                if (chosen.isEmpty())
+                    return shown.passAllowed() || shown.allowed().contains("");
+                return shown.allowed().stream().anyMatch(one -> parts(one, ",").equals(chosen));
+            }
+            case ASSIGN_MINIONS -> {
+                Set<String> pairs = pairings(answer);
+                if (pairs.isEmpty())
+                    return shown.passAllowed() || shown.allowed().stream().anyMatch(one -> pairings(one).isEmpty());
+                return shown.allowed().stream().anyMatch(one -> pairings(one).equals(pairs));
+            }
+            default -> {
+                if (answer.isEmpty() && shown.passAllowed())
+                    return true;
+                return shown.allowed().contains(answer);
+            }
+        }
+    }
+
+    private static Set<String> parts(String answer, String separator) {
+        Set<String> parts = new java.util.HashSet<>();
+        for (String part : answer.split(separator))
+            if (!part.trim().isEmpty())
+                parts.add(part.trim());
+        return parts;
+    }
+
+    /** An assignment as the game takes it ("12 30 31,14 32"), as the pairings the page has the player make: "30>12". */
+    private static Set<String> pairings(String answer) {
+        Set<String> pairs = new java.util.HashSet<>();
+        for (String group : answer.split(",")) {
+            String[] ids = group.trim().split(" +");
+            for (int i = 1; i < ids.length; i++)
+                pairs.add(ids[i] + ">" + ids[0]);
+        }
+        return pairs;
+    }
+
     /* ---- the opponent's orders, and what it does by rule ---- */
 
     /**

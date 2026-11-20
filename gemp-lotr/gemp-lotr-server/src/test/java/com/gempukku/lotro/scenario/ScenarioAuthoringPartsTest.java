@@ -25,10 +25,11 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * The authoring tool and the opponent: what the state says about its orders and its rules, and the changes the
- * Opponent tab makes to them one at a time.
+ * The authoring tool and the parts of a scenario added for the requests of November 2026: what the state says about
+ * the opponent's orders and rules and the changes the Opponent tab makes to them one at a time; a step's refusals;
+ * the kind of decision that is waiting; messages with conditions.
  */
-public class ScenarioAuthoringOpponentTest {
+public class ScenarioAuthoringPartsTest {
     private static final String AUTHOR = "Tester";
 
     @Rule
@@ -45,8 +46,8 @@ public class ScenarioAuthoringOpponentTest {
         canon = new File(users, "public");
         canon.mkdirs();
         ScenarioLibrary library = new ScenarioLibrary(temp.newFolder("shipped"), users, ScenarioTesting.library(),
-                ScenarioAuthoringOpponentTest::format, null, 0, System::currentTimeMillis);
-        authoring = new ScenarioAuthoring(library, ScenarioTesting.library(), ScenarioAuthoringOpponentTest::format, null, (who, live) -> {
+                ScenarioAuthoringPartsTest::format, null, 0, System::currentTimeMillis);
+        authoring = new ScenarioAuthoring(library, ScenarioTesting.library(), ScenarioAuthoringPartsTest::format, null, (who, live) -> {
             LotroGameMediator mediator = new LotroGameMediator(String.valueOf(games.size() + 1), live, LotroServer.AUTHORING_TIMER, false);
             mediator.startGame();
             games.add(mediator);
@@ -109,6 +110,10 @@ public class ScenarioAuthoringOpponentTest {
     }
 
     private void open(String opponent) throws Exception {
+        open(opponent, "");
+    }
+
+    private void open(String opponent, String steps) throws Exception {
         Files.createDirectories(new File(canon, "tutorials").toPath());
         Files.writeString(new File(canon, "tutorials/orders.hjson").toPath(), ScenarioTesting.scenario("""
                 	opponent: {
@@ -122,7 +127,7 @@ public class ScenarioAuthoringOpponentTest {
                 			hand: runner1, runner2
                 		}
                 	}
-                """.replace("OPPONENT", opponent)).replace("id: test", "id: orders"), StandardCharsets.UTF_8);
+                """.replace("OPPONENT", opponent) + steps).replace("id: test", "id: orders"), StandardCharsets.UTF_8);
         authoring.open(player, "orders", true);
     }
 
@@ -254,5 +259,27 @@ public class ScenarioAuthoringOpponentTest {
         authoring.edit(player, "{\"opponent\": {\"set\": {\"fallback\": \"sandbox\"}}}", null);
         JSONObject opponent = opponent();
         assertEquals("sandbox", opponent.getString("fallback"));
+    }
+
+    @Test
+    public void aStepsRefusalsAreSetAndSaidHowTheyStand() throws Exception {
+        open("\t\tfallback: pass", """
+                	steps: [
+                		{
+                			when: freeps, action, phase(fellowship)
+                			allow: play(aragorn)
+                		}
+                	]
+                """);
+        JSONObject human = state().getJSONObject("waiting").getJSONObject("human");
+        assertTrue(human.getJSONArray("refuses").isEmpty());
+        String uid = state().getJSONArray("uids").getString(0);
+        authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + uid + "\", \"set\": {\"refuses\": \"pass, play(aragorn)\"}}]}", null);
+        JSONObject state = state();
+        assertEquals("pass, play(aragorn)", state.getJSONObject("draft").getJSONArray("steps").getJSONObject(0).getString("refuses"));
+        JSONArray refuses = state.getJSONObject("waiting").getJSONObject("human").getJSONArray("refuses");
+        assertEquals("pass", refuses.getJSONObject(0).getString("refusal"));
+        assertEquals("refused", refuses.getJSONObject(0).getString("now"));
+        assertEquals("allowed", refuses.getJSONObject(1).getString("now"));
     }
 }

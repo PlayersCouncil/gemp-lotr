@@ -394,7 +394,7 @@ public final class ScenarioParser {
             throw new ScenarioFormatException(place + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
         String context = parent == null ? "step " + step.label() : place;
         checkFields(object, context, "id", "note", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
-                "messages", "allow", "answer", "end", "anyOrder", "once", "skirmishes");
+                "messages", "allow", "answer", "end", "anyOrder", "once", "skirmishes", "refuses");
         step.note = optionalString(object, "note", null, context);
         step.once = optionalBoolean(object, "once", false, context);
         if (step.once && parent == null)
@@ -442,6 +442,9 @@ public final class ScenarioParser {
             for (String line : lines(object.get("answer"), context + ".answer"))
                 for (Terms.Term term : Terms.parse(line, context + ".answer"))
                     step.answers.add(parseAnswer(def, term, context + ".answer"));
+
+        if (object.get("refuses") != null)
+            step.refuses = parseRefusals(def, step, object.get("refuses"), context + ".refuses");
 
         JsonValue end = object.get("end");
         if (end != null) {
@@ -545,6 +548,38 @@ public final class ScenarioParser {
                 throw new ScenarioFormatException(where + ": a pause's messages are read one after another; they cannot wait for the decision ('advance: decision') or for a moment in answering it ('on')");
         }
         return step;
+    }
+
+    /**
+     * refuses: answers the step's 'allow' must refuse, written as an 'answer' is, one line or a [list] of them.  A
+     * line can begin with the number of the step's decision it is about ("2: choose(boromir)"); without one it is
+     * about every decision of the step.
+     */
+    private static List<Refusal> parseRefusals(ScenarioDefinition def, Step step, JsonValue value, String context) throws ScenarioFormatException {
+        if (step.allow == null)
+            throw new ScenarioFormatException(context + ": a step without an 'allow' lets the player give any answer, so it refuses nothing.  Give it an 'allow', or take 'refuses' out");
+        List<Refusal> refusals = new ArrayList<>();
+        for (String line : lines(value, context)) {
+            java.util.regex.Matcher numbered = java.util.regex.Pattern.compile("^(\\d+)\\s*:\\s*(.*)$", java.util.regex.Pattern.DOTALL).matcher(line.trim());
+            int at = 0;
+            String terms = line.trim();
+            if (numbered.matches()) {
+                at = Integer.parseInt(numbered.group(1));
+                terms = numbered.group(2);
+                if (at < 1)
+                    throw new ScenarioFormatException(context + ": '" + line + "': the step's decisions count from 1");
+                if (at > 1 && !step.recurs())
+                    throw new ScenarioFormatException(context + ": '" + line + "': this step answers one decision, so there is no decision " + at
+                            + " of it (a step with an 'until' repeats)");
+            }
+            for (Terms.Term term : Terms.parse(terms, context)) {
+                Answer answer = parseAnswer(def, term, context);
+                refusals.add(new Refusal(at, answer, at == 0 ? term.raw() : at + ": " + term.raw()));
+            }
+        }
+        if (refusals.isEmpty())
+            throw new ScenarioFormatException(context + ": is empty");
+        return refusals;
     }
 
     private static When parseWhen(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {

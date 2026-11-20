@@ -55,6 +55,8 @@ public class ScenarioRunReport {
 
     /** Where this run could have gone another way (only a run that follows the script records them). */
     public final List<OffScriptPoint> offScriptPoints = new ArrayList<>();
+    /** The refusals (a step's 'refuses') this run has shown to hold, by the step's label: "12 2: choose(boromir)". */
+    public final java.util.Set<String> refusalsShown = new java.util.LinkedHashSet<>();
 
     /**
      * Several runs of the same scenario, one for each way through it, as one report: it passes if they all do, and
