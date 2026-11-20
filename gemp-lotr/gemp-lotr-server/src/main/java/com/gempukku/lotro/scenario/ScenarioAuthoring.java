@@ -2782,6 +2782,8 @@ public class ScenarioAuthoring {
             state.put("uncovered", uncovered);
 
             state.put("opponent", describeOpponent(sitting));
+            //(what message text can quote from the game: see Templates)
+            state.put("templates", Templates.names());
 
             List<String> pending = new ArrayList<>();
             sitting.pending.forEach(op -> pending.add(op.source()));
