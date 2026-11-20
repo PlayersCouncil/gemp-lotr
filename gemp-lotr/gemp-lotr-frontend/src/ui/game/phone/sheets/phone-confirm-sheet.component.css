@@ -1,0 +1,16 @@
+@import './phone-sheet-parts.css';
+
+.gd-phone-confirm {
+  margin: 0;
+  font-size: 14px;
+}
+
+.gd-phone-confirm__buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.gd-phone-confirm__buttons > .gd-phone-menu__item {
+  text-align: center;
+}

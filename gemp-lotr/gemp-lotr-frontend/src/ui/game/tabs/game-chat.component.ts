@@ -15,6 +15,7 @@ import { ChatRoom } from '../../../core/chat/chat-room.service';
 import { GameLog, GameLogEntry } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
+import { GameSettings } from '../../../core/game/settings/game-settings';
 import { PlayerInfo } from '../../../core/session/player-info.service';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
@@ -51,8 +52,9 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
 }
 
 /**
- * The game's chat box: the room's chat and the game's messages in one list, which stays at its end as lines come
- * unless the player scrolled up, and the field to say something (Enter sends it).
+ * The game's chat box: the room's chat and the game's messages in one list, and the field to say something (Enter
+ * sends it). Oldest first (classic, and modern by its setting) it stays at its end as lines come unless the player
+ * scrolled up; newest first (modern's default) it jumps to its top with every new line (the owner, 2026-11-20).
  *
  * DOM contract: `gd-game-chat` holding `.gd-game-chat__lines` with one `.gd-game-chat__line` per line (`data-kind`
  * chat, system, message, warning; `data-mention` ping or mention when it names the player; the game page shows no
@@ -107,11 +109,12 @@ export class GameChatComponent {
   private readonly viewState = inject(GameViewState);
   /** A replay has no room to say anything in. */
   protected readonly replaying = inject(GameSession).replaying;
+  private readonly settings = inject(GameSettings);
   /**
-   * The modern theme lists the newest lines first, the field to say something above them (the owner, 2026-11-16);
-   * classic keeps the legacy page's order, the newest last.
+   * The modern theme lists the newest lines first, the field to say something above them (the owner, 2026-11-16), unless
+   * its setting says otherwise (Settings › Display, 2026-11-20); classic keeps the legacy page's order, the newest last.
    */
-  protected readonly newestFirst = computed(() => this.theme.theme() === 'modern');
+  protected readonly newestFirst = computed(() => this.theme.theme() === 'modern' && this.settings.chatNewestFirst());
   private readonly theme = inject(ThemeService);
   private readonly lines = viewChild<ElementRef<HTMLElement>>('lines');
 
@@ -150,10 +153,12 @@ export class GameChatComponent {
     afterRenderEffect(() => {
       const count = this.views().length;
       const box = this.lines()?.nativeElement;
-      // Newest first: new lines come at the top, and the browser keeps what the player reads where it is
-      if (box && count > drawn && this.follow && !untracked(this.newestFirst)) {
-        // Not while its tab is closed: it opens again where it was
-        if (box.clientHeight > 0) box.scrollTop = box.scrollHeight;
+      // Not while its tab is closed: it opens again where it was
+      if (box && count > drawn && box.clientHeight > 0) {
+        // Newest first: to the top with every new line, wherever the player was (the owner, 2026-11-20); oldest first:
+        // to the end, unless the player scrolled up
+        if (untracked(this.newestFirst)) box.scrollTop = 0;
+        else if (this.follow) box.scrollTop = box.scrollHeight;
       }
       if (box && restoring && count > 0) {
         restoring = false;
@@ -164,6 +169,16 @@ export class GameChatComponent {
         }
       }
       drawn = count;
+    });
+    // The order switched (the setting): to the newest lines
+    let order: boolean | null = null;
+    afterRenderEffect(() => {
+      const newestFirst = this.newestFirst();
+      const box = this.lines()?.nativeElement;
+      if (box && order !== null && order !== newestFirst && box.clientHeight > 0) {
+        box.scrollTop = newestFirst ? 0 : box.scrollHeight;
+      }
+      order = newestFirst;
     });
     const destroyRef = inject(DestroyRef);
     afterNextRender(() => {

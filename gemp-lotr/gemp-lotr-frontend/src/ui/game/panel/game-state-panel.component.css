@@ -253,3 +253,8 @@
 .gd-game-state__decision-clock[data-empty] + br {
   display: none;
 }
+
+/* The page may draw the state panel smaller as a whole (--gd-panel-zoom: a low screen in the modern theme) */
+:host > * {
+  zoom: var(--gd-panel-zoom, 1);
+}

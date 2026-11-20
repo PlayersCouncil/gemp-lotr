@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { loginRequired } from '../../core/session/login-required.guard';
+import { loginRequired, loginRequiredUnlessReplay } from '../../core/session/login-required.guard';
 
 /**
  * The app's pages, each loaded on first use, under the app's base href (/gemp-lotr/ng/): /gemp-lotr/ng/<path>. The
@@ -17,7 +17,8 @@ export const APP_ROUTES: Routes = [
     path: 'game',
     // As game.html's title; the page changes it while it waits for the player (GameAttention)
     title: 'GEMP: LotR-TCG - Game Table',
-    canActivate: [loginRequired],
+    // A replay's link needs no login (shared replays, as game.html's); a game does
+    canActivate: [loginRequiredUnlessReplay],
     loadComponent: () => import('../game/game-page.component').then((m) => m.GamePageComponent),
   },
   { path: '', pathMatch: 'full', redirectTo: 'deckbuilder' },

@@ -1,0 +1,67 @@
+/*
+ * What the phone layout's sheets share (G7): each sheet's content lies in the sheet's body as if it were the body's own
+ * (display: contents), with its headings, notes, rows of cards, facts and menu buttons drawn alike
+ */
+
+:host {
+  display: contents;
+}
+
+h3 {
+  margin: 6px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--theme-game-phone-muted);
+}
+
+/* A row of cards holds to the sheet's width (it scrolls) */
+.gd-phone-sheet__cards {
+  --gd-phone-card: 90px;
+  margin-inline: -12px;
+  min-width: 0;
+}
+
+.gd-phone-note {
+  color: var(--theme-game-phone-muted);
+  font-size: 12px;
+}
+
+.gd-phone-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 12px;
+  margin: 0;
+}
+
+.gd-phone-facts > dt {
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-facts > dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.gd-phone-menu {
+  display: grid;
+  gap: 6px;
+}
+
+.gd-phone-menu__item {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.gd-phone-menu__item[data-danger] {
+  border-color: var(--theme-error);
+  color: var(--theme-game-phone-danger-text);
+}

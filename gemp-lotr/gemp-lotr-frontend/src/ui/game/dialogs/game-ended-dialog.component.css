@@ -1,0 +1,64 @@
+/* The game's end (modern theme): the result, the reason, the player's replay and the server's thanks */
+
+.gd-game-ended {
+  display: grid;
+  gap: 8px;
+  max-width: 420px;
+  /* A low screen (a phone held sideways): the content scrolls, the title and the buttons stay in sight */
+  max-height: calc(100dvh - 150px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.gd-game-ended p {
+  margin: 0;
+}
+
+.gd-game-ended__result {
+  font-size: 1.15em;
+  font-weight: 700;
+}
+
+.gd-game-ended__reason,
+.gd-game-ended__note {
+  font-style: italic;
+}
+
+.gd-game-ended__replay {
+  display: grid;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--theme-separator);
+}
+
+.gd-game-ended__replay > h3 {
+  margin: 0;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.gd-game-ended__link {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+  font-size: 0.85em;
+}
+
+.gd-game-ended__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gd-game-ended__feedback {
+  padding-top: 8px;
+  border-top: 1px solid var(--theme-separator);
+  font-size: 0.9em;
+}

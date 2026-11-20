@@ -25,3 +25,11 @@ export const loginRequired: CanActivateFn = () => {
       }),
     );
 };
+
+/**
+ * The game page, which needs a login for a game but not for a replay: a replay link (`?replayId=`, which the page opens
+ * instead of any game) works for anyone it is shared with, logged in or not, as on game.html; the server serves
+ * replays without a login (the owner, 2026-11-20). Everything else on the page still needs one.
+ */
+export const loginRequiredUnlessReplay: CanActivateFn = (route, state) =>
+  route.queryParamMap.has('replayId') ? true : loginRequired(route, state);

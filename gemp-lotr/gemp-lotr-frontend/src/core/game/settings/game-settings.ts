@@ -37,6 +37,12 @@ export type UnderButton = (typeof UNDER_BUTTONS)[number];
 export const UNDER_BUTTON_COOKIE = 'gempPhoneUnderButton';
 
 /**
+ * The modern theme's chat order (the owner, 2026-11-20): the newest lines first (its default since 2026-11-16) or last,
+ * as classic always has them. A cookie of the modern layout's own.
+ */
+export const CHAT_NEWEST_FIRST_COOKIE = 'gempChatNewestFirst';
+
+/**
  * The server reads autoPassPhases from the cookies of its own requests, which a cookie under /gemp-lotr never reaches,
  * so the value is written under the server's path too (the legacy page does the same).
  */
@@ -71,6 +77,8 @@ export class GameSettings {
   readonly underButton = signal<UnderButton>(
     UNDER_BUTTONS.find((value) => value === this.cookies.read(UNDER_BUTTON_COOKIE)) ?? 'button',
   );
+  /** The modern theme's chat lists the newest lines first (default on); classic never does. */
+  readonly chatNewestFirst = signal(this.cookies.read(CHAT_NEWEST_FIRST_COOKIE) !== 'false');
   /** -4 (slowest) to 4 (fastest); animations last 2^-speed times as long (default 0). */
   readonly animationSpeed = signal(Number(this.cookies.read(COOKIES.animationSpeed) ?? '0') || 0);
   readonly timerAudioMuted = signal(this.cookies.read(COOKIES.timerAudioMuted) === 'true');
@@ -115,6 +123,11 @@ export class GameSettings {
   setUnderButton(value: UnderButton): void {
     this.underButton.set(value);
     this.cookies.write(UNDER_BUTTON_COOKIE, value);
+  }
+
+  setChatNewestFirst(value: boolean): void {
+    this.chatNewestFirst.set(value);
+    this.cookies.write(CHAT_NEWEST_FIRST_COOKIE, String(value));
   }
 
   setAnimationSpeed(value: number): void {

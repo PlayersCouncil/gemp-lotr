@@ -1,0 +1,18 @@
+@import './phone-sheet-parts.css';
+
+/* A card's details: only its picture, as big as the sheet lets it be */
+.gd-phone-detail__image {
+  justify-self: center;
+  width: min(100%, 300px);
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: 5%;
+  box-shadow: 0 2px 8px var(--theme-game-phone-shade);
+  /* No menu of the phone's on a long press (iOS; Android: ModalSheetDirective) */
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.gd-phone-detail__image[data-horizontal] {
+  width: min(100%, 420px);
+}

@@ -2,7 +2,8 @@
  * Test-only: a game server that plays a recorded game back (recording.ts). The game's own requests (its first state,
  * the long polls, the answers to decisions, concede and cancel) must come in the recorded order, and each is answered
  * as the real server answered it; the player's information and card information are answered whenever they are asked.
- * The chat is empty. A request the recording doesn't have stays unanswered, like a long poll with nothing new, and a
+ * The chat is empty, and so is the player's game history (where the modern page looks for the replay of a game that
+ * ended: the recordings don't have it). A request the recording doesn't have stays unanswered, like a long poll with nothing new, and a
  * request that differs from the recorded one is noted in `problems`.
  */
 import { ServerAnswer, ServerRequest } from '../parity/fake-gemp-server';
@@ -48,6 +49,9 @@ export class FakeGameServer implements AnswersRequests {
       // The chat's first answer and a sent message's: no messages; its polls stay open
       return request.method === 'GET' || 'message' in request.params ? chat() : null;
     }
+    if (path === '/gameHistory') {
+      return history();
+    }
     const params = Object.fromEntries(
       Object.entries(request.params)
         .filter(([name]) => !['participantId', 'channelNumber', '_'].includes(name))
@@ -89,6 +93,14 @@ export class FakeGameServer implements AnswersRequests {
     this.answered.add(index);
     return { status: exchange.status, body: exchange.body, contentType: exchange.contentType };
   }
+}
+
+function history(): ServerAnswer {
+  return {
+    status: 200,
+    body: '<?xml version="1.0" encoding="UTF-8"?><gameHistory count="0" total="0" start="0" pageSize="1"/>',
+    contentType: 'application/xml; charset=UTF-8',
+  };
 }
 
 function chat(): ServerAnswer {

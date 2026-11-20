@@ -2,6 +2,7 @@ import { Component, computed, inject, input, linkedSignal } from '@angular/core'
 import { GameClocks } from '../../../core/game/clock/game-clocks.service';
 import { DecisionButton, mainButton } from '../../../core/game/decision/decision-view';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
+import { GameEnding } from '../../../core/game/session/game-ending';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { choiceLabel } from '../decision/decision-dialogs.component';
 import { clockText } from '../panel/game-clock';
@@ -13,13 +14,17 @@ import { CardHintsDirective } from '../table/card-hints.directive';
  * waiting decision's text and its buttons (a number or one answer of several are asked here too), and is dragged up
  * and down; dragged to the bottom it hides the hand. While nothing is asked it says whose move it is.
  *
- * The phone layout drags it (gdPointerDrag, PhoneGameComponent.handDrag).
+ * The phone layout drags it (gdPointerDrag, PhoneGameComponent.handDrag). A spectator (`watching`) has no hand and
+ * nothing to answer (the owner, 2026-11-20): the divider stays at the bottom, is not dragged, has no buttons, and shows
+ * whose turn it is and the game's latest message.
  *
- * DOM contract: `gd-phone-divider` (`data-deciding`) holding `.gd-phone-divider__text` (`data-decision=text`),
+ * DOM contract: `gd-phone-divider` (`data-deciding`, `data-watching`) holding `.gd-phone-divider__text`
+ * (`data-decision=text`), `.gd-phone-divider__latest` (a spectator's latest message),
  * `[data-clock]` the decision's clock, `.gd-phone-divider__hand-hint` while the hand is hidden, and
  * `.gd-phone-divider__buttons` with `button[data-decision-button]` (OK, Pass, Done, Reset choice, Clear selection),
  * `button[data-decision-choice]`, `select[data-decision=choice]`, the number's `button[data-decision=integer-down]`,
- * `output[data-decision=integer]`, `button[data-decision=integer-up]`.
+ * `output[data-decision=integer]`, `button[data-decision=integer-up]`; once the game ended
+ * `button[data-phone=game-ended]`, which shows its end again.
  */
 @Component({
   selector: 'gd-phone-divider',
@@ -27,9 +32,10 @@ import { CardHintsDirective } from '../table/card-hints.directive';
   imports: [CardHintsDirective, ReplayControlsComponent],
   host: {
     '[attr.data-deciding]': "deciding() ? '' : null",
-    role: 'separator',
-    'aria-orientation': 'horizontal',
-    'aria-label': 'Drag to resize the hand',
+    '[attr.data-watching]': "watching() ? '' : null",
+    '[attr.role]': "watching() ? 'status' : 'separator'",
+    '[attr.aria-orientation]': "watching() ? null : 'horizontal'",
+    '[attr.aria-label]': "watching() ? null : 'Drag to resize the hand'",
   },
   template: `
     <div class="gd-phone-divider__question">
@@ -38,7 +44,11 @@ import { CardHintsDirective } from '../table/card-hints.directive';
         <span class="gd-phone-divider__clock" data-clock [attr.data-band]="clocks.view().decisionBand">{{ c }}</span>
       }
     </div>
-    @if (handHidden()) {
+    @if (watching()) {
+      @if (latest(); as message) {
+        <span class="gd-phone-divider__latest" gdCardHints [innerHTML]="message"></span>
+      }
+    } @else if (handHidden()) {
       <span class="gd-phone-divider__hand-hint">▲ Hand {{ handCount() }} · drag up</span>
     }
     @if (session.replaying()) {
@@ -115,6 +125,13 @@ import { CardHintsDirective } from '../table/card-hints.directive';
           }
         }
       </div>
+    } @else if (ending.ended()) {
+      <!-- The game's end again, with the replay (the owner, 2026-11-20) -->
+      <div class="gd-phone-divider__buttons">
+        <button type="button" class="gd-phone-button" data-primary data-phone="game-ended" (click)="ending.show()">
+          Result and replay
+        </button>
+      </div>
     } @else if (buttons().length > 0) {
       <div class="gd-phone-divider__buttons">
         @for (button of buttons(); track button) {
@@ -136,17 +153,22 @@ export class PhoneDividerComponent {
   protected readonly session = inject(GameSession);
   protected readonly decisions = inject(GameDecisions);
   protected readonly clocks = inject(GameClocks);
+  protected readonly ending = inject(GameEnding);
 
   readonly handHidden = input(false);
+  /** A spectator's divider: no hand, nothing to answer (see the class's comment). */
+  readonly watching = input(false);
 
   private readonly view = this.decisions.view;
   private readonly dialog = computed(() => this.view().dialog);
   protected readonly small = computed(() => {
+    if (this.watching()) return null;
     const dialog = this.dialog();
     return dialog && dialog.kind !== 'cards' ? dialog : null;
   });
   /** The alert box's buttons, or those of the cards shown in the hand's place. */
   protected readonly buttons = computed<readonly DecisionButton[]>(() => {
+    if (this.watching()) return [];
     const dialog = this.dialog();
     return dialog?.kind === 'cards' ? dialog.buttons : this.view().buttons;
   });
@@ -167,7 +189,7 @@ export class PhoneDividerComponent {
     if (dialog) return dialog.text;
     const model = this.session.model();
     if (model.ended) return 'The game has ended.';
-    if (!model.started) return '';
+    if (!model.started) return this.session.replaying() ? 'A replay: press play to watch it.' : '';
     const current = model.currentPlayer;
     if (model.spectator || this.session.replaying()) return current ? `${current}'s turn` : '';
     return model.decision
@@ -175,7 +197,19 @@ export class PhoneDividerComponent {
       : `Waiting for ${model.players.find((p) => p !== model.participantId) ?? 'the opponent'}…`;
   });
 
+  /** The game's latest message (HTML, as the chat shows it), for a spectator. */
+  protected readonly latest = computed(() => {
+    const messages = this.session.model().messages;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const message = messages[i];
+      if (message?.kind === 'message') return message.text;
+    }
+    return null;
+  });
+
   protected readonly clock = computed(() => {
+    // Nothing is timed once the game has ended
+    if (this.ending.ended()) return null;
     const decision = this.clocks.view().decision;
     if (!decision) return null;
     const elapsed = clockText(decision.elapsed);

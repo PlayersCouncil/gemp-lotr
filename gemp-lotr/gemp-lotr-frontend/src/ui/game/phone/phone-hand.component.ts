@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { GameDecisions } from '../../../core/game/decision/game-decisions.service';
 import { offeredUnder, offTableChoices } from '../../../core/game/phone/hand-place';
 import { PhoneCard, phoneTable } from '../../../core/game/phone/phone-table';
@@ -8,7 +8,6 @@ import { PhoneSettings } from '../../../core/game/phone/phone-settings';
 import { GameTableState } from '../../../core/game/table/game-table.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
 import { PhoneCardsComponent } from './phone-cards.component';
-import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/pointer-drag.directive';
 
 /**
  * The phone layout's hand, under the divider, scrolled sideways (G7 of trymarz/gemp-lotr-private#27). When the waiting
@@ -19,30 +18,20 @@ import { DragHandlers, PointerDragDirective } from '../../shared/pointer-drag/po
  * group after a small copy of the card they lie under.
  *
  * DOM contract: `gd-phone-hand` (`data-place`: hand, choices; `data-scroll=down` when offered cards wrap into rows
- * scrolled down, the player's setting) holding `.gd-phone-hand__grip` (`data-phone=hand-grip`,
- * shown sideways), `.gd-phone-hand__head` with the label
+ * scrolled down, the player's setting) holding `.gd-phone-hand__head` with the label
  * (`.gd-phone-hand__label`), `button[data-phone=close-choices]` (✕) or `button[data-phone=show-choices]`, then the
  * cards (`gd-phone-cards` with `data-row` hand or choices).
  */
 @Component({
   selector: 'gd-phone-hand',
   styleUrl: './phone-hand.component.css',
-  imports: [PhoneCardsComponent, CardHintsDirective, PointerDragDirective],
+  imports: [PhoneCardsComponent, CardHintsDirective],
   host: {
     '[attr.data-place]': "showing() ? 'choices' : 'hand'",
     // Offered cards in rows scrolled down, as the player chose (PhoneSettings.choicesScroll); the hand stays sideways
     '[attr.data-scroll]': "showing() && phoneSettings.choicesScroll() === 'down' ? 'down' : null",
   },
   template: `
-    <!-- Held sideways the hand is a panel in the screen's right half: its grip slides it up and down -->
-    <div
-      class="gd-phone-hand__grip"
-      data-phone="hand-grip"
-      role="separator"
-      aria-orientation="horizontal"
-      aria-label="Drag to resize the hand"
-      [gdPointerDrag]="gripDrag()"
-    ></div>
     <div class="gd-phone-hand__head">
       @if (showing(); as offer) {
         <span class="gd-phone-hand__label">
@@ -108,7 +97,6 @@ export class PhoneHandComponent {
   protected readonly emptyHand = computed(() => (this.session.model().spectator ? 'Not shown' : 'No cards'));
 
   /** What dragging the grip does (the phone layout's own hand drag). */
-  readonly gripDrag = input<(event: PointerEvent) => DragHandlers | null>(() => null);
 
   protected close(key: string): void {
     this.viewState.phone.update((phone) => ({ ...phone, closedOffer: key }));
