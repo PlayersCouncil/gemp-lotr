@@ -75,6 +75,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             getErrataInfo(request, responseWriter);
         } else if (uri.equals("/players") && request.method() == HttpMethod.GET) {
             searchPlayers(request, responseWriter);
+        } else if (isFormatJsonUri(uri) && request.method() == HttpMethod.GET) {
+            getFormatDefinition(uri.substring(8, uri.length() - 5), responseWriter);
         } else if (uri.startsWith("/format/") && request.method() == HttpMethod.GET) {
             getFormat(request, uri.substring(8), responseWriter);
         } else if (uri.startsWith("/queue/") && request.method() == HttpMethod.POST) {
@@ -535,6 +537,29 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void getFormatDefinitions(ResponseWriter responseWriter) {
         responseWriter.writeJsonResponse(JsonUtils.Serialize(
                 FormatDefinitions.describeAll(_formatLibrary.getHallFormats().values(), _library)));
+    }
+
+    /**
+     * Whether the uri is /format/{code}/json: a non-empty code with no slash in it, so /format/{code} (the HTML,
+     * even for a code ending in "json") and /format/json (the HTML of a format coded "json") are never taken for it.
+     */
+    static boolean isFormatJsonUri(String uri) {
+        // "/format/" + at least one character + "/json"
+        if (uri.length() < 14 || !uri.startsWith("/format/") || !uri.endsWith("/json"))
+            return false;
+        String code = uri.substring(8, uri.length() - 5);
+        return !code.isEmpty() && !code.contains("/");
+    }
+
+    /**
+     * GET /hall/format/{code}/json: one format's entry, the same shape as an entry of /hall/formats/json, for any
+     * format the library knows (a league serie's format need not be a hall format).  404 for an unknown code.
+     */
+    private void getFormatDefinition(String code, ResponseWriter responseWriter) throws HttpProcessingException {
+        LotroFormat lotroFormat = _formatLibrary.getFormat(code);
+        if (lotroFormat == null)
+            throw new HttpProcessingException(404);
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(FormatDefinitions.describe(lotroFormat, _library)));
     }
 
     private void appendFormat(StringBuilder result, LotroFormat lotroFormat) throws CardNotFoundException {
