@@ -166,9 +166,10 @@ let drafts = 0;
 
 /**
  * A new draft of the player's own (`open` with `new=true`), with the script given: `steps` are the file's steps
- * (objects as an HJSON file has them), `top` the file's other parts. Answers its id; the page is on its game.
+ * (objects as an HJSON file has them), `top` the file's other parts, `goto` the step the script is played to (from
+ * 1). Answers its id; the page is on its game.
  */
-export async function newDraft(seat, { title = 'Authoring check', steps = [], top = {} } = {}) {
+export async function newDraft(seat, { title = 'Authoring check', steps = [], top = {}, goto = 1 } = {}) {
   await seat.call('close').catch(() => undefined);
   const id = `check-${Date.now().toString(36)}-${drafts++}`;
   const opened = await seat.call('open', { new: 'true', id, title, canonical: 'false' });
@@ -178,7 +179,7 @@ export async function newDraft(seat, { title = 'Authoring check', steps = [], to
       ...(steps.length ? { steps: steps.map((step) => ({ op: 'insert', step })) } : {}),
     };
     // (`goto` plays the new script from its start, in a fresh game)
-    await seat.call('edit', { patch: JSON.stringify(patch), goto: '1' });
+    await seat.call('edit', { patch: JSON.stringify(patch), goto: String(goto) });
   }
   const state = await seat.state();
   await seat.openGame(String(state.gameId ?? opened.gameId));

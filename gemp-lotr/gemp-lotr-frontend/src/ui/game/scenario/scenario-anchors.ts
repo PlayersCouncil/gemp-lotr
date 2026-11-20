@@ -6,6 +6,7 @@
  */
 import { around, Rect } from '../../../core/game/scenario/bubble-placement';
 import { PartRect, ScenarioSeat } from '../../../core/game/scenario/scenario-events';
+import { GameModel } from '../../../core/game/state/game-model';
 
 /** What the lookup needs to know of the game. */
 export interface AnchorContext {
@@ -21,6 +22,31 @@ export interface AnchorContext {
   self: number | null;
   opponent: number | null;
   humanSeat: ScenarioSeat;
+}
+
+/**
+ * The lookup's context on the game page: the page's game (its sites, and the players' places), with the names the
+ * scenario gives cards and where their printed parts are. The scenario's layer and the authoring panel's picking
+ * use the same.
+ */
+export function pageAnchorContext(
+  root: ParentNode,
+  model: GameModel,
+  named: Pick<AnchorContext, 'cards' | 'parts' | 'humanSeat'>,
+): AnchorContext {
+  const self = model.participantId === null ? -1 : model.players.indexOf(model.participantId);
+  const opponent = model.players.findIndex((player) => player !== model.participantId);
+  return {
+    root,
+    ...named,
+    sites: Object.fromEntries(
+      Object.values(model.cards).flatMap((card) =>
+        card.zone === 'ADVENTURE_PATH' && card.index !== null ? [[card.index, card.id] as const] : [],
+      ),
+    ),
+    self: self < 0 ? null : self,
+    opponent: opponent < 0 ? null : opponent,
+  };
 }
 
 const ROWS: Readonly<Record<string, string>> = {

@@ -1,0 +1,72 @@
+/* The Opponent tab (scenarioAuthor.css of the legacy page: .sa-section, .sa-heading, .sa-asked, .sa-answer). */
+
+.gd-author-opponent__section {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-section-rule);
+}
+
+.gd-author-opponent__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-size: inherit;
+  font-weight: bold;
+}
+
+.gd-author-opponent__asked {
+  margin: 3px 0 5px;
+  color: var(--theme-game-author-asked);
+}
+
+.gd-author-opponent__answers {
+  margin: 4px 0;
+}
+
+.gd-author-opponent__answer {
+  display: block;
+  width: 100%;
+  margin: 0 0 3px;
+  padding: 4px 7px;
+  text-align: left;
+}
+
+.gd-author-opponent__card,
+.gd-author-opponent__how {
+  display: block;
+  margin: 2px 0;
+  white-space: normal;
+}
+
+.gd-author-opponent__fight {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-opponent__minion {
+  flex: 1;
+  min-width: 0;
+  color: var(--theme-game-author-alias);
+  font: 12px var(--theme-game-author-code-font);
+}
+
+.gd-author-opponent__fight .gd-author-input {
+  flex: 0 1 auto;
+  max-width: 60%;
+}
+
+.gd-author-opponent__number {
+  flex: 0 0 76px;
+  width: 76px;
+  margin-right: 5px;
+}
+
+.gd-author-opponent__raw {
+  gap: 5px;
+  margin: 4px 0;
+}
+
+.gd-author-opponent__raw .gd-author-button {
+  margin: 0;
+}

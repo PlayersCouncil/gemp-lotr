@@ -266,6 +266,17 @@
   --theme-game-author-hint-rule: #5d7fa8;
   --theme-game-author-pending-text: #ffe9b0;
   --theme-game-author-bad-border: #e0584a;
+  /* The Opponent tab, picking on the table, the pictures to choose from */
+  --theme-game-author-section-rule: #3a3322;
+  --theme-game-author-asked: #fff;
+  --theme-game-author-alias: #9cc7ff;
+  --theme-game-author-pick-edge: #4fd0ff;
+  --theme-game-author-pick-label-bg: #0a2a3a;
+  --theme-game-author-pick-label-text: #d8f0ff;
+  --theme-game-author-pictures-bg: #100e09;
+  --theme-game-author-pictures-border: #4d4226;
+  --theme-game-author-picture-hover-bg: #231f15;
+  --theme-game-author-picture-hover-border: #d8b24a;
   /* The menu of a card's actions (jquery.contextMenu.css) */
   --theme-game-menu-bg: #eee;
   --theme-game-menu-border: #ccc;
@@ -564,6 +575,11 @@
   --theme-game-author-tag-bg: #c9a24a;
   --theme-game-author-tag-text: #1a140c;
   --theme-game-author-place-rule: #3a2f20;
+  --theme-game-author-section-rule: #3a2f20;
+  --theme-game-author-pictures-bg: #110e0a;
+  --theme-game-author-pictures-border: #3a2f20;
+  --theme-game-author-picture-hover-bg: #241d15;
+  --theme-game-author-picture-hover-border: #c9a24a;
   --theme-game-menu-bg: #241d15;
   --theme-game-menu-border: #5a4a2c;
   --theme-game-menu-text: #ece2cc;

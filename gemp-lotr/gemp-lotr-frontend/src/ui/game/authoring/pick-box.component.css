@@ -1,0 +1,36 @@
+/*
+ * Picking something on the table (scenarioAuthor.css of the legacy page, .sa-pickbox, .sa-picklabel, body.sa-picking):
+ * the crosshair is the whole page's while it lasts; the box and the label take no pointer.
+ */
+
+:root[data-author-picking],
+:root[data-author-picking] * {
+  cursor: crosshair !important;
+}
+
+gd-game-author-pickbox .gd-author-pickbox {
+  position: fixed;
+  z-index: 100020;
+  left: calc(var(--gd-left) - 3px);
+  top: calc(var(--gd-top) - 3px);
+  width: var(--gd-width);
+  height: var(--gd-height);
+  border: 3px solid var(--theme-game-author-pick-edge);
+  border-radius: 6px;
+  box-shadow: 0 0 10px var(--theme-game-author-pick-edge);
+  pointer-events: none;
+}
+
+gd-game-author-pickbox .gd-author-picklabel {
+  position: fixed;
+  z-index: 100021;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--theme-game-author-pick-label-bg);
+  color: var(--theme-game-author-pick-label-text);
+  font: 12px var(--theme-game-author-code-font);
+  white-space: nowrap;
+  pointer-events: none;
+}
