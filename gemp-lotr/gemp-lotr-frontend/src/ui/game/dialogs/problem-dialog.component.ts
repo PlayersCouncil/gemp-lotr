@@ -1,11 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { GameSession, ProblemAction } from '../../../core/game/session/game-session.service';
 import { LOGIN_PAGE_URL } from '../../../core/platform/app-paths';
+import { HALL_PAGE_URL } from '../../../core/platform/hall-tab.service';
 import { PageCues } from '../../../core/platform/page-cues';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 
-/** The legacy hall, where "Go to Game Hall" leads. */
-export const HALL_URL = '/gemp-lotr/hall.html';
+/** The hall, where "Go to Game Hall" leads. */
+export const HALL_URL = HALL_PAGE_URL;
 
 const LABELS: Readonly<Record<ProblemAction, string>> = {
   reload: 'Refresh page',

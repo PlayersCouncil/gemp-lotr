@@ -338,7 +338,7 @@ describe('the decisions on the game page', () => {
     TestBed.resetTestingModule();
     const second = await open('', 403);
     await second.click('[data-problem-action="hall"]');
-    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/hall.html');
+    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/');
   });
 });
 
