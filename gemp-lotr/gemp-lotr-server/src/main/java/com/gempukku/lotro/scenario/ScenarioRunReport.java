@@ -95,6 +95,12 @@ public class ScenarioRunReport {
         };
     }
 
+    /**
+     * Set on the report of an exploring run (ScenarioRunner.explore): the scenario's own run, played as its test plays
+     * it, whose result is the scenario's.  The exploring run itself proves nothing either way.  Null otherwise.
+     */
+    public ScenarioRunReport exploring;
+
     public ScenarioRunReport(String scenarioId) {
         this.scenarioId = scenarioId;
     }
@@ -106,6 +112,21 @@ public class ScenarioRunReport {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        if (exploring != null) {
+            //(an exploring run's own pass or fail means nothing: it was the scenario's run that was its test)
+            sb.append("Scenario ").append(scenarioId).append(": explored beyond its script.  Its own run: ")
+                    .append(exploring.passed() ? "PASSED" : "FAILED")
+                    .append(" (proved: ").append(exploring.reached.name().toLowerCase())
+                    .append(", required: ").append(exploring.required.name().toLowerCase()).append("; stopped: ")
+                    .append(exploring.stopped).append(")\n");
+            for (String failure : exploring.failures)
+                sb.append("  FAILURE of its own run: ").append(failure).append("\n");
+            sb.append("The exploring run stopped: ").append(stopped).append("\n");
+            for (String failure : failures)
+                sb.append("  while exploring: ").append(failure).append("\n");
+            appendSteps(sb);
+            return sb.toString();
+        }
         sb.append("Scenario ").append(scenarioId).append(": ").append(passed() ? "PASSED" : "FAILED")
                 .append(" (proved: ").append(reached.name().toLowerCase())
                 .append(", required: ").append(required.name().toLowerCase()).append(")\n");
@@ -114,6 +135,11 @@ public class ScenarioRunReport {
             sb.append("  FAILURE: ").append(failure).append("\n");
         for (String warning : warnings)
             sb.append("  warning: ").append(warning).append("\n");
+        appendSteps(sb);
+        return sb.toString();
+    }
+
+    private void appendSteps(StringBuilder sb) {
         sb.append("Steps:\n");
         for (Map.Entry<String, ScenarioDirector.StepStatus> entry : steps.entrySet())
             sb.append("  ").append(String.format("%-10s", entry.getValue().name().toLowerCase()))
@@ -134,6 +160,5 @@ public class ScenarioRunReport {
                 sb.append("  ").append(decision.note());
             sb.append("\n");
         }
-        return sb.toString();
     }
 }

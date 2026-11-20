@@ -376,6 +376,46 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                 throw new IllegalArgumentException("rules." + seat.key() + ": " + exp.getMessage(), exp);
             }
         }
+        _game.getActionsEnvironment().addAlwaysOnActionProxy(new EndOfThePath());
+    }
+
+    /**
+     * Why the game was ended by its fellowship coming to the end of the scenario's adventure path; null if it was not.
+     * See EndOfThePath.
+     */
+    public String PathEnded() { return _pathEnded; }
+
+    private String _pathEnded;
+
+    /**
+     * A scenario's path can be shorter than the game's nine sites, and a fellowship at its last site that has to move
+     * on (the move of the Fellowship phase is not optional) would move to a site that is not there: the game cannot
+     * carry on from that, and once broke on it.  So the game is ended just before such a move, as the move begins,
+     * with the reason said in its log, and whatever runs the game is told why (PathEnded).
+     */
+    private class EndOfThePath extends AbstractActionProxy {
+        @Override
+        public List<? extends RequiredTriggerAction> getRequiredBeforeTriggers(LotroGame game, Effect effect) {
+            if (effect.getType() != Effect.Type.BEFORE_MOVE_FROM || _pathEnded != null)
+                return null;
+            int next = game.getGameState().getCurrentSiteNumber() + 1;
+            if (game.getGameState().getSite(next) != null)
+                return null;
+            RequiredTriggerAction action = new RequiredTriggerAction(null);
+            action.setText("The end of the scenario's path");
+            action.appendEffect(new com.gempukku.lotro.logic.timing.UnrespondableEffect() {
+                @Override
+                protected void doPlayEffect(LotroGame game) {
+                    int at = game.getGameState().getCurrentSiteNumber();
+                    _pathEnded = "the fellowship came to the end of the scenario's path: it is at site " + at
+                            + " and would have to move on to site " + (at + 1) + ", which nobody's adventure deck in the scenario has";
+                    game.getGameState().sendMessage("This scenario's path ends at site " + at + ": there is no site " + (at + 1)
+                            + " to move to, so the game is over.");
+                    game.playerLost(game.getGameState().getCurrentPlayerId(), "The scenario's path ends at site " + at);
+                }
+            });
+            return List.of(action);
+        }
     }
 
     /**

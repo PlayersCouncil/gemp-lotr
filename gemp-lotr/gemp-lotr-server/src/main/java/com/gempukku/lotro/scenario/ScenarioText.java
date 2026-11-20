@@ -104,7 +104,7 @@ public final class ScenarioText implements LiveScenario.TextRenderer {
     private static CardLookup.Result resolve(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format,
                                              CardLookup fallback, String reference) {
         String ref = reference == null ? "" : reference.trim();
-        CardDef named = def.cards.get(ref);
+        CardDef named = CardFaces.named(def, ref);
         if (named != null)
             return found(library, format.applyErrata(named.blueprintId()));
 

@@ -207,7 +207,11 @@ public final class ScenarioRunner {
      *                on offer is chosen.
      */
     public static ScenarioRunReport explore(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, List<String> choices) {
-        return run(def, library, format, true, choices);
+        ScenarioRunReport explored = run(def, library, format, true, choices);
+        //An exploring run plays on where the script would have stopped, so what it proves is nothing: the verdict
+        // that means something is the scenario's own run, as its test plays it, and that is what the report gives
+        explored.exploring = run(def, library, format);
+        return explored;
     }
 
     /** In an exploring run, how many decisions to answer beyond the script before stopping. */
@@ -286,6 +290,14 @@ public final class ScenarioRunner {
         int unscripted = 0;
 
         for (int number = 1; number <= DECISION_LIMIT; number++) {
+            if (table.GameIsFinished() && table.PathEnded() != null) {
+                //Not the game's own ending: the scenario's path ran out (see ScenarioTable.EndOfThePath)
+                report.stopped = "the game was stopped: " + table.PathEnded();
+                if (!explore)
+                    report.failures.add("The game was stopped before the scenario ended: " + table.PathEnded()
+                            + ".  Give the path more sites (sites), or have the scenario end before then (end, or outcome.win)");
+                return false;
+            }
             if (table.GameIsFinished()) {
                 String winner = table.game().getWinnerPlayerId();
                 report.stopped = "the game ended" + (winner == null ? " with no winner" : ": the " + table.SeatOf(winner).key() + " seat won");

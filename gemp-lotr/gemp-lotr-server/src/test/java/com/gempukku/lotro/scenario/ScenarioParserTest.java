@@ -423,6 +423,54 @@ public class ScenarioParserTest {
     }
 
     @Test
+    public void aSiteCanBeShownLargeByItsName() throws Exception {
+        //A site is named as a card is, and card:<site> once threw in CardFaces.blueprintOf
+        ScenarioDefinition def = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			when: freeps, action
+                			messages: [
+                				{
+                					text: The number in the corner is the site's Shadow number.
+                					zoom: card:site2
+                					focus: shadowNumber
+                				}
+                				{
+                					text: Look at it on the path.
+                					anchor: card:site2:shadowNumber
+                				}
+                			]
+                		}
+                	]
+                """);
+        Zoom zoom = def.steps.getFirst().messages.getFirst().zoom;
+        assertEquals("site2", zoom.card());
+        assertEquals("1_331", CardFaces.blueprintOf(def, zoom));
+        assertEquals(List.of(), ScenarioValidator.validate(def, ScenarioTesting.library()));
+        var described = CardFaces.describe(def, zoom, ScenarioTesting.library());
+        assertEquals("1_331", described.get("blueprint"));
+        assertEquals("A site's own regions are used", 1, ((List<?>) described.get("focus")).size());
+
+        //...and what a site does not have printed on it is said, as for any card
+        ScenarioDefinition wrong = ScenarioTesting.parse("""
+                	steps: [
+                		{
+                			messages: [
+                				{
+                					text: A site has no strength.
+                					zoom: card:site2
+                					focus: strength
+                				}
+                			]
+                		}
+                	]
+                """);
+        List<String> problems = ScenarioValidator.validate(wrong, ScenarioTesting.library());
+        assertEquals(problems.toString(), 1, problems.size());
+        assertTrue(problems.getFirst(), problems.getFirst().contains("'strength' is not something printed on"));
+    }
+
+    @Test
     public void aMessageCanWaitForAMomentInsideTheDecision() throws Exception {
         ScenarioDefinition def = ScenarioTesting.parse("""
                 	steps: [

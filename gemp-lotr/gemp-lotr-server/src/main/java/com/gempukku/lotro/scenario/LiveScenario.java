@@ -615,6 +615,13 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_result != null || !_begun)
             return;
 
+        if (_table.game().isFinished() && _table.PathEnded() != null) {
+            //Not the game's own ending: the scenario's path ran out under the fellowship (ScenarioTable.EndOfThePath),
+            // which is the scenario's mistake and not the person's
+            problem(_table.PathEnded());
+            finish(Result.ERROR, List.of(), "This scenario's adventure path has run out: " + _table.PathEnded() + ".", false, false);
+            return;
+        }
         if (_table.game().isFinished()) {
             //The game got there first: somebody won it by its own rules
             String winner = _table.game().getWinnerPlayerId();
