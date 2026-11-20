@@ -1,16 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { isOpeningWork } from '../../../../core/game/authoring/step-model';
-import { PHASES, pickersOf, putTerm, SEATS, TYPES, WhenPicker } from '../../../../core/game/authoring/terms';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
-import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
 import { HjsonAreaDirective } from '../widgets/hjson-area.directive';
 import { RepeatRowComponent } from './repeat-row.component';
-import { AskedPickerComponent } from './asked-picker.component';
 import { StepEditor } from './step-editor';
+import { WhenPickersComponent } from './when-pickers.component';
 import { StepFieldDirective } from './step-field.directive';
 
 const WHEN_HINT =
-  'seat, kind of decision, what it is for (nextSkirmish, archeryWound, reconcile, sanctuary, anotherMove, optionalResponses, requiredResponses, chooseSite, phaseActions; or not(one of them)), phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(part of what the decision says). ' +
+  'seat, kind of decision, what it is for (nextSkirmish, archeryWound, reconcile, sanctuary, anotherMove, optionalResponses, requiredResponses, chooseSite, phaseActions; in the game’s own opening bid, goFirst, startingFellowship, mulligan; or not(one of them)), phase(...), turn(...), as(freeps) or as(shadow) (the role the seat plays then, in a game of two sides), skirmish(n), inSkirmish(card), after(card), offers(card), text(part of what the decision says). ' +
   "Or written out in full, as the file has it, in HJSON: { seat: freeps, require: { ... } }. What is copied out of a file can be pasted here, with or without 'when:' in front.";
 const REQUIRE_HINT =
   'Requirements as cards write them, in HJSON as the file has them (one { ... } or a [ list ], a line to each part), which have to hold as well as the When. ' +
@@ -18,27 +16,21 @@ const REQUIRE_HINT =
 
 /**
  * What a step waits for (legacy buildFields' first section): its heading by what kind of step it is; for the
- * opening, only its name; otherwise the composer (seat, kind of decision, what is being asked, phase, turn: each puts its term into the
- * When, keeping the others, in the order a person says them; hidden for a When written out in full), the When, its
+ * opening, only its name; otherwise the composer (gd-author-when-pickers: seat, role in a game of two sides, kind of
+ * decision, what is being asked, phase, turn: each puts its term into the When, keeping the others, in the order the
+ * server writes them; hidden for a When written out in full), the When, its
  * requirements (Only while), the step's flags (pause, once, checkpoint, its name), "repeat until", and If / Unless
  * when the draft's pauses have choices.
  *
  * DOM contract: `gd-author-when` holding `.gd-author-step__section` with `.gd-author-step__heading`,
- * `.gd-author-when__pickers` (`gd-author-select[data-picker]` seat, kind, phase; `gd-author-asked`; `input[data-picker=turn]`), the
+ * `gd-author-when-pickers` (`.gd-author-when__pickers`), the
  * fields (`data-field` when, whenRequire, id, if, unless), `.gd-author-when__flags` (`input[data-flag]` pause, once,
  * checkpoint) and `gd-author-repeat`.
  */
 @Component({
   selector: 'gd-author-when',
   styleUrl: './when-editor.component.css',
-  imports: [
-    AuthorFieldComponent,
-    AuthorSelectComponent,
-    HjsonAreaDirective,
-    StepFieldDirective,
-    RepeatRowComponent,
-    AskedPickerComponent,
-  ],
+  imports: [AuthorFieldComponent, HjsonAreaDirective, StepFieldDirective, RepeatRowComponent, WhenPickersComponent],
   template: `
     @if (view(); as view) {
       <div class="gd-author-step__section">
@@ -62,42 +54,7 @@ const REQUIRE_HINT =
             <input class="gd-author-input gd-author-step__short" gdStepField="id" />
           </gd-author-field>
         } @else {
-          @if (view.pickers; as pickers) {
-            <div class="gd-author-when__pickers">
-              <gd-author-select
-                data-picker="seat"
-                label="Seat"
-                [options]="seats"
-                [value]="pickers.seat"
-                (changed)="pick('seat', $event)"
-              />
-              <gd-author-select
-                data-picker="kind"
-                label="Kind of decision"
-                [options]="kinds"
-                [value]="pickers.kind"
-                (changed)="pick('kind', $event)"
-              />
-              <gd-author-asked path="when" />
-              <gd-author-select
-                data-picker="phase"
-                label="Phase"
-                [options]="phases"
-                [value]="pickers.phase"
-                (changed)="pick('phase', $event)"
-              />
-              <input
-                type="number"
-                min="1"
-                class="gd-author-input gd-author-step__short"
-                data-picker="turn"
-                placeholder="turn"
-                aria-label="Turn"
-                [value]="pickers.turn"
-                (change)="pick('turn', $any($event.target).value)"
-              />
-            </div>
-          }
+          <gd-author-when-pickers />
           <gd-author-field label="When" [hint]="whenHint">
             <textarea gdHjsonArea gdStepField="when" rows="1" [text]="view.when"></textarea>
           </gd-author-field>
@@ -107,7 +64,7 @@ const REQUIRE_HINT =
                 gdHjsonArea
                 gdStepField="whenRequire"
                 rows="1"
-                placeholder="{ type: canSpot, filter: alias(smith), minVitality(2) }"
+                placeholder='{ "type": "canSpot", "filter": "companion, minVitality(2)" }'
                 [text]="view.whenRequire"
               ></textarea>
             </gd-author-field>
@@ -173,13 +130,6 @@ export class WhenEditorComponent {
   protected readonly editor = inject(StepEditor);
   protected readonly whenHint = WHEN_HINT;
   protected readonly requireHint = REQUIRE_HINT;
-  protected readonly seats: readonly AuthorOption[] = [['', 'either seat'], ...SEATS];
-  protected readonly kinds: readonly AuthorOption[] = [['', 'any kind'], ...TYPES];
-  protected readonly phases: readonly AuthorOption[] = [
-    ['', 'any phase'],
-    ...PHASES,
-    ['between_turns', 'between turns'],
-  ];
 
   protected readonly view = computed(() => {
     const work = this.editor.work();
@@ -205,7 +155,6 @@ export class WhenEditorComponent {
       kind,
       heading,
       opening: isOpeningWork(work),
-      pickers: pickersOf(work.when),
       when: work.when ?? '',
       whenRequire: work.whenRequire ?? '',
       require: !(work.when ?? '').trim().startsWith('{'),
@@ -215,12 +164,6 @@ export class WhenEditorComponent {
       flags: draft.flags.join(', '),
     };
   });
-
-  /** A picker changed: its term is put into the When, in its place. */
-  protected pick(picker: WhenPicker, value: string): void {
-    this.editor.put('when', putTerm(this.editor.work()?.when, picker, value.trim()));
-    this.editor.now();
-  }
 
   protected tick(flag: 'pause' | 'once' | 'checkpoint', event: Event): void {
     this.editor.put(flag, (event.target as HTMLInputElement).checked);

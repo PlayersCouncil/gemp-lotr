@@ -501,4 +501,78 @@ describe('ScenarioTabComponent', () => {
       expect(find<HTMLTextAreaElement>('details[data-part=options] textarea').value).toBe('{ nope');
     });
   });
+
+  describe('two sides (A3)', () => {
+    const shadowRow = '[data-part=auto-pass][data-role=shadow]';
+    const ticks = (selector: string) =>
+      [...el.querySelectorAll<HTMLInputElement>(`${selector} gd-author-check[data-phase] input`)].map(
+        (box) => box.checked,
+      );
+
+    it('offers the phases for each role in a game of two sides, sending the object form', async () => {
+      await open(withDraft({ options: { autoPass: 'fellowship' } }, { twoSided: true }));
+      expect(find<HTMLInputElement>('gd-author-check[data-part=by-role] input').checked).toBe(false);
+      await tick('gd-author-check[data-part=by-role]', true);
+      expect(top()).toEqual({ options: { autoPass: { freeps: 'fellowship', shadow: 'fellowship' } } });
+      await update(withDraft({ options: { autoPass: { freeps: 'fellowship', shadow: false } } }, { twoSided: true }));
+      expect(ticks('[data-part=auto-pass][data-role=freeps]')).toEqual([
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ]);
+      expect(ticks(shadowRow)).toEqual([false, false, false, false, false, false, false]);
+      await tick(`${shadowRow} gd-author-check[data-phase=maneuver]`, true);
+      expect(top()).toEqual({ options: { autoPass: { freeps: 'fellowship', shadow: 'maneuver' } } });
+    });
+
+    it('shows a file’s object form whatever the draft’s sidedness, and keeps it when a role’s phase is ticked', async () => {
+      await open(
+        withDraft({ options: { autoPass: { freeps: 'regroup', shadow: 'maneuver, regroup' }, autoAccept: false } }),
+      );
+      expect(find<HTMLInputElement>('gd-author-check[data-part=by-role] input').checked).toBe(true);
+      expect(ticks(shadowRow)).toEqual([false, false, true, false, false, false, true]);
+      await tick('[data-part=auto-pass][data-role=freeps] gd-author-check[data-phase=fellowship]', true);
+      expect(top()).toEqual({
+        options: { autoPass: { freeps: 'fellowship, regroup', shadow: 'maneuver, regroup' }, autoAccept: false },
+      });
+    });
+
+    it('asks before one list takes the place of two that differ; kept, the tick goes back', async () => {
+      await open(withDraft({ options: { autoPass: { freeps: 'regroup', shadow: false } } }, { twoSided: true }));
+      notifier.answers.push(false);
+      await tick('gd-author-check[data-part=by-role]', false);
+      expect(notifier.dialogs[0]).toBe(
+        'confirm: One list for both roles: regroup. (Free Peoples had regroup; Shadow had none.)',
+      );
+      expect(posted('edit')).toEqual([]);
+      expect(find<HTMLInputElement>('gd-author-check[data-part=by-role] input').checked).toBe(true);
+      notifier.answers.push(true);
+      await tick('gd-author-check[data-part=by-role]', false);
+      expect(top()).toEqual({ options: { autoPass: 'regroup' } });
+    });
+
+    it('takes out leftovers a change of sides would leave the opponent unable to give, after asking', async () => {
+      const draft = {
+        human: 'shadow' as const,
+        rules: { oneSided: true },
+        cards: { freeps: { frodo: '10_121' }, shadow: { oppFrodo: '10_121' } },
+        opponent: { leftovers: 'frodo' },
+      };
+      await open(withDraft(draft));
+      notifier.answers.push(false);
+      await tick('gd-author-check[data-part=one-sided]', false);
+      expect(notifier.dialogs[0]).toBe(
+        "confirm: The opponent's leftovers to frodo go: in a two-sided game they go to the player's characters.",
+      );
+      expect(posted('edit')).toEqual([]);
+      expect(find<HTMLInputElement>('gd-author-check[data-part=one-sided] input').checked).toBe(true);
+      notifier.answers.push(true);
+      await tick('gd-author-check[data-part=one-sided]', false);
+      expect(patch()).toEqual({ top: { rules: null }, opponent: { unset: ['leftovers'] } });
+    });
+  });
 });

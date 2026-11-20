@@ -5,8 +5,9 @@
  */
 import { DraftState, DraftStep, StepStatus } from './authoring-state';
 import { isAwaiting, isBlock, isHumanSeat, isOpening, kidsOf, leftOutOf, messagesOf, numberOf, stepsOf } from './steps';
-import { askedTerm, askedWords, SEATS, splitTerms, TYPES, whenParts } from './terms';
-import { unscripted } from './notices';
+import { askedTerm, askedWords, opensTheGame, roleOf, SEATS, splitTerms, TYPES, whenParts } from './terms';
+import { decisionWhere, unscripted } from './notices';
+import { passedIn, Role } from './auto-pass';
 
 /** Who a step is about: read only (a pause, the opening), the player's, the opponent's, either's, or a block. */
 export type StepWho = 'Read' | 'You' | 'Opp' | 'Any' | 'Block';
@@ -33,6 +34,7 @@ export const PHASE_NAMES: Readonly<Record<string, string>> = {
   block: 'Several phases, in any order',
   skirmishes: 'Assignment and skirmishes, in any order',
   'after-block': 'After the block',
+  'game-opening': 'The game’s opening',
 };
 
 /** Said of a step that is a pass the game makes by itself. */
@@ -98,6 +100,8 @@ export interface StepWhere {
 export function placeOf(step: DraftStep, seen: StepWhere | null | undefined): StepWhere {
   if (isOpening(step)) return { turn: 0, phase: 'opening' };
   const when = typeof step.when === 'string' ? step.when : '';
+  // (the game's own opening, B10: a bid, the seat choice, ... come before turn 1, in no phase)
+  if (opensTheGame(when)) return { turn: 0, phase: 'game-opening' };
   const turn = /turn\(\s*(\d+)\s*\)/i.exec(when);
   const phase = /phase\(\s*([a-z_]+)\s*\)/i.exec(when);
   let said = phase ? (phase[1] ?? '').toLowerCase() : null;
@@ -139,18 +143,52 @@ export function silentPass(step: DraftStep): boolean {
  * A silent pass where the game passes by itself: the opponent's (with nothing to play it is never asked), or the
  * player's in a phase they are passed through. (The player's anywhere else is asked all the same.)
  */
-export function passesByItself(state: DraftState, step: DraftStep): boolean {
+export function passesByItself(state: DraftState, step: DraftStep, seen?: StepWhere | null): boolean {
   if (!silentPass(step) || typeof step.when !== 'string') return false;
   const seat = (splitTerms(step.when)[0] ?? '').toLowerCase();
   if ((SEATS as readonly string[]).includes(seat) && !isHumanSeat(state, seat)) return true;
   const phase = /phase\(\s*([a-z_]+)\s*\)/i.exec(step.when);
-  const passed = state.draft.options?.autoPass;
-  if (!phase || passed === undefined) return false;
-  return (
-    passed === true ||
-    String(passed).toLowerCase() === 'true' ||
-    splitTerms(String(passed)).includes((phase[1] ?? '').toLowerCase())
-  );
+  if (!phase) return false;
+  // (in the role the player has at the step: what its When says, else whose turn it is, else their seat's own)
+  const role = stepRole(state, step, placeOf(step, seen).turn) ?? state.draft.human ?? 'freeps';
+  return passedIn(state.draft.options, role, phase[1] ?? '');
+}
+
+/* ---------------------------------------------------------------- whose turn (A3) */
+
+/**
+ * Whose turn a turn of the game is, in a game of two sides (null in a one-sided game, or for no turn): the Free
+ * Peoples seat takes the turn the story starts in, and the seats then take turns.
+ */
+export function turnOwner(state: DraftState, turn: number | null): 'human' | 'opponent' | null {
+  if (state.twoSided !== true || turn === null || turn < 1) return null;
+  const first = state.start?.turn ?? 1;
+  const freepsSeats = Math.abs(turn - first) % 2 === 0;
+  return freepsSeats === ((state.draft.human ?? 'freeps') === 'freeps') ? 'human' : 'opponent';
+}
+
+/** The role a seat of a When plays by its name: freeps and shadow theirs, the person's and the opponent's by the seat. */
+function namedRole(state: DraftState, seat: string): Role | null {
+  if (seat === 'freeps' || seat === 'shadow') return seat;
+  const human = state.draft.human ?? 'freeps';
+  if (seat === 'human') return human;
+  if (seat === 'opponent') return human === 'freeps' ? 'shadow' : 'freeps';
+  return null;
+}
+
+/**
+ * The role the seat a step is about plays at it, in a game of two sides: what its When says (`as(shadow)`), else as
+ * whose turn the step comes in says. Null where that can't be told (or the game is one-sided).
+ */
+export function stepRole(state: DraftState, step: DraftStep, turn: number | null): Role | null {
+  if (state.twoSided !== true) return null;
+  const when = typeof step.when === 'string' ? step.when : (whenParts(step.when)?.terms ?? '');
+  const said = roleOf(when);
+  if (said !== null) return said;
+  const owner = turnOwner(state, turn);
+  const seat = (splitTerms(when)[0] ?? '').toLowerCase();
+  if (owner === null || !(SEATS as readonly string[]).includes(seat)) return null;
+  return isHumanSeat(state, seat) === (owner === 'human') ? 'freeps' : 'shadow';
 }
 
 /** The last checkpoint step before where the game is (or, `inclusive`, at it); 1 if there is none. */
@@ -198,6 +236,11 @@ export interface TimelineRow {
   selected: boolean;
   /** A pass the game makes by itself (faded; SILENT says why). */
   silent: boolean;
+  /**
+   * In a game of two sides, the role its seat plays where the seat's name does not say it ("you as Shadow" on the
+   * opponent's turn); null where it does, or can't be told.
+   */
+  role: Role | null;
   block: boolean;
   phase: string;
   even: boolean;
@@ -253,6 +296,11 @@ export function timelineItems(state: DraftState, pick: TimelinePick): TimelineIt
   let group: StepWhere = { turn: null, phase: null };
   const row = (step: DraftStep, index: number, sub: number): TimelineRow => {
     const number = index + 1;
+    const where = sub > -1 ? placeOf(step, null) : placeOf(step, state.places[index]);
+    const role = stepRole(state, step, where.turn ?? group.turn);
+    const seat = (
+      splitTerms(typeof step.when === 'string' ? step.when : (whenParts(step.when)?.terms ?? ''))[0] ?? ''
+    ).toLowerCase();
     const child = sub > -1;
     const uid = (child ? kidsOf(state, index)[sub] : state.uids[index]) ?? null;
     const status = (child ? state.substatuses[index]?.[sub] : state.statuses[index]) ?? 'unreached';
@@ -268,7 +316,8 @@ export function timelineItems(state: DraftState, pick: TimelinePick): TimelineIt
       tags: tagsOf(state, step, uid, child),
       current: number === position.step && !position.over && !position.frontier && (!child || position.sub === sub + 1),
       selected: number === pick.selected && (child ? pick.sub === uid : pick.sub === null),
-      silent: passesByItself(state, step),
+      silent: passesByItself(state, step, sub > -1 ? { turn: group.turn, phase: group.phase } : state.places[index]),
+      role: role !== null && role !== namedRole(state, seat) ? role : null,
       block: isBlock(step),
       phase: group.phase ?? 'none',
       even: group.turn !== null && group.turn % 2 === 0,
@@ -280,10 +329,17 @@ export function timelineItems(state: DraftState, pick: TimelinePick): TimelineIt
     const phase = where.phase ?? group.phase;
     if (turn !== group.turn || phase !== group.phase) {
       group = { turn, phase };
-      const words = [
-        ...(turn === null ? [] : [`Turn ${turn}`]),
-        ...(phase === null ? [] : [PHASE_NAMES[phase] ?? phase]),
-      ];
+      // (in a game of two sides, whose turn it is: "Turn 2 (theirs)")
+      const owner = turnOwner(state, turn);
+      const words =
+        phase === 'game-opening'
+          ? [PHASE_NAMES[phase] ?? phase]
+          : [
+              ...(turn === null
+                ? []
+                : [`Turn ${turn}${owner === null ? '' : owner === 'human' ? ' (yours)' : ' (theirs)'}`]),
+              ...(phase === null ? [] : [PHASE_NAMES[phase] ?? phase]),
+            ];
       if (words.length > 0) {
         items.push({
           kind: 'group',
@@ -326,7 +382,7 @@ export function timelineEnd(state: DraftState): TimelineEnd {
         : null,
     asked:
       unscripted(state) && asked
-        ? `${waiting.human ? 'You are' : 'The opponent is'} being asked: ${asked.text} (${asked.where})`
+        ? `${waiting.human ? 'You are' : 'The opponent is'} being asked: ${asked.text} (${decisionWhere(state, asked)})`
         : null,
   };
 }

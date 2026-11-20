@@ -44,3 +44,15 @@ export function rulesWithMarkers(draft: Draft, together: boolean): Rules | null 
   const rules: Rules = together ? { ...rest, markers: 'together' } : rest;
   return Object.keys(rules).length === 0 ? null : rules;
 }
+
+/**
+ * The opponent's leftovers that a change of sides would have the server refuse, or null: they go to a character of
+ * the Free Peoples seat's in a one-sided game, and of the person's seat's in a two-sided one (ringBearer is whoever
+ * bears the Ring, either way).
+ */
+export function leftoversLost(draft: Draft, oneSided: boolean): string | null {
+  const leftovers = draft.opponent?.leftovers;
+  if (leftovers === undefined || leftovers === 'ringBearer') return null;
+  const seat = oneSided ? 'freeps' : (draft.human ?? 'freeps');
+  return draft.cards?.[seat]?.[leftovers] === undefined ? leftovers : null;
+}

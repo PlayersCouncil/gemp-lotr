@@ -729,3 +729,28 @@ export function ringChoices(board: AuthoringBoard, seat: DraftSeat, type: string
     .filter((card) => card.owner === seat && card.type === type)
     .map((card) => [card.alias, `${card.alias} (${card.name})`]);
 }
+
+/* ---------------------------------------------------------------- what the setup can have (A3, B10) */
+
+/**
+ * Where a seat's card can be moved to: every place, but to the setup no minions on the table for the Free Peoples
+ * seat (the server refuses setup.freeps.minions: minions on the table at the start are the Shadow seat's), and with
+ * the game's own opening (`deckOnly`) only a deck.
+ */
+export function movesFor(seat: DraftSeat, inSetup: boolean, deckOnly: boolean): readonly string[] {
+  if (deckOnly) return ['deck.top', 'deck.bottom'];
+  return ZONES.filter((zone) => !(inSetup && seat === 'freeps' && zone === 'minions'));
+}
+
+/**
+ * Where a card added can be put (it goes into the setup): no minions for the Free Peoples seat; with the game's own
+ * opening (`realOpening`), only a deck; on another card only where there is one to put it on.
+ */
+export function addPlacesFor(
+  seat: DraftSeat,
+  realOpening: boolean,
+  hosts: boolean,
+): (readonly [zone: string, label: string])[] {
+  if (realOpening) return ADD_PLACES.filter(([zone]) => zone === '');
+  return [...ADD_PLACES.filter(([zone]) => !(seat === 'freeps' && zone === 'minions')), ...(hosts ? ON_PLACES : [])];
+}

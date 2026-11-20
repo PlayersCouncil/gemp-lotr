@@ -124,20 +124,17 @@ describe('the Board tab: where the story starts, the markers, sites without numb
     vi.useRealTimers();
   });
 
-  /** The tab on the draft's game; the number printed on each path's first site looked up (`printed`, 0: none). */
+  /**
+   * The tab on the draft's game; the number printed on each site (`printed`, 0: none) as the state says it. Answers
+   * the cards looked up meanwhile (none: the state says the numbers).
+   */
   async function open(state: DraftState = withStart(), printed = 1) {
     TestBed.inject(GameSession).open('7');
     backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(draftGameXml());
     TestBed.tick();
-    backend.expectOne((r) => r.url === `${AUTHOR}state`).flush(JSON.stringify(state));
+    backend.expectOne((r) => r.url === `${AUTHOR}state`).flush(JSON.stringify(withPrinted(state, printed)));
     await redraw();
     const lookUps = backend.match((r) => r.url === `${AUTHOR}cards`);
-    for (const request of lookUps) {
-      const id = request.request.params.get('q')!;
-      request.flush(
-        JSON.stringify({ cards: [{ id, name: id, type: 'site', culture: null, side: null, cost: 0, site: printed }] }),
-      );
-    }
     await redraw();
     return lookUps;
   }
@@ -516,11 +513,9 @@ describe('the Board tab: where the story starts, the markers, sites without numb
       });
     });
 
-    it('looks up the first site of each path for its number; a numbered path is as it was', async () => {
+    it('takes the number printed on each path’s first site from the state; a numbered path is as it was', async () => {
       const lookUps = await open();
-      expect(lookUps.map((request) => [request.request.params.get('q'), request.request.params.get('sites')])).toEqual([
-        ['1_323', 'true'],
-      ]);
+      expect(lookUps).toEqual([]);
       expect(text('.gd-author-board-path__site[data-site="2"] .gd-author-board-path__number')).toBe('Site 2');
       expect(el.querySelector('[data-unnumbered]')).toBeNull();
       expect(text('gd-author-board-path > [data-action=add-site]')).toBe('+ Site 5');
@@ -534,7 +529,7 @@ describe('the Board tab: where the story starts, the markers, sites without numb
       expect(el.querySelector('.gd-author-board-path__site[data-site="1"] [data-action=raise]')).toBeNull();
       expect(text('gd-author-board-path > [data-action=add-site]')).toBe('+ Site');
       await click('.gd-author-board-path__site[data-site="2"] [data-action=raise]');
-      expect(patch(await answer('edit', result(withStart()))).top).toEqual({
+      expect(patch(await answer('edit', result(withPrinted(withStart(), 0)))).top).toEqual({
         sites: {
           freeps: { site2: '1_329', site1: '1_323', site3: '1_341', site4: '1_348' },
           shadow: { site2opp: '1_329', site1opp: '1_323', site3opp: '1_341', site4opp: '1_348' },
@@ -565,3 +560,20 @@ describe('the Board tab: where the story starts, the markers, sites without numb
     });
   });
 });
+
+/** The state with the number printed on every site of both paths (and of the path laid) said: `printed` (0: none). */
+function withPrinted(state: DraftState, printed: number): DraftState {
+  const board = state.board;
+  if (!board) return state;
+  return {
+    ...state,
+    board: {
+      ...board,
+      sites: {
+        freeps: board.sites.freeps.map((site) => ({ printed, ...site })),
+        shadow: board.sites.shadow.map((site) => ({ printed, ...site })),
+      },
+      path: board.path?.map((site) => ({ printed, ...site })),
+    },
+  };
+}

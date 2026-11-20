@@ -33,7 +33,8 @@ interface LaidRow {
 /**
  * The adventure path on the table, as it will be once the changes gathered are made: a site to a row, with its
  * number, its card (shown large under the mouse), a button per seat's marker (pressed where the marker is; a click
- * puts the marker there, laying the sites up to it) and who controls it (a select once every marker is past it,
+ * puts the marker there, laying the sites up to it; not the Shadow marker while the markers keep together, which the
+ * game puts level with the fellowship's, nor any to the setup of a game that plays its own opening) and who controls it (a select once every marker is past it,
  * which gathers control or liberate), and the next site, not laid yet. Its changes are gathered with the tab's
  * others, for the board as it stands or the one the scenario starts with; for the latter, the markers and who
  * controls a site are shown as the scenario starts (the sites as the board in hand has them).
@@ -74,17 +75,22 @@ interface LaidRow {
               [attr.data-seat]="seat"
               [attr.data-here]="at[seat] === row.site.number ? '' : null"
               [attr.aria-pressed]="at[seat] === row.site.number"
+              [disabled]="changes.deckOnly() || (seat === 'shadow' && together())"
               [title]="
-                at[seat] === row.site.number
-                  ? 'The ' + names[seat].name + ' marker is here'
-                  : 'Put the ' + names[seat].name + ' marker here: marker(' + seat + ', ' + row.site.number + ')'
+                changes.deckOnly()
+                  ? 'The game’s own opening starts at site 1: the setup says only each deck’s order'
+                  : seat === 'shadow' && together()
+                    ? 'The markers keep together (the Scenario tab’s rules): the Shadow marker is put level with the fellowship’s at each move'
+                    : at[seat] === row.site.number
+                      ? 'The ' + names[seat].name + ' marker is here'
+                      : 'Put the ' + names[seat].name + ' marker here: marker(' + seat + ', ' + row.site.number + ')'
               "
               (click)="mark(seat, row.site.number)"
             >
               {{ names[seat].short }}
             </button>
           }
-          @if (row.controllable) {
+          @if (row.controllable && !changes.deckOnly()) {
             <span class="gd-author-board-laid__pick">
               <gd-author-select
                 data-control="control"
@@ -159,8 +165,11 @@ export class BoardLaidComponent {
     }));
   });
 
+  /** The markers keep together (rules.markers): the Shadow marker is not put by hand. */
+  protected readonly together = computed(() => this.changes.start()?.markersTogether === true);
+
   protected mark(seat: DraftSeat, number: number): void {
-    if (this.markers()?.[seat] === number) return;
+    if (this.markers()?.[seat] === number || this.changes.deckOnly() || (seat === 'shadow' && this.together())) return;
     this.changes.queue('marker', [seat, number]);
   }
 

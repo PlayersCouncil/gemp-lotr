@@ -422,4 +422,61 @@ describe('OpponentTabComponent: standing orders and rules', () => {
     expect(find(`${card(1)} [data-part=answer]`)).toBe(answer);
     expect(answer.value).toBe('half typ');
   });
+
+  it('edits an order’s When with the When composer: the form takes it as typing does, and Apply sends it', async () => {
+    await open(withOpponent({}, { twoSided: true }));
+    await click(`${card(2)} .gd-author-order__summary`);
+    const pickers = `${card(2)} gd-author-when-pickers`;
+    expect(find<HTMLSelectElement>(`${pickers} [data-picker=phase] select`).value).toBe('maneuver');
+    await choose(`${pickers} [data-picker=phase] select`, 'archery');
+    await choose(`${pickers} gd-author-select[data-picker=role] select`, 'shadow');
+    await choose(`${pickers} [data-picker=asked] select`, 'phaseActions');
+    const when = find<HTMLTextAreaElement>(`${card(2)} [data-part=when]`);
+    expect(when.value).toBe('shadow, action, phaseActions, phase(archery), as(shadow)');
+    // (nothing is sent until Apply: the form's own model)
+    expect(edits()).toEqual([]);
+    const turn = find<HTMLInputElement>(`${pickers} input[data-picker=turn]`);
+    turn.value = '2';
+    turn.dispatchEvent(new Event('change'));
+    await render();
+    await click(`${card(2)} [data-author=apply]`);
+    expect(patch()).toEqual({
+      opponent: {
+        orders: [
+          { op: 'merge', index: 2, set: { when: 'shadow, action, phaseActions, phase(archery), turn(2), as(shadow)' } },
+        ],
+      },
+    });
+  });
+
+  it('has no pickers for a When written out in full, and no role in a one-sided game', async () => {
+    await open(
+      withOpponent({ orders: [opponentOrder(0, { when: '{\n\tterms: "shadow"\n}' }), { ...ORDERS[2]!, index: 1 }] }),
+    );
+    await click(`${card(0)} .gd-author-order__summary`);
+    expect(el.querySelector(`${card(0)} .gd-author-when__pickers`)).toBeNull();
+    await click(`${card(1)} .gd-author-order__summary`);
+    expect(el.querySelector(`${card(1)} gd-author-select[data-picker=role]`)).toBeNull();
+  });
+
+  it('offers the rest to the Ring-bearer for an order about an assignment, as a step’s Answer does', async () => {
+    await open(withOpponent());
+    await click(`${card(2)} .gd-author-order__summary`);
+    expect(el.querySelector(`${card(2)} [data-author=answer-rest]`)).toBeNull();
+    await click(`${card(1)} .gd-author-order__summary`);
+    expect(text(`${card(1)} [data-author=answer-rest]`)).toBe('+ assign(ringBearer: rest)');
+    await click(`${card(1)} [data-author=answer-rest]`);
+    expect(find<HTMLInputElement>(`${card(1)} [data-part=answer]`).value).toBe(
+      'assign(frodo: rest), assign(ringBearer: rest)',
+    );
+    // (said already)
+    expect(el.querySelector(`${card(1)} [data-author=answer-rest]`)).toBeNull();
+  });
+
+  it('offers it for a new order while the opponent’s waiting decision is an assignment', async () => {
+    await open(withOpponent({}, { waiting: { human: null, opponent: ASSIGN } }));
+    await click('[data-author=add-order]');
+    await click('[data-new] [data-author=answer-rest]');
+    expect(find<HTMLInputElement>('[data-new] [data-part=answer]').value).toBe('assign(ringBearer: rest)');
+  });
 });

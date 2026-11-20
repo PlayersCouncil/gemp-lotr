@@ -1,0 +1,26 @@
+/* The Board tab's "How the game opens": a select on a line, and its note */
+
+:host {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.gd-author-board-opening {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 5px;
+  margin: 3px 0;
+}
+
+.gd-author-board-opening .gd-author-label {
+  flex: 0 0 96px;
+  font-size: 12px;
+  cursor: help;
+}
+
+.gd-author-board-opening__pick {
+  display: flex;
+  flex: 0 1 230px;
+  min-width: 0;
+}

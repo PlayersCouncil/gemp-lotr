@@ -15,6 +15,7 @@ import { DraftState, FoundCard } from './authoring-state';
 import { AUTHOR_UI_KEY, GatheredBoard } from './authoring-ui-store';
 import { Authoring, StepFlushResult } from './authoring.service';
 import { BoardChanges, PART_MADE, WHERE_REFUSED } from './board-changes.service';
+import { START_DEFAULT } from './board-start';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -429,5 +430,73 @@ describe('BoardChanges', () => {
     ]);
     changes.undoAdded(0);
     expect(changes.gathered()!.added.map((add) => add.alias)).toEqual(['sam']);
+  });
+
+  describe('how the game opens (B10)', () => {
+    it('opens with the game: the setup keeps only its decks, after the page asks what goes, and the opening step goes', async () => {
+      const state = withBoard({
+        draft: { ...DRAFT, setup: { freeps: { hand: 'sam', deck: 'merry' } }, steps: [{ when: 'opening' }] },
+      });
+      await ready(state);
+      expect(changes.opening()).toBe('board');
+      notifier.answers.push(false);
+      expect(await changes.setOpening('game')).toBe(false);
+      expect(notifier.dialogs[0]).toBe(
+        "confirm: Its setup keeps only each deck's order. Lost: Free Peoples hand: sam; step 1, read before the first turn.",
+      );
+      expect(notifier.words[0]).toMatchObject({ ok: 'Open with the game', cancel: 'Cancel' });
+      expect(asked('edit')).toEqual([]);
+      notifier.answers.push(true);
+      const going = changes.setOpening('game');
+      await settle();
+      const request = await answer('edit', rebuilt('8'));
+      expect(JSON.parse(form(request, 'patch'))).toEqual({
+        top: { setup: { opening: 'game', freeps: { deck: 'merry' } } },
+        steps: [{ op: 'delete', uid: 's1' }],
+      });
+      expect(await going).toBe(true);
+      expect(await changes.setOpening('board')).toBe(false);
+    });
+
+    it('opens with the game at once when nothing would go; back to a board laid out, asked first where steps answer the opening', async () => {
+      await ready(withBoard({ draft: { ...DRAFT, setup: undefined } }));
+      const going = changes.setOpening('game');
+      await settle();
+      expect(patchOf(await answer('edit', rebuilt('8'))).top).toEqual({ setup: { opening: 'game' } });
+      expect(await going).toBe(true);
+      expect(notifier.dialogs).toEqual([]);
+      authoring.setState(
+        withBoard({
+          start: { ...START_DEFAULT, opening: 'game' },
+          draft: { ...DRAFT, setup: { opening: 'game' }, steps: [{ when: 'human, bid', allow: 'number(1)' }] },
+        }),
+      );
+      expect(changes.opening()).toBe('game');
+      expect(changes.deckOnly()).toBe(false);
+      authoring.remember({ where: 'setup' });
+      expect(changes.deckOnly()).toBe(true);
+      notifier.answers.push(true);
+      const back = changes.setOpening('board');
+      await settle();
+      expect(notifier.dialogs[0]).toBe('confirm: With the board laid out, step 1 will not be reached.');
+      expect(patchOf(await answer('edit', rebuilt('9'))).top).toEqual({ setup: null });
+      expect(await back).toBe(true);
+    });
+
+    it('is not changed with changes gathered', async () => {
+      await ready();
+      changes.queue('twilight', [3]);
+      expect(await changes.setOpening('game')).toBe(false);
+      expect(authoring.problem()).toBe(WHERE_REFUSED);
+    });
+  });
+
+  it('knows a path without numbers by the number printed on its first site, as the state says', async () => {
+    const board = draftBoard();
+    const site = { number: 1, id: '11_236', alias: 'site1', name: 'A Road', printed: 0 };
+    await ready(withBoard({ board: { ...board, sites: { freeps: [site], shadow: [{ ...site, printed: 1 }] } } }));
+    expect(changes.unnumbered('freeps')).toBe(true);
+    expect(changes.unnumbered('shadow')).toBe(false);
+    expect(asked('cards')).toEqual([]);
   });
 });

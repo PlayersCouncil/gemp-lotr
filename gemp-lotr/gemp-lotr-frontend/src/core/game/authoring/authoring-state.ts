@@ -33,6 +33,8 @@ export interface DraftWhen {
   text?: string;
   phase?: string;
   turn?: number | string;
+  /** The role the seat plays then (A3): freeps or shadow. */
+  as?: string;
   skirmish?: number | string;
   offers?: string;
   inSkirmish?: string;
@@ -127,8 +129,12 @@ export interface DraftStep {
 export type DraftCards = Readonly<Record<string, string>>;
 
 export interface DraftOptions {
-  /** Comma-separated phases the player is passed through. */
-  autoPass?: string | boolean;
+  /**
+   * Comma-separated phases the player is passed through (`true`: an ordinary table's); or, said for each role the
+   * person plays (A3), the phases while they are the Free Peoples player and while they are the Shadow player (a role
+   * with none written `false`).
+   */
+  autoPass?: string | boolean | { readonly freeps?: string | boolean; readonly shadow?: string | boolean };
   /** Only ever false. */
   autoAccept?: boolean;
   autoDismissDeckReveal?: boolean;
@@ -187,6 +193,8 @@ export interface Draft {
     markers?: 'together' | 'apart';
   };
   setup?: {
+    /** How the game opens (B10): `game` plays its own opening (bid, seats, starting fellowships, draw); absent: board. */
+    opening?: 'board' | 'game';
     startAt?: DraftStartAt;
     freeps?: Readonly<Record<string, string>>;
     shadow?: Readonly<Record<string, string>>;
@@ -245,6 +253,10 @@ export interface AuthoringPosition {
   phase: string | null;
   /** The flags chosen in this game. */
   chosen: readonly string[];
+  /** Whose turn it is (A3). */
+  turnOf?: 'human' | 'opponent';
+  /** The role each seat is playing now: in a two-sided game the one whose turn it is is the Free Peoples player. */
+  roles?: { readonly human: DraftSeat; readonly opponent: DraftSeat };
 }
 
 /** One of the answers a decision offers. */
@@ -283,6 +295,10 @@ export interface AuthoringDecision {
   kind?: string | null;
   /** The player's, with a step in hand: how each of the step's refusals stands at it. */
   refuses?: readonly DecisionRefusal[];
+  /** The role its seat is playing now (A3): freeps, the Free Peoples player, whose turn it is; or shadow. */
+  role?: DraftSeat;
+  /** Which of its step's decisions it is, from 1, as a refusal's "2: ..." counts them; 0 with no step. */
+  at?: number;
 }
 
 /** One of a step's refusals, at the decision in hand (state.waiting.human.refuses). */
@@ -348,6 +364,8 @@ export interface BoardSite {
   id: string;
   alias: string | null;
   name: string | null;
+  /** The number printed on it: 0 for none (the Shadows block on). */
+  printed?: number;
 }
 
 /** The table as the scenario names it (describeBoard). */
@@ -378,6 +396,8 @@ export interface LaidSite {
   /** Whose adventure deck it came from. */
   owner: DraftSeat;
   controlledBy: DraftSeat | null;
+  /** The number printed on it: 0 for none. */
+  printed?: number;
 }
 
 /** Where the story starts, as the draft says it (describe's `start`), every part filled in. */
@@ -405,6 +425,9 @@ export interface DraftStart {
   phases: readonly string[];
   /** The longest seat path (at most 9). */
   lastSite: number;
+  /** How the game opens (B10): laid out as the setup says (board), or its own opening played (game). */
+  opening?: 'board' | 'game';
+  openings?: readonly ('board' | 'game')[];
 }
 
 /** A part of the file that was left out so that it could be opened at all. */
@@ -435,6 +458,8 @@ export interface StepTexts {
   passWhen?: string;
   /** A message's condition, by its place among the step's messages (from 0). */
   readonly [message: `messages.${number}.require`]: string | undefined;
+  /** A closing message's condition (Ends the scenario), by its place among them. */
+  readonly [closing: `end.messages.${number}.require`]: string | undefined;
 }
 
 /** No draft is open. */
@@ -511,6 +536,24 @@ export interface DraftState {
   templates?: AuthoringTemplates;
   /** The opponent's rules and standing orders (absent from a server that does not say). */
   opponent?: OpponentState;
+  /** Both seats take turns (rules.oneSided is not set): A3. */
+  twoSided?: boolean;
+  /** options.autoPass, read (A3). */
+  autoPass?: AuthoringAutoPass;
+  /** The conditions of the outcome's closing messages, as the file has them: "winMessages.0.require", ... */
+  outcomeTexts?: Readonly<Record<string, string>>;
+}
+
+/** options.autoPass as the server reads it (describeAutoPass). */
+export interface AuthoringAutoPass {
+  /** Said for each role. */
+  byRole: boolean;
+  /** The one list's phases; null when said for each role. */
+  all: readonly string[] | null;
+  /** The phases while the person is the Free Peoples player, and while the Shadow player (each the list, without roles). */
+  freeps: readonly string[];
+  shadow: readonly string[];
+  phases: readonly string[];
 }
 
 export type AuthoringState = NoDraft | DraftState;

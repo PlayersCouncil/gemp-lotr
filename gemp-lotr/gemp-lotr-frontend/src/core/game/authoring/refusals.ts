@@ -58,3 +58,28 @@ export function withRefusal(text: string | undefined, term: string): string {
   const lines = refusalLines(text);
   return (refuses(text, term) ? lines : [...lines, term]).join('\n');
 }
+
+/** A line's decision number ("2: x" is 2), 0 for a line about every decision. */
+const lineAt = (line: string): number => Number(/^(\d+)\s*:/.exec(line)?.[1] ?? 0);
+
+/**
+ * Whether a term is refused at the step's decision `at` already (from 1; 0: any): on a line about every decision, or
+ * on that decision's own line.
+ */
+export function refusesAt(text: string | undefined, term: string, at: number): boolean {
+  if (at < 1) return refuses(text, term);
+  return refusalLines(text).some(
+    (line) => (lineAt(line) === 0 || lineAt(line) === at) && splitTerms(line.replace(/^\d+\s*:\s*/, '')).includes(term),
+  );
+}
+
+/**
+ * A click the step did not take, as the refusal to add: for a step that repeats, about the decision in hand
+ * (`"2: choose(boromir)"`, the runner's way of counting them); else about every decision. As they are if it is one
+ * already.
+ */
+export function withRefusalAt(text: string | undefined, term: string, at: number): string {
+  if (at < 1) return withRefusal(text, term);
+  const lines = refusalLines(text);
+  return (refusesAt(text, term, at) ? lines : [...lines, `${at}: ${term}`]).join('\n');
+}

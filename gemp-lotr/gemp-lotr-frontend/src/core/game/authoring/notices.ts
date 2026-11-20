@@ -24,7 +24,26 @@ export function whereLine(state: DraftState): string {
               ? ' (a block, between its decisions)'
               : ' (which repeats, and is under way)'
             : ' (waiting to come to it)');
-  return position.over ? where : `${where} · turn ${position.turn}, ${position.phase ?? ''}`;
+  if (position.over) return where;
+  // (the game's own opening, B10: before turn 1, in its own steps)
+  if (position.turn === 0 && state.start?.opening === 'game') return `${where} · the game’s opening`;
+  return `${where} · turn ${position.turn}, ${position.phase ?? ''}${turnWords(state)}`;
+}
+
+/** In a game of two sides (A3), whose turn it is and the person's role where it is not their seat's: " · their turn, you as Shadow". */
+export function turnWords(state: DraftState): string {
+  const { turnOf, roles } = state.position;
+  if (state.twoSided !== true || turnOf === undefined) return '';
+  // (the person's role only where their seat's name does not say it)
+  const role = roles?.human !== undefined && roles.human !== (state.draft.human ?? 'freeps') ? roles.human : null;
+  const as = role === null ? '' : `, you as ${role === 'shadow' ? 'Shadow' : 'Free Peoples'}`;
+  return ` · ${turnOf === 'human' ? 'your' : 'their'} turn${as}`;
+}
+
+/** A waiting decision's role, in a game of two sides (A3): " · as Shadow"; nothing in a one-sided game. */
+export function roleWords(state: DraftState, decision: AuthoringDecision | null): string {
+  if (state.twoSided !== true || !decision?.role) return '';
+  return ` · as ${decision.role === 'shadow' ? 'Shadow' : 'Free Peoples'}`;
 }
 
 /** What a failed call is said to be: the server's own words, or what its status means. */
@@ -235,4 +254,13 @@ export function savedNotice(saved: SaveReport, unsent: string | null): { notice:
     report += `\n\n${unsent}`;
   }
   return { notice, report };
+}
+
+/**
+ * Where a waiting decision is, as the panel says it: the server's "turn 3, fellowship", or the game's own opening
+ * (B10: turn 0, in no phase of its own); and its role in a game of two sides (" · as Shadow").
+ */
+export function decisionWhere(state: DraftState, decision: AuthoringDecision): string {
+  const opening = state.position.turn === 0 && state.start?.opening === 'game';
+  return (opening ? 'the game’s opening' : decision.where) + roleWords(state, decision);
 }

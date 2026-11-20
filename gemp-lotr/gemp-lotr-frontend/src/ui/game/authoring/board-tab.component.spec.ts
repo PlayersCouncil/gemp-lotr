@@ -17,6 +17,7 @@ import { PageExit } from '../../../core/platform/page-exit';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { boardCard, draftBoard, draftGameXml, draftState, position, result } from '../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
+import { START_DEFAULT } from '../../../core/game/authoring/board-start';
 import { BoardTabComponent } from './board-tab.component';
 import { foundText, SEARCH_MS } from './widgets/card-search.component';
 
@@ -96,26 +97,19 @@ describe('BoardTabComponent', () => {
     vi.useRealTimers();
   });
 
-  /** The tab on the draft's game; the number printed on each path's first site looked up (`printed`, 0: none). */
+  /** The tab on the draft's game; the number printed on each site as the state says it (`printed`, 0: none). */
   async function open(state: DraftState = withBoard(), printed = 1) {
     TestBed.inject(GameSession).open('7');
     backend.expectOne((r) => r.url === GAME && r.method === 'GET').flush(draftGameXml());
     TestBed.tick();
-    backend.expectOne((r) => r.url === `${AUTHOR}state`).flush(JSON.stringify(state));
-    await settle();
-    await redraw();
-    await lookUps(printed);
-  }
-
-  /** The sites looked up for their printed number (GET cards with the site's id), answered. */
-  async function lookUps(printed = 1) {
-    const ids = new Set(
-      Object.values(authoring.draft()?.board?.sites ?? {}).flatMap((path) => path.map((site) => site.id)),
-    );
-    for (const request of backend.match((r) => r.url === `${AUTHOR}cards` && ids.has(r.params.get('q') ?? ''))) {
-      const id = request.request.params.get('q')!;
-      request.flush(JSON.stringify({ cards: [{ ...GANDALF, id, type: 'site', site: printed }] }));
-    }
+    const board = state.board;
+    const sites = board && {
+      freeps: board.sites.freeps.map((site) => ({ printed, ...site })),
+      shadow: board.sites.shadow.map((site) => ({ printed, ...site })),
+    };
+    backend
+      .expectOne((r) => r.url === `${AUTHOR}state`)
+      .flush(JSON.stringify(board && sites ? { ...state, board: { ...board, sites } } : state));
     await settle();
     await redraw();
   }
@@ -615,5 +609,103 @@ describe('BoardTabComponent', () => {
     expect(foundText({ ...GANDALF, site: undefined }, true, '1_72')).toBe(
       'Gandalf, Friend of the Shirefolk  ·  1_72  ·  site ?  ·  this one',
     );
+  });
+
+  describe('how the game opens, and what a setup can have (B10, A3)', () => {
+    const gameOpening = (extra: Partial<DraftState> = {}) =>
+      withBoard({
+        start: { ...START_DEFAULT, opening: 'game' },
+        draft: { ...DRAFT, setup: { opening: 'game', freeps: { deck: 'sam' } } },
+        ...extra,
+      });
+    const moves = (alias: string) =>
+      [
+        ...el.querySelectorAll<HTMLOptionElement>(
+          `.gd-author-board-card[data-alias=${alias}] select[data-control=move] option`,
+        ),
+      ]
+        .slice(1)
+        .map((one) => one.value);
+
+    it('opens with the game after the page asks what goes, the setup keeping only its decks', async () => {
+      await open();
+      expect(find<HTMLSelectElement>('gd-author-board-opening select').value).toBe('board');
+      expect(el.querySelector('[data-note=opening]')).toBeNull();
+      notifier.answers.push(true);
+      await choose('gd-author-board-opening select', 'game');
+      expect(notifier.dialogs[0]).toBe(
+        "confirm: Its setup keeps only each deck's order. Lost: Free Peoples hand: sam, merry; Shadow hand: orc.",
+      );
+      const request = await answer('edit', result(withBoard()));
+      expect(JSON.parse(request.request.body.get('patch'))).toEqual({ top: { setup: { opening: 'game' } } });
+    });
+
+    it('puts the select back when the author keeps the board', async () => {
+      await open();
+      notifier.answers.push(false);
+      await choose('gd-author-board-opening select', 'game');
+      expect(asked('edit')).toEqual([]);
+      expect(find<HTMLSelectElement>('gd-author-board-opening select').value).toBe('board');
+    });
+
+    it('says that there are no cards before they are dealt, and offers only how the game opens', async () => {
+      await open(gameOpening({ board: null }));
+      expect(el.querySelector('[data-empty]')).toBeNull();
+      expect(find<HTMLSelectElement>('gd-author-board-opening select').value).toBe('game');
+      expect(text('[data-note=undealt]')).toBe('No cards yet: they are dealt once the seats are chosen.');
+      expect(el.querySelector('gd-author-board-start')).toBeNull();
+    });
+
+    it('to the setup of the game’s own opening, offers only a deck’s order', async () => {
+      const deck = (alias: string, at: number) => boardCard(alias, { zone: 'deck', at, cardId: 40 + at });
+      await open(gameOpening({ board: draftBoard({ cards: [boardCard('frodo'), deck('a', 0), deck('b', 1)] }) }));
+      expect(text('[data-note=opening]')).toBe('Bid, seats, fellowships and draw are played.');
+      expect(el.querySelector('.gd-author-board-start__row[data-part=site]')).toBeNull();
+      expect(el.querySelector('gd-author-board-counters')).not.toBeNull();
+      await click('[data-where=setup] input');
+      expect(el.querySelector('gd-author-board-counters')).toBeNull();
+      expect(moves('a')).toEqual(['freeps.deck.top', 'freeps.deck.bottom']);
+      expect(el.querySelector('.gd-author-board-card[data-alias=a] [data-action=down]')).not.toBeNull();
+      expect(el.querySelector('.gd-author-board-card[data-alias=frodo] [data-action=wound]')).toBeNull();
+      expect(
+        all('gd-author-board-laid button[data-action=marker]').every(
+          (button) => (button as HTMLButtonElement).disabled,
+        ),
+      ).toBe(true);
+    });
+
+    it('offers no minions on the table for the Free Peoples seat’s setup, nor the Shadow marker while markers keep together', async () => {
+      await open(withBoard({ start: { ...START_DEFAULT, markersTogether: true } }));
+      expect(moves('sam')).toContain('freeps.minions');
+      await click('[data-where=setup] input');
+      expect(moves('sam')).not.toContain('freeps.minions');
+      expect(moves('orc')).toContain('shadow.minions');
+      const markers = all('gd-author-board-laid button[data-action=marker]') as HTMLButtonElement[];
+      expect(markers.filter((button) => button.dataset['seat'] === 'shadow').every((button) => button.disabled)).toBe(
+        true,
+      );
+      expect(markers.filter((button) => button.dataset['seat'] === 'freeps').some((button) => button.disabled)).toBe(
+        false,
+      );
+    });
+
+    it('adds a card only where its seat’s setup can have it', async () => {
+      await open();
+      await type('gd-author-board-add gd-author-card-search input', 'troll');
+      vi.advanceTimersByTime(SEARCH_MS);
+      asked('cards', 'GET')[0]!.flush(JSON.stringify({ cards: [TROLL] }));
+      await settle();
+      await redraw();
+      await click('gd-author-board-add .gd-author-search__result');
+      const zones = () =>
+        [...el.querySelectorAll<HTMLOptionElement>('gd-author-board-add [data-field=zone] option')].map(
+          (one) => one.value,
+        );
+      expect(zones()).toContain('minions');
+      await choose('gd-author-board-add [data-field=zone] select', 'minions');
+      await choose('gd-author-board-add [data-field=seat] select', 'freeps');
+      expect(zones()).not.toContain('minions');
+      expect(find<HTMLSelectElement>('gd-author-board-add [data-field=zone] select').value).toBe('');
+    });
   });
 });

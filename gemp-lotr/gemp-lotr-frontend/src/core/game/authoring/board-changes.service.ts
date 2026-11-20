@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Notifier } from '../../notifier/notifier';
 import { AuthoringApi } from './authoring-api.service';
 import { BoardSite, DraftSeat, DraftStart, FoundCard } from './authoring-state';
@@ -52,6 +52,7 @@ import {
   undoRemoved,
   ViewCard,
 } from './board-queue';
+import { Opening, openingOf, openingStepUid, openingSteps, setupForBoard, setupForGame, stepWords } from './opening';
 
 /** Said when where changes are made is changed with changes waiting (they are for the other board). */
 export const WHERE_REFUSED = 'Board: submit or reset the changes waiting there first.';
@@ -77,6 +78,13 @@ export class BoardChanges {
   readonly oneSided = computed(() => this.authoring.draft()?.draft.rules?.oneSided === true);
   /** Changes go to the board the scenario starts with (else to the board as it stands). */
   readonly inSetup = computed(() => this.authoring.ui().where === 'setup');
+  /** How the game opens (B10): laid out as the setup says, or the game's own opening played. */
+  readonly opening = computed<Opening>(() => {
+    const state = this.authoring.draft();
+    return state ? openingOf(state) : 'board';
+  });
+  /** The setup of a game that plays its own opening says only each deck's order: all a change to it can do. */
+  readonly deckOnly = computed(() => this.opening() === 'game' && this.inSetup());
   /**
    * What has been gathered, without what is about cards the scenario no longer has (the legacy panel let go of
    * those as it drew the tab; each change made here starts from this).
@@ -305,6 +313,47 @@ export class BoardChanges {
     if (top) await this.authoring.edit({ top });
   }
 
+  /**
+   * How the game opens, changed (a fresh game). To the game's own opening, the setup keeps only each deck's order,
+   * and the step read before the first turn goes (the game has none): the author is asked first when that loses
+   * anything. To a board laid out, steps for the opening's decisions are never come to: asked first too. Not with
+   * changes gathered (they are for the board as it opens now). Resolves whether it was changed.
+   */
+  async setOpening(opening: Opening): Promise<boolean> {
+    const state = this.authoring.draft();
+    if (!state || opening === this.opening()) return false;
+    if (this.count() > 0) {
+      this.authoring.problem.set(WHERE_REFUSED);
+      return false;
+    }
+    if (opening === 'game') {
+      const { setup, lost } = setupForGame(state.draft.setup);
+      const first = openingStepUid(state);
+      const parts = [...lost, ...(first !== null ? ['step 1, read before the first turn'] : [])];
+      if (
+        parts.length > 0 &&
+        !(await this.ask(`Its setup keeps only each deck's order. Lost: ${parts.join('; ')}.`, 'game'))
+      ) {
+        return false;
+      }
+      const steps = first !== null ? { steps: [{ op: 'delete' as const, uid: first }] } : {};
+      return (await this.authoring.edit({ top: { setup }, ...steps })) !== null;
+    }
+    const steps = openingSteps(state);
+    if (
+      steps.length > 0 &&
+      !(await this.ask(`With the board laid out, ${stepWords(steps)} will not be reached.`, 'board'))
+    ) {
+      return false;
+    }
+    return (await this.authoring.edit({ top: { setup: setupForBoard(state.draft.setup) } })) !== null;
+  }
+
+  private ask(question: string, opening: Opening): Promise<boolean> {
+    const ok = opening === 'game' ? 'Open with the game' : 'Lay the board out';
+    return this.notifier.confirm(question, { title: `${ok}?`, ok, cancel: 'Cancel' });
+  }
+
   /** The seats' paths (each a list of blueprint ids): at once. */
   async putSites(freeps: readonly string[], shadow: readonly string[]): Promise<void> {
     const draft = this.authoring.draft();
@@ -351,30 +400,13 @@ export class BoardChanges {
 
   /* ---------------------------------------------------------------- sites without numbers */
 
-  /** The number printed on a site, by its blueprint (0: none), as far as it has been looked up. */
-  private readonly printed = signal<ReadonlyMap<string, number>>(new Map());
-  private readonly asked = new Set<string>();
-
   /**
    * Whether a seat's path is one whose sites have no numbers (the Shadows block on): as the game decides it, by the
-   * first site of the path. Looked up once per site (GET cards).
+   * first site of the path, whose printed number the state says (0: none).
    */
   unnumbered(seat: DraftSeat): boolean {
-    const first = this.path(seat)[0]?.id;
-    return first !== undefined && this.printed().get(first) === 0;
+    return this.path(seat)[0]?.printed === 0;
   }
-
-  private readonly lookUp = effect(() => {
-    for (const seat of BOARD_SEATS) {
-      const first = this.board()?.sites[seat][0]?.id;
-      if (first === undefined || this.asked.has(first)) continue;
-      this.asked.add(first);
-      void this.authoring.send(this.api.cards(first, true), false).then((found) => {
-        const card = found?.cards.find((one) => one.id === first);
-        if (card?.site !== undefined) this.printed.update((known) => new Map([...known, [first, card.site ?? 0]]));
-      });
-    }
-  });
 
   /** "The same sites for both seats": ticked with the paths apart, the Free Peoples' is the Shadow's too. */
   async samePath(same: boolean): Promise<void> {

@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { FoundCard } from '../../../../core/game/authoring/authoring-state';
 import { BoardChanges } from '../../../../core/game/authoring/board-changes.service';
-import { ListedCard, reordered, ZONES } from '../../../../core/game/authoring/board-queue';
+import { ListedCard, movesFor, reordered } from '../../../../core/game/authoring/board-queue';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { CardHoverDirective } from '../widgets/card-hover.directive';
 import { CardSearchComponent } from '../widgets/card-search.component';
@@ -14,7 +14,8 @@ type Option = readonly [value: string, label: string];
  * A card of the Board tab's lists: its name in the scenario (the card shown large under the mouse; a click opens its
  * information), its name, whether it is new or to be taken out, ✎ to rename it and Change to put another card in its
  * place (at once); then what can be gathered for it: Keep it (one to be taken out), ↑ ↓ ⤒ in a hand or pile, a move,
- * wounds − +, +token, put on another card, and × (not added after all, or taken out).
+ * wounds − +, +token, put on another card, and × (not added after all, or taken out). To the setup of a game that
+ * plays its own opening, only a deck's order and a move into a deck are offered.
  *
  * DOM contract: `gd-author-board-card` holding `.gd-author-board-card` (`data-alias`, `data-changed`, `data-added`,
  * `data-removing`) with `.gd-author-board-card__name` (`span.gd-author-board-card__alias.cardHint[value]`, the name,
@@ -94,7 +95,7 @@ type Option = readonly [value: string, label: string];
             Keep it
           </button>
         } @else {
-          @if (entry().ordered) {
+          @if (entry().ordered && (!changes.deckOnly() || card.zone === 'deck')) {
             <button
               gdAuthorButton
               data-action="up"
@@ -134,7 +135,7 @@ type Option = readonly [value: string, label: string];
               <option [value]="option[0]">{{ option[1] }}</option>
             }
           </select>
-          @if (card.zone === 'characters' || card.zone === 'minions' || card.wounds > 0) {
+          @if (!changes.deckOnly() && (card.zone === 'characters' || card.zone === 'minions' || card.wounds > 0)) {
             <button
               gdAuthorButton
               data-action="heal"
@@ -154,7 +155,7 @@ type Option = readonly [value: string, label: string];
               +
             </button>
           }
-          @if (card.zone === 'support' || card.tokens > 0) {
+          @if (!changes.deckOnly() && (card.zone === 'support' || card.tokens > 0)) {
             <button
               gdAuthorButton
               data-action="token"
@@ -164,7 +165,7 @@ type Option = readonly [value: string, label: string];
               +token{{ card.tokens > 0 ? ' (' + card.tokens + ')' : '' }}
             </button>
           }
-          @if (hosts().length > 1) {
+          @if (!changes.deckOnly() && hosts().length > 1) {
             <select
               class="gd-author-input"
               data-control="put"
@@ -205,13 +206,20 @@ export class BoardCardComponent {
   /** A pile (not the hand): its order is from the top. */
   protected readonly pile = computed(() => this.entry().card.zone !== 'hand');
 
-  /** Where it can be moved to: its place first (choosing it does nothing), then every place of its seat's. */
+  /**
+   * Where it can be moved to: its place first (choosing it does nothing), then every place of its seat's the change
+   * can put it (to the setup: no minions on the table for the Free Peoples seat; with the game's own opening, only a
+   * deck).
+   */
   protected readonly moves = computed<Option[]>(() => {
     const { card } = this.entry();
     const seat = card.owner;
     return [
       ['', card.zone + (card.on ? ` on ${card.on}` : '')],
-      ...ZONES.map((zone): Option => [`${seat}.${zone}`, zone]),
+      ...movesFor(seat, this.changes.inSetup(), this.changes.deckOnly()).map((zone): Option => [
+        `${seat}.${zone}`,
+        zone,
+      ]),
     ];
   });
 

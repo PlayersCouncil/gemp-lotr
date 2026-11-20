@@ -24,6 +24,7 @@ import { checks as picking } from './author/picking.mjs';
 import { checks as start } from './author/start.mjs';
 import { checks as opponentOrders } from './author/opponent-orders.mjs';
 import { checks as endings } from './author/endings.mjs';
+import { checks as sides } from './author/sides.mjs';
 
 /** Every check by name; a part's file adds its own here. */
 const CHECKS = {
@@ -36,6 +37,7 @@ const CHECKS = {
   ...start,
   ...opponentOrders,
   ...endings,
+  ...sides,
 };
 
 const ONLY = argument('only', '').split(',').filter(Boolean);

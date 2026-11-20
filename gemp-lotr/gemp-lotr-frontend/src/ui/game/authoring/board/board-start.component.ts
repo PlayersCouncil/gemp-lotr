@@ -5,6 +5,7 @@ import { behind, controlledNumbers, SKIRMISH_PHASES, StartPart } from '../../../
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorCheckComponent } from '../widgets/author-check.component';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
+import { BoardOpeningComponent } from './board-opening.component';
 
 /** The numbers typed in. */
 type Typed = 'turn' | 'twilight' | 'moves';
@@ -12,7 +13,8 @@ type Typed = 'turn' | 'twilight' | 'moves';
 const SEAT_NAMES: Readonly<Record<DraftSeat, string>> = { freeps: 'Free Peoples', shadow: 'Shadow' };
 
 /**
- * The Board tab's "Where the story starts" (setup.startAt and what goes with it): the fellowship's site, the Shadow
+ * The Board tab's "Where the story starts": how the game opens (gd-author-board-opening), and, for a game laid out as
+ * its setup says, where (setup.startAt and what goes with it): the fellowship's site, the Shadow
  * seat's marker (level with the fellowship while the markers keep together), the phase, the turn, the twilight pool,
  * the moves made this turn (only where they can be other than the phase's own), in the Assignment and Skirmish
  * phases the skirmishes already assigned (a Free Peoples character of the setup's and the setup's minions), a tick
@@ -23,7 +25,7 @@ const SEAT_NAMES: Readonly<Record<DraftSeat, string>> = { freeps: 'Free Peoples'
  * says. What the server said of a refused start is said here too.
  *
  * DOM contract: `gd-author-board-start` holding `.gd-author-board__heading` (with `.gd-author-board-start__late`
- * for a late start), a `.gd-author-board-start__row` per part (`data-part`: site, opponentSite, phase, turn,
+ * for a late start), `gd-author-board-opening`, and for a game laid out, a `.gd-author-board-start__row` per part (`data-part`: site, opponentSite, phase, turn,
  * twilight, moves; `data-changed`) with `.gd-author-label` and `.gd-author-board-start__pick` holding `select.gd-author-input`, or
  * `input[type=number].gd-author-input`; `.gd-author-board-start__fights` with a `.gd-author-board-start__fight` per
  * character (`data-character`) holding `.gd-author-board-start__minion` (`data-minion`, `button[data-action=unfight]`)
@@ -35,12 +37,12 @@ const SEAT_NAMES: Readonly<Record<DraftSeat, string>> = { freeps: 'Free Peoples'
 @Component({
   selector: 'gd-author-board-start',
   styleUrl: './board-start.component.css',
-  imports: [AuthorButtonDirective, AuthorCheckComponent, AuthorSelectComponent],
+  imports: [AuthorButtonDirective, AuthorCheckComponent, AuthorSelectComponent, BoardOpeningComponent],
   template: `
     @if (changes.startView(); as view) {
       <div class="gd-author-board__heading">
         Where the story starts
-        @if (view.late) {
+        @if (view.late && changes.opening() === 'board') {
           <span
             class="gd-author-board-start__late"
             title="The game is carried on from here: nothing earlier in the turn happens (no start of turn, no move to this site)"
@@ -48,142 +50,153 @@ const SEAT_NAMES: Readonly<Record<DraftSeat, string>> = { freeps: 'Free Peoples'
           >
         }
       </div>
-      <div class="gd-author-board-start__row" data-part="site" [attr.data-changed]="mark('site')">
-        <span class="gd-author-label">Site</span>
-        <span class="gd-author-board-start__pick">
-          <gd-author-select
-            label="Site"
-            hint="The fellowship's site, whose turn it is"
-            [options]="sites()"
-            [value]="'' + view.site"
-            (changed)="changes.setStart('site', +$event)"
-          />
-        </span>
-      </div>
-      <div class="gd-author-board-start__row" data-part="opponentSite" [attr.data-changed]="mark('opponentSite')">
-        <span class="gd-author-label">Shadow marker</span>
-        <span class="gd-author-board-start__pick">
-          <gd-author-select
-            label="Shadow marker"
-            [hint]="view.markersTogether ? togetherHint : markerHint"
-            [options]="sites()"
-            [value]="'' + view.opponentSite"
-            [disabled]="view.markersTogether"
-            (changed)="changes.setStart('opponentSite', +$event)"
-          />
-        </span>
-      </div>
-      <div class="gd-author-board-start__row" data-part="phase" [attr.data-changed]="mark('phase')">
-        <span class="gd-author-label">Phase</span>
-        <span class="gd-author-board-start__pick">
-          <gd-author-select
-            label="Phase"
-            hint="The phase play begins in"
-            [options]="view.phases"
-            [value]="view.phase"
-            (changed)="changes.setStart('phase', $event)"
-          />
-        </span>
-      </div>
-      @for (field of numbers(); track field.part) {
-        <div class="gd-author-board-start__row" [attr.data-part]="field.part" [attr.data-changed]="mark(field.part)">
-          <span class="gd-author-label">{{ field.label }}</span>
-          <input
-            class="gd-author-input"
-            type="number"
-            [min]="field.min"
-            [attr.aria-label]="field.label"
-            [title]="field.hint"
-            [value]="typed()[field.part] ?? view[field.part]"
-            (input)="type(field.part, $any($event.target).value)"
-            (change)="put(field.part)"
-            (keydown.enter)="put(field.part)"
-          />
+      <gd-author-board-opening />
+      @if (changes.opening() === 'board') {
+        <div class="gd-author-board-start__row" data-part="site" [attr.data-changed]="mark('site')">
+          <span class="gd-author-label">Site</span>
+          <span class="gd-author-board-start__pick">
+            <gd-author-select
+              label="Site"
+              [hint]="
+                changes.oneSided()
+                  ? 'The fellowship’s site, whose turn it is'
+                  : 'The Free Peoples seat’s fellowship, whose turn the story starts in'
+              "
+              [options]="sites()"
+              [value]="'' + view.site"
+              (changed)="changes.setStart('site', +$event)"
+            />
+          </span>
         </div>
-      }
-      @if (fighting()) {
-        <div class="gd-author-board-start__fights">
-          <span class="gd-author-label" title="Already assigned when play begins">Skirmishes</span>
-          @for (character of changes.fightCards().characters; track character) {
-            <div class="gd-author-board-start__fight" [attr.data-character]="character">
-              <span class="gd-author-board-start__name" [title]="nameOf(character)">{{ character }}</span>
-              @for (minion of view.skirmishes[character] ?? []; track minion) {
-                <span class="gd-author-board-start__minion" [attr.data-minion]="minion" [title]="nameOf(minion)"
-                  >{{ minion }}
-                  <button
-                    gdAuthorButton="inline"
-                    data-action="unfight"
-                    title="Out of this skirmish"
-                    (click)="changes.setFight(character, minion, false)"
-                  >
-                    ×
-                  </button></span
-                >
-              }
-              @if (free().length > 0) {
-                <select
-                  class="gd-author-input"
-                  data-control="fight"
-                  aria-label="Minion"
-                  title="A minion the setup puts on the table, into this skirmish"
-                  (change)="fight(character, $event)"
-                >
-                  <option value="" selected>+ minion</option>
-                  @for (minion of free(); track minion) {
-                    <option [value]="minion">{{ minion }}</option>
-                  }
-                </select>
-              }
-            </div>
-          } @empty {
-            <span class="gd-author-note">The setup puts no character on the table.</span>
-          }
+        <div class="gd-author-board-start__row" data-part="opponentSite" [attr.data-changed]="mark('opponentSite')">
+          <span class="gd-author-label">{{ changes.oneSided() ? 'Shadow marker' : 'Shadow fellowship' }}</span>
+          <span class="gd-author-board-start__pick">
+            <gd-author-select
+              label="Shadow marker"
+              [hint]="view.markersTogether ? togetherHint : changes.oneSided() ? markerHint : fellowshipHint"
+              [options]="sites()"
+              [value]="'' + view.opponentSite"
+              [disabled]="view.markersTogether"
+              (changed)="changes.setStart('opponentSite', +$event)"
+            />
+          </span>
         </div>
-      }
-      @if (past().length > 0) {
-        <div class="gd-author-board-start__held">
-          <span class="gd-author-label" title="Sites every marker is past can be controlled when play begins"
-            >Controlled</span
-          >
-          @for (row of held(); track row.seat) {
-            <div
-              class="gd-author-board-start__seat"
-              [attr.data-seat]="row.seat"
-              [attr.data-changed]="mark('controlled')"
-            >
-              <span class="gd-author-board-start__name">{{ row.name }}</span>
-              @for (site of row.sites; track site.number) {
-                <gd-author-check
-                  [attr.data-site]="site.number"
-                  [label]="'' + site.number"
-                  [hint]="'Site ' + site.number + ' is controlled by the ' + row.name + ' seat when play begins'"
-                  [checked]="site.on"
-                  (changed)="changes.setControl(row.seat, site.number, $event)"
-                />
-              }
-            </div>
-          }
+        <div class="gd-author-board-start__row" data-part="phase" [attr.data-changed]="mark('phase')">
+          <span class="gd-author-label">Phase</span>
+          <span class="gd-author-board-start__pick">
+            <gd-author-select
+              label="Phase"
+              hint="The phase play begins in"
+              [options]="view.phases"
+              [value]="view.phase"
+              (changed)="changes.setStart('phase', $event)"
+            />
+          </span>
         </div>
-      }
-      <details class="gd-author-board-start__fold" [open]="open()" (toggle)="open.set($any($event.target).open)">
-        <summary title="Which seat's site is laid at each place (setup.path)" [attr.data-changed]="mark('path')">
-          Whose sites
-        </summary>
-        @for (place of places(); track place.number) {
-          <div class="gd-author-board-start__row" data-part="path" [attr.data-site]="place.number">
-            <span class="gd-author-label">Site {{ place.number }}</span>
-            <span class="gd-author-board-start__pick">
-              <gd-author-select
-                [label]="'Site ' + place.number"
-                hint="The site laid at this place on the path"
-                [options]="place.options"
-                [value]="place.value"
-                (changed)="changes.setPathSite(place.number, $event)"
-              />
-            </span>
+        @for (field of numbers(); track field.part) {
+          <div class="gd-author-board-start__row" [attr.data-part]="field.part" [attr.data-changed]="mark(field.part)">
+            <span class="gd-author-label">{{ field.label }}</span>
+            <input
+              class="gd-author-input"
+              type="number"
+              [min]="field.min"
+              [attr.aria-label]="field.label"
+              [title]="field.hint"
+              [value]="typed()[field.part] ?? view[field.part]"
+              (input)="type(field.part, $any($event.target).value)"
+              (change)="put(field.part)"
+              (keydown.enter)="put(field.part)"
+            />
           </div>
         }
-      </details>
+        @if (fighting()) {
+          <div class="gd-author-board-start__fights">
+            <span
+              class="gd-author-label"
+              title="Already assigned when play begins: the setup's characters and minions (not the game in hand's)"
+              >Skirmishes</span
+            >
+            @for (character of changes.fightCards().characters; track character) {
+              <div class="gd-author-board-start__fight" [attr.data-character]="character">
+                <span class="gd-author-board-start__name" [title]="nameOf(character)">{{ character }}</span>
+                @for (minion of view.skirmishes[character] ?? []; track minion) {
+                  <span class="gd-author-board-start__minion" [attr.data-minion]="minion" [title]="nameOf(minion)"
+                    >{{ minion }}
+                    <button
+                      gdAuthorButton="inline"
+                      data-action="unfight"
+                      title="Out of this skirmish"
+                      (click)="changes.setFight(character, minion, false)"
+                    >
+                      ×
+                    </button></span
+                  >
+                }
+                @if (free().length > 0) {
+                  <select
+                    class="gd-author-input"
+                    data-control="fight"
+                    aria-label="Minion"
+                    title="A minion the setup puts on the table, into this skirmish"
+                    (change)="fight(character, $event)"
+                  >
+                    <option value="" selected>+ minion</option>
+                    @for (minion of free(); track minion) {
+                      <option [value]="minion">{{ minion }}</option>
+                    }
+                  </select>
+                }
+              </div>
+            } @empty {
+              <span class="gd-author-note">The setup puts no character on the table.</span>
+            }
+          </div>
+        }
+        @if (past().length > 0) {
+          <div class="gd-author-board-start__held">
+            <span class="gd-author-label" title="Sites every marker is past can be controlled when play begins"
+              >Controlled</span
+            >
+            @for (row of held(); track row.seat) {
+              <div
+                class="gd-author-board-start__seat"
+                [attr.data-seat]="row.seat"
+                [attr.data-changed]="mark('controlled')"
+              >
+                <span class="gd-author-board-start__name">{{ row.name }}</span>
+                @for (site of row.sites; track site.number) {
+                  <gd-author-check
+                    [attr.data-site]="site.number"
+                    [label]="'' + site.number"
+                    [hint]="'Site ' + site.number + ' is controlled by the ' + row.name + ' seat when play begins'"
+                    [checked]="site.on"
+                    (changed)="changes.setControl(row.seat, site.number, $event)"
+                  />
+                }
+              </div>
+            }
+          </div>
+        }
+        <details class="gd-author-board-start__fold" [open]="open()" (toggle)="open.set($any($event.target).open)">
+          <summary title="Which seat's site is laid at each place (setup.path)" [attr.data-changed]="mark('path')">
+            Whose sites
+          </summary>
+          @for (place of places(); track place.number) {
+            <div class="gd-author-board-start__row" data-part="path" [attr.data-site]="place.number">
+              <span class="gd-author-label">Site {{ place.number }}</span>
+              <span class="gd-author-board-start__pick">
+                <gd-author-select
+                  [label]="'Site ' + place.number"
+                  hint="The site laid at this place on the path"
+                  [options]="place.options"
+                  [value]="place.value"
+                  (changed)="changes.setPathSite(place.number, $event)"
+                />
+              </span>
+            </div>
+          }
+        </details>
+      }
       @if (changes.startRefused(); as said) {
         <p class="gd-author-note gd-author-board-start__problem" data-problem>{{ said }}</p>
       }
@@ -196,6 +209,8 @@ export class BoardStartComponent {
   protected readonly typed = signal<Partial<Record<Typed, string>>>({});
   protected readonly togetherHint = "The markers keep together (the Scenario tab's rules): level with the fellowship";
   protected readonly markerHint = "Where the Shadow seat's marker is";
+  protected readonly fellowshipHint =
+    "Where the Shadow seat's fellowship is: in a game of two sides it moves on that seat's own turns";
   /** The "Whose sites" fold is open. */
   protected readonly open = signal(false);
 

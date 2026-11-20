@@ -77,9 +77,10 @@ describe('the When composer', () => {
       kind: 'action',
       phase: 'shadow',
       turn: '3',
+      role: '',
     });
-    expect(pickersOf('actionchoice')).toEqual({ seat: '', kind: 'actionChoice', phase: '', turn: '' });
-    expect(pickersOf(undefined)).toEqual({ seat: '', kind: '', phase: '', turn: '' });
+    expect(pickersOf('actionchoice')).toEqual({ seat: '', kind: 'actionChoice', phase: '', turn: '', role: '' });
+    expect(pickersOf(undefined)).toEqual({ seat: '', kind: '', phase: '', turn: '', role: '' });
     expect(pickersOf('{ seat: freeps }')).toBeNull();
   });
 

@@ -65,7 +65,9 @@ export function blockStep(turn: number, skirmishes: boolean): DraftStep {
 
 /** Whether the script can be given an opening (its first step isn't one). */
 export function mayAddOpening(state: DraftState): boolean {
-  return !isOpening(stepsOf(state)[0]);
+  // (a game that plays its own opening has none: its first decision is the bid)
+  const realOpening = (state.start?.opening ?? state.draft.setup?.opening) === 'game';
+  return !realOpening && !isOpening(stepsOf(state)[0]);
 }
 
 /** Where a step put in before the selected one goes (none selected: at the end), from 0. */

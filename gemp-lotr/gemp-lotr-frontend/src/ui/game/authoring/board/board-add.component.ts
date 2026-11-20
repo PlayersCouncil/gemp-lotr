@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { DraftSeat, FoundCard } from '../../../../core/game/authoring/authoring-state';
 import { BoardChanges } from '../../../../core/game/authoring/board-changes.service';
-import { ADD_PLACES, ON_PLACES, suggestAlias } from '../../../../core/game/authoring/board-queue';
+import { addPlacesFor, suggestAlias } from '../../../../core/game/authoring/board-queue';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
 import { CardSearchComponent } from '../widgets/card-search.component';
@@ -89,10 +89,11 @@ export class BoardAddComponent {
   protected readonly offered = signal<Offer | null>(null);
   protected readonly seatOptions: readonly AuthorOption[] = ['freeps', 'shadow'];
   protected readonly hosts = computed<AuthorOption[]>(() => this.changes.bearers().map((bearer) => bearer.alias));
-  protected readonly places = computed<AuthorOption[]>(() => [
-    ...ADD_PLACES,
-    ...(this.changes.bearers().length > 0 ? ON_PLACES : []),
-  ]);
+  /** Where it can go in the setup: no minions on the table for the Free Peoples seat; with the game's own opening, a deck. */
+  protected readonly places = computed<AuthorOption[]>(() => {
+    const seat = this.offered()?.seat ?? 'freeps';
+    return addPlacesFor(seat, this.changes.opening() === 'game', this.changes.bearers().length > 0);
+  });
 
   protected offer(card: FoundCard): void {
     const shadow = card.side === 'shadow';
@@ -100,13 +101,21 @@ export class BoardAddComponent {
       card,
       alias: suggestAlias(card.name, this.changes.aliases()),
       seat: shadow ? 'shadow' : 'freeps',
-      zone: shadow ? '' : 'hand',
+      zone: shadow || this.changes.opening() === 'game' ? '' : 'hand',
       host: this.changes.bearers()[0]?.alias ?? '',
     });
   }
 
   protected choose(patch: Partial<Offer>): void {
-    this.offered.update((offer) => offer && { ...offer, ...patch });
+    this.offered.update((offer) => {
+      if (!offer) return offer;
+      const next = { ...offer, ...patch };
+      // (a place the seat chosen cannot have is its deck)
+      const open = addPlacesFor(next.seat, this.changes.opening() === 'game', this.changes.bearers().length > 0);
+      return open.some((place) => (typeof place === 'string' ? place : place[0]) === next.zone)
+        ? next
+        : { ...next, zone: '' };
+    });
   }
 
   protected async add(offer: Offer): Promise<void> {

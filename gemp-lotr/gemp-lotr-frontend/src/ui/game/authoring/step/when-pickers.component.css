@@ -1,0 +1,31 @@
+/* The When composer's pickers, in a line that wraps */
+
+:host {
+  display: block;
+}
+
+.gd-author-when__pickers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-input.gd-author-when__turn {
+  flex: 0 0 76px;
+  width: 76px;
+}
+
+/* (each keeps the width of what it says: the panel's fields grow and shrink in a line, these do not) */
+.gd-author-when__pick {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 3px;
+}
+
+/* (the role, where the draft has none to offer) */
+.gd-author-when__pick:empty {
+  display: none;
+}
