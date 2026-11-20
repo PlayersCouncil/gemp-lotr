@@ -5,11 +5,12 @@ import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
 import { HjsonAreaDirective } from '../widgets/hjson-area.directive';
 import { RepeatRowComponent } from './repeat-row.component';
+import { AskedPickerComponent } from './asked-picker.component';
 import { StepEditor } from './step-editor';
 import { StepFieldDirective } from './step-field.directive';
 
 const WHEN_HINT =
-  'seat, kind of decision, phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(part of what the decision says). ' +
+  'seat, kind of decision, what it is for (nextSkirmish, archeryWound, reconcile, sanctuary, anotherMove, optionalResponses, requiredResponses, chooseSite, phaseActions; or not(one of them)), phase(...), turn(...), skirmish(n), inSkirmish(card), after(card), offers(card), text(part of what the decision says). ' +
   "Or written out in full, as the file has it, in HJSON: { seat: freeps, require: { ... } }. What is copied out of a file can be pasted here, with or without 'when:' in front.";
 const REQUIRE_HINT =
   'Requirements as cards write them, in HJSON as the file has them (one { ... } or a [ list ], a line to each part), which have to hold as well as the When. ' +
@@ -17,20 +18,27 @@ const REQUIRE_HINT =
 
 /**
  * What a step waits for (legacy buildFields' first section): its heading by what kind of step it is; for the
- * opening, only its name; otherwise the composer (seat, kind of decision, phase, turn: each puts its term into the
+ * opening, only its name; otherwise the composer (seat, kind of decision, what is being asked, phase, turn: each puts its term into the
  * When, keeping the others, in the order a person says them; hidden for a When written out in full), the When, its
  * requirements (Only while), the step's flags (pause, once, checkpoint, its name), "repeat until", and If / Unless
  * when the draft's pauses have choices.
  *
  * DOM contract: `gd-author-when` holding `.gd-author-step__section` with `.gd-author-step__heading`,
- * `.gd-author-when__pickers` (`gd-author-select[data-picker]` seat, kind, phase; `input[data-picker=turn]`), the
+ * `.gd-author-when__pickers` (`gd-author-select[data-picker]` seat, kind, phase; `gd-author-asked`; `input[data-picker=turn]`), the
  * fields (`data-field` when, whenRequire, id, if, unless), `.gd-author-when__flags` (`input[data-flag]` pause, once,
  * checkpoint) and `gd-author-repeat`.
  */
 @Component({
   selector: 'gd-author-when',
   styleUrl: './when-editor.component.css',
-  imports: [AuthorFieldComponent, AuthorSelectComponent, HjsonAreaDirective, StepFieldDirective, RepeatRowComponent],
+  imports: [
+    AuthorFieldComponent,
+    AuthorSelectComponent,
+    HjsonAreaDirective,
+    StepFieldDirective,
+    RepeatRowComponent,
+    AskedPickerComponent,
+  ],
   template: `
     @if (view(); as view) {
       <div class="gd-author-step__section">
@@ -70,6 +78,7 @@ const REQUIRE_HINT =
                 [value]="pickers.kind"
                 (changed)="pick('kind', $event)"
               />
+              <gd-author-asked path="when" />
               <gd-author-select
                 data-picker="phase"
                 label="Phase"

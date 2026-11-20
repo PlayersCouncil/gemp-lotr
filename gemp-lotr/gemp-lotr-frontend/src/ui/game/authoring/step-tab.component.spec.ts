@@ -1163,7 +1163,7 @@ describe('StepTabComponent', () => {
       expect(text('.gd-author-skirmish__group[data-kind=fight] .gd-author-step__heading')).toBe("Frodo's skirmish");
       await click('.gd-author-skirmish__group[data-kind=first] [data-add=step]');
       expect(sentOps()).toEqual([
-        { op: 'insert', step: { once: true, when: 'freeps, cards, text(next skirmish)' }, into: 's1', awaiting: true },
+        { op: 'insert', step: { once: true, when: 'freeps, cards, nextSkirmish' }, into: 's1', awaiting: true },
       ]);
       await answer(state);
       await click('.gd-author-skirmish__group[data-kind=before] .gd-author-panel[data-sub="0"] [data-act=down]');

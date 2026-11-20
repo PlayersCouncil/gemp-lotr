@@ -11,6 +11,7 @@ import { MessageListComponent } from './message-list.component';
 import { StepEditor } from './step-editor';
 import { StepFieldDirective } from './step-field.directive';
 import { WhenEditorComponent } from './when-editor.component';
+import { AskedPickerComponent } from './asked-picker.component';
 
 const OPENING_DO_HINT =
   "Changes to the board, made after the opening's messages and before the first turn begins, so that the first decision is worked out with them: " +
@@ -26,7 +27,7 @@ const OPENING_DO_HINT =
  *
  * DOM contract: `gd-author-step-fields` holding `button[data-act=retake]`, `.gd-author-note[data-note]` (awaiting,
  * silent), `gd-author-when`, `.gd-author-step__section[data-section]` (opening-do, ends, messages, rest),
- * `gd-author-allow`, `gd-author-messages`, `gd-author-select[data-pick=end]` and the closing `gd-author-messages`.
+ * `gd-author-asked` (a block's Until and Skip when), `gd-author-allow`, `gd-author-messages`, `gd-author-select[data-pick=end]` and the closing `gd-author-messages`.
  */
 @Component({
   selector: 'gd-author-step-fields',
@@ -40,6 +41,7 @@ const OPENING_DO_HINT =
     AllowEditorComponent,
     MessageListComponent,
     WhenEditorComponent,
+    AskedPickerComponent,
   ],
   template: `
     @if (view(); as view) {
@@ -90,12 +92,14 @@ const OPENING_DO_HINT =
           >
             <textarea gdHjsonArea gdStepField="until" rows="1" [text]="view.until"></textarea>
           </gd-author-field>
+          <div class="gd-author-step__block"><gd-author-asked path="until" /></div>
           <gd-author-field
             label="Skip when"
             hint="Given up on, before any of its steps has applied, if a decision that fits this arrives"
           >
             <textarea gdHjsonArea gdStepField="skipWhen" rows="1" [text]="view.skipWhen"></textarea>
           </gd-author-field>
+          <div class="gd-author-step__block"><gd-author-asked path="skipWhen" /></div>
           <label
             class="gd-author-check gd-author-step__block"
             title="Its steps shown by the skirmish they are in, and after: for a turn's assignment and skirmishes"

@@ -3,7 +3,9 @@ import { DraftStep } from './authoring-state';
 import { own } from './steps';
 import {
   canon,
+  conditionsAsBefore,
   diff,
+  refusalLines,
   fieldsOf,
   inPlayWords,
   partOf,
@@ -187,5 +189,59 @@ describe('step model', () => {
     expect(inPlayWords([])).toBe('they are');
     expect(inPlayWords(['a'])).toBe('a is');
     expect(inPlayWords(['a', 'b'])).toBe('a and b are');
+  });
+
+  it("edits a message's condition as the file writes it, and a step's refusals a line each", () => {
+    const require = [{ type: 'canSpot', filter: 'name(Aragorn)' }];
+    const step: DraftStep = {
+      when: 'freeps, cards',
+      allow: 'choose(frodo)',
+      refuses: ['2: choose(boromir)', 'pass'],
+      messages: ['Plain', { text: 'If', require }, { text: 'One', require: { type: 'x' } }],
+      end: { result: 'complete', messages: [{ text: 'Bye', require: { type: 'y' } }] },
+    };
+    const work = working(step, { 'messages.1.require': 'type: canSpot' });
+    expect(work.messages.map((message) => message.require)).toEqual([
+      undefined,
+      'type: canSpot',
+      '{\n\t"type": "x"\n}',
+    ]);
+    expect(work.end.messages[0]?.require).toBe('{\n\t"type": "y"\n}');
+    expect(work.refuses).toBe('2: choose(boromir)\npass');
+    expect(working({ allow: 'pass', refuses: 'pass, choose(a)' }).refuses).toBe('pass, choose(a)');
+    // (written back: the condition as typed, the refusals one line as a line, more as a list, a blank one gone)
+    const back = written(work);
+    expect(back['messages']).toEqual([
+      { text: 'Plain' },
+      { text: 'If', require: 'type: canSpot' },
+      { text: 'One', require: '{\n\t"type": "x"\n}' },
+    ]);
+    expect(back['refuses']).toEqual(['2: choose(boromir)', 'pass']);
+    expect(written({ ...work, refuses: ' pass \n\n' })['refuses']).toBe('pass');
+    expect(written({ ...work, refuses: '  ' })['refuses']).toBeUndefined();
+    expect(written(withValue(work, 'messages.1.require', ''))['messages']).toEqual([
+      { text: 'Plain' },
+      { text: 'If' },
+      { text: 'One', require: '{\n\t"type": "x"\n}' },
+    ]);
+    expect(refusalLines(undefined)).toEqual([]);
+  });
+
+  it('puts the conditions back as they were sent, so that the rest of the messages can go', () => {
+    const before = [{ text: 'A', require: 'old' }, { text: 'B' }];
+    expect(
+      conditionsAsBefore('messages', [{ text: 'A2', require: 'new' }, { text: 'B', require: 'x' }, 'C'], before),
+    ).toEqual([{ text: 'A2', require: 'old' }, { text: 'B' }, 'C']);
+    // (nothing to keep back, or nothing else to send: nothing)
+    expect(conditionsAsBefore('messages', [{ text: 'A2', require: 'old' }, { text: 'B' }], before)).toBeNull();
+    expect(conditionsAsBefore('messages', [{ text: 'A', require: 'new' }, { text: 'B' }], before)).toBeNull();
+    expect(conditionsAsBefore('messages', 'x', before)).toBeNull();
+    expect(conditionsAsBefore('answer', [], before)).toBeNull();
+    expect(conditionsAsBefore('messages', [{ text: 'Z', require: 'x' }], undefined)).toEqual([{ text: 'Z' }]);
+    expect(
+      conditionsAsBefore('end', { result: 'fail', messages: [{ text: 'Z', require: 'x' }] }, { result: 'fail' }),
+    ).toEqual({ result: 'fail', messages: [{ text: 'Z' }] });
+    expect(conditionsAsBefore('end', 'fail', 'complete')).toBeNull();
+    expect(conditionsAsBefore('end', { result: 'fail' }, 'complete')).toBeNull();
   });
 });

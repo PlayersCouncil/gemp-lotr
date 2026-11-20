@@ -11,6 +11,9 @@ import { askAuthor } from '../widgets/author-confirm';
 import { isBlock, kidsOf, locate, numberOf, stepsOf } from '../../../../core/game/authoring/steps';
 import { SessionStore } from '../../../../core/platform/session-store';
 import { TYPING_SEND_MS } from '../widgets/author-send.directive';
+import { ScenarioGuide } from '../../../../core/game/scenario/scenario-guide.service';
+import { indexesOf, LeftOut, leftOutOf } from '../../../../core/game/authoring/said';
+import { messagesOf } from '../../../../core/game/authoring/steps';
 
 /** Where the form's unsent parts are kept while the page goes to a fresh game (the next page's form takes them). */
 export const STEP_CARRY_KEY = 'gemp-author-step-unsent';
@@ -46,6 +49,7 @@ export class StepEditor {
   private readonly store = inject(SessionStore);
   private readonly document = inject(DOCUMENT);
   private readonly notifier = inject(Notifier);
+  private readonly guide = inject(ScenarioGuide, { optional: true });
 
   /** The form of the step selected, or null (none selected). */
   readonly form = signal<StepForm | null>(null);
@@ -65,6 +69,30 @@ export class StepEditor {
     const draft = this.authoring.draft();
     return place && draft ? (stepsOf(draft)[place.index] ?? null) : null;
   });
+  /**
+   * The form's step is the one on the table: which of its messages (as the server has them) it left out there, their
+   * condition not holding (B6). Nothing when another step is up.
+   */
+  private readonly unsaid = computed<LeftOut | null>(() => {
+    const form = this.form();
+    const place = this.place();
+    const draft = this.authoring.draft();
+    const shown = this.guide?.step() ?? null;
+    if (!form || !place || !draft || !shown) return null;
+    if (shown.step !== place.index + 1 || shown.sub !== (place.sub > -1 ? place.sub + 1 : 0)) return null;
+    const step = locate(draft, form.uid)?.step;
+    if (!step) return null;
+    const conditional = messagesOf(step).map((message) => typeof message !== 'string' && message.require !== undefined);
+    return leftOutOf(conditional, { indexes: indexesOf(shown.messages), count: shown.messages.length });
+  });
+
+  /** Whether message `index` of the form's step was left out on the table ('no'), may have been ('maybe'), or neither. */
+  leftOut(index: number): 'no' | 'maybe' | null {
+    const left = this.unsaid();
+    if (!left?.places.has(index)) return null;
+    return left.sure ? 'no' : 'maybe';
+  }
+
   /** "Wrong clicks, giving up" is opened by what puts something in it (Pass only once…). */
   readonly wrongClicksOpen = signal(false);
   /** A field to give the focus once the form is on the page (where it was on the page before a fresh game). */

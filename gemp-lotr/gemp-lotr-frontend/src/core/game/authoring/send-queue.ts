@@ -12,6 +12,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { DraftState, DraftStep, StepTexts } from './authoring-state';
 import {
   canon,
+  conditionsAsBefore,
   Diff,
   diff,
   fieldsOf,
@@ -46,6 +47,15 @@ const FILED: readonly (readonly [field: string, part: string])[] = [
   ['whenRequire', 'when'],
   ['allow.passWhen', 'allow'],
 ];
+
+/** Those fields, with the ones a step has as many of as it has messages (each message's condition), and its refusals. */
+function filedFields(theirs: WorkStep): readonly (readonly [field: string, part: string])[] {
+  return [
+    ...FILED,
+    ['refuses', 'refuses'],
+    ...theirs.messages.map((_, i) => [`messages.${i}.require`, 'messages'] as const),
+  ];
+}
 
 /** The text a step's state is known by: when it changes, the step was changed (by the form, or elsewhere). */
 export function baseOf(step: DraftStep): string {
@@ -186,7 +196,7 @@ export class StepForm {
   private asFiled(theirs: WorkStep, changes: Diff, sentWork: WorkStep): void {
     let work = this.work();
     const parts = new Set<string>();
-    for (const [field, part] of FILED) {
+    for (const [field, part] of filedFields(theirs)) {
       if (!(part in changes.set)) continue;
       const mine = valueAt(work, field);
       const filed = valueAt(theirs, field);
@@ -215,6 +225,11 @@ export class StepForm {
       ...changes.unset.map((unset) => ({ unset })),
     ];
     if (parts.length < 2) {
+      const only = Object.keys(changes.set)[0];
+      if (only !== undefined && (await this.salvage(only, changes.set[only]))) {
+        this.refused = canon(diff(sent, this.origin));
+        return false;
+      }
       this.refused = canon(changes);
       return false;
     }
@@ -225,11 +240,29 @@ export class StepForm {
           ? { set: { [part.set]: changes.set[part.set] }, unset: [], any: true }
           : { set: {}, unset: [part.unset], any: true };
       if ((await this.transport.merge(this.uid, one.set, one.unset)) !== null) this.took(one, sent);
-      else said = this.transport.problem();
+      else {
+        said = this.transport.problem();
+        if ('set' in part) await this.salvage(part.set, changes.set[part.set]);
+      }
     }
     this.refused = canon(this.dirty());
     if (this.transport.problem() === null) this.transport.sayProblem(said);
     return false;
+  }
+
+  /**
+   * A step's messages (or its end) refused: if a message's condition was changed with them, they are tried with the
+   * conditions as they were last sent, so that what else was typed in them goes (a condition with a mistake in it
+   * stays in the form, unsent, with the server's words said). Whether that went.
+   */
+  private async salvage(part: string, value: unknown): Promise<boolean> {
+    const kept = conditionsAsBefore(part, value, this.origin[part]);
+    if (kept === null) return false;
+    const said = this.transport.problem();
+    if ((await this.transport.merge(this.uid, { [part]: kept }, [])) === null) return false;
+    this.origin = { ...this.origin, [part]: kept };
+    this.transport.sayProblem(said);
+    return true;
   }
 
   private finished(went: boolean): boolean {

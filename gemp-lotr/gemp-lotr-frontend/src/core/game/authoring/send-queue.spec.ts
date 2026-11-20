@@ -269,4 +269,89 @@ describe('the Step form and its sends', () => {
     expect(await going).toBe(true);
     expect(form.index).toBe(0);
   });
+
+  it("takes back the server's way of writing a message's condition and a step's refusals", async () => {
+    type('messages.0.require', '{type:canSpot, filter:name(Aragorn)}');
+    type('refuses', 'choose(a), choose(b)');
+    const going = form.send();
+    expect(server.sent[0]!.set).toEqual({
+      messages: [{ text: 'Hello', require: '{type:canSpot, filter:name(Aragorn)}' }],
+      refuses: 'choose(a), choose(b)',
+    });
+    const require = [{ type: 'canSpot', filter: 'name(Aragorn)' }];
+    const back = { ...step, messages: [{ text: 'Hello', require }], refuses: ['choose(a)', 'choose(b)'] };
+    const filed = '[\n\t{\n\t\ttype: canSpot\n\t\tfilter: name(Aragorn)\n\t}\n]';
+    server.sent[0]!.answer(withStep(back, { 'messages.0.require': filed }));
+    await going;
+    expect(form.work().messages[0]?.require).toBe(filed);
+    expect(form.work().refuses).toBe('choose(a)\nchoose(b)');
+    expect(form.dirty().any).toBe(false);
+  });
+
+  it("sends a message's other changes when its new condition is refused, and keeps the condition unsent", async () => {
+    type('messages.0.require', '{ type: canSpot, filter: ');
+    type('messages.0.text', 'Hello there');
+    const going = form.send();
+    server.sent[0]!.answer(null, 'messages[0].require: bad HJSON');
+    await tick();
+    // (the same messages, the condition as it was last sent: none)
+    expect(server.sent[1]!.set).toEqual({ messages: [{ text: 'Hello there' }] });
+    server.sent[1]!.answer(withStep({ ...step, messages: [{ text: 'Hello there' }] }));
+    expect(await going).toBe(false);
+    expect(server.said).toBe('messages[0].require: bad HJSON');
+    expect(form.work().messages[0]?.require).toBe('{ type: canSpot, filter: ');
+    expect(form.dirty().set).toEqual({ messages: [{ text: 'Hello there', require: '{ type: canSpot, filter: ' }] });
+    // (not sent again as it is; typed in again, it is)
+    expect(await form.send()).toBe(false);
+    expect(server.sent.length).toBe(2);
+    type('messages.0.require', '{ type: canSpot, filter: name(Aragorn) }');
+    void form.send();
+    expect(server.sent.length).toBe(3);
+  });
+
+  it('keeps a condition that was already sent when another one with the same send is refused', async () => {
+    const two = new StepForm(
+      's1',
+      { ...step, messages: [{ text: 'A', require: { type: 'x' } }, { text: 'B' }] },
+      { 'messages.0.require': 'type: x' },
+      { index: 0, sub: -1 },
+      server,
+    );
+    two.work.update((work) => withValue(withValue(work, 'messages.0.require', 'oops'), 'messages.1.text', 'BB'));
+    two.work.update((work) => withValue(work, 'answer', 'pass'));
+    const going = two.send();
+    server.sent[0]!.answer(null, 'No.');
+    await tick();
+    expect(server.sent[1]!.set).toEqual({ messages: [{ text: 'A', require: 'oops' }, { text: 'BB' }] });
+    server.sent[1]!.answer(null, 'Bad condition.');
+    await tick();
+    expect(server.sent[2]!.set).toEqual({ messages: [{ text: 'A', require: 'type: x' }, { text: 'BB' }] });
+    server.sent[2]!.answer(withStep({ ...step, messages: [{ text: 'A', require: { type: 'x' } }, { text: 'BB' }] }));
+    await tick();
+    expect(server.sent[3]!.set).toEqual({ answer: 'pass' });
+    server.sent[3]!.answer(withStep({ ...step, answer: 'pass' }));
+    expect(await going).toBe(false);
+    expect(server.said).toBe('Bad condition.');
+    expect(Object.keys(two.dirty().set)).toEqual(['messages']);
+  });
+
+  it('says a refusal as it is when there is nothing else in the messages to send', async () => {
+    type('messages.0.require', 'nonsense');
+    const going = form.send();
+    server.sent[0]!.answer(null, 'Bad.');
+    expect(await going).toBe(false);
+    expect(server.sent.length).toBe(1);
+  });
+
+  it("sends the step's end without a closing message's refused condition", async () => {
+    const ending = new StepForm('s1', { ...step, end: 'complete' }, {}, { index: 0, sub: -1 }, server);
+    ending.work.update((work) => withValue(work, 'end.messages', [{ text: 'Bye', require: 'x(' }]));
+    const going = ending.send();
+    server.sent[0]!.answer(null, 'Bad.');
+    await tick();
+    expect(server.sent[1]!.set).toEqual({ end: { result: 'complete', messages: [{ text: 'Bye' }] } });
+    server.sent[1]!.answer(withStep({ ...step, end: { result: 'complete', messages: ['Bye'] } }));
+    expect(await going).toBe(false);
+    expect(server.said).toBe('Bad.');
+  });
 });

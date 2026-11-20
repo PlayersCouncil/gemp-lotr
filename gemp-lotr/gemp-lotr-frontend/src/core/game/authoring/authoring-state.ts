@@ -68,6 +68,8 @@ export interface DraftMessage {
   magnify?: string | number;
   /** A pause's last message ends in these buttons: name to label. */
   choices?: Readonly<Record<string, string>>;
+  /** Said only while these hold (requirements as a card's, as `when.require`): one, or a list of them all. */
+  require?: DraftRequirement | readonly DraftRequirement[];
 }
 
 /** A message: just its text, or an object. */
@@ -107,6 +109,8 @@ export interface DraftStep {
   skirmishes?: boolean;
   /** A block: its steps. */
   anyOrder?: readonly DraftStep[];
+  /** Answers its `allow` must refuse (the runner proves it): a line of terms, or lines; "2: x" is its 2nd decision. */
+  refuses?: string | readonly string[];
 }
 
 /** One seat's cards: alias to blueprint id. */
@@ -235,6 +239,27 @@ export interface AuthoringDecision {
   sub: number;
   /** The opponent's, held for the author to answer. */
   held: boolean;
+  /** What it is for, as a When names it (nextSkirmish, phaseActions, ...), or null for none of those. */
+  kind?: string | null;
+  /** The player's, with a step in hand: how each of the step's refusals stands at it. */
+  refuses?: readonly DecisionRefusal[];
+}
+
+/** One of a step's refusals, at the decision in hand (state.waiting.human.refuses). */
+export interface DecisionRefusal {
+  /** As the file has it: "2: choose(boromir)". */
+  refusal: string;
+  /** The step's decision it is about, from 1; 0 for every one. */
+  at: number;
+  /** refused (as it should be), allowed (the runner would fail), notOffered, elsewhere (another decision's). */
+  now: 'refused' | 'allowed' | 'notOffered' | 'elsewhere';
+}
+
+/** The numbers from the game a message's text can quote ({twilight}, {strength:alias}, {hand:shadow}). */
+export interface AuthoringTemplates {
+  totals: readonly string[];
+  perCard: readonly string[];
+  perSeat: readonly string[];
 }
 
 /** A waiting decision that no step covers, and what adding a step for it would do. */
@@ -320,6 +345,8 @@ export interface StepTexts {
   skipWhen?: string;
   whenRequire?: string;
   passWhen?: string;
+  /** A message's condition, by its place among the step's messages (from 0). */
+  readonly [message: `messages.${number}.require`]: string | undefined;
 }
 
 /** No draft is open. */
@@ -390,6 +417,8 @@ export interface DraftState {
   board: AuthoringBoard | null;
   /** What has gone wrong with the script in this game, oldest first. */
   problems: readonly string[];
+  /** What a message's text can quote from the game (Templates.names). */
+  templates?: AuthoringTemplates;
 }
 
 export type AuthoringState = NoDraft | DraftState;

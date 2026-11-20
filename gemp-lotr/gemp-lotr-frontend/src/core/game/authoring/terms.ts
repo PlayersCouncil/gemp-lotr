@@ -29,7 +29,7 @@ export function splitTerms(text: string | null | undefined): string[] {
 
 /** The parts of a When written out in full that a line of terms can say too, as `name(value)`. */
 const CALLED = ['phase', 'turn', 'skirmish', 'offers', 'inSkirmish', 'after', 'text'] as const;
-const SIMPLE = new Set<string>(['seat', 'decision', 'fighting', 'terms', 'require', ...CALLED]);
+const SIMPLE = new Set<string>(['seat', 'decision', 'fighting', 'terms', 'require', 'kind', ...CALLED]);
 
 /**
  * A When written out with requirements, as the line of terms the rest of it makes and its requirements as text (JSON,
@@ -44,6 +44,8 @@ export function whenParts(when: DraftCondition | null | undefined): { terms: str
   if (written.terms) terms.push(written.terms);
   if (written.seat) terms.push(written.seat);
   if (written.decision) terms.push(written.decision);
+  // (what the decision is for: "nextSkirmish", "not(reconcile)", as its terms say it)
+  if (typeof written['kind'] === 'string' && written['kind'] !== '') terms.push(written['kind']);
   for (const name of CALLED) {
     const value = written[name];
     if (value !== undefined && value !== '') terms.push(`${name}(${value})`);
@@ -86,6 +88,8 @@ const PICKED: Readonly<Record<WhenPicker, (term: string) => string | null>> = {
 export function rank(term: string): number {
   if ((SEATS as readonly string[]).includes(term.toLowerCase())) return 0;
   if ((TYPES as readonly string[]).includes(term)) return 1;
+  // (what is being asked comes after the kind of decision, as the server writes a new step's When: Sitting.whenFor)
+  if (askedTerm(term) !== null) return 1.5;
   if (/^phase\(/i.test(term)) return 2;
   if (/^turn\(/i.test(term)) return 3;
   if (/^skirmish\(/i.test(term)) return 4;
@@ -139,4 +143,79 @@ export function untilFromNext(steps: readonly { when?: unknown }[], index: numbe
     }
   }
   return null;
+}
+
+/* ---------------------------------------------------------------- what is being asked (B5) */
+
+/**
+ * What a decision can be for, as a When names it (DecisionKinds on the server): the choice of the next skirmish, an
+ * archery wound, ... `phaseActions` is a phase's own "play something or pass", what an action step means anyway.
+ */
+export const ASKED = [
+  'nextSkirmish',
+  'archeryWound',
+  'reconcile',
+  'sanctuary',
+  'anotherMove',
+  'optionalResponses',
+  'requiredResponses',
+  'chooseSite',
+  'phaseActions',
+] as const;
+export type Asked = (typeof ASKED)[number];
+
+/** Each, in a few words: for pickers, and a row's summary. */
+export const ASKED_WORDS: Readonly<Record<Asked, string>> = {
+  nextSkirmish: 'next skirmish',
+  archeryWound: 'archery wound',
+  reconcile: 'reconcile',
+  sanctuary: 'sanctuary heal',
+  anotherMove: 'another move?',
+  optionalResponses: 'optional responses',
+  requiredResponses: 'required responses',
+  chooseSite: 'choose a site',
+  phaseActions: 'play or pass',
+};
+
+/** One of them as named (any case), as the list writes it; null if it is none. */
+export function askedNamed(name: string | null | undefined): Asked | null {
+  const wanted = (name ?? '').trim().toLowerCase();
+  return ASKED.find((one) => one.toLowerCase() === wanted) ?? null;
+}
+
+/** A term that says what the decision is for, or is not: `nextSkirmish`, `not(reconcile)`. Null for any other term. */
+export function askedTerm(term: string): { asked: Asked; not: boolean } | null {
+  const negated = /^not\(\s*([A-Za-z]+)\s*\)$/i.exec(term.trim());
+  const asked = askedNamed(negated ? negated[1] : term);
+  return asked === null ? null : { asked, not: negated !== null };
+}
+
+/** The term for it: `nextSkirmish`, or `not(nextSkirmish)`. */
+export function askedText(asked: Asked, not: boolean): string {
+  return not ? `not(${asked})` : asked;
+}
+
+/** What the "what is being asked" picker shows for a When or Until (the first such term); null when written in full. */
+export function askedOf(when: string | null | undefined): { asked: Asked | ''; not: boolean } | null {
+  if (writtenInFull(when)) return null;
+  const found = splitTerms(when)
+    .map(askedTerm)
+    .find((one) => one !== null);
+  return found ?? { asked: '', not: false };
+}
+
+/**
+ * A When with what is being asked put in (`asked` '' takes it out), every other such term taken out, the rest kept,
+ * and the line put in order (that of a new step's When on the server: seat, kind, what is asked, phase, turn, ...).
+ */
+export function putAsked(when: string | null | undefined, asked: Asked | '', not: boolean): string {
+  const kept = splitTerms(when).filter((term) => askedTerm(term) === null);
+  if (asked !== '') kept.push(askedText(asked, not));
+  return [...kept].sort((a, b) => rank(a) - rank(b)).join(', ');
+}
+
+/** What a When says of what is asked, as words ("next skirmish", "not reconcile"); null if it says nothing of it. */
+export function askedWords(term: string): string | null {
+  const found = askedTerm(term);
+  return found === null ? null : `${found.not ? 'not ' : ''}${ASKED_WORDS[found.asked]}`;
 }
