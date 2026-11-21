@@ -118,6 +118,8 @@ export const SAME_TEXT = 'Game text (unchanged)';
 export const ONLY_TEXT = 'Game text';
 export const SAME_HINT =
   'The game text and stats read the same; the change is elsewhere on the card (compare the images).';
+/** Over the end of a readout that did not fit even small (pcErrata.css .pc-errata-clipped .pc-errata-note::after). */
+export const CLIPPED_MORE = '…  Enlarge to read it all';
 export const NAME_STAT = 'Name';
 export const TYPE_STAT = 'Type';
 

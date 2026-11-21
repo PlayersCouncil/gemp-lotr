@@ -107,10 +107,25 @@ next visit does.
   new link.
 - Share: kind `errata`, `/gemp-lotr/share/errata/<id>` (`../../share-links.ts`).
 
+## The view (`src/ui/hall/help/errata/`)
+
+`errata.routes.ts` exports `ERRATA_ROUTE` (and `ERRATA_ROUTES`) for Help's routes: one route for `errata` and
+`errata/<cardId>` (a matcher, so the page is not drawn again as the address follows the viewer), with
+`ERRATA_SERVICES` and `ShareLinks` as its providers. `gd-errata-page` (the intro, chips, filters, `gd-errata-table`,
+`gd-errata-viewer`, the backdrop and its own `gd-card-info`, with `CardInfoService` provided by the page) measures the
+nearest scrolling ancestor for `--gd-errata-view-h` (PcErrataUI.fit) and sets `data-width` narrow (< 700 px: viewer
+above the table) / compact (< 1000 px: no # column, a tighter bar) / wide. `gd-errata-frame` fits each card with
+`FrameLayout` (`errata-frame-layout.ts`: layoutCompact, fitBottom, fitSide, layoutFull). The keys are heard on the
+document while the page is shown (the legacy page did the same), and not under an open `<dialog>`. Colours are the
+"Help › PC Errata" block of `src/styles/themes.css`.
+
 ## Differences from the legacy page
 
 - A link to an original with both a PC and a playtest errata, filtered to the playtest's format, shows the playtest
   errata; the legacy page showed the PC one and dropped the filters.
 - `&nbsp;` and the other few entities the server's game text can hold read as their characters, not "&nbsp;".
+- The card information opened from a card is the app's `gd-card-info`: titled "Card Information" (the legacy preview
+  said "<name> (original)" / "<name> (PC errata)", `previewTitle`), and drawn from the blueprint, so a V-set
+  revision's original shows the current image there (gd-card-info ignores `CardView.imageUrl` without an overlay).
 - `help/errata` (the sub-tab and the link `#pc-errata` with no parameters, which Format Definitions uses for a format
   where PC cards are only legal) comes back to the last state; the legacy link `#pc-errata` alone cleared the filters.

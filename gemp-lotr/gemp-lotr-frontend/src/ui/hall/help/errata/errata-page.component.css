@@ -1,0 +1,201 @@
+/*
+ * Help › PC Errata (pcErrata.css .pc-errata and its intro, chips, filters and layout; hall.css's text boxes and lists;
+ * tables.css's .info-text): the table's pane beside the viewer, both as tall as the panel shows (--gd-errata-view-h).
+ */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.4em 12px 4px;
+}
+
+.gd-errata-page__titlebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3em 0.9em;
+  margin: 0.2em 0 0.4em;
+}
+
+h1 {
+  --gd-errata-info-size: 45%;
+  font-size: 150%;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* ---- the (i) text ---- */
+.gd-errata-page__about {
+  color: var(--theme-errata-info-text);
+  font-size: 85%;
+  margin: -0.2em 0 0.3em;
+  padding: 0.3em 0.6em;
+  border-left: 2px solid var(--theme-errata-info-border);
+}
+
+.gd-errata-page__about[hidden] {
+  display: none;
+}
+
+.gd-errata-page__about p {
+  margin: 0.3em 0;
+}
+
+.gd-errata-page__about a {
+  color: var(--theme-hall-link);
+}
+
+.gd-errata-page__about .gd-errata-page__summary {
+  color: var(--theme-errata-summary);
+}
+
+/* ---- the view chips (All / Latest) ---- */
+.gd-errata-page__views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+}
+
+.gd-errata-page__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.25em 0.7em;
+  border: 1px solid var(--theme-errata-chip-border);
+  border-radius: 999px;
+  background: var(--theme-errata-chip-bg);
+  color: var(--theme-errata-chip-text);
+  /* (pcErrata.css asked for 90%, but jQuery UI's .ui-widget button kept it at 1em) */
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-errata-page__chip:hover,
+.gd-errata-page__chip:focus-visible {
+  border-color: var(--theme-active-border);
+  outline: none;
+}
+
+.gd-errata-page__chip[aria-checked='true'] {
+  background: var(--theme-errata-current);
+  border-color: var(--theme-active-border);
+  color: var(--theme-text);
+}
+
+.gd-errata-page__chip-count {
+  font-size: 85%;
+  padding: 0 0.45em;
+  border-radius: 999px;
+  background: var(--theme-errata-chip-count-bg);
+}
+
+/* ---- filters: Title, Set, Format, and how many cards are listed ---- */
+.gd-errata-page__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em 0.5em;
+  margin: 0.2em 0 0.4em;
+}
+
+.gd-errata-page__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+/* each control says what it filters (placeholder / "All ..." choice); the label is for screen readers */
+.gd-errata-page__field > label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.gd-errata-page__field input {
+  box-sizing: border-box;
+  width: 11em;
+  margin: 2px;
+  padding: 1px 2px;
+  font: inherit;
+  color: var(--theme-text);
+  background-color: var(--theme-field-bg);
+  border: 2px inset;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+}
+
+.gd-errata-page__field select {
+  max-width: 14em;
+  padding: 3px;
+  font: inherit;
+  font-size: 90%;
+  color: var(--theme-text);
+  background-color: var(--theme-field-bg);
+  border: 1px solid;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+}
+
+.gd-errata-page__field select:hover {
+  background-color: var(--theme-field-hover-bg);
+}
+
+.gd-errata-page__status {
+  color: var(--theme-errata-dim);
+  padding: 0 0.3em;
+}
+
+.gd-errata-page__status[data-empty] {
+  color: var(--theme-errata-status-empty);
+}
+
+/* ---- layout: table | viewer, both the panel's height ---- */
+.gd-errata-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 56%);
+  gap: 14px;
+  align-items: stretch;
+}
+
+/* the title, the views and the filters stay put; only the rows scroll, under their column headers */
+.gd-errata-page__list {
+  min-width: 0;
+  height: var(--gd-errata-view-h, 480px);
+  display: flex;
+  flex-direction: column;
+}
+
+.gd-errata-page__intro {
+  flex: 0 0 auto;
+}
+
+/* behind the enlarged viewer: dims the hall; a click closes Enlarge, the wheel steps the list */
+.gd-errata-page__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--theme-errata-backdrop);
+}
+
+.gd-errata-page__backdrop[hidden] {
+  display: none;
+}
+
+/* a narrow page: the viewer on top, the list (its title and filters, then the rows) in the rest of the panel */
+:host([data-width='narrow']) .gd-errata-page__layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:host([data-width='narrow']) gd-errata-viewer {
+  order: -1;
+  --gd-errata-viewer-h: calc(var(--gd-errata-view-h, 480px) * 0.58);
+}
+
+:host([data-width='narrow']) .gd-errata-page__list {
+  height: calc(var(--gd-errata-view-h, 480px) * 0.42 - 14px);
+}
