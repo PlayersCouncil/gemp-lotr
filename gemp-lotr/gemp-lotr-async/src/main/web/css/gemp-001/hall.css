@@ -2548,8 +2548,13 @@ textarea.share-link-copy-area {
  * The page open for its Admin tab alone (hall-legacy.html?admin=1, GempHallSession.adminOnly): the hall itself is the
  * Angular one, so only the Admin tab and the way back to the hall are drawn.
  */
-#admin-back {
+#admin-back,
+#admin-back-elsewhere {
 	display: none;
+}
+
+#admin-back-elsewhere {
+	color: #ffffff;
 }
 
 body.admin-only #admin-back {

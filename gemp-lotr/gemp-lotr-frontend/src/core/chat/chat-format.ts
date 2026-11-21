@@ -65,28 +65,3 @@ export function isIgnored(ignored: readonly string[], name: string): boolean {
 export function orderUsers(users: readonly ChatUser[]): ChatUser[] {
   return [...users.filter((u) => u.self), ...users.filter((u) => !u.self)];
 }
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-/**
- * Server text (an <error>/<response> message, a tournament announcement) as safe markup (GempLotrHallUI.serverMarkup):
- * escaped, then only the bare formatting tags the server writes (<b>, <strong>, <i>, <em>, <u>, <br>) are put back.
- */
-export function serverMarkup(text: string | null): string {
-  if (text === null) {
-    return '';
-  }
-  return escapeHtml(text)
-    .replace(
-      /&lt;(\/?)(b|strong|i|em|u)&gt;/gi,
-      (_match, slash: string, tag: string) => `<${slash}${tag.toLowerCase()}>`,
-    )
-    .replace(/&lt;br\s*\/?&gt;/gi, '<br>');
-}

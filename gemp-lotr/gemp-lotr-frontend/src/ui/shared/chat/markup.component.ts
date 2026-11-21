@@ -1,17 +1,22 @@
 import { Component, effect, ElementRef, inject, input, output, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
 import { MarkupNode } from '../../../core/chat/chat-markup';
+import { hallRouteOf } from '../../../core/hall/hall-links';
+import { hallPageAddress } from '../../../core/platform/hall-tab.service';
 
 /**
  * Server markup drawn from its MarkupNodes (core/chat parseServerMarkup): text nodes, `br`, the allowed formatting
  * elements, links, and for rich markup (the patch notes') pictures, cards and links into the hall, built one by one,
- * never from an HTML string. Links open in a new tab. What a card or a hall link does is the page's: this reports them
- * (`card`, `hallLink`).
+ * never from an HTML string. Links open in a new tab. A link into the hall goes to the route the legacy link names
+ * (hallRouteOf) and is reported (`hallLink`), for a page with something more to do; opened in a new tab by the
+ * browser, it is that route's address. What a card does is the page's: it is reported (`card`).
  *
  * DOM contract: `gd-markup` (inline, no box of its own) holding the nodes as plain elements (`b`, `p`, `blockquote`,
  * `table`, ..., with `start`, `colspan` and `rowspan` where the server set them), `a.gd-markup__link`
  * (`target=_blank`, `rel=noopener noreferrer`), `img.gd-markup__image` (`data-icon` for a culture icon, drawn in the
  * line), `button.gd-markup__card` (`data-blueprint`; a card's name, which shows the card) and
- * `a.gd-markup__hall-link` (`href` = the legacy `#fragment`; a click is reported, not followed).
+ * `a.gd-markup__hall-link` (`href` = the address of the route the legacy `#fragment` names; `target=_blank` for
+ * the legacy hall's Admin, which is a page of its own).
  */
 @Component({
   selector: 'gd-markup',
@@ -23,11 +28,12 @@ export class MarkupComponent {
   readonly nodes = input.required<readonly MarkupNode[]>();
   /** A card's name was used: its blueprint id. */
   readonly card = output<string>();
-  /** A link into the hall was used: the legacy `#fragment` it names (core/hall hallRouteOf gives its route). */
+  /** A link into the hall was followed: the legacy `#fragment` it names. */
   readonly hallLink = output<string>();
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly renderer = inject(Renderer2);
+  private readonly router = inject(Router);
 
   constructor() {
     effect(() => {
@@ -43,6 +49,11 @@ export class MarkupComponent {
     for (const node of nodes) {
       this.renderer.appendChild(parent, this.create(node));
     }
+  }
+
+  private withChildren(element: HTMLElement, children: readonly MarkupNode[]): HTMLElement {
+    this.append(element, children);
+    return element;
   }
 
   private create(node: MarkupNode): Node {
@@ -96,9 +107,23 @@ export class MarkupComponent {
       case 'hall-link': {
         const link = this.renderer.createElement('a') as HTMLAnchorElement;
         this.renderer.addClass(link, 'gd-markup__hall-link');
-        this.renderer.setAttribute(link, 'href', node.hash);
-        this.renderer.listen(link, 'click', (event: Event) => {
+        const route = hallRouteOf(node.hash);
+        this.renderer.setAttribute(link, 'href', hallPageAddress(node.hash));
+        if (route === null) {
+          // Admin (the legacy hall's page, which must not replace this one) or a link nothing knows: the hall
+          this.renderer.setAttribute(link, 'target', '_blank');
+          this.renderer.setAttribute(link, 'rel', 'noopener');
+          return this.withChildren(link, node.children);
+        }
+        this.renderer.listen(link, 'click', (event: MouseEvent) => {
+          if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+            return; // a new tab or window: the browser's, with the route's address
+          }
           event.preventDefault();
+          void this.router.navigate([route.path], {
+            queryParams: route.queryParams,
+            ...(route.fragment === null ? {} : { fragment: route.fragment }),
+          });
           this.hallLink.emit(node.hash);
         });
         this.append(link, node.children);

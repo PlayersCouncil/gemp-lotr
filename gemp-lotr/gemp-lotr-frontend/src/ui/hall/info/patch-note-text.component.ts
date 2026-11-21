@@ -1,7 +1,5 @@
 import { Component, inject, input, output, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 import { MarkupNode } from '../../../core/chat/chat-markup';
-import { hallRouteOf } from '../../../core/hall/hall-links';
 import { MarkupComponent } from '../../shared/chat/markup.component';
 import { HallCards } from '../shared/hall-cards';
 
@@ -32,7 +30,7 @@ export interface PatchNotePicture {
     '(click)': 'click($event)',
     '(contextmenu)': 'contextMenu($event)',
   },
-  template: '<gd-markup [nodes]="nodes()" (card)="cards.show($event)" (hallLink)="follow($event)" />',
+  template: '<gd-markup [nodes]="nodes()" (card)="cards.show($event)" />',
 })
 export class PatchNoteTextComponent {
   readonly nodes = input.required<readonly MarkupNode[]>();
@@ -41,17 +39,6 @@ export class PatchNoteTextComponent {
   readonly picture = output<PatchNotePicture>();
 
   protected readonly cards = inject(HallCards);
-  private readonly router = inject(Router);
-
-  protected follow(hash: string): void {
-    const route = hallRouteOf(hash);
-    if (route) {
-      void this.router.navigate([route.path], {
-        queryParams: route.queryParams,
-        ...(route.fragment === null ? {} : { fragment: route.fragment }),
-      });
-    }
-  }
 
   protected click(event: MouseEvent): void {
     const target = event.target as HTMLElement | null;

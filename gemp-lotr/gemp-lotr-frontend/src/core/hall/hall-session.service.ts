@@ -57,7 +57,13 @@ export class HallSession {
     this.started.set(true);
     this.chat.start();
     this.comms.start();
-    this.player.whoAmI().catch(() => undefined);
+    this.player
+      .whoAmI()
+      .then((player) => {
+        // Discord, if that is the player's chat, only now that it can be given their name (chat.js start())
+        if (player) this.chat.applyChoice();
+      })
+      .catch(() => undefined);
   }
 
   /**

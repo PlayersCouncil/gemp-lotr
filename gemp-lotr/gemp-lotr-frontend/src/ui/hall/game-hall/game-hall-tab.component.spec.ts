@@ -33,14 +33,22 @@ describe('GameHallTabComponent', () => {
   it('shows the message of the day drawn element by element, never as HTML, and nothing without one', async () => {
     const { harness, el } = await open();
     expect(el.querySelector('.gd-game-hall__motd')?.textContent?.trim()).toBe('');
-    motd.set('Join <a href="https://lotrtcgpc.net">the PC</a><img src=x onerror="alert(1)">!<br>Bye');
+    motd.set(
+      'Join <a href="https://lotrtcgpc.net">the PC</a><img src=x onerror="alert(1)"><script>alert(2)</script>!<br>' +
+        'Bye, <a href="#patch-notes">notes</a>',
+    );
     await harness.fixture.whenStable();
     const line = el.querySelector('.gd-game-hall__motd');
     expect(line?.querySelector('.gd-game-hall__motd-label')?.textContent).toBe('MOTD:');
-    expect(line?.textContent?.replace(/\s+/g, ' ').trim()).toBe('MOTD: Join the PC!Bye');
+    expect(line?.textContent?.replace(/\s+/g, ' ').trim()).toBe('MOTD: Join the PC!Bye, notes');
     expect(line?.querySelector('a')?.getAttribute('href')).toBe('https://lotrtcgpc.net');
     expect(line?.querySelector('a')?.target).toBe('_blank');
-    expect(line?.querySelector('img')).toBeNull();
+    // read as the patch notes are (as the legacy hall, which put the MOTD in as HTML): a picture is drawn from its
+    // address alone, a link into the hall is its route, and nothing runs
+    const picture = line?.querySelector('img');
+    expect([picture?.getAttribute('src'), picture?.hasAttribute('onerror')]).toEqual(['/gemp-lotr/x', false]);
+    expect(line?.querySelector('script')).toBeNull();
+    expect(line?.querySelector('.gd-markup__hall-link')?.getAttribute('href')).toBe('/gemp-lotr/ng/info/patch-notes');
     expect(line?.querySelector('br')).not.toBeNull();
   });
 });

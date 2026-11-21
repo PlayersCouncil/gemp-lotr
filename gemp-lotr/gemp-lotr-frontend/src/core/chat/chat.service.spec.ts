@@ -249,11 +249,20 @@ describe('ChatService', () => {
 
   it('remembers the Discord / built-in choice (Discord until chosen)', () => {
     create();
+    chat.applyChoice();
     expect(chat.discord()).toBe(true);
     chat.setDiscord(false);
     expect(settings.values.get(CHAT_CHOICE_KEY)).toBe('builtin');
     TestBed.resetTestingModule();
     create('builtin');
+    chat.applyChoice();
     expect(chat.discord()).toBe(false);
+  });
+
+  it('keeps the built-in chat until the player is known or the switch is pressed', () => {
+    create();
+    expect(chat.discord()).toBe(false);
+    chat.setDiscord(true);
+    expect(chat.discord()).toBe(true);
   });
 });

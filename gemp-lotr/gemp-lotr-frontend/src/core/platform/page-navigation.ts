@@ -55,6 +55,7 @@ export class PageNavigation {
     const tab = opened;
     try {
       tab.document.title = 'Gemp-LotR';
+      // a blank page, without the app's stylesheet and its themes: dark while the page it waits for loads
       tab.document.body.style.background = '#111';
     } catch {
       // only cosmetic

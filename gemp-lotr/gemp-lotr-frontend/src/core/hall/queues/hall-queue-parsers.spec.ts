@@ -9,7 +9,6 @@ import {
   queueActions,
   queueSectionRow,
   queueWaitingRow,
-  splitPrice,
   tournamentActions,
   tournamentDraftUrl,
   tournamentRow,
@@ -62,8 +61,6 @@ describe('the hall queue and tournament parsers', () => {
       collection: 'Table Draft',
       name: { draftFormatUrl: '/gemp-lotr-server/deck/draftHtml?draftCode=fotr_table_draft' },
     });
-    expect(splitPrice(250)).toEqual({ gold: 2, silver: '50' });
-    expect(splitPrice(5)).toEqual({ gold: 0, silver: '05' });
   });
 
   it('draws the Waiting Tables rows with the legacy prefixes and buttons', () => {

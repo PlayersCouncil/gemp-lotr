@@ -226,12 +226,12 @@ describe('HallShellComponent', () => {
     expect(shell.injector.get(HallTablesService).invitee()).toBe('bob');
   });
 
-  it("shows admins the Admin tab, the legacy hall's", async () => {
+  it("shows admins the Admin tab, the legacy hall's in a tab of its own (this hall goes on polling)", async () => {
     await open('/hall');
     await answerPlayer({ name: 'boss', type: 'ua' });
     const admin = el().querySelector<HTMLAnchorElement>('.gd-hall__tab[data-tab="admin"]');
     expect(admin?.getAttribute('href')).toBe('/gemp-lotr/hall-legacy.html?admin=1#admin');
-    expect(admin?.target).toBe('');
+    expect(admin?.target).toBe('_blank');
   });
 
   it('goes where another tab of the site asks it to (a legacy hall link)', async () => {

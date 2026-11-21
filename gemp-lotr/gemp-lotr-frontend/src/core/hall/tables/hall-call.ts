@@ -36,13 +36,14 @@ export function jsonCallResult(json: unknown): TableCallResult {
 
 /** TableFlow.errorMap / errorDetail: a 400's JSON {"error"} or "message" header, else the status's sentence. */
 export function tableCallFailure(error: ApiError): TableCallResult {
+  const status = error.status < 0 ? 0 : error.status;
   if (error.status === 400) {
     const detail = errorDetail(error);
     if (detail) {
-      return { ok: false, message: detail };
+      return { ok: false, message: detail, status };
     }
   }
-  return { ok: false, message: statusMessage(error.status < 0 ? 0 : error.status) };
+  return { ok: false, message: statusMessage(status), status };
 }
 
 /** The message a failed answer carries (TableFlow.errorDetail): a JSON body {"error": "..."}, else the "message" header. */

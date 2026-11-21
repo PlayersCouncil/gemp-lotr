@@ -8,6 +8,7 @@ import { PageNavigation } from '../../platform/page-navigation';
 import { SoundPlayer } from '../../platform/sound-player';
 import { Timers } from '../../platform/timers';
 import { PlayerInfo } from '../../session/player-info.service';
+import { HallSession } from '../hall-session.service';
 import { HallBoard, HallBoardChange } from '../board/hall-board.service';
 import { escapeHtml, HallDialogs, pageMarkup, serverMessageHtml, serverMessageMarkup } from '../hall-dialogs.service';
 import { CreateTournament } from '../play/create-tournament.service';
@@ -71,6 +72,7 @@ export class HallQueuesService {
   private readonly sound = inject(SoundPlayer);
   private readonly timers = inject(Timers);
   private readonly player = inject(PlayerInfo);
+  private readonly session = inject(HallSession);
 
   /**
    * The viewer is (or just became) part of a tournament or its queue (hallUi.js inTournament): the hall-wide
@@ -276,10 +278,19 @@ export class HallQueuesService {
 
   /**
    * hallUi.js processResponse: an <error> or <response> message is shown in a dialog ("Error" / "Response") and added
-   * to the chat as a warning; anything else passes quietly. False for a refusal.
+   * to the chat as a warning; anything else passes quietly. False for a refusal. A request that failed as one
+   * (hallUi.js requestFailed): not logged in is the "Not logged in" dialog, and no answer or a 504 nothing (the
+   * connection readout says it); any other is shown the same way as a refusal.
    */
   private async processResponse(call$: Observable<TableCallResult>): Promise<boolean> {
     const result = await firstValueFrom(call$);
+    if (result.status === 401) {
+      this.session.requireLogin();
+      return false;
+    }
+    if (result.status === 0 || result.status === 504) {
+      return false;
+    }
     if (!result.ok || result.message !== RESULT_OK) {
       this.chat.appendWarning(serverMessageHtml(result.message));
       this.dialogs.show(result.ok ? RESPONSE_TITLE : RESPONSE_ERROR_TITLE, serverMessageMarkup(result.message));

@@ -119,12 +119,6 @@ export function queueEventName(queue: HallQueue): HallEventName {
   return { text: queue.name, draftFormatUrl: draft === null ? null : draftFormatUrl(draft) };
 }
 
-/** The entry cost as the hall writes it (common.js formatPrice): gold, then silver in two digits, each with its coin. */
-export function splitPrice(price: number): { gold: number; silver: string } {
-  const silver = price % 100;
-  return { gold: Math.floor(price / 100), silver: String(silver).padStart(2, '0') };
-}
-
 /** The Recurring / Scheduled / World Championship row (drawQueue's `row`). */
 export function queueSectionRow(queue: HallQueue): HallQueueSectionRow {
   const type = displayType(queue.type);

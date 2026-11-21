@@ -10,7 +10,9 @@ import io.netty.handler.codec.http.HttpRequest;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class WebRequestHandler implements UriRequestHandler {
     private static final String ANGULAR_APP = "ng";
@@ -63,12 +65,23 @@ public class WebRequestHandler implements UriRequestHandler {
         responseWriter.writeFile(file, Collections.singletonMap(HttpHeaderNames.ETAG.toString(), etag));
     }
 
-    /** A GET under ng/ whose last path segment has no extension (a route, not a missing asset). */
+    /**
+     * A GET under ng/ that is a route, not a missing asset: its last path segment does not end in a file type the
+     * app is built of.  A route may well have a dot in it (ng/events/tournaments/&lt;id&gt;: a tournament's id is
+     * whatever the admin typed).
+     */
+    /** The file types under ng/ (the built app and what it loads): a missing one of these is a 404, not a route. */
+    private static final Set<String> ASSET_TYPES = Set.of(
+            "js", "mjs", "css", "map", "html", "json", "txt", "ico", "webmanifest",
+            "png", "jpg", "jpeg", "gif", "svg", "webp", "avif",
+            "woff", "woff2", "ttf", "otf", "mp3", "ogg", "wav");
+
     private static boolean isAngularRoute(String uri, HttpRequest request) {
         if (request.method() != HttpMethod.GET || !uri.startsWith(ANGULAR_APP + "/"))
             return false;
         String lastSegment = uri.substring(uri.lastIndexOf('/') + 1);
-        return !lastSegment.contains(".");
+        int dot = lastSegment.lastIndexOf('.');
+        return dot < 0 || !ASSET_TYPES.contains(lastSegment.substring(dot + 1).toLowerCase(Locale.ROOT));
     }
 
     private boolean clientHasCurrentVersion(HttpRequest request, String etag) {

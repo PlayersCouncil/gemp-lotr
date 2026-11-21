@@ -97,21 +97,6 @@
   text-align: right;
 }
 
-.gd-hall-sections__coin {
-  display: inline-block;
-  width: 9px;
-  height: 9px;
-  background: no-repeat;
-}
-
-.gd-hall-sections__coin[data-coin='gold'] {
-  background-image: var(--theme-hall-gold);
-}
-
-.gd-hall-sections__coin[data-coin='silver'] {
-  background-image: var(--theme-hall-silver);
-}
-
 /* hints drawn as buttons look like the links they were */
 .gd-hall-sections__hint {
   display: inline;

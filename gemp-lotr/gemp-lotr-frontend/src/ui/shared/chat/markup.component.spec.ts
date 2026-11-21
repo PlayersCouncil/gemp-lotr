@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { MarkupNode, parseServerMarkup, RICH_MARKUP } from '../../../core/chat/chat-markup';
 import { MarkupComponent } from './markup.component';
 
@@ -68,12 +69,27 @@ describe('MarkupComponent', () => {
     expect(fixture.componentInstance.cards).toEqual(['1_5']);
 
     const link = el.querySelector<HTMLAnchorElement>('a.gd-markup__hall-link')!;
-    expect(link.getAttribute('href')).toBe('#format-pc_movie');
+    // the route's address, for the browser to open in a new tab
+    expect(link.getAttribute('href')).toBe('/gemp-lotr/ng/help/formats/pc_movie');
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const inNewTab = new MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true });
+    link.addEventListener('click', (event) => event.preventDefault(), { once: true });
+    link.dispatchEvent(inNewTab);
+    expect(navigate).not.toHaveBeenCalled();
     const click = new MouseEvent('click', { bubbles: true, cancelable: true });
     link.dispatchEvent(click);
-    // reported to the page, not followed
+    // gone to in this hall, and reported to the page
     expect(click.defaultPrevented).toBe(true);
+    expect(navigate).toHaveBeenCalledWith(['/help/formats/pc_movie'], { queryParams: {} });
     expect(fixture.componentInstance.links).toEqual(['#format-pc_movie']);
+  });
+
+  it("opens the legacy hall's Admin in a tab of its own", async () => {
+    const fixture = TestBed.createComponent(Host);
+    fixture.componentInstance.nodes.set([{ kind: 'hall-link', hash: '#admin', children: [] }]);
+    await fixture.whenStable();
+    const link = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('a.gd-markup__hall-link')!;
+    expect([link.getAttribute('href'), link.target]).toEqual(['/gemp-lotr/hall-legacy.html?admin=1#admin', '_blank']);
   });
 
   it('draws what the rich parser reads of a patch note', async () => {

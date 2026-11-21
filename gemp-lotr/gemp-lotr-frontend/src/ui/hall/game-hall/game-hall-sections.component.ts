@@ -17,12 +17,13 @@ import {
   SHOW_PRIZES,
   START_NOW,
 } from '../../../core/hall/queues/hall-queue-messages';
-import { splitPrice } from '../../../core/hall/queues/hall-queue-parsers';
 import { HallQueuesService } from '../../../core/hall/queues/hall-queues.service';
 import { tableAgeTitle } from '../../../core/hall/tables/hall-table-parsers';
 import { HallTableRow } from '../../../core/hall/tables/hall-table-models';
 import { HallTablesService } from '../../../core/hall/tables/hall-tables.service';
 import { PageNavigation } from '../../../core/platform/page-navigation';
+import { price } from '../../../core/hall/price';
+import { PriceComponent } from '../shared/price.component';
 
 /**
  * The Game Hall tab's sections (hall.html #tablesDiv, hallUi.js drawQueue / drawTournament / drawTable, initTable):
@@ -39,8 +40,8 @@ import { PageNavigation } from '../../../core/platform/page-navigation';
  * invitation for the viewer; `data-bold` for the World Championship). In the rows: `i.gd-hall-sections__note` (a
  * table's note), `span.gd-hall-sections__age` (a waiting table's timer, `title` its opening time),
  * `button.gd-hall-sections__hint` (an event name opening its draft format, a prize label opening its breakdown, a
- * tournament's player count opening its players), `span.gd-hall-sections__price` (gold and silver, each followed by
- * `span.gd-hall-sections__coin[data-coin]`), and the actions: `button.gd-hall-sections__button` (`data-action` = join,
+ * tournament's player count opening its players), `gd-price` (an entry cost), and the actions:
+ * `button.gd-hall-sections__button` (`data-action` = join,
  * leave, join-queue, leave-queue, start, ready-check, prizes, go-to-draft, register-deck, abandon, late-join;
  * `disabled` when waiting for others) or `a.gd-hall-sections__button` (`data-action` = play, watch; `target=_blank`).
  */
@@ -102,10 +103,7 @@ import { PageNavigation } from '../../../core/platform/page-navigation';
                     <td>{{ row.start }}</td>
                     <td>{{ row.system }}</td>
                     <td class="gd-hall-sections__cost">
-                      <span class="gd-hall-sections__price"
-                        >{{ price(row.cost).gold }}<span class="gd-hall-sections__coin" data-coin="gold"></span>
-                        {{ price(row.cost).silver }}<span class="gd-hall-sections__coin" data-coin="silver"></span
-                      ></span>
+                      <gd-price [price]="price(row.cost)" />
                     </td>
                     <td>
                       @if (row.prizes.lines.length > 0) {
@@ -351,7 +349,7 @@ import { PageNavigation } from '../../../core/platform/page-navigation';
       </tr>
     </ng-template>
   `,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, PriceComponent],
 })
 export class GameHallSectionsComponent {
   protected readonly board = inject(HallBoard);
@@ -380,9 +378,7 @@ export class GameHallSectionsComponent {
     return section === 'wc' ? sections.wc : section === 'scheduled' ? sections.scheduled : sections.recurring;
   }
 
-  protected price(cost: number) {
-    return splitPrice(cost);
-  }
+  protected readonly price = price;
 
   protected prizeLabel(prizes: HallPrizes): string {
     return prizes.label === '' ? PRIZE_BREAKDOWN : prizes.label;

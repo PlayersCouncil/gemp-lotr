@@ -14,7 +14,7 @@ describe('the hall calls outcome', () => {
   });
 
   it("words HTTP failures, with a 400's own message", () => {
-    expect(failure(400, { error: 'Bad deck' })).toEqual({ ok: false, message: 'Bad deck' });
+    expect(failure(400, { error: 'Bad deck' })).toEqual({ ok: false, message: 'Bad deck', status: 400 });
     expect(failure(400, null, new HttpHeaders({ message: 'From header' })).message).toBe('From header');
     expect(failure(400).message).toBe('The server rejected the request as malformed.');
     expect(failure(418).message).toBe('The server answered with an error (HTTP 418).');

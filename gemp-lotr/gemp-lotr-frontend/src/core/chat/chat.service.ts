@@ -73,8 +73,15 @@ export class ChatService {
   /** Whether the message box takes messages. */
   readonly canSend = computed(() => this.started() && !this.stopped() && !this.loggedOut());
 
-  /** The Discord chat shows instead of this one (the player's last choice; Discord until they choose). */
-  readonly discord = signal(this.settings.read(CHAT_CHOICE_KEY) !== 'builtin');
+  /** The player's last choice of chat: Discord until they choose. */
+  private readonly discordChosen = signal(this.settings.read(CHAT_CHOICE_KEY) !== 'builtin');
+  /** The choice counts: the player is known (applyChoice()), or the switch was pressed. */
+  private readonly choiceApplies = signal(false);
+  /**
+   * The Discord chat shows instead of this one. Not before the player is known (chat.js start(): Discord takes the
+   * player's name when it is made), so a visitor keeps this chat and its "not logged in" warning unless they switch.
+   */
+  readonly discord = computed(() => this.choiceApplies() && this.discordChosen());
 
   private readonly announcements = new Subject<TournamentAnnouncement>();
   /** Tournament messages, for their dialog (part 4.2 decides who sees it: hallUi.js tournamentCallback). */
@@ -139,9 +146,15 @@ export class ChatService {
     this.append({ kind: 'warning', from: null, date: null, html: text, highlight: null, loginLink: false });
   }
 
+  /** The player is known: the chat they last chose shows (Discord until they choose). */
+  applyChoice(): void {
+    this.choiceApplies.set(true);
+  }
+
   /** Shows this chat or the Discord one, and remembers the choice. */
   setDiscord(discord: boolean): void {
-    this.discord.set(discord);
+    this.discordChosen.set(discord);
+    this.choiceApplies.set(true);
     this.settings.write(CHAT_CHOICE_KEY, discord ? 'discord' : 'builtin');
   }
 
