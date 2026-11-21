@@ -207,4 +207,16 @@ describe('GameHallSectionsComponent', () => {
     )!.click();
     expect(hall.navigation.opened.at(-1)).toBe('/gemp-lotr-server/deck/draftHtml?draftCode=fotr_table_draft');
   });
+  it('joins a running tournament that takes no deck at once', async () => {
+    const { fixture, el } = await render();
+    hall.poll(
+      '<hall channelNumber="8"><tournament action="add" id="t4" collection="Sealed" format="Fellowship Block" name="Casual Sealed" system="Swiss" type="SEALED" stage="Playing Games" round="1" playerCount="4" playerList="bob, carol, dave, erin" signedUp="false" abandoned="false" joinable="true" wc="false"/></hall>',
+    );
+    fixture.detectChanges();
+    button(el, 'tournament:t4', 'late-join').click();
+    const join = hall.request('/hall/tournament/t4/join');
+    expect(hall.body(join)).toMatchObject({ deckName: '', deckSource: '' });
+    join.flush('<response message="Joined."/>');
+    await settle();
+  });
 });
