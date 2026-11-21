@@ -103,6 +103,8 @@ describe('FormatDefinitionsComponent', () => {
     const info = harness.routeDebugElement!.injector.get(CardInfoService);
     el.querySelector<HTMLButtonElement>('.gd-format__chip')!.click();
     expect(info.card()?.blueprintId).toBe('1_45');
+    // headed by the card's name, as the legacy preview's data-title
+    expect(info.title()).toBe('·Ottar, Man of Laketown');
     el.querySelectorAll<HTMLButtonElement>('.gd-format__chip')[1]!.dispatchEvent(
       new MouseEvent('contextmenu', { bubbles: true, cancelable: true }),
     );

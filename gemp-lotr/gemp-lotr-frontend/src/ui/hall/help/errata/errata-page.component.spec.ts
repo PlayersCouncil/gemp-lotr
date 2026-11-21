@@ -18,7 +18,7 @@ describe('ErrataPageComponent', () => {
       providers: [
         provideGempHttp(),
         provideHttpClientTesting(),
-        provideRouter([{ path: 'help', children: [ERRATA_ROUTE] }]),
+        provideRouter([{ path: 'help', children: [ERRATA_ROUTE, { path: 'other', children: [] }] }]),
       ],
     });
     backend = TestBed.inject(HttpTestingController);
@@ -162,6 +162,16 @@ describe('ErrataPageComponent', () => {
     expect(page.querySelector('.gd-errata-page__backdrop')?.hasAttribute('hidden')).toBe(false);
     press('Escape');
     expect(errata.enlarged()).toBe(false);
+  });
+
+  it('stops hearing the keys once the page is left', async () => {
+    await open('/help/errata');
+    const errata = harness.routeDebugElement?.injector.get(PcErrataService) as PcErrataService;
+    const listen = vi.spyOn(errata, 'step');
+    await harness.navigateByUrl('/help/other');
+    expect(harness.fixture.nativeElement.querySelector('gd-errata-page')).toBeNull();
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'j' }));
+    expect(listen).not.toHaveBeenCalled();
   });
 
   it('opens and closes the (i) text', async () => {

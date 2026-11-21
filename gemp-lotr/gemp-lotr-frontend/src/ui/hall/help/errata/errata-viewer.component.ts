@@ -514,7 +514,7 @@ export class ErrataViewerComponent {
       overlayImage: null,
     };
     // after the press is over: the card information closes on a press outside it, this one included
-    const open = () => setTimeout(() => this.cardInfo.show(view), 0);
+    const open = () => setTimeout(() => this.cardInfo.show(view, args.title), 0);
     if (event?.type === 'contextmenu' && event.buttons) {
       this.document.addEventListener('mouseup', open, { once: true });
     } else {

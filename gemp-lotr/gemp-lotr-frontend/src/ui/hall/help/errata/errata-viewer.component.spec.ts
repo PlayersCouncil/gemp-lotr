@@ -139,6 +139,7 @@ describe('ErrataViewerComponent', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(info.card()?.blueprintId).toBe('1_45');
     expect(info.card()?.imageUrl).toBe('https://i.lotrtcgpc.net/decipher/LOTR01045.jpg');
+    expect(info.title()).toBe('Gandalf, The Grey Wizard (original)');
   });
 
   it('opens the keys’ help with its (i)', async () => {

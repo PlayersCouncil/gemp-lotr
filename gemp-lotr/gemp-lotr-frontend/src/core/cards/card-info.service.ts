@@ -10,6 +10,8 @@ export class CardInfoService {
    * sanitizes it.
    */
   readonly details = signal<string | null>(null);
+  /** The title the page gives the card ("Gandalf, The Grey Wizard (original)"), or null for "Card Information". */
+  readonly title = signal<string | null>(null);
   /**
    * Shown by a gesture (dragging a card up, or a long press on a touch screen): the click that ends it, and the context
    * menu a touch browser sends for a long press, don't close it.
@@ -20,14 +22,17 @@ export class CardInfoService {
     return this.card() !== null;
   }
 
-  show(card: CardView): void {
+  /** `title`: what the dialog is headed (the legacy hall's card preview named the card); default "Card Information". */
+  show(card: CardView, title: string | null = null): void {
     this.details.set(null);
+    this.title.set(title);
     this.card.set(card);
   }
 
   showDragged(card: CardView): void {
     this.dragRelease = true;
     this.details.set(null);
+    this.title.set(null);
     this.card.set(card);
   }
 
@@ -51,5 +56,6 @@ export class CardInfoService {
   close(): void {
     this.card.set(null);
     this.details.set(null);
+    this.title.set(null);
   }
 }
