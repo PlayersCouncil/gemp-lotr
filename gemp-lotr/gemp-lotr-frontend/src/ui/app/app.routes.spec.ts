@@ -80,7 +80,9 @@ describe('app routes', () => {
     loginCheck = () => throwError(() => new ApiError(401, 'Not logged in'));
     const toLogin = vi.spyOn(TestBed.inject(LoginPage), 'open').mockImplementation(() => undefined);
     expect((await open('/help')).page).toBeInstanceOf(HallShellComponent);
-    expect(harness.fixture.nativeElement.querySelector('gd-hall-shell gd-hall-placeholder')).not.toBeNull();
+    expect(
+      harness.fixture.nativeElement.querySelector('gd-hall-shell gd-hall-tab-frame[data-tab="help"]'),
+    ).not.toBeNull();
     expect(toLogin).not.toHaveBeenCalled();
   });
 
