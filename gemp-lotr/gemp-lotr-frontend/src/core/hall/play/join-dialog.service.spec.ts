@@ -123,4 +123,51 @@ describe('JoinDialog', () => {
     await registering;
     expect(titles()).toEqual(['Deck Registered']);
   });
+
+  it('joins a running Constructed tournament late with a deck, and says what the server answered', async () => {
+    hall.connect();
+    const late = TestBed.inject(HallBoard).events().tournament('t3')!;
+    await join.joinLate(late);
+    decks();
+    await settle();
+    expect(join.state()).toMatchObject({
+      kind: 'late-join',
+      title: 'Join Tournament: Casual Movie Block',
+      subtitle: 'Format: Movie Block',
+      buttonLabel: 'Join Tournament',
+    });
+    await join.submit(null);
+    expect(join.result()).toEqual({ kind: 'error', message: MUST_SELECT_DECK });
+    const joining = join.submit(elves);
+    const req = hall.request('/hall/tournament/t3/join');
+    expect(hall.body(req)).toMatchObject({ deckName: 'Elves', deckSource: 'player' });
+    req.flush(JSON.stringify({ response: 'You joined Casual Movie Block.' }));
+    await joining;
+    expect(join.state()).toBeNull();
+    expect(titles()).toEqual(['Joined Tournament']);
+    expect(JSON.parse(hall.cookies.read('late-join-decks')!)['Movie Block']).toEqual(['Elves', 'player']);
+  });
+
+  it('joins a limited tournament late at once, with no deck', async () => {
+    hall.connect();
+    const draft = { ...TestBed.inject(HallBoard).events().tournament('t2')!, joinable: true };
+    const joining = join.joinLate(draft);
+    const req = hall.request('/hall/tournament/t2/join');
+    expect(hall.body(req)).toMatchObject({ deckName: '', deckSource: '' });
+    req.flush(JSON.stringify({ response: 'Joined.' }));
+    await joining;
+    expect(join.state()).toBeNull();
+    expect(titles()).toEqual(['Joined Tournament']);
+  });
+
+  it('asks for a deck before joining a Constructed queue, and does nothing once closed', async () => {
+    hall.connect();
+    await join.joinQueue(TestBed.inject(HallBoard).events().queue('daily')!);
+    decks();
+    await join.submit(null);
+    expect(join.result()).toEqual({ kind: 'error', message: MUST_SELECT_DECK });
+    join.close();
+    await join.submit(elves);
+    expect(join.state()).toBeNull();
+  });
 });
