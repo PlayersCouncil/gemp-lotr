@@ -11,6 +11,11 @@ describe('the Help tab (help.routes)', () => {
     Element.prototype.scrollIntoView = vi.fn();
   });
 
+  // jsdom has no scrollIntoView, and the spec files share one window: what stands in for it goes with the test
+  afterEach(() => {
+    delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
+  });
+
   async function open(url: string) {
     TestBed.configureTestingModule({
       providers: [

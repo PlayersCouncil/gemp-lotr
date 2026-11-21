@@ -22,6 +22,11 @@ describe('FormatDefinitionsComponent', () => {
     };
   });
 
+  // jsdom has no scrollIntoView, and the spec files share one window: what stands in for it goes with the test
+  afterEach(() => {
+    delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
+  });
+
   async function open(url: string, answer: string | number = readServerResponse('format-definitions.json')) {
     TestBed.configureTestingModule({
       providers: [
