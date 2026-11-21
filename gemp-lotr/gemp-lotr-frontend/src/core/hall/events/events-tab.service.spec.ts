@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { answerWith, setUpEvents } from '../../../testing/events-server';
 import { settle } from '../../../testing/fake-notifier';
 import { LeagueDetail } from './events-models';
+import { EVENTS_LEAGUE_JOIN_LISTENER } from './events-hooks';
 import { EventsTab } from './events-tab.service';
 import { REFRESH_AFTER_MS } from './return-refresh';
 
@@ -50,7 +51,13 @@ describe('EventsTab', () => {
     answerWith(backend, '/tournament/daily-pc_movie-20261120', 'tournament-playing.xml');
   });
 
-  it('loads the calendar again after a join', async () => {
+  it('loads the calendar again after a join, and tells the hall', async () => {
+    const told: string[] = [];
+    TestBed.resetTestingModule();
+    ({ backend, clock } = setUpEvents([
+      { provide: EVENTS_LEAGUE_JOIN_LISTENER, useValue: { leagueJoined: (code: string) => told.push(code) } },
+    ]));
+    tab = TestBed.inject(EventsTab);
     await started();
     backend
       .match((request) => request.url.endsWith('/eventHistory/months'))
@@ -60,6 +67,7 @@ describe('EventsTab', () => {
     backend.expectOne((request) => request.method === 'POST').flush('');
     await joined;
     answerWith(backend, '/calendar', 'events-calendar.json');
+    expect(told).toEqual(['1700000003']);
   });
 
   it('refreshes the sub-tab the viewer comes back to after 10 s', async () => {

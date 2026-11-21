@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, Injector, signal } from '@angular/core';
 import { firstValueFrom, Observable, Subject } from 'rxjs';
 import { ApiError } from '../../api/api-error';
 import { Notifier } from '../../notifier/notifier';
@@ -36,7 +36,8 @@ export function dateRange(start: string, end: string): string {
 @Injectable()
 export class LeagueResults {
   private readonly api = inject(EventsApi);
-  private readonly notifier = inject(Notifier);
+  /** The Notifier is asked for when a join fails, so the tab's state can be made without one (the frame's specs). */
+  private readonly injector = inject(Injector);
 
   private readonly joinQuestion_ = signal<JoinQuestion | null>(null);
   private readonly joining_ = signal(false);
@@ -116,7 +117,7 @@ export class LeagueResults {
       await firstValueFrom(this.api.joinLeague(question.code));
     } catch (error) {
       const failure = ApiError.from(error);
-      await this.notifier.alert(failure.is(409) ? NOT_ENOUGH_FUNDS : eventErrorMessage(failure));
+      await this.injector.get(Notifier).alert(failure.is(409) ? NOT_ENOUGH_FUNDS : eventErrorMessage(failure));
       return;
     } finally {
       this.joining_.set(false);

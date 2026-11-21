@@ -555,6 +555,52 @@
   --theme-hall-silver: url('/gemp-lotr/images/silver.png');
   --theme-hall-rtmd-arrow: #c0a000;
 
+  /*
+   * The Events tab (hall.css "Event calendar", "Completed event browser", the drawers, .standings, .clickableFormat;
+   * leagueResultsUi.js's RTMD path; common.js formatPrice's coins)
+   */
+  --theme-events-weekday-bg: #222;
+  --theme-events-other-month-bg: rgb(0 0 0 / 0.35);
+  --theme-events-today-bg: #e8e5da;
+  --theme-events-today-other-month-bg: #a8a59b;
+  --theme-events-today-text: #111;
+  --theme-events-muted: #aaa;
+  --theme-events-soft: #bbb;
+  --theme-events-date: #ccc;
+  --theme-events-bar-text: #fff;
+  --theme-events-selected: #fff;
+  --theme-events-serie-divider: rgb(255 255 255 / 0.8);
+  --theme-events-league: #2f6b9a;
+  --theme-events-league-joined: #24567d;
+  --theme-events-tournament: #8a4b1f;
+  --theme-events-tournament-joined: #6e3c18;
+  --theme-events-projected: #3d7a3d;
+  --theme-events-projected-joined: #2f5f2f;
+  --theme-events-projected-border: #9fd49f;
+  --theme-events-joined: #9fd49f;
+  --theme-events-error-bar: #8a1f1f;
+  --theme-events-error: #f0a0a0;
+  --theme-events-loading: #d8d8a0;
+  --theme-events-placeholder-border: #4a4a4a;
+  --theme-events-placeholder-text: #a0a0a0;
+  --theme-events-drawer-bg: #2a2a2a;
+  --theme-events-drawer-border: #3a3a3a;
+  --theme-events-row-open-bg: #353535;
+  --theme-events-title-hover-bg: #333;
+  --theme-events-month-hover-bg: #3a3a3a;
+  --theme-events-dropdown-shadow: rgb(0 0 0 / 0.6);
+  --theme-events-admin-none: #777;
+  --theme-events-rule: #ddd;
+  --theme-events-standings-border: #fff;
+  --theme-events-standings-even: #442;
+  --theme-events-format-link: #6f8cff;
+  --theme-events-rtmd-muted: #888;
+  --theme-events-rtmd-current: gold;
+  --theme-events-rtmd-passed: rgb(255 215 0 / 0.4);
+  --theme-events-rtmd-shadow: #000;
+  --theme-events-coin-gold: url('/gemp-lotr/images/gold.png') no-repeat;
+  --theme-events-coin-silver: url('/gemp-lotr/images/silver.png') no-repeat;
+
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;
   --theme-scrollbar-track: #6666;

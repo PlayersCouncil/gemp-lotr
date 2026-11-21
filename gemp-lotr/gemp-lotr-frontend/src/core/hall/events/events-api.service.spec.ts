@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { answerWith, eventsRequest, failWith, setUpEvents } from '../../../testing/events-server';
-import { settle } from '../../../testing/fake-notifier';
 import { readServerResponse } from '../../../testing/files';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { EventsApi } from './events-api.service';
@@ -60,14 +59,15 @@ describe('EventsApi', () => {
     await expect(refused).rejects.toBeInstanceOf(ApiError);
   });
 
-  it('asks the format definitions once and picks a format by code; a failure asks again', async () => {
-    const first = firstValueFrom(api.formatDefinition('fotr_block'));
-    failWith(backend, '/hall/formats/json', 500);
-    await expect(first).rejects.toMatchObject({ status: 500 });
-    const again = firstValueFrom(api.formatDefinition('fotr_block'));
-    eventsRequest(backend, '/hall/formats/json').flush(readServerResponse('hall-format-definitions.json'));
-    expect((await again)?.name).toBe('Fellowship Block');
-    await settle();
-    expect(await firstValueFrom(api.formatDefinition('sealed_x'))).toBeNull();
+  it("asks one format's definition by code; an unknown code is none", async () => {
+    const known = firstValueFrom(api.formatDefinition('fotr_block'));
+    eventsRequest(backend, '/hall/format/fotr_block/json').flush(readServerResponse('hall-format-definition.json'));
+    expect((await known)?.sitesName).toBe('Fellowship block');
+    const unknown = firstValueFrom(api.formatDefinition('gone'));
+    failWith(backend, '/hall/format/gone/json', 404);
+    expect(await unknown).toBeNull();
+    const failed = firstValueFrom(api.formatDefinition('fotr_block'));
+    failWith(backend, '/hall/format/fotr_block/json', 500);
+    await expect(failed).rejects.toMatchObject({ status: 500 });
   });
 });
