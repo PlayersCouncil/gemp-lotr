@@ -258,3 +258,82 @@ describe('ChatComponent', () => {
     expect(el.querySelector('.gd-chat__switch')).toBeNull();
   });
 });
+
+@Component({
+  imports: [ChatComponent],
+  template: `<gd-chat label="Game Hall chat" [lines]="[]" [users]="users()" [userName]="userName()" />`,
+})
+class WidthHost {
+  readonly users = signal<readonly ChatUser[] | null>(null);
+  readonly userName = signal<string | null>(null);
+}
+
+// chat.js lockUserListWidth: the user list's column is as wide as your own entry with its widest chip ("incognito"),
+// measured on a hidden copy; while the list has no entry of yours it is measured for your name without a role.
+describe('ChatComponent, the user list width', () => {
+  const CHAR = 7;
+  let probes: string[];
+
+  beforeEach(() => {
+    probes = [];
+    const real = HTMLElement.prototype.getBoundingClientRect;
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+      if (!this.matches('li.gd-chat__user[aria-hidden]')) return real.call(this);
+      const text = this.textContent!;
+      probes.push(text);
+      return { width: text.length * CHAR, height: 15 } as DOMRect;
+    });
+  });
+
+  afterEach(() => vi.restoreAllMocks());
+
+  async function render() {
+    const fixture = TestBed.createComponent(WidthHost);
+    const host = fixture.componentInstance;
+    const el = fixture.nativeElement.querySelector('gd-chat') as HTMLElement;
+    const update = () => fixture.whenStable();
+    const width = () =>
+      el.hasAttribute('data-people-width') ? parseFloat(el.style.getPropertyValue('--gd-chat-people-width')) : null;
+    await update();
+    return { host, el, update, width };
+  }
+
+  it('is measured for your own entry, then for your name alone while the list has none of yours', async () => {
+    const { host, el, update, width } = await render();
+    host.userName.set('Visual tester');
+    host.users.set([{ name: 'alice', role: 'admin', self: true, incognito: false }]);
+    await update();
+    expect(probes).toEqual(['alice admin incognito', 'alice admin online']);
+    const own = width()!;
+    expect(own).toBeGreaterThan(0);
+
+    probes = [];
+    host.users.set([]);
+    await update();
+    expect(probes).toEqual(['Visual tester incognito', 'Visual tester online']);
+    const named = width()!;
+    expect(named - own).toBe('Visual tester incognito'.length * CHAR - 'alice admin incognito'.length * CHAR);
+    // the hidden copy is taken away again
+    expect(el.querySelectorAll('li.gd-chat__user')).toHaveLength(0);
+
+    // the same name and role again: not measured again
+    probes = [];
+    host.users.set([{ name: 'bob', role: null, self: false, incognito: false }]);
+    await update();
+    expect(probes).toEqual([]);
+    expect(width()).toBe(named);
+  });
+
+  it('is left alone while there is no name to measure, or nothing is laid out', async () => {
+    const { host, update, width } = await render();
+    host.users.set([]);
+    await update();
+    expect(probes).toEqual([]);
+    expect(width()).toBeNull();
+
+    vi.mocked(HTMLElement.prototype.getBoundingClientRect).mockReturnValue({ width: 0, height: 0 } as DOMRect);
+    host.userName.set('alice');
+    await update();
+    expect(width()).toBeNull();
+  });
+});
