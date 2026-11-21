@@ -1,7 +1,8 @@
 /**
- * GET /hall/formats/json (HallRequestHandler.getFormatDefinitions, FormatDefinitions.describe), read as far as a
- * league serie's "Format description" needs: the facts the legacy dialog (GET /hall/format/{code}, appendFormat)
- * listed. Help › Format Definitions reads the same answer; once it has its own reader, this one gives way to it.
+ * GET /hall/format/{code}/json (HallRequestHandler, FormatDefinitions.describe: one entry of /hall/formats/json, for
+ * any format the library knows), read as far as a league serie's "Format description" needs: the facts the legacy
+ * dialog (GET /hall/format/{code}, appendFormat) listed. Help › Format Definitions reads the same entries
+ * (core/hall/help); once its reader exports one entry's parser and reads sitesName, this one gives way to it.
  */
 
 /** A card of a format's lists. */
@@ -16,8 +17,10 @@ export interface FormatDefinition {
   readonly name: string;
   /** The legal sets in words (FormatSummary.describeSets); null when the server gave none. */
   readonly setSummary: string | null;
-  /** The site block's name. */
+  /** The site block's code ("FELLOWSHIP"). */
   readonly sites: string | null;
+  /** The site block's readable name, as the legacy HTML showed it; null when the server has none. */
+  readonly sitesName: string | null;
   readonly cancelRingBearerSkirmish: boolean;
   /** The game ends after Regroup actions (winAtEndOfRegroup). */
   readonly winAtEndOfRegroup: boolean;
@@ -53,39 +56,36 @@ function cards(value: unknown): FormatCard[] {
   });
 }
 
-/** {"formats": [entry, ...]}; entries without a code are left out. */
-export function parseFormatDefinitions(json: unknown): FormatDefinition[] {
-  return list(object(json)['formats']).flatMap((value) => {
-    const entry = object(value);
-    const code = text(entry['code']);
-    if (code === null) {
-      return [];
-    }
-    const lists = object(entry['lists']);
-    const errata = object(entry['errata']);
-    return [
-      {
-        code,
-        name: text(entry['name']) ?? code,
-        setSummary: text(entry['setSummary']),
-        sites: text(entry['sites']),
-        cancelRingBearerSkirmish: entry['cancelRingBearerSkirmish'] === true,
-        winAtEndOfRegroup: entry['winAtEndOfRegroup'] === true,
-        discardPileIsPublic: entry['discardPileIsPublic'] === true,
-        errata: {
-          pc: errata['pc'] === true,
-          playtest: errata['playtest'] === true,
-          pcCardsLegal: errata['pcCardsLegal'] === true,
-        },
-        banned: cards(lists['banned']),
-        restricted: cards(lists['restricted']),
-        limit2: cards(lists['limit2']),
-        limit3: cards(lists['limit3']),
-        valid: cards(lists['valid']),
-        restrictedNames: list(entry['restrictedNames']).filter((name): name is string => typeof name === 'string'),
-      },
-    ];
-  });
+/** One format's entry (GET /hall/format/{code}/json); null without a code. */
+export function parseFormatDefinition(value: unknown): FormatDefinition | null {
+  const entry = object(value);
+  const code = text(entry['code']);
+  if (code === null) {
+    return null;
+  }
+  const lists = object(entry['lists']);
+  const errata = object(entry['errata']);
+  return {
+    code,
+    name: text(entry['name']) ?? code,
+    setSummary: text(entry['setSummary']),
+    sites: text(entry['sites']),
+    sitesName: text(entry['sitesName']),
+    cancelRingBearerSkirmish: entry['cancelRingBearerSkirmish'] === true,
+    winAtEndOfRegroup: entry['winAtEndOfRegroup'] === true,
+    discardPileIsPublic: entry['discardPileIsPublic'] === true,
+    errata: {
+      pc: errata['pc'] === true,
+      playtest: errata['playtest'] === true,
+      pcCardsLegal: errata['pcCardsLegal'] === true,
+    },
+    banned: cards(lists['banned']),
+    restricted: cards(lists['restricted']),
+    limit2: cards(lists['limit2']),
+    limit3: cards(lists['limit3']),
+    valid: cards(lists['valid']),
+    restrictedNames: list(entry['restrictedNames']).filter((name): name is string => typeof name === 'string'),
+  };
 }
 
 /** A line of the format description: its text, then the cards it lists (each shown on a click), if any. */
@@ -105,7 +105,7 @@ export function formatDescriptionLines(format: FormatDefinition): FormatDescript
   if (format.setSummary !== null) {
     line(format.setSummary);
   }
-  line(`Sites: ${format.sites ?? ''}`);
+  line(`Sites: ${format.sitesName ?? format.sites ?? ''}`);
   line(`Ring-bearer skirmish cancel: ${format.cancelRingBearerSkirmish ? 'Yes' : 'No'}`);
   if (format.winAtEndOfRegroup) {
     line('The game ends after Regroup actions are made (instead of at the start of Regroup)');

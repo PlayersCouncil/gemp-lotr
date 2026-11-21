@@ -107,8 +107,9 @@ formatAvailable collection limited>` (`<matches><match winner loser>` (the viewe
   every live drawer of that league (the list's, the calendar preview's) is fetched again and `joined$` fires: the
   calendar loads again (`EventsTab`), and the hall's Play popup should reload its league formats (4.2b).
 - Format description: the legacy dialog showed GET `/hall/format/{code}` (HTML). Here `EventsApi.formatDefinition`
-  picks the format from GET `/hall/formats/json` (asked once per page; `format-definitions.ts`), whose entry Help ›
-  Format Definitions draws.
+  asks GET `/hall/format/{code}/json` (any format the library knows; 404 for an unknown one, which leaves the dialog
+  empty, as the legacy one was when its call failed), read by `format-definitions.ts`; the sites are shown by their
+  readable name (`sitesName`).
 
 ## Current Tournaments (`TournamentResults`)
 
@@ -167,14 +168,22 @@ calendar's tournaments read them if the server adds them.
   it into the page as HTML.
 - An unreadable answer says "The server's answer could not be read." (or the drawer's "Could not display …"); the
   legacy page did nothing.
-- The format description comes from `/hall/formats/json`, which lists the hall's formats only: a league format that
-  is not one has no description (`formatDefinition` gives null), and `sites` is the block's code ("FELLOWSHIP"), not
-  its name as the HTML had it.
+- The format description is drawn from data (GET `/hall/format/{code}/json`), not the server's HTML; its card names
+  show the card on a click.
 - A league or tournament listed twice gets one row.
 
-## Left for the view (phase 2)
+## The view (`ui/hall/events`)
 
-The tab frame and sub-tab bar, the month grid's CSS grid layout, the drawers' slide, the calendar's scroll keeper
-(the page does not jump when the preview is replaced), the dialogs (join, format description), the card preview of
-the RTMD cards, the league admin's code chip and the report links' player-type check, and the Join Queue button's
-flow (4.2b's).
+`events.routes.ts`: the frame `EventsTabComponent` (`gd-events`, providing `EVENTS_SERVICES` on its route, so the
+state outlives a switch to another tab, as the legacy tab loaded once kept it) with a child route per sub-tab and deep
+link. Pages: `gd-events-calendar`, `gd-events-leagues`, `gd-events-tournaments`; parts: `gd-event-row` (a row and its
+drawer), `gd-league-detail`, `gd-tournament-detail`, `gd-calendar-facts`, `gd-event-history`, `gd-format-description`,
+`gd-price`, `button[gdEventsButton]`. Each component's DOM contract is in its doc comment; the colours are the
+"Events tab" block of `themes.css`.
+
+Hooks for the hall (`events-hooks.ts`, both optional): `EVENTS_QUEUE_JOINER` (`joinQueue(offer)`: the calendar shows
+Join Queue only when it is provided) and `EVENTS_LEAGUE_JOIN_LISTENER` (`leagueJoined(code)`, called by `EventsTab`).
+
+Not drawn as the legacy page did: the drawers open and shut at once (no 250 ms slide), and the calendar's scroll keeper
+(holding the scroll position while the preview is replaced) is left to the browser (`overflow-anchor: none` on the
+details).

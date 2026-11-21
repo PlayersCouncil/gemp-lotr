@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, shareReplay, tap } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { GempHttp } from '../../api/gemp-http.service';
 import {
@@ -20,18 +20,17 @@ import {
   parseTournamentDetail,
   parseTournamentList,
 } from './events-parsers';
-import { FormatDefinition, parseFormatDefinitions } from './format-definitions';
+import { FormatDefinition, parseFormatDefinition } from './format-definitions';
 
 /**
  * The Events tab's calls (communication.js getCalendar, getEventHistoryMonths, getEventHistory, getLeagues, getLeague,
- * joinLeague, getLiveTournaments, getTournament, getFormatDefinitions). All with the participant, none cached.
+ * joinLeague, getLiveTournaments, getTournament; the format description from GET /hall/format/{code}/json). All with the participant, none cached.
  * Failures arrive as ApiError; an answer that cannot be read as ApiError with INVALID_RESPONSE_STATUS. An XML answer
  * with another root element is null (the legacy page drew nothing for it).
  */
 @Injectable()
 export class EventsApi {
   private readonly http = inject(GempHttp);
-  private formats$: Observable<FormatDefinition[]> | null = null;
 
   /** GET /calendar?from&to: every event touching the days (yyyy-MM-dd, at most 400 days apart). */
   calendar(from: string, to: string): Observable<CalendarMonth> {
@@ -83,25 +82,19 @@ export class EventsApi {
 
   /**
    * A format's definition by code, for a league serie's "Format description" (the legacy page asked
-   * GET /hall/format/{code}, which answers HTML). GET /hall/formats/json is asked once per page and shared; null when
-   * the format is not among them (it lists the hall's formats only). A failure is not kept, so the next asks again.
+   * GET /hall/format/{code}, which answers HTML): GET /hall/format/{code}/json, for any format the library knows;
+   * null for one it does not (404).
    */
   formatDefinition(code: string): Observable<FormatDefinition | null> {
-    if (this.formats$ === null) {
-      const request$: Observable<FormatDefinition[]> = this.http.getText('/hall/formats/json').pipe(
-        map((text) => parseFormatDefinitions(readJson(text))),
-        tap({
-          error: () => {
-            if (this.formats$ === request$) {
-              this.formats$ = null;
-            }
-          },
-        }),
-        shareReplay(1),
-      );
-      this.formats$ = request$;
-    }
-    return this.formats$.pipe(map((formats) => formats.find((format) => format.code === code) ?? null));
+    return this.http.getText(`/hall/format/${encodeURIComponent(code)}/json`).pipe(
+      map((text) => parseFormatDefinition(readJson(text))),
+      catchError((error: unknown) => {
+        if (ApiError.from(error).is(404)) {
+          return of(null);
+        }
+        throw error;
+      }),
+    );
   }
 }
 

@@ -40,8 +40,8 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   `league-detail.xml` and `league-detail-rtmd.xml` (GET /league/{code}, LeagueRequestHandler.getLeagueInformation:
   series with matches and standings, one with a retired format; an RTMD league's path), `tournaments.xml` (GET
   /tournament, getCurrentTournaments), `tournament-playing.xml` and `tournament-finished.xml` (GET /tournament/{id},
-  getTournamentInfo) and `hall-format-definitions.json` (GET /hall/formats/json, FormatDefinitions.describeAll, cut
-  down to one format and an entry without a code).
+  getTournamentInfo) and `hall-format-definition.json` (GET /hall/format/{code}/json, FormatDefinitions.describe, with
+  sitesName).
 - Written by hand from the server code, for the Game Hall tab's queues and tournaments: `hall-queues.xml` (GET
   /hall: queues from HallCommunicationChannel.visitTournamentQueue — a World Championship queue shown in Waiting
   Tables, a recurring one with `prizesLabel` / `prizesLines` (the prizes as data, from the server change on
