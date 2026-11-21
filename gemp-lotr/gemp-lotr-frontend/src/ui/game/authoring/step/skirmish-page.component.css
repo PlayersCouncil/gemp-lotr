@@ -1,0 +1,9 @@
+/* A turn's skirmishes: a group for each part of them, each with its own steps and + Step */
+
+:host {
+  display: block;
+}
+
+.gd-author-skirmish__group {
+  margin-top: 6px;
+}

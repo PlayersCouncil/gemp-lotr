@@ -4,6 +4,7 @@
  * shown, a card affecting another) change nothing here.
  */
 import { CardRef, GameEvent, GameStats, ownerOf } from '../protocol/game-events';
+import { applyScenarioEvent, renameOpponent } from '../scenario/scenario-state';
 import { ALERT_DECISIONS, GameCard, GameModel, NO_CHOICES, NO_SKIRMISH_NUMBERS, SkirmishNumbers } from './game-model';
 
 type Cards = Record<string, GameCard>;
@@ -218,9 +219,15 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
         cards: withCard(model.cards, event.cardId, (card) => tokensChanged(card, event.token, -event.count)),
       };
     case 'M':
-      return { ...next, messages: [...model.messages, { kind: 'message', text: event.message }] };
+      return {
+        ...next,
+        messages: [...model.messages, { kind: 'message', text: renameOpponent(model.scenario, event.message) }],
+      };
     case 'W':
-      return { ...next, messages: [...model.messages, { kind: 'warning', text: event.message }] };
+      return {
+        ...next,
+        messages: [...model.messages, { kind: 'warning', text: renameOpponent(model.scenario, event.message) }],
+      };
     case 'GS': {
       const zones = Object.entries(event.stats.playerZones);
       return {
@@ -253,7 +260,11 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'D':
       return {
         ...next,
-        decision: { decision: event.decision, arrivedAt: model.eventCount },
+        // (its text can name the opponent: "Hand of ...")
+        decision: {
+          decision: { ...event.decision, text: renameOpponent(model.scenario, event.decision.text) },
+          arrivedAt: model.eventCount,
+        },
         local: NO_CHOICES,
         alertAsked: model.alertAsked || ALERT_DECISIONS.includes(event.decision.type),
       };
@@ -263,6 +274,18 @@ export function applyEvent(model: GameModel, event: GameEvent): GameModel {
     case 'CA':
     case 'GR':
       return next;
+    case 'S': {
+      // (one the page can't read changes nothing)
+      if (!event.scenario) return next;
+      const scenario = applyScenarioEvent(model.scenario, event.scenario);
+      // A game's whole state has its log before the scenario says who it is (a game that played on before the page
+      // opened it): those lines name the scripted opponent as the scenario does from now on
+      const named = event.scenario.type === 'info' && !model.scenario?.info;
+      const messages = named
+        ? next.messages.map((message) => ({ ...message, text: renameOpponent(scenario, message.text) }))
+        : next.messages;
+      return { ...next, scenario, messages };
+    }
   }
 }
 

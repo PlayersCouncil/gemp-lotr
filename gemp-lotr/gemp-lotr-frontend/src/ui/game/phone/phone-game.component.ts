@@ -59,7 +59,9 @@ const HAND_CHROME = 26 + 12;
       <gd-phone-table />
     } @else if (session.model().preGame; as preGame) {
       <!-- Before the players are known (the bid): the pre-game information, scrolled up and down -->
-      <div class="gd-phone-pregame"><gd-game-pregame [info]="preGame" /></div>
+      <div class="gd-phone-pregame">
+        <gd-game-pregame [info]="preGame" [scenario]="session.model().scenario" />
+      </div>
     } @else {
       <!-- A replay before it plays: the table's place stays, empty, so the divider is at the bottom -->
       <div class="gd-phone-pregame" data-empty></div>

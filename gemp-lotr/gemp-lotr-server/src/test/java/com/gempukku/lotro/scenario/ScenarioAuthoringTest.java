@@ -480,7 +480,7 @@ public class ScenarioAuthoringTest {
         state = json(authoring.stepBefore(player)).getJSONObject("state");
         JSONArray kids = steps(state).getJSONObject(0).getJSONArray("anyOrder");
         JSONObject made = kids.getJSONObject(1);
-        assertEquals("freeps, cards, after(gandalf), text(next skirmish)", made.getString("when"));
+        assertEquals("freeps, cards, nextSkirmish, after(gandalf)", made.getString("when"));
         authoring.edit(player, "{\"steps\": [{\"op\": \"merge\", \"uid\": \"" + state.getJSONArray("kids").getJSONArray(0).getString(1)
                 + "\", \"set\": {\"messages\": [\"Now Aragorn.\"]}}]}", null);
         client = new Client(game());
@@ -2056,5 +2056,81 @@ public class ScenarioAuthoringTest {
                 assertTrue(steps(state()).getJSONObject(0).getString("answer").equals("play(strider)"));
             }
         }
+    }
+
+    @Test
+    public void WhereTheStoryStartsIsSetAndShown() throws Exception {
+        openBlank();
+        JSONObject state = state();
+        JSONObject start = state.getJSONObject("start");
+        assertEquals(1, start.getIntValue("site"));
+        assertEquals("fellowship", start.getString("phase"));
+        assertFalse(start.getBooleanValue("late"));
+        assertEquals(List.of("fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"), start.getList("phases", String.class));
+        assertEquals(4, start.getIntValue("lastSite"));
+        assertEquals(1, state.getJSONObject("board").getJSONObject("markers").getIntValue("freeps"));
+        assertEquals(1, state.getJSONObject("board").getJSONArray("path").size());
+
+        //The Setup tab sends the whole of the setup, the start in it
+        JSONObject setup = state.getJSONObject("draft").getJSONObject("setup");
+        JSONObject startAt = new JSONObject();
+        startAt.put("site", 3);
+        startAt.put("opponentSite", 3);
+        startAt.put("phase", "maneuver");
+        startAt.put("twilight", 2);
+        setup.put("startAt", startAt);
+        JSONObject controlled = new JSONObject();
+        controlled.put("shadow", "1");
+        setup.put("controlled", controlled);
+        setup.getJSONObject("shadow").put("minions", "runner1");
+        setup.getJSONObject("shadow").put("hand", "runner2");
+        JSONObject top = new JSONObject();
+        top.put("setup", setup);
+        JSONObject patch = new JSONObject();
+        patch.put("top", top);
+        JSONObject result = json(authoring.edit(player, patch.toString(), null));
+        assertTrue(result.getBooleanValue("rebuilt"));
+        state = result.getJSONObject("state");
+        start = state.getJSONObject("start");
+        assertEquals(3, start.getIntValue("site"));
+        assertEquals("maneuver", start.getString("phase"));
+        assertEquals(1, start.getIntValue("moves"));
+        assertTrue(start.getBooleanValue("late"));
+        JSONObject board = state.getJSONObject("board");
+        assertEquals(3, board.getJSONObject("markers").getIntValue("freeps"));
+        assertEquals(3, board.getJSONObject("markers").getIntValue("shadow"));
+        assertEquals(3, board.getIntValue("currentSite"));
+        assertEquals(1, board.getIntValue("moves"));
+        assertEquals(2, board.getIntValue("twilight"));
+        assertEquals(3, board.getJSONArray("path").size());
+        assertEquals("site1", board.getJSONArray("path").getJSONObject(0).getString("alias"));
+        assertEquals("shadow", board.getJSONArray("path").getJSONObject(0).getString("controlledBy"));
+        assertEquals("freeps", board.getJSONArray("path").getJSONObject(2).getString("owner"));
+        assertEquals("maneuver", state.getJSONObject("position").getString("phase"));
+
+        //The Board tab's changes to the setup: a marker, a site's control, the pool
+        result = json(authoring.apply(player, "marker(freeps, 4), control(2, shadow), liberate(1), twilight(5)", true));
+        state = result.getJSONObject("state");
+        setup = state.getJSONObject("draft").getJSONObject("setup");
+        assertEquals(4, setup.getJSONObject("startAt").getIntValue("site"));
+        assertEquals(5, setup.getJSONObject("startAt").getIntValue("twilight"));
+        assertEquals("2", setup.getJSONObject("controlled").getString("shadow"));
+        assertEquals(4, state.getJSONObject("board").getIntValue("currentSite"));
+        assertNull(state.getJSONObject("board").getJSONArray("path").getJSONObject(0).getString("controlledBy"));
+        assertEquals("shadow", state.getJSONObject("board").getJSONArray("path").getJSONObject(1).getString("controlledBy"));
+
+        //...and to the board as it stands, which the next step to be written then does
+        result = json(authoring.apply(player, "liberate(2)", false));
+        assertFalse(result.getBooleanValue("rebuilt"));
+        assertNull(result.getJSONObject("state").getJSONObject("board").getJSONArray("path").getJSONObject(1).getString("controlledBy"));
+        assertEquals(List.of("liberate(2)"), result.getJSONObject("state").getJSONArray("pending").toJavaList(String.class));
+
+        //It survives being saved and opened again
+        authoring.save(player, null, false, true);
+        String saved = Files.readString(new File(canon, "tutorials/blank.hjson").toPath(), StandardCharsets.UTF_8);
+        assertTrue(saved, saved.contains("\t\tstartAt: {\n\t\t\tsite: 4\n\t\t\topponentSite: 3\n\t\t\tphase: maneuver\n\t\t\ttwilight: 5\n\t\t}"));
+        state = json(authoring.open(player, "blank", true)).getJSONObject("state");
+        assertEquals(4, state.getJSONObject("start").getIntValue("site"));
+        assertEquals(List.of("2"), state.getJSONObject("start").getJSONObject("controlled").getList("shadow", String.class));
     }
 }

@@ -8,7 +8,11 @@ the other, and compares the pages after every step:
   chat's times masked in magenta;
 - what the page sent the server: every decision answered (id and value), card information asked for, concede and
   cancel, chat messages. The long polls aren't compared: when they are sent depends on timing;
-- the browser's own dialogs, with their text (the check accepts them);
+- the browser's own dialogs, with their text (the check accepts them); the Angular page asks "At least one minion has
+  not been assigned" in a dialog of its own (`ANGULAR_CONTRACT.unassignedQuestion`), which the check answers the same
+  way after Done on an assignment and records in the same words (`run.mjs` `answerUnassignedQuestion`). It asks only
+  while more minions could have been assigned (the server's `maxAssignable`), game.html about any minion left: a
+  step where only game.html asked is accepted (`GAME_ACCEPTED`, Ketura 2026-11-19);
 - the game as the page shows it (`controls.mjs` `readGameState`): twilight, phase, initiative, rule of 4, the decision's
   text and buttons, open dialogs, the action menu, every player counter, and every card with its zone and assignment;
 - page errors.
@@ -216,6 +220,77 @@ npm run check:game:phone -- --shots --only opening        screenshots of a recor
 
 Differences are written to `report-game-phone` (the view before and after, and the differing pixels in red).
 
+## Tutorials (scripted games)
+
+`npm run check:game:tutorial` (`tutorial.mjs`, against a game check server kept up, as the undo check) plays the
+tutorials that ship with the server (`gemp-lotr-cards/.../scenarios/tutorials`) on the Angular game page. A tutorial
+is started with `POST /scenarios/start` by `GamePlayer0` alone: the opponent is played by the server's script. The
+check follows the bubbles as a player would (`follow`): the bubble's Next, the choice of the guided path (`help`), a
+click on what is outlined as next (on the part of it that shows, if something covers its centre), a right click on
+the card a message waits to have opened and Escape to close it, and, where a step takes any answer, the first card
+or button the game offers (an assignment: each minion to a companion of its own, then Done). Each check plays its own
+game:
+
+- **t1**: tutorial 1 (`basics-01`) played through to the end panel "Complete". It fails if it gets stuck (saying the
+  decision's text and the bubble's, with the server's step in `t1-<theme>-stuck-step.json`), if the page logs an
+  error, or if it ends any other way. On the way: while a message with Next is up nothing is outlined as next; the
+  opponent is shown under the scenario's name, never "~Scenario"; the bubble stays in the window and off what is to
+  be clicked; what is outlined as next is what lies at the outline's centre. The end panel's "Report it" link names
+  the game's replay.
+- **t2**: tutorial 2 (`basics-02-items-damage`) the same way.
+- **refuse**: while a message is read, Pass is refused: the buttons under it shake (`data-nudge`) and nothing is sent;
+  later, while a step is answered, a card the game would take but the step doesn't (`data-scenario="notnow"`) shows
+  its hint beside it, and no decision is sent (the page's requests are watched).
+- **bubble**: Space and Escape read on; dragged by its head the bubble stays where it is put; folded and unfolded
+  (Space leaves a folded message be); after reading on, and after answering a step whose bubble was folded and
+  moved, the next message is whole and where the page puts it.
+- **menu**: "Start again" asks in the page's own dialog; Cancel changes nothing, OK opens a new game at its first
+  message; "Leave" asks, then the page is the Game Hall.
+- **small**: 1000×600 shows no panel; 999×700, 1200×599 and 900×550 show "This needs a bigger screen", and "Carry on
+  anyway" takes it away.
+- **phone**: the modern theme on a phone (`device-profiles.mjs` `phone`) shows only the "cannot be played on mobile
+  devices" panel (no message, menu or outline), whose button leads to the Game Hall.
+- **replay**: the replay of a finished tutorial 1 game (this run's t1 game, or one it plays itself; its id from the
+  end panel's link, else from the server's thanks in the chat) shows its messages one after another as it plays,
+  with no buttons, and no scenario menu.
+
+The checks below bring their own scenarios (`tutorial-scenarios.mjs`: the engine's test fixtures, given the `allow`s a
+person needs where the runner gives an `answer`): the check server has only the shipped ones, which are not added to.
+Each is written as the player's own scenario with the authoring calls every server has (`scenarios/author/open` with
+`new=true` and an id starting `check-tutorial-`, `edit`, `save`, `close`), started as a player starts one, and its
+file deleted afterwards (on this machine from `GEMP_SCENARIOS`, default `/etc/gemp-lotr/scenarios`, else with
+`scenarios/mine/delete`, which keeps a copy in the server's archive). Saved rather than tested as a draft so that it
+plays as a player's game: no authoring panel, and "Back to checkpoint" starts it again from the server's file.
+
+- **two-sided**: a two-sided game played through, the person in the first seat (Free Peoples on their own turns, Shadow
+  on the opponent's: a Shadow assignment made pairing by pairing, Freca taking control of site 1, a sanctuary); each
+  skirmish message's outline (`ui:skirmish:selfStrength`) is round the side the person plays then.
+- **second-seat**: the same from the second seat, beginning at site 3 (Shadow first, a fierce Uruk assigned twice).
+- **opening**: the game's own opening: at the bid the arrow towards 1 is outlined, OK only once the box says 1, and OK
+  with 0 is refused beside OK without sending anything; then "Go first", the starting fellowship's card window, the
+  mulligan, the first turn; the opponent is never "~Scenario", not even before the players are known.
+- **checkpoint**: "Back to checkpoint" is not in the menu before the checkpoint (the mulligan), is after it, asks in
+  the page's own dialog (Cancel changes nothing), and OK opens a new game at the checkpoint's message.
+- **left-out**: a step whose middle message's condition fails says the other two, counted "1 / 2" and "2 / 2", each
+  once in the chat; the one left out never shows.
+- **play** (only by name, with `--scenario <id>`): any scenario the player can start played through the same way, to
+  whatever end panel it shows.
+
+Every check runs in both themes (`--theme classic` or `--theme modern` for one), phone in the modern theme only.
+
+```
+npm run check:game -- --only start --sizes 1366x768 --keep     a game check server, kept up
+npm run check:game:tutorial                                    every check in both themes (about 6 minutes)
+npm run check:game:tutorial -- --only t1,refuse --theme modern
+npm run check:game:tutorial -- --only t2 --verbose             every move as it is made
+npm run check:game:down
+```
+
+The report is `report-tutorial/` (`--out`): a screenshot of every step worth seeing (each message that points at
+something, a card shown large, a choice, the page's dialogs, the end), a text file per check with what it found and
+every move it made, and `summary.txt`. `--page angular` (the default) is the only page in `PAGES`: game.html's
+overlay would need an entry of its own.
+
 ## The table check
 
 `npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:
@@ -223,7 +298,9 @@ both pages are served from disk (`../stub-server.mjs`: the legacy web root and t
 recorded game (see "Recordings") answer by answer, as its server sent it, up to one step; the decisions are left out,
 so no dialog is open and no card is offered, and each page asks for the next answer at once. Then the pages are
 compared: the screen (at most `--tolerance` pixels, default 60) and the game as shown (`controls.mjs`
-`readGameState`). Every step of every recording, at 1280x800, 1366x768 and 1920x1080.
+`readGameState`). Every step of every recording, at 1280x800, 1366x768 and 1920x1080. What the owner accepted
+(`GAME_ACCEPTED` in `../accepted.mjs`, worded as the game check words a problem) doesn't count: e.g. the steps where a
+dialog of cards is open, which the Angular page sizes to its cards (Ketura, 2026-11-19) and `game.html` doesn't.
 
 On the last state of two recordings (`WITH_VIEWS`: a player's and a spectator's) it also compares what the table
 doesn't show: each tab of the tab box and each player's other piles opened. Then it loads the Angular page again,
@@ -362,7 +439,7 @@ plays it), where the hand is the whole deck once the starting fellowship is out,
 | `opening`                        | Bid (the spinner), starting fellowship (a card in the dialog, then Done), no mulligan                       |
 | `fellowship-play`                | A companion played, a possession played and put on its bearer, a card's action, moving                      |
 | `minions-and-skirmish`           | The opponent plays a minion; it is assigned to Frodo, the skirmish chosen, its action passed, Frodo's wound |
-| `minions-unassigned`             | Done with a minion unassigned: the browser's confirmation                                                   |
+| `minions-unassigned`             | Done with a minion unassigned: the page asks to confirm (game.html: the browser's confirm)                  |
 | `skirmish-event`                 | A minion assigned, unassigned and assigned again; Axe Strike played in the skirmish                         |
 | `shadow-turn`                    | The player's shadow phase: a minion played, the phase passed, reconcile                                     |
 | `reconcile-discard`              | Without auto-accept: a card chosen in reconcile, Reset choice, chosen again and discarded; the discard pile |
@@ -406,3 +483,130 @@ minutes), 10 items not covered (so the run fails until they are); the 17 recordi
 catches 6 of 6 deliberate bugs.
 
 Masks are drawn over everything, so a clock under an open dialog also hides that part of the dialog.
+
+## The authoring checks
+
+`npm run check:game:author` (`author.mjs`, against a game check server kept up, as the tutorial check) writes
+scenarios in the authoring panel docked beside the Angular game page, in both themes. Every check opens a new draft
+of the player's own (`scenarios/author/open` with `new=true`), sets its script up over HTTP where that is not what is
+being checked, works the panel as an author would, and closes the draft; none saves over a scenario the server ships.
+A check fails on what it looks for, and on any page error, console error, refused authoring call it did not expect,
+or dialog of the browser's own.
+
+The checks are in `author/*.mjs`, one file per part of the panel, each exporting `checks` (`author/lib.mjs` has the
+panel's selectors, the author's page and the waiting helpers); `author.mjs` puts them together.
+
+- **dock**: the panel at the window's right, the table and the message bubble keeping to the rest; folded, the table
+  takes the room back; every tab can be shown.
+- **timeline**: the script's rows; ▶ on a row is a fresh game played to it, the panel back as it was.
+- **leave**: leaving with changes in no file asks first; Stay stays, Discard closes the draft.
+- **step-type**: a message's text typed in the Step tab is on the server soon after the typing stops, with the focus
+  and the caret where they were and the bubble on the table saying it.
+- **step-inflight**: typing goes on while sends are on their way (a slow server): nothing typed meanwhile is lost.
+- **step-when**: the When composer's phase and turn go into the When, in their places, and to the server.
+- **step-refuse**: a refused Allow sent with a message: the message goes in, the refusal is said, the Allow field keeps
+  what was typed; put right, it goes.
+- **step-order**: a step moved later, and one taken out after the page's own question.
+- **step-block**: a step turned into a block (its Until guessed), and a step added on the block's page.
+- **step-fresh**: a change to a step the game has been through brings a fresh game; the page comes back on the same
+  step and tab, the focus in the field that had it.
+- **step-asked**: "what is being asked" picked in the When composer and negated (`not(nextSkirmish)`): the When on
+  the server and in the file's text as the server writes a new step's, and still so after a reload.
+- **step-say-if**: a condition typed in a message's "Say only if": on the server and in the file; the step on the
+  table put up without that message (its condition fails), the bubble not saying it, the card saying it was left out.
+- **step-say-if-bad**: a mistake in "Say only if" typed with a change to the message's text: refused in the server's
+  words and kept in its field, the text on the server all the same.
+- **step-refuses**: a click on Pass the step does not take offers "+ refuses pass"; taken, it is on the server and in
+  the file, its badge saying it is refused; two typed a line each come back as the server writes them.
+- **step-template**: `{twilight}` put in from the menu beside a message's text, at the caret in the middle of typed
+  text: the focus and caret kept, sent once, the bubble showing the number.
+- **board-add**: a card found by name in the Board tab and added to the setup's hand: a fresh game, the card on its
+  board and in the draft's `cards` and `setup`.
+- **board-now**: the twilight set on the board as it stands: the table's twilight pool shows it, in the same game.
+- **board-rename**: a card renamed (a bad name refused first): a fresh game, and the change gathered about it says its
+  new name.
+- **board-path**: a site of the path changed by name: both seats' paths, in a fresh game.
+- **board-keep**: changes gathered are kept when the page loads again; Reset lets go of them.
+- **board-refused**: a submit refused part-way: to the setup, the card goes in, the board's changes stay gathered and
+  the problem is said on the fresh game's page; to the board as it stands, the rest is let go of and the panel says so.
+- **scenario-title**: a new title goes into the game in hand (no fresh game); the panel's head and the scenario's menu
+  follow; a field half typed in is left alone.
+- **scenario-save**: a new draft saved from the Scenario tab (its file written, the saved notice, the star and the red
+  head gone, the report), then saved as a copy through the filing form, the name tidied as the form says (an empty
+  one marked, nothing sent); both files are deleted afterwards.
+- **scenario-rules**: a skipped phase and a hand size added and taken back, each a fresh game back on the Scenario
+  tab; with nothing left, `rules` goes.
+- **scenario-outcome**: losing also when a companion is killed, and what the player is told.
+- **scenario-settings**: the player's settings the draft fixes (an animation speed, the deck reveal, auto-accept), seen
+  on the table's Settings tab; the player's own speed again takes the part out.
+- **scenario-parts**: a part of the rest of the file applied as HJSON; a mistake in it refused in the server's words,
+  the text kept, no fresh game.
+- **scenario-check**: Check reports; See the file and Put that away; Submit for review asks first and Cancel submits
+  nothing (submitting is never checked: it locks the file for an admin's review); Close the draft asks first.
+- **opponent**: the opponent's decision held for the author ("Ask me for the opponent"): the Opponent tab asks for
+  attention, a card played from it is written into the script as a step, and the game goes on.
+- **opponent-pass**: with "write it into the script" unticked, Pass from the tab is the opponent's this once: the game
+  goes on and the script is as it was.
+- **opponent-assign**: the opponent's assignment, made in the tab (a minion to a character), is written as `assign(…)`.
+- **picking**: Pick on the table from a message's anchor fields: the crosshair, the notice, the box and label round
+  what the pointer is on; a click takes it (and a part of the card); Escape and a click in the panel take nothing;
+  `+ Pick` adds a card under another, a site, a row, a pile, the twilight pool and a button to the outlines, each then
+  drawn round where it was picked.
+- **start-late**: where the story starts set in the Board tab (site 3, the maneuver phase, twilight 4): a fresh game
+  with three sites on the table's path, both markers, the pool and the phase; `startAt` in the file's text; the same
+  once the page loads again.
+- **start-skirmishes**: skirmishes assigned at a Skirmish start: the game has them and asks which to fight; the file
+  says them; they are shown once the page loads again.
+- **start-markers**: markers put and a site controlled from the path on the table, to the board as it stands (the same
+  game, the site in the Shadow seat's support area) and to the setup (a fresh game, `setup.controlled` in the file,
+  ticked once the page loads again).
+- **start-refused**: a start the server refuses: its words shown in the start, the moves typed kept and gathered.
+- **start-drop**: a card in a skirmish already assigned taken out of the scenario: the draft is read, the skirmish
+  without it.
+- **start-shadows**: the format set to `scenario_shadows` in the Scenario tab, and a path of sites without numbers
+  built in the Board tab (a site found, "no number" first; another put first): the game lays it first, its name kept.
+- **opponent-orders** (`author/opponent-orders.mjs`): a standing order for the opponent's waiting decision started from
+  the tab (its When from the decision), added (it then plays the runner), made `once` with a note (used up), moved up
+  and deleted after the page's question, each a fresh game back on the Opponent tab with the order still open; after
+  each the draft and the file's text, the other two orders exactly as they were; a reload lists the same.
+- **opponent-order-refused**: an order's answer naming no card: the parser's words on the order, the text kept, no
+  fresh game, the draft as it was.
+- **opponent-leftovers**: the player assigns nobody; with leftovers to Sam or the Ring-bearer the runner is fought
+  (the next skirmish is chosen), with none there is no fight; the draft and the file's text after each.
+- **opponent-sandbox**: the sandbox fallback chosen in the Scenario tab with two of three runners ticked: the first
+  ticked is played, the unticked one stays in hand, the orders untouched; the Opponent tab shows the same fallback.
+- **scenario-game-lost** (`author/endings.mjs`): a heading and a text written for "Game lost" in the Scenario tab
+  (the heading alone sends nothing); the draft and the file have them, and the end panel says them when Frodo dies.
+- **scenario-outcome-kept**: an outcome with every part set keeps every other part when one closing message changes.
+- **step-role** (`author/sides.mjs`): in a two-sided draft the When composer's role, "as Shadow" picked for a step on
+  the opponent's turn: `as(shadow)` after the turn on the server and in the file; a When written out with `as` shows it;
+  the Timeline heads each turn "(yours)" or "(theirs)" and marks the row; the same after a reload.
+- **scenario-auto-pass-roles**: the phases passed through "for each role": the object form on the server and in the
+  file after each tick, shown after a reload, and one list again after the page's question.
+- **sides-play**: a two-sided draft written by playing it into the opponent's turn: the where-line, the Opponent tab
+  and the Timeline say whose turn it is and the person's role; the step written there says `as(shadow)`; a fresh game
+  played to it is on the opponent's turn.
+- **board-opening**: how the game opens, set to the game's own opening in the Board tab after the page's question
+  saying what goes: the setup keeps only its decks, the tab says there are no cards yet, a reload shows it; and back.
+- **step-opening-asked**: the opening's decisions offered in "what is being asked" for a draft that plays its own
+  opening, `bid` picked into the When, a Timeline group of their own before turn 1, no "+ Opening".
+- **opening-play**: a draft's own opening written by playing it (the bid, going first, the mulligans, the opponent's
+  from the Opponent tab) to the first turn; a fresh game played by the script to a step after it; to the setup, only
+  a deck's order offered.
+- **opponent-order-when**: an opponent's order's When changed with the When composer (nothing sent before Apply), then
+  applied; a new order for an assignment answered "the rest to the Ring-bearer"; the same after a reload.
+- **closing-say-if**: "Say only if" on a step's closing message and on a Scenario tab ending: on the server, in the
+  file, and shown as the file has it after a reload.
+- **step-refuses-at**: on a step that repeats, at its second decision, a click it does not take offered as
+  "+ refuses 2: pass", written with its number.
+- **opponent-let-go**: "it plays by its orders" chosen while the opponent's decision is held for the author: the
+  opponent answers by itself at once, in the same game.
+
+```
+npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
+npm run check:game:author                                      every check in both themes
+npm run check:game:author -- --only timeline --theme modern --verbose
+npm run check:game:down
+```
+
+The report is `report-author/` (`--out`): the screenshots a check takes, and its moves and problems per check.

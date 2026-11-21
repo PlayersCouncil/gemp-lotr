@@ -1,0 +1,175 @@
+{
+	id: two-sided-first
+	title: Two sides, the person first
+	note: Both seats take turns.  The person sits in the first seat: the Free Peoples player on turns 1 and 3, the Shadow player on turn 2, where they take control of site 1 with Freca.
+	format: scenario
+	cards: {
+		freeps: {
+			frodo: 10_121
+			aragorn: 4_109
+			ravager: 4_15
+			freca: 9_2
+		}
+		shadow: {
+			oppFrodo: 10_121
+			boromir: 0_65
+			orc1: 1_178
+			orc2: 1_178
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	sites: {
+		freeps: 1_323, 1_331, 1_340, 2_118
+		shadow: 1_323, 1_331, 1_340, 2_118
+	}
+	options: {
+		autoPass: {
+			freeps: fellowship, maneuver, archery, assignment, regroup
+			shadow: maneuver, archery, assignment, regroup
+		}
+	}
+	opponent: {
+		fallback: pass
+		leftovers: ringBearer
+		orders: [
+			{
+				note: The opponent's minions, on the person's turns.
+				when: opponent, action, phase(shadow), as(shadow)
+				answer: play(orc1), play(orc2)
+			}
+		]
+	}
+	setup: {
+		freeps: {
+			characters: aragorn
+			hand: ravager, freca
+		}
+		shadow: {
+			characters: boromir
+			hand: orc1, orc2
+		}
+	}
+	steps: [
+		{
+			id: firstAssign
+			when: human, assign, as(freeps), turn(1)
+			messages: [
+				Your turn: you are the Free Peoples player.  Aragorn takes the first Goblin; the other goes to Frodo.
+			]
+			allow: assign(aragorn: orc1)
+		}
+		{
+			id: fights
+			when: turn(1)
+			until: phase(regroup)
+			anyOrder: [
+				{
+					when: human, nextSkirmish
+					answer: choose(aragorn), choose(frodo)
+				}
+				{
+					once: true
+					when: human, action, inSkirmish(aragorn)
+					messages: [
+						Aragorn is {selfStrength} against {oppStrength}.
+					]
+					allow: pass
+				}
+				{
+					when: human, action, phase(skirmish)
+					answer: pass
+				}
+			]
+		}
+		{
+			when: human, anotherMove, turn(1)
+			answer: option(No)
+		}
+		{
+			when: human, reconcile, turn(1)
+			answer: pass
+		}
+		{
+			id: theirTurn
+			checkpoint: true
+			when: human, action, phase(shadow), as(shadow)
+			do: twilight(10)
+			messages: [
+				Now it is the opponent's turn, and you are the Shadow player.  Play the Ravager, then Freca.
+			]
+			allow: play(ravager)
+		}
+		{
+			when: human, action, phase(shadow), turn(2)
+			allow: play(freca)
+		}
+		{
+			id: control
+			when: human, optionalResponses, as(shadow)
+			messages: [
+				Both fellowships are past site 1: Freca can take control of it.
+			]
+			allow: use(freca)
+		}
+		{
+			when: human, action, phase(shadow), turn(2)
+			allow: pass
+		}
+		{
+			pause: true
+			when: human, assign, as(shadow)
+			messages: [
+				The Free Peoples player has assigned nothing.  The minions are yours to assign.
+			]
+		}
+		{
+			when: human, assign, as(shadow)
+			allow: assign(boromir: freca, oppFrodo: ravager)
+		}
+		{
+			when: turn(2)
+			until: phase(regroup)
+			skirmishes: true
+			anyOrder: [
+				{
+					when: human, action, phase(skirmish), as(shadow)
+					messages: [
+						Your minion is {selfStrength} against {oppStrength}.
+					]
+					answer: pass
+				}
+			]
+		}
+		{
+			when: human, anotherMove, turn(3)
+			answer: option(No)
+		}
+		{
+			when: human, action, phase(shadow), turn(4)
+			messages: [
+				Your hand is empty: nothing to play this time.
+			]
+			allow: pass
+		}
+		{
+			id: sanctuary
+			when: human, sanctuary, as(freeps)
+			messages: [
+				Frodo starts the turn at a sanctuary.
+			]
+			answer: choose(frodo)
+		}
+		{
+			when: human, anotherMove, turn(5)
+			answer: option(No)
+		}
+		{
+			when: human, action, phase(shadow), turn(6)
+			allow: pass
+			end: complete
+		}
+	]
+}

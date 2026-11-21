@@ -1,0 +1,82 @@
+/* The adventure path on the table: a row per site laid, with the markers and who controls it */
+
+:host {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.gd-author-board-laid__heading {
+  margin-top: 4px;
+  padding: 1px 0;
+  border-bottom: 1px solid var(--theme-game-author-place-rule);
+  color: var(--theme-game-author-quiet);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.gd-author-board-laid__site {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+  padding: 1px 0;
+  border-bottom: 1px solid var(--theme-game-author-row-rule);
+}
+
+.gd-author-board-laid__site:not([data-laid]) {
+  opacity: 0.6;
+}
+
+.gd-author-board-laid__site[data-changed] {
+  padding-left: 4px;
+  border-left: 3px solid var(--theme-game-author-changed-mark);
+}
+
+.gd-author-board-path__number {
+  flex: 0 0 14px;
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
+
+.gd-author-board-laid__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  border-bottom: 1px dotted var(--theme-game-author-hint-rule);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.gd-author-board-laid__site .gd-author-button {
+  flex: 0 0 auto;
+  min-width: 26px;
+  margin: 0;
+  padding: 0 4px;
+  font-size: 11px;
+}
+
+.gd-author-board-laid__site .gd-author-button:not([data-here]) {
+  opacity: 0.45;
+}
+
+.gd-author-board-laid__site .gd-author-button[data-here] {
+  border-color: var(--theme-game-author-current-mark);
+  background: var(--theme-game-author-current-bg);
+  color: var(--theme-game-author-current-text);
+  font-weight: bold;
+}
+
+.gd-author-board-laid__pick {
+  display: flex;
+  flex: 0 0 104px;
+  font-size: 12px;
+}
+
+.gd-author-board-laid__held {
+  flex: 0 0 104px;
+  color: var(--theme-game-author-quiet);
+  font-size: 12px;
+}

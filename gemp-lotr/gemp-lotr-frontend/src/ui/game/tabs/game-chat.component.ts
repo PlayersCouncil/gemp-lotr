@@ -1,5 +1,4 @@
 import {
-  afterNextRender,
   afterRenderEffect,
   DestroyRef,
   Component,
@@ -19,6 +18,7 @@ import { GameSettings } from '../../../core/game/settings/game-settings';
 import { PlayerInfo } from '../../../core/session/player-info.service';
 import { ThemeService } from '../../../core/platform/theme.service';
 import { CardHintsDirective } from '../table/card-hints.directive';
+import { LogPin } from './log-pin';
 
 /** A line that names the player is marked: "@name" calls them (ping), their name or "@everyone" mentions them. */
 export function mentionOf(html: string, name: string | null): 'ping' | 'mention' | null {
@@ -35,6 +35,8 @@ interface LineView {
   from: string | null;
   html: string;
   mention: 'ping' | 'mention' | null;
+  /** A line the page put in a player's mouth (a scripted game's message). */
+  said: boolean;
   /**
    * The text is in a box of its own: a chat line's, and a game message's unless it names the player (the legacy page
    * left those bare, so their parts, e.g. card names, are laid out one by one and wrap as wholes).
@@ -45,20 +47,36 @@ interface LineView {
 function lineOf(entry: GameLogEntry, name: string | null): LineView {
   if (entry.kind === 'chat') {
     const { from, html, system } = entry.message;
-    return { kind: system ? 'system' : 'chat', from, html, mention: mentionOf(html, name), boxed: true };
+    return {
+      kind: system ? 'system' : 'chat',
+      from,
+      html,
+      mention: mentionOf(html, name),
+      said: entry.said !== undefined,
+      boxed: true,
+    };
   }
   const mention = mentionOf(entry.html, name);
-  return { kind: entry.kind, from: null, html: entry.html, mention, boxed: entry.kind === 'message' && !mention };
+  return {
+    kind: entry.kind,
+    from: null,
+    html: entry.html,
+    mention,
+    said: false,
+    boxed: entry.kind === 'message' && !mention,
+  };
 }
 
 /**
  * The game's chat box: the room's chat and the game's messages in one list, and the field to say something (Enter
- * sends it). Oldest first (classic, and modern by its setting) it stays at its end as lines come unless the player
- * scrolled up; newest first (modern's default) it jumps to its top with every new line (the owner, 2026-11-20).
+ * sends it). Oldest first (classic, and modern by its setting) it stays at its newest lines as they come unless the
+ * player scrolled away from them (LogPin); newest first (modern's default) it jumps to its top with every new line
+ * (the owner, 2026-11-20).
  *
  * DOM contract: `gd-game-chat` holding `.gd-game-chat__lines` with one `.gd-game-chat__line` per line (`data-kind`
- * chat, system, message, warning; `data-mention` ping or mention when it names the player; the game page shows no
- * times), and `input[data-chat-input]`.
+ * chat, system, message, warning; `data-mention` ping or mention when it names the player; `data-said` on a line the
+ * page put in a player's mouth, a scripted game's message; the game page shows no times), and
+ * `input[data-chat-input]`.
  */
 @Component({
   selector: 'gd-game-chat',
@@ -71,7 +89,12 @@ function lineOf(entry: GameLogEntry, name: string | null): LineView {
     <div #lines class="gd-game-chat__lines" gdCardHints [attr.data-replay]="replaying() ? '' : null">
       @for (line of shownLines(); track $index) {
         @if (line.from !== null || line.boxed) {
-          <div class="gd-game-chat__line" [attr.data-kind]="line.kind" [attr.data-mention]="line.mention">
+          <div
+            class="gd-game-chat__line"
+            [attr.data-kind]="line.kind"
+            [attr.data-mention]="line.mention"
+            [attr.data-said]="line.said ? '' : null"
+          >
             @if (line.from !== null) {
               <div class="gd-game-chat__who">
                 <span>
@@ -126,90 +149,63 @@ export class GameChatComponent {
   /** The lines in the order shown. */
   protected readonly shownLines = computed(() => (this.newestFirst() ? [...this.views()].reverse() : this.views()));
 
-  /**
-   * Whether the list goes to its end when lines come: decided before they are drawn, from where the list stands (legacy
-   * appendMessage): at its end or within 30px of scrolling at all, or not scrollable (also while its tab is closed),
-   * and always for a warning.
-   */
-  private follow = true;
-  private shown = 0;
+  private pin: LogPin | null = null;
 
   constructor() {
-    // Before the new lines are drawn
+    const destroyRef = inject(DestroyRef);
+    // Before the new lines are drawn: whether they are followed was decided by where the player left the list (LogPin)
+    let shown = 0;
+    let warned = false;
     effect(() => {
       const views = this.views();
-      const box = this.lines()?.nativeElement;
-      const most = box ? box.scrollHeight - box.offsetHeight : 0;
-      const warned = views.slice(this.shown).some((line) => line.kind === 'warning');
-      this.shown = views.length;
-      this.follow = warned || most <= 30 || (box?.scrollTop ?? 0) / most >= 0.999;
+      warned ||= views.slice(shown).some((line) => line.kind === 'warning');
+      shown = views.length;
+      untracked(() => this.pin?.drawing());
     });
-    // Only when lines were added, as the legacy page did. While its tab is closed nothing moves it: it opens again where
-    // it was (the browser kept an element's place over a closed tab; here it is kept explicitly)
-    let drawn = 0;
-    let kept: number | null = null;
-    // After a reload: where the list was (null: at its end)
+    // After a reload: where the list was (null: at its newest lines), taken up once its first lines are drawn
     let restoring = true;
-    afterRenderEffect(() => {
-      const count = this.views().length;
-      const box = this.lines()?.nativeElement;
-      // Not while its tab is closed: it opens again where it was
-      if (box && count > drawn && box.clientHeight > 0) {
-        // Newest first: to the top with every new line, wherever the player was (the owner, 2026-11-20); oldest first:
-        // to the end, unless the player scrolled up
-        if (untracked(this.newestFirst)) box.scrollTop = 0;
-        else if (this.follow) box.scrollTop = box.scrollHeight;
-      }
-      if (box && restoring && count > 0) {
-        restoring = false;
-        const saved = untracked(this.viewState.chatScroll);
-        if (saved !== null) {
-          if (box.clientHeight > 0) box.scrollTop = saved;
-          else kept = saved;
-        }
-      }
-      drawn = count;
-    });
-    // The order switched (the setting): to the newest lines
     let order: boolean | null = null;
     afterRenderEffect(() => {
+      const count = this.views().length;
+      // (the order switched, by the theme or the setting: the list goes to its newest lines, at their other end)
       const newestFirst = this.newestFirst();
-      const box = this.lines()?.nativeElement;
-      if (box && order !== null && order !== newestFirst && box.clientHeight > 0) {
-        box.scrollTop = newestFirst ? 0 : box.scrollHeight;
-      }
+      const switched = order !== null && order !== newestFirst;
       order = newestFirst;
-    });
-    const destroyRef = inject(DestroyRef);
-    afterNextRender(() => {
       const box = this.lines()?.nativeElement;
-      const Observer = box?.ownerDocument.defaultView?.ResizeObserver;
-      if (!box || !Observer) return;
-      let last = box.scrollTop;
-      box.addEventListener('scroll', () => {
-        if (restoring) return;
-        last = box.scrollTop;
-        // null: at the newest lines (the end, or the top when they come first)
-        const atNewest = this.newestFirst()
-          ? box.scrollTop < 1
-          : box.scrollHeight - box.clientHeight - box.scrollTop < 1;
-        this.viewState.chatScroll.set(atNewest ? null : box.scrollTop);
-      });
-      const observer = new Observer(() => {
-        if (box.clientHeight === 0) {
-          // (not before the place kept over a reload is taken up)
-          if (restoring) return;
-          kept ??= last;
-          this.viewState.chatScroll.set(kept);
-        } else if (kept !== null) {
-          box.scrollTop = kept;
-          kept = null;
-          last = box.scrollTop;
-        }
-      });
-      observer.observe(box);
-      destroyRef.onDestroy(() => observer.disconnect());
+      if (!box) return;
+      const pin = (this.pin ??= this.pinFor(box, destroyRef));
+      if (restoring) {
+        if (count === 0) return;
+        restoring = false;
+        warned = false;
+        pin.restore(untracked(this.viewState.chatScroll));
+        return;
+      }
+      // A warning always shows, the list then follows its newest lines again; and newest first, every new line is
+      // shown, wherever the player was (the owner, 2026-11-20)
+      pin.drawn(warned || newestFirst || switched);
+      warned = false;
     });
+  }
+
+  /** The list's pin: told of the player's scrolling, of images loading in it, and of its size changing. */
+  private pinFor(box: HTMLElement, destroyRef: DestroyRef): LogPin {
+    const pin = new LogPin(
+      box,
+      () => (untracked(this.newestFirst) ? 'start' : 'end'),
+      (scroll) => this.viewState.chatScroll.set(scroll),
+    );
+    box.addEventListener('scroll', () => pin.scrolled());
+    // (load doesn't bubble: caught on its way down)
+    box.addEventListener('load', () => pin.repin(), true);
+    const Observer = box.ownerDocument.defaultView?.ResizeObserver;
+    const observer = Observer ? new Observer(() => pin.resized()) : null;
+    observer?.observe(box);
+    destroyRef.onDestroy(() => {
+      observer?.disconnect();
+      pin.dispose();
+    });
+    return pin;
   }
 
   protected send(event: Event): void {

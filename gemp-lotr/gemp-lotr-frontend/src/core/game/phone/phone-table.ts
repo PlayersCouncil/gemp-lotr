@@ -5,6 +5,7 @@
  * are drawn as small copies under it. Pure: computed from the table the computer layout uses, so both lay out the same
  * cards.
  */
+import { displayName } from '../scenario/scenario-state';
 import { GameCard, GameModel } from '../state/game-model';
 import { GameTable, TableStack } from '../table/game-table';
 import { isShadowCard } from './card-sides';
@@ -124,7 +125,8 @@ export function phoneTable(table: GameTable, model: GameModel): PhoneTable {
   const bottom = table.bottom;
   const opponent = model.players.find((player) => player !== bottom) ?? 'Opponent';
   const own = table.spectator ? (bottom ?? 'Player') : 'Your';
-  const theirs = `${opponent}'s`;
+  // (a scripted opponent goes by its scenario's name for it)
+  const theirs = `${displayName(model.scenario, opponent)}'s`;
   const ownLabel = (what: string) => (table.spectator ? `${own}'s ${what}` : `${own} ${what}`);
   const current = model.currentPlayer;
   const currentAt = current === null ? null : (model.positions[current] ?? null);
@@ -138,7 +140,9 @@ export function phoneTable(table: GameTable, model: GameModel): PhoneTable {
       number,
       card: sites.get(number)?.card ?? null,
       players: model.players.flatMap((name, i) =>
-        model.positions[name] === number ? [{ number: i + 1, name, current: name === current }] : [],
+        model.positions[name] === number
+          ? [{ number: i + 1, name: displayName(model.scenario, name), current: name === current }]
+          : [],
       ),
       here: currentAt === number,
       ahead: currentAt !== null && number > currentAt,

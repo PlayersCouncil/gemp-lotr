@@ -1,6 +1,9 @@
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { createEnvironmentInjector, EnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Notifier } from '../../core/notifier/notifier';
+import { DialogNotifier } from '../shared/notifier/dialog-notifier';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { Observable, of, throwError } from 'rxjs';
@@ -10,6 +13,7 @@ import { LoginPage } from '../../core/platform/login-page.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
 import { DeckbuilderPageComponent } from '../deckbuilder/deckbuilder-page.component';
+import { GamePageComponent } from '../game/game-page.component';
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
 
@@ -69,6 +73,18 @@ describe('app routes', () => {
       expect(toLogin).toHaveBeenCalledOnce();
     },
   );
+
+  it("loads the game page at game, with the page's own dialogs for its questions", async () => {
+    const { page } = await open('/game');
+    expect(page).toBeInstanceOf(GamePageComponent);
+  });
+
+  it("gives the game page the page's own dialogs for its questions", () => {
+    const game = APP_ROUTES.find((route) => route.path === 'game');
+    const injector = createEnvironmentInjector(game?.providers ?? [], TestBed.inject(EnvironmentInjector));
+    expect(injector.get(Notifier)).toBeInstanceOf(DialogNotifier);
+    expect(injector.get(Notifier)).toBe(injector.get(DialogNotifier));
+  });
 
   it('shows the page in the root component (<gemp-app>, no box of its own)', async () => {
     const fixture = TestBed.createComponent(AppComponent);

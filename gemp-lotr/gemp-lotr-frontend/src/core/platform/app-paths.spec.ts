@@ -1,4 +1,4 @@
-import { legacyRelativeImages, siteImage, SERVER_URL } from './app-paths';
+import { gamePageUrl, legacyRelativeImages, siteImage, SERVER_URL } from './app-paths';
 
 describe('app paths', () => {
   it('builds the address of an image of the site', () => {
@@ -25,6 +25,11 @@ describe('app paths', () => {
     ]) {
       expect(legacyRelativeImages(kept)).toBe(kept);
     }
+  });
+
+  it("gives the game page's address for a game, for an admin acting as a player too", () => {
+    expect(gamePageUrl('42')).toBe('/gemp-lotr/ng/game?gameId=42');
+    expect(gamePageUrl('a&b', 'bob smith')).toBe('/gemp-lotr/ng/game?gameId=a%26b&participantId=bob%20smith');
   });
 
   it('knows where the server is', () => {

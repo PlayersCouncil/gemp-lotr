@@ -648,22 +648,29 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_result != null || !_begun)
             return;
 
+        if (_table.SeatingProblem() != null) {
+            //The game's own opening seated the players the other way round from the scenario's chairs: whatever the
+            // script says from here is about the wrong seat, so the game is not the scenario's.  The scenario's mistake.
+            problem(_table.SeatingProblem());
+            finish(Result.ERROR, List.of(), "This scenario's opening went wrong: " + _table.SeatingProblem() + ".", false, true);
+            return;
+        }
+        if (_table.game().isFinished() && _table.PathEnded() != null) {
+            //Not the game's own ending: the scenario's path ran out under the fellowship (ScenarioTable.EndOfThePath),
+            // which is the scenario's mistake and not the person's
+            problem(_table.PathEnded());
+            finish(Result.ERROR, List.of(), "This scenario's adventure path has run out: " + _table.PathEnded() + ".", false, false);
+            return;
+        }
         if (_table.game().isFinished()) {
             //The game got there first: somebody won it by its own rules
-            String winner = _table.game().getWinnerPlayerId();
-            Result result = _table.game().isCancelled() ? Result.ERROR : _human.equals(winner) ? Result.COMPLETE : Result.FAILED;
-            finish(result, List.of(), result == Result.FAILED ? text(_def.outcome.loseMessage) : null, false, false);
+            gameEnded();
             return;
         }
 
         ScenarioDefinition.End end = _session.Director().end();
         if (end != null) {
-            List<Map<String, Object>> messages = new ArrayList<>();
-            for (Message message : end.messages)
-                messages.add(messageJson(new RenderedMessage(message,
-                        message.header == null ? null : Templates.render(_table, message.header),
-                        Templates.render(_table, message.text)), Advance.NEXT));
-            finish(end.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED, messages, null, false, true);
+            finish(end.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED, closing(end.messages), null, false, true);
         } else if (_offScript != null) {
             if (carriesOnOffScript()) {
                 //The person carries on with an ordinary game, and is told so once.  The script is still followed if
@@ -679,10 +686,46 @@ public class LiveScenario implements ScenarioSession.Listener {
                         _def.outcome.offScriptResult == OffScriptResult.RESTART, true);
             }
         } else if (_def.outcome.lose != null && _table.Holds(_def.outcome.lose, _human)) {
-            finish(Result.FAILED, List.of(), text(_def.outcome.loseMessage), false, true);
+            finish(Result.FAILED, closing(_def.outcome.loseMessages), text(_def.outcome.loseMessage), false, true);
         } else if (_def.outcome.win != null && _table.Holds(_def.outcome.win, _human)) {
-            finish(Result.COMPLETE, List.of(), null, false, true);
+            finish(Result.COMPLETE, closing(_def.outcome.winMessages), null, false, true);
         }
+    }
+
+    /**
+     * The game has ended by its own rules: a Ring-bearer killed or corrupted, a fellowship surviving its last site.
+     * What that counts as, and what is said, is the scenario's outcome.gameWon or outcome.gameLost; without them, as
+     * it always was: complete if the person won, failed (with loseMessage) if they lost.  Where the scenario says
+     * nothing to say and its own 'win' (or 'lose') has come true with the game's end, its winMessages (loseMessages)
+     * are said.
+     */
+    private void gameEnded() {
+        if (_table.game().isCancelled()) {
+            finish(Result.ERROR, List.of(), null, false, false);
+            return;
+        }
+        boolean won = _human.equals(_table.game().getWinnerPlayerId());
+        ScenarioDefinition.End ending = won ? _def.outcome.gameWon : _def.outcome.gameLost;
+        Result result = ending != null ? (ending.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED)
+                : won ? Result.COMPLETE : Result.FAILED;
+        List<Message> said = ending != null ? ending.messages : List.of();
+        if (said.isEmpty() && won && _def.outcome.win != null && _table.Holds(_def.outcome.win, _human))
+            said = _def.outcome.winMessages;
+        else if (said.isEmpty() && !won && _def.outcome.lose != null && _table.Holds(_def.outcome.lose, _human))
+            said = _def.outcome.loseMessages;
+        finish(result, closing(said), result == Result.FAILED ? text(_def.outcome.loseMessage) : null, false, false);
+    }
+
+    /** Closing messages as the panel that ends the scenario shows them, filled in from the board as it is now, and those with a condition only if it holds. */
+    private List<Map<String, Object>> closing(List<Message> said) {
+        List<Map<String, Object>> messages = new ArrayList<>();
+        for (Message message : said)
+            //(one with a condition is said if it holds as the scenario ends)
+            if (_session.Director().saysAtTheEnd(message))
+                messages.add(messageJson(new RenderedMessage(message,
+                    message.header == null ? null : Templates.render(_table, message.header),
+                    Templates.render(_table, message.text)), Advance.NEXT));
+        return messages;
     }
 
     /**
@@ -792,6 +835,10 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("coverage", _def.coverage.name().toLowerCase());
         event.put("human", _human);
         event.put("humanSeat", _def.human.key());
+        //Whether the seats take turns (each playing both roles), or the person's seat keeps its role all game
+        event.put("twoSided", !_def.oneSided);
+        //How the game opens: the board laid out ("board"), or the game's own opening played ("game")
+        event.put("opening", _def.setup.realOpening ? "game" : "board");
         event.put("opponent", _opponent);
         event.put("opponentName", _def.opponentDisplayName());
         event.put("autoAccept", _def.autoAccept);
@@ -832,6 +879,14 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("acknowledge", opponents || step.pause);
         event.put("pause", step.pause);
         event.put("checkpoint", step.checkpoint);
+        //Where the game is, for the person: the role they play now (in a two-sided game the Free Peoples player on
+        // their own turns, the Shadow player on the opponent's), whose turn it is, and which turn
+        event.put("role", ScenarioParser.roleName(_table.RoleOf(_human)));
+        event.put("turnOf", _table.TurnSeat() == _def.human ? "human" : "opponent");
+        event.put("turn", _table.gameState().getTurnNumber());
+        //The last checkpoint reached, this step's own included: while it is set, starting the scenario again with
+        // from=checkpoint picks up there.  Null before any has been reached.
+        event.put("lastCheckpoint", _lastCheckpoint == 0 ? null : _lastCheckpoint);
 
         //The last message shown when the decision arrives stays up while the person answers; the ones before it
         // each wait for "Next".  A message tied to a moment inside the answering is part of the answering.
@@ -850,6 +905,9 @@ public class LiveScenario implements ScenarioSession.Listener {
                 advance = message == lastAtStart || message.message().on != null ? Advance.DECISION : Advance.NEXT;
             }
             messages.add(messageJson(message, advance));
+            //Which of the step's messages it is, counting from 0 as the file has them: with conditions ('require'),
+            // some may not be said, and the authoring panel knows a message by its place in the file
+            messages.getLast().put("index", step.messages.indexOf(message.message()));
             noteCards(message.message(), cards);
             noteParts(message.message(), parts);
         }
@@ -943,7 +1001,15 @@ public class LiveScenario implements ScenarioSession.Listener {
     private void noteCard(String alias, Map<String, Integer> cards) {
         if (alias == null)
             return;
-        PhysicalCard card = _table.Card(alias);
+        PhysicalCard card;
+        try {
+            card = _table.Card(alias);
+        } catch (IllegalStateException exp) {
+            //(a card named before the cards are dealt, in a game whose own opening is played: the scenario's mistake,
+            // and nothing to point at)
+            problem(exp.getMessage());
+            return;
+        }
         cards.put(alias, card.getCardId());
     }
 }

@@ -178,3 +178,27 @@ gd-game-chat[data-newest-first] .gd-game-chat__talk {
     width: calc(100% - 17px);
   }
 }
+
+/* What a scripted game's messages say is kept in the log too, as its opponent's chat: its paragraphs run on, and its
+   culture and twilight icons are the size of the text around them */
+gd-game-chat .gd-game-chat__line[data-said] p {
+  display: inline;
+  margin: 0;
+}
+
+gd-game-chat .gd-game-chat__line[data-said] p + p::before {
+  content: ' ';
+}
+
+gd-game-chat .gd-game-chat__line[data-said] img {
+  display: inline;
+  width: auto;
+  height: 1.15em;
+  margin: 0 0.1em;
+  vertical-align: -0.22em;
+}
+
+gd-game-chat .gd-game-chat__line[data-said] img[src*='/twilight_'] {
+  /* (drawn dark, and the log is dark) */
+  filter: invert(1);
+}

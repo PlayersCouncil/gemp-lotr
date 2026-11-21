@@ -1,0 +1,41 @@
+/* A seat of the Board tab (the legacy seat .sa-section with .sa-ring and the .sa-zonehead places) */
+
+:host {
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-section-rule);
+}
+
+.gd-author-board__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+.gd-author-board-seat__ring {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.gd-author-board-seat__ring .gd-author-label {
+  font-size: 12px;
+}
+
+.gd-author-board-seat__ring .gd-author-label + gd-author-select + .gd-author-label {
+  margin-left: 6px;
+}
+
+/* where the cards under it are: the table, a hand, a pile */
+.gd-author-board-seat__place {
+  margin-top: 7px;
+  padding: 1px 0;
+  border-bottom: 1px solid var(--theme-game-author-place-rule);
+  color: var(--theme-game-author-quiet);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

@@ -4,7 +4,6 @@ import { decisionKey } from '../session/game-restore';
 import { GameSession } from '../session/game-session.service';
 import { GameViewState } from '../session/game-view-state';
 import { GameSettings } from '../settings/game-settings';
-import { GameUndo } from '../undo/game-undo.service';
 import {
   assignMinion,
   assignmentAnswer,
@@ -14,6 +13,7 @@ import {
   selectCard,
   unassignMinion,
 } from '../state/local-choices';
+import { DecisionGates, DecisionGesture } from './decision-gate';
 import { CardAction, DecisionButton, decisionView, minimum, minionUnassigned } from './decision-view';
 
 /** A second click on the same card within this time is a bounce of the finger, not a choice (ms). */
@@ -21,6 +21,8 @@ export const SELECTION_DEBOUNCE_MS = 200;
 
 /** What Done asks when a minion is left without a character. */
 export const UNASSIGNED_QUESTION = 'At least one minion has not been assigned, do you want to proceed?';
+/** How the page's own dialog asks it (the browser's has only OK and Cancel). */
+export const UNASSIGNED_WORDS = { title: 'Unassigned minions', ok: 'Proceed', cancel: 'Go back' } as const;
 
 /** The menu of a card with several actions, where the card was clicked (in the page). */
 export interface ActionMenu {
@@ -33,15 +35,17 @@ export interface ActionMenu {
 /**
  * The waiting decision as the player answers it: what the page shows for it (`view`) and what each gesture does: a
  * card clicked, a button, an action of the menu, a number, an answer of a list, Escape. Choices that aren't sent yet
- * are kept with the game (GameSession), so a reload finds them. While a revert request waits (GameUndo.frozen) no
- * gesture does anything: the server would refuse the answer. Page-scoped.
+ * are kept with the game (GameSession), so a reload finds them. Every gesture is put to the page's gates first
+ * (DecisionGates: a scripted game's step; a revert request waiting, GameUndo.frozen, when the server would refuse the
+ * answer), and happens only if they allow it.
+ * Page-scoped.
  */
 @Injectable()
 export class GameDecisions {
   private readonly session = inject(GameSession);
   private readonly settings = inject(GameSettings);
   private readonly notifier = inject(Notifier);
-  private readonly undo = inject(GameUndo);
+  private readonly gates = inject(DecisionGates);
 
   readonly view = computed(() =>
     decisionView(this.session.model(), {
@@ -111,9 +115,10 @@ export class GameDecisions {
     const decision = this.decision;
     const mark = this.view().marks[cardId];
     if (!decision || this.session.replaying() || (mark !== 'selectable' && mark !== 'actionable')) return;
-    if (this.undo.frozen()) return;
     if (this.lastClick?.cardId === cardId && now - this.lastClick.at < SELECTION_DEBOUNCE_MS) return;
     this.lastClick = { cardId, at: now };
+    const gesture: DecisionGesture = { kind: 'card', cardId };
+    if (!this.gates.allows(gesture)) return;
 
     switch (decision.type) {
       case 'CARD_SELECTION':
@@ -153,14 +158,22 @@ export class GameDecisions {
       default:
         break;
     }
+    this.gates.after(gesture);
   }
 
   /** An action chosen in the open menu. */
   chooseAction(actionId: string): void {
-    if (this.undo.frozen()) return;
     const menu = this.menu();
+    if (!menu || this.decision?.type !== 'CARD_ACTION_CHOICE') {
+      this.saved.set(null);
+      return;
+    }
+    // (an action the gates refuse leaves the menu open, for another of its actions)
+    const gesture: DecisionGesture = { kind: 'action', actionId, cardId: menu.cardId };
+    if (!this.gates.allows(gesture)) return;
     this.saved.set(null);
-    if (menu && this.decision?.type === 'CARD_ACTION_CHOICE') this.take(actionId, menu.cardId);
+    this.take(actionId, menu.cardId);
+    this.gates.after(gesture);
   }
 
   closeMenu(): void {
@@ -169,7 +182,9 @@ export class GameDecisions {
 
   async press(button: DecisionButton): Promise<void> {
     const decision = this.decision;
-    if (!decision || this.undo.frozen()) return;
+    if (!decision) return;
+    const gesture: DecisionGesture = { kind: 'button', button };
+    if (!this.gates.allows(gesture)) return;
     switch (button) {
       case 'Pass':
         this.session.answer('');
@@ -180,7 +195,12 @@ export class GameDecisions {
         break;
       case 'Done':
         if (decision.type === 'ASSIGN_MINIONS') {
-          if (minionUnassigned(this.session.model()) && !(await this.notifier.confirm(UNASSIGNED_QUESTION))) return;
+          if (
+            minionUnassigned(this.session.model()) &&
+            !(await this.notifier.confirm(UNASSIGNED_QUESTION, UNASSIGNED_WORDS))
+          ) {
+            return;
+          }
           this.session.answer(assignmentAnswer(this.session.model()));
         } else if (this.selected.length >= minimum(decision)) {
           this.send();
@@ -189,23 +209,35 @@ export class GameDecisions {
       case 'OK':
         break;
     }
+    this.gates.after(gesture);
   }
 
   /** The number of an integer decision, as typed. */
   answerNumber(value: string): void {
-    if (this.decision?.type === 'INTEGER' && !this.undo.frozen()) this.session.answer(value);
+    if (this.decision?.type !== 'INTEGER') return;
+    const gesture: DecisionGesture = { kind: 'number', value };
+    if (!this.gates.allows(gesture)) return;
+    this.session.answer(value);
+    this.gates.after(gesture);
   }
 
   /** The answer of a multiple choice, by its place in the list. */
   answerChoice(index: number): void {
-    if (this.decision?.type === 'MULTIPLE_CHOICE' && !this.undo.frozen()) this.session.answer(String(index));
+    if (this.decision?.type !== 'MULTIPLE_CHOICE') return;
+    const gesture: DecisionGesture = { kind: 'choice', index };
+    if (!this.gates.allows(gesture)) return;
+    this.session.answer(String(index));
+    this.gates.after(gesture);
   }
 
   /** Escape finishes a choice of cards shown in a dialog, if enough are chosen. */
   escape(): void {
     const decision = this.decision;
-    if (this.undo.frozen()) return;
-    if (decision?.type === 'ARBITRARY_CARDS' && this.selected.length >= minimum(decision)) this.send();
+    if (decision?.type !== 'ARBITRARY_CARDS' || this.selected.length < minimum(decision)) return;
+    const gesture: DecisionGesture = { kind: 'escape' };
+    if (!this.gates.allows(gesture)) return;
+    this.send();
+    this.gates.after(gesture);
   }
 
   private take(actionId: string, cardId: string): void {

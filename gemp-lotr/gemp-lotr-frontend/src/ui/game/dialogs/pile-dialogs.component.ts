@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { displayName } from '../../../core/game/scenario/scenario-state';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameViewState } from '../../../core/game/session/game-view-state';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
@@ -7,12 +8,14 @@ import { CardComponent } from '../../shared/card/card.component';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
+import { CardWindowDirective } from '../../shared/fit-cards/card-window.directive';
 import { GameCardDirective } from '../table/game-card.directive';
 
 /**
  * The piles the player opened from the counters (a discard pile, a dead pile, the adventure deck, the removed pile,
  * the draw deck once the game has ended, a revealed hand), each in a dialog of its own titled "<pile> - <player>",
- * that stays open beside the game until closed. The cards fill it as the legacy groups did.
+ * that stays open beside the game until closed. The cards fill it as the legacy groups did; a revealed hand's dialog is
+ * sized to its cards instead (CardWindowDirective; Ketura, 2026-11-19).
  *
  * DOM contract: `gd-dialog`s with `data-dialog=pile`, each holding `.gd-game-pile` (the fitCards box) with a
  * `button.gd-card` per card (see GameCardDirective).
@@ -20,7 +23,7 @@ import { GameCardDirective } from '../table/game-card.directive';
 @Component({
   selector: 'gd-game-piles',
   styleUrl: '../decision/decision-dialogs.component.css',
-  imports: [DialogComponent, CardComponent, FitCardsDirective, GameCardDirective],
+  imports: [DialogComponent, CardComponent, FitCardsDirective, CardWindowDirective, GameCardDirective],
   host: { style: 'display: contents' },
   template: `
     @for (dialog of dialogs(); track dialog.key) {
@@ -36,6 +39,7 @@ import { GameCardDirective } from '../table/game-card.directive';
           class="gd-game-decision__cards gd-game-pile"
           [gdFitCards]="dialog.fit"
           [gdFitCardsRoundedFrom]="roundedFrom"
+          [gdCardWindow]="dialog.pile === 'revealedHand' ? dialog.fit : null"
         >
           @for (card of dialog.cards; track card.id) {
             <button [gdCard]="views.of(card)" [gdGameCard]="card"></button>
@@ -61,7 +65,7 @@ export class PileDialogsComponent {
         key: `${pile}:${player}`,
         pile,
         player,
-        title: `${pileTitle(pile, own)} - ${player}`,
+        title: `${pileTitle(pile, own)} - ${displayName(model.scenario, player)}`,
         cards,
         fit: cards.map((card): FitCard => ({ horizontal: this.views.of(card).horizontal })),
       };

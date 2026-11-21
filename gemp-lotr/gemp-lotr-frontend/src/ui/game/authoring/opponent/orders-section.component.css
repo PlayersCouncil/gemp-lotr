@@ -1,0 +1,7 @@
+/* The standing orders: a list of cards, tried from the top. */
+
+.gd-author-orders {
+  margin: 2px 0 4px;
+  padding: 0;
+  list-style: none;
+}

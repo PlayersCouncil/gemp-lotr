@@ -228,7 +228,7 @@ describe('CardInfoComponent', () => {
       spy.mockRestore();
     });
 
-    async function open(modalElsewhere: boolean) {
+    async function open(modalElsewhere: boolean, plain = false) {
       const real = document.querySelector.bind(document);
       spy = vi
         .spyOn(document, 'querySelector')
@@ -236,6 +236,7 @@ describe('CardInfoComponent', () => {
           selector === 'dialog:modal' ? (modalElsewhere ? document.createElement('dialog') : null) : real(selector),
         );
       const { fixture } = await render();
+      fixture.componentRef.setInput('plain', plain);
       info.show(CARD);
       await fixture.whenStable();
     }
@@ -260,6 +261,23 @@ describe('CardInfoComponent', () => {
         tapMenuInCorner: false,
       });
       await open(false);
+      expect(showModal).toHaveBeenCalledOnce();
+    });
+
+    it('is not modal where the page says so (something points at it), though the theme would want it', async () => {
+      vi.spyOn(TestBed.inject(ThemeService), 'behaviour').mockReturnValue({
+        cardInfoModal: true,
+        dialogsReturnFocus: true,
+        guardSecondTap: true,
+        tapMenuInCorner: false,
+      });
+      await open(false, true);
+      expect(show).toHaveBeenCalledOnce();
+      expect(showModal).not.toHaveBeenCalled();
+    });
+
+    it("is modal over another modal dialog where the page says it needn't be", async () => {
+      await open(true, true);
       expect(showModal).toHaveBeenCalledOnce();
     });
   });

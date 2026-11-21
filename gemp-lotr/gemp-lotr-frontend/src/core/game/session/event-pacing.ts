@@ -4,6 +4,7 @@
  * flashed, a played event has been shown. Pure: the page draws the animation (GameAnimation) for that time.
  */
 import { GameEvent } from '../protocol/game-events';
+import { openingMessages } from '../scenario/scenario-plan';
 
 /** The legacy durations at normal speed (ms). */
 export const DURATIONS = {
@@ -24,7 +25,9 @@ export type GameAnimation =
   | { kind: 'activate'; cardId: string }
   | { kind: 'event'; blueprintId: string; testingText: string | null }
   | { kind: 'affect'; blueprintId: string; cardIds: readonly string[] }
-  | { kind: 'decision' };
+  | { kind: 'decision' }
+  /** A scripted game's message being read in a replay (nothing is drawn for it: the message is what shows). */
+  | { kind: 'read'; message: number };
 
 /** One stretch of time an event holds the page: drawn as `animation`, before or after the event changes the game. */
 export interface EventPause {
@@ -108,9 +111,27 @@ export function eventPauses(event: GameEvent, context: PacingContext): EventPaus
     case 'D':
       // A replay shows each decision a while
       return context.replay ? [{ animation: { kind: 'decision' }, duration: DURATIONS.decision, when: 'after' }] : [];
+    case 'S':
+      // A replay shows each message a step opens with for as long as it takes to read
+      return context.replay && event.scenario?.type === 'step'
+        ? openingMessages(event.scenario).map((message, index) => ({
+            animation: { kind: 'read' as const, message: index },
+            duration: readingTime(message.html),
+            when: 'after' as const,
+          }))
+        : [];
     default:
       return [];
   }
+}
+
+/** How long a replay leaves a message of so many words up (ms at normal speed). */
+export function readingTime(html: string): number {
+  const words = html
+    .replace(/<[^>]*>/g, ' ')
+    .split(/\s+/)
+    .filter((word) => word !== '').length;
+  return 1500 + 280 * words;
 }
 
 /** The factor of the animations' durations for the animation speed setting (-4 to 4): 2 to the minus speed. */

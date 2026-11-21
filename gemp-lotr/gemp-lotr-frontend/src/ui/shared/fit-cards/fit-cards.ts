@@ -44,6 +44,11 @@ export interface FitCardsInput {
   /** The largest row height. */
   maxHeight: number;
   fit: CardFit;
+  /**
+   * Room left under each row for a line of text (px; `contain` only, default 0): the box's stylesheet adds it to the
+   * space between rows.
+   */
+  label?: number;
 }
 
 /** The width a card takes in a row of the given height (rounded down, as card elements are). */
@@ -79,9 +84,14 @@ export function rowsNeeded(cards: readonly FitCard[], rowHeight: number, width: 
   return rows;
 }
 
+/** The height `rows` rows of cards take, each with its label's room under it. */
+function rowsHeight(rows: number, rowHeight: number, gap: number, label: number): number {
+  return rows * (rowHeight + label) + (rows - 1) * gap;
+}
+
 function fits(input: FitCardsInput, rowHeight: number): boolean {
   const rows = rowsNeeded(input.cards, rowHeight, input.width, input.gap);
-  return rows * rowHeight + (rows - 1) * input.gap <= input.height;
+  return rowsHeight(rows, rowHeight, input.gap, input.label ?? 0) <= input.height;
 }
 
 export interface CardFitResult {
@@ -152,7 +162,7 @@ export function fitCards(input: FitCardsInput): CardFitResult {
     // floating point, and then start a pixel above it, as they did there
     return { height, offset: Math.floor((input.height - height * rows - input.gap * (rows - 1)) / 2) };
   }
-  const used = rows * height + (rows - 1) * input.gap;
+  const used = rowsHeight(rows, height, input.gap, input.fit === 'contain' ? (input.label ?? 0) : 0);
   return { height, offset: Math.max(0, Math.floor((input.height - used) / 2)) };
 }
 

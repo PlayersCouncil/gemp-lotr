@@ -20,6 +20,7 @@ import { CardImageService } from '../../../core/cards/card-image.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
 import { AutoZoomSetting } from '../../../core/platform/auto-zoom-setting';
 import { CardHover, HoveredCard } from '../../../core/cards/card-hover.service';
+import { pageRight } from '../page-room';
 import { zoomPlacement } from './zoom-placement';
 
 /** The mouse has to rest this long on a card before its zoom shows (AutoZoom.HoverDelay). */
@@ -115,7 +116,13 @@ export class AutoZoomComponent {
     );
     return {
       data,
-      place: zoomPlacement(data.horizontal, shown.box, this.window.innerWidth, this.window.innerHeight),
+      // (in what the page leaves of the window: see page-room.ts)
+      place: zoomPlacement(
+        data.horizontal,
+        shown.box,
+        this.window.innerWidth - pageRight(this.window.document),
+        this.window.innerHeight,
+      ),
     };
   });
 

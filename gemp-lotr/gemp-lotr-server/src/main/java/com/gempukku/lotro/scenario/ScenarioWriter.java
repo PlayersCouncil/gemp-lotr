@@ -1,5 +1,6 @@
 package com.gempukku.lotro.scenario;
 
+import com.gempukku.lotro.common.Phase;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.LotroCardBlueprint;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -55,20 +57,31 @@ public final class ScenarioWriter {
             opponent.add("fallback", lower(def.fallback));
         if (!def.orders.isEmpty()) {
             JsonArray orders = new JsonArray();
-            for (Order order : def.orders) {
-                JsonObject json = new JsonObject();
-                json.add("when", when(order.when()));
-                json.add("answer", answers(order.answers()));
-                orders.add(json);
-            }
+            for (Order order : def.orders)
+                orders.add(order(order));
             opponent.add("orders", orders);
         }
+        opponentRules(def, opponent);
         if (!opponent.isEmpty())
             root.add("opponent", opponent);
         root.add("coverage", lower(def.coverage));
 
         JsonObject options = new JsonObject();
-        if (!def.autoPass.isEmpty()) {
+        if (def.autoPassByRole != null) {
+            //(said for each role: each role's phases on a line of its own, an empty one as false)
+            JsonObject byRole = new JsonObject();
+            for (com.gempukku.lotro.common.Side role : List.of(com.gempukku.lotro.common.Side.FREE_PEOPLE, com.gempukku.lotro.common.Side.SHADOW)) {
+                Set<Phase> phases = def.autoPassFor(role);
+                if (phases.isEmpty()) {
+                    byRole.add(ScenarioParser.roleName(role), false);
+                } else {
+                    StringJoiner written = new StringJoiner(", ");
+                    phases.forEach(phase -> written.add(lower(phase)));
+                    byRole.add(ScenarioParser.roleName(role), written.toString());
+                }
+            }
+            options.add("autoPass", byRole);
+        } else if (!def.autoPass.isEmpty()) {
             StringJoiner phases = new StringJoiner(", ");
             def.autoPass.forEach(phase -> phases.add(lower(phase)));
             options.add("autoPass", phases.toString());
@@ -125,6 +138,8 @@ public final class ScenarioWriter {
         JsonObject rules = new JsonObject();
         if (def.oneSided)
             rules.add("oneSided", true);
+        if (def.markersTogether)
+            rules.add("markers", "together");
         for (Seat seat : Seat.values())
             if (def.rules.containsKey(seat))
                 rules.add(seat.key(), JsonValue.readHjson(def.rules.get(seat)));
@@ -154,6 +169,7 @@ public final class ScenarioWriter {
             offScript.add("result", lower(def.outcome.offScriptResult));
         if (!offScript.isEmpty())
             outcome.add("offScript", offScript);
+        endings(def, outcome);
         if (!outcome.isEmpty())
             root.add("outcome", outcome);
 
@@ -164,15 +180,56 @@ public final class ScenarioWriter {
         return root;
     }
 
+    /** One of the opponent's standing orders, as the file has it. */
+    public static JsonObject order(Order order) {
+        JsonObject json = new JsonObject();
+        addIfSet(json, "id", order.id());
+        addIfSet(json, "note", order.note());
+        if (order.once())
+            json.add("once", true);
+        json.add("when", when(order.when()));
+        json.add("answer", answers(order.answers()));
+        return json;
+    }
+
+    /** What the opponent does by rule: opponent.leftovers and opponent.plays. */
+    private static void opponentRules(ScenarioDefinition def, JsonObject opponent) {
+        if (def.leftovers != null)
+            opponent.add("leftovers", def.leftovers.equals(ScenarioDefinition.RING_BEARER) ? "ringBearer" : def.leftovers);
+        if (!def.sandboxPlays.isEmpty())
+            opponent.add("plays", String.join(", ", def.sandboxPlays));
+    }
+
+    /** What is said when the scenario ends by its outcome or by the game's own end (see ScenarioDefinition.Outcome). */
+    private static void endings(ScenarioDefinition def, JsonObject outcome) {
+        if (!def.outcome.winMessages.isEmpty())
+            outcome.add("winMessages", messages(def.outcome.winMessages));
+        if (!def.outcome.loseMessages.isEmpty())
+            outcome.add("loseMessages", messages(def.outcome.loseMessages));
+        if (def.outcome.gameWon != null)
+            outcome.add("gameWon", ending(def.outcome.gameWon));
+        if (def.outcome.gameLost != null)
+            outcome.add("gameLost", ending(def.outcome.gameLost));
+    }
+
+    /** An ending as a step's 'end' is written: the result by itself, or { result, messages }. */
+    private static JsonValue ending(End end) {
+        if (end.messages.isEmpty())
+            return JsonValue.valueOf(lower(end.result));
+        JsonObject json = new JsonObject();
+        json.add("result", lower(end.result));
+        json.add("messages", messages(end.messages));
+        return json;
+    }
+
     private static JsonObject setup(ScenarioDefinition def) {
         Setup from = def.setup;
         JsonObject setup = new JsonObject();
-        if (from.turn != 1 || from.phase != com.gempukku.lotro.common.Phase.FELLOWSHIP) {
-            JsonObject startAt = new JsonObject();
-            startAt.add("turn", from.turn);
-            startAt.add("phase", lower(from.phase));
+        if (from.realOpening)
+            setup.add("opening", "game");
+        JsonObject startAt = startAt(def);
+        if (!startAt.isEmpty())
             setup.add("startAt", startAt);
-        }
         for (Seat seat : Seat.values()) {
             Map<SetupZone, List<String>> zones = from.zones.get(seat);
             if (zones == null)
@@ -192,7 +249,53 @@ public final class ScenarioWriter {
             setup.add("burdens", from.burdens);
         if (from.threats != 0)
             setup.add("threats", from.threats);
+        //(a pool and nothing else of where the story is: beside the burdens and threats, where it is read most simply)
+        if (from.twilight != 0 && startAt.isEmpty())
+            setup.add("twilight", from.twilight);
+        startParts(def, setup);
         return setup;
+    }
+
+    /**
+     * setup.startAt: what of where the story has got to is not the start of the game, each part only if it is not.
+     * The twilight pool goes here only when something else does (otherwise it is setup.twilight).
+     */
+    private static JsonObject startAt(ScenarioDefinition def) {
+        Setup from = def.setup;
+        JsonObject startAt = new JsonObject();
+        if (from.site != 1)
+            startAt.add("site", from.site);
+        if (from.opponentSite != null)
+            startAt.add("opponentSite", from.opponentSite.intValue());
+        if (from.phase != com.gempukku.lotro.common.Phase.FELLOWSHIP)
+            startAt.add("phase", lower(from.phase));
+        if (from.turn != 1)
+            startAt.add("turn", from.turn);
+        if (from.moves != null)
+            startAt.add("moves", from.moves.intValue());
+        if (from.twilight != 0 && !startAt.isEmpty())
+            startAt.add("twilight", from.twilight);
+        return startAt;
+    }
+
+    /** The parts of the setup that go with where the story has got to: the skirmishes, the sites controlled, the path. */
+    private static void startParts(ScenarioDefinition def, JsonObject setup) {
+        Setup from = def.setup;
+        if (!from.skirmishes.isEmpty()) {
+            JsonObject skirmishes = new JsonObject();
+            from.skirmishes.forEach((character, minions) -> skirmishes.add(character, String.join(" + ", minions)));
+            setup.add("skirmishes", skirmishes);
+        }
+        if (!from.controlled.isEmpty()) {
+            JsonObject controlled = new JsonObject();
+            for (Seat seat : Seat.values())
+                if (from.controlled.containsKey(seat) && !from.controlled.get(seat).isEmpty())
+                    controlled.add(seat.key(), String.join(", ", from.controlled.get(seat)));
+            if (!controlled.isEmpty())
+                setup.add("controlled", controlled);
+        }
+        if (!from.path.isEmpty())
+            setup.add("path", String.join(", ", from.path));
     }
 
     public static String zoneName(SetupZone zone) {
@@ -240,6 +343,8 @@ public final class ScenarioWriter {
             json.add("allow", allow(step.allow));
         if (!step.answers.isEmpty())
             json.add("answer", answers(step.answers));
+        if (!step.refuses.isEmpty())
+            json.add("refuses", refusals(step.refuses));
         if (step.end != null) {
             if (step.end.messages.isEmpty()) {
                 json.add("end", lower(step.end.result));
@@ -270,6 +375,8 @@ public final class ScenarioWriter {
         JsonObject json = new JsonObject();
         if (when.seat != null)
             json.add("seat", when.seat.key());
+        if (when.role != null)
+            json.add("as", ScenarioParser.roleName(when.role));
         if (when.decision != null)
             json.add("decision", AnswerCompiler.typeName(when.decision));
         addIfSet(json, "text", when.text);
@@ -282,8 +389,17 @@ public final class ScenarioWriter {
         addIfSet(json, "offers", when.offers);
         addIfSet(json, "inSkirmish", when.fighting);
         addIfSet(json, "after", when.after);
+        addIfSet(json, "kind", kinds(when));
         json.add("require", requirements(when.require));
         return json;
+    }
+
+    /** What a 'when' says the decision is for: "nextSkirmish", "not(reconcile)"; empty for nothing. */
+    static String kinds(When when) {
+        StringJoiner kinds = new StringJoiner(", ");
+        when.kinds.forEach(kind -> kinds.add(kind.term));
+        when.notKinds.forEach(kind -> kinds.add("not(" + kind.term + ")"));
+        return kinds.toString();
     }
 
     /** A 'when' without requirements, as terms. */
@@ -293,10 +409,15 @@ public final class ScenarioWriter {
             terms.add(when.seat.key());
         if (when.decision != null)
             terms.add(AnswerCompiler.typeName(when.decision));
+        String kinds = kinds(when);
+        if (!kinds.isEmpty())
+            terms.add(kinds);
         if (when.phase != null)
             terms.add("phase(" + lower(when.phase) + ")");
         if (when.turn != null)
             terms.add("turn(" + when.turn + ")");
+        if (when.role != null)
+            terms.add("as(" + ScenarioParser.roleName(when.role) + ")");
         if (when.skirmish != null)
             terms.add("skirmish(" + when.skirmish + ")");
         if (when.offers != null)
@@ -316,6 +437,18 @@ public final class ScenarioWriter {
         StringJoiner terms = new StringJoiner(", ");
         answers.forEach(answer -> terms.add(answer.source()));
         return terms.toString();
+    }
+
+    /** What a step refuses: on one line where none is numbered, otherwise one line each ("2: choose(boromir)"). */
+    private static JsonValue refusals(List<Refusal> refusals) {
+        if (refusals.stream().allMatch(refusal -> refusal.at() == 0)) {
+            StringJoiner terms = new StringJoiner(", ");
+            refusals.forEach(refusal -> terms.add(refusal.source()));
+            return JsonValue.valueOf(terms.toString());
+        }
+        JsonArray lines = new JsonArray();
+        refusals.forEach(refusal -> lines.add(refusal.source()));
+        return lines;
     }
 
     private static JsonValue allow(Allow allow) {
@@ -385,6 +518,8 @@ public final class ScenarioWriter {
             message.choices.forEach(choices::add);
             json.add("choices", choices);
         }
+        if (message.require != null)
+            json.add("require", requirements(message.require));
         //A message that is nothing but its text is written as just that
         if (json.size() == 1)
             return JsonValue.valueOf(message.text);

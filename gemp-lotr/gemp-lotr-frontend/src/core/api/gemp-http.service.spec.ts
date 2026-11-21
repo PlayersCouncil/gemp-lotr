@@ -81,6 +81,24 @@ describe('GempHttp', () => {
     const got = firstValueFrom(http.getJson<{ b: number }>('/game/1/restorePoints'));
     backend.expectOne((r) => r.url === '/gemp-lotr-server/game/1/restorePoints' && r.method === 'GET').flush('{"b":2}');
     expect(await got).toEqual({ b: 2 });
+    // (with what is asked for in the address)
+    const asked = firstValueFrom(http.getJson<{ b: number }>('/scenarios/author/state', { q: 'x' }));
+    const req = backend.expectOne((r) => r.url === '/gemp-lotr-server/scenarios/author/state');
+    expect(req.request.method).toBe('GET');
+    expect(req.request.params.get('q')).toBe('x');
+    req.flush('{"b":2}');
+    expect(await asked).toEqual({ b: 2 });
+  });
+
+  it('keeps what the server said of a refusal in the JSON it answered with (the body is text)', async () => {
+    setUp();
+    const result = firstValueFrom(http.postJson('/scenarios/author/edit'));
+    backend
+      .expectOne('/gemp-lotr-server/scenarios/author/edit')
+      .flush('{"error":"No such step."}', { status: 400, statusText: 'Bad Request' });
+    const error = (await result.catch((e: unknown) => e)) as ApiError;
+    expect(error.status).toBe(400);
+    expect(error.said).toBe('No such step.');
   });
 
   it('turns HTTP failures into ApiError with the status', async () => {

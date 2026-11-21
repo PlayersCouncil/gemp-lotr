@@ -1,0 +1,5 @@
+/* The form of one step: its sections one under another (their look is the Step tab's, unscoped) */
+
+:host {
+  display: block;
+}

@@ -109,6 +109,22 @@ describe('GameLog', () => {
     expect(log.feedback()).toBe('Thank you for playing! again');
   });
 
+  it("puts a scripted game's message in the opponent's mouth: one line per message, said again with the newer words", () => {
+    log.restart('7', []);
+    log.say('scenario 1.0:0', 'Basic Shadow', '<p>Welcome</p>');
+    log.game([{ kind: 'message', text: 'played' }]);
+    log.say('scenario 1.0:1', 'Basic Shadow', '<p>Next</p>');
+    log.say('scenario 1.0:0', 'Basic Shadow', '<p>Welcome back</p>');
+    expect(kinds()).toEqual(['chat:<p>Welcome back</p>', 'message:played', 'chat:<p>Next</p>']);
+    expect(log.entries()[0]).toEqual({
+      kind: 'chat',
+      message: { from: 'Basic Shadow', html: '<p>Welcome back</p>', date: null, system: false },
+      said: 'scenario 1.0:0',
+    });
+    // Kept with the game for a reload, the newer words too
+    expect(JSON.stringify(sessionStorage.getItem('gemp.game.7.log'))).toContain('Welcome back');
+  });
+
   it('takes no game lines before the game (or a replay) has come', () => {
     log.game([{ kind: 'message', text: 'too early' }]);
     expect(kinds()).toEqual([]);

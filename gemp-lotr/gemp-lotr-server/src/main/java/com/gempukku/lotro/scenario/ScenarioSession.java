@@ -139,7 +139,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             try {
                 shown = writing(step, ruling.player()) ? _director.presentUnrestricted(step) : _director.present(step, ruling.player(), ruling.decision());
                 try {
-                    answer = _director.scriptedAnswer(step, ruling.decision());
+                    answer = ruling.player().equals(_table.HumanPlayer()) ? _director.scriptedAnswer(step, ruling.decision())
+                            : _director.opponentAnswer(step, ruling.decision());
                 } catch (ScenarioScriptException exp) {
                     if (ruling.player().equals(_table.HumanPlayer()))
                         noAnswer = exp.getMessage();
@@ -263,6 +264,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
 
     @Override
     public List<String> release(Map<String, AwaitingDecision> waiting) {
+        //(in a game whose own opening is played, the cards get their names as soon as they are dealt)
+        _table.Dealt();
         //The bid and the choice of seat come before the scenario's board exists, and the table answers them itself
         if (!_table.Arranged())
             return new ArrayList<>(waiting.keySet());
@@ -295,6 +298,7 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             if (stepInHand)
                 break;
             Ruling ruling = rule(entry.getKey(), entry.getValue());
+            ruling = unsaid(ruling);
             if (ruling.step() != null) {
                 stepInHand = true;
                 accept(ruling, released);
@@ -308,6 +312,20 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
             for (Ruling ruling : outsideTheScript)
                 accept(ruling, released);
         return released;
+    }
+
+    /**
+     * A pause whose messages all have conditions, none of which holds, has nothing to be read: it is read by itself,
+     * there and then, and the decision is ruled on for the step behind it.  (Nothing is written in the journal: a
+     * game that follows this one comes to the same pause with the same board, and reads it by itself the same way.)
+     */
+    private Ruling unsaid(Ruling ruling) {
+        while (ruling.step() != null && ruling.step().pause && ruling.problem() == null && ruling.shown() != null
+                && ruling.shown().messages().isEmpty() && _director.end() == null) {
+            _director.read(ruling.step(), null);
+            ruling = rule(ruling.player(), ruling.decision());
+        }
+        return ruling;
     }
 
     private void accept(Ruling ruling, List<String> released) {
@@ -343,7 +361,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
                 }
                 if (problem == null) {
                     try {
-                        answer = _director.scriptedAnswer(step, decision);
+                        //(the opponent's assignment takes its leftovers as well: see ScenarioDirector.opponentAnswer)
+                        answer = player.equals(_table.HumanPlayer()) ? _director.scriptedAnswer(step, decision) : _director.opponentAnswer(step, decision);
                     } catch (ScenarioScriptException exp) {
                         //The opponent has nothing but the script's answer to go on.  The person has their own.
                         if (player.equals(_table.HumanPlayer()))
@@ -373,6 +392,8 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
 
     @Override
     public void decisionAnswered(String player, AwaitingDecision decision, String answer) {
+        //(an order of the opponent's that is good for one decision is used up by it)
+        _director.orderAnswered(decision, answer);
         Ruling ruling = _rulings.get(player);
         if (ruling == null || ruling.decision() != decision)
             return;

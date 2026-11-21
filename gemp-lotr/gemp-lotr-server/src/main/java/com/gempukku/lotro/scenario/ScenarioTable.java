@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A virtual table laid out the way a scenario file says: each seat gets a deck made of exactly the cards the
@@ -113,10 +114,32 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     public String OpponentPlayer() { return Player(_def.human.other()); }
 
     /**
+     * The role a player is playing at this moment: the Free Peoples player is the one whose turn it is, the other is
+     * the Shadow player.  (In a one-sided game that is always the Free Peoples seat's turn; before the first turn,
+     * and while the game opens, the seat that is to take the first.)  A seat is a chair, and in a two-sided game it
+     * plays both roles in turn.
+     */
+    public com.gempukku.lotro.common.Side RoleOf(String player) {
+        //(before the first turn, whoever the game has as its current player while it opens, the seats are as named)
+        String current = _gameState == null || _gameState.getTurnNumber() < 1 ? null : _gameState.getCurrentPlayerId();
+        String freePeoples = current != null ? current : _freepsPlayer;
+        return player.equals(freePeoples) ? com.gempukku.lotro.common.Side.FREE_PEOPLE : com.gempukku.lotro.common.Side.SHADOW;
+    }
+
+    /** The seat whose turn it is (before the first turn, the seat that is to take it). */
+    public Seat TurnSeat() {
+        return RoleOf(_freepsPlayer) == com.gempukku.lotro.common.Side.FREE_PEOPLE ? Seat.FREEPS : Seat.SHADOW;
+    }
+
+    /**
      * @return The card a scenario alias refers to.
      */
     public PhysicalCardImpl Card(String alias) {
         PhysicalCardImpl card = _aliases.get(alias);
+        if (card == null && _def.setup.realOpening && !_dealt)
+            throw new IllegalStateException("The scenario's cards have no names yet: in the game's own opening (setup.opening: game) the "
+                    + "cards are dealt once the seats have been chosen, so nothing about the bid or the choice of going first can name one ('"
+                    + alias + "')");
         if (card == null)
             throw new IllegalStateException("The scenario has no card called '" + alias + "' on the table");
         return card;
@@ -281,13 +304,51 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         _game.startGame();
 
         //The Free Peoples seat outbids the other and elects to go first.  From there the game runs on its own
-        // through the first site and the Ring-bearers, into arrangeBoard below, and on to the first turn.
-        FreepsDecided("1");
-        ShadowDecided("0");
-        FreepsDecided("0");
+        // through the first site and the Ring-bearers, into arrangeBoard below, and on to the first turn.  (Unless
+        // the game's own opening is the scenario's to play: then every one of these is the script's to answer.)
+        if (!_def.setup.realOpening) {
+            FreepsDecided("1");
+            ShadowDecided("0");
+            FreepsDecided("0");
+            answerOpeningSite();
+        }
 
         if (_following != null)
             follow(_following);
+    }
+
+    /**
+     * On a path whose sites have no numbers (from the Shadows block on), the game's opening has the first player
+     * choose which of their sites is site 1, before the board is laid out.  That is the table's to answer, as the bid
+     * and the seat are: the first site setup.path names, if it is one of the Free Peoples seat's, and otherwise the
+     * first site the scenario lists for that seat.
+     */
+    private void answerOpeningSite() {
+        AwaitingDecision decision = _userFeedback.getAwaitingDecision(_freepsPlayer);
+        if (_arranged || decision == null || decision.getDecisionType() != com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ARBITRARY_CARDS)
+            return;
+        List<String> wanted = new ArrayList<>();
+        if (!_def.setup.path.isEmpty())
+            wanted.add(_def.setup.path.getFirst());
+        wanted.addAll(_def.siteAliases.getOrDefault(Seat.FREEPS, List.of()));
+        String[] ids = decision.getDecisionParameters().get("cardId");
+        String[] blueprints = decision.getDecisionParameters().get("blueprintId");
+        List<String> blueprintsWanted = _def.sites.getOrDefault(Seat.FREEPS, List.of());
+        //(the aliases are bound only as the board is laid out, so the choice is known by its blueprint: the first
+        // listed site that is on offer, in the order the scenario lists them)
+        for (String alias : wanted) {
+            int at = _def.siteAliases.getOrDefault(Seat.FREEPS, List.of()).indexOf(alias);
+            if (at < 0 || ids == null || blueprints == null)
+                continue;
+            String blueprint = _format.applyErrata(blueprintsWanted.get(at));
+            for (int i = 0; i < blueprints.length; i++)
+                if (blueprints[i].equals(blueprint)) {
+                    FreepsDecided(ids[i]);
+                    return;
+                }
+        }
+        if (ids != null && ids.length > 0)
+            FreepsDecided(ids[0]);
     }
 
     private void follow(GameJournal earlier) {
@@ -335,9 +396,13 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         if (_arbiter != null)
             _userFeedback.setDecisionArbiter(_arbiter);
         //The table answers the bid and the choice of seat itself, the same way every time; they are not the game's story
+        // (unless the scenario plays the game's own opening, which is: see Dealt)
+        _arranged = _def.setup.realOpening;
         _userFeedback.addDecisionObserver(new DecisionObserver() {
             @Override
-            public void decisionIssued(String playerId, AwaitingDecision decision) { }
+            public void decisionIssued(String playerId, AwaitingDecision decision) {
+                Dealt();
+            }
 
             @Override
             public void decisionAnswering(String playerId, AwaitingDecision decision) {
@@ -354,16 +419,25 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
 
         _random = new ScenarioRandom(this, _def);
         _gameState.setRandom(_journal.random(_random));
-        _gameState.setPregameSetup(this);
+        if (!_def.setup.realOpening)
+            _gameState.setPregameSetup(this);
         if (_def.oneSided)
             _gameState.setFixedFreePeoplePlayer(_freepsPlayer);
 
         //The person playing is asked to pass exactly where the scenario says, whatever their own settings are.  The
         // scripted opponent is only ever asked when it has something it could do.
-        _game.setPlayerAutoPassSettings(HumanPlayer(), EnumSet.copyOf(_def.autoPass.isEmpty() ? EnumSet.noneOf(Phase.class) : _def.autoPass));
+        Set<Phase> passed = EnumSet.noneOf(Phase.class);
+        passed.addAll(_def.autoPass);
+        if (_def.autoPassByRole != null)
+            _def.autoPassByRole.values().forEach(passed::addAll);
+        _game.setPlayerAutoPassSettings(HumanPlayer(), passed);
         _game.setPlayerAutoPassSettings(OpponentPlayer(), EnumSet.allOf(Phase.class));
-        //...except where the script's next step is about a pass: then whoever it is gets asked, to be passed by hand
-        _game.setAskToPass((player, phase) -> _arranged && _askToPass != null && _askToPass.test(player, phase));
+        //...except where the script's next step is about a pass: then whoever it is gets asked, to be passed by hand.
+        // And where autoPass is said for each role, a phase is passed through only in the role it is said for: the
+        // game knows one set of phases for a player, so it is given both roles' and asks in the role a phase is not
+        // the person's to be passed through in.
+        _game.setAskToPass((player, phase) -> _arranged && ((_askToPass != null && _askToPass.test(player, phase))
+                || (_def.autoPassByRole != null && player.equals(HumanPlayer()) && !_def.autoPassFor(RoleOf(player)).contains(phase))));
         _game.setAutoPassed((player, phase) -> {
             if (_arranged && _autoPassed != null)
                 _autoPassed.accept(player, phase);
@@ -385,6 +459,61 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             } catch (InvalidCardDefinitionException | ParseException exp) {
                 throw new IllegalArgumentException("rules." + seat.key() + ": " + exp.getMessage(), exp);
             }
+        }
+        _game.getActionsEnvironment().addAlwaysOnActionProxy(new EndOfThePath());
+        if (_def.oneSided && _def.markersTogether)
+            _game.getActionsEnvironment().addAlwaysOnActionProxy(new MarkersTogether());
+    }
+
+    /**
+     * Why the game was ended by its fellowship coming to the end of the scenario's adventure path; null if it was not.
+     * See EndOfThePath.
+     */
+    public String PathEnded() { return _pathEnded; }
+
+    private String _pathEnded;
+
+    /**
+     * A scenario's path can be shorter than the game's nine sites, and a fellowship at its last site that has to move
+     * on (the move of the Fellowship phase is not optional) would move to a site that is not there: the game cannot
+     * carry on from that, and once broke on it.  So the game is ended just before such a move, as the move begins,
+     * with the reason said in its log, and whatever runs the game is told why (PathEnded).
+     */
+    private class EndOfThePath extends AbstractActionProxy {
+        @Override
+        public List<? extends RequiredTriggerAction> getRequiredBeforeTriggers(LotroGame game, Effect effect) {
+            //(this is asked once, as the effect is about to be played; what is done here is done there and then,
+            // rather than as a trigger, which would have the player asked to put it in order with any card's own)
+            if (effect.getType() != Effect.Type.BEFORE_MOVE_FROM || _pathEnded != null || game.getWinnerPlayerId() != null)
+                return null;
+            int at = game.getGameState().getCurrentSiteNumber();
+            if (game.getGameState().getSite(at + 1) != null)
+                return null;
+            _pathEnded = "the fellowship came to the end of the scenario's path: it is at site " + at
+                    + " and would have to move on to site " + (at + 1) + ", which nobody's adventure deck in the scenario has";
+            game.getGameState().sendMessage("This scenario's path ends at site " + at + ": there is no site " + (at + 1)
+                    + " to move to, so the game is over.");
+            game.playerLost(game.getGameState().getCurrentPlayerId(), "The scenario's path ends at site " + at);
+            return null;
+        }
+    }
+
+    /**
+     * rules.markers: together.  In a one-sided game the Shadow seat never takes a turn, so its marker never moves of
+     * itself, and a site is only controlled once every marker is past it.  This has the Shadow seat's marker go
+     * where the fellowship's has gone each time the fellowship moves, just after the marker moves and before
+     * anything that answers the fellowship moving to its new site.
+     */
+    private class MarkersTogether extends AbstractActionProxy {
+        @Override
+        public List<? extends RequiredTriggerAction> getRequiredBeforeTriggers(LotroGame game, Effect effect) {
+            //(done as it is asked, as EndOfThePath is, and for the same reason; it can be done any number of times)
+            if (effect.getType() == Effect.Type.BEFORE_MOVE_TO) {
+                int at = game.getGameState().getPlayerPosition(_freepsPlayer);
+                if (game.getGameState().getPlayerPosition(_shadowPlayer) < at)
+                    game.getGameState().setPlayerPosition(_shadowPlayer, at);
+            }
+            return null;
         }
     }
 
@@ -448,6 +577,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         if (_def.setup.threats > 0)
             AddThreats(_def.setup.threats);
 
+        arrangeStart();
+
         //How the table got to this point (the bid, the choice of seat) is not part of the scenario's story
         _gameState.forgetMessages();
         _arranged = true;
@@ -464,6 +595,203 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             _userFeedback.sendAwaitingDecision(OpponentPlayer(), _opening);
         }
     }
+
+    /**
+     * The part of the board that says where the story has got to (setup.startAt and what goes with it): the sites
+     * the fellowships have passed, laid on the path; each seat's marker; the sites controlled; the twilight pool; the
+     * skirmishes already assigned.  Each is put there the way the game itself puts it there, without any of the
+     * game's reactions to it (nobody "plays" a site or "moves" to one here).
+     */
+    private void arrangeStart() {
+        ScenarioDefinition.Setup setup = _def.setup;
+        int opponentSite = setup.opponentSite(_def);
+        layPath(Math.max(Math.max(setup.site, opponentSite), setup.path.size()), "setup.startAt");
+        _gameState.setPlayerPosition(_freepsPlayer, setup.site);
+        _gameState.setPlayerPosition(_shadowPlayer, opponentSite);
+
+        for (Map.Entry<Seat, List<String>> entry : setup.controlled.entrySet())
+            for (String site : entry.getValue()) {
+                PhysicalCard card = siteOnPath(site, "setup.controlled." + entry.getKey().key());
+                if (card != null)
+                    control(card, entry.getKey(), "setup.controlled." + entry.getKey().key());
+            }
+
+        if (setup.twilight > 0)
+            SetTwilight(setup.twilight);
+
+        //The same call the assignment phase makes for each pairing it settles
+        for (Map.Entry<String, List<String>> skirmish : setup.skirmishes.entrySet()) {
+            java.util.Set<PhysicalCard> minions = new java.util.LinkedHashSet<>();
+            for (String minion : skirmish.getValue())
+                minions.add(Card(minion));
+            _gameState.assignToSkirmishes(Card(skirmish.getKey()), minions);
+        }
+    }
+
+    /**
+     * Lays the adventure path out as far as a site, as the game lays a site when a fellowship first comes to it: the
+     * site goes from its owner's adventure deck to its place on the path.  Whose site goes where is setup.path's to
+     * say, and otherwise it is the Free Peoples seat's: its site of that number on a numbered path, its next listed
+     * site on one that is not.  Site 1 is there already, laid by the game's opening (a different one is put in its
+     * place, if setup.path says so).  Sites already on the path stay.
+     */
+    private void layPath(int last, String context) {
+        for (int number = 1; number <= last; number++) {
+            PhysicalCard there = _gameState.getSite(number);
+            String named = number <= _def.setup.path.size() ? _def.setup.path.get(number - 1) : null;
+            PhysicalCard wanted = named != null ? Card(named) : null;
+            if (there != null && (wanted == null || wanted == there || _arranged))
+                continue;
+            if (wanted == null)
+                wanted = siteToLay(number);
+            if (wanted == null) {
+                _problems.add(context + ": the path cannot be laid out to site " + number + ": the Free Peoples seat's sites have no site "
+                        + number + " (list one under sites, or say whose it is in setup.path)");
+                return;
+            }
+            if (wanted.getZone() != Zone.ADVENTURE_DECK) {
+                _problems.add(context + ": '" + AliasOf(wanted) + "' cannot be site " + number + ": it is already on the path");
+                return;
+            }
+            if (there != null) {
+                //(the site the opening laid goes back where it came from, as a replaced site does)
+                _gameState.removeCardsFromZone(there.getOwner(), List.of(there));
+                ((PhysicalCardImpl) there).setSiteNumber(null);
+                _gameState.addCardToZone(game(), there, Zone.ADVENTURE_DECK);
+            }
+            _gameState.removeCardsFromZone(wanted.getOwner(), List.of(wanted));
+            ((PhysicalCardImpl) wanted).setSiteNumber(number);
+            _gameState.addCardToZone(game(), wanted, Zone.ADVENTURE_PATH);
+        }
+    }
+
+    /** The Free Peoples seat's site that is laid as the site of that number when nothing says whose it is. */
+    private PhysicalCard siteToLay(int number) {
+        List<? extends PhysicalCard> deck = _gameState.getAdventureDeck(_freepsPlayer);
+        if (_gameState.usesUnorderedSites(_freepsPlayer)) {
+            //(on a path whose sites have no numbers, the seat's sites in the order the scenario lists them)
+            for (String alias : _def.siteAliases.getOrDefault(Seat.FREEPS, List.of())) {
+                PhysicalCard card = _aliases.get(alias);
+                if (card != null && card.getZone() == Zone.ADVENTURE_DECK)
+                    return card;
+            }
+            return null;
+        }
+        for (PhysicalCard candidate : deck)
+            if (candidate.getBlueprint().getSiteNumber() == number)
+                return candidate;
+        return null;
+    }
+
+    /**
+     * A site on the adventure path, said by its number or its name.
+     * @return Null, with the problem noted, if it is not on the path.
+     */
+    private PhysicalCard siteOnPath(String site, String context) {
+        PhysicalCard card = site.matches("\\d+") ? _gameState.getSite(Integer.parseInt(site)) : _aliases.get(site);
+        if (card == null || card.getZone() == null || !(card.getZone() == Zone.ADVENTURE_PATH || card.getCardController() != null)) {
+            _problems.add(context + ": " + (site.matches("\\d+") ? "there is no site " + site : "'" + site + "' is not")
+                    + " on the adventure path" + (site.matches("\\d+") ? "" : " (a site gets there by a fellowship coming to it)"));
+            return null;
+        }
+        return card;
+    }
+
+    /**
+     * A site controlled by a seat, the way the game has a site taken control of.  A site can only be controlled once
+     * every fellowship has passed it.
+     */
+    private void control(PhysicalCard site, Seat seat, String context) {
+        int number = site.getSiteNumber();
+        for (Seat other : Seat.values())
+            if (_gameState.getPlayerPosition(Player(other)) <= number) {
+                _problems.add(context + ": site " + number + " cannot be controlled: the " + other.key() + " seat's marker is at site "
+                        + _gameState.getPlayerPosition(Player(other)) + ", and a site is controlled only once every marker is past it"
+                        + " (put it further on: setup.startAt.opponentSite, do: marker(" + other.key() + ", n), or rules.markers: together)");
+                return;
+            }
+        if (site.getCardController() != null)
+            _gameState.loseControlOfCard(site, Zone.ADVENTURE_PATH);
+        _gameState.takeControlOfCard(Player(seat), game(), site, Zone.SUPPORT);
+        //Between turns nothing is affecting the game, and the start of the turn starts everything there is,
+        // controlled sites among them: one that was started here would be started twice
+        if (!_gameState.getCurrentPhase().isCardsAffectGame())
+            ((PhysicalCardImpl) site).stopAffectingGameControlledSite();
+    }
+
+    /**
+     * A seat's marker put on a site, the path laid out to it as needed: not a move (nothing that answers moving
+     * does), only where the marker is.  The site the fellowship whose turn it is stands at is the one whose text is
+     * in force, so its marker taking it elsewhere has the one site stop and the other start, as a move does.
+     */
+    private void putMarker(Seat seat, int site, String context) {
+        layPath(site, context);
+        if (_gameState.getSite(site) == null)
+            return;
+        String player = Player(seat);
+        boolean current = player.equals(_gameState.getCurrentPlayerId()) && _gameState.getCurrentPhase().isCardsAffectGame();
+        if (current && _gameState.getCurrentSite() != null)
+            ((PhysicalCardImpl) _gameState.getCurrentSite()).stopAffectingGame();
+        _gameState.setPlayerPosition(player, site);
+        if (current)
+            ((PhysicalCardImpl) _gameState.getCurrentSite()).startAffectingGame(game());
+    }
+
+    /**
+     * Called by the game once the board has been arranged (and the opening, if the scenario has one, read).  A game
+     * that begins further on than the start of turn 1 at site 1 is carried on from where its story has got to.
+     */
+    @Override
+    public com.gempukku.lotro.logic.timing.processes.GameProcess carryOn(LotroGame game) {
+        if (!_def.setup.lateStart())
+            return null;
+        return new com.gempukku.lotro.logic.timing.processes.pregame.MidTurnStartGameProcess(_freepsPlayer, _def.setup.turn,
+                _def.setup.phase, _def.setup.moves());
+    }
+
+    /** Set once the scenario's names are given to the game's cards (see Dealt). */
+    private boolean _dealt;
+    /** Why the game's own opening did not seat the players as the scenario declares them; null while it did. */
+    private String _seatingProblem;
+
+    /**
+     * In a game whose own opening is played (setup.opening: game), the game's cards do not exist until the seats have
+     * been chosen (the bid and the choice of going first come before them).  This gives them their names in the
+     * scenario as soon as they do, before any decision about them is ruled on, and puts the cards setup.<seat>.deck
+     * lists on top of their decks (the opening draw comes from there).  It is asked whenever a decision is about to
+     * be ruled on, and does it once.
+     */
+    public void Dealt() {
+        if (!_def.setup.realOpening || _dealt || _gameState == null || _gameState.getPlayerOrder() == null)
+            return;
+        _dealt = true;
+        for (Seat seat : Seat.values())
+            bindAliases(seat);
+        for (Seat seat : Seat.values())
+            for (String alias : _def.setup.zones.getOrDefault(seat, Map.of()).getOrDefault(SetupZone.DECK, List.of()).reversed())
+                MoveCardsToTopOfDeck(Card(alias));
+        //The seats are chairs the scenario declares: the Free Peoples seat is the one that goes first.  In the game's
+        // own opening who goes first is decided by the bid and the choice, which the script has to make come out so
+        String first = _gameState.getFirstPlayerId();
+        if (first != null && !first.equals(_freepsPlayer))
+            _seatingProblem = "the Shadow seat was seated to go first, but the scenario's Free Peoples seat (freeps) is the one that goes first: "
+                    + "the answers to the bid and to the choice of going first (the person's allow, the opponent's answer) have to have the "
+                    + "freeps seat bid more and choose to go first, or the shadow seat choose to go second";
+    }
+
+    /**
+     * Whether the scenario's cards have their names: always once the board is laid out; in a game whose own opening
+     * is played, once the seats have been chosen and the cards dealt (see Dealt).
+     */
+    public boolean CardsDealt() {
+        return _arranged && (!_def.setup.realOpening || _dealt);
+    }
+
+    /**
+     * Why the game's own opening seated the players otherwise than the scenario declares them (see Dealt); null if
+     * it did not (or the scenario does not play the game's opening).  A game that did is not the scenario's game.
+     */
+    public String SeatingProblem() { return _seatingProblem; }
 
     /** Whether this is the table's own question at the opening (see arrangeBoard), not one of the game's. */
     public boolean IsOpening(AwaitingDecision decision) {
@@ -594,6 +922,19 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                             settled++;
                     for (PhysicalCardImpl card : ordered.subList(settled, ordered.size()))
                         place(card, ref.seat(), ref.zone(), true);
+                }
+                case MARKER -> putMarker(Seat.valueOf(op.target().toUpperCase(java.util.Locale.ROOT)), op.amount(), op.source());
+                case CONTROL -> {
+                    PhysicalCard site = siteOnPath(op.card() != null ? op.card() : String.valueOf(op.amount()), op.source());
+                    if (site != null)
+                        control(site, Seat.valueOf(op.target().toUpperCase(java.util.Locale.ROOT)), op.source());
+                }
+                case LIBERATE -> {
+                    PhysicalCard site = siteOnPath(op.card() != null ? op.card() : String.valueOf(op.amount()), op.source());
+                    if (site != null && site.getCardController() == null)
+                        _problems.add(op.source() + ": site " + site.getSiteNumber() + " is controlled by nobody");
+                    else if (site != null)
+                        _gameState.loseControlOfCard(site, Zone.ADVENTURE_PATH);
                 }
                 case TWILIGHT -> SetTwilight(Math.max(0, op.relative() ? GetTwilight() + op.amount() : op.amount()));
                 case BURDENS -> setTotal(GetBurdens(), op, this::AddBurdens, this::RemoveBurdens);

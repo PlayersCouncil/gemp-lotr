@@ -1,0 +1,5 @@
+/* A block's page: the note, the sections, the buttons after them */
+
+:host {
+  display: block;
+}

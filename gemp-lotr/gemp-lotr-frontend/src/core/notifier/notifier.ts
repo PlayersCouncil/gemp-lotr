@@ -6,6 +6,13 @@ import { Injectable } from '@angular/core';
  *
  * The view layer provides the implementation (`{ provide: Notifier, useClass: ... }`).
  */
+/** The words of a question's dialog, where the view draws its own: its title and its two buttons. */
+export interface ConfirmWords {
+  title?: string;
+  ok?: string;
+  cancel?: string;
+}
+
 @Injectable()
 export abstract class Notifier {
   /** Shows a message; resolves when the player has dismissed it. */
@@ -16,8 +23,8 @@ export abstract class Notifier {
     void this.alert(message);
   }
 
-  /** Asks a yes/no question; true for OK. */
-  abstract confirm(message: string): Promise<boolean>;
+  /** Asks a yes/no question; true for OK. `words` names the dialog and its buttons where the view has its own. */
+  abstract confirm(message: string, words?: ConfirmWords): Promise<boolean>;
 
   /** Asks for a line of text, starting with `defaultValue`; null when the player cancelled. */
   abstract askText(message: string, defaultValue?: string): Promise<string | null>;

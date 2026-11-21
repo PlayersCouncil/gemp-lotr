@@ -1,0 +1,38 @@
+/* An anchor field (the legacy message card's .sa-row.sa-anchor): label, field, Pick, + Pick, the card's part. */
+
+:host {
+  display: block;
+  margin: 3px 0;
+}
+
+.gd-author-anchor {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.gd-author-anchor__label {
+  flex: 0 0 82px;
+  color: var(--theme-game-author-muted);
+  font-size: 12px;
+  cursor: help;
+}
+
+.gd-author-anchor .gd-author-button {
+  flex: none;
+  margin: 0;
+}
+
+:host([data-picking]) .gd-author-button[aria-pressed='true'] {
+  border-color: var(--theme-game-author-pick-edge);
+}
+
+.gd-author-anchor__part {
+  flex: 0 1 auto;
+  max-width: 120px;
+  padding: 1px 2px;
+}
+
+.gd-author-anchor__either {
+  margin: 2px 0 4px 87px;
+}

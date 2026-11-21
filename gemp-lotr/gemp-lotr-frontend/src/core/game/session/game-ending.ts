@@ -68,8 +68,11 @@ export class GameEnding {
   readonly outcome = computed(() => (this.ended() ? gameOutcome(this.session.model()) : null));
   /** The player's replay; `none` for a spectator. */
   readonly replay = signal<ReplayLink>({ state: 'none' });
-  /** Whether the game's end is shown: opens as the game ends, until the player closes it. */
-  readonly dialogOpen = linkedSignal(() => this.ended());
+  /**
+   * Whether the game's end is shown: opens as the game ends, until the player closes it. Not by itself in a scripted
+   * game (a tutorial, a puzzle), whose end is the scenario's own panel; `show` still opens it there.
+   */
+  readonly dialogOpen = linkedSignal(() => this.ended() && this.session.model().scenario === null);
   private asked = false;
   /** Whether a view shows the replay (the modern theme's dialog): only then does the page ask for it. */
   private readonly wanted = signal(false);

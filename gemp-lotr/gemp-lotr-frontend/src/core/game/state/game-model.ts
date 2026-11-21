@@ -4,6 +4,7 @@
  * data: each event gives a new model, so any state can be checked without a page.
  */
 import { Clocks, Decision, DecisionType, GameStats } from '../protocol/game-events';
+import { ScenarioState } from '../scenario/scenario-state';
 
 /** The decisions asked in the alert box, which frame it. */
 export const ALERT_DECISIONS: readonly string[] = ['CARD_ACTION_CHOICE', 'CARD_SELECTION', 'ASSIGN_MINIONS'];
@@ -145,6 +146,8 @@ export interface GameModel {
   alertAsked: boolean;
   /** How many events have been applied. */
   eventCount: number;
+  /** A scripted game's own state (a scenario: a tutorial, a puzzle); null in an ordinary game. */
+  scenario: ScenarioState | null;
 }
 
 export const NO_CHOICES: LocalChoices = { assignments: {}, selectedCardIds: [], markedCardIds: [], minion: null };
@@ -176,5 +179,6 @@ export function emptyGame(): GameModel {
     closedByEnd: null,
     alertAsked: false,
     eventCount: 0,
+    scenario: null,
   };
 }

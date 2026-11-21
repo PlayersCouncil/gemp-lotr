@@ -23,6 +23,7 @@ import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
 import { compareScreens } from '../compare.mjs';
 import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
 import { compareBoxes } from '../compare.mjs';
+import { acceptedGameProblem } from '../accepted.mjs';
 import { ANGULAR_CONTRACT, cardPoint, LEGACY, readGameBoxes, readGameState } from './controls.mjs';
 import { makeGesture, pointTarget } from './matrix.mjs';
 import { GAME_ID, inPage, routeGame, settled } from './stub-game.mjs';
@@ -271,7 +272,18 @@ function record(name, size, step, base, legacy, angular, labels = ['legacy', 'an
     ...stateDifferences(legacy.state, angular.state),
     ...legacy.problems.map((problem) => `${labels[0]}: ${problem}`),
     ...angular.problems.map((problem) => `${labels[1]}: ${problem}`),
-  ];
+  ].filter(
+    // What the owner accepted (accepted.mjs GAME_ACCEPTED) doesn't count: asked as the game check (run.mjs) words a
+    // problem, "<step>: screen: <n> px differ", so one entry serves both checks (only the legacy and the Angular page
+    // are compared against it, not the Angular page with itself after a reload)
+    (problem) =>
+      labels[0] !== 'legacy' ||
+      !acceptedGameProblem(
+        name,
+        size,
+        `${step}: ${problem.replace(/^screen: (\d+) pixels differ$/, 'screen: $1 px differ')}`,
+      ),
+  );
   fs.writeFileSync(path.join(OUT, `${base}-legacy.png`), legacy.screen);
   fs.writeFileSync(path.join(OUT, `${base}-angular.png`), angular.screen);
   if (screens.image) fs.writeFileSync(path.join(OUT, `${base}-diff.png`), screens.image);

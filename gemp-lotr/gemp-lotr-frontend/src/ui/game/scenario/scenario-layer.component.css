@@ -1,0 +1,401 @@
+/*
+ * What a scripted game draws over the game page (scenario.css of the legacy page): one layer above everything the
+ * page shows in itself (its dialogs, a card's menu), which lets clicks through; only the bubble takes its own.
+ */
+
+.gd-scenario {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  pointer-events: none;
+  font-family: var(--theme-game-scenario-font);
+}
+
+/* While its author picks something on the table, what the layer draws is not in the way of what is behind it */
+.gd-scenario[data-picking] :is(.gd-scenario-bubble, .gd-scenario-pointer) {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* ---- the bubble ---- */
+
+.gd-scenario-bubble {
+  position: absolute;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  width: 330px;
+  max-width: 36vw;
+  pointer-events: auto;
+  border: 2px solid var(--theme-game-scenario-border);
+  border-radius: 10px;
+  background: var(--theme-game-scenario-bg);
+  box-shadow: var(--theme-game-scenario-shadow);
+  color: var(--theme-game-scenario-text);
+  font-size: 15px;
+  line-height: 1.42;
+  /* Out of sight until it has been measured and put in its place */
+  visibility: hidden;
+}
+
+.gd-scenario-bubble[data-placed] {
+  visibility: visible;
+}
+
+.gd-scenario-bubble__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 10px 0 14px;
+  min-height: 14px;
+  color: var(--theme-game-scenario-heading);
+  font-weight: bold;
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+.gd-scenario-bubble[data-headed] .gd-scenario-bubble__head {
+  padding: 9px 12px 3px 14px;
+}
+
+.gd-scenario-bubble__title {
+  flex: 1;
+  font-size: 16px;
+}
+
+/* Most bubbles have no heading: what is left of the head is a slim strip to drag by, with the fold button */
+.gd-scenario-bubble:not([data-headed]) .gd-scenario-bubble__head::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  width: 34px;
+  margin-left: -17px;
+  border-top: 2px dotted var(--theme-game-scenario-grip);
+}
+
+.gd-scenario-bubble__count {
+  color: var(--theme-game-scenario-muted);
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.gd-scenario-bubble__fold {
+  padding: 0 3px;
+  border: 0;
+  background: none;
+  color: var(--theme-game-scenario-muted);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gd-scenario-bubble__fold:hover {
+  color: var(--theme-game-scenario-text);
+}
+
+/* A long message scrolls inside the bubble, so that the button under it stays on the screen */
+.gd-scenario-bubble__body {
+  max-height: calc(100vh - 150px);
+  padding: 3px 14px 11px;
+  overflow-y: auto;
+}
+
+.gd-scenario-bubble__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 0 12px 11px;
+}
+
+.gd-scenario-bubble[data-collapsed] {
+  width: auto;
+}
+
+.gd-scenario-bubble[data-collapsed] :is(.gd-scenario-bubble__body, .gd-scenario-bubble__foot) {
+  display: none;
+}
+
+/* The player is to read on first: the buttons under the message shake (again each time: the two are alike) */
+@keyframes gd-scenario-nudge-a {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.18);
+  }
+  60% {
+    transform: scale(0.96);
+  }
+}
+
+@keyframes gd-scenario-nudge-b {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.18);
+  }
+  60% {
+    transform: scale(0.96);
+  }
+}
+
+.gd-scenario-bubble__foot[data-nudge='0'] .gd-scenario-button {
+  animation: gd-scenario-nudge-a 0.45s ease-in-out;
+}
+
+.gd-scenario-bubble__foot[data-nudge='1'] .gd-scenario-button {
+  animation: gd-scenario-nudge-b 0.45s ease-in-out;
+}
+
+/* The arrow: a triangle on whichever edge faces the thing the bubble is about, level with the thing's middle */
+.gd-scenario-bubble__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 9px solid transparent;
+}
+
+.gd-scenario-bubble__arrow[data-edge='left'] {
+  left: -19px;
+  top: calc(var(--gd-along) - 9px);
+  border-right-color: var(--theme-game-scenario-border);
+}
+
+.gd-scenario-bubble__arrow[data-edge='right'] {
+  right: -19px;
+  top: calc(var(--gd-along) - 9px);
+  border-left-color: var(--theme-game-scenario-border);
+}
+
+.gd-scenario-bubble__arrow[data-edge='top'] {
+  top: -19px;
+  left: calc(var(--gd-along) - 9px);
+  border-bottom-color: var(--theme-game-scenario-border);
+}
+
+.gd-scenario-bubble__arrow[data-edge='bottom'] {
+  bottom: -19px;
+  left: calc(var(--gd-along) - 9px);
+  border-top-color: var(--theme-game-scenario-border);
+}
+
+/* ---- what a message says: the bubble's, and a hint's ---- */
+
+:is(.gd-scenario-bubble__body, .gd-scenario-hint) p {
+  margin: 0 0 8px;
+}
+
+:is(.gd-scenario-bubble__body, .gd-scenario-hint) p:last-child {
+  margin-bottom: 0;
+}
+
+.gd-scenario-bubble__body strong {
+  color: var(--theme-game-scenario-strong);
+}
+
+:is(.gd-scenario-bubble__body, .gd-scenario-hint) .cardHint {
+  border-bottom: 1px dotted var(--theme-game-scenario-link);
+  color: var(--theme-game-scenario-link);
+  cursor: pointer;
+}
+
+/* Culture and twilight icons in a message ([gondor], (4)): the size of the text around them and in line with it */
+:is(.gd-scenario-bubble__body, .gd-scenario-hint) img {
+  display: inline;
+  width: auto;
+  height: 1.15em;
+  margin: 0 0.1em;
+  vertical-align: -0.22em;
+}
+
+/* (the twilight icons are drawn dark, and a message is on a dark ground) */
+:is(.gd-scenario-bubble__body, .gd-scenario-hint) img[src*='/twilight_'] {
+  filter: invert(1);
+}
+
+/* ---- outlines ---- */
+
+/* An outline breathes a little, so that nobody new to the table takes it for part of how the table looks */
+@keyframes gd-scenario-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 9px 1px var(--gd-outline),
+      inset 0 0 8px -2px var(--gd-outline);
+    opacity: 1;
+  }
+  50% {
+    box-shadow:
+      0 0 18px 5px var(--gd-outline),
+      inset 0 0 12px 0 var(--gd-outline);
+    opacity: 0.72;
+  }
+}
+
+/* What to click next is the more urgent of the two: quicker, and dashed */
+@keyframes gd-scenario-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 1px var(--gd-outline);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 16px 5px var(--gd-outline);
+    opacity: 0.75;
+  }
+}
+
+.gd-scenario-outline {
+  --gd-outline: var(--theme-game-scenario-outline);
+  position: absolute;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  box-sizing: border-box;
+  width: var(--gd-width);
+  height: var(--gd-height);
+  border: 3px solid var(--gd-outline);
+  border-radius: 9px;
+  animation: gd-scenario-glow 1.9s ease-in-out infinite;
+}
+
+.gd-scenario-outline[data-look='red'] {
+  --gd-outline: var(--theme-game-scenario-outline-alarm);
+}
+
+.gd-scenario-outline[data-look='green'] {
+  --gd-outline: var(--theme-game-scenario-outline-go);
+}
+
+.gd-scenario-outline[data-look='blue'] {
+  --gd-outline: var(--theme-game-scenario-outline-cool);
+}
+
+.gd-scenario-outline[data-look='next'] {
+  --gd-outline: var(--theme-game-scenario-outline-next);
+  border-style: dashed;
+  animation: gd-scenario-pulse 1.2s ease-in-out infinite;
+}
+
+/* (for whoever has asked their machine for less movement, an outline is still an outline) */
+@media (prefers-reduced-motion: reduce) {
+  .gd-scenario-outline {
+    animation: none;
+  }
+}
+
+/* ---- the line from a bubble to what it is about ---- */
+
+.gd-scenario-pointer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gd-scenario-pointer__edge {
+  stroke: var(--theme-game-scenario-pointer-edge);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.gd-scenario-pointer__line {
+  stroke: var(--theme-game-scenario-heading);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.gd-scenario-pointer__end {
+  fill: var(--theme-game-scenario-heading);
+  stroke: var(--theme-game-scenario-pointer-edge);
+  stroke-width: 1.5;
+}
+
+/* ---- "not now" ---- */
+
+.gd-scenario-hint {
+  position: absolute;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  max-width: 300px;
+  padding: 9px 12px;
+  border: 1px solid var(--theme-game-scenario-quiet-border);
+  border-radius: 8px;
+  background: var(--theme-game-scenario-hint-bg);
+  box-shadow: var(--theme-game-scenario-shadow);
+  color: var(--theme-game-scenario-text);
+  font-size: 14px;
+  line-height: 1.4;
+  visibility: hidden;
+}
+
+.gd-scenario-hint[data-placed] {
+  visibility: visible;
+}
+
+/* ---- a card shown large ---- */
+
+.gd-scenario-zoom {
+  position: absolute;
+  inset: 0;
+  background: var(--theme-game-scenario-zoom-shade);
+}
+
+.gd-scenario-zoom[data-blocks] {
+  pointer-events: auto;
+}
+
+.gd-scenario-zoom__frame {
+  position: absolute;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  width: var(--gd-width);
+  height: var(--gd-height);
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: var(--theme-game-scenario-shadow);
+}
+
+.gd-scenario-zoom__card {
+  position: absolute;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  display: block;
+  width: var(--gd-width);
+  max-width: none;
+  height: var(--gd-height);
+}
+
+.gd-scenario-zoom__dim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--theme-game-scenario-zoom-dim);
+}
+
+.gd-scenario-zoom__mark {
+  position: absolute;
+  left: var(--gd-left);
+  top: var(--gd-top);
+  box-sizing: border-box;
+  width: var(--gd-width);
+  height: var(--gd-height);
+  border: 3px solid var(--theme-game-scenario-outline);
+  border-radius: 8px;
+  box-shadow: 0 0 14px 3px var(--theme-game-scenario-outline);
+}
+
+/* ---- on the table ---- */
+
+/* A card the game would let the player choose, but which the step isn't using: still framed as a legal choice, only
+   quieter. Clicking it says why. */
+gemp-game .gd-card[data-scenario='notnow'] {
+  --gd-card-frame-style: dashed;
+}

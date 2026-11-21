@@ -14,6 +14,7 @@ import { CardViews } from '../../../core/cards/card-views.service';
 import { GameAnimation } from '../../../core/game/session/event-pacing';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { CompactLayout } from '../../../core/platform/compact-layout.service';
+import { pageRight } from '../../shared/page-room';
 
 interface Box {
   left: number;
@@ -313,7 +314,8 @@ export class GameAnimationComponent {
 
   private table(): { width: number; height: number } {
     const window = this.document.defaultView;
-    return { width: window?.innerWidth ?? 0, height: window?.innerHeight ?? 0 };
+    // (what the page leaves of the window, beside a docked panel: see page-room.ts)
+    return { width: (window?.innerWidth ?? 0) - pageRight(this.document), height: window?.innerHeight ?? 0 };
   }
 
   private box(element: Element): Box {

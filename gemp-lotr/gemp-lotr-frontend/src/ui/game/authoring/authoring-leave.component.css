@@ -1,0 +1,28 @@
+/* The question on the way out with unsaved changes (the legacy .sa-leave): in the page's own dialog, as its questions */
+
+.gd-author-leave__text {
+  margin: 0.5em 0 0.8em;
+}
+
+.gd-author-leave__said {
+  margin: 0 0 0.8em;
+  color: var(--theme-game-author-tag-mistake);
+  white-space: pre-wrap;
+}
+
+.gd-dialog__actions {
+  flex: none;
+  display: flex;
+  margin: 0.5em 0 0;
+  padding: 0.3em 0.6em 0.5em 0.4em;
+  border-top: 1px solid var(--theme-content-border);
+}
+
+.gd-dialog__actions .gd-button {
+  margin: 0.5em 0.4em 0.5em 0;
+}
+
+/* "Stay here" stands apart, at the right */
+.gd-dialog__actions [data-action='stay'] {
+  margin-left: auto;
+}

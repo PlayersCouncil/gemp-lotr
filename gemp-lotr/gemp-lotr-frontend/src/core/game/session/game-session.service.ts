@@ -8,6 +8,7 @@ import { GameSettings } from '../settings/game-settings';
 import { eventPauses, EventPause, GameAnimation, speedFactor } from './event-pacing';
 import { emptyGame, GameModel } from '../state/game-model';
 import { assignMinion, clearSelection, decisionAnswered, selectCard, unassignMinion } from '../state/local-choices';
+import { noticeRead, scenarioAnswered, stepRead } from '../scenario/scenario-state';
 import { GameLog } from './game-log';
 import { continuedMessages, GameRestore } from './game-restore';
 
@@ -135,6 +136,10 @@ export class GameSession {
   private replayLaying = false;
 
   private gameId: string | null = null;
+  /** The game the page has open, or null (none yet, or a replay). */
+  get openGame(): string | null {
+    return this.gameId;
+  }
   private channel: string | null = null;
   private polling = false;
   /**
@@ -188,7 +193,8 @@ export class GameSession {
   answer(value: string): void {
     const waiting = this.state().decision;
     if (!waiting || !this.gameId || this.channel === null) return;
-    this.state.update(decisionAnswered);
+    // (a scripted game's step about this decision has had its say)
+    this.state.update((model) => ({ ...decisionAnswered(model), scenario: scenarioAnswered(model.scenario) }));
     this.save();
     const generation = this.generation;
     this.lifetime.write(this.api.answer(this.gameId, this.channel, waiting.decision.id, value), {
@@ -251,8 +257,8 @@ export class GameSession {
    * asking of its own while the decision still waits.
    */
   pollOnce(): void {
-    if (!this.gameId || this.channel === null || this.polling || !this.state().decision || this.replaying()) return;
-    this.poll(true);
+    if (!this.state().decision || this.replaying()) return;
+    this.refresh();
   }
 
   /**
@@ -323,6 +329,25 @@ export class GameSession {
       },
       error: (error: unknown) => this.fail(error),
     });
+  }
+
+  /**
+   * Asks for news once, though a decision may be waiting (when nothing else asks): something outside the game's own
+   * to and fro has made the server send (a scripted game's step read, or rewritten by its author). With news already
+   * asked for, it comes that way.
+   */
+  refresh(): void {
+    if (!this.polling) this.poll(true);
+  }
+
+  /** A scripted game's step that only waited to be read has been read (and the server told). */
+  stepRead(): void {
+    this.change((model) => ({ ...model, scenario: stepRead(model.scenario) }));
+  }
+
+  /** A scripted game's notice that it has left its script has been read. */
+  noticeRead(): void {
+    this.change((model) => ({ ...model, scenario: noticeRead(model.scenario) }));
   }
 
   /** Asks the opponent to cancel the game. */
@@ -461,7 +486,10 @@ export class GameSession {
     this.lifetime.later(() => this.poll(), POLL_DELAY_MS);
   }
 
-  /** `once`: asked over a waiting decision (pollOnce), which goes on asking only once no decision waits any more. */
+  /**
+   * `once`: asked for over a waiting decision (refresh, pollOnce); the asking doesn't go on while that decision still
+   * waits, and goes on only once no decision waits any more.
+   */
   private poll(once = false): void {
     if (!this.gameId || this.channel === null) return;
     this.polling = true;

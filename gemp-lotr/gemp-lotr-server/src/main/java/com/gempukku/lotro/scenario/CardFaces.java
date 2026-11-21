@@ -106,13 +106,25 @@ public final class CardFaces {
      * @return The blueprint of the card a zoom shows; null if it names a site the scenario's path does not have.
      */
     public static String blueprintOf(ScenarioDefinition def, ScenarioDefinition.Zoom zoom) {
-        if (zoom.card() != null)
-            return def.cards.get(zoom.card()).blueprintId();
+        if (zoom.card() != null) {
+            ScenarioDefinition.CardDef card = named(def, zoom.card());
+            return card == null ? null : card.blueprintId();
+        }
         if (zoom.site() != null) {
             List<String> sites = def.sites.get(def.human);
             return sites == null || zoom.site() > sites.size() ? null : sites.get(zoom.site() - 1);
         }
         return zoom.blueprint();
+    }
+
+    /**
+     * One of the scenario's cards by its name: a card of a deck, or a site (sites are named as cards are, and a zoom
+     * or an anchor can be about one: card:site3).
+     * @return Null if the scenario has nothing by that name.
+     */
+    static ScenarioDefinition.CardDef named(ScenarioDefinition def, String alias) {
+        ScenarioDefinition.CardDef card = def.cards.get(alias);
+        return card != null ? card : def.siteCards.get(alias);
     }
 
     /**
@@ -123,6 +135,8 @@ public final class CardFaces {
         if (zoom.image() != null)
             return null;
         String blueprintId = blueprintOf(def, zoom);
+        if (blueprintId == null && zoom.card() != null)
+            return "the scenario has no card or site called '" + zoom.card() + "'";
         if (blueprintId == null)
             return "the scenario's path has no site " + zoom.site();
         LotroCardBlueprint blueprint;
@@ -143,8 +157,11 @@ public final class CardFaces {
      * @return Where a part is on one of the scenario's cards; null if that card has no such part (or does not exist).
      */
     public static double[] region(ScenarioDefinition def, String alias, String part, LotroCardBlueprintLibrary library) {
+        ScenarioDefinition.CardDef card = named(def, alias);
+        if (card == null)
+            return null;
         try {
-            double[] rect = region(frameOf(library.getLotroCardBlueprint(def.cards.get(alias).blueprintId()).getCardType()), part);
+            double[] rect = region(frameOf(library.getLotroCardBlueprint(card.blueprintId()).getCardType()), part);
             return rect == null ? null : rect.clone();
         } catch (CardNotFoundException exp) {
             return null;
@@ -155,9 +172,12 @@ public final class CardFaces {
      * @return What is wrong with pointing at a part of one of the scenario's cards; null if nothing is.
      */
     public static String checkPart(ScenarioDefinition def, String alias, String part, LotroCardBlueprintLibrary library) {
+        ScenarioDefinition.CardDef card = named(def, alias);
+        if (card == null)
+            return "the scenario has no card or site called '" + alias + "'";
         LotroCardBlueprint blueprint;
         try {
-            blueprint = library.getLotroCardBlueprint(def.cards.get(alias).blueprintId());
+            blueprint = library.getLotroCardBlueprint(card.blueprintId());
         } catch (CardNotFoundException exp) {
             return null;    //reported where the card is declared
         }

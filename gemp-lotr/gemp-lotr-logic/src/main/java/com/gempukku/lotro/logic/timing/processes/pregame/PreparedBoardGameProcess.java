@@ -15,6 +15,7 @@ import com.gempukku.lotro.logic.timing.processes.turn.BetweenTurnsProcess;
 public class PreparedBoardGameProcess implements GameProcess {
     private final String _firstPlayer;
     private final PregameSetup _setup;
+    private LotroGame _game;
 
     public PreparedBoardGameProcess(String firstPlayer, PregameSetup setup) {
         _firstPlayer = firstPlayer;
@@ -23,6 +24,7 @@ public class PreparedBoardGameProcess implements GameProcess {
 
     @Override
     public void process(LotroGame game) {
+        _game = game;
         GameState gameState = game.getGameState();
 
         //Nothing is affecting the game at this point (the corruption check stops each player's cards as it goes), and
@@ -38,7 +40,9 @@ public class PreparedBoardGameProcess implements GameProcess {
 
     @Override
     public GameProcess getNextProcess() {
-        return new HandOver(_firstPlayer);
+        //(asked once whatever the arranging left the game waiting on has been answered)
+        GameProcess carriedOn = _setup.carryOn(_game);
+        return carriedOn != null ? carriedOn : new HandOver(_firstPlayer);
     }
 
     /**

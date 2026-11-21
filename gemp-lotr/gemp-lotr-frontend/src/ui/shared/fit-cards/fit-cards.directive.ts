@@ -26,8 +26,8 @@ const CARD_SNAP_X_PROPERTY = '--gd-card-snap-x';
  * (fitCards) and sets it on the box as `--gd-card-height`, with `--gd-card-offset` (the space above the rows when
  * centred, as the legacy groups placed them). The theme decides the rest, through custom properties
  * on the box: `--gd-card-max-height` (largest row height, default 200px), `--gd-card-gap` (space between cards, default
- * 5px) and `--gd-card-fit` (`contain`, the default; `rows`, the classic layout; or `none` for always the largest and
- * scrolling). Read again when the theme changes. `gdFitCardsScale` scales the largest row height (default 1).
+ * 5px), `--gd-card-fit` (`contain`, the default; `rows`, the classic layout; or `none` for always the largest and
+ * scrolling) and `--gd-card-label` (with `contain`: room for a line of text under each row, default 0). Read again when the theme changes. `gdFitCardsScale` scales the largest row height (default 1).
  *
  * Usage: `<div class="gd-collection__cards" [gdFitCards]="cards">` with one FitCard per card in the box (whether it
  * is landscape, and the copies drawn behind it).
@@ -97,6 +97,7 @@ export class FitCardsDirective {
       gap,
       maxHeight: parsePx(style.getPropertyValue('--gd-card-max-height'), 200) * scale,
       fit,
+      label: parsePx(style.getPropertyValue('--gd-card-label'), 0),
     });
     this.host.style.setProperty(CARD_HEIGHT_PROPERTY, `${height}px`);
     this.host.style.setProperty(CARD_OFFSET_PROPERTY, `${offset}px`);

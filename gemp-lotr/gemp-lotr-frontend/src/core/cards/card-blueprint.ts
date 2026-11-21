@@ -28,7 +28,7 @@ const CARD_BACK_BLUEPRINT = '-1_1';
 const DECIPHER_IMAGES = 'https://i.lotrtcgpc.net/decipher/';
 /** Absolute here: the legacy relative "images/..." would resolve against the Angular app's base URL. */
 const FUTURE_PRIZE_IMAGE = siteImage('future_prize.jpg');
-export const RULES_IMAGE = siteImage('rules.png');
+export const RULES_IMAGE = siteImage('rules.jpg');
 
 /** Cards whose errata got a remade image, by set (Card.remadeErratas). */
 const REMADE_ERRATAS: Partial<Record<number, readonly number[]>> = {

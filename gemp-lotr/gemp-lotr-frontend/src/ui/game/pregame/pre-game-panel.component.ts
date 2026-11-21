@@ -1,13 +1,15 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { CardView } from '../../../core/cards/card-view';
 import { CardViews } from '../../../core/cards/card-views.service';
+import { displayName, ScenarioState } from '../../../core/game/scenario/scenario-state';
 import { PreGameInfo } from '../../../core/game/state/game-model';
 import { PreGameCard, preGameView } from '../../../core/game/table/pre-game';
 import { CardComponent } from '../../shared/card/card.component';
 
 /**
  * What the page shows until the game starts: the table's summary (format, timer) with two reminders, then "you" and
- * "them": each name, the cards shown beforehand (a map, meta-sites) and, for the player, the deck's notes.
+ * "them": each name, the cards shown beforehand (a map, meta-sites) and, for the player, the deck's notes. In a scripted
+ * game the opponent is named as the scenario names it (the game's own opening is played under this panel).
  *
  * DOM contract: `gd-game-pregame` holding `.gd-game-pregame__summary` and `.gd-game-pregame__sides` with two
  * `.gd-game-pregame__side` (`data-side` left, right), each a `.gd-game-pregame__name` and a
@@ -21,7 +23,7 @@ import { CardComponent } from '../../shared/card/card.component';
     <div class="gd-game-pregame__summary" [innerHTML]="view().summary"></div>
     <div class="gd-game-pregame__sides">
       <div class="gd-game-pregame__side" data-side="left">
-        <div class="gd-game-pregame__name">{{ view().left.name }}</div>
+        <div class="gd-game-pregame__name">{{ shown(view().left.name) }}</div>
         <div class="gd-game-pregame__content">
           @if (leftCards().length > 0) {
             <div class="gd-game-pregame__cards">
@@ -37,7 +39,7 @@ import { CardComponent } from '../../shared/card/card.component';
       </div>
       <div class="gd-game-pregame__versus">VS</div>
       <div class="gd-game-pregame__side" data-side="right">
-        <div class="gd-game-pregame__name">{{ view().right.name }}</div>
+        <div class="gd-game-pregame__name">{{ shown(view().right.name) }}</div>
         <div class="gd-game-pregame__content">
           @if (rightCards().length > 0) {
             <div class="gd-game-pregame__cards">
@@ -53,12 +55,18 @@ import { CardComponent } from '../../shared/card/card.component';
 })
 export class PreGamePanelComponent {
   readonly info = input.required<PreGameInfo>();
+  /** The scripted game's state, if this is one (GameModel.scenario). */
+  readonly scenario = input<ScenarioState | null>(null);
 
   private readonly views = inject(CardViews);
 
   protected readonly view = computed(() => preGameView(this.info()));
   protected readonly leftCards = computed(() => this.view().left.cards.map((card) => this.cardView(card)));
   protected readonly rightCards = computed(() => this.view().right.cards.map((card) => this.cardView(card)));
+
+  protected shown(name: string): string {
+    return displayName(this.scenario(), name);
+  }
 
   private cardView(card: PreGameCard): CardView {
     return this.views.create({

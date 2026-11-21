@@ -230,6 +230,21 @@ describe('game XML', () => {
     });
   });
 
+  it("reads a scripted game's word to the player from its JSON, the pictures in it from the legacy pages", () => {
+    const json = '{"type":"offscript","message":"<img src=\'images/x.png\'/>"}'
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    expect(parse(`type="S" scenario="${json}"`)).toEqual({
+      type: 'S',
+      scenario: { type: 'offscript', message: "<img src='/gemp-lotr/images/x.png'/>" },
+    });
+    // One the page can't read is still an S event, with nothing in it
+    expect(parse('type="S" scenario="{oops"')).toEqual({ type: 'S', scenario: null });
+    expect(parse('type="S"')).toEqual({ type: 'S', scenario: null });
+  });
+
   it('skips what it does not know: an event type, a decision type', () => {
     expect(parse('type="CM"')).toBeNull();
     expect(parse('type="D" decisionType="SOMETHING_NEW"')).toBeNull();

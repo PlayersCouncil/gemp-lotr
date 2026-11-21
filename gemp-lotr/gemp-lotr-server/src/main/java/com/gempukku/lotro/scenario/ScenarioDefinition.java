@@ -18,7 +18,7 @@ import java.util.Set;
 public final class ScenarioDefinition {
     public enum Kind { TUTORIAL, PUZZLE, SANDBOX }
     public enum Coverage { STRICT, GUIDED }
-    public enum Fallback { FAIL, PASS, BOT }
+    public enum Fallback { FAIL, PASS, BOT, SANDBOX }
     public enum RngDefault { IDENTITY, RANDOM }
     public enum RunnerLevel { SETUP, PREFIX, SOLUTION, FULL }
 
@@ -45,6 +45,20 @@ public final class ScenarioDefinition {
      * scripted opponent is never asked: it only gets a choice of actions when it has one to make.)
      */
     public Set<Phase> autoPass = EnumSet.noneOf(Phase.class);
+    /**
+     * options.autoPass written for each role ({ freeps: [...], shadow: [...] }): the phases the person is passed
+     * through while they are the Free Peoples player (their own turn), and while they are the Shadow player (the
+     * other seat's turn, in a two-sided game).  Null when autoPass is written as one list, which holds whatever role
+     * the person is playing (autoPass above).
+     */
+    public Map<com.gempukku.lotro.common.Side, Set<Phase>> autoPassByRole;
+
+    /** The phases the person is passed through while playing a role: autoPassByRole's, or the one list. */
+    public Set<Phase> autoPassFor(com.gempukku.lotro.common.Side role) {
+        if (autoPassByRole == null)
+            return autoPass;
+        return autoPassByRole.getOrDefault(role, EnumSet.noneOf(Phase.class));
+    }
     /**
      * Whether a click that completes a choice is sent at once, without a Done to confirm it.  It is fixed for the
      * game, whatever the person's own setting is, so that the scenario's text can say what will happen.
@@ -95,6 +109,21 @@ public final class ScenarioDefinition {
     public final Map<Seat, String> rules = new EnumMap<>(Seat.class);
     /** The Free Peoples seat takes every turn; the Shadow seat never gets a turn of its own. */
     public boolean oneSided = false;
+    /**
+     * In a one-sided game (rules.markers: together): the Shadow seat's marker, which never moves of itself there,
+     * keeps level with the fellowship's, so that the sites behind them both can be controlled.  False: it stays
+     * where it is put (site 1, setup.startAt.opponentSite, or do: marker(...)), as it always has.
+     */
+    public boolean markersTogether = false;
+
+    /**
+     * Whose characters the opponent's leftovers (and the sandbox's assigning) go to: the fellowship it assigns minions
+     * against.  In a one-sided game that is the Free Peoples seat's, whoever sits there (as it always was); in a
+     * two-sided game it is the person's, the opponent assigning as the Shadow player on the person's turns.
+     */
+    public Seat leftoversSeat() {
+        return oneSided ? Seat.FREEPS : human;
+    }
 
     public final Setup setup = new Setup();
     public final List<RngEntry> rng = new ArrayList<>();
@@ -133,6 +162,63 @@ public final class ScenarioDefinition {
         public final Map<String, Integer> tokens = new LinkedHashMap<>();
         public int burdens = 0;
         public int threats = 0;
+        /**
+         * setup.opening: game.  The game's own opening is played, as decisions the script answers (the bid, the
+         * choice of going first, the starting fellowships, the mulligans), in place of the board being laid out: the
+         * decks are the declared cards in the declared order (with setup.<seat>.deck on top), and nothing else of
+         * the setup is said.  False (opening: board, the default): the board is prepared as the setup says.
+         */
+        public boolean realOpening = false;
+
+        /*
+         * Where the story has got to when the game begins (setup.startAt, and setup.twilight).  A game that begins
+         * anywhere but the start of turn 1 at site 1 is carried on from there, not begun: see lateStart.
+         */
+        /** The site the fellowship whose turn it is (the Free Peoples seat's) is at. */
+        public int site = 1;
+        /** The Shadow seat's marker; null for the default (see opponentSite(def)). */
+        public Integer opponentSite;
+        /** What is in the twilight pool when play begins. */
+        public int twilight = 0;
+        /** How many times the fellowship has moved this turn already; null for the default (see moves()). */
+        public Integer moves;
+        /** Free Peoples character -> the minions it is assigned to skirmish, for a start at the assignments or skirmishes. */
+        public final Map<String, List<String>> skirmishes = new LinkedHashMap<>();
+        /** The sites each seat controls when the game begins: site numbers or sites' names, as written. */
+        public final Map<Seat, List<String>> controlled = new EnumMap<>(Seat.class);
+        /**
+         * The sites on the adventure path when the game begins, by name, site 1 first, where it matters whose they are
+         * (a card that cares who played a site).  Empty, and past its end: the Free Peoples seat's own sites.
+         */
+        public final List<String> path = new ArrayList<>();
+
+        /** Where the Shadow seat's marker is when the game begins. */
+        public int opponentSite(ScenarioDefinition def) {
+            if (opponentSite != null)
+                return opponentSite;
+            return def.oneSided && def.markersTogether ? site : 1;
+        }
+
+        /** How many moves the fellowship has made this turn when the game begins. */
+        public int moves() {
+            return moves != null ? moves : defaultMoves();
+        }
+
+        /** One move (to the site it is at) once the Fellowship phase is over; none before. */
+        public int defaultMoves() {
+            return phase == Phase.FELLOWSHIP ? 0 : 1;
+        }
+
+        /**
+         * Whether the game begins further on than the very start: on a later turn or site, past the start of the
+         * Fellowship phase, with twilight in the pool or skirmishes assigned.  Such a game is carried on from where it
+         * is (ScenarioTable.carryOn), and nothing the story has already been through happens again: no start of turn
+         * (so no sanctuary healing), no moving to the site the fellowship is at.
+         */
+        public boolean lateStart() {
+            return turn != 1 || phase != Phase.FELLOWSHIP || site != 1 || twilight != 0 || moves() != defaultMoves()
+                    || !skirmishes.isEmpty();
+        }
     }
 
     public enum RngKind { SHUFFLE, PICK }
@@ -154,6 +240,12 @@ public final class ScenarioDefinition {
         public String text;
         public Phase phase;
         public Integer turn;
+        /**
+         * The role the seat being asked plays at that moment, written as(freeps) or as(shadow): the Free Peoples
+         * player is the one whose turn it is.  (A seat is a chair: in a two-sided game each seat plays both roles,
+         * one on its own turns and the other on the other seat's.)  Null for either.
+         */
+        public com.gempukku.lotro.common.Side role;
         /** Which skirmish of the turn is being fought, counting from 1. */
         public Integer skirmish;
         /** A card that has to be among the decision's options. */
@@ -179,10 +271,23 @@ public final class ScenarioDefinition {
         public boolean opening;
         /** How it was written, for reports. */
         public String source = "";
+        /** What the decision has to be for (see DecisionKinds): nextSkirmish, archeryWound and the like. */
+        public List<DecisionKinds.Kind> kinds = new ArrayList<>();
+        /** What it must not be for: not(nextSkirmish). */
+        public List<DecisionKinds.Kind> notKinds = new ArrayList<>();
 
         public boolean isEmpty() {
-            return seat == null && decision == null && text == null && phase == null && turn == null
-                    && skirmish == null && offers == null && fighting == null && after == null && require == null && !opening;
+            return seat == null && decision == null && text == null && phase == null && turn == null && role == null
+                    && skirmish == null && offers == null && fighting == null && after == null && require == null && !opening
+                    && kinds.isEmpty() && notKinds.isEmpty();
+        }
+
+        /** Whether a decision that is (or is not, for null) of a kind fits what this says of kinds. */
+        public boolean fitsKind(DecisionKinds.Kind kind) {
+            for (DecisionKinds.Kind wanted : kinds)
+                if (wanted != kind)
+                    return false;
+            return kind == null || !notKinds.contains(kind);
         }
     }
 
@@ -239,9 +344,24 @@ public final class ScenarioDefinition {
      * A standing order: what the opponent does whenever it is asked something that no step covers and this fits.
      * Orders are tried in the order they are written, and the first whose answer the decision offers is taken.
      */
-    public record Order(When when, List<Answer> answers, String source) { }
+    public record Order(When when, List<Answer> answers, String source, boolean once, String note, String id) {
+        public Order(When when, List<Answer> answers, String source) {
+            this(when, answers, source, false, null, null);
+        }
 
-    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW, ORDER }
+        /** What the order is called in reports: its name if it has one, otherwise its place among the orders (from 1). */
+        public String label(int place) {
+            return id == null ? "order " + place : "order " + place + " (" + id + ")";
+        }
+    }
+
+    public enum DoKind { MOVE, ATTACH, STACK, WOUND, HEAL, TWILIGHT, BURDENS, THREATS, TOKENS, DRAW, ORDER,
+        /** A seat's marker put on a site: target the seat, amount the site's number. */
+        MARKER,
+        /** A site controlled by a seat: card the site's name (or null), amount its number (or 0), target the seat. */
+        CONTROL,
+        /** A controlled site controlled by nobody again: card the site's name (or null), amount its number (or 0). */
+        LIBERATE }
 
     /**
      * Something the director does to the board directly.
@@ -349,6 +469,13 @@ public final class ScenarioDefinition {
         public Moment on;
         /** A card to show large while this message is up; null for none. */
         public Zoom zoom;
+        /**
+         * Card-definition requirements (JSON array text) that have to hold for the message to be said; null for
+         * always.  They are looked at when the step is put up (see ScenarioDirector.render), which for a message
+         * tied to a moment ('on') is the same as when its moment comes: nothing in the game changes while the
+         * player builds their answer.  A 'once' message is said the first time its step applies with them holding.
+         */
+        public String require;
     }
 
     public static final class Allow {
@@ -424,6 +551,11 @@ public final class ScenarioDefinition {
          * every decision that fits it (and shows its messages at the first).
          */
         public boolean once;
+        /**
+         * Answers the step's 'allow' has to refuse, for the headless runner to prove (see Refusal).  A live game
+         * takes no notice of them.
+         */
+        public List<Refusal> refuses = new ArrayList<>();
 
         public boolean repeats() {
             return until != null;
@@ -451,6 +583,17 @@ public final class ScenarioDefinition {
         }
     }
 
+    /**
+     * An answer that a step's 'allow' must refuse: "refuses: choose(boromir)".  The runner checks, at the step's
+     * decision, that the game offers the answer and that the step does not allow it (the page would not let the
+     * player give it).
+     * @param at Which of the step's decisions it is about, counting from 1 ("refuses: 2: choose(boromir)", for the
+     *           second arrow of an archery step that repeats); 0 for every decision of the step, of which the game
+     *           has to offer it at one at least.
+     * @param source The line as it was written, its "2: " included.
+     */
+    public record Refusal(int at, Answer answer, String source) { }
+
     public enum OffScriptResult { RESTART, FAIL, CONTINUE }
 
     public static final class Outcome {
@@ -461,7 +604,44 @@ public final class ScenarioDefinition {
         public String loseMessage;
         public String offScriptMessage;
         public OffScriptResult offScriptResult = OffScriptResult.RESTART;
+        /** Closing messages said when 'win' comes true, as a step's end.messages are. */
+        public List<Message> winMessages = new ArrayList<>();
+        /** Closing messages said when 'lose' comes true (loseMessage, if there is one, is said after them, as it always was). */
+        public List<Message> loseMessages = new ArrayList<>();
+        /**
+         * How the scenario ends when the game itself ends with the person winning it (the Ring-bearer they are hunting
+         * killed or corrupted, their fellowship surviving its last site): what it counts as, and what is said.  Null
+         * for as before: complete, and nothing said.
+         */
+        public End gameWon;
+        /**
+         * The same when the game ends with the person losing it (their Ring-bearer killed or corrupted, the other
+         * fellowship surviving).  Null for as before: failed, with loseMessage.
+         */
+        public End gameLost;
     }
+
+    /* ---- the opponent's answering by rule (assign by rule, leftovers, the sandbox) ---- */
+
+    /**
+     * In assign(...): "every minion still unassigned", written rest or all, in place of a character's minions.  (The
+     * sentinels begin with a character no card's name can have, so that a card called "rest" is still that card.)
+     */
+    public static final String REST = "~rest";
+    /** In assign(...) and opponent.leftovers: whichever character is the Free Peoples player's Ring-bearer. */
+    public static final String RING_BEARER = "~ringBearer";
+
+    /**
+     * opponent.leftovers: the character the opponent assigns every minion still unassigned to, after whatever a step
+     * or one of its orders assigns, and when nothing answers its assignment at all: a card's name, or RING_BEARER.
+     * Null for none (the old way: what is not assigned stays unassigned).
+     */
+    public String leftovers;
+    /**
+     * opponent.plays, for the sandbox fallback: the cards it may play, in the order it tries them (minions first
+     * whatever the order).  Empty for every Shadow card it has.
+     */
+    public final List<String> sandboxPlays = new ArrayList<>();
 
     /**
      * @param label A step's label, as given by Step.label().
