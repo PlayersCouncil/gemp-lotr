@@ -112,6 +112,27 @@ describe('HallSession', () => {
     expect(chat.stopped()).toBe(false);
   });
 
+  it('starts once, keeps the built-in chat when the player cannot be had, and leaves a running hall as it is', async () => {
+    await session.begin(true);
+    expectStarted();
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush('', { status: 500, statusText: 'Error' });
+    await settle();
+    expect(chat.discord()).toBe(false);
+
+    await session.begin(true);
+    backend.expectNone((r) => r.url.includes('/chat/') || r.url.endsWith('/hall'));
+
+    // found logged out while the hall runs: its own poll and chat say so, not this
+    const begun = session.begin(false);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/player')
+      .flush('', { status: 401, statusText: 'Unauthorized' });
+    await begun;
+    expect(session.loggedOut()).toBe(true);
+    expect(comms.connection().state).not.toBe('loggedout');
+    expect(chat.lines()).toEqual([]);
+  });
+
   it('starts anyway when the player could not be asked', async () => {
     const begun = session.begin(false);
     backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush('', { status: 500, statusText: 'Error' });

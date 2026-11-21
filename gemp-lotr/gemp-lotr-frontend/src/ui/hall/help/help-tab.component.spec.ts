@@ -52,6 +52,16 @@ describe('the Help tab (help.routes)', () => {
     expect(Element.prototype.scrollIntoView).toHaveBeenCalled();
   });
 
+  it('scrolls to the Manual when #manual is added while the page shows', async () => {
+    const { harness } = await open('/help/how-to-play');
+    const scroll = vi.mocked(Element.prototype.scrollIntoView);
+    expect(scroll).not.toHaveBeenCalled();
+    await harness.navigateByUrl('/help/how-to-play#manual');
+    await harness.fixture.whenStable();
+    expect(scroll).toHaveBeenCalledTimes(1);
+    expect(scroll.mock.contexts[0]).toBe(harness.routeNativeElement!.querySelector('#manual'));
+  });
+
   it('shows the prose pages with the legacy wording and fixed markup', async () => {
     const { harness, el } = await open('/help/conduct');
     expect(el.querySelector('gd-conduct h2')?.textContent).toBe("Don't Cheat");

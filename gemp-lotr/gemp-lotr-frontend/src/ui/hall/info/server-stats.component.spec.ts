@@ -6,6 +6,7 @@ import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { Notifier } from '../../../core/notifier/notifier';
 import { FakeNotifier, provideFakeNotifier } from '../../../testing/fake-notifier';
 import { readServerResponse } from '../../../testing/files';
+import { Timers } from '../../../core/platform/timers';
 import { INFO_ROUTES } from './info.routes';
 
 describe('ServerStatsComponent', () => {
@@ -98,5 +99,65 @@ describe('ServerStatsComponent', () => {
       'No competitive games in this period.',
       'No casual games in this period.',
     ]);
+  });
+
+  describe('coming back after a while (GempHallTabs.onReturn)', () => {
+    let now: number;
+
+    async function openAt() {
+      now = new Date(2026, 10, 20, 12).getTime();
+      TestBed.configureTestingModule({
+        providers: [
+          provideGempHttp(),
+          provideHttpClientTesting(),
+          provideFakeNotifier(),
+          provideRouter([{ path: 'info', children: INFO_ROUTES }]),
+          {
+            provide: Timers,
+            useValue: {
+              now: () => now,
+              after: (ms: number, callback: () => void) => setTimeout(callback, ms),
+              clear: (handle: ReturnType<typeof setTimeout> | null) => clearTimeout(handle ?? undefined),
+            },
+          },
+        ],
+      });
+      const harness = await RouterTestingHarness.create();
+      await harness.navigateByUrl('/info/stats');
+      backend = TestBed.inject(HttpTestingController);
+      await answer(harness);
+      return harness;
+    }
+
+    it('fetches the stats shown again, for the same dates, when the viewer comes back to the sub-tab after 10 s', async () => {
+      const harness = await openAt();
+      (harness.routeNativeElement as HTMLElement).querySelector<HTMLInputElement>('.gd-stats__start')!.value =
+        '2026-1-1';
+      await harness.navigateByUrl('/info/about');
+      now += 9000;
+      await harness.navigateByUrl('/info/stats');
+      backend.expectNone((req) => req.url.endsWith('/stats'));
+      await harness.navigateByUrl('/info/about');
+      now += 10000;
+      await harness.navigateByUrl('/info/stats');
+      const request = await answer(harness);
+      expect(request.request.params.get('startDay')).toBe('2026-10-20');
+    });
+
+    it('fetches them again when the window comes back after 10 s', async () => {
+      const harness = await openAt();
+      window.dispatchEvent(new Event('blur'));
+      harness.detectChanges();
+      now += 3000;
+      window.dispatchEvent(new Event('focus'));
+      harness.detectChanges();
+      backend.expectNone((req) => req.url.endsWith('/stats'));
+      window.dispatchEvent(new Event('blur'));
+      harness.detectChanges();
+      now += 10000;
+      window.dispatchEvent(new Event('focus'));
+      harness.detectChanges();
+      await answer(harness);
+    });
   });
 });

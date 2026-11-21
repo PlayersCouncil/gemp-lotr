@@ -51,6 +51,12 @@ describe('patch notes (GET /patchnotes, /patchnotes/months)', () => {
     expect(plain.notes[0]?.summaryMarkup).toEqual([{ kind: 'text', text: 'Plain :x: text' }]);
   });
 
+  it('skips an update without a name', () => {
+    expect(
+      parsePatchNotesPage({ notes: [{ slug: '' }, { title: 'x' }, { slug: 'a' }] }).notes.map((n) => n.slug),
+    ).toEqual(['a']);
+  });
+
   it('reads a damaged page as an empty one', () => {
     expect(parsePatchNotesPage(null)).toEqual({
       total: 0,

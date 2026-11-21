@@ -14,6 +14,8 @@ import {
   CHAT_CONNECTION_LOST,
   CHAT_INACTIVE,
   CHAT_NOT_LOGGED_IN,
+  chatProblem,
+  STATUS_IGNORE_FAILED,
   STATUS_INCOGNITO,
   STATUS_NOT_IN_CHAT,
 } from './chat-messages';
@@ -243,6 +245,57 @@ describe('ChatService', () => {
     await settle();
     expect(chat.userListStatus()).toBe(STATUS_NOT_IN_CHAT);
     expect(chat.users()[0].incognito).toBe(true);
+    poll();
+    chat.stop();
+  });
+
+  it('says why the ignore list could not change: known failures in the status line, others in the chat', async () => {
+    create();
+    joined();
+    let done = chat.toggleIgnore('erin');
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/player/ignores/add')
+      .flush('', { status: 500, statusText: 'Server Error' });
+    await done;
+    await settle();
+    expect(chat.userListStatus()).toBe(STATUS_IGNORE_FAILED);
+    expect(chat.ignored()).toEqual(['Carol']);
+
+    done = chat.toggleIgnore('erin');
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/player/ignores/add')
+      .flush('', { status: 418, statusText: 'Teapot' });
+    await done;
+    await settle();
+    expect(chat.lines().at(-1)?.html).toBe(chatProblem(418));
+    poll();
+    chat.stop();
+  });
+
+  it('puts an unknown incognito failure in the chat', async () => {
+    create();
+    joined();
+    const done = chat.setIncognito(true);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/player/incognito')
+      .flush('', { status: 418, statusText: 'Teapot' });
+    await done;
+    await settle();
+    expect(chat.lines().at(-1)?.html).toBe(chatProblem(418));
+    expect(chat.users()[0].incognito).toBe(false);
+    poll();
+    chat.stop();
+  });
+
+  it('joins once when started again while open, and leaves the ignore list unknown when it cannot be had', () => {
+    create();
+    chat.start();
+    chat.start();
+    join().flush(readServerResponse('chat.xml'));
+    ignores().flush('', { status: 500, statusText: 'Server Error' });
+    expect(chat.ignored()).toBeNull();
+    expect(chat.lines().some((l) => l.html === chatProblem(500))).toBe(false);
+    vi.advanceTimersByTime(CHAT_POLL_DELAY_MS);
     poll();
     chat.stop();
   });

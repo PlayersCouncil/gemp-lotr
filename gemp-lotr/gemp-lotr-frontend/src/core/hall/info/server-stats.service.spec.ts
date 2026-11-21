@@ -103,4 +103,22 @@ describe('ServerStatsService', () => {
     await service.refresh();
     backend.expectNone(URL);
   });
+
+  it('keeps only the latest answer when Display Stats is pressed again', async () => {
+    const first = service.display();
+    const stale = backend.expectOne((req) => req.url === URL);
+    service.period.set('day');
+    const second = service.display();
+    await answer('2026-10-20', 'day');
+    await second;
+    stale.flush(JSON.stringify({ ActivePlayers: 99 }));
+    await first;
+    expect(service.shown()).toEqual({ startDay: '2026-10-20', period: 'day' });
+    expect(service.stats()?.activePlayers).toBe(34);
+  });
+
+  it('sorts nothing before the first stats', () => {
+    service.sortBy('casual', 'Format');
+    expect(service.sorts()).toEqual({ competitive: null, casual: null });
+  });
 });

@@ -251,4 +251,35 @@ describe('PatchNotesService', () => {
     expect(last().span).toEqual({ slug: '2026-09-27-hall-overhaul' });
     expect(last().tag).toBeNull();
   });
+
+  it('pages and steps through months only once a page is shown', async () => {
+    await notes.step(1);
+    await notes.jumpMonth(-1);
+    expect(api.calls).toEqual([]);
+    expect(api.monthCalls).toEqual([]);
+  });
+
+  it('fetches the months first when "<" is pressed before they came, and stays when they cannot be had', async () => {
+    void notes.show(null, false);
+    await answer(newest());
+    api.monthCalls[0]?.reject(500);
+    await flush();
+    void notes.jumpMonth(-1);
+    expect(api.monthCalls).toHaveLength(2);
+    api.monthCalls[1]?.resolve(MONTHS);
+    await flush();
+    expect(last().span).toEqual({ slug: '2026-09-30' });
+    await answer(SECOND_PAGE);
+    api.monthCalls.length = 0;
+    // the months are forgotten with the filter: another tag, then "<" with its months failing
+    void notes.setTag('PC Updates');
+    await answer(newest());
+    api.monthCalls[0]?.reject(0);
+    await flush();
+    const calls = api.calls.length;
+    void notes.jumpMonth(1);
+    api.monthCalls[1]?.reject(0);
+    await flush();
+    expect(api.calls).toHaveLength(calls);
+  });
 });
