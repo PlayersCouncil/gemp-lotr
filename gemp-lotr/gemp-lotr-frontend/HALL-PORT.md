@@ -48,6 +48,69 @@ has its own, drawn with the theme's values.
    legacy pages are `hall-legacy.html` and `login-legacy.html`; the share pages lead to the app's routes; the Admin
    tab is a link to `hall-legacy.html?admin=1#admin`. Still to do: `visual-check/hall`.
 
+## For Ketura to review
+
+Where the Angular hall knowingly does something other than the legacy hall did. Each part's `README.md` under
+`src/core/hall/` has the detail.
+
+### Legacy bugs fixed
+
+- **Tournaments, the "Round:" line**: the legacy code compared the stage with "Playing games" while the server sends
+  "Playing Games", so the line never showed. It shows now.
+- **Calendar**: an answer for a month the viewer had already left was drawn under the newer month's title; it is
+  dropped. A failure other than 400/401 went to the hall's "Server error" dialog; it shows in the calendar.
+- **Leagues**: a join that failed with anything but 409 said nothing; it shows the error.
+- **Announcements**: Dismiss also snoozed the announcement; it only dismisses. Several Race to Mount Doom moves were
+  drawn one over another, so only the last was seen; they show one after another.
+- **Row buttons** (Leave, Start, Ready, Abandon): a failure over HTTP shows an "Error" dialog in the tables' wording,
+  not the hall's "Server error" dialog.
+- **Loading errors** on Help, Server Info, My Game History and My Stats: a status the legacy code didn't name left
+  "Loading..." on screen (and popped "Server error"); the page says it is unavailable.
+- **My Account's pocket** was drawn once, when the tab loaded; it follows the hall's latest answer.
+- **PC Errata**: a link to an original with both a PC and a playtest errata always showed the first; it shows the one
+  the link's filters list. `&nbsp;` and the like in game text read as characters.
+- **Hall connection readout**: its popup could reopen after Escape; it stays closed.
+- **Login page**: the two ban messages' Discord links had a broken quote and linked nowhere; they are links.
+- **Server text shown as HTML** (player names, deck and format names, standings): all drawn as text now.
+- **Static pages**: the invalid markup in What Are Leagues? and About is put right; the wording is unchanged.
+
+### Behaviour that changed on purpose
+
+- **The start page** sends a logged-in player straight to the hall; the legacy one always showed the login form.
+- **After logging in** the player comes back to the page that sent them (the deck builder or a game too), not always
+  the hall.
+- **Unknown addresses under `/gemp-lotr/ng/`** open the hall; they used to open the deck builder.
+- **Share** copies with the Clipboard API only. On a page served over plain http the link is shown to copy by hand;
+  over https it copies as before.
+- **Delivery headers** are read on every server answer, and the leagues are fetched when Play > League opens, not on
+  every Play.
+- **Game page chat** (it shares the hall's chat code now): an unmapped status reads "Unknown chat problem occurred
+  (error=N)" as on the legacy page, its polls time out after the legacy 20 s, and an unreadable answer stops the chat
+  quietly.
+- **Help > PC Errata** opened bare comes back as it was left; the legacy bare link cleared the filters.
+
+### Wording that is new
+
+- "Could not load your stats. Please try again later." (My Stats; the legacy page showed nothing.)
+- "Could not load your game history. Please try again later." (My Game History, for a failure the legacy page left
+  on "Loading...".)
+- The alt texts "gold" and "silver" on the pocket's coins.
+- "< Back to the Game Hall" on the legacy hall when it is open for its Admin tab alone.
+
+### What looks different
+
+- Sections, drawers and the Play overlay's screens open and close at once; the legacy hall animated them (200 to
+  250 ms). Updated rows don't flash their border.
+- The card dialog is the app's own, titled "Card Information"; the legacy preview showed the card's name.
+- Four old patch notes (2021-12-24, 2022-07-07, 2022-08-19, 2022-12-21) lose their inline colours.
+- In "New items" and Race to Mount Doom dialogs the cards are plain pictures, with no zoom or details.
+- Small offsets (a few px) remain in places; `visual-check/hall` lists them.
+
+### Suggestions not taken, for a decision
+
+- Contribute and About links open in the same tab, as today; a new tab would match the hall's other outside links.
+- The register form has no way back to the login form, as today (the button exists and is hidden).
+
 ## Later
 
 Left out of the port on purpose. Each stays as it is until it is taken up.
