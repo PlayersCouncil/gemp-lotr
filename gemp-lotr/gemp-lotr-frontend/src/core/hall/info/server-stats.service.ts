@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, Injector, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiError } from '../../api/api-error';
 import { Notifier } from '../../notifier/notifier';
@@ -18,7 +18,8 @@ import { ServerStatsApi } from './server-stats-api.service';
 @Injectable()
 export class ServerStatsService {
   private readonly api = inject(ServerStatsApi);
-  private readonly notifier = inject(Notifier);
+  /** The Notifier is asked for when there is something to say (the page's own, from the app). */
+  private readonly injector = inject(Injector);
   private readonly timers = inject(Timers);
   private seq = 0;
 
@@ -49,7 +50,7 @@ export class ServerStatsService {
       stats = await firstValueFrom(this.api.stats(query.startDay, query.period));
     } catch (error) {
       if (seq === this.seq && ApiError.from(error).is(400)) {
-        await this.notifier.alert(INVALID_PARAMETER);
+        await this.injector.get(Notifier).alert(INVALID_PARAMETER);
       }
       return;
     }

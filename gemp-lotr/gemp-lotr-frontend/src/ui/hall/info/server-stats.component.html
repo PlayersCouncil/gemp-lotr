@@ -1,0 +1,68 @@
+<p class="gd-stats__note">{{ words.STATS_TIMEZONE_NOTE }}</p>
+<div class="gd-stats__params">
+  <span>
+    {{ words.START_DATE_LABEL }}
+    <input
+      class="gd-stats__start"
+      type="text"
+      [attr.aria-label]="words.START_DATE_LABEL"
+      [value]="stats.startDay()"
+      (input)="setStart($event)"
+    />
+  </span>
+  <span>
+    {{ words.PERIOD_LABEL }}
+    <select class="gd-stats__period" [attr.aria-label]="words.PERIOD_LABEL" (change)="setPeriod($event)">
+      @for (period of periods; track period) {
+        <option [value]="period" [selected]="period === stats.period()">{{ period }}</option>
+      }
+    </select>
+  </span>
+  <input class="gd-stats__display" type="button" [value]="words.DISPLAY_STATS" (click)="stats.display()" />
+</div>
+<div class="gd-stats__period-title">
+  {{ words.STATS_FOR }} <span class="gd-stats__start-date">{{ stats.stats()?.startDate }}</span> -
+  <span class="gd-stats__end-date">{{ stats.stats()?.endDate }}</span>
+</div>
+<div class="gd-stats__figure" data-figure="active-players">
+  {{ words.ACTIVE_PLAYERS }} <span>{{ stats.stats()?.activePlayers }}</span>
+</div>
+<div class="gd-stats__figure" data-figure="games">
+  {{ words.GAMES_COUNT }} <span>{{ stats.stats()?.gamesCount }}</span>
+</div>
+<div class="gd-stats__figure" data-figure="bot-games">
+  {{ words.BOT_GAMES_COUNT }} <span>{{ stats.stats()?.botGamesCount }}</span> {{ words.BOT_GAMES_NOTE }}
+</div>
+@for (table of tables(); track table.group; let last = $last) {
+  <h2 class="gd-stats__caption" [attr.data-group]="table.group">{{ captions[table.group] }}</h2>
+  <table class="gd-stats__table" [attr.data-group]="table.group">
+    <thead>
+      <tr>
+        @for (column of table.columns; track column.key) {
+          <th scope="col" [attr.aria-sort]="sortOf(table, column.key)">
+            <button type="button" class="gd-stats__sort" (click)="stats.sortBy(table.group, column.key)">
+              {{ column.title
+              }}<span class="gd-stats__sort-mark" aria-hidden="true">{{ mark(table, column.key) }}</span>
+            </button>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of table.rows; track $index) {
+        <tr>
+          @for (column of table.columns; track column.key) {
+            <td>{{ cell(row, column.key) }}</td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td class="gd-stats__empty" [attr.colspan]="table.columns.length">{{ table.emptyText }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  @if (!last) {
+    <br />
+  }
+}
