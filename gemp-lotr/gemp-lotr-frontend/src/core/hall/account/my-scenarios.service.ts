@@ -5,6 +5,7 @@ import { ScenarioApi } from '../../game/scenario/scenario-api.service';
 import { gamePageUrl } from '../../platform/app-paths';
 import { PageNavigation, ReservedTab } from '../../platform/page-navigation';
 import { SessionService } from '../../session/session.service';
+import { gameKey, HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { AccountApi } from './account-api.service';
 import {
   CANCEL,
@@ -77,12 +78,6 @@ export type CopyPublicDialog =
   | { readonly state: 'loaded'; readonly groups: readonly ShelfKindGroup<PublicScenarioRow>[] }
   | { readonly state: 'failed'; readonly message: string };
 
-/** A game the browser gave no tab for: the hall's "Your game is ready" prompt, with its link. */
-export interface BlockedGame {
-  readonly gameId: string;
-  readonly url: string;
-}
-
 /**
  * My Account > My Scenarios (scenarioShelf.js MyScenariosUI, ScenarioShelfCommon): the player's own scenarios by kind
  * and campaign, the draft they have open in the authoring tool, and what can be done with each: open it in the
@@ -90,7 +85,8 @@ export interface BlockedGame {
  * submit it for review, delete it; a new one; a copy of a public one.
  *
  * Opening a game (play, edit, continue writing) reserves a tab at once, on the click, and points it at the game once
- * the server has answered (PageNavigation.reserveTab). So every call that opens one must come straight from a click
+ * the server has answered (PageNavigation.reserveTab); without one the hall's "Your game is ready" prompt offers it
+ * (HallReadyOffers). So every call that opens one must come straight from a click
  * (or from `answer`, itself a click). One shelf change at a time (`busy`); after each, the list is fetched again.
  */
 @Injectable()
@@ -99,13 +95,13 @@ export class MyScenarios {
   private readonly authoringApi = inject(AuthoringApi);
   private readonly scenarioApi = inject(ScenarioApi);
   private readonly navigation = inject(PageNavigation);
+  private readonly offers = inject(HallReadyOffers);
   private readonly participantId = inject(SessionService).participantId;
 
   private readonly answer_ = signal<MyScenariosAnswer | null>(null);
   private readonly saying_ = signal<ShelfSaying>({ text: '', kind: '' });
   private readonly question_ = signal<ShelfQuestion | null>(null);
   private readonly copyPublic_ = signal<CopyPublicDialog | null>(null);
-  private readonly blocked_ = signal<BlockedGame | null>(null);
   private readonly picked_ = signal<string | null>(null);
   private pendingAnswer: { yes: () => void; no: () => void } | null = null;
   /** ScenarioShelfCommon.highlight: the copy to pick out once the list shows it. */
@@ -119,8 +115,6 @@ export class MyScenarios {
   readonly question = this.question_.asReadonly();
   /** The Copy Public dialog, while it is open. */
   readonly copyPublicDialog = this.copyPublic_.asReadonly();
-  /** A game the browser would not open a tab for. */
-  readonly blockedGame = this.blocked_.asReadonly();
   /** The list has come at least once. */
   readonly loaded = computed(() => this.answer_() !== null);
   /** The draft open in the authoring tool, if any ("Continue writing", "Close it"). */
@@ -313,11 +307,6 @@ export class MyScenarios {
     }
   }
 
-  /** The "Your game is ready" prompt's link was followed, or it was closed. */
-  dismissBlockedGame(): void {
-    this.blocked_.set(null);
-  }
-
   // ---- ScenarioShelfCommon ----
 
   /**
@@ -362,12 +351,9 @@ export class MyScenarios {
     return true;
   }
 
-  /** openGame: the reserved tab goes to the game; without one, the "Your game is ready" prompt offers it. */
+  /** openGame: the reserved tab goes to the game; without one, the hall's "Your game is ready" prompt offers it. */
   private openGame(tab: ReservedTab | null, gameId: string): void {
-    const url = gamePageUrl(gameId, this.participantId);
-    if (!tab?.go(url)) {
-      this.blocked_.set({ gameId, url });
-    }
+    this.offers.openReserved(tab, gameKey(gameId), 'game', gamePageUrl(gameId, this.participantId));
   }
 
   /** MyScenariosUI.post: one change at a time; said, and the list fetched again, either way. */

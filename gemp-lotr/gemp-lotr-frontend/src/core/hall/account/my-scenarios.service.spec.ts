@@ -4,6 +4,7 @@ import { settle } from '../../../testing/fake-notifier';
 import { readServerResponse } from '../../../testing/files';
 import { parseMyScenarios } from './account-parsers';
 import { OwnScenario } from './account-models';
+import { HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { MyScenarios } from './my-scenarios.service';
 
 const MINE = JSON.parse(readServerResponse('scenarios-mine.json')) as { scenarios: unknown[]; authoring: unknown };
@@ -74,9 +75,9 @@ describe('MyScenarios', () => {
     const played = shelf.play(inReview!);
     accountRequest(backend, '/scenarios/start', 'POST').flush({ gameId: 'g2' });
     await played;
-    expect(shelf.blockedGame()).toEqual({ gameId: 'g2', url: '/gemp-lotr/ng/game?gameId=g2' });
-    shelf.dismissBlockedGame();
-    expect(shelf.blockedGame()).toBeNull();
+    expect(TestBed.inject(HallReadyOffers).offers()).toEqual([
+      expect.objectContaining({ key: 'game:g2', kind: 'game', url: '/gemp-lotr/ng/game?gameId=g2' }),
+    ]);
   });
 
   it('asks before giving up a draft with unsaved changes, then opens the scenario for writing', async () => {

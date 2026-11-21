@@ -1,0 +1,224 @@
+/* My Scenarios (scenarioShelf.css; hall.css .account-help, .game-history-article) */
+
+:host {
+  display: block;
+  max-width: 70em;
+  padding: 0 10px 1em;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.gd-account-scenarios__help {
+  color: var(--theme-account-help);
+  font-size: 90%;
+}
+
+.gd-account-scenarios__intro {
+  max-width: 52em;
+}
+
+.gd-account-scenarios__button {
+  padding: 0.4em 1em;
+  background: var(--theme-hall-default-bg);
+  font-size: 1em;
+  line-height: normal;
+}
+
+.gd-account-scenarios__button:enabled:hover,
+.gd-account-scenarios__button:focus-visible {
+  background: var(--theme-hall-hover-bg);
+}
+
+.gd-account-scenarios__button:enabled:active {
+  background: var(--theme-hall-active-bg);
+}
+
+.gd-account-scenarios__tools,
+.gd-account-scenarios__draft {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.8em 0;
+}
+
+.gd-account-scenarios__draft {
+  padding: 0.4em 0.7em;
+  border: 1px solid var(--theme-account-shelf-draft-border);
+  background: var(--theme-account-shelf-draft-bg);
+}
+
+.gd-account-scenarios__tools input {
+  flex: 0 1 14em;
+  min-width: 6em;
+  margin: 2px;
+  border: 2px inset;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+}
+
+.gd-account-scenarios__label {
+  font-weight: bold;
+}
+
+.gd-account-scenarios__gap {
+  flex: 1 1 1em;
+}
+
+.gd-account-scenarios__status {
+  min-height: 1.3em;
+  margin: 0.3em 0;
+  white-space: pre-wrap;
+}
+
+.gd-account-scenarios__status[data-kind='error'] {
+  color: var(--theme-account-shelf-error);
+}
+
+.gd-account-scenarios__status[data-kind='success'] {
+  color: var(--theme-account-shelf-success);
+}
+
+.gd-account-scenarios__status[data-kind='pending'] {
+  color: var(--theme-account-shelf-pending);
+  font-style: italic;
+}
+
+.gd-account-scenarios__kind {
+  font-size: 1.5em;
+  margin: 1em 0 0.3em;
+}
+
+.gd-account-scenarios__campaign {
+  margin: 0.6em 0 0.2em 0.6em;
+  font-size: 1.17em;
+  font-weight: normal;
+  font-style: italic;
+  color: var(--theme-account-shelf-campaign);
+}
+
+.gd-account-scenarios__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.45em 0.6em;
+  border-bottom: 1px solid var(--theme-account-shelf-row-border);
+}
+
+.gd-account-scenarios__row:hover {
+  background: var(--theme-account-shelf-row-hover);
+}
+
+.gd-account-scenarios__row[data-picked] {
+  background: var(--theme-account-shelf-picked-bg);
+  box-shadow: inset 3px 0 0 var(--theme-account-shelf-picked-mark);
+}
+
+.gd-account-scenarios__text {
+  flex: 1 1 22em;
+  min-width: 0;
+}
+
+.gd-account-scenarios__title {
+  font-weight: bold;
+}
+
+.gd-account-scenarios__dim,
+.gd-account-scenarios__notes {
+  color: var(--theme-account-shelf-dim);
+}
+
+.gd-account-scenarios__notes {
+  font-size: 85%;
+  overflow-wrap: anywhere;
+}
+
+.gd-account-scenarios__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  margin: 0.15em 0;
+}
+
+.gd-account-scenarios__tag {
+  display: inline-block;
+  padding: 0 0.5em;
+  border: 1px solid var(--theme-account-tag-border);
+  border-radius: 0.7em;
+  color: var(--theme-account-tag-text);
+  font-size: 80%;
+  line-height: 1.6;
+  cursor: default;
+}
+
+.gd-account-scenarios__tag[data-kind='review'] {
+  border-color: var(--theme-account-tag-review-border);
+  color: var(--theme-account-tag-review-text);
+}
+
+.gd-account-scenarios__tag[data-kind='rejected'] {
+  border-color: var(--theme-account-tag-rejected-border);
+  color: var(--theme-account-tag-rejected-text);
+}
+
+.gd-account-scenarios__tag[data-kind='published'] {
+  border-color: var(--theme-account-tag-published-border);
+  background: var(--theme-account-tag-published-bg);
+  color: var(--theme-account-tag-published-text);
+}
+
+.gd-account-scenarios__tag[data-kind='published-changed'] {
+  border-color: var(--theme-account-tag-changed-border);
+  color: var(--theme-account-tag-changed-text);
+}
+
+.gd-account-scenarios__tag[data-kind='broken'] {
+  border-color: var(--theme-account-tag-broken-border);
+  color: var(--theme-account-tag-broken-text);
+}
+
+.gd-account-scenarios__tag[data-kind='unverified'] {
+  border-color: var(--theme-account-tag-unverified-border);
+  color: var(--theme-account-tag-unverified-text);
+}
+
+.gd-account-scenarios__feedback {
+  margin-top: 0.3em;
+  padding: 0.35em 0.6em;
+  border-left: 3px solid var(--theme-account-feedback-border);
+  background: var(--theme-account-feedback-bg);
+  white-space: pre-wrap;
+}
+
+.gd-account-scenarios__buttons {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.gd-account-scenarios__buttons .gd-account-scenarios__button {
+  padding: 0.25em 0.7em;
+}
+
+.gd-account-scenarios__button[data-danger]:enabled {
+  color: var(--theme-account-shelf-danger);
+}
+
+/* The Copy Public dialog: width min(720, the window less 40), height at most the window less 80 (jQuery UI options) */
+:host ::ng-deep .gd-dialog[data-dialog='copy-public'] {
+  --dialog-width: min(720px, calc(100vw - 40px));
+}
+
+.gd-account-scenarios__popup {
+  max-height: calc(100vh - 80px - 3em);
+  overflow-y: auto;
+}

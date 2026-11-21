@@ -1,0 +1,88 @@
+/*
+ * My Account (account.html #account; hall.css .pocket, "tabs-account": .account-section, .account-help, .ignore-*).
+ * Native buttons, as the legacy page's (not jQuery UI ones).
+ */
+
+:host {
+  display: block;
+}
+
+.gd-account-overview__heading {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* .pocket: 95 by 18 px inside its border (the legacy inline style had no units, and did nothing) */
+.gd-account-overview__pocket {
+  float: right;
+  width: 95px;
+  height: 18px;
+  border: 1px solid var(--theme-account-pocket-border);
+  background: var(--theme-account-pocket-bg);
+  color: var(--theme-text);
+  font-size: 90%;
+  font-weight: bolder;
+  text-align: right;
+}
+
+.gd-account-overview__pocket img {
+  vertical-align: baseline;
+}
+
+/* Native buttons, in the widget font (jQuery UI's .ui-widget button) */
+button {
+  font-family: var(--theme-font-widget);
+  font-size: 1em;
+}
+
+.gd-account-overview__migrate {
+  padding: 0.4em 0.8em;
+  white-space: nowrap;
+}
+
+.gd-account-overview__ignores {
+  clear: both;
+  max-width: 40em;
+  margin-top: 1.5em;
+}
+
+.gd-account-overview__ignores h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+.gd-account-overview__help {
+  color: var(--theme-account-help);
+  font-size: 90%;
+}
+
+.gd-account-overview__add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.gd-account-overview__add gd-player-picker {
+  flex: 0 1 16em;
+}
+
+.gd-account-overview__status {
+  min-height: 1.2em;
+  margin: 0.3em 0;
+}
+
+.gd-account-overview__list {
+  margin: 0.3em 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gd-account-overview__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.2em 0.4em;
+  border-bottom: 1px solid var(--theme-account-row-border);
+}

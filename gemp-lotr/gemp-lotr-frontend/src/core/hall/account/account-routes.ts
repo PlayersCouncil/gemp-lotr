@@ -1,14 +1,26 @@
 /**
- * The My Account tab's addresses: `account/overview`, `account/history`, `account/stats`, `account/scenarios`, and
- * `account` alone, which opens the sub-tab the viewer last had open (account.html: localStorage
- * `gemp.account.subTab`), else My Account. The legacy hall's links (hallLinks.js GempLinks: `#account`,
- * `#my-account`, `#account/<sub>`) map onto them.
+ * The My Account tab's addresses: `account` (My Account itself), `account/history`, `account/stats`,
+ * `account/scenarios`. The legacy hall's links (`#account`, `#my-account`, `#account/<sub>`) are mapped onto them by
+ * the hall's `hall-hash-routes.ts`.
+ *
+ * The legacy tab opened on the sub-tab last shown (account.html: localStorage `gemp.account.subTab`). Here `account`
+ * is My Account's own address, so the remembered sub-tab is opened instead only when the tab is entered from
+ * elsewhere: from another tab of the hall, or from the hall's own address (`shouldRestoreSubTab`). A link to
+ * `account`, or a reload of it, shows My Account.
  */
 
 export type AccountSubTab = 'overview' | 'history' | 'stats' | 'scenarios';
 
 export const ACCOUNT_PATH = 'account';
 export const DEFAULT_ACCOUNT_SUB_TAB: AccountSubTab = 'overview';
+
+/** Each sub-tab's route under `account` ('' for My Account), as HALL_TABS has them. */
+export const ACCOUNT_SUB_TAB_PATHS: Readonly<Record<AccountSubTab, string>> = {
+  overview: '',
+  history: 'history',
+  stats: 'stats',
+  scenarios: 'scenarios',
+};
 
 /**
  * localStorage key of the sub-tab last opened (account.html SUB_TAB_KEY). Its value is the legacy sub-tab link's
@@ -25,41 +37,34 @@ export const ACCOUNT_SUB_TAB_HREFS: Readonly<Record<AccountSubTab, string>> = {
 
 const SUB_TABS: readonly AccountSubTab[] = ['overview', 'history', 'stats', 'scenarios'];
 
-function isSubTab(value: string): value is AccountSubTab {
-  return (SUB_TABS as readonly string[]).includes(value);
-}
-
 /** The sub-tab a remembered href names (account.html's match of the saved href), else My Account. */
 export function rememberedSubTab(saved: string | null): AccountSubTab {
   return SUB_TABS.find((sub) => ACCOUNT_SUB_TAB_HREFS[sub] === saved) ?? DEFAULT_ACCOUNT_SUB_TAB;
 }
 
-/**
- * A route's sub-tab: `account/<sub>` that sub-tab, `account` alone the remembered one (`saved`, the stored href);
- * null for a sub-tab the tab does not have.
- */
-export function parseAccountRoute(sub: string | null, saved: string | null): AccountSubTab | null {
-  if (sub === null || sub === '') {
-    return rememberedSubTab(saved);
-  }
-  return isSubTab(sub) ? sub : null;
+/** The sub-tab of a route path under `account` ('' My Account); null for one the tab does not have. */
+export function parseAccountRoute(path: string): AccountSubTab | null {
+  return SUB_TABS.find((sub) => ACCOUNT_SUB_TAB_PATHS[sub] === path) ?? null;
 }
 
-/** The router's commands for a sub-tab: ['account', 'history']. */
+/** The router's commands for a sub-tab: ['/account'] or ['/account', 'history']. */
 export function accountCommands(sub: AccountSubTab): string[] {
-  return [ACCOUNT_PATH, sub];
+  const path = ACCOUNT_SUB_TAB_PATHS[sub];
+  return path === '' ? [`/${ACCOUNT_PATH}`] : [`/${ACCOUNT_PATH}`, path];
+}
+
+/** Whether an address (a path, with or without its query) is the tab's or under it. */
+export function isAccountAddress(url: string): boolean {
+  const path = url.split(/[?#]/)[0] ?? '';
+  return path === `/${ACCOUNT_PATH}` || path.startsWith(`/${ACCOUNT_PATH}/`);
 }
 
 /**
- * A legacy hall fragment of the tab: the sub-tab it names, `'remembered'` for the tab alone (`#account`,
- * `#my-account`: the remembered sub-tab opens), or null when it is not one of the tab's (GempLinks.parse: an unknown
- * sub-tab opens the tab alone).
+ * A navigation to `account` itself opens the remembered sub-tab when it entered the tab from elsewhere: it was asked
+ * for an address outside the tab (the hall's own address, redirected here), or it came from an address outside the
+ * tab (the tab bar's My Account from another tab). `initialUrl`: what the navigation was asked for; `previousUrl`:
+ * the address shown before it, null for the page's first.
  */
-export function legacyAccountLink(fragment: string): AccountSubTab | 'remembered' | null {
-  const parts = /^#(account|my-account)(?:\/([A-Za-z0-9-]+))?\/?$/.exec(fragment);
-  if (!parts) {
-    return null;
-  }
-  const sub = parts[2];
-  return sub !== undefined && isSubTab(sub) ? sub : 'remembered';
+export function shouldRestoreSubTab(initialUrl: string, previousUrl: string | null): boolean {
+  return !isAccountAddress(initialUrl) || (previousUrl !== null && !isAccountAddress(previousUrl));
 }

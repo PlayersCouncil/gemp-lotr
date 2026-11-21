@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, Injector, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { ChatApi } from '../../chat/chat-api.service';
@@ -36,9 +36,14 @@ export class AccountOverview {
   private readonly player = inject(PlayerInfo);
   private readonly comms = inject(HallComms);
   private readonly session = inject(HallSession);
-  private readonly notifier = inject(Notifier);
+  private readonly injector = inject(Injector);
   private readonly navigation = inject(PageNavigation);
   private readonly status_ = signal('');
+
+  /** The Notifier, asked for only when needed: the tab also opens where none is provided (the hall shell's spec). */
+  private get notifier(): Notifier {
+    return this.injector.get(Notifier);
+  }
 
   /** "My Account: <name>". */
   readonly name = computed(() => this.player.name() ?? '');

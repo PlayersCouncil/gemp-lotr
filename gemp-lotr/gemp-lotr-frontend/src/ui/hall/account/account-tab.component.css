@@ -1,0 +1,20 @@
+/*
+ * The tab (account.html #accountMain: .hall-tab.flex-horiz, a jQuery UI tabs widget of its own, framed): the
+ * sub-tabs at the left, the sub-tab's page (.ui-tabs-panel, 1em 1.4em of padding) scrolling beside them.
+ */
+
+:host {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 5px;
+  min-height: 0;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+}
+
+.gd-account-tab__panel {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 1em 1.4em;
+  overflow: auto;
+}

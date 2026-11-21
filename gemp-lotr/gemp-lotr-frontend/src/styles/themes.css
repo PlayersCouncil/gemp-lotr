@@ -220,6 +220,73 @@
   --theme-hall-notes-close-bg: rgba(40, 40, 40, 0.9);
   --theme-hall-load-error: #ffb0a0;
 
+  /* The hall's My Account tab (hall.css "tabs-account" and .pocket, .gameHistory, table.tables; scenarioShelf.css) */
+  --theme-account-help: #bbb;
+  --theme-account-label: #ccc;
+  --theme-account-row-border: #333;
+  --theme-account-pocket-bg: #000;
+  --theme-account-pocket-border: #fff;
+  --theme-account-cell-border: #fff;
+  --theme-account-empty: #bbb;
+  --theme-account-load-error: #ffb0a0;
+  --theme-account-win: #8fdc8f;
+  --theme-account-loss: #ff9a8a;
+  --theme-account-stats-bg: #121212;
+  --theme-account-stats-head-bg: #333;
+  --theme-account-stats-border: #444;
+  --theme-account-shelf-draft-border: #a8893a;
+  --theme-account-shelf-draft-bg: rgb(168 137 58 / 0.12);
+  --theme-account-shelf-picked-bg: rgb(212 175 55 / 0.14);
+  --theme-account-shelf-picked-mark: #d4af37;
+  --theme-account-shelf-error: #ff8a80;
+  --theme-account-shelf-success: #9ccc65;
+  --theme-account-shelf-pending: #bbb;
+  --theme-account-shelf-campaign: #ccb27a;
+  --theme-account-shelf-row-border: #3a3a3a;
+  --theme-account-shelf-row-hover: rgb(255 255 255 / 0.03);
+  --theme-account-shelf-dim: #999;
+  --theme-account-shelf-danger: #ef9a9a;
+  --theme-account-tag-border: #666;
+  --theme-account-tag-text: #ddd;
+  --theme-account-tag-review-border: #64b5f6;
+  --theme-account-tag-review-text: #90caf9;
+  --theme-account-tag-rejected-border: #ffb74d;
+  --theme-account-tag-rejected-text: #ffcc80;
+  --theme-account-tag-published-border: #d4af37;
+  --theme-account-tag-published-text: #f0d46b;
+  --theme-account-tag-published-bg: rgb(212 175 55 / 0.15);
+  --theme-account-tag-changed-border: #a8893a;
+  --theme-account-tag-changed-text: #ccb27a;
+  --theme-account-tag-broken-border: #e57373;
+  --theme-account-tag-broken-text: #ef9a9a;
+  --theme-account-tag-unverified-border: #888;
+  --theme-account-tag-unverified-text: #bbb;
+  --theme-account-feedback-border: #ffb74d;
+  --theme-account-feedback-bg: rgb(255 183 77 / 0.08);
+  /* The shelf's question box (scenarioSubmit.js, scenarioShelf.css): its own, not jQuery UI's */
+  --theme-account-box-shade: rgb(0 0 0 / 0.6);
+  --theme-account-box-bg: #1d1d1d;
+  --theme-account-box-text: #ddd;
+  --theme-account-box-border: #a8893a;
+  --theme-account-box-shadow: rgb(0 0 0 / 0.7);
+  --theme-account-box-title: #f0d46b;
+  --theme-account-box-font: Arial, Helvetica, sans-serif;
+  --theme-account-box-button-border: #777;
+  --theme-account-box-button-bg: #333;
+  --theme-account-box-button-text: #eee;
+  --theme-account-box-yes-border: #a8893a;
+  --theme-account-box-yes-bg: #5a4a1e;
+  --theme-account-box-danger-border: #b71c1c;
+  --theme-account-box-danger-bg: #5c1a1a;
+  /* The player picker (tables.css .player-picker, its menu a jQuery UI autocomplete) */
+  --theme-picker-toggle-border: #666;
+  --theme-picker-toggle-bg: #333;
+  --theme-picker-toggle-text: #ddd;
+  --theme-picker-toggle-hover-bg: #455;
+  --theme-picker-heading: #9ab;
+  --theme-picker-note: #aaa;
+  --theme-picker-menu-border: #555;
+
   /* Selects and text fields (hall.css) */
   --theme-field-bg: #222;
   --theme-field-hover-bg: #444;

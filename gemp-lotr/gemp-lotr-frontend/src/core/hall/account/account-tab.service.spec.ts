@@ -39,14 +39,12 @@ describe('AccountTab', () => {
     await settle();
   });
 
-  it('remembers the sub-tab shown, for `account` alone', () => {
-    expect(tab.route(null)).toBe('overview');
+  it('remembers the sub-tab shown', () => {
+    expect(tab.remembered()).toBe('overview');
     tab.subTabShown('scenarios');
     backend.match(() => true).forEach((request) => request.flush({}));
     expect(stored.get('gemp.account.subTab')).toBe('includes/account/myScenarios.html');
-    expect(tab.route(null)).toBe('scenarios');
-    expect(tab.route('history')).toBe('history');
-    expect(tab.route('admin')).toBeNull();
+    expect(tab.remembered()).toBe('scenarios');
   });
 
   it('refreshes the ignore list, the history and the shelf after 10 s away, never the stats', async () => {
