@@ -47,7 +47,8 @@ let nextChatId = 0;
  * warning).
  *
  * DOM contract: `gd-chat.gd-chat` (`data-mode` = builtin | discord, `data-stopped` once the chat stopped,
- * `data-logged-out` for a visitor, `data-users` when it has a user list) holding `section.gd-chat__room` (the
+ * `data-logged-out` for a visitor, `data-users` when it has a user list, `data-people-width` with
+ * `--gd-chat-people-width` once the user list's column width is measured) holding `section.gd-chat__room` (the
  * built-in chat, `aria-label`; `hidden` while Discord shows) with `div.gd-chat__messages` (`role=log`) of
  * `div.gd-chat__message` (`data-kind` = chat | system | warning, `data-highlight` = ping | mention) each holding,
  * for messages, `span.gd-chat__sender` (`time.gd-chat__time` "[Nov 9 08:05:03]" when timestamps show, then
@@ -73,6 +74,8 @@ let nextChatId = 0;
     '[attr.data-stopped]': "stopped() ? '' : null",
     '[attr.data-logged-out]': "loggedOut() ? '' : null",
     '[attr.data-users]': "users() !== null ? '' : null",
+    '[style.--gd-chat-people-width]': 'peopleWidth()',
+    '[attr.data-people-width]': "peopleWidth() !== null ? '' : null",
     '(document:pointerdown)': 'closeMenuOutside($event)',
   },
   template: `
@@ -267,6 +270,9 @@ export class ChatComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
   private stuck = true;
+  /** The user list's column width, once measured (chat.js lockUserListWidth), and what it was measured for. */
+  protected readonly peopleWidth = signal<string | null>(null);
+  private peopleWidthKey: string | null = null;
 
   constructor() {
     effect(() => {
@@ -274,6 +280,7 @@ export class ChatComponent {
         this.discordLoaded.set(true);
       }
     });
+    afterRenderEffect(() => this.lockPeopleWidth(this.users()));
     afterRenderEffect(() => {
       const lines = this.lines();
       const list = this.messages().nativeElement;
@@ -282,6 +289,91 @@ export class ChatComponent {
         this.stuck = true;
       }
     });
+  }
+
+  /**
+   * chat.js lockUserListWidth: the list's column keeps one width whatever the list holds, exactly wide enough for the
+   * viewer's own entry at its widest (the name, the role badge, and the chip reading "incognito" or "online",
+   * whichever is wider), in whole pixels plus one, and the list's chrome around it. Measured once, and again only if
+   * the name or role changes, so going incognito or players coming and going never move it.
+   */
+  private lockPeopleWidth(users: readonly ChatUser[] | null): void {
+    // chat.js lockUserListWidth: your own entry, or (while the list has none) your name without a role
+    const own = users?.[0]?.self ? users[0] : null;
+    const name = own ? own.name : this.userName();
+    const list = this.host.querySelector<HTMLElement>('.gd-chat__users');
+    if (!name || !list) {
+      return;
+    }
+    const role = own ? own.role : null;
+    const key = JSON.stringify([name, role]);
+    if (key === this.peopleWidthKey) {
+      return;
+    }
+    const probe = this.ownEntryProbe(list, name, role);
+    list.append(probe);
+    const chip = probe.querySelector<HTMLElement>('.gd-chat__visibility');
+    let widest = 0;
+    for (const text of ['incognito', 'online']) {
+      if (chip) chip.textContent = text;
+      widest = Math.max(widest, probe.getBoundingClientRect().width);
+    }
+    probe.remove();
+    if (!(widest > 0)) {
+      return; // not laid out (hidden): measured on a later update
+    }
+    const view = this.host.ownerDocument.defaultView;
+    const column = list.parentElement;
+    if (!view || !column) {
+      return;
+    }
+    const px = (value: string) => parseFloat(value) || 0;
+    const style = view.getComputedStyle(list);
+    const columnStyle = view.getComputedStyle(column);
+    const chrome =
+      list.offsetWidth -
+      list.clientWidth +
+      px(style.paddingLeft) +
+      px(style.paddingRight) +
+      px(style.marginLeft) +
+      px(style.marginRight) +
+      px(columnStyle.paddingLeft) +
+      px(columnStyle.paddingRight) +
+      px(columnStyle.borderLeftWidth) +
+      px(columnStyle.borderRightWidth);
+    // (+1: sub-pixel text widths round the other way in some browsers, which would cut the name)
+    this.peopleWidth.set(`${Math.ceil(widest) + 1 + Math.ceil(chrome)}px`);
+    this.peopleWidthKey = key;
+  }
+
+  /** A hidden copy of your own entry as the template draws it (with this component's style scope), to be measured. */
+  private ownEntryProbe(list: HTMLElement, name: string, role: ChatUser['role']): HTMLElement {
+    const doc = list.ownerDocument;
+    const scope = [...list.attributes].filter((a) => a.name.startsWith('_ngcontent')).map((a) => a.name);
+    const make = (tag: string, className: string, text: string) => {
+      const element = doc.createElement(tag);
+      element.className = className;
+      element.textContent = text;
+      for (const attribute of scope) element.setAttribute(attribute, '');
+      return element;
+    };
+    const probe = make('li', 'gd-chat__user', '');
+    probe.setAttribute('data-self', '');
+    probe.setAttribute('aria-hidden', 'true');
+    probe.append(make('span', 'gd-chat__name', name), ' ');
+    if (role) {
+      probe.setAttribute('data-role', role);
+      probe.append(make('span', 'gd-chat__role', this.roles[role].text), ' ');
+    }
+    probe.append(make('button', 'gd-chat__visibility', ''));
+    Object.assign(probe.style, {
+      position: 'absolute',
+      visibility: 'hidden',
+      left: '0',
+      top: '0',
+      width: 'max-content',
+    });
+    return probe;
   }
 
   protected timestamp(date: number): string {

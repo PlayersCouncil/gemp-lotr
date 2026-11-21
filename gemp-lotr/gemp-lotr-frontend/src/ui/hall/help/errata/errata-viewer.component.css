@@ -127,7 +127,9 @@
   outline-offset: -2px;
 }
 
-gd-errata-info-toggle {
+/* pcErrata.css .pc-errata-viewer-bar > .info-toggle: the toggle keeps its size when the bar is too narrow (the host
+   is display: contents, so the rule goes on the button it draws) */
+gd-errata-info-toggle ::ng-deep .gd-errata-info-toggle {
   flex: 0 0 auto;
 }
 

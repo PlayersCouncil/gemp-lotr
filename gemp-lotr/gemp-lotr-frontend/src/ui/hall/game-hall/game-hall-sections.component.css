@@ -138,6 +138,12 @@
   user-select: none;
 }
 
+/* A button's right margin is jQuery UI's .ui-button (.1em), which beat hall.css's "td button" margin; the links kept
+   their 3px (td a.hall-row-link). It is part of the column's width in the table's automatic layout. */
+button.gd-hall-sections__button {
+  margin-right: 0.1em;
+}
+
 .gd-hall-sections__button:enabled:hover,
 a.gd-hall-sections__button:hover,
 .gd-hall-sections__button:focus-visible {

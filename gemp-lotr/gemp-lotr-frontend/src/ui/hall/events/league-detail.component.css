@@ -7,8 +7,9 @@
   display: block;
 }
 
+/* legacy's <br> after the cost: one empty line */
 .gd-league-detail__cost {
-  margin-bottom: 1em;
+  margin-bottom: 1lh;
 }
 
 .gd-league-detail__membership {

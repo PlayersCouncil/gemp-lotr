@@ -72,6 +72,8 @@
     50% repeat-x;
   --theme-hall-header-bg: #444 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50%
     repeat-x;
+  /* .ui-widget-content's border in the 1.13 build (the deck builder's 1.8 one is #555) */
+  --theme-hall-content-border: #444;
   --theme-hall-panel-bg: linear-gradient(to top, #200902, #111 80%);
   --theme-hall-info-bg: linear-gradient(to top, #333, #111 40%, #111);
   --theme-hall-info-border: #bf8a4a;
@@ -900,6 +902,7 @@
   --theme-hover-border: #6e8bff;
   --theme-active-border: #869dff;
   --theme-content-border: #3c3e44;
+  --theme-hall-content-border: var(--theme-content-border);
   --theme-header-border: #3c3e44;
   --theme-content-bg: #28292d;
   --theme-default-bg: #303236;

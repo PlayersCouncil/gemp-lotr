@@ -169,6 +169,14 @@ gd-discord-embed {
   min-height: 0;
 }
 
+/* Once measured (lockUserListWidth), the column keeps that width */
+:host([data-people-width]) .gd-chat__people {
+  box-sizing: border-box;
+  width: var(--gd-chat-people-width);
+  min-width: var(--gd-chat-people-width);
+  max-width: var(--gd-chat-people-width);
+}
+
 /* #userList */
 .gd-chat__users {
   flex-grow: 1;
@@ -398,6 +406,17 @@ gd-discord-embed {
   padding: 4px;
   font-size: inherit;
   white-space: nowrap;
+  /* the hall's jQuery UI 1.13 button (only the hall's chat has a user list, and so this button) */
+  background: var(--theme-hall-default-bg);
+}
+
+.gd-chat__switch.gd-button:enabled:hover,
+.gd-chat__switch.gd-button:focus-visible {
+  background: var(--theme-hall-hover-bg);
+}
+
+.gd-chat__switch.gd-button:enabled:active {
+  background: var(--theme-hall-active-bg);
 }
 
 .gd-chat__people:has([data-self]) .gd-chat__switch {
