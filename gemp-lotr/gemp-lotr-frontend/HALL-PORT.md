@@ -46,7 +46,11 @@ has its own, drawn with the theme's values.
 9. The switch. **Done:** `hall.html` and `index.html` are now pages that send the browser on to the app's `go` and
    `start` routes with the link's query and fragment (`core/hall/legacy-links.guard.ts` decides where each leads); the
    legacy pages are `hall-legacy.html` and `login-legacy.html`; the share pages lead to the app's routes; the Admin
-   tab is a link to `hall-legacy.html?admin=1#admin`. Still to do: `visual-check/hall`.
+   tab is a link to `hall-legacy.html?admin=1#admin`.
+10. `visual-check/hall` (`npm run check:hall` in `visual-check`): 36 screens of the hall and the login page against
+    their legacy pages, and 58 old addresses against where the legacy hall led. **Done**; the addresses all agree.
+    The screens still differ by a pixel or two in most places (see "What looks different"), so the check fails until
+    those are brought to nothing or Ketura accepts them (`HALL_ACCEPTED` in `visual-check/accepted.mjs`, empty).
 
 ## For Ketura to review
 
@@ -71,6 +75,10 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
   the link's filters list. `&nbsp;` and the like in game text read as characters.
 - **Hall connection readout**: its popup could reopen after Escape; it stays closed.
 - **Login page**: the two ban messages' Discord links had a broken quote and linked nowhere; they are links.
+- **Login page, the picture**: it fills the window. The legacy stylesheet says `shtml { height: 100% }` (a typo for
+  `html`), so the picture was sized to the page's content, 829 px tall whatever the window: a different crop from
+  what was meant, and on a window taller than that (1920 x 1080) a black band below it. This is why the whole login
+  screen differs in `visual-check/hall`.
 - **Server text shown as HTML** (player names, deck and format names, standings): all drawn as text now.
 - **Static pages**: the invalid markup in What Are Leagues? and About is put right; the wording is unchanged.
 
@@ -116,7 +124,8 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
   card's name); a card named in a patch note is still "Card Information".
 - Four old patch notes (2021-12-24, 2022-07-07, 2022-08-19, 2022-12-21) lose their inline colours.
 - In "New items" and Race to Mount Doom dialogs the cards are plain pictures, with no zoom or details.
-- Small offsets (a few px) remain in places; `visual-check/hall` lists them.
+- Offsets of a pixel or two remain in most places (table columns, the chat's user list, where a dialog sits), and
+  the "Not logged in" dialog is narrower than the legacy one; `visual-check/hall` shows each. Being worked on.
 
 ### Suggestions not taken, for a decision
 
