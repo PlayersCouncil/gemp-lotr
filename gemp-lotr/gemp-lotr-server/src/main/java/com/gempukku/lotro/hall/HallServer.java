@@ -580,6 +580,37 @@ public class HallServer extends AbstractServer {
         }
     }
 
+    /**
+     * Admin: sets the stage of one started tournament (see {@link TournamentService#setTournamentStageByAdmin}).
+     * @return false when there is no started tournament with this id
+     */
+    public boolean setTournamentStageByAdmin(String tournamentId, Tournament.Stage stage) {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            boolean done = _tournamentService.setTournamentStageByAdmin(tournamentId, stage);
+            if (done)
+                hallChanged();
+            return done;
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Admin: removes a player from a running tournament or a queue (see {@link TournamentService#removePlayerByAdmin}).
+     * @throws IllegalStateException with a message for the admin when the player was not removed
+     */
+    public String removeTournamentPlayerByAdmin(String tournamentId, String playerName) {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            String result = _tournamentService.removePlayerByAdmin(tournamentId, playerName);
+            hallChanged();
+            return result;
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
     public void confirmReadyCheck(String queueId, Player player) throws SQLException, IOException {
         _hallDataAccessLock.writeLock().lock();
         try {

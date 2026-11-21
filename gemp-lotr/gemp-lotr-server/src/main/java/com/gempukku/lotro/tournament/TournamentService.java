@@ -469,6 +469,71 @@ public class TournamentService {
         _tournamentDao.updateTournamentStage(tournamentId, stage);
     }
 
+    /**
+     * Sets the stage of a started tournament on an admin's say-so and rebuilds that one tournament from the database,
+     * exactly as a server restart would resume it at the new stage.  Nothing else is touched: this used to reload
+     * every queue and tournament on the server, which emptied all queues (without refunds) and dropped the pending
+     * pairings and round timers of every other running tournament.
+     * @return false when there is no started tournament with this id
+     */
+    public synchronized boolean setTournamentStageByAdmin(String tournamentId, Tournament.Stage stage) {
+        if (_tournamentDao.getTournamentById(tournamentId) == null)
+            return false;
+        _tournamentDao.updateTournamentStage(tournamentId, stage);
+        _activeTournaments.remove(tournamentId);
+        if (stage != Tournament.Stage.FINISHED)
+            upsertTournamentInCache(_tournamentDao.getTournamentById(tournamentId), true);
+        return true;
+    }
+
+    private static String matchPlayerName(Collection<String> names, String wanted) {
+        if (names == null || wanted == null)
+            return null;
+        for (String name : names)
+            if (name.equals(wanted.trim()))
+                return name;
+        for (String name : names)
+            if (name.equalsIgnoreCase(wanted.trim()))
+                return name;
+        return null;
+    }
+
+    /**
+     * Removes a player from a running tournament or from a queue on an admin's say-so (someone who joined an event
+     * they were not invited to).  In a running tournament the player is dropped, as if they had dropped themselves:
+     * they stay in the standings, marked as dropped, and a dropped player cannot join again.  In a queue the player
+     * is taken out with the entry cost returned, and cannot sign up for it again.
+     * @return what was done, for the admin
+     * @throws IllegalStateException with a message for the admin when the player was not removed
+     */
+    public synchronized String removePlayerByAdmin(String tournamentId, String playerName) {
+        Tournament live = _activeTournaments.get(tournamentId);
+        if (live != null) {
+            String name = matchPlayerName(_tournamentPlayerDao.getPlayers(tournamentId), playerName);
+            if (name == null)
+                throw new IllegalStateException("'" + playerName + "' is not in tournament '" + live.getTournamentName() + "'.");
+            if (live.isPlayerAbandoned(name))
+                throw new IllegalStateException("'" + name + "' has already dropped from '" + live.getTournamentName() + "'.");
+            String result = live.dropPlayer(name);
+            if (!BaseTournament.DROPPED_MESSAGE.equals(result))
+                throw new IllegalStateException("'" + name + "' was not removed.  The tournament answered: " + result);
+            return "'" + name + "' was dropped from '" + live.getTournamentName() + "' and cannot join it again.";
+        }
+
+        if (_tournamentQueues.get(tournamentId) instanceof AbstractTournamentQueue queue) {
+            String name = matchPlayerName(queue.getSignedUpPlayers(), playerName);
+            try {
+                if (name == null || !queue.removePlayerByAdmin(name))
+                    throw new IllegalStateException("'" + playerName + "' is not signed up for '" + queue.getTournamentQueueName() + "'.");
+            } catch (SQLException | IOException exp) {
+                throw new IllegalStateException("'" + name + "' could not be removed: " + exp.getMessage(), exp);
+            }
+            return "'" + name + "' was removed from the queue of '" + queue.getTournamentQueueName() + "' and cannot join it again.";
+        }
+
+        throw new IllegalStateException("There is no running tournament or open queue '" + tournamentId + "'.");
+    }
+
     public void recordTournamentRound(String tournamentId, int round) {
         _tournamentDao.updateTournamentRound(tournamentId, round);
     }
