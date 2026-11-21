@@ -69,6 +69,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
+            "setupFiles": ["src/testing/shared-window.setup.ts"],
             "coverageThresholds": {
               "statements": 95,
               "branches": 88,
