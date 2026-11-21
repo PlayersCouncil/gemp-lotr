@@ -46,6 +46,7 @@ describe('HallDeliveries', () => {
     const shown = deliveries.announcement();
     expect(shown?.title).toBe('Yuletide update');
     expect(shown?.content[0]).toMatchObject({ kind: 'element', tag: 'p' });
+    expect(JSON.stringify(shown?.content)).toContain('"kind":"hall-link"');
     // asked again while it shows: no request
     announce('announcement');
     deliveries.dismissAnnouncement();

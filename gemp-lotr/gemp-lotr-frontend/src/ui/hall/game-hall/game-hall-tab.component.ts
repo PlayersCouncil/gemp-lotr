@@ -3,23 +3,26 @@ import { parseServerMarkup } from '../../../core/chat/chat-markup';
 import { HallComms } from '../../../core/hall/hall-comms.service';
 import { MarkupComponent } from '../../shared/chat/markup.component';
 import { HALL_INFO_LINKS } from '../hall-links';
-import { HallPlaceholderComponent } from '../hall-placeholder.component';
+import { injectGameHall } from '../../../core/hall/hall-services';
+import { GameHallDialogsComponent } from './game-hall-dialogs.component';
+import { GameHallSectionsComponent } from './game-hall-sections.component';
 
 /**
  * The Game Hall tab (hall.html #gameHallMain): at the top (#serverInfo) the link buttons, each opening in a new tab,
  * and the message of the day (`<b>MOTD:</b> ` and the server's markup, drawn element by element: GempLotrHallUI's
- * motd handling); then the tables, a placeholder until part 4.2 (`gd-hall-placeholder`, "Tables").
+ * motd handling); then the sections of tables, queues and tournaments (`gd-game-hall-sections`) and the hall's
+ * dialogs (`gd-game-hall-dialogs`).
  *
  * DOM contract: `gd-game-hall-tab.gd-game-hall` holding `div.gd-game-hall__info` (`nav.gd-game-hall__links` of
  * `a.gd-game-hall__link` (`data-link` = bug, report, discord, wiki, merchant, for its icon; `target=_blank`; the label
  * in `span.gd-game-hall__link-label`, in `s` when struck through) and `p.gd-game-hall__motd`, holding
  * `b.gd-game-hall__motd-label` "MOTD:" and `gd-markup` when there is one, empty otherwise), then
- * `gd-hall-placeholder`.
+ * `gd-game-hall-sections` and `gd-game-hall-dialogs`.
  */
 @Component({
   selector: 'gd-game-hall-tab',
   styleUrl: './game-hall-tab.component.css',
-  imports: [MarkupComponent, HallPlaceholderComponent],
+  imports: [MarkupComponent, GameHallSectionsComponent, GameHallDialogsComponent],
   host: { class: 'gd-game-hall' },
   template: `
     <div class="gd-game-hall__info">
@@ -42,12 +45,18 @@ import { HallPlaceholderComponent } from '../hall-placeholder.component';
         }
       </p>
     </div>
-    <gd-hall-placeholder />
+    <gd-game-hall-sections />
+    <gd-game-hall-dialogs />
   `,
 })
 export class GameHallTabComponent {
   private readonly comms = inject(HallComms);
   protected readonly links = HALL_INFO_LINKS;
+
+  constructor() {
+    // the services that follow the hall's poll (they must exist before its first answer; the frame starts it)
+    injectGameHall();
+  }
   protected readonly motd = computed(() => {
     const motd = this.comms.motd();
     return motd ? parseServerMarkup(motd) : null;

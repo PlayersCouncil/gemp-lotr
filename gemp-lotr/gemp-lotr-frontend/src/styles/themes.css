@@ -538,6 +538,23 @@
   --theme-game-ui-scrollbar-track: var(--theme-scrollbar-track);
   --theme-game-ui-scrollbar-button: var(--theme-scrollbar-button);
 
+  /* The Game Hall tab's sections and rows, its dialogs (hall.css .eventHeader, table.tables, .wc-queues, .prizeHint,
+     .table-age; part 4.2) */
+  --theme-hall-section-bg: #555;
+  --theme-hall-section-wc-bg: #840000;
+  --theme-hall-section-text: #fff;
+  --theme-hall-table-bg: #121212;
+  --theme-hall-table-border: #444;
+  --theme-hall-table-head-bg: #333;
+  --theme-hall-row-played-bg: #590902;
+  --theme-hall-row-invited-bg: #a63f03;
+  --theme-hall-age: #bbb;
+  --theme-hall-hint: #6f8cff;
+  --theme-hall-danger-text: #d44;
+  --theme-hall-gold: url('/gemp-lotr/images/gold.png');
+  --theme-hall-silver: url('/gemp-lotr/images/silver.png');
+  --theme-hall-rtmd-arrow: #c0a000;
+
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;
   --theme-scrollbar-track: #6666;

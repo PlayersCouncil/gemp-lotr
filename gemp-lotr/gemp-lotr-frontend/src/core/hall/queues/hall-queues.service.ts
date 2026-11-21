@@ -242,12 +242,12 @@ export class HallQueuesService {
     } else {
       html = `<p>${escapeHtml(prizes.label || NO_PRIZE_INFO)}</p>`;
     }
-    this.dialogs.show(PRIZES_TITLE, pageMarkup(html));
+    this.dialogs.showInfo(PRIZES_TITLE, pageMarkup(html));
   }
 
   /** A tournament of more than 8 players: its count opens the list. */
   showCompetingPlayers(tournament: HallTournament): void {
-    this.dialogs.show(
+    this.dialogs.showInfo(
       COMPETING_PLAYERS_TITLE,
       pageMarkup(`${escapeHtml(tournament.playerList)}<br><br>${escapeHtml(ABANDONED_NOTE)}`),
     );

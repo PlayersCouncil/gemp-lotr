@@ -92,6 +92,7 @@
   color: var(--theme-text);
 }
 
-gd-hall-placeholder {
+gd-game-hall-sections {
   flex: 1 1 auto;
+  min-height: 0;
 }

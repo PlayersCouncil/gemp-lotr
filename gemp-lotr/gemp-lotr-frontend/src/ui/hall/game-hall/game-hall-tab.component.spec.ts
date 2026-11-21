@@ -1,28 +1,22 @@
-import { signal } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { HallComms } from '../../../core/hall/hall-comms.service';
+import { HallTestBed, setUpHall } from '../../../testing/hall';
 import { GAME_HALL_ROUTES } from './game-hall.routes';
 
 describe('GameHallTabComponent', () => {
-  const motd = signal<string | null>(null);
+  let hall: HallTestBed;
+  const motd = { set: (value: string | null) => hall.comms.motd.set(value) };
 
   async function open() {
-    TestBed.configureTestingModule({
-      providers: [
-        provideRouter([{ path: 'hall', children: GAME_HALL_ROUTES }]),
-        { provide: HallComms, useValue: { motd } },
-      ],
-    });
+    hall = setUpHall([provideRouter([{ path: 'hall', children: GAME_HALL_ROUTES }])]);
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/hall');
     return { harness, el: harness.routeNativeElement as HTMLElement };
   }
 
-  afterEach(() => motd.set(null));
+  afterEach(() => hall.finish());
 
-  it('shows the link buttons, each in a new tab, then the tables (a placeholder)', async () => {
+  it('shows the link buttons, each in a new tab, then the sections and the dialogs', async () => {
     const { el } = await open();
     const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('.gd-game-hall__link'));
     expect(links.map((a) => [a.dataset['link'], a.textContent?.trim(), a.target])).toEqual([
@@ -33,7 +27,7 @@ describe('GameHallTabComponent', () => {
       ['merchant', 'Merchant', '_blank'],
     ]);
     expect(links[4]?.querySelector('s')?.textContent).toBe('Merchant');
-    expect(el.querySelector('.gd-game-hall__info + gd-hall-placeholder')?.getAttribute('data-tab')).toBe('game-hall');
+    expect(el.querySelector('.gd-game-hall__info + gd-game-hall-sections + gd-game-hall-dialogs')).not.toBeNull();
   });
 
   it('shows the message of the day drawn element by element, never as HTML, and nothing without one', async () => {

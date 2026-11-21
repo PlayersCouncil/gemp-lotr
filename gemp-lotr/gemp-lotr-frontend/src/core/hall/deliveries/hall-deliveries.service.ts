@@ -4,7 +4,7 @@ import { DeliveryAnnouncements, DeliveryKind } from '../../api/delivery-announce
 import { GempHttp } from '../../api/gemp-http.service';
 import { PackDelivery } from '../../api/models';
 import { parsePackDelivery } from '../../api/parsers';
-import { MarkupNode, parseServerMarkup } from '../../chat/chat-markup';
+import { MarkupNode, parseServerMarkup, RICH_MARKUP } from '../../chat/chat-markup';
 import { asText } from '../json-values';
 
 /** An announcement (GET /delivery/announcements, DBDefs.Announcement; content rendered from Markdown by the server). */
@@ -40,7 +40,8 @@ export function parseAnnouncement(json: unknown): HallAnnouncement | null {
   return {
     id: typeof data['id'] === 'number' ? data['id'] : null,
     title: asText(data['title']),
-    content: parseServerMarkup(content),
+    // rich: a patch note's announcement links into the hall ("Read the full patch notes here")
+    content: parseServerMarkup(content, RICH_MARKUP),
   };
 }
 
@@ -174,6 +175,11 @@ export class HallDeliveries {
   dismissAnnouncement(): void {
     this.announcement.set(null);
     this.api.dismissAnnouncement().subscribe({ error: () => undefined });
+  }
+
+  /** A link into the hall was followed from the announcement: it counts as Dismiss (the page it opens is shown). */
+  followAnnouncementLink(): void {
+    this.dismissAnnouncement();
   }
 
   /** Remind Me Later, or the dialog closed any other way (the legacy close handler snoozed too). */
