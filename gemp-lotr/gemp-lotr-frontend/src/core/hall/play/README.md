@@ -86,3 +86,18 @@ queue joins, late joins and registrations end with their own dialog ("Joined Tou
 
 - The leagues are fetched when the League form opens (the legacy page fetched them on every Play open).
 - `PlayScenario.resumeDraft` was not called anywhere in the legacy page and is not ported.
+
+## The view (`ui/hall/game-hall/play/`)
+
+`gd-play-overlay` (the overlay and every flow's form; its stylesheet, unscoped, also draws the Join dialog's form),
+`gd-join-dialog`, and the shared pieces: `gd-deck-picker`, `gd-result-box`, `gd-format-info`. The invitee field is
+`ui/hall/shared/name-suggest.component.ts` (`gd-name-suggest`): a generic name field with suggestions (a source in, the
+name out), meant to become one with My Account's player picker. Play ▸ League shows the Events tab's league rows and
+league detail (`gd-event-row`, `gd-league-detail`) with their own LeagueResults, and its join question. The hall's
+frame holds the overlay, the Join dialog and the Game Hall's dialogs, and calls `injectGameHall()`. The Events tab's
+hooks (EVENTS_QUEUE_JOINER, EVENTS_LEAGUE_JOIN_LISTENER) are `hall-events-hooks.ts`, in `HALL_SERVICES`.
+
+Differences from the legacy overlay:
+
+- A failed league join from the list is said in a dialog (the Events tab's), not in the next steps.
+- The sections, the overlay and its forms appear at once (no jQuery UI show/hide animations).

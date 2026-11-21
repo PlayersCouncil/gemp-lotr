@@ -16,7 +16,7 @@ describe('GameHallTabComponent', () => {
 
   afterEach(() => hall.finish());
 
-  it('shows the link buttons, each in a new tab, then the sections and the dialogs', async () => {
+  it('shows the link buttons, each in a new tab, then the sections', async () => {
     const { el } = await open();
     const links = Array.from(el.querySelectorAll<HTMLAnchorElement>('.gd-game-hall__link'));
     expect(links.map((a) => [a.dataset['link'], a.textContent?.trim(), a.target])).toEqual([
@@ -27,7 +27,7 @@ describe('GameHallTabComponent', () => {
       ['merchant', 'Merchant', '_blank'],
     ]);
     expect(links[4]?.querySelector('s')?.textContent).toBe('Merchant');
-    expect(el.querySelector('.gd-game-hall__info + gd-game-hall-sections + gd-game-hall-dialogs')).not.toBeNull();
+    expect(el.querySelector('.gd-game-hall__info + gd-game-hall-sections')).not.toBeNull();
   });
 
   it('shows the message of the day drawn element by element, never as HTML, and nothing without one', async () => {

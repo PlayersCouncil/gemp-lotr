@@ -5,7 +5,9 @@ import { ChatService } from '../chat/chat.service';
 import { HallBoard } from './board/hall-board.service';
 import { HallSectionSettings } from './board/hall-section-settings.service';
 import { HallDeliveries, HallDeliveriesApi } from './deliveries/hall-deliveries.service';
+import { EVENTS_LEAGUE_JOIN_LISTENER, EVENTS_QUEUE_JOINER } from './events/events-hooks';
 import { HallApi } from './hall-api.service';
+import { HallEventsHooks } from './hall-events-hooks';
 import { HallComms } from './hall-comms.service';
 import { HallDialogs } from './hall-dialogs.service';
 import { HallSession } from './hall-session.service';
@@ -53,6 +55,9 @@ export const HALL_SERVICES: Provider[] = [
   PlayOverlay,
   HallDeliveriesApi,
   HallDeliveries,
+  HallEventsHooks,
+  { provide: EVENTS_QUEUE_JOINER, useExisting: HallEventsHooks },
+  { provide: EVENTS_LEAGUE_JOIN_LISTENER, useExisting: HallEventsHooks },
 ];
 
 /**

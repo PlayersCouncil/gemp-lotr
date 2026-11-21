@@ -1,5 +1,7 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { HallTablesService } from '../../core/hall/tables/hall-tables.service';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { Subject } from 'rxjs';
@@ -210,6 +212,18 @@ describe('HallShellComponent', () => {
     await update();
     expect(el().querySelector('dialog[data-dialog="play"]')?.hasAttribute('open')).toBe(true);
     expect(el().querySelector('dialog[data-dialog="login-required"]')?.hasAttribute('open')).toBe(false);
+  });
+
+  it('opens the Play overlay\'s Casual form from the chat\'s "Invite to table"', async () => {
+    await open('/hall');
+    await answerPlayer();
+    harness.fixture.debugElement.query(By.css('gd-chat')).triggerEventHandler('invite', '+ bob');
+    await update();
+    expect(el().querySelector('dialog[data-dialog="play"] [data-dialog-title]')?.textContent).toBe(
+      'Create Table ▸ Casual',
+    );
+    const shell = harness.fixture.debugElement.query(By.directive(HallShellComponent));
+    expect(shell.injector.get(HallTablesService).invitee()).toBe('bob');
   });
 
   it("shows admins the Admin tab, the legacy hall's", async () => {
