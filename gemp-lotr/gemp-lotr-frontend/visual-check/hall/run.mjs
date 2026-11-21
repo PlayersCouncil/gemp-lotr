@@ -83,10 +83,10 @@ async function act(page, [gesture, selector, value]) {
   return run(page, target);
 }
 
-/** The accepted areas on the Angular page for this screenshot. */
+/** The accepted entries for this screenshot, and the area of the Angular page each one names (null if not there). */
 async function acceptedAreas(page, scenario, size, step) {
   const entries = HALL_ACCEPTED.filter((entry) => gameEntryApplies(entry, scenario.name, size.label, step));
-  return Promise.all(
+  const boxes = await Promise.all(
     entries.map(async (entry) => {
       const box = await page
         .locator(entry.selector)
@@ -95,11 +95,18 @@ async function acceptedAreas(page, scenario, size, step) {
         .boundingBox({ timeout: 500 })
         .catch(() => null);
       const margin = entry.margin ?? 0;
+      // compare.mjs's areas: left, top, right, bottom
       return (
-        box && { x: box.x - margin, y: box.y - margin, width: box.width + 2 * margin, height: box.height + 2 * margin }
+        box && {
+          left: box.x - margin,
+          top: box.y - margin,
+          right: box.x + box.width + margin,
+          bottom: box.y + box.height + margin,
+        }
       );
     }),
   );
+  return { entries, boxes };
 }
 
 async function check(scenario, size) {
@@ -114,18 +121,31 @@ async function check(scenario, size) {
       legacy.page.goto(STUB_ORIGIN + scenario.legacy),
       angular.page.goto(`${STUB_ORIGIN}${scenario.angular}${scenario.angular.includes('?') ? '&' : '?'}theme=classic`),
     ]);
+    // what a scenario leaves out of the comparison on purpose (the login page's picture): its own CSS on each page
+    if (scenario.styles) {
+      await Promise.all([
+        legacy.page.addStyleTag({ content: scenario.styles.legacy }),
+        angular.page.addStyleTag({ content: scenario.styles.angular }),
+      ]);
+    }
     const settle = scenario.settle ?? 2500;
     await Promise.all([pause(legacy.page, settle), pause(angular.page, settle)]);
     const compare = async (label) => {
       const [a, b] = await Promise.all([legacy.page.screenshot(), angular.page.screenshot()]);
-      const areas = await acceptedAreas(angular.page, scenario, size, label);
-      const result = compareScreens(a, b, areas, true);
+      const { entries, boxes } = await acceptedAreas(angular.page, scenario, size, label);
+      const result = compareScreens(a, b, boxes, true);
       const file = `${base}-${shots.length}`;
       fs.writeFileSync(path.join(outDir, `${file}-legacy.png`), a);
       fs.writeFileSync(path.join(outDir, `${file}-angular.png`), b);
       if (result.image) fs.writeFileSync(path.join(outDir, `${file}-diff.png`), result.image);
-      const pixels = result.outside;
-      shots.push({ label, file, pixels });
+      // an accepted area takes up to its maxPixels differing pixels (all of them without one); the rest count
+      const over = result.areas.reduce(
+        (sum, count, i) => sum + Math.max(0, count - (entries[i].maxPixels ?? Infinity)),
+        0,
+      );
+      const pixels = result.outside + over;
+      const differing = result.outside + result.areas.reduce((sum, count) => sum + count, 0);
+      shots.push({ label, file, pixels, differing });
       if (pixels > tolerance) {
         problems.push(`${label}: ${pixels === Infinity ? 'the screens differ in size' : `${pixels} px differ`}`);
       }
@@ -186,6 +206,8 @@ function writeReport(results, navigation) {
           name: `${r.scenario.name}-${r.size.label}`,
           only: r.scenario.name,
           problems: r.problems,
+          // every differing pixel of each screenshot, accepted or not (what HALL_ACCEPTED's budgets are set from)
+          shots: r.shots.map((shot) => ({ label: shot.label, differing: shot.differing })),
         })),
         ...navigation.map((n) => ({ name: `navigation ${n.label}`, problems: n.problems })),
       ],

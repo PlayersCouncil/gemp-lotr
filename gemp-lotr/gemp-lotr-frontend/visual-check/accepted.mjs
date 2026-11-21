@@ -524,13 +524,90 @@ export function gameEntryApplies(entry, scenario, sizeLabel, step = null) {
 /**
  * Differences of the hall and the login page (visual-check/hall, `npm run check:hall`) that the owner has accepted.
  * Only the owner adds to it: anything not in it fails the check. An entry is an area of the Angular page (its first
- * visible match of `selector`, grown by `margin` px) where up to `maxPixels` differing pixels don't count, read again
- * at every screenshot:
+ * visible match of `selector`, grown by `margin` px) where up to `maxPixels` differing pixels don't count (all of them
+ * without a `maxPixels`), read again at every screenshot. A pixel belongs to the first entry whose area holds it.
  *
  *   scenarios  the scenarios (names, or patterns)
  *   steps      a pattern for the steps' labels it applies to (default: all; the page as loaded is "loaded")
  *   sizes      which window sizes (default: all)
  *   browsers   which browsers (CHECK_BROWSER; default: all)
  *   reason     what differs and why it is accepted
+ *
+ * What is here was accepted by Ketura on 2026-11-20, shown what the check still found after the pixel pass (the frame
+ * identical, most screens within a few thousand of the screen's 1,049,088 pixels, and the larger ones named): "<1% is
+ * more than accurate enough, I'm not concerned. Approved." Each screen is given what it measured then (the most of
+ * several runs, and about a sixth more), so the check passes as the pages are and fails when one moves further from
+ * its legacy page. results.json has every screenshot's count (`differing`), accepted or not.
  */
-export const HALL_ACCEPTED = [];
+
+/** The whole hall: its frame is 8px inside the window. */
+const HALL_SCREEN = { selector: 'gd-hall-shell', margin: 8, sizes: ['1366x768'] };
+const exactly = (label) => new RegExp(`^${label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
+/** `scenarios` at `step` (a label; null: every step) may differ from the legacy page by `maxPixels`. */
+const within = (scenarios, step, maxPixels, reason) => ({
+  scenarios,
+  ...(step === null ? {} : { steps: exactly(step) }),
+  ...HALL_SCREEN,
+  maxPixels,
+  reason,
+});
+
+const SUB_PIXEL = 'Text a fraction of a pixel from the legacy page here and there (under 1% of the screen).';
+
+export const HALL_ACCEPTED = [
+  // ---- where the legacy page's own place depends on timing ----
+  {
+    scenarios: ['events-tournament-link', 'events-league-link'],
+    selector: '.gd-hall__panel',
+    sizes: ['1366x768'],
+    reason:
+      "Where the tab ends up scrolled. The legacy hall's smooth scroll to the row is clamped to the page's height at " +
+      'the moment it starts, while the drawer is still loading, so where it stops depends on timing (62,000 to ' +
+      '171,000 px between runs); the Angular hall always lands on the row.',
+  },
+
+  // ---- over 1% of the screen: named to Ketura with the rest ----
+  within(['play-league'], 'league', 48000, 'Play > League: the "Join Leagues" list starts about 10 px higher.'),
+  within(['game-hall-prizes'], 'Show Prizes', 34000, 'The prizes dialog sits 2 px from the legacy one.'),
+  within(['account-overview'], 'Player picker', 30000, "The player picker's menu sits 2 px from the legacy one."),
+  within(['play-bot'], 'bot', 19000, 'Play > Bot: lines a pixel from the legacy form (not measured further).'),
+  within(['frame-visitor-hall'], 'loaded', 14400, 'The "Not logged in" dialog: its button bar.'),
+  within(['game-hall-queues', 'game-hall-prizes'], 'loaded', 14200, "The queues' and tournaments' rows."),
+  within(['events-leagues'], 'Open the first league', 12000, 'A league opened in Events: a pixel here and there.'),
+  within(['events-leagues'], 'Your league matches', 12000, 'A league opened in Events: a pixel here and there.'),
+
+  // ---- under 1% ----
+  within(['account-history'], null, 9600, `My Game History's rows. ${SUB_PIXEL}`),
+  within(['help-errata-filtered'], null, 8800, SUB_PIXEL),
+  within(['help-format-link'], null, 8000, SUB_PIXEL),
+  within(['help-formats'], null, 7400, SUB_PIXEL),
+  within(['play-casual'], 'Create without a deck', 7200, SUB_PIXEL),
+  within(['play-casual'], 'casual', 5500, SUB_PIXEL),
+  within(['play-back'], 'Casual', 5500, SUB_PIXEL),
+  within(['play-scenario'], 'scenario', 5200, SUB_PIXEL),
+  within([/^play-/], 'Play', 4100, `The Play popup's choices. ${SUB_PIXEL}`),
+  within(['play-tournament'], 'tournament', 4100, SUB_PIXEL),
+  within(['play-back'], 'Back', 3900, SUB_PIXEL),
+  within(['join-table'], 'Join Table', 3000, SUB_PIXEL),
+  within(['account-scenarios'], 'Copy Public...', 5900, SUB_PIXEL),
+  within(['account-scenarios'], 'Close', 4200, SUB_PIXEL),
+  within(['account-scenarios'], 'loaded', 3400, SUB_PIXEL),
+  within(['info-patch-notes'], 'Months', 5900, SUB_PIXEL),
+  within(['info-patch-notes'], 'loaded', 2700, SUB_PIXEL),
+  within(['help-conduct'], null, 3500, SUB_PIXEL),
+  within(['info-about'], null, 3300, SUB_PIXEL),
+  within(['info-stats', 'help-errata'], null, 2800, SUB_PIXEL),
+  within(['info-contribute', 'help-errata-card'], null, 2700, SUB_PIXEL),
+  within(['account-stats', 'events-leagues'], null, 1200, SUB_PIXEL),
+  within(['events-calendar'], null, 1100, SUB_PIXEL),
+  within(['help-how-to-play', 'frame-visitor-help'], null, 1000, SUB_PIXEL),
+  within(['help-leagues', 'account-overview'], null, 800, SUB_PIXEL),
+
+  // ---- every screen ----
+  within(
+    [/./],
+    null,
+    200,
+    "A table's waiting time or the clock caught a second apart on the two pages (59 px when it happens).",
+  ),
+];

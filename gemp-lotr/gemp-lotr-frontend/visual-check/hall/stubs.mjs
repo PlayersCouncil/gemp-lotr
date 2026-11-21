@@ -21,6 +21,15 @@ const PUBLIC =
 
 const read = (name) => fs.readFileSync(path.join(RESPONSES_DIR, name), 'utf8');
 
+/**
+ * A chat poll with nothing new: no messages, and the same users (the server sends the room's users with every answer;
+ * an answer without them empties the user list, whose width the legacy page and the Angular one then take from an
+ * empty list at different moments).
+ */
+const CHAT_POLL = read('chat.xml')
+  .replace(/^<\?xml[^>]*\?>\s*/, '')
+  .replace(/<message\b[^>]*>[^<]*<\/message>/g, '');
+
 /** hall.xml with its waiting table another player's, so the viewer can join it. */
 function joinableHall() {
   return read('hall.xml').replace(/(<table action="add" id="11"[^>]*?)playing="true"/, '$1playing="false"');
@@ -45,7 +54,7 @@ export function hallAnswers({ visitor = false, hall = 'hall.xml', history = 'gam
     if (p === '/hall' && get) return hall === 'join' ? { xml: joinableHall() } : file(hall);
     if (p === '/hall/update') return { ...file('hall-update-empty.xml'), delay: POLL_MS };
     if (p === '/chat/Game Hall') {
-      return get ? file('chat.xml') : { xml: '<chat roomName="Game Hall"/>', delay: POLL_MS };
+      return get ? file('chat.xml') : { xml: CHAT_POLL, delay: POLL_MS };
     }
     if (p === '/hall/players') return { json: { players: ['erin', 'eric'] } };
     if (p === '/hall/formats/json') return json('format-definitions.json');

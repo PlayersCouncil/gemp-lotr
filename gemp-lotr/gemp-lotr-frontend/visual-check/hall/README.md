@@ -44,7 +44,12 @@ build it first (`npm run build` in `gemp-lotr-frontend`). The report is `report-
   `hall.html#...` as a visitor still opens the tab. An admin's Admin link must be
   `hall-legacy.html?admin=1#admin` and open the legacy hall on its Admin tab, starting no hall or chat of its own.
 - **Accepted differences**: `HALL_ACCEPTED` in `../accepted.mjs`, areas of the Angular page where some differing
-  pixels don't count. Only the owner (Ketura) adds to it; it is empty, so every difference shows.
+  pixels don't count (up to an entry's `maxPixels`). Only the owner (Ketura) adds to it. It holds what Ketura accepted
+  on 2026-11-20, after the pixel pass: each screen at 1366x768 may differ by about what it measured then, so the check
+  passes as the pages are and fails when a screen moves further from its legacy page. Other window sizes have no
+  entries. `results.json` has every screenshot's whole count (`differing`).
+- **Left out on purpose**: the login page's picture (a scenario's `styles`). The legacy stylesheet sized it to the
+  page's content by a typo and the Angular page fills the window, as Ketura wants it; the rest of the page is compared.
 
 ## What it covers
 

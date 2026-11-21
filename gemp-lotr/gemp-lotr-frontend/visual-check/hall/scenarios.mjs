@@ -6,6 +6,7 @@
 //   legacy       the legacy page's address (hall-legacy.html#<tab>, login-legacy.html)
 //   angular      the Angular page's address (/gemp-lotr/ng/<route>)
 //   settle       ms to wait after loading before the first screenshot (default 2500)
+//   styles       { legacy, angular }: CSS added to each page, for what is left out of the comparison on purpose
 //   stubs        hall/stubs.mjs's options: visitor (nobody logged in), hall (the hall's snapshot), history, player
 //   steps        [label, legacy actions, Angular actions]: an action is [gesture, selector, value?] where the gesture is
 //                one of gestures.mjs's (press, hover, escape, ...) or fill, select, key, wait, scrollTo (run.mjs)
@@ -25,6 +26,16 @@ const tab = (name, note, hash, route, options = {}) => ({
   steps: [],
   ...options,
 });
+
+/**
+ * The login page without its picture. The legacy stylesheet sized it to the page's content (`shtml { height: 100% }`,
+ * a typo for `html`), the Angular page fills the window as was meant (Ketura, 2026-11-20: not to be preserved), so the
+ * picture differs everywhere; without it the rest of the page is compared.
+ */
+const NO_LOGIN_PICTURE = {
+  legacy: 'body { background-image: none !important; }',
+  angular: 'gd-login-page { background-image: none !important; }',
+};
 
 const PLAY_LEGACY = '#open-table-button';
 const PLAY_ANGULAR = 'button.gd-hall__action[data-action=play]';
@@ -54,6 +65,7 @@ export const SCENARIOS = [
     legacy: '/gemp-lotr/login-legacy.html',
     angular: `${NG}login`,
     stubs: { visitor: true },
+    styles: NO_LOGIN_PICTURE,
     steps: [],
   },
   {
@@ -62,6 +74,7 @@ export const SCENARIOS = [
     legacy: '/gemp-lotr/login-legacy.html',
     angular: `${NG}login`,
     stubs: { visitor: true },
+    styles: NO_LOGIN_PICTURE,
     steps: [['Register', [['press', 'text="Register"']], [['press', '[data-action=register]']]]],
   },
 
@@ -185,7 +198,7 @@ export const SCENARIOS = [
     'league-1700000002',
     'events/leagues/1700000002',
     // the legacy hall's smooth scroll to the row ends about 2.2 s after loading, later when the machine is busy
-    { settle: 5000 },
+    { settle: 8000 },
   ),
   tab(
     'events-tournaments',
@@ -226,6 +239,8 @@ export const SCENARIOS = [
 
   // ---- My Account ----
   tab('account-overview', 'My Account, then the player picker', 'account/overview', 'account', {
+    // the legacy page draws the name and the pocket once the player has answered, later when the machine is busy
+    settle: 5000,
     steps: [['Player picker', [['press', '.player-picker-toggle']], [['press', '.gd-player-picker__toggle']]]],
   }),
   tab('account-history', 'My Account › My Game History', 'account/history', 'account/history'),
