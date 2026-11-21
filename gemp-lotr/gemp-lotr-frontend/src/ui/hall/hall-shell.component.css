@@ -13,7 +13,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto auto 10px;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
   grid-template-areas: 'tabs' 'panel' 'bar' 'chat' 'disclaimer';
   border-radius: var(--theme-radius);
   background: var(--theme-hall-content-bg);
@@ -277,9 +277,14 @@ gd-chat {
 
 /* ---------------------------------------------------------------- the disclaimer */
 
+/*
+ * One line is 10px high; in a narrow window it wraps to a second, and the chat, the main bar and the tab's panel move
+ * up by that much, as in the legacy hall
+ */
 .gd-hall__disclaimer {
   grid-area: disclaimer;
   margin: 0;
+  line-height: 10px;
   color: var(--theme-text);
   font-size: 70%;
   text-align: center;
