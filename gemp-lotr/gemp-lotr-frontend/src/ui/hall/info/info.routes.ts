@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { INFO_SERVICES } from '../../../core/hall/info/info-services';
 import { HALL_TAB_DATA } from '../hall-route-data';
-import { provideHallCards } from '../help/hall-cards';
+import { provideHallCards } from '../shared/hall-cards';
 import { patchNotesMatcher } from './patch-notes.component';
 
 /**

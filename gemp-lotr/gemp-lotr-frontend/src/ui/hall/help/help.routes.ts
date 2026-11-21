@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HELP_SERVICES } from '../../../core/hall/help/help-services';
 import { HALL_TAB_DATA } from '../hall-route-data';
 import { formatsMatcher } from './format-definitions.component';
-import { provideHallCards } from './hall-cards';
+import { provideHallCards } from '../shared/hall-cards';
 import { ERRATA_ROUTE } from './errata/errata.routes';
 
 /**

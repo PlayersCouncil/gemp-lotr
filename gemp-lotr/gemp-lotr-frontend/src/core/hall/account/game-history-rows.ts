@@ -1,7 +1,7 @@
 import { replayUrl } from '../../game/session/game-ending';
 import { GameHistoryEntry } from './account-models';
 import { CASUAL_EVENT_CELL, endedTitle, NO_VALUE, RESULT_TITLES, winnerReasonTitle } from './account-messages';
-import { firstText } from './first-text';
+import { firstText } from '../first-text';
 
 /** One row of the history table, as shown (GameHistoryUI.renderRows). */
 export interface GameHistoryRow {

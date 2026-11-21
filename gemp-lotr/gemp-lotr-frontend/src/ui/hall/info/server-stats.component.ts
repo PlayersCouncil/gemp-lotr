@@ -1,12 +1,12 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import * as words from '../../../core/hall/info/info-messages';
 import { STATS_CAPTIONS } from '../../../core/hall/info/server-stats';
 import { STATS_PERIODS, StatsColumnKey, StatsPeriod, StatsTable } from '../../../core/hall/info/server-stats-models';
 import { ServerStatsService } from '../../../core/hall/info/server-stats.service';
 import { ariaSort } from '../../../core/hall/table-sort';
-import { REFRESH_AFTER_MS, ReturnRefresh } from '../../../core/hall/events/return-refresh';
+import { REFRESH_AFTER_MS, ReturnRefresh } from '../../../core/hall/return-refresh';
 import { Timers } from '../../../core/platform/timers';
+import { HallTabFrameComponent } from '../shared/hall-tab-frame.component';
 
 /** When the viewer last left the page (the sub-tab), per service: coming back counts from there. */
 const leftAt = new WeakMap<ServerStatsService, number>();
@@ -50,19 +50,10 @@ export class ServerStatsComponent {
       void this.stats.refresh();
     }
     returns.setShown(PART, true);
-    const document = inject(DOCUMENT);
-    const view = document.defaultView;
-    const pageShown = () => returns.setPageShown(document.visibilityState !== 'hidden' && document.hasFocus());
-    const events: [EventTarget | null, string][] = [
-      [document, 'visibilitychange'],
-      [view, 'focus'],
-      [view, 'blur'],
-    ];
-    for (const [target, type] of events) target?.addEventListener(type, pageShown);
-    inject(DestroyRef).onDestroy(() => {
-      for (const [target, type] of events) target?.removeEventListener(type, pageShown);
-      leftAt.set(this.stats, timers.now());
-    });
+    // the browser tab hidden or the window blurred counts as being away (the tab frame watches it)
+    const frame = inject(HallTabFrameComponent);
+    effect(() => returns.setPageShown(frame.pageShown()));
+    inject(DestroyRef).onDestroy(() => leftAt.set(this.stats, timers.now()));
   }
 
   protected tables(): StatsTable[] {

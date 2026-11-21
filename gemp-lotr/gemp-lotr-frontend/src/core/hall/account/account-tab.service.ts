@@ -3,7 +3,7 @@ import { AuthoringApi } from '../../game/authoring/authoring-api.service';
 import { ScenarioApi } from '../../game/scenario/scenario-api.service';
 import { LocalSettings } from '../../platform/local-settings.service';
 import { Timers } from '../../platform/timers';
-import { ReturnRefresh } from '../events/return-refresh';
+import { ReturnRefresh } from '../return-refresh';
 import { AccountApi } from './account-api.service';
 import { AccountOverview } from './account-overview.service';
 import { ACCOUNT_SUB_TAB_HREFS, ACCOUNT_SUB_TAB_STORAGE_KEY, AccountSubTab, rememberedSubTab } from './account-routes';

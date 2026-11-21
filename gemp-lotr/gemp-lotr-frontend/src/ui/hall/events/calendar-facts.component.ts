@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 import { CalendarFacts } from '../../../core/hall/events/calendar-details';
 import { SERIES_HEADERS } from '../../../core/hall/events/events-messages';
 import { MarkupComponent } from '../../shared/chat/markup.component';
-import { PriceComponent } from './price.component';
+import { PriceComponent } from '../shared/price.component';
 
 /**
  * A calendar event's facts (calendarUi.js renderFacts), in the preview's drawer where the league's or tournament's

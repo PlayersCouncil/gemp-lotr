@@ -5,7 +5,8 @@ import { Notifier } from '../../notifier/notifier';
 import { EventDrawer, eventRow } from './event-drawer';
 import { EventList } from './event-list';
 import { EventsApi } from './events-api.service';
-import { LeagueDetail, LeagueSummary, Price } from './events-models';
+import { LeagueDetail, LeagueSummary } from './events-models';
+import { Price } from '../price';
 import {
   eventErrorMessage,
   LEAGUE_NOT_DISPLAYED,

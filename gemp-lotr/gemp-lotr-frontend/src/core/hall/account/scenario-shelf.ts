@@ -37,7 +37,7 @@ import {
   wasVersionOf,
 } from './account-messages';
 import { OwnScenario, PublicScenario, ShelfScenario } from './account-models';
-import { firstText } from './first-text';
+import { firstText } from '../first-text';
 
 /** The rules of the shelf's rows (scenarioShelf.js ScenarioShelfCommon and MyScenariosUI.row), with no state. */
 

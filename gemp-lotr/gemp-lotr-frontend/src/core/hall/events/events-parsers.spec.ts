@@ -8,7 +8,6 @@ import {
   parseLeagueList,
   parseTournamentDetail,
   parseTournamentList,
-  price,
   safeUrl,
   soloDraftUrl,
   tournamentReportUrl,
@@ -17,11 +16,6 @@ import {
 const json = (name: string) => JSON.parse(readServerResponse(name)) as unknown;
 
 describe('events parsers', () => {
-  it('writes prices as the legacy page did', () => {
-    expect(price(1050)).toEqual({ gold: 10, silver: '50' });
-    expect(price(5)).toEqual({ gold: 0, silver: '05' });
-  });
-
   it('reads the calendar, leaving out events of an unknown kind', () => {
     const month = parseCalendar(json('events-calendar.json'));
     expect(month.from).toBe('2026-10-26');

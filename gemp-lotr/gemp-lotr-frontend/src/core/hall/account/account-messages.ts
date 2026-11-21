@@ -1,6 +1,6 @@
 /** The My Account tab's wording, as the legacy tab has it (account.html and the files named on each part). */
 
-import { firstText } from './first-text';
+import { firstText } from '../first-text';
 
 // ---- the tab and its sub-tabs (account.html) ----
 
@@ -38,11 +38,6 @@ export const IGNORE_NAME_MISSING = 'Type the name of the player to ignore.';
 export const IGNORES_UNREACHABLE = 'Could not reach the server.';
 export const IGNORES_NOT_LOGGED_IN = 'You are not logged in.';
 export const IGNORES_FAILED = 'Could not load or change your ignore list. Try again later.';
-
-/** hallUi.js requestFailed: a side request's failure the part does not word itself. */
-export const SERVER_ERROR_TITLE = 'Server error';
-export const serverErrorText = (status: number) =>
-  `The server could not complete that request (error ${status}). Try again; if it keeps happening, reload the page.`;
 
 // ---- My Game History (gameHistory.html, gameHistoryUi.js) ----
 

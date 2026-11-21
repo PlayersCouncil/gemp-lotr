@@ -1,4 +1,4 @@
-import { Timers } from '../../platform/timers';
+import { Timers } from '../platform/timers';
 
 /** GameHall.js GempHallTabs.REFRESH_AFTER_MS */
 export const REFRESH_AFTER_MS = 10000;

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { accountRequest, answerAccount, setUpAccount } from '../../../testing/account-server';
 import { settle } from '../../../testing/fake-notifier';
 import { LocalSettings } from '../../platform/local-settings.service';
-import { REFRESH_AFTER_MS } from '../events/return-refresh';
+import { REFRESH_AFTER_MS } from '../return-refresh';
 import { AccountTab } from './account-tab.service';
 
 describe('AccountTab', () => {

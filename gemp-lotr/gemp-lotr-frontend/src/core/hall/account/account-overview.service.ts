@@ -1,16 +1,16 @@
 import { computed, inject, Injectable, Injector, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
+import { ApiError } from '../../api/api-error';
 import { ChatApi } from '../../chat/chat-api.service';
 import { IgnoreResult } from '../../chat/chat-models';
 import { ChatService } from '../../chat/chat.service';
 import { Notifier } from '../../notifier/notifier';
 import { PageNavigation } from '../../platform/page-navigation';
 import { PlayerInfo } from '../../session/player-info.service';
-import { price } from '../events/events-parsers';
-import { Price } from '../events/events-models';
+import { Price, price } from '../price';
 import { HallComms } from '../hall-comms.service';
 import { HallSession } from '../hall-session.service';
+import { hallRequestFailed } from '../hall-request-failed';
 import { AccountApi } from './account-api.service';
 import {
   IGNORE_NAME_MISSING,
@@ -18,7 +18,6 @@ import {
   IGNORES_NOT_LOGGED_IN,
   IGNORES_UNREACHABLE,
   MIGRATE_QUESTION,
-  serverErrorText,
 } from './account-messages';
 
 /**
@@ -140,16 +139,8 @@ export class AccountOverview {
     }
   }
 
-  /**
-   * hallUi.js requestFailed: 401 is the "Not logged in" dialog; no answer or 504 nothing (the readout says it); an
-   * answer that could not be read nothing (the legacy page's jQuery took it for a 200); any other the "Server error"
-   * dialog.
-   */
+  /** hallUi.js requestFailed (hall-request-failed.ts). */
   private requestFailed(error: ApiError): void {
-    if (error.is(401)) {
-      this.session.requireLogin();
-    } else if (!error.is(0) && !error.is(504) && !error.is(INVALID_RESPONSE_STATUS)) {
-      this.notifier.tell(serverErrorText(error.status));
-    }
+    hallRequestFailed(error, { requireLogin: () => this.session.requireLogin(), notifier: this.notifier });
   }
 }

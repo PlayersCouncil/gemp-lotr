@@ -1,0 +1,42 @@
+/*
+ * A tab with sub-tabs (hall.css .hall-tab, the hall's jQuery UI 1.13 tabs widget: .ui-tabs and .ui-widget-content):
+ * framed, padded .2em, the sub-tabs at the left (sticky: gd-hall-sub-tabs), the page beside them; the tab scrolls as a
+ * whole (overflow-x hidden, as #helpMain). Its boxes are the legacy tab's, measured in the browser:
+ * - the widget's own clearfix puts a ::before and an ::after in the flex row, so the 5px gap also sits before the
+ *   sub-tabs and after the page;
+ * - .hall-tab is calc(100% - 0.4em) wide plus its padding and border: 2px wider than its place (its right border is
+ *   cut off, as on the legacy hall), and calc(100% - 1rem) high plus them: it runs 0.4em + 2px further down than the
+ *   1rem the hall keeps below it;
+ * - its own gradient (hall.css .hall-tab), drawn over its whole box.
+ */
+
+:host {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 5px;
+  box-sizing: border-box;
+  width: calc(100% + 2px);
+  min-height: 0;
+  margin-bottom: calc(-0.4em - 2px);
+  padding: 0.2em calc(0.2em + 5px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-panel-bg);
+}
+
+/* .hall-tab > .ui-tabs-panel: it takes the rest of the row, at least half of it */
+.gd-hall-tab-frame__page {
+  flex: 1 1 auto;
+  min-width: 50%;
+  padding: 1em 1.4em;
+}
+
+/* The Events sub-tabs' .article: the tab's font at 120%, from 3em down, with 20em of space below */
+.gd-hall-tab-frame__page[data-page='article'] {
+  min-width: 0;
+  margin-top: 3em;
+  margin-bottom: 20em;
+  font-size: 120%;
+}

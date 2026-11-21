@@ -1,6 +1,7 @@
 /** The Events tab's wording, as the legacy tab has it (events.html and the *Ui.js files named on each). */
 
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
+import { messageHeader } from '../hall-request-failed';
 
 // ---- the tab and its sub-tabs (events.html) ----
 
@@ -81,7 +82,7 @@ export const DRAWER_LOADING = 'Loading details…';
 export function eventErrorMessage(error: ApiError): string {
   const status = error.status;
   if (status === 400) {
-    const detail = error.said ?? headerMessage(error.cause);
+    const detail = error.said ?? messageHeader(error.cause);
     return detail !== null ? `The request was rejected: ${detail}` : 'The request was rejected as malformed.';
   }
   if (status === INVALID_RESPONSE_STATUS) {
@@ -103,14 +104,6 @@ const STATUS_MESSAGES: Readonly<Record<number, string>> = {
   410: 'You were logged out after being inactive; refresh the page.',
   500: 'The server failed to produce it.',
 };
-
-function headerMessage(cause: unknown): string | null {
-  if (cause === null || typeof cause !== 'object') {
-    return null;
-  }
-  const headers = (cause as { headers?: { get(name: string): string | null } }).headers;
-  return headers?.get('message') ?? null;
-}
 
 // ---- leagues (leagueResultsUi.js) ----
 

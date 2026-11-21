@@ -45,7 +45,7 @@ import {
   shelfError,
   ShelfKindGroup,
 } from './scenario-shelf';
-import { firstText } from './first-text';
+import { firstText } from '../first-text';
 
 /** The status line's tone (its `data-kind`): nothing, under way, done, failed. */
 export type ShelfSayKind = '' | 'pending' | 'success' | 'error';

@@ -4,7 +4,7 @@ import { settle } from '../../../testing/fake-notifier';
 import { LeagueDetail } from './events-models';
 import { EVENTS_LEAGUE_JOIN_LISTENER } from './events-hooks';
 import { EventsTab } from './events-tab.service';
-import { REFRESH_AFTER_MS } from './return-refresh';
+import { REFRESH_AFTER_MS } from '../return-refresh';
 
 describe('EventsTab', () => {
   let backend: ReturnType<typeof setUpEvents>['backend'];

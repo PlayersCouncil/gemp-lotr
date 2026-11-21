@@ -17,7 +17,7 @@ import { EventRowComponent } from '../../events/event-row.component';
 import { EventsButtonComponent } from '../../events/events-button.component';
 import { EVENTS_AUTO_ZOOM_COOKIE, EventsCardActions } from '../../events/events-tab.component';
 import { LeagueDetailComponent } from '../../events/league-detail.component';
-import { PriceComponent } from '../../events/price.component';
+import { PriceComponent } from '../../shared/price.component';
 import { DeckPickerComponent } from './deck-picker.component';
 import { fieldValue, HelpToggles } from './play-parts';
 import { ResultBoxComponent } from './result-box.component';

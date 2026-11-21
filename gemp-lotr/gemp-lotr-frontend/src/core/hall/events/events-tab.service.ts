@@ -7,7 +7,7 @@ import { EVENTS_LEAGUE_JOIN_LISTENER } from './events-hooks';
 import { CompletedEventsMonth, EventKind } from './events-models';
 import { EventsLink, EventsSubTab } from './events-routes';
 import { LeagueResults } from './league-results.service';
-import { ReturnRefresh } from './return-refresh';
+import { ReturnRefresh } from '../return-refresh';
 import { TournamentResults } from './tournament-results.service';
 
 /**

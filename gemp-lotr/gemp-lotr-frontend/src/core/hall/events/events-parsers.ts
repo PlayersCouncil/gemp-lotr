@@ -1,5 +1,6 @@
 import { parseServerMarkup } from '../../chat/chat-markup';
 import { attr, boolAttr, childElements, intAttr, parseXml, rootElement } from '../../api/xml';
+import { price } from '../price';
 import {
   CalendarEvent,
   CalendarMonth,
@@ -14,7 +15,6 @@ import {
   LeagueSerie,
   LeagueStanding,
   LeagueSummary,
-  Price,
   RtmdPath,
   TournamentDetail,
   TournamentStanding,
@@ -26,12 +26,6 @@ import {
  * LeagueRequestHandler, TournamentRequestHandler). JSON fields of the wrong type count as absent; an XML answer with
  * another root is null, as the legacy page drew nothing for it.
  */
-
-/** formatPrice: 100 silver to the gold, the silver in two digits. */
-export function price(amount: number): Price {
-  const silver = amount % 100;
-  return { gold: Math.floor(amount / 100), silver: silver < 10 ? `0${silver}` : String(silver) };
-}
 
 // ---- JSON helpers ----
 

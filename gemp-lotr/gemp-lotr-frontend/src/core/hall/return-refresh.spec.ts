@@ -1,4 +1,4 @@
-import { Timers } from '../../platform/timers';
+import { Timers } from '../platform/timers';
 import { REFRESH_AFTER_MS, ReturnRefresh } from './return-refresh';
 
 describe('ReturnRefresh', () => {

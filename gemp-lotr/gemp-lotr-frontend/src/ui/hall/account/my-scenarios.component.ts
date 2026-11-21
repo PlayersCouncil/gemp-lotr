@@ -1,5 +1,5 @@
 import { afterRenderEffect, Component, ElementRef, inject, signal } from '@angular/core';
-import { firstText } from '../../../core/hall/account/first-text';
+import { firstText } from '../../../core/hall/first-text';
 import {
   CLOSE_DRAFT,
   CLOSE_DRAFT_HINT,

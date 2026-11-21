@@ -9,7 +9,8 @@
   top: 5px;
   align-self: flex-start;
   flex: 0 0 auto;
-  margin: 6px 4px 4px 13px;
+  /* hall.css .sub-tabs (the tab frame gives the jQuery UI widget's padding and the clearfix's 5px gap) */
+  margin: 4px;
 }
 
 .gd-hall-sub-tabs__list {
@@ -46,6 +47,12 @@
 }
 
 .gd-hall-sub-tabs__tab[aria-selected='true'] {
+  /*
+   * jQuery UI's li.ui-tabs-active (margin-bottom -1px, padding-bottom 1px, which hall.css takes back to 0) and hall.css's
+   * padding-right .1em on the active li, which reaches .1em further right than the others
+   */
+  margin-right: calc(-1px - 0.1em);
+  margin-bottom: -1px;
   padding-right: calc(1em + 0.1em);
   border-color: var(--theme-active-border);
   background: var(--theme-hall-active-bg);
