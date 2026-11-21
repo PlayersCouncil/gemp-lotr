@@ -1,5 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, afterRenderEffect, Component, DestroyRef, ElementRef, inject, signal } from '@angular/core';
+import {
+  afterNextRender,
+  afterRenderEffect,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
 import {
   CARD_COLUMN,
   CARD_COLUMN_TITLE,
@@ -182,11 +191,14 @@ export class ErrataTableComponent {
     afterRenderEffect(() => {
       const sync = this.errata.rowSync();
       this.errata.list();
-      this.geom = null;
-      if (sync?.scroll) {
-        this.scrollToRow();
-      }
-      this.rebaseFollow();
+      // only then: the selection moving as the rows are skimmed must not scroll them back (untracked)
+      untracked(() => {
+        this.geom = null;
+        if (sync?.scroll) {
+          this.scrollToRow();
+        }
+        this.rebaseFollow();
+      });
     });
     afterNextRender(() => {
       const Observer = this.document.defaultView?.ResizeObserver;
