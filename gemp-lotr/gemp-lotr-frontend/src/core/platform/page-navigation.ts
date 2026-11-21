@@ -10,6 +10,11 @@ export class PageNavigation {
     this.window?.location.assign(url);
   }
 
+  /** Loads the page again (hallUi.js `window.location.reload(true)`, e.g. after My Account's trophies migration). */
+  reload(): void {
+    this.window?.location.reload();
+  }
+
   /**
    * Opens `url` in a new tab and focuses it (hallUi.js openOrOffer). False when the browser blocked it: a pop-up
    * opened from a poll answer has no click behind it, so blockers often stop it.

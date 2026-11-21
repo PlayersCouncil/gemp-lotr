@@ -66,8 +66,16 @@ describe('chat parsers', () => {
     expect(parseIgnoreResult(JSON.parse(readServerResponse('ignore-added.json')))).toEqual({
       message: 'erin is now ignored.',
       ignored: ['Carol', 'erin'],
+      changed: true,
+      error: false,
     });
-    expect(parseIgnoreResult({})).toEqual({ message: null, ignored: null });
+    expect(parseIgnoreResult(JSON.parse(readServerResponse('ignore-refused.json')))).toEqual({
+      message: "There is no player called 'nobody'.",
+      ignored: ['Carol', 'erin'],
+      changed: false,
+      error: true,
+    });
+    expect(parseIgnoreResult({})).toEqual({ message: null, ignored: null, changed: false, error: false });
     expect(parseIncognito({ inRoom: true, incognito: true })).toBe(true);
     expect(parseIncognito({})).toBeNull();
   });
