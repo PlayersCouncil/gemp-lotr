@@ -21,6 +21,8 @@ import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.prizes.PrizeService;
 import com.gempukku.lotro.tournament.action.TournamentProcessAction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,6 +34,13 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TournamentService {
+    private static final Logger _log = LogManager.getLogger(TournamentService.class);
+
+    // A queue or tournament that fails is tried again on every pass (about once a second), so its failure is
+    // logged at most this often.
+    private static final long _processFailureLogIntervalMs = 60_000;
+    private final Map<String, Long> _processFailureLastLogged = new ConcurrentHashMap<>();
+
     private final ProductLibrary _productLibrary;
     private final LotroFormatLibrary _formatLibrary;
     private final DraftPackStorage _draftPackStorage;
@@ -215,14 +224,41 @@ public class TournamentService {
         for (var entry : new HashMap<>(_tournamentQueues).entrySet()) {
             var queueID = entry.getKey();
             var queue = entry.getValue();
-            // If it's finished, remove it
-            if (queue.process()) {
-                _tournamentQueues.remove(queueID);
-                queuesChanged = true;
+            // One queue failing must not stop the others (or the tournaments processed after them) from running.
+            try {
+                // If it's finished, remove it
+                if (queue.process()) {
+                    _tournamentQueues.remove(queueID);
+                    queuesChanged = true;
+                }
+            } catch (Exception exp) {
+                logProcessFailure("tournament queue", queueID, exp);
             }
         }
 
         return queuesChanged;
+    }
+
+    private void logProcessFailure(String kind, String id, Exception exp) {
+        long now = System.currentTimeMillis();
+        Long last = _processFailureLastLogged.get(kind + ":" + id);
+        if (last != null && now - last < _processFailureLogIntervalMs)
+            return;
+        _processFailureLastLogged.put(kind + ":" + id, now);
+        _log.error("Unable to process " + kind + " '" + id + "'; it is skipped and tried again on the next pass", exp);
+    }
+
+    /**
+     * Undoes the player rows of a tournament start that failed part-way, so that the queue's next attempt does not
+     * record them a second time.  Does nothing once the tournament itself exists.  Never throws.
+     */
+    public void discardFailedTournamentStart(String tournamentId) {
+        try {
+            if (_tournamentDao.getTournamentById(tournamentId) == null)
+                _tournamentPlayerDao.removePlayers(tournamentId);
+        } catch (RuntimeException exp) {
+            _log.error("Unable to discard the players recorded for the failed start of tournament '" + tournamentId + "'", exp);
+        }
     }
 
     public boolean processTournaments(HallServer hall) {
@@ -231,14 +267,24 @@ public class TournamentService {
             var tourneyID = entry.getKey();
             var tourney = entry.getValue();
 
-            TournamentCallback tournamentCallback = hall.getTournamentCallback(tourney);
-            List<TournamentProcessAction> actions =  tourney.advanceTournament(_collectionsManager);
-            tournamentsChanged |= !actions.isEmpty();
-            for (TournamentProcessAction action : actions) {
-                action.process(tournamentCallback);
+            // One tournament failing must not stop the others from advancing.
+            try {
+                TournamentCallback tournamentCallback = hall.getTournamentCallback(tourney);
+                List<TournamentProcessAction> actions =  tourney.advanceTournament(_collectionsManager);
+                tournamentsChanged |= !actions.isEmpty();
+                for (TournamentProcessAction action : actions) {
+                    // likewise one action failing (a table that cannot be created) must not cost the rest
+                    try {
+                        action.process(tournamentCallback);
+                    } catch (Exception exp) {
+                        logProcessFailure("an action of tournament", tourneyID, exp);
+                    }
+                }
+                if (tourney.getTournamentStage() == Tournament.Stage.FINISHED)
+                    _activeTournaments.remove(tourneyID);
+            } catch (Exception exp) {
+                logProcessFailure("tournament", tourneyID, exp);
             }
-            if (tourney.getTournamentStage() == Tournament.Stage.FINISHED)
-                _activeTournaments.remove(tourneyID);
         }
 
         return tournamentsChanged;

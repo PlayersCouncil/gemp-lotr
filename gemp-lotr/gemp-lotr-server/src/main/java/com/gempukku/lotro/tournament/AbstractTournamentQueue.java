@@ -103,13 +103,20 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
 
 
 
-        for (String player : _players) {
-            _tournamentService.recordTournamentPlayer(tournamentInfo._params.tournamentId, player, _playerDecks.get(player));
+        Tournament tournament;
+        try {
+            for (String player : _players) {
+                _tournamentService.recordTournamentPlayer(tournamentInfo._params.tournamentId, player, _playerDecks.get(player));
+            }
+            tournament = _tournamentService.addTournament(tournamentInfo);
+        } catch (RuntimeException exp) {
+            // The queue keeps its players and is tried again on its next pass.  The players recorded so far are
+            // taken back out, or every attempt would leave another copy of them in the database.
+            _tournamentService.discardFailedTournamentStart(tournamentInfo._params.tournamentId);
+            throw exp;
         }
         clearPlayersInternal();
 
-
-        var tournament = _tournamentService.addTournament(tournamentInfo);
         tournamentQueueCallback.createTournament(tournament);
 
         shouldDestroy = destroyWhenTournamentStarts;
@@ -184,7 +191,9 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         tbr.format = getFormatCode();
         tbr.startTime = DateUtils.Now().toLocalDateTime();
         tbr.playoff = _tournamentInfo._params.playoff;
-        tbr.manualKickoff = false;
+        tbr.manualKickoff = _tournamentInfo._params.manualKickoff;
+        tbr.tiebreaker = _tournamentInfo._params.tiebreaker;
+        tbr.customCollection = _tournamentInfo._params.customCollection;
         tbr.cost = getCost();
         tbr.prizes = _tournamentInfo._params.prizes;
         tbr.minimumPlayers = _tournamentInfo._params.minimumPlayers;
