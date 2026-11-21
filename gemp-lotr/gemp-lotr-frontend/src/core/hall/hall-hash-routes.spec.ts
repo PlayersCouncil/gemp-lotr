@@ -47,6 +47,10 @@ describe('hallAddressOfHash', () => {
     ['#info/about', '/info/about'],
     ['#patch-notes', '/info/patch-notes'],
     ['#patch-notes/2026-11-yuletide', '/info/patch-notes/2026-11-yuletide'],
+    // a note is named in lower case (GempPatchNotes.show)
+    ['#patch-notes/2026-09-27-Hall-Overhaul', '/info/patch-notes/2026-09-27-hall-overhaul'],
+    // a shared card (shareLinks.js CARD_HASH), shown over Help
+    ['#card-1_5', '/help?card=1_5'],
     ['#account', '/account'],
     ['#my-account', '/account'],
     ['#account/overview', '/account'],

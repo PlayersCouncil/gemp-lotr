@@ -43,10 +43,12 @@ export function parseIgnored(json: unknown): string[] {
 
 /** POST /player/ignores/add or /remove: {outcome, changed, error, name, message, ignored}. */
 export function parseIgnoreResult(json: unknown): IgnoreResult {
-  const result = (json ?? {}) as { message?: unknown; ignored?: unknown };
+  const result = (json ?? {}) as { message?: unknown; ignored?: unknown; changed?: unknown; error?: unknown };
   return {
     message: typeof result.message === 'string' && result.message !== '' ? result.message : null,
     ignored: Array.isArray(result.ignored) ? parseIgnored(result) : null,
+    changed: result.changed === true,
+    error: result.error === true,
   };
 }
 

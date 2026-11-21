@@ -6,6 +6,7 @@ import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { SERVER_URL } from '../platform/app-paths';
 import { ApiError } from './api-error';
 import { BYPASS_CACHE, OPENED_PACK_HEADER, provideGempHttp, SEND_PARTICIPANT } from './gemp-interceptors';
+import { DeliveryAnnouncements } from './delivery-announcements';
 import { OpenedPackAnnouncements } from './opened-pack-announcements';
 
 describe('the Gemp server interceptors', () => {
@@ -87,5 +88,25 @@ describe('the Gemp server interceptors', () => {
     http.get(url, { responseType: 'text' }).subscribe();
     backend.expectOne((r) => r.url === url).flush('', { headers: { [OPENED_PACK_HEADER]: 'true' } });
     expect(announced).toHaveBeenCalledOnce();
+  });
+
+  it("announces the hall's deliveries from their headers (deliveryCheck)", () => {
+    setUp();
+    const announced: string[] = [];
+    TestBed.inject(DeliveryAnnouncements).announced$.subscribe((kind) => announced.push(kind));
+    http.get(url, { responseType: 'text' }).subscribe();
+    backend.expectOne((r) => r.url === url).flush('', { headers: { 'Delivery-Service-Package': 'false' } });
+    expect(announced).toEqual([]);
+    http.get(url, { responseType: 'text' }).subscribe();
+    backend
+      .expectOne((r) => r.url === url)
+      .flush('', {
+        headers: {
+          'Delivery-Service-Package': 'true',
+          'Delivery-Service-Announcement': 'true',
+          'Delivery-Service-League': 'true',
+        },
+      });
+    expect(announced).toEqual(['package', 'announcement', 'league']);
   });
 });

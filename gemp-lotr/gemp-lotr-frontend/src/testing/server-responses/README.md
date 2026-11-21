@@ -23,7 +23,8 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   ChatRequestHandler.serializeChatRoomData: `<chat roomName>` with `<message from date>` holding server markup
   (MarkdownParser output for players), and the `<user>` list with the viewer's own entry first (`self`,
   `incognito`), a `role`, and an old-style "+ " prefix), `chat-update.xml` (a poll's answer) and, for
-  PlayerInfoRequestHandler, `ignores.json` (GET /player/ignores) and `ignore-added.json` (POST /player/ignores/add).
+  PlayerInfoRequestHandler, `ignores.json` (GET /player/ignores), `ignore-added.json` (POST /player/ignores/add) and
+  `ignore-refused.json` (the same for a name that is no player: still 200, `error` true, IgnoreListService's message).
 - Written by hand from the server code, for the hall's tables (4.2a): `hall-tables-update.xml` (POST /hall/update with
   invite-only `add`s, one for the viewer (`invitedYou`), and a table that `update`s to FINISHED with a `winner`),
   `hall-table-ok.xml` (what POST /hall, /hall/solo, /hall/{id} and /hall/{id}/leave answer on success:
@@ -41,3 +42,29 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   /tournament, getCurrentTournaments), `tournament-playing.xml` and `tournament-finished.xml` (GET /tournament/{id},
   getTournamentInfo) and `hall-format-definitions.json` (GET /hall/formats/json, FormatDefinitions.describeAll, cut
   down to one format and an entry without a code).
+- Written by hand from the server code, for the Game Hall tab's queues and tournaments: `hall-queues.xml` (GET
+  /hall: queues from HallCommunicationChannel.visitTournamentQueue — a World Championship queue shown in Waiting
+  Tables, a recurring one with `prizesLabel` / `prizesLines` (the prizes as data, from the server change on
+  `feature/hall-angular`), a player-made live draft with only the old `prizes` HTML and a ready check running — and
+  tournaments from visitTournament: playing, a solo draft deck-building with 9 players and `timeRemaining`, and one
+  open to late joins), `tournament-formats.json` (GET /tournament/tournamentFormats,
+  JSONDefs.PlayerMadeTournamentAvailableFormats), `scenarios.json` (GET /scenarios, ScenarioRequestHandler.list,
+  serialized with nulls), `delivery-announcement.json` (GET /delivery/announcements, DBDefs.Announcement with its
+  content rendered by MarkdownParser) and `delivery-league.json` (GET /delivery/league, DBDefs.Transfer list).
+- Written by hand from the server code, for Help and Server Info (4.3): `format-definitions.json` (GET
+  /hall/formats/json, FormatDefinitions.describeAll serialized by JsonUtils.Serialize, which leaves nulls out: a PC
+  format with an X-list holding a V-set card without collector's info and a card the library doesn't know, Anything
+  Goes with PC cards legal, limits, an extra legal card and a title on the R-list, and a playtest format without
+  description or set summary), `server-stats.json` (GET /stats, JSONDefs.PlayHistoryStats), `patch-notes-page.json`
+  (GET /patchnotes?start=5: PatchNotesLibrary.pageJson with SerializeWithNulls; a note whose body has a card link, a
+  hall link, a screenshot and a web link, and whose summary has a culture icon, as PatchNoteRenderer and CultureIcons
+  write them; an announcement without title or summary) and `patch-notes-months.json` (GET /patchnotes/months).
+- Written by hand from the server code, for the My Account tab (a fresh database has no games or scenarios; values
+  made up): `game-history.xml` (GET /gameHistory, GameHistoryRequestHandler.getGameHistory: the second page of a
+  filtered history, a won league game with a replay, a lost casual one without, and an old entry with no `result`,
+  `opponent` or times), `game-history-filters.json` (GET /gameHistory/filters), `player-stats.xml` (GET /playerStats,
+  PlayerStatsRequestHandler: casual entries, no competitive ones), `scenarios-mine.json` (GET /scenarios/mine,
+  ScenarioShelf.mine with ScenarioAuthoring.current: one in review in a campaign, one sent back that is a version of a
+  public one, one published, an unreadable one whose public scenario is gone, and a draft open with changes),
+  `scenarios-public.json` (GET /scenarios/public, ScenarioShelf.publicOnes) and `scenario-copy.json` (POST
+  /scenarios/mine/copy and copyPublic).

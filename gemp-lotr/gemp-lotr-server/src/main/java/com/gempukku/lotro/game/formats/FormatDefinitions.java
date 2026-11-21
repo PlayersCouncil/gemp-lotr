@@ -19,7 +19,8 @@ import java.util.Map;
 /**
  * The data behind Help › Format Definitions (GET /hall/formats/json): one entry per hall format, in the Play menu's
  * order.  Each entry carries the same facts the Play popup's format (i) shows (the format JSON from
- * {@link LotroFormat#Serialize()}: setSummary, sites, cancelRingBearerSkirmish, ...), the id of its section on the
+ * {@link LotroFormat#Serialize()}: setSummary, sites, cancelRingBearerSkirmish, ...; plus sitesName, the site block's
+ * readable name), the id of its section on the
  * page ({@link FormatSummary#anchorId}), which errata it plays with, and its card lists (X-list, R-list, limits,
  * additional valid cards) with each card's name and set, so the page can group and draw them without a card lookup
  * per card.  The errata themselves are not listed: they live on Help › PC Errata.
@@ -54,6 +55,8 @@ public final class FormatDefinitions {
         entry.put("description", facts.description);
         entry.put("setSummary", facts.setSummary);
         entry.put("sites", facts.sites);
+        // the readable name of the site block ("Fellowship Block"), as the format's HTML page shows it
+        entry.put("sitesName", format.getSiteBlock() == null ? null : format.getSiteBlock().getHumanReadable());
         entry.put("cancelRingBearerSkirmish", facts.cancelRingBearerSkirmish);
         entry.put("minimumDeckSize", facts.minimumDeckSize);
         entry.put("maximumSameName", facts.maximumSameName);
