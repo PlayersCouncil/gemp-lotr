@@ -96,6 +96,41 @@ describe('HallConnectionComponent', () => {
     expect(popup.hidden).toBe(true);
   });
 
+  it('opens for the keyboard while the readout has focus, and stays closed after Escape until the focus has left', async () => {
+    const { readout, popup, update } = await render();
+    const elsewhere = document.querySelector<HTMLElement>('.elsewhere')!;
+    readout.focus();
+    await update();
+    expect(popup.hidden).toBe(false);
+
+    // Escape closes it, and the focus still on the readout doesn't open it again (the legacy readout did)
+    readout.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await update();
+    expect(popup.hidden).toBe(true);
+    readout.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    await update();
+    expect(popup.hidden).toBe(true);
+
+    // once the focus has been elsewhere, coming back opens it; leaving closes it
+    elsewhere.focus();
+    await update();
+    readout.focus();
+    await update();
+    expect(popup.hidden).toBe(false);
+    elsewhere.focus();
+    await update();
+    expect(popup.hidden).toBe(true);
+
+    // pinned by a click, it stays when the focus leaves
+    readout.click();
+    await update();
+    readout.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: elsewhere }));
+    await update();
+    expect(popup.hidden).toBe(false);
+    readout.click();
+    await update();
+  });
+
   it("offers a visitor the login page, without a last update when there wasn't one", async () => {
     const { el, readout, text, update } = await render();
     connection.set({ state: 'loggedout', detail: { message: null, action: 'login' }, lastUpdate: null });

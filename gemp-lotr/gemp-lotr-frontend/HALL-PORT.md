@@ -48,11 +48,15 @@ has its own, drawn with the theme's values.
    legacy pages are `hall-legacy.html` and `login-legacy.html`; the share pages lead to the app's routes; the Admin
    tab is a link to `hall-legacy.html?admin=1#admin`.
 10. `visual-check/hall` (`npm run check:hall` in `visual-check`): 36 screens of the hall and the login page against
-    their legacy pages, and 58 old addresses against where the legacy hall led. **Done**; the addresses all agree.
-    After a pixel pass the frame is identical and most screens are within a few thousand pixels of 1,049,088 (see
-    "What looks different" for what is left); the check still fails on 34 of 36 until those are brought to nothing
-    or Ketura accepts them (`HALL_ACCEPTED` in `visual-check/accepted.mjs`, empty). The deck builder's
-    `check:stubbed` gives the same 14 differences on this branch as on the commit it started from.
+    their legacy pages, and 58 old addresses against where the legacy hall led. **Done, and it passes.** After a
+    pixel pass the frame is identical; what was left Ketura accepted on 2026-11-20 ("<1% is more than accurate
+    enough"), recorded in `HALL_ACCEPTED` (`visual-check/accepted.mjs`) as about what each screen measured, so a
+    screen that moves further from its legacy page fails. The deck builder's `check:stubbed` gives the same 14
+    differences on this branch as on the commit it started from.
+11. Coverage. The Maven build runs the tests with `--coverage` and `angular.json` asks for 95% of statements; the
+    port first came in under it (94.96%, the hall's own files at 91%). **Done:** every hall, login and chat file is
+    at 95% or better (98.9% together; the whole app 98.1%), and the specs written for it found two bugs, both fixed
+    (see "Found by the port's own specs").
 
 ## For Ketura to review
 
@@ -83,6 +87,13 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
   screen differs in `visual-check/hall`.
 - **Server text shown as HTML** (player names, deck and format names, standings): all drawn as text now.
 - **Static pages**: the invalid markup in What Are Leagues? and About is put right; the wording is unchanged.
+
+### Found by the port's own specs
+
+- **PC Errata**: scrolling the table yourself scrolled it back towards the middle. The effect that centres a newly
+  chosen row also ran for every row the scroll itself selected.
+- **Play > League**: a league join that failed from the form's list was told in a dialog; the legacy form told it
+  with its next steps ("Could not join the league: ..."), and so does this one now.
 
 ### Behaviour that changed on purpose
 
@@ -127,8 +138,9 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
 - Four old patch notes (2021-12-24, 2022-07-07, 2022-08-19, 2022-12-21) lose their inline colours.
 - In "New items" and Race to Mount Doom dialogs the cards are plain pictures, with no zoom or details.
 - What `visual-check/hall` still shows at 1366 x 768, after the pixel pass (the frame itself is identical, and so
-  are the tabs at 1100, 950 and 700 px wide):
-  - the login and register pages, whole: the picture (see "Legacy bugs fixed");
+  are the tabs at 1100, 950 and 700 px wide). Ketura accepted these on 2026-11-20; `HALL_ACCEPTED` lists each:
+  - the login and register pages' picture (see "Legacy bugs fixed"; the check compares the pages without it, and
+    they are otherwise identical);
   - a tournament's own link (about 117,000 px): where the page ends up scrolled. The legacy smooth scroll is
     clamped to the page's height at the moment it starts, while the drawer is still loading, so where it stops
     depends on timing; ours always lands on the row;
