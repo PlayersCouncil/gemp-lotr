@@ -7,6 +7,8 @@ export interface HallDialog {
   readonly id: number;
   readonly title: string;
   readonly body: readonly MarkupNode[];
+  /** It has an OK button; an information dialog (the prize breakdown, the players) has only its close button. */
+  readonly ok: boolean;
 }
 
 /** HTML-escapes text (GempLotrHallUI.escapeHtml / TableFlow.escapeHtml), for building markup around server values. */
@@ -63,10 +65,15 @@ export class HallDialogs {
   /** The dialogs showing, oldest first (the last one is on top). */
   readonly open = this.open_.asReadonly();
 
-  show(title: string, body: readonly MarkupNode[]): HallDialog {
-    const dialog: HallDialog = { id: this.nextId++, title, body };
+  show(title: string, body: readonly MarkupNode[], ok = true): HallDialog {
+    const dialog: HallDialog = { id: this.nextId++, title, body, ok };
     this.open_.update((dialogs) => [...dialogs, dialog]);
     return dialog;
+  }
+
+  /** An information dialog: no OK button (GameHall.js's hint dialog, hallUi.js showPrizes). */
+  showInfo(title: string, body: readonly MarkupNode[]): HallDialog {
+    return this.show(title, body, false);
   }
 
   /** A dialog of plain text (its line breaks kept). */

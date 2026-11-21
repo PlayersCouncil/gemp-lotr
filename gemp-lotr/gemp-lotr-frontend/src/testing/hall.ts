@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
-import { Provider, signal } from '@angular/core';
+import { EnvironmentProviders, Provider, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../core/api/gemp-interceptors';
 import { HallComms, NEXT_POLL_DELAY_MS } from '../core/hall/hall-comms.service';
@@ -83,7 +83,7 @@ export interface HallTestBed {
   finish(): void;
 }
 
-export function setUpHall(extra: Provider[] = []): HallTestBed {
+export function setUpHall(extra: (Provider | EnvironmentProviders)[] = []): HallTestBed {
   const cookies = new FakeCookies();
   const navigation = new FakeNavigation();
   const sounds: string[] = [];

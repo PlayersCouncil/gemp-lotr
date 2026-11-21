@@ -14,6 +14,7 @@ import { settle } from '../../testing/fake-notifier';
 import { readServerResponse } from '../../testing/files';
 import { APP_ROUTES } from '../app/app.routes';
 import { CHAT_HEIGHT_COOKIE, CHAT_RESIZE_STEP, HallShellComponent } from './hall-shell.component';
+import { provideFakeNotifier } from '../../testing/fake-notifier';
 
 const SERVER = '/gemp-lotr-server';
 /** A request's path on the server, without the cache-buster the interceptors add. */
@@ -50,6 +51,8 @@ describe('HallShellComponent', () => {
         { provide: PAGE_QUERY_STRING, useValue: '' },
         { provide: LocalSettings, useValue: settings },
         { provide: SettingCookies, useValue: cookies },
+        // the app's (app.config.ts): the Game Hall tab's queues ask their questions through it
+        ...provideFakeNotifier(),
       ],
     });
     backend = TestBed.inject(HttpTestingController);
@@ -104,10 +107,7 @@ describe('HallShellComponent', () => {
     ]);
     expect(all('.gd-hall__tab[aria-current="page"]').map((tab) => tab.dataset['tab'])).toEqual(['game-hall']);
     expect(el().querySelector('main.gd-hall__panel gd-game-hall-tab')).not.toBeNull();
-    expect(el().querySelector('gd-hall-placeholder')?.textContent).toBe('');
-    expect(el().querySelector('.gd-hall-placeholder__content')?.getAttribute('aria-label')).toBe(
-      'Tables — coming in 4.2',
-    );
+    expect(el().querySelector('gd-game-hall-tab gd-game-hall-sections')).not.toBeNull();
     expect(text('.gd-game-hall__motd')).toBe('MOTD: Welcome back!');
     expect(el().querySelector('.gd-game-hall__motd b:not(.gd-game-hall__motd-label)')?.textContent).toBe('back');
 

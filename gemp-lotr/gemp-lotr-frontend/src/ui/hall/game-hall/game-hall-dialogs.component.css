@@ -1,0 +1,140 @@
+/* The Game Hall's dialogs (hall.css .hall-ready-check, .hall-ready-actions, #announcement-dialog; deliveryService.js
+   and leagueDeliveryService.js inline styles) */
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__offer-actions {
+  text-align: center;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__open {
+  display: inline-block;
+  padding: 0.4em 1em;
+  text-decoration: none;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__announcement {
+  --gd-markup-visited: var(--theme-hall-link);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 80vw;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__item {
+  position: relative;
+  display: inline-block;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__item img {
+  display: block;
+  height: 150px;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__count {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  padding: 0 4px;
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-table-head-bg);
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__rtmd {
+  padding: 10px;
+  text-align: center;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__rtmd-message {
+  margin: 0 0 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__rtmd-sites {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__site {
+  position: relative;
+  overflow: hidden;
+  height: min(600px, 70vh);
+  aspect-ratio: 357 / 497;
+  border-radius: 8px;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__site[data-site='old'] {
+  opacity: 0.5;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__site > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__modifier {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 27%;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__modifier img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+gd-game-hall-dialogs .gd-game-hall-dialogs__arrow {
+  color: var(--theme-hall-rtmd-arrow);
+  font-size: 48px;
+  font-weight: bold;
+}
+
+/* The dialogs' sizes (jQuery UI's options in hallUi.js: width 360 for the ready check and the ready prompt) */
+gd-game-hall-dialogs .gd-dialog:is([data-dialog='ready-check'], [data-dialog='ready-offer']) {
+  --dialog-width: 360px;
+}
+
+gd-game-hall-dialogs .gd-dialog[data-dialog='new-items'] {
+  --dialog-width: 400px;
+}
+
+/* the announcement: 800px, or nearly the whole window on a narrower screen */
+gd-game-hall-dialogs .gd-dialog[data-dialog='announcement'] {
+  --dialog-width: min(800px, 95vw);
+}
+
+gd-game-hall-dialogs .gd-dialog[data-dialog='rtmd'] {
+  --dialog-width: min(940px, 95vw);
+}
+
+/* .ui-dialog-buttonpane: the buttons at the right, under a line */
+gd-game-hall-dialogs .gd-dialog__actions {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5em 0 0;
+  padding: 0.3em 1em 0.5em 0.4em;
+  border-top: 1px solid var(--theme-content-border);
+}
+
+/* the hall's jQuery UI 1.13 buttons: .4em 1em at the dialog's 13.2px */
+gd-game-hall-dialogs .gd-dialog .gd-button {
+  display: inline-block;
+  margin: 0.5em 0.4em 0.5em 0;
+  padding: 5.28px 13.2px;
+  font-size: 13.2px;
+  line-height: normal;
+  text-decoration: none;
+}
