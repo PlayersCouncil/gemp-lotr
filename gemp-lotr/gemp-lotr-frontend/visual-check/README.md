@@ -16,7 +16,10 @@ and writes its report to a `report-*` folder here.
 - **`game/author.mjs`**: the scenario authoring panel docked beside the Angular game page, writing drafts of its own:
   `npm run check:game:author`, against a game check server kept up. See
   [`game/README.md`](game/README.md#the-authoring-checks).
-- **`npm run check:all`** (`tools/check-all.mjs`) runs the important checks of both.
+- **`hall/`**: the hall and the login page (`/gemp-lotr/ng/hall`, `/gemp-lotr/ng/login` and every tab against
+  `hall-legacy.html` and `login-legacy.html`), stubbed, and the old addresses (`hall.html#...`, the start page):
+  `npm run check:hall`. See [`hall/README.md`](hall/README.md).
+- **`npm run check:all`** (`tools/check-all.mjs`) runs the important checks of all of them.
 - **`npm run check:failed`** (`check:all --failed`) runs again only what failed in the last `check:all`: the parts
   that passed are left out, and each failed part runs only its failed scenarios (or `--checks` parts). It builds the
   Angular app first, not the server: after a Java change, run `check:all`. Its reports then hold only what ran again.
@@ -24,14 +27,14 @@ and writes its report to a `report-*` folder here.
   what failed in its report, e.g.
   `npm run check:game -- --out report-game $(node tools/failed-checks.mjs report-game)`.
 
-Shared by both:
+Shared by all of them:
 
 | File              | What it is                                                                            |
 | ----------------- | ------------------------------------------------------------------------------------- |
 | `accepted.mjs`    | The differences the owner has accepted (only the owner adds to it)                    |
 | `browser.mjs`     | Which browser a check runs in (`CHECK_BROWSER`, `CHECK_BROWSER_EXECUTABLE`)           |
 | `compare.mjs`     | Comparing two screenshots, or where controls are                                      |
-| `stub-server.mjs` | Serving the pages from disk, without a server                                         |
+| `stub-server.mjs` | Serving the pages from disk, without a server (a check can add answers of its own)    |
 | `gestures.mjs`    | The mouse and keyboard gestures every check makes                                     |
 | `touch.mjs`       | Touch on a phone (tap, long press, drag)                                              |
 | `local-server/`   | The throwaway server the checks start (compose files, test data)                      |
