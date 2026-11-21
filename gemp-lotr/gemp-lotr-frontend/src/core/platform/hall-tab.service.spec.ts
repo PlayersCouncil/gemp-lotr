@@ -104,7 +104,7 @@ describe('HallTab', () => {
 
   it('opens the hall here in a browser without channels, and does nothing without a window', () => {
     hall(false).go('#admin');
-    expect(view.location.href).toBe('/gemp-lotr/hall-legacy.html#admin');
+    expect(view.location.href).toBe('/gemp-lotr/hall-legacy.html?admin=1#admin');
     TestBed.resetTestingModule();
     const nowhere = hall(true, false);
     nowhere.go();
@@ -119,7 +119,7 @@ describe('hallPageAddress', () => {
     expect(hallPageAddress('')).toBe('/gemp-lotr/ng/');
     expect(hallPageAddress('#account/scenarios')).toBe('/gemp-lotr/ng/account/scenarios');
     expect(hallPageAddress('#format-pc_movie')).toBe('/gemp-lotr/ng/help/formats/pc_movie');
-    expect(hallPageAddress('#admin/scenarios')).toBe('/gemp-lotr/hall-legacy.html#admin/scenarios');
+    expect(hallPageAddress('#admin/scenarios')).toBe('/gemp-lotr/hall-legacy.html?admin=1#admin/scenarios');
     expect(hallPageAddress('#nonsense')).toBe('/gemp-lotr/ng/');
   });
 });

@@ -216,7 +216,7 @@ describe('HallShellComponent', () => {
     await open('/hall');
     await answerPlayer({ name: 'boss', type: 'ua' });
     const admin = el().querySelector<HTMLAnchorElement>('.gd-hall__tab[data-tab="admin"]');
-    expect(admin?.getAttribute('href')).toBe('/gemp-lotr/hall-legacy.html#admin');
+    expect(admin?.getAttribute('href')).toBe('/gemp-lotr/hall-legacy.html?admin=1#admin');
     expect(admin?.target).toBe('');
   });
 

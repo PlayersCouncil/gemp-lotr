@@ -54,7 +54,9 @@ Left out of the port on purpose. Each stays as it is until it is taken up.
 - **The Admin tab** (general, league, tournament, prizes, scenarios, users): stays on the legacy hall, which the
   Angular hall's Admin tab links to. With it stay `addItemsForm.js`, `prizeTierEditor.js`, `manage.js` and the admin
   calls that answer with HTML. The server allows a player one hall at a time (a second one gives the first a
-  "Concurrent access" error), so the legacy hall opened for Admin must not start its own hall and chat.
+  "Concurrent access" error), so the link is `hall-legacy.html?admin=1#admin`: with `?admin=1` the legacy hall asks
+  who the player is, draws only its Admin tab and a way back, and starts neither its hall poll nor its chat
+  (`GempHallSession.adminOnly`, `startForAdmin`). Without it the legacy hall is as it always was.
 - **Rich text the server renders** (above). To be decided again when the Admin tab is ported: whether the server
   should send the source and the page render it.
 - **The MOTD as markdown**: today an admin types HTML (links, `i`, `b`, `br`). The form is on the Admin tab.

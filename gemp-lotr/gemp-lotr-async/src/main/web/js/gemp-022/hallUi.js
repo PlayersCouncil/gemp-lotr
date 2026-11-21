@@ -514,6 +514,35 @@ var GempLotrHallUI = Class.extend({
 		this.getHall();
 	},
 
+	// The page is open for its Admin tab alone (GempHallSession.adminOnly): the player info, so the Admin tab shows
+	// for an admin, and whatever waited for the hall; no hall poll, which would end the Angular hall's.
+	startForAdmin: function () {
+		var that = this;
+		if (this.started)
+			return;
+		this.started = true;
+		var queued = this.startQueue || [];
+		this.startQueue = null;
+		for (var i = 0; i < queued.length; i++) {
+			try {
+				queued[i]();
+			} catch (e) {
+				if (window.console)
+					console.error("Starting the hall failed", e);
+			}
+		}
+		this.comm.getPlayerInfoShared(function(json) {
+			that.userInfo = json;
+			if (that.userInfo.type.includes("a") || that.userInfo.type.includes("l")) {
+				that.adminTab.show();
+				if (typeof GempLinks !== "undefined")
+					GempLinks.poke();
+			} else {
+				that.adminTab.hide();
+			}
+		});
+	},
+
 	setPendingTournament: function(value) {
 		this.inTournament = value;
 	},

@@ -1,7 +1,11 @@
 import { findHallSubTab, findHallTab } from './hall-tabs';
 
-/** The legacy hall, kept for what the Angular hall leaves out (the Admin tab). */
-export const LEGACY_HALL_URL = '/gemp-lotr/hall-legacy.html';
+/**
+ * The legacy hall, opened for its Admin tab alone: the Admin tab is not ported. `?admin=1` tells that page to start
+ * neither its hall poll nor its chat (hallLinks.js GempHallSession.adminOnly): the server gives a player one hall at a
+ * time, and this one is it.
+ */
+export const LEGACY_HALL_URL = '/gemp-lotr/hall-legacy.html?admin=1';
 
 /**
  * Where a legacy hall link leads now: a route of the Angular hall (`route`: the router's address, "/help/formats/pc_fotr",
