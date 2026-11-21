@@ -56,4 +56,18 @@ describe('ShelfQuestionComponent', () => {
     expect(fixture.componentInstance.answers).toEqual([true]);
     expect((box.querySelector('[data-action=yes]') as HTMLElement).textContent?.trim()).toBe('Submit for review');
   });
+
+  it('answers no to Cancel in the submit box, and to a press on the shade but not inside the box', async () => {
+    const { fixture, box } = await render({ kind: 'submit', title: 'Mine' });
+    (box.querySelector('[data-action=no]') as HTMLButtonElement).click();
+    vi.spyOn(box, 'getBoundingClientRect').mockReturnValue(new DOMRect(100, 100, 400, 300));
+    const press = (x: number, y: number) =>
+      box.dispatchEvent(new MouseEvent('pointerdown', { clientX: x, clientY: y, bubbles: true }));
+    press(200, 200);
+    press(20, 20);
+    (box.querySelector('h2') as HTMLElement).dispatchEvent(
+      new MouseEvent('pointerdown', { clientX: 20, clientY: 20, bubbles: true }),
+    );
+    expect(fixture.componentInstance.answers).toEqual([false, false]);
+  });
 });
