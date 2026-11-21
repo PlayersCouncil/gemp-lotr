@@ -178,13 +178,14 @@ reviewedAt, reviewedBy, locked, origin {id, title, exists}, published (current |
   server does not route; nothing calls it).
 - The Users tab (hidden).
 
-## Left for the view (phase 2)
+## The view (`ui/hall/account/`, `ui/hall/shared/player-picker.component.ts`)
 
-The vertical sub-tab bar, the forms (and the player picker in the ignore field: the Game Hall's, see below), the
-history table and pagers, the scenario rows and their tags' colours (scenarioShelf.css), the question and submit
-boxes and the Copy Public dialog, scrolling a picked-out copy into view, and the gold and silver images.
-
-The ignore field expects the Game Hall's picker (`core/hall/play/player-picker.ts` `PlayerSearch` on hall/gamehall):
-`online()` (the players in the hall, without the viewer), `suggest(term): Promise<PickerItem[]>` (the hall's players,
-and from 2 characters GET `/hall/players?prefix&limit=10`, a failure quietly offering the hall's players alone), and
-a text value, handed to `AccountOverview.add(name)`.
+`account.routes.ts` provides `ACCOUNT_SERVICES` on the tab's route and draws `gd-account-tab` (the sub-tab bar and
+the page) with a child route per sub-tab: `gd-account-overview`, `gd-account-history`, `gd-account-stats`,
+`gd-account-scenarios`; anything else under `account` goes to `account`. Its guard on `account` itself
+(`restoreAccountSubTab`) opens the remembered sub-tab when the tab is entered from elsewhere. `gd-account-tab` reports
+the sub-tab shown and whether the page is in front of the viewer (document visibility, window focus) for the return
+refresh. My Scenarios asks in `gd-shelf-question` (the shelf's own box, not a jQuery UI dialog) and copies a public
+scenario in a `gd-dialog`. The ignore field is `gd-player-picker`, generic (its lines come from an input: here
+`PlayerSearch.suggest`). Each component's DOM contract is in its doc comment; the colours are the `--theme-account-*`
+and `--theme-picker-*` values of `themes.css` (classic only).

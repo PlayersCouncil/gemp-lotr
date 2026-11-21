@@ -1,0 +1,42 @@
+/* My Stats (hall.css .article, .playerStatHeader, table.tables, .load-error) */
+
+:host {
+  display: block;
+}
+
+/* .article: max(800px, 50%) wide, centred, 3em above, 120% text */
+.gd-account-stats__article {
+  width: max(800px, 50%);
+  margin: 3em auto 20em;
+  font-size: 120%;
+}
+
+.gd-account-stats__intro {
+  margin: 0;
+}
+
+.gd-account-stats__heading {
+  font-size: 200%;
+  font-weight: bolder;
+}
+
+.gd-account-stats__table {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  border-collapse: collapse;
+  background: var(--theme-account-stats-bg);
+}
+
+.gd-account-stats__table th {
+  padding: 4px;
+  background: var(--theme-account-stats-head-bg);
+}
+
+.gd-account-stats__table td {
+  padding: 2px;
+  border: 2px solid var(--theme-account-stats-border);
+}
+
+.gd-account-stats__failed {
+  color: var(--theme-account-load-error);
+}

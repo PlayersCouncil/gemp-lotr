@@ -1,0 +1,165 @@
+/*
+ * My Game History (hall.css "tabs-account": .game-history-*, table.gemp-table, .gameHistory td/th, .gh-*). The
+ * buttons are jQuery UI buttons in the hall's theme.
+ */
+
+:host {
+  display: block;
+  max-width: 100%;
+  padding: 0 10px 1em;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.gd-account-history__button {
+  padding: 0.4em 1em;
+  background: var(--theme-hall-default-bg);
+  font-size: 1em;
+  line-height: normal;
+}
+
+.gd-account-history__button:enabled:hover,
+.gd-account-history__button:focus-visible {
+  background: var(--theme-hall-hover-bg);
+}
+
+.gd-account-history__button:enabled:active {
+  background: var(--theme-hall-active-bg);
+}
+
+.gd-account-history__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.4em 1em;
+  margin: 0.5em 0 1.8em;
+}
+
+.gd-account-history__field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.gd-account-history__field label {
+  font-size: 85%;
+  color: var(--theme-account-label);
+}
+
+.gd-account-history__field input,
+.gd-account-history__field select {
+  margin: 2px;
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+}
+
+.gd-account-history__field input {
+  border: 2px inset;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+}
+
+.gd-account-history__field select {
+  padding: 3px;
+  border: 1px solid;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+}
+
+.gd-account-history__field select:hover {
+  background: var(--theme-field-hover-bg);
+}
+
+.gd-account-history__field select,
+.gd-account-history__field input[type='text'] {
+  min-width: 12em;
+}
+
+.gd-account-history__buttons {
+  display: inline-flex;
+  gap: 0.4em;
+}
+
+.gd-account-history__status {
+  margin: 0.4em 0;
+}
+
+.gd-account-history__pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.4em 0;
+}
+
+.gd-account-history__page {
+  padding: 0 0.6em;
+}
+
+.gd-account-history__table {
+  overflow-x: auto;
+}
+
+.gd-account-history__grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gd-account-history__grid th,
+.gd-account-history__grid td {
+  padding: 4px 7px;
+  border: 1px solid var(--theme-account-cell-border);
+  text-align: center;
+}
+
+.gd-account-history__grid th {
+  white-space: nowrap;
+}
+
+.gd-account-history__grid td[data-column='format'],
+.gd-account-history__grid td[data-column='event'],
+.gd-account-history__grid td[data-column='deck'] {
+  text-align: left;
+}
+
+.gd-account-history__grid td[data-column='date'],
+.gd-account-history__grid td[data-column='length'] {
+  white-space: nowrap;
+}
+
+.gd-account-history__deck {
+  max-width: 14em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+[data-result] {
+  font-weight: bold;
+}
+
+[data-result='W'] {
+  color: var(--theme-account-win);
+}
+
+[data-result='L'] {
+  color: var(--theme-account-loss);
+}
+
+.gd-account-history__replay:link {
+  color: var(--theme-hall-link);
+}
+
+.gd-account-history__replay:visited {
+  color: var(--theme-link-visited);
+}
+
+.gd-account-history__empty {
+  padding: 0.6em;
+  color: var(--theme-account-empty);
+  font-style: italic;
+}

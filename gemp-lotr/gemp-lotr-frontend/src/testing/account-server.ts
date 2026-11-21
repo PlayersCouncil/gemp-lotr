@@ -1,9 +1,12 @@
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
-import { Provider } from '@angular/core';
+import { Component, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { provideGempHttp } from '../core/api/gemp-interceptors';
 import { ACCOUNT_SERVICES } from '../core/hall/account/account-tab.service';
 import { HALL_SERVICES } from '../core/hall/hall-services';
+import { LocalSettings } from '../core/platform/local-settings.service';
 import { PageNavigation, ReservedTab } from '../core/platform/page-navigation';
 import { Timers } from '../core/platform/timers';
 import { provideFakeNotifier } from './fake-notifier';
@@ -100,4 +103,48 @@ export function failAccount(
   headers: Record<string, string> = {},
 ): void {
   accountRequest(backend, path, method).flush(body, { status, statusText: 'Error', headers });
+}
+
+/**
+ * The My Account tab's pages under a router (`/account/...` with ACCOUNT_ROUTES, and an empty `/hall`), the hall's
+ * services, a fake server, localStorage in `stored`; open an address with `harness.navigateByUrl`.
+ */
+export async function setUpAccountPages(stored = new Map<string, string>()): Promise<{
+  backend: HttpTestingController;
+  navigation: FakeNavigation;
+  harness: RouterTestingHarness;
+  stored: Map<string, string>;
+}> {
+  const { ACCOUNT_ROUTES } = await import('../ui/hall/account/account.routes');
+  const navigation = new FakeNavigation();
+  TestBed.configureTestingModule({
+    providers: [
+      provideGempHttp(),
+      provideHttpClientTesting(),
+      provideFakeNotifier(),
+      { provide: PageNavigation, useValue: navigation },
+      {
+        provide: LocalSettings,
+        useValue: { read: (key: string) => stored.get(key) ?? null, write: (k: string, v: string) => stored.set(k, v) },
+      },
+      ...HALL_SERVICES,
+      provideRouter([
+        { path: 'hall', component: EmptyPage },
+        { path: 'account', children: ACCOUNT_ROUTES },
+      ]),
+    ],
+  });
+  const harness = await RouterTestingHarness.create();
+  return { backend: TestBed.inject(HttpTestingController), navigation, harness, stored };
+}
+
+@Component({ template: '' })
+class EmptyPage {}
+
+/** Lets the pages' requests go out and their answers be drawn. */
+export async function drawn(harness: RouterTestingHarness): Promise<void> {
+  for (let i = 0; i < 5; i++) {
+    await Promise.resolve();
+  }
+  await harness.fixture.whenStable();
 }

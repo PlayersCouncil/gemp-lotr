@@ -1,0 +1,92 @@
+/*
+ * The player picker (tables.css .player-picker, .player-picker-toggle, .player-picker-menu; its menu a jQuery UI
+ * autocomplete: .ui-menu in the hall's dark-hive theme). The field keeps the hall's field look (hall.css input).
+ */
+
+:host {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.gd-player-picker__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 2px;
+  border: 2px inset;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+  background: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+}
+
+.gd-player-picker__input:disabled {
+  background: var(--theme-field-disabled-bg);
+  color: var(--theme-field-disabled-text);
+}
+
+.gd-player-picker__toggle {
+  flex: 0 0 auto;
+  width: 2em;
+  margin-left: 2px;
+  padding: 0;
+  border: 1px solid var(--theme-picker-toggle-border);
+  background: var(--theme-picker-toggle-bg);
+  color: var(--theme-picker-toggle-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-player-picker__toggle:hover:not(:disabled),
+.gd-player-picker__toggle:focus-visible {
+  background: var(--theme-picker-toggle-hover-bg);
+}
+
+.gd-player-picker__toggle:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.gd-player-picker__menu {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  max-height: 18em;
+  margin: 0;
+  padding: 0;
+  overflow: hidden auto;
+  list-style: none;
+  border: 1px solid var(--theme-picker-menu-border);
+  background: var(--theme-hall-content-bg);
+  color: var(--theme-text);
+}
+
+.gd-player-picker__heading {
+  padding: 0.3em 0.6em 0.1em;
+  font-size: 80%;
+  font-weight: bold;
+  color: var(--theme-picker-heading);
+  cursor: default;
+}
+
+.gd-player-picker__note {
+  font-weight: normal;
+  font-style: italic;
+  color: var(--theme-picker-note);
+}
+
+.gd-player-picker__option {
+  margin: 1px;
+  padding: 3px 1em 3px 0.4em;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.gd-player-picker__option[aria-selected='true'] {
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+}
