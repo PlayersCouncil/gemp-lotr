@@ -5,6 +5,7 @@
 //   name, note   what it shows
 //   legacy       the legacy page's address (hall-legacy.html#<tab>, login-legacy.html)
 //   angular      the Angular page's address (/gemp-lotr/ng/<route>)
+//   settle       ms to wait after loading before the first screenshot (default 2500)
 //   stubs        hall/stubs.mjs's options: visitor (nobody logged in), hall (the hall's snapshot), history, player
 //   steps        [label, legacy actions, Angular actions]: an action is [gesture, selector, value?] where the gesture is
 //                one of gestures.mjs's (press, hover, escape, ...) or fill, select, key, wait, scrollTo (run.mjs)
@@ -183,6 +184,8 @@ export const SCENARIOS = [
     "A league's own link: its drawer open (RTMD)",
     'league-1700000002',
     'events/leagues/1700000002',
+    // the legacy hall's smooth scroll to the row ends about 2.2 s after loading, later when the machine is busy
+    { settle: 5000 },
   ),
   tab(
     'events-tournaments',
@@ -209,6 +212,8 @@ export const SCENARIOS = [
     "A tournament's own link: its drawer open",
     'tournament-daily-pc_movie-20261120',
     'events/tournaments/daily-pc_movie-20261120',
+    // the legacy hall's smooth scroll to the row ends about 2.2 s after loading, later when the machine is busy
+    { settle: 5000 },
   ),
 
   // ---- Server Info ----

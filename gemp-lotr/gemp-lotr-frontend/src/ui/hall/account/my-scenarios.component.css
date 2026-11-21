@@ -216,6 +216,8 @@ h1 {
 /* The Copy Public dialog: width min(720, the window less 40), height at most the window less 80 (jQuery UI options) */
 :host ::ng-deep .gd-dialog[data-dialog='copy-public'] {
   --dialog-width: min(720px, calc(100vw - 40px));
+  /* jQuery UI placed it as it opened, empty, at its least height (minHeight 150, the whole box); the list came after */
+  --dialog-centred-height: calc(150px - 0.4em - 2px);
 }
 
 .gd-account-scenarios__popup {

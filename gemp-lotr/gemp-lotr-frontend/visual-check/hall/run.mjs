@@ -114,7 +114,8 @@ async function check(scenario, size) {
       legacy.page.goto(STUB_ORIGIN + scenario.legacy),
       angular.page.goto(`${STUB_ORIGIN}${scenario.angular}${scenario.angular.includes('?') ? '&' : '?'}theme=classic`),
     ]);
-    await Promise.all([pause(legacy.page, 2500), pause(angular.page, 2500)]);
+    const settle = scenario.settle ?? 2500;
+    await Promise.all([pause(legacy.page, settle), pause(angular.page, settle)]);
     const compare = async (label) => {
       const [a, b] = await Promise.all([legacy.page.screenshot(), angular.page.screenshot()]);
       const areas = await acceptedAreas(angular.page, scenario, size, label);

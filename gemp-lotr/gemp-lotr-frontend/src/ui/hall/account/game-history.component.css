@@ -63,7 +63,9 @@ h1 {
     var(--theme-field-border-dark);
 }
 
+/* legacy's select keeps the browser's margin, 0, where its inputs have 2px */
 .gd-account-history__field select {
+  margin: 0;
   padding: 3px;
   border: 1px solid;
   border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)

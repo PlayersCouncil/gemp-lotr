@@ -283,13 +283,33 @@ gd-chat {
   color: var(--theme-text);
   font-size: 70%;
   text-align: center;
-  white-space: nowrap;
 }
 
 /* ---------------------------------------------------------------- the "Not logged in" dialog */
 
+/* hallUi.js's dialog: 380px wide, not resizable, centred for the height it has */
+:host ::ng-deep .gd-dialog[data-dialog='login-required'] {
+  --dialog-width: 380px;
+  resize: none;
+}
+
+:host ::ng-deep .gd-dialog[data-dialog='login-required']:not([data-placed]) {
+  inset: 0;
+  margin: auto;
+}
+
 .gd-hall__login-required {
   margin: 0.3em 0;
+}
+
+/* .ui-dialog-buttonpane: the buttons at the right, under a line */
+.gd-dialog__actions {
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  margin: 0.5em 0 0;
+  padding: 0.3em 1em 0.5em 0.4em;
+  border-top: 1px solid var(--theme-content-border);
 }
 
 .gd-dialog__actions .gd-button {
@@ -299,4 +319,40 @@ gd-chat {
   font-size: 13.2px;
   line-height: normal;
   text-decoration: none;
+}
+
+/* ---------------------------------------------------------------- the hall's dialogs */
+
+/*
+ * The hall's dialogs are jQuery UI 1.13's, which centred a dialog at exactly half the free space around it, with its
+ * fraction (the deck builder's 1.8 rounded it to whole pixels, as gd-dialog does by default): a 907.25px dialog in a
+ * 1366px window sits at 229.375px, not 230px. Centred across by the browser (auto margins); the height it is centred
+ * for stays gd-dialog's.
+ */
+:host ::ng-deep .gd-dialog:not([data-placed]) {
+  right: 0;
+  left: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* ... and drawn with the hall's jQuery UI 1.13 images, not the deck builder's 1.8 ones gd-dialog uses by default */
+:host ::ng-deep .gd-dialog {
+  background: var(--theme-hall-content-bg);
+}
+
+:host ::ng-deep .gd-dialog__header {
+  background: var(--theme-hall-header-bg);
+}
+
+:host ::ng-deep .gd-dialog .gd-button {
+  background: var(--theme-hall-default-bg);
+}
+
+:host ::ng-deep .gd-dialog .gd-button:is(:enabled:hover, :focus) {
+  background: var(--theme-hall-hover-bg);
+}
+
+:host ::ng-deep .gd-dialog .gd-button:enabled:active {
+  background: var(--theme-hall-active-bg);
 }

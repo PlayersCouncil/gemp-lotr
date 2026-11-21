@@ -21,10 +21,33 @@ gd-join-dialog .gd-dialog[data-dialog='join'] {
   min-width: 320px;
 }
 
+/*
+ * jQuery UI 1.13 centred them at half the free space around the unrounded outer width (900px + .4em + 2px), which
+ * the page then snaps to 1/64 px; margin: auto halves the snapped width instead, a fraction of a pixel off
+ */
+:is(gd-play-overlay .gd-dialog[data-dialog='play'], gd-join-dialog .gd-dialog[data-dialog='join']):not([data-placed]) {
+  right: auto;
+  left: calc((100vw - var(--gd-page-right, 0px) - (max(320px, var(--dialog-width)) + 0.4em + 2px)) / 2);
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* centred for the height it has with its form (jQuery UI positioned it after it was filled) */
+gd-join-dialog .gd-dialog[data-dialog='join']:not([data-placed]) {
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 /* the join form is the dialog's whole content (.inner-table-form.table-form): no space above it */
 gd-join-dialog .gd-play-form.gd-join {
   margin-top: 0;
-  padding-bottom: 1em;
+}
+
+/* #join-table-popup is a .play-flow as the Play popup is: the same padding around the form */
+gd-join-dialog .gd-dialog[data-dialog='join'] .gd-dialog__body {
+  padding: 0.5em 1.5em 2em;
 }
 
 /* resizable, as the legacy popups, but with no grip drawn (the hall's jQuery UI theme drew none) */
@@ -40,10 +63,10 @@ gd-play-overlay .gd-dialog[data-dialog='play'] .gd-dialog__body {
 /* the close button: a jQuery UI 1.13 button, with its box */
 :is(gd-play-overlay, gd-join-dialog) .gd-dialog__close {
   box-sizing: border-box;
-  width: 24px;
-  height: 24px;
-  margin-top: -12px;
-  padding: 3px;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  padding: 1px;
   border: 1px solid var(--theme-widget-border);
   background: var(--theme-hall-default-bg);
 }
@@ -172,6 +195,18 @@ gd-play-overlay .gd-play-overlay__subtitle {
   user-select: none;
 }
 
+/* .ui-widget button's font-size 1em (the choices have their own) */
+:is(gd-play-overlay, gd-join-dialog)
+  :is(
+    .gd-play-overlay__back,
+    .gd-play-form__button,
+    .gd-play-form__create,
+    .gd-play-form__unlock,
+    .gd-play-form__advanced-toggle
+  ) {
+  font-size: 1em;
+}
+
 :is(gd-play-overlay, gd-join-dialog)
   :is(
     .gd-play-overlay__back,
@@ -228,7 +263,9 @@ gd-play-overlay .gd-play-form__create:enabled:is(:hover, :focus-visible) {
 
 /* Bot and Scenarios: the heading above the form (.table-form > h1), 1rem from the top */
 .gd-play-form[data-heading='outer'] > h1:first-child {
-  margin: 0 0 0.67em;
+  /* legacy's 0.67em below collapses with the form's 1rem; here the form's gap (0.6em of 13.2px = 0.3em of the
+     heading) makes up the rest */
+  margin: 0 0 0.37em;
 }
 
 /* League and Tournament: the form in its own padded box (#league-table-options, #tournament-table-options) */
@@ -243,7 +280,11 @@ gd-play-overlay .gd-play-form__create:enabled:is(:hover, :focus-visible) {
   padding: 1rem;
 }
 
+/* hall.css .flex-vert.table-blurb: the text and the list are flex items 2px apart */
 .gd-play-form__blurb {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   margin: 0 1rem 0.8rem;
   padding: 1rem;
   border: medium solid var(--theme-play-blurb-border);
@@ -505,6 +546,11 @@ gd-league-form.gd-play-form {
 
 .gd-join__heading {
   font-size: 2em;
+}
+
+/* .play-flow .table-form > h1: 1rem above the heading */
+.gd-play-form.gd-join > .gd-join__heading {
+  margin-top: 1rem;
 }
 
 .gd-join__subtitle {
