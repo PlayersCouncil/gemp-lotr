@@ -1,0 +1,218 @@
+/*
+ * A league's detail (leagueResultsUi.js loadedLeague; hall.css .serieName, .clickableFormat, .standings and the
+ * jQuery UI tabs the results sit in). The RTMD path's sizes are the legacy page's inline styles.
+ */
+
+:host {
+  display: block;
+}
+
+.gd-league-detail__cost {
+  margin-bottom: 1em;
+}
+
+.gd-league-detail__membership {
+  margin-bottom: 1em;
+}
+
+.gd-league-detail__description {
+  display: block;
+}
+
+/* <br><hr><br> */
+.gd-league-detail__rule {
+  margin: 1.5em 0;
+  border: 0;
+  border-top: 1px solid var(--theme-events-rule);
+}
+
+.gd-league-detail__rtmd-title {
+  margin: 1em 0;
+  font-size: 1.17em;
+}
+
+.gd-league-detail__muted {
+  margin-bottom: 8px;
+  color: var(--theme-events-rtmd-muted);
+}
+
+.gd-league-detail__intro p {
+  margin: 1em 0;
+}
+
+.gd-league-detail__path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 700px;
+  margin: 12px auto;
+}
+
+.gd-league-detail__site {
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: content-box;
+  width: 120px;
+  height: 167px;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+
+.gd-league-detail__site[data-mark='current'] {
+  border: 3px solid var(--theme-events-rtmd-current);
+}
+
+.gd-league-detail__site[data-mark='passed'] {
+  border-color: var(--theme-events-rtmd-passed);
+}
+
+.gd-league-detail__site-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Card.MetaSiteOverlayHeight: the modifier's bottom 27% over the visual card */
+.gd-league-detail__site-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 27%;
+  overflow: hidden;
+}
+
+.gd-league-detail__site-overlay img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+.gd-league-detail__site-number {
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  color: var(--theme-events-bar-text);
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow:
+    0 0 3px var(--theme-events-rtmd-shadow),
+    0 0 3px var(--theme-events-rtmd-shadow);
+}
+
+.gd-league-detail__cumulative {
+  margin-top: 4px;
+  font-size: 0.9em;
+}
+
+/* .serieName */
+.gd-league-detail__serie-name {
+  font-size: 150%;
+  font-weight: bolder;
+}
+
+/* .clickableFormat */
+.gd-league-detail__format {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--theme-events-format-link);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* The results: a jQuery UI tabs widget (.ui-tabs, .ui-widget-content) with its header bar (.ui-tabs-nav) */
+.gd-league-detail__tabs {
+  margin-top: 0.2em;
+  padding: 0.2em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-content-bg);
+}
+
+.gd-league-detail__tab-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.2em 0.2em 0;
+  border: 1px solid var(--theme-header-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-header-bg);
+}
+
+.gd-league-detail__tab {
+  margin: 1px 0.2em 0 0;
+  padding: 0.5em 1em;
+  border: 1px solid var(--theme-widget-border);
+  border-bottom-width: 0;
+  border-radius: var(--theme-radius) var(--theme-radius) 0 0;
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gd-league-detail__tab:hover,
+.gd-league-detail__tab:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-league-detail__tab[aria-selected='true'] {
+  margin-bottom: -1px;
+  padding-bottom: calc(0.5em + 1px);
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+  color: var(--theme-text);
+  cursor: text;
+}
+
+.gd-league-detail__panel {
+  padding: 1em 1.4em;
+}
+
+/* table.standings: half the width, centred, white cell borders, olive even rows */
+.gd-league-detail__standings {
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 0.5em;
+}
+
+.gd-league-detail__standings td,
+.gd-league-detail__standings th {
+  padding: 2px;
+  border: 1px solid var(--theme-events-standings-border);
+}
+
+.gd-league-detail__standings td {
+  text-align: center;
+}
+
+.gd-league-detail__standings tr:nth-child(even) {
+  background-color: var(--theme-events-standings-even);
+}
+
+/* In Completed leagues the detail sits in the month's table, whose cell rules its tables took on */
+:host([data-context='history']) .gd-league-detail__standings th,
+:host([data-context='history']) .gd-league-detail__standings td {
+  padding: 0.25em 0.6em 0.25em 0;
+  border-bottom-color: var(--theme-widget-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+:host([data-context='history']) .gd-league-detail__standings th {
+  color: var(--theme-events-muted);
+  font-weight: normal;
+  white-space: nowrap;
+}

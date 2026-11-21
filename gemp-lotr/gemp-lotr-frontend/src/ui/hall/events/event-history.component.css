@@ -1,0 +1,235 @@
+/* A completed-events panel (hall.css "Completed event browser": .event-history*, the header as .calendar-header) */
+
+:host {
+  display: block;
+  margin: 0.5em 0 1em;
+}
+
+.gd-event-history__heading {
+  color: var(--theme-events-soft);
+  font-weight: bold;
+}
+
+.gd-event-history__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.5em 0;
+}
+
+.gd-event-history__month {
+  position: relative;
+  display: inline-block;
+}
+
+.gd-event-history__title {
+  display: inline-block;
+  box-sizing: content-box;
+  min-width: 11em;
+  padding: 0.1em 0.4em;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 130%;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gd-event-history__title:hover,
+.gd-event-history__title:focus,
+.gd-event-history__title[aria-expanded='true'] {
+  background: var(--theme-events-title-hover-bg);
+  outline: none;
+}
+
+.gd-event-history__title:focus-visible {
+  outline: 1px dotted var(--theme-events-muted);
+}
+
+.gd-event-history__caret {
+  margin-left: 0.4em;
+  color: var(--theme-events-muted);
+  font-size: 70%;
+  vertical-align: middle;
+}
+
+.gd-event-history__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 50;
+  min-width: 16em;
+  max-height: 20em;
+  margin-top: 0.2em;
+  padding: 0.4em;
+  overflow-y: auto;
+  transform: translateX(-50%);
+  border: 1px solid var(--theme-hall-popup-border);
+  border-radius: 4px;
+  background: var(--theme-hall-popup-bg);
+  box-shadow: 0 4px 12px var(--theme-events-dropdown-shadow);
+  text-align: left;
+}
+
+.gd-event-history__dd-status {
+  padding: 0.3em;
+}
+
+.gd-event-history__year + .gd-event-history__year {
+  margin-top: 0.3em;
+  padding-top: 0.3em;
+  border-top: 1px solid var(--theme-widget-border);
+}
+
+.gd-event-history__year-label {
+  margin-bottom: 0.2em;
+  color: var(--theme-events-muted);
+  font-weight: bold;
+}
+
+.gd-event-history__months {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.2em;
+}
+
+.gd-event-history__dd-month {
+  padding: 0.2em 0.4em;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-event-history__dd-month:hover,
+.gd-event-history__dd-month:focus {
+  border-color: var(--theme-hall-popup-border);
+  background: var(--theme-events-month-hover-bg);
+  outline: none;
+}
+
+.gd-event-history__dd-month[aria-current='true'] {
+  border-color: var(--theme-events-muted);
+  font-weight: bold;
+}
+
+.gd-event-history__status {
+  margin: 0.3em 0 0.5em;
+}
+
+.gd-event-history__status[data-state='empty'] {
+  color: var(--theme-events-soft);
+  font-style: italic;
+}
+
+.gd-event-history__status[data-state='loading'],
+.gd-event-history__loading {
+  color: var(--theme-events-loading);
+  font-style: italic;
+}
+
+.gd-event-history__status[data-state='error'],
+.gd-event-history__error {
+  color: var(--theme-events-error);
+  font-weight: bold;
+}
+
+.gd-event-history__status[data-state='loaded'] {
+  color: var(--theme-events-soft);
+}
+
+.gd-event-history__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gd-event-history__table > * > tr > th,
+.gd-event-history__table > * > tr > td {
+  padding: 0.25em 0.6em 0.25em 0;
+  border-bottom: 1px solid var(--theme-widget-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.gd-event-history__table > thead > tr > th {
+  color: var(--theme-events-muted);
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+/* the toggle sits where the Current Leagues / Tournaments rows have theirs */
+.gd-event-history__table > thead > tr > th:first-child,
+.gd-event-history__detail-cell {
+  width: 1%;
+  padding-right: 0.7em !important;
+  padding-left: 0.5em !important;
+  white-space: nowrap;
+}
+
+.gd-event-history__name {
+  font-weight: bold;
+}
+
+.gd-event-history__dates {
+  white-space: nowrap;
+}
+
+/* .event-history-number's right alignment loses to the table's own rule, as on the legacy page */
+.gd-event-history__number {
+  white-space: nowrap;
+}
+
+.gd-event-history__row[data-expanded] > td {
+  border-bottom-color: transparent !important;
+  background: var(--theme-events-drawer-bg);
+}
+
+.gd-event-history__table > tbody > tr.gd-event-history__detail-row > td {
+  padding: 0;
+  background: transparent;
+}
+
+.gd-event-history__detail-row[hidden] {
+  display: none;
+}
+
+.gd-event-history__detail {
+  margin: 0 1.2em 0.6em;
+  padding: 0.5em 0.8em 0.8em;
+  border: 1px solid var(--theme-events-drawer-border);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  background: var(--theme-events-drawer-bg);
+}
+
+.gd-event-history__admin-item {
+  display: inline-block;
+  margin-right: 0.6em;
+  white-space: nowrap;
+}
+
+.gd-event-history__admin-link {
+  color: inherit;
+  font-family: monospace;
+}
+
+.gd-event-history__admin-text {
+  padding: 0 0.3em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: 3px;
+  background: var(--theme-events-drawer-bg);
+  font-family: monospace;
+  cursor: text;
+  user-select: all;
+}
+
+.gd-event-history__admin-none {
+  color: var(--theme-events-admin-none);
+}

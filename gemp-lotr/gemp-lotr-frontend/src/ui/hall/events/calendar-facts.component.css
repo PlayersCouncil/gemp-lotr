@@ -1,0 +1,46 @@
+/* hall.css .calendar-details-facts, -label, -desc, -series */
+
+:host {
+  display: block;
+}
+
+.gd-calendar-facts__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em 1.5em;
+  margin-bottom: 0.4em;
+}
+
+.gd-calendar-facts__label {
+  margin-right: 0.4em;
+  color: var(--theme-events-muted);
+}
+
+.gd-calendar-facts__label::after {
+  content: ':';
+}
+
+.gd-calendar-facts__description {
+  display: block;
+  max-width: 100%;
+  margin: 0.4em 0 0.6em;
+  padding: 0.4em 0.6em;
+  border-left: 3px solid var(--theme-content-border);
+  overflow-wrap: break-word;
+}
+
+.gd-calendar-facts__series {
+  margin: 0.3em 0 0.6em;
+  border-collapse: collapse;
+}
+
+.gd-calendar-facts__series th,
+.gd-calendar-facts__series td {
+  padding: 0.15em 0.8em 0.15em 0;
+  text-align: left;
+}
+
+.gd-calendar-facts__series th {
+  color: var(--theme-events-muted);
+  font-weight: normal;
+}

@@ -1,0 +1,123 @@
+<p class="gd-events-calendar__intro gd-events__intro">
+  {{ words.CALENDAR_INTRO_BEFORE_BOLD }}<b>{{ words.CALENDAR_INTRO_BOLD }}</b
+  >{{ words.CALENDAR_INTRO_AFTER_BOLD }}
+</p>
+@if (error(); as text) {
+  <div class="gd-events-calendar__error">{{ text }}</div>
+} @else {
+  @if (calendar.grid(); as grid) {
+    <div class="gd-events-calendar__header">
+      <button gdEventsButton data-action="previous" (click)="calendar.previousMonth()">
+        {{ words.CALENDAR_PREVIOUS }}
+      </button>
+      <span class="gd-events-calendar__title">{{ grid.title }}</span>
+      <button gdEventsButton data-action="next" (click)="calendar.nextMonth()">{{ words.CALENDAR_NEXT }}</button>
+      <button gdEventsButton data-action="today" (click)="calendar.today()">{{ words.CALENDAR_TODAY }}</button>
+      <span class="gd-events-calendar__legend">
+        <span class="gd-events-chip" data-kind="league">{{ words.CALENDAR_LEGEND.league }}</span>
+        {{ ' ' }}<span class="gd-events-chip" data-kind="tournament">{{ words.CALENDAR_LEGEND.tournament }}</span>
+        {{ ' ' }}<span class="gd-events-chip" data-kind="projected">{{ words.CALENDAR_LEGEND.projected }}</span>
+      </span>
+    </div>
+    <div class="gd-events-calendar__grid">
+      <div class="gd-events-calendar__weekdays">
+        @for (name of words.WEEKDAY_NAMES; track name) {
+          <div class="gd-events-calendar__weekday">{{ name }}</div>
+        }
+      </div>
+      @for (week of grid.weeks; track week.days[0]?.date) {
+        <div class="gd-events-calendar__week" [style.--gd-lanes]="week.lanes" [attr.data-lanes]="week.lanes">
+          <div class="gd-events-calendar__week-bg">
+            @for (day of week.days; track day.date) {
+              <div
+                class="gd-events-calendar__day"
+                [attr.data-other-month]="day.inMonth ? null : ''"
+                [attr.data-today]="day.today ? '' : null"
+              ></div>
+            }
+          </div>
+          @for (day of week.days; track day.date; let column = $index) {
+            <div
+              class="gd-events-calendar__day-number"
+              [style.--gd-column]="column + 1"
+              [attr.data-other-month]="day.inMonth ? null : ''"
+              [attr.data-today]="day.today ? '' : null"
+            >
+              {{ day.day }}
+            </div>
+          }
+          @for (bar of week.bars; track $index) {
+            <button
+              type="button"
+              class="gd-events-calendar__bar"
+              [attr.data-kind]="bar.event.kind"
+              [attr.data-joined]="bar.event.joined ? '' : null"
+              [attr.data-error]="bar.event.kind === 'projected' && bar.event.error ? '' : null"
+              [attr.data-selected]="calendar.isSelected(bar.event) ? '' : null"
+              [attr.data-continues-before]="bar.continuesBefore ? '' : null"
+              [attr.data-continues-after]="bar.continuesAfter ? '' : null"
+              [title]="bar.tooltip"
+              [style.--gd-column]="bar.column"
+              [style.--gd-span]="bar.span"
+              [style.--gd-lane]="bar.lane + 2"
+              (click)="select(bar)"
+            >
+              @for (part of bar.parts; track $index) {
+                <span
+                  class="gd-events-calendar__part"
+                  [attr.data-serie-start]="part.serieStart ? '' : null"
+                  [attr.title]="part.serieStart ? part.title : null"
+                  [style.--gd-share]="part.percent + '%'"
+                  >{{ part.text }}</span
+                >
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+}
+<hr class="gd-events__rule" />
+<div class="gd-events-calendar__details">
+  @if (calendar.selection(); as selection) {
+    <gd-event-row
+      class="gd-events-calendar__preview"
+      [drawer]="selection.drawer"
+      [title]="selection.preview.title"
+      [date]="selection.preview.date"
+      [kind]="selection.preview.event.kind"
+      [goLabel]="selection.preview.goLabel"
+      (go)="go()"
+    >
+      @if (selection.preview.chip || selection.preview.signedUp || (canJoinQueue && selection.preview.queue)) {
+        <span class="gd-events-calendar__extras" gdRowExtras>
+          @if (selection.preview.chip; as chip) {
+            <span class="gd-events-chip" [attr.data-kind]="selection.preview.event.kind">{{ chip }}</span>
+          }
+          @if (selection.preview.signedUp) {
+            <span class="gd-events-calendar__signed-up">{{ words.SIGNED_UP }}</span>
+          }
+          @if (canJoinQueue && selection.preview.queue; as queue) {
+            <button gdEventsButton class="gd-events-calendar__join-queue" (click)="joinQueue(queue)">
+              {{ words.JOIN_QUEUE }}
+            </button>
+          }
+        </span>
+      }
+      @if (selection.drawer?.content() ?? { kind: 'fallback' }; as content) {
+        @if (content.kind === 'data') {
+          @if (selection.preview.body.kind === 'league') {
+            <gd-league-detail [league]="asLeague(content.data)" />
+          } @else {
+            <gd-tournament-detail [tournament]="asTournament(content.data)" />
+          }
+        } @else if (content.kind === 'fallback') {
+          <gd-calendar-facts [facts]="selection.preview.facts" />
+        }
+      }
+    </gd-event-row>
+  } @else {
+    <div class="gd-events-calendar__placeholder">{{ words.DETAILS_PLACEHOLDER }}</div>
+  }
+</div>

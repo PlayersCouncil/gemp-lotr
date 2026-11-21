@@ -1,0 +1,40 @@
+/* .ui-button (jQuery UI 1.13 dark-hive, as the hall has it): the hall's widget colours, padding .4em 1em */
+
+:host {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0 0.1em 0 0;
+  padding: 0.4em 1em;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  font-family: var(--theme-font-widget);
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+
+:host(:enabled:hover),
+:host(:focus-visible) {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+:host(:enabled:active) {
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+  color: var(--theme-text);
+}
+
+:host(:disabled) {
+  opacity: 0.35;
+  background-image: none;
+  cursor: default;
+}

@@ -1,0 +1,37 @@
+/*
+ * Events › Current Leagues and Current Tournaments (hall.css .event-tab-intro, .event-list, hr.event-section-rule, the
+ * admins' .event-row-code; the list's error and empty lines).
+ */
+
+:host {
+  display: block;
+}
+
+.gd-events__intro {
+  margin: 0 0 0.4em;
+}
+
+.gd-events__list {
+  margin: 0.4em 0;
+}
+
+.gd-events__rule {
+  margin: 36px 0 54px;
+}
+
+.gd-events__error {
+  color: var(--theme-events-error);
+  font-weight: bold;
+}
+
+.gd-events__code {
+  color: var(--theme-events-soft);
+  font-family: monospace;
+  font-size: smaller;
+  cursor: text;
+  user-select: all;
+}
+
+.gd-events__code a {
+  color: inherit;
+}

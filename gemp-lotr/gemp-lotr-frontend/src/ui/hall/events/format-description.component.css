@@ -1,0 +1,31 @@
+/* The format's section as the server page drew it (formatDefinitions.css .format-entry): its name, then a list */
+
+.gd-format-description__name {
+  margin: 0 0 0.3em;
+  font-size: 150%;
+}
+
+.gd-format-description ul {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+.gd-format-description__line {
+  margin: 0.3em 0;
+}
+
+/* GameUtils.getCardLink: a card's name to click */
+.gd-format-description__card {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--theme-hall-link);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-format-description__card:hover,
+.gd-format-description__card:focus-visible {
+  color: var(--theme-hall-link-hover);
+  text-decoration: underline;
+}
