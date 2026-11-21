@@ -32,12 +32,16 @@ LEFT JOIN tournament t ON t.tournament_id = tp.tournament_id
 WHERE t.tournament_id IS NULL;
 
 -- 4. A start that succeeded after failed attempts (the server was running when step 1 was applied) has the
---    tournament and each player several times: keep each player's newest row.
+--    tournament and each player several times: keep each player's newest row.  Only (tournament, player) pairs
+--    recorded more than once are touched.
 DELETE tp FROM tournament_player tp
-JOIN tournament_player newer
-    ON newer.tournament_id = tp.tournament_id
-    AND newer.player = tp.player
-    AND newer.id > tp.id;
+JOIN (
+    SELECT tournament_id, player, MAX(id) AS keep_id
+    FROM tournament_player
+    GROUP BY tournament_id, player
+    HAVING COUNT(*) > 1
+) dup ON dup.tournament_id = tp.tournament_id AND dup.player = tp.player
+WHERE tp.id <> dup.keep_id;
 
 -- Should now return nothing.
 SELECT tournament_id, player, COUNT(*) AS player_rows
