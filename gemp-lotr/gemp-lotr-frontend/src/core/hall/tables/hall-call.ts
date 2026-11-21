@@ -4,6 +4,7 @@ import { RESULT_OK, statusMessage } from './hall-tables-messages';
 import { parseTableCallResult } from './hall-table-parsers';
 import { TableCallResult } from './hall-table-models';
 import { asText } from '../json-values';
+import { messageHeader } from '../hall-request-failed';
 
 /**
  * One reading of every Play / Join / queue / tournament call's outcome (TableFlow.respond): the answer on HTTP 200 as
@@ -52,8 +53,7 @@ export function errorDetail(error: ApiError): string | null {
   if (cause === null || typeof cause !== 'object') {
     return null;
   }
-  const response = cause as { error?: unknown; headers?: { get(name: string): string | null } };
-  let body = response.error;
+  let body = (cause as { error?: unknown }).error;
   if (typeof body === 'string') {
     try {
       body = JSON.parse(body);
@@ -64,6 +64,5 @@ export function errorDetail(error: ApiError): string | null {
   if (body !== null && typeof body === 'object' && 'error' in body && body.error !== null && body.error !== undefined) {
     return asText(body.error);
   }
-  const header = response.headers?.get('message');
-  return header === undefined || header === null || header === '' ? null : header;
+  return messageHeader(cause);
 }

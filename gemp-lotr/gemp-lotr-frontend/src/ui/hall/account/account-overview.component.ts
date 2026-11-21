@@ -14,8 +14,8 @@ import {
 } from '../../../core/hall/account/account-messages';
 import { AccountOverview } from '../../../core/hall/account/account-overview.service';
 import { PlayerSearch } from '../../../core/hall/play/player-picker';
-import { siteImage } from '../../../core/platform/app-paths';
 import { PlayerPickerComponent } from '../shared/player-picker.component';
+import { PriceComponent } from '../shared/price.component';
 
 /**
  * My Account > My Account (account.html #account): the heading with the player's name, the pocket at the right (gold
@@ -23,8 +23,8 @@ import { PlayerPickerComponent } from '../shared/player-picker.component';
  * players: the help, the "Ignore a player:" form (the hall's player picker), the status line and the list.
  *
  * DOM contract: `gd-account-overview.gd-account-overview` holding `h1.gd-account-overview__heading` (the name in
- * `span.gd-account-overview__name`), `div.gd-account-overview__pocket` (the gold, `img`, the silver,
- * `img`; empty before the hall's first answer), `button.gd-account-overview__migrate` (only with trophies),
+ * `span.gd-account-overview__name`), `div.gd-account-overview__pocket` (`gd-price`; empty before the hall's first
+ * answer), `button.gd-account-overview__migrate` (only with trophies),
  * `section.gd-account-overview__ignores` with `h2`, `p.gd-account-overview__help`, `form.gd-account-overview__add`
  * (`label`, `gd-player-picker`, `button[type=submit]`), `div.gd-account-overview__status` (`role=status`),
  * `ul.gd-account-overview__list` of `li` (`span.gd-account-overview__ignored`, `button.gd-account-overview__remove`
@@ -33,7 +33,7 @@ import { PlayerPickerComponent } from '../shared/player-picker.component';
 @Component({
   selector: 'gd-account-overview',
   styleUrl: './account-overview.component.css',
-  imports: [PlayerPickerComponent],
+  imports: [PlayerPickerComponent, PriceComponent],
   host: { class: 'gd-account-overview' },
   template: `
     <h1 class="gd-account-overview__heading">
@@ -41,7 +41,7 @@ import { PlayerPickerComponent } from '../shared/player-picker.component';
     </h1>
     <div class="gd-account-overview__pocket">
       @if (overview.pocket(); as pocket) {
-        {{ pocket.gold }}<img [src]="gold" alt="gold" />&ngsp;{{ pocket.silver }}<img [src]="silver" alt="silver" />
+        <gd-price [price]="pocket" />
       }
     </div>
     @if (overview.migrateShown()) {
@@ -93,8 +93,6 @@ export class AccountOverviewComponent {
 
   protected readonly name = signal('');
   protected readonly suggest = (term: string) => this.search.suggest(term);
-  protected readonly gold = siteImage('gold.png');
-  protected readonly silver = siteImage('silver.png');
   protected readonly heading = ACCOUNT_HEADING;
   protected readonly migrateLabel = MIGRATE_TROPHIES;
   protected readonly ignoresHeading = IGNORES_HEADING;

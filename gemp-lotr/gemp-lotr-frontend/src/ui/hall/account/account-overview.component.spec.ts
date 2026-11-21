@@ -12,7 +12,11 @@ describe('AccountOverviewComponent', () => {
     const host = harness.fixture.nativeElement as HTMLElement;
     expect(host.querySelector('.gd-account-overview__heading')?.textContent?.trim()).toBe('My Account:');
     expect(host.querySelector('.gd-account-overview__pocket')?.textContent?.replace(/\s+/g, ' ').trim()).toBe('12 34');
-    expect(host.querySelectorAll('.gd-account-overview__pocket img')).toHaveLength(2);
+    const price = host.querySelector('.gd-account-overview__pocket gd-price');
+    expect(price?.getAttribute('aria-label')).toBe('12 gold 34 silver');
+    expect(
+      Array.from(price?.querySelectorAll('[data-coin]') ?? []).map((coin) => coin.getAttribute('data-coin')),
+    ).toEqual(['gold', 'silver']);
     expect(host.querySelector('.gd-account-overview__migrate')).toBeNull();
     expect(host.querySelector('.gd-account-overview__empty')?.textContent).toBe('You are not ignoring anyone.');
 

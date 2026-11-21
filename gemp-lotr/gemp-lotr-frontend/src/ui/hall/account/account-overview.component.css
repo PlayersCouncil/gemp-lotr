@@ -25,10 +25,6 @@
   text-align: right;
 }
 
-.gd-account-overview__pocket img {
-  vertical-align: baseline;
-}
-
 /* Native buttons, in the widget font (jQuery UI's .ui-widget button) */
 button {
   font-family: var(--theme-font-widget);
