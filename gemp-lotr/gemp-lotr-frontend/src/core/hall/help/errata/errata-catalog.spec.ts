@@ -71,6 +71,12 @@ describe('parseErrataCatalog', () => {
       name: '1_2',
     });
     expect(odd.counts.total).toBe(1);
+    const strange = parseErrataCatalog({
+      entries: [{ id: '1_3', after: { stats: { Twilight: { odd: 1 }, Unique: true } } }],
+      formats: [{ name: 'no code' }, { code: '', name: 'empty' }, { code: 'x' }],
+    });
+    expect(strange.entries[0]?.after?.stats).toEqual({ Twilight: null, Unique: true });
+    expect(strange.formats).toEqual([{ code: 'x', name: 'x', count: 0 }]);
   });
 
   it("labels a card by its collector's info, else its set and number (collectorLabel)", () => {
