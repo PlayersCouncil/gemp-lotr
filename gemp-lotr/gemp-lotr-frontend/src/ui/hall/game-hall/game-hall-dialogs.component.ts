@@ -31,7 +31,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
  * goes there) and the Race to Mount Doom move.
  *
  * DOM contract: `gd-game-hall-dialogs` (no box) holding `gd-dialog`s: `data-dialog=hall-message` (`gd-markup`,
- * `button.gd-button[data-action=ok]`), `hall-info` (the same without OK), `ready-check` (`div.gd-game-hall-dialogs__ready-check`,
+ * `button.gd-button[data-action=ok]`), `hall-info` (the same without OK, not modal), `ready-check` (`div.gd-game-hall-dialogs__ready-check`,
  * `button.gd-button[data-action=ready|ok]`), `ready-offer` (`p`, `a.gd-button.gd-game-hall-dialogs__open`
  * `target=_blank`), `new-items` (`div.gd-game-hall-dialogs__items` of `span.gd-game-hall-dialogs__item` with an `img`
  * and, past 1, `span.gd-game-hall-dialogs__count`), `announcement` (`div.gd-game-hall-dialogs__announcement`,
@@ -51,6 +51,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
         [name]="dialog.ok ? 'hall-message' : 'hall-info'"
         [heading]="dialog.title"
         [open]="true"
+        [modal]="dialog.ok"
         (closed)="dialogs.close(dialog.id)"
       >
         <div class="gd-game-hall-dialogs__message"><gd-markup [nodes]="dialog.body" (hallLink)="go($event)" /></div>
