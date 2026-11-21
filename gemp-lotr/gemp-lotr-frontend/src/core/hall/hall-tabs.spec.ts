@@ -10,7 +10,7 @@ import {
 
 describe('hall tabs', () => {
   it('has the legacy tabs, labels and slugs, in order', () => {
-    const html = readLegacyWebFile('hall.html');
+    const html = readLegacyWebFile('hall-legacy.html');
     const labels = [...html.matchAll(/<a href="[^"]*" class="custom-icon icon-\w+">([^<]+)<\/a>/g)].map((m) => m[1]);
     expect(HALL_TABS.map((t) => t.label)).toEqual(labels);
     const links = readLegacyWebFile('js/gemp-022/hallLinks.js');
@@ -30,7 +30,7 @@ describe('hall tabs', () => {
   });
 
   it("has the legacy tabs' links (what the legacy hall remembers) and the sub-tabs' labels", () => {
-    const html = readLegacyWebFile('hall.html');
+    const html = readLegacyWebFile('hall-legacy.html');
     const hrefs = [...html.matchAll(/<a href="([^"]*)" class="custom-icon icon-\w+">/g)].map((m) => m[1]);
     expect(HALL_TABS.map((t) => t.href)).toEqual(hrefs);
     for (const tab of HALL_TABS.filter((t) => t.subTabs.length > 0)) {

@@ -2,7 +2,7 @@ import { readLegacyWebFile } from '../../testing/files';
 import { DECKBUILDER_HREF, HALL_DISCLAIMER, HALL_INFO_LINKS } from './hall-links';
 
 describe('hall links', () => {
-  const html = readLegacyWebFile('hall.html');
+  const html = readLegacyWebFile('hall-legacy.html');
 
   it("are the legacy hall's link buttons, labels and addresses, in order", () => {
     const legacy = [

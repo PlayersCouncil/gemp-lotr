@@ -3,11 +3,12 @@ import { HELP_SERVICES } from '../../../core/hall/help/help-services';
 import { HALL_TAB_DATA } from '../hall-route-data';
 import { formatsMatcher } from './format-definitions.component';
 import { provideHallCards } from './hall-cards';
+import { ERRATA_ROUTE } from './errata/errata.routes';
 
 /**
  * The Help tab's routes (/help/...), loaded with the tab: its frame (the sub-tabs and the card information) and a
  * route per sub-tab. `formats` and `formats/<code>` are one route (formatsMatcher), so the page stays while the address
- * follows the format being read. PC Errata (`errata[/<card id>]`) is another part's: for now its sub-tab shows nothing.
+ * follows the format being read; PC Errata (`errata[/<card id>]`, errata/errata.routes.ts) likewise.
  * Help's state and calls (HELP_SERVICES) and the card code are provided here, with the tab.
  */
 export const HELP_ROUTES: Routes = [
@@ -26,8 +27,8 @@ export const HELP_ROUTES: Routes = [
         loadComponent: () => import('./format-definitions.component').then((m) => m.FormatDefinitionsComponent),
       },
       { path: 'leagues', loadComponent: () => import('./leagues.component').then((m) => m.LeaguesComponent) },
-      // PC Errata: another part's page goes here
-      { path: 'errata', children: [{ path: '**', children: [] }] },
+      // PC Errata: `errata` and `errata/<card id>` are one route too (errata/errata.routes.ts)
+      ERRATA_ROUTE,
       { path: '**', redirectTo: 'how-to-play' },
     ],
   },

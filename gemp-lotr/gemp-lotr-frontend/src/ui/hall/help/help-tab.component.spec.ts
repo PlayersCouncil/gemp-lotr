@@ -73,13 +73,14 @@ describe('the Help tab (help.routes)', () => {
     expect(leagues.querySelectorAll('table.gd-hall-article__table')).toHaveLength(2);
   });
 
-  it('leaves PC Errata to its own part: the sub-tab opens, with nothing in it yet', async () => {
-    const { el, router } = await open('/help/errata/1_5?format=pc_movie');
-    expect(router.url).toBe('/help/errata/1_5?format=pc_movie');
+  it('opens PC Errata on its sub-tab, at the card its address names', async () => {
+    const { el, router, harness } = await open('/help/errata/1_5?format=pc_movie');
+    await harness.fixture.whenStable();
+    expect(router.url.startsWith('/help/errata')).toBe(true);
     expect(el.querySelector('.gd-hall-sub-tabs__tab[data-sub-tab="pc-errata"]')?.getAttribute('aria-selected')).toBe(
       'true',
     );
-    expect(el.querySelector('.gd-hall-tab-frame__page')?.children.length).toBe(1);
+    expect(el.querySelector('gd-errata-page')).not.toBeNull();
   });
 
   it("shows a card share link's card over the sub-tab, and takes the parameter away once it is closed", async () => {

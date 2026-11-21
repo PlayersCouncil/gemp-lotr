@@ -68,3 +68,9 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   public one, one published, an unreadable one whose public scenario is gone, and a draft open with changes),
   `scenarios-public.json` (GET /scenarios/public, ScenarioShelf.publicOnes) and `scenario-copy.json` (POST
   /scenarios/mine/copy and copyPublic).
+- Written by hand from the server code, for Help › PC Errata (values made up): `errata.json` (GET /hall/errata/json,
+  HallRequestHandler.getErrataInfo with ErrataCatalog.build, serialized by JsonUtils.Serialize, which leaves nulls
+  out): a PC errata with a stat and text change, an original with both a PC and a playtest errata whose names differ
+  from it by accents only, a site whose change is only in its image, a type change (Event → Condition), a V-set
+  revision with its earlier version and one without, and a hall format without errata; with the old `all` and
+  `recent` maps the page doesn't read.
