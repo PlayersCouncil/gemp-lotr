@@ -31,7 +31,7 @@ import { EventHistoryComponent } from './event-history.component';
 import { EventRowComponent } from './event-row.component';
 import { EVENTS_AUTO_ZOOM_COOKIE, EventsCardActions } from './events-tab.component';
 import { LeagueDetailComponent } from './league-detail.component';
-import { PriceComponent } from './price.component';
+import { PriceComponent } from '../shared/price.component';
 import { TournamentDetailComponent } from './tournament-detail.component';
 
 const LEAGUE = parseLeagueDetail(readServerResponse('league-detail.xml'))!;

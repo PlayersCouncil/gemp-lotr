@@ -23,6 +23,7 @@ import {
   NO_GAME_HISTORY_FILTERS,
 } from './account-models';
 import { GameHistoryRow, gameHistoryRow } from './game-history-rows';
+import { messageHeader } from '../hall-request-failed';
 
 /** GameHistoryUI.pageSize. */
 export const GAME_HISTORY_PAGE_SIZE = 20;
@@ -245,20 +246,10 @@ function historyError(error: ApiError): string {
     case 0:
       return HISTORY_UNREACHABLE;
     case 400:
-      return headerMessage(error.cause) ?? HISTORY_BAD_FILTERS;
+      return messageHeader(error.cause) ?? HISTORY_BAD_FILTERS;
     case 401:
       return HISTORY_NOT_LOGGED_IN;
     default:
       return HISTORY_FAILED;
   }
-}
-
-/** The server's words for a 400 (GempukkuHttpRequestHandler sends them in the `message` header). */
-function headerMessage(cause: unknown): string | null {
-  if (cause === null || typeof cause !== 'object') {
-    return null;
-  }
-  const headers = (cause as { headers?: { get(name: string): string | null } }).headers;
-  const message = headers?.get('message') ?? null;
-  return message !== null && message !== '' ? message : null;
 }

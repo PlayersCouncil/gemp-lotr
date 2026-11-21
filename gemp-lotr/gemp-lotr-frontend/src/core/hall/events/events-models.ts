@@ -1,16 +1,10 @@
 import { MarkupNode } from '../../chat/chat-markup';
+import { Price } from '../price';
 
 /**
  * The Events tab's data, read from the server's answers (see README.md). Every text the server sends is kept as text;
  * the league and event descriptions, which the server renders from markdown, are MarkupNode lists.
  */
-
-/** A price in the hall's money: 100 silver to the gold (common.js formatPrice). */
-export interface Price {
-  readonly gold: number;
-  /** Always two digits ("05"), as the legacy page wrote it. */
-  readonly silver: string;
-}
 
 // ---- the calendar (GET /calendar) ----
 

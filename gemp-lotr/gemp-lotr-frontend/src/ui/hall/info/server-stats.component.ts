@@ -4,7 +4,7 @@ import { STATS_CAPTIONS } from '../../../core/hall/info/server-stats';
 import { STATS_PERIODS, StatsColumnKey, StatsPeriod, StatsTable } from '../../../core/hall/info/server-stats-models';
 import { ServerStatsService } from '../../../core/hall/info/server-stats.service';
 import { ariaSort } from '../../../core/hall/table-sort';
-import { REFRESH_AFTER_MS, ReturnRefresh } from '../../../core/hall/events/return-refresh';
+import { REFRESH_AFTER_MS, ReturnRefresh } from '../../../core/hall/return-refresh';
 import { Timers } from '../../../core/platform/timers';
 import { HallTabFrameComponent } from '../shared/hall-tab-frame.component';
 

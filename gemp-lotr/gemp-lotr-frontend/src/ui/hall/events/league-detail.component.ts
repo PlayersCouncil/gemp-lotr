@@ -11,7 +11,7 @@ import { PageNavigation } from '../../../core/platform/page-navigation';
 import { MarkupComponent } from '../../shared/chat/markup.component';
 import { EventsButtonComponent } from './events-button.component';
 import { FormatDescriptionComponent } from './format-description.component';
-import { PriceComponent } from './price.component';
+import { PriceComponent } from '../shared/price.component';
 
 /**
  * A league's detail in a drawer (leagueResultsUi.js loadedLeague, with showName false): its cost, the membership line

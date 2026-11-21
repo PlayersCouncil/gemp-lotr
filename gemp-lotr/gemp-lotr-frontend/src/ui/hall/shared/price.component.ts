@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Price } from '../../../core/hall/events/events-models';
+import { Price } from '../../../core/hall/price';
 
 /**
  * A price (common.js formatPrice): the gold, the gold coin, a space, the silver in two digits and the silver coin.

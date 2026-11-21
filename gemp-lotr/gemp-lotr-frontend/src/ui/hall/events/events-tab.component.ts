@@ -9,7 +9,7 @@ import { CardInfoComponent } from '../../shared/card-info/card-info.component';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { HallTabFrameComponent } from '../shared/hall-tab-frame.component';
 import { EventsButtonComponent } from './events-button.component';
-import { PriceComponent } from './price.component';
+import { PriceComponent } from '../shared/price.component';
 
 /** The cookie the Events tab would keep a hover zoom setting in (it shows no hover zoom; the card helpers need one). */
 export const EVENTS_AUTO_ZOOM_COOKIE = 'eventsAutoZoom';

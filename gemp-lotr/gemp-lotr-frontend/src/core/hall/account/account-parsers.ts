@@ -14,7 +14,7 @@ import {
   ShelfOrigin,
   ShelfScenario,
 } from './account-models';
-import { firstText } from './first-text';
+import { firstText } from '../first-text';
 
 /**
  * Reading the My Account calls' answers (GameHistoryRequestHandler, PlayerStatsRequestHandler, ScenarioRequestHandler

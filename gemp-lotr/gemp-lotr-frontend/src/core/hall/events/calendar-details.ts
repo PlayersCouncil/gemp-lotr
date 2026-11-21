@@ -1,5 +1,6 @@
 import { MarkupNode } from '../../chat/chat-markup';
-import { CalendarEvent, CalendarQueueOffer, Price } from './events-models';
+import { CalendarEvent, CalendarQueueOffer } from './events-models';
+import { Price } from '../price';
 import {
   cannotBeCreated,
   FACT_COST,
