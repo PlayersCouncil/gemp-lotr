@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { accountRequest, answerAccount, drawn, setUpAccountPages } from '../../../testing/account-server';
 import { HallComms } from '../../../core/hall/hall-comms.service';
+import { Notifier } from '../../../core/notifier/notifier';
+import { PlayerInfo } from '../../../core/session/player-info.service';
+import { FakeNotifier } from '../../../testing/fake-notifier';
 
 describe('AccountOverviewComponent', () => {
   it('shows the pocket and the ignore list, and ignores the name typed', async () => {
@@ -37,6 +40,24 @@ describe('AccountOverviewComponent', () => {
     accountRequest(backend, '/player/ignores/remove', 'POST').flush({ message: 'erin removed.', ignored: ['Carol'] });
     await drawn(harness);
     expect(host.querySelectorAll('.gd-account-overview__list li')).toHaveLength(1);
+    backend.match(() => true);
+  });
+
+  it('offers the trophies migration to a player who has trophies, asking first', async () => {
+    const { backend, harness } = await setUpAccountPages();
+    TestBed.inject(PlayerInfo).load().subscribe();
+    accountRequest(backend, '/player').flush({ name: 'alice', type: 'u', hasTrophies: true });
+    await harness.navigateByUrl('/account');
+    accountRequest(backend, '/player/ignores').flush({ ignored: [] });
+    await drawn(harness);
+    const host = harness.fixture.nativeElement as HTMLElement;
+    expect(host.querySelector('.gd-account-overview__heading')?.textContent?.trim()).toBe('My Account: alice');
+    const migrate = host.querySelector<HTMLButtonElement>('.gd-account-overview__migrate')!;
+    expect(migrate.textContent?.trim()).toBe('Migrate Trophies to My Cards');
+    migrate.click();
+    await drawn(harness);
+    expect((TestBed.inject(Notifier) as FakeNotifier).dialogs[0]).toMatch(/^confirm: This will permanently migrate/);
+    backend.expectNone((request) => request.url.endsWith('/collection/migrate'));
     backend.match(() => true);
   });
 });

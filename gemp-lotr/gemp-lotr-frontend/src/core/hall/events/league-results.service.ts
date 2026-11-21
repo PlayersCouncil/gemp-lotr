@@ -103,9 +103,15 @@ export class LeagueResults {
   }
 
   /**
+   * Told a failed join's words instead of the alert (LeagueResultsUI's options.onJoinError): Play > League shows
+   * them with its next steps.
+   */
+  joinFailureHandler: ((message: string) => void) | null = null;
+
+  /**
    * The answer to the join question. Yes joins (POST /league/{code}); then every live drawer of that league is
    * fetched again where it is, and `joined$` tells the code. Refused for want of money (409): "You don't have
-   * enough funds to join this league."; any other failure says what went wrong.
+   * enough funds to join this league."; any other failure says what went wrong (an alert, or joinFailureHandler).
    */
   async answerJoin(yes: boolean): Promise<void> {
     const question = this.joinQuestion_();
@@ -118,7 +124,12 @@ export class LeagueResults {
       await firstValueFrom(this.api.joinLeague(question.code));
     } catch (error) {
       const failure = ApiError.from(error);
-      await this.injector.get(Notifier).alert(failure.is(409) ? NOT_ENOUGH_FUNDS : eventErrorMessage(failure));
+      const message = failure.is(409) ? NOT_ENOUGH_FUNDS : eventErrorMessage(failure);
+      if (this.joinFailureHandler !== null) {
+        this.joinFailureHandler(message);
+      } else {
+        await this.injector.get(Notifier).alert(message);
+      }
       return;
     } finally {
       this.joining_.set(false);

@@ -93,4 +93,14 @@ describe('PlayScenario', () => {
     hall.request('/scenarios/author/open').flush({ gameId: 'g-10' });
     expect(await editing).toBe(true);
   });
+
+  it('takes no second start or edit while one is being set up (a second click before the buttons are off)', async () => {
+    await refreshed();
+    const starting = play.start(play.listing()!.scenarios[0]);
+    expect(await play.start(play.listing()!.scenarios[1])).toBe(false);
+    expect(await play.edit('broken')).toBe(false);
+    hall.request('/scenarios/start').flush({ gameId: 'g-5' });
+    expect(await starting).toBe(true);
+    expect(hall.navigation.reserved.length).toBe(1);
+  });
 });

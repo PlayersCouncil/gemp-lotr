@@ -201,6 +201,8 @@ export class LeagueFormComponent {
     void this.flow.show();
     void this.leagues.loadList();
     const joined = this.leagues.joined$.subscribe((code) => void this.flow.leagueJoined(code));
+    // a join that failed is told with the next steps, not in an alert (CreateLeagueTable.js onJoinError)
+    this.leagues.joinFailureHandler = (message) => this.flow.leagueJoinFailed(message);
     inject(DestroyRef).onDestroy(() => joined.unsubscribe());
     // the deck remembered for the league chosen, once the lists have arrived
     effect(() => {
