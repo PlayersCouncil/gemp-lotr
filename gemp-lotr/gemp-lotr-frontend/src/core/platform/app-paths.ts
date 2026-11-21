@@ -7,6 +7,20 @@ export const APP_URL = '/gemp-lotr/ng';
 /** The login page. */
 export const LOGIN_PAGE_URL = `${APP_URL}/login`;
 
+/** The site's front door (the `start` route): the hall for a logged-in player, the login page for anyone else. */
+export const START_PAGE_URL = `${APP_URL}/start`;
+
+/** A place in the app, as the router writes it: "/events/leagues", "/deckbuilder?theme=modern". */
+const APP_PATH = /^\/(?!\/)[A-Za-z0-9_\-/?=&%.+]{1,200}$/;
+
+/**
+ * Whether `path` is a place in the app the login page may come back to (its `?return=`): anything else is dropped,
+ * so the login page can't be made to send a player elsewhere, nor back to itself.
+ */
+export function isReturnPath(path: string): boolean {
+  return APP_PATH.test(path) && !path.startsWith('/login');
+}
+
 /** Where the legacy pages are: the server's HTML names its pictures relative to them (images/cultures/gondor.png). */
 const LEGACY_PAGES_URL = '/gemp-lotr/';
 

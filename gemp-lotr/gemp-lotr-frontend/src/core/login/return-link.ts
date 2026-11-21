@@ -1,7 +1,4 @@
-import { APP_URL } from '../platform/app-paths';
-
-/** A place in the app, as the router writes it: "/events/leagues", "/deckbuilder?theme=modern". */
-const APP_PATH = /^\/(?!\/)[A-Za-z0-9_\-/?=&%.+]{0,200}$/;
+import { APP_URL, isReturnPath } from '../platform/app-paths';
 
 /**
  * The place in the app the visitor was sent to the login page from (its `?return=`: the login guard and the hall's
@@ -10,7 +7,7 @@ const APP_PATH = /^\/(?!\/)[A-Za-z0-9_\-/?=&%.+]{0,200}$/;
  */
 export function returnPath(queryString: string): string {
   const path = new URLSearchParams(queryString).get('return') ?? '';
-  return APP_PATH.test(path) && !path.startsWith('/login') ? path : '';
+  return isReturnPath(path) ? path : '';
 }
 
 /** The page to go to after logging in: the place the visitor came from, else the hall. */

@@ -51,8 +51,11 @@ describe('HallSession', () => {
   it('starts at once on a tab that needs logging in', async () => {
     await session.begin(true);
     expectStarted();
+    // Discord takes the player's name when it is made: not shown before the player is known
+    expect(chat.discord()).toBe(false);
     backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush(readServerResponse('player.json'));
     await settle();
+    expect(chat.discord()).toBe(true);
   });
 
   it('on a public tab, asks who is logged in first, and starts for a player', async () => {
@@ -73,6 +76,8 @@ describe('HallSession', () => {
     expect(session.loggedOut()).toBe(true);
     expect(comms.connection().state).toBe('loggedout');
     expect(chat.lines().map((l) => l.html)).toEqual([CHAT_NOT_LOGGED_IN]);
+    // the built-in chat, with its warning: not Discord
+    expect(chat.discord()).toBe(false);
     expect(session.loginRequired()).toBe(false);
     backend.expectNone(() => true);
 

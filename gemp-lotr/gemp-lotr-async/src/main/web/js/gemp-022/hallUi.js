@@ -413,7 +413,8 @@ var GempLotrHallUI = Class.extend({
 		// A game tab that wants to come back here asks whether a hall is open before opening another one (two halls
 		// at once get a 409).  Answering lets it close itself instead: see HallTab in the Angular game page
 		// (gemp-lotr-frontend/src/core/platform/hall-tab.service.ts).
-		try {
+		// Open for the Admin tab alone, this page is not the hall: it neither answers for it nor follows its links.
+		if (!(window.GempHallSession && GempHallSession.adminOnly)) try {
 			this.hallChannel = new BroadcastChannel("gemp-lotr-hall");
 			this.hallChannel.onmessage = function (event) {
 				if (event.data != null && event.data.type == "anyone")
@@ -516,11 +517,50 @@ var GempLotrHallUI = Class.extend({
 
 	// The page is open for its Admin tab alone (GempHallSession.adminOnly): the player info, so the Admin tab shows
 	// for an admin, and whatever waited for the hall; no hall poll, which would end the Angular hall's.
+	/*
+	 * Back to the Game Hall from the page open for its Admin tab alone. The hall opened this page in a tab of its
+	 * own and is normally still open: this tab is then closed rather than a second hall opened (two halls at once
+	 * get a 409). A tab the browser won't close says where the hall is; with no hall about, it opens here. The same
+	 * question the game page asks: HallTab in gemp-lotr-frontend/src/core/platform/hall-tab.service.ts.
+	 */
+	backToHall: function (link) {
+		var hallUrl = link.attr("href");
+		var channel = null;
+		try {
+			channel = new BroadcastChannel("gemp-lotr-hall");
+		} catch (e) {
+			window.location.href = hallUrl;
+			return;
+		}
+		var answered = false;
+		channel.onmessage = function (event) {
+			if (answered || event.data == null || event.data.type != "here")
+				return;
+			answered = true;
+			channel.close();
+			window.close();
+			setTimeout(function () {
+				$("#admin-back-elsewhere").show();
+			}, 400);
+		};
+		channel.postMessage({type: "anyone"});
+		setTimeout(function () {
+			if (answered)
+				return;
+			channel.close();
+			window.location.href = hallUrl;
+		}, 350);
+	},
+
 	startForAdmin: function () {
 		var that = this;
 		if (this.started)
 			return;
 		this.started = true;
+		$("#admin-back").click(function (event) {
+			event.preventDefault();
+			that.backToHall($(this));
+		});
 		var queued = this.startQueue || [];
 		this.startQueue = null;
 		for (var i = 0; i < queued.length; i++) {

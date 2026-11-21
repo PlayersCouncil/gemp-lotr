@@ -1,5 +1,4 @@
 import { Component, inject, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 import { CardImageService } from '../../../core/cards/card-image.service';
 import { HallDeliveries } from '../../../core/hall/deliveries/hall-deliveries.service';
 import {
@@ -10,7 +9,6 @@ import {
   RTMD_TITLE,
 } from '../../../core/hall/deliveries/hall-deliveries.service';
 import { HallDialogs } from '../../../core/hall/hall-dialogs.service';
-import { hallRouteOf } from '../../../core/hall/hall-links';
 import { pageMarkup } from '../../../core/hall/hall-dialogs.service';
 import {
   readyCheckText,
@@ -54,7 +52,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
         [modal]="dialog.ok"
         (closed)="dialogs.close(dialog.id)"
       >
-        <div class="gd-game-hall-dialogs__message"><gd-markup [nodes]="dialog.body" (hallLink)="go($event)" /></div>
+        <div class="gd-game-hall-dialogs__message"><gd-markup [nodes]="dialog.body" /></div>
         @if (dialog.ok) {
           <div class="gd-dialog__actions" gdDialogActions>
             <button type="button" class="gd-button" data-action="ok" (click)="dialogs.close(dialog.id)">OK</button>
@@ -131,7 +129,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
         (closed)="deliveries.snoozeAnnouncement()"
       >
         <div class="gd-game-hall-dialogs__announcement">
-          <gd-markup [nodes]="announcement.content" (hallLink)="announcementLink($event)" />
+          <gd-markup [nodes]="announcement.content" (hallLink)="deliveries.followAnnouncementLink()" />
         </div>
         <div class="gd-dialog__actions" gdDialogActions>
           <button type="button" class="gd-button" data-action="dismiss" (click)="deliveries.dismissAnnouncement()">
@@ -177,7 +175,6 @@ export class GameHallDialogsComponent {
   protected readonly offers = inject(HallReadyOffers);
   protected readonly deliveries = inject(HallDeliveries);
   protected readonly images = inject(CardImageService);
-  private readonly router = inject(Router);
 
   protected readonly readyCheckTitle = READY_CHECK_TITLE;
   protected readonly readyWord = READY_CHECK_READY;
@@ -198,18 +195,4 @@ export class GameHallDialogsComponent {
   }
 
   /** A link into the hall: its route. */
-  protected go(hash: string): void {
-    const route = hallRouteOf(hash);
-    if (route !== null) {
-      void this.router.navigate([route.path], {
-        queryParams: route.queryParams,
-        ...(route.fragment === null ? {} : { fragment: route.fragment }),
-      });
-    }
-  }
-
-  protected announcementLink(hash: string): void {
-    this.deliveries.followAnnouncementLink();
-    this.go(hash);
-  }
 }

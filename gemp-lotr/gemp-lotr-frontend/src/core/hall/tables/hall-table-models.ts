@@ -111,6 +111,8 @@ export interface BotTableForm {
 export interface TableCallResult {
   readonly ok: boolean;
   readonly message: string;
+  /** The HTTP status of a call that failed as a request (0: no answer); absent when the server answered (HTTP 200). */
+  readonly status?: number;
 }
 
 /** The result box of a flow ("Result: Ready."). */

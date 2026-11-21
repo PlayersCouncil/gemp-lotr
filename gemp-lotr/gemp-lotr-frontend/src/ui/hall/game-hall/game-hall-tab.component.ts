@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { parseServerMarkup } from '../../../core/chat/chat-markup';
+import { parseServerMarkup, RICH_MARKUP } from '../../../core/chat/chat-markup';
 import { HallComms } from '../../../core/hall/hall-comms.service';
 import { MarkupComponent } from '../../shared/chat/markup.component';
 import { HALL_INFO_LINKS } from '../hall-links';
@@ -51,6 +51,6 @@ export class GameHallTabComponent {
   protected readonly links = HALL_INFO_LINKS;
   protected readonly motd = computed(() => {
     const motd = this.comms.motd();
-    return motd ? parseServerMarkup(motd) : null;
+    return motd ? parseServerMarkup(motd, RICH_MARKUP) : null;
   });
 }

@@ -6,6 +6,8 @@ import { parseMyScenarios } from './account-parsers';
 import { OwnScenario } from './account-models';
 import { HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { MyScenarios } from './my-scenarios.service';
+import { Subject } from 'rxjs';
+import { HallChannel } from '../../platform/hall-tab.service';
 
 const MINE = JSON.parse(readServerResponse('scenarios-mine.json')) as { scenarios: unknown[]; authoring: unknown };
 const [inReview, sentBack] = parseMyScenarios(MINE).scenarios as OwnScenario[];
@@ -35,6 +37,17 @@ describe('MyScenarios', () => {
     expect(shelf.draft()?.title).toBe('Second steps');
     expect(shelf.limit()).toBe(100);
     expect(shelf.empty()).toBe(false);
+  });
+
+  it('fetches the list again when another tab sends the hall somewhere, once it has been shown', async () => {
+    const goes = (TestBed.inject(HallChannel) as unknown as { goes: Subject<string> }).goes;
+    goes.next('#account/scenarios');
+    backend.expectNone(() => true);
+    await shown();
+    goes.next('#account/scenarios');
+    accountRequest(backend, '/scenarios/mine').flush({ ...MINE, limit: 7 });
+    await settle();
+    expect(shelf.limit()).toBe(7);
   });
 
   it('says when there are none, or nowhere to keep them, or the list failed', async () => {

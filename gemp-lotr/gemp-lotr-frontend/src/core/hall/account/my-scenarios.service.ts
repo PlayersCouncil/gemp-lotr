@@ -1,8 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { firstValueFrom, Observable } from 'rxjs';
 import { AuthoringApi } from '../../game/authoring/authoring-api.service';
 import { ScenarioApi } from '../../game/scenario/scenario-api.service';
 import { gamePageUrl } from '../../platform/app-paths';
+import { HallChannel } from '../../platform/hall-tab.service';
 import { PageNavigation, ReservedTab } from '../../platform/page-navigation';
 import { SessionService } from '../../session/session.service';
 import { gameKey, HallReadyOffers } from '../ready/hall-ready-offers.service';
@@ -133,6 +135,16 @@ export class MyScenarios {
   });
   /** No scenarios yet (and a folder to keep them in). */
   readonly empty = computed(() => this.loaded() && this.ownFolder() && (this.answer_()?.scenarios.length ?? 0) === 0);
+
+  constructor() {
+    // Another tab sent the hall somewhere (the authoring tool, after a scenario was submitted: hallUi.js fires
+    // gemp:scenarios-changed with it). The list is fetched again, which going to a sub-tab already showing would not do.
+    inject(HallChannel)
+      .goes$.pipe(takeUntilDestroyed())
+      .subscribe(() => {
+        if (this.started) void this.refresh();
+      });
+  }
 
   /** The sub-tab's first showing. */
   start(): void {

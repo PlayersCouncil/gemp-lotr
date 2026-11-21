@@ -45,8 +45,9 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
  * in until opening a tab that needs it. The tab shown is remembered (localStorage gemp.hall.activeTab, as the legacy
  * hall: its legacy link), and the hall's address with no tab opens it again (hall.routes.ts). Another tab of the site
  * asking whether a hall is open, or asking it to show a legacy hall link, is answered (HallChannel, hallUi.js).
- * The Admin tab (admins and league admins) is a link to the legacy hall's; the Users tab is not drawn (hidden in the
- * legacy hall too). Play opens the "Not logged in" dialog for a visitor and the Play overlay for a player
+ * The Admin tab (admins and league admins) is a link to the legacy hall's, in a tab of its own: this hall has to stay
+ * open and polling, or the server takes the admin out of their tables and queues after 20 s (HallServer). The Users
+ * tab is not drawn (hidden in the legacy hall too). Play opens the "Not logged in" dialog for a visitor and the Play overlay for a player
  * (`gd-play-overlay`, part 4.2); the chat's "Invite to table" opens its Casual form for that player. The Join dialog and
  * the Game Hall's dialogs (ready checks, ready prompts, messages, deliveries) are here too, so they show over every tab.
  *
@@ -96,7 +97,9 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
             >{{ tab.label }}</a
           >
         } @else {
-          <a class="gd-hall__tab" [href]="adminHref" [attr.data-tab]="tab.slug">{{ tab.label }}</a>
+          <a class="gd-hall__tab" [href]="adminHref" target="_blank" rel="noopener" [attr.data-tab]="tab.slug">{{
+            tab.label
+          }}</a>
         }
       }
     </nav>

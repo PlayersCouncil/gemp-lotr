@@ -1,4 +1,4 @@
-import { parseServerMarkup } from '../../chat/chat-markup';
+import { parseServerMarkup, RICH_MARKUP } from '../../chat/chat-markup';
 import { attr, boolAttr, childElements, intAttr, parseXml, rootElement } from '../../api/xml';
 import { price } from '../price';
 import {
@@ -89,7 +89,7 @@ function parseCalendarEvent(json: Json): CalendarEvent | null {
         leagueType: text(json['leagueType']),
         inviteOnly: json['inviteOnly'] === true,
         cost: cost === null ? null : price(cost),
-        description: parseServerMarkup(text(json['description']) ?? ''),
+        description: parseServerMarkup(text(json['description']) ?? '', RICH_MARKUP),
         scheduleId: text(json['scheduleId']),
         series: array(json['series']).map((serie) => parseCalendarSerie(object(serie))),
       };
@@ -261,7 +261,7 @@ export function parseLeagueDetail(xml: string): LeagueDetail | null {
     joinable: boolAttr(league, 'joinable'),
     draftable: boolAttr(league, 'draftable'),
     inviteOnly: boolAttr(league, 'inviteOnly'),
-    description: parseServerMarkup(attr(league, 'desc') ?? ''),
+    description: parseServerMarkup(attr(league, 'desc') ?? '', RICH_MARKUP),
     rtmd: rtmd ? parseRtmdPath(league) : null,
     series: childElements(league, 'serie').map(parseLeagueSerie),
     standings: sortStandings(childElements(league, 'leagueStanding').map((standing) => leagueStanding(standing, rtmd))),

@@ -97,6 +97,13 @@ public class WebRequestHandlerTest {
     }
 
     @Test
+    public void routeWithADotInItServesTheAppIndex() throws Exception {
+        // a tournament's id is whatever the admin typed
+        assertEquals(ngIndex.getCanonicalFile(), serve("ng/events/tournaments/wc2026.finals"));
+        assertEquals(ngIndex.getCanonicalFile(), serve("ng/events/tournaments/yuletide.1700000000000"));
+    }
+
+    @Test
     public void filesInsideTheAppDirectoryAreServedDirectly() throws Exception {
         assertEquals("main-ABC123.js", serve("ng/main-ABC123.js").getName());
         assertEquals("bg.png", serve("ng/themes/classic/bg.png").getName());

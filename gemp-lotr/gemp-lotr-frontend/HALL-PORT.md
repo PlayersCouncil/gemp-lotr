@@ -39,7 +39,7 @@ has its own, drawn with the theme's values.
 2. The shell: routes, the tab bar, the connection readout, the chat, the Deck-builder and Play buttons. **Done.**
 3. The login page. **Done.**
 4. The Game Hall tab: tables, queues, tournaments, ready checks, the MOTD, announcements. **Done.**
-5. The Play and Join flows: casual, bots, league, tournament, scenario.
+5. The Play and Join flows: casual, bots, league, tournament, scenario. **Done.**
 6. Help and Server Info. **Done** (PC Errata last).
 7. Events. **Done.**
 8. My Account. **Done.**
@@ -88,6 +88,16 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
   (error=N)" as on the legacy page, its polls time out after the legacy 20 s, and an unreadable answer stops the chat
   quietly.
 - **Help > PC Errata** opened bare comes back as it was left; the legacy bare link cleared the filters.
+- **The Admin tab** opens the legacy hall's Admin in a tab of its own, and "< Back to the Game Hall" there closes
+  that tab. It can't share the hall's tab as it did: the Angular hall has to stay open and polling, or the server
+  takes the admin out of their tables and queues after 20 s.
+- **Links into the hall in server text** (a patch note's, an announcement's, the MOTD's) are real addresses, so they
+  open in a new tab too; the legacy `#fragment` ones did as well.
+- **The game page's "Go to main page"** leads to the start page, so a logged-in player lands in the hall.
+- **Leave Queue, Start, Ready and Abandon** that fail with a 400 show the server's own words; the legacy hall showed
+  "Server error ... (error 400)". A lost request and a 401 are handled as before.
+- **A blocked game tab** always reads "... your browser blocked the new window."; the legacy scenario shelf alone
+  said "new tab".
 
 ### Wording that is new
 
@@ -95,13 +105,15 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
 - "Could not load your game history. Please try again later." (My Game History, for a failure the legacy page left
   on "Loading...".)
 - The alt texts "gold" and "silver" on the pocket's coins.
-- "< Back to the Game Hall" on the legacy hall when it is open for its Admin tab alone.
+- "< Back to the Game Hall" on the legacy hall when it is open for its Admin tab alone, and "The Game Hall is open
+  in another tab." beside it when the browser won't let the page close itself.
 
 ### What looks different
 
 - Sections, drawers and the Play overlay's screens open and close at once; the legacy hall animated them (200 to
   250 ms). Updated rows don't flash their border.
-- The card dialog is the app's own, titled "Card Information"; the legacy preview showed the card's name.
+- The card dialog is the app's own. It is titled as the legacy preview was in Format Definitions and PC Errata (the
+  card's name); a card named in a patch note is still "Card Information".
 - Four old patch notes (2021-12-24, 2022-07-07, 2022-08-19, 2022-12-21) lose their inline colours.
 - In "New items" and Race to Mount Doom dialogs the cards are plain pictures, with no zoom or details.
 - Small offsets (a few px) remain in places; `visual-check/hall` lists them.

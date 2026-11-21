@@ -107,7 +107,8 @@ The hall is split into five parts; 4.1a is the core of the frame and the chat, *
   with links shredded): HTML escaped, markdown (bold, italics, strikethrough, quotes, code, lists), bare URLs
   autolinked with `target="_blank"`, `[text](url)` written out as "text: url", underscores literal, newlines as
   `<br/>`. Commands (starting with "/") are not rendered. System messages hold simple tags (`<br />`). The legacy chat
-  inserted the markup as it came; the view should bind it as HTML (Angular sanitizes it).
+  inserted the markup as it came; here it is read into nodes (`parseServerMarkup`) and drawn element by element
+  (`gd-markup`), never bound as HTML.
 - Lines (`ChatLine`): kind `system` (from "System": joins, leaves, welcome, command answers), `chat`, or `warning`
   (made by the page); sender shown before the text in bold, preceded in the hall by a timestamp
   `[Nov 9 08:05:03]` in the viewer's time zone (`formatChatTimestamp`). Senders "TournamentSystem" and
@@ -171,11 +172,14 @@ The hall is split into five parts; 4.1a is the core of the frame and the chat, *
   math.
 - The route's injector outlives the page, so the page stops the poll and the chat when it goes (`HallSession.stop()`)
   and starts them afresh when shown again (`ChatService.start()` after `stop()` joins anew, its old lines cleared).
-- Play opens a placeholder dialog for a logged-in player (`gd-hall-play-dialog`, which 4.2 fills); "Invite to table"
-  in a player's menu waits for 4.2 too.
+- Play opens the Play overlay for a logged-in player (`gd-play-overlay`); "Invite to table" in a player's menu is
+  `PlayOverlay.inviteToTable`.
 - Another tab's `{type: 'go', hash}` (HallChannel) opens the hash's route; the legacy hall also fired
-  `gemp:scenarios-changed` then, for My Scenarios to fetch its lists again: 4.4 subscribes to `HallChannel.goes$`.
-- Delivery headers on hall answers are ignored (4.4). The chat does not rejoin after 410 by itself, as the legacy
-- "Invite to table" is `PlayOverlay.inviteToTable`.
-- The chat does not rejoin after 410 by itself, as the legacy
-  chat (refresh the page).
+  `gemp:scenarios-changed` then, for My Scenarios to fetch its lists again: `MyScenarios` listens to
+  `HallChannel.goes$` for that.
+- The Admin tab opens the legacy hall's Admin in a tab of its own: this hall has to go on polling, or the server takes
+  the admin out of their tables and queues after 20 s (`HallServer`). That page neither answers on the hall's channel
+  nor polls.
+- Discord shows only once the player is known (`ChatService.applyChoice`, from `HallSession.start`): it takes the
+  player's name when it is made, and a visitor keeps the built-in chat with its warning.
+- The chat does not rejoin after 410 by itself, as the legacy chat (refresh the page).

@@ -332,7 +332,7 @@ describe('the decisions on the game page', () => {
   it('leads to the main page or the hall', async () => {
     const first = await open('', 401);
     await first.click('[data-problem-action="mainPage"]');
-    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/login');
+    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/start');
     first.fixture.destroy();
     backend.match(() => true);
     TestBed.resetTestingModule();

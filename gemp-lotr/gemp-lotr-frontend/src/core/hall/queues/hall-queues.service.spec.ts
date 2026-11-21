@@ -7,6 +7,7 @@ import { FakeNotifier, settle } from '../../../testing/fake-notifier';
 import { HallTestBed, setUpHall } from '../../../testing/hall';
 import { HallBoard } from '../board/hall-board.service';
 import { HallDialogs } from '../hall-dialogs.service';
+import { HallSession } from '../hall-session.service';
 import { JoinDialog } from '../play/join-dialog.service';
 import { HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { GAME_START_SOUND } from '../tables/hall-tables.service';
@@ -86,6 +87,28 @@ describe('HallQueuesService', () => {
       { kind: 'text', text: ' players' },
     ]);
     expect(warnings).toEqual(['Not <b>enough</b> players']);
+  });
+
+  it('says nothing of a lost request, asks a logged-out player to log in, and shows any other failure', async () => {
+    hall.connect();
+    const session = TestBed.inject(HallSession);
+    let leaving = queues.leaveQueue('pm1');
+    hall.request('/hall/queue/pm1/leave').error(new ProgressEvent('error'));
+    await leaving;
+    leaving = queues.leaveQueue('pm1');
+    hall.request('/hall/queue/pm1/leave').flush('', { status: 504, statusText: 'Gateway Timeout' });
+    await leaving;
+    expect([titles(), warnings, session.loginRequired()]).toEqual([[], [], false]);
+
+    leaving = queues.leaveQueue('pm1');
+    hall.request('/hall/queue/pm1/leave').flush('', { status: 401, statusText: 'Unauthorized' });
+    await leaving;
+    expect([titles(), warnings, session.loginRequired()]).toEqual([[], [], true]);
+
+    leaving = queues.leaveQueue('pm1');
+    hall.request('/hall/queue/pm1/leave').flush('', { status: 500, statusText: 'Server Error' });
+    await leaving;
+    expect(titles()).toEqual(['Error']);
   });
 
   it('leaves a queue and abandons a tournament after the question', async () => {

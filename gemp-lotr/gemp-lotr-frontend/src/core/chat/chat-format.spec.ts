@@ -4,7 +4,6 @@ import {
   highlightOf,
   isIgnored,
   orderUsers,
-  serverMarkup,
   tournamentAnnouncement,
 } from './chat-format';
 
@@ -44,13 +43,5 @@ describe('chat format', () => {
       { name: 'zed', role: null, self: true, incognito: false },
     ];
     expect(orderUsers(users).map((u) => u.name)).toEqual(['zed', 'bob']);
-  });
-
-  it('keeps only the simple formatting tags of server text', () => {
-    expect(serverMarkup('Round <b>2</b><br/>starts <script>x</script> & "now"')).toBe(
-      'Round <b>2</b><br>starts &lt;script&gt;x&lt;/script&gt; &amp; &quot;now&quot;',
-    );
-    expect(serverMarkup('<B class="x">no</B>')).toBe('&lt;B class=&quot;x&quot;&gt;no</b>');
-    expect(serverMarkup(null)).toBe('');
   });
 });
