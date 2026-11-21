@@ -8,7 +8,13 @@
   position: sticky;
   top: 5px;
   align-self: flex-start;
-  flex: 0 0 auto;
+  /*
+   * The legacy list is a float in the frame's flex row: its width is its widest sub-tab, at most 200px, and it gives
+   * way (flex-shrink 1, in proportion to its width) with the page when the row is too narrow, down to its longest label
+   */
+  flex: 0 1 auto;
+  /* the list's 200px and its padding and border (it starts at its widest; a label is never wider) */
+  width: calc(200px + 0.4em + 2px);
   /* hall.css .sub-tabs (the tab frame gives the jQuery UI widget's padding and the clearfix's 5px gap) */
   margin: 4px;
 }
@@ -17,7 +23,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: content-box;
-  width: 200px;
+  max-width: 200px;
   margin: 0;
   padding: 0.2em 0.2em 0;
   border: 1px solid var(--theme-header-border);
