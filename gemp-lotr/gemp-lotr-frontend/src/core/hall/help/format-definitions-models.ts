@@ -52,6 +52,8 @@ export interface FormatDefinition {
   /** "Cards from sets 1-10, V1-V3", or null. */
   readonly setSummary: string | null;
   readonly sites: string | null;
+  /** The site block's readable name ("Fellowship block"); null when the server sent none. */
+  readonly sitesName: string | null;
   readonly cancelRingBearerSkirmish: boolean;
   readonly minimumDeckSize: number;
   readonly maximumSameName: number;

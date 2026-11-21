@@ -20,7 +20,8 @@ import {
   parseTournamentDetail,
   parseTournamentList,
 } from './events-parsers';
-import { FormatDefinition, parseFormatDefinition } from './format-definitions';
+import { parseFormat } from '../help/format-definitions';
+import { FormatDefinition } from '../help/format-definitions-models';
 
 /**
  * The Events tab's calls (communication.js getCalendar, getEventHistoryMonths, getEventHistory, getLeagues, getLeague,
@@ -87,7 +88,7 @@ export class EventsApi {
    */
   formatDefinition(code: string): Observable<FormatDefinition | null> {
     return this.http.getText(`/hall/format/${encodeURIComponent(code)}/json`).pipe(
-      map((text) => parseFormatDefinition(readJson(text))),
+      map((text) => parseFormat(readJson(text))),
       catchError((error: unknown) => {
         if (ApiError.from(error).is(404)) {
           return of(null);

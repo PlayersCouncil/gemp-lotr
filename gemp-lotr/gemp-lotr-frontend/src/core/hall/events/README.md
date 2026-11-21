@@ -37,7 +37,9 @@ providers; `EventsTab` holds the rest.
   startTime (a ZonedDateTime's text; "HH:mm" = characters 11-16), started, cost, joined, queueOpen with queueType
   and queueStart), and for event admins `projected` (scheduleId, scheduleName, eventIndex, eventName, name,
   leagueType, start, end, createdOn, error). Unknown kinds are left out.
-- Opens on the current UTC month. Header: "<", "November 2026", ">", "Today", and the legend League / Tournament /
+- Opens on the current UTC month, and marks today by the UTC date, whatever the browser's time zone (isoDate and
+  init read `getUTC*`): on the evening of 20 November in America, today is already the 21st.
+  Header: "<", "November 2026", ">", "Today", and the legend League / Tournament /
   Scheduled (not yet created). The grid shows whole weeks, Monday to Sunday (Mon ... Sun); days of other months and
   today are marked. The fetched range is the grid's (`gridRange`).
 - Bars (`buildCalendarGrid`): one per event per week row, clipped to the week, marked where they continue; packed
@@ -108,8 +110,8 @@ formatAvailable collection limited>` (`<matches><match winner loser>` (the viewe
   calendar loads again (`EventsTab`), and the hall's Play popup should reload its league formats (4.2b).
 - Format description: the legacy dialog showed GET `/hall/format/{code}` (HTML). Here `EventsApi.formatDefinition`
   asks GET `/hall/format/{code}/json` (any format the library knows; 404 for an unknown one, which leaves the dialog
-  empty, as the legacy one was when its call failed), read by `format-definitions.ts`; the sites are shown by their
-  readable name (`sitesName`).
+  empty, as the legacy one was when its call failed), read by Help's `parseFormat` (`core/hall/help`) and worded by
+  `format-description.ts`; the sites are shown by their readable name (`sitesName`).
 
 ## Current Tournaments (`TournamentResults`)
 
@@ -171,6 +173,11 @@ calendar's tournaments read them if the server adds them.
 - The format description is drawn from data (GET `/hall/format/{code}/json`), not the server's HTML; its card names
   show the card on a click.
 - A league or tournament listed twice gets one row.
+- The drawers open and shut at once: the legacy drawers slid open and shut over 250 ms (EventDrawer.slide /
+  resize, none with prefers-reduced-motion), easing to a new height when fetched content replaced the loading line.
+- No scroll keeper: the legacy calendar held the page's scroll position while the preview under the grid was
+  replaced (EventCalendarUI.ScrollKeeper, a spacer sized to the held offset); here the details only have
+  `overflow-anchor: none` and the browser keeps the position as it can.
 
 ## The view (`ui/hall/events`)
 
@@ -184,6 +191,4 @@ drawer), `gd-league-detail`, `gd-tournament-detail`, `gd-calendar-facts`, `gd-ev
 Hooks for the hall (`events-hooks.ts`, both optional): `EVENTS_QUEUE_JOINER` (`joinQueue(offer)`: the calendar shows
 Join Queue only when it is provided) and `EVENTS_LEAGUE_JOIN_LISTENER` (`leagueJoined(code)`, called by `EventsTab`).
 
-Not drawn as the legacy page did: the drawers open and shut at once (no 250 ms slide), and the calendar's scroll keeper
-(holding the scroll position while the preview is replaced) is left to the browser (`overflow-anchor: none` on the
-details).
+Not drawn as the legacy page did: the drawers' slide and the calendar's scroll keeper (see Differences).

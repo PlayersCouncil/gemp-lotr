@@ -7,9 +7,10 @@ import { EventsCalendar } from './events-calendar.service';
 describe('EventsCalendar', () => {
   let backend: ReturnType<typeof setUpEvents>['backend'];
   let calendar: EventsCalendar;
+  let clock: { now: number };
 
   beforeEach(() => {
-    backend = setUpEvents().backend;
+    ({ backend, clock } = setUpEvents());
     calendar = TestBed.inject(EventsCalendar);
   });
 
@@ -120,5 +121,28 @@ describe('EventsCalendar', () => {
     expect(calendar.selection()).not.toBe(before);
     expect(calendar.selection()!.preview.title).toBe('Daily PC-Movie (renamed)');
     answerWith(backend, '/tournament/daily-pc_movie-20261120', 'tournament-playing.xml');
+  });
+
+  // calendarUi.js marks today, and opens on the month, by the UTC date (isoDate and init read getUTC*), whatever the
+  // browser's time zone: on the evening of 20 November in America the calendar already shows 21 November as today.
+  it('marks the UTC day as today, not the local one', async () => {
+    clock.now = Date.parse('2026-11-20T23:59:00Z');
+    let done = calendar.today();
+    answerWith(backend, '/calendar', 'events-calendar.json');
+    await done;
+    const today = () =>
+      calendar
+        .grid()
+        ?.weeks.flatMap((week) => week.days)
+        .filter((day) => day.today)
+        .map((day) => day.date);
+    expect(today()).toEqual(['2026-11-20']);
+
+    clock.now = Date.parse('2026-12-01T00:30:00Z');
+    done = calendar.today();
+    answerWith(backend, '/calendar', 'events-calendar.json');
+    await done;
+    expect(calendar.grid()?.title).toBe('December 2026');
+    expect(today()).toEqual(['2026-12-01']);
   });
 });

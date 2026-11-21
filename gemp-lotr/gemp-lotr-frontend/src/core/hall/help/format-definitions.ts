@@ -74,7 +74,8 @@ function parseCards(value: unknown): FormatCard[] {
   return Array.isArray(value) ? value.map(parseCard).filter((card): card is FormatCard => card !== null) : [];
 }
 
-function parseFormat(value: unknown): FormatDefinition | null {
+/** One format's entry (of /hall/formats/json, or GET /hall/format/{code}/json); null without a code. */
+export function parseFormat(value: unknown): FormatDefinition | null {
   const json = object(value);
   const code = text(json['code']);
   if (code === null || code === '') {
@@ -89,6 +90,7 @@ function parseFormat(value: unknown): FormatDefinition | null {
     description: text(json['description']),
     setSummary: text(json['setSummary']),
     sites: text(json['sites']),
+    sitesName: text(json['sitesName']),
     cancelRingBearerSkirmish: flag(json['cancelRingBearerSkirmish'], false),
     minimumDeckSize: count(json['minimumDeckSize'], 60),
     maximumSameName: count(json['maximumSameName'], 4),

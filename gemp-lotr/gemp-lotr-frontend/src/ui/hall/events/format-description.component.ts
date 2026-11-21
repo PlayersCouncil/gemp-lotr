@@ -3,11 +3,8 @@ import { CardInfoService } from '../../../core/cards/card-info.service';
 import { CardViews } from '../../../core/cards/card-views.service';
 import { EventsApi } from '../../../core/hall/events/events-api.service';
 import { FORMAT_DIALOG_TITLE } from '../../../core/hall/events/events-messages';
-import {
-  FormatCard,
-  formatDescriptionLines,
-  FormatDescriptionLine,
-} from '../../../core/hall/events/format-definitions';
+import { FormatDescriptionLine, formatDescriptionLines } from '../../../core/hall/events/format-description';
+import { FormatCard } from '../../../core/hall/help/format-definitions-models';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
 
 /**
