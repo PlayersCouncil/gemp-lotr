@@ -102,8 +102,8 @@
   border-radius: 4px;
   background: var(--theme-hall-formats-field-bg);
   color: var(--theme-hall-formats-field-text);
+  /* jQuery UI's .ui-widget input (1em) outranked .fd-filter's 90% */
   font: inherit;
-  font-size: 90%;
 }
 
 .gd-formats__filter:focus {
