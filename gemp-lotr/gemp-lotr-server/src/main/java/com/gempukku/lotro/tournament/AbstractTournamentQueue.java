@@ -206,6 +206,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         tbr.prizeTiers = new java.util.ArrayList<>();
         if (_tournamentInfo._params.prizeTiers != null)
             tbr.prizeTiers.addAll(_tournamentInfo._params.prizeTiers);
+        // whoever an admin took out of the queue stays out of the tournament too
+        tbr.removedPlayers = new java.util.ArrayList<>(_removedByAdmin);
 
         return tbr;
     }

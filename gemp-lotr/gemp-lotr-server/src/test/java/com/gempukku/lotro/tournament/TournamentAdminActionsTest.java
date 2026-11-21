@@ -56,6 +56,7 @@ public class TournamentAdminActionsTest {
         params.playoff = Tournament.PairingType.SWISS;
         params.prizes = Tournament.PrizeType.NONE;
         params.minimumPlayers = 2;
+        params.manualKickoff = true;
         return params;
     }
 
@@ -233,6 +234,29 @@ public class TournamentAdminActionsTest {
             assertEquals("An administrator removed you from Cup waiting, so you cannot join it again.", expected.getMessage());
         }
         assertEquals(1, queue.getPlayerCount());
+    }
+
+    @Test
+    public void aPlayerRemovedFromAQueueCannotJoinItsTournamentLate() throws Exception {
+        var queue = queueWithTwoPlayers("waiting");
+        queue.joinPlayer(player("carol"), new LotroDeck("carol's deck"));
+        _service.removePlayerByAdmin("waiting", "bob");
+        var stored = org.mockito.ArgumentCaptor.forClass(DBDefs.Tournament.class);
+
+        _service.processTournamentQueues(); // its start time has passed: the tournament starts with alice and carol
+
+        Mockito.verify(_tournamentDao).addTournament(stored.capture());
+        Mockito.verify(_playerDao, Mockito.never()).addPlayer(Mockito.eq("waiting"), Mockito.eq("bob"), Mockito.any());
+        assertEquals(List.of("bob"), Tournament.parseInfo(stored.getValue().type, stored.getValue().parameters).removedPlayers);
+
+        // the started tournament, as it is built from its stored row, turns the removed player away
+        var row = stored.getValue();
+        Mockito.when(_tournamentDao.getTournament("waiting")).thenReturn(row);
+        var tournament = new ConstructedTournament(_service, Mockito.mock(CollectionsManager.class),
+                Mockito.mock(ProductLibrary.class), Mockito.mock(LotroFormatLibrary.class), null, null, null, "waiting");
+        assertTrue("open to late joiners while it waits for its kickoff", tournament.isJoinable());
+        assertFalse(tournament.join("bob", new LotroDeck("bob's deck")));
+        assertTrue(tournament.join("dave", new LotroDeck("dave's deck")));
     }
 
     @Test

@@ -594,6 +594,10 @@ public abstract class BaseTournament implements Tournament {
             if (_players.contains(playerName)) {
                 return false;
             }
+            var removed = _tournamentInfo._params.removedPlayers;
+            if (removed != null && removed.contains(playerName)) {
+                return false; // an admin took this player out of the tournament's queue
+            }
             _tournamentService.recordTournamentPlayer(_tournamentId, playerName, lotroDeck);
             issuePlayerMaterial(playerName);
             _players.add(playerName);
