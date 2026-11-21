@@ -159,4 +159,53 @@ describe('EventHistoryBrowser', () => {
       text: 'Could not load the details (HTTP 500). The server failed to produce it.',
     });
   });
+  it('starts once; without the list of months it shows this month', async () => {
+    const browser = new EventHistoryBrowser('tournament', source, timers);
+    browser.start();
+    browser.start();
+    expect(months).toHaveLength(1);
+    months[0]!.error(new ApiError(500, 'x'));
+    await tick();
+    expect(monthRequests.map((request) => request.month)).toEqual(['2026-11']);
+    expect(browser.status().text).toBe('Loading November 2026…');
+  });
+
+  it('keeps the month the viewer moved to while the list of months was still coming', async () => {
+    const browser = new EventHistoryBrowser('tournament', source, timers);
+    browser.start();
+    browser.setMonth('2026-07');
+    answerMonths(['2026-10', '2026-07']);
+    await tick();
+    expect(browser.title()).toBe('July 2026');
+    expect(monthRequests.map((request) => request.month)).toEqual(['2026-07']);
+  });
+
+  it('ignores a month that is not "yyyy-MM", and the title toggles the dropdown shut', () => {
+    const browser = new EventHistoryBrowser('league', source, timers);
+    browser.setMonth('July');
+    expect(browser.title()).toBe('November 2026');
+    expect(monthRequests).toEqual([]);
+    browser.toggleDropdown();
+    browser.toggleDropdown();
+    expect(browser.dropdownOpen()).toBe(false);
+  });
+
+  it('asks for the months once when an arrow is pressed while they are coming, then jumps', async () => {
+    const browser = new EventHistoryBrowser('tournament', source, timers);
+    browser.openDropdown();
+    browser.jump(-1);
+    expect(months).toHaveLength(1);
+    answerMonths(['2026-10', '2026-07']);
+    await tick();
+    expect(browser.title()).toBe('October 2026');
+  });
+
+  it('drops a failure for a month the viewer has left', async () => {
+    const browser = new EventHistoryBrowser('tournament', source, timers);
+    browser.setMonth('2026-08');
+    browser.setMonth('2026-09');
+    monthRequests[0]!.answer.error(new ApiError(500, 'x'));
+    await tick();
+    expect(browser.status()).toEqual({ state: 'loading', text: 'Loading September 2026…', retry: false });
+  });
 });

@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { answerWith, setUpEvents } from '../../../testing/events-server';
 import { settle } from '../../../testing/fake-notifier';
+import { readServerResponse } from '../../../testing/files';
 import { LeagueDetail } from './events-models';
 import { EVENTS_LEAGUE_JOIN_LISTENER } from './events-hooks';
 import { EventsTab } from './events-tab.service';
@@ -87,5 +88,55 @@ describe('EventsTab', () => {
     tab.returns.setPageShown(true);
     answerWith(backend, '/league', 'leagues.xml');
     await settle();
+  });
+  it('fetches the calendar or the live tournaments again when the viewer comes back to them after 10 s', async () => {
+    await started();
+    backend
+      .match((request) => request.url.endsWith('/eventHistory/months'))
+      .forEach((request) => request.flush('{"months":[]}'));
+    for (const sub of ['calendar', 'tournaments'] as const) {
+      tab.subTabShown(sub);
+      tab.subTabShown(null);
+      clock.now += REFRESH_AFTER_MS;
+      tab.subTabShown(sub);
+    }
+    answerWith(backend, '/calendar', 'events-calendar.json');
+    // the tournaments come back with a new name and date: the row keeps its drawer and shows them
+    const drawer = tab.tournaments.rows()[0]!.drawer;
+    backend
+      .expectOne((request) => request.url.endsWith('/tournament'))
+      .flush(
+        '<tournaments><tournament id="daily-pc_movie-20261120" name="Daily PC-Movie (late)" start="2026-11-21" round="2" stage="Playing Games"/></tournaments>',
+      );
+    await settle();
+    const row = tab.tournaments.rows()[0]!;
+    expect([row.title(), row.date(), row.drawer]).toEqual(['Daily PC-Movie (late)', '2026-11-21', drawer]);
+  });
+
+  it("fetches a completed league's or tournament's details from the server", async () => {
+    await started();
+    backend
+      .match((request) => request.url.endsWith('/eventHistory/months'))
+      .forEach((request) => request.flush('{"months":["2026-10"]}'));
+    await settle();
+    backend
+      .match((request) => request.url.endsWith('/eventHistory'))
+      .forEach((request) =>
+        request.flush(
+          readServerResponse(
+            request.request.params.get('kind') === 'league'
+              ? 'event-history-league.json'
+              : 'event-history-tournament.json',
+          ),
+        ),
+      );
+    await settle();
+    tab.leagueHistory.rows()[0]!.drawer!.open();
+    answerWith(backend, '/league/1690000001', 'league-detail.xml');
+    tab.tournamentHistory.rows()[0]!.drawer!.open();
+    answerWith(backend, '/tournament/daily-pc_movie-20261031', 'tournament-finished.xml');
+    await settle();
+    expect(tab.leagueHistory.rows()[0]!.drawer!.content()?.kind).toBe('data');
+    expect(tab.tournamentHistory.rows()[0]!.drawer!.content()?.kind).toBe('data');
   });
 });
