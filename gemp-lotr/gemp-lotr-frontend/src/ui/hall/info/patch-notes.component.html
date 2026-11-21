@@ -1,0 +1,181 @@
+<div class="gd-notes__intro">
+  <h1 class="gd-notes__heading">{{ words.PATCH_NOTES_HEADING }}</h1>
+  <br />
+</div>
+<div class="gd-notes__filters" role="radiogroup" [attr.aria-label]="words.FILTERS_LABEL">
+  @for (chip of notes.chips(); track chip.label) {
+    <button
+      type="button"
+      class="gd-notes__filter"
+      role="radio"
+      [attr.aria-checked]="chip.on"
+      (click)="notes.setTag(chip.tag)"
+    >
+      <span class="gd-notes__filter-label">{{ chip.label }}</span>
+      @if (chip.count !== null) {
+        <span class="gd-notes__filter-count">{{ chip.count }}</span>
+      }
+    </button>
+  }
+</div>
+<div class="gd-notes__months">
+  <button
+    type="button"
+    class="gd-notes__month-step"
+    data-step="older"
+    [title]="words.OLDER_MONTH_TITLE"
+    [disabled]="notes.monthArrowsDisabled().older"
+    (click)="notes.jumpMonth(-1)"
+  >
+    &lt;
+  </button>
+  <span class="gd-notes__month-wrap">
+    <span
+      class="gd-notes__month-title"
+      role="button"
+      tabindex="0"
+      aria-haspopup="true"
+      title="Choose a month"
+      [attr.aria-expanded]="monthsOpen()"
+      (click)="toggleMonths()"
+      (keydown)="titleKey($event)"
+      ><span>{{ notes.monthTitle() }}</span
+      ><span class="gd-notes__caret" aria-hidden="true">▾</span></span
+    >
+    @if (monthsOpen()) {
+      <div class="gd-notes__dropdown">
+        @let list = notes.monthList();
+        @if (list.kind === 'loading') {
+          <div class="gd-notes__dropdown-status" data-loading>{{ words.MONTHS_LOADING }}</div>
+        } @else if (list.kind === 'error') {
+          <div class="gd-notes__dropdown-status" data-error>{{ list.message }}</div>
+          <button type="button" class="gd-notes__retry" (click)="notes.retryMonths()">{{ words.RETRY }}</button>
+        } @else if (list.months.length === 0) {
+          <div class="gd-notes__dropdown-status" data-empty>{{ list.emptyText }}</div>
+        } @else {
+          @for (year of years(); track year.year) {
+            <div class="gd-notes__year">
+              <div class="gd-notes__year-label">{{ year.year }}</div>
+              <div class="gd-notes__year-months">
+                @for (key of year.months; track key) {
+                  <button
+                    type="button"
+                    class="gd-notes__month"
+                    [attr.data-selected]="key === list.current ? '' : null"
+                    (click)="pickMonth(key)"
+                  >
+                    {{ monthName(key) }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    }
+  </span>
+  <button
+    type="button"
+    class="gd-notes__month-step"
+    data-step="newer"
+    [title]="words.NEWER_MONTH_TITLE"
+    [disabled]="notes.monthArrowsDisabled().newer"
+    (click)="notes.jumpMonth(1)"
+  >
+    &gt;
+  </button>
+</div>
+@let status = notes.status();
+<div
+  class="gd-notes__status"
+  role="status"
+  aria-live="polite"
+  [attr.data-error]="status.kind === 'error' ? '' : null"
+  [hidden]="!(status.kind === 'error' || (status.kind === 'loading' && status.shown))"
+>
+  @if (status.kind === 'error') {
+    <span>{{ words.patchNotesFailed(status.status) }}</span
+    ><button type="button" class="gd-notes__retry" (click)="notes.retry()">{{ words.TRY_AGAIN }}</button>
+  } @else if (status.kind === 'loading' && status.shown) {
+    {{ words.PATCH_NOTES_LOADING }}
+  }
+</div>
+<div class="gd-notes__list">
+  @for (notice of notes.notices(); track $index) {
+    <p class="gd-notes__notice">{{ notice }}</p>
+  }
+  @if (notes.emptyText(); as empty) {
+    <p class="gd-notes__empty">{{ empty }}</p>
+  }
+  @for (note of notes.page()?.notes ?? []; track note.slug) {
+    <article
+      class="gd-note"
+      [id]="'patchnote-' + note.slug"
+      [attr.data-slug]="note.slug"
+      [attr.data-kind]="note.kind"
+      [attr.data-target]="notes.highlight() === note.slug ? '' : null"
+    >
+      <header class="gd-note__head">
+        <h2 class="gd-note__title">
+          @if (note.title) {
+            {{ note.title }}
+          } @else {
+            <time [attr.datetime]="note.date">{{ note.date }}</time>
+          }
+        </h2>
+        @if (note.title) {
+          <time class="gd-note__date" [attr.datetime]="note.date">{{ note.date }}</time>
+        }
+        @if (note.tags.length > 0) {
+          <span class="gd-note__tags">
+            @for (tag of note.tags; track tag) {
+              <span class="gd-note__tag">{{ tag }}</span>
+            }
+          </span>
+        }
+        <gd-hall-share-button
+          class="gd-note__share"
+          kind="patch-notes"
+          note="left"
+          look="filled"
+          [id]="note.slug"
+          [label]="words.SHARE_LABEL"
+          [ariaLabel]="shareLabel(note)"
+        />
+      </header>
+      @if (note.summaryMarkup; as summary) {
+        <gd-patch-note-text kind="summary" [nodes]="summary" />
+      }
+      <gd-patch-note-text kind="body" [nodes]="note.body" (picture)="openPicture($event)" />
+    </article>
+  }
+</div>
+@if (notes.pager(); as pager) {
+  <div class="gd-notes__pager">
+    @if (pager.newer) {
+      <button type="button" class="gd-notes__newer" (click)="notes.step(-1)">{{ words.NEWER_UPDATES }}</button>
+    }
+    <span class="gd-notes__range">{{ pager.range }}</span>
+    @if (pager.older) {
+      <button type="button" class="gd-notes__older" (click)="notes.step(1)">{{ words.OLDER_UPDATES }}</button>
+    }
+  </div>
+}
+@if (lightbox(); as picture) {
+  <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -- Esc closes it (document) -->
+  <div
+    class="gd-notes__lightbox"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="words.lightboxLabel(picture.alt)"
+    (click)="lightboxClick($event)"
+  >
+    <figure class="gd-notes__lightbox-figure">
+      <img [src]="picture.src" [alt]="picture.alt" />
+      @if (picture.alt) {
+        <figcaption>{{ picture.alt }}</figcaption>
+      }
+    </figure>
+    <button #close type="button" class="gd-notes__lightbox-close" [attr.aria-label]="words.LIGHTBOX_CLOSE">×</button>
+  </div>
+}

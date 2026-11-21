@@ -1,0 +1,215 @@
+/* patchNotes.css .patchnote-summary and .patchnote-body (unscoped: gd-markup builds the elements; all rules start at .gd-patch-note-text) */
+
+.gd-patch-note-text {
+  display: block;
+}
+
+.gd-patch-note-text[data-kind='summary'] {
+  margin: 0.6em 0 0.2em;
+  color: var(--theme-hall-notes-summary);
+  font-size: 108%;
+  line-height: 1.45;
+}
+
+.gd-patch-note-text[data-kind='body'] {
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.gd-patch-note-text[data-kind='body'] .gd-markup > :first-child {
+  margin-top: 0.6em;
+}
+
+.gd-patch-note-text[data-kind='body'] .gd-markup > :last-child {
+  margin-bottom: 0;
+}
+
+.gd-patch-note-text p {
+  margin: 0.6em 0;
+}
+
+.gd-patch-note-text ul,
+.gd-patch-note-text ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.gd-patch-note-text li {
+  margin: 0.25em 0;
+}
+
+.gd-patch-note-text :is(h1, h2, h3, h4) {
+  margin: 0.9em 0 0.3em;
+  color: var(--theme-hall-formats-pc);
+  font-size: 1.08em;
+}
+
+.gd-patch-note-text :is(h1, h2) {
+  font-size: 1.15em;
+}
+
+.gd-patch-note-text a.gd-markup__link,
+.gd-patch-note-text a.gd-markup__hall-link,
+.gd-patch-note-text a.gd-markup__link:visited,
+.gd-patch-note-text a.gd-markup__hall-link:visited {
+  color: var(--theme-hall-link);
+}
+
+.gd-patch-note-text a.gd-markup__link:hover,
+.gd-patch-note-text a.gd-markup__hall-link:hover {
+  color: var(--theme-hall-notes-link-hover);
+}
+
+.gd-patch-note-text code {
+  padding: 0 0.25em;
+  border-radius: 3px;
+  background: var(--theme-hall-notes-code-bg);
+  font-size: 92%;
+}
+
+.gd-patch-note-text pre {
+  padding: 0.6em 0.8em;
+  overflow-x: auto;
+  border: 1px solid var(--theme-hall-formats-line);
+  border-radius: 4px;
+  background: var(--theme-hall-formats-side-bg);
+  white-space: pre;
+}
+
+.gd-patch-note-text pre code {
+  padding: 0;
+  background: none;
+}
+
+.gd-patch-note-text blockquote {
+  margin: 0.6em 0;
+  padding: 0.1em 0.9em;
+  border-left: 3px solid var(--theme-content-border);
+  color: var(--theme-hall-formats-soft);
+}
+
+.gd-patch-note-text hr {
+  margin: 1em 0;
+  border: 0;
+  border-top: 1px solid var(--theme-hall-formats-card-border);
+}
+
+.gd-patch-note-text table {
+  margin: 0.6em 0;
+  border-collapse: collapse;
+}
+
+.gd-patch-note-text :is(th, td) {
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--theme-hall-formats-card-border);
+  text-align: left;
+}
+
+/* [[card links]]: marked as a card with a dotted underline */
+.gd-patch-note-text button.gd-markup__card {
+  border-radius: 2px;
+  color: var(--theme-hall-notes-card);
+  text-decoration: underline dotted var(--theme-hall-notes-card-underline);
+  text-underline-offset: 0.18em;
+  cursor: zoom-in;
+}
+
+.gd-patch-note-text button.gd-markup__card:hover {
+  color: var(--theme-hall-notes-card-hover);
+  text-decoration-style: solid;
+}
+
+.gd-patch-note-text button.gd-markup__card:focus-visible {
+  outline: 2px solid var(--theme-hall-link);
+  outline-offset: 1px;
+}
+
+/* screenshots: readable thumbnails (several in one paragraph sit in a row); a click enlarges one */
+.gd-patch-note-text img.gd-markup__image:not([data-icon]) {
+  max-width: min(100%, 24em);
+  max-height: 13em;
+  height: auto;
+  margin: 0.2em 0.4em 0.2em 0;
+  border: 1px solid var(--theme-hall-share-border);
+  border-radius: 4px;
+  background: var(--theme-hall-formats-field-bg);
+  vertical-align: top;
+  cursor: zoom-in;
+}
+
+.gd-patch-note-text a img.gd-markup__image {
+  cursor: pointer;
+}
+
+.gd-patch-note-text img.gd-markup__image:not([data-icon]):hover {
+  border-color: var(--theme-hall-formats-pc-border);
+}
+
+/* culture icons: inline at the text's size, each at its own shape; no frame */
+.gd-patch-note-text img.gd-markup__image[data-icon] {
+  display: inline;
+  width: auto;
+  height: 1.15em;
+  margin: 0 0.1em;
+  vertical-align: -0.22em;
+}
+
+/* twilight icons are black SVGs: drawn white on this dark page */
+.gd-patch-note-text img.gd-markup__image[data-icon][src*='/twilight_'] {
+  filter: invert(1);
+}
+
+/* <details><summary>: the summary is a button in the hall's jQuery UI look, with a triangle that turns when it opens */
+.gd-patch-note-text details {
+  margin: 0.6em 0;
+}
+
+.gd-patch-note-text details > summary {
+  display: inline-block;
+  padding: 0.35em 1em 0.35em 0.8em;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: 6px;
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  line-height: normal;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gd-patch-note-text details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.gd-patch-note-text details > summary::before {
+  content: '\25B8';
+  display: inline-block;
+  width: 0.8em;
+  margin-right: 0.35em;
+  transition: transform 0.15s ease;
+}
+
+.gd-patch-note-text details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.gd-patch-note-text details > summary:hover,
+.gd-patch-note-text details > summary:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-patch-note-text details[open] > summary {
+  margin-bottom: 0.4em;
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+  color: var(--theme-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gd-patch-note-text details > summary::before {
+    transition: none;
+  }
+}

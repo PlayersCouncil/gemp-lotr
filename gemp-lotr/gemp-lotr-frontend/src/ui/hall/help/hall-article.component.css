@@ -1,0 +1,65 @@
+/* hall.css .article, .lemph, .helpimg and table.tables, for the prose pages (unscoped: all rules start at .gd-hall-article) */
+
+.gd-hall-article {
+  display: block;
+  width: max(800px, 50%);
+  margin: 3em auto 20em;
+  font-size: 120%;
+}
+
+.gd-hall-article li {
+  margin: 10px;
+}
+
+.gd-hall-article a {
+  color: var(--theme-text);
+}
+
+.gd-hall-article a:visited {
+  color: var(--theme-link-visited);
+}
+
+.gd-hall-article .gd-hall-article__emphasis {
+  color: var(--theme-hall-emphasis);
+  font-weight: bold;
+}
+
+.gd-hall-article .gd-hall-article__picture {
+  display: block;
+  margin: auto;
+  padding: 1em;
+}
+
+.gd-hall-article .gd-hall-article__picture > img {
+  display: block;
+  max-width: 100%;
+  margin: auto;
+  border-style: solid;
+}
+
+.gd-hall-article .gd-hall-article__picture > figcaption {
+  display: block;
+  margin: auto;
+  padding: 1em;
+  font-style: italic;
+  text-align: center;
+}
+
+.gd-hall-article .gd-hall-article__table {
+  width: calc(100% - 20px);
+  margin-right: 10px;
+  margin-left: 10px;
+  border-collapse: collapse;
+  background-color: var(--theme-hall-table-bg);
+}
+
+.gd-hall-article .gd-hall-article__table td {
+  padding: 2px;
+  border: 2px solid var(--theme-hall-table-border);
+}
+
+.gd-hall-article .gd-hall-article__table th {
+  margin: 2px;
+  padding: 4px;
+  background-color: var(--theme-hall-table-header-bg);
+}

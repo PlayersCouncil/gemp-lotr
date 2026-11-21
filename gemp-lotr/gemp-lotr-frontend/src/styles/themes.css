@@ -145,6 +145,81 @@
   --theme-chat-menu-bg: #262626;
   --theme-chat-menu-shadow: #0009;
 
+  /*
+   * Help and Server Info (hall part 4.3): hall.css .article / .lemph / table.tables, formatDefinitions.css,
+   * patchNotes.css, tables.css (.info-toggle), hall.css (share-link buttons, Server Stats)
+   */
+  --theme-hall-emphasis: #009f9f;
+  --theme-hall-table-bg: #121212;
+  --theme-hall-table-border: #444;
+  --theme-hall-table-header-bg: #333;
+  --theme-hall-share-border: #444;
+  --theme-hall-share-text: #aaa;
+  --theme-hall-share-note: #9c9;
+  --theme-hall-share-field-bg: #1d1d1d;
+  --theme-hall-share-field-text: #ddd;
+  --theme-hall-share-icon-filter: invert(0.75);
+  --theme-hall-share-icon-hover-filter: invert(1);
+  --theme-hall-formats-accent: #8ab;
+  --theme-hall-formats-errata-hover: #bcd;
+  --theme-hall-formats-intro: #ddd;
+  --theme-hall-formats-soft: #ccc;
+  --theme-hall-formats-muted: #aaa;
+  --theme-hall-formats-faint: #999;
+  --theme-hall-formats-label: #9aa6b0;
+  --theme-hall-formats-permalink: #666;
+  --theme-hall-formats-thumb-name: #bbb;
+  --theme-hall-formats-info-font: Georgia, serif;
+  --theme-hall-formats-info-hover-text: #111;
+  --theme-hall-formats-help-border: #567;
+  --theme-hall-formats-line: #333;
+  --theme-hall-formats-side-bg: rgba(0, 0, 0, 0.35);
+  --theme-hall-formats-tools-bg: #140d0a;
+  --theme-hall-formats-field-bg: #111;
+  --theme-hall-formats-field-border: #555;
+  --theme-hall-formats-field-text: #eee;
+  --theme-hall-formats-nav: #cdd6e0;
+  --theme-hall-formats-nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --theme-hall-formats-nav-active-bg: rgba(255, 255, 255, 0.08);
+  --theme-hall-formats-card-bg: rgba(0, 0, 0, 0.28);
+  --theme-hall-formats-card-border: #3a3a3a;
+  --theme-hall-formats-highlight-bg: rgba(136, 170, 187, 0.18);
+  --theme-hall-formats-pc: #f0b35a;
+  --theme-hall-formats-pc-border: #8a5a14;
+  --theme-hall-formats-playtest: #c9a6ff;
+  --theme-hall-formats-playtest-border: #6a4b99;
+  --theme-hall-formats-count-bg: #3b4a5a;
+  --theme-hall-formats-count-banned-bg: #7a2a2a;
+  --theme-hall-formats-count-restricted-bg: #7a5a1a;
+  --theme-hall-formats-chip: #bfc6ff;
+  --theme-hall-formats-chip-bg: rgba(111, 111, 255, 0.08);
+  --theme-hall-formats-chip-hover-bg: rgba(111, 111, 255, 0.2);
+  --theme-hall-formats-chip-border: #3d4452;
+  --theme-hall-formats-hit-bg: rgba(232, 129, 4, 0.25);
+  --theme-hall-formats-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --theme-hall-notes-text: #ddd;
+  --theme-hall-notes-button-bg: #2b2b2b;
+  --theme-hall-notes-summary: #eee;
+  --theme-hall-notes-date: #9aa;
+  --theme-hall-notes-chip-bg: #1d1d1d;
+  --theme-hall-notes-chip-on-bg: #0972a5;
+  --theme-hall-notes-count-bg: rgba(255, 255, 255, 0.12);
+  --theme-hall-notes-tag-bg: rgba(38, 179, 247, 0.12);
+  --theme-hall-notes-tag-border: rgba(38, 179, 247, 0.35);
+  --theme-hall-notes-notice-bg: rgba(255, 255, 255, 0.05);
+  --theme-hall-notes-month-hover-bg: #3a3a3a;
+  --theme-hall-notes-target-glow: rgba(232, 129, 4, 0.25);
+  --theme-hall-notes-link-hover: #ffa53a;
+  --theme-hall-notes-code-bg: rgba(255, 255, 255, 0.08);
+  --theme-hall-notes-card: #8fb4ff;
+  --theme-hall-notes-card-hover: #c0d6ff;
+  --theme-hall-notes-card-underline: rgba(143, 180, 255, 0.7);
+  --theme-hall-notes-lightbox-bg: rgba(0, 0, 0, 0.62);
+  --theme-hall-notes-lightbox-font: Arial, Helvetica, sans-serif;
+  --theme-hall-notes-lightbox-shadow: rgba(0, 0, 0, 0.7);
+  --theme-hall-notes-close-bg: rgba(40, 40, 40, 0.9);
+  --theme-hall-load-error: #ffb0a0;
+
   /* Selects and text fields (hall.css) */
   --theme-field-bg: #222;
   --theme-field-hover-bg: #444;

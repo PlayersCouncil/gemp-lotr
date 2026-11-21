@@ -1,0 +1,491 @@
+/*
+ * Help › Format Definitions (formatDefinitions.css; tables.css .info-toggle and .info-text for the intro's (i)): a sticky
+ * format list (with a find box) beside one card per format: its facts, then its card lists as name chips grouped by
+ * set, or thumbnails when "Card images" is on.
+ */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  /* .fd-page's, inside the panel's own (the frame's) */
+  padding: 0.6em 1.2em 3em;
+}
+
+/* ---- the intro ---- */
+.gd-formats__intro p {
+  max-width: 62em;
+  margin: 0.2em 0 0.6em;
+  color: var(--theme-hall-formats-intro);
+}
+
+.gd-formats__info {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0 0 0 0.35em;
+  padding: 0;
+  border: 1px solid var(--theme-hall-formats-accent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--theme-hall-formats-accent);
+  font-family: var(--theme-hall-formats-info-font);
+  font-size: 75%;
+  font-style: italic;
+  font-weight: bold;
+  line-height: 1.1em;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gd-formats__info:hover,
+.gd-formats__info:focus-visible {
+  background: var(--theme-hall-formats-accent);
+  color: var(--theme-hall-formats-info-hover-text);
+  outline: none;
+}
+
+.gd-formats__help {
+  max-width: 62em;
+  margin: -0.2em 0 0.8em;
+  padding: 0.3em 0.6em;
+  border-left: 2px solid var(--theme-hall-formats-help-border);
+  color: var(--theme-hall-formats-muted);
+  font-size: 85%;
+}
+
+.gd-formats__help ul {
+  margin: 0 0 0.3em;
+  padding-left: 1.2em;
+}
+
+/* ---- the layout ---- */
+.gd-formats__layout {
+  display: grid;
+  grid-template-columns: 13.5em minmax(0, 1fr);
+  gap: 1.2em;
+  align-items: start;
+}
+
+.gd-formats__status {
+  grid-column: 1 / -1;
+  color: var(--theme-hall-formats-muted);
+}
+
+/* ---- the format list: stays in view while the panel scrolls ---- */
+.gd-formats__side {
+  position: sticky;
+  top: 0;
+  box-sizing: border-box;
+  max-height: var(--gd-formats-view-height, 80vh);
+  overflow-y: auto;
+  border: 1px solid var(--theme-hall-formats-line);
+  border-radius: 6px;
+  background: var(--theme-hall-formats-side-bg);
+}
+
+.gd-formats__tools {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.5em 0.5em 0.3em;
+  border-bottom: 1px solid var(--theme-hall-formats-line);
+  background: var(--theme-hall-formats-tools-bg);
+}
+
+.gd-formats__filter {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.3em 0.5em;
+  border: 1px solid var(--theme-hall-formats-field-border);
+  border-radius: 4px;
+  background: var(--theme-hall-formats-field-bg);
+  color: var(--theme-hall-formats-field-text);
+  font: inherit;
+  font-size: 90%;
+}
+
+.gd-formats__filter:focus {
+  border-color: var(--theme-hall-formats-accent);
+  outline: none;
+}
+
+.gd-formats__images {
+  display: block;
+  margin-top: 0.35em;
+  color: var(--theme-hall-formats-soft);
+  font-size: 85%;
+  cursor: pointer;
+}
+
+.gd-formats__filter-status {
+  color: var(--theme-hall-formats-muted);
+  font-size: 78%;
+}
+
+.gd-formats__filter-status:empty {
+  display: none;
+}
+
+.gd-formats__nav {
+  margin: 0;
+  padding: 0.3em 0;
+  list-style: none;
+}
+
+.gd-formats__nav li {
+  margin: 0;
+}
+
+.gd-formats__nav li[hidden] {
+  display: none;
+}
+
+.gd-formats__nav a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+  padding: 0.22em 0.6em 0.22em 0.5em;
+  border-left: 3px solid transparent;
+  color: var(--theme-hall-formats-nav);
+  font-size: 92%;
+  text-decoration: none;
+}
+
+.gd-formats__nav a:hover,
+.gd-formats__nav a:focus-visible {
+  background: var(--theme-hall-formats-nav-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-formats__nav li[data-active] a {
+  border-left-color: var(--theme-hall-link);
+  background: var(--theme-hall-formats-nav-active-bg);
+  color: var(--theme-text);
+}
+
+.gd-formats__nav-meta {
+  flex: none;
+  color: var(--theme-hall-formats-faint);
+  font-size: 78%;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- one format ---- */
+.gd-format {
+  margin: 0 0 1em;
+  padding: 0.55em 1em 0.8em;
+  border: 1px solid var(--theme-hall-formats-card-border);
+  border-radius: 6px;
+  background: var(--theme-hall-formats-card-bg);
+  scroll-margin-top: 0.5em;
+  transition:
+    background-color 0.6s ease,
+    box-shadow 0.6s ease;
+}
+
+.gd-format[hidden] {
+  display: none;
+}
+
+/* a link lands on it: it flashes */
+.gd-format[data-highlight] {
+  background-color: var(--theme-hall-formats-highlight-bg);
+  box-shadow: 0 0 0 2px var(--theme-hall-formats-accent);
+}
+
+.gd-format__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3em 0.6em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--theme-hall-formats-line);
+}
+
+.gd-format__name {
+  margin: 0;
+  font-size: 1.35em;
+}
+
+.gd-format__badge {
+  padding: 0 0.55em;
+  border: 1px solid;
+  border-radius: 1em;
+  font-size: 72%;
+  white-space: nowrap;
+}
+
+.gd-format__badge[data-badge='pc'] {
+  border-color: var(--theme-hall-formats-pc-border);
+  color: var(--theme-hall-formats-pc);
+}
+
+.gd-format__badge[data-badge='playtest'] {
+  border-color: var(--theme-hall-formats-playtest-border);
+  color: var(--theme-hall-formats-playtest);
+}
+
+.gd-format__permalink {
+  margin-left: auto;
+  color: var(--theme-hall-formats-permalink);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.gd-format__permalink:hover,
+.gd-format__permalink:focus-visible {
+  color: var(--theme-hall-formats-accent);
+}
+
+.gd-format__share {
+  align-self: center;
+  font-size: 80%;
+}
+
+.gd-format__description {
+  margin: 0.5em 0 0;
+  color: var(--theme-hall-formats-soft);
+}
+
+.gd-format__facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.2em 1em;
+  margin: 0.6em 0 0.2em;
+}
+
+.gd-format__facts dt {
+  color: var(--theme-hall-formats-label);
+  font-size: 90%;
+}
+
+.gd-format__facts dd {
+  margin: 0;
+}
+
+.gd-format__rules {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.gd-format__rules li {
+  margin: 0;
+}
+
+.gd-format__errata {
+  color: var(--theme-hall-formats-accent);
+}
+
+.gd-format__errata:hover,
+.gd-format__errata:focus-visible {
+  color: var(--theme-hall-formats-errata-hover);
+}
+
+.gd-format__no-lists {
+  margin: 0.5em 0 0;
+  color: var(--theme-hall-formats-faint);
+  font-size: 90%;
+}
+
+/* ---- card lists ---- */
+.gd-format__list {
+  margin: 0.55em 0 0;
+  padding-top: 0.4em;
+  border-top: 1px dashed var(--theme-hall-formats-card-border);
+}
+
+.gd-format__list summary {
+  margin-bottom: 0.3em;
+  cursor: pointer;
+}
+
+.gd-format__list summary:focus-visible {
+  outline: 2px solid var(--theme-hall-link);
+  outline-offset: 1px;
+}
+
+.gd-format__list-title {
+  font-weight: bold;
+}
+
+.gd-format__count {
+  display: inline-block;
+  min-width: 1.4em;
+  margin: 0 0.5em 0 0.4em;
+  padding: 0 0.4em;
+  border-radius: 1em;
+  background: var(--theme-hall-formats-count-bg);
+  color: var(--theme-text);
+  font-size: 80%;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.gd-format__list[data-list='banned'] .gd-format__count {
+  background: var(--theme-hall-formats-count-banned-bg);
+}
+
+.gd-format__list[data-list='restricted'] .gd-format__count,
+.gd-format__list[data-list='restrictedNames'] .gd-format__count {
+  background: var(--theme-hall-formats-count-restricted-bg);
+}
+
+.gd-format__list-note {
+  color: var(--theme-hall-formats-faint);
+  font-size: 85%;
+}
+
+.gd-format__set-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin: 0.15em 0;
+}
+
+.gd-format__set {
+  flex: 0 0 2.4em;
+  color: var(--theme-hall-formats-faint);
+  font-size: 80%;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  cursor: default;
+}
+
+.gd-format__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 0.35em;
+  min-width: 0;
+}
+
+.gd-format__chip,
+.gd-format__name-chip {
+  display: inline-block;
+  margin: 0;
+  padding: 0 0.5em;
+  border: 1px solid var(--theme-hall-formats-chip-border);
+  border-radius: 3px;
+  background: var(--theme-hall-formats-chip-bg);
+  color: var(--theme-hall-formats-chip);
+  font: inherit;
+  font-size: 90%;
+  line-height: 1.55;
+  white-space: nowrap;
+}
+
+.gd-format__chip {
+  cursor: pointer;
+}
+
+.gd-format__name-chip {
+  color: var(--theme-hall-formats-intro);
+}
+
+.gd-format__chip:hover {
+  border-color: var(--theme-hall-formats-accent);
+  background: var(--theme-hall-formats-chip-hover-bg);
+  color: var(--theme-text);
+}
+
+.gd-format__chip[data-hit] {
+  border-color: var(--theme-hall-link);
+  background: var(--theme-hall-formats-hit-bg);
+  color: var(--theme-text);
+}
+
+/* ---- "Card images": thumbnails (a click opens the card, hovering enlarges it) ---- */
+.gd-format__list-body[data-images] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 0.6em 0.5em;
+  padding: 0.2em 0 0.3em;
+}
+
+.gd-format__thumb {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.gd-format__thumb .gd-card {
+  --gd-card-height: 109px;
+  border-radius: 4px;
+  box-shadow: var(--theme-hall-formats-thumb-shadow);
+  transition: transform 0.15s ease;
+  transform-origin: center top;
+}
+
+.gd-format__thumb[data-orientation='horizontal'] .gd-card {
+  --gd-card-height: 78px;
+  margin: 26px 0 27px;
+}
+
+.gd-format__thumb .gd-card:hover,
+.gd-format__thumb .gd-card:focus-visible {
+  z-index: 5;
+  transform: scale(2);
+}
+
+.gd-format__thumb[data-hit] .gd-card {
+  outline: 3px solid var(--theme-hall-link);
+}
+
+.gd-format__thumb-name {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--theme-hall-formats-thumb-name);
+  font-size: 70%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- narrow panels: the list goes on top and wraps ---- */
+@media (max-width: 900px) {
+  .gd-formats__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.8em;
+  }
+
+  .gd-formats__side,
+  .gd-formats__tools {
+    position: static;
+    max-height: none;
+  }
+
+  .gd-formats__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1em 0.2em;
+    padding: 0.3em;
+  }
+
+  .gd-formats__nav a {
+    padding: 0.1em 0.4em;
+    border-bottom: 2px solid transparent;
+    border-left: none;
+  }
+
+  .gd-formats__nav li[data-active] a {
+    border-bottom-color: var(--theme-hall-link);
+  }
+
+  .gd-formats__nav-meta {
+    display: none;
+  }
+
+  .gd-format__facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .gd-format__facts dd {
+    margin-bottom: 0.3em;
+  }
+}

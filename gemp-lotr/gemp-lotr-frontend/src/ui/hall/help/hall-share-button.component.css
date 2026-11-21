@@ -1,0 +1,84 @@
+/* hall.css button.share-link-button and .share-link-note; patchNotes.css .patchnote-share-wrap for the note at the left */
+
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.gd-hall-share__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0;
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--theme-hall-share-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--theme-hall-share-text);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gd-hall-share__icon {
+  width: 1em;
+  height: 1em;
+  filter: var(--theme-hall-share-icon-filter);
+}
+
+.gd-hall-share__button:hover,
+.gd-hall-share__button:focus-visible {
+  border-color: var(--theme-hall-link);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-hall-share__button:hover .gd-hall-share__icon,
+.gd-hall-share__button:focus-visible .gd-hall-share__icon {
+  filter: var(--theme-hall-share-icon-hover-filter);
+}
+
+.gd-hall-share__button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.gd-hall-share__note {
+  margin-left: 0.5em;
+  color: var(--theme-hall-share-note);
+  font-size: 90%;
+  white-space: nowrap;
+}
+
+.gd-hall-share__field {
+  width: 24em;
+  max-width: 60vw;
+  border: 1px solid var(--theme-content-border);
+  background: var(--theme-hall-share-field-bg);
+  color: var(--theme-hall-share-field-text);
+  font: inherit;
+}
+
+/* Patch Notes: the note to the button's left, over the header, so nothing moves */
+:host([data-note='left']) .gd-hall-share__note {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  z-index: 3;
+  margin: 0 0.5em 0 0;
+  padding: 0.1em 0.5em;
+  transform: translateY(-50%);
+  border: 1px solid var(--theme-hall-share-border);
+  border-radius: 4px;
+  background: var(--theme-hall-share-field-bg);
+  line-height: 1.4;
+}
+
+/* Patch Notes: the header's buttons (patchNotes.css .patchnote-head button, .patchnote-share at 80%) */
+:host([data-look='filled']) .gd-hall-share__button {
+  padding: 0.35em 0.9em;
+  border-color: var(--theme-content-border);
+  background: var(--theme-hall-notes-button-bg);
+  color: var(--theme-hall-notes-text);
+}
