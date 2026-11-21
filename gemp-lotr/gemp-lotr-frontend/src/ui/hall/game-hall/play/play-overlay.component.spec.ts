@@ -90,6 +90,28 @@ describe('the Play overlay and the Join dialog', () => {
     expect(el.querySelector('.gd-play-form__result-box')?.getAttribute('data-kind')).toBe('error');
   });
 
+  it("names an invite-only table's player in the hall's player picker", async () => {
+    const { el, update } = await open('casual');
+    const picker = el.querySelector('gd-player-picker')!;
+    const input = picker.querySelector<HTMLInputElement>('input')!;
+    expect(input.disabled).toBe(true);
+    expect(input.getAttribute('aria-label')).not.toBeNull();
+    el.querySelector<HTMLInputElement>('[data-field=invite-only]')!.click();
+    await update();
+    expect(input.disabled).toBe(false);
+    picker.querySelector<HTMLButtonElement>('.gd-player-picker__toggle')!.click();
+    await update();
+    expect(text(picker.querySelector('.gd-player-picker__menu'))).toContain('Nobody else is in the hall');
+    input.value = 'erin';
+    input.dispatchEvent(new Event('input'));
+    await update();
+    el.querySelector<HTMLButtonElement>('.gd-play-form__create')!.click();
+    const req = hall.request('/hall');
+    expect(hall.body(req)).toMatchObject({ desc: 'erin' });
+    req.flush('<error message="No."/>');
+    await update();
+  });
+
   it('shows the tournament fields of the type chosen', async () => {
     const { el, update } = await open('tournament');
     expect(el.querySelector('.gd-play-form__startup')).toBeNull();
