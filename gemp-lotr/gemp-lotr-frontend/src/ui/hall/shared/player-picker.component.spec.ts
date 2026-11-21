@@ -15,7 +15,8 @@ const ITEMS: PickerItem[] = [
   template: `<gd-player-picker
     fieldId="who"
     placeholder="Choose"
-    [maxlength]="30"
+    [maxLength]="30"
+    [disabled]="disabled()"
     [suggest]="suggest"
     [(value)]="value"
     (picked)="picked.push($event)"
@@ -23,6 +24,7 @@ const ITEMS: PickerItem[] = [
 })
 class Host {
   readonly value = signal('');
+  readonly disabled = signal(false);
   readonly picked: string[] = [];
   readonly asked: string[] = [];
   items: PickerItem[] = ITEMS;
@@ -99,15 +101,59 @@ describe('PlayerPickerComponent', () => {
     timers.run();
     await settle();
     expect(fixture.componentInstance.asked).toEqual(['er']);
-    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
-    await settle();
-    expect(element.querySelector('[aria-selected="true"]')?.getAttribute('data-name')).toBe('bob');
-    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-    await settle();
+    const chosen = () => element.querySelector('[aria-selected="true"]')?.getAttribute('data-name') ?? null;
+    const press = async (key: string) => {
+      input.dispatchEvent(new KeyboardEvent('keydown', { key }));
+      await settle();
+    };
+    // the menu's next and previous: past either end back to the field
+    await press('ArrowDown');
+    expect(chosen()).toBe('bob');
+    await press('ArrowUp');
+    expect(chosen()).toBeNull();
+    await press('ArrowUp');
+    expect(chosen()).toBe('erin');
+    await press('ArrowDown');
+    expect(chosen()).toBeNull();
+    await press('ArrowDown');
+    await press('Enter');
     expect(fixture.componentInstance.picked).toEqual(['bob']);
+    // Down on a field with a name in it does not open the list; on an empty one, or with Alt, it opens the whole list
+    await press('ArrowDown');
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', altKey: true }));
+    await settle();
+    expect(fixture.componentInstance.asked).toEqual(['er', '']);
     expect(PICKER_DELAY_MS).toBe(250);
+  });
+
+  it('is off while disabled, and closes its list then', async () => {
+    const { fixture, element, input, settle } = await render();
+    (element.querySelector('.gd-player-picker__toggle') as HTMLButtonElement).click();
+    await settle();
+    fixture.componentInstance.disabled.set(true);
+    await settle();
+    expect(input.disabled).toBe(true);
+    expect((element.querySelector('.gd-player-picker__toggle') as HTMLButtonElement).disabled).toBe(true);
+    expect(element.querySelector('.gd-player-picker__menu')).toBeNull();
+    expect(element.querySelector('gd-player-picker')?.getAttribute('data-disabled')).toBe('');
+  });
+
+  it('closes when the focus leaves it, and Escape goes no further', async () => {
+    const { element, input, settle } = await render();
+    input.click();
+    await settle();
+    const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
+    let bubbled = false;
+    element.addEventListener('keydown', () => (bubbled = true));
+    input.dispatchEvent(escape);
+    await settle();
+    expect(bubbled).toBe(false);
+    input.click();
+    await settle();
+    input.dispatchEvent(new FocusEvent('focusout', { relatedTarget: null, bubbles: true }));
+    await settle();
+    expect(input.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('shows notes as no choice, and closes on Escape', async () => {

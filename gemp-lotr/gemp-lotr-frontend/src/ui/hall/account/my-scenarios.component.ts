@@ -135,14 +135,8 @@ import { ShelfQuestionComponent } from './shelf-question.component';
         {{ copyPublicLabel }}
       </button>
     </div>
-    <div
-      class="gd-account-scenarios__status"
-      role="status"
-      aria-live="polite"
-      [attr.data-kind]="shelf.saying().kind || null"
-    >
-      {{ shelf.saying().text }}
-    </div>
+    <!-- prettier-ignore -->
+    <div class="gd-account-scenarios__status" role="status" aria-live="polite" [attr.data-kind]="shelf.saying().kind || null">{{ shelf.saying().text }}</div>
     <div class="gd-account-scenarios__list">
       @if (shelf.loaded()) {
         @if (!shelf.ownFolder()) {
