@@ -16,7 +16,11 @@ import { ChatComponent } from '../shared/chat/chat.component';
 import { DialogComponent } from '../shared/dialog/dialog.component';
 import { HallConnectionComponent } from './hall-connection.component';
 import { DECKBUILDER_HREF, HALL_DISCLAIMER } from './hall-links';
-import { HallPlayDialogComponent } from './hall-play-dialog.component';
+import { injectGameHall } from '../../core/hall/hall-services';
+import { PlayOverlay } from '../../core/hall/play/play-overlay.service';
+import { GameHallDialogsComponent } from './game-hall/game-hall-dialogs.component';
+import { JoinDialogComponent } from './game-hall/play/join-dialog.component';
+import { PlayOverlayComponent } from './game-hall/play/play-overlay.component';
 
 /** The chat's height (px) as the legacy hall keeps it (hallUi.js HallChatResizer: the chatResize cookie). */
 export const CHAT_HEIGHT_COOKIE = 'chatResize';
@@ -42,8 +46,9 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
  * hall: its legacy link), and the hall's address with no tab opens it again (hall.routes.ts). Another tab of the site
  * asking whether a hall is open, or asking it to show a legacy hall link, is answered (HallChannel, hallUi.js).
  * The Admin tab (admins and league admins) is a link to the legacy hall's; the Users tab is not drawn (hidden in the
- * legacy hall too). Play opens the "Not logged in" dialog for a visitor and the Play dialog for a player (its choices
- * come with part 4.2, which takes the dialog over: `playOpen`).
+ * legacy hall too). Play opens the "Not logged in" dialog for a visitor and the Play overlay for a player
+ * (`gd-play-overlay`, part 4.2); the chat's "Invite to table" opens its Casual form for that player. The Join dialog and
+ * the Game Hall's dialogs (ready checks, ready prompts, messages, deliveries) are here too, so they show over every tab.
  *
  * The chat's height is set by dragging its resize bar or with Up and Down on it (hallUi.js HallChatResizer): 100 px
  * to the window's height less 160, 300 by default, kept in the legacy chatResize cookie.
@@ -57,12 +62,21 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
  * date and time on two lines, empty before the first update); `div.gd-hall__resizer` (`role=separator`,
  * `aria-valuenow` the chat's height, `data-dragging` while dragged); `gd-chat`; `p.gd-hall__disclaimer`;
  * `gd-dialog[data-dialog=login-required]` (`p.gd-hall__login-required`, `a.gd-button[data-action=login]`,
- * `button.gd-button[data-action=close]`); and `gd-hall-play-dialog`.
+ * `button.gd-button[data-action=close]`); `gd-play-overlay`, `gd-join-dialog` and `gd-game-hall-dialogs`.
  */
 @Component({
   selector: 'gd-hall-shell',
   styleUrl: './hall-shell.component.css',
-  imports: [RouterOutlet, RouterLink, ChatComponent, DialogComponent, HallConnectionComponent, HallPlayDialogComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    ChatComponent,
+    DialogComponent,
+    HallConnectionComponent,
+    PlayOverlayComponent,
+    JoinDialogComponent,
+    GameHallDialogsComponent,
+  ],
   host: {
     class: 'gd-hall',
     '[attr.data-tab]': 'active()?.slug ?? null',
@@ -133,6 +147,7 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
       (ignoreToggle)="chat.toggleIgnore($event)"
       (incognitoChange)="chat.setIncognito($event)"
       (discordChange)="chat.setDiscord($event)"
+      (invite)="playOverlay.inviteToTable($event)"
     />
     <p class="gd-hall__disclaimer">{{ disclaimer }}</p>
     <gd-dialog
@@ -149,7 +164,9 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
         </button>
       </div>
     </gd-dialog>
-    <gd-hall-play-dialog [open]="playOpen()" (closed)="playOpen.set(false)" />
+    <gd-play-overlay />
+    <gd-join-dialog />
+    <gd-game-hall-dialogs />
   `,
 })
 export class HallShellComponent {
@@ -186,14 +203,16 @@ export class HallShellComponent {
     return { date: date ?? '', time: clock ?? '' };
   });
 
-  /** The Play dialog is open (part 4.2 fills it). */
-  readonly playOpen = signal(false);
+  /** The Play overlay and its flows (part 4.2). */
+  protected readonly playOverlay = inject(PlayOverlay);
 
   /** The chat's height (px) as resized, within its limits. */
   protected readonly chatHeight = signal(CHAT_DEFAULT_HEIGHT);
   protected readonly dragging = signal(false);
 
   constructor() {
+    // the Game Hall's services that follow the poll, before its first answer (whatever tab the hall opens on)
+    injectGameHall();
     const route = inject(ActivatedRoute);
     const first = this.tabOfRoute(route.snapshot.firstChild?.routeConfig?.path ?? null);
     this.show(first, this.addressOf(route), false);
@@ -231,11 +250,7 @@ export class HallShellComponent {
 
   /** Play: the Play dialog for a player; a visitor is asked to log in instead (hallUi.js #open-table-button). */
   protected play(): void {
-    if (this.session.loggedOut()) {
-      this.session.requireLogin();
-    } else {
-      this.playOpen.set(true);
-    }
+    this.playOverlay.open();
   }
 
   /** Dragging the resize bar: the chat's top edge follows the pointer. */

@@ -802,6 +802,72 @@
   --theme-errata-share-note: #9c9;
   --theme-errata-share-note-bg: #1d1d1d;
 
+  /* The Play overlay and the Join dialog (hall.html #create-table-popup, #join-table-popup; tables.css, hall.css
+     .table-form, .table-blurb, .result-box; part 4.2) */
+  --theme-play-blurb-bg: #333;
+  --theme-play-blurb-border: #fff;
+  --theme-play-info: #8ab;
+  --theme-play-info-font: georgia, serif;
+  --theme-play-info-hover-text: #111;
+  --theme-play-info-text: #aaa;
+  --theme-play-info-border: #567;
+  --theme-play-info-code: #ddd;
+  --theme-play-subtitle: #bbb;
+  --theme-play-result-bg: #333;
+  --theme-play-result-border: #555;
+  --theme-play-success-border: #5a7a4a;
+  --theme-play-error-border: #a55;
+  --theme-play-error-text: #f2c4c4;
+  --theme-play-panel-border: grey;
+  --theme-play-format-description: #ccc;
+  --theme-play-disabled-field-bg: #333;
+  --theme-play-disabled-field-text: #bbb;
+  --theme-play-disabled-field-border: #555;
+  --theme-play-disabled-placeholder: #858585;
+  --theme-play-placeholder: #9a9a9a;
+  --theme-play-icon-scenario: url('/gemp-lotr/images/icons/puzzle-piece.svg');
+  --theme-play-icon-bot: url('/gemp-lotr/images/icons/processor.svg');
+  --theme-play-icon-unranked: url('/gemp-lotr/images/icons/tabletop-players.svg');
+  --theme-play-icon-league: url('/gemp-lotr/images/icons/holy-grail.svg');
+  --theme-play-icon-tournament: url('/gemp-lotr/images/icons/family-tree.svg');
+  --theme-play-icon-bot-filter: invert(91%) sepia(43%) saturate(671%) hue-rotate(84deg) brightness(106%) contrast(104%);
+  --theme-play-icon-unranked-filter: invert(63%) sepia(9%) saturate(3388%) hue-rotate(70deg) brightness(93%)
+    contrast(76%);
+  --theme-play-icon-league-filter: invert(91%) sepia(19%) saturate(1241%) hue-rotate(13deg) brightness(106%)
+    contrast(103%);
+  --theme-play-icon-tournament-filter: invert(69%) sepia(31%) saturate(683%) hue-rotate(322deg) brightness(102%)
+    contrast(101%);
+  --theme-hall-picker-border: #666;
+  --theme-hall-picker-bg: #333;
+  --theme-hall-picker-text: #ddd;
+  --theme-hall-picker-hover-bg: #455;
+  --theme-hall-picker-heading: #9ab;
+  --theme-hall-picker-note: #aaa;
+  /* Play > Scenarios (tables.css .scenario-*) */
+  --theme-scenario-folders-border: #555;
+  --theme-scenario-folders-bg: #222;
+  --theme-scenario-folder-line: #3a3a3a;
+  --theme-scenario-folder-text: #ddd;
+  --theme-scenario-folder-hover-bg: #303030;
+  --theme-scenario-folder-selected-bg: #1f3d57;
+  --theme-scenario-folder-selected-text: #fff;
+  --theme-scenario-count: #9a9a9a;
+  --theme-scenario-row-bg: #2a2a2a;
+  --theme-scenario-row-border: #555;
+  --theme-scenario-current-border: #c9a227;
+  --theme-scenario-summary: #ccc;
+  --theme-scenario-notes: #aaa;
+  --theme-scenario-status-new: #b8b8b8;
+  --theme-scenario-status-progress: #8ab4e8;
+  --theme-scenario-status-complete: #7ecb7e;
+  --theme-scenario-status-updated: #e0c060;
+  --theme-scenario-status-next-text: #1c1608;
+  --theme-scenario-status-next-bg: #e8c14a;
+  --theme-scenario-author-border: #777;
+  --theme-scenario-note-border: #a8893a;
+  --theme-scenario-note-text: #e8d9a8;
+  --theme-scenario-code: #fff;
+
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;
   --theme-scrollbar-track: #6666;

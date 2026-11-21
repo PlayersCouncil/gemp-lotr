@@ -37,6 +37,7 @@ import {
   nextIds,
   parseScenarioListing,
   ScenarioEntry,
+  ScenarioFolder,
   ScenarioFolderLine,
   ScenarioGroup,
   ScenarioListing,
@@ -105,7 +106,7 @@ export class PlayScenario {
   private readonly tree = computed(() => buildScenarioTree(this.listing()?.scenarios ?? []));
 
   /** The folder shown: the one chosen (or last time's) if it is still there, else the first. */
-  readonly selectedFolder = computed(() => {
+  readonly selectedFolder = computed<ScenarioFolder | null>(() => {
     const tree = this.tree();
     const wanted = this.wantedFolder();
     const found = wanted === null ? null : findFolder(tree, wanted);

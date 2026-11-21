@@ -1,0 +1,81 @@
+/* The name field with suggestions (tables.css .player-picker, .player-picker-toggle, .player-picker-menu; the jQuery UI
+   autocomplete menu of the hall's theme) */
+
+:host {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.gd-name-suggest__input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gd-name-suggest__toggle {
+  flex: 0 0 auto;
+  width: 2em;
+  margin-left: 2px;
+  padding: 0;
+  border: 1px solid var(--theme-hall-picker-border);
+  background: var(--theme-hall-picker-bg);
+  color: var(--theme-hall-picker-text);
+  cursor: pointer;
+}
+
+.gd-name-suggest__toggle:enabled:hover,
+.gd-name-suggest__toggle:focus-visible {
+  background: var(--theme-hall-picker-hover-bg);
+}
+
+.gd-name-suggest__toggle:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.gd-name-suggest__list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 18em;
+  margin: 0;
+  padding: 2px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--theme-content-border);
+  background: var(--theme-hall-content-bg);
+  list-style: none;
+}
+
+.gd-name-suggest__heading {
+  padding: 0.3em 0.6em 0.1em;
+  color: var(--theme-hall-picker-heading);
+  font-size: 80%;
+  font-weight: bold;
+  cursor: default;
+}
+
+.gd-name-suggest__note {
+  padding: 0.3em 0.6em 0.1em;
+  color: var(--theme-hall-picker-note);
+  font-size: 80%;
+  font-style: italic;
+  cursor: default;
+}
+
+.gd-name-suggest__option {
+  padding: 3px 1em 3px 0.4em;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.gd-name-suggest__option:hover,
+.gd-name-suggest__option[aria-selected='true'] {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+}

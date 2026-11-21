@@ -138,3 +138,37 @@ gd-game-hall-dialogs .gd-dialog .gd-button {
   line-height: normal;
   text-decoration: none;
 }
+
+/* Placed where jQuery UI put them: centred for the height they have (they are not resizable: resizable:false) */
+gd-game-hall-dialogs .gd-dialog:not([data-placed]) {
+  inset: 0;
+  margin: auto;
+}
+
+gd-game-hall-dialogs .gd-dialog {
+  resize: none;
+}
+
+gd-game-hall-dialogs .gd-dialog::-webkit-resizer {
+  background: none;
+}
+
+gd-game-hall-dialogs .gd-dialog > .gd-dialog__grip {
+  display: none;
+}
+
+/* the close button: a jQuery UI 1.13 button, with its box */
+gd-game-hall-dialogs .gd-dialog__close,
+gd-game-hall-dialogs .gd-dialog__close:hover,
+gd-game-hall-dialogs .gd-dialog__close:focus {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  margin-top: -12px;
+  padding: 3px;
+  border: 1px solid var(--theme-widget-border);
+}
+
+gd-game-hall-dialogs .gd-dialog__close {
+  background: var(--theme-hall-default-bg);
+}
