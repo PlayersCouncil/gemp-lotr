@@ -59,7 +59,7 @@ import { PlayerPickerComponent } from '../shared/player-picker.component';
         <gd-player-picker
           fieldId="gd-account-ignore-name"
           [placeholder]="ignorePlaceholder"
-          [maxlength]="ignoreMax"
+          [maxLength]="ignoreMax"
           [suggest]="suggest"
           [(value)]="name"
         />

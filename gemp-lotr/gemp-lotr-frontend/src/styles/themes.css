@@ -278,14 +278,6 @@
   --theme-account-box-yes-bg: #5a4a1e;
   --theme-account-box-danger-border: #b71c1c;
   --theme-account-box-danger-bg: #5c1a1a;
-  /* The player picker (tables.css .player-picker, its menu a jQuery UI autocomplete) */
-  --theme-picker-toggle-border: #666;
-  --theme-picker-toggle-bg: #333;
-  --theme-picker-toggle-text: #ddd;
-  --theme-picker-toggle-hover-bg: #455;
-  --theme-picker-heading: #9ab;
-  --theme-picker-note: #aaa;
-  --theme-picker-menu-border: #555;
 
   /* Selects and text fields (hall.css) */
   --theme-field-bg: #222;

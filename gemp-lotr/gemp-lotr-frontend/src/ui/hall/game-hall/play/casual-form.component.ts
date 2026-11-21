@@ -7,7 +7,7 @@ import { TIMER_HELP } from '../../../../core/hall/tables/hall-tables-messages';
 import { timerLabel } from '../../../../core/hall/tables/hall-table-parsers';
 import { CASUAL_DECK_FLOW, HallTablesService } from '../../../../core/hall/tables/hall-tables.service';
 import { MarkupComponent } from '../../../shared/chat/markup.component';
-import { NameSuggestComponent, NameSuggestion } from '../../shared/name-suggest.component';
+import { PlayerPickerComponent } from '../../shared/player-picker.component';
 import { DeckPickerComponent } from './deck-picker.component';
 import { FormatInfoComponent } from './format-info.component';
 import { checked, fieldValue, HelpToggles } from './play-parts';
@@ -23,12 +23,12 @@ import { ResultBoxComponent } from './result-box.component';
  * DOM contract: `gd-casual-form.gd-play-form` holding `h1`, `div.gd-play-form__blurb` (`gd-markup`), `gd-deck-picker`,
  * rows (`div.gd-play-form__row` with `div.gd-play-form__label`, `button.gd-play-form__info` and the field:
  * `input[data-field=description]`, `select[data-field=format]`, `select[data-field=timer]`,
- * `input[type=checkbox][data-field=invite-only|private|keep-open|default-flow]`, `gd-name-suggest`) each followed by its
+ * `input[type=checkbox][data-field=invite-only|private|keep-open|default-flow]`, `gd-player-picker`) each followed by its
  * `div.gd-play-form__info-text` while shown, `button.gd-play-form__create` and `gd-result-box`.
  */
 @Component({
   selector: 'gd-casual-form',
-  imports: [DeckPickerComponent, FormatInfoComponent, MarkupComponent, NameSuggestComponent, ResultBoxComponent],
+  imports: [DeckPickerComponent, FormatInfoComponent, MarkupComponent, PlayerPickerComponent, ResultBoxComponent],
   host: { class: 'gd-play-form' },
   template: `
     <h1>{{ w.CASUAL_HEADING }}</h1>
@@ -105,15 +105,14 @@ import { ResultBoxComponent } from './result-box.component';
         [checked]="inviteOnly()"
         (change)="inviteOnly.set(isChecked($event))"
       />
-      <gd-name-suggest
-        [value]="invitee()"
+      <gd-player-picker
+        [(value)]="invitee"
         [suggest]="suggest"
         [disabled]="!inviteOnly()"
         [placeholder]="w.INVITEE_PLACEHOLDER"
         [label]="w.INVITEE_LABEL"
         [toggleLabel]="w.PICKER_TOGGLE"
         [maxLength]="w.DESCRIPTION_MAX_LENGTH"
-        (valueChange)="invitee.set($event)"
       />
     </div>
     @if (help.shown('invite')) {
@@ -192,10 +191,7 @@ export class CasualFormComponent {
   protected readonly keepOpen = signal(false);
   protected readonly openByDefault = signal(this.defaults.openByDefault);
 
-  protected readonly suggest = async (term: string): Promise<NameSuggestion[]> =>
-    (await this.players.suggest(term)).map((item) =>
-      item.kind === 'player' ? { name: item.name, heading: item.heading } : { note: item.text },
-    );
+  protected readonly suggest = (term: string) => this.players.suggest(term);
 
   private readonly formatCodes = computed(() => this.tables.formats().map((f) => f.code));
 

@@ -276,7 +276,7 @@ gd-play-overlay .gd-play-form__create:enabled:is(:hover, :focus-visible) {
 }
 
 .gd-play-form__row > .gd-play-form__field,
-.gd-play-form__row > gd-name-suggest {
+.gd-play-form__row > gd-player-picker {
   flex: 1 1 70%;
   min-width: 0;
 }
@@ -322,7 +322,7 @@ gd-play-overlay .gd-play-form__create:enabled:is(:hover, :focus-visible) {
 }
 
 /* disabled but still readable: the placeholder explains why the field is off */
-.gd-play-form :is(gd-name-suggest input, input[data-field='description']):disabled {
+.gd-play-form :is(gd-player-picker input, input[data-field='description']):disabled {
   border-color: var(--theme-play-disabled-field-border);
   background-color: var(--theme-play-disabled-field-bg);
   color: var(--theme-play-disabled-field-text);
