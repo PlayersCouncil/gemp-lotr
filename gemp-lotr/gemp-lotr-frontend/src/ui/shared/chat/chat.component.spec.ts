@@ -257,4 +257,105 @@ describe('ChatComponent', () => {
     await update();
     expect(el.querySelector('.gd-chat__switch')).toBeNull();
   });
+
+  describe('the user list column (chat.js lockUserListWidth)', () => {
+    afterEach(() => vi.restoreAllMocks());
+
+    /** Your own entry's width as laid out: "incognito" is the wider chip; 0 when nothing is laid out. */
+    function layOut(widths: { online: number; incognito: number } | null): void {
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+        const chip = this.querySelector?.('.gd-chat__visibility')?.textContent ?? '';
+        const width =
+          widths === null || !this.matches('li[aria-hidden="true"]')
+            ? 0
+            : chip === 'incognito'
+              ? widths.incognito
+              : widths.online;
+        return { width } as DOMRect;
+      });
+    }
+
+    it("keeps the column as wide as your own entry at its widest, plus the list's chrome, measured once", async () => {
+      layOut({ online: 70.2, incognito: 90.4 });
+      const { host, el, update } = await render();
+      // 91 + 1, and the list's and column's padding from their stylesheet (10px)
+      expect(el.style.getPropertyValue('--gd-chat-people-width')).toBe('102px');
+      expect(el.dataset['peopleWidth']).toBe('');
+      expect(el.querySelector('li[aria-hidden="true"]')).toBeNull();
+      // going incognito or players coming and going never move it
+      layOut({ online: 10, incognito: 20 });
+      host.users.set([{ ...USERS[0]!, incognito: true }, USERS[2]!]);
+      await update();
+      expect(el.style.getPropertyValue('--gd-chat-people-width')).toBe('102px');
+      // another role measures again, the badge with it
+      layOut({ online: 100, incognito: 120 });
+      host.users.set([{ ...USERS[0]!, role: 'admin' }]);
+      await update();
+      expect(el.style.getPropertyValue('--gd-chat-people-width')).toBe('131px');
+      expect(el.querySelector('.gd-chat__user[data-self] .gd-chat__role')?.textContent).toBe('admin');
+    });
+
+    it('measures nothing while the list is not laid out (hidden), and does once it is', async () => {
+      layOut(null);
+      const { host, el, update } = await render();
+      expect(el.dataset['peopleWidth']).toBeUndefined();
+      layOut({ online: 50, incognito: 60 });
+      host.users.set([...USERS]);
+      await update();
+      expect(el.style.getPropertyValue('--gd-chat-people-width')).toBe('71px');
+    });
+  });
+
+  it('stays where the reader scrolled up to as lines come, and follows them again from the bottom', async () => {
+    const { host, el, update } = await render();
+    const log = el.querySelector<HTMLElement>('.gd-chat__messages')!;
+    Object.defineProperty(log, 'scrollHeight', { configurable: true, get: () => 1000 });
+    Object.defineProperty(log, 'clientHeight', { configurable: true, value: 200 });
+    log.scrollTop = 300;
+    log.dispatchEvent(new Event('scroll'));
+    host.lines.set([line(1, {})]);
+    await update();
+    expect(log.scrollTop).toBe(300);
+    // a warning always shows
+    host.lines.set([line(1, {}), line(2, { kind: 'warning', html: 'Chat room is closed.' })]);
+    await update();
+    expect(log.scrollTop).toBe(1000);
+    log.scrollTop = 790;
+    log.dispatchEvent(new Event('scroll'));
+    host.lines.set([line(1, {}), line(2, { kind: 'warning' }), line(3, {})]);
+    await update();
+    expect(log.scrollTop).toBe(1000);
+  });
+
+  it('moves between players with Up and Down, closes a menu with Tab or a second click, and never submits the form', async () => {
+    const { el, update, all } = await render();
+    const players = all('.gd-chat__player');
+    players[0]!.focus();
+    players[0]!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(players[1]);
+    players[1]!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(players[0]);
+    players[0]!.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+    expect(document.activeElement).toBe(players[0]);
+
+    players[0]!.click();
+    await update();
+    document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
+    await update();
+    expect(el.querySelector('.gd-chat__menu')).toBeNull();
+    players[0]!.click();
+    await update();
+    expect(el.querySelector('.gd-chat__menu')).not.toBeNull();
+    // a press inside the menu leaves it open
+    el.querySelector('.gd-chat__menu')!.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    await update();
+    expect(el.querySelector('.gd-chat__menu')).not.toBeNull();
+    players[0]!.click();
+    await update();
+    expect(el.querySelector('.gd-chat__menu')).toBeNull();
+
+    const submit = new Event('submit', { cancelable: true });
+    el.querySelector('form')!.dispatchEvent(submit);
+    expect(submit.defaultPrevented).toBe(true);
+  });
 });

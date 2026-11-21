@@ -138,6 +138,11 @@ describe('FormatDefinitionsComponent', () => {
     expect(settings.get(FORMAT_IMAGES_KEY)).toBe('1');
     expect(el.querySelectorAll('.gd-format__thumb button.gd-card').length).toBe(8);
     expect(el.querySelector('.gd-format__thumb-name')?.textContent).toBe('·Ottar, Man of Laketown');
+    // a picture is used as the name was: the card, headed by its name
+    const info = harness.routeDebugElement!.injector.get(CardInfoService);
+    el.querySelector<HTMLButtonElement>('.gd-format__thumb button.gd-card')!.click();
+    expect(info.card()?.blueprintId).toBe('1_45');
+    expect(info.title()).toBe('·Ottar, Man of Laketown');
   });
 
   it('brings the format an address names into view, highlighted', async () => {
@@ -154,5 +159,141 @@ describe('FormatDefinitionsComponent', () => {
     harness.detectChanges();
     expect(TestBed.inject(Router).url).toBe('/help/formats/rev_tow_sta');
     expect(scrolled).toContain('format-rev_tow_sta');
+  });
+
+  describe('the panel', () => {
+    /** Each element's box, by a test-chosen key; anything else has an empty box. */
+    let boxes: Map<Element, { top: number; bottom: number }>;
+
+    beforeEach(() => {
+      boxes = new Map();
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+        const box = boxes.get(this) ?? { top: 0, bottom: 0 };
+        return {
+          top: box.top,
+          bottom: box.bottom,
+          height: box.bottom - box.top,
+          left: 0,
+          right: 0,
+          width: 0,
+        } as DOMRect;
+      });
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      vi.unstubAllGlobals();
+    });
+
+    const frame = (el: HTMLElement) =>
+      el.closest('gd-hall-tab-frame') ?? el.ownerDocument.querySelector('gd-hall-tab-frame')!;
+    const sections = (el: HTMLElement) => Array.from(el.querySelectorAll<HTMLElement>('section.gd-format'));
+
+    /** The panel shows 0 to 500; the formats are 300px tall from `top` (the first) on. */
+    function layOut(el: HTMLElement, top: number): void {
+      boxes.set(frame(el), { top: 0, bottom: 500 });
+      sections(el).forEach((section, i) => boxes.set(section, { top: top + i * 300, bottom: top + (i + 1) * 300 }));
+    }
+
+    async function scroll(harness: RouterTestingHarness, el: HTMLElement): Promise<void> {
+      frame(el).dispatchEvent(new Event('scroll'));
+      await new Promise((resolve) => setTimeout(resolve, 40));
+      await harness.fixture.whenStable();
+      harness.detectChanges();
+    }
+
+    const active = (el: HTMLElement) =>
+      el.querySelector('.gd-formats__nav li[data-active] .gd-formats__nav-name')?.textContent;
+
+    it('keeps the list as tall as the panel inside its padding (--gd-formats-view-height)', async () => {
+      let resized: (() => void) | null = null;
+      vi.stubGlobal(
+        'ResizeObserver',
+        class {
+          constructor(callback: () => void) {
+            resized = callback;
+          }
+          observe = vi.fn();
+          disconnect = vi.fn();
+        },
+      );
+      const { el, harness } = await open('/help/formats');
+      const scroller = frame(el) as HTMLElement;
+      Object.defineProperty(scroller, 'clientHeight', { configurable: true, value: 600 });
+      scroller.style.padding = '10px 0 20px';
+      resized!();
+      harness.detectChanges();
+      expect(
+        el.querySelector<HTMLElement>('gd-format-definitions')!.style.getPropertyValue('--gd-formats-view-height'),
+      ).toBe('570px');
+    });
+
+    it('follows the reading: the format at the top of the panel is marked and put in the address', async () => {
+      const { el, harness } = await open('/help/formats');
+      const router = TestBed.inject(Router);
+      layOut(el, -320);
+      await scroll(harness, el);
+      expect(router.url).toBe('/help/formats/rev_tow_sta');
+      expect(active(el)).toBe('Anything Goes');
+      // the address it put there reveals nothing
+      expect(scrolled).toEqual([]);
+      layOut(el, -500);
+      await scroll(harness, el);
+      expect(router.url).toBe('/help/formats/rev_tow_sta');
+      layOut(el, -580);
+      await scroll(harness, el);
+      expect(router.url).toBe('/help/formats/pc_playtest');
+    });
+
+    it('holds on to a format just revealed while the panel scrolls to it, until the reader scrolls by hand', async () => {
+      const { el, harness } = await open('/help/formats/pc_playtest');
+      const router = TestBed.inject(Router);
+      layOut(el, 0);
+      await scroll(harness, el);
+      expect(router.url).toBe('/help/formats/pc_playtest');
+      expect(active(el)).toBe('PC Playtest');
+      frame(el).dispatchEvent(new Event('wheel'));
+      await scroll(harness, el);
+      expect(router.url).toBe('/help/formats/pc_fotr_block');
+      expect(active(el)).toBe('Fellowship Block (PC)');
+    });
+
+    it('lets go of a revealed format the filter hides', async () => {
+      const { el, harness } = await open('/help/formats/pc_playtest');
+      sections(el)[2]!.hidden = true;
+      layOut(el, 0);
+      await scroll(harness, el);
+      expect(TestBed.inject(Router).url).toBe('/help/formats/pc_fotr_block');
+    });
+  });
+
+  it('opens and closes the (i) text', async () => {
+    const { el, harness } = await open('/help/formats');
+    const toggle = el.querySelector<HTMLButtonElement>('.gd-formats__info')!;
+    const help = el.querySelector<HTMLElement>('.gd-formats__help')!;
+    expect([toggle.getAttribute('aria-expanded'), help.hidden]).toEqual(['false', true]);
+    toggle.click();
+    harness.detectChanges();
+    expect([toggle.getAttribute('aria-expanded'), help.hidden]).toEqual(['true', false]);
+    toggle.click();
+    harness.detectChanges();
+    expect(help.hidden).toBe(true);
+  });
+
+  it('says so when there are no formats', async () => {
+    const { el } = await open('/help/formats', '{"formats":[]}');
+    expect(el.querySelector('.gd-formats__main .gd-formats__status')?.textContent).toBe(
+      'No formats are available right now.',
+    );
+  });
+
+  it('reveals a format from its permalink, even when the address names it already', async () => {
+    const { el, harness } = await open('/help/formats/rev_tow_sta');
+    scrolled.length = 0;
+    el.querySelectorAll<HTMLAnchorElement>('.gd-format__permalink')[1]!.click();
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(scrolled).toEqual(['format-rev_tow_sta']);
+    expect(TestBed.inject(Router).url).toBe('/help/formats/rev_tow_sta');
   });
 });

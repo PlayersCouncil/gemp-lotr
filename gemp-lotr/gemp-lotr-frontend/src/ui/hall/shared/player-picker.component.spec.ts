@@ -28,9 +28,12 @@ class Host {
   readonly picked: string[] = [];
   readonly asked: string[] = [];
   items: PickerItem[] = ITEMS;
+  /** Answers held back until a test gives them (one per term asked), when set. */
+  held: ((items: PickerItem[]) => void)[] | null = null;
   readonly suggest = (term: string) => {
     this.asked.push(term);
-    return Promise.resolve(this.items);
+    const held = this.held;
+    return held ? new Promise<PickerItem[]>((resolve) => held.push(resolve)) : Promise.resolve(this.items);
   };
 }
 
@@ -166,5 +169,49 @@ describe('PlayerPickerComponent', () => {
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     await settle();
     expect(input.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('closes its list from ▾ when it was open, and marks the name under the pointer', async () => {
+    const { element, input, settle } = await render();
+    const toggle = element.querySelector('.gd-player-picker__toggle') as HTMLButtonElement;
+    toggle.click();
+    await settle();
+    const erin = element.querySelector('[data-name="erin"]') as HTMLElement;
+    erin.dispatchEvent(new MouseEvent('mouseenter'));
+    await settle();
+    expect(erin.getAttribute('aria-selected')).toBe('true');
+    expect(input.getAttribute('aria-activedescendant')).toBe(erin.id);
+    // a press in the list keeps the focus in the field
+    const press = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+    erin.dispatchEvent(press);
+    expect(press.defaultPrevented).toBe(true);
+    toggle.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+    toggle.click();
+    await settle();
+    expect(element.querySelector('.gd-player-picker__menu')).toBeNull();
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('takes a name with Enter on it, and drops an answer for a term since changed', async () => {
+    const { fixture, element, input, settle } = await render();
+    const host = fixture.componentInstance;
+    const answers: ((items: PickerItem[]) => void)[] = [];
+    host.held = answers;
+    input.value = 'b';
+    input.dispatchEvent(new Event('input'));
+    timers.run();
+    input.value = 'ca';
+    input.dispatchEvent(new Event('input'));
+    timers.run();
+    answers[1]?.([ITEMS[1]!]);
+    await settle();
+    answers[0]?.(ITEMS);
+    await settle();
+    expect(Array.from(element.querySelectorAll('[data-name]')).map((li) => li.getAttribute('data-name'))).toEqual([
+      'carol',
+    ]);
+    element.querySelector('[data-name="carol"]')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    await settle();
+    expect(host.picked).toEqual(['carol']);
   });
 });

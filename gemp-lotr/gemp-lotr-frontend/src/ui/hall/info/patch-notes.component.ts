@@ -129,10 +129,6 @@ export class PatchNotesComponent {
 
   protected monthName = monthName;
 
-  protected title(note: PatchNote): string {
-    return note.title ?? note.date;
-  }
-
   protected shareLabel(note: PatchNote): string {
     return words.noteShareLabel(note.kind === 'announcement', note.date);
   }

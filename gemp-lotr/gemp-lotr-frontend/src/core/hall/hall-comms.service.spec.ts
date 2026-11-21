@@ -139,8 +139,24 @@ describe('HallComms', () => {
     update().flush('<html>proxy error</html');
     expect(message()).toContain('could not be read');
     vi.advanceTimersByTime(1000);
+    // well-formed, but not the hall's answer
+    update().flush('<html>proxy error</html>');
+    expect(message()).toContain('could not be read');
+    vi.advanceTimersByTime(2000);
     update();
     comms.stop();
+  });
+
+  it('signs up once when started again while polling, and polls no more once stopped from an update', () => {
+    comms.start();
+    comms.start();
+    signUp().flush(readServerResponse('hall.xml'));
+    // e.g. a game started and the page was left
+    comms.updates$.subscribe(() => comms.stop());
+    vi.advanceTimersByTime(NEXT_POLL_DELAY_MS);
+    update().flush(readServerResponse('hall-update-empty.xml'));
+    vi.advanceTimersByTime(60_000);
+    backend.expectNone(() => true);
   });
 
   it('signs up again with a fresh snapshot when the channel was dropped (410), and says so', () => {

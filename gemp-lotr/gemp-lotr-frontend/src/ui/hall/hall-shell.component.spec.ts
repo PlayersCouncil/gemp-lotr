@@ -261,4 +261,84 @@ describe('HallShellComponent', () => {
     expect(el().style.getPropertyValue('--gd-chat-height')).toBe('100px');
     expect(bar?.getAttribute('aria-valuenow')).toBe('100');
   });
+
+  it("passes the chat's messages, ignores, incognito and Discord choice on to the hall's chat", async () => {
+    await open('/hall');
+    await answerPlayer();
+    const chat = harness.fixture.debugElement.query(By.css('gd-chat'));
+    chat.triggerEventHandler('send', 'hello all');
+    await update();
+    const sent = backend.match((r) => CHAT(r) && r.method === 'POST' && r.body?.toString().includes('message='));
+    expect(sent.map((r) => r.request.body?.toString())).toEqual([expect.stringContaining('message=hello%20all')]);
+    chat.triggerEventHandler('ignoreToggle', 'bob');
+    await update();
+    expect(backend.match(at('/player/ignores/add')).map((r) => r.request.body?.toString())).toEqual(['name=bob']);
+    chat.triggerEventHandler('incognitoChange', true);
+    await update();
+    expect(backend.match(at('/player/incognito')).map((r) => r.request.body?.toString())).toEqual(['incognito=true']);
+    chat.triggerEventHandler('discordChange', true);
+    await update();
+    expect(settings.read(CHAT_CHOICE_KEY)).toBe('discord');
+    expect(el().dataset['chat']).toBe('discord');
+  });
+
+  it('asks to log in when the poll finds the session ended, on a tab that needs it; Esc closes the dialog', async () => {
+    await open('/hall');
+    await answerPlayer();
+    backend.match(at('/hall/update')).forEach((r) => r.flush('', { status: 401, statusText: 'Unauthorized' }));
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    await update();
+    backend.match(at('/hall/update')).forEach((r) => r.flush('', { status: 401, statusText: 'Unauthorized' }));
+    await update();
+    const dialog = el().querySelector<HTMLDialogElement>('dialog[data-dialog="login-required"]')!;
+    expect(dialog.hasAttribute('open')).toBe(true);
+    dialog.dispatchEvent(new Event('close'));
+    await update();
+    expect(dialog.hasAttribute('open')).toBe(false);
+  });
+
+  describe('dragging the chat taller or shorter (HallChatResizer)', () => {
+    afterEach(() => vi.restoreAllMocks());
+
+    const press = (type: string, init: { button?: number; clientY?: number }) =>
+      Object.assign(new MouseEvent(type, { bubbles: true, cancelable: true, ...init }), { pointerId: 1 });
+
+    it('makes the chat follow the pointer while the bar is dragged, within its limits, and keeps the height', async () => {
+      await open('/help');
+      const bar = el().querySelector<HTMLElement>('.gd-hall__resizer')!;
+      const chat = el().querySelector<HTMLElement>('gd-chat')!;
+      vi.spyOn(chat, 'getBoundingClientRect').mockReturnValue({ bottom: 700 } as DOMRect);
+      bar.dispatchEvent(press('pointerdown', { button: 2, clientY: 400 }));
+      await update();
+      expect(bar.hasAttribute('data-dragging')).toBe(false);
+      bar.dispatchEvent(press('pointerdown', { button: 0, clientY: 400 }));
+      await update();
+      expect(bar.hasAttribute('data-dragging')).toBe(true);
+      bar.dispatchEvent(press('pointermove', { clientY: 350 }));
+      await update();
+      expect(el().style.getPropertyValue('--gd-chat-height')).toBe('350px');
+      bar.dispatchEvent(press('pointermove', { clientY: 650 }));
+      await update();
+      expect(el().style.getPropertyValue('--gd-chat-height')).toBe('100px');
+      expect(cookies.read(CHAT_HEIGHT_COOKIE)).toBeNull();
+      bar.dispatchEvent(press('pointerup', {}));
+      await update();
+      expect(bar.hasAttribute('data-dragging')).toBe(false);
+      expect(cookies.read(CHAT_HEIGHT_COOKIE)).toBe('100');
+      // let go: moving no longer resizes
+      bar.dispatchEvent(press('pointermove', { clientY: 300 }));
+      await update();
+      expect(el().style.getPropertyValue('--gd-chat-height')).toBe('100px');
+    });
+
+    it('keeps the chat within the window when the window gets smaller', async () => {
+      cookies.write(CHAT_HEIGHT_COOKIE, '500');
+      await open('/help');
+      expect(el().style.getPropertyValue('--gd-chat-height')).toBe('500px');
+      vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(560);
+      window.dispatchEvent(new Event('resize'));
+      await update();
+      expect(el().style.getPropertyValue('--gd-chat-height')).toBe('400px');
+    });
+  });
 });
