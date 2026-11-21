@@ -14,11 +14,14 @@ route (it needs `HALL_SERVICES`: the chat, the hall's poll, the hall session); `
 
 ## The tab
 
-- Sub-tabs (vertical, at the left; `ACCOUNT_SUB_TABS`): **My Account**, **My Game History**, **My Stats**, **My
-  Scenarios**. Routes (`account-routes.ts`): `account/overview`, `account/history`, `account/stats`,
-  `account/scenarios`, and `account` alone, which opens the sub-tab last shown, else My Account. The legacy links
-  `#account`, `#my-account` (the remembered sub-tab) and `#account/<sub>` map onto them (`legacyAccountLink`; an
-  unknown sub-tab opens the remembered one, as GempLinks did).
+- Sub-tabs (vertical, at the left; `ACCOUNT_SUB_TABS`, HALL_TABS): **My Account**, **My Game History**, **My
+  Stats**, **My Scenarios**. Routes (`account-routes.ts`): `account` (My Account itself), `account/history`,
+  `account/stats`, `account/scenarios`. The legacy links `#account`, `#my-account` and `#account/<sub>` are mapped
+  onto them by the hall's `hall-hash-routes.ts`.
+- The legacy tab opened on the sub-tab last shown. Here `account` is My Account's own address, so the remembered
+  sub-tab is opened instead only when the tab is entered from elsewhere (`shouldRestoreSubTab`): the tab bar's My
+  Account from another tab, or the hall's own address redirected to the tab last opened. A link to `account`, a reload
+  of it, and the sub-tab bar's My Account show My Account (the view's route guard).
 - The sub-tab shown is kept in localStorage `gemp.account.subTab`, as the legacy sub-tab link's href (`#account`,
   `includes/account/gameHistory.html`, `.../yourStats.html`, `.../myScenarios.html`: `ACCOUNT_SUB_TAB_HREFS`), so both
   halls read each other's.
@@ -139,8 +142,8 @@ reviewedAt, reviewedBy, locked, origin {id, title, exists}, published (current |
     unreadable answer counts as 200, as jQuery saw it).
 - **Opening a game**: the tab is reserved on the click itself (`PageNavigation.reserveTab`, titled "Gemp-LotR") and
   pointed at the game page `/gemp-lotr/ng/game?gameId=<id>` (+ `participantId`) once the server answers; closed if
-  the call failed. Without a tab, `blockedGame` is the hall's "Your game is ready" prompt ("Your game has started, but
-  your browser blocked the new tab.", "Open game"). The authoring tool is the Angular game page of the draft's game,
+  the call failed. Without a tab, the hall's "Your game is ready" prompt offers it (`HallReadyOffers`, whose words say
+  "the new window"; the legacy shelf's said "the new tab"). The authoring tool is the Angular game page of the draft's game,
   which docks the authoring panel itself (see the frontend README, "Scenario authoring").
 - **Copy Public...**: a dialog "Copy a public scenario", "Loading...", then "A copy goes into your own scenarios,
   linked to the public one: …" and the public scenarios (GET `/scenarios/public`) by kind and campaign, each with its
@@ -162,7 +165,7 @@ reviewedAt, reviewedBy, locked, origin {id, title, exists}, published (current |
   nothing): wording of the port's own.
 - The ignore list is the chat's, so it is shared without an event, and loading it on My Account updates the user
   list's strike-through too.
-- Routes `account/<sub>` instead of fragments, and `account/overview` for My Account (the legacy `#account/overview`).
+- Routes instead of fragments; the remembered sub-tab is opened only when the tab is entered from elsewhere (above).
 - The replay link's id is URL-encoded (`alice%24rec1`); the game page reads it the same.
 
 ## Left out
@@ -179,8 +182,7 @@ reviewedAt, reviewedBy, locked, origin {id, title, exists}, published (current |
 
 The vertical sub-tab bar, the forms (and the player picker in the ignore field: the Game Hall's, see below), the
 history table and pagers, the scenario rows and their tags' colours (scenarioShelf.css), the question and submit
-boxes and the Copy Public dialog, scrolling a picked-out copy into view, the "Your game is ready" prompt (the Game
-Hall's, once merged), and the gold and silver images.
+boxes and the Copy Public dialog, scrolling a picked-out copy into view, and the gold and silver images.
 
 The ignore field expects the Game Hall's picker (`core/hall/play/player-picker.ts` `PlayerSearch` on hall/gamehall):
 `online()` (the players in the hall, without the viewer), `suggest(term): Promise<PickerItem[]>` (the hall's players,

@@ -272,8 +272,3 @@ export const COPY_PUBLIC_HELP =
 export const COPY_PUBLIC_ROW_HINT = 'Copy it into your own scenarios';
 export const byAuthor = (author: string) => `by ${author}`;
 export const DISABLED_NOTE = 'disabled';
-
-/** ScenarioShelfCommon.openGame: the hall's "Your game is ready" prompt when the browser gave no tab. */
-export const GAME_READY_TITLE = 'Your game is ready';
-export const GAME_READY_TEXT = 'Your game has started, but your browser blocked the new tab.';
-export const GAME_READY_OPEN = 'Open game';

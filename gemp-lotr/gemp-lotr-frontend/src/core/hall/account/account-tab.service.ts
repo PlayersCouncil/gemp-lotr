@@ -6,7 +6,7 @@ import { Timers } from '../../platform/timers';
 import { ReturnRefresh } from '../events/return-refresh';
 import { AccountApi } from './account-api.service';
 import { AccountOverview } from './account-overview.service';
-import { ACCOUNT_SUB_TAB_HREFS, ACCOUNT_SUB_TAB_STORAGE_KEY, AccountSubTab, parseAccountRoute } from './account-routes';
+import { ACCOUNT_SUB_TAB_HREFS, ACCOUNT_SUB_TAB_STORAGE_KEY, AccountSubTab, rememberedSubTab } from './account-routes';
 import { GameHistory } from './game-history.service';
 import { MyScenarios } from './my-scenarios.service';
 import { PlayerStatsView } from './player-stats.service';
@@ -15,7 +15,7 @@ import { PlayerStatsView } from './player-stats.service';
  * The My Account tab (includes/account.html and its sub-tabs' pages): My Account's own part (the ignore list) loads
  * when the tab first opens, whichever sub-tab shows; each other sub-tab loads the first time it shows, and keeps what
  * it shows when the viewer comes back (account.html's beforeLoad). The sub-tab shown is remembered (localStorage
- * `gemp.account.subTab`) for `account` alone. The ignore list, the game history and My Scenarios are fetched again
+ * `gemp.account.subTab`), to open when the tab is entered from elsewhere. The ignore list, the game history and My Scenarios are fetched again
  * when the viewer comes back to them after 10 s or more (`returns`); My Stats is not.
  */
 @Injectable()
@@ -31,9 +31,9 @@ export class AccountTab {
   private started = false;
   private readonly loaded = new Set<AccountSubTab>();
 
-  /** The sub-tab `account[/<sub>]` opens (`account` alone: the one last open); null for one the tab has not. */
-  route(sub: string | null): AccountSubTab | null {
-    return parseAccountRoute(sub, this.settings.read(ACCOUNT_SUB_TAB_STORAGE_KEY));
+  /** The sub-tab last shown (the legacy href kept in localStorage), else My Account. */
+  remembered(): AccountSubTab {
+    return rememberedSubTab(this.settings.read(ACCOUNT_SUB_TAB_STORAGE_KEY));
   }
 
   /**

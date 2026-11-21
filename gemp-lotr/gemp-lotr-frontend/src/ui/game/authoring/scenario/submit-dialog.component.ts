@@ -1,21 +1,6 @@
 import { Component, input, output } from '@angular/core';
+import { SUBMIT_CONSEQUENCES, SUBMIT_GUIDELINES } from '../../../../core/game/authoring/submit-wording';
 import { DialogComponent } from '../../../shared/dialog/dialog.component';
-
-/** What to see to before submitting a scenario for review (the legacy scenarioSubmit.js GUIDELINES). */
-export const SUBMIT_GUIDELINES: readonly string[] = [
-  'Play it through yourself first, as a player would. The server plays it through too: one that does not play through cannot be submitted.',
-  'Give it a clear title and a summary that says what the player will do or learn, and put your name in Author.',
-  'Keep the messages friendly, on topic and accurate: what they say about cards and rules has to be true of the game as Gemp plays it.',
-  'A tutorial teaches one thing at a time; a puzzle has a solution a player can find from what they are shown.',
-];
-
-/** What submitting does (the legacy WHAT_HAPPENS). */
-export const SUBMIT_CONSEQUENCES: readonly string[] = [
-  'It is locked: you cannot change, rename or delete it until an admin has approved or rejected it. A draft of it open in the authoring tool is closed. To keep working on it in the meantime, copy it in My Scenarios.',
-  'An admin plays it, and either approves it or sends it back with the changes they would like, which you will see in My Scenarios.',
-  'Approved, it becomes a public scenario, offered to every player. If it is a version of a public scenario (copied from one), it replaces that one.',
-  'A public scenario is part of the game: the admins may change it, disable it or take it down, and it may be kept with the game’s own scenarios. It stays credited to whoever its Author says.',
-];
 
 /**
  * Asked before a scenario of the author's own is submitted for review (the legacy ScenarioSubmit.ask): what to see
