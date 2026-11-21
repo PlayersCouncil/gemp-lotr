@@ -49,8 +49,10 @@ has its own, drawn with the theme's values.
    tab is a link to `hall-legacy.html?admin=1#admin`.
 10. `visual-check/hall` (`npm run check:hall` in `visual-check`): 36 screens of the hall and the login page against
     their legacy pages, and 58 old addresses against where the legacy hall led. **Done**; the addresses all agree.
-    The screens still differ by a pixel or two in most places (see "What looks different"), so the check fails until
-    those are brought to nothing or Ketura accepts them (`HALL_ACCEPTED` in `visual-check/accepted.mjs`, empty).
+    After a pixel pass the frame is identical and most screens are within a few thousand pixels of 1,049,088 (see
+    "What looks different" for what is left); the check still fails on 34 of 36 until those are brought to nothing
+    or Ketura accepts them (`HALL_ACCEPTED` in `visual-check/accepted.mjs`, empty). The deck builder's
+    `check:stubbed` gives the same 14 differences on this branch as on the commit it started from.
 
 ## For Ketura to review
 
@@ -124,8 +126,17 @@ Where the Angular hall knowingly does something other than the legacy hall did. 
   card's name); a card named in a patch note is still "Card Information".
 - Four old patch notes (2021-12-24, 2022-07-07, 2022-08-19, 2022-12-21) lose their inline colours.
 - In "New items" and Race to Mount Doom dialogs the cards are plain pictures, with no zoom or details.
-- Offsets of a pixel or two remain in most places (table columns, the chat's user list, where a dialog sits), and
-  the "Not logged in" dialog is narrower than the legacy one; `visual-check/hall` shows each. Being worked on.
+- What `visual-check/hall` still shows at 1366 x 768, after the pixel pass (the frame itself is identical, and so
+  are the tabs at 1100, 950 and 700 px wide):
+  - the login and register pages, whole: the picture (see "Legacy bugs fixed");
+  - a tournament's own link (about 117,000 px): where the page ends up scrolled. The legacy smooth scroll is
+    clamped to the page's height at the moment it starts, while the drawer is still loading, so where it stops
+    depends on timing; ours always lands on the row;
+  - Play > League (42,000): the "Join Leagues" list starts about 10 px higher than the legacy one;
+  - Show Prizes (30,000) and the player picker's menu (26,000): each sits 2 px from the legacy one;
+  - Play > Bot (17,000), the "Not logged in" dialog's button bar and the queues' rows (12,000 each), a league opened
+    in Events (10,000), My Game History's rows (8,000): a pixel here and there, not yet measured;
+  - everything else is under 7,000 px, mostly sub-pixel text positions.
 
 ### Suggestions not taken, for a decision
 
