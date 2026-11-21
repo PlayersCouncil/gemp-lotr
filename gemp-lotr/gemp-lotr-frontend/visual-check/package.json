@@ -33,6 +33,7 @@
     "check:game:undo": "node game/undo.mjs",
     "check:game:tutorial": "node game/tutorial.mjs",
     "check:game:author": "node game/author.mjs",
+    "check:hall": "node hall/run.mjs",
     "check:game:matrix": "node game/local.mjs --matrix --pages legacy,angular --sizes 1366x768 --out report-game-matrix",
     "tunnel": "node tools/tunnel.mjs"
   },

@@ -520,3 +520,17 @@ export function gameEntryApplies(entry, scenario, sizeLabel, step = null) {
     (!entry.steps || step === null || entry.steps.test(step))
   );
 }
+
+/**
+ * Differences of the hall and the login page (visual-check/hall, `npm run check:hall`) that the owner has accepted.
+ * Only the owner adds to it: anything not in it fails the check. An entry is an area of the Angular page (its first
+ * visible match of `selector`, grown by `margin` px) where up to `maxPixels` differing pixels don't count, read again
+ * at every screenshot:
+ *
+ *   scenarios  the scenarios (names, or patterns)
+ *   steps      a pattern for the steps' labels it applies to (default: all; the page as loaded is "loaded")
+ *   sizes      which window sizes (default: all)
+ *   browsers   which browsers (CHECK_BROWSER; default: all)
+ *   reason     what differs and why it is accepted
+ */
+export const HALL_ACCEPTED = [];
