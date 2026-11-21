@@ -52,6 +52,11 @@ describe('errata diff', () => {
       { op: '=', text: ' d' },
     ]);
     expect(diffTexts('', 'new')).toEqual([{ op: '+', text: 'new' }]);
+    // what the original had after all the errata's words
+    expect(diffTexts('Exert twice', 'Exert')).toEqual([
+      { op: '=', text: 'Exert' },
+      { op: '-', text: ' twice' },
+    ]);
     expect(diffTexts('same', 'same')).toEqual([{ op: '=', text: 'same' }]);
   });
 

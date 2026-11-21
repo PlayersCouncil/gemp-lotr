@@ -4,6 +4,7 @@ import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { provideGempHttp } from '../../../../core/api/gemp-interceptors';
 import { PcErrataService } from '../../../../core/hall/help/errata/errata.service';
+import { installFakeResizeObserver } from '../../../../testing/fake-resize-observer';
 import { readServerResponse } from '../../../../testing/files';
 import { ERRATA_ROUTE } from './errata.routes';
 
@@ -184,5 +185,94 @@ describe('ErrataPageComponent', () => {
     await harness.fixture.whenStable();
     expect(about.hidden).toBe(false);
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const service = () => harness.routeDebugElement?.injector.get(PcErrataService) as PcErrataService;
+
+  it('searches a moment after the last key, and filters by format', async () => {
+    const page = await open('/help/errata');
+    const search = page.querySelector('#gd-errata-q') as HTMLInputElement;
+    search.value = 'lor';
+    search.dispatchEvent(new Event('input'));
+    await wait(200);
+    await settle();
+    expect(texts(page, '.gd-errata-page__status')).toEqual(['2 of 7 cards']);
+    expect(router().url).toBe('/help/errata/51_100?q=lor');
+    const format = page.querySelector('#gd-errata-format') as HTMLSelectElement;
+    format.value = 'pc_playtest';
+    format.dispatchEvent(new Event('change'));
+    await settle();
+    expect(texts(page, 'tr.gd-errata-table__row td[data-column=num]')).toEqual(['1C100']);
+  });
+
+  it('closes Enlarge with a click beside the viewer, and when the page is left', async () => {
+    const page = await open('/help/errata');
+    service().setEnlarged(true);
+    await settle();
+    (page.querySelector('.gd-errata-page__backdrop') as HTMLElement).click();
+    expect(service().enlarged()).toBe(false);
+    service().setEnlarged(true);
+    const errata = service();
+    await harness.navigateByUrl('/help/other');
+    expect(errata.enlarged()).toBe(false);
+  });
+
+  it('ignores keys with Alt, Ctrl or Meta, keys it has no use for, keys under a dialog and keys before the list', async () => {
+    const page = await open('/help/errata');
+    const errata = service();
+    const press = (init: KeyboardEventInit) => {
+      const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init });
+      document.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+    expect(press({ key: 'j', ctrlKey: true })).toBe(false);
+    expect(press({ key: 'x' })).toBe(false);
+    const dialog = document.createElement('dialog');
+    dialog.setAttribute('open', '');
+    document.body.appendChild(dialog);
+    expect(press({ key: 'j' })).toBe(false);
+    dialog.remove();
+    expect(errata.index()).toBe(0);
+    expect(press({ key: 'j' })).toBe(true);
+    expect(errata.index()).toBe(1);
+    expect(page).toBeTruthy();
+    const catalog = errata.load();
+    errata.load.set({ kind: 'loading' });
+    expect(press({ key: 'j' })).toBe(false);
+    errata.load.set(catalog);
+  });
+
+  it('is as tall as the panel it scrolls in shows, and lays out for its width (fit)', async () => {
+    const observers = installFakeResizeObserver();
+    try {
+      const panel = harness.fixture.nativeElement as HTMLElement;
+      panel.style.overflowY = 'auto';
+      panel.style.paddingBottom = '12px';
+      Object.defineProperty(panel, 'clientHeight', { value: 500, configurable: true });
+      const page = await open('/help/errata');
+      const host = page.querySelector('gd-errata-page') as HTMLElement;
+      const layout = host.querySelector('.gd-errata-page__layout') as HTMLElement;
+      vi.spyOn(layout, 'getBoundingClientRect').mockReturnValue({ top: 40 } as DOMRect);
+      vi.spyOn(panel, 'getBoundingClientRect').mockReturnValue({ top: 10 } as DOMRect);
+      let width = 1200;
+      Object.defineProperty(host, 'clientWidth', { get: () => width });
+      observers.resize();
+      await settle();
+      // 500 - 30 (where the layout starts) - 12 and 4 (the panel's and the page's padding) - 1
+      expect(host.style.getPropertyValue('--gd-errata-view-h')).toBe('453px');
+      expect(host.dataset['width']).toBe('wide');
+      width = 800;
+      observers.resize();
+      await settle();
+      expect(host.dataset['width']).toBe('compact');
+      width = 600;
+      observers.resize();
+      await settle();
+      expect(host.dataset['width']).toBe('narrow');
+    } finally {
+      observers.restore();
+      vi.restoreAllMocks();
+    }
   });
 });

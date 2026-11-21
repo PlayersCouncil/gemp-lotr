@@ -251,4 +251,32 @@ describe('PcErrataService', () => {
     expect(errata.images()?.before).toBeNull();
     expect(errata.readout()?.texts[0]?.label).toBe('Game text');
   });
+
+  it('keeps the answer of the latest fetch when two cross (a visit, left and made again while loading)', async () => {
+    const errata = service();
+    const first = errata.start();
+    const second = errata.start();
+    const [early, late] = backend.match((req) => req.url === URL);
+    // the first answer, with no errata, comes after the second fetch began: ignored
+    early?.flush('{"entries":[]}');
+    await first;
+    expect(errata.load().kind).toBe('loading');
+    late?.flush(readServerResponse('errata.json'));
+    await second;
+    expect(errata.load().kind).toBe('ready');
+    expect(errata.list()).toHaveLength(7);
+  });
+
+  it('does nothing to select or step with nothing listed, or to follow onto the row already selected', async () => {
+    const errata = await ready({ card: null, params: { format: 'fotr_block' } });
+    errata.select(0);
+    expect(errata.shown()).toBeNull();
+    expect(errata.step(1)).toBe(false);
+    expect(errata.bump()).toBeNull();
+    errata.setFilter('format', '');
+    const seq = errata.shown()?.seq;
+    errata.follow(0);
+    vi.advanceTimersByTime(FOLLOW_INTERVAL_MS);
+    expect(errata.shown()?.seq).toBe(seq);
+  });
 });
