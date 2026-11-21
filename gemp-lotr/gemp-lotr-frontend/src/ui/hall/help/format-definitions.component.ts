@@ -46,7 +46,8 @@ const SPY_OFFSET = 40;
  * an address naming a format brings it into view. A card's name or thumbnail shows the card (click or right-click).
  *
  * DOM contract: `gd-format-definitions.gd-formats` (`--gd-formats-view-height`, the panel's inner height) holding
- * `div.gd-formats__intro` (`p` with `button.gd-formats__info` (i) (`aria-expanded`), `div.gd-formats__help`), then
+ * `div.gd-formats__intro` (`p` with `button.gd-formats__info` (i) (`aria-expanded`), `div.gd-formats__help` with
+ * `a.gd-formats__errata-link` to Help › PC Errata, plain text on the legacy page), then
  * `div.gd-formats__layout` with either `p.gd-formats__status` (loading, `data-error` for a failure) or
  * `aside.gd-formats__side` (`div.gd-formats__tools`: `input[type=search].gd-formats__filter`,
  * `label.gd-formats__images` with its checkbox, `div.gd-formats__filter-status` (`aria-live`); `ul.gd-formats__nav`

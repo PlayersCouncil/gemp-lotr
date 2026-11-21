@@ -91,6 +91,7 @@ describe('FormatDefinitionsComponent', () => {
       'every card from its sets is legal',
     );
     expect(el.querySelector('.gd-format__name-chip')?.textContent).toBe('Gandalf');
+    expect(el.querySelector('.gd-formats__help a.gd-formats__errata-link')?.getAttribute('href')).toBe('/help/errata');
   });
 
   it("says what went wrong in the page's place", async () => {

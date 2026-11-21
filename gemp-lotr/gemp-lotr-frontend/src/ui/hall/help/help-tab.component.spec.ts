@@ -71,6 +71,10 @@ describe('the Help tab (help.routes)', () => {
     );
     expect(leagues.querySelector('figcaption')?.textContent).toContain('Some players ranked in a past League');
     expect(leagues.querySelectorAll('table.gd-hall-article__table')).toHaveLength(2);
+    expect(leagues.querySelector('a.gd-leagues__link')?.getAttribute('href')).toBe('/events/leagues');
+    expect(leagues.querySelector('a.gd-leagues__link')?.parentElement?.textContent).toBe(
+      'Navigate to the Events > Current Leagues tab:',
+    );
   });
 
   it('leaves PC Errata to its own part: the sub-tab opens, with nothing in it yet', async () => {

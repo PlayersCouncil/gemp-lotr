@@ -489,3 +489,13 @@
     margin-bottom: 0.3em;
   }
 }
+
+/* "Help › PC Errata" in the (i) text: a router link, in the facts' errata link colours */
+.gd-formats__errata-link {
+  color: var(--theme-hall-formats-accent);
+}
+
+.gd-formats__errata-link:hover,
+.gd-formats__errata-link:focus-visible {
+  color: var(--theme-hall-formats-errata-hover);
+}
