@@ -160,11 +160,11 @@ export class FormatDefinitionsComponent {
 
   protected showCard(card: FormatCard, event?: Event): void {
     event?.preventDefault();
-    this.cards.show(card.id);
+    this.cards.show(card.id, card.name);
   }
 
   protected cardView(card: FormatCard) {
-    return this.cards.view(card.id);
+    return this.cards.view(card.id, card.name);
   }
 
   protected filterInput(event: Event): void {

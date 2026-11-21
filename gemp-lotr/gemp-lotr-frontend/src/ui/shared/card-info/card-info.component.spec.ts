@@ -84,6 +84,26 @@ describe('CardInfoComponent', () => {
     );
   });
 
+  it('is headed by the title the page gives the card, and shows the picture the page gave it', async () => {
+    const { fixture, dialog } = await render();
+    info.show(
+      { ...CARD, imageUrl: 'https://i.lotrtcgpc.net/sets/vset3/LOTR-ENV3S019.0_card.jpg' },
+      'Gandalf (original)',
+    );
+    await fixture.whenStable();
+    expect(dialog.querySelector('.gd-card-info__title')!.textContent).toBe('Gandalf (original)');
+    expect(dialog.querySelector<HTMLImageElement>('img.gd-card-info__image')!.src).toBe(
+      'https://i.lotrtcgpc.net/sets/vset3/LOTR-ENV3S019.0_card.jpg',
+    );
+    // another card without a title: the default again
+    info.show(CARD);
+    await fixture.whenStable();
+    expect(dialog.querySelector('.gd-card-info__title')!.textContent).toBe('Card Information');
+    info.show(CARD, 'A');
+    info.close();
+    expect(info.title()).toBeNull();
+  });
+
   it('flips the card when it is clicked, and starts a new card face up', async () => {
     const { fixture, dialog, click } = await render();
     info.show(CARD);

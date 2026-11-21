@@ -16,13 +16,24 @@ export const HALL_PAGES_AUTO_ZOOM_COOKIE = 'autoZoomInHall';
 export class HallCards {
   private readonly views = inject(CardViews);
   private readonly info = inject(CardInfoService);
+  /** The name a card was drawn with, which heads its card information (the legacy preview's `data-title`). */
+  private readonly titles = new Map<string, string>();
 
-  view(blueprintId: string): CardView<string> {
+  view(blueprintId: string, title: string | null = null): CardView<string> {
+    if (title !== null) {
+      this.titles.set(blueprintId, title);
+    }
     return this.views.create({ ref: blueprintId, blueprintId, zone: 'SPECIAL' });
   }
 
-  show(blueprintId: string): void {
-    this.info.show(this.view(blueprintId));
+  /** `title`: what heads the card information (the card's name); none: "Card Information". */
+  show(blueprintId: string, title: string | null = null): void {
+    this.info.show(this.view(blueprintId), title);
+  }
+
+  /** A card drawn on the page was used: headed by the name it was drawn with. */
+  showDrawn(blueprintId: string): void {
+    this.show(blueprintId, this.titles.get(blueprintId) ?? null);
   }
 }
 
@@ -33,7 +44,7 @@ export class HallCardActions extends CardActions {
 
   activate(ref: unknown): void {
     if (typeof ref === 'string') {
-      this.cards.show(ref);
+      this.cards.showDrawn(ref);
     }
   }
 }

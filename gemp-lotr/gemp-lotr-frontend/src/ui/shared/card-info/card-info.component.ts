@@ -20,6 +20,9 @@ import { readCookie, writeCookie } from '../../../core/platform/cookies';
 import { cardElementOf } from '../card/card.component';
 import { DocumentPressDirective } from '../document-press/document-press.directive';
 
+/** The dialog's title unless the page names the card (CardInfoDialog's, GempCardPreview.DEFAULT_TITLE). */
+export const CARD_INFO_TITLE = 'Card Information';
+
 /** Shared with the legacy card information dialog (the zoom slider's last value). */
 export const ZOOM_COOKIE = 'card-info-dialog-slider-last-value';
 const ZOOM_MIN = 0.4;
@@ -70,7 +73,12 @@ function isMetaSiteModifier(blueprintId: string): boolean {
     >
       @if (view(); as v) {
         <header class="gd-card-info__header">
-          <h2 id="gd-card-info-title" class="gd-card-info__title" data-dialog-title>Card Information</h2>
+          <h2
+            id="gd-card-info-title"
+            class="gd-card-info__title"
+            data-dialog-title
+            [textContent]="info.title() ?? defaultTitle"
+          ></h2>
           <button type="button" class="gd-card-info__close" aria-label="Close" (click)="info.close()"></button>
         </header>
         <input
@@ -132,6 +140,7 @@ export class CardInfoComponent {
   readonly plain = input(false);
 
   protected readonly holoImage = siteImage('holo.jpg');
+  protected readonly defaultTitle = CARD_INFO_TITLE;
   protected readonly zoomMin = ZOOM_MIN;
   protected readonly zoomMax = ZOOM_MAX;
   protected readonly zoomStep = ZOOM_STEP;
@@ -148,7 +157,8 @@ export class CardInfoComponent {
     }
     const image = this.images.resolve(card.blueprintId, card.zone);
     return {
-      data: asDrawn(cardDisplayData(image, card.overlayImage), card),
+      // the card's own picture when the page gave it one (PC Errata's original of a revised card), as drawn
+      data: { ...asDrawn(cardDisplayData(image, card.overlayImage), card), image: card.imageUrl || image.imageUrl },
       wikiUrl: image.hasWiki ? image.wikiUrl : null,
       flippable: !isMetaSiteModifier(image.bareBlueprint),
     };
