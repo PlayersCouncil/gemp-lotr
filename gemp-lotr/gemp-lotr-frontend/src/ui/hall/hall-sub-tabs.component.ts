@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
 import { HallSubTab } from '../../core/hall/hall-tabs';
 
 /**
@@ -32,7 +32,7 @@ import { HallSubTab } from '../../core/hall/hall-tabs';
           [routerLink]="link(tab)"
           routerLinkActive
           #active="routerLinkActive"
-          [routerLinkActiveOptions]="{ exact: tab.path === '' }"
+          [routerLinkActiveOptions]="activeOptions(tab)"
           [attr.aria-selected]="active.isActive"
           [attr.data-sub-tab]="tab.slug"
           (keydown)="key($event)"
@@ -46,6 +46,19 @@ export class HallSubTabsComponent {
   readonly tabs = input.required<readonly HallSubTab[]>();
   readonly base = input.required<string>();
   readonly label = input<string | null>(null);
+
+  /**
+   * Selected while the address is the sub-tab's or below it (only its own for a sub-tab whose path is ''), whatever the
+   * query (`?theme=`, a card share link's `?card=`) and fragment.
+   */
+  protected activeOptions(tab: HallSubTab): IsActiveMatchOptions {
+    return {
+      paths: tab.path === '' ? 'exact' : 'subset',
+      queryParams: 'ignored',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+    };
+  }
 
   protected link(tab: HallSubTab): string {
     return tab.path === '' ? this.base() : `${this.base()}/${tab.path}`;

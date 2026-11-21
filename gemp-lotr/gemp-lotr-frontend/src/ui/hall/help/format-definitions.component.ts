@@ -20,9 +20,9 @@ import * as words from '../../../core/hall/help/help-messages';
 import { errataRoute, formatRoute } from '../../../core/hall/help/help-routes';
 import { Timers } from '../../../core/platform/timers';
 import { CardComponent } from '../../shared/card/card.component';
-import { HallCards } from './hall-cards';
-import { HallShareButtonComponent } from './hall-share-button.component';
-import { HallTabFrameComponent } from './hall-tab-frame.component';
+import { HallCards } from '../shared/hall-cards';
+import { HallShareButtonComponent } from '../shared/hall-share-button.component';
+import { HallTabFrameComponent } from '../shared/hall-tab-frame.component';
 
 /** `formats` and `formats/<code>` are one route, so following the formats (the address changes) keeps the page. */
 export function formatsMatcher(segments: UrlSegment[]): UrlMatchResult | null {

@@ -17,8 +17,8 @@ import { patchNotesRoute } from '../../../core/hall/info/info-routes';
 import { parsePatchNotesSlug } from '../../../core/hall/info/patch-notes';
 import { PatchNote } from '../../../core/hall/info/patch-notes-models';
 import { PatchNotesService } from '../../../core/hall/info/patch-notes.service';
-import { HallShareButtonComponent } from '../help/hall-share-button.component';
-import { HallTabFrameComponent } from '../help/hall-tab-frame.component';
+import { HallShareButtonComponent } from '../shared/hall-share-button.component';
+import { HallTabFrameComponent } from '../shared/hall-tab-frame.component';
 import { PatchNotePicture, PatchNoteTextComponent } from './patch-note-text.component';
 
 /** `patch-notes` and `patch-notes/<slug>` are one route, so the page stays while the address follows the window. */

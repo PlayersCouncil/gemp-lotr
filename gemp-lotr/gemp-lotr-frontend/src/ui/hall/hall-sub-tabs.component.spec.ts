@@ -49,6 +49,12 @@ describe('HallSubTabsComponent', () => {
     tabs = await open('/account/history/game-12');
     expect(tabs.map((tab) => tab.getAttribute('aria-selected'))).toEqual(['false', 'true', 'false']);
     expect(tabs.map((tab) => tab.dataset['subTab'])).toEqual(['overview', 'history', 'stats']);
+
+    // whatever the query and fragment (?theme=, a card share link's ?card=)
+    tabs = await open('/account?theme=classic#top');
+    expect(tabs.map((tab) => tab.getAttribute('aria-selected'))).toEqual(['true', 'false', 'false']);
+    tabs = await open('/account/stats?card=1_5');
+    expect(tabs.map((tab) => tab.getAttribute('aria-selected'))).toEqual(['false', 'false', 'true']);
   });
 
   it('opens a sub-tab when clicked, and moves the focus with the arrow keys, Home and End', async () => {

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MarkupNode } from '../../../core/chat/chat-markup';
 import { hallRouteOf } from '../../../core/hall/hall-links';
 import { MarkupComponent } from '../../shared/chat/markup.component';
-import { HallCards } from '../help/hall-cards';
+import { HallCards } from '../shared/hall-cards';
 
 /** A screenshot to enlarge: its address and description, and the picture itself (the focus goes back to it). */
 export interface PatchNotePicture {
