@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HALL_SERVICES } from '../../core/hall/hall-services';
+import { legacyHallLink, startPage } from '../../core/hall/legacy-links.guard';
 import { LOGIN_SERVICES } from '../../core/login/login-services';
 import { Notifier } from '../../core/notifier/notifier';
 import { loginRequired, loginRequiredUnlessReplay } from '../../core/session/login-required.guard';
@@ -35,6 +36,9 @@ export const APP_ROUTES: Routes = [
     providers: [...LOGIN_SERVICES],
     loadComponent: () => import('../login/login-page.component').then((m) => m.LoginPageComponent),
   },
+  // The old addresses: hall.html and the site's start page send the browser here with the link's #fragment
+  { path: 'go', canActivate: [legacyHallLink], children: [] },
+  { path: 'start', canActivate: [startPage], children: [] },
   {
     // The Game Hall (hall.html): its frame around the tabs, each a route of its own (hall.routes.ts); last, so the
     // pages above match first. Unknown addresses go to the Game Hall
