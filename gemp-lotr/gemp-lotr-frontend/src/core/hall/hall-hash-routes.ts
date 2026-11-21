@@ -9,8 +9,11 @@ export const LEGACY_HALL_URL = '/gemp-lotr/hall-legacy.html';
  */
 export type HallAddress = { readonly route: string } | { readonly page: string };
 
-/** The errata filters a link may carry (PcErrata.FILTER_KEYS); `card` names the card, as `#errata-<id>` does. */
-const ERRATA_KEYS = ['q', 'set', 'format', 'show'];
+/**
+ * What an errata link may carry: the filters (PcErrata.FILTER_KEYS) and the sort (`sort`, `dir`), which
+ * PcErrataUI.applyRoute read too; `card` names the card, as `#errata-<id>` does.
+ */
+const ERRATA_KEYS = ['q', 'set', 'format', 'show', 'sort', 'dir'];
 
 /**
  * The address of what a legacy hall link's fragment names (hallLinks.js GempLinks.parse and its ROUTES), for the
@@ -24,7 +27,7 @@ const ERRATA_KEYS = ['q', 'set', 'format', 'show'];
  * | `#help`, `#help/<sub>`                            | `/help`, `/help/<sub's path>`                  |
  * | `#help/manual`                                    | `/help/how-to-play#manual`                     |
  * | `#format-<code>`                                  | `/help/formats/<code>`                         |
- * | `#pc-errata[?k=v&...]`, `#errata-<id>[?k=v&...]`  | `/help/errata[/<id>][?q=&set=&format=&show=]`  |
+ * | `#pc-errata[?k=v&...]`, `#errata-<id>[?k=v&...]`  | `/help/errata[/<id>][?q=&set=&format=&show=&sort=&dir=]` |
  * | `#events`, `#events/<sub>`                        | `/events`, `/events/<sub>`                     |
  * | `#league-<code>`, `#tournament-<id>`              | `/events/leagues/<code>`, `/events/tournaments/<id>` |
  * | `#info`, `#server-info`, `#info/<sub>`            | `/info`, `/info/<sub>`                         |

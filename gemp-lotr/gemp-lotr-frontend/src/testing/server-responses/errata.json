@@ -1,0 +1,221 @@
+{
+  "all": {
+    "1_45": { "BaseID": "1_45", "Name": "Gandalf, The Grey Wizard", "LinkText": "Gandalf", "ErrataIDs": { "PC": "51_45" } },
+    "1_100": { "BaseID": "1_100", "Name": "Lorien Elf", "LinkText": "Lorien Elf", "ErrataIDs": { "PC": "51_100", "Playtest": "71_100" } }
+  },
+  "recent": {
+    "1_45": { "BaseID": "1_45", "Name": "Gandalf, The Grey Wizard", "LinkText": "Gandalf", "ErrataIDs": { "PC": "51_45" } }
+  },
+  "entries": [
+    {
+      "id": "51_45",
+      "base": "1_45",
+      "kind": "errata",
+      "name": "Gandalf, The Grey Wizard",
+      "title": "Gandalf",
+      "subtitle": "The Grey Wizard",
+      "set": "1",
+      "setName": "The Fellowship of the Ring",
+      "cardNum": 45,
+      "collInfo": "1R45",
+      "culture": "Gandalf",
+      "cultureCode": "gandalf",
+      "side": "Free Peoples",
+      "type": "Companion",
+      "revision": 1,
+      "recent": true,
+      "formats": ["pc_fotr_block", "pc_movie"],
+      "after": {
+        "name": "Gandalf, The Grey Wizard",
+        "type": "Companion",
+        "stats": { "Twilight": 4, "Strength": 6, "Vitality": 4, "Unique": true },
+        "gametext": "Wise. Fellowship: Exert Gandalf to play a [gandalf] card from your discard pile."
+      },
+      "before": {
+        "name": "Gandalf, The Grey Wizard",
+        "type": "Companion",
+        "stats": { "Twilight": 4, "Strength": 7, "Vitality": 4, "Unique": true },
+        "gametext": "Wise. Fellowship: Exert Gandalf twice to play a [gandalf] card from your draw deck."
+      }
+    },
+    {
+      "id": "51_100",
+      "base": "1_100",
+      "kind": "errata",
+      "name": "Lorien Elf",
+      "title": "Lorien Elf",
+      "set": "1",
+      "setName": "The Fellowship of the Ring",
+      "cardNum": 100,
+      "collInfo": "1C100",
+      "culture": "Elven",
+      "cultureCode": "elven",
+      "side": "Free Peoples",
+      "type": "Companion",
+      "revision": 2,
+      "recent": false,
+      "formats": ["pc_fotr_block", "pc_movie", "rev_tow_sta"],
+      "after": {
+        "name": "Lorien Elf",
+        "type": "Companion",
+        "stats": { "Twilight": 2, "Strength": 5, "Vitality": 2, "Unique": false },
+        "gametext": "To play, spot an Elf. Archer."
+      },
+      "before": {
+        "name": "Lórien Elf",
+        "type": "Companion",
+        "stats": { "Twilight": 2, "Strength": 5, "Vitality": 2, "Unique": false },
+        "gametext": "To play, spot an Elf."
+      }
+    },
+    {
+      "id": "71_100",
+      "base": "1_100",
+      "kind": "playtest",
+      "name": "Lorien Elf",
+      "title": "Lorien Elf",
+      "set": "1",
+      "setName": "The Fellowship of the Ring",
+      "cardNum": 100,
+      "collInfo": "1C100",
+      "culture": "Elven",
+      "cultureCode": "elven",
+      "side": "Free Peoples",
+      "type": "Companion",
+      "revision": 0,
+      "recent": false,
+      "formats": ["pc_playtest"],
+      "after": {
+        "name": "Lorien Elf",
+        "type": "Companion",
+        "stats": { "Twilight": 1, "Strength": 5, "Vitality": 2, "Unique": false },
+        "gametext": "To play, spot an Elf."
+      },
+      "before": {
+        "name": "Lórien Elf",
+        "type": "Companion",
+        "stats": { "Twilight": 2, "Strength": 5, "Vitality": 2, "Unique": false },
+        "gametext": "To play, spot an Elf."
+      }
+    },
+    {
+      "id": "52_120",
+      "base": "2_120",
+      "kind": "errata",
+      "name": "Dwarrowdelf Chamber",
+      "title": "Dwarrowdelf Chamber",
+      "set": "2",
+      "setName": "Mines of Moria",
+      "cardNum": 120,
+      "collInfo": "2U120",
+      "side": "Free Peoples",
+      "type": "Site",
+      "revision": 1,
+      "recent": false,
+      "formats": ["pc_movie"],
+      "after": {
+        "name": "Dwarrowdelf Chamber",
+        "type": "Site",
+        "stats": { "Twilight": 3, "Site": 4, "Unique": false },
+        "gametext": "Underground. Each minion is strength +1."
+      },
+      "before": {
+        "name": "Dwarrowdelf Chamber",
+        "type": "Site",
+        "stats": { "Twilight": 3, "Site": 4, "Unique": false },
+        "gametext": "Underground. Each minion is strength +1."
+      }
+    },
+    {
+      "id": "55_10",
+      "base": "5_10",
+      "kind": "errata",
+      "name": "Still Draws Breath",
+      "title": "Still Draws Breath",
+      "set": "5",
+      "setName": "Battle of Helm's Deep",
+      "cardNum": 10,
+      "collInfo": "5R10",
+      "culture": "Gondor",
+      "cultureCode": "gondor",
+      "side": "Free Peoples",
+      "type": "Condition",
+      "revision": 1,
+      "recent": true,
+      "formats": ["pc_movie"],
+      "after": {
+        "name": "Still Draws Breath",
+        "type": "Condition",
+        "stats": { "Twilight": 1, "Unique": false },
+        "gametext": "Bearer must be Aragorn. Maneuver: Discard this condition to heal Aragorn."
+      },
+      "before": {
+        "name": "Still Draws Breath",
+        "type": "Event",
+        "stats": { "Twilight": 1, "Unique": false },
+        "gametext": "Maneuver: Heal Aragorn."
+      }
+    },
+    {
+      "id": "103_19",
+      "base": "103_19",
+      "kind": "revision",
+      "name": "Úlairë Toldëa, Messenger of Morgul",
+      "title": "Úlairë Toldëa",
+      "subtitle": "Messenger of Morgul",
+      "set": "103",
+      "setName": "Shadow of the Past",
+      "cardNum": 19,
+      "collInfo": "V3_19",
+      "culture": "Ringwraith",
+      "cultureCode": "wraith",
+      "side": "Shadow",
+      "type": "Minion",
+      "revision": 1,
+      "recent": true,
+      "formats": ["pc_movie"],
+      "after": {
+        "name": "Úlairë Toldëa, Messenger of Morgul",
+        "type": "Minion",
+        "stats": { "Twilight": 6, "Strength": 12, "Vitality": 3, "Site": 3, "Unique": true },
+        "gametext": "Fierce. Each time this minion wins a skirmish, the Free Peoples player adds a burden."
+      },
+      "before": {
+        "name": "Úlairë Toldëa, Messenger of Morgul",
+        "type": "Minion",
+        "stats": { "Twilight": 6, "Strength": 12, "Vitality": 3, "Site": 3, "Unique": true },
+        "gametext": "Fierce. Each time this minion wins a skirmish, add a burden."
+      }
+    },
+    {
+      "id": "101_5",
+      "base": "101_5",
+      "kind": "revision",
+      "name": "Bilbo's Pipe",
+      "title": "Bilbo's Pipe",
+      "set": "101",
+      "cardNum": 5,
+      "culture": "Shire",
+      "cultureCode": "shire",
+      "side": "Free Peoples",
+      "type": "Possession",
+      "revision": 1,
+      "recent": false,
+      "formats": [],
+      "after": {
+        "name": "Bilbo's Pipe",
+        "type": "Possession",
+        "stats": { "Twilight": 1, "Unique": true },
+        "gametext": "Pipe. Bearer must be a Hobbit."
+      }
+    }
+  ],
+  "formats": [
+    { "code": "pc_fotr_block", "name": "PC-FotR Block", "count": 2 },
+    { "code": "pc_movie", "name": "PC-Movie Block", "count": 5 },
+    { "code": "rev_tow_sta", "name": "Towers Standard", "count": 1 },
+    { "code": "pc_playtest", "name": "PC Playtest", "count": 1 },
+    { "code": "fotr_block", "name": "Fellowship Block", "count": 0 }
+  ],
+  "counts": { "total": 7, "errata": 4, "playtest": 1, "revision": 2, "recent": 3 }
+}
