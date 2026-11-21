@@ -1,14 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
 	<title>GEMP: LotR-TCG - Login</title>
-	
 	<link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
 	<link rel="manifest" href="images/icons/site.webmanifest">
-	
+
 	<meta property="og:title" content="GEMP: Play the LotR-TCG" />
 	<meta property="og:description" content="Play the Lord of the Rings TCG for free in your browser using GEMP.  No limits, no clean-up, and no budget.  Build your deck and play today!" />
 	<meta property="og:url" content="https://play.lotrtcgpc.net" />
@@ -16,72 +15,18 @@
 	<meta property="og:image" content="https://play.lotrtcgpc.net/gemp-lotr/images/splash.jpg" />
 	<meta property="og:type" content="website" />
 
-	<link rel="stylesheet" type="text/css" href="src/Login/index.css">
-	<link rel="stylesheet" type="text/css" href="css/dark-hive/jquery-ui-1.8.16.custom.css">
-	<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css">
-	<link rel="stylesheet" type="text/css" href="js/jquery/styles/jquery.spinnercontrol.css">
-
-	<script type="text/javascript" src="js/jquery/jquery-1.6.2.js"></script>
-	<script type="text/javascript" src="js/jquery/jquery-ui-1.8.16.custom.min.js"></script>
-	<script type="text/javascript" src="js/jquery/jquery.cookie.js"></script>
-	<script type="text/javascript" src="js/jquery/jquery.spinnercontrol.js"></script>
-	<script type="text/javascript" src="js/jquery/jquery.layout.js"></script>
-	<script type="text/javascript" src="js/jquery/jquery.touchSwipe.js"></script>
-
-	<script type="text/javascript" src="js/gemp-022/inheritance.js"></script>
-	<script type="text/javascript" src="js/gemp-022/common.js"></script>
-	<script type="text/javascript" src="js/gemp-022/logging.js"></script>
-	<script type="text/javascript" src="js/gemp-022/chat.js"></script>
-	<script type="text/javascript" src="js/gemp-022/communication.js"></script>
-	<script type="text/javascript" src="js/gemp-022/commonUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cards/CardFilter.js"></script>
-
-  <script type="text/javascript" src="js/gemp-022/cards/CardGroup.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cards/Card.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cards/CardDisplay.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cards/CardInfoDialog.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cards/CardImages.js"></script>
-	<script type="text/javascript" src="js/gemp-022/cards/PackImages.js"></script>
-	<script type="text/javascript" src="js/gemp-022/hobbit.js"></script>
-	<script type="text/javascript" src="js/gemp-022/set40.js"></script>
-	<script type="text/javascript" src="js/gemp-022/PC_Cards.js"></script>
-
-	<script type="text/javascript" src="js/gemp-022/hallUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/leagueResultsUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/tournamentResultsUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/statsUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/playerStatsUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/gameHistoryUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/deckBuildingUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/gameUi.js"></script>
-	<script type="text/javascript" src="js/gemp-022/gameAnimations.js"></script>
-	<script type="text/javascript" src="js/gemp-022/merchantUi.js"></script>
-
-	<!-- these scripts will be bundled together -->
-	<script type="text/javascript" src="src/Login/login.js"></script>
-
+	<!--
+		The start page (the login page) is part of the Angular app now (gemp-lotr-frontend, served under /gemp-lotr/ng/).  This page only sends
+		the browser on, with the link's query and #fragment: a fragment never reaches the server, so a page has to pass
+		it on.  Where each old link leads is decided in the app (core/hall/legacy-links.guard.ts), not here.  The tags
+		above are for the sites that preview a link: they read this page and run no script.
+		The legacy page is kept as login-legacy.html until it is removed.
+	-->
+	<script>
+		window.location.replace("/gemp-lotr/ng/start" + window.location.search + window.location.hash);
+	</script>
 </head>
 <body>
-	<div class="dim"></div>
-	<div class="centerContainer">
-		<h1 class="banner">GEMP: Play the Lord of the Rings TCG</h1>
-		<div class="content">
-			<div class="login">
-				<div class="status"></div>
-				<div class="error"></div>
-				<div class="interaction"></div>
-			</div>
-			<div class="info">
-				<p><a href="https://wiki.lotrtcgpc.net/wiki/The_Lord_of_the_Rings_TCG">The Lord of the Rings TCG</a> was published by Decipher, Inc from 2001-2007.<br />GEMP is a platform for playing this excellent game for free in your browser.<br />Maintained by the unofficial <a href="https://lotrtcgpc.net/">Player's Council</a>.</p>
-				
-				<div class="sw-shoutout">
-					<img src="https://res.starwarsccg.org/gemp/lightForce-42.png" height="20"/>
-					<p>(Also check out the <a href="https://gemp.starwarsccg.org/gemp-swccg/">Star Wars CCG GEMP</a> ran by the <a href="https://www.starwarsccg.org/">Star Wars Players Committee</a>.)</p>
-					<img src="https://res.starwarsccg.org/gemp/darkForce-42.png" height="20"/>
-				</div>
-			</div>
-		</div>
-	</div>
-
+	<noscript><a href="/gemp-lotr/ng/">GEMP: Play the Lord of the Rings TCG</a> needs JavaScript.</noscript>
 </body>
 </html>

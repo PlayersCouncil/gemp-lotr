@@ -22,7 +22,7 @@ function register() {
                     $(".error").html("Your password has successfully been reset!  Please refresh the page and log in.");
                 }
                 else {
-                    location.href = "/gemp-lotr/hall.html" + hallReturnLink();
+                    location.href = "/gemp-lotr/hall-legacy.html" + hallReturnLink();
                 }
             },
             {
@@ -65,7 +65,7 @@ function login() {
                 $("#login").val(login);
             }
             else {
-                location.href = "/gemp-lotr/hall.html" + hallReturnLink();
+                location.href = "/gemp-lotr/hall-legacy.html" + hallReturnLink();
             }
         },
         {

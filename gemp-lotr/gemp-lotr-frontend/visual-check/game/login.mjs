@@ -21,6 +21,8 @@ export const PUBLIC_ADDRESSES = ['/gemp-lotr/ng/game?replayId=somebody$abc123'];
 
 /** What the page may ask the server for at a public address: who is logged in, and the replay. */
 const PUBLIC_ASKS = (asked) => asked.endsWith('/player') || asked.startsWith('/gemp-lotr-server/replay/');
+/** Where a page that needs a logged-in player sends a visitor (core/platform/app-paths.ts LOGIN_PAGE_URL). */
+const LOGIN_PAGE = '/gemp-lotr/ng/login';
 
 /** The problems of each address, for a browser that isn't logged in to `server`. */
 export async function loginProblems(browser, server) {
@@ -34,13 +36,20 @@ export async function loginProblems(browser, server) {
     });
     page.on('request', (request) => {
       const asked = new URL(request.url()).pathname;
-      if (page.url().includes('/ng/') && asked.startsWith('/gemp-lotr-server/') && !asked.endsWith('/player')) {
+      // The login page it is sent to asks for the hall's counts (GET /status), which needs no login
+      const onLoginPage = new URL(page.url()).pathname === LOGIN_PAGE;
+      if (
+        page.url().includes('/ng/') &&
+        asked.startsWith('/gemp-lotr-server/') &&
+        !asked.endsWith('/player') &&
+        !(onLoginPage && asked === '/gemp-lotr-server/status')
+      ) {
         problems.push(`${address}: the page asked for ${asked}`);
       }
     });
     await page.goto(server + address);
     await page
-      .waitForURL((url) => url.pathname === '/gemp-lotr/', { timeout: 10000 })
+      .waitForURL((url) => url.pathname === LOGIN_PAGE, { timeout: 10000 })
       .catch(() => {
         problems.push(`${address}: was not sent to the login page, stayed on ${page.url()}`);
       });
@@ -62,7 +71,7 @@ export async function loginProblems(browser, server) {
     });
     await page.goto(server + address);
     await page.waitForTimeout(3000);
-    if (new URL(page.url()).pathname === '/gemp-lotr/') problems.push(`${address}: was sent to the login page`);
+    if (new URL(page.url()).pathname === LOGIN_PAGE) problems.push(`${address}: was sent to the login page`);
     if (!replayAsked) problems.push(`${address}: the page didn't ask for the replay`);
     await context.close();
   }

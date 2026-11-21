@@ -778,13 +778,20 @@ async function findLoginProblems() {
   });
   page.on('request', (request) => {
     const address = new URL(request.url()).pathname;
-    if (page.url().includes('/ng/') && address.startsWith('/gemp-lotr-server/') && !address.endsWith('/player')) {
+    // The login page it is sent to asks for the hall's counts (GET /status), which needs no login
+    const onLoginPage = new URL(page.url()).pathname === '/gemp-lotr/ng/login';
+    if (
+      page.url().includes('/ng/') &&
+      address.startsWith('/gemp-lotr-server/') &&
+      !address.endsWith('/player') &&
+      !(onLoginPage && address === '/gemp-lotr-server/status')
+    ) {
       problems.push(`the page asked for ${address}`);
     }
   });
   await page.goto(options.server + angularPath);
   await page
-    .waitForURL((url) => url.pathname === '/gemp-lotr/', { timeout: 10000 })
+    .waitForURL((url) => url.pathname === '/gemp-lotr/ng/login', { timeout: 10000 })
     .catch(() => {
       problems.push(`was not sent to the login page, stayed on ${page.url()}`);
     });

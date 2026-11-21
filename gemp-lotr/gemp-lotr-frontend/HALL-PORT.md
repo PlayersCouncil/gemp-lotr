@@ -36,14 +36,17 @@ has its own, drawn with the theme's values.
 ## Order of work
 
 1. The core from kermit's branch, compiling and tested here. **Done.**
-2. The shell: routes, the tab bar, the connection readout, the chat, the Deck-builder and Play buttons.
-3. The login page.
-4. The Game Hall tab: tables, queues, tournaments, ready checks, the MOTD, announcements.
+2. The shell: routes, the tab bar, the connection readout, the chat, the Deck-builder and Play buttons. **Done.**
+3. The login page. **Done.**
+4. The Game Hall tab: tables, queues, tournaments, ready checks, the MOTD, announcements. **Done.**
 5. The Play and Join flows: casual, bots, league, tournament, scenario.
-6. Help and Server Info.
-7. Events.
-8. My Account.
-9. The switch: the old addresses, the share links, the Admin link, the hall links on the game page, `visual-check/hall`.
+6. Help and Server Info. **Done** (PC Errata last).
+7. Events. **Done.**
+8. My Account. **Done.**
+9. The switch. **Done:** `hall.html` and `index.html` are now pages that send the browser on to the app's `go` and
+   `start` routes with the link's query and fragment (`core/hall/legacy-links.guard.ts` decides where each leads); the
+   legacy pages are `hall-legacy.html` and `login-legacy.html`; the share pages lead to the app's routes; the Admin
+   tab is a link to `hall-legacy.html?admin=1#admin`. Still to do: `visual-check/hall`.
 
 ## Later
 
