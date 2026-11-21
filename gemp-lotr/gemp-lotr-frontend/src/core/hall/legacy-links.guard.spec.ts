@@ -44,6 +44,11 @@ describe('the old addresses', () => {
       expect(visited).toEqual([]);
     });
 
+    it('keeps the query the old address came with (an admin acting as a player)', () => {
+      expect(go('/go?participantId=bob#events/leagues')).toBe('/events/leagues?participantId=bob');
+      expect(go('/go?participantId=bob#errata-1_5?q=x')).toBe('/help/errata/1_5?participantId=bob&q=x');
+    });
+
     it('opens the hall for no link, or one it does not know', () => {
       expect(go('/go')).toBe('/');
       expect(go('/go#')).toBe('/');

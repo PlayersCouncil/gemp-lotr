@@ -24,13 +24,20 @@ function targetOf(fragment: string | null): { route: string } | { page: string }
  */
 export const legacyHallLink: CanActivateFn = (_route, state): UrlTree | boolean => {
   const router = inject(Router);
-  const target = targetOf(router.parseUrl(state.url).fragment);
+  const asked = router.parseUrl(state.url);
+  const target = targetOf(asked.fragment);
   if ('page' in target) {
     inject(PageNavigation).go(target.page);
     return false;
   }
-  return router.parseUrl(target.route);
+  return withQuery(router.parseUrl(target.route), asked);
 };
+
+/** `tree` with the query the old address came with (`?participantId=`, an admin acting as a player) kept. */
+function withQuery(tree: UrlTree, asked: UrlTree): UrlTree {
+  tree.queryParams = { ...asked.queryParams, ...tree.queryParams };
+  return tree;
+}
 
 /**
  * `start#<legacy fragment>`: what the site's start page leads to. A logged-in player goes to the hall (to the place
@@ -41,7 +48,8 @@ export const startPage: CanActivateFn = async (_route, state): Promise<UrlTree |
   const router = inject(Router);
   const players = inject(PlayerInfo);
   const navigation = inject(PageNavigation);
-  const target = targetOf(router.parseUrl(state.url).fragment);
+  const asked = router.parseUrl(state.url);
+  const target = targetOf(asked.fragment);
   let loggedIn = true;
   try {
     loggedIn = (await players.whoAmI()) !== null;
@@ -50,11 +58,13 @@ export const startPage: CanActivateFn = async (_route, state): Promise<UrlTree |
   }
   if (!loggedIn) {
     const back = 'route' in target && target.route !== '/' ? target.route : null;
-    return router.createUrlTree(['/login'], { queryParams: back === null ? {} : { return: back } });
+    return router.createUrlTree(['/login'], {
+      queryParams: { ...asked.queryParams, ...(back === null ? {} : { return: back }) },
+    });
   }
   if ('page' in target) {
     navigation.go(target.page);
     return false;
   }
-  return router.parseUrl(target.route);
+  return withQuery(router.parseUrl(target.route), asked);
 };
