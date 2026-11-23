@@ -12,6 +12,7 @@ import { provideFakeNotifier } from '../../testing/fake-notifier';
 import { DeckbuilderPageComponent } from '../deckbuilder/deckbuilder-page.component';
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
+import { instanceOf } from '../../testing/matchers';
 
 describe('app routes', () => {
   let loginCheck: () => Observable<string>;
@@ -40,7 +41,7 @@ describe('app routes', () => {
   beforeEach(async () => (harness = await RouterTestingHarness.create()));
 
   async function open(url: string) {
-    const page = await harness.navigateByUrl(url);
+    const page = (await harness.navigateByUrl(url)) as unknown;
     return { page, url: TestBed.inject(Router).url };
   }
 
@@ -56,7 +57,7 @@ describe('app routes', () => {
   });
 
   it('sends the app root and unknown addresses to the deck builder', async () => {
-    expect(await open('/')).toEqual({ page: expect.any(DeckbuilderPageComponent), url: '/deckbuilder' });
+    expect(await open('/')).toEqual({ page: instanceOf(DeckbuilderPageComponent), url: '/deckbuilder' });
     expect((await open('/no/such/page?theme=classic')).url).toBe('/deckbuilder?theme=classic');
   });
 

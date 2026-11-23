@@ -13,6 +13,7 @@ import { DeckEditing } from '../../../core/deck/deck-editing.service';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { CollectionGridComponent } from './collection-grid.component';
+import { containing, instanceOf } from '../../../testing/matchers';
 
 describe('CollectionGridComponent', () => {
   let collection: CollectionBrowser;
@@ -84,8 +85,8 @@ describe('CollectionGridComponent', () => {
     const { el } = await render();
     el.querySelector<HTMLButtonElement>('.gd-card')!.click();
     expect(activate).toHaveBeenCalledWith(
-      expect.objectContaining({ kind: 'collection', role: 'card', blueprintId: '1_1' }),
-      expect.any(MouseEvent),
+      containing({ kind: 'collection', role: 'card', blueprintId: '1_1' }),
+      instanceOf(MouseEvent),
     );
   });
 

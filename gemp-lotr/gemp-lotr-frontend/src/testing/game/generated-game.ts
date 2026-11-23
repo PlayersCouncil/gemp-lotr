@@ -569,7 +569,7 @@ export function generatedGame(seed: number, rounds = 12): GameRecording {
 
   for (let round = 0; round < rounds; round++) {
     const events = [...(pending?.confirm?.() ?? []), ...game.events(pick.below(6))];
-    let next = null;
+    let next: Decision | null = null;
     for (let tries = 0; tries < 5 && !next && pick.chance(0.6); tries++) next = game.decision();
     if (next) events.push(next.event);
     if (round === rounds - 1 && !next && pick.chance(0.2)) events.push(element('EG', {}));

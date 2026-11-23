@@ -47,7 +47,7 @@ describe('DialogNotifier', () => {
       await fixture.whenStable();
       const el = fixture.nativeElement as HTMLElement;
       const dialog = el.querySelector<HTMLDialogElement>('dialog.gd-dialog')!;
-      const stable = () => fixture.whenStable();
+      const stable = (): Promise<void> => fixture.whenStable() as Promise<void>;
       return { el, dialog, stable };
     }
 

@@ -41,7 +41,7 @@ describe('deck builder dialogs', () => {
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
     const dialogs = () => Array.from(el.querySelectorAll<HTMLDialogElement>('dialog.gd-dialog'));
-    return { fixture, el, dialogs, stable: () => fixture.whenStable() };
+    return { fixture, el, dialogs, stable: (): Promise<void> => fixture.whenStable() as Promise<void> };
   }
 
   describe('deck list and library', () => {

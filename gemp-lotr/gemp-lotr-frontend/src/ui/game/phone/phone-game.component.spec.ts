@@ -12,6 +12,7 @@ import { PageCues } from '../../../core/platform/page-cues';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { GamePageComponent } from '../game-page.component';
+import { sentDecision } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const param = (name: string, ...values: string[]) =>
@@ -110,10 +111,7 @@ describe('the game on a phone (G7)', () => {
       await stable();
     };
     const sheet = () => el.querySelector('.gd-phone-sheet:not([data-sheet="actions"])');
-    const answer = () =>
-      backend
-        .match((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'))[0]
-        ?.request.body?.get('decisionValue') ?? null;
+    const answer = () => sentDecision(backend, GAME);
     return { fixture, el, stable, click, longPress, sheet, answer };
   }
 

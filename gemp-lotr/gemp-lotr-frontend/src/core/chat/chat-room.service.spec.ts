@@ -5,6 +5,7 @@ import { parseXml } from '../api/xml';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageLifetime } from '../platform/page-lifetime.service';
 import { ChatRoom, chatProblem, parseChat } from './chat-room.service';
+import { sentForm } from '../../testing/sent-form';
 
 const ROOM = '/gemp-lotr-server/chat/Game7';
 const chat = (body: string) => `<chat>${body}</chat>`;
@@ -112,10 +113,10 @@ describe('ChatRoom', () => {
     backend.expectOne((r) => r.url === ROOM && r.method === 'GET').flush(chat(''));
     room.send('one');
     room.send('two');
-    const first = backend.expectOne((r) => r.body?.get('message') === 'one');
-    backend.expectNone((r) => r.body?.get('message') === 'two');
+    const first = backend.expectOne((r) => sentForm(r).get('message') === 'one');
+    backend.expectNone((r) => sentForm(r).get('message') === 'two');
     first.flush(chat(''));
-    backend.expectOne((r) => r.body?.get('message') === 'two').flush('', { status: 403, statusText: 'x' });
+    backend.expectOne((r) => sentForm(r).get('message') === 'two').flush('', { status: 403, statusText: 'x' });
     expect(room.problem()).toContain('no permission');
   });
 });

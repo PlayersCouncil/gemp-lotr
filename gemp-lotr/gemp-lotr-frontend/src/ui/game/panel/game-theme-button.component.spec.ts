@@ -22,7 +22,7 @@ describe('GameThemeButtonComponent', () => {
   });
 
   it("switches to the next theme, named in its title, and remembers it as the game's choice", () => {
-    const replace = vi.fn();
+    const replace = vi.fn<PageCues['replace']>();
     TestBed.configureTestingModule({
       providers: [
         { provide: PAGE_PATH, useValue: '/gemp-lotr/ng/game' },
