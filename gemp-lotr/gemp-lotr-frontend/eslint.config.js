@@ -54,6 +54,8 @@ module.exports = defineConfig([
     rules: {
       // In a native <dialog>, autofocus is how the HTML standard picks the control focused when it opens
       '@angular-eslint/template/no-autofocus': 'off',
+      // No type any in the app, templates included (scripts/find-any.mjs checks the TypeScript)
+      '@angular-eslint/template/no-any': 'error',
       // <button [gdCard]>: the card component fills the button
       '@angular-eslint/template/elements-content': ['error', { allowList: ['gdCard'] }],
     },

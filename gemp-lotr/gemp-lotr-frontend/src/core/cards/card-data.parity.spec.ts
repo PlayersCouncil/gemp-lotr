@@ -15,7 +15,8 @@ const GENERATED = resolve(process.cwd(), 'src/generated/card-data.json');
  * pages see.
  */
 describe('card data parity with the legacy data files', () => {
-  const onDisk = (): Record<string, Record<string, string>> => JSON.parse(readFileSync(GENERATED, 'utf8'));
+  const onDisk = (): Record<string, Record<string, string>> =>
+    JSON.parse(readFileSync(GENERATED, 'utf8')) as Record<string, Record<string, string>>;
 
   it('is up to date (the extraction script finds nothing to change)', () => {
     expect(() => execFileSync(process.execPath, [SCRIPT, '--check'], { stdio: 'pipe' })).not.toThrow();

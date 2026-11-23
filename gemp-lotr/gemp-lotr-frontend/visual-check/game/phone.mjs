@@ -315,6 +315,26 @@ const STATES = {
       `<ge blueprintId="1_319" cardId="42" controllerId="${opponent}" hindered="false" participantId="${player}" ` +
       `timestamp="2026-11-20 00:00:00.0000" type="MCIP" zone="SUPPORT"/>`,
   },
+  /**
+   * A support row of several cards, to drag one sideways (the owner, 2026-11-23: game.html sorts them with the mouse):
+   * the player's possession 50 and three conditions put into play after it, 9501–9503.
+   */
+  supportRow: {
+    recording: 'effects-skirmish',
+    count: 25,
+    lastEvents: (_opponent, player) =>
+      [
+        ['9501', '1_16'],
+        ['9502', '1_17'],
+        ['9503', '1_7'],
+      ]
+        .map(
+          ([cardId, blueprintId]) =>
+            `<ge blueprintId="${blueprintId}" cardId="${cardId}" hindered="false" participantId="${player}" ` +
+            `timestamp="2026-11-23 00:00:00.0000" type="PCIP" zone="SUPPORT"/>`,
+        )
+        .join(''),
+  },
   /** Threats on the player (2 of the 3 the fellowship can take) and the Shadow holding the initiative. */
   threats: {
     recording: 'effects-skirmish',

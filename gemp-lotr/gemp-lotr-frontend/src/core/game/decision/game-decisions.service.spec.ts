@@ -7,6 +7,7 @@ import { provideGameState } from '../game-state';
 import { GameSession } from '../session/game-session.service';
 import { GameSettings } from '../settings/game-settings';
 import { GameDecisions, SELECTION_DEBOUNCE_MS, UNASSIGNED_QUESTION } from './game-decisions.service';
+import { sentDecision } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const param = (name: string, ...values: string[]) =>
@@ -51,8 +52,7 @@ describe('GameDecisions', () => {
 
   /** The answer sent, or null if none. */
   function answer(): string | null {
-    const sent = backend.match((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'));
-    return sent.length ? (sent[0]!.request.body?.get('decisionValue') ?? null) : null;
+    return sentDecision(backend, GAME);
   }
 
   const at = { x: 1, y: 2 };

@@ -6,6 +6,14 @@ import { inject, Injectable } from '@angular/core';
  * what only a page holds and must survive a reload (D10 of trymarz/gemp-lotr-private#27). Storage that is missing or
  * full (a private window, a browser setting) makes it forget quietly: the page then simply starts afresh.
  */
+/**
+ * A list read back from the store, its items still to be checked; null when it isn't one. (Array.isArray alone would
+ * make an unknown value any[], and every item any.)
+ */
+export function storedList(value: unknown): readonly unknown[] | null {
+  return Array.isArray(value) ? (value as unknown[]) : null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SessionStore {
   private readonly storage: Storage | null = (() => {

@@ -1,6 +1,7 @@
 import { effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { readSheet, SheetEntry } from '../phone/sheet';
 import { PileName } from '../table/game-table';
+import { storedList } from '../../platform/session-store';
 import { GameSession } from './game-session.service';
 
 /** A card's open menu of actions: the card, where it was clicked, and the decision it is for (decisionKey). */
@@ -42,6 +43,9 @@ export const NO_PHONE_VIEW: PhoneView = {
  * game (GameSession.keepView), so a reload shows the page as it was left (D10 of trymarz/gemp-lotr-private#27).
  * Page-scoped.
  */
+const isString = (value: unknown): value is string => typeof value === 'string';
+const isNumber = (value: unknown): value is number => typeof value === 'number';
+
 @Injectable()
 export class GameViewState {
   private readonly session = inject(GameSession);
@@ -96,10 +100,10 @@ export class GameViewState {
         blueprintId: info.blueprintId,
       });
     }
-    const order = saved['cardOrder'];
-    if (Array.isArray(order)) this.cardOrder.set(order.filter((id): id is string => typeof id === 'string'));
-    const dialogs = saved['pileDialogs'];
-    if (Array.isArray(dialogs)) {
+    const order = storedList(saved['cardOrder']);
+    if (order) this.cardOrder.set(order.filter(isString));
+    const dialogs = storedList(saved['pileDialogs']);
+    if (dialogs) {
       this.pileDialogs.set(
         dialogs.filter(
           (d): d is { pile: PileName; player: string } =>
@@ -108,8 +112,8 @@ export class GameViewState {
         ),
       );
     }
-    const sheets = saved['sheets'];
-    if (Array.isArray(sheets)) this.sheets.set(sheets.flatMap((entry) => readSheet(entry) ?? []));
+    const sheets = storedList(saved['sheets']);
+    if (sheets) this.sheets.set(sheets.flatMap((entry) => readSheet(entry) ?? []));
     const phone = saved['phone'] as Partial<PhoneView> | null | undefined;
     if (phone && typeof phone === 'object') {
       const rows = phone.rows && typeof phone.rows === 'object' ? phone.rows : {};
@@ -118,12 +122,12 @@ export class GameViewState {
         rows: Object.fromEntries(Object.entries(rows).filter(([, left]) => typeof left === 'number')),
         closedOffer: typeof phone.closedOffer === 'string' ? phone.closedOffer : null,
         chatSeen: typeof phone.chatSeen === 'number' ? phone.chatSeen : 0,
-        unfolded: Array.isArray(phone.unfolded) ? phone.unfolded.filter((key) => typeof key === 'string') : [],
-        openUnder: Array.isArray(phone.openUnder) ? phone.openUnder.filter((id) => typeof id === 'string') : [],
+        unfolded: storedList(phone.unfolded)?.filter(isString) ?? [],
+        openUnder: storedList(phone.openUnder)?.filter(isString) ?? [],
       });
     }
-    const piles = saved['openPiles'];
-    if (Array.isArray(piles)) this.openPiles.set(piles.filter((index) => typeof index === 'number'));
+    const piles = storedList(saved['openPiles']);
+    if (piles) this.openPiles.set(piles.filter(isNumber));
     const menu = saved['menu'] as Partial<SavedMenu> | null | undefined;
     if (
       menu &&

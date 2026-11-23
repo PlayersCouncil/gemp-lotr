@@ -4,7 +4,9 @@
 // and a tablet upright (the phone layout), a computer and a low phone held sideways (the computer layout), and what
 // the page shows is checked: hindered cards lie face down with their numbers hidden, turned up they show them again
 // once the stats name them, tokens are drawn on their cards, a moved card lies under its new bearer, a controlled site
-// in its controller's support, threats and the initiative in the status, a revealed hand opens with its cards.
+// in its controller's support, threats and the initiative in the status, a revealed hand opens with its cards; and,
+// on a computer, a support card dragged sideways with the mouse moves in its row as in game.html, and stays there after
+// a reload (the owner, 2026-11-23).
 //
 //   node game/mechanics.mjs [--only hindered,tokens,...] [--devices phone,tablet,computer,phone-sideways]
 //                           [--out report-game-mechanics]
@@ -116,9 +118,20 @@ function cardProblems(cards, want) {
 
 // --- The mechanics ---
 
+/** The cards of a row, left to right: the ids given, as the page places them (by their left edge). */
+const rowOrder = (cards, ids) =>
+  ids
+    .filter((id) => cards[id]?.shown)
+    .sort((a, b) => cards[a].box.x - cards[b].box.x)
+    .join(' ');
+
+const SUPPORT_ROW = ['50', '9501', '9502', '9503'];
+
 /**
- * Each mechanic: the prepared state that shows it (phone.mjs STATES), what is done first (`open`, by layout), and
- * what must be true of it (`expect`, given what the page shows and, with `baseline`, what it showed before the change).
+ * Each mechanic: the prepared state that shows it (phone.mjs STATES), what is done first (`open`, by layout, then
+ * `act`, given the page and its cards), and what must be true of it (`expect`, given what the page shows, `start`: its
+ * cards before `act`, `reloaded`: its cards after a reload that follows `act`, and, with `baseline`, what it showed
+ * before the change). `devices`: only these devices (a mouse gesture: the computer).
  */
 export const MECHANICS = [
   {
@@ -215,6 +228,37 @@ export const MECHANICS = [
         .map((id) => `the revealed card ${id} isn't shown once the piles are opened`),
   },
   {
+    name: 'supportDrag',
+    state: 'supportRow',
+    what:
+      'a support card dragged sideways with the mouse, two card widths to the right: it moves two places in its row, ' +
+      'as in game.html (gameUi.js dragContinuesCardFunction), and keeps its place after a reload',
+    devices: ['computer'],
+    act: async (page, cards) => {
+      const box = cards[50]?.box;
+      if (!box) return;
+      const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+      await page.mouse.move(start.x, start.y);
+      await page.mouse.down();
+      for (let step = 1; step <= 12; step++) {
+        await page.mouse.move(start.x + ((box.width * 2 + 10) * step) / 12, start.y);
+      }
+      await page.mouse.up();
+    },
+    reload: true,
+    expect: ({ cards, start, reloaded }) => {
+      const want = { start: '50 9501 9502 9503', moved: '9501 9502 50 9503' };
+      const problems = [];
+      if (rowOrder(start, SUPPORT_ROW) !== want.start)
+        problems.push(`before the drag the row is "${rowOrder(start, SUPPORT_ROW)}", wanted "${want.start}"`);
+      if (rowOrder(cards, SUPPORT_ROW) !== want.moved)
+        problems.push(`after the drag the row is "${rowOrder(cards, SUPPORT_ROW)}", wanted "${want.moved}"`);
+      if (rowOrder(reloaded, SUPPORT_ROW) !== want.moved)
+        problems.push(`after a reload the row is "${rowOrder(reloaded, SUPPORT_ROW)}", wanted "${want.moved}"`);
+      return problems;
+    },
+  },
+  {
     name: 'metaSite',
     what:
       "an RTMD meta-site in support: game.html draws the visual card's picture with the modifier's bottom over it " +
@@ -233,7 +277,7 @@ export const MECHANICS = [
 ];
 
 /** What the page shows of a mechanic's state on a device: its cards and status, after opening what it opens. */
-async function look(browser, device, stateName, open) {
+async function look(browser, device, stateName, { open, act, reload } = {}) {
   const state = mechanicState(stateName);
   const shown = await openPhone(browser, SIZES[device] ? 'phone' : device, state, state.count, {
     viewport: SIZES[device],
@@ -248,10 +292,24 @@ async function look(browser, device, stateName, open) {
       else await target.click();
       await shown.settle();
     }
+    const start = await shown.page.evaluate(readCards);
+    if (act) {
+      await act(shown.page, start);
+      await shown.settle();
+    }
+    const cards = await shown.page.evaluate(readCards);
+    const screen = await shown.page.screenshot();
+    let reloaded = {};
+    if (reload) {
+      await shown.reload();
+      reloaded = await shown.page.evaluate(readCards);
+    }
     return {
-      cards: await shown.page.evaluate(readCards),
+      start,
+      cards,
+      reloaded,
       status: await shown.page.evaluate(readStatus),
-      screen: await shown.page.screenshot(),
+      screen,
       errors: shown.errors,
     };
   } finally {
@@ -398,9 +456,9 @@ async function main() {
   const checks = [];
   try {
     for (const mechanic of mechanics) {
-      for (const device of devices) {
+      for (const device of devices.filter((one) => !mechanic.devices || mechanic.devices.includes(one))) {
         const name = `${mechanic.name}-${device}`;
-        const now = await look(browser, device, mechanic.name, mechanic.open);
+        const now = await look(browser, device, mechanic.state ?? mechanic.name, mechanic);
         const before = mechanic.baseline ? (await look(browser, device, mechanic.baseline)).cards : {};
         const problems = [...now.errors.map((error) => `page error: ${error}`), ...mechanic.expect({ ...now, before })];
         fs.writeFileSync(path.join(OUT, `${name}.png`), now.screen);

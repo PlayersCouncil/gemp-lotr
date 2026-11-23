@@ -4,6 +4,7 @@ import { CardViews } from '../cards/card-views.service';
 import { FoilSetting } from '../platform/foil-setting';
 import { pileStacks, raceCardView, slotCards } from './deck-cards';
 import { addDrawCopy, addToSlot, EMPTY_DECK } from './deck-model';
+import { containing } from '../../testing/matchers';
 
 describe('deck cards', () => {
   beforeEach(() =>
@@ -20,9 +21,9 @@ describe('deck cards', () => {
     deck = addToSlot(deck, 'sites', '1_320');
     const [ringBearer] = slotCards(deck, 'ringBearer', options());
     expect(ringBearer).toEqual(
-      expect.objectContaining({ role: 'card', horizontal: false, border: true, count: null, overlayImage: null }),
+      containing({ role: 'card', horizontal: false, border: true, count: null, overlayImage: null }),
     );
-    expect(ringBearer.ref).toEqual(expect.objectContaining({ kind: 'slot', slot: 'ringBearer', blueprintId: '1_290' }));
+    expect(ringBearer.ref).toEqual(containing({ kind: 'slot', slot: 'ringBearer', blueprintId: '1_290' }));
     const sites = slotCards(deck, 'sites', options());
     expect(sites.map((site) => [site.ref.blueprintId, site.horizontal, site.wholePixels])).toEqual([
       ['1_319', true, true],

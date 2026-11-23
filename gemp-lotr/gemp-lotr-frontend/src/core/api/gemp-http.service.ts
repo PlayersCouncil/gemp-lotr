@@ -30,7 +30,7 @@ function toXml(text: string): Document {
 
 function toJson(text: string): unknown {
   try {
-    return JSON.parse(text);
+    return JSON.parse(text) as unknown;
   } catch (error) {
     throw ApiError.from(error);
   }

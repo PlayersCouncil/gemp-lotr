@@ -1,3 +1,4 @@
+import { storedList } from '../../platform/session-store';
 import { PileName } from '../table/game-table';
 
 /** What a sheet of the phone layout shows. */
@@ -33,7 +34,7 @@ export function readSheet(value: unknown): SheetEntry | null {
   const sheet = entry?.sheet;
   if (!sheet || typeof sheet['kind'] !== 'string' || !SHEET_KINDS.includes(sheet['kind'])) return null;
   const top = typeof entry.scroll?.top === 'number' ? entry.scroll.top : 0;
-  const rows = Array.isArray(entry.scroll?.rows) ? entry.scroll.rows.filter((n) => typeof n === 'number') : [];
+  const rows = storedList(entry.scroll?.rows)?.filter((n): n is number => typeof n === 'number') ?? [];
   const scroll = { top, rows };
   switch (sheet['kind']) {
     case 'piles':

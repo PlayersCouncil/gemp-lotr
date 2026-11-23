@@ -161,7 +161,7 @@ export class ThemeService {
       if (this.page?.reloadForNoViewport && window) {
         const address = new URL(window.location.href);
         address.searchParams.delete('theme');
-        window.history.replaceState(window.history.state, '', address.toString());
+        window.history.replaceState(window.history.state as unknown, '', address.toString());
       }
     }
     const cookie = this.page?.cookie ?? THEME_COOKIE;
