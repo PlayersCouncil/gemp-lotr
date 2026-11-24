@@ -38,6 +38,20 @@ function tools(context, page, server) {
       throw new Failed(`${selector} is not shown`);
     }
   };
+  /**
+   * Reads until what is read is right, or the wait runs out. The page redraws after an answer in its own time, so
+   * something read once, straight after the click that changes it, is sometimes read too soon.
+   */
+  const eventually = async (read, isRight, wrong) => {
+    const until = Date.now() + WAIT;
+    for (;;) {
+      const actual = await read();
+      if (isRight(actual)) return;
+      if (Date.now() >= until) throw new Failed(wrong(actual));
+      await page.waitForTimeout(50);
+    }
+  };
+  const same = (expected) => (actual) => JSON.stringify(actual) === JSON.stringify(expected);
   return {
     page,
     server,
@@ -52,26 +66,35 @@ function tools(context, page, server) {
     },
     text: async (selector, expected) => {
       await visible(selector);
-      const actual = (await page.locator(selector).first().innerText()).replace(/\s+/g, ' ').trim();
-      if (actual !== expected) throw new Failed(`${selector} reads "${actual}", not "${expected}"`);
+      await eventually(
+        async () => (await page.locator(selector).first().innerText()).replace(/\s+/g, ' ').trim(),
+        same(expected),
+        (actual) => `${selector} reads "${actual}", not "${expected}"`,
+      );
     },
     texts: async (selector, expected) => {
       await visible(selector);
-      const actual = (await page.locator(selector).allInnerTexts()).map((t) => t.trim());
-      if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-        throw new Failed(`${selector}: ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`);
-      }
+      await eventually(
+        async () => (await page.locator(selector).allInnerTexts()).map((t) => t.trim()),
+        same(expected),
+        (actual) => `${selector}: ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`,
+      );
     },
     attribute: async (selector, name, expected) => {
       await visible(selector);
-      const actual = await page.locator(selector).first().getAttribute(name);
-      if (actual !== expected)
-        throw new Failed(`${selector} [${name}] is ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`);
+      await eventually(
+        () => page.locator(selector).first().getAttribute(name),
+        same(expected),
+        (actual) => `${selector} [${name}] is ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`,
+      );
     },
     disabled: async (selector, expected = true) => {
       await visible(selector);
-      const actual = await page.locator(selector).first().isDisabled();
-      if (actual !== expected) throw new Failed(`${selector} is ${actual ? '' : 'not '}disabled`);
+      await eventually(
+        () => page.locator(selector).first().isDisabled(),
+        same(expected),
+        (actual) => `${selector} is ${actual ? '' : 'not '}disabled`,
+      );
     },
     click: async (selector) => {
       await visible(selector);
@@ -84,8 +107,11 @@ function tools(context, page, server) {
     /** An input's value. */
     value: async (selector, expected) => {
       await visible(selector);
-      const actual = await page.locator(selector).first().inputValue();
-      if (actual !== expected) throw new Failed(`${selector} holds "${actual}", not "${expected}"`);
+      await eventually(
+        () => page.locator(selector).first().inputValue(),
+        same(expected),
+        (actual) => `${selector} holds "${actual}", not "${expected}"`,
+      );
     },
     /**
      * The browser arrives within the wait at `where`: a path of the stub's (one of several, given an array), with the
