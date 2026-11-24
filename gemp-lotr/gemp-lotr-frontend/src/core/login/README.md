@@ -39,8 +39,10 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
 
 The page asks GET `/gemp-lotr-server/argonauth/session` first (core/session `PcSessionService`, see PC-ACCOUNT.md) and
 draws the form's place once it has answered. In `test` mode, or when the server gives no session, the page is as
-above. In `optional` mode, for nobody, the Register button and form are gone: in their place a line for new players
-(NEW_PLAYERS) and "Sign in with PC Account", a link to `/gemp-lotr-server/argonauth/login` carrying the page's
-`return`. A signed-in PC account, or a password login, gets the alias list (`gd-alias-list`, core/session `AliasList`)
+above. In `optional` mode, for nobody, the page is two columns with a rule between them (Ketura's layout): "Legacy
+Login", the login form without Register (registering is through a PC account there) with the forgotten-password line
+under it, and "PC SSO", with "Sign in with PC Account" and "Register PC Account" stacked: links to
+`/gemp-lotr-server/argonauth/login`, the second with `register=1`, both carrying the page's `return`. They stack on a
+narrow window. A signed-in PC account, or a password login, gets the alias list (`gd-alias-list`, core/session `AliasList`)
 in the form's place. `?pc=cancelled` and `?pc=failed` are a line above (`pcNotice`); `?open=create|link` opens that
 form of the list.

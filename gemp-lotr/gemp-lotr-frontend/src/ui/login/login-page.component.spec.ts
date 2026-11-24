@@ -364,26 +364,54 @@ describe('LoginPageComponent and the PC account', () => {
     expect(query('gd-alias-list')).toBeNull();
   });
 
-  it('offers "Sign in with PC Account" where Register was, in optional mode, for nobody', async () => {
+  it('lays out Legacy Login and PC SSO side by side, in optional mode, for nobody', async () => {
     setUp();
-    const { query } = await render('argonauth-session-nobody.json');
-    expect(query('.gd-button[data-action="register"]')).toBeNull();
-    const intro = query('.gd-login__intro')!;
-    expect(intro.hasAttribute('data-pc')).toBe(true);
-    expect(intro.textContent).toContain('New players: sign in with a PC Account, then create your Gemp alias.');
-    const link = query('a.gd-button[data-action="pc-login"]')!;
-    expect(link.textContent!.trim()).toBe('Sign in with PC Account');
-    expect(link.getAttribute('href')).toBe('/gemp-lotr-server/argonauth/login');
-    expect(query('.gd-login__input[name="password"]')).not.toBeNull();
-    expect(query('.gd-button[data-action="submit"]')!.textContent!.trim()).toBe('Login');
+    const { query, el } = await render('argonauth-session-nobody.json');
+    const columns = query('.gd-login__columns')!;
+    expect(Array.from(columns.children).map((child) => `${child.localName}.${child.className}`)).toEqual([
+      'section.gd-login__column',
+      'div.gd-login__rule',
+      'section.gd-login__column',
+    ]);
+    const [legacy, sso] = Array.from(columns.querySelectorAll<HTMLElement>('section.gd-login__column'));
+    expect([legacy.dataset['column'], sso.dataset['column']]).toEqual(['legacy', 'sso']);
+    expect(legacy.querySelector('h2.gd-login__heading')!.textContent).toBe('Legacy Login');
+    expect(legacy.getAttribute('aria-labelledby')).toBe(legacy.querySelector('h2')!.id);
+    expect(sso.querySelector('h2.gd-login__heading')!.textContent).toBe('PC SSO');
+    expect(sso.getAttribute('aria-labelledby')).toBe(sso.querySelector('h2')!.id);
+    // Legacy Login: the fields, Login and the forgotten-password line; no Register, no line for new players
+    const form = legacy.querySelector('form.gd-login__form')!;
+    expect(form.querySelector('.gd-login__input[name="login"]')).not.toBeNull();
+    expect(form.querySelector('.gd-login__input[name="password"]')).not.toBeNull();
+    expect(form.querySelector('[data-action="submit"]')!.textContent!.trim()).toBe('Login');
+    expect(form.querySelector('.gd-login__forgot')).not.toBeNull();
+    expect(query('.gd-login__intro')).toBeNull();
+    expect(query('[data-action="register"]')).toBeNull();
+    expect(el.textContent).not.toContain('New players');
+    // PC SSO: two links, stacked
+    const links = Array.from(sso.querySelectorAll<HTMLAnchorElement>('.gd-login__sso > a.gd-button'));
+    expect(links.map((link) => [link.dataset['action'], link.textContent!.trim(), link.getAttribute('href')])).toEqual([
+      ['pc-login', 'Sign in with PC Account', '/gemp-lotr-server/argonauth/login'],
+      ['pc-register', 'Register PC Account', '/gemp-lotr-server/argonauth/login?register=1'],
+    ]);
   });
 
-  it("carries the page's return place into the PC sign-in", async () => {
+  it("carries the page's return place into both PC links", async () => {
     setUp('?return=%2Fevents%2Fleagues');
     const { query } = await render('argonauth-session-nobody.json');
     expect(query('[data-action="pc-login"]')!.getAttribute('href')).toBe(
       '/gemp-lotr-server/argonauth/login?return=%2Fevents%2Fleagues',
     );
+    expect(query('[data-action="pc-register"]')!.getAttribute('href')).toBe(
+      '/gemp-lotr-server/argonauth/login?register=1&return=%2Fevents%2Fleagues',
+    );
+  });
+
+  it('draws no columns in test mode', async () => {
+    setUp();
+    const { query } = await render('argonauth-session-test.json');
+    expect(query('.gd-login__columns')).toBeNull();
+    expect(query('.gd-login__panel > form.gd-login__form .gd-login__intro')).not.toBeNull();
   });
 
   it.each([

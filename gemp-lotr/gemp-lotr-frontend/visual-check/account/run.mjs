@@ -169,18 +169,56 @@ const SCENARIOS = [
   // ---- the login page in optional mode
   {
     name: 'optional-nobody',
-    note: 'optional mode, nobody: Sign in with PC Account, no registration form',
+    note: 'optional mode, nobody: Legacy Login beside PC SSO (Sign in, Register), no registration form',
     server: { session: 'argonauth-session-nobody.json' },
     run: async (t) => {
       await t.open(`${NG}login?return=%2Fevents%2Fleagues`);
       await t.text('[data-action="pc-login"]', 'Sign in with PC Account');
       await t.attribute('[data-action="pc-login"]', 'href', `${SIGN_IN}?return=%2Fevents%2Fleagues`);
-      await t.visible('.gd-login__intro[data-pc]');
+      await t.text('.gd-login__column[data-column="legacy"] .gd-login__heading', 'Legacy Login');
+      await t.text('.gd-login__column[data-column="sso"] .gd-login__heading', 'PC SSO');
+      await t.text('[data-action="pc-register"]', 'Register PC Account');
+      await t.attribute('[data-action="pc-register"]', 'href', `${SIGN_IN}?register=1&return=%2Fevents%2Fleagues`);
+      await t.visible('.gd-login__column[data-column="legacy"] .gd-login__forgot');
+      await t.absent('.gd-login__intro');
       await t.absent('[data-action="register"]');
       await t.absent('.gd-login__input[name="password-repeated"]');
       await t.visible('.gd-login__input[name="password"]');
       await t.click('[data-action="pc-login"]');
       await t.arrives('/gemp-lotr-server/argonauth/login', '?return=%2Fevents%2Fleagues');
+    },
+  },
+  {
+    name: 'optional-columns',
+    note: 'the two columns: side by side at 1366 and 1024 (tops level, the rule as tall as both), stacked at 600',
+    server: { session: 'argonauth-session-nobody.json' },
+    run: async (t) => {
+      const box = (selector) => t.page.locator(selector).first().boundingBox();
+      for (const width of [1366, 1024]) {
+        await t.page.setViewportSize({ width, height: 768 });
+        await t.open(`${NG}login`);
+        await t.visible('.gd-login__columns');
+        const [legacy, rule, sso] = await Promise.all(
+          ['[data-column="legacy"]', '.gd-login__rule', '[data-column="sso"]'].map(box),
+        );
+        if (Math.abs(legacy.y - sso.y) > 1)
+          throw new Failed(`${width}: the columns' tops differ (${legacy.y}, ${sso.y})`);
+        if (!(legacy.x + legacy.width <= rule.x && rule.x + rule.width <= sso.x)) {
+          throw new Failed(`${width}: the columns are not side by side either side of the rule`);
+        }
+        if (rule.height < Math.max(legacy.height, sso.height) - 1) throw new Failed(`${width}: the rule is too short`);
+        if (sso.x + sso.width > width) throw new Failed(`${width}: PC SSO runs off the window`);
+      }
+      await t.page.setViewportSize({ width: 600, height: 900 });
+      await t.open(`${NG}login`);
+      await t.visible('.gd-login__columns');
+      const [legacy, rule, sso] = await Promise.all(
+        ['[data-column="legacy"]', '.gd-login__rule', '[data-column="sso"]'].map(box),
+      );
+      if (!(legacy.y + legacy.height <= rule.y && rule.y + rule.height <= sso.y)) {
+        throw new Failed('600: the columns are not stacked either side of the rule');
+      }
+      if (rule.height > 2 || rule.width < 50) throw new Failed('600: the rule is not across');
     },
   },
   {
