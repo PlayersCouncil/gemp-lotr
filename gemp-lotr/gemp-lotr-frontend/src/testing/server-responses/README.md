@@ -76,7 +76,7 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   `recent` maps the page doesn't read.
 - Written by hand from `gemp-lotr/PC-ACCOUNT.md` ("The Server's Addresses"), the contract the client is built
   against, before the server had them (values made up), for the PC account: GET /argonauth/session as
-  `argonauth-session.json` (the document's own example: a PC account playing one alias, another busy, `blockedBy`),
+  `argonauth-session.json` (the document's own example: a PC account playing an alias that is busy, so `blockedBy` names it),
   `argonauth-session-test.json` (`test` mode, a password login), `argonauth-session-nobody.json` (`optional`,
   nobody), `argonauth-session-password.json` and `argonauth-session-password-linked.json` (a password login, its
   account not linked and linked), `argonauth-session-aliases.json` (a PC account with three aliases and none played),

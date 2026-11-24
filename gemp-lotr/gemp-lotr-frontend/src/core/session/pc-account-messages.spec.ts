@@ -89,7 +89,9 @@ describe('pcNotice', () => {
 describe('the alias list wording', () => {
   it('names the account, the busy alias and the page', () => {
     expect(signedInAs('Frodo Baggins')).toBe('Signed in as Frodo Baggins');
-    expect(blockedReason('Underhill')).toBe('Underhill is still playing: only it can be entered.');
+    expect(blockedReason('Underhill')).toBe(
+      'Underhill is in a game, queue, table or tournament: finish or leave it to switch.',
+    );
     expect(pageLine(2, 3)).toBe('Page 2 of 3');
   });
 });

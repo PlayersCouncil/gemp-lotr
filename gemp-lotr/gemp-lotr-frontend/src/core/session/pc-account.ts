@@ -16,7 +16,10 @@ export interface PcAccount {
   readonly fresh: boolean;
 }
 
-/** A Gemp account of the PC account. `busy`: at a table, in a queue, in a running tournament or in a game. */
+/**
+ * A Gemp account of the PC account. `busy`: at a table, in a queue, in a running tournament or in a game, in whatever
+ * browser; shown, and gating nothing by itself (see `blockedBy`).
+ */
 export interface Alias {
   readonly id: number;
   readonly name: string;
@@ -35,8 +38,10 @@ export interface PcSession {
   readonly linked: boolean | null;
   readonly aliases: readonly Alias[];
   /**
-   * A busy alias of the PC account (the one played included), or null: while set, only it can be entered, and no alias
-   * can be created. Linking still can.
+   * `player`, when a PC account is signed in and the alias this browser plays is busy (at a table, in a queue, in a
+   * running tournament or in a game), else null. While set, this browser can enter only that alias and create none;
+   * linking and logging out still can. The switching gate is each browser's own: another alias busy elsewhere gates
+   * nothing.
    */
   readonly blockedBy: string | null;
 }
@@ -90,7 +95,7 @@ export function parsePcSession(json: unknown): PcSession {
   };
 }
 
-/** Whether `alias` can be entered: always, unless an alias is busy (`blockedBy`) and it is not that one. */
+/** Whether `alias` can be entered: always, unless this browser's alias is busy (`blockedBy`) and it is not that one. */
 export function canEnter(session: PcSession, alias: Alias): boolean {
   return session.blockedBy === null || session.blockedBy === alias.name;
 }

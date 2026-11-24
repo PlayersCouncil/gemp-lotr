@@ -225,11 +225,14 @@ const SCENARIOS = [
   },
   {
     name: 'gate',
-    note: 'another alias busy: only it can be entered, and none created',
+    note: "this browser's alias busy: only it can be entered, none created, linking still can",
     server: { session: 'argonauth-session.json' },
     run: async (t) => {
       await t.open(`${NG}login`);
-      await t.text('.gd-alias-list__blocked', 'Underhill is still playing: only it can be entered.');
+      await t.text(
+        '.gd-alias-list__blocked',
+        'Underhill is in a game, queue, table or tournament: finish or leave it to switch.',
+      );
       await t.disabled(ENTER('Frodo'));
       await t.disabled(ENTER('Underhill'), false);
       await t.disabled(ACTION('create'));
@@ -240,16 +243,23 @@ const SCENARIOS = [
     },
   },
   {
-    name: 'gate-current',
-    note: 'the alias played is the busy one: it alone can be entered, none created, linking still can',
-    server: { session: { ...read('argonauth-session.json'), blockedBy: 'Frodo' } },
+    name: 'busy-elsewhere',
+    note: 'an alias busy in another browser gates nothing here: it is only tagged',
+    server: {
+      session: {
+        ...read('argonauth-session-aliases.json'),
+        aliases: read('argonauth-session-aliases.json').aliases.map((a) => ({ ...a, busy: a.name === 'Underhill' })),
+      },
+    },
     run: async (t) => {
       await t.open(`${NG}login`);
-      await t.text('.gd-alias-list__blocked', 'Frodo is still playing: only it can be entered.');
+      await t.texts(`${ALIAS('Underhill')} .gd-alias-list__tag`, ['playing']);
+      await t.absent('.gd-alias-list__blocked');
       await t.disabled(ENTER('Frodo'), false);
-      await t.disabled(ENTER('Underhill'));
-      await t.disabled(ACTION('create'));
-      await t.disabled(ACTION('link'), false);
+      await t.disabled(ACTION('create'), false);
+      await t.click(ENTER('Underhill'));
+      await t.arrives(HALL);
+      t.sent(['/enter playerId=900002']);
     },
   },
   {

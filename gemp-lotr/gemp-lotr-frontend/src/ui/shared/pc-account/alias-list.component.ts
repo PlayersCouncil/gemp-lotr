@@ -27,7 +27,7 @@ import {
  * The alias list (PC-ACCOUNT.md, "What A Person Does"), the same on the login page and on My Account: for a signed-in
  * PC account its name, its aliases ten to a page each with Enter Gemp, Create New Gemp Alias and Link Existing Gemp
  * Account (each opening its form under the list) and Log Out; for a password login its one account with Enter Gemp
- * and Log Out. While another alias is busy (`blockedBy`) every Enter Gemp but that alias's is disabled, and Create too,
+ * and Log Out. While the alias this browser plays is busy (`blockedBy`) every other Enter Gemp is disabled, and Create too,
  * with the reason above the list. Each refusal shows beside what it concerns. The state is AliasList's (core/session),
  * one per list; nothing is drawn until the session is known, or for anyone else (test mode, nobody).
  *

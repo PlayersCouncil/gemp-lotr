@@ -86,7 +86,7 @@ describe('AliasListComponent', () => {
     expect(query('.gd-alias-list__signed-in')!.textContent).toBe('Signed in as Frodo Baggins');
     expect(query('.gd-alias-list__aliases')!.getAttribute('aria-label')).toBe('Your Gemp aliases');
     expect(names()).toEqual(['Frodo', 'Underhill']);
-    expect(row('Frodo').hasAttribute('data-current')).toBe(true);
+    expect(row('Underhill').hasAttribute('data-current')).toBe(true);
     expect(row('Underhill').hasAttribute('data-busy')).toBe(true);
     expect(all('.gd-alias-list__tag').map((tag) => `${tag.dataset['tag']}:${tag.textContent}`)).toEqual([
       'current:current',
@@ -102,11 +102,13 @@ describe('AliasListComponent', () => {
     expect(query('form')).toBeNull();
   });
 
-  it('while another alias is busy, disables every Enter Gemp but its own, and Create, saying why', async () => {
+  it("while this browser's alias is busy, disables every other Enter Gemp, and Create, saying why", async () => {
     setUp();
     const { query, enterOf, button } = await render(readServerResponse('argonauth-session.json'));
     const reason = query('.gd-alias-list__blocked')!;
-    expect(reason.textContent).toBe('Underhill is still playing: only it can be entered.');
+    expect(reason.textContent).toBe(
+      'Underhill is in a game, queue, table or tournament: finish or leave it to switch.',
+    );
     expect(enterOf('Frodo').disabled).toBe(true);
     expect(enterOf('Frodo').getAttribute('aria-describedby')).toBe(reason.id);
     expect(enterOf('Underhill').disabled).toBe(false);

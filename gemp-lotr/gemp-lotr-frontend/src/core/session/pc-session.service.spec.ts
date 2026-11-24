@@ -110,7 +110,7 @@ describe('PcSessionService', () => {
     const result = pc.create('Merry');
     expectPost('/create').flush(readServerResponse('argonauth-session.json'));
     expect(await result).toBeNull();
-    expect(pc.session()?.player).toBe('Frodo');
+    expect(pc.session()?.player).toBe('Underhill');
     expect(channel.announced).toBe(1);
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
   });

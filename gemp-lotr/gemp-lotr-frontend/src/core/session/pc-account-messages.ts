@@ -21,9 +21,9 @@ export const ALIASES_HEADING = 'Your Gemp aliases';
 export const NO_ALIASES = 'No Gemp alias yet: create one, or link an account you had.';
 export const ALIAS_CURRENT = 'current';
 export const ALIAS_PLAYING = 'playing';
-/** Why every Enter Gemp but one is disabled, and Create too. */
+/** Why every Enter Gemp but the played alias's is disabled, and Create too (the alias is this browser's). */
 export function blockedReason(busyAlias: string): string {
-  return `${busyAlias} is still playing: only it can be entered.`;
+  return `${busyAlias} is in a game, queue, table or tournament: finish or leave it to switch.`;
 }
 
 export const PAGE_PREVIOUS = 'Previous';
@@ -44,7 +44,7 @@ export const CANCEL = 'Cancel';
 export const NO_PC_ACCOUNT = 'Your PC Account sign-in has ended. Sign in again.';
 export const NOT_LINKED = 'That alias is no longer linked to your PC Account.';
 export const ALIAS_BANNED = 'That alias is banned.';
-export const ALIAS_BUSY = 'One of your aliases is still playing.';
+export const ALIAS_BUSY = 'Your alias here is in a game, queue, table or tournament: finish or leave it to switch.';
 export const UNAVAILABLE = 'The PC Account service is not answering. Try again shortly.';
 export const INVALID_ALIAS_NAME = 'A name is 2 to 30 letters, digits, _ or -.';
 export const NAME_TAKEN = 'That name is taken.';
