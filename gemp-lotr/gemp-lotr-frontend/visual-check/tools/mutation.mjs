@@ -118,6 +118,10 @@ export const TARGETS = [
   'src/core/game/authoring/refusals.ts',
   'src/core/game/authoring/said.ts',
   'src/core/game/authoring/templates.ts',
+  'src/core/game/authoring/puzzle-settings.ts',
+  'src/core/game/authoring/puzzle-slots.ts',
+  'src/core/game/authoring/puzzle-solutions.ts',
+  'src/core/game/authoring/board-modifiers.ts',
 ];
 
 /**

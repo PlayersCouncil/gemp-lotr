@@ -1,6 +1,7 @@
 // Authoring checks: the Opponent tab, answering for the opponent where the script holds it (see ../author.mjs).
 
 import { closeDraft, newDraft, sleep, ui, until } from './lib.mjs';
+import { changed, reloaded, source } from './puzzles.mjs';
 
 /** Sam beside Frodo, two Goblin Runners in the opponent's hand. */
 const TABLE = {
@@ -117,6 +118,40 @@ export const checks = {
     await sleep(300);
     await seat.settled();
     await seat.shot('assigned');
+    await closeDraft(seat);
+  },
+
+  /** The eager and bot fallbacks chosen in the Opponent tab, each option saying what it does: draft, file, reload. */
+  async 'opponent-eager-bot'({ seat }, problems) {
+    await newDraft(seat, { title: 'Fallback check', top: TABLE });
+    const page = seat.page;
+    await seat.showTab('opponent');
+    const fallback = `${ui.opponent} gd-author-select[data-part="fallback"] select`;
+    const titles = await page
+      .locator(`${fallback} option`)
+      .evaluateAll((all) => all.map((one) => [one.value, one.title]));
+    for (const name of ['eager', 'bot']) {
+      const title = titles.find(([value]) => value === name)?.[1] ?? null;
+      if (title === null) problems.push(`no ${name} fallback offered`);
+      else if (title.length < 20) problems.push(`the ${name} fallback says "${title}"`);
+    }
+    await changed(
+      seat,
+      'the eager fallback',
+      () => page.locator(fallback).selectOption('eager'),
+      (now) => now.draft.opponent?.fallback === 'eager',
+    );
+    if (!(await source(seat)).includes('fallback: eager')) problems.push("the file's text lacks fallback: eager");
+    await reloaded(seat, 'opponent');
+    if ((await page.locator(fallback).inputValue()) !== 'eager') problems.push('eager is not chosen after a reload');
+    await seat.shot('eager');
+    await changed(
+      seat,
+      'the bot fallback',
+      () => page.locator(fallback).selectOption('bot'),
+      (now) => now.draft.opponent?.fallback === 'bot',
+    );
+    if (!(await source(seat)).includes('fallback: bot')) problems.push("the file's text lacks fallback: bot");
     await closeDraft(seat);
   },
 };

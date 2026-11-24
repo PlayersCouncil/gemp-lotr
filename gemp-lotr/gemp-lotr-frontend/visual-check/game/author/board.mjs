@@ -2,6 +2,7 @@
 // Ring for each seat, the stock path), gathers changes in the tab and submits them.
 
 import { closeDraft, newDraft, sleep, ui, until } from './lib.mjs';
+import { changed, reloaded, same, source } from './puzzles.mjs';
 
 const board = {
   submit: `${ui.board} button[data-action=submit]`,
@@ -244,6 +245,67 @@ export const checks = {
     if (seat.gameId() !== here) problems.push('a refused change to the board as it stands went to another game');
     if ((await gathered(page)).length !== 0) problems.push('the changes to the board as it stands stayed gathered');
     await seat.shot('now-refused');
+    await closeDraft(seat);
+  },
+
+  /**
+   * A modifier put on Frodo with mod… to the board as it stands (in force at once, carried by a step), one to the
+   * setup (setup.modifiers, a fresh game), shown after a reload, and taken off again with its ×.
+   */
+  async 'board-modifiers'({ seat }, problems) {
+    await onBoard(seat);
+    const page = seat.page;
+    const frodo = board.card('frodo');
+    await page.locator(`${frodo} button[data-action=modify]`).click();
+    await page.locator(`${frodo} gd-author-select[data-control=what] select`).selectOption('strength');
+    await page.locator(`${frodo} input[data-control=amount]`).fill('+2');
+    await page.locator(`${frodo} gd-author-select[data-control=until] select`).selectOption('turn');
+    await page.locator(`${frodo} button[data-action=add]`).click();
+    const lines = await gathered(page);
+    if (!same(lines, ['modify(frodo, strength, +2, turn)'])) problems.push(`gathered: ${JSON.stringify(lines)}`);
+    await seat.shot('gathered');
+    let state = await changed(
+      seat,
+      'the modifier to the board as it stands',
+      () => page.locator(board.submit).click(),
+      (now) => now.board?.cards.find((card) => card.alias === 'frodo')?.modifiers?.length === 1,
+    );
+    const on = state.board.cards.find((card) => card.alias === 'frodo').modifiers[0];
+    if (on.written !== 'strength +2 turn') problems.push(`Frodo has ${JSON.stringify(on)}`);
+    if (
+      !JSON.stringify([...state.pending, ...state.draft.steps.map((step) => step.do ?? '')]).includes(
+        'modify(frodo, strength, +2, turn)',
+      )
+    ) {
+      problems.push('no step carries the modifier');
+    }
+    await page.locator(board.where('setup')).check();
+    await page.locator(`${frodo} button[data-action=modify]`).click();
+    await page.locator(`${frodo} gd-author-select[data-control=what] select`).selectOption('archer');
+    await page.locator(`${frodo} button[data-action=add]`).click();
+    state = await changed(
+      seat,
+      'the modifier to the setup',
+      () => page.locator(board.submit).click(),
+      (now) => now.draft.setup?.modifiers?.frodo === 'archer',
+    );
+    if (!/frodo: archer/.test(await source(seat))) problems.push("the file's text lacks setup.modifiers");
+    await reloaded(seat, 'board');
+    const chips = await page
+      .locator(`${frodo} .gd-author-mods__chip`)
+      .evaluateAll((all) => all.map((one) => one.getAttribute('data-what')));
+    if (!same(chips, ['archer'])) problems.push(`at the setup, Frodo shows ${JSON.stringify(chips)}`);
+    await seat.shot('setup');
+    state = await changed(
+      seat,
+      'the setup modifier taken off',
+      async () => {
+        await page.locator(`${frodo} .gd-author-mods__chip[data-what=archer] button[data-action=unmodify]`).click();
+        await page.locator(board.submit).click();
+      },
+      (now) => now.draft.setup?.modifiers === undefined,
+    );
+    await page.locator(board.where('now')).check();
     await closeDraft(seat);
   },
 };
