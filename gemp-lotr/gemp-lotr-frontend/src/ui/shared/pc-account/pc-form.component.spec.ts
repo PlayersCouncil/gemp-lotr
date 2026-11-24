@@ -44,16 +44,23 @@ describe('PcFormComponent', () => {
     return { fixture, host: fixture.componentInstance, el };
   }
 
-  it('draws its fields with labels, and its buttons (DOM contract)', async () => {
+  it('draws its fields in a line, named by placeholders, and its buttons to their right (DOM contract)', async () => {
     const { el } = await render();
     expect(el.classList).toContain('gd-pc-form');
     expect(el.dataset['place']).toBe('login');
     const form = el.querySelector<HTMLFormElement>('form.gd-pc-form__form')!;
     expect([form.dataset['form'], form.getAttribute('aria-label')]).toEqual(['link', 'Link it']);
     const fields = Array.from(el.querySelectorAll<HTMLElement>('label.gd-pc-form__field'));
-    expect(fields.map((f) => [f.dataset['field'], f.querySelector('.gd-pc-form__label')!.textContent])).toEqual([
-      ['login', 'Username'],
-      ['password', 'Password'],
+    // No visible label: the field's placeholder and aria-label name it
+    expect(fields.map((f) => [f.dataset['field'], f.textContent!.trim()])).toEqual([
+      ['login', ''],
+      ['password', ''],
+    ]);
+    const line = el.querySelector('form > .gd-pc-form__line')!;
+    expect(Array.from(line.children).map((child) => child.className)).toEqual([
+      'gd-pc-form__field',
+      'gd-pc-form__field',
+      'gd-pc-form__actions',
     ]);
     const [login, password] = fields.map((f) => f.querySelector<HTMLInputElement>('input.gd-pc-form__input')!);
     expect([login.type, login.name, login.autocomplete, login.maxLength, login.value]).toEqual([
@@ -63,6 +70,10 @@ describe('PcFormComponent', () => {
       30,
       'Sam',
     ]);
+    expect([login.placeholder, login.getAttribute('aria-label')]).toEqual(['Username', 'Username']);
+    expect([password.placeholder, password.getAttribute('aria-label')]).toEqual(['Password', 'Password']);
+    // The first field takes the focus
+    expect(document.activeElement).toBe(login);
     expect(login.getAttribute('autocapitalize')).toBe('none');
     expect([password.type, password.value, password.hasAttribute('maxlength')]).toEqual(['password', '', false]);
     expect(password.hasAttribute('autocapitalize')).toBe(false);
@@ -79,13 +90,22 @@ describe('PcFormComponent', () => {
     expect(el.querySelector('.gd-pc-form__note')).toBeNull();
   });
 
-  it('says its note before the buttons', async () => {
+  it('says its note under the line, the refusal after it', async () => {
     const { fixture, host, el } = await render();
     host.note.set('Mind this.');
     await fixture.whenStable();
     const note = el.querySelector('.gd-pc-form__note')!;
     expect(note.textContent).toBe('Mind this.');
-    expect(note.nextElementSibling!.classList).toContain('gd-pc-form__actions');
+    expect(note.previousElementSibling!.classList).toContain('gd-pc-form__line');
+    host.error.set('No.');
+    await fixture.whenStable();
+    expect(note.nextElementSibling!.classList).toContain('gd-pc-form__error');
+  });
+
+  it('cancels on Escape', async () => {
+    const { host, el } = await render();
+    el.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(host.cancels).toBe(1);
   });
 
   it('passes on what is typed, the submit and Cancel; shows a refusal; waits while busy', async () => {

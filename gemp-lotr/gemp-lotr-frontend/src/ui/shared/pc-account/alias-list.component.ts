@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { AliasList } from '../../../core/session/alias-list.service';
 import { PcFormComponent, PcFormField } from './pc-form.component';
-import { Alias, ALIAS_NAME_MAX } from '../../../core/session/pc-account';
+import { Alias, ALIAS_NAME_MAX, PcSession } from '../../../core/session/pc-account';
 import {
   ALIAS_CURRENT,
   ALIAS_NAME_LABEL,
@@ -22,28 +22,35 @@ import {
   PAGE_NEXT,
   PAGE_PREVIOUS,
   pageLine,
-  signedInAs,
+  LOGGED_IN_AS,
+  SIGNED_IN_AS,
 } from '../../../core/session/pc-account-messages';
 
 /**
- * The alias list (PC-ACCOUNT.md, "What A Person Does"), the same on the login page and on My Account: for a signed-in
- * PC account its name, its aliases ten to a page each with Enter Gemp, Create New Gemp Profile and Link Existing Gemp
- * Account (each opening its form under the list) and Log Out; for a password login its one account with Enter Gemp
- * and Log Out. While the alias this browser plays is busy (`blockedBy`) every other Enter Gemp is disabled, and Create too,
- * with the reason above the list. Each refusal shows beside what it concerns. The state is AliasList's (core/session),
- * one per list; nothing is drawn until the session is known, or for anyone else (test mode, nobody).
+ * The alias list (PC-ACCOUNT.md, "What A Person Does"; on screen the aliases are "Gemp profiles"), the same on the
+ * login page and on My Account. Its first line says who is signed in ("Signed in as" the PC account's name, or for a
+ * password login "Logged in as" its account, the name in bold), with Log Out at the line's end; on the login page the
+ * sentence is centred. Then the aliases, ten to a page, each with Enter Gemp; then, further down, Create New Gemp
+ * Profile and Link Existing Gemp Account (a PC account; centred on the login page). Either opens a row at the end of
+ * the list, where the next alias would show, laid out as an alias's row: the field(s) in place of the name and the
+ * confirming button and Cancel where Enter Gemp is (`gd-pc-form`), its note and its refusal (red) under it. Only one
+ * such row is open; the page with the list's end is shown while it is. A password login has its one account, Enter
+ * Gemp and Log Out. While the alias this browser plays is busy (`blockedBy`) every other Enter Gemp is disabled, and
+ * Create too, with the reason above the list. Each refusal shows beside what it concerns. The state is AliasList's
+ * (core/session), one per list; nothing is drawn until the session is known, or for anyone else (test mode, nobody).
  *
  * DOM contract: `gd-alias-list.gd-alias-list` (`data-place` = login | account, `data-kind` = pc | password,
- * `data-busy` and `aria-busy` while a call is under way) holding `p.gd-alias-list__signed-in` (pc), then
- * `p.gd-alias-list__blocked` (`id`, while blocked), `p.gd-alias-list__refusal` (`role=alert`: a refused Enter Gemp
- * whose alias has left the list), `p.gd-alias-list__empty` (pc, no aliases),
- * `ul.gd-alias-list__aliases` (`aria-label`) of `li.gd-alias-list__alias` (`data-alias` = its name, `data-current`,
- * `data-busy`) with `span.gd-alias-list__name`, `span.gd-alias-list__tag` (`data-tag` = current | playing),
- * `button.gd-button[data-action=enter]` (`aria-describedby` the blocked line when disabled for it) and
- * `p.gd-alias-list__error` (`role=alert`, that alias's refusal); `div.gd-alias-list__pager` (more than one page:
- * `button.gd-button[data-action=previous|next]`, `span.gd-alias-list__page`); `div.gd-alias-list__actions` with
- * `button.gd-button[data-action]` = create, link (pc), logout; and with a form open `gd-pc-form` (its form's `data-form` =
- * create | link; fields `name`, or `login` and `password`; see PcFormComponent).
+ * `data-busy` and `aria-busy` while a call is under way) holding `div.gd-alias-list__head` (`p.gd-alias-list__signed-in`
+ * with `b.gd-alias-list__who`, and `button.gd-button[data-action=logout]`), then `p.gd-alias-list__blocked` (`id`,
+ * while blocked), `p.gd-alias-list__refusal` (`role=alert`: a refused Enter Gemp whose alias has left the list),
+ * `p.gd-alias-list__empty` (pc, no aliases), `ul.gd-alias-list__aliases` (`aria-label`) of `li.gd-alias-list__alias`
+ * (`data-alias` = its name, `data-current`, `data-busy`) with `span.gd-alias-list__name`, `span.gd-alias-list__tag`
+ * (`data-tag` = current | playing), `button.gd-button[data-action=enter]` (`aria-describedby` the blocked line when
+ * disabled for it) and `p.gd-alias-list__error` (`role=alert`, that alias's refusal), and last, with a row open,
+ * `li.gd-alias-list__new` (`data-form` = create | link) holding `gd-pc-form` (its form's `data-form` the same; fields
+ * `name`, or `login` and `password`; see PcFormComponent); `div.gd-alias-list__pager` (more than one page:
+ * `button.gd-button[data-action=previous|next]`, `span.gd-alias-list__page`); `div.gd-alias-list__actions` (pc) with
+ * `button.gd-button[data-action]` = create, link (`aria-expanded` while its row is open).
  */
 @Component({
   selector: 'gd-alias-list',
@@ -59,10 +66,16 @@ import {
   },
   template: `
     @if (list.session(); as session) {
-      @if (session.pcAccount; as account) {
-        <p class="gd-alias-list__signed-in">{{ signedInAs(account.name) }}</p>
-      }
       @if (kind() !== null) {
+        <div class="gd-alias-list__head">
+          <p class="gd-alias-list__signed-in">
+            <span>{{ signedIn(session) }}</span
+            >&ngsp;<b class="gd-alias-list__who">{{ who(session) }}</b>
+          </p>
+          <button type="button" class="gd-button" data-action="logout" [disabled]="list.busy()" (click)="logout()">
+            {{ text.logout }}
+          </button>
+        </div>
         @if (list.blockedBy(); as busy) {
           <p class="gd-alias-list__blocked" id="gd-alias-list-blocked">{{ blockedReason(busy) }}</p>
         }
@@ -105,6 +118,25 @@ import {
                 }
               </li>
             }
+            @if (list.form(); as form) {
+              <li class="gd-alias-list__new" [attr.data-form]="form">
+                <gd-pc-form
+                  [place]="place()"
+                  [form]="form"
+                  [label]="form === 'create' ? text.create : text.link"
+                  [fields]="form === 'create' ? createFields : linkFields"
+                  [values]="{ name: list.name(), login: list.login(), password: list.password() }"
+                  [note]="form === 'link' ? text.linkNote : null"
+                  [error]="list.formError()"
+                  [submitLabel]="form === 'create' ? text.createSubmit : text.linkSubmit"
+                  [cancelLabel]="text.cancel"
+                  [busy]="list.busy()"
+                  (valueChange)="change($event)"
+                  (submitted)="submit()"
+                  (cancelled)="list.cancel()"
+                />
+              </li>
+            }
           } @else if (session.player; as player) {
             <li class="gd-alias-list__alias" [attr.data-alias]="player" data-current>
               <span class="gd-alias-list__name">{{ player }}</span>
@@ -143,8 +175,8 @@ import {
             </button>
           </div>
         }
-        <div class="gd-alias-list__actions">
-          @if (kind() === 'pc') {
+        @if (kind() === 'pc') {
+          <div class="gd-alias-list__actions">
             <button
               type="button"
               class="gd-button"
@@ -166,27 +198,7 @@ import {
             >
               {{ text.link }}
             </button>
-          }
-          <button type="button" class="gd-button" data-action="logout" [disabled]="list.busy()" (click)="logout()">
-            {{ text.logout }}
-          </button>
-        </div>
-        @if (kind() === 'pc' && list.form(); as form) {
-          <gd-pc-form
-            [place]="place()"
-            [form]="form"
-            [label]="form === 'create' ? text.create : text.link"
-            [fields]="form === 'create' ? createFields : linkFields"
-            [values]="{ name: list.name(), login: list.login(), password: list.password() }"
-            [note]="form === 'link' ? text.linkNote : null"
-            [error]="list.formError()"
-            [submitLabel]="form === 'create' ? text.createSubmit : text.linkSubmit"
-            [cancelLabel]="text.cancel"
-            [busy]="list.busy()"
-            (valueChange)="change($event)"
-            (submitted)="submit()"
-            (cancelled)="list.cancel()"
-          />
+          </div>
         }
       }
     }
@@ -203,9 +215,11 @@ export class AliasListComponent {
     return kind === 'pc' || kind === 'password' ? kind : null;
   });
 
-  protected readonly signedInAs = signedInAs;
   protected readonly blockedReason = blockedReason;
   protected readonly pageLine = pageLine;
+  /** The first line's words, before the name: a PC account, or a password login's account. */
+  protected readonly signedIn = (session: PcSession) => (session.pcAccount ? SIGNED_IN_AS : LOGGED_IN_AS);
+  protected readonly who = (session: PcSession) => session.pcAccount?.name ?? session.player ?? '';
   protected readonly createFields: readonly PcFormField[] = [
     { name: 'name', label: ALIAS_NAME_LABEL, type: 'text', autocomplete: 'off', maxLength: ALIAS_NAME_MAX },
   ];
