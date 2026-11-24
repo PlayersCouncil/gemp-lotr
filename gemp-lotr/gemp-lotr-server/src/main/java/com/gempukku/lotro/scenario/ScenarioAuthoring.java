@@ -306,7 +306,8 @@ public class ScenarioAuthoring {
          */
         @Override
         public void passedByItself(String player, Phase phase, Step used, boolean frontier) {
-            if (!frontier || !session.recording)
+            //(while a solution is being recorded, nothing is written into the script)
+            if (!frontier || !session.recording || session.recordingSolution != null)
                 return;
             ScenarioDirector director = live.Session().Director();
             if (director.end() != null)

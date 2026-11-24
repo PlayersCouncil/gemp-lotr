@@ -119,7 +119,12 @@ public final class SlotBounds {
     static boolean finds(String filter, String blueprintId, LotroCardBlueprintLibrary library) {
         if (filter == null)
             return true;
-        return !SEARCH.process(filter, List.of(new BasicCardItem(blueprintId)), library, null).isEmpty();
+        try {
+            return !SEARCH.process(filter, List.of(new BasicCardItem(blueprintId)), library, null).isEmpty();
+        } catch (RuntimeException exp) {
+            //(a filter the search cannot read finds nothing: the validator says what is wrong with it)
+            return false;
+        }
     }
 
     /**
