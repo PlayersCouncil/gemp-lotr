@@ -26,4 +26,11 @@ public interface DecisionObserver {
      * The game has accepted an answer.  It has not yet carried on from it.
      */
     void decisionAnswered(String playerId, AwaitingDecision decision, String answer);
+
+    /**
+     * A decision that was put to a player (or was waiting to be) has been taken back unanswered: the game will ask
+     * something afresh in its place (TurnProcedure.askAgain, for a scenario's sandbox).  Nothing in an ordinary game
+     * does this.  Nothing is written in a journal for it: whatever had the decision taken back writes its own note.
+     */
+    default void decisionWithdrawn(String playerId, AwaitingDecision decision) { }
 }

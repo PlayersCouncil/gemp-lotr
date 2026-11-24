@@ -88,6 +88,19 @@ public class LoopFeedback implements UserFeedback {
         _players.atRest();
     }
 
+    /**
+     * A decision withdrawn is never answered, so it has no place in a recording, and one held for a run is not
+     * held any more.  (A decision is only withdrawn with the game at rest, which no run is.)
+     */
+    @Override
+    public void withdrawAwaitingDecision(String playerId) {
+        if (_held != null && playerId.equals(_heldPlayer)) {
+            _held = null;
+            _heldPlayer = null;
+        }
+        _players.withdrawAwaitingDecision(playerId);
+    }
+
     @Override
     public void decisionAnswered(String playerId, AwaitingDecision decision, String answer) {
         if (_recording != null && _recordable.remove(decision))

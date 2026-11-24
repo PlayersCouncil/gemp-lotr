@@ -22,4 +22,14 @@ public interface UserFeedback {
      * @param answer The answer it took.
      */
     default void decisionAnswered(String playerId, AwaitingDecision decision, String answer) { }
+
+    /**
+     * Takes back the decision a player is being asked, which is now not to be answered at all: the game will ask
+     * something afresh in its place (TurnProcedure.askAgain).  Nothing in an ordinary game does this.
+     * @param playerId The player.
+     * @throws UnsupportedOperationException from feedback that cannot (the default).
+     */
+    default void withdrawAwaitingDecision(String playerId) {
+        throw new UnsupportedOperationException("This feedback cannot withdraw a decision");
+    }
 }
