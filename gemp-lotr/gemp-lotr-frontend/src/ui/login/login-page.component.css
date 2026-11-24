@@ -18,6 +18,11 @@
   font-size: medium;
 }
 
+/* Outside test mode the page scrolls up and down, so a narrow window reaches the stacked PC SSO column */
+:host(:is([data-pc='nobody'], [data-pc='pc'], [data-pc='password'])) {
+  overflow: hidden auto;
+}
+
 /* For a theme that draws a logo; classic has none */
 .gd-login__brand {
   display: none;
@@ -171,7 +176,7 @@ a.gd-button:focus-visible {
 .gd-login__column {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   min-width: 0;
 }
 
@@ -181,8 +186,32 @@ a.gd-button:focus-visible {
   font-size: 125%;
 }
 
+/*
+ * Legacy Login's form: the labels in a column of their own and the two inputs flush (same left edge, same width); Login
+ * and the forgotten-password line centred under them, as the heading is over them
+ */
 .gd-login__column > .gd-login__form {
+  display: grid;
+  grid-template-columns: auto minmax(0, 14em);
+  align-items: center;
+  gap: 0.4em 0.5em;
   margin: 0;
+}
+
+.gd-login__column .gd-login__field {
+  display: contents;
+}
+
+.gd-login__column .gd-login__input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.gd-login__column :is(.gd-login__actions, .gd-login__forgot) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  text-align: center;
 }
 
 .gd-login__rule {
@@ -190,9 +219,9 @@ a.gd-button:focus-visible {
   background: var(--theme-widget-border);
 }
 
-/* The two PC buttons, stacked, one width */
+/* The two PC buttons, stacked, one width, centred under their heading */
 .gd-login__sso {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.6em;
@@ -201,6 +230,24 @@ a.gd-button:focus-visible {
 .gd-login__sso > .gd-button {
   margin: 0;
   text-align: center;
+}
+
+/*
+ * Outside test mode: the messages and the columns (or the profile list) in one box, the page's picture blurred
+ * through it and the bands' dark fill under the text where the browser can't blur
+ */
+.gd-login__box {
+  display: grid;
+  row-gap: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1em 2em;
+  border-radius: var(--theme-radius);
+  background: var(--theme-login-band-bg);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 @media (max-width: 720px) {
@@ -212,5 +259,9 @@ a.gd-button:focus-visible {
   .gd-login__rule {
     width: auto;
     height: 1px;
+  }
+
+  .gd-login__box {
+    padding: 1em;
   }
 }

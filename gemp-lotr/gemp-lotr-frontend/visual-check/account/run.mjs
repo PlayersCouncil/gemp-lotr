@@ -172,6 +172,7 @@ const SCENARIOS = [
       await t.open(`${NG}login`);
       await t.visible('.gd-login__form .gd-button[data-action="register"]');
       await t.absent('[data-action="pc-login"]');
+      await t.absent('.gd-login__box');
       await t.absent('gd-alias-list *');
       await t.open(`${NG}login?pc=failed`);
       await t.visible('.gd-login__form');
@@ -259,6 +260,52 @@ const SCENARIOS = [
       await t.text('.gd-login__error', 'That account is linked to a PC Account, please use that to log in.');
       await t.visible('.gd-login__form');
       t.sent(['/login login=Samwise&password=anything']);
+    },
+  },
+  {
+    name: 'optional-alignment',
+    note: 'the box: Login and Password flush, each heading centred over its column, the SSO buttons one width under theirs; inside the window down to 360',
+    server: { session: 'argonauth-session-nobody.json' },
+    run: async (t) => {
+      const box = (selector) => t.page.locator(selector).first().boundingBox();
+      const centre = (b) => b.x + b.width / 2;
+      for (const [width, height] of [
+        [1366, 768],
+        [1024, 768],
+        [390, 800],
+        [360, 800],
+      ]) {
+        await t.page.setViewportSize({ width, height });
+        await t.open(`${NG}login`);
+        await t.visible('.gd-login__box .gd-login__columns');
+        const [login, password] = await Promise.all(
+          ['.gd-login__input[name="login"]', '.gd-login__input[name="password"]'].map(box),
+        );
+        if (Math.abs(login.x - password.x) > 0.5 || Math.abs(login.width - password.width) > 0.5) {
+          throw new Failed(
+            `${width}: the inputs are not flush (${login.x}/${login.width}, ${password.x}/${password.width})`,
+          );
+        }
+        for (const column of ['legacy', 'sso']) {
+          const [heading, body] = await Promise.all([
+            box(`[data-column="${column}"] .gd-login__heading`),
+            box(column === 'legacy' ? '[data-column="legacy"] .gd-login__form' : '.gd-login__sso'),
+          ]);
+          if (Math.abs(centre(heading) - centre(body)) > 1) {
+            throw new Failed(
+              `${width}: ${column}'s heading is not centred over it (${centre(heading)}, ${centre(body)})`,
+            );
+          }
+        }
+        const [signIn, register] = await Promise.all(
+          ['[data-action="pc-login"]', '[data-action="pc-register"]'].map(box),
+        );
+        if (Math.abs(signIn.width - register.width) > 0.5 || Math.abs(signIn.x - register.x) > 0.5) {
+          throw new Failed(`${width}: the SSO buttons differ in width or place`);
+        }
+        const panel = await box('.gd-login__box');
+        if (panel.x < 0 || panel.x + panel.width > width) throw new Failed(`${width}: the box overflows the window`);
+      }
     },
   },
   {

@@ -419,9 +419,33 @@ describe('LoginPageComponent and the PC account', () => {
     );
   });
 
-  it('draws no columns in test mode', async () => {
+  it('puts the messages and the columns in one box outside test mode', async () => {
+    setUp('?pc=failed');
+    const { query } = await render('argonauth-session-nobody.json');
+    const box = query('.gd-login__panel > .gd-login__box')!;
+    expect(Array.from(box.children).map((child) => child.className)).toEqual([
+      'gd-login__status',
+      'gd-login__error',
+      'gd-login__notice',
+      'gd-login__columns',
+    ]);
+  });
+
+  it.each(['argonauth-session-aliases.json', 'argonauth-session-password.json'])(
+    'puts the profile list in the same box (%s)',
+    async (fixture) => {
+      setUp();
+      const { query } = await render(fixture);
+      expect(query('.gd-login__box > gd-alias-list')).not.toBeNull();
+      expect(query('.gd-login__box > .gd-login__status')).not.toBeNull();
+    },
+  );
+
+  it('draws no columns and no box in test mode', async () => {
     setUp();
     const { query } = await render('argonauth-session-test.json');
+    expect(query('.gd-login__box')).toBeNull();
+    expect(query('.gd-login__panel > .gd-login__status')).not.toBeNull();
     expect(query('.gd-login__columns')).toBeNull();
     expect(query('.gd-login__panel > form.gd-login__form .gd-login__intro')).not.toBeNull();
   });

@@ -10,7 +10,7 @@
 
 :host([data-place='login']) {
   justify-self: center;
-  min-width: 20em;
+  min-width: min(20em, 100%);
   max-width: 32em;
 }
 
