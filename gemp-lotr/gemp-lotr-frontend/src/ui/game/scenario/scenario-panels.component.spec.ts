@@ -13,6 +13,10 @@ import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
 import { CardPicker } from '../table-edit/card-picker';
 import { BUG_REPORT_URL, endBody, MIN_HEIGHT, MIN_WIDTH, ScenarioPanelsComponent } from './scenario-panels.component';
+import { UNLISTED_TEXT } from './scenario-panels.component';
+import { PuzzleBackend } from '../../../core/game/table-edit/puzzle-backend';
+import { fakePuzzle } from '../../../testing/table-edit';
+import { PuzzlePopups } from '../table-edit/puzzle-popups';
 
 const INFO: ScenarioInfo = {
   type: 'info',
@@ -402,5 +406,86 @@ describe('ScenarioPanelsComponent', () => {
   it('says of an ending with no scenario named "this scenario"', () => {
     expect(endBody(end('complete'), null)).toBe('<p>You have finished <b>this scenario</b>.</p>');
     expect(endBody(end('error', { message: '<p>Sorry</p>' }), INFO)).toBe('<p>Sorry</p>');
+  });
+
+  describe("a puzzle's", () => {
+    const PUZZLE: ScenarioInfo = { ...INFO, kind: 'puzzle', level: 'puzzle', campaign: null };
+    let changeCards: ReturnType<typeof vi.fn>;
+
+    beforeEach(() => {
+      changeCards = vi.fn();
+      Object.assign(guide, { changeCards });
+      TestBed.configureTestingModule({
+        providers: [PuzzlePopups, { provide: PuzzleBackend, useValue: fakePuzzle() }],
+      });
+      edit.level.set('puzzle');
+    });
+
+    it('menu has the puzzle bar in place of the edit bar and Start again', () => {
+      guide.info.set(PUZZLE);
+      render();
+      expect(el.querySelector('nav.gd-scenario-menu gd-puzzle-bar')).not.toBeNull();
+      expect(el.querySelector('nav.gd-scenario-menu gd-edit-bar')).toBeNull();
+    });
+
+    it('ending says its score, the best and a new best, an unlisted solution, and offers Change cards', () => {
+      guide.info.set(PUZZLE);
+      guide.end.set(
+        end('complete', {
+          messages: [{ header: null, html: '<p>Solved.</p>' } as ScenarioMessage],
+          score: { value: 1160, label: "Sméagol's strength", better: 'higher', best: 1160, newBest: true },
+          unlisted: true,
+        }),
+      );
+      render();
+      expect(text('.gd-scenario-panel__body')).toBe('Solved.');
+      const score = el.querySelector<HTMLElement>('.gd-scenario-panel__score')!;
+      expect(score.title).toBe('Higher is better');
+      expect(text('.gd-scenario-panel__score-label')).toBe("Sméagol's strength");
+      expect(text('.gd-scenario-panel__score-value')).toBe('1160');
+      expect(text('.gd-scenario-panel__best')).toBe('Best 1160');
+      expect(text('.gd-scenario-panel__new-best')).toBe('New best');
+      expect(text('.gd-scenario-panel__unlisted')).toBe(UNLISTED_TEXT);
+      expect(buttons()).toEqual(['Play it again', 'Change cards', 'Back to the Game Hall (main)']);
+      press('Change cards');
+      expect(changeCards).toHaveBeenCalled();
+    });
+
+    it('failed ending: no score where unscored, no unlisted line, Change cards before the way back', () => {
+      guide.info.set(PUZZLE);
+      guide.end.set(
+        end('failed', {
+          score: { value: 3, label: null, better: 'lower', best: null, newBest: false },
+          unlisted: true,
+        }),
+      );
+      render();
+      expect(text('.gd-scenario-panel__score-label')).toBe('Score');
+      expect(el.querySelector('.gd-scenario-panel__best')).toBeNull();
+      expect(el.querySelector('.gd-scenario-panel__new-best')).toBeNull();
+      expect(el.querySelector('.gd-scenario-panel__unlisted')).toBeNull();
+      expect(buttons()).toEqual(['Start again (main)', 'Change cards', 'Back to the Game Hall']);
+      guide.end.set(end('failed'));
+      refresh();
+      expect(el.querySelector('.gd-scenario-panel__score')).toBeNull();
+    });
+
+    it("ending offers no Change cards in a draft's game, after an error, or in a campaign without the way back", () => {
+      guide.info.set({ ...PUZZLE, author: true });
+      guide.end.set(end('failed'));
+      render();
+      expect(buttons()).not.toContain('Change cards');
+      guide.info.set({ ...PUZZLE, draftTest: true });
+      refresh();
+      expect(buttons()).not.toContain('Change cards');
+      guide.info.set(PUZZLE);
+      guide.end.set(end('error'));
+      refresh();
+      expect(buttons()).not.toContain('Change cards');
+      guide.info.set(INFO);
+      guide.end.set(end('failed'));
+      refresh();
+      expect(buttons()).not.toContain('Change cards');
+    });
   });
 });

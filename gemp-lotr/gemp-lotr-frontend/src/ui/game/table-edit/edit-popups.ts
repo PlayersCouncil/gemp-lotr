@@ -89,6 +89,8 @@ export class TableEditGestures extends CardGestures {
   menu(card: CardView, place: CardGesturePlace): boolean {
     const cardId = (card.ref as Partial<GameCardRef> | null)?.cardId;
     if (!this.edit.editing() || this.phone() || typeof cardId !== 'string') return false;
+    // (a puzzle's cards are not changed by hand: only its slots are filled, so a card's details as always)
+    if (this.edit.level() === 'puzzle') return false;
     this.popups.openMenu(cardId, card, place);
     return true;
   }

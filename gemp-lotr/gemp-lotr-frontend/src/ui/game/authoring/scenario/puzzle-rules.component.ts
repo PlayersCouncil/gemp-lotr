@@ -10,6 +10,7 @@ import {
 import { AuthorCheckComponent } from '../widgets/author-check.component';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { FilterFieldComponent } from '../widgets/filter-field.component';
+import { FindBoundComponent } from '../board/find-bound.component';
 import { sendTop } from './top';
 
 /**
@@ -19,11 +20,12 @@ import { sendTop } from './top';
  * sends the whole of `rules`; the pool is a part of its own.
  *
  * DOM contract: `.gd-author-scenario__ticks[data-part=forbid]` with a `gd-author-check[data-forbid]` per choice; for
- * a puzzle, `gd-author-filter` (data-part=pool) in a `gd-author-field`.
+ * a puzzle, `gd-author-filter` (data-part=pool) in a `gd-author-field`, with `gd-author-find-bound` (Find…: the card
+ * search, whose "Use as bound" sends its filters as the pool).
  */
 @Component({
   selector: 'gd-game-author-scenario-puzzle-rules',
-  imports: [AuthorCheckComponent, AuthorFieldComponent, FilterFieldComponent],
+  imports: [AuthorCheckComponent, AuthorFieldComponent, FilterFieldComponent, FindBoundComponent],
   template: `
     @if (state().puzzle; as puzzle) {
       <div class="gd-author-scenario__ticks" data-part="forbid">
@@ -55,6 +57,7 @@ import { sendTop } from './top';
             [refused]="refused()"
             (sent)="pool($event)"
           />
+          <gd-author-find-bound part="pool" what="pool" (used)="pool($event)" />
         </gd-author-field>
       }
     }

@@ -9,6 +9,8 @@ import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
 import { GameCardLayersComponent } from './game-card-layers.component';
 import { GameCardDirective } from './game-card.directive';
 import { ReorderDirective } from './reorder.directive';
+import { FilledSlot } from '../../../core/game/table-edit/puzzle-backend';
+import { PuzzleSlotComponent } from '../table-edit/puzzle-slot.component';
 
 /** The share of a card left showing under the one drawn over it: attached, a fifth; stacked, a little more. */
 const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
@@ -22,7 +24,8 @@ const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
  *
  * DOM contract: `gd-game-cards` holding `.gd-game-cards__box` (sized by fitCards), in it one `.gd-game-stack` per card,
  * holding its cards as `button.gd-card` (see GameCardDirective for their attributes), the ones under it first; then,
- * with a `spot`, `.gd-game-stack[data-open-spot]` holding `gd-open-spot`.
+ * with a `spot`, `.gd-game-stack[data-open-spot]` holding `gd-open-spot`; then a `.gd-game-stack[data-puzzle-slot]`
+ * holding `gd-puzzle-slot` per slot of a puzzle's in the row (`slots`).
  */
 @Component({
   selector: 'gd-game-cards',
@@ -34,6 +37,7 @@ const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
     GameCardLayersComponent,
     ReorderDirective,
     OpenSpotComponent,
+    PuzzleSlotComponent,
   ],
   template: `
     <div class="gd-game-cards__box" [gdFitCards]="fit()" [gdFitCardsOnPagePixels]="placed()" [gdReorder]="ids()">
@@ -54,6 +58,11 @@ const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
           <gd-open-spot [where]="where" />
         </div>
       }
+      @for (filled of slots(); track filled.slot.id) {
+        <div class="gd-game-stack" data-puzzle-slot>
+          <gd-puzzle-slot [slot]="filled" />
+        </div>
+      }
     </div>
   `,
 })
@@ -63,6 +72,8 @@ export class GameCardsComponent {
   readonly placed = input<unknown>(0);
   /** Where a card added at the row's open spot goes; null: no open spot. */
   readonly spot = input<EditPlace | null>(null);
+  /** A puzzle's slots in this row, while they are being filled (each sized as an upright card). */
+  readonly slots = input<readonly FilledSlot[]>([]);
 
   protected readonly views = inject(GameCardViews);
 
@@ -77,5 +88,6 @@ export class GameCardsComponent {
     })),
     // (the open spot is the size of an upright card)
     ...(this.spot() ? [{ horizontal: false, behind: [], behindShown: [] }] : []),
+    ...this.slots().map(() => ({ horizontal: false, behind: [], behindShown: [] })),
   ]);
 }

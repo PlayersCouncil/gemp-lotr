@@ -50,6 +50,9 @@ import { TableEdit } from '../../core/game/table-edit/table-edit.service';
 import { EditPlace, otherSeat } from '../../core/game/table-edit/edit-ops';
 import { provideTableEditUi } from './table-edit/provide-table-edit-ui';
 import { TableEditLayerComponent } from './table-edit/table-edit-layer.component';
+import { FilledSlot, PuzzleBackend } from '../../core/game/table-edit/puzzle-backend';
+import { slotRow } from '../../core/game/table-edit/puzzle-slots';
+import { BoundFinderComponent } from './table-edit/bound-finder.component';
 
 /** The rows of the table that can have an open spot. */
 type TableRow = 'supportOpponent' | 'charactersOpponent' | 'minions' | 'charactersPlayer' | 'supportPlayer' | 'hand';
@@ -114,6 +117,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     AuthoringPanelComponent,
     NotifierDialogComponent,
     TableEditLayerComponent,
+    BoundFinderComponent,
   ],
   host: {
     class: 'gd-game',
@@ -147,31 +151,46 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
           <span class="gd-game__theme"><gd-game-theme-button /></span>
         }
         <section class="gd-game__row" data-row="support-opponent" aria-label="Opponent's support area">
-          <gd-game-cards [stacks]="table().supportOpponent" [spot]="spots()?.supportOpponent ?? null" />
+          <gd-game-cards
+            [stacks]="table().supportOpponent"
+            [spot]="spots()?.supportOpponent ?? null"
+            [slots]="slots().supportOpponent"
+          />
         </section>
         <section class="gd-game__row" data-row="characters-opponent" aria-label="Opponent's characters">
           <gd-game-cards
             [stacks]="table().charactersOpponent"
             [spot]="spots()?.charactersOpponent ?? null"
             [placed]="placed()"
+            [slots]="slots().charactersOpponent"
           />
         </section>
         <section class="gd-game__row" data-row="shadow" aria-label="Minions">
-          <gd-game-cards [stacks]="table().shadow" [spot]="spots()?.minions ?? null" [placed]="placed()" />
+          <gd-game-cards
+            [stacks]="table().shadow"
+            [spot]="spots()?.minions ?? null"
+            [placed]="placed()"
+            [slots]="slots().minions"
+          />
         </section>
         <section class="gd-game__row" data-row="characters-player" aria-label="Your characters">
           <gd-game-cards
             [stacks]="table().charactersPlayer"
             [spot]="spots()?.charactersPlayer ?? null"
             [placed]="placed()"
+            [slots]="slots().charactersPlayer"
           />
         </section>
         <section class="gd-game__row" data-row="support-player" aria-label="Your support area">
-          <gd-game-cards [stacks]="table().supportPlayer" [spot]="spots()?.supportPlayer ?? null" />
+          <gd-game-cards
+            [stacks]="table().supportPlayer"
+            [spot]="spots()?.supportPlayer ?? null"
+            [slots]="slots().supportPlayer"
+          />
         </section>
         @if (!model().spectator) {
           <section class="gd-game__row" data-row="hand" aria-label="Your hand">
-            <gd-game-cards [stacks]="table().hand" [spot]="spots()?.hand ?? null" />
+            <gd-game-cards [stacks]="table().hand" [spot]="spots()?.hand ?? null" [slots]="slots().hand" />
           </section>
         }
         @if (table().skirmish; as skirmish) {
@@ -247,6 +266,8 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     @if (!phone() && authoring.active()) {
       <!-- A draft's game: the authoring panel, docked at the right (in a test, floating) -->
       <gd-game-author />
+      <!-- (its Find…: the card search opened to find a filter, over the page) -->
+      <gd-bound-finder />
     }
     @if (!phone()) {
       <!-- (a scripted game's bubbles point at the card information too: it is never modal there) -->
@@ -286,6 +307,24 @@ export class GamePageComponent {
       supportPlayer: { seat: human, zone: 'support' },
       hand: { seat: human, zone: 'hand' },
     };
+  });
+  private readonly puzzle = inject(PuzzleBackend);
+  /** A puzzle's slots in each row of the table, while they are being filled (the others: the slots strip). */
+  protected readonly slots = computed<Readonly<Record<TableRow, readonly FilledSlot[]>>>(() => {
+    const rows: Record<TableRow, FilledSlot[]> = {
+      supportOpponent: [],
+      charactersOpponent: [],
+      minions: [],
+      charactersPlayer: [],
+      supportPlayer: [],
+      hand: [],
+    };
+    if (this.edit.level() !== 'puzzle' || !this.edit.editing() || this.phone()) return rows;
+    for (const filled of this.puzzle.filled()) {
+      const row = slotRow(filled.slot);
+      if (row) rows[row].push(filled);
+    }
+    return rows;
   });
   private readonly themes = inject(ThemeService);
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */

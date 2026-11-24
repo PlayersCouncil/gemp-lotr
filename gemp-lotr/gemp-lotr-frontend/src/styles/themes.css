@@ -479,6 +479,11 @@
   --theme-game-edit-problem-bg: #3a1714;
   --theme-game-edit-problem-text: #ffe4de;
   --theme-game-edit-problem-edge: #e0584a;
+  /* A puzzle's slots (ui/game/table-edit/puzzle-*): the label on a slot; a scored ending's new best */
+  --theme-game-edit-slot-label-bg: rgb(8 20 34 / 0.82);
+  --theme-game-edit-slot-label-text: #e6f3ff;
+  --theme-game-scenario-new-best-bg: #f0cf6a;
+  --theme-game-scenario-new-best-text: #2a1f05;
 }
 
 /* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11); the game page Middle-earth */
@@ -806,4 +811,6 @@
   --theme-game-edit-field-edge: #5a4a2c;
   --theme-game-edit-button-text: #ece2cc;
   --theme-game-edit-button-edge: #5a4a2c;
+  --theme-game-edit-slot-label-bg: rgb(30 22 12 / 0.85);
+  --theme-game-edit-slot-label-text: #f3e7cc;
 }

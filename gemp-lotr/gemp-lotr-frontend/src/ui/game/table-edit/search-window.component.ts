@@ -40,6 +40,7 @@ export class ChooseFound extends CardActions {
  * `.gd-edit-search__bar` (`.gd-edit-search__bound` with the bound's label and its filter as `title`,
  * `.gd-edit-search__count`, `button[data-action=clear]` "Clear filters"), `.gd-edit-search__problem` (`role=alert`)
  * while a refusal is up, and `.gd-edit-search__cards` (fitCards) with a `button.gd-card[data-blueprint]` per card found.
+ * With `use`, the bar ends with `button[data-action=use]` (its label; its title the filter text it hands on).
  */
 @Component({
   selector: 'gd-edit-search',
@@ -74,6 +75,17 @@ export class ChooseFound extends CardActions {
               >
                 Clear filters
               </button>
+              @if (use(); as label) {
+                <button
+                  type="button"
+                  class="gd-edit-search__clear"
+                  data-action="use"
+                  [title]="usedFilter() || 'Any card'"
+                  (click)="used.emit(usedFilter())"
+                >
+                  {{ label }}
+                </button>
+              }
             </div>
             @if (said(); as problem) {
               <p class="gd-edit-search__problem" role="alert">{{ problem }}</p>
@@ -99,6 +111,10 @@ export class SearchWindowComponent {
   readonly said = input<string | null>(null);
   readonly chosen = output<FoundCard>();
   readonly closed = output();
+  /** A button handing the filters on (its label, "Use as bound"); null: none. */
+  readonly use = input<string | null>(null);
+  /** The filters as the deck builder's filter text (without the sort), when `use` is pressed. */
+  readonly used = output<string>();
 
   protected readonly search = inject(CardSearch);
   private readonly cardViews = inject(CardViews);
@@ -128,6 +144,15 @@ export class SearchWindowComponent {
       });
     });
   }
+
+  /** The filters set, as the deck builder's filter text a bound takes (the sort is no part of a bound). */
+  protected readonly usedFilter = computed(() =>
+    this.search
+      .filter()
+      .split(/\s+/)
+      .filter((part) => part !== '' && !/^sort:/i.test(part))
+      .join(' '),
+  );
 
   protected titleOf(view: CardView<FoundRef>): string {
     return view.ref.found.name;

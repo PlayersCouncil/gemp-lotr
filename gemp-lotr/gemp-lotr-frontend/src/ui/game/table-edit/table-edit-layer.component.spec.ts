@@ -10,6 +10,12 @@ import { CardPicker } from './card-picker';
 import { EditPopups } from './edit-popups';
 import { SearchWindowComponent } from './search-window.component';
 import { TableEditLayerComponent } from './table-edit-layer.component';
+import { PuzzleLayerComponent } from './puzzle-layer.component';
+import { PuzzlePopups } from './puzzle-popups';
+import { PuzzleBackend } from '../../../core/game/table-edit/puzzle-backend';
+import { fakePuzzle } from '../../../testing/table-edit';
+import { GameSession } from '../../../core/game/session/game-session.service';
+import { PageLifetime } from '../../../core/platform/page-lifetime.service';
 
 describe('TableEditLayerComponent', () => {
   let edit: FakeTableEdit;
@@ -95,5 +101,22 @@ describe('TableEditLayerComponent', () => {
     edit.problem.set({ text: 'The game is not stopped.', at: null });
     fixture.detectChanges();
     expect(el.querySelector('.gd-edit-problem')).toBeNull();
+  });
+
+  it("draws a puzzle's own layer (its slots' chooser, search window and strip) for a puzzle only", () => {
+    TestBed.overrideComponent(PuzzleLayerComponent, { set: { imports: [], template: '' } });
+    TestBed.configureTestingModule({
+      providers: [
+        PuzzlePopups,
+        { provide: PuzzleBackend, useValue: fakePuzzle() },
+        { provide: GameSession, useValue: { model: () => ({ cards: {} }) } },
+        PageLifetime,
+      ],
+    });
+    const { fixture, el } = render();
+    expect(el.querySelector('gd-puzzle-layer')).toBeNull();
+    edit.level.set('puzzle');
+    fixture.detectChanges();
+    expect(el.querySelector('gd-puzzle-layer')).not.toBeNull();
   });
 });

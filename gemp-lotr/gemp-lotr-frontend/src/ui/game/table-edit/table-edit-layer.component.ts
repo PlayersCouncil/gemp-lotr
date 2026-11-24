@@ -11,6 +11,7 @@ import { CardPicker } from './card-picker';
 import { ChooserComponent } from './chooser.component';
 import { EditPopups } from './edit-popups';
 import { PopupPlaceDirective } from './popup-place.directive';
+import { PuzzleLayerComponent } from './puzzle-layer.component';
 import { SearchWindowComponent } from './search-window.component';
 import { TablePick } from './table-pick';
 
@@ -20,6 +21,8 @@ import { TablePick } from './table-pick';
  * card under the pointer while one is picked for Attach or Stack, and a refusal said where it was asked for (the edit
  * bar says the others). The open spots themselves are their hosts' (gd-game-cards).
  *
+ * A puzzle's (level `puzzle`) adds `gd-puzzle-layer`: its slots' chooser, search window and strip.
+ *
  * DOM contract: `gd-table-edit` holding `gd-edit-chooser`, `gd-edit-menu`, `gd-edit-search`,
  * `gd-game-author-pickbox` (while picking) and, while a refusal of a control is up, `.gd-edit-problem` (`role=alert`,
  * placed by gdPopupPlace where it was asked for) with the server's words (TableEdit takes it away after a while, or at
@@ -28,7 +31,14 @@ import { TablePick } from './table-pick';
 @Component({
   selector: 'gd-table-edit',
   styleUrl: './table-edit-layer.component.css',
-  imports: [ChooserComponent, CardMenuComponent, SearchWindowComponent, PickBoxComponent, PopupPlaceDirective],
+  imports: [
+    ChooserComponent,
+    CardMenuComponent,
+    SearchWindowComponent,
+    PickBoxComponent,
+    PopupPlaceDirective,
+    PuzzleLayerComponent,
+  ],
   providers: [{ provide: TablePick, useExisting: CardPicker }],
   template: `
     <gd-edit-chooser />
@@ -46,6 +56,10 @@ import { TablePick } from './table-pick';
       <p class="gd-edit-problem" role="alert" [gdPopupPlace]="problem.place">
         {{ problem.text }}
       </p>
+    }
+    @if (edit.level() === 'puzzle') {
+      <!-- A puzzle's slots: their chooser, their search window, the slots strip -->
+      <gd-puzzle-layer />
     }
   `,
 })
