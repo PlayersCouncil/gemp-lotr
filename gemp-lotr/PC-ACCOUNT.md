@@ -72,9 +72,15 @@ Going back is `ARGONAUTH_MODE=test` and a restart. Aliases created through a PC 
 
 ## What A Person Does
 
-**Signing in.** "Sign in with PC Account" on the login page goes to Argonauth and comes
-back. With one alias the person lands in the hall. With several, or none, they land on the
-login page, which now shows their aliases:
+**The login page** in `optional` (Ketura, 2026-11-24) is two columns with a vertical rule between
+them. Left, "Legacy Login": name, password, Login. Right, "PC SSO": two buttons, **Sign in with PC
+Account** and **Register PC Account**. Both go to Argonauth and come back signed in; Register asks
+Argonauth for its sign-up page.
+
+**Coming back.** With one alias the person lands in the hall. With none (a PC account just
+registered, most of all) they land on the login page with Create New Gemp Alias already open, and
+linking an old account beside it. With several they land on the login page, which shows their
+aliases:
 
 - each alias with **Enter Gemp**;
 - **Create New Gemp Alias**: asks for a name, creates the account, enters the hall as it;
@@ -85,6 +91,12 @@ The list is paged at 10. There is no limit on aliases.
 
 **The same list** shows whenever someone with a PC account signed in opens the login page,
 and on the profile page (My Account), which also has a link to manage the PC account.
+
+**An account a PC account has claimed has no password login** (Ketura, 2026-11-24). From the
+moment it is linked, by its owner or by an admin, the login form answers for it "That account is
+linked to a PC Account, please use that to log in.", whatever password is typed, and anyone logged
+in to it by password is logged out. Its password is kept, and works again if the link is ever
+removed. In `test` mode there are no PC accounts and every password works as ever.
 
 **Someone logged in with a password** sees their one account on the login page with Enter
 Gemp and Log Out, and on the profile page a **Connect PC Account** button, which asks for the
@@ -106,13 +118,15 @@ off a table by mistake; it is not a limit of one alias at a time.
 
 For a password login both simply log out.
 
-**Registration** in `optional` is "Sign in with PC Account", then Create New Gemp Alias. The
+**Registration** in `optional` is Register PC Account, then Create New Gemp Alias. The
 old registration form is gone there. An alias made this way has no Gemp password.
 
-**A lost Gemp password.** Admins no longer reset passwords. An admin checks the player is
+**A lost or leaked Gemp password.** Admins no longer reset passwords. An admin checks the player is
 who they say (the deck-name check, as before), then links the Gemp account to the PC
 account the player names, in Argonauth's admin. The player signs in with the PC account and
-finds the alias in their list. The Gemp admin page shows the player's id for this.
+finds the alias in their list. The Gemp admin page shows the player's id for this. That link is
+also what makes a password that has got about worthless: Gemp hears of an admin's link when its
+owner next signs in, and from then the password logs nobody in and whoever was in by it is out.
 
 ## Rules The Code Keeps
 
@@ -126,6 +140,10 @@ finds the alias in their list. The Gemp admin page shows the player's id for thi
 - **An alias being played is looked at again every five minutes** in every PC-account session
   used since the last look: one Argonauth no longer says is theirs is put down, and the browser
   is back at its list. An Argonauth that cannot be asked puts nobody down.
+- **A claimed account's password is never looked at**: not at the login form (423), not to link
+  it (`linked-elsewhere`). Gemp's copy answers "not claimed" at once; a "claimed" from the copy
+  is put to Argonauth first, since an unlink there is not sent here, and the copy stands when
+  Argonauth cannot be asked.
 - **The player comes from the session cookie and nothing else.** The `participantId`
   parameter no longer names the acting player for anyone.
 - **Linking and connecting need the account's password**, typed then, with guesses counted as
@@ -152,7 +170,7 @@ is for every mode.
 
 | | |
 |---|---|
-| `GET /login` | Starts a PC sign-in: 302 to Argonauth. `then` = `link` or `create`: land on the list with that form open. `return` = a place in the app to go to after entering (as the login page's `?return=`) |
+| `GET /login` | Starts a PC sign-in: 302 to Argonauth. `then` = `link` or `create`: land on the list with that form open. `register=1`: Register PC Account; Argonauth is asked for its sign-up page (`prompt=create`) if its discovery document says it takes that, and for its sign-in page otherwise. `return` = a place in the app to go to after entering (as the login page's `?return=`) |
 | `GET /callback` | Argonauth's answer. Always ends in a 302 into the app (below) |
 
 Where the callback lands:
@@ -160,7 +178,8 @@ Where the callback lands:
 | Outcome | Lands on |
 |---|---|
 | One alias, nothing asked by `then` | `return`, or `/gemp-lotr/ng/hall` |
-| Several aliases, or none | `/gemp-lotr/ng/login` |
+| No alias | `/gemp-lotr/ng/login?open=create` |
+| Several aliases | `/gemp-lotr/ng/login` |
 | `then=link` or `then=create` | `/gemp-lotr/ng/login?open=link` or `?open=create` |
 | Started by `POST /connect`, linked | `/gemp-lotr/ng/account?pc=connected` |
 | Started by `POST /connect`, the alias belongs to another PC account | `/gemp-lotr/ng/account?pc=linked-elsewhere`. The browser stays a password login |
@@ -210,6 +229,13 @@ be recorded at Argonauth is taken back, and its name with it.
 
 `POST /gemp-lotr-server/register` answers 403 in any mode but `test`.
 
+`POST /gemp-lotr-server/login` answers **423** for an account a PC account has claimed, in any mode but `test`,
+whatever the password. `POST /link` for such an account answers `409 linked-elsewhere` the same way, or the
+session, nothing changed, when it is this PC account's already.
+
+Landings on `?open=link` and `?open=create` carry `&return=<path>` when the sign-in was asked from somewhere in
+the app: where to go once an alias is entered.
+
 **Password guesses** (the login form, `link` and `connect` alike) are counted over ten minutes: 10 wrong for one
 name from one address, 30 for one name from everywhere, 50 from one address whatever the names. At a limit the
 answer is 429 and the password is not looked at. The limit for a name from everywhere is the one that can be
@@ -221,7 +247,7 @@ why one address alone cannot reach it. A request's address is the one nginx saw:
 
 - One cookie, `loggedUser`, as before: now `HttpOnly`, `SameSite=Lax`, and `Secure` when the
   request came over https. Its value is 32 characters from `SecureRandom`.
-- A session lasts a month without use, and is lost on a restart. One that is nobody's (made to carry a sign-in to
+- A session lasts six months without use (Ketura, 2026-11-24), and is lost on a restart. One that is nobody's (made to carry a sign-in to
   Argonauth and back, which anyone can ask for) lasts ten minutes. The code used to say ten
   minutes, but its sweep looked at one session a minute, so in practice sessions already
   lasted until a restart. That is now what the code says.
@@ -251,21 +277,15 @@ why one address alone cannot reach it. A request's address is the one nginx saw:
 
 ## Later
 
-- **Turning a password off.** With resets gone, nothing changes a Gemp password. One that has leaked or been
-  shared stays good for ever: its holder logs in after the owner has the account back through a PC account, and
-  can link the account to a PC account of their own first. Since a blank password now logs nobody in, "turn off
-  password login for this account" would be safe as an admin action (blank it, end its sessions). Ketura's to
-  decide: it is what was removed, in a form that cannot be used to take an account.
 - **A PC account disabled at Argonauth** cannot sign in again, but a Gemp session it already has goes on for
-  its month: the lookup still says its aliases are linked.
+  its six months: the lookup still says its aliases are linked.
 - **The new SQL has no test in the repository.** The tests stand a map in for the tables. It was run once by
   hand (2026-11-23) against an embedded MariaDB 10.11 (production is 10.5), with the tables as
   `database_script.sql` makes them and the DAOs as they are: `player_argonauth` (the upsert keeping `linked_at`
   for the same PC account and renewing it for another, `replaceLinks`, the foreign key, 320 concurrent
   `replaceLinks` without a deadlock), `registerAlias`, `removeUnusedAlias` (leaves alone an account with a
   password or one that has been entered), and that `'Frodo '` matches the row `Frodo` in the column but no longer
-  logs in. A test that does this on every build needs a database in the build (MariaDB4j is an 80 MB test
-  dependency): Ketura's call.
+  logs in. The repository's tests go on using a map (Ketura, 2026-11-24).
 - **Bans that follow the PC account.** A ban is per alias today, and a new alias is one
   click. Ketura is settling with the moderators how it should behave; until then dodgers are
   dealt with by IP.

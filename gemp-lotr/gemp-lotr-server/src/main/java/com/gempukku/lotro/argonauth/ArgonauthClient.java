@@ -84,7 +84,8 @@ public class ArgonauthClient {
         RATE_LIMITED
     }
 
-    private record Endpoints(String authorize, String token, String userinfo, String keys, String logout, long readAt) {
+    private record Endpoints(String authorize, String token, String userinfo, String keys, String logout,
+                             boolean takesSignUps, long readAt) {
     }
 
     private record Answer(int status, String body) {
@@ -150,6 +151,17 @@ public class ArgonauthClient {
 
     /** Where the browser goes to sign in. Argonauth sends it back to the redirect address with `code` and `state`. */
     public String signInAddress(String state, String nonce, String codeVerifier) throws ArgonauthException {
+        return signInAddress(state, nonce, codeVerifier, false);
+    }
+
+    /**
+     * As above; with `signUp`, for someone who has said they have no PC account yet: Argonauth is asked for its
+     * sign-up page in place of its sign-in page (`prompt=create`, OpenID Connect's "Initiating User Registration"),
+     * if its discovery document says it takes that. If it does not, the sign-in page it is, which has its own way
+     * to sign up. Either way they come back signed in.
+     */
+    public String signInAddress(String state, String nonce, String codeVerifier, boolean signUp) throws ArgonauthException {
+        Endpoints endpoints = endpoints();
         Map<String, String> query = new LinkedHashMap<>();
         query.put("response_type", "code");
         query.put("client_id", _config.clientId());
@@ -159,7 +171,9 @@ public class ArgonauthClient {
         query.put("nonce", nonce);
         query.put("code_challenge", challenge(codeVerifier));
         query.put("code_challenge_method", "S256");
-        return endpoints().authorize() + "?" + form(query);
+        if (signUp && endpoints.takesSignUps())
+            query.put("prompt", "create");
+        return endpoints.authorize() + "?" + form(query);
     }
 
     /**
@@ -424,7 +438,8 @@ public class ArgonauthClient {
                             + ", and argonauth.issuer is " + _config.issuer());
                 _endpoints = new Endpoints(endpoint(document, "authorization_endpoint"), endpoint(document, "token_endpoint"),
                         endpoint(document, "userinfo_endpoint"), endpoint(document, "jwks_uri"),
-                        endpoint(document, "end_session_endpoint"), now);
+                        endpoint(document, "end_session_endpoint"),
+                        document.get("prompt_values_supported") instanceof JSONArray prompts && prompts.contains("create"), now);
                 _endpointsFailure = null;
                 return _endpoints;
             } catch (ArgonauthException exp) {

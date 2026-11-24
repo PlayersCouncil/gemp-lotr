@@ -87,6 +87,8 @@ public class ArgonauthRequestHandler extends LotroServerRequestHandler implement
             QueryStringDecoder query = new QueryStringDecoder(request.uri());
             String then = getQueryParameterSafely(query, "then");
             String returnPath = getQueryParameterSafely(query, "return");
+            // Register PC Account: the same trip, to Argonauth's sign-up page
+            boolean signUp = "1".equals(getQueryParameterSafely(query, "register"));
             boolean https = cameOverHttps(request);
             // A browser that is nobody yet gets a session to carry the sign-in there and back. Anyone can ask for
             // that, any number of times, so there is a ceiling on sessions (and such a session is short-lived).
@@ -99,7 +101,7 @@ public class ArgonauthRequestHandler extends LotroServerRequestHandler implement
             later(responseWriter, () -> {
                 String address;
                 try {
-                    address = _service.startSignIn(asking, then, returnPath);
+                    address = _service.startSignIn(asking, then, returnPath, signUp);
                 } catch (ArgonauthException exp) {
                     _log.warn("A PC sign-in could not be started (" + exp.getReason() + "): " + exp.getMessage());
                     address = PcAccountService.APP + "/login?pc=failed";

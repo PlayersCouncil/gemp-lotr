@@ -222,12 +222,20 @@ public class PcAccountServiceTest {
     }
 
     @Test
-    public void withSeveralAliasesOrNoneASignInGoesToTheList() throws Exception {
-        Landing none = signIn(_sessions.newSession(), SAM, null, "/hall");
-        assertEquals("/gemp-lotr/ng/login", none.location());
+    public void withNoAliasASignInGoesStraightToMakingOne() throws Exception {
+        // a PC account just registered, most of all (Ketura, 2026-11-24)
+        Landing none = signIn(_sessions.newSession(), SAM, null, null);
+        assertEquals("/gemp-lotr/ng/login?open=create", none.location());
         assertNull(none.session().getPlayer());
         assertEquals(SAM.sub(), none.session().getPcAccount().sub());
+        // and where it was asked from goes along, for after the alias is made
+        assertEquals("/gemp-lotr/ng/login?open=create&return=%2Fdeckbuilder%3Fdeck%3DShire",
+                signIn(_sessions.newSession(), SAM, null, "/deckbuilder?deck=Shire").location());
+        assertEquals("/gemp-lotr/ng/login?open=create", signIn(_sessions.newSession(), SAM, null, "//evil.example").location());
+    }
 
+    @Test
+    public void withSeveralAliasesASignInGoesToTheList() throws Exception {
         alias(FRODO, 101, "Frodo");
         alias(FRODO, 102, "Underhill");
         Landing several = signIn(_sessions.newSession(), FRODO, null, "/hall");
@@ -255,7 +263,7 @@ public class PcAccountServiceTest {
     public void aSignInStartedToLinkOrCreateLandsOnThatForm() throws Exception {
         alias(FRODO, 101, "Frodo");
         Landing link = signIn(_sessions.newSession(), FRODO, "link", "/hall");
-        assertEquals("/gemp-lotr/ng/login?open=link", link.location());
+        assertEquals("/gemp-lotr/ng/login?open=link&return=%2Fhall", link.location());
         assertNull(link.session().getPlayer());
         assertEquals("/gemp-lotr/ng/login?open=create", signIn(_sessions.newSession(), FRODO, "create", null).location());
         // anything else asked for is a plain sign-in
@@ -402,6 +410,146 @@ public class PcAccountServiceTest {
         assertEquals("/gemp-lotr/ng/login", asStranger.location());
     }
 
+    @Test
+    public void registeringAsksArgonauthForItsSignUpPageWhenItTakesThat() throws Exception {
+        Session browser = _sessions.newSession();
+        _argonauth.signIn(_service.startSignIn(browser, null, null, true), SAM);
+        assertNull("today's Argonauth does not say it takes prompt=create, and is not sent it", _argonauth.lastPrompt);
+
+        _argonauth.promptValues = List.of("none", "login", "create");
+        PcAccountService fresh = service(_argonauth.config());
+        Map<String, String> back = _argonauth.signIn(fresh.startSignIn(browser, null, null, true), SAM);
+        assertEquals("create", _argonauth.lastPrompt);
+        // and they come back signed in, with nothing to enter: straight to making an alias
+        assertEquals("/gemp-lotr/ng/login?open=create", fresh.completeSignIn(browser, back.get("code"), back.get("state"), null, IP).location());
+
+        // a plain sign-in never asks for it
+        _argonauth.signIn(fresh.startSignIn(_sessions.newSession(), null, null, false), SAM);
+        assertNull(_argonauth.lastPrompt);
+    }
+
+    // ---- an account a PC account has claimed has no password login
+
+    @Test
+    public void anAccountIsClaimedWhenArgonauthStillSaysSo() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        player(201, "OldHand", "s3cret", "u", null);
+
+        // not claimed: said at once, and Argonauth is not troubled
+        assertFalse(_service.isClaimedByCopy("OldHand"));
+        assertFalse(_service.isClaimedByCopy("Nobody"));
+        assertFalse(_service.isClaimedByCopy(null));
+        assertNull(_service.claimedBy("OldHand"));
+        assertTrue(_argonauth.requests.isEmpty());
+
+        assertTrue(_service.isClaimedByCopy("Frodo"));
+        assertEquals(FRODO.sub(), _service.claimedBy("Frodo"));
+    }
+
+    @Test
+    public void gempsCopySayingClaimedIsPutToArgonauth() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        alias(FRODO, 102, "Underhill");
+        alias(FRODO, 103, "Ringbearer");
+
+        // unlinked there since: no longer claimed, and the copy corrected, so its password works again
+        _argonauth.unlink(101);
+        assertTrue(_service.isClaimedByCopy("Frodo"));
+        assertNull(_service.claimedBy("Frodo"));
+        assertFalse(_service.isClaimedByCopy("Frodo"));
+
+        // moved to Sam there since: still claimed, by Sam
+        _argonauth.link(SAM, 102, "Underhill", "admin");
+        assertEquals(SAM.sub(), _service.claimedBy("Underhill"));
+        assertEquals(SAM.sub(), _linkDao.getSub(102));
+
+        // Argonauth away: the copy stands
+        _argonauth.unlink(103);
+        _argonauth.statusFor.put("/api/v1/links/", 503);
+        assertEquals(FRODO.sub(), _service.claimedBy("Ringbearer"));
+        assertTrue(_service.isClaimedByCopy("Ringbearer"));
+    }
+
+    @Test
+    public void inTestModeNothingIsClaimed() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        PcAccountService test = service(ArgonauthConfig.TEST);
+        assertFalse(test.isClaimedByCopy("Frodo"));
+        assertNull(test.claimedBy("Frodo"));
+    }
+
+    @Test
+    public void beingClaimedLogsOutWhoeverWasInByPassword() throws Exception {
+        // the password had got about: someone else is logged in with it when the owner links the account
+        player(201, "OldHand", "s3cret", "u", null);
+        Session thief = loggedIn("OldHand");
+        Session bystander = loggedIn("Somebody");
+        Session owner = signedIn(SAM);
+
+        _service.link(owner, "OldHand", "s3cret", IP);
+
+        assertNull("the password login no longer exists, and its session with it", _sessions.getSession(thief.getId()));
+        assertNotNull(_sessions.getSession(bystander.getId()));
+        assertNotNull(_sessions.getSession(owner.getId()));
+    }
+
+    @Test
+    public void aLinkAnAdminMadeEndsPasswordLoginsAtTheOwnersNextSignIn() throws Exception {
+        player(201, "Recovered", "leaked", "u", null);
+        Session thief = loggedIn("Recovered");
+        _argonauth.link(FRODO, 201, "Recovered", "admin");
+
+        Session owner = signedIn(FRODO);
+
+        assertNull(_sessions.getSession(thief.getId()));
+        assertEquals("the one alias, entered", "Recovered", owner.getPlayer());
+        assertTrue(_service.isClaimedByCopy("Recovered"));
+    }
+
+    @Test
+    public void connectingKeepsTheBrowserThatDidItAndEndsTheOthers() throws Exception {
+        player(201, "OldHand", "s3cret", "u", null);
+        Session elsewhere = loggedIn("OldHand");
+        Session here = loggedIn("OldHand");
+
+        Landing landing = connect(here, "s3cret", FRODO);
+
+        assertEquals("OldHand", landing.session().getPlayer());
+        assertNull(_sessions.getSession(elsewhere.getId()));
+    }
+
+    @Test
+    public void anotherPcAccountPlayingAnAliasThatMovedPutsItDown() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        Session frodo = signedIn(FRODO);
+        assertEquals("Frodo", frodo.getPlayer());
+        // an admin moves the account to Sam, who signs in
+        _argonauth.link(SAM, 101, "Frodo", "admin");
+
+        Session sam = signedIn(SAM);
+
+        assertEquals("Frodo", sam.getPlayer());
+        assertNull(frodo.getPlayer());
+        assertEquals("still signed in, at a list that no longer has it", FRODO.sub(), frodo.getPcAccount().sub());
+    }
+
+    @Test
+    public void aClaimedAccountIsNotLinkedByItsPasswordRightOrWrong() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        Session sam = signedIn(SAM);
+
+        // nothing is learned about the password: it is not looked at, and no guess is counted
+        assertRefused(409, "linked-elsewhere", () -> _service.link(sam, "Frodo", "pass-Frodo", IP));
+        assertRefused(409, "linked-elsewhere", () -> _service.link(sam, "Frodo", "guess", IP));
+        assertTrue(_failedAttempts.isEmpty());
+        assertFalse(_argonauth.requests.contains("POST /api/v1/links"));
+
+        // one this PC account already has: nothing to do, and said as a success
+        Session frodo = signedIn(FRODO);
+        assertEquals(1, _service.link(frodo, "Frodo", "whatever", IP).aliases().size());
+        assertFalse(_argonauth.requests.contains("POST /api/v1/links"));
+    }
+
     // ---- connecting the account a password login is in
 
     /** Connect PC Account, from giving the password to coming back from Argonauth as `person`. */
@@ -443,7 +591,7 @@ public class PcAccountServiceTest {
 
         // and the address anyone can be sent to starts a plain sign-in, which connects nothing
         Landing landing = signIn(browser, FRODO, "connect", null);
-        assertEquals("/gemp-lotr/ng/login", landing.location());
+        assertEquals("/gemp-lotr/ng/login?open=create", landing.location());
         assertNull(_argonauth.linkOf(201));
         assertNull(_linkDao.getSub(201));
         assertFalse(_argonauth.requests.contains("POST /api/v1/links"));

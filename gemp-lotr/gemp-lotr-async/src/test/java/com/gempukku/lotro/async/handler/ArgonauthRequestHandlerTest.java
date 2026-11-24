@@ -142,7 +142,7 @@ public class ArgonauthRequestHandlerTest {
         assertEquals(404, statusOf(HttpMethod.POST, "/link", "login=Frodo&password=x"));
         assertEquals(404, statusOf(HttpMethod.POST, "/connect", "password=x"));
         verify(_service, never()).startConnect(any(), any(), any());
-        verify(_service, never()).startSignIn(any(), any(), any());
+        verify(_service, never()).startSignIn(any(), any(), any(), anyBoolean());
         verify(_service, never()).completeSignIn(any(), any(), any(), any(), any());
         verify(_service, never()).enter(any(), anyInt(), any());
         verify(_service, never()).create(any(), any(), any());
@@ -169,12 +169,12 @@ public class ArgonauthRequestHandlerTest {
 
     @Test
     public void startingASignInSendsTheBrowserToArgonauthWithASessionToComeBackTo() throws Exception {
-        when(_service.startSignIn(any(), any(), any())).thenReturn("https://auth.example/identity/o/authorize?state=s");
+        when(_service.startSignIn(any(), any(), any(), anyBoolean())).thenReturn("https://auth.example/identity/o/authorize?state=s");
 
         handle(HttpMethod.GET, "/login?then=create&return=%2Fdeckbuilder", null, null);
 
         ArgumentCaptor<Session> asking = ArgumentCaptor.forClass(Session.class);
-        verify(_service).startSignIn(asking.capture(), eq("create"), eq("/deckbuilder"));
+        verify(_service).startSignIn(asking.capture(), eq("create"), eq("/deckbuilder"), eq(false));
         assertSame("a session was made for the browser that had none", asking.getValue(), _sessions.getSession(asking.getValue().getId()));
         Map<String, String> headers = redirect();
         assertEquals("https://auth.example/identity/o/authorize?state=s", headers.get("location"));
@@ -188,18 +188,28 @@ public class ArgonauthRequestHandlerTest {
 
     @Test
     public void aBrowserThatHasASessionStartsTheSignInFromIt() throws Exception {
-        when(_service.startSignIn(any(), any(), any())).thenReturn("https://auth.example/a");
+        when(_service.startSignIn(any(), any(), any(), anyBoolean())).thenReturn("https://auth.example/a");
         Session session = _sessions.getSession(_sessions.logUser("OldHand"));
 
         handle(HttpMethod.GET, "/login?then=connect", null, session);
 
-        verify(_service).startSignIn(same(session), eq("connect"), isNull());
+        verify(_service).startSignIn(same(session), eq("connect"), isNull(), eq(false));
         assertTrue(redirect().get("set-cookie").startsWith("loggedUser=" + session.getId() + ";"));
     }
 
     @Test
+    public void registeringIsTheSameTripAskedForAsASignUp() throws Exception {
+        when(_service.startSignIn(any(), any(), any(), anyBoolean())).thenReturn("https://auth.example/a?prompt=create");
+
+        handle(HttpMethod.GET, "/login?register=1&return=%2Fhall", null, null);
+
+        verify(_service).startSignIn(any(), isNull(), eq("/hall"), eq(true));
+        assertEquals("https://auth.example/a?prompt=create", redirect().get("location"));
+    }
+
+    @Test
     public void overHttpsTheCookieIsKeptToHttps() throws Exception {
-        when(_service.startSignIn(any(), any(), any())).thenReturn("https://auth.example/a");
+        when(_service.startSignIn(any(), any(), any(), anyBoolean())).thenReturn("https://auth.example/a");
         HttpRequest request = request(HttpMethod.GET, "/login", null, null);
         request.headers().set("X-Forwarded-Proto", "https");
         new ArgonauthRequestHandler(_context, Runnable::run).handleRequest("/login", request, _context, _writer, IP);
@@ -208,7 +218,7 @@ public class ArgonauthRequestHandlerTest {
 
     @Test
     public void aSignInThatCannotBeStartedLandsOnTheLoginPageSayingSo() throws Exception {
-        when(_service.startSignIn(any(), any(), any()))
+        when(_service.startSignIn(any(), any(), any(), anyBoolean()))
                 .thenThrow(new ArgonauthException(ArgonauthException.Reason.UNAVAILABLE, "Argonauth did not answer"));
         handle(HttpMethod.GET, "/login", null, null);
         assertEquals("/gemp-lotr/ng/login?pc=failed", redirect().get("location"));
@@ -265,7 +275,7 @@ public class ArgonauthRequestHandlerTest {
 
         assertEquals("/gemp-lotr/ng/login?pc=failed", redirect().get("location"));
         verify(full, never()).newSession();
-        verify(_service, never()).startSignIn(any(), any(), any());
+        verify(_service, never()).startSignIn(any(), any(), any(), anyBoolean());
     }
 
     // ---- the alias list's actions
@@ -356,7 +366,7 @@ public class ArgonauthRequestHandlerTest {
         assertEquals(8, _deferred.size());
         verify(_service, never()).startConnect(any(), any(), any());
         verify(_service, never()).view(any());
-        verify(_service, never()).startSignIn(any(), any(), any());
+        verify(_service, never()).startSignIn(any(), any(), any(), anyBoolean());
         verify(_service, never()).completeSignIn(any(), any(), any(), any(), any());
         verify(_service, never()).enter(any(), anyInt(), any());
         verify(_service, never()).create(any(), any(), any());

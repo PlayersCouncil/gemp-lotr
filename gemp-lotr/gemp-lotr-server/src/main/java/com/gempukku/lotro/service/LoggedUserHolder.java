@@ -19,9 +19,9 @@ public class LoggedUserHolder {
     /**
      * How long a session lasts without being used. Until November 2026 this said ten minutes, but the sweep looked
      * at one session a minute, so in practice a session lasted until the server restarted. That is kept on purpose,
-     * as a month: nobody is logged out of Gemp for stepping away.
+     * as six months (Ketura, 2026-11-24): nobody is logged out of Gemp for stepping away.
      */
-    static final long SESSION_IDLE_MILLIS = 1000L * 60 * 60 * 24 * 30;
+    static final long SESSION_IDLE_MILLIS = 1000L * 60 * 60 * 24 * 183;
     /** How long Argonauth's answer to a sign-in is waited for. */
     static final long PENDING_SIGN_IN_MILLIS = 1000L * 60 * 5;
     static final int MAX_SESSIONS = 50_000;

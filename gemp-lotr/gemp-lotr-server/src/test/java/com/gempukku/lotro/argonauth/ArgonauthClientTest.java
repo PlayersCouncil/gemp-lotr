@@ -111,6 +111,26 @@ public class ArgonauthClientTest {
     }
 
     @Test
+    public void theSignUpPageIsAskedForOnlyOfAnArgonauthThatSaysItTakesThat() throws Exception {
+        String address = _client.signInAddress("the-state", "the-nonce", ArgonauthClient.randomToken(), true);
+        assertFalse(address, address.contains("prompt"));
+
+        _argonauth.promptValues = List.of("none", "login", "create");
+        _client = client();
+        assertEquals("create", FakeArgonauth.form(_client.signInAddress("s", "n", ArgonauthClient.randomToken(), true).split("\\?")[1]).get("prompt"));
+        assertFalse(_client.signInAddress("s", "n", ArgonauthClient.randomToken(), false).contains("prompt"));
+        assertFalse(_client.signInAddress("s", "n", ArgonauthClient.randomToken()).contains("prompt"));
+
+        // a document without the list at all
+        _argonauth.discovery = document -> {
+            document.remove("prompt_values_supported");
+            return document;
+        };
+        _client = client();
+        assertFalse(_client.signInAddress("s", "n", ArgonauthClient.randomToken(), true).contains("prompt"));
+    }
+
+    @Test
     public void randomTokensAreLongAndDiffer() {
         String one = ArgonauthClient.randomToken();
         assertEquals(43, one.length());

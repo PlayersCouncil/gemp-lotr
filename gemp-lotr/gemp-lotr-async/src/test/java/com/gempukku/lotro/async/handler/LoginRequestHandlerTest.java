@@ -71,7 +71,8 @@ public class LoginRequestHandlerTest {
     }
 
     private LoginRequestHandler handler() {
-        return new LoginRequestHandler(context);
+        // what would be answered later, off the IO thread, is answered at once here
+        return new LoginRequestHandler(context, Runnable::run);
     }
 
     /** The status the attempt answered: 200 when it wrote a response, else the thrown status. */
@@ -183,5 +184,91 @@ public class LoginRequestHandlerTest {
         assertEquals(409, attempt("Merry", "x"));
         assertEquals(401, attempt("Merry", "guess"));
         assertEquals("not blocked: the 409 cleared the count", 409, attempt("Merry", "x"));
+    }
+
+    // ---- an account a PC account has claimed
+
+    private com.gempukku.lotro.argonauth.PcAccountService pcAccounts() {
+        var pcAccounts = mock(com.gempukku.lotro.argonauth.PcAccountService.class);
+        context.put(com.gempukku.lotro.argonauth.PcAccountService.class, pcAccounts);
+        return pcAccounts;
+    }
+
+    @Test
+    public void anAccountClaimedByAPcAccountIsNotLoggedInToByPasswordRightOrWrong() throws Exception {
+        var pcAccounts = pcAccounts();
+        when(pcAccounts.isClaimedByCopy("Frodo")).thenReturn(true);
+        when(pcAccounts.claimedBy("Frodo")).thenReturn("760f5b53-1a93-4a03-91a7-d812c8f0fc23");
+        when(playerDao.loginUser("Frodo", "ring")).thenReturn(player("Frodo", "hash", "u", null));
+        ResponseWriter writer = mock(ResponseWriter.class);
+
+        handler().handleRequest("", loginPost(" Frodo ", "ring"), context, writer, IP);
+        handler().handleRequest("", loginPost("Frodo", "wrong"), context, writer, IP);
+
+        verify(writer, times(2)).writeError(LoginRequestHandler.LINKED_TO_PC_ACCOUNT);
+        // the password is never looked at, so no guess is counted and nobody is logged in
+        verify(playerDao, never()).loginUser(anyString(), anyString());
+        verify(loggedUserHolder, never()).logUser(anyString());
+        assertFalse(throttle.isBlocked("Frodo", IP, System.currentTimeMillis()));
+    }
+
+    @Test
+    public void anAccountUnlinkedSinceGempLastHeardLogsInByPasswordAgain() throws Exception {
+        var pcAccounts = pcAccounts();
+        when(pcAccounts.isClaimedByCopy("Frodo")).thenReturn(true);
+        when(pcAccounts.claimedBy("Frodo")).thenReturn(null);
+        when(playerDao.loginUser("Frodo", "ring")).thenReturn(player("Frodo", "hash", "u", null));
+        ResponseWriter writer = mock(ResponseWriter.class);
+
+        handler().handleRequest("", loginPost("Frodo", "ring"), context, writer, IP);
+        verify(writer).writeXmlResponse(isNull(), anyMap());
+        verify(loggedUserHolder).logUser("Frodo");
+
+        // and a wrong password is still a wrong password, said from the later thread too
+        handler().handleRequest("", loginPost("Frodo", "wrong"), context, writer, IP);
+        verify(writer).writeError(401);
+    }
+
+    @Test
+    public void askingArgonauthAboutAClaimedAccountIsLeftForLater() throws Exception {
+        var pcAccounts = pcAccounts();
+        when(pcAccounts.isClaimedByCopy("Frodo")).thenReturn(true);
+        when(pcAccounts.claimedBy("Frodo")).thenReturn("sub");
+        java.util.List<Runnable> deferred = new java.util.ArrayList<>();
+        ResponseWriter writer = mock(ResponseWriter.class);
+
+        new LoginRequestHandler(context, deferred::add).handleRequest("", loginPost("Frodo", "ring"), context, writer, IP);
+
+        assertEquals(1, deferred.size());
+        verify(pcAccounts, never()).claimedBy(anyString());
+        verifyNoInteractions(writer);
+        deferred.get(0).run();
+        verify(writer).writeError(LoginRequestHandler.LINKED_TO_PC_ACCOUNT);
+    }
+
+    @Test
+    public void anAccountNobodyHasClaimedIsAnsweredAtOnceAsEver() throws Exception {
+        var pcAccounts = pcAccounts();
+        when(playerDao.loginUser("OldHand", "s3cret")).thenReturn(player("OldHand", "hash", "u", null));
+        java.util.List<Runnable> deferred = new java.util.ArrayList<>();
+        ResponseWriter writer = mock(ResponseWriter.class);
+
+        new LoginRequestHandler(context, deferred::add).handleRequest("", loginPost("OldHand", "s3cret"), context, writer, IP);
+
+        assertTrue(deferred.isEmpty());
+        verify(writer).writeXmlResponse(isNull(), anyMap());
+        verify(pcAccounts, never()).claimedBy(anyString());
+    }
+
+    @Test
+    public void somethingUnexpectedWhileAskingIsA500() throws Exception {
+        var pcAccounts = pcAccounts();
+        when(pcAccounts.isClaimedByCopy("Frodo")).thenReturn(true);
+        when(pcAccounts.claimedBy("Frodo")).thenThrow(new java.sql.SQLException("the database is away"));
+        ResponseWriter writer = mock(ResponseWriter.class);
+
+        handler().handleRequest("", loginPost("Frodo", "ring"), context, writer, IP);
+
+        verify(writer).writeError(500);
     }
 }

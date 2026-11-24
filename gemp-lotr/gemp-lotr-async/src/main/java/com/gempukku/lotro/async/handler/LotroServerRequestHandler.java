@@ -231,10 +231,15 @@ public class LotroServerRequestHandler {
 
     /** A password login: a new session playing as `login`, and the header that gives the browser its cookie. */
     protected Map<String, String> logUserReturningHeaders(HttpRequest request, String remoteIp, String login) throws SQLException {
+        return logUserReturningHeaders(cameOverHttps(request), remoteIp, login);
+    }
+
+    /** As above, for an answer written after the request is gone: `https` is {@link #cameOverHttps} of it. */
+    protected Map<String, String> logUserReturningHeaders(boolean https, String remoteIp, String login) throws SQLException {
         _playerDao.updateLastLoginIp(login, remoteIp);
 
         String sessionId = _loggedUserHolder.logUser(login);
-        return Collections.singletonMap(SET_COOKIE.toString(), sessionCookie(request, sessionId));
+        return Collections.singletonMap(SET_COOKIE.toString(), sessionCookie(https, sessionId));
     }
 
     /**

@@ -93,6 +93,10 @@ public class FakeArgonauth implements AutoCloseable {
      * browser's part themselves use {@link #signIn} and never set this.
      */
     public volatile Person browserPerson;
+    /** What the discovery document says `prompt` may be. The real one says none and login; `create` is asked of it. */
+    public volatile List<String> promptValues = List.of("none", "login");
+    /** The `prompt` of the last sign-in address followed, or null. */
+    public volatile String lastPrompt;
     /** How long every answer is held back. */
     public volatile long delayMillis;
     /** Run while a lookup is being answered: something that happens in Gemp meanwhile. */
@@ -158,6 +162,9 @@ public class FakeArgonauth implements AutoCloseable {
     }
 
     private Map<String, String> authorize(Map<String, String> query, Person person) {
+        lastPrompt = query.get("prompt");
+        if (lastPrompt != null && !promptValues.contains(lastPrompt))
+            throw new AssertionError("a prompt Argonauth does not say it takes: " + lastPrompt);
         require(query, "response_type", "code");
         require(query, "client_id", CLIENT_ID);
         require(query, "redirect_uri", REDIRECT_URI);
@@ -262,6 +269,7 @@ public class FakeArgonauth implements AutoCloseable {
         document.put("userinfo_endpoint", issuer + "/identity/o/api/userinfo");
         document.put("jwks_uri", issuer + "/.well-known/jwks.json");
         document.put("end_session_endpoint", issuer + "/identity/o/logout");
+        document.put("prompt_values_supported", new JSONArray(promptValues));
         return document;
     }
 

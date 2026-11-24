@@ -191,7 +191,12 @@ public class PcAccountService {
      * @param returnPath a place in the app to go to once an alias is entered; anything else is dropped
      */
     public String startSignIn(Session session, String then, String returnPath) throws ArgonauthException {
-        return begin(session, then != null && List.of("link", "create").contains(then) ? then : "", returnPath);
+        return startSignIn(session, then, returnPath, false);
+    }
+
+    /** As above; with `signUp`, Argonauth is asked for its sign-up page: Register PC Account. */
+    public String startSignIn(Session session, String then, String returnPath, boolean signUp) throws ArgonauthException {
+        return begin(session, then != null && List.of("link", "create").contains(then) ? then : "", returnPath, signUp);
     }
 
     /**
@@ -210,18 +215,18 @@ public class PcAccountService {
             throw new Refusal(403, "not-allowed");
         proveByPassword(playing, password, remoteIp);
         try {
-            return begin(session, "connect", null);
+            return begin(session, "connect", null, false);
         } catch (ArgonauthException exp) {
             _log.warn("A PC sign-in could not be started (" + exp.getReason() + "): " + exp.getMessage());
             throw new Refusal(503, "unavailable");
         }
     }
 
-    private String begin(Session session, String purpose, String returnPath) throws ArgonauthException {
+    private String begin(Session session, String purpose, String returnPath, boolean signUp) throws ArgonauthException {
         String state = ArgonauthClient.randomToken();
         String nonce = ArgonauthClient.randomToken();
         String codeVerifier = ArgonauthClient.randomToken();
-        String address = _client.signInAddress(state, nonce, codeVerifier);
+        String address = _client.signInAddress(state, nonce, codeVerifier, signUp);
         session.setPending(new PendingSignIn(state, nonce, codeVerifier, purpose,
                 isAppPath(returnPath) ? returnPath : "", _clock.getAsLong()));
         return address;
@@ -284,6 +289,8 @@ public class PcAccountService {
                     _log.warn("Argonauth links PC account " + signIn.sub() + " to player " + link.playerId() + ", which this Gemp does not have");
             }
             _linkDao.replaceLinks(signIn.sub(), owned);
+            for (int playerId : owned.keySet())
+                putDownElsewhere(_playerDao.getPlayer(playerId).getName(), signIn.sub(), session);
 
             Player playing = session.getPlayer() == null ? null : _playerDao.getPlayer(session.getPlayer());
             if (connecting) {
@@ -298,6 +305,7 @@ public class PcAccountService {
                     if (assertion != Assertion.LINKED)
                         return new Landing(null, failed);
                     _linkDao.setLink(playing.getId(), signIn.sub(), "password");
+                    putDownElsewhere(playing.getName(), signIn.sub(), session);
                 }
                 session.setPcAccount(pcAccount);
                 return new Landing(_sessions.renew(session), APP + "/account?pc=connected");
@@ -309,8 +317,15 @@ public class PcAccountService {
             session.setPcAccount(pcAccount);
             Session renewed = _sessions.renew(session);
 
+            // Wherever it lands on the list, the place the sign-in was asked from goes along, for after an alias is entered.
+            String andBack = pending.returnPath().isEmpty() ? ""
+                    : "&return=" + java.net.URLEncoder.encode(pending.returnPath(), java.nio.charset.StandardCharsets.UTF_8);
             if (pending.then().equals("link") || pending.then().equals("create"))
-                return new Landing(renewed, APP + "/login?open=" + pending.then());
+                return new Landing(renewed, APP + "/login?open=" + pending.then() + andBack);
+            // Nothing to enter yet (a PC account just registered, most of all): straight to making one
+            // (Ketura, 2026-11-24). The list is there round the form, with linking an old account beside it.
+            if (owned.isEmpty())
+                return new Landing(renewed, APP + "/login?open=create" + andBack);
 
             // With one alias there is nothing to choose: straight in. Argonauth has just said it is theirs.
             if (owned.size() == 1) {
@@ -355,8 +370,10 @@ public class PcAccountService {
                 _linkDao.removeLink(playerId);
             throw new Refusal(403, "not-linked");
         }
-        if (!owner.sub().equals(copy))
+        if (!owner.sub().equals(copy)) {
             _linkDao.setLink(playerId, owner.sub(), owner.proof());
+            putDownElsewhere(player.getName(), owner.sub(), session);
+        }
         if (!owner.sub().equals(pcAccount.sub()))
             throw new Refusal(403, "not-linked");
 
@@ -470,7 +487,16 @@ public class PcAccountService {
 
     public View link(Session session, String login, String password, String remoteIp) throws Refusal, SQLException {
         PcAccount pcAccount = freshPcAccountOf(session);
-        Player player = proveByPassword(login == null ? "" : login.trim(), password, remoteIp);
+        String name = login == null ? "" : login.trim();
+        // An account a PC account has claimed is not to be had by its password, right or wrong: the password is not
+        // even looked at, so nothing can be learned about it here either.
+        String claimedBy = name.isEmpty() ? null : claimedBy(name);
+        if (claimedBy != null) {
+            if (claimedBy.equals(pcAccount.sub()))
+                return view(session);
+            throw new Refusal(409, "linked-elsewhere");
+        }
+        Player player = proveByPassword(name, password, remoteIp);
 
         Assertion assertion;
         try {
@@ -480,7 +506,10 @@ public class PcAccountService {
             throw new Refusal(503, "unavailable");
         }
         switch (assertion) {
-            case LINKED -> _linkDao.setLink(player.getId(), pcAccount.sub(), "password");
+            case LINKED -> {
+                _linkDao.setLink(player.getId(), pcAccount.sub(), "password");
+                putDownElsewhere(player.getName(), pcAccount.sub(), session);
+            }
             case LINKED_ELSEWHERE -> throw new Refusal(409, "linked-elsewhere");
             case TOKEN_LAPSED -> throw new Refusal(401, "reauth");
             case RATE_LIMITED -> throw new Refusal(429, "slow-down");
@@ -501,6 +530,67 @@ public class PcAccountService {
         if (!pcAccount.isFresh(_clock.getAsLong()))
             throw new Refusal(401, "reauth");
         return pcAccount;
+    }
+
+    // ---- an account a PC account has claimed has no password login (Ketura, 2026-11-24)
+
+    /**
+     * Whether Gemp's copy has this account as some PC account's. Waits on nothing: the login form asks this of
+     * every name, and goes on to {@link #claimedBy} only for one it says yes to.
+     */
+    public boolean isClaimedByCopy(String name) throws SQLException {
+        if (!_config.enabled() || name == null || name.isEmpty())
+            return false;
+        Player player = _playerDao.getPlayer(name);
+        return player != null && _linkDao.getSub(player.getId()) != null;
+    }
+
+    /**
+     * The PC account that has claimed this account, or null: such an account is entered through its PC account,
+     * and by its password not at all. Gemp's copy can say an account is claimed after an admin has unlinked it at
+     * Argonauth, which is not sent here, so a yes from the copy is put to Argonauth, and the copy corrected. May
+     * wait on Argonauth; when it cannot be asked, the copy stands.
+     */
+    public String claimedBy(String name) throws SQLException {
+        if (!_config.enabled())
+            return null;
+        Player player = _playerDao.getPlayer(name);
+        String copy = player == null ? null : _linkDao.getSub(player.getId());
+        if (copy == null)
+            return null;
+        try {
+            ArgonauthClient.Owner owner = _client.ownerOf(player.getId());
+            if (owner == null) {
+                _linkDao.removeLink(player.getId());
+                return null;
+            }
+            if (!owner.sub().equals(copy)) {
+                _linkDao.setLink(player.getId(), owner.sub(), owner.proof());
+                putDownElsewhere(player.getName(), owner.sub(), null);
+            }
+            return owner.sub();
+        } catch (ArgonauthException exp) {
+            _log.warn("Argonauth could not be asked who owns player " + player.getId() + " (" + exp.getReason() + "): " + exp.getMessage());
+            return copy;
+        }
+    }
+
+    /**
+     * What becoming a PC account's ends for an account: a browser logged in to it by its password is logged out
+     * (that login no longer exists), and another PC account playing it puts it down.
+     *
+     * @param except the session through which it became theirs, which is dealt with by its caller
+     */
+    private void putDownElsewhere(String playerName, String sub, Session except) {
+        for (Session other : _sessions.sessions()) {
+            if (other == except || !playerName.equals(other.getPlayer()))
+                continue;
+            PcAccount pcAccount = other.getPcAccount();
+            if (pcAccount == null)
+                _sessions.end(other.getId());
+            else if (!pcAccount.sub().equals(sub))
+                other.setPlayer(null);
+        }
     }
 
     // ---- an alias being played, looked at again
@@ -561,10 +651,12 @@ public class PcAccountService {
             if (owner != null && owner.sub().equals(pcAccount.sub()))
                 continue;
             _log.info(playing + " no longer belongs to the PC account playing it, by Argonauth: put down");
-            if (owner == null)
+            if (owner == null) {
                 _linkDao.removeLink(player.getId());
-            else
+            } else {
                 _linkDao.setLink(player.getId(), owner.sub(), owner.proof());
+                putDownElsewhere(playing, owner.sub(), null);
+            }
             // only if it is still what the session plays: it may have switched while Argonauth was asked
             if (playing.equals(session.getPlayer()))
                 session.setPlayer(null);
