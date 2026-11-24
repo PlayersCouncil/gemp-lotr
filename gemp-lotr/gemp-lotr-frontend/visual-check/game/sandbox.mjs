@@ -397,17 +397,18 @@ const CHECKS = {
         () => document.activeElement?.getAttribute('data-menu') ?? document.activeElement?.getAttribute('data-card-id'),
       );
     if ((await focused()) !== 'info') problems.push(`the menu's first entry is not focused (${await focused()})`);
+    // (the Ring-bearer stays where he is: his menu goes from Info to Add, with no Send to)
     await page.keyboard.press('ArrowDown');
-    if ((await focused()) !== 'send') problems.push(`Down went to ${await focused()}, not Send to`);
+    if ((await focused()) !== 'add') problems.push(`Down went to ${await focused()}, not Add`);
     await page.keyboard.press('ArrowRight');
     const inSubmenu = () =>
       page.evaluate(() => document.activeElement?.closest('[data-submenu]')?.getAttribute('data-submenu'));
-    await until(async () => (await inSubmenu()) === 'send', 'Right into the Send to submenu').catch(() =>
+    await until(async () => (await inSubmenu()) === 'add', 'Right into the Add submenu').catch(() =>
       problems.push('Right did not go into the submenu'),
     );
     await page.keyboard.press('ArrowLeft');
     await until(
-      async () => (await page.locator(ui.submenu('send')).count()) === 0 && (await focused()) === 'send',
+      async () => (await page.locator(ui.submenu('add')).count()) === 0 && (await focused()) === 'add',
       'Left back',
     );
     await page.keyboard.press('Escape');
@@ -660,23 +661,35 @@ const CHECKS = {
     await until(async () => (await page.locator(ui.card(gone)).count()) === 0, 'Legolas gone from the table');
   },
 
-  /** A refusal is said where it was asked for, in the server's own words. */
+  /**
+   * A refusal is said where it was asked for, in the server's own words: Legolas deleted behind the page's back (the
+   * page asks for no news while edited), then deleted again from his menu. The Ring-bearer's menu offers nothing that
+   * the server would refuse (no Send to, Stack, Copy or Delete: the state calls him `ringBearer`).
+   */
   async refuse(table, problems) {
     const { seat } = table;
     const { page } = seat;
     await seat.open();
     const frodo = await seat.card('frodo');
+    if (!frodo.ringBearer) problems.push("the server's state does not call Frodo the Ring-bearer");
+    await seat.menuOf(frodo.cardId);
+    const offered = await menuEntries(seat);
+    for (const entry of ['send', 'stack', 'copy', 'delete']) {
+      if (offered.includes(entry)) problems.push(`the Ring-bearer's menu offers ${entry} (${offered.join()})`);
+    }
+    await page.keyboard.press('Escape');
+    await setUp(seat, [{ op: 'add', blueprint: LEGOLAS, to: 'freeps.characters' }]);
+    const legolas = await seat.card('legolas');
+    const del = [{ op: 'delete', card: 'legolas' }];
+    await seat.who.post('/scenarios/sandbox/edit', { gameId: seat.gameId(), ops: JSON.stringify(del) });
     const said = await seat.who
-      .post('/scenarios/sandbox/edit', {
-        gameId: seat.gameId(),
-        ops: JSON.stringify([{ op: 'delete', card: 'frodo' }]),
-      })
+      .post('/scenarios/sandbox/edit', { gameId: seat.gameId(), ops: JSON.stringify(del) })
       .then(() => null)
       .catch((error) => error.message);
     const words = /"error":"([^"]+)"/.exec(said ?? '')?.[1] ?? null;
-    if (!words) problems.push(`the server did not refuse deleting the Ring-bearer (${said})`);
+    if (!words) problems.push(`the server did not refuse deleting a card gone (${said})`);
     seat.refusals++;
-    await seat.menuOf(frodo.cardId);
+    await seat.menuOf(legolas.cardId);
     await page.locator(ui.menuEntry('delete')).click();
     const shown = await until(async () => (await page.locator(ui.problem).textContent())?.trim(), 'the refusal');
     if (words && shown !== words) problems.push(`the refusal says "${shown}", not the server's "${words}"`);

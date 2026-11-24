@@ -2,7 +2,6 @@ import { readEditBoard } from './edit-board';
 import {
   asGameCard,
   boardPileCards,
-  boardZones,
   inBoardOrder,
   pageHasPile,
   PILE_BOARD_ZONES,
@@ -96,20 +95,5 @@ describe('edit piles', () => {
       '98',
     ]);
     expect(inBoardOrder([deck[1]!, deck[0]!], null).map((card) => card.id)).toEqual(['41', '40']);
-  });
-
-  it("counts a seat's piles as the board does, in the game's stats' form", () => {
-    expect(boardZones(board, 'freeps')).toEqual({
-      hand: 0,
-      discard: 0,
-      adventureDeck: 1,
-      dead: 0,
-      deck: 3,
-      removed: 0,
-      handRevealed: false,
-    });
-    expect(boardZones({ ...board, piles: { freeps: {}, shadow: {} } }, 'shadow')?.deck).toBeNull();
-    expect(boardZones(board, null)).toBeNull();
-    expect(boardZones(null, 'freeps')).toBeNull();
   });
 });

@@ -70,7 +70,7 @@ describe('TableEditLayerComponent', () => {
       .componentInstance as SearchWindowComponent;
     expect(search.bound()).toEqual({ filter: 'cardType:MINION', label: 'Minions' });
     expect(search.heading()).toBe('Add to Minions');
-    search.chosen.emit({ blueprintId: '1_178', name: 'Goblin Runner', type: 'minion', culture: 'moria', site: false });
+    search.chosen.emit({ blueprintId: '1_178', name: 'Goblin Runner', type: 'MINION', culture: 'moria', site: false });
     await fixture.whenStable();
     expect(edit.apply).toHaveBeenCalledWith([{ op: 'add', blueprint: '1_178', to: 'shadow.minions' }], { x: 0, y: 0 });
     expect(popups.search()).toBeNull();
@@ -85,7 +85,7 @@ describe('TableEditLayerComponent', () => {
     edit.problem.set({ text: 'No room', at: { x: 0, y: 0 } });
     fixture.detectChanges();
     expect(search.said()).toBe('No room');
-    search.chosen.emit({ blueprintId: '1_178', name: 'Goblin Runner', type: 'minion', culture: 'moria', site: false });
+    search.chosen.emit({ blueprintId: '1_178', name: 'Goblin Runner', type: 'MINION', culture: 'moria', site: false });
     await fixture.whenStable();
     expect(popups.search()).not.toBeNull();
     search.closed.emit();

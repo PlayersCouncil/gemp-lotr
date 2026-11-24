@@ -103,13 +103,19 @@ describe('edit menu', () => {
     expect(runner.modify).toBeNull();
   });
 
-  it('offers a site nothing (it has edits of its own), and the Ring and the Ring-bearer what the server explains', () => {
+  it('offers a site nothing (it has edits of its own), and the Ring and the Ring-bearer nothing that moves them', () => {
     const site = cardMenu(board, card('site1'), all);
     expect(menuHasEdits(site)).toBe(false);
     const ring = cardMenu(board, card('ring'), all);
-    expect(ring.sendTo).toEqual([]);
-    expect(ring.delete).toBe(true);
-    expect(cardMenu(board, card('frodo'), all).delete).toBe(true);
+    expect([ring.sendTo, ring.attach, ring.stack, ring.copy, ring.delete]).toEqual([[], false, false, false, false]);
+    const frodo = cardMenu(board, card('frodo'), all);
+    expect([frodo.sendTo, frodo.stack, frodo.copy, frodo.delete]).toEqual([[], false, false, false]);
+    // (what the server takes on him is still offered: wounds, tokens, modifiers)
+    expect(frodo.add?.wounds).toBe(true);
+    expect(frodo.modify).not.toBeNull();
+    // A card the server does not call either is offered them as before
+    const plain = { ...card('frodo'), ringBearer: false };
+    expect(cardMenu(board, plain, all).delete).toBe(true);
   });
 
   it('offers each entry only where the level allows its tool', () => {

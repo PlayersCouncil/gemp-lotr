@@ -4,7 +4,7 @@
  * which are still empty. Read defensively: a slot without an id or a zone is left out. Pure.
  */
 import { SearchBound } from './card-search';
-import { slotFilter } from './slot-filter';
+import { slotKinds } from './slot-filter';
 
 /** What a slot's card comes with when it is put in place. */
 export interface SlotComes {
@@ -143,9 +143,13 @@ export function slotRow(slot: PuzzleSlot): SlotRow | null {
 }
 
 /** A slot's search: within its bound (the pool and its filter, each by itself), labelled by its label. */
-export function slotSearch(slot: PuzzleSlot): SearchBound & { exact: boolean } {
-  const { filter, exact } = slotFilter(slot.pool, slot.filter, slot.zone, slot.siteNumber);
-  return { filter, exact, label: slotLabel(slot) };
+export function slotSearch(slot: PuzzleSlot): SearchBound {
+  return {
+    filter: slot.filter ?? '',
+    pool: slot.pool,
+    with: slotKinds(slot.zone, slot.siteNumber),
+    label: slotLabel(slot),
+  };
 }
 
 /** What a slot comes with, in a word or two ("3 tokens, 1 wound"), or null for nothing. */

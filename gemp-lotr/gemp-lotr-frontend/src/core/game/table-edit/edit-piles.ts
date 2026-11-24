@@ -5,7 +5,6 @@
  * from the server: the hidden piles), the board's cards of a pile in order as the page's cards, and where a card added
  * in a pile's window goes. Pure.
  */
-import { PlayerZones } from '../protocol/game-events';
 import { GameCard } from '../state/game-model';
 import { PileName } from '../table/game-table';
 import { EditBoard, EditCard } from './edit-board';
@@ -140,24 +139,4 @@ export function inBoardOrder(cards: readonly GameCard[], board: EditBoard | null
     .map((card, order) => ({ card, order }))
     .sort((a, b) => place(a.card) - place(b.card) || a.order - b.order)
     .map(({ card }) => card);
-}
-
-/**
- * How many cards each pile of a seat holds, as the board counts them, in the game's own stats' form: the game sends
- * its stats only as it moves, not after an edit, so while the table is edited its counters show these. Null for no
- * seat or no board.
- */
-export function boardZones(board: EditBoard | null, seat: EditSeat | null): PlayerZones | null {
-  const piles = board && seat ? board.piles[seat] : null;
-  if (!piles) return null;
-  const count = (name: string) => piles[name] ?? null;
-  return {
-    hand: count('hand'),
-    discard: count('discard'),
-    adventureDeck: count('adventureDeck'),
-    dead: count('deadPile'),
-    deck: count('deck'),
-    removed: count('removed'),
-    handRevealed: false,
-  };
 }

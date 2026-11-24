@@ -49,6 +49,10 @@ export interface EditCard {
   site?: number | null;
   /** A site's printed number (0: none printed); null for a card that is not a site. */
   printed?: number | null;
+  /** Its seat's Ring-bearer, as the game has it (the server refuses to move, copy or delete it). */
+  ringBearer?: boolean;
+  /** Its seat's One Ring (likewise). */
+  ring?: boolean;
 }
 
 /** A site laid on the adventure path (the state's `path`). */
@@ -181,6 +185,8 @@ function card(value: unknown): EditCard | null {
     at: number(json['at']),
     site: number(json['site']),
     printed: number(json['printed']),
+    ringBearer: json['ringBearer'] === true,
+    ring: json['ring'] === true,
   };
 }
 

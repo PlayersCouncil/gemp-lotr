@@ -447,7 +447,7 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   the draw decks and the other seat's hand and adventure deck, with its `piles` tool), in the page's own pile window
   (`gd-game-piles`, top first): a pile the page's game view isn't shown comes from `TableEdit.board`, read again when
   its window opens and as the game moves; while edited, a window has its pile's open spots (a draw deck's top and
-  bottom) and its cards the card menu, and the counts are the board's (the game sends its stats only as it moves).
+  bottom) and its cards the card menu; the counts are the game's own stats (the server sends them after every edit).
   The adventure path ends with a site-shaped open spot for the next site (`gd-site-spot`), whose chooser
   (`gd-site-chooser`: Search… held to the site's number, From adventure deck… then a seat then its sites) lays a site;
   a laid site's menu has each seat's marker, control, Liberate and Replace…. The twilight pool, the threats and the
@@ -460,8 +460,9 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   has no row for (a place in a draw deck, a pile, on a card, a site, the opponent's hand), in the slots strip under the
   scenario's menu, labelled with where its card goes. Its chooser lists Recent and In this scenario held to what the
   server says the slot takes (`POST /scenarios/picks`), and Search… opens the search window held to the slot's bound
-  (the pool and the slot's filter intersected key by key, with the kinds of card the place takes: `slotFilter`; the
-  person's filters can only narrow it). A card chosen is checked with the server and held on the page (`{op: 'pick'}`
+  (`GET /scenarios/search` with the puzzle's `pool=` and the slot's filter as `bound=`, which the server searches with
+  each by itself; the kinds of card the place takes are part of the person's filter, `slotKinds`: so the person's
+  filters can only narrow it). A sandbox zone's search sends its kinds of card as `bound=` the same way. A card chosen is checked with the server and held on the page (`{op: 'pick'}`
   through TableEdit), refused in the server's words by the slot. The puzzle bar (`gd-puzzle-bar`, in the menu):
   Choosing and Submit (`TableEdit.submit`: `POST /scenarios/start` with the picks; the page goes to the fresh game);
   in play Start again (`picks=same`) and Change cards (the slots empty again, asked first). The end panel adds the

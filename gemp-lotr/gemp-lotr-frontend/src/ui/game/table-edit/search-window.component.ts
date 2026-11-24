@@ -3,7 +3,7 @@ import { CardActions } from '../../../core/cards/card-actions';
 import { CardView } from '../../../core/cards/card-view';
 import { CardViews } from '../../../core/cards/card-views.service';
 import { CardFilterModel, CardFilterPager } from '../../../core/card-filter/card-filter-model';
-import { CardSearch, FoundCard, SearchBound } from '../../../core/game/table-edit/card-search';
+import { boundText, CardSearch, FoundCard, SearchBound } from '../../../core/game/table-edit/card-search';
 import { CardFilterComponent } from '../../shared/card-filter/card-filter.component';
 import { CardComponent } from '../../shared/card/card.component';
 import { DialogComponent } from '../../shared/dialog/dialog.component';
@@ -37,7 +37,8 @@ export class ChooseFound extends CardActions {
  *
  * DOM contract: `gd-dialog` with `data-dialog=edit-search`, holding `.gd-edit-search` (`data-loading`) with
  * `.gd-edit-search__filters` (`gd-collection-filter`, see its contract) and `.gd-edit-search__results`:
- * `.gd-edit-search__bar` (`.gd-edit-search__bound` with the bound's label and its filter as `title`,
+ * `.gd-edit-search__bar` (`.gd-edit-search__bound` with the bound's label and its filter text as `title`: the pool,
+ * the bound and what is always searched with, a line each: "Pool: …", "Bound: …", "Place: …";
  * `.gd-edit-search__count`, `button[data-action=clear]` "Clear filters"), `.gd-edit-search__problem` (`role=alert`)
  * while a refusal is up, and `.gd-edit-search__cards` (fitCards) with a `button.gd-card[data-blueprint]` per card found.
  * With `use`, the bar ends with `button[data-action=use]` (its label; its title the filter text it hands on).
@@ -63,7 +64,7 @@ export class ChooseFound extends CardActions {
           <div class="gd-edit-search__results">
             <div class="gd-edit-search__bar">
               @if (search.bound(); as bound) {
-                <span class="gd-edit-search__bound" [title]="bound.filter">{{ bound.label }}</span>
+                <span class="gd-edit-search__bound" [title]="boundTitle(bound)">{{ bound.label }}</span>
               }
               <span class="gd-edit-search__count">{{ countText() }}</span>
               <button
@@ -153,6 +154,11 @@ export class SearchWindowComponent {
       .filter((part) => part !== '' && !/^sort:/i.test(part))
       .join(' '),
   );
+
+  /** The bound in words, as filter text (the pool, the bound, what is always searched with). */
+  protected boundTitle(bound: SearchBound): string {
+    return boundText(bound);
+  }
 
   protected titleOf(view: CardView<FoundRef>): string {
     return view.ref.found.name;

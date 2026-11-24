@@ -57,6 +57,7 @@ export const SANDBOX_STATE = {
       site: null,
       printed: null,
       added: false,
+      ringBearer: true,
     },
     {
       alias: 'ring',
@@ -76,6 +77,7 @@ export const SANDBOX_STATE = {
       site: null,
       printed: null,
       added: false,
+      ring: true,
     },
     {
       alias: 'site1',
