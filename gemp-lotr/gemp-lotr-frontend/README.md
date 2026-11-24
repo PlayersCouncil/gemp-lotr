@@ -349,7 +349,13 @@ and replays (G4). The hall opens games on it (`hallUi.js`), and the game history
   gathered as `modify(...)` / `unmodify(...)`) and a puzzle's slots (`board/board-slot*`); the Opponent tab's eager
   and bot fallbacks. A filter (the pool, a slot's bound) is typed with the server's count beside it
   (`widgets/filter-field.component.ts`); `Authoring.offerSlotBound(slot, filter)` hands a bound to its slot's form
-  from outside the panel.
+  from outside the panel. The author has the
+  on-table edit controls too (`AuthorBackend`, level `author`, `core/game/table-edit/author-*.ts`): the panel's Edit
+  table (remembered in `gemp-author-ui`) puts the page in edit mode (no decision shown or answered), and each change on
+  the table is said as the Board tab says it (`author-ops.ts`) and sent through the tab's own service (`BoardChanges`),
+  to the board the tab's "Changes are made" names; the menu's `gd-author-edit-bar` says "Editing" and is also that
+  switch (Start / Now). A puzzle's draft offers Open slot in a spot's chooser, draws its empty slots on the table and
+  gives a slot's card a Slot… entry (its form in the Board tab).
 - **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
   layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
   status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's

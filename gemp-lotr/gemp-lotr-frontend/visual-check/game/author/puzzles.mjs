@@ -316,8 +316,9 @@ export const checks = {
     );
     await page.locator(tab.solution('published')).scrollIntoViewIfNeeded();
     const verdict = await page.locator(`${tab.solution('published')} .gd-author-solution__verdict`).innerText();
-    if (!/^solved \(judged at endOf\(archery\): won\)/.test(verdict))
-      problems.push(`the solution's verdict says "${verdict}"`);
+    // (Check's `solutions` says null for a solution that solves it: the row says "solved"; the solution in play says
+    // the game in hand's verdict, now that playing it reaches the judge: ef-notes.md 1)
+    if (!/^(solved\b|won at endOf\(archery\))/.test(verdict)) problems.push(`the solution's verdict says "${verdict}"`);
     if ((await page.locator(`${tab.solution('mine')}[data-solved="no"]`).count()) !== 1) {
       problems.push('the solution with no answers is not said to fail');
     }

@@ -731,6 +731,28 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
 - **puzzle-solutions**: a solution recorded with the game's cards (the panel says it is recording; Stop), the
   published one played, Check's verdict on each in the list, one renamed, its answers written, its cards used (marked
   after a reload) and deleted after the page's question.
+- **table-toggle** (`author/table.mjs`, the author's own table): the panel's Edit table turns the page's edit mode on
+  (no decision shown, none answered by a key, the open spots, "Editing" and the Start / Now chip in the menu), the
+  draft and its file unchanged; still on after a reload; off, the decision back and the spots gone.
+- **table-cards**: at the start (the chip's Start, the Board tab's radio with it), Gandalf added to the hand by the
+  spot's search, again from its chooser (Recent), copied, the second one deleted; each in the draft's cards and setup
+  (`GET state`, `GET source`, after a reload) and the file's text the same, change by change, as the Board tab's Add a
+  card and × write it in a second draft.
+- **table-start**: at the start, a move (Send to), a token, an attach (Attach… and the card picked), a wound, a
+  modifier (Modify…) and the twilight (the state panel's counter), each in the setup exactly as the tab's forms write
+  it in a second draft; after a reload.
+- **table-now**: the same at the board as it stands, each in the `do` of the step in hand (none left waiting) exactly
+  as the tab writes it.
+- **table-site**: a site laid by the path's + refused at the board as it stands, said where it was asked; at the
+  start, site 2 replaced by the Shadow seat's (its menu's Replace…: `setup.path`) and the Free Peoples marker put on
+  it (`setup.startAt`), each as the tab's "Whose sites" and "On the table" write it.
+- **table-slot**: a puzzle's slot opened in the hand (the chooser's Open slot): in the draft as the tab's Add slot
+  writes it, its form shown with the focus in its label, drawn on the table as an open slot; a bound typed, the
+  server's count beside it while typing, sent; after a reload the slot's press shows its form; the file's text.
+- **table-loose**: "Write down what I do" off in a new puzzle with its note until ticked (remembered); Check's verdict
+  per solution from its `solutions`; a bound with an unknown key refused as it is typed, in the server's words; the
+  Ring-bearer's and the Ring's rows marked (their × says why); a sandbox's other seat set to "you" and back
+  (`options.otherSeat`, the file, after a reload).
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
