@@ -34,7 +34,7 @@ final class BoardView {
     }
 
     /**
-     * One card: {alias, blueprintId, name, type, owner, cardId, zone, at, wounds, tokens, on}.  'tokens' counts the
+     * One card: {alias, blueprintId, name, type, owner, cardId, zone, at, wounds, tokens, on, modifiers, ringBearer, ring}.  'tokens' counts the
      * card's own culture's tokens; 'on' is the card it is attached to or stacked on.
      */
     static Map<String, Object> card(ScenarioTable table, String alias, PhysicalCardImpl physical, Seat owner, Map<PhysicalCard, Integer> places) {
@@ -54,6 +54,10 @@ final class BoardView {
                 : physical.getStackedOn() != null ? table.AliasOf(physical.getStackedOn()) : null);
         //(the modifiers put on it by hand that are in force: see CardModifiers)
         json.put("modifiers", table.DescribeModifiers(physical));
+        //(its seat's Ring-bearer, or its seat's One Ring, as the game has them: the page marks them, and offers them no
+        // Delete, Copy or Send to)
+        json.put("ringBearer", table.gameState().getRingBearer(physical.getOwner()) == physical);
+        json.put("ring", table.gameState().getRing(physical.getOwner()) == physical);
         return json;
     }
 

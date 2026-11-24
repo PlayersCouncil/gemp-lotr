@@ -51,6 +51,16 @@ public final class SlotBounds {
      * @return What is wrong with a filter, said for an author; null if the deck builder's search understands it.
      */
     public static String filterProblem(String filter, LotroCardBlueprintLibrary library) {
+        return filterProblem(filter, library, true);
+    }
+
+    /**
+     * @param bound True for a slot's bound or a pool; false for what a person types into a search, whose words are
+     *              then said for the person rather than for a slot (the caller takes any format: out first, which
+     *              the deck builder reads with the formats and a bound may not say).
+     * @return What is wrong with a filter; null if the deck builder's search understands it.
+     */
+    public static String filterProblem(String filter, LotroCardBlueprintLibrary library, boolean bound) {
         if (filter == null)
             return null;
         for (String param : filter.trim().split(" +")) {
@@ -61,7 +71,8 @@ public final class SlotBounds {
                 return "'" + param + "' is not a part of a search: each part is key:value (set:1-6, culture:ROHAN, cardtype:CONDITION, name:Aldor)";
             String key = param.substring(0, colon).toLowerCase(Locale.ROOT);
             if (key.equals("format"))
-                return "'" + param + "': a slot is bounded by sets (set:4-6), not by a format, whose sets the scenario's own format already decides";
+                return bound ? "'" + param + "': a slot is bounded by sets (set:4-6), not by a format, whose sets the scenario's own format already decides"
+                        : "'" + param + "': a format is not something this search takes";
             if (!KEYS.contains(key))
                 return "'" + param + "': the deck builder's search has no '" + key + "' (it has " + String.join(", ", KEYS.stream().sorted().toList()) + ")";
             if (key.equals("set") || key.equals("block"))

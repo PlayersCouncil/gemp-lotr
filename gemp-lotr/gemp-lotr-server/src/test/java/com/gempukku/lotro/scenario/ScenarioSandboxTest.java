@@ -149,6 +149,15 @@ public class ScenarioSandboxTest {
         assertNull(game.card("site2").get("site"));
         assertEquals(2, game.card("site2").get("printed"));
         assertNull(game.card("frodo").get("printed"));
+        //Each seat's Ring-bearer and Ring are marked as such (BoardView.card, shared with the authoring Board tab)
+        assertEquals(true, game.card("frodo").get("ringBearer"));
+        assertEquals(false, game.card("frodo").get("ring"));
+        assertEquals(true, game.card("ring").get("ring"));
+        assertEquals(false, game.card("ring").get("ringBearer"));
+        assertEquals(true, game.card("oppFrodo").get("ringBearer"));
+        assertEquals(true, game.card("oppRing").get("ring"));
+        assertEquals(false, game.card("site1").get("ringBearer"));
+        assertEquals(false, game.card("site1").get("ring"));
 
         //The fellowship phase's prompt is there, and an answer to it is refused while stopped
         AwaitingDecision waiting = game.waiting();

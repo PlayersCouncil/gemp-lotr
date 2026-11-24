@@ -718,6 +718,23 @@ public final class ScenarioDefinition {
         return kind == Kind.SANDBOX ? "sandbox" : "none";
     }
 
+    /**
+     * Who plays a sandbox's other seat (the seat the person does not sit in): the file's own opponent, its steps,
+     * orders and fallback (SCRIPT, as every scenario's opponent is played); Gemp's bot wherever steps and orders leave
+     * it (BOT: what opponent.fallback: bot does); or nobody but the person (PERSON: its decisions wait for the person,
+     * who answers them from the table seen from that seat: see LotroGameMediator.sandboxFlip).  The person changes
+     * it while the sandbox runs (LiveScenario.SetOtherSeat); the file says where it starts.
+     */
+    public enum OtherSeat { SCRIPT, BOT, PERSON }
+
+    /** options.otherSeat (a sandbox's only); null where the file does not say, which is SCRIPT. */
+    public OtherSeat otherSeat;
+
+    /** Who plays a sandbox's other seat when its game begins: options.otherSeat, or the script. */
+    public OtherSeat otherSeatInForce() {
+        return otherSeat != null ? otherSeat : OtherSeat.SCRIPT;
+    }
+
     /** The tools in force: options.tools, or all of them. */
     public List<String> toolsInForce() {
         return tools != null ? tools : ScenarioSandbox.TOOLS;

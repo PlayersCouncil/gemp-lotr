@@ -94,10 +94,20 @@ import java.util.Map;
  * cultures}.<br>
  * POST /scenarios/sandbox/stop, start (gameId); edit (gameId, ops: a JSON list of edits, made whole or not at all);
  * each answers {ok: true, state} or a 400 {error}.<br>
+ * POST /scenarios/sandbox/otherSeat (gameId, to: script | bot | person) - who plays the other seat from now on.<br>
+ * POST /scenarios/sandbox/flip (gameId, optionally seat: freeps | shadow) - the person's page shows the table from
+ * that seat (by default the other one from the seat it shows now): {ok, seat, state}; the page is sent a resync
+ * notice (reason "flip") and reads the game again from nothing, as after a take-back.  Also for an author at the
+ * table of a draft (state null then).<br>
  * POST /scenarios/sandbox/reset (gameId) - a fresh game of the sandbox as it opened: {gameId}, which the page goes to
  * as to any fresh game of a scenario.  Allowed once the game is over too.<br>
  * GET /scenarios/search?filter=&start=&count= - for any logged-in player: cards found with the deck builder's filter
  * (ScenarioCardSearch): {total, start, cards: [{blueprintId, name, type, side, culture, site, siteNumber, twilight}]}.
+ * Optionally pool= and bound= (a puzzle's pool, a slot's filter): only the cards each of them finds as well, each
+ * searched with by itself, so that what is typed can narrow a slot's bound and never widen it; and strict=true: a key
+ * the search does not know is refused (400 {error}) rather than ignored.  pool and bound are always read strictly.<br>
+ * GET /scenarios/author/bound?filter=&pool= - whether a filter is a bound a slot can be given (as strictly as saving
+ * the slot is) and how many cards it finds, with the pool if one is given: {ok, why, total}.
  */
 public class ScenarioRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private static final Logger _log = LogManager.getLogger(ScenarioRequestHandler.class);
@@ -536,6 +546,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     case "cards" -> result.put("cards", _authoring.findCards(getQueryParameterSafely(query, "q"),
                             "true".equals(getQueryParameterSafely(query, "sites"))));
                     case "images" -> result.put("images", _authoring.images());
+                    //(whether a filter is a bound a slot can be given, as strictly as saving it: {ok, why, total})
+                    case "bound" -> result = _search.bound(getQueryParameterSafely(query, "filter"), getQueryParameterSafely(query, "pool"));
                     default -> throw new HttpProcessingException(404);
                 }
                 responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
@@ -654,8 +666,10 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         HttpPostRequestDecoder form = new HttpPostRequestDecoder(request);
         try {
             LotroGameMediator mediator = _lotroServer.getGameById(getFormParameterSafely(form, "gameId"));
+            //(the flip is an author's at the table too, whose game is no sandbox)
+            boolean flip = what.equals("flip") && mediator != null && mediator.getScenario() != null && mediator.getScenario().CanFlip();
             if (mediator == null || mediator.getScenario() == null || !mediator.getScenario().HumanPlayer().equals(player.getName())
-                    || mediator.getScenario().Sandbox() == null) {
+                    || (mediator.getScenario().Sandbox() == null && !flip)) {
                 writeError(responseWriter, 404, "This is not a sandbox you are playing.");
                 return;
             }
@@ -670,6 +684,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     String ops = getFormParameterSafely(form, "ops");
                     yield ops == null ? "Say what to change: ops, a list of edits" : mediator.sandboxEdit(player.getName(), ops);
                 }
+                case "otherSeat" -> mediator.sandboxOtherSeat(player.getName(), getFormParameterSafely(form, "to"));
+                case "flip" -> mediator.sandboxFlip(player.getName(), getFormParameterSafely(form, "seat"));
                 default -> throw new HttpProcessingException(404);
             };
             if (problem != null) {
@@ -678,6 +694,9 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             }
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("ok", true);
+            if (what.equals("flip"))
+                result.put("seat", mediator.getScenario().Looking().key());
+            //(null for an author's game, which is no sandbox)
             result.put("state", mediator.sandboxState(player.getName()));
             responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
         } finally {
@@ -730,7 +749,19 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             writeError(responseWriter, 400, "start and count are numbers");
             return;
         }
-        responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), start, count)));
+        String pool = getQueryParameterSafely(query, "pool");
+        String bound = getQueryParameterSafely(query, "bound");
+        boolean strict = "true".equals(getQueryParameterSafely(query, "strict"));
+        if (pool == null && bound == null && !strict) {
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), start, count)));
+            return;
+        }
+        //Kept inside a bound that cannot be widened: the pool, the bound and the typed filter each searched with by itself
+        try {
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), pool, bound, strict, start, count)));
+        } catch (ScenarioCardSearch.Refused exp) {
+            writeError(responseWriter, 400, exp.getMessage());
+        }
     }
 
     private Integer number(HttpPostRequestDecoder form, String name) throws Exception {
