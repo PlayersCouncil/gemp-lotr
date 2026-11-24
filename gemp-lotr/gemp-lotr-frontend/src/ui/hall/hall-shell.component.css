@@ -140,10 +140,42 @@
   background-color: var(--theme-hall-bar-bg);
 }
 
-.gd-hall__bar > gd-hall-connection,
+.gd-hall__presence,
 .gd-hall__clock {
   flex: 1 1 0;
   min-width: max-content;
+}
+
+/*
+ * The connection readout, which fills the room as it did alone (its popup is as wide as its box allows), then Log Out
+ * at the end of it
+ */
+.gd-hall__presence {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-hall__presence > gd-hall-connection {
+  flex: 1 1 auto;
+}
+
+.gd-hall__logout {
+  padding: 2px 8px;
+  border: 1px solid var(--theme-hall-bar-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.gd-hall__logout:enabled:hover,
+.gd-hall__logout:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
 }
 
 .gd-hall__actions {

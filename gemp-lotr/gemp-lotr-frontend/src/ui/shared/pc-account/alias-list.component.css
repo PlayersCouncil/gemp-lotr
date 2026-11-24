@@ -1,0 +1,118 @@
+/*
+ * The alias list: on the login page where the login form is, in its text and buttons (login-page.component.css); on
+ * My Account as the rest of that page (account-overview.component.css). Classic theme values only, reused.
+ */
+
+:host {
+  display: block;
+  color: var(--theme-text);
+}
+
+:host([data-place='login']) {
+  justify-self: center;
+  min-width: 20em;
+  max-width: 32em;
+}
+
+:host([data-place='account']) {
+  max-width: 40em;
+}
+
+.gd-alias-list__signed-in,
+.gd-alias-list__blocked,
+.gd-alias-list__empty {
+  margin: 0 0 0.5em;
+}
+
+.gd-alias-list__blocked,
+.gd-alias-list__empty,
+.gd-alias-list__tag,
+.gd-alias-list__page {
+  color: var(--theme-account-help);
+}
+
+.gd-alias-list__blocked,
+.gd-alias-list__tag {
+  font-size: 90%;
+}
+
+.gd-alias-list__aliases {
+  margin: 0 0 0.5em;
+  padding: 0;
+  list-style: none;
+}
+
+.gd-alias-list__alias {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em 0.6em;
+  padding: 0.25em 0.4em;
+  border-bottom: 1px solid var(--theme-account-row-border);
+}
+
+.gd-alias-list__name {
+  font-weight: bold;
+}
+
+/* Enter Gemp at the row's end; its refusal on a line of its own under the row */
+.gd-alias-list__alias > [data-action='enter'] {
+  margin-left: auto;
+}
+
+.gd-alias-list__alias > .gd-alias-list__error {
+  flex-basis: 100%;
+}
+
+.gd-alias-list__error {
+  margin: 0.3em 0;
+}
+
+:host([data-place='login']) .gd-alias-list__error {
+  color: var(--theme-login-error);
+}
+
+:host([data-place='account']) .gd-alias-list__error {
+  color: var(--theme-account-load-error);
+}
+
+.gd-alias-list__pager,
+.gd-alias-list__actions,
+.gd-alias-list__form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.5em 0;
+}
+
+.gd-alias-list__form {
+  margin: 0.5em 0;
+}
+
+.gd-alias-list__field {
+  display: block;
+  margin: 0.3em 0;
+}
+
+.gd-alias-list__label {
+  display: inline-block;
+  min-width: 6em;
+}
+
+/* As the login page's buttons and fields there (login-page.component.css .gd-button, .gd-login__input) */
+:host([data-place='login']) .gd-button {
+  padding: 7.46875px 11.203125px;
+  font-size: 15.4px;
+  line-height: 1.4;
+}
+
+:host([data-place='login']) .gd-alias-list__input {
+  font-size: 90%;
+}
+
+/* As My Account's native-looking buttons, in the widget font */
+:host([data-place='account']) .gd-button {
+  padding: 0.3em 0.8em;
+  font-size: 1em;
+}

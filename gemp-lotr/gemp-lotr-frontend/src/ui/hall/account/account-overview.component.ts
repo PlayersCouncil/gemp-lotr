@@ -16,15 +16,16 @@ import { AccountOverview } from '../../../core/hall/account/account-overview.ser
 import { PlayerSearch } from '../../../core/hall/play/player-picker';
 import { PlayerPickerComponent } from '../shared/player-picker.component';
 import { PriceComponent } from '../shared/price.component';
+import { PcAccountBlockComponent } from './pc-account-block.component';
 
 /**
  * My Account > My Account (account.html #account): the heading with the player's name, the pocket at the right (gold
- * and silver, hall.css .pocket), "Migrate Trophies to My Cards" for a player who still has trophies, and the ignored
- * players: the help, the "Ignore a player:" form (the hall's player picker), the status line and the list.
+ * and silver, hall.css .pocket), "Migrate Trophies to My Cards" for a player who still has trophies, the PC Account
+ * block (`gd-pc-account-block`, nothing in `test` mode) and the ignored players: the help, the "Ignore a player:" form (the hall's player picker), the status line and the list.
  *
  * DOM contract: `gd-account-overview.gd-account-overview` holding `h1.gd-account-overview__heading` (the name in
  * `span.gd-account-overview__name`), `div.gd-account-overview__pocket` (`gd-price`; empty before the hall's first
- * answer), `button.gd-account-overview__migrate` (only with trophies),
+ * answer), `button.gd-account-overview__migrate` (only with trophies), `gd-pc-account-block`,
  * `section.gd-account-overview__ignores` with `h2`, `p.gd-account-overview__help`, `form.gd-account-overview__add`
  * (`label`, `gd-player-picker`, `button[type=submit]`), `div.gd-account-overview__status` (`role=status`),
  * `ul.gd-account-overview__list` of `li` (`span.gd-account-overview__ignored`, `button.gd-account-overview__remove`
@@ -33,7 +34,7 @@ import { PriceComponent } from '../shared/price.component';
 @Component({
   selector: 'gd-account-overview',
   styleUrl: './account-overview.component.css',
-  imports: [PlayerPickerComponent, PriceComponent],
+  imports: [PlayerPickerComponent, PriceComponent, PcAccountBlockComponent],
   host: { class: 'gd-account-overview' },
   template: `
     <h1 class="gd-account-overview__heading">
@@ -51,6 +52,7 @@ import { PriceComponent } from '../shared/price.component';
         </button>
       </div>
     }
+    <gd-pc-account-block />
     <section class="gd-account-overview__ignores" aria-labelledby="gd-account-ignores-heading">
       <h2 id="gd-account-ignores-heading">{{ ignoresHeading }}</h2>
       <p class="gd-account-overview__help">{{ ignoresHelp }}</p>

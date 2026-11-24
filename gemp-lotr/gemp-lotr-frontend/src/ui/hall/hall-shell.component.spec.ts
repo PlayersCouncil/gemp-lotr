@@ -8,9 +8,10 @@ import { Subject } from 'rxjs';
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { CHAT_CHOICE_KEY } from '../../core/chat/chat-messages';
 import { HALL_TAB_STORAGE_KEY } from '../../core/hall/hall-tabs';
-import { HallChannel } from '../../core/platform/hall-tab.service';
+import { HallChannel, SessionChannel } from '../../core/platform/hall-tab.service';
 import { LocalSettings } from '../../core/platform/local-settings.service';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
+import { PageNavigation } from '../../core/platform/page-navigation';
 import { SettingCookies } from '../../core/platform/setting-cookies';
 import { settle } from '../../testing/fake-notifier';
 import { readServerResponse } from '../../testing/files';
@@ -339,6 +340,51 @@ describe('HallShellComponent', () => {
       window.dispatchEvent(new Event('resize'));
       await update();
       expect(el().style.getPropertyValue('--gd-chat-height')).toBe('400px');
+    });
+  });
+
+  describe('Log Out', () => {
+    const SESSION = at('/argonauth/session');
+
+    async function answerSession(fixture: string) {
+      backend.match(SESSION).forEach((r) => r.flush(readServerResponse(fixture)));
+      await update();
+    }
+
+    it('is beside the connection readout, and logs the alias out', async () => {
+      const go = vi.spyOn(TestBed.inject(PageNavigation), 'go').mockImplementation(() => undefined);
+      const announce = vi.spyOn(TestBed.inject(SessionChannel), 'announce').mockImplementation(() => undefined);
+      await open('/hall');
+      await answerPlayer();
+      await answerSession('argonauth-session.json');
+      const presence = el().querySelector('.gd-hall__bar > .gd-hall__presence')!;
+      expect(Array.from(presence.children).map((child) => child.localName)).toEqual(['gd-hall-connection', 'button']);
+      const logout = presence.querySelector<HTMLButtonElement>('button.gd-hall__logout[data-action="logout"]')!;
+      expect(logout.textContent!.trim()).toBe('Log Out');
+      logout.click();
+      await update();
+      expect(logout.disabled).toBe(true);
+      const request = backend.expectOne((r) => at('/argonauth/logout')(r) && r.method === 'POST');
+      expect(request.request.body.toString()).toBe('scope=alias');
+      request.flush(readServerResponse('argonauth-logout-alias.json'));
+      await update();
+      expect(announce).toHaveBeenCalledTimes(1);
+      expect(go).toHaveBeenCalledWith('/gemp-lotr/ng/login');
+    });
+
+    it('is there in test mode too', async () => {
+      await open('/hall');
+      await answerPlayer();
+      await answerSession('argonauth-session-test.json');
+      expect(el().querySelector('.gd-hall__presence .gd-hall__logout')).not.toBeNull();
+    });
+
+    it('is not there with no alias played', async () => {
+      await open('/hall');
+      await answerPlayer();
+      await answerSession('argonauth-session-aliases.json');
+      expect(el().querySelector('.gd-hall__presence gd-hall-connection')).not.toBeNull();
+      expect(el().querySelector('.gd-hall__logout')).toBeNull();
     });
   });
 });

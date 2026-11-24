@@ -1,0 +1,32 @@
+/* My Account's PC Account block: as the page's other sections (account-overview.component.css) */
+
+:host {
+  display: block;
+}
+
+section {
+  clear: both;
+  max-width: 40em;
+  margin-top: 1.5em;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+.gd-pc-account-block__about,
+.gd-pc-account-block__connected {
+  color: var(--theme-account-help);
+  font-size: 90%;
+}
+
+.gd-pc-account-block__manage,
+.gd-pc-account-block__connect {
+  color: var(--theme-hall-link);
+}
+
+.gd-pc-account-block__manage:hover,
+.gd-pc-account-block__connect:hover {
+  color: var(--theme-hall-link-hover);
+}

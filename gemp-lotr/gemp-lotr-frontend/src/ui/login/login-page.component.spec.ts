@@ -3,7 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { CANNOT_CONTACT, FORGOT_PASSWORD, PASSWORDS_DIFFER, messageText } from '../../core/login/login-messages';
-import { INVALID_NEW_LOGIN, PERMANENTLY_BANNED } from '../../core/login/login-messages';
+import { INVALID_NEW_LOGIN, PERMANENTLY_BANNED, TOO_MANY_ATTEMPTS } from '../../core/login/login-messages';
 import { LOGIN_SERVICES } from '../../core/login/login-services';
 import { Notifier } from '../../core/notifier/notifier';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
@@ -44,14 +44,18 @@ describe('LoginPageComponent', () => {
   const fail = (request: TestRequest, status: number) => request.flush('', { status, statusText: 'Error' });
   const bodyOf = (request: TestRequest) => (request.request.body as HttpParams).toString();
 
-  /** The page, its status line answered (or failed, with `status`). */
-  async function render(status?: number) {
+  const sessionRequest = () =>
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/argonauth/session' && r.method === 'GET');
+
+  /** The page, its status line answered (or failed, with `status`), and its session (`test` mode unless given). */
+  async function render(status?: number, session = 'argonauth-session-test.json') {
     const fixture = TestBed.createComponent(LoginPageComponent);
     if (status) {
       fail(statusRequest(), status);
     } else {
       statusRequest().flush(readServerResponse('server-status.json'));
     }
+    sessionRequest().flush(readServerResponse(session));
     await settle();
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
@@ -260,14 +264,25 @@ describe('LoginPageComponent', () => {
     );
   });
 
-  it('labels the button "Update Password" after a password reset', async () => {
-    const { input, type, button, stable } = await render();
+  it('has no password reset: a 202 leaves for the hall like any login', async () => {
+    const { type, button, stable } = await render();
     await type('login', 'reset');
     button('submit')!.click();
     expectPost('/login').flush('', { status: 202, statusText: 'Accepted' });
     await stable();
-    expect(button('submit')!.textContent!.trim()).toBe('Update Password');
-    expect(input('login')!.value).toBe('reset');
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush('{"name":"reset","type":"u"}');
+    await stable();
+    expect((TestBed.inject(PageNavigation) as unknown as FakeNavigation).visited).toEqual(['/gemp-lotr/ng/']);
+    expect(button('submit')!.textContent!.trim()).toBe('Login');
+  });
+
+  it('says to wait after too many attempts (429)', async () => {
+    const { query, type, button, stable } = await render();
+    await type('login', 'frodo');
+    button('submit')!.click();
+    fail(expectPost('/login'), 429);
+    await stable();
+    expect(query('.gd-login__error')!.textContent!.trim()).toBe(messageText(TOO_MANY_ATTEMPTS));
   });
 
   it('disables the buttons and marks the form busy while a call is under way', async () => {
@@ -292,5 +307,126 @@ describe('LoginPageComponent', () => {
     const { query } = await render(500);
     expect((TestBed.inject(Notifier) as FakeNotifier).dialogs).toEqual([`alert: ${CANNOT_CONTACT}`]);
     expect(query('.gd-login__status')!.textContent).toBe('');
+  });
+});
+
+describe('LoginPageComponent and the PC account', () => {
+  let backend: HttpTestingController;
+
+  function setUp(queryString = '') {
+    TestBed.configureTestingModule({
+      providers: [
+        provideGempHttp(),
+        provideHttpClientTesting(),
+        provideFakeNotifier(),
+        { provide: PAGE_QUERY_STRING, useValue: queryString },
+        { provide: PageNavigation, useClass: FakeNavigation },
+        ...LOGIN_SERVICES,
+      ],
+    });
+    backend = TestBed.inject(HttpTestingController);
+  }
+
+  afterEach(() => backend.verify());
+
+  /** The page with its status line, and the session answered with `session` (a fixture), or failed with a status. */
+  async function render(session: string | number | null) {
+    const fixture = TestBed.createComponent(LoginPageComponent);
+    const status = backend.match((r) => r.url === '/gemp-lotr-server/status');
+    status.forEach((request) => request.flush(readServerResponse('server-status.json')));
+    const sessions = backend.match((r) => r.url === '/gemp-lotr-server/argonauth/session');
+    expect(sessions.length).toBe(1);
+    if (typeof session === 'string') sessions[0].flush(readServerResponse(session));
+    else if (typeof session === 'number') sessions[0].flush('', { status: session, statusText: 'Error' });
+    // null: left unanswered, and done with (verify() then finds nothing open)
+    await settle();
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    return { fixture, el, query: (selector: string) => el.querySelector<HTMLElement>(selector) };
+  }
+
+  it('draws neither the form nor the list until the session is known', async () => {
+    setUp();
+    const { el, query } = await render(null);
+    expect(query('.gd-login__form')).toBeNull();
+    expect(query('gd-alias-list')).toBeNull();
+    expect(el.hasAttribute('data-pc')).toBe(false);
+    // (the session's request, left unanswered)
+  });
+
+  it('is the page as it always was in test mode, or when the server gives no session', async () => {
+    setUp('?pc=failed');
+    const { el, query } = await render(404);
+    expect(el.dataset['pc']).toBe('test');
+    expect(query('.gd-button[data-action="register"]')).not.toBeNull();
+    expect(query('[data-action="pc-login"]')).toBeNull();
+    expect(query('.gd-login__notice')).toBeNull();
+    expect(query('gd-alias-list')).toBeNull();
+  });
+
+  it('offers "Sign in with PC Account" where Register was, in optional mode, for nobody', async () => {
+    setUp();
+    const { query } = await render('argonauth-session-nobody.json');
+    expect(query('.gd-button[data-action="register"]')).toBeNull();
+    const intro = query('.gd-login__intro')!;
+    expect(intro.hasAttribute('data-pc')).toBe(true);
+    expect(intro.textContent).toContain('New players: sign in with a PC Account, then create your Gemp alias.');
+    const link = query('a.gd-button[data-action="pc-login"]')!;
+    expect(link.textContent!.trim()).toBe('Sign in with PC Account');
+    expect(link.getAttribute('href')).toBe('/gemp-lotr-server/argonauth/login');
+    expect(query('.gd-login__input[name="password"]')).not.toBeNull();
+    expect(query('.gd-button[data-action="submit"]')!.textContent!.trim()).toBe('Login');
+  });
+
+  it("carries the page's return place into the PC sign-in", async () => {
+    setUp('?return=%2Fevents%2Fleagues');
+    const { query } = await render('argonauth-session-nobody.json');
+    expect(query('[data-action="pc-login"]')!.getAttribute('href')).toBe(
+      '/gemp-lotr-server/argonauth/login?return=%2Fevents%2Fleagues',
+    );
+  });
+
+  it.each([
+    ['?pc=cancelled', 'PC Account sign-in was cancelled.'],
+    ['?pc=failed', 'PC Account sign-in failed. Try again.'],
+  ])('says how a PC sign-in ended (%s)', async (queryString, line) => {
+    setUp(queryString);
+    const { query } = await render('argonauth-session-nobody.json');
+    expect(query('.gd-login__notice')!.textContent!.trim()).toBe(line);
+    expect(query('.gd-login__notice')!.getAttribute('role')).toBe('status');
+  });
+
+  it('shows the alias list instead of the form for a signed-in PC account', async () => {
+    setUp();
+    const { el, query } = await render('argonauth-session-aliases.json');
+    // The list shares the page's session: asked once
+    expect(backend.match((r) => r.url === '/gemp-lotr-server/argonauth/session')).toEqual([]);
+    expect(el.dataset['pc']).toBe('pc');
+    expect(query('.gd-login__form')).toBeNull();
+    const list = query('gd-alias-list')!;
+    expect(list.dataset['place']).toBe('login');
+    expect(list.querySelector('.gd-alias-list__signed-in')!.textContent).toBe('Signed in as Frodo Baggins');
+    expect(Array.from(list.querySelectorAll('.gd-alias-list__name')).map((name) => name.textContent)).toEqual([
+      'Frodo',
+      'Underhill',
+      'Ringbearer',
+    ]);
+  });
+
+  it('shows a password login its one account', async () => {
+    setUp();
+    const { query } = await render('argonauth-session-password.json');
+    const list = query('gd-alias-list')!;
+    expect(list.dataset['kind']).toBe('password');
+    expect(Array.from(list.querySelectorAll('.gd-alias-list__name')).map((name) => name.textContent)).toEqual([
+      'Samwise',
+    ]);
+    expect(query('.gd-login__form')).toBeNull();
+  });
+
+  it('opens the form a PC sign-in came back for', async () => {
+    setUp('?open=link');
+    const { query } = await render('argonauth-session-aliases.json');
+    expect(query('.gd-alias-list__form')!.dataset['form']).toBe('link');
   });
 });
