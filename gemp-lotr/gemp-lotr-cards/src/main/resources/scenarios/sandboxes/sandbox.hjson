@@ -11,6 +11,7 @@
 		name: Sandbox
 		fallback: pass
 	}
+	coverage: guided
 	cards: {
 		freeps: {
 			# Frodo, Son of Drogo
@@ -38,4 +39,6 @@
 		freeps: 1_319, 1_331, 1_341, 1_343, 1_349, 1_351, 1_353, 1_356, 1_360
 		shadow: 1_319, 1_331, 1_341, 1_343, 1_349, 1_351, 1_353, 1_356, 1_360
 	}
+	steps: [
+	]
 }

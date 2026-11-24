@@ -99,6 +99,9 @@ public final class ScenarioWriter {
         if (def.runnerLevel != null)
             options.add("runnerLevel", lower(def.runnerLevel));
         addIfSet(options, "bubbleGap", def.bubbleGap);
+        //(none at all is written false, as an empty autoPass is)
+        if (def.tools != null)
+            options.add("tools", def.tools.isEmpty() ? org.hjson.JsonValue.valueOf(false) : org.hjson.JsonValue.valueOf(String.join(", ", def.tools)));
         if (!options.isEmpty())
             root.add("options", options);
 

@@ -2790,6 +2790,15 @@ public class ScenarioAuthoring {
             state.put("draft", JSON.parseObject(ScenarioWriter.toJson(def).toString()));
             //Each part of the file but its steps, as the file has it: what is copied between the file and the panel
             state.put("parts", ScenarioWriter.parts(def, _library));
+            //For the Scenario tab: the kinds a scenario can be, and what a sandbox's player may be allowed to change
+            // (options.tools, set with {top: {options: {..., tools: "add, move"}}}; left out for every tool)
+            state.put("kinds", List.of("tutorial", "puzzle", "sandbox"));
+            Map<String, Object> tools = new LinkedHashMap<>();
+            tools.put("names", ScenarioSandbox.TOOLS);
+            tools.put("notBuilt", new ArrayList<>(new java.util.TreeSet<>(ScenarioSandbox.NOT_BUILT)));
+            tools.put("said", def.tools != null);
+            tools.put("allowed", def.toolsInForce());
+            state.put("sandboxTools", tools);
 
             List<String> statuses = new ArrayList<>();
             for (Step step : def.steps)
