@@ -246,8 +246,12 @@ public class ArgonauthClient {
         }
     }
 
-    /** The `sub` of the PC account that owns the Gemp account `playerId` now, or null when nobody does. */
-    public String ownerOf(int playerId) throws ArgonauthException {
+    /** Who owns one of this Gemp's accounts, and by what proof, as Argonauth has it now. */
+    public record Owner(String sub, String proof) {
+    }
+
+    /** The PC account that owns the Gemp account `playerId` now, or null when nobody does. */
+    public Owner ownerOf(int playerId) throws ArgonauthException {
         Answer answer = send(HttpRequest.newBuilder(backchannel(_config.issuer() + "/api/v1/links/" + playerId))
                 .header("Authorization", basic()).GET());
         if (answer.status() == 429)
@@ -262,7 +266,7 @@ public class ArgonauthClient {
         String sub = link.getString("sub");
         if (isBlank(sub))
             throw new ArgonauthException(REJECTED, "a link with nobody on it");
-        return sub;
+        return new Owner(sub, firstText(link.getString("proof"), "unknown"));
     }
 
     // ---- the ID token

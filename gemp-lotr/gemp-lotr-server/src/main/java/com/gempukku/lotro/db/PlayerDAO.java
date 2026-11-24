@@ -45,4 +45,20 @@ public interface PlayerDAO {
      * At most {@code limit} names.  Used by the admin player search.
      */
     List<String> findPlayerNames(String fragment, int limit);
+
+    /**
+     * Makes a new account for someone signed in with a PC account, who enters it through that account and never
+     * with a password: it has none. The same rules for names as {@link #registerUser}.
+     *
+     * @return the new player, or null when the name is taken
+     * @throws LoginInvalidException when the name is not one an account may have
+     */
+    Player registerAlias(String login, String remoteAddr) throws SQLException, LoginInvalidException;
+
+    /**
+     * Takes back an account {@link #registerAlias} has just made, when it could not be recorded at Argonauth as
+     * anybody's: nobody could ever enter it, and its name would be lost. Removes nothing that has a password or
+     * has ever been played.
+     */
+    void removeUnusedAlias(int playerId) throws SQLException;
 }

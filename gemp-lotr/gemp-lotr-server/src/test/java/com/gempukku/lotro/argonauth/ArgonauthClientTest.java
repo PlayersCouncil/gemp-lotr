@@ -506,7 +506,7 @@ public class ArgonauthClientTest {
         String address = _client.signInAddress(ArgonauthClient.randomToken(), "n", ArgonauthClient.randomToken());
         assertTrue(address, address.startsWith("http://localhost:1/identity/o/authorize?"));
         assertEquals(1, signIn(FRODO).links().size());
-        assertEquals(FRODO.sub(), _client.ownerOf(900001));
+        assertEquals(FRODO.sub(), _client.ownerOf(900001).sub());
         assertTrue(_client.signOutAddress("the.id.token").startsWith("http://localhost:1/identity/o/logout?"));
     }
 
@@ -533,7 +533,7 @@ public class ArgonauthClientTest {
         assertEquals(Assertion.LINKED, _client.assertLink(frodo.accessToken(), 4711, "Underhill", "created"));
         assertEquals(new FakeArgonauth.LinkRow(FRODO.sub(), "Underhill", "created"), _argonauth.linkOf(4711));
         assertEquals(Assertion.LINKED, _client.assertLink(frodo.accessToken(), 4711, "Underhill", "created"));
-        assertEquals(FRODO.sub(), _client.ownerOf(4711));
+        assertEquals(new ArgonauthClient.Owner(FRODO.sub(), "created"), _client.ownerOf(4711));
     }
 
     @Test
@@ -542,7 +542,7 @@ public class ArgonauthClientTest {
         SignIn frodo = signIn(FRODO);
 
         assertEquals(Assertion.LINKED_ELSEWHERE, _client.assertLink(frodo.accessToken(), 900003, "SamGamgee", "password"));
-        assertEquals(SAM.sub(), _client.ownerOf(900003));
+        assertEquals(new ArgonauthClient.Owner(SAM.sub(), "session"), _client.ownerOf(900003));
     }
 
     @Test

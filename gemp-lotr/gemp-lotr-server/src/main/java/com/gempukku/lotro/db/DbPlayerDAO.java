@@ -555,4 +555,58 @@ public class DbPlayerDAO implements PlayerDAO {
             throw new RuntimeException("Unable to search player names", ex);
         }
     }
+
+    @Override
+    public synchronized Player registerAlias(String login, String remoteAddr) throws SQLException, LoginInvalidException {
+        // A name that is refused outright (admin..., guest...) is no more to be had here than a malformed one.
+        if (!validLoginName(login))
+            throw new LoginInvalidException();
+        if (loginExists(login))
+            return null;
+
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                // No password: this account is entered through its PC account. A blank password logs nobody in.
+                String sql = """
+                                INSERT INTO player (name, password, type, create_ip)
+                                VALUES (:login, '', :type, :create_ip)
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("login", login)
+                        .addParameter("type", Player.Type.USER.toString())
+                        .addParameter("create_ip", remoteAddr)
+                        .executeUpdate();
+
+                conn.commit();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to insert new alias", ex);
+        }
+        return getPlayerFromDBByName(login);
+    }
+
+    @Override
+    public synchronized void removeUnusedAlias(int playerId) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                String sql = """
+                                DELETE FROM player
+                                WHERE id = :id AND password = '' AND type = :type
+                                    AND last_login_reward IS NULL AND last_ip IS NULL
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("id", playerId)
+                        .addParameter("type", Player.Type.USER.toString())
+                        .executeUpdate();
+
+                conn.commit();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to remove unused alias", ex);
+        }
+    }
 }

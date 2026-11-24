@@ -227,6 +227,24 @@ CREATE TABLE `player` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `player_argonauth`
+--
+
+DROP TABLE IF EXISTS `player_argonauth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `player_argonauth` (
+  `player_id` int(11) NOT NULL,
+  `argonauth_sub` char(36) NOT NULL,
+  `proof` varchar(16) NOT NULL,
+  `linked_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`player_id`),
+  KEY `player_argonauth_sub` (`argonauth_sub`),
+  CONSTRAINT `fk_player_argonauth_player_id` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `scheduled_tournament`
 --
 

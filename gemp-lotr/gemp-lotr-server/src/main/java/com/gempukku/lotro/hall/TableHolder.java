@@ -163,6 +163,20 @@ public class TableHolder {
         return result;
     }
 
+    /** Whether this player sits at a table that is waiting to fill, or is in a game that is not over. */
+    public boolean isPlayerSeated(String playerName) {
+        for (GameTable awaitingTable : awaitingTables.values()) {
+            if (awaitingTable.hasPlayer(playerName))
+                return true;
+        }
+        for (GameTable runningTable : runningTables.values()) {
+            LotroGameMediator game = runningTable.getLotroGameMediator();
+            if (game != null && !game.isFinished() && game.getPlayersPlaying().contains(playerName))
+                return true;
+        }
+        return false;
+    }
+
     private void verifyNotPlayingLeagueGame(Player player, League league) throws HallException {
         for (GameTable awaitingTable : awaitingTables.values()) {
             if (league.equals(awaitingTable.getGameSettings().league())

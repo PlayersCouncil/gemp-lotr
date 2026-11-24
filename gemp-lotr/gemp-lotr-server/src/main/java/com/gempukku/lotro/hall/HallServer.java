@@ -597,6 +597,30 @@ public class HallServer extends AbstractServer {
         }
     }
 
+    /**
+     * Whether this player is in the middle of something: sits at a waiting table, is signed up in a queue, is still
+     * in a running tournament, or is in a game that is not over. Being in a league is not counted, a league game
+     * under way is. While one alias of a PC account is busy its other aliases cannot be entered (PC-ACCOUNT.md).
+     */
+    public boolean isPlayerBusy(String playerName) {
+        _hallDataAccessLock.readLock().lock();
+        try {
+            if (tableHolder.isPlayerSeated(playerName))
+                return true;
+            for (TournamentQueue tournamentQueue : _tournamentService.getAllTournamentQueues()) {
+                if (tournamentQueue.isPlayerSignedUp(playerName))
+                    return true;
+            }
+            for (Tournament tournament : _tournamentService.getLiveTournaments()) {
+                if (tournament.isPlayerInCompetition(playerName))
+                    return true;
+            }
+            return false;
+        } finally {
+            _hallDataAccessLock.readLock().unlock();
+        }
+    }
+
     private boolean leaveQueuesForLeavingPlayer(Player player) throws SQLException, IOException {
         _hallDataAccessLock.writeLock().lock();
         try {

@@ -168,4 +168,18 @@ public class CachedPlayerDAO implements PlayerDAO, Cached {
         }
         return updated;
     }
+
+    @Override
+    public Player registerAlias(String login, String remoteAddr) throws SQLException, LoginInvalidException {
+        Player player = _delegate.registerAlias(login, remoteAddr);
+        if (player != null)
+            _playerByName.remove(login);
+        return player;
+    }
+
+    @Override
+    public void removeUnusedAlias(int playerId) throws SQLException {
+        _delegate.removeUnusedAlias(playerId);
+        clearCache();
+    }
 }
