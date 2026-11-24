@@ -282,7 +282,7 @@ const SCENARIOS = [
       await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer']);
       await t.texts(`${ALIAS('Frodo')} [data-action="enter"]`, ['Enter Gemp']);
       await t.texts('.gd-alias-list__actions .gd-button', [
-        'Create New Gemp Alias',
+        'Create New Gemp Profile',
         'Link Existing Gemp Account',
         'Log Out',
       ]);
@@ -309,7 +309,7 @@ const SCENARIOS = [
       await t.open(`${NG}login`);
       await t.click(ENTER('Ringbearer'));
       await t.texts(NAMES, ['Frodo', 'Underhill']);
-      await t.text('.gd-alias-list__refusal', 'That alias is no longer linked to your PC Account.');
+      await t.text('.gd-alias-list__refusal', 'That profile is no longer linked to your PC Account.');
       await t.attribute('.gd-alias-list__refusal', 'role', 'alert');
       await t.arrives(`${NG}login`);
       t.sent(['/enter playerId=900003']);
@@ -377,7 +377,7 @@ const SCENARIOS = [
     run: async (t) => {
       await t.open(`${NG}login?open=create&return=%2Fevents%2Fleagues`);
       await t.attribute(FORM, 'data-form', 'create');
-      await t.text('.gd-alias-list__empty', 'No Gemp alias yet: create one, or link an account you had.');
+      await t.text('.gd-alias-list__empty', 'No Gemp profile yet: create one, or link an account you had.');
       await t.disabled(ACTION('link'), false);
       const [link, form] = await Promise.all(
         [ACTION('link'), FORM].map((selector) => t.page.locator(selector).first().boundingBox()),
@@ -392,7 +392,7 @@ const SCENARIOS = [
   },
   {
     name: 'create-good',
-    note: 'Create New Gemp Alias: made, entered, the hall opens',
+    note: 'Create New Gemp Profile: made, entered, the hall opens',
     server: { session: 'argonauth-session-aliases.json' },
     run: async (t) => {
       await t.open(`${NG}login`);
@@ -610,7 +610,7 @@ const SCENARIOS = [
       await t.text('.gd-pc-account-block__notice', 'This account is now connected to your PC Account.');
       await t.text(
         '.gd-pc-account-block__connected',
-        'This account is connected to a PC Account. Sign in with the PC Account to see all your aliases.',
+        'This account is connected to a PC Account. Sign in with the PC Account to see all your Gemp profiles.',
       );
       await t.absent('.gd-pc-account-block__connect');
     },
