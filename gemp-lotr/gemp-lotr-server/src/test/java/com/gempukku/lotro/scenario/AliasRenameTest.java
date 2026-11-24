@@ -148,4 +148,59 @@ public class AliasRenameTest {
         assertEquals("marker(shadow, 2), control(hobbiton, shadow), liberate(hobbiton)",
                 root.get("steps").asArray().get(0).asObject().getString("do", null));
     }
+
+    @Test
+    public void aPuzzlesPartsNameTheCardAsTheRestDo() {
+        JsonObject root = JsonValue.readHjson("""
+                {
+                	cards: {
+                		freeps: {
+                			smeagol: 5_29
+                		}
+                	}
+                	slots: {
+                		trick: hand
+                		cloak: {
+                			zone: attached
+                			on: smeagol
+                		}
+                	}
+                	outcome: {
+                		judge: {
+                			at: endOf(archery)
+                			win: {
+                				type: canSpot
+                				filter: alias(smeagol)
+                			}
+                		}
+                		score: {
+                			value: strength:smeagol
+                		}
+                	}
+                	solutions: [
+                		{
+                			name: key
+                			picks: {
+                				trick: 1_2
+                				cloak: 1_3
+                			}
+                			answers: [
+                				use(smeagol)
+                				play(trick)
+                			]
+                		}
+                	]
+                }
+                """).asObject();
+        AliasRename.rename(root, "smeagol", "gollum");
+        assertEquals("gollum", root.get("slots").asObject().get("cloak").asObject().getString("on", null));
+        assertEquals("alias(gollum)", root.get("outcome").asObject().get("judge").asObject().get("win").asObject().getString("filter", null));
+        assertEquals("strength:gollum", root.get("outcome").asObject().get("score").asObject().getString("value", null));
+        assertEquals("use(gollum)", root.get("solutions").asArray().get(0).asObject().get("answers").asArray().get(0).asString());
+        //A slot is renamed as its card is: the slot, the solution's pick for it, and what names it
+        AliasRename.rename(root, "trick", "gambit");
+        assertEquals("hand", root.get("slots").asObject().getString("gambit", null));
+        assertEquals("1_2", root.get("solutions").asArray().get(0).asObject().get("picks").asObject().getString("gambit", null));
+        assertEquals("play(gambit)", root.get("solutions").asArray().get(0).asObject().get("answers").asArray().get(1).asString());
+    }
 }
