@@ -71,10 +71,14 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
         }
         String scheme = uri.getScheme() == null ? "" : uri.getScheme().toLowerCase(Locale.ROOT);
         String host = uri.getHost() == null ? "" : uri.getHost().toLowerCase(Locale.ROOT);
-        boolean thisMachine = host.equals("localhost") || host.equals("127.0.0.1") || host.equals("host.docker.internal");
-        boolean backchannel = key.equals("argonauth.backchannel.url");
-        if (host.isEmpty() || !(scheme.equals("https") || (scheme.equals("http") && (thisMachine || backchannel))))
-            throw new IllegalStateException(key + "=" + value + " must be an https address (http only for localhost)");
+        boolean thisMachine = host.equals("localhost") || host.equals("127.0.0.1");
+        // The back channel carries the client secret. Unencrypted it may only go to another container on this
+        // machine: the Docker host, or a name with no dot in it (a compose service).
+        boolean insideThisMachine = key.equals("argonauth.backchannel.url")
+                && (host.equals("host.docker.internal") || !host.contains("."));
+        if (host.isEmpty() || !(scheme.equals("https") || (scheme.equals("http") && (thisMachine || insideThisMachine))))
+            throw new IllegalStateException(key + "=" + value + " must be an https address (http only for localhost"
+                    + (key.equals("argonauth.backchannel.url") ? ", host.docker.internal or a container's name)" : ")"));
         if (uri.getQuery() != null || uri.getFragment() != null)
             throw new IllegalStateException(key + "=" + value + " must not have a query or a fragment");
         return value.endsWith("/") && uri.getPath().equals("/") ? value.substring(0, value.length() - 1) : value;

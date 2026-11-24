@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.LongSupplier;
 
 import static com.gempukku.lotro.argonauth.ArgonauthException.Reason.REJECTED;
@@ -57,6 +58,8 @@ public class ArgonauthClient {
     private static final long REMEMBERED_MILLIS = Duration.ofHours(1).toMillis();
     /** A key id nobody has heard of sends Gemp back for the keys, but not more often than this. */
     private static final long KEYS_AGAIN_MILLIS = Duration.ofMinutes(1).toMillis();
+    /** After failing to fetch Argonauth's addresses or keys, how long before trying again: until then, what is held is used, or the failure repeated. */
+    private static final long TRY_AGAIN_MILLIS = Duration.ofSeconds(30).toMillis();
     /** How far Argonauth's clock and this one may differ. */
     private static final long CLOCK_SKEW_MILLIS = Duration.ofMinutes(1).toMillis();
 
@@ -102,9 +105,17 @@ public class ArgonauthClient {
     private final LongSupplier _clock;
     private final Duration _answerTimeout;
 
+    // Each of the two fetches is made by one thread at a time. The locks are not monitors: a virtual thread that
+    // waits for one, or on the network while holding one, does not hold up the others' carrier.
+    private final ReentrantLock _endpointsLock = new ReentrantLock();
+    private final ReentrantLock _keysLock = new ReentrantLock();
     private volatile Endpoints _endpoints;
+    private volatile ArgonauthException _endpointsFailure;
+    private volatile long _endpointsFailedAt;
     private volatile JWKSet _keys;
     private volatile long _keysReadAt;
+    private volatile ArgonauthException _keysFailure;
+    private volatile long _keysFailedAt;
 
     public ArgonauthClient(ArgonauthConfig config) {
         this(config, System::currentTimeMillis, ANSWER_TIMEOUT);
@@ -320,10 +331,10 @@ public class ArgonauthClient {
         long now = _clock.getAsLong();
         JWKSet keys = _keys;
         if (keys == null || now - _keysReadAt > REMEMBERED_MILLIS)
-            keys = readKeys(now);
+            keys = readKeys(now, _keysReadAt);
         RSAKey key = signingKey(keys, keyId);
         if (key == null && now - _keysReadAt > KEYS_AGAIN_MILLIS)
-            key = signingKey(readKeys(now), keyId);
+            key = signingKey(readKeys(now, _keysReadAt), keyId);
         if (key == null)
             throw new ArgonauthException(REJECTED, "the ID token is signed with a key Argonauth does not publish");
         return key;
@@ -344,16 +355,36 @@ public class ArgonauthClient {
         return keyId == null && count == 1 ? only : null;
     }
 
-    private synchronized JWKSet readKeys(long now) throws ArgonauthException {
-        Answer answer = send(HttpRequest.newBuilder(backchannel(endpoints().keys())).GET());
-        if (answer.status() != 200)
-            throw new ArgonauthException(UNAVAILABLE, "Argonauth's keys answered " + answer.status());
+    /** Fetches the keys, unless another thread has since `heldFrom` (when the caller looked), or a fetch has just failed. */
+    private JWKSet readKeys(long now, long heldFrom) throws ArgonauthException {
+        _keysLock.lock();
         try {
-            _keys = JWKSet.parse(answer.body());
-            _keysReadAt = now;
-            return _keys;
-        } catch (ParseException exp) {
-            throw new ArgonauthException(REJECTED, "Argonauth's keys cannot be read");
+            if (_keys != null && _keysReadAt != heldFrom)
+                return _keys;
+            if (_keysFailure != null && now - _keysFailedAt < TRY_AGAIN_MILLIS) {
+                if (_keys != null)
+                    return _keys;
+                throw _keysFailure;
+            }
+            try {
+                Answer answer = send(HttpRequest.newBuilder(backchannel(endpoints().keys())).GET());
+                if (answer.status() != 200)
+                    throw new ArgonauthException(UNAVAILABLE, "Argonauth's keys answered " + answer.status());
+                try {
+                    _keys = JWKSet.parse(answer.body());
+                } catch (ParseException exp) {
+                    throw new ArgonauthException(REJECTED, "Argonauth's keys cannot be read");
+                }
+                _keysReadAt = now;
+                _keysFailure = null;
+                return _keys;
+            } catch (ArgonauthException exp) {
+                _keysFailure = exp;
+                _keysFailedAt = now;
+                throw exp;
+            }
+        } finally {
+            _keysLock.unlock();
         }
     }
 
@@ -365,7 +396,7 @@ public class ArgonauthClient {
         if (endpoints != null && now - endpoints.readAt() <= REMEMBERED_MILLIS)
             return endpoints;
         try {
-            return readEndpoints(now);
+            return readEndpoints(now, endpoints);
         } catch (ArgonauthException exp) {
             // Addresses that were good an hour ago are better than none while Argonauth is away.
             if (endpoints != null && exp.getReason() == UNAVAILABLE)
@@ -374,19 +405,36 @@ public class ArgonauthClient {
         }
     }
 
-    private synchronized Endpoints readEndpoints(long now) throws ArgonauthException {
-        Answer answer = send(HttpRequest.newBuilder(
-                backchannel(_config.issuer() + "/.well-known/openid-configuration")).GET());
-        if (answer.status() != 200)
-            throw new ArgonauthException(UNAVAILABLE, "Argonauth's discovery document answered " + answer.status());
-        JSONObject document = answer.json();
-        if (!_config.issuer().equals(document.getString("issuer")))
-            throw new ArgonauthException(REJECTED, "the discovery document is for " + document.getString("issuer")
-                    + ", and argonauth.issuer is " + _config.issuer());
-        _endpoints = new Endpoints(endpoint(document, "authorization_endpoint"), endpoint(document, "token_endpoint"),
-                endpoint(document, "userinfo_endpoint"), endpoint(document, "jwks_uri"),
-                endpoint(document, "end_session_endpoint"), now);
-        return _endpoints;
+    /** Fetches the discovery document, unless another thread has since the caller looked, or a fetch has just failed. */
+    private Endpoints readEndpoints(long now, Endpoints held) throws ArgonauthException {
+        _endpointsLock.lock();
+        try {
+            if (_endpoints != held)
+                return _endpoints;
+            if (_endpointsFailure != null && now - _endpointsFailedAt < TRY_AGAIN_MILLIS)
+                throw _endpointsFailure;
+            try {
+                Answer answer = send(HttpRequest.newBuilder(
+                        backchannel(_config.issuer() + "/.well-known/openid-configuration")).GET());
+                if (answer.status() != 200)
+                    throw new ArgonauthException(UNAVAILABLE, "Argonauth's discovery document answered " + answer.status());
+                JSONObject document = answer.json();
+                if (!_config.issuer().equals(document.getString("issuer")))
+                    throw new ArgonauthException(REJECTED, "the discovery document is for " + document.getString("issuer")
+                            + ", and argonauth.issuer is " + _config.issuer());
+                _endpoints = new Endpoints(endpoint(document, "authorization_endpoint"), endpoint(document, "token_endpoint"),
+                        endpoint(document, "userinfo_endpoint"), endpoint(document, "jwks_uri"),
+                        endpoint(document, "end_session_endpoint"), now);
+                _endpointsFailure = null;
+                return _endpoints;
+            } catch (ArgonauthException exp) {
+                _endpointsFailure = exp;
+                _endpointsFailedAt = now;
+                throw exp;
+            }
+        } finally {
+            _endpointsLock.unlock();
+        }
     }
 
     /** One of the discovery document's addresses, which must be the issuer's own: the client secret is sent to some. */

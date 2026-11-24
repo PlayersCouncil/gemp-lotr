@@ -92,8 +92,8 @@ public class PcAccountServiceTest {
         }
 
         @Override
-        public void succeeded(String name, long now) {
-            _failedAttempts.removeIf(attempt -> attempt.startsWith(name + " "));
+        public void succeeded(String name, String ip, long now) {
+            _failedAttempts.removeIf(attempt -> attempt.equals(name + " from " + ip));
         }
     };
 
@@ -217,7 +217,7 @@ public class PcAccountServiceTest {
         alias(FRODO, 101, "Frodo");
         assertEquals("/gemp-lotr/ng/deckbuilder?deck=Shire", signIn(_sessions.newSession(), FRODO, null, "/deckbuilder?deck=Shire").location());
         for (String elsewhere : new String[]{"//evil.example/x", "https://evil.example/", "/login", "/login?return=/hall",
-                "\\\\evil.example", "/a b", "hall", "", "/x#y", "/" + "a".repeat(201)})
+                "\\\\evil.example", "/a b", "hall", "", "/x#y", "/" + "a".repeat(201), "/../../x", "/hall/../../other"})
             assertEquals(elsewhere, "/gemp-lotr/ng/hall", signIn(_sessions.newSession(), FRODO, null, elsewhere).location());
     }
 
@@ -290,13 +290,34 @@ public class PcAccountServiceTest {
         Session browser = _sessions.newSession();
         Map<String, String> back = _argonauth.signIn(_service.startSignIn(browser, null, null), FRODO);
 
-        // someone else's state, and then the right one too late: the first answer spent the asking
+        // a made-up state gets nothing, and the code is never sent to Argonauth with it
         Landing wrong = _service.completeSignIn(browser, back.get("code"), ArgonauthClient.randomToken(), null, IP);
         assertEquals("/gemp-lotr/ng/login?pc=failed", wrong.location());
         assertNull(wrong.session());
-        assertEquals("/gemp-lotr/ng/login?pc=failed", _service.completeSignIn(browser, back.get("code"), back.get("state"), null, IP).location());
         assertNull(browser.getPcAccount());
-        assertFalse("the code was never sent to Argonauth", _argonauth.requests.contains("POST /identity/o/api/token"));
+        assertFalse(_argonauth.requests.contains("POST /identity/o/api/token"));
+
+        // nor does it call the real sign-in off (another site could send a browser to the callback with one)
+        Landing right = _service.completeSignIn(browser, back.get("code"), back.get("state"), null, IP);
+        assertEquals("/gemp-lotr/ng/hall", right.location());
+
+        // the answer was taken: the same one again is nothing, in the old session or the new
+        assertEquals("/gemp-lotr/ng/login?pc=failed", _service.completeSignIn(browser, back.get("code"), back.get("state"), null, IP).location());
+        assertEquals("/gemp-lotr/ng/login?pc=failed", _service.completeSignIn(right.session(), back.get("code"), back.get("state"), null, IP).location());
+    }
+
+    @Test
+    public void theSessionFromBeforeASignInIsLeftWithNothing() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        Session before = _sessions.newSession();
+        Landing landing = signIn(before, FRODO, null, null);
+
+        // someone who knew the cookie from before the sign-in, and whose request picked the session up in time
+        assertNull(before.getPcAccount());
+        assertNull(before.getPlayer());
+        assertRefused(401, "no-pc-account", () -> _service.create(before, "Fixated", IP));
+        assertRefused(401, "no-pc-account", () -> _service.enter(before, 101, IP));
+        assertEquals("Frodo", landing.session().getPlayer());
     }
 
     @Test
@@ -383,16 +404,22 @@ public class PcAccountServiceTest {
 
     // ---- connecting the account a password login is in
 
+    /** Connect PC Account, from giving the password to coming back from Argonauth as `person`. */
+    private Landing connect(Session browser, String password, Person person) throws Exception {
+        Map<String, String> back = _argonauth.signIn(_service.startConnect(browser, password, IP), person);
+        return _service.completeSignIn(browser, back.get("code"), back.get("state"), null, IP);
+    }
+
     @Test
-    public void connectingLinksTheAccountThisBrowserIsLoggedInTo() throws Exception {
-        player(201, "OldHand", "pass", "u", null);
+    public void connectingLinksTheAccountThisBrowserIsLoggedInToByItsPassword() throws Exception {
+        player(201, "OldHand", "s3cret", "u", null);
         Session browser = loggedIn("OldHand");
         String cookieBefore = browser.getId();
 
-        Landing landing = signIn(browser, FRODO, "connect", "/hall");
+        Landing landing = connect(browser, "s3cret", FRODO);
 
         assertEquals("/gemp-lotr/ng/account?pc=connected", landing.location());
-        assertEquals(new LinkRow(FRODO.sub(), "OldHand", "session"), _argonauth.linkOf(201));
+        assertEquals(new LinkRow(FRODO.sub(), "OldHand", "password"), _argonauth.linkOf(201));
         assertEquals(FRODO.sub(), _linkDao.getSub(201));
         assertEquals("OldHand", landing.session().getPlayer());
         assertEquals(FRODO.sub(), landing.session().getPcAccount().sub());
@@ -401,9 +428,56 @@ public class PcAccountServiceTest {
     }
 
     @Test
+    public void beingLoggedInIsNotEnoughToConnect() throws Exception {
+        // a shared computer left logged in, or a borrowed cookie: without the password the account stays its owner's
+        player(201, "OldHand", "s3cret", "u", null);
+        Session browser = loggedIn("OldHand");
+
+        assertRefused(401, "bad-credentials", () -> _service.startConnect(browser, "guess", IP));
+        assertRefused(401, "bad-credentials", () -> _service.startConnect(browser, "", IP));
+        assertRefused(401, "bad-credentials", () -> _service.startConnect(browser, null, IP));
+        assertEquals(3, _failedAttempts.size());
+        _blockedNames.add("OldHand");
+        assertRefused(429, "slow-down", () -> _service.startConnect(browser, "s3cret", IP));
+        _blockedNames.clear();
+
+        // and the address anyone can be sent to starts a plain sign-in, which connects nothing
+        Landing landing = signIn(browser, FRODO, "connect", null);
+        assertEquals("/gemp-lotr/ng/login", landing.location());
+        assertNull(_argonauth.linkOf(201));
+        assertNull(_linkDao.getSub(201));
+        assertFalse(_argonauth.requests.contains("POST /api/v1/links"));
+    }
+
+    @Test
+    public void onlyAPasswordLoginConnects() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        assertRefused(403, "not-allowed", () -> _service.startConnect(null, "x", IP));
+        assertRefused(403, "not-allowed", () -> _service.startConnect(_sessions.newSession(), "x", IP));
+        Session frodo = signedIn(FRODO);
+        assertRefused(403, "not-allowed", () -> _service.startConnect(frodo, "pass-Frodo", IP));
+        assertTrue(_failedAttempts.isEmpty());
+    }
+
+    @Test
+    public void anAliasAnAdminUnlinkedCannotBeTakenBackByThePcAccountStillPlayingIt() throws Exception {
+        // an admin linked the account to the wrong person, saw it, and unlinked it at Argonauth
+        alias(FRODO, 101, "Victim");
+        Session impostor = signedIn(FRODO);
+        assertEquals("Victim", impostor.getPlayer());
+        _argonauth.unlink(101);
+
+        assertRefused(403, "not-allowed", () -> _service.startConnect(impostor, "pass-Victim", IP));
+        Landing landing = signIn(impostor, FRODO, "connect", null);
+        assertNull(_argonauth.linkOf(101));
+        // and that sign-in, with Argonauth's word fresh, put the alias down
+        assertNull(landing.session().getPlayer());
+    }
+
+    @Test
     public void connectingAnAccountThatIsAlreadyTheirsAssertsNothing() throws Exception {
         alias(FRODO, 101, "Frodo");
-        Landing landing = signIn(loggedIn("Frodo"), FRODO, "connect", null);
+        Landing landing = connect(loggedIn("Frodo"), "pass-Frodo", FRODO);
         assertEquals("/gemp-lotr/ng/account?pc=connected", landing.location());
         assertFalse(_argonauth.requests.contains("POST /api/v1/links"));
     }
@@ -413,7 +487,7 @@ public class PcAccountServiceTest {
         alias(SAM, 301, "SamGamgee");
         Session browser = loggedIn("SamGamgee");
 
-        Landing landing = signIn(browser, FRODO, "connect", null);
+        Landing landing = connect(browser, "pass-SamGamgee", FRODO);
 
         assertEquals("/gemp-lotr/ng/account?pc=linked-elsewhere", landing.location());
         // the browser stays what it was: logged in to that account by its password, and no PC account's
@@ -426,24 +500,22 @@ public class PcAccountServiceTest {
 
     @Test
     public void connectingThatFailsSaysSoOnMyAccount() throws Exception {
-        player(201, "OldHand", "pass", "u", null);
+        player(201, "OldHand", "s3cret", "u", null);
         Session browser = loggedIn("OldHand");
 
         _argonauth.statusFor.put("/api/v1/links", 429);
-        assertEquals("/gemp-lotr/ng/account?pc=failed", signIn(browser, FRODO, "connect", null).location());
+        assertEquals("/gemp-lotr/ng/account?pc=failed", connect(browser, "s3cret", FRODO).location());
         _argonauth.statusFor.put("/api/v1/links", 500);
-        assertEquals("/gemp-lotr/ng/account?pc=failed", signIn(browser, FRODO, "connect", null).location());
+        assertEquals("/gemp-lotr/ng/account?pc=failed", connect(browser, "s3cret", FRODO).location());
         assertNull(browser.getPcAccount());
         assertNull(_linkDao.getSub(201));
 
-        String state = FakeArgonauth.form(_service.startSignIn(browser, "connect", null).split("\\?")[1]).get("state");
+        String state = FakeArgonauth.form(_service.startConnect(browser, "s3cret", IP).split("\\?")[1]).get("state");
         assertEquals("/gemp-lotr/ng/account?pc=cancelled", _service.completeSignIn(browser, null, state, "access_denied", IP).location());
-    }
 
-    @Test
-    public void connectingWithNobodyLoggedInIsAPlainSignIn() throws Exception {
-        alias(FRODO, 101, "Frodo");
-        assertEquals("/gemp-lotr/ng/hall", signIn(_sessions.newSession(), FRODO, "connect", null).location());
+        _argonauth.close();
+        PcAccountService restarted = service(_argonauth.config());
+        assertRefused(503, "unavailable", () -> restarted.startConnect(browser, "s3cret", IP));
     }
 
     // ---- entering
@@ -595,6 +667,84 @@ public class PcAccountServiceTest {
         assertTrue(_lastIps.isEmpty());
     }
 
+    @Test
+    public void aBanThatLandsWhileArgonauthIsAskedStillKeepsTheAliasOut() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        alias(FRODO, 102, "Underhill");
+        Session frodo = signedIn(FRODO);
+        // the lookup takes its time, and the ban lands during it
+        _argonauth.duringLookup = () -> player(102, "Underhill", "pass", "", null);
+        assertRefused(403, "banned", () -> _service.enter(frodo, 102, IP));
+        assertNull(frodo.getPlayer());
+    }
+
+    // ---- an alias being played, looked at again
+
+    @Test
+    public void anAliasUnlinkedAtArgonauthIsPutDownAtTheNextLook() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        alias(SAM, 301, "SamGamgee");
+        Session frodo = signedIn(FRODO);
+        Session sam = signedIn(SAM);
+        Session byPassword = loggedIn("Frodo");
+
+        _service.recheckAliases();
+        assertEquals("nothing has changed", "Frodo", frodo.getPlayer());
+
+        _argonauth.unlink(101);
+        _sessions.getSession(frodo.getId());
+        _sessions.getSession(sam.getId());
+        _service.recheckAliases();
+
+        assertNull(frodo.getPlayer());
+        assertEquals("the PC account is still signed in, at its list", FRODO.sub(), frodo.getPcAccount().sub());
+        assertTrue(_service.view(frodo).aliases().isEmpty());
+        assertEquals("SamGamgee", sam.getPlayer());
+        // a password login is its own proof, and is not Argonauth's to end
+        assertEquals("Frodo", byPassword.getPlayer());
+    }
+
+    @Test
+    public void anAliasMovedToAnotherPcAccountIsPutDownAndTheCopyFollows() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        Session frodo = signedIn(FRODO);
+        _argonauth.link(SAM, 101, "Frodo", "admin");
+        _sessions.getSession(frodo.getId());
+
+        _service.recheckAliases();
+
+        assertNull(frodo.getPlayer());
+        assertEquals(SAM.sub(), _linkDao.getSub(101));
+    }
+
+    @Test
+    public void theLookAsksOnlyAboutSessionsInUseAndStopsWhenArgonauthIsAway() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        alias(SAM, 301, "SamGamgee");
+        Session frodo = signedIn(FRODO);
+        Session sam = signedIn(SAM);
+        Thread.sleep(5);
+        _service.recheckAliases();
+        _argonauth.requests.clear();
+
+        // only Sam's browser has asked for anything since
+        Thread.sleep(5);
+        _sessions.getSession(sam.getId());
+        _argonauth.unlink(101);
+        _service.recheckAliases();
+        assertEquals(List.of("GET /api/v1/links/301"), _argonauth.requests);
+        assertEquals("not asked about, so not put down yet", "Frodo", frodo.getPlayer());
+
+        // an Argonauth that cannot be asked puts nobody down
+        _argonauth.unlink(301);
+        _argonauth.statusFor.put("/api/v1/links/", 503);
+        _sessions.getSession(sam.getId());
+        _sessions.getSession(frodo.getId());
+        _service.recheckAliases();
+        assertEquals("SamGamgee", sam.getPlayer());
+        assertEquals("Frodo", frodo.getPlayer());
+    }
+
     // ---- creating
 
     @Test
@@ -661,6 +811,48 @@ public class PcAccountServiceTest {
 
         _argonauth.statusFor.clear();
         assertEquals("Gardener", _service.create(sam, "Gardener", IP).player());
+    }
+
+    @Test
+    public void anAliasArgonauthRecordedButNeverAnsweredForIsKept() throws Exception {
+        Session sam = signedIn(SAM);
+        // the link is recorded, and the answer lost on the way back
+        _argonauth.loseNextAssertAnswer = true;
+
+        View view = _service.create(sam, "Gardener", IP);
+
+        assertEquals("Gardener", view.player());
+        Player made = byName("Gardener");
+        assertNotNull("not taken back: Argonauth has it as Sam's", made);
+        assertEquals(SAM.sub(), _argonauth.linkOf(made.getId()).sub());
+        assertEquals(SAM.sub(), _linkDao.getSub(made.getId()));
+    }
+
+    @Test
+    public void manyCreatesAtOnceStillGetTenBetweenThem() throws Exception {
+        Session sam = signedIn(SAM);
+        _argonauth.delayMillis = 30;
+        java.util.concurrent.atomic.AtomicInteger made = new java.util.concurrent.atomic.AtomicInteger();
+        java.util.concurrent.atomic.AtomicInteger slowedDown = new java.util.concurrent.atomic.AtomicInteger();
+        List<Thread> threads = new ArrayList<>();
+        for (int number = 0; number < 25; number++) {
+            String name = "Racer" + number;
+            threads.add(Thread.ofVirtual().start(() -> {
+                try {
+                    _service.create(sam, name, IP);
+                    made.incrementAndGet();
+                } catch (Refusal refusal) {
+                    if (refusal.getMessage().equals("slow-down"))
+                        slowedDown.incrementAndGet();
+                } catch (Exception exp) {
+                    throw new IllegalStateException(exp);
+                }
+            }));
+        }
+        for (Thread thread : threads)
+            thread.join();
+        assertEquals(PcAccountService.CREATED_PER_HOUR, made.get());
+        assertEquals(25 - PcAccountService.CREATED_PER_HOUR, slowedDown.get());
     }
 
     @Test

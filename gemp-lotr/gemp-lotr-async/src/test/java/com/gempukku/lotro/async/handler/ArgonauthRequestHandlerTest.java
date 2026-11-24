@@ -108,12 +108,11 @@ public class ArgonauthRequestHandlerTest {
     // ---- who this browser is
 
     @Test
-    public void theSessionIsAnsweredAtOnceForWhoeverTheCookieSays() throws Exception {
+    public void theSessionIsAnsweredForWhoeverTheCookieSays() throws Exception {
         Session session = _sessions.newSession();
-        defer(HttpMethod.GET, "/session", null, session);
+        handle(HttpMethod.GET, "/session", null, session);
         verify(_service).view(same(session));
         verify(_writer).writeJsonResponse(VIEW.toJson());
-        assertTrue(_deferred.isEmpty());
 
         handle(HttpMethod.GET, "/session", null, null);
         verify(_service).view(isNull());
@@ -141,6 +140,8 @@ public class ArgonauthRequestHandlerTest {
         assertEquals(404, statusOf(HttpMethod.POST, "/enter", "playerId=1"));
         assertEquals(404, statusOf(HttpMethod.POST, "/create", "name=Frodo"));
         assertEquals(404, statusOf(HttpMethod.POST, "/link", "login=Frodo&password=x"));
+        assertEquals(404, statusOf(HttpMethod.POST, "/connect", "password=x"));
+        verify(_service, never()).startConnect(any(), any(), any());
         verify(_service, never()).startSignIn(any(), any(), any());
         verify(_service, never()).completeSignIn(any(), any(), any(), any(), any());
         verify(_service, never()).enter(any(), anyInt(), any());
@@ -160,6 +161,7 @@ public class ArgonauthRequestHandlerTest {
         assertEquals(404, statusOf(HttpMethod.GET, "/enter?playerId=1", null));
         assertEquals(404, statusOf(HttpMethod.GET, "/create?name=Frodo", null));
         assertEquals(404, statusOf(HttpMethod.GET, "/link?login=Frodo&password=x", null));
+        assertEquals(404, statusOf(HttpMethod.GET, "/connect?password=x", null));
         verifyNoInteractions(_writer);
     }
 
@@ -236,6 +238,34 @@ public class ArgonauthRequestHandlerTest {
         Map<String, String> headers = redirect();
         assertEquals("/gemp-lotr/ng/login?pc=cancelled", headers.get("location"));
         assertFalse(headers.containsKey("set-cookie"));
+    }
+
+    @Test
+    public void connectingIsStartedByAPostWithThePasswordAndAnswersWhereToGo() throws Exception {
+        Session session = _sessions.getSession(_sessions.logUser("OldHand"));
+        when(_service.startConnect(any(), any(), any())).thenReturn("https://auth.example/identity/o/authorize?state=s");
+
+        handle(HttpMethod.POST, "/connect", "password=s3cret", session);
+
+        verify(_service).startConnect(same(session), eq("s3cret"), eq(IP));
+        verify(_writer).writeJsonResponse("{\"next\":\"https://auth.example/identity/o/authorize?state=s\"}");
+
+        when(_service.startConnect(any(), any(), any())).thenThrow(new Refusal(401, "bad-credentials"));
+        handle(HttpMethod.POST, "/connect", "password=guess", session);
+        verify(_writer).writeJsonResponse(401, "{\"error\":\"bad-credentials\"}");
+    }
+
+    @Test
+    public void aSignInIsTurnedAwayWhenThereAreAsManySessionsAsThereMayBe() throws Exception {
+        LoggedUserHolder full = mock(LoggedUserHolder.class);
+        when(full.isFull()).thenReturn(true);
+        _context.put(LoggedUserHolder.class, full);
+
+        handle(HttpMethod.GET, "/login", null, null);
+
+        assertEquals("/gemp-lotr/ng/login?pc=failed", redirect().get("location"));
+        verify(full, never()).newSession();
+        verify(_service, never()).startSignIn(any(), any(), any());
     }
 
     // ---- the alias list's actions
@@ -320,8 +350,12 @@ public class ArgonauthRequestHandlerTest {
         defer(HttpMethod.POST, "/create", "name=Frodo", session);
         defer(HttpMethod.POST, "/link", "login=a&password=b", session);
         defer(HttpMethod.POST, "/logout", "scope=all", session);
+        defer(HttpMethod.POST, "/connect", "password=x", session);
+        defer(HttpMethod.GET, "/session", null, session);
 
-        assertEquals(6, _deferred.size());
+        assertEquals(8, _deferred.size());
+        verify(_service, never()).startConnect(any(), any(), any());
+        verify(_service, never()).view(any());
         verify(_service, never()).startSignIn(any(), any(), any());
         verify(_service, never()).completeSignIn(any(), any(), any(), any(), any());
         verify(_service, never()).enter(any(), anyInt(), any());

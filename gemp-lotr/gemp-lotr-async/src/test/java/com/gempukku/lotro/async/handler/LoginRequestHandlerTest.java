@@ -100,6 +100,19 @@ public class LoginRequestHandlerTest {
     }
 
     @Test
+    public void spacesTypedRoundANameAreNotPartOfIt() throws Exception {
+        when(playerDao.loginUser("Frodo", "ring")).thenReturn(player("Frodo", "hash", "u", null));
+        assertEquals(200, attempt("  Frodo ", "ring"));
+        // the session is the account's, by its own name: a ban of "Frodo" ends it
+        verify(loggedUserHolder).logUser("Frodo");
+
+        // and "Frodo " is not a second name for the limit to count separately
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_NAME; i++)
+            assertEquals(401, attempt("Frodo" + " ".repeat(i), "wrong"));
+        assertEquals(429, attempt("Frodo", "ring"));
+    }
+
+    @Test
     public void noMatchIs401AndNever202() throws Exception {
         // what loginUser answers for a wrong password, and for any password at all on a blank-password account
         assertEquals(401, attempt("Sam", "anything"));

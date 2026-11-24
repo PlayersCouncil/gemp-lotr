@@ -29,7 +29,10 @@ public class LoginRequestHandler extends LotroServerRequestHandler implements Ur
         if (uri.equals("") && request.method() == HttpMethod.POST) {
             HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
             try {
-            String login = getFormParameterSafely(postDecoder, "login");
+            // A name has no spaces in it: ones typed round it are dropped, so that "Frodo " is not a second way to
+            // name Frodo (to the limit on attempts, and to a ban, which ends sessions by name).
+            String typed = getFormParameterSafely(postDecoder, "login");
+            String login = typed == null ? null : typed.strip();
             String password = getFormParameterSafely(postDecoder, "password");
 
             // Too many wrong passwords for this name or from this address: refused without checking the password
@@ -39,13 +42,13 @@ public class LoginRequestHandler extends LotroServerRequestHandler implements Ur
 
             Player player = _playerDao.loginUser(login, password);
             if (player != null) {
-                _loginThrottle.succeeded(login, now);
+                _loginThrottle.succeeded(login, remoteIp, now);
                 // loginUser never answers an account with a blank password, so there is no "set your password" case
                 if (player.getType().contains(Player.Type.USER.getValue())) {
                     if (player.isTemporarilyBannedAt(new Date()))
                         throw new HttpProcessingException(409);
                     else
-                        responseWriter.writeXmlResponse(null, logUserReturningHeaders(request, remoteIp, login));
+                        responseWriter.writeXmlResponse(null, logUserReturningHeaders(request, remoteIp, player.getName()));
                 } else {
                     throw new HttpProcessingException(403);
                 }

@@ -214,7 +214,9 @@ public class DbPlayerDAO implements PlayerDAO {
                         .executeAndFetch(DBDefs.Player.class);
 
                 String typedHash = encodePassword(password);
+                // The name exactly: the column's comparison ignores trailing spaces, and "Frodo " is not Frodo.
                 var def = result.stream()
+                        .filter(row -> login.equals(row.name))
                         .filter(row -> storedPasswordMatches(row.password, typedHash))
                         .findFirst().orElse(null);
                 if(def == null)

@@ -27,8 +27,9 @@ import static io.netty.handler.codec.http.HttpHeaderNames.SET_COOKIE;
  * `/gemp-lotr-server/argonauth/...`: the PC account's addresses, exactly as PC-ACCOUNT.md lists them. What each
  * does is {@link PcAccountService}'s; this turns requests into its calls and its answers into HTTP.
  *
- * Whatever may wait on Argonauth is answered later, from a virtual thread: the request's parameters are read here,
- * on the server's IO thread, and nothing of the request is touched after that (it is released when this returns).
+ * Everything is answered later, from a virtual thread, since nearly all of it may wait on Argonauth: the request's
+ * parameters are read here, on the server's IO thread, and this class touches nothing of the request after that
+ * (its body is released when this returns; the response writer still reads its headers, which are not).
  */
 public class ArgonauthRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private static final Logger _log = LogManager.getLogger(ArgonauthRequestHandler.class);
@@ -71,7 +72,7 @@ public class ArgonauthRequestHandler extends LotroServerRequestHandler implement
         LoggedUserHolder.Session session = getSession(request);
 
         if (uri.equals("/session") && get) {
-            responseWriter.writeJsonResponse(_service.view(session).toJson());
+            later(responseWriter, () -> responseWriter.writeJsonResponse(_service.view(session).toJson()));
         } else if (uri.equals("/logout") && post) {
             String scope = form(request, "scope").get("scope");
             later(responseWriter, () -> {
@@ -87,7 +88,13 @@ public class ArgonauthRequestHandler extends LotroServerRequestHandler implement
             String then = getQueryParameterSafely(query, "then");
             String returnPath = getQueryParameterSafely(query, "return");
             boolean https = cameOverHttps(request);
-            // A browser that is nobody yet gets a session to carry the sign-in there and back.
+            // A browser that is nobody yet gets a session to carry the sign-in there and back. Anyone can ask for
+            // that, any number of times, so there is a ceiling on sessions (and such a session is short-lived).
+            if (session == null && _loggedUserHolder.isFull()) {
+                _log.error("There are as many sessions as there may be: a PC sign-in was turned away");
+                redirect(responseWriter, PcAccountService.APP + "/login?pc=failed", null);
+                return;
+            }
             LoggedUserHolder.Session asking = session != null ? session : _loggedUserHolder.newSession();
             later(responseWriter, () -> {
                 String address;
@@ -109,6 +116,13 @@ public class ArgonauthRequestHandler extends LotroServerRequestHandler implement
                 PcAccountService.Landing landing = _service.completeSignIn(session, code, state, error, remoteIp);
                 redirect(responseWriter, landing.location(),
                         landing.session() == null ? null : sessionCookie(https, landing.session().getId()));
+            });
+        } else if (uri.equals("/connect") && post) {
+            String password = form(request, "password").get("password");
+            later(responseWriter, () -> {
+                JSONObject answer = new JSONObject();
+                answer.put("next", _service.startConnect(session, password, remoteIp));
+                responseWriter.writeJsonResponse(answer.toJSONString());
             });
         } else if (uri.equals("/enter") && post) {
             int playerId;

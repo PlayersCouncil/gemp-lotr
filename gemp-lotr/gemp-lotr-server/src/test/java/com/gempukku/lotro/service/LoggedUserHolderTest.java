@@ -60,6 +60,9 @@ public class LoggedUserHolderTest {
         assertNull(_sessions.getSession(before.getId()));
         assertEquals("Frodo", _sessions.getLoggedUser(after.getId()));
         assertEquals("sub-1", after.getPcAccount().sub());
+        // and a request that already held the old session is left holding nothing
+        assertNull(before.getPlayer());
+        assertNull(before.getPcAccount());
     }
 
     @Test
@@ -68,19 +71,24 @@ public class LoggedUserHolderTest {
         PendingSignIn pending = new PendingSignIn("state-1", "nonce", "verifier", "link", "/hall", 1000);
 
         session.setPending(pending);
+        // a made-up state takes nothing, and does not call the sign-in off
         assertNull(session.takePending("another state", 1001));
-        // asked for with the wrong state, it is gone all the same
-        assertNull(session.takePending("state-1", 1001));
-
-        session.setPending(pending);
+        assertNull(session.takePending(null, 1001));
         assertSame(pending, session.takePending("state-1", 1000 + LoggedUserHolder.PENDING_SIGN_IN_MILLIS));
         assertNull(session.takePending("state-1", 1001));
 
         session.setPending(pending);
         assertNull(session.takePending("state-1", 1001 + LoggedUserHolder.PENDING_SIGN_IN_MILLIS));
+        assertNull("too late once is too late", session.takePending("state-1", 1001));
+    }
 
-        session.setPending(pending);
-        assertNull(session.takePending(null, 1001));
+    @Test
+    public void thereIsACeilingOnSessions() {
+        assertFalse(_sessions.isFull());
+        for (int number = 0; number < LoggedUserHolder.MAX_SESSIONS; number++)
+            _sessions.newSession();
+        assertTrue(_sessions.isFull());
+        assertEquals(LoggedUserHolder.MAX_SESSIONS, _sessions.sessions().size());
     }
 
     @Test

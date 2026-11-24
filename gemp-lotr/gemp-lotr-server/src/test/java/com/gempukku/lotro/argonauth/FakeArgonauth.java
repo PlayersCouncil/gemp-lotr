@@ -89,6 +89,10 @@ public class FakeArgonauth implements AutoCloseable {
     public final Map<String, String> bodyFor = new ConcurrentHashMap<>();
     /** How long every answer is held back. */
     public volatile long delayMillis;
+    /** Run while a lookup is being answered: something that happens in Gemp meanwhile. */
+    public volatile Runnable duringLookup;
+    /** The next assertion is recorded, and then answered 504: the answer lost on its way back. */
+    public volatile boolean loseNextAssertAnswer;
 
     public FakeArgonauth() throws IOException {
         _server = HttpServer.create(new InetSocketAddress("localhost", 0), 0);
@@ -342,6 +346,11 @@ public class FakeArgonauth implements AutoCloseable {
         }
         if (existing == null)
             _links.put(playerId, new LinkRow(token.person().sub(), asked.getString("external_name"), proof));
+        if (loseNextAssertAnswer) {
+            loseNextAssertAnswer = false;
+            send(exchange, 504, "{\"error\":\"gateway_timeout\"}");
+            return;
+        }
         send(exchange, existing == null ? 201 : 200, linkJson(playerId, _links.get(playerId)).toJSONString());
     }
 
@@ -350,6 +359,9 @@ public class FakeArgonauth implements AutoCloseable {
             send(exchange, 401, "{\"error\":\"invalid_client\"}");
             return;
         }
+        Runnable during = duringLookup;
+        if (during != null)
+            during.run();
         LinkRow link = _links.get(Integer.parseInt(id));
         if (link == null)
             send(exchange, 200, "{\"linked\":false,\"system\":\"gemp\",\"id\":\"" + id + "\"}");

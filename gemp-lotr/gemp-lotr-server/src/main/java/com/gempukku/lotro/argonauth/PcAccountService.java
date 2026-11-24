@@ -34,8 +34,7 @@ import java.util.regex.Pattern;
  * What a PC account does in Gemp: sign in, and enter, create and link aliases (PC-ACCOUNT.md, which is the
  * contract for every answer here). The request handler turns these into HTTP and nothing more.
  *
- * Everything but {@link #view} and {@link #logOut} may wait on Argonauth, and so is never called on one of the
- * server's IO threads.
+ * Almost everything here may wait on Argonauth, and none of it is called on one of the server's IO threads.
  */
 public class PcAccountService {
     private static final Logger _log = LogManager.getLogger(PcAccountService.class);
@@ -55,7 +54,7 @@ public class PcAccountService {
 
         void failed(String name, String ip, long now);
 
-        void succeeded(String name, long now);
+        void succeeded(String name, String ip, long now);
     }
 
     /** An action that is refused: the HTTP status and the `error` of PC-ACCOUNT.md. */
@@ -188,14 +187,37 @@ public class PcAccountService {
     /**
      * Starts a sign-in for this session and returns Argonauth's address to send the browser to.
      *
-     * @param then       "link", "create" or "connect"; anything else is a plain sign-in
+     * @param then       "link" or "create": land on the alias list with that form open. Anything else is a plain sign-in
      * @param returnPath a place in the app to go to once an alias is entered; anything else is dropped
      */
     public String startSignIn(Session session, String then, String returnPath) throws ArgonauthException {
-        String purpose = then != null && List.of("link", "create", "connect").contains(then) ? then : "";
-        // Connecting is of the alias this session is logged in as: without one it is a plain sign-in.
-        if (purpose.equals("connect") && session.getPlayer() == null)
-            purpose = "";
+        return begin(session, then != null && List.of("link", "create").contains(then) ? then : "", returnPath);
+    }
+
+    /**
+     * Connect PC Account: starts the sign-in that links the account this browser is logged in to, by its password,
+     * to the PC account that then signs in. Returns Argonauth's address to send the browser to.
+     *
+     * The password is asked for again here. A browser that is merely logged in (a shared computer, a borrowed
+     * cookie) must not be able to make the account somebody's for good, and nothing another site can send a
+     * browser to (a link, a form) starts this.
+     */
+    public String startConnect(Session session, String password, String remoteIp) throws Refusal, SQLException {
+        String playing = session == null ? null : session.getPlayer();
+        // Only a password login connects. A PC account's own aliases are linked already, and one it has lost
+        // (an admin's unlink) is not to be taken back this way.
+        if (playing == null || session.getPcAccount() != null)
+            throw new Refusal(403, "not-allowed");
+        proveByPassword(playing, password, remoteIp);
+        try {
+            return begin(session, "connect", null);
+        } catch (ArgonauthException exp) {
+            _log.warn("A PC sign-in could not be started (" + exp.getReason() + "): " + exp.getMessage());
+            throw new Refusal(503, "unavailable");
+        }
+    }
+
+    private String begin(Session session, String purpose, String returnPath) throws ArgonauthException {
         String state = ArgonauthClient.randomToken();
         String nonce = ArgonauthClient.randomToken();
         String codeVerifier = ArgonauthClient.randomToken();
@@ -205,8 +227,27 @@ public class PcAccountService {
         return address;
     }
 
+    /**
+     * The player `name` is, proved by its password, with guesses counted as at the login form. An account without
+     * a password proves nothing by one, and an account that cannot log in is not proved by logging in. Neither is
+     * told apart from a wrong password.
+     */
+    private Player proveByPassword(String name, String password, String remoteIp) throws Refusal, SQLException {
+        long now = _clock.getAsLong();
+        if (_attempts.isBlocked(name, remoteIp, now))
+            throw new Refusal(429, "slow-down");
+        Player player = name.isEmpty() || password == null || password.isEmpty() ? null : _playerDao.loginUser(name, password);
+        if (player == null || player.getPassword() == null || player.getPassword().isEmpty() || !player.hasType(Player.Type.USER)) {
+            _attempts.failed(name, remoteIp, now);
+            throw new Refusal(401, "bad-credentials");
+        }
+        _attempts.succeeded(name, remoteIp, now);
+        return player;
+    }
+
     static boolean isAppPath(String path) {
-        return path != null && APP_PATH.matcher(path).matches() && !path.startsWith("/login");
+        // No ".." either: the browser would resolve it, and "/../../x" is a place on this site outside the app.
+        return path != null && APP_PATH.matcher(path).matches() && !path.startsWith("/login") && !path.contains("..");
     }
 
     /**
@@ -246,17 +287,17 @@ public class PcAccountService {
 
             Player playing = session.getPlayer() == null ? null : _playerDao.getPlayer(session.getPlayer());
             if (connecting) {
-                if (playing == null)
+                // Still the password login that gave its password to start this (startConnect).
+                if (playing == null || session.getPcAccount() != null)
                     return new Landing(null, failed);
                 if (!owned.containsKey(playing.getId())) {
-                    // Proof `session`: this browser was already logged in to the account, by its password.
-                    Assertion assertion = _client.assertLink(signIn.accessToken(), playing.getId(), playing.getName(), "session");
+                    Assertion assertion = _client.assertLink(signIn.accessToken(), playing.getId(), playing.getName(), "password");
                     // The session stays a password login: it is not handed a PC account that does not own its alias.
                     if (assertion == Assertion.LINKED_ELSEWHERE)
                         return new Landing(null, APP + "/account?pc=linked-elsewhere");
                     if (assertion != Assertion.LINKED)
                         return new Landing(null, failed);
-                    _linkDao.setLink(playing.getId(), signIn.sub(), "session");
+                    _linkDao.setLink(playing.getId(), signIn.sub(), "password");
                 }
                 session.setPcAccount(pcAccount);
                 return new Landing(_sessions.renew(session), APP + "/account?pc=connected");
@@ -339,8 +380,10 @@ public class PcAccountService {
     }
 
     /** The checks a password login makes, and then the session plays as this player. */
-    private void play(Session session, Player player, String remoteIp) throws Refusal, SQLException {
-        if (!player.hasType(Player.Type.USER) || player.isTemporarilyBannedAt(new Date(_clock.getAsLong())))
+    private void play(Session session, Player asked, String remoteIp) throws Refusal, SQLException {
+        // Read again: Argonauth may have been waited on since `asked` was, and a ban may have landed meanwhile.
+        Player player = _playerDao.getPlayer(asked.getId());
+        if (player == null || !player.hasType(Player.Type.USER) || player.isTemporarilyBannedAt(new Date(_clock.getAsLong())))
             throw new Refusal(403, "banned");
         session.setPlayer(player.getName());
         _playerDao.updateLastLoginIp(player.getName(), remoteIp);
@@ -352,13 +395,30 @@ public class PcAccountService {
         leavingIsAllowed(session, null);
         long now = _clock.getAsLong();
         Deque<Long> created = _created.computeIfAbsent(pcAccount.sub(), sub -> new ArrayDeque<>());
+        // The place in the hour is taken before anything is waited on, and given back if nothing comes of it:
+        // any number asking at once still get ten between them.
         synchronized (created) {
             while (!created.isEmpty() && created.peekFirst() <= now - HOUR_MILLIS)
                 created.removeFirst();
             if (created.size() >= CREATED_PER_HOUR)
                 throw new Refusal(429, "slow-down");
+            created.addLast(now);
         }
+        boolean made = false;
+        try {
+            View view = createReserved(session, pcAccount, name, remoteIp);
+            made = true;
+            return view;
+        } finally {
+            if (!made) {
+                synchronized (created) {
+                    created.removeLastOccurrence(now);
+                }
+            }
+        }
+    }
 
+    private View createReserved(Session session, PcAccount pcAccount, String name, String remoteIp) throws Refusal, SQLException {
         Player player;
         try {
             player = _playerDao.registerAlias(name == null ? "" : name.trim(), remoteIp);
@@ -386,6 +446,16 @@ public class PcAccountService {
         } catch (ArgonauthException exp) {
             _log.warn("A new alias could not be recorded at Argonauth (" + exp.getReason() + "): " + exp.getMessage());
             refusal = new Refusal(503, "unavailable");
+            // No answer is not a no: Argonauth may have recorded the link and the answer been lost. Ask before
+            // taking the account back, or Argonauth is left with a link to an account that is gone.
+            try {
+                ArgonauthClient.Owner owner = _client.ownerOf(player.getId());
+                if (owner != null && owner.sub().equals(pcAccount.sub()))
+                    refusal = null;
+            } catch (ArgonauthException again) {
+                _log.error("Player " + player.getId() + " (" + player.getName() + ") is being taken back unrecorded, and Argonauth"
+                        + " cannot be asked whether it recorded the link after all. If it did, unlink gemp " + player.getId() + " there.");
+            }
         }
         if (refusal != null) {
             // Unrecorded, nobody could ever enter it: the name goes back.
@@ -394,28 +464,13 @@ public class PcAccountService {
         }
 
         _linkDao.setLink(player.getId(), pcAccount.sub(), "created");
-        synchronized (created) {
-            created.addLast(now);
-        }
         play(session, player, remoteIp);
         return view(session);
     }
 
     public View link(Session session, String login, String password, String remoteIp) throws Refusal, SQLException {
         PcAccount pcAccount = freshPcAccountOf(session);
-        long now = _clock.getAsLong();
-        String name = login == null ? "" : login.trim();
-        if (_attempts.isBlocked(name, remoteIp, now))
-            throw new Refusal(429, "slow-down");
-
-        Player player = name.isEmpty() || password == null || password.isEmpty() ? null : _playerDao.loginUser(name, password);
-        // An account without a password proves nothing by one, and an account that cannot log in cannot be linked
-        // by logging in. Neither is told apart from a wrong password.
-        if (player == null || player.getPassword() == null || player.getPassword().isEmpty() || !player.hasType(Player.Type.USER)) {
-            _attempts.failed(name, remoteIp, now);
-            throw new Refusal(401, "bad-credentials");
-        }
-        _attempts.succeeded(name, now);
+        Player player = proveByPassword(login == null ? "" : login.trim(), password, remoteIp);
 
         Assertion assertion;
         try {
@@ -446,6 +501,74 @@ public class PcAccountService {
         if (!pcAccount.isFresh(_clock.getAsLong()))
             throw new Refusal(401, "reauth");
         return pcAccount;
+    }
+
+    // ---- an alias being played, looked at again
+
+    /** How often the aliases being played are looked at again. */
+    static final long RECHECK_MILLIS = 1000L * 60 * 5;
+    private volatile long _lastRecheck;
+
+    /** Starts looking again, every few minutes, at who owns the alias each PC account's browser is playing. */
+    public void start() {
+        if (!_config.enabled())
+            return;
+        Thread.ofVirtual().name("pc-account-recheck").start(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(RECHECK_MILLIS);
+                } catch (InterruptedException exp) {
+                    return;
+                }
+                try {
+                    recheckAliases();
+                } catch (Exception exp) {
+                    _log.error("Looking again at the aliases being played failed", exp);
+                }
+            }
+        });
+    }
+
+    /**
+     * Entering is checked with Argonauth, but a session lasts a month, and an unlink at Argonauth (an admin
+     * undoing a wrong link) is not sent here. So each alias a PC account's browser is playing, in a session used
+     * since the last look, is asked about again: one that is no longer theirs is put down, and the browser is
+     * back at the alias list at its next request. An Argonauth that cannot be asked ends the look, and changes
+     * nothing.
+     */
+    void recheckAliases() throws SQLException {
+        // by the wall clock, as the sessions' own record of their use is
+        long since = _lastRecheck;
+        _lastRecheck = System.currentTimeMillis();
+        Map<Integer, ArgonauthClient.Owner> asked = new LinkedHashMap<>();
+        for (Session session : _sessions.sessions()) {
+            PcAccount pcAccount = session.getPcAccount();
+            String playing = session.getPlayer();
+            if (pcAccount == null || playing == null || !session.usedSince(since))
+                continue;
+            Player player = _playerDao.getPlayer(playing);
+            if (player == null)
+                continue;
+            if (!asked.containsKey(player.getId())) {
+                try {
+                    asked.put(player.getId(), _client.ownerOf(player.getId()));
+                } catch (ArgonauthException exp) {
+                    _log.warn("Argonauth could not be asked who owns player " + player.getId() + " (" + exp.getReason() + "): " + exp.getMessage());
+                    return;
+                }
+            }
+            ArgonauthClient.Owner owner = asked.get(player.getId());
+            if (owner != null && owner.sub().equals(pcAccount.sub()))
+                continue;
+            _log.info(playing + " no longer belongs to the PC account playing it, by Argonauth: put down");
+            if (owner == null)
+                _linkDao.removeLink(player.getId());
+            else
+                _linkDao.setLink(player.getId(), owner.sub(), owner.proof());
+            // only if it is still what the session plays: it may have switched while Argonauth was asked
+            if (playing.equals(session.getPlayer()))
+                session.setPlayer(null);
+        }
     }
 
     // ---- logging out

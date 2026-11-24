@@ -128,5 +128,15 @@ public class ArgonauthConfigTest {
                 config.backchannel("http://localhost:1630/identity/o/api/token"));
         // an address that is not Argonauth's is left alone
         assertEquals("https://elsewhere.example/x", config.backchannel("https://elsewhere.example/x"));
+
+        _properties.put("argonauth.backchannel.url", "http://host.docker.internal:1630");
+        assertEquals("http://host.docker.internal:1630", read().backchannelUrl());
+        // out on the network the client secret does not travel in clear
+        _properties.put("argonauth.backchannel.url", "http://auth.lotrtcgpc.net");
+        assertRefused("argonauth.backchannel.url");
+        _properties.put("argonauth.backchannel.url", "http://10.0.0.5:8000");
+        assertRefused("argonauth.backchannel.url");
+        _properties.put("argonauth.backchannel.url", "https://auth.lotrtcgpc.net");
+        assertEquals("https://auth.lotrtcgpc.net", read().backchannelUrl());
     }
 }

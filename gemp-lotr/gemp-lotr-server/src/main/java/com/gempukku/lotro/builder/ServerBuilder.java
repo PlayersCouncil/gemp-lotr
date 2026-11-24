@@ -303,8 +303,8 @@ public class ServerBuilder {
                             }
 
                             @Override
-                            public void succeeded(String name, long now) {
-                                loginThrottle.succeeded(name, now);
+                            public void succeeded(String name, String ip, long now) {
+                                loginThrottle.succeeded(name, ip, now);
                             }
                         },
                         System::currentTimeMillis));
@@ -321,6 +321,7 @@ public class ServerBuilder {
         extract(objectMap, HallServer.class).startServer();
         extract(objectMap, LotroServer.class).startServer();
         extract(objectMap, ChatServer.class).startServer();
+        extract(objectMap, PcAccountService.class).start();
     }
 
     public static void StopServers(Map<Type, Object> objectMap) {

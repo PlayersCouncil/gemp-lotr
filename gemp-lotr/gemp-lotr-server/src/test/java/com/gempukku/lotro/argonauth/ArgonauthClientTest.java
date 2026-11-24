@@ -56,6 +56,11 @@ public class ArgonauthClientTest {
         return _client.completeSignIn(back.get("code"), verifier, nonce);
     }
 
+    /** Past the half minute in which a fetch of Argonauth's addresses or keys that failed is not tried again. */
+    private void aLittleLater() {
+        _argonauth.now.addAndGet(31_000);
+    }
+
     private void assertSignInFails(Reason reason, String saying) {
         try {
             signIn(FRODO);
@@ -374,6 +379,7 @@ public class ArgonauthClientTest {
         _argonauth.statusFor.put("/.well-known/jwks.json", 404);
         assertSignInFails(Reason.UNAVAILABLE, "keys answered 404");
 
+        aLittleLater();
         _argonauth.statusFor.put("/.well-known/jwks.json", 200);
         _argonauth.bodyFor.put("/.well-known/jwks.json", "{\"keys\": 5}");
         assertSignInFails(Reason.REJECTED, "keys cannot be read");
@@ -424,6 +430,7 @@ public class ArgonauthClientTest {
             return document;
         };
         assertSignInFails(Reason.REJECTED, "token_endpoint is not under");
+        aLittleLater();
         _argonauth.discovery = document -> {
             document.remove("userinfo_endpoint");
             return document;
@@ -444,6 +451,7 @@ public class ArgonauthClientTest {
         assertEquals(FRODO.sub(), signIn(FRODO).sub());
 
         // but a document that has turned wrong is not papered over
+        aLittleLater();
         _argonauth.statusFor.clear();
         _argonauth.discovery = document -> {
             document.put("issuer", "https://auth.example.com");
@@ -456,13 +464,55 @@ public class ArgonauthClientTest {
     public void withNothingLearnedAnOutageIsAnOutage() {
         _argonauth.statusFor.put("/.well-known/openid-configuration", 503);
         assertSignInFails(Reason.UNAVAILABLE, "answered 503");
+        aLittleLater();
         _argonauth.statusFor.put("/.well-known/openid-configuration", 404);
         assertSignInFails(Reason.UNAVAILABLE, "discovery document answered 404");
+        aLittleLater();
         _argonauth.statusFor.put("/.well-known/openid-configuration", 200);
         _argonauth.bodyFor.put("/.well-known/openid-configuration", "<html>");
         assertSignInFails(Reason.REJECTED, "not JSON");
+        aLittleLater();
         _argonauth.bodyFor.put("/.well-known/openid-configuration", "null");
         assertSignInFails(Reason.REJECTED, "with nothing");
+    }
+
+    @Test
+    public void anArgonauthThatJustFailedIsNotAskedAgainAtOnce() throws Exception {
+        _argonauth.statusFor.put("/.well-known/openid-configuration", 503);
+        assertSignInFails(Reason.UNAVAILABLE, "answered 503");
+        long asked = _argonauth.requests.size();
+        // a crowd arriving while it is away is told so without each of them waiting on it in turn
+        for (int again = 0; again < 20; again++)
+            assertSignInFails(Reason.UNAVAILABLE, "answered 503");
+        assertEquals(asked, _argonauth.requests.size());
+
+        // back up, and within the half minute still not asked; after it, asked and answered
+        _argonauth.statusFor.clear();
+        assertSignInFails(Reason.UNAVAILABLE, "answered 503");
+        aLittleLater();
+        assertEquals(FRODO.sub(), signIn(FRODO).sub());
+    }
+
+    @Test
+    public void manySignInsAtOnceFetchTheAddressesAndKeysOnce() throws Exception {
+        _argonauth.delayMillis = 50;
+        java.util.List<Thread> threads = new java.util.ArrayList<>();
+        java.util.concurrent.atomic.AtomicInteger signedIn = new java.util.concurrent.atomic.AtomicInteger();
+        for (int number = 0; number < 12; number++) {
+            threads.add(Thread.ofVirtual().start(() -> {
+                try {
+                    if (FRODO.sub().equals(signIn(FRODO).sub()))
+                        signedIn.incrementAndGet();
+                } catch (ArgonauthException exp) {
+                    throw new IllegalStateException(exp);
+                }
+            }));
+        }
+        for (Thread thread : threads)
+            thread.join();
+        assertEquals(12, signedIn.get());
+        assertEquals(1, _argonauth.requests.stream().filter(request -> request.endsWith("openid-configuration")).count());
+        assertEquals(1, keyRequests());
     }
 
     // ---- the network

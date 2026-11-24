@@ -1,6 +1,8 @@
 package com.gempukku.lotro.service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +24,7 @@ public class LoggedUserHolder {
     static final long SESSION_IDLE_MILLIS = 1000L * 60 * 60 * 24 * 30;
     /** How long Argonauth's answer to a sign-in is waited for. */
     static final long PENDING_SIGN_IN_MILLIS = 1000L * 60 * 5;
+    static final int MAX_SESSIONS = 50_000;
     /** How long a session that is nobody's is kept unused: twice the time a sign-in may take. */
     static final long NOBODYS_SESSION_IDLE_MILLIS = PENDING_SIGN_IN_MILLIS * 2;
     private static final long SWEEP_INTERVAL_MILLIS = 1000L * 60;
@@ -100,16 +103,23 @@ public class LoggedUserHolder {
 
         /**
          * The sign-in this session is waiting on, if `state` is its and it has not been waited on for too long. It
-         * is forgotten by the asking: an answer is taken once.
+         * is forgotten by being taken: an answer is taken once. A `state` that is not its takes nothing and leaves
+         * it waiting, so that a made-up callback cannot call off somebody's sign-in (the state cannot be guessed,
+         * so there is nothing to be had by trying).
          */
         public synchronized PendingSignIn takePending(String state, long now) {
             PendingSignIn pending = _pending;
-            _pending = null;
             if (pending == null || state == null || !pending.state().equals(state))
                 return null;
+            _pending = null;
             if (now > pending.startedAt() + PENDING_SIGN_IN_MILLIS)
                 return null;
             return pending;
+        }
+
+        /** Whether a request has come with this session's cookie since `time`. */
+        public boolean usedSince(long time) {
+            return _lastAccess >= time;
         }
     }
 
@@ -183,7 +193,24 @@ public class LoggedUserHolder {
         session._player = old._player;
         session._pcAccount = old._pcAccount;
         _sessions.remove(old.getId());
+        // A request already holding the old session is left holding nothing.
+        old._player = null;
+        old._pcAccount = null;
+        old._pending = null;
         return session;
+    }
+
+    /** Every session there is, as of now. */
+    public List<Session> sessions() {
+        return new ArrayList<>(_sessions.values());
+    }
+
+    /**
+     * Whether there are as many sessions as there may be. A session costs a request (asking to sign in with a PC
+     * account makes one for a browser that has none), so there is a ceiling, far above any use the game has seen.
+     */
+    public boolean isFull() {
+        return _sessions.size() >= MAX_SESSIONS;
     }
 
     public void end(String sessionId) {
