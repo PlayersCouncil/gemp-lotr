@@ -1,0 +1,64 @@
+/* A Board card's modifiers: a chip each, mod…, and the line that puts one on */
+
+:host {
+  display: contents;
+}
+
+.gd-author-mods__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0 3px 2px 0;
+  padding: 0 0 0 4px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.gd-author-mods__chip[data-pending] {
+  border-color: var(--theme-game-author-changed-mark);
+  color: var(--theme-game-author-pending-text);
+}
+
+.gd-author-mods__chip[data-removing] {
+  padding-right: 4px;
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.gd-author-mods__chip .gd-author-button {
+  min-width: 0;
+  margin: 0;
+  padding: 0 3px;
+}
+
+.gd-author-mods__until {
+  color: var(--theme-game-author-quiet);
+}
+
+.gd-author-mods__form {
+  display: flex;
+  flex: 1 1 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 3px;
+  margin: 2px 0;
+}
+
+.gd-author-mods__form select.gd-author-input {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 1px 2px;
+}
+
+.gd-author-input.gd-author-mods__amount {
+  flex: 0 0 40px;
+  width: 40px;
+}
+
+.gd-author-mods__problem {
+  flex: 1 1 100%;
+  color: var(--theme-game-author-tag-mistake);
+  font-size: 11px;
+}
