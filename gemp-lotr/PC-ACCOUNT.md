@@ -50,7 +50,8 @@ integration use the dev Argonauth, which has its own database.
    exactly as they will be set here (Argonauth's `docs/INTEGRATING.md`). A local Argonauth already has `gemp-dev`
    for a Gemp on port 17001.
 3. **The settings.** Each `argonauth.x.y` can be given as the environment variable `ARGONAUTH_X_Y`, which wins
-   over the properties file; `docker/.env` reaches the app's container, so the secret goes there and not in the
+   over the properties file; `docker/.env` reaches the app's container, is not in the repository (copy
+   `docker/.env.example`, which lists every one of these), so the secret goes there and not in the
    repository. For a local Gemp against a local Argonauth, both in Docker:
 
        ARGONAUTH_MODE=optional

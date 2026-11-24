@@ -94,6 +94,29 @@ public class ArgonauthConfigTest {
     }
 
     @Test
+    public void aSettingLeftBlankInTheEnvironmentIsAsIfAbsent() {
+        // docker/.env.example lists every setting, most of them empty: with the mode left at test, that is test mode
+        for (String name : new String[]{"ARGONAUTH_ISSUER", "ARGONAUTH_CLIENT_ID", "ARGONAUTH_CLIENT_SECRET",
+                "ARGONAUTH_REDIRECT_URI", "ARGONAUTH_POSTLOGOUT_URI", "ARGONAUTH_BACKCHANNEL_URL"})
+            _environment.put(name, "");
+        _environment.put("ARGONAUTH_MODE", "test");
+        assertSame(ArgonauthConfig.TEST, read());
+
+        // and a blank one does not wipe out what the properties file says
+        optional();
+        _environment.put("ARGONAUTH_MODE", " ");
+        ArgonauthConfig config = read();
+        assertEquals(ArgonauthMode.OPTIONAL, config.mode());
+        assertEquals("s3cret", config.clientSecret());
+        assertEquals(config.issuer(), config.backchannelUrl());
+
+        // switched on in the environment with something still blank: the server stops and names it
+        _properties.clear();
+        _environment.put("ARGONAUTH_MODE", "optional");
+        assertRefused("argonauth.issuer");
+    }
+
+    @Test
     public void plainHttpIsForThisMachineOnly() {
         optional();
         _properties.put("argonauth.issuer", "http://auth.lotrtcgpc.net");

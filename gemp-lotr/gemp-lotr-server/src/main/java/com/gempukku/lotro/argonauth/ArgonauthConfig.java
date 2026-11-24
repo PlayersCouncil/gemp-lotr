@@ -9,7 +9,8 @@ import java.util.function.Function;
  * is read. In any other mode a missing or malformed setting stops the server from starting, naming the setting.
  *
  * Each `argonauth.x.y` property can be given instead as the environment variable `ARGONAUTH_X_Y`, which wins: the
- * client secret then need not be in a file.
+ * client secret then need not be in a file the repository holds (docker/.env.example lists them; docker/.env,
+ * which is not committed, is where they go).
  *
  * @param issuer         Argonauth's address as browsers and tokens have it, no trailing slash
  * @param redirectUri    this Gemp's callback address, exactly as registered at Argonauth
@@ -36,8 +37,9 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
 
     public static ArgonauthConfig read(Function<String, String> properties, Function<String, String> environment) {
         Function<String, String> setting = key -> {
+            // One left blank is as if absent: docker/.env.example lists them all, most of them empty.
             String fromEnvironment = environment.apply(key.toUpperCase(Locale.ROOT).replace('.', '_'));
-            String value = fromEnvironment != null ? fromEnvironment : properties.apply(key);
+            String value = fromEnvironment != null && !fromEnvironment.isBlank() ? fromEnvironment : properties.apply(key);
             return value == null ? "" : value.trim();
         };
         ArgonauthMode mode = ArgonauthMode.parse(setting.apply("argonauth.mode"));
