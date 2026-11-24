@@ -5,7 +5,10 @@ import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.game.LotroGameMediator;
 import com.gempukku.lotro.game.LotroServer;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
+import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.scenario.ScenarioAuthoring;
+import com.gempukku.lotro.scenario.ScenarioCardSearch;
 import com.gempukku.lotro.scenario.ScenarioDefinition;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.scenario.ScenarioLibrary;
@@ -36,7 +39,7 @@ import java.util.Map;
  * campaign:{id, title, position, count, next:{id, title}|null}|null,
  * progress:{status, attempts, version, firstCompleted, lastPlayed}|null}], current:{gameId, id}|null}}.
  * {@code campaign} is the campaign the scenario is part of: a game of it ends by offering {@code next}.
- * {@code progress.status} is "started" or "complete".
+ * {@code progress.status} is "started" or "complete" ("visited" for a sandbox, which is never complete).
  * {@code verified} is false for a scenario that does not play through headless; only its owner and the admins are
  * offered one of those.  {@code current} is the scenario game the player is in the middle of, if any.<br>
  * POST /scenarios/start (form: id, optionally from=checkpoint) - starts a game of the scenario against its scripted
@@ -79,6 +82,17 @@ import java.util.Map;
  * save (path, canonical, as: copy|rename); submit (the draft's saved file, for review: the draft is closed); left;
  * check; test (step);
  * resume; close.
+ * <p>
+ * A sandbox (kind: sandbox; see ScenarioSandbox), for the person playing it, in their own game (gameId):<br>
+ * GET /scenarios/sandbox/state?gameId= - what they may see of the table: {mode, level, tools, canStop, canStart,
+ * over, cards, piles, hiddenPilesOpen, twilight, burdens, threats, markers, currentSite, moves, path, skirmishes,
+ * cultures}.<br>
+ * POST /scenarios/sandbox/stop, start (gameId); edit (gameId, ops: a JSON list of edits, made whole or not at all);
+ * each answers {ok: true, state} or a 400 {error}.<br>
+ * POST /scenarios/sandbox/reset (gameId) - a fresh game of the sandbox as it opened: {gameId}, which the page goes to
+ * as to any fresh game of a scenario.  Allowed once the game is over too.<br>
+ * GET /scenarios/search?filter=&start=&count= - for any logged-in player: cards found with the deck builder's filter
+ * (ScenarioCardSearch): {total, start, cards: [{blueprintId, name, type, side, culture, site, siteNumber, twilight}]}.
  */
 public class ScenarioRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private static final Logger _log = LogManager.getLogger(ScenarioRequestHandler.class);
@@ -88,9 +102,11 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
     private final LotroServer _lotroServer;
     private final ScenarioAuthoring _authoring;
     private final ScenarioShelf _shelf;
+    private final ScenarioCardSearch _search;
 
     public ScenarioRequestHandler(Map<Type, Object> context) {
         super(context);
+        _search = new ScenarioCardSearch(extractObject(context, LotroCardBlueprintLibrary.class), extractObject(context, LotroFormatLibrary.class));
         _authoring = extractObject(context, ScenarioAuthoring.class);
         _shelf = extractObject(context, ScenarioShelf.class);
         _scenarios = extractObject(context, ScenarioLibrary.class);
@@ -112,6 +128,10 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             mine(uri.substring(1), request, responseWriter);
         } else if (uri.equals("/admin") || uri.startsWith("/admin/")) {
             admin(uri.substring(1), request, responseWriter);
+        } else if (uri.startsWith("/sandbox/")) {
+            sandbox(uri.substring("/sandbox/".length()), request, responseWriter);
+        } else if (uri.equals("/search") && request.method() == HttpMethod.GET) {
+            search(request, responseWriter);
         } else {
             throw new HttpProcessingException(404);
         }
@@ -147,7 +167,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                 json.put("progress", null);
             } else {
                 Map<String, Object> progressJson = new LinkedHashMap<>();
-                progressJson.put("status", played.status);
+                //(a sandbox has no end to come to: somebody who has played one has visited it, S6)
+                progressJson.put("status", def.kind == ScenarioDefinition.Kind.SANDBOX && "started".equals(played.status) ? "visited" : played.status);
                 progressJson.put("attempts", played.attempts);
                 //The version last played or, once completed, the version completed: older than the scenario's own
                 // version means it has changed since
@@ -500,6 +521,106 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             _log.error("The authoring tool could not " + what + " for " + player.getName(), exp);
             writeError(responseWriter, 500, "That went wrong on the server: " + exp);
         }
+    }
+
+    /** A sandbox's calls (see the class's description).  The caller has to be the person playing it. */
+    private void sandbox(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        //Not on behalf of anybody else: a sandbox is its player's own
+        Player player = getResourceOwnerSafely(request, null);
+        if (request.method() == HttpMethod.GET) {
+            if (!what.equals("state"))
+                throw new HttpProcessingException(404);
+            LotroGameMediator mediator = _lotroServer.getGameById(getQueryParameterSafely(new QueryStringDecoder(request.uri()), "gameId"));
+            Map<String, Object> state = mediator == null ? null : mediator.sandboxState(player.getName());
+            if (state == null) {
+                writeError(responseWriter, 404, "This is not a sandbox you are playing.");
+                return;
+            }
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(state));
+            return;
+        }
+        if (request.method() != HttpMethod.POST)
+            throw new HttpProcessingException(404);
+        HttpPostRequestDecoder form = new HttpPostRequestDecoder(request);
+        try {
+            LotroGameMediator mediator = _lotroServer.getGameById(getFormParameterSafely(form, "gameId"));
+            if (mediator == null || mediator.getScenario() == null || !mediator.getScenario().HumanPlayer().equals(player.getName())
+                    || mediator.getScenario().Sandbox() == null) {
+                writeError(responseWriter, 404, "This is not a sandbox you are playing.");
+                return;
+            }
+            if (what.equals("reset")) {
+                reset(player, mediator, responseWriter);
+                return;
+            }
+            String problem = switch (what) {
+                case "stop" -> mediator.sandboxStop(player.getName());
+                case "start" -> mediator.sandboxStart(player.getName());
+                case "edit" -> {
+                    String ops = getFormParameterSafely(form, "ops");
+                    yield ops == null ? "Say what to change: ops, a list of edits" : mediator.sandboxEdit(player.getName(), ops);
+                }
+                default -> throw new HttpProcessingException(404);
+            };
+            if (problem != null) {
+                writeError(responseWriter, 400, problem);
+                return;
+            }
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("ok", true);
+            result.put("state", mediator.sandboxState(player.getName()));
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+        } finally {
+            form.destroy();
+        }
+    }
+
+    /** A fresh game of the sandbox the player is in, as it opened: the same file, from its beginning. */
+    private void reset(Player player, LotroGameMediator mediator, ResponseWriter responseWriter) throws Exception {
+        ScenarioDefinition def = mediator.getScenario().Definition();
+        //(the library's entry for it: the very definition, or failing that, if the file was read again, the same scenario)
+        ScenarioLibrary.Entry found = null;
+        for (ScenarioLibrary.Entry entry : _scenarios.getAll())
+            if (entry.def() == def)
+                found = entry;
+        if (found == null)
+            for (ScenarioLibrary.Entry entry : _scenarios.getAll())
+                if (found == null && entry.def() != null && entry.def().id.equals(def.id) && entry.playable()
+                        && _scenarios.startableBy(entry, player.getName(), player.hasType(Player.Type.ADMIN)))
+                    found = entry;
+        if (found == null || !_scenarios.startableBy(found, player.getName(), player.hasType(Player.Type.ADMIN))) {
+            writeError(responseWriter, 404, "This sandbox is no longer offered.");
+            return;
+        }
+        LotroGameMediator fresh;
+        try {
+            fresh = _lotroServer.createScenarioGame(player, found.def(), found.format(), _scenarios.textFor(found), false,
+                    _scenarios.campaignInfo(found.id(), player.getName(), player.hasType(Player.Type.ADMIN)));
+        } catch (RuntimeException exp) {
+            _log.error("Sandbox " + def.id + " could not be reset for " + player.getName(), exp);
+            writeError(responseWriter, 500, "The sandbox could not be started again.");
+            return;
+        }
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("gameId", fresh.getGameId());
+        responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+    }
+
+    /** Cards found with the deck builder's filter, for any logged-in player (ScenarioCardSearch). */
+    private void search(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        QueryStringDecoder query = new QueryStringDecoder(request.uri());
+        getResourceOwnerSafely(request, null);
+        int start = 0, count = 50;
+        try {
+            String asked = getQueryParameterSafely(query, "start");
+            start = asked == null ? 0 : Integer.parseInt(asked.trim());
+            asked = getQueryParameterSafely(query, "count");
+            count = asked == null ? 50 : Integer.parseInt(asked.trim());
+        } catch (NumberFormatException exp) {
+            writeError(responseWriter, 400, "start and count are numbers");
+            return;
+        }
+        responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), start, count)));
     }
 
     private Integer number(HttpPostRequestDecoder form, String name) throws Exception {
