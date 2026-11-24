@@ -8,9 +8,9 @@ import java.util.function.Function;
  * This Gemp's PC account settings (PC-ACCOUNT.md, "Modes"), read once at start. In test mode nothing but the mode
  * is read. In any other mode a missing or malformed setting stops the server from starting, naming the setting.
  *
- * Each `argonauth.x.y` property can be given instead as the environment variable `ARGONAUTH_X_Y`, which wins: the
- * client secret then need not be in a file the repository holds (docker/.env.example lists them; docker/.env,
- * which is not committed, is where they go).
+ * The settings are the `argonauth.*` properties, which gemp-lotr.properties takes from the environment variables
+ * `SSO_*` like the database's (AppConfig): docker/.env.example lists them, and docker/.env, which is not
+ * committed, is where they and the client secret go. One left blank is as if absent.
  *
  * @param issuer         Argonauth's address as browsers and tokens have it, no trailing slash
  * @param redirectUri    this Gemp's callback address, exactly as registered at Argonauth
@@ -35,11 +35,9 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
         return address.startsWith(issuer) ? backchannelUrl + address.substring(issuer.length()) : address;
     }
 
-    public static ArgonauthConfig read(Function<String, String> properties, Function<String, String> environment) {
+    public static ArgonauthConfig read(Function<String, String> properties) {
         Function<String, String> setting = key -> {
-            // One left blank is as if absent: docker/.env.example lists them all, most of them empty.
-            String fromEnvironment = environment.apply(key.toUpperCase(Locale.ROOT).replace('.', '_'));
-            String value = fromEnvironment != null && !fromEnvironment.isBlank() ? fromEnvironment : properties.apply(key);
+            String value = properties.apply(key);
             return value == null ? "" : value.trim();
         };
         ArgonauthMode mode = ArgonauthMode.parse(setting.apply("argonauth.mode"));
@@ -55,10 +53,16 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
                 backchannel);
     }
 
+    /** A setting as the person who has to fix it knows it: argonauth.client.id is SSO_CLIENT_ID in docker/.env. */
+    private static String named(String key) {
+        return key + " (" + key.replace("argonauth.", "SSO_").replace('.', '_').toUpperCase(Locale.ROOT)
+                + " in docker/.env)";
+    }
+
     private static String required(Function<String, String> setting, String key) {
         String value = setting.apply(key);
         if (value.isEmpty())
-            throw new IllegalStateException(key + " is not set, and argonauth.mode is not test");
+            throw new IllegalStateException(named(key) + " is not set, and argonauth.mode is not test");
         return value;
     }
 
@@ -69,7 +73,7 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
         try {
             uri = URI.create(value);
         } catch (IllegalArgumentException exp) {
-            throw new IllegalStateException(key + "=" + value + " is not an address");
+            throw new IllegalStateException(named(key) + "=" + value + " is not an address");
         }
         String scheme = uri.getScheme() == null ? "" : uri.getScheme().toLowerCase(Locale.ROOT);
         String host = uri.getHost() == null ? "" : uri.getHost().toLowerCase(Locale.ROOT);
@@ -79,10 +83,10 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
         boolean insideThisMachine = key.equals("argonauth.backchannel.url")
                 && (host.equals("host.docker.internal") || !host.contains("."));
         if (host.isEmpty() || !(scheme.equals("https") || (scheme.equals("http") && (thisMachine || insideThisMachine))))
-            throw new IllegalStateException(key + "=" + value + " must be an https address (http only for localhost"
+            throw new IllegalStateException(named(key) + "=" + value + " must be an https address (http only for localhost"
                     + (key.equals("argonauth.backchannel.url") ? ", host.docker.internal or a container's name)" : ")"));
         if (uri.getQuery() != null || uri.getFragment() != null)
-            throw new IllegalStateException(key + "=" + value + " must not have a query or a fragment");
+            throw new IllegalStateException(named(key) + "=" + value + " must not have a query or a fragment");
         return value.endsWith("/") && uri.getPath().equals("/") ? value.substring(0, value.length() - 1) : value;
     }
 }

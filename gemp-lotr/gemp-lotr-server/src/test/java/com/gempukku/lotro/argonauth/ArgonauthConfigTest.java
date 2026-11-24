@@ -9,10 +9,9 @@ import static org.junit.Assert.*;
 
 public class ArgonauthConfigTest {
     private final Map<String, String> _properties = new HashMap<>();
-    private final Map<String, String> _environment = new HashMap<>();
 
     private ArgonauthConfig read() {
-        return ArgonauthConfig.read(_properties::get, _environment::get);
+        return ArgonauthConfig.read(_properties::get);
     }
 
     private void optional() {
@@ -76,44 +75,35 @@ public class ArgonauthConfigTest {
             _properties.remove(key);
             assertRefused(key);
         }
-    }
-
-    @Test
-    public void theEnvironmentWinsOverTheFile() {
+        // and as what it is called in docker/.env, which is where it is set
         optional();
-        _properties.remove("argonauth.client.secret");
-        _environment.put("ARGONAUTH_CLIENT_SECRET", "from the environment");
-        _environment.put("ARGONAUTH_CLIENT_ID", "gemp-sandbox");
-        ArgonauthConfig config = read();
-        assertEquals("from the environment", config.clientSecret());
-        assertEquals("gemp-sandbox", config.clientId());
-
-        _properties.clear();
-        _environment.put("ARGONAUTH_MODE", "pester");
-        assertRefused("not built");
+        _properties.remove("argonauth.client.id");
+        assertRefused("argonauth.client.id (SSO_CLIENT_ID in docker/.env) is not set");
+        _properties.put("argonauth.client.id", "gemp");
+        _properties.put("argonauth.postlogout.uri", "ftp://x");
+        assertRefused("argonauth.postlogout.uri (SSO_POSTLOGOUT_URI in docker/.env)=ftp://x must be");
     }
 
     @Test
-    public void aSettingLeftBlankInTheEnvironmentIsAsIfAbsent() {
-        // docker/.env.example lists every setting, most of them empty: with the mode left at test, that is test mode
-        for (String name : new String[]{"ARGONAUTH_ISSUER", "ARGONAUTH_CLIENT_ID", "ARGONAUTH_CLIENT_SECRET",
-                "ARGONAUTH_REDIRECT_URI", "ARGONAUTH_POSTLOGOUT_URI", "ARGONAUTH_BACKCHANNEL_URL"})
-            _environment.put(name, "");
-        _environment.put("ARGONAUTH_MODE", "test");
+    public void aSettingLeftBlankIsAsIfAbsent() {
+        // gemp-lotr.properties takes each of these from docker/.env (AppConfigTest), where most are left empty:
+        // with the mode left at test, that is test mode
+        for (String key : new String[]{"argonauth.issuer", "argonauth.client.id", "argonauth.client.secret",
+                "argonauth.redirect.uri", "argonauth.postlogout.uri", "argonauth.backchannel.url"})
+            _properties.put(key, "");
+        _properties.put("argonauth.mode", "test");
+        assertSame(ArgonauthConfig.TEST, read());
+        _properties.put("argonauth.mode", " ");
         assertSame(ArgonauthConfig.TEST, read());
 
-        // and a blank one does not wipe out what the properties file says
+        // an empty back channel is the issuer
         optional();
-        _environment.put("ARGONAUTH_MODE", " ");
-        ArgonauthConfig config = read();
-        assertEquals(ArgonauthMode.OPTIONAL, config.mode());
-        assertEquals("s3cret", config.clientSecret());
-        assertEquals(config.issuer(), config.backchannelUrl());
+        _properties.put("argonauth.backchannel.url", "");
+        assertEquals(read().issuer(), read().backchannelUrl());
 
-        // switched on in the environment with something still blank: the server stops and names it
-        _properties.clear();
-        _environment.put("ARGONAUTH_MODE", "optional");
-        assertRefused("argonauth.issuer");
+        // switched on with something still blank: the server stops and names it
+        _properties.put("argonauth.client.secret", " ");
+        assertRefused("argonauth.client.secret");
     }
 
     @Test

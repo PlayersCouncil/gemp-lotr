@@ -20,7 +20,7 @@ this replaces where they differ. What Gemp asks of Argonauth is in
 
 ## Modes
 
-`argonauth.mode` in `gemp-lotr.properties`. Moving between modes is a setting and a restart.
+`SSO_MODE` in `docker/.env`. Moving between modes is a setting and a restart.
 
 | Mode | PC account | Password login | Registration | Where |
 |---|---|---|---|---|
@@ -30,12 +30,17 @@ this replaces where they differ. What Gemp asks of Argonauth is in
 
 | Setting | |
 |---|---|
-| `argonauth.mode` | Above |
-| `argonauth.issuer` | The address in tokens and the one browsers are sent to. `https` unless the host is `localhost` |
-| `argonauth.client.id`, `argonauth.client.secret` | This Gemp's registration at that Argonauth |
-| `argonauth.redirect.uri` | This Gemp's public callback address, exactly as registered: `<site>/gemp-lotr-server/argonauth/callback` |
-| `argonauth.postlogout.uri` | Where Argonauth sends the browser after a sign-out: `<site>/gemp-lotr/ng/login`, as registered |
-| `argonauth.backchannel.url` | Optional. Where Gemp's server reaches Argonauth, when that differs from the issuer (both in containers on one machine). Defaults to the issuer |
+| `SSO_MODE` | Above |
+| `SSO_ISSUER` | The address in tokens and the one browsers are sent to. `https` unless the host is `localhost` |
+| `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET` | This Gemp's registration at that Argonauth |
+| `SSO_REDIRECT_URI` | This Gemp's public callback address, exactly as registered: `<site>/gemp-lotr-server/argonauth/callback` |
+| `SSO_POSTLOGOUT_URI` | Where Argonauth sends the browser after a sign-out: `<site>/gemp-lotr/ng/login`, as registered |
+| `SSO_BACKCHANNEL_URL` | Optional. Where Gemp's server reaches Argonauth, when that differs from the issuer (both in containers on one machine). Defaults to the issuer |
+
+These are environment variables. Gemp itself reads properties, `argonauth.mode` and the rest, and
+`gemp-lotr.properties` takes each from its variable (`argonauth.mode=${SSO_MODE:-test}`), as it does the
+database's: a variable unset or left blank is the default there, which for all but the mode is nothing. A run
+outside Docker sets the variables in its own environment.
 
 A test Gemp is never registered at production Argonauth: links are keyed by `player.id`, and
 a test server's ids are production's ids for other people. Test servers that try the
@@ -49,26 +54,25 @@ integration use the dev Argonauth, which has its own database.
 2. **The registration at Argonauth.** `python manage.py client save ...` there, with this Gemp's two addresses
    exactly as they will be set here (Argonauth's `docs/INTEGRATING.md`). A local Argonauth already has `gemp-dev`
    for a Gemp on port 17001.
-3. **The settings.** Each `argonauth.x.y` can be given as the environment variable `ARGONAUTH_X_Y`, which wins
-   over the properties file; `docker/.env` reaches the app's container, is not in the repository (copy
+3. **The settings.** In `docker/.env`, which reaches the app's container and is not in the repository (copy
    `docker/.env.example`, which lists every one of these), so the secret goes there and not in the
    repository. For a local Gemp against a local Argonauth, both in Docker:
 
-       ARGONAUTH_MODE=optional
-       ARGONAUTH_ISSUER=http://localhost:1630
-       ARGONAUTH_CLIENT_ID=gemp-dev
-       ARGONAUTH_CLIENT_SECRET=gemp-dev-secret
-       ARGONAUTH_REDIRECT_URI=http://localhost:17001/gemp-lotr-server/argonauth/callback
-       ARGONAUTH_POSTLOGOUT_URI=http://localhost:17001/gemp-lotr/ng/login
-       ARGONAUTH_BACKCHANNEL_URL=http://host.docker.internal:1630
+       SSO_MODE=optional
+       SSO_ISSUER=http://localhost:1630
+       SSO_CLIENT_ID=gemp-dev
+       SSO_CLIENT_SECRET=gemp-dev-secret
+       SSO_REDIRECT_URI=http://localhost:17001/gemp-lotr-server/argonauth/callback
+       SSO_POSTLOGOUT_URI=http://localhost:17001/gemp-lotr/ng/login
+       SSO_BACKCHANNEL_URL=http://host.docker.internal:1630
 
    On Linux Docker the app's service also needs `extra_hosts: ["host.docker.internal:host-gateway"]`. On the
    droplets there is no back channel: leave it unset and the server uses the public https address.
 4. **Restart.** The log says `PC accounts: argonauth.mode is optional, at <issuer> as <client id>`. A setting
-   that is missing or malformed stops the server and names itself. Argonauth is first reached for when someone
+   that is missing or malformed stops the server and names itself, as the property and as the variable. Argonauth is first reached for when someone
    signs in, not at start: a Gemp can start while Argonauth is down.
 
-Going back is `ARGONAUTH_MODE=test` and a restart. Aliases created through a PC account have no password, so in
+Going back is `SSO_MODE=test` and a restart. Aliases created through a PC account have no password, so in
 `test` mode nobody can log in to them; they are there again when the mode is.
 
 ## What A Person Does
