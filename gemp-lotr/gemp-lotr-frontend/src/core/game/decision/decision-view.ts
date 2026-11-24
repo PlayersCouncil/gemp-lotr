@@ -183,6 +183,8 @@ function cardChoice(
 }
 
 export function decisionView(model: GameModel, settings: DecisionSettings): DecisionView {
+  // A scripted game's table being changed by hand (a sandbox stopped, a puzzle before Submit): nobody is asked anything
+  if (model.scenario?.info?.mode === 'edit') return NO_DECISION;
   const view = askedView(model, settings);
   if (!settings.replay) return view;
   // A replay: the same, with no buttons; once the alert box asked, its frame stays wide (the legacy page only put the

@@ -1,0 +1,50 @@
+/* An open spot: card-shaped (as the cards of its host, --gd-card-height), a + in it, glowing blue */
+
+:host {
+  display: block;
+}
+
+.gd-open-spot {
+  --gd-spot-width: round(down, calc(var(--gd-card-height, 120px) * 350 / 490), 1px);
+  position: relative;
+  box-sizing: border-box;
+  width: var(--gd-spot-width);
+  height: round(down, calc(var(--gd-spot-width) * 490 / 350), 1px);
+  padding: 0;
+  border: 2px dashed var(--theme-game-edit-spot-edge);
+  border-radius: 6%/4.3%;
+  background: var(--theme-game-edit-spot-bg);
+  color: var(--theme-game-edit-spot-plus);
+  box-shadow: 0 0 10px 1px var(--theme-game-edit-glow);
+  cursor: pointer;
+  animation: gd-open-spot-glow 2.4s ease-in-out infinite;
+}
+
+.gd-open-spot:hover,
+.gd-open-spot:focus-visible,
+.gd-open-spot[aria-expanded='true'] {
+  border-style: solid;
+  box-shadow: 0 0 16px 4px var(--theme-game-edit-glow);
+  outline: none;
+}
+
+.gd-open-spot__plus {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: bold calc(var(--gd-spot-width) * 0.5) / 1 var(--theme-game-edit-font);
+}
+
+/* A calm breath of the glow; none for those who ask for less motion */
+@keyframes gd-open-spot-glow {
+  50% {
+    box-shadow: 0 0 4px 0 var(--theme-game-edit-glow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gd-open-spot {
+    animation: none;
+  }
+}

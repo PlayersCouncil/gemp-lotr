@@ -6,6 +6,7 @@ import { CardView } from '../../../core/cards/card-view';
 import { CardHover } from '../../../core/cards/card-hover.service';
 import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { CardComponent, DRAG_UP_FOR_INFO, LONG_PRESS_MS } from './card.component';
+import { CardGestures, CardGesturePlace } from './card-gestures';
 
 const CARD: CardView = {
   blueprintId: '1_2',
@@ -41,6 +42,9 @@ function pointer(type: string, init: { x?: number; y?: number; pointerType?: str
   return event;
 }
 
+/** The page's say in the gesture for its own menu, while a test gives one (CardGestures). */
+let hook: ((card: CardView, place: CardGesturePlace) => boolean) | null = null;
+
 describe('CardComponent', () => {
   let actions: {
     activate: ReturnType<typeof vi.fn>;
@@ -51,13 +55,23 @@ describe('CardComponent', () => {
   beforeEach(() => {
     const activate = vi.fn();
     TestBed.configureTestingModule({
-      providers: [...provideTestCardInteractions(), { provide: CardActions, useValue: { activate } }],
+      providers: [
+        ...provideTestCardInteractions(),
+        { provide: CardActions, useValue: { activate } },
+        {
+          provide: CardGestures,
+          useValue: { menu: (card: CardView, place: CardGesturePlace) => hook?.(card, place) ?? false },
+        },
+      ],
     });
     const info = TestBed.inject(CardInfoService);
     actions = { activate, showInfo: vi.spyOn(info, 'show'), showDraggedInfo: vi.spyOn(info, 'showDragged') };
   });
 
-  afterEach(() => vi.useRealTimers());
+  afterEach(() => {
+    vi.useRealTimers();
+    hook = null;
+  });
 
   async function render(card: Partial<CardView> = {}) {
     const fixture = TestBed.createComponent(Host);
@@ -209,6 +223,61 @@ describe('CardComponent', () => {
       const event = new Event('dragstart', { bubbles: true, cancelable: true });
       el.querySelector('img')!.dispatchEvent(event);
       expect(event.defaultPrevented).toBe(true);
+    });
+  });
+
+  describe("a page's own menu (CardGestures)", () => {
+    let taken: { card: CardView; place: CardGesturePlace }[];
+    let takes: boolean;
+
+    beforeEach(() => {
+      taken = [];
+      takes = true;
+      hook = (card, place) => {
+        taken.push({ card, place });
+        return takes;
+      };
+    });
+
+    it('takes a right-click, with the card and the pointer, instead of the details', async () => {
+      const { el } = await render();
+      el.dispatchEvent(pointer('pointerdown', { button: 2, x: 30, y: 40 }));
+      const event = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        button: 2,
+        clientX: 30,
+        clientY: 40,
+      });
+      el.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
+      expect(taken).toEqual([{ card: CARD, place: { element: el, point: { x: 30, y: 40 } } }]);
+      expect(actions.showInfo).not.toHaveBeenCalled();
+      // Shift-click is always the details
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, shiftKey: true }));
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
+    });
+
+    it('takes the context-menu key with no pointer, and a long press where it was pressed', async () => {
+      const { el } = await render();
+      el.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+      expect(taken[0]?.place.point).toBeNull();
+      vi.useFakeTimers();
+      el.dispatchEvent(pointer('pointerdown', { pointerType: 'touch', x: 50, y: 60 }));
+      vi.advanceTimersByTime(LONG_PRESS_MS);
+      expect(taken[1]?.place.point).toEqual({ x: 50, y: 60 });
+      expect(actions.showDraggedInfo).not.toHaveBeenCalled();
+    });
+
+    it('shows the details as always when the page does not take the gesture', async () => {
+      takes = false;
+      const { el } = await render();
+      el.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+      expect(actions.showInfo).toHaveBeenCalledWith(CARD);
+      vi.useFakeTimers();
+      el.dispatchEvent(pointer('pointerdown', { pointerType: 'touch', x: 50, y: 60 }));
+      vi.advanceTimersByTime(LONG_PRESS_MS);
+      expect(actions.showDraggedInfo).toHaveBeenCalledWith(CARD);
     });
   });
 

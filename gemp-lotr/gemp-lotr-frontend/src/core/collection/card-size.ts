@@ -30,6 +30,8 @@ export class CardSize {
   private readonly cookies = inject(SettingCookies);
 
   readonly percent = signal(parseCardSize(this.cookies.read(CARD_SIZE_COOKIE)));
+  /** The slider's range (CardFilterSize). */
+  readonly limits = { min: CARD_SIZE_MIN, max: CARD_SIZE_MAX, step: CARD_SIZE_STEP } as const;
 
   set(percent: number): void {
     this.percent.set(parseCardSize(String(percent)));

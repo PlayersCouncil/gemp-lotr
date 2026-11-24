@@ -106,7 +106,13 @@ describe('core boundary', () => {
       'core/actions/',
       'core/game/',
     ];
-    const shared = files.filter(({ name }) => name.startsWith('core/cards/') || name.startsWith('core/platform/'));
+    const shared = files.filter(
+      ({ name }) =>
+        name.startsWith('core/cards/') ||
+        name.startsWith('core/platform/') ||
+        // (the card filter, shared by the deck builder and the game page's search)
+        name.startsWith('core/card-filter/'),
+    );
     const tied = shared.flatMap(({ file, name, source }) =>
       importedPaths(file, source)
         .filter((path) => pageFolders.some((folder) => path.startsWith(folder)))

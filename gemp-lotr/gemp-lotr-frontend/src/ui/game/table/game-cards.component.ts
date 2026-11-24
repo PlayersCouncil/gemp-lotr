@@ -1,6 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { TableStack } from '../../../core/game/table/game-table';
+import { EditPlace } from '../../../core/game/table-edit/edit-ops';
+import { OpenSpotComponent } from '../table-edit/open-spot.component';
 import { CardComponent } from '../../shared/card/card.component';
 import { FitCard } from '../../shared/fit-cards/fit-cards';
 import { FitCardsDirective } from '../../shared/fit-cards/fit-cards.directive';
@@ -15,13 +17,24 @@ const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
  * A row of the table's cards (a legacy NormalCardGroup): each card with what is attached to it and stacked on it
  * drawn under it, to its left; the cards as high as fits, in as many rows as that takes (fitCards, `rows`).
  *
+ * While the table is edited by hand, a row that can take a card ends with an open spot (`spot`: where a card chosen
+ * there goes), sized as its cards.
+ *
  * DOM contract: `gd-game-cards` holding `.gd-game-cards__box` (sized by fitCards), in it one `.gd-game-stack` per card,
- * holding its cards as `button.gd-card` (see GameCardDirective for their attributes), the ones under it first.
+ * holding its cards as `button.gd-card` (see GameCardDirective for their attributes), the ones under it first; then,
+ * with a `spot`, `.gd-game-stack[data-open-spot]` holding `gd-open-spot`.
  */
 @Component({
   selector: 'gd-game-cards',
   styleUrl: './game-cards.component.css',
-  imports: [CardComponent, FitCardsDirective, GameCardDirective, GameCardLayersComponent, ReorderDirective],
+  imports: [
+    CardComponent,
+    FitCardsDirective,
+    GameCardDirective,
+    GameCardLayersComponent,
+    ReorderDirective,
+    OpenSpotComponent,
+  ],
   template: `
     <div class="gd-game-cards__box" [gdFitCards]="fit()" [gdFitCardsOnPagePixels]="placed()" [gdReorder]="ids()">
       @for (stack of stacks(); track stack.card.id) {
@@ -36,6 +49,11 @@ const SHOWN = { attached: 0.2, stacked: 0.22 } as const;
           </button>
         </div>
       }
+      @if (spot(); as where) {
+        <div class="gd-game-stack" data-open-spot>
+          <gd-open-spot [where]="where" />
+        </div>
+      }
     </div>
   `,
 })
@@ -43,17 +61,21 @@ export class GameCardsComponent {
   readonly stacks = input.required<readonly TableStack[]>();
   /** Changes when the row may have moved on the page without changing its size (see gdFitCardsOnPagePixels). */
   readonly placed = input<unknown>(0);
+  /** Where a card added at the row's open spot goes; null: no open spot. */
+  readonly spot = input<EditPlace | null>(null);
 
   protected readonly views = inject(GameCardViews);
 
   /** The row's cards (the ones others lie under), in their order: what dragging reorders. */
   protected readonly ids = computed(() => this.stacks().map((stack) => stack.card.id));
 
-  protected readonly fit = computed<FitCard[]>(() =>
-    this.stacks().map((stack) => ({
+  protected readonly fit = computed<FitCard[]>(() => [
+    ...this.stacks().map((stack) => ({
       horizontal: this.views.of(stack.card).horizontal,
       behind: stack.under.map((child) => this.views.of(child.card).horizontal),
       behindShown: stack.under.map((child) => SHOWN[child.kind]),
     })),
-  );
+    // (the open spot is the size of an upright card)
+    ...(this.spot() ? [{ horizontal: false, behind: [], behindShown: [] }] : []),
+  ]);
 }

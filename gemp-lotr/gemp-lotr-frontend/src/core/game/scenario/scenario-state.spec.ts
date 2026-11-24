@@ -26,6 +26,11 @@ const INFO: ScenarioInfo = {
   draftTest: false,
   twoSided: false,
   opening: 'board',
+  mode: 'play',
+  level: 'none',
+  tools: [],
+  canStop: false,
+  canStart: false,
 };
 
 const step = (extra: Partial<ScenarioStep> = {}): ScenarioStep => ({
@@ -52,6 +57,9 @@ const END: ScenarioEnd = {
   message: null,
   checkpoint: null,
   restart: false,
+  winner: null,
+  reason: null,
+  reset: false,
 };
 
 const withInfo = (info: Partial<ScenarioInfo>): ScenarioState => applyScenarioEvent(null, { ...INFO, ...info });

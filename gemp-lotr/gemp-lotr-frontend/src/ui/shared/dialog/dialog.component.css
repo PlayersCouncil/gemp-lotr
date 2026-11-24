@@ -289,6 +289,18 @@
   --dialog-width: min(420px, calc(100vw - 2em));
 }
 
+/* A card search of the game's edit controls (ui/game/table-edit): room for the filter beside the cards found */
+.gd-dialog[data-dialog='edit-search'] {
+  --dialog-width: min(1180px, calc(94vw - var(--gd-page-right, 0px)));
+  --dialog-height: min(640px, calc(var(--gd-window-height, 100vh) - 60px));
+  height: var(--dialog-height);
+}
+
+.gd-dialog[data-dialog='edit-search'] .gd-dialog__body {
+  display: flex;
+  overflow: hidden;
+}
+
 /* A game that can't go on (the game page's error dialog): 300 x 160, not resizable */
 .gd-dialog[data-dialog='game-problem'] {
   --dialog-height: 160px;

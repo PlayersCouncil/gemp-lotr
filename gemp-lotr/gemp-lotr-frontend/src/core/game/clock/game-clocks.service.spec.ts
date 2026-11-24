@@ -148,6 +148,13 @@ describe('GameClocks and GameAttention', () => {
     expect(cues.setTitle).toHaveBeenLastCalledWith(GAME_TITLE);
   });
 
+  it("flashes nothing while a scripted game's table is changed by hand: nobody is asked anything then", () => {
+    const info = JSON.stringify({ type: 'info', id: 'sandbox', kind: 'sandbox', mode: 'edit', level: 'sandbox' });
+    open(PLAYERS() + `<ge type="S" scenario="${info.replace(/"/g, '&quot;')}"/>` + DECISION());
+    vi.advanceTimersByTime(TITLE_FLASH_MS * 3);
+    expect(cues.setTitle).not.toHaveBeenCalledWith(DECISION_TITLE);
+  });
+
   it('plays the decision sound when the page is in the background, for the decisions that had it', () => {
     away = true;
     open(PLAYERS() + DECISION());

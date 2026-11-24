@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { SettingCookies } from '../platform/setting-cookies';
 import { CollectionQuery } from './collection-query.service';
-import { FilterFields, NUMERIC_FILTERS, NumericFilter } from './filter-fields';
+import { FilterFields, NUMERIC_FILTERS, NumericFilter } from '../card-filter/filter-fields';
 
 /**
  * The filters a player can keep shown above the collection in the compact layout (the rest are in the collection
@@ -82,6 +82,8 @@ export class FilterPins {
   private readonly query = inject(CollectionQuery);
 
   readonly pinned = signal(parseFilterPins(this.cookies.read(FILTER_PINS_COOKIE)));
+  /** The filters that can be kept shown (CardFilterPins). */
+  readonly pinnable = PINNABLE_FILTERS;
 
   /** The filters in the menu that narrow the cards shown. */
   readonly hiddenSet = computed(() => {

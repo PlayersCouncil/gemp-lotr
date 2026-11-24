@@ -6,6 +6,8 @@
  * the JSON with every field checked, so the rest of the page can rely on the shapes.
  */
 import { legacyRelativeImages } from '../../platform/app-paths';
+import { editLevel, EditLevel, editMode, EditMode, editTools } from '../table-edit/edit-board';
+import { EditTool } from '../table-edit/edit-ops';
 
 export type ScenarioKind = 'tutorial' | 'puzzle' | 'sandbox';
 export type ScenarioSeat = 'freeps' | 'shadow';
@@ -54,6 +56,19 @@ export interface ScenarioInfo {
   author: boolean;
   /** ...or playing a draft of it as a player would. */
   draftTest: boolean;
+  /**
+   * Whether the table is being changed by hand (`edit`: nobody is asked anything) or played (`play`). Sent again
+   * whenever it, `canStop` or `canStart` changes.
+   */
+  mode: EditMode;
+  /** What the person may change in edit mode: nothing (`none`), a puzzle's slots, a sandbox's everything. */
+  level: Exclude<EditLevel, 'author'>;
+  /** The kinds of change allowed (a sandbox's `options.tools`). */
+  tools: readonly EditTool[];
+  /** Play can be stopped for edit mode now (the game is at rest), or started again from it. */
+  canStop: boolean;
+  canStart: boolean;
+  // (a puzzle's `slots` and `undo` come here too: the puzzle page reads them)
 }
 
 export type MessageSide = 'auto' | 'above' | 'below' | 'left' | 'right';
@@ -147,7 +162,8 @@ export interface ScenarioOffScript {
   message: string | null;
 }
 
-export type ScenarioResult = 'complete' | 'failed' | 'off_script' | 'abandoned' | 'error';
+/** `ended`: a sandbox's game came to its end (a sandbox is never complete or failed). */
+export type ScenarioResult = 'complete' | 'failed' | 'off_script' | 'abandoned' | 'error' | 'ended';
 
 export interface ScenarioEnd {
   type: 'end';
@@ -161,6 +177,12 @@ export interface ScenarioEnd {
    * rather than counting it a failure (`fail`). Only ever true with the result `off_script`.
    */
   restart: boolean;
+  /** Who won the game, where it was played to its end (a sandbox's): the person, the opponent; null: nobody said. */
+  winner: 'human' | 'opponent' | null;
+  /** Why the game ended, in the game's words ("The Ring-Bearer is dead"), or null. */
+  reason: string | null;
+  /** The page offers Reset: a fresh game of the sandbox as it opened. */
+  reset: boolean;
 }
 
 export type ScenarioEvent = ScenarioInfo | ScenarioStep | ScenarioOffScript | ScenarioEnd;
@@ -300,6 +322,11 @@ function info(value: Json): ScenarioInfo | null {
     campaign: campaign(value['campaign']),
     author: boolean(value['author']) ?? false,
     draftTest: boolean(value['draftTest']) ?? false,
+    mode: editMode(value['mode']),
+    level: ((level) => (level === 'author' ? 'none' : level))(editLevel(value['level'])),
+    tools: editTools(value['tools']),
+    canStop: boolean(value['canStop']) ?? false,
+    canStart: boolean(value['canStart']) ?? false,
   };
 }
 
@@ -338,11 +365,18 @@ function step(value: Json): ScenarioStep | null {
 function end(value: Json): ScenarioEnd {
   return {
     type: 'end',
-    result: oneOf<ScenarioResult>(value['result'], ['complete', 'failed', 'off_script', 'abandoned', 'error'], 'error'),
+    result: oneOf<ScenarioResult>(
+      value['result'],
+      ['complete', 'failed', 'off_script', 'abandoned', 'error', 'ended'],
+      'error',
+    ),
     messages: messages(value['messages']),
     message: html(value['message']),
     checkpoint: number(value['checkpoint']),
     restart: boolean(value['restart']) ?? false,
+    winner: value['winner'] === 'human' || value['winner'] === 'opponent' ? value['winner'] : null,
+    reason: string(value['reason']),
+    reset: boolean(value['reset']) ?? false,
   };
 }
 

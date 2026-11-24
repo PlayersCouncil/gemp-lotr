@@ -36,11 +36,11 @@ export const TARGETS = [
   'src/core/collection/collection-browser.service.ts',
   'src/core/collection/collection-cards.ts',
   'src/core/collection/collection-query.service.ts',
-  'src/core/collection/filter-block-sets.ts',
-  'src/core/collection/filter-cultures.ts',
-  'src/core/collection/filter-fields.ts',
-  'src/core/collection/filter-options.ts',
-  'src/core/collection/filter-string.ts',
+  'src/core/card-filter/filter-block-sets.ts',
+  'src/core/card-filter/filter-cultures.ts',
+  'src/core/card-filter/filter-fields.ts',
+  'src/core/card-filter/filter-options.ts',
+  'src/core/card-filter/filter-string.ts',
   'src/core/deck/deck-cards.ts',
   'src/core/deck/deck-changes.service.ts',
   'src/core/deck/deck-contents.ts',
@@ -118,6 +118,15 @@ export const TARGETS = [
   'src/core/game/authoring/refusals.ts',
   'src/core/game/authoring/said.ts',
   'src/core/game/authoring/templates.ts',
+  // The table changed by hand (sandbox, later puzzles): its state, the menus' choices, the search, the backends
+  'src/core/game/table-edit/edit-ops.ts',
+  'src/core/game/table-edit/edit-board.ts',
+  'src/core/game/table-edit/edit-menu.ts',
+  'src/core/game/table-edit/popup-place.ts',
+  'src/core/game/table-edit/recent-cards.ts',
+  'src/core/game/table-edit/card-search.ts',
+  'src/core/game/table-edit/sandbox-backend.ts',
+  'src/core/game/table-edit/table-edit.service.ts',
 ];
 
 /**

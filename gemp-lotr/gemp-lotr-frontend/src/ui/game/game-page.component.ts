@@ -46,6 +46,13 @@ import { GameUndo } from '../../core/game/undo/game-undo.service';
 import { UndoBannerComponent } from './undo/undo-banner.component';
 import { UndoListComponent } from './undo/undo-list.component';
 import { UndoRequestComponent } from './undo/undo-request.component';
+import { TableEdit } from '../../core/game/table-edit/table-edit.service';
+import { EditPlace, otherSeat } from '../../core/game/table-edit/edit-ops';
+import { provideTableEditUi } from './table-edit/provide-table-edit-ui';
+import { TableEditLayerComponent } from './table-edit/table-edit-layer.component';
+
+/** The rows of the table that can have an open spot. */
+type TableRow = 'supportOpponent' | 'charactersOpponent' | 'minions' | 'charactersPlayer' | 'supportPlayer' | 'hand';
 
 /** The cookie the game page remembers its hover zoom setting in (the legacy game page's). */
 export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
@@ -66,7 +73,8 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
  * (`data-side`: shadow, free-peoples). `data-animating` while an event holds the page (its animation). Cards: see GameCardDirective.
  * Taking the game back (in both layouts): `gd-undo-list`, `gd-undo-request` and `gd-undo-banner` (see ./undo).
  * `data-scenario` (tutorial, puzzle, sandbox) in a scripted game, which draws over the page with `gd-game-scenario`
- * and `gd-game-scenario-panels`; a draft's game adds `gd-game-author` (the authoring panel), the page leaving it the room
+ * and `gd-game-scenario-panels`; `data-edit` (edit, play) in one whose table is changed by hand, with `gd-table-edit`
+ * (the edit controls; each row that can take a card ends with an open spot then, see GameCardsComponent); a draft's game adds `gd-game-author` (the authoring panel), the page leaving it the room
  * at the window's right (`--gd-page-right` on the document element).
  */
 @Component({
@@ -75,6 +83,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
   providers: [
     ...provideGameState(),
     ...provideCardInteractions({ actions: GameCardActions, autoZoomCookie: GAME_AUTO_ZOOM_COOKIE }),
+    ...provideTableEditUi(),
   ],
   imports: [
     AdventurePathComponent,
@@ -104,6 +113,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     ScenarioPanelsComponent,
     AuthoringPanelComponent,
     NotifierDialogComponent,
+    TableEditLayerComponent,
   ],
   host: {
     class: 'gd-game',
@@ -115,6 +125,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
     '[attr.data-animating]': "session.busy() ? '' : null",
     '[attr.data-layout]': "phone() ? 'phone' : null",
     '[attr.data-scenario]': 'scenario.info()?.kind ?? null',
+    '[attr.data-edit]': "edit.level() !== 'none' ? edit.mode() : null",
     '(document:keydown.escape)': 'escape()',
     '[style.--gd-window-height]': "windowHeight() + 'px'",
     '(window:resize)': 'measureWindow()',
@@ -136,23 +147,31 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
           <span class="gd-game__theme"><gd-game-theme-button /></span>
         }
         <section class="gd-game__row" data-row="support-opponent" aria-label="Opponent's support area">
-          <gd-game-cards [stacks]="table().supportOpponent" />
+          <gd-game-cards [stacks]="table().supportOpponent" [spot]="spots()?.supportOpponent ?? null" />
         </section>
         <section class="gd-game__row" data-row="characters-opponent" aria-label="Opponent's characters">
-          <gd-game-cards [stacks]="table().charactersOpponent" [placed]="placed()" />
+          <gd-game-cards
+            [stacks]="table().charactersOpponent"
+            [spot]="spots()?.charactersOpponent ?? null"
+            [placed]="placed()"
+          />
         </section>
         <section class="gd-game__row" data-row="shadow" aria-label="Minions">
-          <gd-game-cards [stacks]="table().shadow" [placed]="placed()" />
+          <gd-game-cards [stacks]="table().shadow" [spot]="spots()?.minions ?? null" [placed]="placed()" />
         </section>
         <section class="gd-game__row" data-row="characters-player" aria-label="Your characters">
-          <gd-game-cards [stacks]="table().charactersPlayer" [placed]="placed()" />
+          <gd-game-cards
+            [stacks]="table().charactersPlayer"
+            [spot]="spots()?.charactersPlayer ?? null"
+            [placed]="placed()"
+          />
         </section>
         <section class="gd-game__row" data-row="support-player" aria-label="Your support area">
-          <gd-game-cards [stacks]="table().supportPlayer" />
+          <gd-game-cards [stacks]="table().supportPlayer" [spot]="spots()?.supportPlayer ?? null" />
         </section>
         @if (!model().spectator) {
           <section class="gd-game__row" data-row="hand" aria-label="Your hand">
-            <gd-game-cards [stacks]="table().hand" />
+            <gd-game-cards [stacks]="table().hand" [spot]="spots()?.hand ?? null" />
           </section>
         }
         @if (table().skirmish; as skirmish) {
@@ -221,6 +240,10 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-scenario />
     }
     <gd-game-scenario-panels />
+    @if (!phone() && edit.level() !== 'none') {
+      <!-- A table changed by hand (a sandbox): the chooser, a card's menu, the search window, picking a card -->
+      <gd-table-edit />
+    }
     @if (!phone() && authoring.active()) {
       <!-- A draft's game: the authoring panel, docked at the right (in a test, floating) -->
       <gd-game-author />
@@ -245,6 +268,25 @@ export class GamePageComponent {
   protected readonly scenario = inject(ScenarioGuide);
   /** A draft's game (the scenario says its player is writing it, or testing it): the authoring panel. */
   protected readonly authoring = inject(Authoring);
+  /** A table changed by hand (a sandbox stopped): its open spots, and the edit controls over the page. */
+  protected readonly edit = inject(TableEdit);
+  /**
+   * Where each row's open spot adds a card, while cards can be added: the person's seat below, the other above; the
+   * minions' row is the Shadow player's of the turn (the other seat on the person's own turn).
+   */
+  protected readonly spots = computed<Readonly<Record<TableRow, EditPlace>> | null>(() => {
+    if (!this.edit.may('add')) return null;
+    const human = this.scenario.info()?.humanSeat ?? 'freeps';
+    const other = otherSeat(human);
+    return {
+      supportOpponent: { seat: other, zone: 'support' },
+      charactersOpponent: { seat: other, zone: 'characters' },
+      minions: { seat: this.table().bottomTurn ? other : human, zone: 'minions' },
+      charactersPlayer: { seat: human, zone: 'characters' },
+      supportPlayer: { seat: human, zone: 'support' },
+      hand: { seat: human, zone: 'hand' },
+    };
+  });
   private readonly themes = inject(ThemeService);
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
   protected readonly phone = inject(CompactLayout).gameActive;

@@ -451,6 +451,34 @@
   --theme-scroll-down: url('/gemp-lotr/ng/themes/classic/scroll-button-down.png');
   --theme-scroll-left: url('/gemp-lotr/ng/themes/classic/scroll-button-left.png');
   --theme-scroll-right: url('/gemp-lotr/ng/themes/classic/scroll-button-right.png');
+
+  /* The table changed by hand (ui/game/table-edit): the open spots' blue glow, the menus, the edit bar, a refusal */
+  --theme-game-edit-font: var(--theme-game-scenario-font);
+  --theme-game-edit-glow: #3fa9ff;
+  --theme-game-edit-spot-bg: rgb(40 110 190 / 0.22);
+  --theme-game-edit-spot-edge: #7cc8ff;
+  --theme-game-edit-spot-plus: #d6eeff;
+  --theme-game-edit-menu-bg: #18212b;
+  --theme-game-edit-menu-text: #e6eef7;
+  --theme-game-edit-menu-edge: #45627f;
+  --theme-game-edit-menu-rule: #2e4053;
+  --theme-game-edit-menu-hover-bg: #2b5d93;
+  --theme-game-edit-menu-hover-text: #fff;
+  --theme-game-edit-menu-muted: #93a8bf;
+  --theme-game-edit-menu-danger: #ff8f80;
+  --theme-game-edit-menu-shadow: 0 6px 20px rgb(0 0 0 / 0.6);
+  --theme-game-edit-field-bg: #0e141b;
+  --theme-game-edit-field-edge: #45627f;
+  --theme-game-edit-mode-edit: #8fd0ff;
+  --theme-game-edit-mode-play: #a5dc94;
+  --theme-game-edit-button-bg: transparent;
+  --theme-game-edit-button-text: #e6eef7;
+  --theme-game-edit-button-edge: #6e5f33;
+  --theme-game-edit-main-bg: #3fa9ff;
+  --theme-game-edit-main-text: #0b1a28;
+  --theme-game-edit-problem-bg: #3a1714;
+  --theme-game-edit-problem-text: #ffe4de;
+  --theme-game-edit-problem-edge: #e0584a;
 }
 
 /* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11); the game page Middle-earth */
@@ -765,4 +793,17 @@
   --theme-scroll-down: none;
   --theme-scroll-left: none;
   --theme-scroll-right: none;
+
+  /* The table changed by hand: the menus in the game's browns and golds; the open spots stay blue */
+  --theme-game-edit-menu-bg: #241d15;
+  --theme-game-edit-menu-text: #ece2cc;
+  --theme-game-edit-menu-edge: #8c7442;
+  --theme-game-edit-menu-rule: #3a2f20;
+  --theme-game-edit-menu-hover-bg: #5a4a2c;
+  --theme-game-edit-menu-hover-text: #fff4dc;
+  --theme-game-edit-menu-muted: #b9a57e;
+  --theme-game-edit-field-bg: #110e0a;
+  --theme-game-edit-field-edge: #5a4a2c;
+  --theme-game-edit-button-text: #ece2cc;
+  --theme-game-edit-button-edge: #5a4a2c;
 }

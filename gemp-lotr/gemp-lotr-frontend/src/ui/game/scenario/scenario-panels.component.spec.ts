@@ -9,6 +9,9 @@ import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { CompactLayout } from '../../../core/platform/compact-layout.service';
 import { HallTab } from '../../../core/platform/hall-tab.service';
 import { provideTestCardInteractions } from '../../../testing/card-interactions';
+import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
+import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
+import { CardPicker } from '../table-edit/card-picker';
 import { BUG_REPORT_URL, endBody, MIN_HEIGHT, MIN_WIDTH, ScenarioPanelsComponent } from './scenario-panels.component';
 
 const INFO: ScenarioInfo = {
@@ -33,6 +36,11 @@ const INFO: ScenarioInfo = {
   draftTest: false,
   twoSided: false,
   opening: 'board',
+  mode: 'play',
+  level: 'none',
+  tools: [],
+  canStop: false,
+  canStart: false,
 };
 
 const end = (result: ScenarioEnd['result'], extra: Partial<ScenarioEnd> = {}): ScenarioEnd => ({
@@ -42,6 +50,9 @@ const end = (result: ScenarioEnd['result'], extra: Partial<ScenarioEnd> = {}): S
   message: null,
   checkpoint: null,
   restart: false,
+  winner: null,
+  reason: null,
+  reset: false,
   ...extra,
 });
 
@@ -67,8 +78,10 @@ describe('ScenarioPanelsComponent', () => {
   const ended = signal(false);
   const feedback = signal<string | null>(null);
   let size = { width: 1280, height: 800 };
+  let edit: FakeTableEdit;
 
   beforeEach(() => {
+    edit = fakeTableEdit({ level: 'none' });
     size = { width: 1280, height: 800 };
     for (const [name, value] of [
       ['clientWidth', () => size.width],
@@ -105,6 +118,8 @@ describe('ScenarioPanelsComponent', () => {
         { provide: GameLog, useValue: { feedback } },
         { provide: HallTab, useValue: hall },
         { provide: CompactLayout, useValue: { gameActive: phone } },
+        { provide: TableEdit, useValue: edit },
+        { provide: CardPicker, useValue: { told: signal(null) } },
       ],
     });
   });
@@ -350,6 +365,38 @@ describe('ScenarioPanelsComponent', () => {
       refresh();
       expect(panel()).toBeNull();
     });
+
+    it("of a sandbox's game played to its end: who won and why, with Reset and Leave", () => {
+      edit.level.set('sandbox');
+      ending('ended', { winner: 'opponent', reason: 'The Ring-Bearer is <dead>', reset: true });
+      expect(panel()?.dataset).toMatchObject({ panel: 'end', result: 'ended' });
+      expect(text('h2')).toBe('You lost');
+      expect(el.querySelector('.gd-scenario-panel__body')?.innerHTML).toBe('<p>The Ring-Bearer is &lt;dead&gt;</p>');
+      expect(buttons()).toEqual(['Reset (main)', 'Leave']);
+      press('Reset');
+      expect(edit.reset).toHaveBeenCalledWith(false);
+      press('Leave');
+      expect(guide.backToHall).toHaveBeenCalled();
+      ending('ended', {
+        winner: 'human',
+        reason: null,
+        reset: false,
+        messages: [{ header: null, html: '<p>Well played</p>' } as ScenarioMessage],
+      });
+      expect(text('h2')).toBe('You won');
+      expect(buttons()).toEqual(['Leave (main)']);
+      ending('ended');
+      expect(text('h2')).toBe('Game over');
+      expect(el.querySelector('.gd-scenario-panel__body')?.innerHTML).toBe('');
+    });
+  });
+
+  it('has the edit bar in its menu in place of Start again, for a table changed by hand', () => {
+    edit.level.set('sandbox');
+    render();
+    expect(el.querySelector('nav.gd-scenario-menu gd-edit-bar')).not.toBeNull();
+    expect(el.querySelector('[data-scenario-menu="restart"]')).toBeNull();
+    expect(el.querySelector('[data-scenario-menu="leave"]')).not.toBeNull();
   });
 
   it('says of an ending with no scenario named "this scenario"', () => {

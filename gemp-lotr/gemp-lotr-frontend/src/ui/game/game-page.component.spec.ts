@@ -956,6 +956,57 @@ describe('GamePageComponent in a scripted game', () => {
     const { el } = await open(TABLE + STATS + S(INFO));
     expect(el.querySelector('gd-game-author')).toBeNull();
   });
+
+  it('shows a stopped sandbox in edit mode: no decision, the edit bar, an open spot in each row, the card menu', async () => {
+    const SANDBOX = {
+      ...INFO,
+      kind: 'sandbox',
+      mode: 'edit',
+      level: 'sandbox',
+      tools: ['add', 'delete'],
+      canStart: true,
+    };
+    const { el, stable } = await open(TABLE + STATS + S(SANDBOX) + ACTIONS);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/state')
+      .flush({ mode: 'edit', level: 'sandbox', tools: ['add', 'delete'], cards: [] });
+    await stable();
+    expect(el.getAttribute('data-edit')).toBe('edit');
+    expect(el.querySelector('[data-game="alert"]')?.textContent).toBe('');
+    expect(el.querySelectorAll('button[data-decision-button]')).toHaveLength(0);
+    expect(el.querySelector('nav.gd-scenario-menu gd-edit-bar')?.getAttribute('data-mode')).toBe('edit');
+    expect(el.querySelector('gd-table-edit')).not.toBeNull();
+    const spots = [...el.querySelectorAll<HTMLElement>('gd-open-spot button')].map(
+      (spot) => `${spot.dataset['seat']}.${spot.dataset['zone']}`,
+    );
+    // (the person plays the freeps seat; the minions' row is the other seat's on the person's own turn)
+    expect(spots).toEqual([
+      'shadow.support',
+      'shadow.characters',
+      'shadow.minions',
+      'freeps.characters',
+      'freeps.support',
+      'freeps.hand',
+    ]);
+    const card = el.querySelector<HTMLElement>('gd-game-cards [data-card-id="1"]')!;
+    card.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+    await stable();
+    expect(el.querySelector('.gd-edit-menu [data-menu="info"]')).not.toBeNull();
+    // Start: play mode, the bar and nothing else of the controls; the game's news asked for at once
+    el.querySelector<HTMLElement>('.gd-edit-backdrop')?.dispatchEvent(new Event('pointerdown'));
+    el.querySelector<HTMLButtonElement>('[data-edit-bar="start"]')?.click();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/start')
+      .flush({ ok: true, state: { mode: 'play', level: 'sandbox', tools: ['add'], canStop: true, cards: [] } });
+    await stable();
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush(update(S({ ...SANDBOX, mode: 'play', canStop: true })));
+    await stable();
+    expect(el.getAttribute('data-edit')).toBe('play');
+    expect(el.querySelectorAll('gd-open-spot')).toHaveLength(0);
+    expect(el.querySelector('[data-game="alert"]')?.textContent).not.toBe('');
+  });
 });
 
 describe('mentionOf', () => {

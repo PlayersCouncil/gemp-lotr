@@ -252,6 +252,11 @@ describe('applyEvent', () => {
       draftTest: false,
       twoSided: false,
       opening: 'board',
+      mode: 'play',
+      level: 'none',
+      tools: [],
+      canStop: false,
+      canStart: false,
     };
     expect(play({ type: 'M', message: '~Scenario passes' }).scenario).toBeNull();
     const model = play(
