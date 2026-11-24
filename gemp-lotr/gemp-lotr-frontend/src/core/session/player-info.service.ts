@@ -8,8 +8,8 @@ import { parsePlayer, Player } from './player';
 export type PlayerState = { status: 'unknown' } | { status: 'player'; player: Player } | { status: 'anonymous' };
 
 /**
- * Who is logged in (GET /player, what the legacy hall asks: communication.js getPlayerInfoShared), with the session's
- * participantId, so an admin acting as a player gets that player. Asked once per page: the login guard asks it to
+ * Who is logged in (GET /player, what the legacy hall asks: communication.js getPlayerInfoShared): the session's
+ * player. Asked once per page: the login guard asks it to
  * tell whether anyone is, the hall whether to start (and whether the player is an admin), and a chat wants the name
  * (it marks messages that mention the player).
  */

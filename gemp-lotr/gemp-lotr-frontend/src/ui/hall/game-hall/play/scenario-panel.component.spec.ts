@@ -50,9 +50,7 @@ describe('ScenarioPanelComponent (Play ▸ Play Scenario or Tutorial, PlayScenar
   it('goes on with the game in progress, in a new tab, and the overlay closes', async () => {
     const play = await openScenarios();
     await play.click('[data-action=continue]');
-    expect(hall.navigation.reserved.map((tab) => tab.url)).toEqual([
-      '/gemp-lotr/ng/game?gameId=g-77&participantId=alice',
-    ]);
+    expect(hall.navigation.reserved.map((tab) => tab.url)).toEqual(['/gemp-lotr/ng/game?gameId=g-77']);
     expect(TestBed.inject(PlayOverlay).isOpen()).toBe(false);
   });
 

@@ -8,8 +8,8 @@ import { HallUpdate } from './hall-models';
 import { parseHallUpdate } from './hall-parsers';
 
 /**
- * The hall long-poll's two calls (HallRequestHandler), as communication.js made them: participantId added by
- * GempHttp, not cached, 20 s time-out (PollTimeoutError). Failed calls arrive as ApiError; an answer that is not a
+ * The hall long-poll's two calls (HallRequestHandler), as communication.js made them (without the
+ * participantId the server ignores): not cached, 20 s time-out (PollTimeoutError). Failed calls arrive as ApiError; an answer that is not a
  * <hall> as ApiError with INVALID_RESPONSE_STATUS.
  */
 @Injectable()

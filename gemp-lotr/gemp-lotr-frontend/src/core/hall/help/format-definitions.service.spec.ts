@@ -35,7 +35,6 @@ describe('FormatDefinitionsService', () => {
   async function answer(body: string = readServerResponse('format-definitions.json')): Promise<void> {
     const request = backend.expectOne((req) => req.url === URL);
     expect(request.request.method).toBe('GET');
-    expect(request.request.params.get('participantId')).toBe('alice');
     request.flush(body);
     await Promise.resolve();
     await Promise.resolve();
@@ -50,7 +49,7 @@ describe('FormatDefinitionsService', () => {
         provideHttpClientTesting(),
         ...HELP_SERVICES,
         { provide: LocalSettings, useValue: settings },
-        { provide: PAGE_QUERY_STRING, useValue: '?participantId=alice' },
+        { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
     backend = TestBed.inject(HttpTestingController);

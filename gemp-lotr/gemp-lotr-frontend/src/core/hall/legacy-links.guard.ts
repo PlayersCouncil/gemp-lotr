@@ -33,7 +33,7 @@ export const legacyHallLink: CanActivateFn = (_route, state): UrlTree | boolean 
   return withQuery(router.parseUrl(target.route), asked);
 };
 
-/** `tree` with the query the old address came with (`?participantId=`, an admin acting as a player) kept. */
+/** `tree` with the query the old address came with (e.g. `?theme=`) kept. */
 function withQuery(tree: UrlTree, asked: UrlTree): UrlTree {
   tree.queryParams = { ...asked.queryParams, ...tree.queryParams };
   return tree;

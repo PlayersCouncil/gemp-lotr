@@ -59,7 +59,7 @@ describe('HallComms', () => {
     expect(state()).toBe('connecting');
     comms.start();
     const req = signUp();
-    expect(req.request.params.get('participantId')).toBe('alice');
+    expect(req.request.params.has('participantId')).toBe(false);
     req.flush(readServerResponse('hall.xml'));
 
     expect(state()).toBe('connected');

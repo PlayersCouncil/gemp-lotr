@@ -41,7 +41,7 @@ describe('JoinDialog', () => {
     let joining = join.submit(elves);
     expect(join.result().kind).toBe('pending');
     const req = hall.request('/hall/13');
-    expect(hall.body(req)).toEqual({ participantId: 'alice', deckName: 'Elves', deckSource: 'player' });
+    expect(hall.body(req)).toEqual({ deckName: 'Elves', deckSource: 'player' });
     req.flush('<result>OK</result>');
     await joining;
     expect(join.state()).toBeNull();

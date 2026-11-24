@@ -59,14 +59,12 @@ export class HallTablesApi {
 
   /** The formats and the timers (POST /deck/formats; HallTimers comes with every answer). */
   tableOptions(): Observable<HallTableOptionsReadout> {
-    return this.http
-      .postJson<Record<string, unknown>>('/deck/formats', { includeEvents: false }, { participant: false })
-      .pipe(
-        map((json) => ({
-          formats: (json['Formats'] ?? {}) as Record<string, GempFormat>,
-          timers: parseHallTimers(json['HallTimers']),
-        })),
-      );
+    return this.http.postJson<Record<string, unknown>>('/deck/formats', { includeEvents: false }).pipe(
+      map((json) => ({
+        formats: (json['Formats'] ?? {}) as Record<string, GempFormat>,
+        timers: parseHallTimers(json['HallTimers']),
+      })),
+    );
   }
 
   /**

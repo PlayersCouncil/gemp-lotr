@@ -4,8 +4,8 @@ import { GempHttp } from '../api/gemp-http.service';
 import { ServerStatus, serverStatusLine } from './login-messages';
 
 /**
- * The login page's server calls (communication.js getStatus, login, register), form-encoded and with the session's
- * participantId like every legacy call. Failures are ApiErrors; their statuses are mapped in LoginService.
+ * The login page's server calls (communication.js getStatus, login, register), form-encoded (the legacy calls'
+ * participantId is no longer sent: the server ignores it). Failures are ApiErrors; their statuses are mapped in LoginService.
  */
 @Injectable()
 export class LoginApi {

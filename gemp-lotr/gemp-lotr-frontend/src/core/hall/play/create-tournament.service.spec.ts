@@ -36,7 +36,6 @@ describe('CreateTournament', () => {
     const hosting = tournament.submit(elves);
     const req = hall.request('/tournament/create');
     expect(hall.body(req)).toEqual({
-      participantId: 'alice',
       type: 'constructed',
       deckName: 'Elves',
       deckSource: 'player',

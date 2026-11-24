@@ -47,7 +47,7 @@ describe('DeckbuilderApi', () => {
     const result = firstValueFrom(call$);
     const req = backend.expectOne((r) => r.url === '/gemp-lotr-server' + path);
     expect(req.request.method).toBe(method);
-    expect(sentData(req)).toEqual({ participantId: 'admin-target', ...data });
+    expect(sentData(req)).toEqual(data);
     req.flush(response);
     return result;
   }
@@ -117,7 +117,7 @@ describe('DeckbuilderApi', () => {
     );
   });
 
-  it('gets the formats without a participantId', async () => {
+  it('gets the formats', async () => {
     const result = firstValueFrom(api.getFormats());
     const req = backend.expectOne('/gemp-lotr-server/deck/formats');
     expect(req.request.serializeBody()).toBe('includeEvents=false');

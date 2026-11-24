@@ -21,7 +21,6 @@ describe('PcErrataService', () => {
   async function answer(body: string = readServerResponse('errata.json')): Promise<void> {
     const request = backend.expectOne((req) => req.url === URL);
     expect(request.request.method).toBe('GET');
-    expect(request.request.params.get('participantId')).toBe('alice');
     request.flush(body);
     await Promise.resolve();
     await Promise.resolve();
@@ -46,7 +45,7 @@ describe('PcErrataService', () => {
         provideGempHttp(),
         provideHttpClientTesting(),
         ...ERRATA_SERVICES,
-        { provide: PAGE_QUERY_STRING, useValue: '?participantId=alice' },
+        { provide: PAGE_QUERY_STRING, useValue: '' },
         {
           provide: ImagePreloader,
           useValue: {

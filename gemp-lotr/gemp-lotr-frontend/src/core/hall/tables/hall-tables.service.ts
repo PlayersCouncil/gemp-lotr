@@ -6,7 +6,6 @@ import { LegacyCookies } from '../../platform/legacy-cookies';
 import { SoundPlayer } from '../../platform/sound-player';
 import { Timers } from '../../platform/timers';
 import { PlayerInfo } from '../../session/player-info.service';
-import { SessionService } from '../../session/session.service';
 import { HallComms } from '../hall-comms.service';
 import { FormatInfo, formatInfo, HallFormatDetails, readFormatDetails } from '../play/format-info';
 import { HallBoard, HallBoardChange } from '../board/hall-board.service';
@@ -73,12 +72,11 @@ export class HallTablesService {
   private readonly cookies = inject(LegacyCookies);
   private readonly timers = inject(Timers);
   private readonly player = inject(PlayerInfo);
-  private readonly participantId = inject(SessionService).participantId;
 
   private readonly board = inject(HallBoard);
   private readonly readyOffers = inject(HallReadyOffers);
   /** The tables' own sections (the board merges them with the queues and tournaments: HallBoard.sections). */
-  readonly sections = computed(() => this.board.tables().sections(this.participantId));
+  readonly sections = computed(() => this.board.tables().sections());
   /** The tables in each section (the headers count the board's rows: HallBoard.counts). */
   readonly counts = computed(() => {
     const { waiting, playing, finished } = this.sections();
@@ -156,7 +154,7 @@ export class HallTablesService {
   }
 
   private gameStarted(gameId: string): void {
-    this.readyOffers.openOrOffer(gameKey(gameId), 'game', gameUrl(gameId, this.participantId));
+    this.readyOffers.openOrOffer(gameKey(gameId), 'game', gameUrl(gameId));
     this.sound.play(GAME_START_SOUND);
   }
 

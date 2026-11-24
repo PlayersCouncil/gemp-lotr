@@ -44,12 +44,10 @@ describe('PlayScenario', () => {
     const starting = play.start(play.listing()!.scenarios[0]);
     expect(play.starting()).toBe(true);
     const req = hall.request('/scenarios/start');
-    expect(hall.body(req)).toEqual({ participantId: 'alice', id: 't1' });
+    expect(hall.body(req)).toEqual({ id: 't1' });
     req.flush({ gameId: 'g-5', resumedAt: null });
     expect(await starting).toBe(true);
-    expect(hall.navigation.reserved).toEqual([
-      { url: '/gemp-lotr/ng/game?gameId=g-5&participantId=alice', closed: false },
-    ]);
+    expect(hall.navigation.reserved).toEqual([{ url: '/gemp-lotr/ng/game?gameId=g-5', closed: false }]);
     expect(play.result().message).toBe('Started.');
   });
 

@@ -39,18 +39,14 @@ export class PatchNotesApi {
     }
     const key = `${tag ? `tag:${tag}/` : ''}${params['from'] ? `from:${params['from']}` : `start:${params['start']}`}/${PATCH_NOTES_PAGE_SIZE}`;
     return this.cached(this.pages, key, () =>
-      firstValueFrom(
-        this.http.getJson<unknown>('/patchnotes', params, { participant: false }).pipe(map(parsePatchNotesPage)),
-      ),
+      firstValueFrom(this.http.getJson<unknown>('/patchnotes', params).pipe(map(parsePatchNotesPage))),
     );
   }
 
   /** The months with entries of the tag (the service keeps them for PATCH_NOTES_CACHE_MS). */
   months(tag: string | null): Promise<PatchNotesMonth[]> {
     return firstValueFrom(
-      this.http
-        .getJson<unknown>('/patchnotes/months', tag ? { tag } : {}, { participant: false })
-        .pipe(map(parsePatchNotesMonths)),
+      this.http.getJson<unknown>('/patchnotes/months', tag ? { tag } : {}).pipe(map(parsePatchNotesMonths)),
     );
   }
 

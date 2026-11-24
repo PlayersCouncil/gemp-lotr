@@ -9,7 +9,8 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
   contact the server".
 - Login form: "Login below, or [Register]", Login (text), Password (password; Enter submits), [Login], and the link
   "Forgot your password? Contact ketura on the PC Discord." (FORGOT_PASSWORD). No client-side checks.
-- POST `/gemp-lotr-server/login` with `login`, `password`, `participantId` (form-encoded; the body is `<result>OK</result>`).
+- POST `/gemp-lotr-server/login` with `login` and `password` (form-encoded, without the legacy `participantId`, which
+  the server ignores; the body is `<result>OK</result>`).
   - 200: go to the hall. (The legacy page took a 202 as "the password was reset by an admin" and asked for a new one
     through the register form. Admins no longer reset passwords and the server no longer answers 202 (PC-ACCOUNT.md):
     that path is gone, and any 2xx is a login.)
@@ -21,7 +22,7 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
   Password repeated, [Register]. Only check: the two passwords must match (PASSWORDS_DIFFER, nothing sent).
   The server checks the login (2-30 chars, letters/digits/_/-, no admin/guest/system/bye prefix); the 400 message
   still says 2-10, kept as is.
-- POST `/gemp-lotr-server/register` with `login`, `password`, `participantId`.
+- POST `/gemp-lotr-server/register` with `login` and `password`.
   - 200: go to the hall. 400: INVALID_NEW_LOGIN. 409: LOGIN_TAKEN. 503: MAINTENANCE. 0/other: alerts as for login.
   - (The legacy 202 PASSWORD_UPDATED branch is gone with the password reset.)
 - After 200 the browser goes to `/gemp-lotr/hall.html` plus the page's #fragment when it looks like a hall link

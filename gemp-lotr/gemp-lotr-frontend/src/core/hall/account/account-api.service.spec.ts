@@ -23,8 +23,8 @@ describe('AccountApi', () => {
     );
     const request = answerAccount(backend, '/gameHistory', 'game-history.xml');
     const params = request.request.params;
-    expect(params.keys().filter((key) => key !== '_')).toEqual(['start', 'count', 'opponent', 'to', 'participantId']);
-    expect([params.get('start'), params.get('count'), params.get('participantId')]).toEqual(['20', '20', 'bob']);
+    expect(params.keys().filter((key) => key !== '_')).toEqual(['start', 'count', 'opponent', 'to']);
+    expect([params.get('start'), params.get('count'), params.has('participantId')]).toEqual(['20', '20', false]);
     expect((await page)?.matching).toBe(23);
   });
 
@@ -40,7 +40,7 @@ describe('AccountApi', () => {
     await migrated;
   });
 
-  it("sends the shelf's calls without the participant", async () => {
+  it("sends the shelf's calls", async () => {
     const mine = firstValueFrom(api.myScenarios());
     const request = answerAccount(backend, '/scenarios/mine', 'scenarios-mine.json');
     expect(request.request.params.has('participantId')).toBe(false);

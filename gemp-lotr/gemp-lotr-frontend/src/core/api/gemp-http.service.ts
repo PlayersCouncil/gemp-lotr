@@ -4,12 +4,10 @@ import { map, Observable } from 'rxjs';
 import { SERVER_URL } from '../platform/app-paths';
 import { ApiError } from './api-error';
 import { FormData, toFormParams } from './form-codec';
-import { BYPASS_CACHE, SEND_PARTICIPANT } from './gemp-interceptors';
+import { BYPASS_CACHE } from './gemp-interceptors';
 import { parseXml } from './xml';
 
 export interface RequestOptions {
-  /** Send the session's participantId (default true; the legacy client sent it with nearly every call). */
-  participant?: boolean;
   /** GET only: add a cache-busting parameter (default true). */
   noCache?: boolean;
 }
@@ -21,9 +19,7 @@ export interface StatusResponse {
 }
 
 function contextOf(options: RequestOptions): HttpContext {
-  return new HttpContext()
-    .set(SEND_PARTICIPANT, options.participant !== false)
-    .set(BYPASS_CACHE, options.noCache !== false);
+  return new HttpContext().set(BYPASS_CACHE, options.noCache !== false);
 }
 
 function toXml(text: string): Document {

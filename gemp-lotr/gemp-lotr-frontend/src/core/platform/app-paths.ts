@@ -33,10 +33,9 @@ export function legacyRelativeImages(html: string): string {
   return html.replace(/(<img\b[^>]*?\bsrc\s*=\s*['"]?)(?![a-z][a-z0-9+.-]*:|[/'"])/gi, `$1${LEGACY_PAGES_URL}`);
 }
 
-/** The game page's address for a game, for a player acting as another (an admin's ?participantId=) if given. */
-export function gamePageUrl(gameId: string, participantId: string | null = null): string {
-  const acting = participantId === null ? '' : `&participantId=${encodeURIComponent(participantId)}`;
-  return `/gemp-lotr/ng/game?gameId=${encodeURIComponent(gameId)}${acting}`;
+/** The game page's address for a game. */
+export function gamePageUrl(gameId: string): string {
+  return `/gemp-lotr/ng/game?gameId=${encodeURIComponent(gameId)}`;
 }
 
 /** Where the site's own images are. */

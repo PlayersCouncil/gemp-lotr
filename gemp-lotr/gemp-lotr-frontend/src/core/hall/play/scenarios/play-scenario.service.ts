@@ -6,7 +6,6 @@ import { Notifier } from '../../../notifier/notifier';
 import { gamePageUrl } from '../../../platform/app-paths';
 import { LegacyCookies } from '../../../platform/legacy-cookies';
 import { PageNavigation } from '../../../platform/page-navigation';
-import { SessionService } from '../../../session/session.service';
 import { gameKey, HallReadyOffers } from '../../ready/hall-ready-offers.service';
 import { errorDetail, tableCallFailure } from '../../tables/hall-call';
 import { RESULT_READY } from '../../tables/hall-tables-messages';
@@ -91,7 +90,6 @@ export class PlayScenario {
   private readonly navigation = inject(PageNavigation);
   private readonly offers = inject(HallReadyOffers);
   private readonly notifier = inject(Notifier);
-  private readonly participantId = inject(SessionService).participantId;
 
   readonly listing = signal<ScenarioListing | null>(null);
   /** The list could not be loaded: "The list of scenarios could not be loaded." stands in for it. */
@@ -258,7 +256,7 @@ export class PlayScenario {
   }
 
   private open(tab: ReturnType<PageNavigation['reserveTab']>, gameId: string): void {
-    this.offers.openReserved(tab, gameKey(gameId), 'game', gamePageUrl(gameId, this.participantId));
+    this.offers.openReserved(tab, gameKey(gameId), 'game', gamePageUrl(gameId));
   }
 
   /** The unreadable files in the result box, in a line, only while it has nothing else to say (sayUnreadable). */

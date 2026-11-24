@@ -10,9 +10,9 @@ function orElse<T>(value: string | null | undefined, fallback: T): string | T {
   return value === null || value === undefined || value === '' ? fallback : value;
 }
 
-/** The game page (hallUi.js: ng/game?gameId=, plus the participantId an admin acts as). */
-export function gameUrl(gameId: string, participantId: string | null): string {
-  return gamePageUrl(gameId, participantId);
+/** The game page (hallUi.js: ng/game?gameId=). */
+export function gameUrl(gameId: string): string {
+  return gamePageUrl(gameId);
 }
 
 /**

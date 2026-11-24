@@ -21,7 +21,7 @@ const update = (id: string, status: string, extra: Record<string, string> = {}):
 const remove = (id: string): HallItemChange => ({ action: 'remove', id, attributes: {} });
 
 const ids = (state: HallTablesState) => {
-  const { waiting, playing, finished } = state.sections(null);
+  const { waiting, playing, finished } = state.sections();
   const of = (rows: typeof waiting) => rows.map((row) => row.table.id);
   return { waiting: of(waiting), playing: of(playing), finished: of(finished) };
 };
@@ -30,10 +30,10 @@ describe('HallTablesState', () => {
   it('draws a snapshot into its sections', () => {
     const state = HallTablesState.EMPTY.apply(changesOf('hall.xml'), true, order);
     expect(ids(state)).toEqual({ waiting: ['11'], playing: ['12'], finished: [] });
-    const [row] = state.sections('alice').playing;
+    const [row] = state.sections().playing;
     expect(row.action).toBe('watch');
-    expect(row.gameUrl).toBe('/gemp-lotr/ng/game?gameId=g-12&participantId=alice');
-    expect(state.sections(null).waiting[0]).toMatchObject({ action: 'leave', note: '[new player, go easy]' });
+    expect(row.gameUrl).toBe('/gemp-lotr/ng/game?gameId=g-12');
+    expect(state.sections().waiting[0]).toMatchObject({ action: 'leave', note: '[new player, go easy]' });
   });
 
   it('applies incremental updates: moves, removals and additions', () => {
@@ -41,7 +41,7 @@ describe('HallTablesState', () => {
     state = state.apply(changesOf('hall-update.xml'), false, order);
     expect(ids(state)).toEqual({ waiting: [], playing: ['11'], finished: [] });
     expect(state.get('11')).toMatchObject({ players: ['alice', 'erin'], gameId: 'g-11' });
-    expect(state.sections(null).playing[0].action).toBe('play');
+    expect(state.sections().playing[0].action).toBe('play');
     expect(state.get('12')).toBeNull();
   });
 

@@ -47,7 +47,7 @@ The hall is split into five parts; 4.1a is the core of the frame and the chat, *
 
 ## The hall long-poll (`HallApi`, `HallComms`)
 
-- GET `/gemp-lotr-server/hall` (getHall, `participantId`, not cached, 20 s time-out) signs up for a new channel and
+- GET `/gemp-lotr-server/hall` (getHall, not cached, 20 s time-out) signs up for a new channel and
   answers with a full snapshot. POST `/hall/update` with `channelNumber` (updateHall, same) long-polls that channel:
   the server answers when the hall changes, or after at most 5 s (`LongPollingSystem._pollingLength`) with no
   changes. Every answer is `<hall>`:
@@ -58,7 +58,7 @@ The hall is split into five parts; 4.1a is the core of the frame and the chat, *
     attributes (all kept as sent in `HallItemChange.attributes`; typed by 4.2), and `<newGame id>` for games that
     started for the player.
 - A snapshot (`HallUpdate.full`) replaces everything drawn. A re-signup re-announces running games; `startedGames$`
-  gives each game once per page (legacy `offeredGames`). 4.2 opens `/gemp-lotr/game.html?gameId=` (+ participantId).
+  gives each game once per page (legacy `offeredGames`). 4.2 opens `/gemp-lotr/ng/game?gameId=`.
 - Timing: the next poll 100 ms after an answer, in a `finally` so a failing subscriber can't stop the loop.
 - Failures (`pollFailed`):
   - 401: stops; readout grey "Not logged in", "You are not logged in (or your session has ended)." with a login link.

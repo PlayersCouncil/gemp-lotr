@@ -64,7 +64,7 @@ export class FakePlayerInfo {
   }
 }
 
-/** The hall test bed: the hall's services over the testing backend, as player "alice" (?participantId=alice). */
+/** The hall test bed: the hall's services over the testing backend, as player "alice". */
 export interface HallTestBed {
   readonly backend: HttpTestingController;
   readonly comms: HallComms;
@@ -93,7 +93,7 @@ export function setUpHall(extra: (Provider | EnvironmentProviders)[] = []): Hall
       provideHttpClientTesting(),
       ...HALL_SERVICES,
       ...provideFakeNotifier(),
-      { provide: PAGE_QUERY_STRING, useValue: '?participantId=alice' },
+      { provide: PAGE_QUERY_STRING, useValue: '' },
       { provide: LegacyCookies, useValue: cookies },
       { provide: PageNavigation, useValue: navigation },
       { provide: SoundPlayer, useValue: { play: (url: string) => sounds.push(url) } },
