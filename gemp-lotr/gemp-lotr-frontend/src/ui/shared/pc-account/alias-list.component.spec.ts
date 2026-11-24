@@ -176,6 +176,7 @@ describe('AliasListComponent', () => {
     const form = query('form.gd-pc-form__form')!;
     expect(form.dataset['form']).toBe('create');
     expect(form.getAttribute('aria-label')).toBe('Create New Gemp Alias');
+    expect(form.querySelector('.gd-pc-form__note')).toBeNull();
     const name = query<HTMLInputElement>('.gd-pc-form__field[data-field="name"] input')!;
     expect(name.maxLength).toBe(30);
     expect(query('.gd-pc-form__field[data-field="name"] .gd-pc-form__label')!.textContent).toBe('Name');
@@ -244,6 +245,9 @@ describe('AliasListComponent', () => {
       ['Username', 'Password'],
     );
     expect(query<HTMLInputElement>('input[name="password"]')!.type).toBe('password');
+    expect(query('form .gd-pc-form__note')!.textContent).toBe(
+      'Once linked, that account is entered through your PC Account; its password no longer logs in.',
+    );
     await type('login', 'Sam');
     await type('password', 'wrong');
     await submit();

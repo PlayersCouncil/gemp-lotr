@@ -40,6 +40,8 @@ export const INVALID_NEW_LOGIN: LoginMessage = [
 ];
 /** POST /login answers 429 after too many attempts (new; no legacy wording). */
 export const TOO_MANY_ATTEMPTS: LoginMessage = ['Too many login attempts. Wait a few minutes, then try again.'];
+/** POST /login answers 423 for an account a PC account has claimed, whatever the password (Ketura's words). */
+export const LINKED_TO_PC: LoginMessage = ['That account is linked to a PC Account, please use that to log in.'];
 export const LOGIN_TAKEN: LoginMessage = ['User with this login already exists in the system. Try a different one.'];
 
 /** The link under the login form. */

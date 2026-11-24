@@ -276,6 +276,18 @@ describe('LoginPageComponent', () => {
     expect(button('submit')!.textContent!.trim()).toBe('Login');
   });
 
+  it('says a claimed account is entered through its PC Account (423), where the other refusals go', async () => {
+    const { query, type, button, stable } = await render();
+    await type('login', 'frodo');
+    button('submit')!.click();
+    fail(expectPost('/login'), 423);
+    await stable();
+    expect(query('.gd-login__error')!.textContent!.trim()).toBe(
+      'That account is linked to a PC Account, please use that to log in.',
+    );
+    expect(query('.gd-login__form')).not.toBeNull();
+  });
+
   it('says to wait after too many attempts (429)', async () => {
     const { query, type, button, stable } = await render();
     await type('login', 'frodo');

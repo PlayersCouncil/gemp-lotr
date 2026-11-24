@@ -13,8 +13,8 @@ describe('login messages', () => {
   // Read as text only, to check the wording; the legacy script is not run.
   const loginJs = readLegacyWebFile('src/Login/login.js').replace(/"\s*\+\s*"/g, '');
 
-  /** Wording the legacy page never had: POST /login's 429 is new. */
-  const NEW_WORDING = ['TOO_MANY_ATTEMPTS'];
+  /** Wording the legacy page never had: POST /login's 429 and 423 are new. */
+  const NEW_WORDING = ['TOO_MANY_ATTEMPTS', 'LINKED_TO_PC'];
   const htmlMessages: [string, LoginMessage][] = Object.entries(messages).filter(
     (entry): entry is [string, LoginMessage] => Array.isArray(entry[1]) && !NEW_WORDING.includes(entry[0]),
   );

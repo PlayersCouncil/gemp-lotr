@@ -15,6 +15,7 @@ const FIELDS: PcFormField[] = [
     label="Link it"
     [fields]="fields"
     [values]="values()"
+    [note]="note()"
     [error]="error()"
     submitLabel="Link"
     cancelLabel="Cancel"
@@ -27,6 +28,7 @@ const FIELDS: PcFormField[] = [
 class HostComponent {
   readonly fields = FIELDS;
   readonly values = signal<Record<string, string>>({ login: 'Sam' });
+  readonly note = signal<string | null>(null);
   readonly error = signal<string | null>(null);
   readonly busy = signal(false);
   readonly changes: { name: string; value: string }[] = [];
@@ -74,6 +76,16 @@ describe('PcFormComponent', () => {
       ['cancel', 'Cancel'],
     ]);
     expect(el.querySelector('.gd-pc-form__error')).toBeNull();
+    expect(el.querySelector('.gd-pc-form__note')).toBeNull();
+  });
+
+  it('says its note before the buttons', async () => {
+    const { fixture, host, el } = await render();
+    host.note.set('Mind this.');
+    await fixture.whenStable();
+    const note = el.querySelector('.gd-pc-form__note')!;
+    expect(note.textContent).toBe('Mind this.');
+    expect(note.nextElementSibling!.classList).toContain('gd-pc-form__actions');
   });
 
   it('passes on what is typed, the submit and Cancel; shows a refusal; waits while busy', async () => {

@@ -222,6 +222,20 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'login-claimed',
+    note: 'a password login to an account a PC account has claimed (423): said where the refusals go',
+    server: { session: 'argonauth-session-nobody.json', loginStatus: 423 },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.fill('.gd-login__input[name="login"]', 'Samwise');
+      await t.fill('.gd-login__input[name="password"]', 'anything');
+      await t.click('.gd-login__form [data-action="submit"]');
+      await t.text('.gd-login__error', 'That account is linked to a PC Account, please use that to log in.');
+      await t.visible('.gd-login__form');
+      t.sent(['/login login=Samwise&password=anything']);
+    },
+  },
+  {
     name: 'optional-notices',
     note: 'where a PC sign-in came back to: cancelled, failed',
     server: { session: 'argonauth-session-nobody.json' },
@@ -394,6 +408,12 @@ const SCENARIOS = [
     server: { session: 'argonauth-session-aliases.json' },
     run: async (t) => {
       await t.open(`${NG}login`);
+      await t.click(ACTION('link'));
+      await t.text(
+        `${FORM} .gd-pc-form__note`,
+        'Once linked, that account is entered through your PC Account; its password no longer logs in.',
+      );
+      await t.click(`${FORM} [data-action="cancel"]`);
       await link(t, 'OldSam', 'secret');
       await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer', 'OldSam']);
       await t.absent(FORM);
@@ -508,6 +528,10 @@ const SCENARIOS = [
       await t.open(`${NG}account`);
       await t.click('button.gd-pc-account-block__connect');
       await t.attribute(FORM, 'data-form', 'connect');
+      await t.text(
+        `${FORM} .gd-pc-form__note`,
+        'Once connected, this account is entered through your PC Account; its password no longer logs in.',
+      );
       await t.fill(`${FORM} input[name="password"]`, 'secret');
       await t.click(`${FORM} [data-action="submit"]`);
       await t.arrives(read('argonauth-connect.json').next.split('?')[0]);

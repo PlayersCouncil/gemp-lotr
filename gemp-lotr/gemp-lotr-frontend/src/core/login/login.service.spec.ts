@@ -19,6 +19,8 @@ import {
   PERMANENTLY_BANNED,
   TEMPORARILY_BANNED,
   TOO_MANY_ATTEMPTS,
+  LINKED_TO_PC,
+  messageText,
 } from './login-messages';
 import { LOGIN_SERVICES } from './login-services';
 import { LoginService, registrationError } from './login.service';
@@ -225,6 +227,34 @@ describe('LoginService', () => {
     expect(service.formShown()).toBe(true);
     expect(service.login()).toBe('frodo');
     expect(navigation.visited).toEqual([]);
+  });
+
+  it('says an account a PC account has claimed is entered through it (423), keeping the form', async () => {
+    setUp();
+    fillLogin();
+    const done = service.logIn();
+    fail(expectPost('/login'), 423);
+    await done;
+    expect(service.error()).toBe(LINKED_TO_PC);
+    expect(messageText(LINKED_TO_PC)).toBe('That account is linked to a PC Account, please use that to log in.');
+    expect(service.formShown()).toBe(true);
+    expect(navigation.visited).toEqual([]);
+  });
+
+  it('words every refusal POST /login answers with', async () => {
+    const statuses = Object.keys(JSON.parse(readServerResponse('login-refusals.json'))).map(Number);
+    setUp();
+    const worded: unknown[] = [];
+    for (const status of statuses) {
+      fillLogin();
+      const done = service.logIn();
+      fail(expectPost('/login'), status);
+      await done;
+      worded.push(service.error());
+    }
+    expect(worded.every((message) => message !== null)).toBe(true);
+    expect(new Set(worded).size).toBe(statuses.length);
+    expect(notifier.dialogs).toEqual([]);
   });
 
   it('has no password reset: a 202 is a login like any other success', async () => {

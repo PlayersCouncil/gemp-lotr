@@ -85,4 +85,6 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   `argonauth-logout-alias.json` and `argonauth-logout-all.json` (`next`). POST /argonauth/connect as `argonauth-connect.json`
   (`next`: the PC sign-in that links the account). `argonauth-errors.json` lists every refusal
   of the document's table, by action, as `[status, code]`: each is answered with the body `{"error": "<code>"}`.
+  `login-refusals.json` lists what POST /login refuses with, by status (each with an empty body), 423 (an
+  account a PC account has claimed) and 429 (too many attempts) among them.
   Replace them with captured answers once the server has the addresses.

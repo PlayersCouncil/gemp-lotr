@@ -4,6 +4,7 @@ import {
   CANCEL,
   CONNECT_PASSWORD_LABEL,
   CONNECT_PC_ACCOUNT,
+  CONNECT_NOTE,
   CONNECT_SUBMIT,
   MANAGE_PC_ACCOUNT,
   PC_ABOUT,
@@ -63,6 +64,7 @@ import { PcFormComponent, PcFormField } from '../../shared/pc-account/pc-form.co
               [label]="text.connect"
               [fields]="connectFields"
               [values]="{ password: connect.password() }"
+              [note]="text.connectNote"
               [error]="connect.error()"
               [submitLabel]="text.connectSubmit"
               [cancelLabel]="text.cancel"
@@ -90,6 +92,7 @@ export class PcAccountBlockComponent {
   ];
   protected readonly text = {
     connectSubmit: CONNECT_SUBMIT,
+    connectNote: CONNECT_NOTE,
     cancel: CANCEL,
     heading: PC_BLOCK_HEADING,
     manage: MANAGE_PC_ACCOUNT,

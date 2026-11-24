@@ -15,6 +15,7 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
     through the register form. Admins no longer reset passwords and the server no longer answers 202 (PC-ACCOUNT.md):
     that path is gone, and any 2xx is a login.)
   - 429 (new: too many attempts): TOO_MANY_ATTEMPTS, keeping the form.
+  - 423 (new: the account is claimed by a PC account; the password is not looked at): LINKED_TO_PC, keeping the form.
   - 401: INVALID_LOGIN, and the login form is shown again, empty. 403: PERMANENTLY_BANNED, 409: TEMPORARILY_BANNED,
     and the form is hidden (`formShown`). 503: MAINTENANCE.
   - 0: alert CANNOT_CONNECT. Anything else: alert CANNOT_CONTACT (the communication object's failure handler).

@@ -76,6 +76,9 @@ describe('PcAccountBlockComponent', () => {
     const form = query('gd-pc-form form')!;
     expect([form.dataset['form'], form.getAttribute('aria-label')]).toEqual(['connect', 'Connect PC Account']);
     expect(query('.gd-pc-form__label')!.textContent).toBe('Password');
+    expect(query('.gd-pc-form__note')!.textContent).toBe(
+      'Once connected, this account is entered through your PC Account; its password no longer logs in.',
+    );
     expect(query('[data-action="submit"]')!.textContent!.trim()).toBe('Connect');
     expect(query('button.gd-pc-account-block__connect')).toBeNull();
     const type = async (value: string) => {
