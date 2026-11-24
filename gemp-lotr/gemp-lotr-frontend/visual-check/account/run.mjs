@@ -345,6 +345,26 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'landing-no-alias',
+    note: 'a PC sign-in with no alias lands in Create, Link plainly beside it, and enters the return place',
+    server: { session: 'argonauth-session-no-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login?open=create&return=%2Fevents%2Fleagues`);
+      await t.attribute(FORM, 'data-form', 'create');
+      await t.text('.gd-alias-list__empty', 'No Gemp alias yet: create one, or link an account you had.');
+      await t.disabled(ACTION('link'), false);
+      const [link, form] = await Promise.all(
+        [ACTION('link'), FORM].map((selector) => t.page.locator(selector).first().boundingBox()),
+      );
+      if (!(link.y + link.height <= form.y)) throw new Failed('Link Existing Gemp Account is not above the open form');
+      if (link.y + link.height > 768) throw new Failed('Link Existing Gemp Account is below the window');
+      await t.fill(`${FORM} input[name="name"]`, 'Pippin');
+      await t.click(`${FORM} [data-action="submit"]`);
+      await t.arrives(`${NG}events/leagues`);
+      t.sent(['/create name=Pippin']);
+    },
+  },
+  {
     name: 'create-good',
     note: 'Create New Gemp Alias: made, entered, the hall opens',
     server: { session: 'argonauth-session-aliases.json' },
