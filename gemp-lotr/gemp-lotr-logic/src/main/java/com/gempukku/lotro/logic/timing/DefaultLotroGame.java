@@ -421,6 +421,16 @@ public class DefaultLotroGame implements LotroGame {
         }
     }
 
+    /**
+     * Sends the players the game's figures (strengths, vitalities and the rest) again if they have changed, for a change
+     * made to the game from outside its own procedure while it waits on a decision: a scenario's board changed by
+     * hand.  The game's own procedure sends them as it goes; no ordinary game calls this.
+     */
+    public void refreshGameStats() {
+        if (_turnProcedure.getGameStats().updateGameStats(this))
+            _gameState.sendGameStats(_turnProcedure.getGameStats());
+    }
+
     public void addGameStateListener(String playerId, GameStateListener gameStateListener) {
         _gameState.addGameStateListener(playerId, gameStateListener, _turnProcedure.getGameStats());
     }

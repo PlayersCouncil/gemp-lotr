@@ -322,11 +322,39 @@ public class ScenarioSandboxTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void AModifierPutOnByHandIsTakenBackWithTheRest() throws Exception {
+        Game game = begin(sandbox());
+        int strength = game.scenario().Table().GetStrength(game.scenario().Table().Card("frodo"));
+        game.edit("[{op: 'modify', card: 'frodo', what: 'strength', amount: 3}, {op: 'modify', card: 'frodo', what: 'fierce', until: 'turn'}]");
+        List<Map<String, Object>> modifiers = (List<Map<String, Object>>) game.card("frodo").get("modifiers");
+        assertEquals(2, modifiers.size());
+        assertEquals("strength", modifiers.get(0).get("what"));
+        assertEquals(strength + 3, game.scenario().Table().GetStrength(game.scenario().Table().Card("frodo")));
+
+        //One kind taken off again, in a list of edits of its own: a place to go back to
+        game.edit("{op: 'unmodify', card: 'frodo', what: 'fierce'}");
+        assertEquals(1, ((List<Map<String, Object>>) game.card("frodo").get("modifiers")).size());
+        assertNull(game.mediator().sandboxStart(HUMAN));
+        assertNotNull(game.waiting());
+
+        //Back to before the taking off: both are on Frodo again, in a game rebuilt from its journal
+        game.revertTo("Took modifiers off Frodo, Son of Drogo");
+        assertNull(game.scenario().Table().FollowProblem());
+        assertEquals(2, ((List<Map<String, Object>>) game.card("frodo").get("modifiers")).size());
+        assertEquals(strength + 3, game.scenario().Table().GetStrength(game.scenario().Table().Card("frodo")));
+        assertEquals(List.of(), game.scenario().Problems());
+    }
+
+    @Test
     public void WhatIsRefused() throws Exception {
         Game game = begin(sandbox());
         //Not an edit; one not built here; not where it can go; the Ring-bearer and the Ring
         assertTrue(game.refused("{op: 'paint'}").contains("not an edit"));
-        assertTrue(game.refused("{op: 'modify', card: 'frodo'}").contains("not built"));
+        assertTrue(game.refused("{op: 'modify', card: 'frodo'}").contains("'what' is missing"));
+        assertTrue(game.refused("{op: 'modify', card: 'frodo', what: 'glow'}").contains("not something a card can be modified in"));
+        assertTrue(game.refused("{op: 'modify', card: 'frodo', what: 'strength'}").contains("needs the amount"));
+        assertTrue(game.refused("{op: 'unmodify', id: 7}").contains("no modifier 7"));
         assertTrue(game.refused("{op: 'add', blueprint: '1_178', to: 'shadow.characters'}").contains("only a companion"));
         assertTrue(game.refused("{op: 'add', blueprint: '99_99', to: 'freeps.hand'}").contains("no card"));
         assertTrue(game.refused("{op: 'delete', card: 'frodo'}").contains("Ring-bearer"));

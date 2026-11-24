@@ -125,7 +125,7 @@ public class ScenarioSandboxFileTest {
         assertEquals(List.of("tutorial", "puzzle", "sandbox"), state.getList("kinds", String.class));
         JSONObject tools = state.getJSONObject("sandboxTools");
         assertEquals(ScenarioSandbox.TOOLS, tools.getList("names", String.class));
-        assertEquals(List.of("modify"), tools.getList("notBuilt", String.class));
+        assertEquals(List.of(), tools.getList("notBuilt", String.class));
         assertFalse(tools.getBooleanValue("said"));
 
         Map<String, Object> result = authoring.edit(player, "{top: {kind: \"sandbox\", options: {tools: \"add, counters\"}}}", null);

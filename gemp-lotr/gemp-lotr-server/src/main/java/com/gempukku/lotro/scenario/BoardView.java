@@ -52,6 +52,8 @@ final class BoardView {
         json.put("tokens", token == null ? 0 : table.gameState().getTokenCount(physical, token));
         json.put("on", physical.getAttachedTo() != null ? table.AliasOf(physical.getAttachedTo())
                 : physical.getStackedOn() != null ? table.AliasOf(physical.getStackedOn()) : null);
+        //(the modifiers put on it by hand that are in force: see CardModifiers)
+        json.put("modifiers", table.DescribeModifiers(physical));
         return json;
     }
 

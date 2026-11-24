@@ -65,6 +65,7 @@ public final class ScenarioValidator {
 
         start(def, library, problems);
         opening(def, problems);
+        modifiers(def, library, problems);
 
         for (Step step : def.allSteps()) {
             String context = step.context();
@@ -150,6 +151,8 @@ public final class ScenarioValidator {
             said.add("wounds");
         if (!setup.tokens.isEmpty())
             said.add("tokens");
+        if (!setup.modifiers.isEmpty())
+            said.add("modifiers");
         if (setup.burdens != 0)
             said.add("burdens");
         if (setup.threats != 0)
@@ -169,6 +172,33 @@ public final class ScenarioValidator {
         if (!def.steps.isEmpty() && def.steps.getFirst().when.opening)
             problems.add("step 1: 'when: opening' waits for the board to be laid out before the first turn, and " + why
                     + "its first decision is the bid (when: bid)");
+    }
+
+    /**
+     * The modifiers put on by hand (setup.modifiers, do: modify(...)): each on a card it means something on, strength
+     * on a character and not on a condition (see CardModifiers.unsuited).
+     */
+    private static void modifiers(ScenarioDefinition def, LotroCardBlueprintLibrary library, List<String> problems) {
+        for (Map.Entry<String, List<ScenarioDefinition.Modification>> entry : def.setup.modifiers.entrySet())
+            for (ScenarioDefinition.Modification modification : entry.getValue()) {
+                String unsuited = unsuited(def, library, entry.getKey(), modification);
+                if (unsuited != null)
+                    problems.add("setup.modifiers." + entry.getKey() + ": '" + modification.text() + "': " + unsuited);
+            }
+        for (Step step : def.allSteps())
+            for (ScenarioDefinition.DoOp op : step.doOps)
+                if (op.kind() == ScenarioDefinition.DoKind.MODIFY) {
+                    String unsuited = unsuited(def, library, op.card(), op.modification());
+                    if (unsuited != null)
+                        problems.add(step.context() + ".do: " + op.source() + ": " + unsuited);
+                }
+    }
+
+    private static String unsuited(ScenarioDefinition def, LotroCardBlueprintLibrary library, String alias,
+                                   ScenarioDefinition.Modification modification) {
+        CardDef card = def.cards.containsKey(alias) ? def.cards.get(alias) : def.siteCards.get(alias);
+        LotroCardBlueprint blueprint = card == null ? null : blueprintOrNull(library, card.blueprintId());
+        return blueprint == null ? null : CardModifiers.unsuited(modification, blueprint.getCardType());
     }
 
     private static String zoneName(ScenarioDefinition.SetupZone zone) {

@@ -92,7 +92,7 @@ final class AliasRename {
                                 renamed.set(card, exact(renamed.get(card)));
                         setup.set(part, renamed == null ? value : renamed);
                     }
-                    case "wounds", "tokens" -> setup.set(part, keys(value));
+                    case "wounds", "tokens", "modifiers" -> setup.set(part, keys(value));
                     case "startAt", "burdens", "threats", "twilight" -> { }
                     case "skirmishes" -> {
                         //(character: minion + minion)

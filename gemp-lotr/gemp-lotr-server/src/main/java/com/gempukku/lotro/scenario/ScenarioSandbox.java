@@ -53,15 +53,15 @@ public class ScenarioSandbox {
     /**
      * What a sandbox's player may change, each a name options.tools can list:
      * add (a card by its blueprint), copy (another of a card, in the same place), delete (out of the game),
-     * move (to a zone), attach, stack, wounds (add or heal), tokens (culture tokens), modify (an ad hoc modifier; not
-     * built in this tree), counters (twilight, burdens, threats), markers (a seat's marker, and who controls a site),
+     * move (to a zone), attach, stack, wounds (add or heal), tokens (culture tokens), modify (a modifier put on a card
+     * by hand, or taken off: CardModifiers), counters (twilight, burdens, threats), markers (a seat's marker, and who controls a site),
      * sites (a site put on the path), piles (looking in the hidden piles: both draw decks, the other seat's hand and
      * adventure deck).
      */
     public static final List<String> TOOLS = List.of("add", "copy", "delete", "move", "attach", "stack", "wounds", "tokens",
             "modify", "counters", "markers", "sites", "piles");
-    /** Tools whose name is kept but which this tree cannot do yet. */
-    public static final Set<String> NOT_BUILT = Set.of("modify");
+    /** Tools whose name is kept but which this tree cannot do yet (none now). */
+    public static final Set<String> NOT_BUILT = Set.of();
 
     /** The journal's notes: detail is one of these, player the person, value what goes with it. */
     static final String STOP = "sandbox.stop";
@@ -260,7 +260,7 @@ public class ScenarioSandbox {
 
     /** The ops an edit can be, each with the tool that allows it. */
     static final List<String> EDITS = List.of("add", "copy", "delete", "move", "attach", "stack", "wounds", "tokens", "modify",
-            "twilight", "burdens", "threats", "marker", "control", "liberate", "site");
+            "twilight", "burdens", "threats", "marker", "control", "liberate", "site", "unmodify");
 
     static String toolOf(String op) {
         return switch (op) {
@@ -268,6 +268,7 @@ public class ScenarioSandbox {
             case "twilight", "burdens", "threats" -> "counters";
             case "marker", "control", "liberate" -> "markers";
             case "site" -> "sites";
+            case "unmodify" -> "modify";
             default -> null;
         };
     }
@@ -427,6 +428,57 @@ public class ScenarioSandbox {
                 kept.add("card", alias).add("amount", amount).add("culture", token.name().toLowerCase(Locale.ROOT));
                 labels.add((amount >= 0 ? "Added " : "Removed ") + Math.abs(amount) + " " + token.name().toLowerCase(Locale.ROOT) + " token"
                         + (Math.abs(amount) == 1 ? "" : "s") + (amount >= 0 ? " to " : " from ") + GameUtils.getFullName(card));
+            }
+            case "modify" -> {
+                //{op: modify, card, what: strength | fierce | ..., amount?, until?: phase | turn}: as do: modify(...) is
+                String alias = card(op, "card");
+                PhysicalCardImpl card = _table.Card(alias);
+                if (card.getZone() == null || !card.getZone().isInPlay())
+                    throw new Refused(GameUtils.getFullName(card) + " is not on the table");
+                List<String> rest = new ArrayList<>();
+                if (op.get("amount") != null)
+                    rest.add(String.valueOf(number(op, "amount", -99, 99)));
+                String until = op.getString("until", null);
+                if (until != null && !until.isBlank() && !until.equalsIgnoreCase("removed"))
+                    rest.add(until);
+                ScenarioDefinition.Modification modification;
+                try {
+                    modification = CardModifiers.parse(string(op, "what"), rest, "modify");
+                } catch (ScenarioFormatException exp) {
+                    throw new Refused(exp.getMessage());
+                }
+                String unsuited = CardModifiers.unsuited(modification, card.getBlueprint().getCardType());
+                if (unsuited != null)
+                    throw new Refused(unsuited);
+                _changed = true;
+                _table.Modify(card, modification);
+                kept.add("card", alias).add("what", modification.what());
+                if (modification.amount() != 0)
+                    kept.add("amount", modification.amount());
+                if (modification.until() != ScenarioDefinition.ModifierTime.REMOVED)
+                    kept.add("until", modification.until().name().toLowerCase(Locale.ROOT));
+                labels.add("Modified " + GameUtils.getFullName(card) + " (" + modification.text() + ")");
+            }
+            case "unmodify" -> {
+                //{op: unmodify, card, what?}: every modifier put on the card by hand, or those of one kind; or {id}: that one
+                if (op.get("id") != null) {
+                    int id = number(op, "id", 1, 100000);
+                    if (!_table.Unmodify(id))
+                        throw new Refused("no modifier " + id + " is in force");
+                    _changed = true;
+                    kept.add("id", id);
+                    labels.add("Took a modifier off");
+                } else {
+                    String alias = card(op, "card");
+                    PhysicalCardImpl card = _table.Card(alias);
+                    String what = op.getString("what", null);
+                    _changed = true;
+                    _table.Unmodify(card, what);
+                    kept.add("card", alias);
+                    if (what != null)
+                        kept.add("what", what);
+                    labels.add("Took modifiers off " + GameUtils.getFullName(card));
+                }
             }
             case "twilight", "burdens", "threats" -> {
                 boolean relative = op.get("set") == null;

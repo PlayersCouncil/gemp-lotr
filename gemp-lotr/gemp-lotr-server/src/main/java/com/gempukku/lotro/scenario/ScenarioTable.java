@@ -573,6 +573,10 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             AddWoundsToChar(Card(entry.getKey()), entry.getValue());
         for (Map.Entry<String, Integer> entry : _def.setup.tokens.entrySet())
             AddTokensToCard(Card(entry.getKey()), entry.getValue());
+        //(one for the phase lasts to the end of the phase the game starts in: the board is laid out between turns)
+        for (Map.Entry<String, List<ScenarioDefinition.Modification>> entry : _def.setup.modifiers.entrySet())
+            for (ScenarioDefinition.Modification modification : entry.getValue())
+                modify(Card(entry.getKey()), modification, _def.setup.phase, "setup.modifiers." + entry.getKey());
 
         //The burden that was bid for the first turn does not count; the scenario says how many there are.
         RemoveBurdens(GetBurdens());
@@ -942,10 +946,82 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                 case TWILIGHT -> SetTwilight(Math.max(0, op.relative() ? GetTwilight() + op.amount() : op.amount()));
                 case BURDENS -> setTotal(GetBurdens(), op, this::AddBurdens, this::RemoveBurdens);
                 case THREATS -> setTotal(GetThreats(), op, this::AddThreats, this::RemoveThreats);
+                case MODIFY -> modify(Card(op.card()), op.modification(), _gameState.getCurrentPhase(), op.source());
+                case UNMODIFY -> {
+                    if (Unmodify(Card(op.card()), op.target()) == 0)
+                        _problems.add(op.source() + ": '" + op.card() + "' has no " + (op.target() == null ? "" : op.target() + " ")
+                                + "modifier put on it by hand to take off");
+                }
             }
         } catch (ScenarioFormatException exp) {
             _problems.add(exp.getMessage());
         }
+    }
+
+    /* ------------------------------------------------------------------ modifiers put on by hand (see CardModifiers) */
+
+    /** What this game has had put on its cards by hand; counted afresh in each game. */
+    private final CardModifiers _modifiers = new CardModifiers();
+
+    private void modify(PhysicalCard card, ScenarioDefinition.Modification modification, Phase phase, String context) {
+        try {
+            _modifiers.put(_game, card, modification, phase);
+            //(the board being laid out is sent as the first turn begins)
+            if (_arranged)
+                _game.refreshGameStats();
+        } catch (IllegalArgumentException exp) {
+            _problems.add(context + ": '" + AliasOf(card) + "': " + exp.getMessage());
+        }
+    }
+
+    /**
+     * Puts a modifier on a card by hand, as do: modify(...) does: for the phase (the one the game is in), the turn, or
+     * until it is taken off.  For a sandbox's edits as well as a script's.  Only while the game waits on a decision.
+     * @return What was put on, with its number in this game (see CardModifiers.Put.id).
+     * @throws IllegalArgumentException if it means nothing on that card (strength for a condition, say), with words
+     * that say why.
+     */
+    public CardModifiers.Put Modify(PhysicalCard card, ScenarioDefinition.Modification modification) {
+        CardModifiers.Put put = _modifiers.put(_game, card, modification, _gameState.getCurrentPhase());
+        //(the numbers on the table are sent as the game goes, and a change made while it waits has to be sent itself)
+        _game.refreshGameStats();
+        return put;
+    }
+
+    /**
+     * Takes one modifier put on by hand off again, by its number.
+     * @return Whether there was one of that number still in force.
+     */
+    public boolean Unmodify(int id) {
+        boolean taken = _modifiers.remove(_game, id);
+        _game.refreshGameStats();
+        return taken;
+    }
+
+    /**
+     * Takes off a card's modifiers put on by hand: every one of a kind, or all of them.
+     * @param what strength, fierce and so on (CardModifiers.WORDS); null for all of them.
+     * @return How many were taken off.
+     */
+    public int Unmodify(PhysicalCard card, String what) {
+        int taken = _modifiers.removeFrom(_game, card, what);
+        _game.refreshGameStats();
+        return taken;
+    }
+
+    /** A card's modifiers put on by hand that are still in force, in the order they were put on. */
+    public List<CardModifiers.Put> ModifiersOn(PhysicalCard card) {
+        return _modifiers.on(_game, card);
+    }
+
+    /**
+     * The same as the page is told of them: [{id, what, amount, until, text, written}] (see CardModifiers.Put.json).
+     */
+    public List<Map<String, Object>> DescribeModifiers(PhysicalCard card) {
+        List<Map<String, Object>> all = new ArrayList<>();
+        for (CardModifiers.Put put : ModifiersOn(card))
+            all.add(put.json());
+        return all;
     }
 
     /**
