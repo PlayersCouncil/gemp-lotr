@@ -165,21 +165,43 @@ describe('opponent-orders', () => {
   });
 
   it('offers the fallbacks the server names, and the leftovers', () => {
-    expect(fallbackOptions(undefined)).toEqual([
+    expect(fallbackOptions(undefined).map(([value, label]) => [value, label])).toEqual([
       ['fail', 'fail: off the script'],
       ['pass', 'pass: does least'],
     ]);
     const opponent = opponentState({ fallbacks: ['fail', 'sandbox', 'odd'], leftoversChoices: ['ringBearer', 'sam'] });
-    expect(fallbackOptions(opponent)).toEqual([
+    expect(fallbackOptions(opponent).map(([value, label]) => [value, label])).toEqual([
       ['fail', 'fail: off the script'],
       ['sandbox', 'sandbox: plays minions'],
       ['odd', 'odd'],
     ]);
+    // (each with what it does, in a sentence, as its tooltip; one the panel does not know has none)
+    expect(fallbackOptions(opponent).map(([, , title]) => title !== '')).toEqual([true, true, false]);
     expect(leftoversOptions(opponent)).toEqual([
       ['', 'none'],
       ['ringBearer', 'the Ring-bearer'],
       ['sam', 'sam'],
     ]);
+  });
+
+  it('offers the eager and bot fallbacks, a word or two each with a sentence as the tooltip (ep P8, em S2b)', () => {
+    const opponent = opponentState({ fallbacks: ['fail', 'pass', 'bot', 'sandbox', 'eager'] });
+    const options = fallbackOptions(opponent);
+    expect(options.map(([value]) => value)).toEqual(['fail', 'pass', 'bot', 'sandbox', 'eager']);
+    const eager = options[4]!;
+    expect(eager[1]).toBe('eager: takes all');
+    expect(eager[2]).toMatch(/every action and response/);
+    expect(options[2]![1]).toBe('bot: Gemp’s bot');
+    expect(options[2]![2]).toMatch(/bot/);
+    // (the two new ones a word or two after their name; each says what it does in a sentence)
+    for (const [, label] of [options[2]!, eager]) expect(label.split(/[: ]+/).length).toBeLessThanOrEqual(3);
+    for (const [, , title] of options) expect(title).toMatch(/\.$/);
+    // (the patch is the existing one: the eager fallback set, the sandbox's cards taken out with any but sandbox)
+    expect(fallbackPatch('eager')).toEqual({ set: { fallback: 'eager' }, unset: ['plays'] });
+    expect(fallbackPatch('bot')).toEqual({ set: { fallback: 'bot' }, unset: ['plays'] });
+    expect(answeringLine({ order: null, id: null, answer: null, gives: null, rule: 'eager', when: '' }).text).toBe(
+      'Eager',
+    );
   });
 
   it('remembers the tab for its draft only, and forgets what it does not understand', () => {
