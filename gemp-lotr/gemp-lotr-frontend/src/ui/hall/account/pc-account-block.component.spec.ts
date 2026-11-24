@@ -75,7 +75,9 @@ describe('PcAccountBlockComponent', () => {
     await stable();
     const form = query('gd-pc-form form')!;
     expect([form.dataset['form'], form.getAttribute('aria-label')]).toEqual(['connect', 'Connect PC Account']);
-    expect(query('.gd-pc-form__label')!.textContent).toBe('Password');
+    const field = query('input[name="password"]') as HTMLInputElement;
+    expect([field.placeholder, field.getAttribute('aria-label')]).toEqual(['Password', 'Password']);
+    expect(query('.gd-pc-form__label')).toBeNull();
     expect(query('.gd-pc-form__note')!.textContent).toBe(
       'Once connected, this account is entered through your PC Account; its password no longer logs in.',
     );

@@ -16,10 +16,9 @@ export const LOG_OUT = 'Log Out';
 export const CONNECT_PC_ACCOUNT = 'Connect PC Account';
 export const MANAGE_PC_ACCOUNT = 'Manage PC Account';
 
-/** Above the alias list. */
-export function signedInAs(name: string): string {
-  return `Signed in as ${name}`;
-}
+/** The list's first line, before the PC account's name (or a password login's account), in bold. */
+export const SIGNED_IN_AS = 'Signed in as';
+export const LOGGED_IN_AS = 'Logged in as';
 
 export const ALIASES_HEADING = 'Your Gemp profiles';
 export const NO_ALIASES = 'No Gemp profile yet: create one, or link an account you had.';
@@ -37,8 +36,8 @@ export function pageLine(page: number, pages: number): string {
 }
 
 // The create and link forms
-export const ALIAS_NAME_LABEL = 'Name';
-export const LINK_LOGIN_LABEL = 'Username';
+export const ALIAS_NAME_LABEL = 'Profile Name';
+export const LINK_LOGIN_LABEL = 'Profile Name';
 export const LINK_PASSWORD_LABEL = 'Password';
 export const CREATE_SUBMIT = 'Create';
 export const LINK_SUBMIT = 'Link';

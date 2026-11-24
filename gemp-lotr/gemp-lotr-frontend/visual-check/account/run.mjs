@@ -143,7 +143,7 @@ function tools(context, page, server) {
 
 const ALIAS = (name) => `.gd-alias-list__alias[data-alias="${name}"]`;
 const ENTER = (name) => `${ALIAS(name)} [data-action="enter"]`;
-const ACTION = (action) => `.gd-alias-list__actions [data-action="${action}"]`;
+const ACTION = (action) => `:is(.gd-alias-list__actions, .gd-alias-list__head) [data-action="${action}"]`;
 const FORM = 'form.gd-pc-form__form';
 const FORM_ERROR = `${FORM} .gd-pc-form__error`;
 const NAMES = '.gd-alias-list__name';
@@ -328,11 +328,9 @@ const SCENARIOS = [
       await t.text('.gd-alias-list__signed-in', 'Signed in as Frodo Baggins');
       await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer']);
       await t.texts(`${ALIAS('Frodo')} [data-action="enter"]`, ['Enter Gemp']);
-      await t.texts('.gd-alias-list__actions .gd-button', [
-        'Create New Gemp Profile',
-        'Link Existing Gemp Account',
-        'Log Out',
-      ]);
+      await t.texts('.gd-alias-list__actions .gd-button', ['Create New Gemp Profile', 'Link Existing Gemp Account']);
+      await t.text('.gd-alias-list__head [data-action="logout"]', 'Log Out');
+      await t.text('.gd-alias-list__head .gd-alias-list__who', 'Frodo Baggins');
       await t.absent('.gd-login__form');
       await t.absent('.gd-alias-list__pager');
     },
@@ -418,6 +416,97 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'list-layout',
+    note: 'the list on the login page: the sentence centred on the box with Log Out on its line, Create and Link centred, a row opened after the last profile; at 1366 and 390',
+    server: {
+      session: 'argonauth-session-aliases.json',
+      refuse: { link: [409, 'linked-elsewhere'] },
+    },
+    run: async (t) => {
+      const box = (selector) => t.page.locator(selector).first().boundingBox();
+      const centre = (b) => b.x + b.width / 2;
+      for (const [width, height] of [
+        [1366, 768],
+        [390, 800],
+      ]) {
+        await t.page.setViewportSize({ width, height });
+        await t.open(`${NG}login`);
+        await t.text('.gd-alias-list__signed-in', 'Signed in as Frodo Baggins');
+        const [panel, sentence, logout, create, link] = await Promise.all(
+          [
+            '.gd-login__box',
+            '.gd-alias-list__signed-in',
+            '.gd-alias-list__head [data-action="logout"]',
+            ACTION('create'),
+            ACTION('link'),
+          ].map(box),
+        );
+        const list = await box('gd-alias-list');
+        if (Math.abs(centre(sentence) - centre(list)) > 1.5) {
+          throw new Failed(`${width}: the sentence is not centred (${centre(sentence)}, ${centre(list)})`);
+        }
+        if (
+          width > 480 &&
+          (Math.abs(centre(sentence) - centre(panel)) > 1.5 ||
+            logout.y > sentence.y + sentence.height ||
+            logout.y + logout.height < sentence.y)
+        ) {
+          throw new Failed(`${width}: the sentence is off the box's centre, or Log Out is not on its line`);
+        }
+        // Side by side, the pair is centred; wrapped, each on its line is
+        const lines =
+          Math.abs(create.y - link.y) < 1 ? [{ x: create.x, width: link.x + link.width - create.x }] : [create, link];
+        if (lines.some((line) => Math.abs(centre(line) - centre(list)) > 1.5)) {
+          throw new Failed(`${width}: Create and Link are not centred`);
+        }
+        const weight = await t.page
+          .locator('.gd-alias-list__who')
+          .evaluate((b) => Number(getComputedStyle(b).fontWeight));
+        if (weight < 600) throw new Failed(`${width}: the name is not bold (${weight})`);
+        // A row opened sits after the last profile and before the buttons, as a profile's row
+        await t.click(ACTION('create'));
+        await t.visible('.gd-alias-list__new');
+        const [last, row, field] = await Promise.all(
+          [`${ALIAS('Ringbearer')}`, '.gd-alias-list__new', `${FORM} input[name="name"]`].map(box),
+        );
+        const createAfter = await box(ACTION('create'));
+        if (!(last.y + last.height <= row.y + 1 && row.y + row.height <= createAfter.y)) {
+          throw new Failed(`${width}: the row is not between the last profile and the buttons`);
+        }
+        if (row.x < panel.x || row.x + row.width > panel.x + panel.width)
+          throw new Failed(`${width}: the row leaves the box`);
+        await t.attribute(`${FORM} input[name="name"]`, 'placeholder', 'Profile Name');
+        await t.attribute(`${FORM} input[name="name"]`, 'aria-label', 'Profile Name');
+        await t.absent(`${FORM} .gd-pc-form__label`);
+        if ((await t.page.locator(`${FORM} label`).first().innerText()).trim() !== '') {
+          throw new Failed(`${width}: the field has a visible label`);
+        }
+        if (field.width < 80) throw new Failed(`${width}: the field is too narrow (${field.width})`);
+        // Link swaps it; a refusal under it, in the theme's error colour
+        await t.click(ACTION('link'));
+        await t.attribute(FORM, 'data-form', 'link');
+        await t.fill(`${FORM} input[name="login"]`, 'Taken');
+        await t.fill(`${FORM} input[name="password"]`, 'secret');
+        await t.page.keyboard.press('Enter');
+        await t.text(`${FORM} .gd-pc-form__error`, 'That account belongs to another PC Account.');
+        const [colour, token] = await t.page.evaluate(() => {
+          const error = document.querySelector('.gd-pc-form__error');
+          const probe = document.createElement('span');
+          probe.style.color = 'var(--theme-error)';
+          error.parentElement.append(probe);
+          const result = [getComputedStyle(error).color, getComputedStyle(probe).color];
+          probe.remove();
+          return result;
+        });
+        if (colour !== token)
+          throw new Failed(`${width}: the refusal is ${colour}, not the theme's error colour ${token}`);
+        await t.value(`${FORM} input[name="login"]`, 'Taken');
+        await t.value(`${FORM} input[name="password"]`, '');
+        t.server.refuse.link = [409, 'linked-elsewhere'];
+      }
+    },
+  },
+  {
     name: 'landing-no-alias',
     note: 'a PC sign-in with no alias lands in Create, Link plainly beside it, and enters the return place',
     server: { session: 'argonauth-session-no-aliases.json' },
@@ -426,10 +515,18 @@ const SCENARIOS = [
       await t.attribute(FORM, 'data-form', 'create');
       await t.text('.gd-alias-list__empty', 'No Gemp profile yet: create one, or link an account you had.');
       await t.disabled(ACTION('link'), false);
-      const [link, form] = await Promise.all(
-        [ACTION('link'), FORM].map((selector) => t.page.locator(selector).first().boundingBox()),
+      // The row is where the first profile would be, under the empty list's line, Link under it within the window
+      await t.visible('.gd-alias-list__aliases > li.gd-alias-list__new:only-child');
+      const focused = await t.page.evaluate(() => document.activeElement?.getAttribute('name'));
+      if (focused !== 'name') throw new Failed(`the focus is on ${focused}, not the name field`);
+      const [empty, row, link] = await Promise.all(
+        ['.gd-alias-list__empty', '.gd-alias-list__new', ACTION('link')].map((selector) =>
+          t.page.locator(selector).first().boundingBox(),
+        ),
       );
-      if (!(link.y + link.height <= form.y)) throw new Failed('Link Existing Gemp Account is not above the open form');
+      if (!(empty.y + empty.height <= row.y && row.y + row.height <= link.y)) {
+        throw new Failed('the empty line, the row and Link are not in that order');
+      }
       if (link.y + link.height > 768) throw new Failed('Link Existing Gemp Account is below the window');
       await t.fill(`${FORM} input[name="name"]`, 'Pippin');
       await t.click(`${FORM} [data-action="submit"]`);
@@ -568,8 +665,9 @@ const SCENARIOS = [
     run: async (t) => {
       await t.open(`${NG}login`);
       await t.texts(NAMES, ['Samwise']);
-      await t.texts('.gd-alias-list__actions .gd-button', ['Log Out']);
-      await t.absent('.gd-alias-list__signed-in');
+      await t.text('.gd-alias-list__signed-in', 'Logged in as Samwise');
+      await t.texts('.gd-alias-list__head .gd-button', ['Log Out']);
+      await t.absent('.gd-alias-list__actions');
       await t.click(ENTER('Samwise'));
       await t.arrives(HALL);
       t.sent([]);

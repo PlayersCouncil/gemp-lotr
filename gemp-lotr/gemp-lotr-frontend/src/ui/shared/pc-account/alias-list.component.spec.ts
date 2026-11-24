@@ -64,7 +64,9 @@ describe('AliasListComponent', () => {
     const row = (name: string) => query(`.gd-alias-list__alias[data-alias="${name}"]`)!;
     const enterOf = (name: string) => row(name).querySelector<HTMLButtonElement>('[data-action="enter"]')!;
     const button = (action: string) =>
-      query<HTMLButtonElement>(`.gd-alias-list__actions [data-action="${action}"], form [data-action="${action}"]`)!;
+      query<HTMLButtonElement>(
+        `:is(.gd-alias-list__actions, .gd-alias-list__head) [data-action="${action}"], form [data-action="${action}"]`,
+      )!;
     const type = async (field: string, value: string) => {
       const input = query<HTMLInputElement>(`.gd-pc-form__field[data-field="${field}"] input`)!;
       input.value = value;
@@ -93,11 +95,16 @@ describe('AliasListComponent', () => {
       'playing:playing',
     ]);
     expect(enterOf('Underhill').textContent!.trim()).toBe('Enter Gemp');
+    // Create and Link under the list; Log Out on the first line, after the sentence
     expect(all('.gd-alias-list__actions .gd-button').map((b) => b.textContent!.trim())).toEqual([
       'Create New Gemp Profile',
       'Link Existing Gemp Account',
-      'Log Out',
     ]);
+    const head = query('.gd-alias-list__head')!;
+    expect(Array.from(head.children).map((child) => child.localName)).toEqual(['p', 'button']);
+    expect(head.querySelector('b.gd-alias-list__who')!.textContent).toBe('Frodo Baggins');
+    expect(head.querySelector('button')!.textContent!.trim()).toBe('Log Out');
+    expect(head.querySelector('button')!.dataset['action']).toBe('logout');
     expect(query('.gd-alias-list__pager')).toBeNull();
     expect(query('form')).toBeNull();
   });
@@ -179,7 +186,11 @@ describe('AliasListComponent', () => {
     expect(form.querySelector('.gd-pc-form__note')).toBeNull();
     const name = query<HTMLInputElement>('.gd-pc-form__field[data-field="name"] input')!;
     expect(name.maxLength).toBe(30);
-    expect(query('.gd-pc-form__field[data-field="name"] .gd-pc-form__label')!.textContent).toBe('Name');
+    expect([name.placeholder, name.getAttribute('aria-label')]).toEqual(['Profile Name', 'Profile Name']);
+    // In the list, after the last profile, before Create and Link
+    const added = query('.gd-alias-list__aliases > li:last-child')!;
+    expect([added.className, added.dataset['form']]).toEqual(['gd-alias-list__new', 'create']);
+    expect(added.previousElementSibling!.getAttribute('data-alias')).toBe('Ringbearer');
     expect(button('submit').textContent!.trim()).toBe('Create');
 
     await type('name', 'bad name!');
@@ -241,9 +252,17 @@ describe('AliasListComponent', () => {
     button('link').click();
     await stable();
     expect(query('form')!.dataset['form']).toBe('link');
-    expect(Array.from(query('form')!.querySelectorAll('.gd-pc-form__label')).map((label) => label.textContent)).toEqual(
-      ['Username', 'Password'],
-    );
+    expect(
+      Array.from(query('form')!.querySelectorAll<HTMLInputElement>('input')).map((input) => [
+        input.name,
+        input.placeholder,
+        input.getAttribute('aria-label'),
+        input.autocomplete,
+      ]),
+    ).toEqual([
+      ['login', 'Profile Name', 'Profile Name', 'username'],
+      ['password', 'Password', 'Password', 'current-password'],
+    ]);
     expect(query<HTMLInputElement>('input[name="password"]')!.type).toBe('password');
     expect(query('form .gd-pc-form__note')!.textContent).toBe(
       'Once linked, that account is entered through your PC Account; its password no longer logs in.',
@@ -309,9 +328,10 @@ describe('AliasListComponent', () => {
       readServerResponse('argonauth-session-password.json'),
     );
     expect(el.dataset['kind']).toBe('password');
-    expect(query('.gd-alias-list__signed-in')).toBeNull();
+    expect(query('.gd-alias-list__signed-in')!.textContent).toBe('Logged in as Samwise');
     expect(names()).toEqual(['Samwise']);
-    expect(all('.gd-alias-list__actions .gd-button').map((b) => b.dataset['action'])).toEqual(['logout']);
+    expect(query('.gd-alias-list__actions')).toBeNull();
+    expect(all('.gd-alias-list__head .gd-button').map((b) => b.dataset['action'])).toEqual(['logout']);
     enterOf('Samwise').click();
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/account']);
     button('logout').click();
@@ -359,13 +379,15 @@ describe('AliasListComponent', () => {
     // Create is open on arrival
     expect(query('gd-pc-form form')!.dataset['form']).toBe('create');
     expect(button('create').getAttribute('aria-expanded')).toBe('true');
-    // and the way to link an old account instead is there, above the form, not hidden by it
+    // in the list where the first profile would be, and the way to link an old account instead plainly there with it
     expect(query('.gd-alias-list__empty')!.textContent).toBe(
       'No Gemp profile yet: create one, or link an account you had.',
     );
     const link = button('link');
     expect(link.disabled).toBe(false);
-    expect(link.compareDocumentPosition(query('gd-pc-form')!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(query('.gd-alias-list__aliases > li.gd-alias-list__new:only-child gd-pc-form')).not.toBeNull();
+    // the field has the focus
+    expect(document.activeElement).toBe(query('gd-pc-form input[name="name"]'));
     expect(
       query('.gd-alias-list__empty')!.compareDocumentPosition(query('gd-pc-form')!) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
@@ -384,5 +406,32 @@ describe('AliasListComponent', () => {
     await stable();
     expect(query('gd-pc-form form')!.dataset['form']).toBe('link');
     expect(button('create').getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('cancels the row with Escape, and swaps Create for Link with the other button', async () => {
+    setUp();
+    const { query, button, stable } = await render(readServerResponse('argonauth-session-aliases.json'));
+    button('create').click();
+    await stable();
+    button('link').click();
+    await stable();
+    expect(query('.gd-alias-list__new')!.dataset['form']).toBe('link');
+    expect(query('.gd-alias-list__aliases')!.querySelectorAll('.gd-alias-list__new').length).toBe(1);
+    query('gd-pc-form input[name="login"]')!.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+    );
+    await stable();
+    expect(query('.gd-alias-list__new')).toBeNull();
+  });
+
+  it("opens the row on the list's last page", async () => {
+    setUp();
+    const { query, names, button, stable } = await render(sessionWithAliases(11));
+    expect(names().length).toBe(10);
+    button('create').click();
+    await stable();
+    expect(names()).toEqual(['Alias11']);
+    expect(query('.gd-alias-list__page')!.textContent).toBe('Page 2 of 2');
+    expect(query('.gd-alias-list__new')).not.toBeNull();
   });
 });

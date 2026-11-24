@@ -67,7 +67,7 @@ export class AliasList {
   async start(): Promise<void> {
     const session = await this.pc.load();
     if (this.opened !== null && session.pcAccount !== null) {
-      this.form_.set(this.opened);
+      this.showForm(this.opened);
     }
   }
 
@@ -91,7 +91,10 @@ export class AliasList {
     if (refusal) this.aliasError_.set({ id: alias.id, message: refusal.message });
   }
 
-  /** Create New Gemp Profile (Link Existing Gemp Account): its form, after a sign-in if the last one has lapsed. */
+  /**
+   * Create New Gemp Profile (Link Existing Gemp Account): its row at the end of the list (the other's, if open, goes),
+   * after a sign-in if the last one has lapsed.
+   */
   open(form: AliasForm): void {
     this.aliasError_.set(null);
     if (form === 'create' && this.blockedBy() !== null) return;
@@ -99,8 +102,14 @@ export class AliasList {
       this.pc.signInFor(form);
       return;
     }
-    this.form_.set(form);
+    this.showForm(form);
     this.formError_.set(null);
+  }
+
+  /** The row being added sits at the list's end: its last page is shown. */
+  private showForm(form: AliasForm): void {
+    this.form_.set(form);
+    this.page_.set(this.pages() - 1);
   }
 
   cancel(): void {
