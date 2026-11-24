@@ -273,12 +273,29 @@
   opacity: 0.85;
 }
 
+/*
+ * While the badge shows, it stands beside the scrolled cards, not over them: a card half in view at the row's end is
+ * tapped itself, not the badge (the owner, 2026-11-24: an offered condition there couldn't be chosen)
+ */
+:host([data-more]) {
+  display: flex;
+  align-items: center;
+}
+
+:host([data-more]) .gd-phone-cards__scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gd-phone-cards__more,
+.gd-phone-cards__more-space {
+  flex: none;
+  box-sizing: border-box;
+  min-width: 62px;
+  margin: 0 6px 0 2px;
+}
+
 .gd-phone-cards__more {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
   border: 0;
   border-radius: 99px;
   padding: 2px 8px;
