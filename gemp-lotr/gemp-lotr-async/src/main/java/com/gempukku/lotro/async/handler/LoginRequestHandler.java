@@ -38,7 +38,7 @@ public class LoginRequestHandler extends LotroServerRequestHandler implements Ur
                     if (player.isTemporarilyBannedAt(new Date()))
                         throw new HttpProcessingException(409);
                     else
-                        responseWriter.writeXmlResponse(null, logUserReturningHeaders(remoteIp, login));
+                        responseWriter.writeXmlResponse(null, logUserReturningHeaders(request, remoteIp, login));
                 } else {
                     throw new HttpProcessingException(403);
                 }

@@ -12,6 +12,8 @@ import com.gempukku.lotro.service.LoggedUserHolder;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.cookie.Cookie;
+import io.netty.handler.codec.http.cookie.CookieHeaderNames;
+import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.netty.handler.codec.http.multipart.Attribute;
@@ -68,21 +70,56 @@ public class LotroServerRequestHandler {
         }
     }
 
-    private String getLoggedUser(HttpRequest request) {
-        ServerCookieDecoder cookieDecoder = ServerCookieDecoder.STRICT;
+    /** The session cookie's name, and the path it is set for: every address of the server, and nothing else. */
+    protected static final String SESSION_COOKIE = "loggedUser";
+    private static final String SESSION_COOKIE_PATH = "/gemp-lotr-server";
+
+    /** The value of the request's session cookie, or null. */
+    protected final String getSessionId(HttpRequest request) {
         String cookieHeader = request.headers().get(COOKIE);
         if (cookieHeader != null) {
-            Set<Cookie> cookies = cookieDecoder.decode(cookieHeader);
-            for (Cookie cookie : cookies) {
-                if (cookie.name().equals("loggedUser")) {
-                    String value = cookie.value();
-                    if (value != null) {
-                        return _loggedUserHolder.getLoggedUser(value);
-                    }
-                }
+            for (Cookie cookie : ServerCookieDecoder.STRICT.decode(cookieHeader)) {
+                if (cookie.name().equals(SESSION_COOKIE) && cookie.value() != null)
+                    return cookie.value();
             }
         }
         return null;
+    }
+
+    /** The request's session (PC-ACCOUNT.md), or null. */
+    protected final LoggedUserHolder.Session getSession(HttpRequest request) {
+        String sessionId = getSessionId(request);
+        return sessionId == null ? null : _loggedUserHolder.getSession(sessionId);
+    }
+
+    private String getLoggedUser(HttpRequest request) {
+        LoggedUserHolder.Session session = getSession(request);
+        return session == null ? null : session.getPlayer();
+    }
+
+    /**
+     * The Set-Cookie value that names `sessionId` as the browser's session. Not readable by scripts, not sent with
+     * another site's requests (a link here from another site still carries it), and kept to https when the request
+     * came over it (nginx says so in X-Forwarded-Proto; plain http stays possible for local development).
+     */
+    protected final String sessionCookie(HttpRequest request, String sessionId) {
+        DefaultCookie cookie = new DefaultCookie(SESSION_COOKIE, sessionId);
+        cookie.setPath(SESSION_COOKIE_PATH);
+        cookie.setHttpOnly(true);
+        cookie.setSameSite(CookieHeaderNames.SameSite.Lax);
+        cookie.setSecure("https".equalsIgnoreCase(request.headers().get("X-Forwarded-Proto")));
+        return ServerCookieEncoder.STRICT.encode(cookie);
+    }
+
+    /** The Set-Cookie value that takes the session cookie away. */
+    protected final String noSessionCookie(HttpRequest request) {
+        DefaultCookie cookie = new DefaultCookie(SESSION_COOKIE, "");
+        cookie.setPath(SESSION_COOKIE_PATH);
+        cookie.setHttpOnly(true);
+        cookie.setSameSite(CookieHeaderNames.SameSite.Lax);
+        cookie.setSecure("https".equalsIgnoreCase(request.headers().get("X-Forwarded-Proto")));
+        cookie.setMaxAge(0);
+        return ServerCookieEncoder.STRICT.encode(cookie);
     }
 
     protected final void processDeliveryServiceNotification(Player player, Map<String, String> headersToAdd) {
@@ -190,11 +227,12 @@ public class LotroServerRequestHandler {
         return (T) value;
     }
 
-    protected Map<String, String> logUserReturningHeaders(String remoteIp, String login) throws SQLException {
+    /** A password login: a new session playing as `login`, and the header that gives the browser its cookie. */
+    protected Map<String, String> logUserReturningHeaders(HttpRequest request, String remoteIp, String login) throws SQLException {
         _playerDao.updateLastLoginIp(login, remoteIp);
 
         String sessionId = _loggedUserHolder.logUser(login);
-        return Collections.singletonMap(SET_COOKIE.toString(), ServerCookieEncoder.STRICT.encode("loggedUser", sessionId));
+        return Collections.singletonMap(SET_COOKIE.toString(), sessionCookie(request, sessionId));
     }
 
     /**
