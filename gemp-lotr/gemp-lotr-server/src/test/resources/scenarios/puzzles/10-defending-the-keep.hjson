@@ -1,0 +1,134 @@
+{
+	id: decipher-10-defending-the-keep
+	version: 1
+	kind: puzzle
+	title: Defending the Keep
+	summary: Keep every one of your companions alive through this archery phase.
+	author: Decipher (Playmat Puzzle, 22 July 2003)
+	note: Transcribed from the Wayback Machine capture; the published key is the solution 'published'.
+	format: scenario
+	human: freeps
+	opponent: {
+		fallback: eager
+	}
+	coverage: guided
+	options: {
+		autoPass: true
+		opponentDelayMs: 0
+	}
+	cards: {
+		freeps: {
+			frodo: 2_102
+			ring: 4_1
+			eomer: 4_267
+			spear: 4_268
+			theoden: 4_365
+			mail: 4_284
+			pahs1: 1_308
+			pahs2: 1_308
+			lemenya: 1_232
+			twilightWorld: 1_228
+		}
+		shadow: {
+			oppFrodo: 2_102
+			troop1: 4_182
+			troop2: 4_182
+			troop3: 4_182
+			weapons: 4_211
+			engine: 5_60
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+	}
+	sites: {
+		freeps: 4_326, 4_330, 4_339
+		shadow: 4_326, 4_330, 4_339
+	}
+	rules: {
+		oneSided: true
+		forbid: shuffle
+	}
+	pool: set:1-6
+	slots: {
+		condition: {
+			zone: support
+			filter: culture:ROHAN cardtype:CONDITION
+			label: a Rohan condition
+		}
+		ally: {
+			zone: support
+			filter: culture:ROHAN cardtype:ALLY
+			label: a Rohan ally
+		}
+	}
+	setup: {
+		startAt: {
+			phase: maneuver
+			site: 3
+		}
+		freeps: {
+			characters: eomer, theoden
+			hand: pahs1, pahs2, lemenya, twilightWorld
+		}
+		shadow: {
+			minions: troop1, troop2, troop3
+			support: weapons, engine
+		}
+		attach: {
+			spear: eomer
+			mail: theoden
+		}
+		wounds: {
+			frodo: 5
+			eomer: 2
+			theoden: 1
+		}
+		tokens: {
+			weapons: 2
+		}
+	}
+	outcome: {
+		judge: {
+			at: endOf(archery)
+			win: [
+				{
+					type: canSpot
+					filter: alias(frodo)
+				}
+				{
+					type: canSpot
+					filter: alias(eomer)
+				}
+				{
+					type: canSpot
+					filter: alias(theoden)
+				}
+			]
+		}
+		winMessages: Every companion came through the archery.
+		loseMessages: A companion fell to the crossbows.
+	}
+	steps: [
+	]
+	solutions: [
+		{
+			name: published
+			note: Parapet makes the minion archery total -3; the two arrows left go on Aldor, whose home is site 3.
+			picks: {
+				condition: 5_87
+				ally: 4_262
+			}
+			answers: [
+				use(condition)
+				option(Make the minion archery total -3)
+				choose(ally)
+				choose(ally)
+			]
+		}
+	]
+}
