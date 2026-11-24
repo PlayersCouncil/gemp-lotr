@@ -108,6 +108,18 @@ public class ScenarioSandbox {
         _points = points;
     }
 
+    /** The seat the person looks at the table from (LiveScenario.Looking); the one they sit in until told. */
+    private java.util.function.Supplier<Seat> _looking;
+
+    void LookingFrom(java.util.function.Supplier<Seat> looking) {
+        _looking = looking;
+    }
+
+    /** A place to go back to, just before something the person is about to do to the game (LiveScenario.SetOtherSeat). */
+    void Point(String label) {
+        point(label);
+    }
+
     /** Whether the game is stopped (edit mode): nothing is answered, and the board may be changed. */
     public boolean Stopped() {
         return _stopped;
@@ -917,12 +929,17 @@ public class ScenarioSandbox {
         return alias;
     }
 
-    /** Whether the person may see the card where it is: anywhere with piles, otherwise not in a hidden pile. */
+    /**
+     * Whether the person may see the card where it is: anywhere with piles, otherwise not in a hidden pile.  A seat's
+     * hand and adventure deck are hidden from the person only while they neither sit in that seat nor look at the
+     * table from it (the flip shows the hand of the seat looked from, as its player sees it).
+     */
     private boolean visible(PhysicalCard card) {
         if (Tools().contains("piles"))
             return true;
         Zone zone = card.getZone();
-        boolean mine = _table.SeatOf(card.getOwner()) == _def.human;
+        Seat owner = _table.SeatOf(card.getOwner());
+        boolean mine = owner == _def.human || (_looking != null && owner == _looking.get());
         return zone != Zone.DECK && !(zone == Zone.HAND && !mine) && !(zone == Zone.ADVENTURE_DECK && !mine);
     }
 

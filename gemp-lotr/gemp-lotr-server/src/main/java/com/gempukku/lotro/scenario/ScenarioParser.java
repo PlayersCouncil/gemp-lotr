@@ -63,6 +63,11 @@ import java.util.regex.Pattern;
  * the tools being add, copy, delete, move, attach, stack, wounds, tokens, modify, counters (twilight, burdens,
  * threats), markers (a seat's marker, who controls a site), sites (a site put on the path) and piles (looking in
  * both draw decks, the other seat's hand and adventure deck).
+ * Who plays the other seat when the sandbox begins (the person changes it as it runs):
+ *     options: { otherSeat: bot }       script (default): the file's opponent, its steps, orders and fallback;
+ *                                       bot: Gemp's bot, wherever steps and orders leave it (as fallback: bot);
+ *                                       person: nobody; its decisions wait for the person, who answers them from
+ *                                       the table seen from that seat (the flip).  A sandbox's only.
  *
  * The game's own opening can be played instead of the board being laid out:
  *     setup: { opening: game }       the bid, the choice of going first, the starting fellowships, the opening draw
@@ -206,7 +211,7 @@ public final class ScenarioParser {
         JsonObject options = optionalObject(object, "options", "scenario");
         if (options != null) {
             checkFields(options, "options", "autoPass", "autoAccept", "autoDismissDeckReveal", "animationSpeed", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap",
-                    "tools", "undo");
+                    "tools", "undo", "otherSeat");
             JsonValue autoPass = get(options, "autoPass");
             if (autoPass != null && autoPass.isObject()) {
                 //For each role the person can play: { freeps: fellowship, regroup  shadow: shadow, maneuver }
@@ -235,6 +240,7 @@ public final class ScenarioParser {
             if (get(options, "tools") != null)
                 def.tools = tools(get(options, "tools"));
             def.undo = undo(optionalString(options, "undo", null, "options"));
+            def.otherSeat = optionalEnum(options, "otherSeat", ScenarioDefinition.OtherSeat.class, null, "options");
         }
 
         parseCards(def, requireObject(object, "cards", "scenario"));

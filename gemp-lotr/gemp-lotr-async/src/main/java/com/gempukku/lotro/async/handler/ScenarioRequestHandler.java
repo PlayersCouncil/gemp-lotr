@@ -94,6 +94,11 @@ import java.util.Map;
  * cultures}.<br>
  * POST /scenarios/sandbox/stop, start (gameId); edit (gameId, ops: a JSON list of edits, made whole or not at all);
  * each answers {ok: true, state} or a 400 {error}.<br>
+ * POST /scenarios/sandbox/otherSeat (gameId, to: script | bot | person) - who plays the other seat from now on.<br>
+ * POST /scenarios/sandbox/flip (gameId, optionally seat: freeps | shadow) - the person's page shows the table from
+ * that seat (by default the other one from the seat it shows now): {ok, seat, state}; the page is sent a resync
+ * notice (reason "flip") and reads the game again from nothing, as after a take-back.  Also for an author at the
+ * table of a draft (state null then).<br>
  * POST /scenarios/sandbox/reset (gameId) - a fresh game of the sandbox as it opened: {gameId}, which the page goes to
  * as to any fresh game of a scenario.  Allowed once the game is over too.<br>
  * GET /scenarios/search?filter=&start=&count= - for any logged-in player: cards found with the deck builder's filter
@@ -661,8 +666,10 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         HttpPostRequestDecoder form = new HttpPostRequestDecoder(request);
         try {
             LotroGameMediator mediator = _lotroServer.getGameById(getFormParameterSafely(form, "gameId"));
+            //(the flip is an author's at the table too, whose game is no sandbox)
+            boolean flip = what.equals("flip") && mediator != null && mediator.getScenario() != null && mediator.getScenario().CanFlip();
             if (mediator == null || mediator.getScenario() == null || !mediator.getScenario().HumanPlayer().equals(player.getName())
-                    || mediator.getScenario().Sandbox() == null) {
+                    || (mediator.getScenario().Sandbox() == null && !flip)) {
                 writeError(responseWriter, 404, "This is not a sandbox you are playing.");
                 return;
             }
@@ -677,6 +684,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     String ops = getFormParameterSafely(form, "ops");
                     yield ops == null ? "Say what to change: ops, a list of edits" : mediator.sandboxEdit(player.getName(), ops);
                 }
+                case "otherSeat" -> mediator.sandboxOtherSeat(player.getName(), getFormParameterSafely(form, "to"));
+                case "flip" -> mediator.sandboxFlip(player.getName(), getFormParameterSafely(form, "seat"));
                 default -> throw new HttpProcessingException(404);
             };
             if (problem != null) {
@@ -685,6 +694,9 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             }
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("ok", true);
+            if (what.equals("flip"))
+                result.put("seat", mediator.getScenario().Looking().key());
+            //(null for an author's game, which is no sandbox)
             result.put("state", mediator.sandboxState(player.getName()));
             responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
         } finally {

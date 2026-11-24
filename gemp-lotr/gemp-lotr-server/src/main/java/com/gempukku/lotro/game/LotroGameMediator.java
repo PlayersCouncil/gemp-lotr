@@ -37,6 +37,12 @@ public class LotroGameMediator {
     private static final Logger LOG = LogManager.getLogger(LotroGameMediator.class);
 
     private final Map<String, GameCommunicationChannel> _communicationChannels = Collections.synchronizedMap(new HashMap<>());
+    /**
+     * A scenario's person whose page shows the table from the other seat (sandboxFlip): person -> that seat's player.
+     * Their channel is made for that player (what it is shown, its decisions), and their answers are that player's.
+     * Absent for everybody else, whose page is their own.
+     */
+    private final Map<String, String> _lookingAs = new java.util.concurrent.ConcurrentHashMap<>();
     // The game and its feedback are replaced when the game is taken back to an earlier decision (revertTo).  Only
     // ever written inside the write lock.
     private volatile DefaultUserFeedback _userFeedback;
@@ -666,13 +672,15 @@ public class LotroGameMediator {
             Map<GameStateListener, Integer> recordedThen = _recordedAt.get(entryCount);
             for (Map.Entry<GameStateListener, String> listener : new ArrayList<>(_gameStateListeners.entrySet())) {
                 String who = listener.getValue();
-                if (listener.getKey() instanceof GameCommunicationChannel channel && _communicationChannels.get(who) == channel) {
+                //(whose page it is: the listener's player, or a person looking at the table from that player's seat)
+                String owner = listener.getKey() instanceof GameCommunicationChannel channel ? ownerOf(channel) : null;
+                if (listener.getKey() instanceof GameCommunicationChannel channel && owner != null) {
                     GameCommunicationChannel fresh = new GameCommunicationChannel(who, _channelNextIndex++, true, _lotroGame.getFormat());
                     _gameStateListeners.remove(channel);
                     _gameStateListeners.put(fresh, who);
-                    _communicationChannels.put(who, fresh);
+                    _communicationChannels.put(owner, fresh);
                     _lotroGame.addGameStateListener(who, fresh);
-                    newChannels.put(who, fresh.getChannelNumber());
+                    newChannels.put(owner, fresh.getChannelNumber());
                     skipFrom.put(fresh, 0);
                 } else {
                     if (listener.getKey() instanceof GameCommunicationChannel recording) {
@@ -1332,10 +1340,12 @@ public class LotroGameMediator {
     }
 
     public synchronized void playerAnswered(Player player, int channelNumber, int decisionId, String answer) throws SubscriptionConflictException, SubscriptionExpiredException {
-        String playerName = player.getName();
+        String person = player.getName();
         _writeLock.lock();
         try {
-            GameCommunicationChannel communicationChannel = _communicationChannels.get(playerName);
+            GameCommunicationChannel communicationChannel = _communicationChannels.get(person);
+            //(a page that shows the table from the other seat answers as that seat's player: see sandboxFlip)
+            String playerName = lookingAs(person);
             if (communicationChannel != null) {
                 if (communicationChannel.getChannelNumber() == channelNumber) {
                     AwaitingDecision awaitingDecision = _userFeedback.getAwaitingDecision(playerName);
@@ -1345,6 +1355,9 @@ public class LotroGameMediator {
                     } else if (awaitingDecision != null && _scenario != null && _scenario.Stopped()) {
                         //A stopped sandbox takes no answers: its decision is asked again, afresh, at Start
                         _lotroGame.getGameState().sendWarning(playerName, "The game is stopped: press Start to play on");
+                    } else if (awaitingDecision != null && _scenario != null && !playerName.equals(person) && !_scenario.PersonAnswersFor(playerName)) {
+                        //Looking from the other seat, while somebody else plays it (the script, the bot): it answers for itself
+                        _lotroGame.getGameState().sendWarning(playerName, "The other seat is not yours to answer for: it plays itself (give it to yourself to answer it)");
                     } else if (awaitingDecision != null) {
                         if (awaitingDecision.getAwaitingDecisionId() == decisionId && !_lotroGame.isFinished()) {
                             long startedAt = System.currentTimeMillis();
@@ -1468,7 +1481,9 @@ public class LotroGameMediator {
         _writeLock.lock();
         try {
             //(nor while a sandbox is stopped: its decision will be asked again, and answered then)
-            if (_scenario.Result() == null && !_scenario.Stopped() && _userFeedback.getAwaitingDecision(opponent) == decision)
+            //(nor once the person plays that seat: its answers are theirs)
+            if (_scenario.Result() == null && !_scenario.Stopped() && _scenario.OpponentAnswersItself()
+                    && _userFeedback.getAwaitingDecision(opponent) == decision)
                 botAnswered(opponent, decision.getAwaitingDecisionId(), answer);
         } finally {
             _writeLock.unlock();
@@ -1574,7 +1589,12 @@ public class LotroGameMediator {
         _writeLock.lock();
         try {
             com.gempukku.lotro.scenario.ScenarioSandbox sandbox = sandboxOf(player);
-            return sandbox == null ? null : sandbox.State();
+            if (sandbox == null)
+                return null;
+            Map<String, Object> state = sandbox.State();
+            //(the seats: looked from, who plays the other, whose decision it waits on)
+            state.putAll(_scenario.SeatState());
+            return state;
         } finally {
             _writeLock.unlock();
         }
@@ -1600,6 +1620,86 @@ public class LotroGameMediator {
             //(the person's clock starts afresh with each thing they do: a sandbox being set up is not a person gone away)
             scenarioAfterActions();
             return problem;
+        } finally {
+            _writeLock.unlock();
+        }
+    }
+
+    /** The player whose page a person's is: their own, or the other seat's player while they look from there. */
+    private String lookingAs(String person) {
+        return _lookingAs.getOrDefault(person, person);
+    }
+
+    /** The person whose page a channel is; null for a channel that is nobody's page (a recording, a stale one). */
+    private String ownerOf(GameCommunicationChannel channel) {
+        synchronized (_communicationChannels) {
+            for (Map.Entry<String, GameCommunicationChannel> entry : _communicationChannels.entrySet())
+                if (entry.getValue() == channel)
+                    return entry.getKey();
+        }
+        return null;
+    }
+
+    /**
+     * The person playing a sandbox gives its other seat to the script, the bot or themselves (LiveScenario.SetOtherSeat).
+     * @return Null if done; otherwise why not.
+     */
+    public String sandboxOtherSeat(String player, String to) {
+        return sandbox(player, sandbox -> _scenario.SetOtherSeat(to));
+    }
+
+    /**
+     * The person's page shows the table from a seat from now on ("flip table"): the other seat's, or with seat
+     * named, that one ("freeps", "shadow", or the scenario's "human", "opponent").  Allowed in a sandbox whatever
+     * plays its other seat, and to an author at the table (LiveScenario.CanFlip).  Their page is given a channel of
+     * the seat's player, as that player's own page would be (its hand face up, the other face down, the table turned
+     * for it, its decisions, the scenario's events as well), and sent the whole table on it, the way a take-back
+     * sends it; their answers are that player's (taken only where the person plays that seat: see
+     * LiveScenario.PersonAnswersFor).  The page hears of it as of a take-back, by a resync notice (reason "flip",
+     * channelNumber, seat).  Not written in the journal: a take-back keeps it, a fresh game (Reset) starts without.
+     * Edits made meanwhile name their seats as before: a zone alone is still the seat the person sits in.
+     * @return Null if done; otherwise why not.
+     */
+    public String sandboxFlip(String player, String seat) {
+        _writeLock.lock();
+        try {
+            if (_scenario == null || !_scenario.HumanPlayer().equals(player) || !_scenario.CanFlip())
+                return NOT_A_SANDBOX;
+            com.gempukku.lotro.scenario.Seat to;
+            com.gempukku.lotro.scenario.Seat sits = _scenario.Definition().human;
+            if (seat == null || seat.isBlank()) {
+                to = _scenario.Looking().other();
+            } else {
+                switch (seat.trim().toLowerCase(java.util.Locale.ROOT)) {
+                    case "freeps" -> to = com.gempukku.lotro.scenario.Seat.FREEPS;
+                    case "shadow" -> to = com.gempukku.lotro.scenario.Seat.SHADOW;
+                    case "human" -> to = sits;
+                    case "opponent" -> to = sits.other();
+                    default -> {
+                        return "'" + seat + "' is not a seat: freeps or shadow (or human, opponent)";
+                    }
+                }
+            }
+            String as = _scenario.Table().Player(to);
+            if (as.equals(player))
+                _lookingAs.remove(player);
+            else
+                _lookingAs.put(player, as);
+            //A channel of that player's for the page, sent the whole table, as a take-back gives one
+            GameCommunicationChannel old = _communicationChannels.get(player);
+            if (old != null)
+                removeGameStateListener(old);
+            _scenario.Look(to);
+            GameCommunicationChannel fresh = new GameCommunicationChannel(as, _channelNextIndex++, true, _lotroGame.getFormat());
+            _communicationChannels.put(player, fresh);
+            addGameStateListener(as, fresh);
+            _notices.know(player);
+            Map<String, String> fields = new LinkedHashMap<>();
+            fields.put("reason", "flip");
+            fields.put("channelNumber", String.valueOf(fresh.getChannelNumber()));
+            fields.put("seat", to.key());
+            _notices.send(player, GameNotices.RESYNC, fields);
+            return null;
         } finally {
             _writeLock.unlock();
         }
@@ -1706,10 +1806,15 @@ public class LotroGameMediator {
             int number = _channelNextIndex;
             _channelNextIndex++;
 
-            GameCommunicationChannel participantCommunicationChannel = new GameCommunicationChannel(playerName, number, true, _lotroGame.getFormat());
-            _communicationChannels.put(playerName, participantCommunicationChannel);
+            //(a person looking from the other seat is given that seat's channel again: see sandboxFlip)
+            String lookingAs = lookingAs(playerName);
+            GameCommunicationChannel participantCommunicationChannel = new GameCommunicationChannel(lookingAs, number, true, _lotroGame.getFormat());
+            GameCommunicationChannel before = _communicationChannels.put(playerName, participantCommunicationChannel);
+            //(the game drops a page's older channel by itself only when it is for the same player)
+            if (before != null && !before.getAssignedPlayerId().equals(lookingAs))
+                removeGameStateListener(before);
 
-            addGameStateListener(playerName, participantCommunicationChannel);
+            addGameStateListener(lookingAs, participantCommunicationChannel);
 
             visitor.visitChannelNumber(number);
 

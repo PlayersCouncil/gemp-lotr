@@ -28,6 +28,12 @@ public final class ScenarioValidator {
     public static List<String> validate(ScenarioDefinition def, LotroCardBlueprintLibrary library) {
         List<String> problems = new ArrayList<>();
 
+        //(only a sandbox's other seat is played by anything but the scenario's own opponent)
+        if (def.otherSeat != null && def.kind != ScenarioDefinition.Kind.SANDBOX)
+            problems.add("options.otherSeat: only a sandbox's other seat can be played by the bot or by the person, and this is a "
+                    + def.kind.name().toLowerCase(java.util.Locale.ROOT) + ".  Leave otherSeat out: its opponent is its script "
+                    + "(opponent.fallback: bot has the bot play wherever the script does not say)");
+
         for (CardDef card : def.cards.values()) {
             LotroCardBlueprint blueprint = blueprint(library, card.blueprintId(), "cards: '" + card.alias() + "'", problems);
             if (blueprint != null && blueprint.getCardType() == CardType.SITE)

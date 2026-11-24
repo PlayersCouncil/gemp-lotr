@@ -154,4 +154,65 @@ public class ScenarioSandboxFileTest {
         assertEquals(1, read.leftOut().size());
         assertEquals("options.tools", read.leftOut().getFirst().where());
     }
+
+    @Test
+    public void WhoPlaysTheOtherSeatIsReadWrittenAndSetByAnAuthor() throws Exception {
+        //Read, any case, and written back as read; not said is the script, and not written
+        for (String who : List.of("script", "bot", "person")) {
+            ScenarioDefinition def = ScenarioParser.parse(sandbox("\toptions: {\n\t\totherSeat: " + who.toUpperCase() + "\n\t}"));
+            assertEquals(ScenarioDefinition.OtherSeat.valueOf(who.toUpperCase()), def.otherSeat);
+            assertEquals(def.otherSeat, def.otherSeatInForce());
+            assertEquals(List.of(), ScenarioValidator.validate(def, ScenarioTesting.library()));
+            String written = ScenarioWriter.toHjson(def, ScenarioTesting.library());
+            assertTrue(written, written.contains("\t\totherSeat: " + who + "\n"));
+            ScenarioDefinition again = ScenarioParser.parse(written);
+            assertEquals(def.otherSeat, again.otherSeat);
+            assertEquals(written, ScenarioWriter.toHjson(again, ScenarioTesting.library()));
+        }
+        ScenarioDefinition unsaid = ScenarioParser.parse(sandbox(""));
+        assertNull(unsaid.otherSeat);
+        assertEquals(ScenarioDefinition.OtherSeat.SCRIPT, unsaid.otherSeatInForce());
+        assertFalse(ScenarioWriter.toHjson(unsaid, ScenarioTesting.library()).contains("otherSeat"));
+        //Not one of them: the parser says so, and salvage leaves it out
+        try {
+            ScenarioParser.parse(sandbox("\toptions: {\n\t\totherSeat: nobody\n\t}"));
+            fail("'nobody' was taken");
+        } catch (ScenarioFormatException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().startsWith("options.otherSeat: "));
+        }
+        ScenarioSalvage.Result read = ScenarioSalvage.read(sandbox("\toptions: {\n\t\totherSeat: nobody\n\t}"), def -> List.of());
+        assertNull(read.def().otherSeat);
+        assertEquals("options.otherSeat", read.leftOut().getFirst().where());
+        //Only a sandbox's: the validator refuses it elsewhere, and salvage leaves it out of such a file
+        ScenarioDefinition tutorial = ScenarioParser.parse(ScenarioTesting.scenario("\toptions: {\n\t\totherSeat: bot\n\t}"));
+        List<String> problems = ScenarioValidator.validate(tutorial, ScenarioTesting.library());
+        assertTrue(problems.toString(), problems.getFirst().startsWith("options.otherSeat: only a sandbox's other seat"));
+        ScenarioSalvage.Result tutorialRead = ScenarioSalvage.read(ScenarioTesting.scenario("\toptions: {\n\t\totherSeat: bot\n\t}"),
+                def -> ScenarioValidator.validate(def, ScenarioTesting.library()));
+        assertNull(tutorialRead.def().otherSeat);
+
+        //The authoring tool: the state says it, the options patch sets it, and it survives save and reopen
+        Files.createDirectories(new File(canon, "sandboxes").toPath());
+        Files.writeString(new File(canon, "sandboxes/table.hjson").toPath(), sandbox("").replace("id: test", "id: table"), StandardCharsets.UTF_8);
+        authoring.open(player, "table", true);
+        JSONObject otherSeat = JSON.parseObject(JSON.toJSONString(authoring.state(player))).getJSONObject("sandboxOtherSeat");
+        assertEquals(List.of("script", "bot", "person"), otherSeat.getList("choices", String.class));
+        assertFalse(otherSeat.getBooleanValue("said"));
+        assertEquals("script", otherSeat.getString("value"));
+        Map<String, Object> result = authoring.edit(player, "{top: {options: {otherSeat: \"person\"}}}", null);
+        JSONObject state = JSON.parseObject(JSON.toJSONString(result)).getJSONObject("state");
+        assertEquals("person", state.getJSONObject("draft").getJSONObject("options").getString("otherSeat"));
+        assertTrue(state.getJSONObject("sandboxOtherSeat").getBooleanValue("said"));
+        assertEquals("person", state.getJSONObject("sandboxOtherSeat").getString("value"));
+        authoring.save(player, null, false, true);
+        authoring.close(player);
+        authoring.open(player, "table", true);
+        assertEquals(ScenarioDefinition.OtherSeat.PERSON, library.get("table").def().otherSeat);
+        try {
+            authoring.edit(player, "{top: {kind: \"tutorial\"}}", null);
+            fail("A tutorial with otherSeat was taken");
+        } catch (ScenarioAuthoring.AuthoringException exp) {
+            assertTrue(exp.getMessage(), exp.getMessage().contains("options.otherSeat: only a sandbox's"));
+        }
+    }
 }

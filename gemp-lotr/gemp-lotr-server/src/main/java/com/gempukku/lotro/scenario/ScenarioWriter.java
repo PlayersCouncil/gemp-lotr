@@ -104,6 +104,8 @@ public final class ScenarioWriter {
             options.add("tools", def.tools.isEmpty() ? org.hjson.JsonValue.valueOf(false) : org.hjson.JsonValue.valueOf(String.join(", ", def.tools)));
         if (def.undo != null)
             options.add("undo", def.undo ? "on" : "off");
+        if (def.otherSeat != null)
+            options.add("otherSeat", lower(def.otherSeat));
         if (!options.isEmpty())
             root.add("options", options);
 

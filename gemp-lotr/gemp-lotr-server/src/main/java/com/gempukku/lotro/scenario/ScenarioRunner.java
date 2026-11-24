@@ -342,6 +342,9 @@ public final class ScenarioRunner {
         ScenarioTable table = new ScenarioTable(def, library, format, HUMAN, OPPONENT);
         ScenarioSession session = new ScenarioSession(table);
         ScenarioDirector director = session.Director();
+        //(a sandbox whose other seat begins with the bot is played as fallback: bot is: see the opponent's decisions below)
+        if (def.kind == ScenarioDefinition.Kind.SANDBOX && def.otherSeatInForce() == ScenarioDefinition.OtherSeat.BOT)
+            director.FallbackInstead(Fallback.BOT);
         table.Picks(playing.picks());
         try {
             table.Start();
@@ -643,13 +646,16 @@ public final class ScenarioRunner {
                     else
                         report.reached = RunnerLevel.PREFIX;
                     return false;
-                } else if (def.fallbackInForce() == Fallback.PASS || def.fallbackInForce() == Fallback.SANDBOX) {
+                } else if ((def.fallbackInForce() == Fallback.PASS || def.fallbackInForce() == Fallback.SANDBOX)
+                        && (def.kind != ScenarioDefinition.Kind.SANDBOX || def.otherSeatInForce() == ScenarioDefinition.OtherSeat.SCRIPT)) {
                     answer = AnswerCompiler.leastAnswer(decision);
                     note = "(opponent fallback: " + (def.fallback == Fallback.PASS ? "pass" : "sandbox, with no rule for this: as little as it can") + ")";
                 } else {
                     report.decisions.add(new ScenarioRunReport.Decision(number, description, null, null, null));
                     report.stopped = "a decision for the opponent that no step covers";
-                    if (def.fallback == Fallback.BOT && !strict)
+                    //(the bot, or a sandbox's person in the other seat, answers here: proved as far as the script can be)
+                    if ((def.fallback == Fallback.BOT || (def.kind == ScenarioDefinition.Kind.SANDBOX
+                            && def.otherSeatInForce() != ScenarioDefinition.OtherSeat.SCRIPT)) && !strict)
                         report.reached = RunnerLevel.PREFIX;
                     else
                         report.failures.add("No step covers this decision for the opponent (the script is waiting on "

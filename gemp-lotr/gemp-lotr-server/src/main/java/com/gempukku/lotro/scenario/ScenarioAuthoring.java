@@ -2902,6 +2902,13 @@ public class ScenarioAuthoring {
             tools.put("said", def.tools != null);
             tools.put("allowed", def.toolsInForce());
             state.put("sandboxTools", tools);
+            //Who plays a sandbox's other seat when it begins (options.otherSeat, set with {top: {options: {...,
+            // otherSeat: "bot"}}}; left out for the script): the choices, whether the file says, and what is in force
+            Map<String, Object> otherSeat = new LinkedHashMap<>();
+            otherSeat.put("choices", List.of("script", "bot", "person"));
+            otherSeat.put("said", def.otherSeat != null);
+            otherSeat.put("value", def.otherSeatInForce().name().toLowerCase(Locale.ROOT));
+            state.put("sandboxOtherSeat", otherSeat);
 
             List<String> statuses = new ArrayList<>();
             for (Step step : def.steps)
