@@ -52,6 +52,7 @@ export class GameDecisions {
       autoAccept: this.settings.autoAccept(),
       alwaysDropDown: this.settings.alwaysDropDown(),
       replay: this.session.replaying(),
+      editing: this.gates.hiding(),
     }),
   );
 

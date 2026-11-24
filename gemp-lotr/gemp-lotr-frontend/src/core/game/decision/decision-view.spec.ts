@@ -25,6 +25,8 @@ describe('decisionView', () => {
     const asked = waiting(decision('CARD_ACTION_CHOICE', { actionId: ['1'], cardId: ['5'], actionText: ['Play'] }));
     const editing = { ...asked, scenario: { info: { mode: 'edit' } } } as unknown as GameModel;
     expect(decisionView(editing, SETTINGS)).toEqual(NO_DECISION);
+    // (and while the page's table is edited by a level the info does not say: the author's Edit table)
+    expect(decisionView(asked, { ...SETTINGS, editing: true })).toEqual(NO_DECISION);
     const playing = { ...asked, scenario: { info: { mode: 'play' } } } as unknown as GameModel;
     expect(decisionView(playing, SETTINGS).alert).toBe('Do it');
   });

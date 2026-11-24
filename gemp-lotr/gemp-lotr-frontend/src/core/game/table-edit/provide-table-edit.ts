@@ -1,5 +1,7 @@
 import { Provider } from '@angular/core';
 import { FormatsService } from '../../formats/formats.service';
+import { BoardChanges } from '../authoring/board-changes.service';
+import { AuthorBackend } from './author-backend';
 import { CardSearch, CardSearchApi } from './card-search';
 import { EditSeating } from './edit-seating.service';
 import { PuzzleBackend } from './puzzle-backend';
@@ -25,5 +27,9 @@ export function provideTableEdit(): Provider[] {
     EditSeating,
     PuzzleBackend,
     { provide: TABLE_EDIT_BACKENDS, useExisting: PuzzleBackend, multi: true },
+    // (the author's: the Board tab's changes, made from the table)
+    BoardChanges,
+    AuthorBackend,
+    { provide: TABLE_EDIT_BACKENDS, useExisting: AuthorBackend, multi: true },
   ];
 }

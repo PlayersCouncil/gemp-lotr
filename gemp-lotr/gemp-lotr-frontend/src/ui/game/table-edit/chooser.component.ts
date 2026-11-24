@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { AuthorBackend } from '../../../core/game/table-edit/author-backend';
 import { cardsInGame, fits, placeLabel } from '../../../core/game/table-edit/edit-menu';
 import { addTo } from '../../../core/game/table-edit/edit-ops';
 import { placeBeside, Size } from '../../../core/game/table-edit/popup-place';
@@ -17,7 +18,9 @@ import { PopupPlaceDirective } from './popup-place.directive';
  *
  * DOM contract: `gd-edit-chooser` holding `.gd-edit-backdrop` and `.gd-edit-chooser` (`role=menu`, `data-seat`,
  * `data-zone`; placed by gdPopupPlace) with `.gd-edit-chooser__heading`s and `button[role=menuitem]`:
- * `[data-chooser=recent]` and `[data-chooser=scenario]` (each with `data-blueprint`), then `[data-chooser=search]`.
+ * `[data-chooser=recent]` and `[data-chooser=scenario]` (each with `data-blueprint`), then `[data-chooser=search]`;
+ * for the author of a puzzle, `[data-chooser=slot]` (Open slot: a slot of the puzzle at this place, its form shown in
+ * the Board tab).
  */
 @Component({
   selector: 'gd-edit-chooser',
@@ -80,6 +83,19 @@ import { PopupPlaceDirective } from './popup-place.directive';
         >
           Search…
         </button>
+        @if (author?.slotted()) {
+          <button
+            type="button"
+            role="menuitem"
+            class="gd-edit-chooser__item gd-edit-chooser__search"
+            data-chooser="slot"
+            title="A slot here: the solver chooses its card (its label and bound in the Board tab)"
+            [disabled]="edit.busy()"
+            (click)="openSlot()"
+          >
+            Open slot
+          </button>
+        }
       </div>
     }
   `,
@@ -120,5 +136,16 @@ export class ChooserComponent {
 
   protected close(focusBack = false): void {
     this.popups.closeChooser(focusBack);
+  }
+
+  /** The author's: a puzzle's slot opened at this place (a fresh game; the Board tab shows its form). */
+  protected readonly author = inject(AuthorBackend, { optional: true });
+
+  protected async openSlot(): Promise<void> {
+    const open = this.popups.chooser();
+    if (!open || !this.author) return;
+    const said = await this.author.openSlot(open.place);
+    if (said === null) this.popups.closeChooser();
+    else this.edit.problem.set({ text: said, at: { x: open.anchor.left, y: open.anchor.bottom } });
   }
 }

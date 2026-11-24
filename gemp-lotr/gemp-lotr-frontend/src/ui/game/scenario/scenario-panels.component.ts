@@ -10,6 +10,7 @@ import { CompactLayout } from '../../../core/platform/compact-layout.service';
 import { HallTab } from '../../../core/platform/hall-tab.service';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { EditBarComponent } from '../table-edit/edit-bar.component';
+import { AuthorEditBarComponent } from '../table-edit/author-edit-bar.component';
 import { PuzzleBarComponent } from '../table-edit/puzzle-bar.component';
 import { CardHintsDirective } from '../table/card-hints.directive';
 
@@ -98,6 +99,8 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
  * A table changed by hand (a sandbox) has its edit bar (`gd-edit-bar`) in the menu in place of Start again; its
  * ending (`ended`: the game played to its end) says who won and why, with Reset and Leave.
  *
+ * A draft written at the table keeps Start again, and has the author's bar (`gd-author-edit-bar`) beside it.
+ *
  * A puzzle has its bar (`gd-puzzle-bar`: Choosing and Submit, then Start again and Change cards) in its place; its
  * ending says, under the puzzle's own words, the score with its label, the best and "New best" when it is
  * (`.gd-scenario-panel__score`), and that the solution is one the author did not list (`.gd-scenario-panel__unlisted`);
@@ -115,7 +118,7 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
   // An ending's words are the server's HTML, which a scoped stylesheet wouldn't reach; and the buttons' look is
   // shared with the bubble's (gd-game-scenario). Every rule starts at a .gd-scenario class
   encapsulation: ViewEncapsulation.None,
-  imports: [CardHintsDirective, EditBarComponent, PuzzleBarComponent],
+  imports: [CardHintsDirective, EditBarComponent, PuzzleBarComponent, AuthorEditBarComponent],
   host: {
     style: 'display: contents',
     '(window:resize)': 'measure()',
@@ -128,6 +131,10 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
           @if (edit.level() === 'puzzle') {
             <!-- A puzzle: Choosing and Submit while its slots are filled; then Start again and Change cards -->
             <gd-puzzle-bar />
+          } @else if (edit.level() === 'author') {
+            <!-- A draft written at the table: Start again, and while its table is edited which board changes go to -->
+            <button type="button" data-scenario-menu="restart" (click)="guide.askRestart()">Start again</button>
+            <gd-author-edit-bar />
           } @else if (edit.level() !== 'none') {
             <!-- A table changed by hand: its mode, Stop / Start and Reset (in place of Start again) -->
             <gd-edit-bar />

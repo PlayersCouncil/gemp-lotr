@@ -49,6 +49,11 @@ export interface EditCard {
   site?: number | null;
   /** A site's printed number (0: none printed); null for a card that is not a site. */
   printed?: number | null;
+  /** Its seat's Ring-bearer, or its seat's One Ring (the state's `ringBearer`, `ring`). Optional: absent is not. */
+  ringBearer?: boolean;
+  ring?: boolean;
+  /** The card in a puzzle's slot, by the slot's id (the author's board): changed through the slot, not by hand. */
+  slot?: string;
 }
 
 /** A site laid on the adventure path (the state's `path`). */

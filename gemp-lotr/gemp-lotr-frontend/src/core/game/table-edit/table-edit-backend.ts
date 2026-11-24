@@ -1,7 +1,7 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EditBoard, EditLevel } from './edit-board';
-import { EditOp } from './edit-ops';
+import { EditBoard, EditLevel, EditMode } from './edit-board';
+import { EditOp, EditTool } from './edit-ops';
 
 /**
  * Where the on-table edit controls' changes go, for one level (TableEdit picks the backend whose `level` the scenario's
@@ -27,6 +27,20 @@ export abstract class TableEditBackend {
   abstract reset(gameId: string): Observable<string>;
   /** Submit (a puzzle's): a fresh game built with what the level holds, which the page goes to; its id. Optional. */
   submit?(gameId: string): Observable<string>;
+  /**
+   * A level the page itself decides, not the scenario's info (the author's, while a draft is written): non-null, this
+   * backend's level is the page's, with this mode and these tools, whatever the info and the last answer said.
+   * Optional.
+   */
+  readonly claim?: Signal<BackendClaim | null>;
+  /** The table as the level knows it, as it changes (the author's: from the authoring state); TableEdit follows it. Optional. */
+  readonly liveBoard?: Signal<EditBoard | null>;
+}
+
+/** What a backend that claims the page says of it (TableEditBackend.claim). */
+export interface BackendClaim {
+  mode: EditMode;
+  tools: readonly EditTool[];
 }
 
 /**

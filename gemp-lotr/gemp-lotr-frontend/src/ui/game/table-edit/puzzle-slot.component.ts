@@ -2,6 +2,7 @@ import { Component, computed, ElementRef, inject, Injectable, input } from '@ang
 import { CardActions } from '../../../core/cards/card-actions';
 import { CardView } from '../../../core/cards/card-view';
 import { CardViews } from '../../../core/cards/card-views.service';
+import { AuthorBackend } from '../../../core/game/table-edit/author-backend';
 import { FilledSlot } from '../../../core/game/table-edit/puzzle-backend';
 import { comesText, slotLabel, slotPlace } from '../../../core/game/table-edit/puzzle-slots';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
@@ -34,6 +35,9 @@ export class PressSlot extends CardActions {
  * it has a card) with `.gd-puzzle-slot__face` holding either `button.gd-open-spot.gd-puzzle-slot__open` (`aria-label` "Fill …", `aria-expanded`) or
  * `button.gd-card.gd-puzzle-slot__card[data-blueprint]` (`aria-expanded`), then `.gd-puzzle-slot__label` and
  * `.gd-puzzle-slot__comes` when it comes with something; then `.gd-puzzle-slot__place` with `place`.
+ *
+ * On the author's table (level `author`) a slot the game in hand has no card in is drawn the same way, and pressing it
+ * opens the slot's form in the Board tab (AuthorBackend.showSlot).
  */
 @Component({
   selector: 'gd-puzzle-slot',
@@ -104,11 +108,18 @@ export class PuzzleSlotComponent {
   });
   protected readonly open = computed(() => this.popups.chooser()?.slot === this.slot().slot.id);
 
+  private readonly author = inject(AuthorBackend, { optional: true });
+
   constructor() {
     inject(PressSlot).pressed = () => this.press();
   }
 
   protected press(): void {
+    // (the author's table: an open slot is the puzzle's own, and pressing it opens its form in the Board tab)
+    if (this.author && this.edit.level() === 'author') {
+      if (this.edit.editing()) this.author.showSlot(this.slot().slot.id);
+      return;
+    }
     if (this.open()) {
       this.popups.closeChooser();
     } else if (this.edit.editing()) {

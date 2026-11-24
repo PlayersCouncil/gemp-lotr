@@ -1,5 +1,6 @@
 import { Component, computed, ElementRef, inject, linkedSignal, signal, viewChild } from '@angular/core';
 import { CardInfoService } from '../../../core/cards/card-info.service';
+import { AuthorBackend } from '../../../core/game/table-edit/author-backend';
 import { cardById, ModifyWord } from '../../../core/game/table-edit/edit-board';
 import { cardMenu, modifyOp, nameOf, UNTIL_LABELS } from '../../../core/game/table-edit/edit-menu';
 import { EditOp, ModifierUntil } from '../../../core/game/table-edit/edit-ops';
@@ -47,6 +48,9 @@ const boxOf = (element: Element): Box => {
  * is), under Control a `button[data-site-action=control][data-seat]` per seat (`data-here` for the controller) and
  * `button[data-site-action=liberate]` while it is controlled, and `button[data-menu=replace]` (Replace…: the site
  * chooser for its number).
+ *
+ * On the author's table a puzzle slot's card has only Info and `button[data-menu=slot]` (Slot…: the slot's form in the
+ * Board tab).
  */
 @Component({
   selector: 'gd-edit-menu',
@@ -221,6 +225,18 @@ const boxOf = (element: Element): Box => {
               Replace…
             </button>
           }
+        }
+        @if (slotOf(); as slot) {
+          <button
+            type="button"
+            role="menuitem"
+            data-menu="slot"
+            [title]="'The puzzle’s slot ' + slot + ': its form in the Board tab'"
+            (click)="openSlot(slot)"
+            (pointerenter)="sub.set(null)"
+          >
+            Slot…
+          </button>
         }
       </div>
 
@@ -464,7 +480,8 @@ export class CardMenuComponent {
   protected readonly menu = computed(() => {
     const board = this.edit.board();
     const card = this.card();
-    return board && card ? cardMenu(board, card, (tool) => this.edit.may(tool)) : null;
+    // (a puzzle slot's card, on the author's table, is changed through its slot: no edits of its own)
+    return board && card && card.slot === undefined ? cardMenu(board, card, (tool) => this.edit.may(tool)) : null;
   });
   protected readonly title = computed(() => this.card()?.name ?? 'Card');
 
@@ -608,5 +625,14 @@ export class CardMenuComponent {
     const at = open.point;
     const anchor = at ? { left: at.x, top: at.y, right: at.x, bottom: at.y } : open.anchor;
     this.paths?.openChooserAt(number, anchor, open.element, true);
+  }
+
+  // (the author's table: a puzzle slot's card opens its slot's form)
+  private readonly author = inject(AuthorBackend, { optional: true });
+  protected readonly slotOf = computed(() => (this.author ? (this.card()?.slot ?? null) : null));
+
+  protected openSlot(slot: string): void {
+    this.close();
+    this.author?.showSlot(slot);
   }
 }
