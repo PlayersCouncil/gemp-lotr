@@ -164,7 +164,7 @@ export class SiteChooserComponent {
   protected readonly sites = computed(() => {
     const step = this.step();
     if (step === 'start' || step === 'decks') return null;
-    return deckSites(this.edit.board(), step, this.seating.seats().human);
+    return deckSites(this.edit.board(), step, this.seating.seats().human, this.seating.looked());
   });
   protected readonly placement = computed(() => {
     const anchor = this.popups.chooser()?.anchor;

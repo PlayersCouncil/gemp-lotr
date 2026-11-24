@@ -85,7 +85,8 @@ export class GameEnding {
         if (model.spectator || model.participantId === null || this.asked) return;
         this.asked = true;
         this.replay.set({ state: 'looking' });
-        this.look(model.participantId, REPLAY_TRIES);
+        // (the replay is the person's: a page flipped to the other seat is that seat's player's page)
+        this.look(model.scenario?.info?.human ?? model.participantId, REPLAY_TRIES);
       });
     });
   }

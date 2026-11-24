@@ -439,12 +439,14 @@ const CHECKS = {
     const bound = page.locator(ui.searchBound);
     if ((await bound.textContent()).trim() !== 'a Rohan condition') problems.push('the bound is not labelled');
     const filter = await bound.getAttribute('title');
-    if (filter !== 'set:1-6 culture:ROHAN cardtype:CONDITION') problems.push(`the search's bound is "${filter}"`);
-    // The fields the bound sets are not offered: they could only widen it
-    for (const field of ['cardType', 'set', 'block']) {
-      if ((await page.locator(ui.searchField(field)).count()) > 0) problems.push(`the ${field} field is offered`);
+    const titled = 'Pool: set:1-6\nBound: culture:ROHAN cardtype:CONDITION\nPlace: cardtype:CONDITION,POSSESSION,ARTIFACT,ALLY,FOLLOWER';
+    if (filter !== titled) problems.push(`the search's bound is "${filter}"`);
+    // The server searches inside the pool and the bound, so the person's fields can only narrow it: only the card
+    // type the bound fixes is not offered (a select offering others would only confuse)
+    if ((await page.locator(ui.searchField('cardType')).count()) > 0) problems.push('the cardType field is offered');
+    for (const field of ['set', 'block']) {
+      if ((await page.locator(ui.searchField(field)).count()) === 0) problems.push(`the ${field} field is not offered`);
     }
-    if ((await page.locator(ui.searchCultures).count()) > 0) problems.push('the culture buttons are offered');
     const count = (await page.locator(ui.searchCount).textContent()).trim();
     if (!/ of \d+$/.test(count)) problems.push(`the bounded search found "${count}"`);
     // Aldor (a Rohan ally) cannot be found by the condition slot's search
@@ -667,7 +669,8 @@ const CHECKS = {
     // The site's search is held to site 2 of set 4
     await seat.search('site2');
     const filter = await page.locator(ui.searchBound).getAttribute('title');
-    if (filter !== 'set:4 cardtype:SITE sitenumber:2') problems.push(`the site slot's search is "${filter}"`);
+    if (filter !== 'Pool: set:1-5\nBound: set:4 cardtype:SITE\nPlace: cardtype:SITE sitenumber:2')
+      problems.push(`the site slot's search is "${filter}"`);
     // (every site 2 of set 4: Derndingle and Fangorn Forest, the published answers, among them)
     const found = await page.locator(ui.searchCards).evaluateAll((cards) => cards.map((card) => card.dataset.blueprint));
     if (found.length !== 7 || !found.includes('4_330') || !found.includes('4_332'))

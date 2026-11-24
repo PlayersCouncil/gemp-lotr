@@ -29,8 +29,13 @@ describe('readEditBoard', () => {
       at: null,
       site: null,
       printed: null,
+      ringBearer: false,
+      ring: false,
     });
     expect(board.piles.shadow['hand']).toBe(1);
+    // (the Ring-bearer and the Ring, as the server calls them)
+    expect(cardByAlias(board, 'frodo')).toMatchObject({ ringBearer: true, ring: false });
+    expect(cardByAlias(board, 'ring')).toMatchObject({ ringBearer: false, ring: true });
     expect(board.hiddenPilesOpen).toBe(true);
     expect(board.cultures).toContain('uruk_hai');
     expect(board.modify.words.map((word) => [word.what, word.kind, word.number])).toEqual([
@@ -83,6 +88,8 @@ describe('readEditBoard', () => {
         at: null,
         site: null,
         printed: null,
+        ringBearer: false,
+        ring: false,
       },
     ]);
     expect(odd.modify.words).toEqual([{ what: 'odd', label: 'odd', kind: 'keyword', number: 'none', types: [] }]);

@@ -142,6 +142,8 @@ export const TARGETS = [
   'src/core/game/table-edit/author-ops.ts',
   'src/core/game/table-edit/author-board.ts',
   'src/core/game/authoring/bound-check.ts',
+  'src/core/game/table-edit/table-seat.ts',
+  'src/core/game/table-edit/table-flip.service.ts',
 ];
 
 /**

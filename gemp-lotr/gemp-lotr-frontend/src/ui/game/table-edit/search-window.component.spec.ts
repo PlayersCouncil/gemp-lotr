@@ -8,14 +8,14 @@ import { SearchWindowComponent } from './search-window.component';
 const LEGOLAS: FoundCard = {
   blueprintId: '1_50',
   name: 'Legolas, Greenleaf',
-  type: 'companion',
+  type: 'COMPANION',
   culture: 'elven',
   site: false,
 };
 const ARWEN: FoundCard = {
   blueprintId: '1_30',
   name: 'Arwen, Daughter of Elrond',
-  type: 'companion',
+  type: 'COMPANION',
   culture: 'elven',
   site: false,
 };
@@ -70,7 +70,7 @@ describe('SearchWindowComponent', () => {
     expect(filter.querySelector('.gd-field[data-field="cardType"]')).toBeNull();
     expect(filter.querySelector('.gd-filter__resets')).toBeNull();
     const bound = el.querySelector<HTMLElement>('.gd-edit-search__bound')!;
-    expect([bound.textContent, bound.title]).toEqual(['Companions', 'cardType:COMPANION']);
+    expect([bound.textContent, bound.title]).toEqual(['Companions', 'Bound: cardType:COMPANION']);
     expect(el.querySelector('.gd-edit-search__count')?.textContent).toBe('');
     el.querySelector<HTMLButtonElement>('[data-action="clear"]')!.click();
     expect(search.resetAll).toHaveBeenCalled();

@@ -301,8 +301,8 @@ server is not meant to make fails the check.
 
 - **open**: the sandbox opens in edit mode: the bar says Editing with Start (and no Stop, and no Start again in the
   menu), no decision text or buttons, an open spot in each of the six rows (each seat's characters and support, the
-  minions, the hand); the context-menu key on a focused card opens its menu at Info, Down goes to Send to, Right into
-  its submenu, Left back, Escape closes it and gives the focus back to the card; Info shows the card's details.
+  minions, the hand); the context-menu key on a focused card (Frodo) opens its menu at Info, Down goes to Add (the
+  Ring-bearer has no Send to), Right into its submenu, Left back, Escape closes it and gives the focus back to the card; Info shows the card's details.
 - **add**: Legolas found by the search window with a name filter (bound to "Companions" for the characters) put among
   the characters; from Recent (Legolas first) into the hand; from In this scenario into the other seat's characters;
   after a reload the search still has its filter (bound to "Support cards" for the support) and "Clear filters" clears
@@ -312,7 +312,9 @@ server is not meant to make fails the check.
   tokens and one taken off; his own culture listed first), Modify (Strength +2 this turn, Archer with no number until
   removed, both listed on him, one taken off by its ×), Copy, Send to (the copy to the discard pile), Stack (a Goblin
   Runner on Legolas), Delete (Legolas out of the game, the Armor he bore in the discard pile).
-- **refuse**: deleting the Ring-bearer is refused, and the page says so by the card in the server's own words.
+- **refuse**: the Ring-bearer's menu offers no Send to, Stack, Copy or Delete (the server's state calls him
+  `ringBearer`); Legolas deleted behind the page's back and then deleted from his menu is refused, and the page says
+  so by the card in the server's own words.
 - **play**: Legolas added to the hand, Start: the bar says Playing, no open spots, the fellowship prompt offers
   Legolas, who is played; right-click is the card's details again; Stop (once the game can stop), an Armor added in
   edit mode, Start again.
@@ -350,6 +352,27 @@ server is not meant to make fails the check.
   scenario folder, `GEMP_SCENARIOS`, written and deleted by the check; tools add, move, copy, delete) offers no hidden
   pile (the draw decks, the other seat's hand and adventure deck do not open), no path +, no counter to change and no
   marker, control or Replace… in a site's menu, while its own discard pile's window still has its open spot.
+- **otherseat**: the edit bar's choice of who plays the other seat offers what the server's `otherSeats` does (the
+  bot only on a server that has one: the run says which); each choice set from it and read back on the server and in
+  the bar (the script's last, in play mode); the undo list has "Gave the shadow seat to you".
+- **flip**: the other seat given to the person, a Goblin Runner in its hand; Start, the fellowship passed: the server
+  waits on the Shadow seat and the alert box says "Shadow to choose" (no decision buttons, the runner not shown);
+  its Flip: the server says the page looks from Shadow, the bar says "As Shadow", the runner is in the hand at the
+  bottom and the alert box asks the Shadow action; the runner played from there (among the minions on the server);
+  "Free Peoples to choose"; the bar's Flip back, the person's own Pass offered and pressed, and play goes on.
+- **flipedit**: flipped in edit mode: the open spots are the Shadow seat's at the bottom and the person's at the top;
+  the runner by the bottom hand's spot lands in the Shadow hand, Legolas by the top characters' spot among the
+  person's characters, an Armor by the person's discard pile window in the person's discard pile, and Legolas sent to
+  the hand from his menu goes to his owner's hand, and a site laid on the path by the search is the Shadow seat's (all
+  on the server).
+- **flipback**: flipped, two cards added, then taken back to before the second: still flipped on the page and on the
+  server, the Shadow hand at the bottom; after a reload still flipped; Reset: a fresh game, unflipped (page and server).
+- **script**: the script plays the other seat (the default): with a runner in its hand it passes the Shadow phase by
+  itself (the runner stays in hand) and the page never says the other seat is to choose; flipped onto it, its hand is
+  at the bottom, no decision is offered and the alert box says "Free Peoples to choose".
+- **authorflip**: a new draft of the author's own (`check-uf-*`, never saved, closed afterwards): the authoring panel's
+  Flip turns the table to the opponent's seat ("As Shadow", the panel still docked, the draft still there, the
+  author's own decision not offered there) and back (the author's Pass offered again).
 
 Every check runs in both themes at 1366×768 (`--theme classic` or `--theme modern` for one; `--only menu,play`;
 `--verbose`). The report is `report-sandbox/` (`--out`): screenshots of the steps worth seeing and a text file per
@@ -368,9 +391,10 @@ event's slots and picks, `POST /scenarios/picks`, `GET /scenarios`, the authorin
   names both empty slots), both slots in the support row labelled as the file calls them, no sandbox open spots, no
   slots strip, no decision text or buttons, no card offered, no bubble, no Start again; no Undo button and no Revert;
   right-click on a card is its details (no card menu); the server's info says `mode: edit`, `level: puzzle`, 2 slots.
-- **bound**: the condition slot's search window: its bound labelled "a Rohan condition" with the filter
-  `set:1-6 culture:ROHAN cardtype:CONDITION` in its title; no Card Type, Set or Block field and no culture buttons
-  (they could only widen it); Aldor (a Rohan ally) is not found; the same pick sent anyway (the page's own request
+- **bound**: the condition slot's search window: its bound labelled "a Rohan condition", its title a line each for
+  the pool (`set:1-6`), the bound (`culture:ROHAN cardtype:CONDITION`) and the place's kinds; no Card Type field
+  (the bound fixes it), the Set and Block fields offered (the server searches inside the pool and the bound, each by
+  itself, so they can only narrow it); Aldor (a Rohan ally) is not found; the same pick sent anyway (the page's own request
   carrying Aldor) is refused in the server's own words, shown in the window, and nothing is put in; with Aldor and
   Parapet in Recent, the condition slot's chooser offers Parapet only (the server's word on each).
 - **fill**: Aldor from the search into the ally slot (Submit still off, its title names the condition); Armory, then
@@ -389,7 +413,8 @@ event's slots and picks, `POST /scenarios/picks`, `GET /scenarios`, the authorin
   answers clicked on the page (no Undo button after the first choices): Complete, and the panel says "You found a
   solution the author did not list."
 - **score**: puzzle 03: eight slots in the hand's row and the site slot in the strip ("Site 2"); the site's search is
-  `set:4 cardtype:SITE sitenumber:2` (the seven site 2s of set 4, Derndingle and Fangorn Forest among them);
+  held to the pool `set:1-5`, the bound `set:4 cardtype:SITE` and the place `cardtype:SITE sitenumber:2` (the seven
+  site 2s of set 4, Derndingle and Fangorn Forest among them);
   Derndingle and eight Stout and Sturdy, Submit, then a short line (the troll assigned to Sméagol as the step asks,
   passes to the first skirmish's resolution) instead of the 362 answers of the published walkthrough: Sméagol's
   strength with its value, "Best" the same and "New best", titled "Higher is better"; Play it again: the same score,

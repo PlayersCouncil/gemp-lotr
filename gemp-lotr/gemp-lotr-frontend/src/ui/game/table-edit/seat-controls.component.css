@@ -1,0 +1,50 @@
+/* The edit bar's seat controls: the other seat's player, the seat looked from, Flip */
+
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+:host([data-busy]) {
+  cursor: progress;
+}
+
+.gd-seat-controls__looking {
+  font-weight: bold;
+  color: var(--theme-game-edit-mode-edit);
+}
+
+.gd-seat-controls__other {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.gd-seat-controls__select {
+  padding: 0 2px;
+  border: 1px solid var(--theme-game-edit-field-edge);
+  border-radius: 4px;
+  background: var(--theme-game-edit-field-bg);
+  color: var(--theme-game-edit-menu-text);
+  font: inherit;
+}
+
+/* A refusal, under the bar (as the edit bar's own) */
+.gd-seat-controls__problem {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1;
+  width: max-content;
+  max-width: 340px;
+  padding: 6px 10px;
+  border: 1px solid var(--theme-game-edit-problem-edge);
+  border-radius: 6px;
+  background: var(--theme-game-edit-problem-bg);
+  color: var(--theme-game-edit-problem-text);
+  font-size: 13px;
+  line-height: 1.35;
+}

@@ -116,9 +116,9 @@ function zoneOf(card: EditCard): EditZone | null {
 /** The menu of a card, from what the level allows (`may`). */
 export function cardMenu(board: EditBoard, card: EditCard, may: (tool: EditTool) => boolean): CardMenu {
   const type = card.type.toUpperCase();
-  // (a site goes by its own edits; the Ring-bearer and the Ring are offered, and the server says why not: its words
-  // say what to do instead)
-  const fixed = type === 'SITE';
+  // (a site goes by its own edits; the Ring-bearer and the Ring stay where they are: the server refuses moving, copying
+  // or deleting either, so none of that is offered)
+  const fixed = type === 'SITE' || card.ringBearer === true || card.ring === true;
   const inPlay = onTable(card);
   const here = zoneOf(card);
   const sendTo =

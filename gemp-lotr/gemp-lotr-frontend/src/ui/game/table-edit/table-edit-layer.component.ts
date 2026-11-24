@@ -100,7 +100,7 @@ export class TableEditLayerComponent {
     const place: EditPlace | null = this.popups.search();
     if (!place) return;
     if (await this.edit.apply([addTo(found.blueprintId, place)], { x: 0, y: 0 })) {
-      this.recent.use({ blueprintId: found.blueprintId, name: found.name, type: found.type.toUpperCase() });
+      this.recent.use({ blueprintId: found.blueprintId, name: found.name, type: found.type });
       this.popups.closeSearch();
     }
   }

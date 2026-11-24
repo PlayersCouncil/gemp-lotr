@@ -4,9 +4,7 @@ import { displayName } from '../../../core/game/scenario/scenario-state';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { handRevealed, PileName } from '../../../core/game/table/game-table';
 import { GameViewState } from '../../../core/game/session/game-view-state';
-import { boardZones, sandboxPileAccess } from '../../../core/game/table-edit/edit-piles';
-import { seatOf } from '../../../core/game/table-edit/edit-seats';
-import { EditSeating } from '../../../core/game/table-edit/edit-seating.service';
+import { sandboxPileAccess } from '../../../core/game/table-edit/edit-piles';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { CounterEditComponent } from '../table-edit/counter-edit.component';
 import { clockText } from './game-clock';
@@ -40,17 +38,9 @@ interface PlayerView {
   link: boolean;
   /** The threats can be changed here (a sandbox stopped, with `counters`: the fellowship's, whose turn it is). */
   threatsEdit: boolean;
-  /**
-   * The threats as the sandbox's table has them, while they are changed here (the game's own stats are sent only as
-   * the game moves, not after an edit): with the game's limit, as the stats show it.
-   */
-  threatsNow: string;
 }
 
 const shown = (value: number | null | undefined) => (value === null || value === undefined ? '' : String(value));
-/** Threats as the stats show them: "1/3" with a limit, "1" without (-1), from the number given. */
-const threatsNow = (value: number, total: string | undefined) =>
-  total === undefined || total === '-1' ? String(value) : `${value}/${total}`;
 
 /**
  * The game state panel: each player with their clock and counters (deck, hand, threats; "+" shows the discard pile,
@@ -65,8 +55,8 @@ const threatsNow = (value: number, total: string | undefined) =>
  * In a sandbox every pile of both players opens (the hidden ones with its `piles` tool): their counters have
  * `data-link` (underlined), the hand's opens `data-pile=hand`. While it is edited with its `counters` tool, the
  * twilight pool and the threats of the player whose turn it is are `gd-edit-counter`s, and `[data-game=burdens]`
- * shows the burdens (one too). While it is edited the piles' counts are the sandbox's table's, as are the threats
- * (the game sends its own stats only as it moves).
+ * shows the burdens (one too). The counts and the threats are the game's own stats also while it is edited (the
+ * server sends them after every edit).
  */
 @Component({
   selector: 'gd-game-state',
@@ -123,7 +113,7 @@ const threatsNow = (value: number, total: string | undefined) =>
           >
           @if (player.threatsEdit) {
             <span class="gd-game-counter" data-counter="threats" [attr.data-stat]="'threats' + player.index"
-              ><gd-edit-counter counter="threats" [shown]="player.threatsNow"
+              ><gd-edit-counter counter="threats" [shown]="player.threats"
             /></span>
           } @else {
             <span class="gd-game-counter" data-counter="threats" [attr.data-stat]="'threats' + player.index">{{
@@ -254,7 +244,6 @@ export class GameStatePanelComponent {
   /** A sandbox: every pile opens; edited, its counters change here. */
   protected readonly edit = inject(TableEdit);
   protected readonly counters = computed(() => this.edit.may('counters'));
-  private readonly seating = inject(EditSeating);
   /** The players whose other piles are shown: kept with the game, so a reload shows them again. */
   protected readonly open = computed<ReadonlySet<number>>(() => new Set(this.view.openPiles()));
 
@@ -262,9 +251,7 @@ export class GameStatePanelComponent {
     const model = this.model();
     const clocks = this.clocks.view();
     return model.players.map((name, index) => {
-      // (while a sandbox is edited, its piles as its table counts them: the game's stats come only as it moves)
-      const counted = this.edit.editing() ? boardZones(this.edit.board(), seatOf(this.seating.seats(), name)) : null;
-      const zones = counted ?? model.stats?.playerZones[name];
+      const zones = model.stats?.playerZones[name];
       const threat = model.stats?.threats[name];
       const seconds = clocks.banks[name];
       const own = !model.spectator && name === model.participantId;
@@ -301,7 +288,6 @@ export class GameStatePanelComponent {
         handPile: sandbox ? (access.hand || revealed ? 'hand' : null) : revealed ? 'revealedHand' : null,
         link: sandbox,
         threatsEdit: this.counters() && name === model.currentPlayer,
-        threatsNow: threatsNow(this.edit.board()?.threats ?? 0, threat?.total),
       };
     });
   });

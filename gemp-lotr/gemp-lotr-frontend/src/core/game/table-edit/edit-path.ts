@@ -40,8 +40,14 @@ export function siteBound(number: number, numbered: boolean): SearchBound {
  * A seat's adventure deck as the board lists it, in printed number then name order; null where the board does not
  * list it (the other seat's, without the `piles` tool).
  */
-export function deckSites(board: EditBoard | null, seat: EditSeat, human: EditSeat): EditCard[] | null {
-  if (!board || (!board.hiddenPilesOpen && seat !== human)) return null;
+export function deckSites(
+  board: EditBoard | null,
+  seat: EditSeat,
+  human: EditSeat,
+  looked: EditSeat = human,
+): EditCard[] | null {
+  // (without the hidden piles the board lists the deck of the seat the person sits in, and of the one looked from)
+  if (!board || (!board.hiddenPilesOpen && seat !== human && seat !== looked)) return null;
   return board.cards
     .filter((card) => card.zone === 'adventureDeck' && card.owner === seat && card.type.toUpperCase() === 'SITE')
     .sort((a, b) => (a.printed ?? 0) - (b.printed ?? 0) || a.name.localeCompare(b.name));
@@ -57,9 +63,9 @@ export function siteFromSeat(number: number, seat: EditSeat): EditOp {
   return { op: 'site', number, from: seat };
 }
 
-/** Lays a new site card of the blueprint (the person's) at the number. */
-export function siteOfBlueprint(number: number, blueprint: string): EditOp {
-  return { op: 'site', number, blueprint };
+/** Lays a new site card of the blueprint at the number: the seat's (said; left out, the server's default, the person's). */
+export function siteOfBlueprint(number: number, blueprint: string, seat?: EditSeat): EditOp {
+  return seat === undefined ? { op: 'site', number, blueprint } : { op: 'site', number, blueprint, seat };
 }
 
 /** A seat in a site's menu: its player's name, and whether it is the seat's already (its marker, its control). */

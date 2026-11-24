@@ -1009,6 +1009,57 @@ describe('GamePageComponent in a scripted game', () => {
     expect(el.querySelector('[data-game="alert"]')?.textContent).not.toBe('');
   });
 
+  it("flips a sandbox's table: the seat looked from below, its open spots its own; the other seat's to choose", async () => {
+    const FLIPPED = {
+      ...INFO,
+      kind: 'sandbox',
+      mode: 'edit',
+      level: 'sandbox',
+      tools: ['add'],
+      canStart: true,
+      seat: 'shadow',
+      otherSeat: 'person',
+      otherSeats: ['script', 'person'],
+      waitingOn: 'freeps',
+      canFlip: true,
+    };
+    const { el, stable } = await open(TABLE + STATS + S(FLIPPED) + ACTIONS);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/state')
+      .flush({ mode: 'edit', level: 'sandbox', tools: ['add'], cards: [] });
+    await stable();
+    const spots = [...el.querySelectorAll<HTMLElement>('gd-open-spot button')].map(
+      (spot) => `${spot.dataset['seat']}.${spot.dataset['zone']}`,
+    );
+    // (looking from the shadow seat: its rows and hand at the bottom, the person's own seat at the top)
+    expect(spots).toEqual([
+      'freeps.support',
+      'freeps.characters',
+      'freeps.minions',
+      'shadow.characters',
+      'shadow.support',
+      'shadow.hand',
+    ]);
+    const bar = el.querySelector('gd-edit-bar gd-seat-controls');
+    expect(bar?.querySelector('.gd-seat-controls__looking')?.textContent?.trim()).toBe('As Shadow');
+    expect(bar?.querySelector<HTMLSelectElement>('select[data-seat-control="other"]')?.value).toBe('person');
+    // In play, the person's own seat waits: said where the decision would be, with Flip; nothing to answer here
+    el.querySelector<HTMLButtonElement>('[data-edit-bar="start"]')?.click();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/start')
+      .flush({ ok: true, state: { mode: 'play', level: 'sandbox', tools: ['add'], canStop: true, cards: [] } });
+    await stable();
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush(update(S({ ...FLIPPED, mode: 'play', canStop: true, otherSeat: 'script' })));
+    await stable();
+    expect(el.querySelector('gd-game-alert .gd-seat-waiting__text')?.textContent).toBe('Free Peoples to choose');
+    expect(el.querySelector('gd-game-alert gd-seat-waiting button[data-flip]')).not.toBeNull();
+    // (flipped onto a seat the script plays: its decision is not offered)
+    expect(el.querySelector('[data-game="alert"]')?.textContent).toBe('');
+    expect(el.querySelectorAll('button[data-decision-button]')).toHaveLength(0);
+  });
+
   it('shows a puzzle held for its picks: no decision, its slots in their rows and the strip, Choosing and Submit', async () => {
     const PUZZLE = {
       ...INFO,

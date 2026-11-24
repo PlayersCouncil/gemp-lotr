@@ -117,12 +117,14 @@ describe('a slot on the page', () => {
     expect(slotRow(slot({ zone: 'hand', seat: 'opponent' }))).toBeNull();
   });
 
-  it('searches within its bound, labelled as it is called', () => {
+  it("searches within its pool and its filter (the server's, each by itself), its place's kinds beside", () => {
     expect(slotSearch(slot())).toEqual({
-      filter: 'set:1-6 culture:ROHAN cardtype:CONDITION',
-      exact: true,
+      filter: 'culture:ROHAN cardtype:CONDITION',
+      pool: 'set:1-6',
+      with: 'cardtype:CONDITION,POSSESSION,ARTIFACT,ALLY,FOLLOWER',
       label: 'a Rohan condition',
     });
+    expect(slotSearch(slot({ filter: null, pool: null })).filter).toBe('');
   });
 
   it('says what it comes with', () => {

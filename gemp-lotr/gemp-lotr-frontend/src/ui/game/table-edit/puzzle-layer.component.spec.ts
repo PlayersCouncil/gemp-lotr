@@ -8,7 +8,7 @@ import { fakePuzzle, FakePuzzle, fakeTableEdit, FakeTableEdit, PUZZLE_SLOTS } fr
 import { PuzzleLayerComponent } from './puzzle-layer.component';
 import { PuzzlePopups } from './puzzle-popups';
 
-const PARAPET: FoundCard = { blueprintId: '5_87', name: 'Parapet', type: 'condition', culture: 'rohan', site: false };
+const PARAPET: FoundCard = { blueprintId: '5_87', name: 'Parapet', type: 'CONDITION', culture: 'rohan', site: false };
 
 describe('PuzzleLayerComponent', () => {
   let edit: FakeTableEdit;
@@ -32,7 +32,7 @@ describe('PuzzleLayerComponent', () => {
     TestBed.overrideComponent(PuzzleLayerComponent, {
       set: {
         imports: [],
-        template: `<i class="bound">{{ bound()?.filter }}|{{ bound()?.label }}|{{ heading() }}|{{ said() }}</i>
+        template: `<i class="bound">{{ bound()?.pool }}|{{ bound()?.filter }}|{{ bound()?.label }}|{{ heading() }}|{{ said() }}</i>
           @for (filled of strip(); track filled.slot.id) {<b>{{ filled.slot.id }}</b>}`,
       },
     });
@@ -47,12 +47,12 @@ describe('PuzzleLayerComponent', () => {
 
   it("holds the search window to the open slot's bound, titled by it, with its refusal", () => {
     const { fixture, el } = render();
-    expect(el.querySelector('.bound')?.textContent).toBe('||Search|');
+    expect(el.querySelector('.bound')?.textContent).toBe('|||Search|');
     popups.openSearch('condition');
     edit.problem.set({ text: 'Not that one.', at: null });
     fixture.detectChanges();
     expect(el.querySelector('.bound')?.textContent).toBe(
-      'set:1-6 culture:ROHAN cardtype:CONDITION|a Rohan condition|Fill: a Rohan condition|Not that one.',
+      'set:1-6|culture:ROHAN cardtype:CONDITION|a Rohan condition|Fill: a Rohan condition|Not that one.',
     );
   });
 

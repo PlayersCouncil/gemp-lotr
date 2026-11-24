@@ -10,6 +10,7 @@ import {
   allBlocks,
   boundFields,
   boundOmits,
+  boundText,
   CardSearch,
   CardSearchApi,
   readFields,
@@ -33,8 +34,8 @@ const PAGE = {
   total: 30,
   start: 0,
   cards: [
-    { blueprintId: '1_50', name: 'Legolas, Greenleaf', type: 'companion', culture: 'elven', site: false },
-    { blueprintId: '1_319', name: 'Bag End', type: 'site', culture: null, site: true, siteNumber: 1, twilight: null },
+    { blueprintId: '1_50', name: 'Legolas, Greenleaf', type: 'COMPANION', culture: 'elven', site: false },
+    { blueprintId: '1_319', name: 'Bag End', type: 'SITE', culture: null, site: true, siteNumber: 1, twilight: null },
     { name: 'no id' },
   ],
 };
@@ -68,20 +69,31 @@ describe('card search', () => {
     });
   });
 
-  it("writes the deck builder's filter string within the bound, the bound's own fields left to it", () => {
+  it("writes the person's own filter: the server holds it to the bound, only a fixed card type is not offered", () => {
     const fields = { ...readFields(null), name: 'son of', cardType: 'MINION', side: 'SHADOW' };
     expect(searchFilter(fields, null)).toBe('side:SHADOW cardType:MINION sort:name name:son name:of');
+    // (the bound goes to the server by itself: the person's filter can only narrow it, so only the card type it fixes,
+    // and a site number, are not offered, where a select offering others would only confuse)
     expect(boundFields({ filter: 'cardType:COMPANION', label: 'x' })).toEqual(['cardType']);
-    expect(boundFields({ filter: 'set:1 side:FREE_PEOPLE', label: 'x' })).toEqual(['side', 'set', 'block']);
-    expect(boundFields({ filter: 'block:fotr_block', label: 'x' })).toEqual(['block', 'set']);
+    expect(boundFields({ filter: 'set:1 side:FREE_PEOPLE', label: 'x' })).toEqual([]);
+    expect(boundFields({ filter: 'cardType:SITE siteNumber:3', label: 'x' })).toEqual([
+      'cardType',
+      'siteNumberCompare',
+      'siteNumberValue',
+    ]);
+    expect(boundFields({ filter: '', pool: 'set:1-6 cardtype:ALLY', label: 'x' })).toEqual(['cardType']);
     expect(boundFields(null)).toEqual([]);
     expect(searchFilter(fields, { filter: 'cardType:COMPANION', label: 'Companions' })).toBe(
-      'side:SHADOW sort:name name:son name:of cardType:COMPANION',
+      'side:SHADOW sort:name name:son name:of',
     );
   });
 
-  it("leaves every field a bound sets to the bound, whatever case it writes its keys in (a puzzle slot's)", () => {
-    const bound = { filter: 'set:1-6 Culture:ROHAN cardtype:ALLY KEYWORD:VALIANT strength:5', label: 'a Rohan ally' };
+  it("leaves every field of what is always searched with to it, whatever case it writes its keys in (a slot's place)", () => {
+    const bound = {
+      filter: '',
+      with: 'set:1-6 Culture:ROHAN cardtype:ALLY KEYWORD:VALIANT strength:5',
+      label: 'a Rohan ally',
+    };
     expect(boundFields(bound)).toEqual(['cardType', 'set', 'block', 'keyword', 'strengthCompare', 'strengthValue']);
     expect(boundOmits(bound)).toEqual([
       'cardType',
@@ -106,9 +118,17 @@ describe('card search', () => {
     expect(searchFilter(fields, bound)).toBe(
       'sort:name name:aldor set:1-6 Culture:ROHAN cardtype:ALLY KEYWORD:VALIANT strength:5',
     );
-    for (const key of ['name', 'gametext', 'phase', 'race', 'itemclass', 'signet', 'sitenumbercompare']) {
-      expect(boundFields({ filter: `${key}:X`, label: '' }).length).toBeGreaterThan(0);
+    for (const key of ['name', 'gametext', 'phase', 'race', 'itemclass', 'signet', 'sitenumbercompare', 'side']) {
+      expect(boundFields({ filter: '', with: `${key}:X`, label: '' }).length).toBeGreaterThan(0);
     }
+    expect(boundFields({ filter: '', with: 'block:fotr_block', label: 'x' })).toEqual(['block', 'set']);
+  });
+
+  it('says the bound in words, a line each for the pool, the bound and the place', () => {
+    expect(boundText({ filter: 'culture:ROHAN', pool: 'set:1-6', with: 'cardtype:ALLY', label: 'x' })).toBe(
+      'Pool: set:1-6\nBound: culture:ROHAN\nPlace: cardtype:ALLY',
+    );
+    expect(boundText({ filter: 'cardType:COMPANION', label: 'Companions' })).toBe('Bound: cardType:COMPANION');
   });
 
   it('reads a page of cards found, leaving out what is not a card', () => {
@@ -116,8 +136,8 @@ describe('card search', () => {
       total: 30,
       start: 0,
       cards: [
-        { blueprintId: '1_50', name: 'Legolas, Greenleaf', type: 'companion', culture: 'elven', site: false },
-        { blueprintId: '1_319', name: 'Bag End', type: 'site', culture: null, site: true },
+        { blueprintId: '1_50', name: 'Legolas, Greenleaf', type: 'COMPANION', culture: 'elven', site: false },
+        { blueprintId: '1_319', name: 'Bag End', type: 'SITE', culture: null, site: true },
       ],
     });
     expect(readSearchPage(null)).toEqual({ total: 0, start: 0, cards: [] });
@@ -160,7 +180,9 @@ describe('card search', () => {
       expect(search.setOptions().map((option) => option.value)).toEqual(['', '1']);
       expect(search.omitted()).toEqual(['product', 'rarity', 'cardType']);
       const { params, request } = asked();
-      expect(params.get('filter')).toBe('sort:name name:legolas cardType:COMPANION');
+      expect(params.get('filter')).toBe('sort:name name:legolas');
+      expect(params.get('bound')).toBe('cardType:COMPANION');
+      expect(params.has('pool')).toBe(false);
       expect(params.get('start')).toBe('0');
       expect(params.get('count')).toBe('18');
       expect(search.loading()).toBe(true);
@@ -170,6 +192,17 @@ describe('card search', () => {
       expect(search.previousDisabled()).toBe(true);
       expect(search.nextDisabled()).toBe(false);
       expect(search.sliderDisabled()).toBe(false);
+    });
+
+    it("sends a slot's pool and bound for the server to search with by themselves, the place's kinds in the filter", () => {
+      search.open({ filter: 'culture:ROHAN', pool: 'set:1-6', with: 'cardtype:ALLY', label: 'a Rohan ally' });
+      backend.expectOne('/gemp-lotr-server/deck/formats').flush({ Formats: {} });
+      expect(search.omitted()).toEqual(['product', 'rarity', 'cardType']);
+      const { params, request } = asked();
+      expect(params.get('filter')).toBe('sort:name name:legolas cardtype:ALLY');
+      expect(params.get('bound')).toBe('culture:ROHAN');
+      expect(params.get('pool')).toBe('set:1-6');
+      request.flush(PAGE);
     });
 
     it('goes page by page, and changes the page size', () => {

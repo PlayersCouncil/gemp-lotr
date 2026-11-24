@@ -145,6 +145,7 @@ export function fakeEditSeating() {
   return {
     seats: signal(editSeats({ participantId: 'alice', players: ['alice', '~Scenario'] }, 'freeps')),
     names: signal({ freeps: 'alice', shadow: 'Sandbox' }),
+    looked: signal<'freeps' | 'shadow'>('freeps'),
   };
 }
 

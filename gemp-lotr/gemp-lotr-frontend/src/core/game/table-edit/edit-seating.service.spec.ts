@@ -6,7 +6,7 @@ import { emptyGame, GameModel } from '../state/game-model';
 import { EditSeating } from './edit-seating.service';
 
 describe('EditSeating', () => {
-  const info = signal<{ humanSeat: 'freeps' | 'shadow' } | null>({ humanSeat: 'freeps' });
+  const info = signal<{ humanSeat: 'freeps' | 'shadow'; seat?: 'freeps' | 'shadow' } | null>({ humanSeat: 'freeps' });
   const model = signal<GameModel>(emptyGame());
 
   function seating(): EditSeating {
@@ -39,5 +39,19 @@ describe('EditSeating', () => {
     info.set(null);
     model.set(emptyGame());
     expect(seating().names()).toEqual({ freeps: 'Free Peoples', shadow: 'Shadow' });
+  });
+
+  it('follows the seat the page looks from: flipped, its own player is the other seat', () => {
+    info.set({ humanSeat: 'freeps', seat: 'shadow' });
+    model.set({
+      ...emptyGame(),
+      participantId: '~Scenario',
+      players: ['alice', '~Scenario'],
+      scenario: { info: { opponent: '~Scenario', opponentName: 'Sandbox' } } as GameModel['scenario'],
+    });
+    const seats = seating();
+    expect(seats.looked()).toBe('shadow');
+    expect(seats.seats()).toEqual({ human: 'freeps', players: { freeps: 'alice', shadow: '~Scenario' } });
+    expect(seats.names()).toEqual({ freeps: 'alice', shadow: 'Sandbox' });
   });
 });

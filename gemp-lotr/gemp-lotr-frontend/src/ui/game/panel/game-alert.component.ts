@@ -6,6 +6,7 @@ import { ThemeService } from '../../../core/platform/theme.service';
 import { GameUndo } from '../../../core/game/undo/game-undo.service';
 import { UNDO_BUTTON } from '../../../core/game/undo/undo-view';
 import { CardHintsDirective } from '../table/card-hints.directive';
+import { SeatWaitingComponent } from '../table-edit/seat-waiting.component';
 
 /** The legacy ids of the alert box's buttons. */
 const BUTTON_IDS: Readonly<Record<DecisionButton, string>> = {
@@ -29,15 +30,17 @@ const BUTTON_IDS: Readonly<Record<DecisionButton, string>> = {
  * request waits) with a `button[data-decision-button]` per button (the button's text; `data-button-id` the legacy id;
  * `data-right` on a Done that stands at the right) and `button[data-game="ended"]` once it ended; then
  * `button[data-undo=last]` ("✓ Undo", its `title` what it undoes or why it can't, disabled then and while a request
- * waits).
+ * waits). In a scripted game whose table can be flipped, `gd-seat-waiting` after the text (in its place: "Shadow to
+ * choose" with Flip, while the game waits on the seat the page does not look from).
  */
 @Component({
   selector: 'gd-game-alert',
   styleUrl: './game-alert.component.css',
-  imports: [CardHintsDirective],
+  imports: [CardHintsDirective, SeatWaitingComponent],
   host: { '[attr.data-frame]': 'decisions.view().frame', '[attr.data-undo]': "undo.button() ? '' : null" },
   template: `
     <div class="gd-game-alert__text" data-game="alert" gdCardHints [innerHTML]="decisions.view().alert"></div>
+    <gd-seat-waiting />
     <div
       class="gd-game-alert__buttons"
       data-game="alert-buttons"

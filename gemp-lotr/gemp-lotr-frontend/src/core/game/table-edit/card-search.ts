@@ -17,7 +17,7 @@ import { PageLifetime } from '../../platform/page-lifetime.service';
 export interface FoundCard {
   blueprintId: string;
   name: string;
-  /** In lower case, as the server gives it: companion, minion, site... */
+  /** The card type in capitals, as the server gives it (and the state): COMPANION, MINION, SITE... */
   type: string;
   culture: string | null;
   site: boolean;
@@ -29,10 +29,32 @@ export interface SearchPage {
   cards: readonly FoundCard[];
 }
 
-/** A search bounded by a filter of its own (a place's card types; a puzzle slot's bound): shown, never changed. */
+/**
+ * A search held inside a bound (a place's card types; a puzzle slot's filter and its puzzle's pool): shown, never
+ * changed. The server searches with the bound and the pool each by itself and gives only the cards that the person's
+ * own filter finds too (`GET scenarios/search` with `bound=` and `pool=`), so nothing the person sets can widen it.
+ */
 export interface SearchBound {
+  /** The bound, in the deck builder's filter language (`bound=`; empty: none). */
   filter: string;
   label: string;
+  /** A puzzle's pool, searched with by itself as well (`pool=`); absent: none. */
+  pool?: string | null;
+  /** Always part of the person's own filter (a puzzle slot's kinds of card and site number: the place's, not its bound). */
+  with?: string;
+}
+
+/** The bound for its title, a line each: the pool, the bound and what is always searched with, as filter text. */
+export function boundText(bound: SearchBound): string {
+  const lines: [string, string | null | undefined][] = [
+    ['Pool', bound.pool],
+    ['Bound', bound.filter],
+    ['Place', bound.with],
+  ];
+  return lines
+    .filter(([, text]) => (text ?? '').trim() !== '')
+    .map(([name, text]) => `${name}: ${(text ?? '').trim()}`)
+    .join('\n');
 }
 
 /** Where the search's last filters are remembered, on this device (a convenience: the page works without it). */
@@ -78,19 +100,32 @@ export function readFields(value: unknown): FilterFields {
   return fields as unknown as FilterFields;
 }
 
-/** The fields a bound names are its own: the search's own value for them is not sent. */
+/** The keys a filter text says, in lower case (as the deck builder's search reads them). */
+function keysOf(text: string | null | undefined): string[] {
+  return (text ?? '').split(/\s+/).map((part) => part.split(':')[0]?.toLowerCase() ?? '');
+}
+
+/**
+ * The fields of the person's filter that are not theirs under a bound: every field that what is always searched with
+ * (`with`) names, since the deck builder's search reads a key given twice as either of the two, or only the first, so
+ * the person's own value must never be sent beside it; and the card type (and a site's number) where the bound or the
+ * pool fixes it, where a select offering others would only confuse. Anything else the person may set: the server
+ * keeps the search inside the bound whatever it is.
+ */
 export function boundFields(bound: SearchBound | null): FilterFieldName[] {
-  const keys = (bound?.filter ?? '').split(/\s+/).map((part) => part.split(':')[0]?.toLowerCase() ?? '');
+  const keys = keysOf(bound?.with);
+  const fixed = [...keysOf(bound?.filter), ...keysOf(bound?.pool)];
   const names: FilterFieldName[] = [];
-  if (keys.includes('cardtype')) names.push('cardType');
+  if (keys.includes('cardtype') || fixed.includes('cardtype')) names.push('cardType');
   if (keys.includes('side')) names.push('side');
   if (keys.includes('set')) names.push('set', 'block');
   if (keys.includes('block')) names.push('block', 'set');
-  // (every other field the bound names, whatever case it writes its keys in: the deck builder's search reads a key
-  // given twice as either of the two, or only the first, so the person's own value must never be sent beside it)
   for (const [key, fields] of BOUND_KEYS) if (keys.includes(key)) names.push(...fields);
+  if (fixed.includes('sitenumber') && !names.includes('siteNumberCompare')) names.push(...SITE_NUMBER);
   return names;
 }
+
+const SITE_NUMBER: readonly FilterFieldName[] = ['siteNumberCompare', 'siteNumberValue'];
 
 /** The fields of the filter each other key of the deck builder's search sets (keys in lower case, as the server reads them). */
 const BOUND_KEYS: readonly (readonly [string, readonly FilterFieldName[]])[] = [
@@ -108,9 +143,9 @@ const BOUND_KEYS: readonly (readonly [string, readonly FilterFieldName[]])[] = [
   ),
 ];
 
-/** Whether a bound names cultures (the person's culture buttons are then not sent, and not shown). */
+/** Whether what is always searched with names cultures (the person's culture buttons are then not sent, nor shown). */
 function boundCultures(bound: SearchBound | null): boolean {
-  return /(^|\s)culture:/i.test(bound?.filter ?? '');
+  return /(^|\s)culture:/i.test(bound?.with ?? '');
 }
 
 /** What the filter panel leaves out for a bound (by its fields' `data-field` names): every field the bound sets. */
@@ -120,13 +155,13 @@ export function boundOmits(bound: SearchBound | null): string[] {
   return [...new Set([...fields, ...stats, ...(boundCultures(bound) ? ['cultures'] : [])])];
 }
 
-/** The deck builder's filter string for the fields, within the bound. */
+/** The person's own filter, as the deck builder's filter string (with what the bound always searches with). */
 export function searchFilter(fields: FilterFields, bound: SearchBound | null): string {
   const cleared: Partial<Record<FilterFieldName, string>> = {};
   for (const name of [...SEARCH_OMITS, ...boundFields(bound)]) cleared[name] = '';
   return buildFilterString(
     { ...fields, ...cleared, ...(boundCultures(bound) ? { cultures: [] } : {}) },
-    { format: null, override: bound?.filter ?? '', siteOverride: false, cardsInDeck: () => [] },
+    { format: null, override: bound?.with ?? '', siteOverride: false, cardsInDeck: () => [] },
   );
 }
 
@@ -159,11 +194,17 @@ export function readSearchPage(value: unknown): SearchPage {
 export class CardSearchApi {
   private readonly http = inject(GempHttp);
 
-  search(filter: string, start: number, count: number): Observable<SearchPage> {
+  /** The cards the filter finds, within the bound and the pool if given (each searched with by itself). */
+  search(filter: string, start: number, count: number, bound: SearchBound | null = null): Observable<SearchPage> {
+    // (an empty bound or pool is not sent: the server would read it as one that finds nothing)
+    const within = {
+      ...(bound?.filter.trim() ? { bound: bound.filter.trim() } : {}),
+      ...(bound?.pool?.trim() ? { pool: bound.pool.trim() } : {}),
+    };
     return this.http
       .getJson<unknown>(
         '/scenarios/search',
-        { filter, start: String(start), count: String(count) },
+        { filter, start: String(start), count: String(count), ...within },
         { participant: false },
       )
       .pipe(map(readSearchPage));
@@ -282,7 +323,7 @@ export class CardSearch implements CardFilterModel, CardFilterPager {
   private load(): void {
     const asked = ++this.asked;
     this.loading.set(true);
-    this.lifetime.read(this.api.search(this.filter(), this.start(), this.count()), {
+    this.lifetime.read(this.api.search(this.filter(), this.start(), this.count(), this.bound()), {
       next: (page) => {
         if (asked !== this.asked) return;
         this.loading.set(false);

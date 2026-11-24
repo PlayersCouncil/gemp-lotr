@@ -350,6 +350,14 @@ describe('ScenarioGuide', () => {
     expect(answer()).toBe('');
   });
 
+  it("holds no decision of a flipped page to the person's step: it is the other seat's decision (flip table)", () => {
+    open(S({ ...INFO, seat: 'shadow', canFlip: true }) + S(step({ allow: allow(['3']) })) + CARD_ACTIONS);
+    expect(guide.plan()).toBeNull();
+    expect(guide.cardMarks()).toEqual({});
+    click('extra8');
+    expect(answer()).toBe('13');
+  });
+
   it('takes anything for a step that allows anything', () => {
     open(S(INFO) + S(step({ messages: [message('Anything', { advance: 'decision' })] })) + CARD_ACTIONS);
     expect(guide.plan()).toBeNull();

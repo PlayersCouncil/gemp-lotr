@@ -80,7 +80,10 @@ describe('PathEditComponent', () => {
     edit.apply.mockResolvedValueOnce(false);
     (window.componentInstance as SearchWindowComponent).chosen.emit(found);
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 5, blueprint: '1_350' }], { x: 30, y: 20 });
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 5, blueprint: '1_350', seat: 'freeps' }], {
+      x: 30,
+      y: 20,
+    });
     expect(popups.search()).not.toBeNull();
     (window.componentInstance as SearchWindowComponent).chosen.emit(found);
     await fixture.whenStable();

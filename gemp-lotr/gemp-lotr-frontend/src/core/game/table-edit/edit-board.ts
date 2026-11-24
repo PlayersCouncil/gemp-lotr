@@ -49,8 +49,9 @@ export interface EditCard {
   site?: number | null;
   /** A site's printed number (0: none printed); null for a card that is not a site. */
   printed?: number | null;
-  /** Its seat's Ring-bearer, or its seat's One Ring (the state's `ringBearer`, `ring`). Optional: absent is not. */
+  /** Its seat's Ring-bearer, as the game has it (the server refuses to move, copy or delete it). */
   ringBearer?: boolean;
+  /** Its seat's One Ring (likewise). */
   ring?: boolean;
   /** The card in a puzzle's slot, by the slot's id (the author's board): changed through the slot, not by hand. */
   slot?: string;
@@ -186,6 +187,8 @@ function card(value: unknown): EditCard | null {
     at: number(json['at']),
     site: number(json['site']),
     printed: number(json['printed']),
+    ringBearer: json['ringBearer'] === true,
+    ring: json['ring'] === true,
   };
 }
 

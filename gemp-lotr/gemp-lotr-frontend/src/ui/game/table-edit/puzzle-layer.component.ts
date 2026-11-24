@@ -11,8 +11,8 @@ import { SearchWindowComponent } from './search-window.component';
 
 /**
  * What the puzzle page draws over the table while its slots are being filled: the chooser of a slot, the search
- * window held to a slot's bound (its label shown, its filter in the label's title; the person's filters can only
- * narrow it: CardSearch, slotFilter), and the slots strip: the slots whose place the table shows no row for (a place
+ * window held to a slot's bound (its label shown, its pool and filter in the label's title; the server searches
+ * inside them, so the person's filters can only narrow it: CardSearch, slotSearch), and the slots strip: the slots whose place the table shows no row for (a place
  * in a draw deck, a pile, on a card, a site, the opponent's hand), each labelled with where its card goes, at the top
  * right under the scenario's menu, so that no slot is out of reach. The slots in the table's rows are those rows'
  * (gd-game-cards). Drawn by gd-table-edit for a puzzle.
@@ -59,9 +59,7 @@ export class PuzzleLayerComponent {
   });
   protected readonly bound = computed(() => {
     const slot = this.searched();
-    if (!slot) return null;
-    const { filter, label } = slotSearch(slot);
-    return { filter, label };
+    return slot ? slotSearch(slot) : null;
   });
   protected readonly heading = computed(() => {
     const slot = this.searched();
@@ -75,7 +73,7 @@ export class PuzzleLayerComponent {
     const slot = this.searched();
     if (!slot) return;
     if (await this.edit.apply([{ op: 'pick', slot: slot.id, blueprint: found.blueprintId }], null)) {
-      this.recent.use({ blueprintId: found.blueprintId, name: found.name, type: found.type.toUpperCase() });
+      this.recent.use({ blueprintId: found.blueprintId, name: found.name, type: found.type });
       this.popups.closeSearch();
     }
   }

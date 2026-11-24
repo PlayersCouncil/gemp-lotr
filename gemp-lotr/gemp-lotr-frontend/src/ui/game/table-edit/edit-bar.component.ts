@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { CardPicker } from './card-picker';
+import { SeatControlsComponent } from './seat-controls.component';
 
 /**
  * The edit bar: whether the table is being edited or played, said plainly, with Start (edit mode to play), Stop (play
@@ -12,11 +13,12 @@ import { CardPicker } from './card-picker';
  * `.gd-edit-bar__mode` (the mode's word; `data-picking` and the instruction while picking), `button[data-edit-bar]`
  * = start (in edit mode), stop (in play mode; disabled unless the game can stop now), reset; and `.gd-edit-bar__problem`
  * (`role=alert`) with the server's words while a refusal of Stop, Start or Reset is up (TableEdit takes it away
- * after a while, or at the next change).
+ * after a while, or at the next change). After Reset, `gd-seat-controls` (who plays the other seat, Flip).
  */
 @Component({
   selector: 'gd-edit-bar',
   styleUrl: './edit-bar.component.css',
+  imports: [SeatControlsComponent],
   host: {
     '[attr.data-mode]': 'edit.mode()',
     '[attr.data-busy]': "edit.busy() ? '' : null",
@@ -60,6 +62,7 @@ import { CardPicker } from './card-picker';
       >
         Reset
       </button>
+      <gd-seat-controls />
     }
     @if (barProblem(); as problem) {
       <span class="gd-edit-bar__problem" role="alert">{{ problem }}</span>

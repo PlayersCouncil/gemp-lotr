@@ -1,3 +1,4 @@
+import { isFlipped } from '../../../core/game/table-edit/table-seat';
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -370,6 +371,7 @@ export class ScenarioLayerComponent {
       parts: step?.parts ?? {},
       humanSeat: this.guide.info()?.humanSeat ?? 'freeps',
       humanRole: this.guide.role(),
+      flipped: isFlipped(this.guide.info()),
     });
   }
 

@@ -1,0 +1,18 @@
+/* "Shadow to choose" with Flip, in the alert box where the decision's text would be (the text is empty then) */
+
+:host {
+  position: absolute;
+  inset: 0 0 auto;
+}
+
+.gd-seat-waiting {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+  padding: 2px;
+}
+
+.gd-seat-waiting__text {
+  white-space: nowrap;
+}

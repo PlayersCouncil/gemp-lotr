@@ -9,8 +9,7 @@ import { readEditBoard } from '../../../core/game/table-edit/edit-board';
 import { EditTool } from '../../../core/game/table-edit/edit-ops';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
-import { fakeEditSeating, SANDBOX_PILES_STATE } from '../../../testing/table-edit-piles';
-import { EditSeating } from '../../../core/game/table-edit/edit-seating.service';
+import { SANDBOX_PILES_STATE } from '../../../testing/table-edit-piles';
 import { CounterPopups } from '../table-edit/counter-popups';
 import { GameStatePanelComponent } from './game-state-panel.component';
 
@@ -56,7 +55,6 @@ describe('GameStatePanelComponent in a sandbox', () => {
         },
         { provide: GameViewState, useValue: { openPiles: signal([0, 1]), openPile, togglePiles: vi.fn() } },
         { provide: TableEdit, useValue: edit },
-        { provide: EditSeating, useValue: fakeEditSeating() },
         CounterPopups,
       ],
     });
@@ -132,8 +130,11 @@ describe('GameStatePanelComponent in a sandbox', () => {
     expect(stat('threats0').querySelector('gd-edit-counter')).not.toBeNull();
     expect(stat('threats1').textContent).toBe('0');
     expect(el.querySelector('[data-game="burdens"]')?.textContent).toContain('Burdens:');
-    // (the threats as the table has them: the game's stats are sent only as it moves)
-    edit.board.update((board) => board && { ...board, threats: 1 });
+    // (the threats as the game's stats have them: the server sends them after every edit)
+    model.update((now) => ({
+      ...now,
+      stats: { ...now.stats!, threats: { alice: { value: '1', total: '1' } } },
+    }));
     fixture.detectChanges();
     expect(stat('threats0').textContent.trim()).toBe('1/1');
     model.update((now) => ({
@@ -144,15 +145,15 @@ describe('GameStatePanelComponent in a sandbox', () => {
     expect(stat('threats0').textContent.trim()).toBe('1');
     model.update((now) => ({ ...now, stats: { ...now.stats!, threats: {} } }));
     fixture.detectChanges();
-    expect(stat('threats0').textContent.trim()).toBe('1');
+    expect(stat('threats0').textContent.trim()).toBe('');
   });
 
-  it("counts the piles as the sandbox's table has them while edited, as the game's stats while played", () => {
+  it("counts the piles as the game's stats have them, edited or played (the server sends them after every edit)", () => {
     const counts = (el: HTMLElement) =>
       ['deck0', 'hand0', 'discard0', 'adventureDeck1', 'removedPile1'].map((name) =>
         el.querySelector(`[data-stat="${name}"]`)?.textContent.trim(),
       );
-    expect(counts(render('sandbox', 'edit').el)).toEqual(['3', '0', '0', '2', '0']);
+    expect(counts(render('sandbox', 'edit').el)).toEqual(['2', '1', '1', '8', '0']);
     TestBed.resetTestingModule();
     expect(counts(render('sandbox', 'play').el)).toEqual(['2', '1', '1', '8', '0']);
   });
