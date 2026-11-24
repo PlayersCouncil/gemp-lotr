@@ -3,6 +3,9 @@ import { computed, signal } from '@angular/core';
 import { EditBoard, EditLevel, EditMode, readEditBoard } from '../core/game/table-edit/edit-board';
 import { EDIT_TOOLS, EditOp, EditTool } from '../core/game/table-edit/edit-ops';
 import { EditPoint, EditProblem } from '../core/game/table-edit/table-edit.service';
+import { FilledSlot, SlotCard, SlotVerdict } from '../core/game/table-edit/puzzle-backend';
+import { readPuzzleSlots } from '../core/game/table-edit/puzzle-slots';
+import { of } from 'rxjs';
 
 /** The default sandbox's state as the server sends it (es-notes.md 6, shortened), with a modifier put on Boromir. */
 export const SANDBOX_STATE = {
@@ -189,7 +192,72 @@ export function fakeTableEdit(start: { level?: EditLevel; mode?: EditMode; tools
     reset: vi.fn(() => Promise.resolve()),
     refresh: vi.fn(),
     dismissProblem: vi.fn(),
+    submit: vi.fn(),
   };
 }
 
 export type FakeTableEdit = ReturnType<typeof fakeTableEdit>;
+
+/** Puzzle 10's two slots as the scenario's info event has them (ep-notes.md P3), empty (the game held for picks). */
+export const PUZZLE_SLOTS = [
+  {
+    id: 'condition',
+    label: 'a Rohan condition',
+    zone: 'support',
+    seat: 'human',
+    on: null,
+    position: null,
+    bound: 'set:1-6 culture:ROHAN cardtype:CONDITION',
+    pool: 'set:1-6',
+    filter: 'culture:ROHAN cardtype:CONDITION',
+    overlap: [],
+    comes: { tokens: 0, wounds: 0 },
+    pick: null,
+    pickName: null,
+  },
+  {
+    id: 'ally',
+    label: 'a Rohan ally',
+    zone: 'support',
+    seat: 'human',
+    on: null,
+    position: null,
+    bound: 'set:1-6 culture:ROHAN cardtype:ALLY',
+    pool: 'set:1-6',
+    filter: 'culture:ROHAN cardtype:ALLY',
+    overlap: [],
+    comes: { tokens: 0, wounds: 0 },
+    pick: null,
+    pickName: null,
+  },
+];
+
+/**
+ * A puzzle's backend for view specs (PuzzleBackend): puzzle 10's slots, the cards held in them (`picks`), and the
+ * server's word on a candidate (`verdict`: fits unless `refuse` names it).
+ */
+export function fakePuzzle(slots: unknown[] = PUZZLE_SLOTS) {
+  const read = signal(readPuzzleSlots(slots));
+  const picks = signal<Readonly<Record<string, SlotCard>>>({});
+  const refuse = new Set<string>();
+  return {
+    slots: read,
+    picks,
+    refuse,
+    filled: computed<FilledSlot[]>(() => read().map((slot) => ({ slot, card: picks()[slot.id] ?? null }))),
+    missing: computed(() =>
+      read()
+        .filter((slot) => !picks()[slot.id])
+        .map((slot) => slot.label ?? slot.id),
+    ),
+    verdict: vi.fn((slot: string, blueprint: string) =>
+      of<SlotVerdict>(
+        refuse.has(blueprint)
+          ? { fits: false, why: `${blueprint} does not fit ${slot}.`, name: null }
+          : { fits: true, why: null, name: `Card ${blueprint}` },
+      ),
+    ),
+  };
+}
+
+export type FakePuzzle = ReturnType<typeof fakePuzzle>;

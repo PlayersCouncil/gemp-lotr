@@ -2,6 +2,7 @@ import { Provider } from '@angular/core';
 import { FormatsService } from '../../formats/formats.service';
 import { CardSearch, CardSearchApi } from './card-search';
 import { EditSeating } from './edit-seating.service';
+import { PuzzleBackend } from './puzzle-backend';
 import { RecentCards } from './recent-cards';
 import { SandboxBackend } from './sandbox-backend';
 import { TABLE_EDIT_BACKENDS } from './table-edit-backend';
@@ -22,5 +23,7 @@ export function provideTableEdit(): Provider[] {
     CardSearch,
     FormatsService,
     EditSeating,
+    PuzzleBackend,
+    { provide: TABLE_EDIT_BACKENDS, useExisting: PuzzleBackend, multi: true },
   ];
 }

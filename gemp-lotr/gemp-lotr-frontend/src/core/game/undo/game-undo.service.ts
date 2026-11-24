@@ -87,7 +87,8 @@ export class GameUndo {
    */
   readonly button = computed<{ title: string; enabled: boolean } | null>(() => {
     const latest = this.latest();
-    if (!latest) return null;
+    // (nor in a game that allows no taking back at all: a puzzle's, as its scenario has it)
+    if (!latest || !this.allowed()) return null;
     const off = latest.unavailable;
     return {
       title: off ?? `Undo: ${latest.label}`,

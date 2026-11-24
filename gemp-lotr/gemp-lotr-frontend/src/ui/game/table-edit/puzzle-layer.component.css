@@ -1,0 +1,23 @@
+/* The slots strip: the slots the table has no row for, at the top right under the scenario's menu */
+
+:host {
+  display: contents;
+}
+
+.gd-puzzle-strip {
+  --gd-card-height: 112px;
+  position: fixed;
+  top: 40px;
+  right: calc(var(--gd-page-right, 0px) + 44px);
+  z-index: 1080;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: 60vw;
+  padding: 6px 8px;
+  border: 1px solid var(--theme-game-edit-menu-edge);
+  border-radius: 8px;
+  background: var(--theme-game-edit-menu-bg);
+  box-shadow: var(--theme-game-edit-menu-shadow);
+}

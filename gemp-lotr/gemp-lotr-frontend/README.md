@@ -454,6 +454,22 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   burdens (a line of their own in edit mode) change where they are shown (`gd-edit-counter`, its box
   `gd-edit-counter-box`: −, +, Set).
 
+- **A puzzle's slots (puzzle player's page)** (`PuzzleBackend`, `puzzle-slots.ts`, `slot-filter.ts`;
+  `ui/game/table-edit/puzzle-*`): a puzzle with slots opens held (`mode: edit`, `level: puzzle`) with its slots
+  (`info.slots`) on the table: each one an open spot (or its card, once chosen) in its row, or, for a place the table
+  has no row for (a place in a draw deck, a pile, on a card, a site, the opponent's hand), in the slots strip under the
+  scenario's menu, labelled with where its card goes. Its chooser lists Recent and In this scenario held to what the
+  server says the slot takes (`POST /scenarios/picks`), and Search… opens the search window held to the slot's bound
+  (the pool and the slot's filter intersected key by key, with the kinds of card the place takes: `slotFilter`; the
+  person's filters can only narrow it). A card chosen is checked with the server and held on the page (`{op: 'pick'}`
+  through TableEdit), refused in the server's words by the slot. The puzzle bar (`gd-puzzle-bar`, in the menu):
+  Choosing and Submit (`TableEdit.submit`: `POST /scenarios/start` with the picks; the page goes to the fresh game);
+  in play Start again (`picks=same`) and Change cards (the slots empty again, asked first). The end panel adds the
+  score, the best and "New best", and a line when the solution is one the author did not list; and Change cards.
+  Undo's button follows the game's policy (off in a puzzle unless its file says `undo: on`). The authoring panel's
+  Find… beside a slot's bound and the pool opens the same search window (`BoundFinder`), whose "Use as bound" hands its
+  filter on. Checked by `npm run check:game:puzzle`.
+
 ## Tests and the visual check
 
 ```

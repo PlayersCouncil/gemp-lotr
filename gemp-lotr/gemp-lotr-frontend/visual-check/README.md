@@ -19,6 +19,9 @@ and writes its report to a `report-*` folder here.
 - **`game/sandbox.mjs`**: the sandbox on the Angular game page, its table changed by hand (the edit bar, the open
   spots, the search window, the card menu, Start and Stop, undo across edits, Reset, the end): `npm run
 check:game:sandbox`, against a game check server kept up. See [`game/README.md`](game/README.md#the-sandbox-checks).
+- **`game/puzzle.mjs`**: the puzzle player's page (a puzzle's slots, the bounded search, Submit, solved / failed /
+  scored / unlisted endings, Start again and Change cards, Undo by the file, the author's Find…): `npm run
+  check:game:puzzle`, against a game check server kept up. See [`game/README.md`](game/README.md#the-puzzle-checks).
 - **`npm run check:all`** (`tools/check-all.mjs`) runs the important checks of both.
 - **`npm run check:failed`** (`check:all --failed`) runs again only what failed in the last `check:all`: the parts
   that passed are left out, and each failed part runs only its failed scenarios (or `--checks` parts). It builds the

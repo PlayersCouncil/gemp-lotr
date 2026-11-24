@@ -11,6 +11,7 @@ import { CardPicker } from './card-picker';
 import { ChooserComponent } from './chooser.component';
 import { EditPopups } from './edit-popups';
 import { PopupPlaceDirective } from './popup-place.directive';
+import { PuzzleLayerComponent } from './puzzle-layer.component';
 import { SearchWindowComponent } from './search-window.component';
 import { TablePick } from './table-pick';
 import { PathEditComponent } from './path-edit.component';
@@ -21,6 +22,8 @@ import { CounterBoxComponent } from './counter-box.component';
  * card's menu, the search window (adding to the chooser's place, within the place's card types), the box round the
  * card under the pointer while one is picked for Attach or Stack, and a refusal said where it was asked for (the edit
  * bar says the others). The open spots themselves are their hosts' (gd-game-cards).
+ *
+ * A puzzle's (level `puzzle`) adds `gd-puzzle-layer`: its slots' chooser, search window and strip.
  *
  * DOM contract: `gd-table-edit` holding `gd-edit-chooser`, `gd-edit-menu`, `gd-edit-search`,
  * `gd-game-author-pickbox` (while picking) and, while a refusal of a control is up, `.gd-edit-problem` (`role=alert`,
@@ -39,6 +42,7 @@ import { CounterBoxComponent } from './counter-box.component';
     PopupPlaceDirective,
     PathEditComponent,
     CounterBoxComponent,
+    PuzzleLayerComponent,
   ],
   providers: [{ provide: TablePick, useExisting: CardPicker }],
   template: `
@@ -60,6 +64,10 @@ import { CounterBoxComponent } from './counter-box.component';
     }
     <gd-path-edit />
     <gd-edit-counter-box />
+    @if (edit.level() === 'puzzle') {
+      <!-- A puzzle's slots: their chooser, their search window, the slots strip -->
+      <gd-puzzle-layer />
+    }
   `,
 })
 export class TableEditLayerComponent {

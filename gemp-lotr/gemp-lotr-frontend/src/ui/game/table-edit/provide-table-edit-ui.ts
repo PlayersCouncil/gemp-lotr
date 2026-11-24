@@ -4,6 +4,8 @@ import { CardPicker } from './card-picker';
 import { EditPopups, TableEditGestures } from './edit-popups';
 import { PathPopups } from './path-popups';
 import { CounterPopups } from './counter-popups';
+import { PuzzlePopups } from './puzzle-popups';
+import { BoundFinder } from './bound-finder';
 
 /**
  * The edit controls' view state, for the game page's providers: which popup is open (EditPopups), picking a card on
@@ -17,5 +19,9 @@ export function provideTableEditUi(): Provider[] {
     { provide: CardGestures, useExisting: TableEditGestures },
     PathPopups,
     CounterPopups,
+    // (a puzzle's slots: their chooser and search window)
+    PuzzlePopups,
+    // (the card search opened to find a filter: the authoring panel's Find…)
+    BoundFinder,
   ];
 }

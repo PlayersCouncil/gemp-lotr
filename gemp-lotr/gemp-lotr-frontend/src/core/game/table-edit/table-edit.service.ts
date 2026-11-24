@@ -210,4 +210,26 @@ export class TableEdit implements DecisionGate {
       if (this.problem() === problem) this.problem.set(null);
     }, PROBLEM_MS);
   }
+
+  /**
+   * Submit (a puzzle): a fresh game built with what the level holds (the slots' cards), which the page goes to as to
+   * any fresh game of a scenario. Refused (a slot empty, a card that does not fit), the server's words are said by the
+   * edit bar. Only in edit mode, and only for a level that has it (TableEditBackend.submit).
+   */
+  submit(): void {
+    const backend = this.backend();
+    const gameId = this.session.openGame;
+    if (!backend?.submit || !gameId || !this.editing() || this.busy() || this.guide.leaving()) return;
+    this.busy.set(true);
+    this.problem.set(null);
+    this.guide.leaving.set(true);
+    this.lifetime.write(backend.submit(gameId), {
+      next: (fresh) => this.cues.go(gamePageUrl(fresh, this.acting.participantId)),
+      error: (error: unknown) => {
+        this.busy.set(false);
+        this.guide.leaving.set(false);
+        this.refuse(error, null);
+      },
+    });
+  }
 }

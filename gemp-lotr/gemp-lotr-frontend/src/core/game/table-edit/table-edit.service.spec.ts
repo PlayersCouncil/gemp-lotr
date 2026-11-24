@@ -298,4 +298,41 @@ describe('TableEdit', () => {
     expect(leaving()).toBe(false);
     expect(edit.busy()).toBe(false);
   });
+
+  it('submits a level that has Submit (a puzzle) and goes to the fresh game; or says why not; only in edit mode', () => {
+    backend.answer();
+    // (the sandbox's backend has no Submit: nothing is sent)
+    edit.submit();
+    expect(backend.asked.at(-1)).toBe('state 12');
+    const submitted = new Subject<string>();
+    Object.assign(backend, {
+      submit: (gameId: string) => {
+        backend.asked.push(`submit ${gameId}`);
+        return submitted;
+      },
+    });
+    edit.submit();
+    expect(backend.asked.at(-1)).toBe('submit 12');
+    expect(edit.busy()).toBe(true);
+    expect(leaving()).toBe(true);
+    submitted.next('14');
+    expect(go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=14');
+
+    leaving.set(false);
+    edit.busy.set(false);
+    const refused = new Subject<string>();
+    Object.assign(backend, { submit: () => refused });
+    edit.submit();
+    refused.error(new ApiError(400, 'no', { said: 'Not every slot has a card it takes.' }));
+    expect(edit.problem()).toEqual({ text: 'Not every slot has a card it takes.', at: null });
+    expect(leaving()).toBe(false);
+    expect(edit.busy()).toBe(false);
+
+    info.set({ ...INFO, mode: 'play' });
+    TestBed.tick();
+    const asked = backend.asked.length;
+    Object.assign(backend, { submit: () => submitted });
+    edit.submit();
+    expect(backend.asked.length).toBe(asked);
+  });
 });

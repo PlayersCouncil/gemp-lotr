@@ -24,6 +24,7 @@ import { AuthorSendDirective } from '../widgets/author-send.directive';
 import { CardHoverDirective } from '../widgets/card-hover.directive';
 import { FilterFieldComponent } from '../widgets/filter-field.component';
 import { BoardRenameComponent } from './board-rename.component';
+import { FindBoundComponent } from './find-bound.component';
 
 /**
  * One of a puzzle's slots in the Board tab (ep-notes.md P2), every part of it changed at once (`top: {slots}`): its id
@@ -39,7 +40,8 @@ import { BoardRenameComponent } from './board-rename.component';
  * (`.gd-author-slot__id`, `button[data-action]` rename, remove; or `gd-author-board-rename`;
  * `.gd-author-slot__pick`), then `gd-author-field`s with `input[data-part=slot-label]`,
  * `gd-author-select[data-part]` slot-zone, slot-seat, slot-on, `input[data-part=slot-position]`,
- * `gd-author-filter` (data-part=slot-filter), `input[data-part]` slot-tokens, slot-wounds.
+ * `gd-author-filter` (data-part=slot-filter) with `gd-author-find-bound` (Find…: the card search, whose "Use as bound"
+ * hands its filters to the slot), `input[data-part]` slot-tokens, slot-wounds.
  */
 @Component({
   selector: 'gd-author-board-slot',
@@ -53,6 +55,7 @@ import { BoardRenameComponent } from './board-rename.component';
     BoardRenameComponent,
     CardHoverDirective,
     FilterFieldComponent,
+    FindBoundComponent,
   ],
   template: `
     @let row = slot();
@@ -157,6 +160,7 @@ import { BoardRenameComponent } from './board-rename.component';
           [refused]="refused()"
           (sent)="bound($event)"
         />
+        <gd-author-find-bound [part]="row.id" [what]="'bound of ' + row.id" (used)="offer(row.id, $event)" />
       </gd-author-field>
       <gd-author-field
         label="Comes with"
@@ -254,6 +258,11 @@ export class BoardSlotComponent {
     const done = await this.authoring.edit(slotBoundPatch(this.state().draft, this.slot().id, typed));
     this.refused.set(done === null ? (this.authoring.problem() ?? 'Refused') : null);
     if (done !== null) this.offered.set(null);
+  }
+
+  /** A filter found with the card search (Find…): handed to this slot as any bound from outside is. */
+  protected offer(slot: string, filter: string): void {
+    this.authoring.offerSlotBound(slot, filter);
   }
 
   protected async remove(): Promise<void> {

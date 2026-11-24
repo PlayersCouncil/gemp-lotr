@@ -59,4 +59,12 @@ describe('EditPopups and TableEditGestures', () => {
     edit.mode.set('play');
     expect(gestures.menu(view({ cardId: '8' }), { element, point: null })).toBe(false);
   });
+
+  it("leaves a puzzle's cards their details: only its slots are filled", () => {
+    edit.level.set('puzzle');
+    expect(gestures.menu(view({ cardId: '7' }), { element: document.createElement('button'), point: null })).toBe(
+      false,
+    );
+    expect(popups.menu()).toBeNull();
+  });
 });

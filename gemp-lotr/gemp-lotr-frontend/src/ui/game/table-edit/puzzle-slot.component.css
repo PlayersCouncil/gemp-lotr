@@ -1,0 +1,86 @@
+/* A puzzle's slot: the open spot's look (open-spot.component.css) or the card in it, its label laid over its foot */
+
+@import './open-spot.component.css';
+
+/* (a row of the table takes no pointer itself: its cards and its slots do) */
+:host {
+  pointer-events: auto;
+}
+
+.gd-puzzle-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+}
+
+/* The card or the spot, with the label and what it comes with laid over it */
+.gd-puzzle-slot__face {
+  position: relative;
+}
+
+.gd-puzzle-slot__card {
+  cursor: pointer;
+  box-shadow: 0 0 8px 1px var(--theme-game-edit-glow);
+}
+
+.gd-puzzle-slot__card[aria-expanded='true'],
+.gd-puzzle-slot__card:focus-visible {
+  box-shadow: 0 0 14px 4px var(--theme-game-edit-glow);
+  outline: none;
+}
+
+.gd-open-spot:disabled {
+  cursor: default;
+  animation: none;
+}
+
+/* The + sits higher, leaving the foot to the label */
+.gd-puzzle-slot__open .gd-open-spot__plus {
+  inset: 0 0 30% 0;
+}
+
+.gd-puzzle-slot__label,
+.gd-puzzle-slot__comes {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  box-sizing: border-box;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--theme-game-edit-slot-label-bg);
+  color: var(--theme-game-edit-slot-label-text);
+  /* (as small as the card: a word of a label fits a small card's width) */
+  font: clamp(9px, calc(var(--gd-card-height, 120px) / 10), 12px) / 1.2 var(--theme-game-edit-font);
+  text-align: center;
+  overflow-wrap: break-word;
+  pointer-events: none;
+}
+
+.gd-puzzle-slot__label {
+  bottom: 6%;
+  max-height: 50%;
+  overflow: hidden;
+}
+
+/* Over a card, one line: the card shows */
+.gd-puzzle-slot[data-filled] .gd-puzzle-slot__label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* What its card comes with, at its head */
+.gd-puzzle-slot__comes {
+  top: 6%;
+  color: var(--theme-game-edit-mode-edit);
+  font-weight: bold;
+}
+
+/* Where its card goes, under a slot shown away from its place */
+.gd-puzzle-slot__place {
+  margin-top: 3px;
+  color: var(--theme-game-edit-menu-muted);
+  font: 11px/1.2 var(--theme-game-edit-font);
+  white-space: nowrap;
+}

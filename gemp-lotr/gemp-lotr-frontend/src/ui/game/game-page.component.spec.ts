@@ -10,6 +10,7 @@ import { By } from '@angular/platform-browser';
 import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
 import { PlayerInfo } from '../../core/session/player-info.service';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
+import { PUZZLE_SLOTS } from '../../testing/table-edit';
 import { GamePageComponent } from './game-page.component';
 import { mentionOf } from './tabs/game-chat.component';
 
@@ -1006,6 +1007,30 @@ describe('GamePageComponent in a scripted game', () => {
     expect(el.getAttribute('data-edit')).toBe('play');
     expect(el.querySelectorAll('gd-open-spot')).toHaveLength(0);
     expect(el.querySelector('[data-game="alert"]')?.textContent).not.toBe('');
+  });
+
+  it('shows a puzzle held for its picks: no decision, its slots in their rows and the strip, Choosing and Submit', async () => {
+    const PUZZLE = {
+      ...INFO,
+      kind: 'puzzle',
+      mode: 'edit',
+      level: 'puzzle',
+      undo: false,
+      slots: [...PUZZLE_SLOTS, { id: 'tale', label: 'a tale', zone: 'deck', position: 2 }],
+    };
+    const { el, stable } = await open(TABLE + STATS + S(PUZZLE) + ACTIONS);
+    await stable();
+    expect(el.getAttribute('data-edit')).toBe('edit');
+    expect(el.querySelector('[data-game="alert"]')?.textContent).toBe('');
+    expect(el.querySelectorAll('button[data-decision-button]')).toHaveLength(0);
+    expect(el.querySelectorAll('gd-open-spot')).toHaveLength(0);
+    expect(el.querySelector('nav.gd-scenario-menu gd-puzzle-bar')?.getAttribute('data-mode')).toBe('edit');
+    const inRows = [...el.querySelectorAll<HTMLElement>('.gd-game__row .gd-puzzle-slot')].map(
+      (slot) => `${slot.closest<HTMLElement>('[data-row]')?.dataset['row']}:${slot.dataset['slot']}`,
+    );
+    expect(inRows).toEqual(['support-player:condition', 'support-player:ally']);
+    expect(el.querySelector('section.gd-puzzle-strip .gd-puzzle-slot')?.getAttribute('data-slot')).toBe('tale');
+    expect(el.querySelector('section.gd-puzzle-strip .gd-puzzle-slot__place')?.textContent).toBe('Deck, 2nd');
   });
 });
 

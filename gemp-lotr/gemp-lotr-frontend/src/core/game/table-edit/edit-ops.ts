@@ -75,7 +75,9 @@ export type EditOp =
   | { op: 'site'; number: number; card: string }
   | ({ op: 'modify'; what: string; amount?: number; until?: 'phase' | 'turn' } & CardName)
   | ({ op: 'unmodify'; what?: string } & CardName)
-  | { op: 'unmodify'; id: number };
+  | { op: 'unmodify'; id: number }
+  // A puzzle's slot filled with a card (a blueprint), or emptied (null): held on the page until Submit (PuzzleBackend)
+  | { op: 'pick'; slot: string; blueprint: string | null };
 
 /** What a place is called in an edit: `freeps.characters`, `shadow.deck.bottom`. */
 export function placeTarget(place: EditPlace): string {
@@ -123,5 +125,8 @@ export function toolOf(op: EditOp): EditTool {
     case 'modify':
     case 'unmodify':
       return 'modify';
+    case 'pick':
+      // (a card put in a slot is a card added, to its slot's place)
+      return 'add';
   }
 }

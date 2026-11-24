@@ -25,6 +25,8 @@ export abstract class TableEditBackend {
   abstract start(gameId: string): Observable<EditBoard>;
   /** A fresh game of the scenario as it opened: the new game's id, which the page goes to. */
   abstract reset(gameId: string): Observable<string>;
+  /** Submit (a puzzle's): a fresh game built with what the level holds, which the page goes to; its id. Optional. */
+  submit?(gameId: string): Observable<string>;
 }
 
 /**

@@ -308,6 +308,9 @@ public class ScenarioSandbox {
         if (_points != null)
             _points.reached(entries, labels.getFirst() + (labels.size() > 1 ? " and " + (labels.size() - 1) + " more" : ""));
         _table.Journal().note(_human, EDIT, done.toString());
+        //(the numbers on the table - how many cards each pile holds, the threats - are sent as the game goes, and the
+        // game is not going: a change made while it is stopped has to send them itself)
+        game().refreshGameStats();
         return Outcome.done(added);
     }
 

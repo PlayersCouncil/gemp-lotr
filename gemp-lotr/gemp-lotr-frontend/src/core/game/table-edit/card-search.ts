@@ -86,7 +86,38 @@ export function boundFields(bound: SearchBound | null): FilterFieldName[] {
   if (keys.includes('side')) names.push('side');
   if (keys.includes('set')) names.push('set', 'block');
   if (keys.includes('block')) names.push('block', 'set');
+  // (every other field the bound names, whatever case it writes its keys in: the deck builder's search reads a key
+  // given twice as either of the two, or only the first, so the person's own value must never be sent beside it)
+  for (const [key, fields] of BOUND_KEYS) if (keys.includes(key)) names.push(...fields);
   return names;
+}
+
+/** The fields of the filter each other key of the deck builder's search sets (keys in lower case, as the server reads them). */
+const BOUND_KEYS: readonly (readonly [string, readonly FilterFieldName[]])[] = [
+  ['name', ['name']],
+  ['gametext', ['gametext']],
+  ['keyword', ['keyword']],
+  ['phase', ['phase']],
+  ['race', ['race']],
+  ['itemclass', ['itemClass']],
+  ['signet', ['signet']],
+  ...(['twilight', 'strength', 'vitality', 'resistance', 'siteNumber'] as const).flatMap((stat) =>
+    [stat.toLowerCase(), `${stat.toLowerCase()}compare`].map(
+      (key) => [key, [`${stat}Compare`, `${stat}Value`] as FilterFieldName[]] as const,
+    ),
+  ),
+];
+
+/** Whether a bound names cultures (the person's culture buttons are then not sent, and not shown). */
+function boundCultures(bound: SearchBound | null): boolean {
+  return /(^|\s)culture:/i.test(bound?.filter ?? '');
+}
+
+/** What the filter panel leaves out for a bound (by its fields' `data-field` names): every field the bound sets. */
+export function boundOmits(bound: SearchBound | null): string[] {
+  const fields = boundFields(bound);
+  const stats = fields.filter((name) => name.endsWith('Compare')).map((name) => name.replace(/Compare$/, ''));
+  return [...new Set([...fields, ...stats, ...(boundCultures(bound) ? ['cultures'] : [])])];
 }
 
 /** The deck builder's filter string for the fields, within the bound. */
@@ -94,7 +125,7 @@ export function searchFilter(fields: FilterFields, bound: SearchBound | null): s
   const cleared: Partial<Record<FilterFieldName, string>> = {};
   for (const name of [...SEARCH_OMITS, ...boundFields(bound)]) cleared[name] = '';
   return buildFilterString(
-    { ...fields, ...cleared },
+    { ...fields, ...cleared, ...(boundCultures(bound) ? { cultures: [] } : {}) },
     { format: null, override: bound?.filter ?? '', siteOverride: false, cardsInDeck: () => [] },
   );
 }
@@ -177,7 +208,7 @@ export class CardSearch implements CardFilterModel, CardFilterPager {
   /** The filter string searched with. */
   readonly filter = computed(() => searchFilter(this.fields(), this.bound()));
   /** The fields the panel leaves out: those the search has no use for, and those the bound sets. */
-  readonly omitted = computed<readonly string[]>(() => [...SEARCH_OMITS, ...boundFields(this.bound())]);
+  readonly omitted = computed<readonly string[]>(() => [...SEARCH_OMITS, ...boundOmits(this.bound())]);
 
   private asked = 0;
 
