@@ -18,7 +18,9 @@ import java.util.Set;
 public final class ScenarioDefinition {
     public enum Kind { TUTORIAL, PUZZLE, SANDBOX }
     public enum Coverage { STRICT, GUIDED }
-    public enum Fallback { FAIL, PASS, BOT, SANDBOX }
+    public enum Fallback { FAIL, PASS, BOT, SANDBOX,
+        /** Takes every optional action and response it is offered, and makes every forced choice the plainest way (see ScenarioDirector.eager). */
+        EAGER }
     public enum RngDefault { IDENTITY, RANDOM }
     public enum RunnerLevel { SETUP, PREFIX, SOLUTION, FULL }
 
@@ -619,6 +621,10 @@ public final class ScenarioDefinition {
          * fellowship surviving).  Null for as before: failed, with loseMessage.
          */
         public End gameLost;
+        /** outcome.judge: the moment at which the scenario is over, won or failed; null for none. */
+        public Judge judge;
+        /** outcome.score: a number read from the game as the scenario ends; null for an unscored scenario. */
+        public Score score;
     }
 
     /* ---- the opponent's answering by rule (assign by rule, leftovers, the sandbox) ---- */
@@ -661,5 +667,85 @@ public final class ScenarioDefinition {
             all.addAll(step.children);
         }
         return all;
+    }
+
+    /* ---- puzzles: judging at a moment, scores, undo, slots the solver fills, and the author's solutions ---- */
+
+    /** When outcome.judge looks at the game: the start of a phase, the end of one, or the end of the turn. */
+    public enum JudgeMoment { START_OF, END_OF, END_OF_TURN }
+
+    /**
+     * outcome.judge: the scenario is over at a moment of the game, won if 'win' holds then (and 'lose' does not), and
+     * failed otherwise.
+     * @param phase START_OF and END_OF: the phase; null for END_OF_TURN.
+     * @param turn Only on this turn; null for the first time the moment comes.
+     * @param win Card-definition requirements (JSON array text) that have to hold at the moment; null for "the moment
+     *            came" (a scored puzzle that is complete once it has been played to its end).
+     * @param source The moment as it was written: "endOf(archery)", "startOf(regroup), turn(2)", "endOfTurn".
+     */
+    public record Judge(JudgeMoment at, Phase phase, Integer turn, String win, String source) { }
+
+    /**
+     * outcome.score: a number read from the game as the scenario ends.
+     * @param value What to read, as a message's text quotes the game, without its braces: "strength:smeagol",
+     *              "burdens" (see Templates).  Null if valueJson says it.
+     * @param valueJson Or a value as card definitions write one ({ type: forEachWound, filter: companion }), as JSON
+     *                  text; null if value says it.
+     * @param higherBetter Whether a higher score is the better one (better: higher), or a lower (better: lower).
+     * @param label What the score is called on the page ("Sméagol's strength"); null for "Score".
+     */
+    public record Score(String value, String valueJson, boolean higherBetter, String label) { }
+
+    /** options.undo: whether the person may take back what they have done.  Null: off in a puzzle, on otherwise. */
+    public Boolean undo;
+
+    /** Whether the person may take back what they have done in a game of this scenario. */
+    public boolean undoAllowed() {
+        return undo != null ? undo : kind != Kind.PUZZLE;
+    }
+
+    /** Where a slot's card sits when the game begins: any place setup can put a card, and a site of the path. */
+    public enum SlotZone { CHARACTERS, SUPPORT, MINIONS, HAND, DECK, DISCARD, DEAD_PILE, ATTACHED, STACKED, SITE }
+
+    /**
+     * A card the solver chooses (slots: { id: { ... } }).  Its id is the name the card goes by everywhere a card's
+     * name can be written: steps, requirements, solutions, message text.
+     * @param seat Whose card it is.
+     * @param on ATTACHED and STACKED: the declared card it is attached to or stacked on; null otherwise.
+     * @param position DECK: where it is in the draw deck, counting from the top (1); null for the top.
+     * @param filter What it may be, in the deck builder's filter language ("culture:ROHAN cardtype:CONDITION"); null
+     *               for anything the puzzle's pool allows.
+     * @param tokens Culture tokens of the card's own culture it comes with.
+     * @param wounds Wounds it comes with.
+     * @param label What the page calls the slot ("a Rohan condition"); null for none.
+     */
+    public record Slot(String id, Seat seat, SlotZone zone, String on, Integer position, String filter, int tokens, int wounds, String label) { }
+
+    /** Every slot, in the order the file declares them. */
+    public final Map<String, Slot> slots = new LinkedHashMap<>();
+
+    /** pool: a deck builder filter every slot's card has to pass ("set:1-6"); null for every card. */
+    public String pool;
+
+    /**
+     * One of the author's solutions: the cards it puts in the slots, and what the person does where the script leaves
+     * the choice to them, in order.
+     * @param name What it is called, unique among the solutions.
+     * @param picks Slot id -> the blueprint picked for it.
+     * @param answers The person's answers, in the scenario's answer words, one for each of their decisions that no step
+     *                gives the runner an answer for, in the order those decisions come.  Once they run out the person
+     *                does as little as can be done (passes).
+     * @param note Whatever its author wanted to keep with it.
+     */
+    public record Solution(String name, Map<String, String> picks, List<Answer> answers, String note) { }
+
+    public final List<Solution> solutions = new ArrayList<>();
+
+    /** The solution called that; null if there is none. */
+    public Solution solution(String name) {
+        for (Solution solution : solutions)
+            if (solution.name().equals(name))
+                return solution;
+        return null;
     }
 }

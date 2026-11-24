@@ -233,6 +233,12 @@ public class ScenarioShelf {
             if (!entry.verified())
                 throw new ShelfException("It does not play through as it says it should, and so cannot be submitted"
                         + (entry.report() == null ? "." : ":\n" + entry.report()));
+            //A puzzle is known to have an answer by one of its solutions solving it (see ScenarioRunner's 'solution' level)
+            if (entry.def().kind == ScenarioDefinition.Kind.PUZZLE
+                    && (entry.report() == null || !entry.report().solutions.containsValue(null)))
+                throw new ShelfException("A puzzle is submitted with a solution that solves it, and this one "
+                        + (entry.def().solutions.isEmpty() ? "lists none.  Record one in the authoring tool (Solutions: Record)."
+                        : "has none that does:\n" + entry.report()));
             meta.status = SUBMITTED;
             meta.submittedAt = _clock.getAsLong();
             meta.feedback = null;

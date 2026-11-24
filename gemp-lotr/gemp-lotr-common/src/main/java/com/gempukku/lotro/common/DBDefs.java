@@ -171,6 +171,11 @@ public class DBDefs {
         public String problems;
         public String recording_id; //64
         public String journal;
+        public String picks; //JSON: slot id -> blueprint, for a puzzle with slots
+        public Integer score;
+        public boolean unlisted;
+        /** The player's name: filled in by the listings that show it, not a column of the table. */
+        public String player_name;
     }
 
     public static class ScenarioProgress {

@@ -163,7 +163,7 @@ public class ScenarioAuthoringPartsTest {
         open(TWO_ORDERS);
         JSONObject opponent = opponent();
         assertEquals("pass", opponent.getString("fallback"));
-        assertEquals(List.of("fail", "pass", "bot", "sandbox"), opponent.getJSONArray("fallbacks").toJavaList(String.class));
+        assertEquals(List.of("fail", "pass", "bot", "sandbox", "eager"), opponent.getJSONArray("fallbacks").toJavaList(String.class));
         assertNull(opponent.getString("leftovers"));
         assertEquals("ringBearer", opponent.getJSONArray("leftoversChoices").getString(0));
         assertTrue(opponent.getJSONArray("leftoversChoices").contains("aragorn"));

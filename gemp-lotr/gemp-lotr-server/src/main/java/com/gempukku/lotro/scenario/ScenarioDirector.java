@@ -891,7 +891,8 @@ public class ScenarioDirector {
             return null;
         if (_def.leftovers != null)
             return _def.leftovers;
-        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX && role == com.gempukku.lotro.common.Side.SHADOW)
+        if ((_def.fallback == ScenarioDefinition.Fallback.SANDBOX || _def.fallback == ScenarioDefinition.Fallback.EAGER)
+                && role == com.gempukku.lotro.common.Side.SHADOW)
             return ScenarioDefinition.RING_BEARER;
         return null;
     }
@@ -941,6 +942,9 @@ public class ScenarioDirector {
         }
         if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX)
             return sandbox(player, decision);
+        //(the eager opponent has an answer for everything: see AnswerCompiler.eagerAnswer)
+        if (_def.fallback == ScenarioDefinition.Fallback.EAGER)
+            return AnswerCompiler.eagerAnswer(decision);
         return null;
     }
 

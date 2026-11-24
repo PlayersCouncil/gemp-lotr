@@ -33,7 +33,10 @@ import java.util.regex.Pattern;
  *                                               ([[y|x]]), and [[x|words]]
  *     requirements and rules (when.require,     alias(x), the card builder's filter for one of a scenario's cards,
  *     allow.passWhen, outcome, rules, a         wherever in them it is written
- *     message's require)
+ *     message's require, outcome.judge.win)
+ *     outcome.score.value                       strength:x, as message text quotes it without its braces; or alias(x)
+ *     slots, and a solution's picks             the name itself (a slot is named as its card is); a slot's 'on'
+ *     a solution's answers                      as a step's answer
  */
 final class AliasRename {
     private static final Set<String> QUOTED = Set.of("text", "option", "raw", "title", "name");
@@ -161,10 +164,56 @@ final class AliasRename {
             JsonObject offScript = object(outcome.get("offScript"));
             if (offScript != null && offScript.get("message") != null)
                 offScript.set("message", prose(offScript.get("message")));
+            judging(outcome);
         }
+        puzzle(root);
         if (root.get("steps") != null && root.get("steps").isArray())
             for (JsonValue step : root.get("steps").asArray())
                 step(object(step));
+    }
+
+    /** outcome.judge's requirements, and outcome.score's value: strength:x as message text quotes it, or a card definition's value. */
+    private void judging(JsonObject outcome) {
+        JsonObject judge = object(outcome.get("judge"));
+        if (judge != null && judge.get("win") != null)
+            judge.set("win", filters(judge.get("win")));
+        JsonObject score = object(outcome.get("score"));
+        if (score != null && score.get("value") != null) {
+            JsonValue value = score.get("value");
+            score.set("value", value.isString() ? strings(value, text -> {
+                String inner = text.trim();
+                boolean braced = inner.startsWith("{") && inner.endsWith("}");
+                String renamed = prose(JsonValue.valueOf(braced ? inner : "{" + inner + "}")).asString();
+                return braced ? renamed : renamed.substring(1, renamed.length() - 1);
+            }) : filters(value));
+        }
+    }
+
+    /**
+     * A puzzle's slots (named as cards are: a slot is renamed as its card is) and what they are on, and its solutions:
+     * their picks (by slot) and their answers (as a step's).
+     */
+    private void puzzle(JsonObject root) {
+        JsonObject slots = object(root.get("slots"));
+        if (slots != null) {
+            JsonObject renamed = object(keys(slots));
+            for (String slot : names(renamed)) {
+                JsonObject json = object(renamed.get(slot));
+                if (json != null && json.get("on") != null)
+                    json.set("on", exact(json.get("on")));
+            }
+            root.set("slots", renamed);
+        }
+        if (root.get("solutions") != null && root.get("solutions").isArray())
+            for (JsonValue solution : root.get("solutions").asArray()) {
+                JsonObject json = object(solution);
+                if (json == null)
+                    continue;
+                if (json.get("picks") != null)
+                    json.set("picks", keys(json.get("picks")));
+                if (json.get("answers") != null)
+                    json.set("answers", terms(json.get("answers")));
+            }
     }
 
     /** What the opponent does by rule: the character it gives its leftovers to, and the cards its sandbox plays. */

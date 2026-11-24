@@ -190,6 +190,17 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
                         TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier) {
+        this(def, library, format, humanPlayer, renderer, timer, earlier, Map.of());
+    }
+
+    /**
+     * @param picks For a puzzle with slots: the cards the solver picked, slot id -> blueprint (see SlotBounds, which
+     *              is to have checked them).  Empty for none: a puzzle with slots is then laid out with them empty and
+     *              held (see Holding) until a game with picks takes its place.
+     */
+    public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
+                        TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier, Map<String, String> picks) {
+        _picks = picks == null ? Map.of() : Map.copyOf(picks);
         _def = def;
         _library = library;
         _format = format;
@@ -202,6 +213,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         _session.Listen(this);
         if (earlier != null)
             _table.Follow(earlier);
+        _table.Picks(_picks);
         _table.Prepare();
     }
 
@@ -250,8 +262,9 @@ public class LiveScenario implements ScenarioSession.Listener {
     public LiveScenario Again(GameJournal earlier) {
         if (!CanBeBuiltAgain())
             throw new IllegalStateException("A scenario's game with an author is not built again");
-        LiveScenario again = new LiveScenario(_def, _library, _format, _human, _renderer, _timer, earlier);
+        LiveScenario again = new LiveScenario(_def, _library, _format, _human, _renderer, _timer, earlier, _picks);
         again._campaign = _campaign;
+        again._previousBest = _previousBest;
         again._resumedAt = _resumedAt;
         again._takenBack = true;
         again._whenSettled.addAll(_whenSettled);
@@ -364,7 +377,7 @@ public class LiveScenario implements ScenarioSession.Listener {
             Step step = ruling.step();
             if (step != null && (step.number > _runTo || (step.number == _runTo && farEnough(step, director))))
                 return;
-            if (step == null && director.atFrontier())
+            if (step == null && director.atFrontier() && !onTape(ruling))
                 return;
             //(sent so far into a block, to a decision that none of the block's steps covers: that is where it is)
             Step at = director.currentStep();
@@ -380,6 +393,16 @@ public class LiveScenario implements ScenarioSession.Listener {
                 continue;
             }
             String answer = ruling.answer();
+            //(a solution being played: its next answer, where the script has none for the person)
+            if (onTape(ruling)) {
+                ScenarioDefinition.Answer next = _tape.get(_taped++);
+                try {
+                    answer = AnswerCompiler.compile(_table, ruling.decision(), next);
+                } catch (ScenarioScriptException exp) {
+                    _runProblem = "the solution's answer " + _taped + ", " + next.source() + ", does not fit: " + exp.getMessage();
+                    return;
+                }
+            }
             if (answer == null && step == null && !ruling.player().equals(_human) && _def.fallback != Fallback.FAIL)
                 answer = AnswerCompiler.leastAnswer(ruling.decision());
             if (answer == null) {
@@ -430,6 +453,8 @@ public class LiveScenario implements ScenarioSession.Listener {
      * Sets the game going.  To be called once, inside the game's lock, before anybody has connected.
      */
     public void Begin() {
+        //A puzzle waiting for its picks is laid out and held: nobody is asked anything (see Holding)
+        _session.Hold(Holding());
         //Until the game has got to where the person comes in (the first decision, or the end of an earlier game it
         // is repeating), nothing is shown and the opponent does not act for itself
         _table.Begin();
@@ -484,8 +509,8 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     private void act(Ruling ruling) {
         //Once the scenario is over, or about to be ended (by its last step, or for leaving its script), nothing more
-        // is shown or played: the game is ended as soon as it has stopped working
-        if (_result != null || _session.Director().end() != null || (_offScript != null && !carriesOnOffScript()))
+        // is shown or played: the game is ended as soon as it has stopped working.  (Nor, while it is held, is anything.)
+        if (_session.Holding() || _result != null || _session.Director().end() != null || (_offScript != null && !carriesOnOffScript()))
             return;
         Step step = ruling.step();
         if (ruling.problem() != null)
@@ -645,7 +670,7 @@ public class LiveScenario implements ScenarioSession.Listener {
      * as the session.)
      */
     public void AfterActions() {
-        if (_result != null || !_begun)
+        if (_result != null || !_begun || _session.Holding())
             return;
 
         if (_table.SeatingProblem() != null) {
@@ -660,6 +685,12 @@ public class LiveScenario implements ScenarioSession.Listener {
             // which is the scenario's mistake and not the person's
             problem(_table.PathEnded());
             finish(Result.ERROR, List.of(), "This scenario's adventure path has run out: " + _table.PathEnded() + ".", false, false);
+            return;
+        }
+        //The judging moment has come (outcome.judge): the scenario is over, whatever else the game has done since
+        ScenarioTable.Verdict verdict = _table.Verdict();
+        if (verdict != null) {
+            judged(verdict);
             return;
         }
         if (_table.game().isFinished()) {
@@ -707,7 +738,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         boolean won = _human.equals(_table.game().getWinnerPlayerId());
         ScenarioDefinition.End ending = won ? _def.outcome.gameWon : _def.outcome.gameLost;
         Result result = ending != null ? (ending.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED)
-                : won ? Result.COMPLETE : Result.FAILED;
+                : won || scoredToTheEnd(_def) ? Result.COMPLETE : Result.FAILED;
         List<Message> said = ending != null ? ending.messages : List.of();
         if (said.isEmpty() && won && _def.outcome.win != null && _table.Holds(_def.outcome.win, _human))
             said = _def.outcome.winMessages;
@@ -794,6 +825,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("restart", restart);
         //Whether there is a checkpoint to go back to, and if so which step it is
         event.put("checkpoint", _lastCheckpoint == 0 ? null : _lastCheckpoint);
+        puzzleEnd(result, event);
         show(END, event);
         settled(result);
 
@@ -854,6 +886,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("author", _author != null);
         //...or playing a draft of it as a player would, to see what they will see
         event.put("draftTest", _draftTest);
+        puzzleInfo(event);
         return event;
     }
 
@@ -1012,4 +1045,159 @@ public class LiveScenario implements ScenarioSession.Listener {
         }
         cards.put(alias, card.getCardId());
     }
+
+    /* ---- puzzles: the picks, holding, the judging moment, the score, unlisted solutions ---- */
+
+    /** The solver's picks this game was built with (slot id -> blueprint); empty if none. */
+    private final Map<String, String> _picks;
+    /** The person's best score before this game (scenario_progress.best_score); null if they have none. */
+    private Integer _previousBest;
+    private Integer _score;
+    private boolean _unlisted;
+
+    /** The picks this game was built with, slot id -> blueprint; empty for none. */
+    public Map<String, String> Picks() { return _picks; }
+
+    /**
+     * Whether this is a puzzle waiting for its picks: it has slots and none of them was filled.  Such a game is laid out
+     * with its slots empty and held: nobody is asked anything, the opponent does nothing, and the page is told it is
+     * in edit mode.  It is never played: a game built with the picks takes its place.  (A game with an author is not
+     * held: the author plays the draft with its slots as they are.)
+     */
+    public boolean Holding() {
+        return !_def.slots.isEmpty() && _picks.isEmpty() && _author == null;
+    }
+
+    /** The person's best score so far, for the end of the game to compare this one's with.  To be called before Begin. */
+    public void SetPreviousBest(Integer best) {
+        _previousBest = best;
+    }
+
+    /** The score this game ended with (outcome.score); null while it goes on, or for an unscored scenario. */
+    public Integer Score() { return _score; }
+
+    /**
+     * Whether this game solved its puzzle with picks that none of the author's solutions lists.  Never for a puzzle
+     * with no slots: there is nothing to compare.
+     */
+    public boolean Unlisted() { return _unlisted; }
+
+    /** A scored scenario whose own end is the end: no 'win' anywhere, so it is complete once it has been played out. */
+    static boolean scoredToTheEnd(ScenarioDefinition def) {
+        return def.outcome.score != null && def.outcome.win == null && (def.outcome.judge == null || def.outcome.judge.win() == null);
+    }
+
+    /** The judging moment has come: won or failed, as the judge found, with the scenario's usual closing words. */
+    private void judged(ScenarioTable.Verdict verdict) {
+        _score = verdict.score();
+        if (verdict.won())
+            finish(Result.COMPLETE, closing(_def.outcome.winMessages), null, false, true);
+        else
+            finish(Result.FAILED, closing(_def.outcome.loseMessages), text(_def.outcome.loseMessage), false, true);
+    }
+
+    /**
+     * What the end of a puzzle tells the page: its score ({value, label, better, best}, best counting this game's if it
+     * counts: a complete one), and whether it was solved with picks no listed solution has (unlisted).
+     */
+    private void puzzleEnd(Result result, Map<String, Object> event) {
+        ScenarioDefinition.Score scored = _def.outcome.score;
+        if (scored != null && _score == null && result != Result.ERROR && result != Result.ABANDONED)
+            _score = _table.Score();
+        if (scored == null) {
+            event.put("score", null);
+        } else {
+            Map<String, Object> score = new LinkedHashMap<>();
+            score.put("value", _score);
+            score.put("label", scored.label());
+            score.put("better", scored.higherBetter() ? "higher" : "lower");
+            Integer best = _previousBest;
+            if (result == Result.COMPLETE && _score != null)
+                best = better(scored, best, _score);
+            score.put("best", best);
+            //(whether this game's is the best so far: the page's "a new best")
+            score.put("newBest", result == Result.COMPLETE && _score != null && !_score.equals(_previousBest) && _score.equals(best));
+            event.put("score", score);
+        }
+        _unlisted = result == Result.COMPLETE && !_def.slots.isEmpty() && !_picks.isEmpty()
+                && _def.solutions.stream().noneMatch(solution -> SlotBounds.same(solution.picks(), _picks, _library));
+        event.put("unlisted", _unlisted);
+    }
+
+    /** The better of two scores, as the scenario counts better; the one that is there if the other is not. */
+    public static Integer better(ScenarioDefinition.Score scored, Integer one, Integer other) {
+        if (one == null)
+            return other;
+        if (other == null)
+            return one;
+        return scored.higherBetter() ? Math.max(one, other) : Math.min(one, other);
+    }
+
+    /**
+     * What the page is told of a puzzle in the info event: mode ("edit" while it waits for its picks, otherwise
+     * "play"), level ("puzzle" for a puzzle with slots, otherwise "none"), undo (whether taking back is allowed), and
+     * for a puzzle with slots, each slot (see slotInfo).
+     */
+    private void puzzleInfo(Map<String, Object> event) {
+        event.put("mode", Holding() ? "edit" : "play");
+        event.put("level", _def.slots.isEmpty() ? "none" : "puzzle");
+        event.put("undo", _def.undoAllowed());
+        if (!_def.slots.isEmpty())
+            event.put("slots", slotInfo(_def, _picks, _library));
+    }
+
+    /**
+     * Each slot as the page shows it: [{id, label, zone, seat, on, position, bound, pool, filter, overlap, comes:
+     * {tokens, wounds}, pick, pickName}].  'bound' is the search that finds what it may hold (the pool and the slot's
+     * filter, as one text); where the two say the same key, 'overlap' lists it, and the page searches with 'pool' and
+     * 'filter' each (see SlotBounds).  'pick' is the blueprint in it, null while it is empty.
+     */
+    public static List<Map<String, Object>> slotInfo(ScenarioDefinition def, Map<String, String> picks, LotroCardBlueprintLibrary library) {
+        List<Map<String, Object>> slots = new ArrayList<>();
+        for (ScenarioDefinition.Slot slot : def.slots.values()) {
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("id", slot.id());
+            json.put("label", slot.label());
+            json.put("zone", ScenarioParser.slotZoneName(slot.zone()));
+            json.put("seat", slot.seat() == def.human ? "human" : "opponent");
+            json.put("on", slot.on());
+            json.put("position", slot.position());
+            json.put("bound", SlotBounds.bound(def, slot));
+            json.put("pool", def.pool);
+            json.put("filter", slot.filter());
+            json.put("overlap", SlotBounds.overlap(def, slot));
+            Map<String, Object> comes = new LinkedHashMap<>();
+            comes.put("tokens", slot.tokens());
+            comes.put("wounds", slot.wounds());
+            json.put("comes", comes);
+            String pick = picks.get(slot.id());
+            json.put("pick", pick);
+            json.put("pickName", pick == null ? null : SlotBounds.nameOf(pick, library));
+            slots.add(json);
+        }
+        return slots;
+    }
+
+    /** A solution's answers, for the script playing itself to give where it has none for the person (see PlayAnswers). */
+    private List<ScenarioDefinition.Answer> _tape = List.of();
+    private int _taped;
+
+    /**
+     * Has the script, as it plays itself (RunTo), give the person these answers, one after another, wherever it has
+     * no answer of its own for them: a solution played through.  To be called before Begin, with a RunTo past the
+     * last step.
+     */
+    public void PlayAnswers(List<ScenarioDefinition.Answer> answers) {
+        _tape = answers == null ? List.of() : List.copyOf(answers);
+        _taped = 0;
+    }
+
+    /** Whether a solution's answers have the next answer to this decision (the person's, with no answer of the script's). */
+    private boolean onTape(Ruling ruling) {
+        return _taped < _tape.size() && ruling.player().equals(_human) && ruling.problem() == null
+                && (ruling.answer() == null || ruling.noAnswer() != null) && (ruling.step() == null || !ruling.step().pause);
+    }
+
+    /** How many of a solution's answers the script gave as it played itself (see PlayAnswers). */
+    public int AnswersPlayed() { return _taped; }
 }

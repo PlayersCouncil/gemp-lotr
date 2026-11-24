@@ -285,11 +285,16 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             deck.setRingBearer(_def.cards.get(ringBearer).blueprintId());
             if (ring != null)
                 deck.setRing(_def.cards.get(ring).blueprintId());
-            for (String site : _def.sites.get(seat))
-                deck.addSite(site);
+            for (int at = 0; at < _def.sites.get(seat).size(); at++)
+                deck.addSite(siteBlueprint(seat, at));
             for (CardDef card : _def.cards.values())
                 if (card.owner() == seat && !card.alias().equals(ringBearer) && !card.alias().equals(ring))
                     deck.addCard(card.blueprintId());
+            //The solver's picks, after the declared cards (so that a pick of the same card as a declared one is the
+            // later copy, and the declared card keeps its own)
+            for (ScenarioDefinition.Slot slot : _def.slots.values())
+                if (slot.seat() == seat && slot.zone() != ScenarioDefinition.SlotZone.SITE && _picks.containsKey(slot.id()))
+                    deck.addCard(_picks.get(slot.id()));
             //The format decides which version of each card is in force, the same as at a hall table
             _decks.put(Player(seat), _format.applyErrata(deck));
         }
@@ -461,6 +466,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             }
         }
         _game.getActionsEnvironment().addAlwaysOnActionProxy(new EndOfThePath());
+        if (_def.outcome.judge != null)
+            _game.getActionsEnvironment().addAlwaysOnActionProxy(new JudgingMoment());
         if (_def.oneSided && _def.markersTogether)
             _game.getActionsEnvironment().addAlwaysOnActionProxy(new MarkersTogether());
     }
@@ -570,6 +577,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             AddWoundsToChar(Card(entry.getKey()), entry.getValue());
         for (Map.Entry<String, Integer> entry : _def.setup.tokens.entrySet())
             AddTokensToCard(Card(entry.getKey()), entry.getValue());
+
+        arrangeSlots();
 
         //The burden that was bid for the first turn does not count; the scenario says how many there are.
         RemoveBurdens(GetBurdens());
@@ -817,6 +826,13 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
                     break;
                 }
             }
+            //(the solver's picks are named after their slots)
+            if (match == null)
+                for (ScenarioDefinition.Slot slot : _def.slots.values())
+                    if (match == null && slot.seat() == seat && _picks.containsKey(slot.id()) && !_aliases.containsKey(slot.id())
+                            && slot.zone() != ScenarioDefinition.SlotZone.SITE
+                            && _format.applyErrata(_picks.get(slot.id())).equals(card.getBlueprintId()))
+                        match = slot.id();
             if (match == null)
                 _problems.add("A " + card.getBlueprintId() + " in the " + seat.key() + " deck matches no card alias");
             else
@@ -832,7 +848,7 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         List<String> blueprints = _def.sites.getOrDefault(seat, List.of());
         for (int at = 0; at < aliases.size(); at++) {
             int number = at + 1;
-            String blueprint = _format.applyErrata(blueprints.get(at));
+            String blueprint = _format.applyErrata(siteBlueprint(seat, at));
             PhysicalCard found = null;
             for (PhysicalCard card : sites)
                 if (found == null && card.getBlueprintId().equals(blueprint) && !_aliases.containsValue(card))
@@ -1078,5 +1094,150 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         } catch (InvalidCardDefinitionException | ParseException exp) {
             throw new IllegalArgumentException(exp.getMessage(), exp);
         }
+    }
+
+    /* ---- puzzles: the solver's picks, the judging moment, the score ---- */
+
+    /** Slot id -> the blueprint the solver picked for it; empty for a game with its slots empty. */
+    private Map<String, String> _picks = Map.of();
+
+    /**
+     * Has the game built with these cards in the puzzle's slots (see ScenarioDefinition.Slot).  A slot with no pick
+     * stays empty.  Only before the game is prepared.
+     */
+    public void Picks(Map<String, String> picks) {
+        if (_game != null)
+            throw new IllegalStateException("The game already exists; it is too late to fill its slots");
+        _picks = picks == null ? Map.of() : Map.copyOf(picks);
+    }
+
+    /** The picks the game was built with (slot id -> blueprint); empty if none. */
+    public Map<String, String> Picks() { return _picks; }
+
+    /** A seat's site at a place in its adventure deck (from 0): the one the scenario lists, or the solver's pick for it. */
+    private String siteBlueprint(Seat seat, int at) {
+        String alias = _def.siteAliases.getOrDefault(seat, List.of()).size() > at ? _def.siteAliases.get(seat).get(at) : null;
+        ScenarioDefinition.Slot slot = alias == null ? null : _def.slots.get(alias);
+        if (slot != null && slot.zone() == ScenarioDefinition.SlotZone.SITE && _picks.containsKey(alias))
+            return _picks.get(alias);
+        return _def.sites.get(seat).get(at);
+    }
+
+    /**
+     * Puts each picked card where its slot says, with what it comes with: the same way the setup puts its cards (a
+     * placement, not a play).  A card in the draw deck is put at its place from the top once everything else is
+     * where it goes.  A site is laid with the path, as any site is.
+     */
+    private void arrangeSlots() {
+        Map<Seat, java.util.TreeMap<Integer, List<PhysicalCardImpl>>> decks = new EnumMap<>(Seat.class);
+        for (ScenarioDefinition.Slot slot : _def.slots.values()) {
+            if (!_picks.containsKey(slot.id()) || slot.zone() == ScenarioDefinition.SlotZone.SITE)
+                continue;
+            PhysicalCardImpl card = _aliases.get(slot.id());
+            if (card == null)
+                continue;
+            switch (slot.zone()) {
+                case CHARACTERS -> place(card, slot.seat(), SetupZone.CHARACTERS, false);
+                case SUPPORT -> place(card, slot.seat(), SetupZone.SUPPORT, false);
+                case MINIONS -> place(card, slot.seat(), SetupZone.MINIONS, false);
+                case HAND -> place(card, slot.seat(), SetupZone.HAND, false);
+                case DISCARD -> place(card, slot.seat(), SetupZone.DISCARD, false);
+                case DEAD_PILE -> place(card, slot.seat(), SetupZone.DEAD_PILE, false);
+                case ATTACHED -> AttachCardsTo(Card(slot.on()), card);
+                case STACKED -> StackCardsOn(Card(slot.on()), card);
+                case DECK -> decks.computeIfAbsent(slot.seat(), x -> new java.util.TreeMap<>())
+                        .computeIfAbsent(slot.position() == null ? 1 : slot.position(), x -> new ArrayList<>()).add(card);
+                default -> { }
+            }
+            if (slot.wounds() > 0)
+                AddWoundsToChar(card, slot.wounds());
+            if (slot.tokens() > 0)
+                AddTokensToCard(card, slot.tokens());
+        }
+        for (Map.Entry<Seat, java.util.TreeMap<Integer, List<PhysicalCardImpl>>> deck : decks.entrySet()) {
+            List<PhysicalCard> order = new ArrayList<>(_gameState.getDeck(Player(deck.getKey())));
+            for (List<PhysicalCardImpl> cards : deck.getValue().values())
+                order.removeAll(cards);
+            //(the shallowest first, each at its place counting from the top of the deck as it is by then)
+            for (Map.Entry<Integer, List<PhysicalCardImpl>> at : deck.getValue().entrySet())
+                for (PhysicalCardImpl card : at.getValue())
+                    order.add(Math.min(at.getKey() - 1 + at.getValue().indexOf(card), order.size()), card);
+            for (PhysicalCard card : order.reversed())
+                MoveCardsToTopOfDeck((PhysicalCardImpl) card);
+        }
+    }
+
+    /**
+     * What the scenario's judge found, at the moment it judges (outcome.judge).
+     * @param won Whether its 'win' held then and 'lose' did not.
+     * @param score The score at that moment; null for an unscored scenario.
+     * @param moment The moment, as the file says it.
+     */
+    public record Verdict(boolean won, Integer score, String moment) { }
+
+    private Verdict _verdict;
+
+    /** The judge's verdict, once its moment has come; null until then (and for a scenario with no judge). */
+    public Verdict Verdict() { return _verdict; }
+
+    /**
+     * outcome.judge: watches for its moment (a phase starting, a phase ending, the turn ending: the results the game
+     * itself announces those with, which cards answer "at the start of..." to) and judges there and then, before
+     * anything answers that moment.  The game goes on to its next rest, where whatever runs it sees the verdict and
+     * ends the scenario.  Nothing in the game is changed.
+     */
+    private class JudgingMoment extends AbstractActionProxy {
+        @Override
+        public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult result) {
+            ScenarioDefinition.Judge judge = _def.outcome.judge;
+            if (_verdict != null || !_arranged || game.getWinnerPlayerId() != null)
+                return null;
+            boolean moment = switch (judge.at()) {
+                case START_OF -> result.getType() == EffectResult.Type.START_OF_PHASE
+                        && ((com.gempukku.lotro.logic.timing.results.StartOfPhaseResult) result).getPhase() == judge.phase();
+                case END_OF -> result.getType() == EffectResult.Type.END_OF_PHASE
+                        && ((com.gempukku.lotro.logic.timing.results.EndOfPhaseResult) result).getPhase() == judge.phase();
+                case END_OF_TURN -> result.getType() == EffectResult.Type.END_OF_TURN;
+            };
+            if (!moment || (judge.turn() != null && game.getGameState().getTurnNumber() != judge.turn()))
+                return null;
+            String human = HumanPlayer();
+            boolean won = (judge.win() == null || Holds(judge.win(), human)) && (_def.outcome.lose == null || !Holds(_def.outcome.lose, human));
+            _verdict = new Verdict(won, Score(), judge.source());
+            return null;
+        }
+    }
+
+    /** The scenario's score as the game stands (outcome.score); null for an unscored scenario, or one that cannot be read now. */
+    public Integer Score() {
+        ScenarioDefinition.Score score = _def.outcome.score;
+        if (score == null || !_arranged)
+            return null;
+        try {
+            if (score.value() != null)
+                return Integer.parseInt(Templates.render(this, "{" + score.value() + "}").trim());
+            ActionContext context = new DefaultActionContext(HumanPlayer(), _game, _rulesCards.get(_def.human), null, null);
+            return value(score.valueJson()).getEvaluator(context).evaluateExpression(_game, null);
+        } catch (RuntimeException exp) {
+            _problems.add("outcome.score: could not be read: " + exp.getMessage());
+            return null;
+        }
+    }
+
+    private static final Map<String, com.gempukku.lotro.cards.build.ValueSource> VALUES = new java.util.concurrent.ConcurrentHashMap<>();
+
+    private static com.gempukku.lotro.cards.build.ValueSource value(String json) {
+        return VALUES.computeIfAbsent(json, text -> {
+            try {
+                return com.gempukku.lotro.cards.build.field.effect.appender.resolver.ValueResolver.resolveEvaluator(new JSONParser().parse(text), BUILDER);
+            } catch (InvalidCardDefinitionException | ParseException exp) {
+                throw new IllegalArgumentException(exp.getMessage(), exp);
+            }
+        });
+    }
+
+    /** @throws IllegalArgumentException if the JSON is not a value the card builder understands. */
+    public static void checkValue(String json) {
+        value(json);
     }
 }
