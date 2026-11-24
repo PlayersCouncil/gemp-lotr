@@ -9,6 +9,7 @@ import {
   LINKED_ELSEWHERE,
   NAME_TAKEN,
   NO_PC_ACCOUNT,
+  NOT_ALLOWED,
   NOT_LINKED,
   pageLine,
   PC_CANCELLED,
@@ -22,6 +23,7 @@ import {
   signedInAs,
   SLOW_DOWN,
   UNAVAILABLE,
+  WRONG_PASSWORD,
 } from './pc-account-messages';
 
 const ERRORS = JSON.parse(readServerResponse('argonauth-errors.json')) as Record<PcAction, [number, string][]>;
@@ -31,7 +33,7 @@ describe('the PC account refusals', () => {
     const worded = Object.entries(ERRORS).flatMap(([action, errors]) =>
       errors
         .filter(([, code]) => code !== 'reauth')
-        .map(([status, code]) => refusalMessage(refusalCode(action as PcAction, status, code))),
+        .map(([status, code]) => refusalMessage(refusalCode(action as PcAction, status, code), action as PcAction)),
     );
     expect(worded).not.toContain(ACTION_FAILED);
     expect(new Set(worded)).toEqual(
@@ -46,8 +48,18 @@ describe('the PC account refusals', () => {
         SLOW_DOWN,
         BAD_CREDENTIALS,
         LINKED_ELSEWHERE,
+        WRONG_PASSWORD,
+        NOT_ALLOWED,
       ]),
     );
+  });
+
+  it("words Connect's wrong password as the account's own, and the other actions' as before", () => {
+    expect(refusalMessage('bad-credentials', 'connect')).toBe(WRONG_PASSWORD);
+    expect(refusalMessage('bad-credentials', 'link')).toBe(BAD_CREDENTIALS);
+    expect(refusalMessage('bad-credentials')).toBe(BAD_CREDENTIALS);
+    expect(refusalMessage('slow-down', 'connect')).toBe(SLOW_DOWN);
+    expect(refusalCode('connect', 403, null)).toBe('not-allowed');
   });
 
   it("tells the codes that share a status apart by the server's code", () => {
@@ -89,7 +101,9 @@ describe('pcNotice', () => {
 describe('the alias list wording', () => {
   it('names the account, the busy alias and the page', () => {
     expect(signedInAs('Frodo Baggins')).toBe('Signed in as Frodo Baggins');
-    expect(blockedReason('Underhill')).toBe('Underhill is still playing: only it can be entered.');
+    expect(blockedReason('Underhill')).toBe(
+      'Underhill is in a game, queue, table or tournament: finish or leave it to switch.',
+    );
     expect(pageLine(2, 3)).toBe('Page 2 of 3');
   });
 });

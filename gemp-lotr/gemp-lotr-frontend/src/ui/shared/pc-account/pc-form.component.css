@@ -1,0 +1,44 @@
+/*
+ * A PC account form in place: on the login page in its text and buttons (login-page.component.css), on My Account as
+ * the rest of that page. Classic theme values only, reused.
+ */
+
+:host {
+  display: block;
+  margin: 0.5em 0;
+}
+
+.gd-pc-form__field {
+  display: block;
+  margin: 0.3em 0;
+}
+
+.gd-pc-form__label {
+  display: inline-block;
+  min-width: 6em;
+}
+
+.gd-pc-form__error {
+  margin: 0.3em 0;
+}
+
+:host([data-place='login']) .gd-pc-form__error {
+  color: var(--theme-login-error);
+}
+
+:host([data-place='account']) .gd-pc-form__error {
+  color: var(--theme-account-load-error);
+}
+
+.gd-pc-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.5em 0;
+}
+
+/* The login page's fields (login-page.component.css .gd-login__input); the buttons' sizes are controls.css's */
+:host([data-place='login']) .gd-pc-form__input {
+  font-size: 90%;
+}

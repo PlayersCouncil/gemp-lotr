@@ -77,42 +77,10 @@
 }
 
 .gd-alias-list__pager,
-.gd-alias-list__actions,
-.gd-alias-list__form-actions {
+.gd-alias-list__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.4em;
   margin: 0.5em 0;
-}
-
-.gd-alias-list__form {
-  margin: 0.5em 0;
-}
-
-.gd-alias-list__field {
-  display: block;
-  margin: 0.3em 0;
-}
-
-.gd-alias-list__label {
-  display: inline-block;
-  min-width: 6em;
-}
-
-/* As the login page's buttons and fields there (login-page.component.css .gd-button, .gd-login__input) */
-:host([data-place='login']) .gd-button {
-  padding: 7.46875px 11.203125px;
-  font-size: 15.4px;
-  line-height: 1.4;
-}
-
-:host([data-place='login']) .gd-alias-list__input {
-  font-size: 90%;
-}
-
-/* As My Account's native-looking buttons, in the widget font */
-:host([data-place='account']) .gd-button {
-  padding: 0.3em 0.8em;
-  font-size: 1em;
 }

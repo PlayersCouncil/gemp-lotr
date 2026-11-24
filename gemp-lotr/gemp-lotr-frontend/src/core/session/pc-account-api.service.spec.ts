@@ -74,6 +74,14 @@ describe('PcAccountApi', () => {
     await expect(all).resolves.toBe('');
   });
 
+  it('connects with the password and gives where to go next', async () => {
+    const result = firstValueFrom(api.connect('p&w'));
+    const request = expectPost('/connect');
+    expect(body(request)).toBe('password=p%26w');
+    request.flush(readServerResponse('argonauth-connect.json'));
+    await expect(result).resolves.toMatch(/^https:\/\/auth\.lotrtcgpc\.net\/authorize\?/);
+  });
+
   it("gives a refusal as an ApiError with the server's code", async () => {
     const result = firstValueFrom(api.create('Frodo'));
     expectPost('/create').flush('{"error": "name-taken"}', { status: 409, statusText: 'Conflict' });

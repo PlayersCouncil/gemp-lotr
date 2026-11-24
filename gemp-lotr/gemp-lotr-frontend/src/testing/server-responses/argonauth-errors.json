@@ -22,5 +22,11 @@
     [409, "linked-elsewhere"],
     [429, "slow-down"],
     [503, "unavailable"]
+  ],
+  "connect": [
+    [401, "bad-credentials"],
+    [429, "slow-down"],
+    [403, "not-allowed"],
+    [503, "unavailable"]
   ]
 }

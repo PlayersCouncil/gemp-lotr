@@ -1,11 +1,11 @@
 {
   "mode": "optional",
-  "player": "Frodo",
+  "player": "Underhill",
   "pcAccount": { "name": "Frodo Baggins", "manageUrl": "https://auth.lotrtcgpc.net/", "fresh": true },
   "linked": true,
   "aliases": [
-    { "id": 900001, "name": "Frodo", "current": true, "busy": false },
-    { "id": 900002, "name": "Underhill", "current": false, "busy": true }
+    { "id": 900001, "name": "Frodo", "current": false, "busy": false },
+    { "id": 900002, "name": "Underhill", "current": true, "busy": true }
   ],
   "blockedBy": "Underhill"
 }

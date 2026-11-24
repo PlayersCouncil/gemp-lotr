@@ -73,6 +73,25 @@ export class PcSessionService {
     return this.act('link', this.api.link(login, password), () => undefined);
   }
 
+  /**
+   * Connect PC Account, for a password login not linked: the account's password, then (a full navigation) the PC
+   * sign-in the server names, which comes back to My Account (`?pc=`). A refusal is given back; `not-allowed` means
+   * this browser is no password login any more, and the session asked for again shows what it is.
+   */
+  async connect(password: string): Promise<Refusal | null> {
+    try {
+      const next = await firstValueFrom(this.api.connect(password));
+      if (next === '') throw new Error('No address to go to');
+      this.navigation.go(next);
+      return null;
+    } catch (error) {
+      void this.refresh();
+      const failure = ApiError.from(error);
+      const code = refusalCode('connect', failure.status, failure.said);
+      return { code, message: refusalMessage(code, 'connect') };
+    }
+  }
+
   /** Enter Gemp for a password login: already logged in as it, so straight to the page. */
   enterLoggedIn(): void {
     this.navigation.go(loginTarget(this.queryString));
@@ -95,7 +114,11 @@ export class PcSessionService {
     this.navigation.go(pcSignInAddress(then, returnPath(this.queryString)));
   }
 
-  private async act(action: PcAction, call: Observable<PcSession>, done: () => void): Promise<Refusal | null> {
+  private async act(
+    action: Exclude<PcAction, 'connect'>,
+    call: Observable<PcSession>,
+    done: () => void,
+  ): Promise<Refusal | null> {
     try {
       this.show(await firstValueFrom(call));
       done();
@@ -108,7 +131,7 @@ export class PcSessionService {
       }
       void this.refresh();
       const code = refusalCode(action, failure.status, failure.said);
-      return { code, message: refusalMessage(code) };
+      return { code, message: refusalMessage(code, action) };
     }
   }
 

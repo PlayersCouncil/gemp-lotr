@@ -7,7 +7,7 @@ import { SessionChannel } from '../platform/hall-tab.service';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageNavigation } from '../platform/page-navigation';
 import { NO_PC_SESSION } from './pc-account';
-import { NAME_TAKEN, NOT_LINKED, UNAVAILABLE } from './pc-account-messages';
+import { NAME_TAKEN, NOT_ALLOWED, NOT_LINKED, UNAVAILABLE, WRONG_PASSWORD } from './pc-account-messages';
 import { PcSessionService } from './pc-session.service';
 
 class FakeNavigation {
@@ -110,7 +110,7 @@ describe('PcSessionService', () => {
     const result = pc.create('Merry');
     expectPost('/create').flush(readServerResponse('argonauth-session.json'));
     expect(await result).toBeNull();
-    expect(pc.session()?.player).toBe('Frodo');
+    expect(pc.session()?.player).toBe('Underhill');
     expect(channel.announced).toBe(1);
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
   });
@@ -166,6 +166,44 @@ describe('PcSessionService', () => {
       '/gemp-lotr-server/argonauth/login?then=create&return=%2Fdeckbuilder',
       '/gemp-lotr-server/argonauth/login?then=link&return=%2Fdeckbuilder',
     ]);
+  });
+
+  it('connects a password login: the password, then the PC sign-in the server names', async () => {
+    setUp();
+    await loaded('argonauth-session-password.json');
+    const result = pc.connect('secret');
+    const request = expectPost('/connect');
+    expect(request.request.body.toString()).toBe('password=secret');
+    request.flush(readServerResponse('argonauth-connect.json'));
+    expect(await result).toBeNull();
+    expect(navigation.visited).toEqual([JSON.parse(readServerResponse('argonauth-connect.json')).next]);
+    expect(channel.announced).toBe(0);
+  });
+
+  it("gives Connect's refusals their wording, and asks for the session again", async () => {
+    setUp();
+    await loaded('argonauth-session-password.json');
+    const wrong = pc.connect('nope');
+    refuse(expectPost('/connect'), 401, 'bad-credentials');
+    await settle();
+    expectSession().flush(readServerResponse('argonauth-session-password.json'));
+    expect(await wrong).toEqual({ code: 'bad-credentials', message: WRONG_PASSWORD });
+
+    const notAllowed = pc.connect('x');
+    refuse(expectPost('/connect'), 403, 'not-allowed');
+    await settle();
+    expectSession().flush(readServerResponse('argonauth-session-aliases.json'));
+    expect(await notAllowed).toEqual({ code: 'not-allowed', message: NOT_ALLOWED });
+    await settle();
+    expect(pc.kind()).toBe('pc');
+
+    // An answer without an address goes nowhere
+    const empty = pc.connect('x');
+    expectPost('/connect').flush('{}');
+    await settle();
+    expectSession().flush(readServerResponse('argonauth-session-password.json'));
+    expect((await empty)?.code).toBeNull();
+    expect(navigation.visited).toEqual([]);
   });
 
   it('goes straight to the page for a password login', () => {

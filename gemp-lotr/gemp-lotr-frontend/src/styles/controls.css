@@ -106,3 +106,20 @@
 .gd-slider:focus {
   outline: none;
 }
+
+/*
+ * The PC account's buttons (ui/shared/pc-account: the alias list and its forms; My Account's Connect PC Account): on
+ * the login page as its own
+ * (login-page.component.css .gd-button), on My Account as that page's native-looking ones
+ */
+:is(.gd-alias-list, .gd-pc-form)[data-place='login'] .gd-button {
+  padding: 7.46875px 11.203125px;
+  font-size: 15.4px;
+  line-height: 1.4;
+}
+
+:is(.gd-alias-list, .gd-pc-form)[data-place='account'] .gd-button,
+.gd-pc-account-block__connect {
+  padding: 0.3em 0.8em;
+  font-size: 1em;
+}

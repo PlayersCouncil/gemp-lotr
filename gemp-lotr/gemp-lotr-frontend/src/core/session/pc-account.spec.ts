@@ -15,12 +15,12 @@ describe('parsePcSession', () => {
   it("reads PC-ACCOUNT.md's example", () => {
     expect(session('argonauth-session.json')).toEqual({
       mode: 'optional',
-      player: 'Frodo',
+      player: 'Underhill',
       pcAccount: { name: 'Frodo Baggins', manageUrl: 'https://auth.lotrtcgpc.net/', fresh: true },
       linked: true,
       aliases: [
-        { id: 900001, name: 'Frodo', current: true, busy: false },
-        { id: 900002, name: 'Underhill', current: false, busy: true },
+        { id: 900001, name: 'Frodo', current: false, busy: false },
+        { id: 900002, name: 'Underhill', current: true, busy: true },
       ],
       blockedBy: 'Underhill',
     });
@@ -74,13 +74,13 @@ describe('sessionKind', () => {
 });
 
 describe('canEnter', () => {
-  it('lets only the busy alias be entered while another is busy', () => {
+  it("lets only this browser's alias be entered while it is busy", () => {
     const blocked = session('argonauth-session.json');
     expect(canEnter(blocked, blocked.aliases[0])).toBe(false);
     expect(canEnter(blocked, blocked.aliases[1])).toBe(true);
-    // The alias played can be the busy one: then it alone can be entered
-    const playing = { ...blocked, blockedBy: 'Frodo' };
-    expect(playing.aliases.map((alias) => canEnter(playing, alias))).toEqual([true, false]);
+    // An alias busy in another browser gates nothing here
+    const elsewhere = { ...blocked, player: 'Frodo', blockedBy: null };
+    expect(elsewhere.aliases.every((alias) => canEnter(elsewhere, alias))).toBe(true);
     const free = session('argonauth-session-aliases.json');
     expect(free.aliases.every((alias) => canEnter(free, alias))).toBe(true);
   });
@@ -101,7 +101,7 @@ describe('isAliasName', () => {
 describe('pcSignInAddress', () => {
   it("is the server's sign-in, with what it is for and where to come back to", () => {
     expect(pcSignInAddress()).toBe('/gemp-lotr-server/argonauth/login');
-    expect(pcSignInAddress('connect')).toBe('/gemp-lotr-server/argonauth/login?then=connect');
+    expect(pcSignInAddress('link')).toBe('/gemp-lotr-server/argonauth/login?then=link');
     expect(pcSignInAddress(null, '/events/leagues')).toBe(
       '/gemp-lotr-server/argonauth/login?return=%2Fevents%2Fleagues',
     );
