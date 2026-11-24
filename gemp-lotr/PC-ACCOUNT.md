@@ -220,3 +220,5 @@ be recorded at Argonauth is taken back, and its name with it.
   place.
 - **`origin.allowed.pattern=^.*$`** in the default properties.
 - **The legacy Admin tab** still runs in `hall-legacy.html` (see `gemp-lotr-frontend/HALL-PORT.md`).
+- **`login-legacy.html`**, kept until it is removed, still offers Register. In `optional` the server refuses it
+  (403) and the page says nothing. Nothing links to that page.
