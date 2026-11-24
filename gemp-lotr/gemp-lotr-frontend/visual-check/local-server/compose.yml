@@ -7,7 +7,7 @@ services:
   db:
     image: mariadb:10.5
     env_file:
-      - ../../../docker/.env
+      - ../../../docker/.env.example
     tmpfs:
       - /var/lib/mysql
     volumes:
