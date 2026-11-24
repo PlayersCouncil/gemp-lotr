@@ -941,6 +941,8 @@ public class ScenarioSandbox {
         state.put("canStop", CanStop());
         state.put("canStart", CanStart());
         state.put("over", game().isFinished());
+        //(what a card can be modified in by hand, and for how long: the card menu's Modify...)
+        state.put("modify", ScenarioAuthoring.describeModify());
         Map<PhysicalCard, Integer> places = BoardView.places(_table);
         List<Map<String, Object>> cards = new ArrayList<>();
         for (Map.Entry<String, PhysicalCardImpl> named : _table.Named().entrySet()) {
