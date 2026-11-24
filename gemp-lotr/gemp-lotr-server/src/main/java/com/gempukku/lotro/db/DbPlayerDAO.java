@@ -110,30 +110,6 @@ public class DbPlayerDAO implements PlayerDAO {
     }
 
     @Override
-    public boolean resetUserPassword(String login) throws SQLException {
-        try {
-            var db = _dbAccess.openDB();
-
-            try (org.sql2o.Connection conn = db.beginTransaction()) {
-                String sql = """
-                                UPDATE player
-                                SET password = ''
-                                WHERE name = :login
-                            """;
-                conn.createQuery(sql)
-                        .addParameter("login", login)
-                        .executeUpdate();
-
-                conn.commit();
-
-                return conn.getResult() == 1;
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to reset password", ex);
-        }
-    }
-
-    @Override
     public boolean banPlayerPermanently(String login) throws SQLException {
         try (Connection conn = _dbAccess.getDataSource().getConnection()) {
             try (PreparedStatement statement = conn.prepareStatement("update player set type='', banned_until=null where name=?")) {

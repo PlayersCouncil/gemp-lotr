@@ -1341,20 +1341,6 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
-    resetUserPassword:function (login, callback, errorMap) {
-        $.ajax({
-            type:"POST",
-            url:this.url + "/admin/resetUserPassword",
-            cache:false,
-            data:{
-                login:login
-            },
-            success:callback,
-            error:this.errorCheck(errorMap),
-            dataType:"html"
-        });
-    },
-    
     permabanUser:function (login, callback, errorMap) {
         $.ajax({
             type:"POST",

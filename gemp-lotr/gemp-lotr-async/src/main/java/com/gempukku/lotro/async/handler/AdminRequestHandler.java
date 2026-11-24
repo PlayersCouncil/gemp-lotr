@@ -193,8 +193,6 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         // ---- end t4-admin-load-from-event ----
         } else if (uri.equals("/banUser") && request.method() == HttpMethod.POST) {
             banUser(request, responseWriter);
-        } else if (uri.equals("/resetUserPassword") && request.method() == HttpMethod.POST) {
-            resetUserPassword(request, responseWriter);
         } else if (uri.equals("/banMultiple") && request.method() == HttpMethod.POST) {
             banMultiple(request, responseWriter);
         } else if (uri.equals("/banUserTemp") && request.method() == HttpMethod.POST) {
@@ -331,25 +329,6 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         if (similarPlayer.hasType(Player.Type.UNBANNED))
             return "Unbanned";
         return "OK";
-    }
-
-    private void resetUserPassword(HttpRequest request, ResponseWriter responseWriter) throws Exception {
-        validateAdmin(request);
-
-        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
-        try {
-            String login = getFormParameterSafely(postDecoder, "login");
-
-            if (login==null)
-                throw new HttpProcessingException(400);
-
-            if (!_adminService.resetUserPassword(login))
-                throw new HttpProcessingException(404);
-
-            responseWriter.writeHtmlResponse("OK");
-        } finally {
-            postDecoder.destroy();
-        }
     }
 
     private void banUser(HttpRequest request, ResponseWriter responseWriter) throws Exception {
@@ -644,7 +623,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
     /**
      * POST /resolvePlayers {players: names separated by newlines, commas, semicolons or spaces} :
-     * {players:[{input, name (null when unknown), suggestions:[...]}]}
+     * {players:[{input, name (null when unknown), id (player.id, null when unknown), suggestions:[...]}]}.
+     * The add-items form reads the names; the User Admin tab's account recovery lookup reads the id.
      */
     private void resolvePlayers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateAdmin(request);
@@ -657,6 +637,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
                 var p = new LinkedHashMap<String, Object>();
                 p.put("input", resolution.input());
                 p.put("name", resolution.name());
+                p.put("id", resolution.id());
                 p.put("suggestions", resolution.suggestions());
                 list.add(p);
             }

@@ -31,14 +31,6 @@ public class CachedPlayerDAO implements PlayerDAO, Cached {
     }
 
     @Override
-    public boolean resetUserPassword(String login) throws SQLException {
-        final boolean success = _delegate.resetUserPassword(login);
-        if (success)
-            clearCache();
-        return success;
-    }
-
-    @Override
     public boolean banPlayerPermanently(String login) throws SQLException {
         final boolean success = _delegate.banPlayerPermanently(login);
         if (success)
