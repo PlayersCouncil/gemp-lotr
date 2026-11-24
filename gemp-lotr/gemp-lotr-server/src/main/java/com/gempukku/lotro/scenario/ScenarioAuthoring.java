@@ -3068,6 +3068,13 @@ public class ScenarioAuthoring {
         values.put("totals", List.of("twilight", "burdens", "threats", "site", "turn", "hand"));
         values.put("perCard", List.of("strength", "vitality", "resistance", "wounds", "tokens", "cost", "playCost"));
         json.put("scoreValues", values);
+        List<String> forbid = new ArrayList<>();
+        def.forbid.forEach(what -> forbid.add(what.name().toLowerCase(Locale.ROOT)));
+        json.put("forbid", forbid);
+        List<String> forbidChoices = new ArrayList<>();
+        for (ScenarioDefinition.Forbid what : ScenarioDefinition.Forbid.values())
+            forbidChoices.add(what.name().toLowerCase(Locale.ROOT));
+        json.put("forbidChoices", forbidChoices);
         json.put("pool", def.pool);
         Map<String, String> picks = sitting.live.Picks();
         json.put("slots", LiveScenario.slotInfo(def, picks, _library));

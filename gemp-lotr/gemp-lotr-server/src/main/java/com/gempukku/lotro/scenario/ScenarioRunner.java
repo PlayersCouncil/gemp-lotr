@@ -402,6 +402,13 @@ public final class ScenarioRunner {
                         + table.SeatingProblem());
                 return false;
             }
+            if (table.Breach() != null) {
+                report.stopped = "the person broke the puzzle's rules: " + table.Breach();
+                if (deviation != null)
+                    return true;
+                report.failures.add("The path breaks the puzzle's rules: " + table.Breach());
+                return false;
+            }
             if (table.Verdict() != null) {
                 //The judging moment came (outcome.judge): that is the end, whatever the game did after it
                 ScenarioTable.Verdict verdict = table.Verdict();
@@ -554,6 +561,8 @@ public final class ScenarioRunner {
                     report.stopped = "the game rejected an answer";
                     return false;
                 }
+                if (table.Breach() != null)
+                    continue;
                 if (endedHere(def, table, director, report, deviation))
                     return director.end() == null || director.end().result != EndResult.FAIL;
                 if (def.outcome.lose != null && table.Holds(def.outcome.lose, table.HumanPlayer())) {
@@ -715,6 +724,9 @@ public final class ScenarioRunner {
                 return false;
             }
 
+            //(what the puzzle's rules forbid comes before whatever else the answer led to: the loop's top says it)
+            if (table.Breach() != null)
+                continue;
             if (director.end() != null) {
                 report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
                 if (director.end().result == EndResult.FAIL && deviation == null) {

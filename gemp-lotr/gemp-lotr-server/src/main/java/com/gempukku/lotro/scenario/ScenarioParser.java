@@ -66,7 +66,12 @@ import java.util.regex.Pattern;
  *     options: { undo: off }          whether the person may take back what they have done: on or off; left out, off in
  *                                     a puzzle (kind: puzzle) and on in anything else
  *     opponent: { fallback: eager }   the opponent takes every optional action and response it is offered, and makes
- *                                     every choice it is forced to the plainest way (see ScenarioDirector.eager)
+ *                                     every choice it is forced to the plainest way (see AnswerCompiler.eagerAnswer)
+ *     rules: { forbid: shuffle, reveal }   what the person may not do that no card definition can say: have their draw
+ *                                     deck shuffled, or reveal a card by a card of theirs.  Doing it ends the scenario,
+ *                                     failed, with the rule said.  ("You may not draw cards" is a rule cards can say:
+ *                                     freeps: [ { type: modifier, modifier: { type: cantTakeCardsIntoHandFromDeckOrDiscardPile,
+ *                                     player: you } } ], each on a line of its own.)
  *     outcome: {
  *         judge: {                    the scenario is over at a moment of the game
  *             at: endOf(archery)      endOf(phase), startOf(phase) or endOfTurn; ", turn(2)" for that turn's only.
@@ -101,7 +106,8 @@ import java.util.regex.Pattern;
  *     solutions: [                    the author's solutions: what fills the slots, and what the person does where the
  *         {                           script leaves the choice to them
  *             name: published
- *             picks: { trap: 7_?? }   every slot, by blueprint
+ *             picks: {                every slot, by blueprint, each on a line of its own: trap: 7_47
+ *             }
  *             answers: [              written as a step's answer is, one or more to a line: each is the person's answer
  *                 use(trap)           to their next decision that no step gives the runner an answer for, in order;
  *                 pass                once they run out the person does as little as can be (passes)
@@ -220,6 +226,17 @@ public final class ScenarioParser {
                     def.oneSided = optionalBoolean(rules, name, false, "rules");
                 } else if (name.equalsIgnoreCase("markers")) {
                     def.markersTogether = parseMarkers(scalar(rules.get(name), "rules.markers"));
+                } else if (name.equalsIgnoreCase("forbid")) {
+                    //(what a puzzle's rules forbid that no card definition can say: "you may not shuffle your draw deck")
+                    for (String what : list(rules.get(name), "rules.forbid")) {
+                        try {
+                            def.forbid.add(Forbid.valueOf(what.trim().toUpperCase(Locale.ROOT)));
+                        } catch (IllegalArgumentException exp) {
+                            throw new ScenarioFormatException("rules.forbid: '" + what.trim() + "' is not something a puzzle's rules can forbid here: shuffle "
+                                    + "(the person's draw deck being shuffled) or reveal (a card of theirs revealing one).  For \"you may not draw\", give "
+                                    + "the person's seat the rule { type: modifier, modifier: { type: cantTakeCardsIntoHandFromDeckOrDiscardPile, player: you } }");
+                        }
+                    }
                 } else {
                     def.rules.put(parseSeat(def, name, "rules"), jsonArrayText(rules.get(name), "rules." + name));
                 }

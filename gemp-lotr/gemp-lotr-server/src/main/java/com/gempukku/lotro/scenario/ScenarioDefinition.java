@@ -741,6 +741,17 @@ public final class ScenarioDefinition {
 
     public final List<Solution> solutions = new ArrayList<>();
 
+    /** What a puzzle's rules can forbid the person that no card definition can say (rules.forbid). */
+    public enum Forbid {
+        /** Having their draw deck shuffled (by anything after the board is laid out). */
+        SHUFFLE,
+        /** Revealing a card, from hand or from the draw deck, by a card of their own. */
+        REVEAL
+    }
+
+    /** rules.forbid: doing any of these ends the scenario, failed, with the rule said. */
+    public final Set<Forbid> forbid = EnumSet.noneOf(Forbid.class);
+
     /** The solution called that; null if there is none. */
     public Solution solution(String name) {
         for (Solution solution : solutions)

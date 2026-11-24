@@ -389,4 +389,87 @@ public class ScenarioPuzzleTest {
             public void decisionMade(String result) { }
         }));
     }
+
+    /* ---------------------------------------------------------------- P10: what a puzzle's rules forbid */
+
+    /** Grimir shuffles a Dwarven event from the discard pile into the draw deck; Master Proudfoot reveals the top card. */
+    private static final String FORBIDDING = """
+            	kind: puzzle
+            	coverage: guided
+            	options: {
+            		opponentDelayMs: 0
+            	}
+            	opponent: {
+            		fallback: pass
+            	}
+            	rules: {
+            		forbid: FORBID
+            		RULES
+            	}
+            	setup: {
+            		freeps: {
+            			support: grimir, proudfoot
+            			characters: gimli
+            			discard: delving
+            			hand: delving2
+            		}
+            	}
+            	steps: [
+            		{
+            			when: human, action, phase(fellowship)
+            			allow: USE
+            		}
+            	]
+            	outcome: {
+            		win: {
+            			type: canSpot
+            			filter: alias(grimir),wounded
+            		}
+            	}
+            """;
+
+    /** The base scenario with Grimir, Delving (twice), Master Proudfoot and Gimli among the freeps cards. */
+    private static String forbidding(String forbid, String use, String rules) {
+        return ScenarioTesting.scenario(FORBIDDING.replace("FORBID", forbid).replace("USE", use).replace("RULES", rules))
+                .replace("\t\t\tboromir: 0_65\n", "\t\t\tboromir: 0_65\n\t\t\tgrimir: 1_17\n\t\t\tdelving: 1_6\n\t\t\tdelving2: 1_6\n"
+                        + "\t\t\tproudfoot: 1_301\n\t\t\tgimli: 1_13\n");
+    }
+
+    @Test
+    public void aPuzzleCanForbidShufflingAndRevealingAndSaysSoAsItFails() throws Exception {
+        ScenarioDefinition shuffle = ScenarioParser.parse(forbidding("shuffle, reveal", "use(grimir)", ""));
+        assertEquals(java.util.EnumSet.allOf(ScenarioDefinition.Forbid.class), shuffle.forbid);
+        assertTrue(ScenarioWriter.toHjson(roundTrip(shuffle), null).contains("forbid: shuffle, reveal"));
+        ScenarioRunReport shuffled = ScenarioRunner.run(shuffle, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertTrue(shuffled.toString(), shuffled.failures.contains("The path breaks the puzzle's rules: This puzzle's rules say you may not shuffle your draw deck."));
+        Client live = play(shuffle, Map.of());
+        assertEquals("failed", live.end.getString("result"));
+        assertTrue(live.end.getString("message"), live.end.getString("message").contains("may not shuffle your draw deck"));
+
+        //(Proudfoot's card is shown to both players before anything answers its being revealed: a live game, which answers that)
+        ScenarioDefinition reveal = ScenarioParser.parse(forbidding("reveal", "use(proudfoot)", ""));
+        Client revealed = play(reveal, Map.of());
+        assertEquals("failed", revealed.end.getString("result"));
+        assertTrue(revealed.end.getString("message"), revealed.end.getString("message").contains("may not reveal cards"));
+
+        //Without the rule, the same play is no breach
+        ScenarioDefinition allowed = ScenarioParser.parse(forbidding("reveal", "use(grimir)", ""));
+        ScenarioRunReport fine = ScenarioRunner.run(allowed, ScenarioTesting.library(), ScenarioTesting.format("scenario"));
+        assertFalse(fine.toString(), fine.toString().contains("breaks the puzzle's rules"));
+        assertRejected("rules: {\n forbid: drawing\n}", "cantTakeCardsIntoHandFromDeckOrDiscardPile");
+    }
+
+    @Test
+    public void youMayNotDrawCardsIsARuleTheCardDefinitionsCanAlreadySay() throws Exception {
+        //Delving: exert a Dwarf to draw 3.  Barred, it draws none.
+        String bar = "freeps: [\n {\n type: modifier\n modifier: {\n type: cantTakeCardsIntoHandFromDeckOrDiscardPile\n player: you\n }\n }\n ]";
+        ScenarioDefinition def = ScenarioParser.parse(forbidding("shuffle", "play(delving2)", bar));
+        ScenarioTable table = new ScenarioTable(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), ScenarioRunner.HUMAN, ScenarioRunner.OPPONENT);
+        table.Start();
+        int hand = table.gameState().getHand(table.P1()).size();
+        table.FreepsPlayCard(table.Card("delving2"));
+        if (table.FreepsDecisionAvailable("exert"))
+            table.FreepsChooseCard(table.Card("gimli"));
+        assertEquals("Delving left the hand and drew nothing", hand - 1, table.gameState().getHand(table.P1()).size());
+    }
 }

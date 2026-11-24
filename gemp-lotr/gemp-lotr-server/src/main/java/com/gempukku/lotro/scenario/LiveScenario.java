@@ -687,6 +687,11 @@ public class LiveScenario implements ScenarioSession.Listener {
             finish(Result.ERROR, List.of(), "This scenario's adventure path has run out: " + _table.PathEnded() + ".", false, false);
             return;
         }
+        //The person has done what the puzzle's rules forbid (rules.forbid): failed, with the rule said
+        if (_table.Breach() != null) {
+            finish(Result.FAILED, closing(_def.outcome.loseMessages), _renderer.render(_table.Breach()), false, true);
+            return;
+        }
         //The judging moment has come (outcome.judge): the scenario is over, whatever else the game has done since
         ScenarioTable.Verdict verdict = _table.Verdict();
         if (verdict != null) {

@@ -468,6 +468,8 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
         _game.getActionsEnvironment().addAlwaysOnActionProxy(new EndOfThePath());
         if (_def.outcome.judge != null)
             _game.getActionsEnvironment().addAlwaysOnActionProxy(new JudgingMoment());
+        if (_def.forbid.contains(ScenarioDefinition.Forbid.REVEAL))
+            _game.getActionsEnvironment().addAlwaysOnActionProxy(new NoRevealing());
         if (_def.oneSided && _def.markersTogether)
             _game.getActionsEnvironment().addAlwaysOnActionProxy(new MarkersTogether());
     }
@@ -1204,6 +1206,31 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             String human = HumanPlayer();
             boolean won = (judge.win() == null || Holds(judge.win(), human)) && (_def.outcome.lose == null || !Holds(_def.outcome.lose, human));
             _verdict = new Verdict(won, Score(), judge.source());
+            return null;
+        }
+    }
+
+    /** What the person did that the puzzle's rules forbid (rules.forbid), as the rule says it; null while they have not. */
+    public String Breach() { return _breach; }
+
+    private String _breach;
+
+    /** A player's draw deck has been shuffled (see ScenarioRandom): a breach of the rules if the puzzle forbids it. */
+    void Shuffled(String player) {
+        if (_breach == null && _arranged && _def.forbid.contains(ScenarioDefinition.Forbid.SHUFFLE) && player.equals(HumanPlayer()))
+            _breach = "This puzzle's rules say you may not shuffle your draw deck.";
+    }
+
+    /** rules.forbid: reveal.  A card of the person's revealing a card, from a hand or a draw deck, breaks the rule. */
+    private class NoRevealing extends AbstractActionProxy {
+        @Override
+        public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult result) {
+            if (_breach != null || !_arranged)
+                return null;
+            PhysicalCard source = result instanceof com.gempukku.lotro.logic.timing.results.RevealCardFromHandResult hand ? hand.getSource()
+                    : result instanceof com.gempukku.lotro.logic.timing.results.RevealedCardFromDeckResult deck ? deck.getSource() : null;
+            if (source != null && HumanPlayer().equals(source.getOwner()))
+                _breach = "This puzzle's rules say you may not reveal cards.";
             return null;
         }
     }

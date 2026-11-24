@@ -143,6 +143,11 @@ public final class ScenarioWriter {
             rules.add("oneSided", true);
         if (def.markersTogether)
             rules.add("markers", "together");
+        if (!def.forbid.isEmpty()) {
+            StringJoiner forbid = new StringJoiner(", ");
+            def.forbid.forEach(what -> forbid.add(lower(what)));
+            rules.add("forbid", forbid.toString());
+        }
         for (Seat seat : Seat.values())
             if (def.rules.containsKey(seat))
                 rules.add(seat.key(), JsonValue.readHjson(def.rules.get(seat)));
