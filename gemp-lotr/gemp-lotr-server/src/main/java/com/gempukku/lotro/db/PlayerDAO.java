@@ -12,8 +12,6 @@ public interface PlayerDAO {
 
     public Player getPlayer(String playerName);
 
-    public boolean resetUserPassword(String login) throws SQLException;
-
     public boolean banPlayerPermanently(String login) throws SQLException;
 
     public boolean banPlayerTemporarily(String login, long dateTo) throws SQLException;

@@ -161,14 +161,13 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private void getDeckStats(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, CardNotFoundException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
             String collectionName = getFormParameterSafely(postDecoder, "collectionName");
             String contents = getFormParameterSafely(postDecoder, "deckContents");
             String leagueCode = getFormParameterSafely(postDecoder, "leagueCode");
 
             //check for valid access
-            Player player = getResourceOwnerSafely(request, participantId);
+            Player player = getResourceOwnerSafely(request);
 
             LotroDeck deck = _lotroServer.createDeckWithValidate("tempDeck", contents, targetFormat, "");
             if (deck == null)
@@ -384,9 +383,8 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private void deleteDeck(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             _deckDao.deleteDeckForPlayer(resourceOwner, deckName);
 
@@ -399,11 +397,10 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private void renameDeck(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, ParserConfigurationException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             String oldDeckName = getFormParameterSafely(postDecoder, "oldDeckName");
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             LotroDeck deck = _deckDao.renameDeck(resourceOwner, oldDeckName, deckName);
             if (deck == null)
@@ -418,13 +415,12 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private void saveDeck(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, ParserConfigurationException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
             String notes = getFormParameterSafely(postDecoder, "notes");
             String contents = getFormParameterSafely(postDecoder, "deckContents");
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             LotroFormat validatedFormat = validateFormat(targetFormat);
 
@@ -455,9 +451,8 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
 
     private void shareDeck(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, CardNotFoundException {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String deckName = getQueryParameterSafely(queryDecoder, "deckName");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         var result = LotroDeck.GenerateDeckSharingURL(deckName, resourceOwner.getName());
 
@@ -466,7 +461,6 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
 
     private void getDeckInHtml(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, CardNotFoundException {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String deckName = getQueryParameterSafely(queryDecoder, "deckName");
         String shareCode = getQueryParameterSafely(queryDecoder, "id");
 
@@ -487,7 +481,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
             deck = _deckDao.getDeckForPlayer(resourceOwner, deckName2);
         }
         else {
-            resourceOwner = getResourceOwnerSafely(request, participantId);
+            resourceOwner = getResourceOwnerSafely(request);
             deck = _deckDao.getDeckForPlayer(resourceOwner, deckName);
         }
 
@@ -650,10 +644,9 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
 
     private void getDeck(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, ParserConfigurationException {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String deckName = getQueryParameterSafely(queryDecoder, "deckName");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         responseWriter.writeXmlResponse(serializeDeck(resourceOwner, deckName));
     }
@@ -661,8 +654,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private void convertErrata(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, ParserConfigurationException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             String targetFormat = getFormParameterSafely(postDecoder, "targetFormat");
             String contents = getFormParameterSafely(postDecoder, "deckContents");
@@ -686,10 +678,7 @@ public class DeckRequestHandler extends LotroServerRequestHandler implements Uri
     private record DeckEntry(LotroFormat format, String displayFormat, String deckName, boolean isRtmd) {}
 
     private void listDecks(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, ParserConfigurationException {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         List<DeckEntry> decks = GetDeckNamesAndFormats(resourceOwner);
         SortDecks(decks);

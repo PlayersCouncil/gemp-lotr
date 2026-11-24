@@ -13,7 +13,6 @@ import com.gempukku.polling.LongPollingSystem;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -30,14 +29,10 @@ import static org.mockito.Mockito.*;
  * knows, hall format or not, without a login; 404 for an unknown code.
  */
 public class HallFormatJsonTest {
-    private String previousTestProperty;
     private Map<Type, Object> context;
 
     @Before
     public void setUp() {
-        // anonymous requests (getResourceOwnerSafely treats the participantId as the login when -Dtest=true)
-        previousTestProperty = System.clearProperty("test");
-
         JSONDefs.Format facts = new JSONDefs.Format();
         facts.sites = "FELLOWSHIP";
         LotroFormat leagueOnly = mock(LotroFormat.class);
@@ -53,12 +48,6 @@ public class HallFormatJsonTest {
         context = new HashMap<>();
         context.put(LotroFormatLibrary.class, formatLibrary);
         context.put(LotroCardBlueprintLibrary.class, mock(LotroCardBlueprintLibrary.class));
-    }
-
-    @After
-    public void tearDown() {
-        if (previousTestProperty != null)
-            System.setProperty("test", previousTestProperty);
     }
 
     private ResponseWriter get(String path) throws Exception {

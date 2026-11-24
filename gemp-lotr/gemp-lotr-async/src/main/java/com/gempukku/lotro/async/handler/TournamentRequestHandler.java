@@ -110,8 +110,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
     }
 
     private void getTournamentFormats(HttpRequest request, HttpPostRequestDecoder postDecoder, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         JSONDefs.PlayerMadeTournamentAvailableFormats data = new JSONDefs.PlayerMadeTournamentAvailableFormats();
 
@@ -151,8 +150,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
     }
 
     private void processPlayerMadeTournament(HttpRequest request, HttpPostRequestDecoder postDecoder, ResponseWriter responseWriter) throws Exception {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
         String deckName = getFormParameterSafely(postDecoder, "deckName");
         // deckSource=library: the creator's deck is a Deck Library deck (owned by the Librarian)
         String deckSource = getFormParameterSafely(postDecoder, "deckSource");

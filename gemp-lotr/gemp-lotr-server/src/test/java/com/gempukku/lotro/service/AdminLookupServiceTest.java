@@ -257,6 +257,7 @@ public class AdminLookupServiceTest extends LoadedLibraries {
         PlayerDAO dao = Mockito.mock(PlayerDAO.class);
         Player ketura = new Player(1, "Ketura", "p", "u", null, null, null, null, false);
         Mockito.when(dao.getPlayer("Ketura")).thenReturn(ketura);
+        Mockito.when(dao.getPlayer("KeturaFan")).thenReturn(new Player(2, "KeturaFan", "p", "u", null, null, null, null, false));
         Mockito.when(dao.findPlayerNames(Mockito.eq("ketura"), Mockito.anyInt())).thenReturn(List.of("Ketura", "KeturaFan"));
         Mockito.when(dao.findPlayerNames(Mockito.eq("ketur"), Mockito.anyInt())).thenReturn(List.of("Ketura", "KeturaFan"));
         Mockito.when(dao.findPlayerNames(Mockito.eq("nobody"), Mockito.anyInt())).thenReturn(List.of());
@@ -266,8 +267,10 @@ public class AdminLookupServiceTest extends LoadedLibraries {
         assertEquals("duplicates (ignoring case) reported once", 3, result.size());
 
         assertEquals("Ketura", result.get(0).name());
+        assertEquals("the id an admin links to a PC account", Integer.valueOf(1), result.get(0).id());
         assertEquals("ketur", result.get(1).input());
         assertNull(result.get(1).name());
+        assertNull("no id for an unknown name", result.get(1).id());
         assertEquals(List.of("Ketura", "KeturaFan"), result.get(1).suggestions());
         assertNull(result.get(2).name());
         assertTrue(result.get(2).suggestions().isEmpty());
@@ -275,6 +278,17 @@ public class AdminLookupServiceTest extends LoadedLibraries {
         // a case-insensitive database miss still resolves when the search finds the exact name in another case
         var caseOnly = service.resolvePlayers(List.of("ketura"));
         assertEquals("Ketura", caseOnly.getFirst().name());
+        assertEquals("the case-insensitive match carries the real player's id", Integer.valueOf(1), caseOnly.getFirst().id());
+    }
+
+    @Test
+    public void resolvePlayersReportsANameThatVanishedBetweenSearchAndLookupAsUnknown() {
+        PlayerDAO dao = Mockito.mock(PlayerDAO.class);
+        Mockito.when(dao.findPlayerNames(Mockito.eq("gone"), Mockito.anyInt())).thenReturn(List.of("Gone"));
+        var result = new AdminLookupService(null, null, dao).resolvePlayers(List.of("gone"));
+        assertNull(result.getFirst().name());
+        assertNull(result.getFirst().id());
+        assertEquals(List.of("Gone"), result.getFirst().suggestions());
     }
 
     @Test

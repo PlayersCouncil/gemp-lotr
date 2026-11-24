@@ -77,8 +77,7 @@ public class CalendarRequestHandler extends LotroServerRequestHandler implements
 
     private void getCalendar(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-        Player viewer = getResourceOwnerSafely(request, participantId);
+        Player viewer = getResourceOwnerSafely(request);
         boolean eventAdmin = viewer.hasType(Player.Type.ADMIN) || viewer.hasType(Player.Type.LEAGUE_ADMIN);
 
         LocalDate from = parseDate(getQueryParameterSafely(queryDecoder, "from"), "from");
