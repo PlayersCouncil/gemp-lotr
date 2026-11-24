@@ -99,9 +99,8 @@ describe('hall table parsers', () => {
     expect(tableAgeTitle(1794232900000)).toBe('Open since 2026-11-09 14:01:40 (server time)');
   });
 
-  it('links the game page with the participant an admin acts as', () => {
-    expect(gameUrl('g 1', null)).toBe('/gemp-lotr/ng/game?gameId=g%201');
-    expect(gameUrl('g1', 'bob&co')).toBe('/gemp-lotr/ng/game?gameId=g1&participantId=bob%26co');
+  it('links the game page', () => {
+    expect(gameUrl('g 1')).toBe('/gemp-lotr/ng/game?gameId=g%201');
   });
 
   it('reads what a table call answered', () => {

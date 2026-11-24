@@ -64,9 +64,9 @@ describe('loginRequired', () => {
     expect(toLogin).not.toHaveBeenCalled();
   });
 
-  it('asks about the player an admin acts for, like every other call of the page', () => {
+  it("asks about the session's player, whatever participantId the address names", () => {
     const { http } = start('?participantId=bob');
-    expect(http.expectOne(isLoginCheck).request.params.get('participantId')).toBe('bob');
+    expect(http.expectOne(isLoginCheck).request.params.has('participantId')).toBe(false);
   });
 });
 

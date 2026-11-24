@@ -6,7 +6,7 @@ import { LOGIN_PAGE_URL } from '../platform/app-paths';
 import { SessionChannel } from '../platform/hall-tab.service';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageNavigation } from '../platform/page-navigation';
-import { Alias, NO_PC_SESSION, PcSession, pcSignInAddress, sessionKind } from './pc-account';
+import { Alias, NO_PC_SESSION, PcSession, PcSessionKind, pcSignInAddress, sessionKind } from './pc-account';
 import { LogoutScope, PcAccountApi } from './pc-account-api.service';
 import { PcAction, refusalCode, refusalMessage } from './pc-account-messages';
 
@@ -38,6 +38,13 @@ export class PcSessionService {
   private readonly queryString = inject(PAGE_QUERY_STRING);
   private request: Promise<PcSession> | null = null;
   private readonly session_ = signal<PcSession | null>(null);
+  private readonly strayRefusal_ = signal<string | null>(null);
+
+  /**
+   * A refusal whose page part the session asked for again took away (the alias list or the Connect form gone, e.g.
+   * the PC sign-in ended): its wording, for the page to show at its own level; null again at the next action.
+   */
+  readonly strayRefusal = this.strayRefusal_.asReadonly();
 
   /** The session, or null until the server has answered. */
   readonly session = this.session_.asReadonly();
@@ -79,16 +86,16 @@ export class PcSessionService {
    * this browser is no password login any more, and the session asked for again shows what it is.
    */
   async connect(password: string): Promise<Refusal | null> {
+    const before = this.acting();
     try {
       const next = await firstValueFrom(this.api.connect(password));
       if (next === '') throw new Error('No address to go to');
       this.navigation.go(next);
       return null;
     } catch (error) {
-      void this.refresh();
       const failure = ApiError.from(error);
       const code = refusalCode('connect', failure.status, failure.said);
-      return { code, message: refusalMessage(code, 'connect') };
+      return this.refused(before, { code, message: refusalMessage(code, 'connect') });
     }
   }
 
@@ -99,6 +106,7 @@ export class PcSessionService {
 
   /** Log Out: `alias` from the hall, `all` from the alias list (and for a password login). */
   async logout(scope: LogoutScope): Promise<void> {
+    this.acting();
     let next = '';
     try {
       next = await firstValueFrom(this.api.logout(scope));
@@ -119,6 +127,7 @@ export class PcSessionService {
     call: Observable<PcSession>,
     done: () => void,
   ): Promise<Refusal | null> {
+    const before = this.acting();
     try {
       this.show(await firstValueFrom(call));
       done();
@@ -129,10 +138,26 @@ export class PcSessionService {
         this.signInFor(action);
         return null;
       }
-      void this.refresh();
       const code = refusalCode(action, failure.status, failure.said);
-      return { code, message: refusalMessage(code, action) };
+      return this.refused(before, { code, message: refusalMessage(code, action) });
     }
+  }
+
+  /** An action begins: the last stray refusal goes. Gives who the browser is now, to tell whether that changes. */
+  private acting(): PcSessionKind | null {
+    this.strayRefusal_.set(null);
+    return this.kind();
+  }
+
+  /**
+   * After a refusal the session is asked for again (an alias may be unlinked, another busy, the sign-in ended). If
+   * that makes the browser someone else, the part that would show the refusal is gone with it: it is kept as stray.
+   */
+  private refused(before: PcSessionKind | null, refusal: Refusal): Refusal {
+    void this.refresh().then((session) => {
+      if (sessionKind(session) !== before) this.strayRefusal_.set(refusal.message);
+    });
+    return refusal;
   }
 
   private leaveForTarget(): void {

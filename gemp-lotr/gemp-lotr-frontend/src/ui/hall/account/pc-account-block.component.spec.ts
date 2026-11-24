@@ -136,4 +136,27 @@ describe('PcAccountBlockComponent', () => {
     expect(notice.textContent).toBe(line);
     expect(notice.getAttribute('role')).toBe('status');
   });
+
+  it("says Connect's not-allowed on top when the session asked for again is a PC account's", async () => {
+    const { query, stable } = await render('argonauth-session-password.json');
+    (query('button.gd-pc-account-block__connect') as HTMLButtonElement).click();
+    await stable();
+    (query('gd-pc-form form') as HTMLFormElement).requestSubmit();
+    await stable();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/connect')
+      .flush('{"error":"not-allowed"}', { status: 403, statusText: 'Forbidden' });
+    await stable();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/session')
+      .flush(readServerResponse('argonauth-session-aliases.json'));
+    await stable();
+    expect(query('gd-pc-form')).toBeNull();
+    expect(query('gd-alias-list')).not.toBeNull();
+    const refusal = query('.gd-pc-account-block__refusal')!;
+    expect([refusal.textContent, refusal.getAttribute('role')]).toEqual([
+      'Only an account logged in with its password can be connected.',
+      'alert',
+    ]);
+  });
 });

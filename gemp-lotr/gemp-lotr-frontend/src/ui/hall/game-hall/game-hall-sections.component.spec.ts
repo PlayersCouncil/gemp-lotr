@@ -90,7 +90,7 @@ describe('GameHallSectionsComponent', () => {
     ]);
     expect(playing[1]?.querySelector('td:nth-child(4) button')?.textContent?.trim()).toBe('9');
     expect(playing[3]?.querySelector('a[data-action=play]')?.getAttribute('href')).toBe(
-      '/gemp-lotr/ng/game?gameId=g-12&participantId=alice',
+      '/gemp-lotr/ng/game?gameId=g-12',
     );
     el.querySelector<HTMLButtonElement>('[data-key="table:11"] [data-action=join]')!.click();
     hall.request('/deck/list', 'GET').flush('<decks/>');

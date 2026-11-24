@@ -429,4 +429,35 @@ describe('LoginPageComponent and the PC account', () => {
     const { query } = await render('argonauth-session-aliases.json');
     expect(query('.gd-pc-form__form')!.dataset['form']).toBe('link');
   });
+
+  it('says a refusal above the form when the session asked for again takes the alias list away', async () => {
+    setUp();
+    const { fixture, query } = await render('argonauth-session-aliases.json');
+    const stable = async () => {
+      await settle();
+      await fixture.whenStable();
+    };
+    query('.gd-alias-list__actions [data-action="create"]')!.click();
+    await stable();
+    const name = query('gd-pc-form input[name="name"]') as HTMLInputElement;
+    name.value = 'Merry';
+    name.dispatchEvent(new Event('input'));
+    (query('gd-pc-form form') as HTMLFormElement).requestSubmit();
+    await stable();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/create')
+      .flush('{"error":"no-pc-account"}', { status: 401, statusText: 'Unauthorized' });
+    await stable();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/session')
+      .flush(readServerResponse('argonauth-session-nobody.json'));
+    await stable();
+    expect(query('gd-alias-list *')).toBeNull();
+    expect(query('.gd-login__form')).not.toBeNull();
+    const refusal = query('.gd-login__refusal')!;
+    expect([refusal.textContent, refusal.getAttribute('role')]).toEqual([
+      'Your PC Account sign-in has ended. Sign in again.',
+      'alert',
+    ]);
+  });
 });

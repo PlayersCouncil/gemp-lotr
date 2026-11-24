@@ -1,6 +1,5 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { SessionService } from '../../session/session.service';
 import { HallComms } from '../hall-comms.service';
 import { HallUpdate } from '../hall-models';
 import { byOrder, RowOrder } from '../hall-row-order';
@@ -24,7 +23,6 @@ export interface HallBoardChange {
  */
 @Injectable()
 export class HallBoard {
-  private readonly participantId = inject(SessionService).participantId;
   private readonly order = new RowOrder();
 
   private readonly tables_ = signal(HallTablesState.EMPTY);
@@ -37,7 +35,7 @@ export class HallBoard {
   readonly changes$: Observable<HallBoardChange> = this.changes.asObservable();
 
   readonly sections = computed<HallBoardSections>(() => {
-    const tables = this.tables_().sections(this.participantId);
+    const tables = this.tables_().sections();
     const events = this.events_();
     const tableRows = (rows: typeof tables.waiting): HallBoardRow[] =>
       rows.map((row) => ({ kind: 'table', key: `table:${row.table.id}`, order: row.order, row }));

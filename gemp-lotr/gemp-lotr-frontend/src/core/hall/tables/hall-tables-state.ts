@@ -58,23 +58,21 @@ export class HallTablesState {
   }
 
   /** The Waiting, Playing and Finished sections; a table of another status is in none (the legacy hall drew none). */
-  sections(participantId: string | null): HallTableSections {
+  sections(): HallTableSections {
     const sorted = [...this.entries.values()].sort((a, b) => a.seq - b.seq);
     const rows = (status: string): HallTableRow[] =>
-      sorted
-        .filter(({ table }) => table.status === status)
-        .map(({ table, seq }) => tableRow(table, participantId, seq));
+      sorted.filter(({ table }) => table.status === status).map(({ table, seq }) => tableRow(table, seq));
     return { waiting: rows('WAITING'), playing: rows('PLAYING'), finished: rows('FINISHED') };
   }
 }
 
-export function tableRow(table: HallTable, participantId: string | null, order = 0): HallTableRow {
+export function tableRow(table: HallTable, order = 0): HallTableRow {
   const action = tableAction(table);
   return {
     order,
     table,
     action,
     note: tableNote(table),
-    gameUrl: (action === 'play' || action === 'watch') && table.gameId ? gameUrl(table.gameId, participantId) : null,
+    gameUrl: (action === 'play' || action === 'watch') && table.gameId ? gameUrl(table.gameId) : null,
   };
 }

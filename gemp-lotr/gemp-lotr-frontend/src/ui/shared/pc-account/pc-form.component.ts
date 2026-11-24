@@ -73,8 +73,8 @@ export class PcFormComponent {
   readonly busy = input(false);
 
   readonly valueChange = output<{ name: string; value: string }>();
-  readonly submitted = output<void>();
-  readonly cancelled = output<void>();
+  readonly submitted = output();
+  readonly cancelled = output();
 
   protected changed(name: string, event: Event): void {
     this.valueChange.emit({ name, value: (event.target as HTMLInputElement).value });

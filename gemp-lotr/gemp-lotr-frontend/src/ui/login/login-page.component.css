@@ -53,6 +53,7 @@
 .gd-login__status,
 .gd-login__error,
 .gd-login__notice,
+.gd-login__refusal,
 .gd-login__form {
   margin: 0 auto;
 }
@@ -63,7 +64,8 @@
   color: var(--theme-text);
 }
 
-.gd-login__error {
+.gd-login__error,
+.gd-login__refusal {
   color: var(--theme-login-error);
 }
 

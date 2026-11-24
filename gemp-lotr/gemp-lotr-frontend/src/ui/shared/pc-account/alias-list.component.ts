@@ -34,7 +34,8 @@ import {
  *
  * DOM contract: `gd-alias-list.gd-alias-list` (`data-place` = login | account, `data-kind` = pc | password,
  * `data-busy` and `aria-busy` while a call is under way) holding `p.gd-alias-list__signed-in` (pc), then
- * `p.gd-alias-list__blocked` (`id`, while blocked), `p.gd-alias-list__empty` (pc, no aliases),
+ * `p.gd-alias-list__blocked` (`id`, while blocked), `p.gd-alias-list__refusal` (`role=alert`: a refused Enter Gemp
+ * whose alias has left the list), `p.gd-alias-list__empty` (pc, no aliases),
  * `ul.gd-alias-list__aliases` (`aria-label`) of `li.gd-alias-list__alias` (`data-alias` = its name, `data-current`,
  * `data-busy`) with `span.gd-alias-list__name`, `span.gd-alias-list__tag` (`data-tag` = current | playing),
  * `button.gd-button[data-action=enter]` (`aria-describedby` the blocked line when disabled for it) and
@@ -63,6 +64,9 @@ import {
       @if (kind() !== null) {
         @if (list.blockedBy(); as busy) {
           <p class="gd-alias-list__blocked" id="gd-alias-list-blocked">{{ blockedReason(busy) }}</p>
+        }
+        @if (list.listError(); as refusal) {
+          <p class="gd-alias-list__refusal" role="alert">{{ refusal }}</p>
         }
         @if (kind() === 'pc' && list.aliases().length === 0) {
           <p class="gd-alias-list__empty">{{ text.empty }}</p>

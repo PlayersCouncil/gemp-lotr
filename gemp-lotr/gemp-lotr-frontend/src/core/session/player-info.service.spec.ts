@@ -102,8 +102,8 @@ describe('PlayerInfo', () => {
   });
 });
 
-describe('PlayerInfo for an admin acting as a player', () => {
-  it("sends the session's participantId (an admin acting as a player)", async () => {
+describe('PlayerInfo with a participantId in the address', () => {
+  it("asks for the session's player and sends no participantId (the server ignores it)", async () => {
     TestBed.configureTestingModule({
       providers: [
         provideGempHttp(),
@@ -115,7 +115,7 @@ describe('PlayerInfo for an admin acting as a player', () => {
     const info = TestBed.inject(PlayerInfo);
     const loaded = info.whoAmI();
     const request = backend.expectOne((r) => r.url === '/gemp-lotr-server/player' && r.method === 'GET');
-    expect(request.request.params.get('participantId')).toBe('bob');
+    expect(request.request.params.has('participantId')).toBe(false);
     request.flush('{"hasTrophies":false,"name":"bob","type":"u"}');
     await expect(loaded).resolves.toMatchObject({ name: 'bob' });
   });

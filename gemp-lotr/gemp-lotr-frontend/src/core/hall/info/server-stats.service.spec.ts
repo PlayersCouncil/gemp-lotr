@@ -21,7 +21,6 @@ describe('ServerStatsService', () => {
     const request = backend.expectOne((req) => req.url === URL);
     expect(request.request.params.get('startDay')).toBe(startDay);
     expect(request.request.params.get('length')).toBe(length);
-    expect(request.request.params.get('participantId')).toBe('alice');
     request.flush(body);
     await Promise.resolve();
   }
@@ -34,7 +33,7 @@ describe('ServerStatsService', () => {
         ...INFO_SERVICES,
         provideFakeNotifier(),
         { provide: Timers, useValue: { now: () => NOW, after: () => null, clear: () => undefined } },
-        { provide: PAGE_QUERY_STRING, useValue: '?participantId=alice' },
+        { provide: PAGE_QUERY_STRING, useValue: '' },
       ],
     });
     backend = TestBed.inject(HttpTestingController);

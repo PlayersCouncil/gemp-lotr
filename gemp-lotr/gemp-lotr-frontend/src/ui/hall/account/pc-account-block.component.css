@@ -28,3 +28,7 @@ h2 {
 .gd-pc-account-block__manage:hover {
   color: var(--theme-hall-link-hover);
 }
+
+.gd-pc-account-block__refusal {
+  color: var(--theme-account-load-error);
+}

@@ -1,7 +1,6 @@
 import {
   HttpContextToken,
   HttpInterceptorFn,
-  HttpParams,
   HttpResponse,
   provideHttpClient,
   withInterceptors,
@@ -9,7 +8,6 @@ import {
 import { inject } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 import { SERVER_URL } from '../platform/app-paths';
-import { SessionService } from '../session/session.service';
 import { ApiError } from './api-error';
 import { DELIVERY_HEADERS, DeliveryAnnouncements, DeliveryKind } from './delivery-announcements';
 import { OpenedPackAnnouncements } from './opened-pack-announcements';
@@ -17,27 +15,10 @@ import { OpenedPackAnnouncements } from './opened-pack-announcements';
 /** Response header the server sets when opened-pack contents are waiting to be shown. */
 export const OPENED_PACK_HEADER = 'Delivery-Service-Opened-Pack';
 
-/** Send the session's participantId with this request (the default). */
-export const SEND_PARTICIPANT = new HttpContextToken<boolean>(() => true);
 /** GET only: add a cache-busting parameter to this request (the default). */
 export const BYPASS_CACHE = new HttpContextToken<boolean>(() => true);
 
 const toServer = (url: string) => url.startsWith(SERVER_URL);
-
-/**
- * Passes the page's `?participantId=` on with every call, as the legacy client did. The server ignores it since
- * November 2026 (the acting player is the session's); see SessionService for why this is still here.
- */
-const participantInterceptor: HttpInterceptorFn = (request, next) => {
-  const participantId = inject(SessionService).participantId;
-  if (!toServer(request.url) || participantId === null || !request.context.get(SEND_PARTICIPANT)) {
-    return next(request);
-  }
-  if (request.method === 'GET') {
-    return next(request.clone({ params: request.params.set('participantId', participantId) }));
-  }
-  return next(request.clone({ body: (request.body as HttpParams).set('participantId', participantId) }));
-};
 
 const noCacheInterceptor: HttpInterceptorFn = (request, next) =>
   toServer(request.url) && request.method === 'GET' && request.context.get(BYPASS_CACHE)
@@ -79,12 +60,6 @@ const apiErrorInterceptor: HttpInterceptorFn = (request, next) =>
 /** HttpClient, with what every call to the Gemp server needs. */
 export function provideGempHttp() {
   return provideHttpClient(
-    withInterceptors([
-      participantInterceptor,
-      noCacheInterceptor,
-      openedPackInterceptor,
-      deliveryInterceptor,
-      apiErrorInterceptor,
-    ]),
+    withInterceptors([noCacheInterceptor, openedPackInterceptor, deliveryInterceptor, apiErrorInterceptor]),
   );
 }

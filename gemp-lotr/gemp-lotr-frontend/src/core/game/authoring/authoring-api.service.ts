@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GempHttp, RequestOptions } from '../../api/gemp-http.service';
+import { GempHttp } from '../../api/gemp-http.service';
 import { FormData } from '../../api/form-codec';
 import { SERVER_URL } from '../../platform/app-paths';
 import { PageExit } from '../../platform/page-exit';
@@ -9,11 +9,6 @@ import { StepOp } from './step-ops';
 import { OpponentPatch } from './opponent-orders';
 
 const AUTHOR = '/scenarios/author';
-/**
- * Authoring is the logged-in player's own: the server takes no `participantId` there (an admin acting as somebody
- * else writes as themselves), so none is sent.
- */
-const OWN: RequestOptions = { participant: false };
 
 /** What `edit` changes: top-level parts of the file (null: taken out), the same as the file's text, and steps. */
 export interface DraftPatch {
@@ -48,11 +43,11 @@ export class AuthoringApi {
   private readonly exit = inject(PageExit);
 
   private get<T>(what: string, data: FormData = {}): Observable<T> {
-    return this.http.getJson<T>(`${AUTHOR}/${what}`, data, OWN);
+    return this.http.getJson<T>(`${AUTHOR}/${what}`, data);
   }
 
   private post<T>(what: string, data: FormData = {}): Observable<T> {
-    return this.http.postJson<T>(`${AUTHOR}/${what}`, data, OWN);
+    return this.http.postJson<T>(`${AUTHOR}/${what}`, data);
   }
 
   /** The draft and its game (`{session: false}` with none open). */

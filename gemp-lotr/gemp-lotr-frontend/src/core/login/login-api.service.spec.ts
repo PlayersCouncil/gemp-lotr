@@ -30,18 +30,16 @@ describe('LoginApi', () => {
   const expectPost = (path: string) =>
     backend.expectOne((r) => r.url === '/gemp-lotr-server' + path && r.method === 'POST');
 
-  it('posts login and password strictly form-encoded, with the participantId', async () => {
+  it("posts login and password strictly form-encoded, without the page's participantId", async () => {
     setUp('?participantId=bob');
     const result = firstValueFrom(api.login('a+b&c', 'p w+%=é'));
     const request = expectPost('/login');
-    expect((request.request.body as HttpParams).toString()).toBe(
-      'login=a%2Bb%26c&password=p%20w%2B%25%3D%C3%A9&participantId=bob',
-    );
+    expect((request.request.body as HttpParams).toString()).toBe('login=a%2Bb%26c&password=p%20w%2B%25%3D%C3%A9');
     request.flush(readServerResponse('login-ok.xml'));
     await expect(result).resolves.toBeUndefined();
   });
 
-  it('leaves out the participantId when the page has none', async () => {
+  it('registers with login and password', async () => {
     setUp();
     const result = firstValueFrom(api.register('newbie', 'secret'));
     const request = expectPost('/register');

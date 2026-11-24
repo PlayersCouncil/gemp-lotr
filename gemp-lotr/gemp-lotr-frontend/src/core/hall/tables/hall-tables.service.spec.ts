@@ -160,7 +160,7 @@ describe('HallTablesService', () => {
     expect(ids(tables.sections().waiting)).toEqual(['13', '14']);
     expect(tables.sections().playing[0]).toMatchObject({
       action: 'play',
-      gameUrl: '/gemp-lotr/ng/game?gameId=g-11&participantId=alice',
+      gameUrl: '/gemp-lotr/ng/game?gameId=g-11',
     });
     expect(tables.sections().finished).toEqual([]);
   });
@@ -188,7 +188,7 @@ describe('HallTablesService', () => {
 
   it('opens a started game in a new tab once, with the fanfare', () => {
     connect();
-    expect(opened).toEqual(['/gemp-lotr/ng/game?gameId=g-9&participantId=alice']);
+    expect(opened).toEqual(['/gemp-lotr/ng/game?gameId=g-9']);
     expect(sounds).toEqual([GAME_START_SOUND]);
     poll('hall-update.xml');
     expect(opened.length).toBe(2);
@@ -207,7 +207,7 @@ describe('HallTablesService', () => {
       {
         key: 'game:g-12',
         kind: 'game',
-        url: '/gemp-lotr/ng/game?gameId=g-12&participantId=alice',
+        url: '/gemp-lotr/ng/game?gameId=g-12',
         title: 'Your game is ready',
         text: 'Your game has started, but your browser blocked the new window.',
         label: 'Open game',
@@ -287,7 +287,6 @@ describe('HallTablesService', () => {
     expect(tables.busy()).toBe(true);
     const req = request('/hall');
     expect(body(req)).toEqual({
-      participantId: 'alice',
       format: 'movie',
       deckName: 'Elves',
       deckSource: 'player',
@@ -351,7 +350,6 @@ describe('HallTablesService', () => {
     });
     const req = request('/hall/solo');
     expect(body(req)).toEqual({
-      participantId: 'alice',
       format: 'fotr_block',
       deckName: 'FotR Starter - Gandalf',
       deckSource: 'library',
@@ -366,7 +364,7 @@ describe('HallTablesService', () => {
   it('leaves a waiting table', async () => {
     const leaving = tables.leave('11');
     const req = request('/hall/11/leave');
-    expect(body(req)).toEqual({ participantId: 'alice' });
+    expect(body(req)).toEqual({});
     req.flush('<result>OK</result>');
     expect(await leaving).toBe(true);
 

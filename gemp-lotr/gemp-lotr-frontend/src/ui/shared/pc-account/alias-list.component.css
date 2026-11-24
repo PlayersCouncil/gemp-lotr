@@ -20,6 +20,7 @@
 
 .gd-alias-list__signed-in,
 .gd-alias-list__blocked,
+.gd-alias-list__refusal,
 .gd-alias-list__empty {
   margin: 0 0 0.5em;
 }
@@ -68,11 +69,11 @@
   margin: 0.3em 0;
 }
 
-:host([data-place='login']) .gd-alias-list__error {
+:host([data-place='login']) :is(.gd-alias-list__error, .gd-alias-list__refusal) {
   color: var(--theme-login-error);
 }
 
-:host([data-place='account']) .gd-alias-list__error {
+:host([data-place='account']) :is(.gd-alias-list__error, .gd-alias-list__refusal) {
   color: var(--theme-account-load-error);
 }
 

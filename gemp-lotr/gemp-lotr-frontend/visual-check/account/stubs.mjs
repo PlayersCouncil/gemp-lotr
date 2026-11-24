@@ -60,6 +60,10 @@ export class FakePcServer {
     const refused = this.refuse[action];
     if (refused) {
       delete this.refuse[action];
+      // An enter refused not-linked: the server has corrected the list (PC-ACCOUNT.md)
+      if (action === 'enter' && refused[1] === 'not-linked') {
+        this.session = { ...this.session, aliases: this.session.aliases.filter((a) => String(a.id) !== body.playerId) };
+      }
       return refusal(...refused);
     }
     if (action === 'enter') {

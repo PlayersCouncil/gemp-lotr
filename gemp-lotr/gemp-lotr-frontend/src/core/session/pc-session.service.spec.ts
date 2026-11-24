@@ -7,7 +7,7 @@ import { SessionChannel } from '../platform/hall-tab.service';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageNavigation } from '../platform/page-navigation';
 import { NO_PC_SESSION } from './pc-account';
-import { NAME_TAKEN, NOT_ALLOWED, NOT_LINKED, UNAVAILABLE, WRONG_PASSWORD } from './pc-account-messages';
+import { NAME_TAKEN, NO_PC_ACCOUNT, NOT_ALLOWED, NOT_LINKED, UNAVAILABLE, WRONG_PASSWORD } from './pc-account-messages';
 import { PcSessionService } from './pc-session.service';
 
 class FakeNavigation {
@@ -227,5 +227,35 @@ describe('PcSessionService', () => {
       'https://auth.lotrtcgpc.net/logout?post_logout_redirect_uri=https%3A%2F%2Fplay.lotrtcgpc.net%2Fgemp-lotr%2Fng%2Flogin',
       '/gemp-lotr/ng/login',
     ]);
+  });
+
+  it("keeps a refusal as stray when the session asked for again is someone else's, until the next action", async () => {
+    setUp();
+    await loaded();
+    const ended = pc.create('Merry');
+    refuse(expectPost('/create'), 401, 'no-pc-account');
+    await settle();
+    expectSession().flush(readServerResponse('argonauth-session-nobody.json'));
+    await ended;
+    await settle();
+    expect(pc.kind()).toBe('nobody');
+    expect(pc.strayRefusal()).toBe(NO_PC_ACCOUNT);
+
+    const out = pc.logout('alias');
+    expect(pc.strayRefusal()).toBeNull();
+    expectPost('/logout').flush(readServerResponse('argonauth-logout-alias.json'));
+    await out;
+  });
+
+  it('keeps no stray refusal when the browser stays who it was', async () => {
+    setUp();
+    await loaded();
+    const taken = pc.create('Frodo');
+    refuse(expectPost('/create'), 409, 'name-taken');
+    await settle();
+    expectSession().flush(readServerResponse('argonauth-session-aliases.json'));
+    await taken;
+    await settle();
+    expect(pc.strayRefusal()).toBeNull();
   });
 });

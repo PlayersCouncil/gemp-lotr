@@ -41,21 +41,16 @@ describe('GempHttp', () => {
     req.flush('');
   });
 
-  it('sends the participantId from the page URL, decoded once', () => {
-    setUp('?participantId=Bob%20the%2BBrave');
-    http.getText('/deck/list').subscribe();
-    const req = backend.expectOne((r) => r.url === '/gemp-lotr-server/deck/list');
-    expect(req.request.params.get('participantId')).toBe('Bob the+Brave');
-    expect(req.request.urlWithParams).toContain('participantId=Bob%20the%2BBrave');
-    req.flush('');
-  });
-
-  it('can leave the participantId out', () => {
+  it("sends no participantId, whatever the page's address says (the server ignores it)", () => {
     setUp('?participantId=bob');
-    http.postText('/deck/formats', { includeEvents: false }, { participant: false }).subscribe();
-    const req = backend.expectOne('/gemp-lotr-server/deck/formats');
-    expect(req.request.serializeBody()).toBe('includeEvents=false');
-    req.flush('{}');
+    http.getText('/deck/list').subscribe();
+    const get = backend.expectOne((r) => r.url === '/gemp-lotr-server/deck/list');
+    expect(get.request.params.has('participantId')).toBe(false);
+    get.flush('');
+    http.postText('/deck/formats', { includeEvents: false }).subscribe();
+    const post = backend.expectOne('/gemp-lotr-server/deck/formats');
+    expect(post.request.serializeBody()).toBe('includeEvents=false');
+    post.flush('{}');
   });
 
   it('POSTs form-encoded data with every reserved character encoded, leaving out null values', () => {
@@ -70,9 +65,7 @@ describe('GempHttp', () => {
 
   it('gives the status of a successful POST with its body', async () => {
     setUp();
-    const answer = firstValueFrom(
-      http.postForStatus('/login', { login: 'bob', password: 'x' }, { participant: false }),
-    );
+    const answer = firstValueFrom(http.postForStatus('/login', { login: 'bob', password: 'x' }));
     const req = backend.expectOne('/gemp-lotr-server/login');
     expect(req.request.serializeBody()).toBe('login=bob&password=x');
     req.flush('<ok/>', { status: 202, statusText: 'Accepted' });

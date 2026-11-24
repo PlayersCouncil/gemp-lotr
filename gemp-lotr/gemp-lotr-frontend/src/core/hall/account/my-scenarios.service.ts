@@ -6,7 +6,6 @@ import { ScenarioApi } from '../../game/scenario/scenario-api.service';
 import { gamePageUrl } from '../../platform/app-paths';
 import { HallChannel } from '../../platform/hall-tab.service';
 import { PageNavigation, ReservedTab } from '../../platform/page-navigation';
-import { SessionService } from '../../session/session.service';
 import { gameKey, HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { AccountApi } from './account-api.service';
 import {
@@ -98,7 +97,6 @@ export class MyScenarios {
   private readonly scenarioApi = inject(ScenarioApi);
   private readonly navigation = inject(PageNavigation);
   private readonly offers = inject(HallReadyOffers);
-  private readonly participantId = inject(SessionService).participantId;
 
   private readonly answer_ = signal<MyScenariosAnswer | null>(null);
   private readonly saying_ = signal<ShelfSaying>({ text: '', kind: '' });
@@ -365,7 +363,7 @@ export class MyScenarios {
 
   /** openGame: the reserved tab goes to the game; without one, the hall's "Your game is ready" prompt offers it. */
   private openGame(tab: ReservedTab | null, gameId: string): void {
-    this.offers.openReserved(tab, gameKey(gameId), 'game', gamePageUrl(gameId, this.participantId));
+    this.offers.openReserved(tab, gameKey(gameId), 'game', gamePageUrl(gameId));
   }
 
   /** MyScenariosUI.post: one change at a time; said, and the list fetched again, either way. */

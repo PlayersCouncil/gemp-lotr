@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { FormData } from '../../api/form-codec';
-import { GempHttp, RequestOptions } from '../../api/gemp-http.service';
+import { GempHttp } from '../../api/gemp-http.service';
 import { parseXml } from '../../api/xml';
 import {
   GameHistoryFilterOptions,
@@ -21,12 +21,6 @@ import {
   parsePublicScenarios,
   parseScenarioCopy,
 } from './account-parsers';
-
-/**
- * My scenarios are the logged-in player's own: the server takes no `participantId` for /scenarios/mine and
- * /scenarios/public (an admin acting as somebody else sees their own), and the legacy page sent none.
- */
-const OWN: RequestOptions = { participant: false };
 
 /**
  * The My Account tab's own calls (communication.js getGameHistory, getGameHistoryFilters, getPlayerStats,
@@ -70,12 +64,12 @@ export class AccountApi {
 
   /** GET /scenarios/mine: the player's own scenarios, how many they may keep, and the draft they have open. */
   myScenarios(): Observable<MyScenariosAnswer> {
-    return this.http.getText('/scenarios/mine', {}, OWN).pipe(map((text) => parseMyScenarios(readJson(text))));
+    return this.http.getText('/scenarios/mine').pipe(map((text) => parseMyScenarios(readJson(text))));
   }
 
   /** GET /scenarios/public: the public scenarios the player may copy. */
   publicScenarios(): Observable<PublicScenario[]> {
-    return this.http.getText('/scenarios/public', {}, OWN).pipe(map((text) => parsePublicScenarios(readJson(text))));
+    return this.http.getText('/scenarios/public').pipe(map((text) => parsePublicScenarios(readJson(text))));
   }
 
   /** POST /scenarios/mine/copy: a copy of one of the player's own ("Copy of …"). */
@@ -100,7 +94,7 @@ export class AccountApi {
 
   /** Something that cannot be done is a 400 whose `{error}` is the server's reason (ApiError.said). */
   private post(what: string, data: FormData): Observable<unknown> {
-    return this.http.postText(`/scenarios/${what}`, data, OWN).pipe(map(readJson));
+    return this.http.postText(`/scenarios/${what}`, data).pipe(map(readJson));
   }
 }
 

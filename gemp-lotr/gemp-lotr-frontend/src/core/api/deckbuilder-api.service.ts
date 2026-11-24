@@ -75,7 +75,7 @@ export class DeckbuilderApi {
 
   /** getFormats: all formats keyed by code. 400 = the formats could not be retrieved. */
   getFormats(): Observable<FormatsReadout> {
-    return this.http.postJson<FormatsReadout>('/deck/formats', { includeEvents: false }, { participant: false });
+    return this.http.postJson<FormatsReadout>('/deck/formats', { includeEvents: false });
   }
 
   /** convertErrata: the same deck with the format's errata versions swapped in. 400 = invalid contents. */

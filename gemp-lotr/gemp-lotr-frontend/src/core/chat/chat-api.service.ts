@@ -9,7 +9,7 @@ import { parseChat, parseIgnored, parseIgnoreResult, parseIncognito } from './ch
 
 /**
  * The chat's server calls (ChatRequestHandler, PlayerInfoRequestHandler), as communication.js made them
- * (named in each comment). participantId is added by GempHttp; failed calls arrive as ApiError.
+ * (named in each comment), without their participantId; failed calls arrive as ApiError.
  */
 @Injectable()
 export class ChatApi {

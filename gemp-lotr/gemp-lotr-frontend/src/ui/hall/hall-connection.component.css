@@ -88,6 +88,8 @@
   bottom: calc(100% + 6px);
   left: 0;
   z-index: 200;
+  /* As wide as its text within its limits, whatever the readout's own box (Log Out sits beside it in the hall) */
+  width: max-content;
   min-width: 16rem;
   max-width: min(22rem, 90vw);
   padding: 0.5em 0.7em;
