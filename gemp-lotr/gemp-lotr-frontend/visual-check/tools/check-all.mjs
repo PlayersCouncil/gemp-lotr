@@ -82,6 +82,11 @@ const PARTS = [
     'Hall and login page: every scenario and the old addresses',
     reported(npm(VISUAL_CHECK, 'run', 'check:hall'), 'report-hall'),
   ],
+  // The PC account's behaviour on the login page, My Account and the hall, without a server (account/README.md)
+  [
+    'PC account: sign-in, aliases, log-outs and other tabs',
+    reported(npm(VISUAL_CHECK, 'run', 'check:account'), 'report-account'),
+  ],
   // The game screen (game/README.md): seeded games played on two pages
   // The Angular game page's table against game.html on the recorded games, without a server (the app as built in the web root)
   [

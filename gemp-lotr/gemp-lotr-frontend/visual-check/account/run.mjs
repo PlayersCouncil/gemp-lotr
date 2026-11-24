@@ -1,0 +1,534 @@
+#!/usr/bin/env node
+// The PC account's behaviour in a real browser, without a server (gemp-lotr/PC-ACCOUNT.md): the login page, My
+// Account and the hall against account/stubs.mjs's stand-in for the server's PC account addresses. No screenshots:
+// each scenario does what a player does and checks what the page shows and what was sent. Writes <out>/results.json;
+// exits with 1 when a scenario fails. See README.md.
+//
+//   npm run check:account
+//   npm run check:account -- --only create-taken,link-good --out report-account
+//   CHECK_BROWSER_EXECUTABLE=/usr/bin/google-chrome npm run check:account
+import fs from 'node:fs';
+import path from 'node:path';
+import { parseArgs } from 'node:util';
+import { launchBrowser } from '../browser.mjs';
+import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
+import { FakePcServer, read, sessionWithAliases } from './stubs.mjs';
+
+const { values: options } = parseArgs({
+  options: {
+    out: { type: 'string', default: 'report-account' },
+    only: { type: 'string' },
+  },
+});
+
+const NG = '/gemp-lotr/ng/';
+/** The hall: the app's root, which opens its Game Hall tab. */
+const HALL = [NG, `${NG}hall`];
+const SIGN_IN = '/gemp-lotr-server/argonauth/login';
+const WAIT = 5000;
+
+class Failed extends Error {}
+
+/** What a scenario can do: its page (more with `newPage`), the stand-in server, and checks that stop it at the first failure. */
+function tools(context, page, server) {
+  const visible = async (selector) => {
+    try {
+      await page.locator(selector).first().waitFor({ state: 'visible', timeout: WAIT });
+    } catch {
+      throw new Failed(`${selector} is not shown`);
+    }
+  };
+  return {
+    page,
+    server,
+    newPage: () => context.newPage(),
+    open: (address) => page.goto(STUB_ORIGIN + address),
+    visible,
+    absent: async (selector) => {
+      // Let the page settle first: a part drawn once the session is known
+      await page.waitForTimeout(300);
+      const count = await page.locator(selector).count();
+      if (count) throw new Failed(`${selector} is shown (${count})`);
+    },
+    text: async (selector, expected) => {
+      await visible(selector);
+      const actual = (await page.locator(selector).first().innerText()).replace(/\s+/g, ' ').trim();
+      if (actual !== expected) throw new Failed(`${selector} reads "${actual}", not "${expected}"`);
+    },
+    texts: async (selector, expected) => {
+      await visible(selector);
+      const actual = (await page.locator(selector).allInnerTexts()).map((t) => t.trim());
+      if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+        throw new Failed(`${selector}: ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`);
+      }
+    },
+    attribute: async (selector, name, expected) => {
+      await visible(selector);
+      const actual = await page.locator(selector).first().getAttribute(name);
+      if (actual !== expected)
+        throw new Failed(`${selector} [${name}] is ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`);
+    },
+    disabled: async (selector, expected = true) => {
+      await visible(selector);
+      const actual = await page.locator(selector).first().isDisabled();
+      if (actual !== expected) throw new Failed(`${selector} is ${actual ? '' : 'not '}disabled`);
+    },
+    click: async (selector) => {
+      await visible(selector);
+      await page.locator(selector).first().click();
+    },
+    fill: async (selector, value) => {
+      await visible(selector);
+      await page.locator(selector).first().fill(value);
+    },
+    /** An input's value. */
+    value: async (selector, expected) => {
+      await visible(selector);
+      const actual = await page.locator(selector).first().inputValue();
+      if (actual !== expected) throw new Failed(`${selector} holds "${actual}", not "${expected}"`);
+    },
+    /**
+     * The browser arrives within the wait at `where`: a path of the stub's (one of several, given an array), with the
+     * query `search` if given, or an outside address it starts with.
+     */
+    arrives: async (where, search = null, target = page) => {
+      const paths = [where].flat();
+      const matches = (url) =>
+        paths.some((p) =>
+          p.startsWith('http')
+            ? url.href.startsWith(p)
+            : url.origin === STUB_ORIGIN && url.pathname === p && (search === null || url.search === search),
+        );
+      try {
+        await target.waitForURL(matches, { timeout: WAIT, waitUntil: 'commit' });
+      } catch {
+        throw new Failed(`at ${target.url()}, not ${paths.join(' or ')}${search ?? ''}`);
+      }
+    },
+    /** The POSTs sent so far, as "path body". */
+    sent: (expected) => {
+      const actual = server.posts.map(({ path: p, body }) => `${p} ${new URLSearchParams(body).toString()}`);
+      if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+        throw new Failed(`sent ${JSON.stringify(actual)}, not ${JSON.stringify(expected)}`);
+      }
+    },
+  };
+}
+
+const ALIAS = (name) => `.gd-alias-list__alias[data-alias="${name}"]`;
+const ENTER = (name) => `${ALIAS(name)} [data-action="enter"]`;
+const ACTION = (action) => `.gd-alias-list__actions [data-action="${action}"]`;
+const FORM = 'form.gd-alias-list__form';
+const FORM_ERROR = `${FORM} .gd-alias-list__error`;
+const NAMES = '.gd-alias-list__name';
+
+/** Opens the create form and submits `name`. */
+async function create(t, name) {
+  await t.click(ACTION('create'));
+  await t.fill(`${FORM} input[name="name"]`, name);
+  await t.click(`${FORM} [data-action="submit"]`);
+}
+
+async function link(t, login, password) {
+  await t.click(ACTION('link'));
+  await t.fill(`${FORM} input[name="login"]`, login);
+  await t.fill(`${FORM} input[name="password"]`, password);
+  await t.click(`${FORM} [data-action="submit"]`);
+}
+
+const SCENARIOS = [
+  // ---- test mode: no PC account anywhere
+  {
+    name: 'test-login',
+    note: 'test mode: the login page as it always was',
+    server: { session: 'argonauth-session-test.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.visible('.gd-login__form .gd-button[data-action="register"]');
+      await t.absent('[data-action="pc-login"]');
+      await t.absent('gd-alias-list *');
+      await t.open(`${NG}login?pc=failed`);
+      await t.visible('.gd-login__form');
+      await t.absent('.gd-login__notice');
+    },
+  },
+  {
+    name: 'test-hall-account',
+    note: "test mode: nothing on My Account; the hall's Log Out still logs out",
+    server: { session: 'argonauth-session-test.json' },
+    run: async (t) => {
+      await t.open(`${NG}account`);
+      await t.visible('.gd-account-overview__ignores');
+      await t.absent('gd-pc-account-block *');
+      await t.click('.gd-hall__presence .gd-hall__logout');
+      await t.arrives(`${NG}login`);
+      t.sent(['/logout scope=alias']);
+      await t.visible('.gd-login__form .gd-button[data-action="register"]');
+    },
+  },
+  // ---- the login page in optional mode
+  {
+    name: 'optional-nobody',
+    note: 'optional mode, nobody: Sign in with PC Account, no registration form',
+    server: { session: 'argonauth-session-nobody.json' },
+    run: async (t) => {
+      await t.open(`${NG}login?return=%2Fevents%2Fleagues`);
+      await t.text('[data-action="pc-login"]', 'Sign in with PC Account');
+      await t.attribute('[data-action="pc-login"]', 'href', `${SIGN_IN}?return=%2Fevents%2Fleagues`);
+      await t.visible('.gd-login__intro[data-pc]');
+      await t.absent('[data-action="register"]');
+      await t.absent('.gd-login__input[name="password-repeated"]');
+      await t.visible('.gd-login__input[name="password"]');
+      await t.click('[data-action="pc-login"]');
+      await t.arrives('/gemp-lotr-server/argonauth/login', '?return=%2Fevents%2Fleagues');
+    },
+  },
+  {
+    name: 'optional-notices',
+    note: 'where a PC sign-in came back to: cancelled, failed',
+    server: { session: 'argonauth-session-nobody.json' },
+    run: async (t) => {
+      await t.open(`${NG}login?pc=cancelled`);
+      await t.text('.gd-login__notice', 'PC Account sign-in was cancelled.');
+      await t.open(`${NG}login?pc=failed`);
+      await t.text('.gd-login__notice', 'PC Account sign-in failed. Try again.');
+    },
+  },
+  {
+    name: 'list',
+    note: 'a PC account with several aliases: the list instead of the form',
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.text('.gd-alias-list__signed-in', 'Signed in as Frodo Baggins');
+      await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer']);
+      await t.texts(`${ALIAS('Frodo')} [data-action="enter"]`, ['Enter Gemp']);
+      await t.texts('.gd-alias-list__actions .gd-button', [
+        'Create New Gemp Alias',
+        'Link Existing Gemp Account',
+        'Log Out',
+      ]);
+      await t.absent('.gd-login__form');
+      await t.absent('.gd-alias-list__pager');
+    },
+  },
+  {
+    name: 'enter',
+    note: 'Enter Gemp: the alias is entered and the hall opens',
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.click(ENTER('Underhill'));
+      await t.arrives(HALL);
+      t.sent(['/enter playerId=900002']);
+    },
+  },
+  {
+    name: 'gate',
+    note: 'another alias busy: only it can be entered, and none created',
+    server: { session: 'argonauth-session.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.text('.gd-alias-list__blocked', 'Underhill is still playing: only it can be entered.');
+      await t.disabled(ENTER('Frodo'));
+      await t.disabled(ENTER('Underhill'), false);
+      await t.disabled(ACTION('create'));
+      await t.disabled(ACTION('link'), false);
+      await t.click(ENTER('Underhill'));
+      await t.arrives(HALL);
+      t.sent(['/enter playerId=900002']);
+    },
+  },
+  {
+    name: 'gate-current',
+    note: 'the alias played is the busy one: it alone can be entered, none created, linking still can',
+    server: { session: { ...read('argonauth-session.json'), blockedBy: 'Frodo' } },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.text('.gd-alias-list__blocked', 'Frodo is still playing: only it can be entered.');
+      await t.disabled(ENTER('Frodo'), false);
+      await t.disabled(ENTER('Underhill'));
+      await t.disabled(ACTION('create'));
+      await t.disabled(ACTION('link'), false);
+    },
+  },
+  {
+    name: 'paging',
+    note: 'eleven aliases: ten to a page',
+    server: { session: sessionWithAliases(11) },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.text('.gd-alias-list__page', 'Page 1 of 2');
+      const first = await t.page.locator(NAMES).count();
+      if (first !== 10) throw new Failed(`${first} aliases on the first page`);
+      await t.disabled('[data-action="previous"]');
+      await t.click('[data-action="next"]');
+      await t.texts(NAMES, ['Alias11']);
+      await t.text('.gd-alias-list__page', 'Page 2 of 2');
+      await t.disabled('[data-action="next"]');
+    },
+  },
+  {
+    name: 'create-good',
+    note: 'Create New Gemp Alias: made, entered, the hall opens',
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await create(t, 'Merry');
+      await t.arrives(HALL);
+      t.sent(['/create name=Merry']);
+    },
+  },
+  {
+    name: 'create-bad-name',
+    note: "a name outside Gemp's rule is not sent",
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await create(t, 'no spaces!');
+      await t.text(FORM_ERROR, 'A name is 2 to 30 letters, digits, _ or -.');
+      t.sent([]);
+    },
+  },
+  {
+    name: 'create-taken',
+    note: 'a name taken: said under the form, the page stays',
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await create(t, 'frodo');
+      await t.text(FORM_ERROR, 'That name is taken.');
+      await t.arrives(`${NG}login`);
+      t.sent(['/create name=frodo']);
+    },
+  },
+  {
+    name: 'create-reauth',
+    note: '401 reauth: through a fresh PC sign-in, back with the form open',
+    server: { session: 'argonauth-session-aliases.json', refuse: { create: [401, 'reauth'] } },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await create(t, 'Merry');
+      await t.arrives('/gemp-lotr-server/argonauth/login', '?then=create');
+      // The callback's landing
+      await t.open(`${NG}login?open=create`);
+      await t.attribute(FORM, 'data-form', 'create');
+    },
+  },
+  {
+    name: 'create-stale',
+    note: 'a lapsed PC sign-in: Create goes through a sign-in before the form',
+    server: { session: 'argonauth-session-stale.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.click(ACTION('create'));
+      await t.arrives('/gemp-lotr-server/argonauth/login', '?then=create');
+      t.sent([]);
+    },
+  },
+  {
+    name: 'link-good',
+    note: 'Link Existing Gemp Account: the alias joins the list, nothing entered',
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await link(t, 'OldSam', 'secret');
+      await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer', 'OldSam']);
+      await t.absent(FORM);
+      await t.arrives(`${NG}login`);
+      t.sent(['/link login=OldSam&password=secret']);
+    },
+  },
+  {
+    name: 'link-bad',
+    note: 'wrong credentials: said under the form',
+    server: { session: 'argonauth-session-aliases.json', refuse: { link: [401, 'bad-credentials'] } },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await link(t, 'OldSam', 'wrong');
+      await t.text(FORM_ERROR, 'Wrong username or password, or that account cannot be linked with a password.');
+      await t.value(`${FORM} input[name="password"]`, '');
+      await t.value(`${FORM} input[name="login"]`, 'OldSam');
+    },
+  },
+  {
+    name: 'link-elsewhere',
+    note: 'an account of another PC account: said under the form',
+    server: { session: 'argonauth-session-aliases.json', refuse: { link: [409, 'linked-elsewhere'] } },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await link(t, 'OldSam', 'secret');
+      await t.text(FORM_ERROR, 'That account belongs to another PC Account.');
+      await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer']);
+    },
+  },
+  {
+    name: 'logout-all',
+    note: "the alias list's Log Out: everything, to the PC Account's sign-out",
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.click(ACTION('logout'));
+      await t.arrives(read('argonauth-logout-all.json').next.split('?')[0]);
+      t.sent(['/logout scope=all']);
+    },
+  },
+  {
+    name: 'logout-hall',
+    note: "the hall's Log Out: the alias only, to the login page's list",
+    server: { session: 'argonauth-session.json' },
+    run: async (t) => {
+      await t.open(`${NG}hall`);
+      await t.text('.gd-hall__presence .gd-hall__logout', 'Log Out');
+      await t.click('.gd-hall__logout');
+      await t.arrives(`${NG}login`);
+      t.sent(['/logout scope=alias']);
+      await t.text('.gd-alias-list__signed-in', 'Signed in as Frodo Baggins');
+    },
+  },
+  {
+    name: 'password-login',
+    note: 'a password login: its one account, Enter Gemp and Log Out',
+    server: { session: 'argonauth-session-password.json' },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.texts(NAMES, ['Samwise']);
+      await t.texts('.gd-alias-list__actions .gd-button', ['Log Out']);
+      await t.absent('.gd-alias-list__signed-in');
+      await t.click(ENTER('Samwise'));
+      await t.arrives(HALL);
+      t.sent([]);
+      await t.click('.gd-hall__logout');
+      await t.arrives(`${NG}login`);
+      t.sent(['/logout scope=alias']);
+      await t.visible('.gd-login__form');
+    },
+  },
+  // ---- My Account
+  {
+    name: 'account-pc',
+    note: 'My Account, a PC account: the alias list and Manage PC Account',
+    server: { session: 'argonauth-session.json' },
+    run: async (t) => {
+      await t.open(`${NG}account`);
+      await t.visible('gd-pc-account-block gd-alias-list[data-place="account"]');
+      await t.texts(`gd-pc-account-block ${NAMES}`, ['Frodo', 'Underhill']);
+      await t.attribute('.gd-pc-account-block__manage', 'href', 'https://auth.lotrtcgpc.net/');
+      await t.attribute('.gd-pc-account-block__manage', 'target', '_blank');
+      await t.absent('.gd-pc-account-block__connect');
+    },
+  },
+  {
+    name: 'account-password',
+    note: 'My Account, a password login not linked: Connect PC Account',
+    server: { session: 'argonauth-session-password.json' },
+    run: async (t) => {
+      await t.open(`${NG}account`);
+      await t.visible('.gd-pc-account-block__about');
+      await t.text('.gd-pc-account-block__connect', 'Connect PC Account');
+      await t.attribute('.gd-pc-account-block__connect', 'href', `${SIGN_IN}?then=connect`);
+      await t.absent('gd-pc-account-block gd-alias-list *');
+      await t.open(`${NG}account?pc=linked-elsewhere`);
+      await t.text('.gd-pc-account-block__notice', 'This account already belongs to another PC Account.');
+      await t.open(`${NG}account?pc=failed`);
+      await t.text('.gd-pc-account-block__notice', 'PC Account sign-in failed. Try again.');
+      await t.open(`${NG}account?pc=cancelled`);
+      await t.text('.gd-pc-account-block__notice', 'PC Account sign-in was cancelled.');
+    },
+  },
+  {
+    name: 'account-linked',
+    note: 'My Account, a password login linked: says so',
+    server: { session: 'argonauth-session-password-linked.json' },
+    run: async (t) => {
+      await t.open(`${NG}account?pc=connected`);
+      await t.text('.gd-pc-account-block__notice', 'This account is now connected to your PC Account.');
+      await t.text(
+        '.gd-pc-account-block__connected',
+        'This account is connected to a PC Account. Sign in with the PC Account to see all your aliases.',
+      );
+      await t.absent('.gd-pc-account-block__connect');
+    },
+  },
+  // ---- other tabs
+  {
+    name: 'second-tab',
+    note: 'entering an alias in one tab reloads the deck builder open in another',
+    server: { session: 'argonauth-session-aliases.json' },
+    run: async (t) => {
+      const other = await t.newPage();
+      await other.goto(`${STUB_ORIGIN}${NG}deckbuilder`);
+      await other.locator('.gd-page').waitFor({ state: 'visible', timeout: WAIT });
+      await other.evaluate(() => (window.gempMarker = 'before'));
+      await t.open(`${NG}login`);
+      await t.click(ENTER('Frodo'));
+      await t.arrives(HALL);
+      try {
+        await other.waitForFunction(() => window.gempMarker === undefined, null, { timeout: WAIT });
+      } catch {
+        throw new Failed('the other tab did not reload');
+      }
+      await other.locator('.gd-page').waitFor({ state: 'visible', timeout: WAIT });
+    },
+  },
+];
+
+const only = options.only ? options.only.split(',') : null;
+const scenarios = SCENARIOS.filter((s) => !only || only.includes(s.name));
+if (only && scenarios.length !== only.length) {
+  console.error(`Unknown scenario: ${only.filter((name) => !SCENARIOS.some((s) => s.name === name)).join(', ')}`);
+  process.exit(2);
+}
+
+const outDir = path.resolve(options.out);
+fs.mkdirSync(outDir, { recursive: true });
+const browser = await launchBrowser();
+
+async function check(scenario) {
+  const log = [];
+  const server = new FakePcServer(scenario.server);
+  const context = await browser.newContext({ viewport: { width: 1366, height: 768 } });
+  // The built-in chat, not Discord's embed (a new tab's about:blank has no storage)
+  await context.addInitScript(() => {
+    try {
+      localStorage.setItem('gemp.hallChat', 'builtin');
+    } catch {
+      // about:blank
+    }
+  });
+  await routeToStub(context, log, { answer: server.answers() });
+  // The account service's own pages (Log Out from the alias list ends there): a page that says where it is
+  await context.route(/^https:\/\/auth\.lotrtcgpc\.net\//, (route) =>
+    route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>PC Account</title>' }),
+  );
+  const page = await context.newPage();
+  const errors = [];
+  context.on('page', (opened) =>
+    opened.on('pageerror', (error) => errors.push(String(error.message ?? error).slice(0, 200))),
+  );
+  page.on('pageerror', (error) => errors.push(String(error.message ?? error).slice(0, 200)));
+  const problems = [];
+  try {
+    await scenario.run(tools(context, page, server));
+  } catch (error) {
+    problems.push(error instanceof Failed ? error.message : `could not run: ${String(error.message).split('\n')[0]}`);
+  } finally {
+    await context.close();
+  }
+  for (const error of errors) problems.push(`page error: ${error}`);
+  console.log(
+    `${problems.length ? 'FAIL' : 'pass'} ${scenario.name}${problems.length ? `: ${problems.join('; ')}` : ''}`,
+  );
+  return { name: scenario.name, only: scenario.name, note: scenario.note, problems };
+}
+
+try {
+  const results = [];
+  for (const scenario of scenarios) results.push(await check(scenario));
+  fs.writeFileSync(path.join(outDir, 'results.json'), JSON.stringify({ checks: results }, null, 1));
+  const failed = results.filter((r) => r.problems.length).length;
+  console.log(`\n${results.length} scenarios, ${failed} failed. Results: ${path.join(outDir, 'results.json')}`);
+  process.exitCode = failed ? 1 : 0;
+} finally {
+  await browser.close();
+}

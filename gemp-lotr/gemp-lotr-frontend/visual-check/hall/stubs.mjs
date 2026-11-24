@@ -48,6 +48,8 @@ export function hallAnswers({ visitor = false, hall = 'hall.xml', history = 'gam
     // The login page's server status: the legacy page reads the text of GET /, the Angular page GET /status
     if (p === '/') return { text: read('server-status.txt'), type: 'text/html' };
     if (p === '/status') return json('server-status.json');
+    // The PC account's session: test mode, so the pages are as they were (account/ checks the other modes)
+    if (p === '/argonauth/session') return json('argonauth-session-test.json');
     if (p === '/player')
       return player ? { json: { ...JSON.parse(read('player.json')), ...player } } : json('player.json');
     if (p === '/player/ignores') return { json: { ignored: [] } };
