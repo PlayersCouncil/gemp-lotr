@@ -768,7 +768,11 @@ const CHECKS = {
     const field = page.locator(ui.searchField('cardType')).locator('select');
     await field.selectOption('ALLY');
     await page.locator(`dialog[data-dialog="edit-search"][open] label.gd-culture[data-culture="GONDOR"]`).click();
-    await until(async () => (await page.locator(ui.searchUse).getAttribute('title'))?.includes('cardType:ALLY'), 'the filter');
+    // (both choices in the filter before it is read: the culture's click arrives a moment after the select's)
+    await until(async () => {
+      const title = (await page.locator(ui.searchUse).getAttribute('title')) ?? '';
+      return title.includes('cardType:ALLY') && title.includes('culture:GONDOR');
+    }, 'the filter');
     const filter = await page.locator(ui.searchUse).getAttribute('title');
     await seat.shot('find');
     await page.locator(ui.searchUse).click();
