@@ -24,7 +24,7 @@ that the browser got there, and opens where the server would send it back to (`?
 
 What it covers: `test` mode shows no PC account on the login page or My Account, and the hall's Log Out works there; in `optional` mode Sign in
 with PC Account (with the page's `return`) and no registration form, and the lines for a cancelled or failed sign-in;
-the alias list with several aliases, Enter, the gate (`blockedBy`: this browser's alias busy) and an alias busy elsewhere gating nothing, paging at eleven aliases; Create (made, a name
+the alias list with several aliases, Enter (and an alias unlinked meanwhile, its refusal kept), the gate (`blockedBy`: this browser's alias busy) and an alias busy elsewhere gating nothing, paging at eleven aliases; Create (made, a name
 outside the rule, a name taken, `401 reauth`, a lapsed sign-in); Link (linked, wrong credentials, linked elsewhere);
 the alias list's Log Out and the hall's; a password login's own page and its Log Out; My Account's three states, its four `?pc=` lines and Connect
 PC Account (its password, accepted and refused); and a deck builder open in a second tab reloading when the first enters an alias.

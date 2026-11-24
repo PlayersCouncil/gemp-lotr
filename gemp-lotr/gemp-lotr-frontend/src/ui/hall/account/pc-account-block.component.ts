@@ -26,7 +26,8 @@ import { PcFormComponent, PcFormField } from '../../shared/pc-account/pc-form.co
  *
  * DOM contract: `gd-pc-account-block.gd-pc-account-block` (`data-kind` = pc | password, once known and outside `test`)
  * holding, outside `test` mode, `section` (`aria-labelledby` its `h2`) with `p.gd-pc-account-block__notice`
- * (`role=status`, with a `?pc=` line), then for pc `gd-alias-list[data-place=account]` and
+ * (`role=status`, with a `?pc=` line), `p.gd-pc-account-block__refusal` (`role=alert`, a refusal whose form or list
+ * the session then took away, e.g. Connect's `not-allowed`), then for pc `gd-alias-list[data-place=account]` and
  * `a.gd-pc-account-block__manage` (`target=_blank`); for a password login `p.gd-pc-account-block__about` and
  * `button.gd-pc-account-block__connect`, or once pressed `gd-pc-form` (its form's `data-form=connect`, the field
  * `password`) (not linked) or `p.gd-pc-account-block__connected` (linked).
@@ -43,6 +44,9 @@ import { PcFormComponent, PcFormField } from '../../shared/pc-account/pc-form.co
         <h2 id="gd-pc-account-heading">{{ text.heading }}</h2>
         @if (notice; as notice) {
           <p class="gd-pc-account-block__notice" role="status">{{ notice }}</p>
+        }
+        @if (pc.strayRefusal(); as refusal) {
+          <p class="gd-pc-account-block__refusal" role="alert">{{ refusal }}</p>
         }
         @if (kind === 'pc') {
           <gd-alias-list place="account" />

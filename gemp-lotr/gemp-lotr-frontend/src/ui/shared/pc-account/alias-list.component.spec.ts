@@ -324,4 +324,26 @@ describe('AliasListComponent', () => {
       expect(el.hasAttribute('data-kind')).toBe(false);
     },
   );
+
+  it("says a refused Enter Gemp at the list's level when the session asked for again no longer has the alias", async () => {
+    setUp();
+    const { query, names, enterOf, stable, button } = await render(
+      readServerResponse('argonauth-session-aliases.json'),
+    );
+    enterOf('Ringbearer').click();
+    refuse(expectPost('/enter'), 403, 'not-linked');
+    await stable();
+    const session = JSON.parse(readServerResponse('argonauth-session-aliases.json'));
+    expectSession().flush(JSON.stringify({ ...session, aliases: session.aliases.slice(0, 2) }));
+    await stable();
+    expect(names()).toEqual(['Frodo', 'Underhill']);
+    const refusal = query('.gd-alias-list__refusal')!;
+    expect([refusal.textContent, refusal.getAttribute('role')]).toEqual([
+      'That alias is no longer linked to your PC Account.',
+      'alert',
+    ]);
+    button('link').click();
+    await stable();
+    expect(query('.gd-alias-list__refusal')).toBeNull();
+  });
 });

@@ -225,4 +225,38 @@ describe('AliasList', () => {
     await out;
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/', '/gemp-lotr/ng/login']);
   });
+
+  it("keeps a refused Enter Gemp's message at the list's level when its alias has left the list", async () => {
+    setUp();
+    await started(readServerResponse('argonauth-session-aliases.json'));
+    const ringbearer = list.aliases()[2];
+    const refused = list.enter(ringbearer);
+    refuse(expectPost('/enter'), 403, 'not-linked');
+    // Asked again, the session no longer has it
+    await answerRefresh(
+      JSON.stringify({
+        ...JSON.parse(readServerResponse('argonauth-session-aliases.json')),
+        aliases: JSON.parse(readServerResponse('argonauth-session-aliases.json')).aliases.slice(0, 2),
+      }),
+    );
+    await refused;
+    expect(list.aliases().map((alias) => alias.name)).toEqual(['Frodo', 'Underhill']);
+    expect(list.listError()).toBe(NOT_LINKED);
+    // until the next action
+    list.open('link');
+    expect([list.listError(), list.aliasError()]).toEqual([null, null]);
+  });
+
+  it("keeps a refused alias's message beside it while it is listed, and none at the list's level", async () => {
+    setUp();
+    await started(readServerResponse('argonauth-session-aliases.json'));
+    const refused = list.enter(list.aliases()[0]);
+    refuse(expectPost('/enter'), 403, 'banned');
+    await answerRefresh();
+    await refused;
+    expect(list.aliasError()?.message).toBe('That alias is banned.');
+    expect(list.listError()).toBeNull();
+    list.cancel();
+    expect(list.aliasError()).toBeNull();
+  });
 });

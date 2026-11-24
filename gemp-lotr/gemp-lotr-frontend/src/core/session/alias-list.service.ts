@@ -41,6 +41,14 @@ export class AliasList {
   readonly password = this.password_.asReadonly();
   /** The refusal of the last Enter Gemp, beside that alias. */
   readonly aliasError = this.aliasError_.asReadonly();
+  /**
+   * The refusal of the last Enter Gemp when its alias is no longer listed (unlinked at the account service: the
+   * session asked for again lost it), for the list to show at its own level; null at the next action.
+   */
+  readonly listError = computed(() => {
+    const error = this.aliasError_();
+    return error !== null && !this.aliases().some((alias) => alias.id === error.id) ? error.message : null;
+  });
   /** The refusal of the open form's last submit, or its name check. */
   readonly formError = this.formError_.asReadonly();
   /** A call is under way: the list's buttons wait. */
@@ -85,6 +93,7 @@ export class AliasList {
 
   /** Create New Gemp Alias (Link Existing Gemp Account): its form, after a sign-in if the last one has lapsed. */
   open(form: AliasForm): void {
+    this.aliasError_.set(null);
     if (form === 'create' && this.blockedBy() !== null) return;
     if (this.session()?.pcAccount?.fresh === false) {
       this.pc.signInFor(form);
@@ -95,6 +104,7 @@ export class AliasList {
   }
 
   cancel(): void {
+    this.aliasError_.set(null);
     this.form_.set(null);
     this.formError_.set(null);
     this.name_.set('');
@@ -116,12 +126,14 @@ export class AliasList {
 
   /** The open form's submit. */
   submit(): Promise<void> {
+    this.aliasError_.set(null);
     return this.form_() === 'link' ? this.link() : this.create();
   }
 
   /** Log Out from the list: everything, the PC account's sign-in included. */
   async logout(): Promise<void> {
     if (this.busy_()) return;
+    this.aliasError_.set(null);
     await this.during(() => this.pc.logout('all'));
   }
 

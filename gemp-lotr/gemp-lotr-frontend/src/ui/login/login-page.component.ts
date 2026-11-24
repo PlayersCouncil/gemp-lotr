@@ -41,7 +41,8 @@ function segments(message: LoginMessage | null): Segment[] {
  * draws a logo), `h1.gd-login__banner`, then `.gd-login__content` with `section.gd-login__panel` and
  * `section.gd-login__info`. The panel: `p.gd-login__status` (the server's status line, once loaded),
  * `div.gd-login__error` (`role=alert`; the message: `span`s of text, its line breaks as `br`, its links as `a`), then
- * `p.gd-login__notice` (`role=status`, `optional` only, with a `?pc=` line), `gd-alias-list[data-place=login]` (a
+ * `p.gd-login__notice` (`role=status`, `optional` only, with a `?pc=` line), `p.gd-login__refusal` (`role=alert`, a
+ * refusal of the alias list's whose list the session then took away, e.g. a PC sign-in that had ended), `gd-alias-list[data-place=login]` (a
  * PC account or a password login), or unless banned `form.gd-login__form` (`data-mode`, `data-busy` and `aria-busy` while a call is under way): in login mode
  * `p.gd-login__intro` ("Login below, or" `button.gd-button[data-action=register]`; in `optional`
  * mode instead `data-pc` with the new players' line and `a.gd-button[data-action=pc-login]`), a `label.gd-login__field` per field
@@ -80,6 +81,9 @@ function segments(message: LoginMessage | null): Segment[] {
         </div>
         @if (notice(); as notice) {
           <p class="gd-login__notice" role="status">{{ notice }}</p>
+        }
+        @if (pc.strayRefusal(); as refusal) {
+          <p class="gd-login__refusal" role="alert">{{ refusal }}</p>
         }
         @if (pc.kind() === 'pc' || pc.kind() === 'password') {
           <gd-alias-list place="login" />

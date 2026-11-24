@@ -224,6 +224,20 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'enter-unlinked',
+    note: 'Enter Gemp on an alias unlinked at the account service: it leaves the list, and the message stays',
+    server: { session: 'argonauth-session-aliases.json', refuse: { enter: [403, 'not-linked'] } },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.click(ENTER('Ringbearer'));
+      await t.texts(NAMES, ['Frodo', 'Underhill']);
+      await t.text('.gd-alias-list__refusal', 'That alias is no longer linked to your PC Account.');
+      await t.attribute('.gd-alias-list__refusal', 'role', 'alert');
+      await t.arrives(`${NG}login`);
+      t.sent(['/enter playerId=900003']);
+    },
+  },
+  {
     name: 'gate',
     note: "this browser's alias busy: only it can be entered, none created, linking still can",
     server: { session: 'argonauth-session.json' },
