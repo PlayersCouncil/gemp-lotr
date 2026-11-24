@@ -29,7 +29,7 @@ import { OrdersEditor } from './orders-editor';
     <gd-author-select
       data-part="fallback"
       label="Fallback"
-      hint="fail: that is leaving the script; pass: it does as little as it can; bot: it plays as a bot; sandbox: it plays the minions it can afford, and assigns the minions left to the leftovers character"
+      hint="fail: that is leaving the script; pass: it does as little as it can; bot: Gemp's bot plays it; sandbox: it plays the minions it can afford, and assigns the minions left to the leftovers character; eager: it takes every action and response it can"
       [options]="options()"
       [value]="fallback()"
       (changed)="choose($event)"

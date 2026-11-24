@@ -1,0 +1,35 @@
+/* The Scenario tab's judge and score: a row of selects each, the requirements and a custom value under them */
+
+:host {
+  display: block;
+}
+
+.gd-author-judging {
+  margin: 4px 0 6px;
+}
+
+.gd-author-judging__row {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 4px;
+  min-width: 0;
+}
+
+.gd-author-judging__row select.gd-author-input {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 1px 2px;
+}
+
+.gd-author-input.gd-author-judging__turn {
+  flex: 0 0 52px;
+  width: 52px;
+}
+
+textarea.gd-author-input {
+  width: 100%;
+  margin: 2px 0 4px;
+  font-family: var(--theme-game-author-code-font);
+}

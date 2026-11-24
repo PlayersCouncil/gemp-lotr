@@ -1,0 +1,30 @@
+/* The Scenario tab's solutions: the recording banner, the list, and Record */
+
+:host {
+  display: block;
+}
+
+.gd-author-solutions__recording {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 2px 0 6px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  background: var(--theme-game-author-told-bg);
+  color: var(--theme-game-author-told-text);
+  font-size: 12px;
+}
+
+.gd-author-solutions {
+  margin: 0 0 4px;
+}
+
+.gd-author-solutions__record {
+  margin-top: 4px;
+}
+
+.gd-author-solutions__record .gd-author-button {
+  margin-left: 4px;
+}
