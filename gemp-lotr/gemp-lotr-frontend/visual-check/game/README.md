@@ -291,6 +291,43 @@ something, a card shown large, a choice, the page's dialogs, the end), a text fi
 every move it made, and `summary.txt`. `--page angular` (the default) is the only page in `PAGES`: game.html's
 overlay would need an entry of its own.
 
+## The sandbox checks
+
+`npm run check:game:sandbox` (`sandbox.mjs`, against a game check server kept up, as the tutorial check) plays the
+default sandbox (`sandbox`, which ships with the server) on the Angular game page as `GamePlayer0`: the table changed
+by hand (see "A table changed by hand" in the frontend's README). Each check starts a game of its own; every change is
+asserted on the page and in the server's own view of the table (`GET /scenarios/sandbox/state`), and a refusal the
+server is not meant to make fails the check.
+
+- **open**: the sandbox opens in edit mode: the bar says Editing with Start (and no Stop, and no Start again in the
+  menu), no decision text or buttons, an open spot in each of the six rows (each seat's characters and support, the
+  minions, the hand); the context-menu key on a focused card opens its menu at Info, Down goes to Send to, Right into
+  its submenu, Left back, Escape closes it and gives the focus back to the card; Info shows the card's details.
+- **add**: Legolas found by the search window with a name filter (bound to "Companions" for the characters) put among
+  the characters; from Recent (Legolas first) into the hand; from In this scenario into the other seat's characters;
+  after a reload the search still has its filter (bound to "Support cards" for the support) and "Clear filters" clears
+  it; Recent is still there.
+- **menu**: every entry of the card menu: Attach (Armor onto Legolas, picked on the table: the bar says what to pick,
+  the box is round the card under the pointer), Add (two wounds by the stepper, a heal, three Elven tokens, two Sauron
+  tokens and one taken off; his own culture listed first), Modify (Strength +2 this turn, Archer with no number until
+  removed, both listed on him, one taken off by its ×), Copy, Send to (the copy to the discard pile), Stack (a Goblin
+  Runner on Legolas), Delete (Legolas out of the game, the Armor he bore in the discard pile).
+- **refuse**: deleting the Ring-bearer is refused, and the page says so by the card in the server's own words.
+- **play**: Legolas added to the hand, Start: the bar says Playing, no open spots, the fellowship prompt offers
+  Legolas, who is played; right-click is the card's details again; Stop (once the game can stop), an Armor added in
+  edit mode, Start again.
+- **undo**: after an edit, Start, a card played and Stop, the undo list reads "Stopped play", "Played Legolas,
+  Greenleaf", "Started play", "Added Legolas, Greenleaf"; going back to before the edit leaves the page stopped, the
+  card gone, the open spots back and no decision shown, and the controls work on the rebuilt game.
+- **reset**: Reset asks in the page's own dialog (Cancel changes nothing), then the page is on a fresh game in edit
+  mode without what was added.
+- **ended**: Frodo given four wounds with the stepper, then Start: the end panel (`data-result=ended`) says "You lost"
+  and "The Ring-Bearer is dead", with Reset and Leave; Reset goes to a fresh game.
+
+Every check runs in both themes at 1366×768 (`--theme classic` or `--theme modern` for one; `--only menu,play`;
+`--verbose`). The report is `report-sandbox/` (`--out`): screenshots of the steps worth seeing and a text file per
+check with every move.
+
 ## The table check
 
 `npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:
