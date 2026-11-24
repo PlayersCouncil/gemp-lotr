@@ -11,7 +11,6 @@ import com.gempukku.polling.LongPollingResource;
 import com.gempukku.polling.LongPollingSystem;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,10 +52,9 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
     private void postMessages(HttpRequest request, String room, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String message = getFormParameterSafely(postDecoder, "message");
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             ChatRoomMediator chatRoom = _chatServer.getChatRoom(room);
             if (chatRoom == null)
@@ -140,10 +138,7 @@ public class ChatRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     private void getMessages(HttpRequest request, String room, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         ChatRoomMediator chatRoom = _chatServer.getChatRoom(room);
         if (chatRoom == null)

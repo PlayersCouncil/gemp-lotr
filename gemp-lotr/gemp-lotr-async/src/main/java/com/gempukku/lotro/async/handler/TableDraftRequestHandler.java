@@ -19,7 +19,6 @@ import com.gempukku.lotro.tournament.Tournament;
 import com.gempukku.lotro.tournament.TournamentService;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,9 +66,7 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
     }
 
     private void getAvailablePicks(HttpRequest request, String eventId, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         if (eventMap.containsKey(eventId) && eventMap.get(eventId).containsKey(resourceOwner.getName())) {
             // Check saved players first
@@ -138,8 +135,7 @@ public class TableDraftRequestHandler extends LotroServerRequestHandler implemen
     private void makePick(HttpRequest request, String eventId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             String selectedChoiceId = getFormParameterSafely(postDecoder, "choiceId");
 
             if (eventMap.containsKey(eventId) && eventMap.get(eventId).containsKey(resourceOwner.getName())) {

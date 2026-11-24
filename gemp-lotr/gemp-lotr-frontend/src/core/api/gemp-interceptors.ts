@@ -24,7 +24,10 @@ export const BYPASS_CACHE = new HttpContextToken<boolean>(() => true);
 
 const toServer = (url: string) => url.startsWith(SERVER_URL);
 
-/** Acting for another player (admins, `?participantId=`): every call says so. */
+/**
+ * Passes the page's `?participantId=` on with every call, as the legacy client did. The server ignores it since
+ * November 2026 (the acting player is the session's); see SessionService for why this is still here.
+ */
 const participantInterceptor: HttpInterceptorFn = (request, next) => {
   const participantId = inject(SessionService).participantId;
   if (!toServer(request.url) || participantId === null || !request.context.get(SEND_PARTICIPANT)) {

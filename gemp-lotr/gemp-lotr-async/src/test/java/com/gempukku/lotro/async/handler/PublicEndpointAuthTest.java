@@ -11,7 +11,6 @@ import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,16 +31,12 @@ import static org.mockito.Mockito.*;
 public class PublicEndpointAuthTest {
     private static final String SERVER = "/gemp-lotr-server";
 
-    private String previousTestProperty;
     private Map<Type, Object> context;
     private LotroFormatLibrary formatLibrary;
     private GameHistoryService gameHistoryService;
 
     @Before
     public void setUp() {
-        // getResourceOwnerSafely treats the participantId as the login when -Dtest=true; these requests are anonymous
-        previousTestProperty = System.clearProperty("test");
-
         formatLibrary = mock(LotroFormatLibrary.class);
         LotroFormat pcErrata = mock(LotroFormat.class);
         when(formatLibrary.getFormat("pc_errata")).thenReturn(pcErrata);
@@ -52,12 +47,6 @@ public class PublicEndpointAuthTest {
         context.put(LotroFormatLibrary.class, formatLibrary);
         context.put(LotroCardBlueprintLibrary.class, mock(LotroCardBlueprintLibrary.class));
         context.put(GameHistoryService.class, gameHistoryService);
-    }
-
-    @After
-    public void tearDown() {
-        if (previousTestProperty != null)
-            System.setProperty("test", previousTestProperty);
     }
 
     private static HttpRequest anonymous(HttpMethod method, String uri) {

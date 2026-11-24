@@ -118,8 +118,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
     }
 
     private void list(HttpRequest request, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        Player player = getResourceOwnerSafely(request, getQueryParameterSafely(queryDecoder, "participantId"));
+        Player player = getResourceOwnerSafely(request);
 
         Map<String, DBDefs.ScenarioProgress> progress = _runLog.progressOf(player);
         List<Map<String, Object>> scenarios = new ArrayList<>();
@@ -207,7 +206,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
     private void start(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player player = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
+            Player player = getResourceOwnerSafely(request);
             String id = getFormParameterSafely(postDecoder, "id");
 
             ScenarioLibrary.Entry entry = _scenarios.get(id);
@@ -239,7 +238,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
     private void errors(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         //Not on behalf of anybody else: the caller has to be an admin themselves
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
         if (!player.hasType(Player.Type.ADMIN))
             throw new HttpProcessingException(403);
 
@@ -269,7 +268,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
     private void mine(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
         //Not on behalf of anybody else: a player's scenarios are their own
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
         if (!mayAuthor(player))
             throw new HttpProcessingException(403);
         boolean admin = player.hasType(Player.Type.ADMIN);
@@ -330,7 +329,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
     private void admin(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
         //Not on behalf of anybody else: the caller has to be an admin themselves
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
         if (!player.hasType(Player.Type.ADMIN))
             throw new HttpProcessingException(403);
         String name = player.getName();
@@ -392,7 +391,7 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
 
     private void author(String what, HttpRequest request, ResponseWriter responseWriter) throws Exception {
         //Not on behalf of anybody else: a draft is its author's own
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
         if (!mayAuthor(player))
             throw new HttpProcessingException(403);
         boolean admin = player.hasType(Player.Type.ADMIN);

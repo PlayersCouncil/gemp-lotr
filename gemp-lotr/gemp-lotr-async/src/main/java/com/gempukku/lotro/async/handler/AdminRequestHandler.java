@@ -1364,7 +1364,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
      */
     private void resolvePrize(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateEventAdmin(request);
-        Player admin = getResourceOwnerSafely(request, null);
+        Player admin = getResourceOwnerSafely(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
         try {
@@ -1398,7 +1398,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
      */
     private void addPromise(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateEventAdmin(request);
-        Player admin = getResourceOwnerSafely(request, null);
+        Player admin = getResourceOwnerSafely(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
         try {

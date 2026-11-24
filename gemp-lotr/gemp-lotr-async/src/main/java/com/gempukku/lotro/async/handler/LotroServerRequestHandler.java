@@ -45,10 +45,6 @@ public class LotroServerRequestHandler {
         _collectionManager = extractObject(context, CollectionsManager.class);
     }
 
-    private boolean isTest() {
-        return Boolean.parseBoolean(System.getProperty("test"));
-    }
-
     protected final void processLoginReward(String loggedUser) throws Exception {
         if (loggedUser != null) {
             Player player = _playerDao.getPlayer(loggedUser);
@@ -143,24 +139,21 @@ public class LotroServerRequestHandler {
         }
     }
 
-    protected final Player getResourceOwnerSafely(HttpRequest request, String participantId) throws HttpProcessingException {
+    /**
+     * The player acting: the one the session cookie's session plays as, and nothing else (PC-ACCOUNT.md, "The player
+     * comes from the session cookie").  401 without a session, or one that plays as nobody.  A {@code participantId}
+     * parameter no longer names anyone: it used to let an admin act as any player, and with {@code -Dtest=true} let
+     * anyone act as anyone with no login at all (Ketura, 2026-11-23: "needs ripped out").  Clients may still send
+     * it; it is ignored.
+     */
+    protected final Player getResourceOwnerSafely(HttpRequest request) throws HttpProcessingException {
         String loggedUser = getLoggedUser(request);
-        if (isTest() && loggedUser == null)
-            loggedUser = participantId;
-
         if (loggedUser == null)
             throw new HttpProcessingException(401);
 
         Player resourceOwner = _playerDao.getPlayer(loggedUser);
-
         if (resourceOwner == null)
             throw new HttpProcessingException(401);
-
-        if (resourceOwner.hasType(Player.Type.ADMIN) && participantId != null && !participantId.equals("null") && !participantId.isEmpty()) {
-            resourceOwner = _playerDao.getPlayer(participantId);
-            if (resourceOwner == null)
-                throw new HttpProcessingException(401);
-        }
         return resourceOwner;
     }
 
@@ -434,7 +427,7 @@ public class LotroServerRequestHandler {
      * @throws HttpProcessingException This function throws HTTP 403 (Forbidden) if the user is not a full admin.
      */
     protected void validateAdmin(HttpRequest request) throws HttpProcessingException {
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
 
         if (!player.hasType(Player.Type.ADMIN))
             throw new HttpProcessingException(403);
@@ -446,7 +439,7 @@ public class LotroServerRequestHandler {
      * @throws HttpProcessingException This function throws HTTP 403 (Forbidden) if the user is not a league admin.
      */
     protected void validateEventAdmin(HttpRequest request) throws HttpProcessingException {
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
 
         if (!player.hasType(Player.Type.ADMIN) && !player.hasType(Player.Type.LEAGUE_ADMIN))
             throw new HttpProcessingException(403);
