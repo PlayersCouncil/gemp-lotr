@@ -2,12 +2,7 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { DraftState, FoundCard } from '../../../../core/game/authoring/authoring-state';
 import { Authoring } from '../../../../core/game/authoring/authoring.service';
 import { puzzleLike } from '../../../../core/game/authoring/puzzle-settings';
-import {
-  freshSolutionName,
-  recordPicks,
-  reportVerdicts,
-  solutionNameProblem,
-} from '../../../../core/game/authoring/puzzle-solutions';
+import { freshSolutionName, recordPicks, solutionNameProblem } from '../../../../core/game/authoring/puzzle-solutions';
 import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { ShownPick, SlotPicksComponent } from './slot-picks.component';
@@ -103,8 +98,8 @@ export class SolutionsSectionComponent {
   protected readonly typedName = signal<string | null>(null);
   /** (Record may be made again for a solution there is: it starts again empty) */
   protected readonly nameProblem = computed(() => solutionNameProblem(this.typedName() ?? this.fresh(), []));
-  /** What the last report (a Check's) says of each solution. */
-  protected readonly verdicts = computed(() => reportVerdicts(this.authoring.report()));
+  /** What the last Check (or save) said of each solution. */
+  protected readonly verdicts = this.authoring.solutionVerdicts;
   /** The cards chosen for Record, slot by slot (the game in hand's where none is). */
   private readonly chosen = signal<Readonly<Record<string, FoundCard>>>({});
 

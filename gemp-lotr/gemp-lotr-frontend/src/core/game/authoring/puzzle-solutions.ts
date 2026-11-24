@@ -1,6 +1,6 @@
 /**
  * The Scenario tab's model of a puzzle's solutions (ep-notes.md P4): what each is (its picks by name, how many
- * answers), what the runner said of each (the last Check's report: "Solution <name>: solved (...)" or why not; and
+ * answers), what the runner said of each (the last Check's or save's `solutions`: it solves it, or why not; and
  * the game in hand's verdict for the solution it is played with), the picks a Record sends, and the whole
  * `solutions` part a change of a name, a note, a pick or the answers sends (`top: {solutions}`, every solution as
  * the file has it). Pure.
@@ -25,12 +25,19 @@ export function freshSolutionName(taken: readonly string[]): string {
   return `solution${n}`;
 }
 
-/** What the runner said of each solution in a report (a Check's, a save's), by name: the line after its name. */
-export function reportVerdicts(report: string | null): Map<string, string> {
+/** What a solution that solves the puzzle is said to do. */
+export const SOLVED = 'solved';
+
+/**
+ * What the runner said of each solution (a Check's answer, a save's: `solutions`, ef-notes.md 3), by name: SOLVED for
+ * one that solves it (the server sends null), else the runner's words. Read defensively.
+ */
+export function solutionVerdicts(value: unknown): Map<string, string> {
   const verdicts = new Map<string, string>();
-  for (const line of (report ?? '').split('\n')) {
-    const [, name, verdict] = /^\s*Solution ([A-Za-z][A-Za-z0-9_-]*): (.+)$/.exec(line) ?? [];
-    if (name !== undefined && verdict !== undefined) verdicts.set(name, verdict.trim());
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return verdicts;
+  for (const [name, said] of Object.entries(value as Readonly<Record<string, unknown>>)) {
+    if (said === null) verdicts.set(name, SOLVED);
+    else if (typeof said === 'string') verdicts.set(name, said);
   }
   return verdicts;
 }

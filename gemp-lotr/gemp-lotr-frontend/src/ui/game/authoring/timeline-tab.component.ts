@@ -29,7 +29,7 @@ const CURRENT_MARGIN = 60;
  *
  * DOM contract: `gd-game-author-timeline` holding `.gd-author-timeline__nav` (`button[data-go]`: start, checkpoint,
  * back, this, end), `.gd-author-timeline__options` (`gd-author-check`s, `data-option`: recording, ask-opponent,
- * follow), `.gd-author-timeline__way` (the forks' flags, `data-flag`), `.gd-author-timeline__list` with
+ * follow; in a puzzle whose author has not said, `.gd-author-note[data-note=recording]` "Off in a puzzle"), `.gd-author-timeline__way` (the forks' flags, `data-flag`), `.gd-author-timeline__list` with
  * `.gd-author-timeline__group` headings (`data-phase`, `data-even`) and `.gd-author-timeline__row`s (`data-step` the
  * number, `data-status`, `data-phase`, `data-even`, `data-sub` for a block's step, `data-block`, `data-current`,
  * `data-selected`, `data-silent`) each with `button.gd-author-timeline__pick` (`.gd-author-timeline__num`,
@@ -91,6 +91,14 @@ const CURRENT_MARGIN = 60;
           [checked]="draft.recording"
           (changed)="authoring.settings({ recording: $event })"
         />
+        @if (draft.draft.kind === 'puzzle' && draft.recordingSaid !== true) {
+          <span
+            class="gd-author-note"
+            data-note="recording"
+            title="A puzzle is played by its solutions: steps written for what you do would take the decisions they answer. Tick it to write steps on purpose."
+            >Off in a puzzle</span
+          >
+        }
         <gd-author-check
           data-option="ask-opponent"
           label="Ask me for the opponent"

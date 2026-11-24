@@ -1,7 +1,13 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { DraftState } from '../../../../core/game/authoring/authoring-state';
 import { Authoring } from '../../../../core/game/authoring/authoring.service';
-import { optionsWithTool, toolTicks } from '../../../../core/game/authoring/puzzle-settings';
+import {
+  optionsWithOtherSeat,
+  optionsWithTool,
+  otherSeatOptions,
+  toolTicks,
+} from '../../../../core/game/authoring/puzzle-settings';
+import { AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorCheckComponent } from '../widgets/author-check.component';
 import { sendTop } from './top';
 
@@ -23,16 +29,19 @@ const TOOL_HINTS: Readonly<Record<string, string>> = {
 };
 
 /**
- * The Scenario tab's tools of a sandbox (es-notes.md 4: `options.tools`), under its Kind: a tick per tool the server
+ * The Scenario tab's tools of a sandbox and who plays its other seat (es-notes.md 4: `options.tools`), under its Kind: a tick per tool the server
  * names, all ticked when the file does not say (every tool: what ticking the last one comes back to); one the server
  * has not built is shown and cannot be ticked. Each change sends the whole of `options`.
  *
  * DOM contract: `.gd-author-scenario__ticks[data-part=tools]` with `.gd-author-label`, a `gd-author-check[data-tool]`
- * per tool, and `.gd-author-note[data-part=all-tools]` while the file does not say.
+ * per tool, and `.gd-author-note[data-part=all-tools]` while the file does not say; then (a sandbox's) who plays its
+ * other seat (ef-notes.md A: `options.otherSeat`), `.gd-author-scenario__ticks[data-part=other-seat]` with
+ * `gd-author-select[data-part=other-seat]` (script, bot, you: the server's choices) and
+ * `.gd-author-note[data-part=seat-unsaid]` while the file does not say.
  */
 @Component({
   selector: 'gd-game-author-sandbox-tools',
-  imports: [AuthorCheckComponent],
+  imports: [AuthorCheckComponent, AuthorSelectComponent],
   template: `
     @if (state().sandboxTools; as tools) {
       <div class="gd-author-scenario__ticks" data-part="tools">
@@ -54,6 +63,26 @@ const TOOL_HINTS: Readonly<Record<string, string>> = {
         }
       </div>
     }
+    @if (state().sandboxOtherSeat; as seat) {
+      @if (state().draft.kind === 'sandbox') {
+        <div class="gd-author-scenario__ticks" data-part="other-seat">
+          <span class="gd-author-label" title="Who plays the seat the person does not sit in">Other seat</span>
+          <gd-author-select
+            data-part="other-seat"
+            label="Other seat"
+            hint="Who plays the seat the person does not sit in"
+            [options]="seatOptions()"
+            [value]="seat.value"
+            (changed)="otherSeat($event)"
+          />
+          @if (!seat.said) {
+            <span class="gd-author-note" data-part="seat-unsaid" title="The file does not say: the script"
+              >(script)</span
+            >
+          }
+        </div>
+      }
+    }
   `,
 })
 export class SandboxToolsComponent {
@@ -64,6 +93,13 @@ export class SandboxToolsComponent {
     const tools = this.state().sandboxTools;
     return tools ? toolTicks(tools) : [];
   });
+
+  protected readonly seatOptions = computed(() => otherSeatOptions(this.state().sandboxOtherSeat?.choices ?? []));
+
+  /** Who plays the other seat: the whole of `options` sent. */
+  protected otherSeat(choice: string): void {
+    void sendTop(this.authoring, 'options', optionsWithOtherSeat(this.state().draft, choice));
+  }
 
   protected tool(name: string, on: boolean): void {
     const state = this.state();

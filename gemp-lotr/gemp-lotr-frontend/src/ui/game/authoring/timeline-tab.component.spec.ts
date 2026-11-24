@@ -382,4 +382,15 @@ describe('TimelineTabComponent', () => {
     expect(tags).toEqual([null, 'as Shadow', 'as FP']);
     expect(text('.gd-author-timeline__group')).toBe('Turn 1 (yours) · Fellowship');
   });
+
+  it('says why "Write down what I do" is off in a puzzle until the author has said (ef-notes.md 2)', async () => {
+    const puzzle = draftState({ recording: false, recordingSaid: false });
+    await open({ ...puzzle, draft: { ...puzzle.draft, kind: 'puzzle' } });
+    expect(el.querySelector<HTMLInputElement>('[data-option=recording] input')!.checked).toBe(false);
+    expect(text('[data-note=recording]')).toBe('Off in a puzzle');
+    await update({ ...puzzle, draft: { ...puzzle.draft, kind: 'puzzle' }, recordingSaid: true });
+    expect(el.querySelector('[data-note=recording]')).toBeNull();
+    await update(draftState({ recording: true, recordingSaid: false }));
+    expect(el.querySelector('[data-note=recording]')).toBeNull();
+  });
 });

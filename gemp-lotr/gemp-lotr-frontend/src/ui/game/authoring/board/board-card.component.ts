@@ -21,7 +21,8 @@ type Option = readonly [value: string, label: string];
  *
  * DOM contract: `gd-author-board-card` holding `.gd-author-board-card` (`data-alias`, `data-changed`, `data-added`,
  * `data-removing`) with `.gd-author-board-card__name` (`span.gd-author-board-card__alias.cardHint[value]`, the name,
- * `.gd-author-board-card__tag`, `button[data-action]`: rename, change; or `gd-author-board-rename`, or
+ * `.gd-author-board-card__tag` (`data-tag` ring-bearer, ring: the seat's Ring-bearer and Ring, whose × says that the
+ * server takes them out only once another is chosen), `button[data-action]`: rename, change; or `gd-author-board-rename`, or
  * `gd-author-card-search`), then `.gd-author-board-card__controls` (`button[data-action]`: keep, up, down, top, heal,
  * wound, token, drop; `.gd-author-board-card__count`; `select[data-control]`: move, put; `gd-author-board-modifiers`).
  */
@@ -57,6 +58,13 @@ type Option = readonly [value: string, label: string];
             >{{ card.alias }}</span
           >
           {{ card.name }}
+          @if (card.ringBearer) {
+            <span class="gd-author-board-card__tag" data-tag="ring-bearer" title="Its seat's Ring-bearer"
+              >Ring-bearer</span
+            >
+          } @else if (card.ring) {
+            <span class="gd-author-board-card__tag" data-tag="ring" title="Its seat's One Ring">Ring</span>
+          }
           @if (card.added) {
             <span class="gd-author-board-card__tag">new</span>
           } @else if (card.removing) {
@@ -191,9 +199,13 @@ type Option = readonly [value: string, label: string];
             gdAuthorButton="danger"
             data-action="drop"
             [title]="
-              card.added
-                ? 'Do not add this card'
-                : 'Take this card out of the scenario (when the changes are submitted)'
+              card.ringBearer || card.ring
+                ? 'Its seat’s ' +
+                  (card.ring ? 'Ring' : 'Ring-bearer') +
+                  ': the server takes it out only once another is chosen (above)'
+                : card.added
+                  ? 'Do not add this card'
+                  : 'Take this card out of the scenario (when the changes are submitted)'
             "
             (click)="changes.drop(card)"
           >

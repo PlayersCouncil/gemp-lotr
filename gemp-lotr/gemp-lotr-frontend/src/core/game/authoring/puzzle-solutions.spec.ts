@@ -7,7 +7,8 @@ import {
   freshSolutionName,
   picksLine,
   recordPicks,
-  reportVerdicts,
+  solutionVerdicts,
+  SOLVED,
   solutionNameProblem,
   solutionsWith,
   solvedBy,
@@ -42,22 +43,16 @@ describe('puzzle-solutions (ep P4)', () => {
     expect(freshSolutionName(['solution2'])).toBe('solution3');
   });
 
-  it('reads what a Check’s report says of each solution', () => {
-    const report = [
-      'Scenario x: PASSED (proved: solution, required: solution)',
-      'Decisions:',
-      '  1. [step 1] Play action or Pass',
-      ' Solution published: solved (judged at endOf(archery): won)',
-      ' Solution wrong: the solution does not fit the game',
-    ].join('\n');
-    const verdicts = reportVerdicts(report);
+  it('reads what Check (or a save) says of each solution: null solves it, else the runner’s words', () => {
+    const verdicts = solutionVerdicts({ published: null, wrong: 'does not solve it: no', odd: 3 });
     expect([...verdicts]).toEqual([
-      ['published', 'solved (judged at endOf(archery): won)'],
-      ['wrong', 'the solution does not fit the game'],
+      ['published', SOLVED],
+      ['wrong', 'does not solve it: no'],
     ]);
-    expect(reportVerdicts(null).size).toBe(0);
-    expect(solvedBy('solved (x)')).toBe(true);
-    expect(solvedBy('the solution does not fit')).toBe(false);
+    expect(solutionVerdicts(null).size).toBe(0);
+    expect(solutionVerdicts(['x']).size).toBe(0);
+    expect(solvedBy(SOLVED)).toBe(true);
+    expect(solvedBy('does not solve it')).toBe(false);
   });
 
   it('says the game in hand’s verdict for the solution it is played with', () => {

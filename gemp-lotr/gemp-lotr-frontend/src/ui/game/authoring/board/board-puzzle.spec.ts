@@ -2,6 +2,7 @@ import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@a
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../../../core/api/gemp-interceptors';
+import { BOUND_TYPING_MS } from '../../../../core/game/authoring/bound-check';
 import { CardHover } from '../../../../core/cards/card-hover.service';
 import { CardInfoService } from '../../../../core/cards/card-info.service';
 import { CardViews } from '../../../../core/cards/card-views.service';
@@ -29,7 +30,7 @@ import { SEARCH_MS } from '../widgets/card-search.component';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
-const SEARCH = '/gemp-lotr-server/scenarios/search';
+const BOUND = '/gemp-lotr-server/scenarios/author/bound';
 
 const DRAFT: Draft = {
   id: 'test',
@@ -199,11 +200,14 @@ describe('Board tab: modifiers and slots', () => {
   }
 
   async function searched(total: number): Promise<string[]> {
-    const requests = backend.match((r) => r.url === SEARCH);
-    for (const request of requests) request.flush(JSON.stringify({ total, start: 0, cards: [] }));
+    const requests = backend.match((r) => r.url === BOUND);
+    for (const request of requests) request.flush(JSON.stringify({ ok: true, why: null, total }));
     await settle();
     await redraw();
-    return requests.map((request: TestRequest) => request.request.params.get('filter') ?? '');
+    // (a slot's bound is counted with the pool, each searched by itself: `filter | pool`)
+    return requests.map((request: TestRequest) =>
+      [request.request.params.get('filter') ?? '', request.request.params.get('pool')].filter(Boolean).join(' | '),
+    );
   }
 
   /* ---------------------------------------------------------------- modifiers (em T5) */
@@ -323,8 +327,8 @@ describe('Board tab: modifiers and slots', () => {
     expect(el.querySelector(`${slot('condition')} [data-part=slot-on]`)).toBeNull();
     expect(el.querySelector(`${slot('condition')} [data-part=slot-position]`)).toBeNull();
     expect(find<HTMLInputElement>(`${slot('hand1')} [data-part=slot-label]`).value).toBe('');
-    // (each bound counted with the pool)
-    expect((await searched(11)).sort()).toEqual(['set:1-6', 'set:1-6 culture:ROHAN cardtype:CONDITION']);
+    // (each bound counted with the pool by the server, each searched by itself; an empty one says nothing)
+    expect(await searched(11)).toEqual(['culture:ROHAN cardtype:CONDITION | set:1-6']);
     expect(text(`${slot('condition')} .gd-author-filter__verdict`)).toBe('11 cards');
   });
 
@@ -407,7 +411,7 @@ describe('Board tab: modifiers and slots', () => {
         },
       },
     });
-    expect(await searched(4)).toEqual(['set:1-6 culture:ROHAN cardtype:CONDITION side:FREE_PEOPLE']);
+    expect(await searched(4)).toEqual(['culture:ROHAN cardtype:CONDITION side:FREE_PEOPLE | set:1-6']);
     offered[0]!.flush(JSON.stringify(result(withPuzzle())));
     await settle();
     await redraw();
@@ -418,11 +422,35 @@ describe('Board tab: modifiers and slots', () => {
     expect(authoring.slotBoundOffer()?.slot).toBe('nothing');
   });
 
-  it('counts a bound by itself when the pool says the same key', async () => {
+  it('counts a bound with the pool, the server searching each by itself, also when they say the same key', async () => {
     const overlapping = [puzzleSlot('condition', { overlap: ['culture'] }), SLOTS[1]!];
     await open(withPuzzle({ puzzle: puzzleState({ pool: 'set:1-6', slots: overlapping }) }));
-    expect((await searched(20)).sort()).toEqual(['culture:ROHAN cardtype:CONDITION', 'set:1-6']);
-    expect(find(`${slot('condition')} .gd-author-filter__verdict`).title).toMatch(/filter alone/);
+    expect(await searched(20)).toEqual(['culture:ROHAN cardtype:CONDITION | set:1-6']);
+    expect(find(`${slot('condition')} .gd-author-filter__verdict`).title).toMatch(/and the pool/);
+  });
+
+  it('checks a bound as it is typed, once the typing rests, and says why the server will not take it', async () => {
+    await open();
+    await searched(11);
+    const field = find<HTMLInputElement>(`${slot('hand1')} input[data-part=slot-filter]`);
+    field.value = 'colour:red';
+    field.dispatchEvent(new Event('input'));
+    field.value = 'colour:red ';
+    field.dispatchEvent(new Event('input'));
+    expect(backend.match((r) => r.url === BOUND)).toHaveLength(0);
+    vi.advanceTimersByTime(BOUND_TYPING_MS);
+    const requests = backend.match((r) => r.url === BOUND);
+    expect(requests.map((one) => [one.request.params.get('filter'), one.request.params.get('pool')])).toEqual([
+      ['colour:red', 'set:1-6'],
+    ]);
+    requests[0]!.flush(
+      JSON.stringify({ ok: false, why: "'colour:red': the deck builder's search has no 'colour'", total: null }),
+    );
+    await settle();
+    await redraw();
+    expect(text(`${slot('hand1')} .gd-author-filter__verdict`)).toBe('refused');
+    expect(text(`${slot('hand1')} .gd-author-filter__why`)).toMatch(/has no 'colour'/);
+    expect(asked('edit')).toHaveLength(0);
   });
 
   it('adds a slot with each solution’s card for it, and takes one out of the slots and the solutions', async () => {
@@ -572,6 +600,25 @@ describe('Board tab: modifiers and slots', () => {
     await settle();
     await redraw();
     expect(find<HTMLInputElement>('[data-part=new-slot-id]').value).toBe('trick');
+    await searched(1);
+  });
+
+  it('shows a slot’s form asked for from the table, the focus in its label; marks the Ring-bearer and the Ring', async () => {
+    const state = withPuzzle();
+    const cards = state.board!.cards.map((card) =>
+      card.alias === 'frodo' ? { ...card, ringBearer: true } : card.alias === 'ring' ? { ...card, ring: true } : card,
+    );
+    await open({ ...state, board: { ...state.board!, cards } });
+    authoring.remember({ showSlot: 'hand1' });
+    await redraw();
+    await redraw();
+    expect(authoring.ui().showSlot).toBeNull();
+    expect(document.activeElement).toBe(find(`${slot('hand1')} input[data-part=slot-label]`));
+    expect(text(`${card('frodo')} [data-tag=ring-bearer]`)).toBe('Ring-bearer');
+    expect(text(`${card('ring')} [data-tag=ring]`)).toBe('Ring');
+    expect(find(`${card('frodo')} button[data-action=drop]`).title).toMatch(/Ring-bearer: the server takes it out/);
+    expect(find(`${card('ring')} button[data-action=drop]`).title).toMatch(/^Its seat’s Ring:/);
+    expect(find(`${card('sam')} button[data-action=drop]`).title).toMatch(/^Take this card out/);
     await searched(1);
   });
 });

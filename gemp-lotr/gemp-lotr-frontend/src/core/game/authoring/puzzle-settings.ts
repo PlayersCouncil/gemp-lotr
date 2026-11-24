@@ -268,3 +268,21 @@ export function verdictText(verdict: FilterVerdict): { text: string; tone: 'good
       return null;
   }
 }
+
+/**
+ * The options with who plays a sandbox's other seat chosen (options.otherSeat, ef-notes.md A): the script is the key
+ * left out; the bot, or the person.
+ */
+export function optionsWithOtherSeat(draft: Draft, choice: string): DraftOptions | null {
+  return optionsWith(draft, 'otherSeat', choice === 'bot' || choice === 'person' ? choice : null);
+}
+
+/** Who can play a sandbox's other seat, as its select offers them: [value, word, tooltip]. */
+export function otherSeatOptions(choices: readonly string[]): (readonly [string, string, string])[] {
+  const words: Readonly<Record<string, readonly [string, string]>> = {
+    script: ['script', 'The file’s opponent: its steps, orders and fallback'],
+    bot: ['bot', 'Gemp’s bot, where steps and orders leave it (it plays weakly)'],
+    person: ['you', 'Nobody: its decisions wait for the person, who plays it from the other side (flip table)'],
+  };
+  return choices.map((choice) => [choice, ...(words[choice] ?? [choice, choice])] as const);
+}
