@@ -22,9 +22,11 @@ one fails.
 The pages the browser is sent to (a PC sign-in, the account service's sign-out) are not followed: a scenario checks
 that the browser got there, and opens where the server would send it back to (`?open=create`) itself.
 
-What it covers: `test` mode shows no PC account on the login page or My Account, and the hall's Log Out works there; in `optional` mode Sign in
-with PC Account (with the page's `return`) and no registration form, and the lines for a cancelled or failed sign-in;
-the alias list with several aliases, Enter (and an alias unlinked meanwhile, its refusal kept), the gate (`blockedBy`: this browser's alias busy) and an alias busy elsewhere gating nothing, paging at eleven aliases; Create (made, a name
+What it covers: `test` mode shows no PC account on the login page or My Account, and the hall's Log Out works there; in `optional` mode the Legacy Login and PC SSO
+columns (at three widths), Sign in
+with PC Account and Register PC Account, a claimed account's password login (423) (with the page's `return`) and no registration form, and the lines for a cancelled or failed sign-in;
+the alias list with several aliases, Enter (and an alias unlinked meanwhile, its refusal kept), a PC account with no alias landing in Create
+(`?open=create&return=`) with Link beside it, the gate (`blockedBy`: this browser's alias busy) and an alias busy elsewhere gating nothing, paging at eleven aliases; Create (made, a name
 outside the rule, a name taken, `401 reauth`, a lapsed sign-in); Link (linked, wrong credentials, linked elsewhere);
 the alias list's Log Out and the hall's; a password login's own page and its Log Out; My Account's three states, its four `?pc=` lines and Connect
 PC Account (its password, accepted and refused); and a deck builder open in a second tab reloading when the first enters an alias.

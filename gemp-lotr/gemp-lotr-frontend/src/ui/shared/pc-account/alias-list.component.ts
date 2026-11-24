@@ -14,6 +14,7 @@ import {
   ENTER_GEMP,
   LINK_ACCOUNT,
   LINK_LOGIN_LABEL,
+  LINK_NOTE,
   LINK_PASSWORD_LABEL,
   LINK_SUBMIT,
   LOG_OUT,
@@ -177,6 +178,7 @@ import {
             [label]="form === 'create' ? text.create : text.link"
             [fields]="form === 'create' ? createFields : linkFields"
             [values]="{ name: list.name(), login: list.login(), password: list.password() }"
+            [note]="form === 'link' ? text.linkNote : null"
             [error]="list.formError()"
             [submitLabel]="form === 'create' ? text.createSubmit : text.linkSubmit"
             [cancelLabel]="text.cancel"
@@ -225,6 +227,7 @@ export class AliasListComponent {
     createSubmit: CREATE_SUBMIT,
     linkSubmit: LINK_SUBMIT,
     cancel: CANCEL,
+    linkNote: LINK_NOTE,
   };
 
   constructor() {

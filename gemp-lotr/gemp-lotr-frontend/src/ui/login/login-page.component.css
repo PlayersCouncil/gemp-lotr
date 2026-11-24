@@ -140,7 +140,7 @@ a:visited {
   display: none;
 }
 
-/* "Sign in with PC Account" (optional mode): a link drawn as the buttons are */
+/* Sign in with PC Account and Register PC Account (optional mode): links drawn as the buttons are */
 a.gd-button,
 a.gd-button:visited {
   display: inline-block;
@@ -155,7 +155,62 @@ a.gd-button:focus-visible {
   color: var(--theme-text);
 }
 
-/* The new players' line, where "Login below, or Register" was: as wide as the form's fields allow */
-.gd-login__intro[data-pc] {
-  max-width: 22em;
+/*
+ * `optional` mode, nobody: two columns, Legacy Login | PC SSO, with a rule between them as tall as the taller one;
+ * their tops and headings level. Stacked, the rule across, on a narrow window.
+ */
+.gd-login__columns {
+  display: grid;
+  grid-template-columns: auto 1px auto;
+  column-gap: 2em;
+  align-items: stretch;
+  margin: 0 auto;
+  color: var(--theme-text);
+}
+
+.gd-login__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.gd-login__heading {
+  margin: 0 0 0.5em;
+  color: var(--theme-login-banner);
+  font-size: 125%;
+}
+
+.gd-login__column > .gd-login__form {
+  margin: 0;
+}
+
+.gd-login__rule {
+  width: 1px;
+  background: var(--theme-widget-border);
+}
+
+/* The two PC buttons, stacked, one width */
+.gd-login__sso {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6em;
+}
+
+.gd-login__sso > .gd-button {
+  margin: 0;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .gd-login__columns {
+    grid-template-columns: auto;
+    row-gap: 1.2em;
+  }
+
+  .gd-login__rule {
+    width: auto;
+    height: 1px;
+  }
 }

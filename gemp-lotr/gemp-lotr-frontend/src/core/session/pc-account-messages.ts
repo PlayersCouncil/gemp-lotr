@@ -5,6 +5,10 @@
 
 // Ketura's labels
 export const PC_SIGN_IN = 'Sign in with PC Account';
+export const PC_REGISTER = 'Register PC Account';
+/** The login page's two columns in `optional` mode, for nobody. */
+export const LEGACY_LOGIN_HEADING = 'Legacy Login';
+export const PC_SSO_HEADING = 'PC SSO';
 export const ENTER_GEMP = 'Enter Gemp';
 export const CREATE_ALIAS = 'Create New Gemp Alias';
 export const LINK_ACCOUNT = 'Link Existing Gemp Account';
@@ -41,6 +45,11 @@ export const LINK_SUBMIT = 'Link';
 export const CANCEL = 'Cancel';
 export const CONNECT_PASSWORD_LABEL = 'Password';
 export const CONNECT_SUBMIT = 'Connect';
+/** Said in the Link and Connect forms before they are used: the password stops working once linked. */
+export const LINK_NOTE =
+  'Once linked, that account is entered through your PC Account; its password no longer logs in.';
+export const CONNECT_NOTE =
+  'Once connected, this account is entered through your PC Account; its password no longer logs in.';
 
 // The errors of PC-ACCOUNT.md's tables, by code
 export const NO_PC_ACCOUNT = 'Your PC Account sign-in has ended. Sign in again.';
@@ -64,9 +73,6 @@ export const PC_CANCELLED = 'PC Account sign-in was cancelled.';
 export const PC_FAILED = 'PC Account sign-in failed. Try again.';
 export const PC_CONNECTED = 'This account is now connected to your PC Account.';
 export const PC_LINKED_ELSEWHERE = 'This account already belongs to another PC Account.';
-
-// The login page in `optional` mode, where the Register form was
-export const NEW_PLAYERS = 'New players: sign in with a PC Account, then create your Gemp alias.';
 
 // My Account's PC Account block
 export const PC_BLOCK_HEADING = 'PC Account';

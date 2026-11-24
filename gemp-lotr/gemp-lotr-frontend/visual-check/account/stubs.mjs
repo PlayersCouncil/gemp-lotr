@@ -28,10 +28,17 @@ const refusal = (status, error) => ({ status, text: JSON.stringify({ error }), t
 /**
  * The PC account's server for one scenario. `session`: a saved session's file name, or a session. `refuse`: a
  * refusal per action (`{ create: [409, 'name-taken'] }`), each given once, the next call answered as usual. `linked`:
- * the alias a link adds. `nextAll`: where Log Out from the alias list sends the browser.
+ * the alias a link adds. `loginStatus`: what POST /login answers (a refusal's status), if the scenario logs in with a
+ * password.
  */
 export class FakePcServer {
-  constructor({ session, refuse = {}, linked = { id: 900099, name: 'OldSam', current: false, busy: false } } = {}) {
+  constructor({
+    session,
+    refuse = {},
+    linked = { id: 900099, name: 'OldSam', current: false, busy: false },
+    loginStatus = null,
+  } = {}) {
+    this.loginStatus = loginStatus;
     this.session = typeof session === 'string' ? read(session) : session;
     this.refuse = { ...refuse };
     this.linked = linked;
@@ -45,6 +52,11 @@ export class FakePcServer {
     return (url, request) => {
       const p = url.pathname.replace('/gemp-lotr-server', '');
       if (p.startsWith('/argonauth/')) return this.answer(p.slice('/argonauth'.length), url, request);
+      // The password login, when a scenario says how it is refused (`loginStatus`, e.g. 423 for a claimed account)
+      if (p === '/login' && this.loginStatus) {
+        this.posts.push({ path: p, body: Object.fromEntries(new URLSearchParams(request.postData() ?? '')) });
+        return { status: this.loginStatus };
+      }
       return hall(url, request);
     };
   }

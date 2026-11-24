@@ -105,6 +105,10 @@ describe('pcSignInAddress', () => {
     expect(pcSignInAddress(null, '/events/leagues')).toBe(
       '/gemp-lotr-server/argonauth/login?return=%2Fevents%2Fleagues',
     );
+    expect(pcSignInAddress(null, '', true)).toBe('/gemp-lotr-server/argonauth/login?register=1');
+    expect(pcSignInAddress(null, '/events', true)).toBe(
+      '/gemp-lotr-server/argonauth/login?register=1&return=%2Fevents',
+    );
     expect(pcSignInAddress('create', '/deckbuilder')).toBe(
       '/gemp-lotr-server/argonauth/login?then=create&return=%2Fdeckbuilder',
     );

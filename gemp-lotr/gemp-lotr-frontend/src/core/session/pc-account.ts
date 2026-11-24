@@ -117,10 +117,15 @@ export const ARGONAUTH_URL = `${SERVER_URL}/argonauth`;
  */
 export type PcSignInPurpose = 'link' | 'create';
 
-/** GET /argonauth/login: starts a PC sign-in, for `then`, coming back (after entering) to `returnTo` if given. */
-export function pcSignInAddress(then: PcSignInPurpose | null = null, returnTo = ''): string {
+/**
+ * GET /argonauth/login: starts a PC sign-in, for `then`, coming back (after entering) to `returnTo` if given. With
+ * `register` (Register PC Account) the server sends the browser to the account service's sign-up page where it can;
+ * the person comes back signed in either way.
+ */
+export function pcSignInAddress(then: PcSignInPurpose | null = null, returnTo = '', register = false): string {
   const params = new URLSearchParams();
   if (then !== null) params.set('then', then);
+  if (register) params.set('register', '1');
   if (returnTo !== '') params.set('return', returnTo);
   const query = params.toString();
   return `${ARGONAUTH_URL}/login${query === '' ? '' : `?${query}`}`;

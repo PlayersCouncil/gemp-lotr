@@ -176,6 +176,7 @@ describe('AliasListComponent', () => {
     const form = query('form.gd-pc-form__form')!;
     expect(form.dataset['form']).toBe('create');
     expect(form.getAttribute('aria-label')).toBe('Create New Gemp Alias');
+    expect(form.querySelector('.gd-pc-form__note')).toBeNull();
     const name = query<HTMLInputElement>('.gd-pc-form__field[data-field="name"] input')!;
     expect(name.maxLength).toBe(30);
     expect(query('.gd-pc-form__field[data-field="name"] .gd-pc-form__label')!.textContent).toBe('Name');
@@ -244,6 +245,9 @@ describe('AliasListComponent', () => {
       ['Username', 'Password'],
     );
     expect(query<HTMLInputElement>('input[name="password"]')!.type).toBe('password');
+    expect(query('form .gd-pc-form__note')!.textContent).toBe(
+      'Once linked, that account is entered through your PC Account; its password no longer logs in.',
+    );
     await type('login', 'Sam');
     await type('password', 'wrong');
     await submit();
@@ -345,5 +349,40 @@ describe('AliasListComponent', () => {
     button('link').click();
     await stable();
     expect(query('.gd-alias-list__refusal')).toBeNull();
+  });
+
+  it('lands a PC account with no alias in Create, with Link plainly beside it, and enters the return place', async () => {
+    setUp('?open=create&return=%2Fevents%2Fleagues');
+    const { query, button, type, submit, stable } = await render(
+      readServerResponse('argonauth-session-no-aliases.json'),
+    );
+    // Create is open on arrival
+    expect(query('gd-pc-form form')!.dataset['form']).toBe('create');
+    expect(button('create').getAttribute('aria-expanded')).toBe('true');
+    // and the way to link an old account instead is there, above the form, not hidden by it
+    expect(query('.gd-alias-list__empty')!.textContent).toBe(
+      'No Gemp alias yet: create one, or link an account you had.',
+    );
+    const link = button('link');
+    expect(link.disabled).toBe(false);
+    expect(link.compareDocumentPosition(query('gd-pc-form')!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(
+      query('.gd-alias-list__empty')!.compareDocumentPosition(query('gd-pc-form')!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    await type('name', 'Pippin');
+    await submit();
+    expectPost('/create').flush(readServerResponse('argonauth-session.json'));
+    await stable();
+    expect(navigation.visited).toEqual(['/gemp-lotr/ng/events/leagues']);
+  });
+
+  it('switches from the Create it landed in to Link Existing Gemp Account', async () => {
+    setUp('?open=create');
+    const { query, button, stable } = await render(readServerResponse('argonauth-session-no-aliases.json'));
+    button('link').click();
+    await stable();
+    expect(query('gd-pc-form form')!.dataset['form']).toBe('link');
+    expect(button('create').getAttribute('aria-expanded')).toBe('false');
   });
 });

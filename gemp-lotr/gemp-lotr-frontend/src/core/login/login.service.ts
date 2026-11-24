@@ -11,6 +11,7 @@ import {
   CANNOT_CONTACT,
   INVALID_LOGIN,
   INVALID_NEW_LOGIN,
+  LINKED_TO_PC,
   LOGIN_BUTTON,
   LOGIN_TAKEN,
   LoginMessage,
@@ -176,6 +177,9 @@ export class LoginService {
       case 409:
         this.error_.set(TEMPORARILY_BANNED);
         this.formShown_.set(false);
+        return;
+      case 423:
+        this.error_.set(LINKED_TO_PC);
         return;
       case 429:
         this.error_.set(TOO_MANY_ATTEMPTS);

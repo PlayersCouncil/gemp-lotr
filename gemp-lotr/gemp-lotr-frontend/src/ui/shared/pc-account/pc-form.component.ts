@@ -17,7 +17,7 @@ export interface PcFormField {
  * DOM contract: `gd-pc-form.gd-pc-form` (`data-place` = login | account) holding `form.gd-pc-form__form`
  * (`data-form`, `aria-label`) with a `label.gd-pc-form__field` per field (`data-field` = its name;
  * `span.gd-pc-form__label`, `input.gd-pc-form__input` with `name`, `type`, `autocomplete`, `maxlength`),
- * `p.gd-pc-form__error` (`role=alert`, with a refusal) and `div.gd-pc-form__actions` with
+ * `p.gd-pc-form__note` (with a note), `p.gd-pc-form__error` (`role=alert`, with a refusal) and `div.gd-pc-form__actions` with
  * `button.gd-button[data-action=submit]` (type submit) and `button.gd-button[data-action=cancel]`.
  */
 @Component({
@@ -47,6 +47,9 @@ export interface PcFormField {
           />
         </label>
       }
+      @if (note(); as note) {
+        <p class="gd-pc-form__note">{{ note }}</p>
+      }
       @if (error(); as error) {
         <p class="gd-pc-form__error" role="alert">{{ error }}</p>
       }
@@ -67,6 +70,8 @@ export class PcFormComponent {
   readonly label = input.required<string>();
   readonly fields = input.required<readonly PcFormField[]>();
   readonly values = input.required<Readonly<Record<string, string>>>();
+  /** A line before the buttons on what submitting means, if any. */
+  readonly note = input<string | null>(null);
   readonly error = input<string | null>(null);
   readonly submitLabel = input.required<string>();
   readonly cancelLabel = input.required<string>();

@@ -1,10 +1,17 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { FORGOT_PASSWORD, LoginMessage, MessageLink } from '../../core/login/login-messages';
 import { LoginService } from '../../core/login/login.service';
 import { returnPath } from '../../core/login/return-link';
 import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { pcSignInAddress } from '../../core/session/pc-account';
-import { NEW_PLAYERS, PC_SIGN_IN, pcNotice } from '../../core/session/pc-account-messages';
+import {
+  LEGACY_LOGIN_HEADING,
+  PC_REGISTER,
+  PC_SIGN_IN,
+  PC_SSO_HEADING,
+  pcNotice,
+} from '../../core/session/pc-account-messages';
 import { PcSessionService } from '../../core/session/pc-session.service';
 import { AliasListComponent } from '../shared/pc-account/alias-list.component';
 
@@ -32,9 +39,11 @@ function segments(message: LoginMessage | null): Segment[] {
  * Enter in a field submits the form.
  *
  * The PC account (PC-ACCOUNT.md; the session from PcSessionService, asked first, the form's place empty until then):
- * in `test` mode the page is as it always was. In `optional` mode, for nobody, the form has "Sign in with PC Account"
- * where the Register button was, in a line for new players (registering is through a PC account there); a PC account
- * signed in, or a password login, gets the alias list (`gd-alias-list`) in the form's place. Where a PC sign-in came
+ * in `test` mode the page is as it always was. In `optional` mode, for nobody, two columns with a rule between them,
+ * as Ketura laid them out: "Legacy Login" (the login form, without Register: registering is through a PC account
+ * there; the forgotten-password line under it) and "PC SSO" (Sign in with PC Account and Register PC Account, stacked:
+ * plain links to the server's PC sign-in, the second with `register=1`, both carrying the page's `return`). A PC
+ * account signed in, or a password login, gets the alias list (`gd-alias-list`) in the form's place. Where a PC sign-in came
  * back to (`?pc=cancelled`, `?pc=failed`) is a line above.
  *
  * DOM contract: `.gd-login` (`data-mode` = login, register) holding `div.gd-login__brand` (empty; for a theme that
@@ -43,9 +52,12 @@ function segments(message: LoginMessage | null): Segment[] {
  * `div.gd-login__error` (`role=alert`; the message: `span`s of text, its line breaks as `br`, its links as `a`), then
  * `p.gd-login__notice` (`role=status`, `optional` only, with a `?pc=` line), `p.gd-login__refusal` (`role=alert`, a
  * refusal of the alias list's whose list the session then took away, e.g. a PC sign-in that had ended), `gd-alias-list[data-place=login]` (a
- * PC account or a password login), or unless banned `form.gd-login__form` (`data-mode`, `data-busy` and `aria-busy` while a call is under way): in login mode
- * `p.gd-login__intro` ("Login below, or" `button.gd-button[data-action=register]`; in `optional`
- * mode instead `data-pc` with the new players' line and `a.gd-button[data-action=pc-login]`), a `label.gd-login__field` per field
+ * PC account or a password login), or unless banned (`optional`, nobody) `div.gd-login__columns` holding
+ * `section.gd-login__column[data-column=legacy]` (`h2.gd-login__heading`, then the form), `div.gd-login__rule` and
+ * `section.gd-login__column[data-column=sso]` (`h2.gd-login__heading`, `div.gd-login__sso` with
+ * `a.gd-button[data-action=pc-login]` and `a.gd-button[data-action=pc-register]`), or (`test`) the form alone:
+ * `form.gd-login__form` (`data-mode`, `data-busy` and `aria-busy` while a call is under way): in login mode
+ * `p.gd-login__intro` ("Login below, or" `button.gd-button[data-action=register]`; `test` mode only), a `label.gd-login__field` per field
  * (`data-field` = login, password, password-repeated (register mode only); `span.gd-login__label` and
  * `input.gd-login__input` with `name` and `autocomplete`), `.gd-login__actions` with
  * `button.gd-button[data-action=submit]` (type submit; "Login" or "Register") and in register mode
@@ -56,7 +68,7 @@ function segments(message: LoginMessage | null): Segment[] {
 @Component({
   selector: 'gd-login-page',
   styleUrl: './login-page.component.css',
-  imports: [AliasListComponent],
+  imports: [AliasListComponent, NgTemplateOutlet],
   host: { class: 'gd-login', '[attr.data-mode]': 'login.mode()', '[attr.data-pc]': 'pc.kind()' },
   template: `
     <div class="gd-login__brand" aria-hidden="true"></div>
@@ -87,7 +99,25 @@ function segments(message: LoginMessage | null): Segment[] {
         }
         @if (pc.kind() === 'pc' || pc.kind() === 'password') {
           <gd-alias-list place="login" />
+        } @else if (pc.kind() === 'nobody' && login.formShown()) {
+          <div class="gd-login__columns">
+            <section class="gd-login__column" data-column="legacy" aria-labelledby="gd-login-legacy">
+              <h2 class="gd-login__heading" id="gd-login-legacy">{{ text.legacy }}</h2>
+              <ng-container *ngTemplateOutlet="passwordForm" />
+            </section>
+            <div class="gd-login__rule" aria-hidden="true"></div>
+            <section class="gd-login__column" data-column="sso" aria-labelledby="gd-login-sso">
+              <h2 class="gd-login__heading" id="gd-login-sso">{{ text.sso }}</h2>
+              <div class="gd-login__sso">
+                <a class="gd-button" data-action="pc-login" [href]="pcSignIn">{{ text.signIn }}</a>
+                <a class="gd-button" data-action="pc-register" [href]="pcRegister">{{ text.register }}</a>
+              </div>
+            </section>
+          </div>
         } @else if (pc.kind() !== null && login.formShown()) {
+          <ng-container *ngTemplateOutlet="passwordForm" />
+        }
+        <ng-template #passwordForm>
           <form
             class="gd-login__form"
             [attr.data-mode]="login.mode()"
@@ -95,12 +125,7 @@ function segments(message: LoginMessage | null): Segment[] {
             [attr.aria-busy]="login.busy()"
             (submit)="$event.preventDefault(); submit()"
           >
-            @if (pc.kind() === 'nobody') {
-              <p class="gd-login__intro" data-pc>
-                {{ newPlayers }}
-                <a class="gd-button" data-action="pc-login" [href]="pcSignIn">{{ pcSignInLabel }}</a>
-              </p>
-            } @else if (login.mode() === 'login') {
+            @if (pc.kind() !== 'nobody' && login.mode() === 'login') {
               <p class="gd-login__intro">
                 Login below, or
                 <button
@@ -176,7 +201,7 @@ function segments(message: LoginMessage | null): Segment[] {
               </p>
             }
           </form>
-        }
+        </ng-template>
       </section>
       <section class="gd-login__info" aria-label="About GEMP">
         <p class="gd-login__about">
@@ -201,8 +226,13 @@ export class LoginPageComponent {
   protected readonly pc = inject(PcSessionService);
   private readonly queryString = inject(PAGE_QUERY_STRING);
   protected readonly pcSignIn = pcSignInAddress(null, returnPath(this.queryString));
-  protected readonly pcSignInLabel = PC_SIGN_IN;
-  protected readonly newPlayers = NEW_PLAYERS;
+  protected readonly pcRegister = pcSignInAddress(null, returnPath(this.queryString), true);
+  protected readonly text = {
+    legacy: LEGACY_LOGIN_HEADING,
+    sso: PC_SSO_HEADING,
+    signIn: PC_SIGN_IN,
+    register: PC_REGISTER,
+  };
   /** A PC sign-in's outcome (`?pc=`), outside `test` mode. */
   protected readonly notice = computed(() => {
     const kind = this.pc.kind();

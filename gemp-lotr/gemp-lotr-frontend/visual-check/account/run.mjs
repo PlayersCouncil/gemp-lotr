@@ -169,18 +169,70 @@ const SCENARIOS = [
   // ---- the login page in optional mode
   {
     name: 'optional-nobody',
-    note: 'optional mode, nobody: Sign in with PC Account, no registration form',
+    note: 'optional mode, nobody: Legacy Login beside PC SSO (Sign in, Register), no registration form',
     server: { session: 'argonauth-session-nobody.json' },
     run: async (t) => {
       await t.open(`${NG}login?return=%2Fevents%2Fleagues`);
       await t.text('[data-action="pc-login"]', 'Sign in with PC Account');
       await t.attribute('[data-action="pc-login"]', 'href', `${SIGN_IN}?return=%2Fevents%2Fleagues`);
-      await t.visible('.gd-login__intro[data-pc]');
+      await t.text('.gd-login__column[data-column="legacy"] .gd-login__heading', 'Legacy Login');
+      await t.text('.gd-login__column[data-column="sso"] .gd-login__heading', 'PC SSO');
+      await t.text('[data-action="pc-register"]', 'Register PC Account');
+      await t.attribute('[data-action="pc-register"]', 'href', `${SIGN_IN}?register=1&return=%2Fevents%2Fleagues`);
+      await t.visible('.gd-login__column[data-column="legacy"] .gd-login__forgot');
+      await t.absent('.gd-login__intro');
       await t.absent('[data-action="register"]');
       await t.absent('.gd-login__input[name="password-repeated"]');
       await t.visible('.gd-login__input[name="password"]');
       await t.click('[data-action="pc-login"]');
       await t.arrives('/gemp-lotr-server/argonauth/login', '?return=%2Fevents%2Fleagues');
+    },
+  },
+  {
+    name: 'optional-columns',
+    note: 'the two columns: side by side at 1366 and 1024 (tops level, the rule as tall as both), stacked at 600',
+    server: { session: 'argonauth-session-nobody.json' },
+    run: async (t) => {
+      const box = (selector) => t.page.locator(selector).first().boundingBox();
+      for (const width of [1366, 1024]) {
+        await t.page.setViewportSize({ width, height: 768 });
+        await t.open(`${NG}login`);
+        await t.visible('.gd-login__columns');
+        const [legacy, rule, sso] = await Promise.all(
+          ['[data-column="legacy"]', '.gd-login__rule', '[data-column="sso"]'].map(box),
+        );
+        if (Math.abs(legacy.y - sso.y) > 1)
+          throw new Failed(`${width}: the columns' tops differ (${legacy.y}, ${sso.y})`);
+        if (!(legacy.x + legacy.width <= rule.x && rule.x + rule.width <= sso.x)) {
+          throw new Failed(`${width}: the columns are not side by side either side of the rule`);
+        }
+        if (rule.height < Math.max(legacy.height, sso.height) - 1) throw new Failed(`${width}: the rule is too short`);
+        if (sso.x + sso.width > width) throw new Failed(`${width}: PC SSO runs off the window`);
+      }
+      await t.page.setViewportSize({ width: 600, height: 900 });
+      await t.open(`${NG}login`);
+      await t.visible('.gd-login__columns');
+      const [legacy, rule, sso] = await Promise.all(
+        ['[data-column="legacy"]', '.gd-login__rule', '[data-column="sso"]'].map(box),
+      );
+      if (!(legacy.y + legacy.height <= rule.y && rule.y + rule.height <= sso.y)) {
+        throw new Failed('600: the columns are not stacked either side of the rule');
+      }
+      if (rule.height > 2 || rule.width < 50) throw new Failed('600: the rule is not across');
+    },
+  },
+  {
+    name: 'login-claimed',
+    note: 'a password login to an account a PC account has claimed (423): said where the refusals go',
+    server: { session: 'argonauth-session-nobody.json', loginStatus: 423 },
+    run: async (t) => {
+      await t.open(`${NG}login`);
+      await t.fill('.gd-login__input[name="login"]', 'Samwise');
+      await t.fill('.gd-login__input[name="password"]', 'anything');
+      await t.click('.gd-login__form [data-action="submit"]');
+      await t.text('.gd-login__error', 'That account is linked to a PC Account, please use that to log in.');
+      await t.visible('.gd-login__form');
+      t.sent(['/login login=Samwise&password=anything']);
     },
   },
   {
@@ -293,6 +345,26 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'landing-no-alias',
+    note: 'a PC sign-in with no alias lands in Create, Link plainly beside it, and enters the return place',
+    server: { session: 'argonauth-session-no-aliases.json' },
+    run: async (t) => {
+      await t.open(`${NG}login?open=create&return=%2Fevents%2Fleagues`);
+      await t.attribute(FORM, 'data-form', 'create');
+      await t.text('.gd-alias-list__empty', 'No Gemp alias yet: create one, or link an account you had.');
+      await t.disabled(ACTION('link'), false);
+      const [link, form] = await Promise.all(
+        [ACTION('link'), FORM].map((selector) => t.page.locator(selector).first().boundingBox()),
+      );
+      if (!(link.y + link.height <= form.y)) throw new Failed('Link Existing Gemp Account is not above the open form');
+      if (link.y + link.height > 768) throw new Failed('Link Existing Gemp Account is below the window');
+      await t.fill(`${FORM} input[name="name"]`, 'Pippin');
+      await t.click(`${FORM} [data-action="submit"]`);
+      await t.arrives(`${NG}events/leagues`);
+      t.sent(['/create name=Pippin']);
+    },
+  },
+  {
     name: 'create-good',
     note: 'Create New Gemp Alias: made, entered, the hall opens',
     server: { session: 'argonauth-session-aliases.json' },
@@ -356,6 +428,12 @@ const SCENARIOS = [
     server: { session: 'argonauth-session-aliases.json' },
     run: async (t) => {
       await t.open(`${NG}login`);
+      await t.click(ACTION('link'));
+      await t.text(
+        `${FORM} .gd-pc-form__note`,
+        'Once linked, that account is entered through your PC Account; its password no longer logs in.',
+      );
+      await t.click(`${FORM} [data-action="cancel"]`);
       await link(t, 'OldSam', 'secret');
       await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer', 'OldSam']);
       await t.absent(FORM);
@@ -470,6 +548,10 @@ const SCENARIOS = [
       await t.open(`${NG}account`);
       await t.click('button.gd-pc-account-block__connect');
       await t.attribute(FORM, 'data-form', 'connect');
+      await t.text(
+        `${FORM} .gd-pc-form__note`,
+        'Once connected, this account is entered through your PC Account; its password no longer logs in.',
+      );
       await t.fill(`${FORM} input[name="password"]`, 'secret');
       await t.click(`${FORM} [data-action="submit"]`);
       await t.arrives(read('argonauth-connect.json').next.split('?')[0]);

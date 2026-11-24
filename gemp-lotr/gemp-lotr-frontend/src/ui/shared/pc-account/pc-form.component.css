@@ -18,8 +18,15 @@
   min-width: 6em;
 }
 
+.gd-pc-form__note,
 .gd-pc-form__error {
   margin: 0.3em 0;
+}
+
+.gd-pc-form__note {
+  max-width: 28em;
+  color: var(--theme-account-help);
+  font-size: 90%;
 }
 
 :host([data-place='login']) .gd-pc-form__error {
