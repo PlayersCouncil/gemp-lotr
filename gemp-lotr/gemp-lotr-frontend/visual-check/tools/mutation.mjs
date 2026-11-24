@@ -118,6 +118,15 @@ export const TARGETS = [
   'src/core/game/authoring/refusals.ts',
   'src/core/game/authoring/said.ts',
   'src/core/game/authoring/templates.ts',
+  // The table changed by hand (sandbox, later puzzles): its state, the menus' choices, the search, the backends
+  'src/core/game/table-edit/edit-ops.ts',
+  'src/core/game/table-edit/edit-board.ts',
+  'src/core/game/table-edit/edit-menu.ts',
+  'src/core/game/table-edit/popup-place.ts',
+  'src/core/game/table-edit/recent-cards.ts',
+  'src/core/game/table-edit/card-search.ts',
+  'src/core/game/table-edit/sandbox-backend.ts',
+  'src/core/game/table-edit/table-edit.service.ts',
 ];
 
 /**

@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, DestroyRef, effect, inject, ViewEncapsulation } from '@angular/core';
-import { TablePicker } from './table-picker.service';
+import { TablePick } from '../table-edit/table-pick';
 
 /** The attribute the document element has while the author picks something on the table (the crosshair). */
 export const PICKING_ATTRIBUTE = 'data-author-picking';
@@ -8,8 +8,10 @@ export const PICKING_ATTRIBUTE = 'data-author-picking';
 const px = (value: number) => `${Math.round(value)}px`;
 
 /**
- * What picking on the table draws (TablePicker): the pointer a crosshair everywhere, and round the thing under it a
- * box, with its anchor in a label above. Neither takes the pointer. Rendered by the authoring panel.
+ * What picking on the table draws (TablePick: the authoring panel's TablePicker, the edit controls' CardPicker): the
+ * pointer a crosshair everywhere, and round the thing under it a box, with its name in a label above. Neither takes
+ * the pointer. Rendered by the authoring panel and by the edit controls, each over its own picker (provided as
+ * TablePick).
  *
  * Its stylesheet is not scoped (the crosshair is the whole page's); every other rule starts at
  * `gd-game-author-pickbox`.
@@ -33,13 +35,13 @@ const px = (value: number) => `${Math.round(value)}px`;
         [style.--gd-height]="px(hover.box.height)"
       ></div>
       <div class="gd-author-picklabel" [style.--gd-left]="px(hover.label.left)" [style.--gd-top]="px(hover.label.top)">
-        {{ hover.anchor }}
+        {{ hover.text ?? hover.anchor }}
       </div>
     }
   `,
 })
 export class PickBoxComponent {
-  protected readonly picker = inject(TablePicker);
+  protected readonly picker = inject(TablePick);
   protected readonly px = px;
 
   constructor() {

@@ -25,6 +25,7 @@ import { GameCardInfo } from './table/game-card-info';
 import { GameUndo } from './undo/game-undo.service';
 import { GameCardViews } from './table/game-card-views';
 import { GameTableState } from './table/game-table.service';
+import { provideTableEdit } from './table-edit/provide-table-edit';
 
 /**
  * The game page's state, for the providers of its page (as provideDeckbuilderState): created when the page opens and
@@ -58,5 +59,6 @@ export function provideGameState(): Provider[] {
     GameSheets,
     PhoneSettings,
     PhoneBridge,
+    ...provideTableEdit(),
   ];
 }

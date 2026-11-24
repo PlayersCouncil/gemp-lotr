@@ -418,6 +418,22 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   began). An ending's `restart` (outcome.offScript.result) is read: a game that left its script is "not how this one
   goes" when the scenario has it played again (the default), a failure when it says `fail`.
 
+- **A table changed by hand (sandbox)** (`core/game/table-edit`, `ui/game/table-edit`): the scenario's info says
+  the `mode` (play, edit), the `level` (none, puzzle, sandbox), the `tools` and whether Stop and Start can be pressed.
+  `TableEdit` (page-scoped) holds them, the table as the level knows it (`board`: names, owners, hand-put modifiers,
+  the Modify… vocabulary) and every change, which it sends to the level's `TableEditBackend` (`SandboxBackend`:
+  `/scenarios/sandbox/*`); the game's own events show each change. In edit mode nobody is asked anything: the decision
+  is not shown (`decisionView`), not answered (TableEdit is a decision gate) and the tab's title doesn't flash. The
+  view: the edit bar (`gd-edit-bar`, in the scenario's menu in place of Start again: Editing / Playing, Start, Stop,
+  Reset), an open spot (`gd-open-spot`, the glowing +) at the end of each row of the table and of the hand, its
+  chooser (Recent, In this scenario, Search…), the search window (`gd-edit-search`: the deck builder's own filter
+  panel, lifted into `ui/shared/card-filter` as `gd-collection-filter`, over `GET /scenarios/search`; it remembers its
+  filters and Recent its cards in the browser's local storage, `LocalStore`), and a card's menu on right-click, the
+  context-menu key or a long press (`gd-edit-menu`: Info, Send to, Attach, Stack, Add, Modify, Copy, Delete; the card
+  component lets the page take the gesture, `CardGestures`). Attach and Stack pick a card on the table with the
+  authoring panel's picking (`TablePick`, shared). A sandbox's end (`ended`) says who won and why, with Reset and
+  Leave. Checked by `npm run check:game:sandbox` (see `visual-check/game/README.md`).
+
 ## Tests and the visual check
 
 ```

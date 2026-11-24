@@ -21,6 +21,14 @@ describe('decisionView', () => {
     expect(decisionView(emptyGame(), SETTINGS)).toEqual(NO_DECISION);
   });
 
+  it("shows nothing while a scripted game's table is changed by hand (a sandbox stopped): nobody is asked", () => {
+    const asked = waiting(decision('CARD_ACTION_CHOICE', { actionId: ['1'], cardId: ['5'], actionText: ['Play'] }));
+    const editing = { ...asked, scenario: { info: { mode: 'edit' } } } as unknown as GameModel;
+    expect(decisionView(editing, SETTINGS)).toEqual(NO_DECISION);
+    const playing = { ...asked, scenario: { info: { mode: 'play' } } } as unknown as GameModel;
+    expect(decisionView(playing, SETTINGS).alert).toBe('Do it');
+  });
+
   it('keeps the alert frame when the game ended while the alert box asked, as the legacy page did', () => {
     const ended = { ...emptyGame(), ended: true };
     expect(decisionView({ ...ended, closedByEnd: 'CARD_SELECTION' }, SETTINGS).frame).toBe('ended');

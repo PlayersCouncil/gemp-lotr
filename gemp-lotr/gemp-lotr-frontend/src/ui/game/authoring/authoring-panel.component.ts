@@ -15,6 +15,7 @@ import { TimelineTabComponent } from './timeline-tab.component';
 import { AuthorButtonDirective } from './widgets/author-button.directive';
 import { PickBoxComponent } from './pick-box.component';
 import { TablePicker } from './table-picker.service';
+import { TablePick } from '../table-edit/table-pick';
 
 /** The panel's tabs, in order, with what their buttons say. */
 export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
@@ -63,7 +64,7 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
     ScenarioTabComponent,
     PickBoxComponent,
   ],
-  providers: [TablePicker],
+  providers: [TablePicker, { provide: TablePick, useExisting: TablePicker }],
   host: {
     style: 'display: contents',
     // Typing in the panel is not for the page's shortcuts to hear (the scenario's skip [data-own-keys])

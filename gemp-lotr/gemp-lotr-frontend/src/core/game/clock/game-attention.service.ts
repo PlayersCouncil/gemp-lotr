@@ -44,7 +44,9 @@ export class GameAttention {
   constructor() {
     let flashing = false;
     effect(() => {
-      const waiting = this.session.model().decision;
+      const model = this.session.model();
+      // (a scripted game's table being changed by hand asks nobody anything: TableEdit)
+      const waiting = model.scenario?.info?.mode === 'edit' ? null : model.decision;
       untracked(() => {
         // A replay shows decisions, it doesn't wait for one
         if (this.session.replaying()) return;

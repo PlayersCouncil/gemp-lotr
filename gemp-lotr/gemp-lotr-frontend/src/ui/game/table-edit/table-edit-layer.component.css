@@ -1,0 +1,27 @@
+/* A refusal of an edit control, said where it was asked for */
+
+:host {
+  display: contents;
+}
+
+.gd-edit-problem {
+  position: fixed;
+  left: var(--gd-left, 0px);
+  top: var(--gd-top, 0px);
+  z-index: 1092;
+  box-sizing: border-box;
+  max-width: 360px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--theme-game-edit-problem-edge);
+  border-radius: 6px;
+  background: var(--theme-game-edit-problem-bg);
+  box-shadow: var(--theme-game-edit-menu-shadow);
+  color: var(--theme-game-edit-problem-text);
+  font: 13px/1.35 var(--theme-game-edit-font);
+  pointer-events: none;
+}
+
+.gd-edit-problem[data-placing] {
+  visibility: hidden;
+}
