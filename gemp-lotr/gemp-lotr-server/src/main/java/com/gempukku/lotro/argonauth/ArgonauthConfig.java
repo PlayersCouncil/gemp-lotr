@@ -8,7 +8,7 @@ import java.util.function.Function;
  * This Gemp's PC account settings (PC-ACCOUNT.md, "Modes"), read once at start. In test mode nothing but the mode
  * is read. In any other mode a missing or malformed setting stops the server from starting, naming the setting.
  *
- * The settings are the `argonauth.*` properties, which gemp-lotr.properties takes from the environment variables
+ * The settings are the `sso.*` properties, which gemp-lotr.properties takes from the environment variables
  * `SSO_*` like the database's (AppConfig): docker/.env.example lists them, and docker/.env, which is not
  * committed, is where they and the client secret go. One left blank is as if absent.
  *
@@ -40,29 +40,28 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
             String value = properties.apply(key);
             return value == null ? "" : value.trim();
         };
-        ArgonauthMode mode = ArgonauthMode.parse(setting.apply("argonauth.mode"));
+        ArgonauthMode mode = ArgonauthMode.parse(setting.apply("sso.mode"));
         if (mode == ArgonauthMode.TEST)
             return TEST;
 
-        String issuer = address(setting, "argonauth.issuer");
-        String backchannel = setting.apply("argonauth.backchannel.url").isEmpty()
-                ? issuer : address(setting, "argonauth.backchannel.url");
+        String issuer = address(setting, "sso.issuer");
+        String backchannel = setting.apply("sso.backchannel.url").isEmpty()
+                ? issuer : address(setting, "sso.backchannel.url");
         return new ArgonauthConfig(mode, issuer,
-                required(setting, "argonauth.client.id"), required(setting, "argonauth.client.secret"),
-                address(setting, "argonauth.redirect.uri"), address(setting, "argonauth.postlogout.uri"),
+                required(setting, "sso.client.id"), required(setting, "sso.client.secret"),
+                address(setting, "sso.redirect.uri"), address(setting, "sso.postlogout.uri"),
                 backchannel);
     }
 
-    /** A setting as the person who has to fix it knows it: argonauth.client.id is SSO_CLIENT_ID in docker/.env. */
+    /** A setting as the person who has to fix it knows it: sso.client.id is SSO_CLIENT_ID in docker/.env. */
     private static String named(String key) {
-        return key + " (" + key.replace("argonauth.", "SSO_").replace('.', '_').toUpperCase(Locale.ROOT)
-                + " in docker/.env)";
+        return key + " (" + key.replace('.', '_').toUpperCase(Locale.ROOT) + " in docker/.env)";
     }
 
     private static String required(Function<String, String> setting, String key) {
         String value = setting.apply(key);
         if (value.isEmpty())
-            throw new IllegalStateException(named(key) + " is not set, and argonauth.mode is not test");
+            throw new IllegalStateException(named(key) + " is not set, and sso.mode is not test");
         return value;
     }
 
@@ -80,11 +79,11 @@ public record ArgonauthConfig(ArgonauthMode mode, String issuer, String clientId
         boolean thisMachine = host.equals("localhost") || host.equals("127.0.0.1");
         // The back channel carries the client secret. Unencrypted it may only go to another container on this
         // machine: the Docker host, or a name with no dot in it (a compose service).
-        boolean insideThisMachine = key.equals("argonauth.backchannel.url")
+        boolean insideThisMachine = key.equals("sso.backchannel.url")
                 && (host.equals("host.docker.internal") || !host.contains("."));
         if (host.isEmpty() || !(scheme.equals("https") || (scheme.equals("http") && (thisMachine || insideThisMachine))))
             throw new IllegalStateException(named(key) + "=" + value + " must be an https address (http only for localhost"
-                    + (key.equals("argonauth.backchannel.url") ? ", host.docker.internal or a container's name)" : ")"));
+                    + (key.equals("sso.backchannel.url") ? ", host.docker.internal or a container's name)" : ")"));
         if (uri.getQuery() != null || uri.getFragment() != null)
             throw new IllegalStateException(named(key) + "=" + value + " must not have a query or a fragment");
         return value.endsWith("/") && uri.getPath().equals("/") ? value.substring(0, value.length() - 1) : value;

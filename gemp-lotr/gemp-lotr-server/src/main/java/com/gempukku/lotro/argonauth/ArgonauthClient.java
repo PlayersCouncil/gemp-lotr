@@ -435,7 +435,7 @@ public class ArgonauthClient {
                 JSONObject document = answer.json();
                 if (!_config.issuer().equals(document.getString("issuer")))
                     throw new ArgonauthException(REJECTED, "the discovery document is for " + document.getString("issuer")
-                            + ", and argonauth.issuer is " + _config.issuer());
+                            + ", and sso.issuer is " + _config.issuer());
                 _endpoints = new Endpoints(endpoint(document, "authorization_endpoint"), endpoint(document, "token_endpoint"),
                         endpoint(document, "userinfo_endpoint"), endpoint(document, "jwks_uri"),
                         endpoint(document, "end_session_endpoint"),

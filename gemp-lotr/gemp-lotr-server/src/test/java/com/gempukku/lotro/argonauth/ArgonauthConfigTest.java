@@ -15,12 +15,12 @@ public class ArgonauthConfigTest {
     }
 
     private void optional() {
-        _properties.put("argonauth.mode", "optional");
-        _properties.put("argonauth.issuer", "https://auth.lotrtcgpc.net/");
-        _properties.put("argonauth.client.id", "gemp");
-        _properties.put("argonauth.client.secret", "s3cret");
-        _properties.put("argonauth.redirect.uri", "https://play.lotrtcgpc.net/gemp-lotr-server/argonauth/callback");
-        _properties.put("argonauth.postlogout.uri", "https://play.lotrtcgpc.net/gemp-lotr/ng/login");
+        _properties.put("sso.mode", "optional");
+        _properties.put("sso.issuer", "https://auth.lotrtcgpc.net/");
+        _properties.put("sso.client.id", "gemp");
+        _properties.put("sso.client.secret", "s3cret");
+        _properties.put("sso.redirect.uri", "https://play.lotrtcgpc.net/gemp-lotr-server/argonauth/callback");
+        _properties.put("sso.postlogout.uri", "https://play.lotrtcgpc.net/gemp-lotr/ng/login");
     }
 
     private void assertRefused(String naming) {
@@ -37,8 +37,8 @@ public class ArgonauthConfigTest {
         assertSame(ArgonauthConfig.TEST, read());
         assertFalse(read().enabled());
 
-        _properties.put("argonauth.mode", " Test ");
-        _properties.put("argonauth.issuer", "not even an address");
+        _properties.put("sso.mode", " Test ");
+        _properties.put("sso.issuer", "not even an address");
         assertSame(ArgonauthConfig.TEST, read());
     }
 
@@ -60,81 +60,81 @@ public class ArgonauthConfigTest {
     @Test
     public void theStagesNotBuiltAndUnknownModesStopTheServer() {
         for (String mode : new String[]{"pester", "required", "argonauth_only"}) {
-            _properties.put("argonauth.mode", mode);
+            _properties.put("sso.mode", mode);
             assertRefused("not built");
         }
-        _properties.put("argonauth.mode", "on");
+        _properties.put("sso.mode", "on");
         assertRefused("not a mode");
     }
 
     @Test
     public void aMissingSettingIsNamed() {
-        for (String key : new String[]{"argonauth.issuer", "argonauth.client.id", "argonauth.client.secret",
-                "argonauth.redirect.uri", "argonauth.postlogout.uri"}) {
+        for (String key : new String[]{"sso.issuer", "sso.client.id", "sso.client.secret",
+                "sso.redirect.uri", "sso.postlogout.uri"}) {
             optional();
             _properties.remove(key);
             assertRefused(key);
         }
         // and as what it is called in docker/.env, which is where it is set
         optional();
-        _properties.remove("argonauth.client.id");
-        assertRefused("argonauth.client.id (SSO_CLIENT_ID in docker/.env) is not set");
-        _properties.put("argonauth.client.id", "gemp");
-        _properties.put("argonauth.postlogout.uri", "ftp://x");
-        assertRefused("argonauth.postlogout.uri (SSO_POSTLOGOUT_URI in docker/.env)=ftp://x must be");
+        _properties.remove("sso.client.id");
+        assertRefused("sso.client.id (SSO_CLIENT_ID in docker/.env) is not set");
+        _properties.put("sso.client.id", "gemp");
+        _properties.put("sso.postlogout.uri", "ftp://x");
+        assertRefused("sso.postlogout.uri (SSO_POSTLOGOUT_URI in docker/.env)=ftp://x must be");
     }
 
     @Test
     public void aSettingLeftBlankIsAsIfAbsent() {
         // gemp-lotr.properties takes each of these from docker/.env (AppConfigTest), where most are left empty:
         // with the mode left at test, that is test mode
-        for (String key : new String[]{"argonauth.issuer", "argonauth.client.id", "argonauth.client.secret",
-                "argonauth.redirect.uri", "argonauth.postlogout.uri", "argonauth.backchannel.url"})
+        for (String key : new String[]{"sso.issuer", "sso.client.id", "sso.client.secret",
+                "sso.redirect.uri", "sso.postlogout.uri", "sso.backchannel.url"})
             _properties.put(key, "");
-        _properties.put("argonauth.mode", "test");
+        _properties.put("sso.mode", "test");
         assertSame(ArgonauthConfig.TEST, read());
-        _properties.put("argonauth.mode", " ");
+        _properties.put("sso.mode", " ");
         assertSame(ArgonauthConfig.TEST, read());
 
         // an empty back channel is the issuer
         optional();
-        _properties.put("argonauth.backchannel.url", "");
+        _properties.put("sso.backchannel.url", "");
         assertEquals(read().issuer(), read().backchannelUrl());
 
         // switched on with something still blank: the server stops and names it
-        _properties.put("argonauth.client.secret", " ");
-        assertRefused("argonauth.client.secret");
+        _properties.put("sso.client.secret", " ");
+        assertRefused("sso.client.secret");
     }
 
     @Test
     public void plainHttpIsForThisMachineOnly() {
         optional();
-        _properties.put("argonauth.issuer", "http://auth.lotrtcgpc.net");
-        assertRefused("argonauth.issuer");
+        _properties.put("sso.issuer", "http://auth.lotrtcgpc.net");
+        assertRefused("sso.issuer");
 
-        _properties.put("argonauth.issuer", "http://localhost:1630");
-        _properties.put("argonauth.redirect.uri", "http://localhost:17001/gemp-lotr-server/argonauth/callback");
-        _properties.put("argonauth.postlogout.uri", "http://localhost:17001/gemp-lotr/ng/login");
+        _properties.put("sso.issuer", "http://localhost:1630");
+        _properties.put("sso.redirect.uri", "http://localhost:17001/gemp-lotr-server/argonauth/callback");
+        _properties.put("sso.postlogout.uri", "http://localhost:17001/gemp-lotr/ng/login");
         assertEquals("http://localhost:1630", read().issuer());
 
-        _properties.put("argonauth.issuer", "ftp://localhost");
-        assertRefused("argonauth.issuer");
-        _properties.put("argonauth.issuer", "auth.lotrtcgpc.net");
-        assertRefused("argonauth.issuer");
-        _properties.put("argonauth.issuer", "https://auth.lotrtcgpc.net/?x=1");
-        assertRefused("argonauth.issuer");
-        _properties.put("argonauth.issuer", "https://auth lotrtcgpc.net");
-        assertRefused("argonauth.issuer");
+        _properties.put("sso.issuer", "ftp://localhost");
+        assertRefused("sso.issuer");
+        _properties.put("sso.issuer", "auth.lotrtcgpc.net");
+        assertRefused("sso.issuer");
+        _properties.put("sso.issuer", "https://auth.lotrtcgpc.net/?x=1");
+        assertRefused("sso.issuer");
+        _properties.put("sso.issuer", "https://auth lotrtcgpc.net");
+        assertRefused("sso.issuer");
     }
 
     @Test
     public void theServerCanReachArgonauthAtAnotherAddress() {
         optional();
-        _properties.put("argonauth.issuer", "http://localhost:1630");
-        _properties.put("argonauth.redirect.uri", "http://localhost:17001/gemp-lotr-server/argonauth/callback");
-        _properties.put("argonauth.postlogout.uri", "http://localhost:17001/gemp-lotr/ng/login");
+        _properties.put("sso.issuer", "http://localhost:1630");
+        _properties.put("sso.redirect.uri", "http://localhost:17001/gemp-lotr-server/argonauth/callback");
+        _properties.put("sso.postlogout.uri", "http://localhost:17001/gemp-lotr/ng/login");
         // from inside Gemp's container, Argonauth's container: plain http between them is expected
-        _properties.put("argonauth.backchannel.url", "http://argonauth:8000");
+        _properties.put("sso.backchannel.url", "http://argonauth:8000");
         ArgonauthConfig config = read();
 
         assertEquals("http://argonauth:8000/identity/o/api/token",
@@ -142,14 +142,14 @@ public class ArgonauthConfigTest {
         // an address that is not Argonauth's is left alone
         assertEquals("https://elsewhere.example/x", config.backchannel("https://elsewhere.example/x"));
 
-        _properties.put("argonauth.backchannel.url", "http://host.docker.internal:1630");
+        _properties.put("sso.backchannel.url", "http://host.docker.internal:1630");
         assertEquals("http://host.docker.internal:1630", read().backchannelUrl());
         // out on the network the client secret does not travel in clear
-        _properties.put("argonauth.backchannel.url", "http://auth.lotrtcgpc.net");
-        assertRefused("argonauth.backchannel.url");
-        _properties.put("argonauth.backchannel.url", "http://10.0.0.5:8000");
-        assertRefused("argonauth.backchannel.url");
-        _properties.put("argonauth.backchannel.url", "https://auth.lotrtcgpc.net");
+        _properties.put("sso.backchannel.url", "http://auth.lotrtcgpc.net");
+        assertRefused("sso.backchannel.url");
+        _properties.put("sso.backchannel.url", "http://10.0.0.5:8000");
+        assertRefused("sso.backchannel.url");
+        _properties.put("sso.backchannel.url", "https://auth.lotrtcgpc.net");
         assertEquals("https://auth.lotrtcgpc.net", read().backchannelUrl());
     }
 }

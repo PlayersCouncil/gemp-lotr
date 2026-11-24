@@ -17,7 +17,7 @@ public enum ArgonauthMode {
         if (mode.equals("optional"))
             return OPTIONAL;
         if (NOT_BUILT.contains(mode))
-            throw new IllegalStateException("argonauth.mode (SSO_MODE in docker/.env)=" + mode + " is not built yet: use test or optional");
-        throw new IllegalStateException("argonauth.mode (SSO_MODE in docker/.env)=" + mode + " is not a mode: use test or optional");
+            throw new IllegalStateException("sso.mode (SSO_MODE in docker/.env)=" + mode + " is not built yet: use test or optional");
+        throw new IllegalStateException("sso.mode (SSO_MODE in docker/.env)=" + mode + " is not a mode: use test or optional");
     }
 }

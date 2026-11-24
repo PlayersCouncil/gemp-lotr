@@ -37,8 +37,8 @@ this replaces where they differ. What Gemp asks of Argonauth is in
 | `SSO_POSTLOGOUT_URI` | Where Argonauth sends the browser after a sign-out: `<site>/gemp-lotr/ng/login`, as registered |
 | `SSO_BACKCHANNEL_URL` | Optional. Where Gemp's server reaches Argonauth, when that differs from the issuer (both in containers on one machine). Defaults to the issuer |
 
-These are environment variables. Gemp itself reads properties, `argonauth.mode` and the rest, and
-`gemp-lotr.properties` takes each from its variable (`argonauth.mode=${SSO_MODE:-test}`), as it does the
+These are environment variables. Gemp itself reads properties, `sso.mode` and the rest, and
+`gemp-lotr.properties` takes each from its variable (`sso.mode=${SSO_MODE:-test}`), as it does the
 database's: a variable unset or left blank is the default there, which for all but the mode is nothing. A run
 outside Docker sets the variables in its own environment.
 
@@ -68,7 +68,7 @@ integration use the dev Argonauth, which has its own database.
 
    On Linux Docker the app's service also needs `extra_hosts: ["host.docker.internal:host-gateway"]`. On the
    droplets there is no back channel: leave it unset and the server uses the public https address.
-4. **Restart.** The log says `PC accounts: argonauth.mode is optional, at <issuer> as <client id>`. A setting
+4. **Restart.** The log says `PC accounts: sso.mode is optional, at <issuer> as <client id>`. A setting
    that is missing or malformed stops the server and names itself, as the property and as the variable. Argonauth is first reached for when someone
    signs in, not at start: a Gemp can start while Argonauth is down.
 

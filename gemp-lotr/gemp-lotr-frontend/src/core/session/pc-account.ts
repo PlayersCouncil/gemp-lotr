@@ -6,7 +6,7 @@ import { SERVER_URL } from '../platform/app-paths';
  * name; in code, settings and addresses `argonauth` is fine.
  */
 
-/** `argonauth.mode`: `test` shows no PC account anywhere; `optional` offers it beside the password login. */
+/** `sso.mode`: `test` shows no PC account anywhere; `optional` offers it beside the password login. */
 export type PcMode = 'test' | 'optional';
 
 /** The signed-in PC account. `fresh` is false once its sign-in has lapsed: creating and linking then sign in again. */

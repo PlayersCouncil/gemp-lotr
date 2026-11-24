@@ -1,6 +1,6 @@
 -- Which Gemp accounts belong to which PC account (PC-ACCOUNT.md). Argonauth is the authority; this is Gemp's copy,
 -- brought up to date at every PC sign-in. Empty until someone signs in with a PC account, and never read in the
--- default (test) mode, so it is safe to create ahead of switching argonauth.mode to optional.
+-- default (test) mode, so it is safe to create ahead of switching sso.mode to optional.
 
 CREATE TABLE player_argonauth (
   player_id INT NOT NULL PRIMARY KEY,           -- player.id: an account has at most one PC account

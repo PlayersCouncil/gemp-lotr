@@ -278,7 +278,7 @@ public class ServerBuilder {
 
         // The PC account (PC-ACCOUNT.md). In test mode, the default, there is none, and Argonauth is never reached for.
         ArgonauthConfig argonauth = ArgonauthConfig.read(AppConfig::getProperty);
-        LOGGER.info("PC accounts: argonauth.mode is " + argonauth.mode().name().toLowerCase()
+        LOGGER.info("PC accounts: sso.mode is " + argonauth.mode().name().toLowerCase()
                 + (argonauth.enabled() ? ", at " + argonauth.issuer() + " as " + argonauth.clientId() : ""));
         objectMap.put(ArgonauthConfig.class, argonauth);
         LoginThrottle loginThrottle = extract(objectMap, LoginThrottle.class);
