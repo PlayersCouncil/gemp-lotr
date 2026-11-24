@@ -138,6 +138,17 @@ public class RestorePoints implements DecisionObserver {
         return result;
     }
 
+    /**
+     * A place to go back to that is not an answer: a sandbox's Stop, an edit to its board, its Start
+     * (ScenarioSandbox).  It is the player's own, made now, in the turn and phase the game is in.
+     * @param entryCount How many entries the journal holds just before the note that makes it.
+     * @param label What was done there, as the player is told it ("Added Gimli").
+     */
+    public void note(int entryCount, String player, String label) {
+        int turn = _game.getGameState().getTurnNumber();
+        _points.add(new Point(entryCount, player, label, label, turn, _game.getGameState().getCurrentPhase(), Kind.PLAY));
+    }
+
     /** Every point there is, soonest first, whoever's and however long ago. */
     public List<Point> all() {
         return List.copyOf(_points);

@@ -1,0 +1,41 @@
+{
+	id: sandbox
+	version: 1
+	kind: sandbox
+	title: Sandbox
+	summary: An empty table to set up as you like: each side has Frodo, The One Ring and the Fellowship block's sites, and nothing else.  Stop the game to add cards, move them and change the counters; Start it to play.
+	note: The default sandbox, offered to everybody.  The cards are the card tests' own benign defaults (TestConstants.FellowshipSites, FOTRFrodo, RulingRing), chosen there to stay out of the way.
+	format: scenario
+	human: freeps
+	opponent: {
+		name: Sandbox
+		fallback: pass
+	}
+	cards: {
+		freeps: {
+			# Frodo, Son of Drogo
+			frodo: 1_290
+			# The One Ring, The Ruling Ring
+			ring: 1_2
+		}
+		shadow: {
+			# Frodo, Son of Drogo
+			oppFrodo: 1_290
+			# The One Ring, The Ruling Ring
+			oppRing: 1_2
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+		shadow: oppRing
+	}
+	# Bag End, Ettenmoors, Rivendell Valley, Balin's Tomb, The Bridge of Khazad-dûm, Galadriel's Glade, Anduin Confluence, Anduin Banks, Emyn Muil
+	sites: {
+		freeps: 1_319, 1_331, 1_341, 1_343, 1_349, 1_351, 1_353, 1_356, 1_360
+		shadow: 1_319, 1_331, 1_341, 1_343, 1_349, 1_351, 1_353, 1_356, 1_360
+	}
+}

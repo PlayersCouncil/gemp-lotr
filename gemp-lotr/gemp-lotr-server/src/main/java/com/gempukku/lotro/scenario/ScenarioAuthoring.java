@@ -3189,33 +3189,11 @@ public class ScenarioAuthoring {
 
     private Map<String, Object> describeBoard(Sitting sitting) {
         ScenarioTable table = sitting.live.Table();
-        //Where each card comes in its hand or its pile (0 first: the top of a pile)
-        Map<PhysicalCard, Integer> places = new IdentityHashMap<>();
-        for (Seat seat : Seat.values())
-            for (SetupZone zone : ScenarioParser.ORDERED) {
-                List<? extends PhysicalCard> there = table.CardsIn(seat, zone);
-                for (int i = 0; i < there.size(); i++)
-                    places.put(there.get(i), i);
-            }
+        //(described as a sandbox's board is: BoardView)
+        Map<PhysicalCard, Integer> places = BoardView.places(table);
         List<Map<String, Object>> cards = new ArrayList<>();
-        for (CardDef card : sitting.def.cards.values()) {
-            PhysicalCardImpl physical = table.Card(card.alias());
-            Map<String, Object> json = new LinkedHashMap<>();
-            json.put("alias", card.alias());
-            json.put("blueprintId", physical.getBlueprintId());
-            json.put("name", GameUtils.getFullName(physical));
-            json.put("type", physical.getBlueprint().getCardType().name());
-            json.put("owner", card.owner().key());
-            json.put("cardId", physical.getCardId());
-            json.put("zone", zoneOf(physical));
-            json.put("at", places.get(physical));
-            json.put("wounds", table.gameState().getWounds(physical));
-            Token token = physical.getBlueprint().getCulture() == null ? null : Token.findTokenForCulture(physical.getBlueprint().getCulture());
-            json.put("tokens", token == null ? 0 : table.gameState().getTokenCount(physical, token));
-            json.put("on", physical.getAttachedTo() != null ? table.AliasOf(physical.getAttachedTo())
-                    : physical.getStackedOn() != null ? table.AliasOf(physical.getStackedOn()) : null);
-            cards.add(json);
-        }
+        for (CardDef card : sitting.def.cards.values())
+            cards.add(BoardView.card(table, card.alias(), table.Card(card.alias()), card.owner(), places));
         Map<String, Object> board = new LinkedHashMap<>();
         board.put("cards", cards);
         board.put("twilight", table.GetTwilight());
@@ -3257,36 +3235,7 @@ public class ScenarioAuthoring {
      * assigned.
      */
     private static void describeWhere(ScenarioTable table, Map<String, Object> board) {
-        Map<String, Object> markers = new LinkedHashMap<>();
-        for (Seat seat : Seat.values())
-            markers.put(seat.key(), table.gameState().getPlayerPosition(table.Player(seat)));
-        board.put("markers", markers);
-        board.put("currentSite", table.gameState().getCurrentSiteNumber());
-        board.put("moves", table.gameState().getMoveCount());
-        List<Map<String, Object>> path = new ArrayList<>();
-        for (int number = 1; number <= 9; number++) {
-            PhysicalCard site = table.gameState().getSite(number);
-            if (site == null)
-                continue;
-            Map<String, Object> json = new LinkedHashMap<>();
-            json.put("number", number);
-            json.put("alias", table.AliasOf(site));
-            json.put("blueprintId", site.getBlueprintId());
-            json.put("name", GameUtils.getFullName(site));
-            json.put("printed", site.getBlueprint().getSiteNumber());
-            json.put("owner", table.SeatOf(site.getOwner()).key());
-            json.put("controlledBy", site.getCardController() == null ? null : table.SeatOf(site.getCardController()).key());
-            path.add(json);
-        }
-        board.put("path", path);
-        Map<String, Object> skirmishes = new LinkedHashMap<>();
-        for (com.gempukku.lotro.game.state.Assignment assignment : table.gameState().getAssignments()) {
-            List<String> minions = new ArrayList<>();
-            for (PhysicalCard minion : assignment.getShadowCharacters())
-                minions.add(table.AliasOf(minion));
-            skirmishes.put(table.AliasOf(assignment.getFellowshipCharacter()), minions);
-        }
-        board.put("skirmishes", skirmishes);
+        BoardView.where(table, board);
     }
 
     /**
@@ -3353,21 +3302,7 @@ public class ScenarioAuthoring {
     }
 
     private static String zoneOf(PhysicalCard card) {
-        if (card.getZone() == null)
-            return "nowhere";
-        return switch (card.getZone()) {
-            case FREE_CHARACTERS -> "characters";
-            case SUPPORT -> "support";
-            case SHADOW_CHARACTERS -> "minions";
-            case HAND -> "hand";
-            case DECK -> "deck";
-            case DISCARD -> "discard";
-            case DEAD -> "deadPile";
-            case REMOVED -> "removed";
-            case ATTACHED -> "attached";
-            case STACKED -> "stacked";
-            default -> card.getZone().name().toLowerCase(Locale.ROOT);
-        };
+        return BoardView.zoneOf(card);
     }
 
     /** A decision, in enough detail for the author to answer it from a panel: what it offers, in the scenario's words. */
