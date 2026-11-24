@@ -10,8 +10,10 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
 - Login form: "Login below, or [Register]", Login (text), Password (password; Enter submits), [Login], and the link
   "Forgot your password? Contact ketura on the PC Discord." (FORGOT_PASSWORD). No client-side checks.
 - POST `/gemp-lotr-server/login` with `login`, `password`, `participantId` (form-encoded; the body is `<result>OK</result>`).
-  - 200: go to the hall. 202: the password was reset by an admin: show the register form with the login filled in, the
-    button "Update Password" and PASSWORD_RESET_PROMPT; registering then sets the new password.
+  - 200: go to the hall. (The legacy page took a 202 as "the password was reset by an admin" and asked for a new one
+    through the register form. Admins no longer reset passwords and the server no longer answers 202 (PC-ACCOUNT.md):
+    that path is gone, and any 2xx is a login.)
+  - 429 (new: too many attempts): TOO_MANY_ATTEMPTS, keeping the form.
   - 401: INVALID_LOGIN, and the login form is shown again, empty. 403: PERMANENTLY_BANNED, 409: TEMPORARILY_BANNED,
     and the form is hidden (`formShown`). 503: MAINTENANCE.
   - 0: alert CANNOT_CONNECT. Anything else: alert CANNOT_CONTACT (the communication object's failure handler).
@@ -21,8 +23,7 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
   still says 2-10, kept as is.
 - POST `/gemp-lotr-server/register` with `login`, `password`, `participantId`.
   - 200: go to the hall. 400: INVALID_NEW_LOGIN. 409: LOGIN_TAKEN. 503: MAINTENANCE. 0/other: alerts as for login.
-  - 202: PASSWORD_UPDATED. The legacy check compares jQuery's text status, so it never matched; the server answers
-    200 for a reset too, so today this branch is unused.
+  - (The legacy 202 PASSWORD_UPDATED branch is gone with the password reset.)
 - After 200 the browser goes to `/gemp-lotr/hall.html` plus the page's #fragment when it looks like a hall link
   (`/^#[A-Za-z0-9_\-\/?=&%.+]{1,200}$/`, e.g. `#events/leagues`), else nothing (`returnLink`).
 - Cookies: the page reads and writes none itself; the server's answer sets `loggedUser`. No browser checks.
@@ -32,3 +33,13 @@ calls in `js/gemp-022/communication.js`. Wording is in `login-messages.ts`; the 
 - The page (`ui/login`) is one `<form>`: Enter submits from any field, in both forms (the legacy page listened for Enter
   in the login form's password field only). While a call is under way its buttons are disabled (the legacy login call
   was synchronous, so the page froze until the answer).
+
+## The PC account
+
+The page asks GET `/gemp-lotr-server/argonauth/session` first (core/session `PcSessionService`, see PC-ACCOUNT.md) and
+draws the form's place once it has answered. In `test` mode, or when the server gives no session, the page is as
+above. In `optional` mode, for nobody, the Register button and form are gone: in their place a line for new players
+(NEW_PLAYERS) and "Sign in with PC Account", a link to `/gemp-lotr-server/argonauth/login` carrying the page's
+`return`. A signed-in PC account, or a password login, gets the alias list (`gd-alias-list`, core/session `AliasList`)
+in the form's place. `?pc=cancelled` and `?pc=failed` are a line above (`pcNotice`); `?open=create|link` opens that
+form of the list.

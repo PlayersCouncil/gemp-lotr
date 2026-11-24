@@ -74,3 +74,14 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   from it by accents only, a site whose change is only in its image, a type change (Event → Condition), a V-set
   revision with its earlier version and one without, and a hall format without errata; with the old `all` and
   `recent` maps the page doesn't read.
+- Written by hand from `gemp-lotr/PC-ACCOUNT.md` ("The Server's Addresses"), the contract the client is built
+  against, before the server had them (values made up), for the PC account: GET /argonauth/session as
+  `argonauth-session.json` (the document's own example: a PC account playing one alias, another busy, `blockedBy`),
+  `argonauth-session-test.json` (`test` mode, a password login), `argonauth-session-nobody.json` (`optional`,
+  nobody), `argonauth-session-password.json` and `argonauth-session-password-linked.json` (a password login, its
+  account not linked and linked), `argonauth-session-aliases.json` (a PC account with three aliases and none played),
+  `argonauth-session-no-aliases.json` (a PC account with none) and `argonauth-session-stale.json` (`fresh` false);
+  what POST /argonauth/enter, /create and /link answer on success is a session as these. POST /argonauth/logout as
+  `argonauth-logout-alias.json` and `argonauth-logout-all.json` (`next`). `argonauth-errors.json` lists every refusal
+  of the document's table, by action, as `[status, code]`: each is answered with the body `{"error": "<code>"}`.
+  Replace them with captured answers once the server has the addresses.

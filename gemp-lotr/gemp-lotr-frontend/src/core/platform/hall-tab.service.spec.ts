@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { HALL_PAGE_URL, HallChannel, hallPageAddress, HallTab } from './hall-tab.service';
+import { HALL_PAGE_URL, HallChannel, hallPageAddress, HallTab, SessionChannel } from './hall-tab.service';
 
 /** A BroadcastChannel that keeps what is posted on it; the test answers for the hall. */
 class FakeChannel {
@@ -162,5 +162,45 @@ describe('HallChannel', () => {
     expect(FakeChannel.made[0]?.closed).toBe(true);
     channel(false).listen();
     expect(FakeChannel.made).toHaveLength(1);
+  });
+});
+
+describe('SessionChannel', () => {
+  let reload: ReturnType<typeof vi.fn>;
+
+  function channel(withChannels = true): SessionChannel {
+    reload = vi.fn();
+    const view = { location: { reload }, ...(withChannels ? { BroadcastChannel: FakeChannel } : {}) };
+    TestBed.configureTestingModule({ providers: [{ provide: DOCUMENT, useValue: { defaultView: view } }] });
+    return TestBed.inject(SessionChannel);
+  }
+
+  beforeEach(() => (FakeChannel.made = []));
+
+  it("tells the other tabs on the hall's channel that the session changed", () => {
+    channel().announce();
+    expect(FakeChannel.made.map((made) => made.name)).toEqual(['gemp-lotr-hall']);
+    expect(FakeChannel.made[0].posted).toEqual([{ type: 'session-changed' }]);
+  });
+
+  it('reloads the page when another tab says so, and for nothing else; on one channel, so not for its own', () => {
+    const sessions = channel();
+    sessions.reloadOnChange();
+    sessions.reloadOnChange();
+    sessions.announce();
+    expect(FakeChannel.made.length).toBe(1);
+    const [made] = FakeChannel.made;
+    made.hear({ type: 'anyone' });
+    made.hear(null);
+    expect(reload).not.toHaveBeenCalled();
+    made.hear({ type: 'session-changed' });
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('does nothing in a browser without channels', () => {
+    const sessions = channel(false);
+    sessions.reloadOnChange();
+    sessions.announce();
+    expect(FakeChannel.made).toEqual([]);
   });
 });

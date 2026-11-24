@@ -1,0 +1,26 @@
+{
+  "enter": [
+    [401, "no-pc-account"],
+    [403, "not-linked"],
+    [403, "banned"],
+    [409, "busy"],
+    [503, "unavailable"]
+  ],
+  "create": [
+    [401, "no-pc-account"],
+    [401, "reauth"],
+    [400, "invalid-name"],
+    [409, "name-taken"],
+    [409, "busy"],
+    [429, "slow-down"],
+    [503, "unavailable"]
+  ],
+  "link": [
+    [401, "no-pc-account"],
+    [401, "reauth"],
+    [401, "bad-credentials"],
+    [409, "linked-elsewhere"],
+    [429, "slow-down"],
+    [503, "unavailable"]
+  ]
+}
