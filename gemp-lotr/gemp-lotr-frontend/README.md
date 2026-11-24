@@ -442,6 +442,17 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   component lets the page take the gesture, `CardGestures`). Attach and Stack pick a card on the table with the
   authoring panel's picking (`TablePick`, shared). A sandbox's end (`ended`) says who won and why, with Reset and
   Leave. Checked by `npm run check:game:sandbox` (see `visual-check/game/README.md`).
+  The piles, the path and the counters (`edit-piles.ts`, `edit-path.ts`, `edit-counters.ts`, `edit-seats.ts`,
+  `EditSeating`): in a sandbox every pile of both seats opens from its count (a link), in both modes (the hidden ones,
+  the draw decks and the other seat's hand and adventure deck, with its `piles` tool), in the page's own pile window
+  (`gd-game-piles`, top first): a pile the page's game view isn't shown comes from `TableEdit.board`, read again when
+  its window opens and as the game moves; while edited, a window has its pile's open spots (a draw deck's top and
+  bottom) and its cards the card menu, and the counts are the board's (the game sends its stats only as it moves).
+  The adventure path ends with a site-shaped open spot for the next site (`gd-site-spot`), whose chooser
+  (`gd-site-chooser`: Search… held to the site's number, From adventure deck… then a seat then its sites) lays a site;
+  a laid site's menu has each seat's marker, control, Liberate and Replace…. The twilight pool, the threats and the
+  burdens (a line of their own in edit mode) change where they are shown (`gd-edit-counter`, its box
+  `gd-edit-counter-box`: −, +, Set).
 
 ## Tests and the visual check
 

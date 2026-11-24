@@ -143,7 +143,7 @@ export function gameTable(model: GameModel, order: readonly string[] = []): Game
 }
 
 /** The piles a player's counters open (the legacy page's pile dialogs), by the counter's name. */
-export type PileName = 'discard' | 'deadPile' | 'adventureDeck' | 'removedPile' | 'deck' | 'revealedHand';
+export type PileName = 'discard' | 'deadPile' | 'adventureDeck' | 'removedPile' | 'deck' | 'revealedHand' | 'hand';
 
 const PILE_ZONES: Readonly<Record<PileName, string>> = {
   discard: 'DISCARD',
@@ -152,6 +152,8 @@ const PILE_ZONES: Readonly<Record<PileName, string>> = {
   removedPile: 'REMOVED',
   deck: 'DECK',
   revealedHand: 'HAND',
+  // (a hand as it is, in a sandbox, where every pile opens: its own cards, never copies)
+  hand: 'HAND',
 };
 
 /** A pile's dialog title, as the legacy page wrote it before the player's name. */
@@ -169,6 +171,8 @@ export function pileTitle(pile: PileName, ownHand: boolean): string {
       return 'Draw Deck';
     case 'revealedHand':
       return ownHand ? 'Your Revealed Hand' : 'Revealed Hand';
+    case 'hand':
+      return ownHand ? 'Your Hand' : 'Hand';
   }
 }
 

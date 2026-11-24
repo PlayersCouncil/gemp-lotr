@@ -2,6 +2,7 @@ import { Component, computed, DestroyRef, ElementRef, inject, input, signal } fr
 import { GameCardViews } from '../../../core/game/table/game-card-views';
 import { TableSite } from '../../../core/game/table/game-table';
 import { CardComponent } from '../../shared/card/card.component';
+import { SiteSpotComponent } from '../table-edit/site-spot.component';
 import { GameCardLayersComponent } from './game-card-layers.component';
 import { GameCardDirective } from './game-card.directive';
 
@@ -9,14 +10,18 @@ import { GameCardDirective } from './game-card.directive';
  * The adventure path (the legacy AdvPathCardGroup): the sites in play one under the other in their order, each with
  * a marker per player standing on it (the player's number; lit for the player whose turn it is).
  *
- * DOM contract: `gd-game-path` with `--gd-path-count` (the number of sites), holding one `button.gd-card` per site
- * with `--gd-path-index` (from 0) and, once the path is measured, `--gd-path-top`.
+ * While the path is changed by hand (a sandbox stopped), the site not laid yet has an open spot after the sites
+ * (`spot`: its number), counted with them.
+ *
+ * DOM contract: `gd-game-path` with `--gd-path-count` (the number of sites, and the open spot), holding one
+ * `button.gd-card` per site with `--gd-path-index` (from 0) and, once the path is measured, `--gd-path-top`; then
+ * `gd-site-spot.gd-game-path__spot` (the same two) while there is an open spot.
  */
 @Component({
   selector: 'gd-game-path',
   styleUrl: './adventure-path.component.css',
-  imports: [CardComponent, GameCardDirective, GameCardLayersComponent],
-  host: { '[style.--gd-path-count]': 'sites().length' },
+  imports: [CardComponent, GameCardDirective, GameCardLayersComponent, SiteSpotComponent],
+  host: { '[style.--gd-path-count]': 'count()' },
   template: `
     @for (site of sites(); track site.card.id; let index = $index) {
       <button
@@ -28,10 +33,22 @@ import { GameCardDirective } from './game-card.directive';
         <gd-game-card-layers [card]="site.card" [tokens]="markers(site)" />
       </button>
     }
+    @if (spot(); as number) {
+      <gd-site-spot
+        class="gd-game-path__spot"
+        [number]="number"
+        [style.--gd-path-index]="sites().length"
+        [style.--gd-path-top.px]="tops()[sites().length] ?? null"
+      />
+    }
   `,
 })
 export class AdventurePathComponent {
   readonly sites = input.required<readonly TableSite[]>();
+  /** The number of the site the path's open spot lays (a sandbox stopped), or null for none. */
+  readonly spot = input<number | null>(null);
+  /** What the path holds: its sites, and the open spot. */
+  protected readonly count = computed(() => this.sites().length + (this.spot() === null ? 0 : 1));
 
   protected readonly views = inject(GameCardViews);
 
@@ -44,12 +61,12 @@ export class AdventurePathComponent {
    */
   protected readonly tops = computed<readonly number[]>(() => {
     const box = this.box();
-    const count = this.sites().length;
+    const count = this.count();
     if (!box) return [];
     const siteHeight = Math.floor((box.width * 350) / 490);
     const gap = Math.min(5, (box.height - count * siteHeight) / (count - 1));
     let y = 0;
-    return this.sites().map(() => {
+    return Array.from({ length: count }, () => {
       const top = Math.floor(y);
       y += siteHeight + gap;
       return top;

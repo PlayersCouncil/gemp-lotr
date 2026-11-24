@@ -13,6 +13,8 @@ import { EditPopups } from './edit-popups';
 import { PopupPlaceDirective } from './popup-place.directive';
 import { SearchWindowComponent } from './search-window.component';
 import { TablePick } from './table-pick';
+import { PathEditComponent } from './path-edit.component';
+import { CounterBoxComponent } from './counter-box.component';
 
 /**
  * What the edit controls draw over the game page while its table is edited by hand: the chooser of an open spot, a
@@ -23,12 +25,21 @@ import { TablePick } from './table-pick';
  * DOM contract: `gd-table-edit` holding `gd-edit-chooser`, `gd-edit-menu`, `gd-edit-search`,
  * `gd-game-author-pickbox` (while picking) and, while a refusal of a control is up, `.gd-edit-problem` (`role=alert`,
  * placed by gdPopupPlace where it was asked for) with the server's words (TableEdit takes it away after a while, or at
- * the next change).
+ * the next change); then `gd-path-edit` (the adventure path's site chooser and site search) and
+ * `gd-edit-counter-box` (a counter's box).
  */
 @Component({
   selector: 'gd-table-edit',
   styleUrl: './table-edit-layer.component.css',
-  imports: [ChooserComponent, CardMenuComponent, SearchWindowComponent, PickBoxComponent, PopupPlaceDirective],
+  imports: [
+    ChooserComponent,
+    CardMenuComponent,
+    SearchWindowComponent,
+    PickBoxComponent,
+    PopupPlaceDirective,
+    PathEditComponent,
+    CounterBoxComponent,
+  ],
   providers: [{ provide: TablePick, useExisting: CardPicker }],
   template: `
     <gd-edit-chooser />
@@ -47,6 +58,8 @@ import { TablePick } from './table-pick';
         {{ problem.text }}
       </p>
     }
+    <gd-path-edit />
+    <gd-edit-counter-box />
   `,
 })
 export class TableEditLayerComponent {

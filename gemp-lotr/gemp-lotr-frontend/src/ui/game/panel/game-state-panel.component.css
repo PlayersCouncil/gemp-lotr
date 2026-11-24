@@ -264,3 +264,10 @@
 :host-context(gemp-game[data-scenario='tutorial']) [data-clock] {
   visibility: hidden;
 }
+
+/* A sandbox: every pile opens, and its count reads as a link */
+.gd-game-counter[data-link] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}

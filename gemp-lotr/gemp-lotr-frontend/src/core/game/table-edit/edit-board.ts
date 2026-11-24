@@ -43,6 +43,24 @@ export interface EditCard {
   modifiers: readonly EditModifier[];
   /** Made by an edit, not one of the scenario's own. */
   added: boolean;
+  /** Its place in a hand or an ordered pile (0: the top of a pile); null elsewhere. (Optional for a backend's own boards.) */
+  at?: number | null;
+  /** A site's number on the path (a controlled one's too); null elsewhere. */
+  site?: number | null;
+  /** A site's printed number (0: none printed); null for a card that is not a site. */
+  printed?: number | null;
+}
+
+/** A site laid on the adventure path (the state's `path`). */
+export interface EditPathSite {
+  number: number;
+  alias: string;
+  blueprintId: string;
+  name: string;
+  printed: number | null;
+  owner: EditSeat | null;
+  /** The seat controlling it, or null. */
+  controlledBy: EditSeat | null;
 }
 
 /** One of the things Modify… offers. */
@@ -75,6 +93,12 @@ export interface EditBoard {
   /** The culture names a token can be. */
   cultures: readonly string[];
   modify: { words: readonly ModifyWord[]; until: readonly ModifierUntil[] };
+  /** The site each seat's marker is at. (These three are optional for a backend's own boards.) */
+  markers?: Readonly<Partial<Record<EditSeat, number>>>;
+  /** The site of the fellowship whose turn it is. */
+  currentSite?: number | null;
+  /** The sites laid on the path, by number. */
+  path?: readonly EditPathSite[];
 }
 
 type Json = Record<string, unknown>;
@@ -154,6 +178,25 @@ function card(value: unknown): EditCard | null {
       return read ? [read] : [];
     }),
     added: json['added'] === true,
+    at: number(json['at']),
+    site: number(json['site']),
+    printed: number(json['printed']),
+  };
+}
+
+function pathSite(value: unknown): EditPathSite | null {
+  const json = object(value);
+  const at = number(json['number']);
+  const alias = text(json['alias']);
+  if (at === null || alias === null) return null;
+  return {
+    number: at,
+    alias,
+    blueprintId: text(json['blueprintId']) ?? '',
+    name: text(json['name']) ?? alias,
+    printed: number(json['printed']),
+    owner: seat(json['owner']),
+    controlledBy: seat(json['controlledBy']),
   };
 }
 
@@ -204,6 +247,14 @@ export function readEditBoard(value: unknown): EditBoard {
       }),
       until: modifyUntil.length > 0 ? modifyUntil : UNTIL,
     },
+    markers: Object.fromEntries(Object.entries(counts(json['markers'])).filter(([name]) => seat(name) !== null)),
+    currentSite: number(json['currentSite']),
+    path: list(json['path'])
+      .flatMap((item) => {
+        const read = pathSite(item);
+        return read ? [read] : [];
+      })
+      .sort((a, b) => a.number - b.number),
   };
 }
 

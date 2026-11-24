@@ -48,3 +48,21 @@
     animation: none;
   }
 }
+
+/* The adventure path's open spot (gd-site-spot): site-shaped, as wide as its host, its site number in a corner */
+.gd-open-spot[data-shape='site'] {
+  width: 100%;
+  height: 100%;
+  border-radius: 4.3%/6%;
+}
+
+.gd-open-spot[data-shape='site'] .gd-open-spot__plus {
+  font-size: min(40cqw, 60cqh, 48px);
+}
+
+.gd-open-spot__number {
+  position: absolute;
+  left: 6%;
+  top: 6%;
+  font: bold 14px/1 var(--theme-game-edit-font);
+}

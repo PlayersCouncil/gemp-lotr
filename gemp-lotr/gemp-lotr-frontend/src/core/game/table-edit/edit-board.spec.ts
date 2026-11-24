@@ -1,5 +1,6 @@
 import { cardByAlias, cardById, editLevel, editMode, editTools, onTable, readEditBoard } from './edit-board';
 import { SANDBOX_STATE } from '../../../testing/table-edit';
+import { SANDBOX_PILES_STATE } from '../../../testing/table-edit-piles';
 
 describe('readEditBoard', () => {
   it('reads the state the sandbox sends', () => {
@@ -25,6 +26,9 @@ describe('readEditBoard', () => {
       on: null,
       modifiers: [{ id: 1, what: 'strength', amount: 2, until: 'turn', text: 'Strength +2' }],
       added: true,
+      at: null,
+      site: null,
+      printed: null,
     });
     expect(board.piles.shadow['hand']).toBe(1);
     expect(board.hiddenPilesOpen).toBe(true);
@@ -76,6 +80,9 @@ describe('readEditBoard', () => {
         on: null,
         modifiers: [{ id: 3, what: 'fierce', amount: null, until: 'removed', text: 'fierce' }],
         added: false,
+        at: null,
+        site: null,
+        printed: null,
       },
     ]);
     expect(odd.modify.words).toEqual([{ what: 'odd', label: 'odd', kind: 'keyword', number: 'none', types: [] }]);
@@ -101,5 +108,48 @@ describe('readEditBoard', () => {
     expect(cardByAlias(board, null)).toBeNull();
     expect(cardByAlias(null, 'boromir')).toBeNull();
     expect(board.cards.map((card) => onTable(card))).toEqual([true, true, false, true, true, false]);
+  });
+});
+
+describe('readEditBoard: the piles and the path', () => {
+  it("reads a card's place in its pile, a site's number and its printed number", () => {
+    const board = readEditBoard(SANDBOX_PILES_STATE);
+    expect(cardByAlias(board, 'legolas')).toMatchObject({ zone: 'deck', at: 0, site: null, printed: null });
+    expect(cardByAlias(board, 'site2')).toMatchObject({ zone: 'support', at: null, site: 2, printed: 2 });
+    expect(cardByAlias(board, 'site3')).toMatchObject({ zone: 'adventureDeck', site: null, printed: 3 });
+  });
+
+  it('reads the markers, the current site and the path in its order, leaving out what is unreadable', () => {
+    const board = readEditBoard(SANDBOX_PILES_STATE);
+    expect(board.markers).toEqual({ freeps: 3, shadow: 3 });
+    expect(board.currentSite).toBe(3);
+    expect(board.path).toEqual([
+      {
+        number: 1,
+        alias: 'site1',
+        blueprintId: '1_319',
+        name: 'Bag End',
+        printed: 1,
+        owner: 'freeps',
+        controlledBy: null,
+      },
+      {
+        number: 2,
+        alias: 'site2',
+        blueprintId: '1_331',
+        name: 'Ettenmoors',
+        printed: 2,
+        owner: 'freeps',
+        controlledBy: 'shadow',
+      },
+    ]);
+  });
+
+  it('reads a path of bare sites, and nothing where the state has no path', () => {
+    const board = readEditBoard({ path: [{ number: 4, alias: 'x' }] });
+    expect(board.path).toEqual([
+      { number: 4, alias: 'x', blueprintId: '', name: 'x', printed: null, owner: null, controlledBy: null },
+    ]);
+    expect(readEditBoard({})).toMatchObject({ markers: {}, currentSite: null, path: [] });
   });
 });
