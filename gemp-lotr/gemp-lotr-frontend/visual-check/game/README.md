@@ -323,6 +323,33 @@ server is not meant to make fails the check.
   mode without what was added.
 - **ended**: Frodo given four wounds with the stepper, then Start: the end panel (`data-result=ended`) says "You lost"
   and "The Ring-Bearer is dead", with Reset and Leave; Reset goes to a fresh game.
+- **piles**: a table set up through the server (both draw decks, hands, discard piles, the dead and removed piles):
+  every pile of both seats opens from its count in the state panel (each count a link, `data-link`, and the number the
+  server's `piles` says while edited), and its window shows the server's cards in the server's order (a pile's top
+  first); a deck window left open shows a card put on the deck from elsewhere once Start lets the game move, and has
+  no open spots in play mode.
+- **pileadd**: the draw deck's window has its top spot first and its bottom spot last; Legolas by the search onto the
+  top, Boromir by the search at the bottom, Legolas again from Recent onto the top (the deck reads Legolas, Legolas,
+  Boromir on the server and in the window); Legolas from Recent into the other seat's hand from its window; Armor by
+  the search into the discard pile from its window.
+- **pilemenu**: a card in the deck window has Info, Send to, Stack, Copy and Delete (no wounds, tokens or Modify);
+  Send to offers the deck's top and the hand; Legolas sent to the hand (gone from the window, on the hand's row),
+  Boromir copied (the copy on the deck), the copy deleted, the window right after each.
+- **path**: the path's + is for site 2; its chooser's Search… is bound to "Site 2" and lays a new Ettenmoors there;
+  then From adventure deck… lays the other seat's site 3 and the person's own site 4 (the page's path shows the four
+  sites in order); a laid site's Replace… ("Replace site 2") puts the person's own Ettenmoors there, and the card it
+  replaced goes back to its adventure deck.
+- **markers**: a site's menu has Info, each seat's marker (the one already there disabled), control for each seat and
+  Replace…; control while the markers are at the site is refused in the server's words (and the page reads the game
+  taken back without a "Concurrent access" error); site 2 laid and both markers moved there from its menu, site 1
+  given to the other seat (it lies in its support area on the page), then liberated (back on the path).
+- **counters**: the twilight pool set to 5 (Set) and stepped up and down, the burdens set to 2 (Enter) and one taken
+  off, the threats set to 1 and one taken off, each where it is shown in the state panel, on the server and on the
+  page; in play mode none of them is a link.
+- **tools**: a sandbox of the check's own (`users/GamePlayer0/sandboxes/check-u2-tools-*.hjson` in the server's
+  scenario folder, `GEMP_SCENARIOS`, written and deleted by the check; tools add, move, copy, delete) offers no hidden
+  pile (the draw decks, the other seat's hand and adventure deck do not open), no path +, no counter to change and no
+  marker, control or Replace… in a site's menu, while its own discard pile's window still has its open spot.
 
 Every check runs in both themes at 1366×768 (`--theme classic` or `--theme modern` for one; `--only menu,play`;
 `--verbose`). The report is `report-sandbox/` (`--out`): screenshots of the steps worth seeing and a text file per
