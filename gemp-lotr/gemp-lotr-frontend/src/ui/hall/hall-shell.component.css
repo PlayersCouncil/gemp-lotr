@@ -147,26 +147,28 @@
 }
 
 /*
- * The connection readout, which fills the room as it did alone (its popup is as wide as its box allows), then Log Out
- * at the end of it
+ * The connection readout, then Log Out right after it; the rest of the box stays empty, so the middle group keeps its
+ * place
  */
 .gd-hall__presence {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .gd-hall__presence > gd-hall-connection {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
 }
 
 .gd-hall__logout {
-  padding: 2px 8px;
+  padding: 5.28px 13.2px;
   border: 1px solid var(--theme-hall-bar-border);
   border-radius: var(--theme-radius);
   background: var(--theme-hall-default-bg);
   color: var(--theme-widget-text);
   font: inherit;
+  font-weight: bold;
+  line-height: normal;
   white-space: nowrap;
   cursor: pointer;
 }
