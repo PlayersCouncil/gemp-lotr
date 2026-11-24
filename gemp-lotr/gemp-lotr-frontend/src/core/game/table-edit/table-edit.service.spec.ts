@@ -228,8 +228,10 @@ describe('TableEdit', () => {
     backend.refuse(new ApiError(400, 'Bad Request', { said: 'Frodo cannot be deleted' }));
     expect(await made).toBe(false);
     expect(edit.problem()).toEqual({ text: 'Frodo cannot be deleted', at: { x: 5, y: 6 } });
-    // (a list refused part way was taken back: the game is read again)
-    expect(refresh).toHaveBeenCalled();
+    // (a list refused part way was taken back: the undo notices say so, and the page reads the game then; the old
+    // channel is not asked, which would answer as if another window had it)
+    expect(refresh).not.toHaveBeenCalled();
+    expect(undoRefresh).toHaveBeenCalled();
     vi.advanceTimersByTime(PROBLEM_MS);
     expect(edit.problem()).toBeNull();
     const again = edit.apply([{ op: 'copy', cardId: 1 }]);

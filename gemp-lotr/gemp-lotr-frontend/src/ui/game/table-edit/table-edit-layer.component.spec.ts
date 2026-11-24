@@ -6,6 +6,7 @@ import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { EMPTY_FILTER } from '../../../core/card-filter/filter-fields';
 import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
+import { providePathTesting } from '../../../testing/table-edit-piles';
 import { CardPicker } from './card-picker';
 import { EditPopups } from './edit-popups';
 import { SearchWindowComponent } from './search-window.component';
@@ -25,6 +26,7 @@ describe('TableEditLayerComponent', () => {
         RecentCards,
         CardPicker,
         { provide: TableEdit, useValue: edit },
+        ...providePathTesting(),
         {
           provide: CardSearch,
           useValue: {

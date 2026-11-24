@@ -22,6 +22,8 @@ const PILE_TITLES: Readonly<Record<PileName, string>> = {
   removedPile: 'Removed from game',
   deck: 'Draw deck',
   revealedHand: 'Revealed hand',
+  // (a sandbox's; the phone layout plays no scenario)
+  hand: 'Hand',
 };
 
 /**

@@ -47,6 +47,7 @@ import { UndoBannerComponent } from './undo/undo-banner.component';
 import { UndoListComponent } from './undo/undo-list.component';
 import { UndoRequestComponent } from './undo/undo-request.component';
 import { TableEdit } from '../../core/game/table-edit/table-edit.service';
+import { nextSite } from '../../core/game/table-edit/edit-path';
 import { EditPlace, otherSeat } from '../../core/game/table-edit/edit-ops';
 import { provideTableEditUi } from './table-edit/provide-table-edit-ui';
 import { TableEditLayerComponent } from './table-edit/table-edit-layer.component';
@@ -137,7 +138,7 @@ export const GAME_AUTO_ZOOM_COOKIE = 'autoZoomInGame';
       <gd-game-phone />
     } @else if (model().started) {
       <section class="gd-game__path" aria-label="Adventure path">
-        <gd-game-path [sites]="table().sites" />
+        <gd-game-path [sites]="table().sites" [spot]="siteSpot()" />
       </section>
       <gd-game-stats class="gd-game__stats" />
       <gd-game-state class="gd-game__state" />
@@ -287,6 +288,8 @@ export class GamePageComponent {
       hand: { seat: human, zone: 'hand' },
     };
   });
+  /** The site the adventure path's open spot lays, while sites can be laid by hand: the next one not laid. */
+  protected readonly siteSpot = computed(() => (this.edit.may('sites') ? nextSite(this.edit.board()) : null));
   private readonly themes = inject(ThemeService);
   /** The modern theme on a phone or an upright tablet (CompactLayout): the phone layout (G7). */
   protected readonly phone = inject(CompactLayout).gameActive;

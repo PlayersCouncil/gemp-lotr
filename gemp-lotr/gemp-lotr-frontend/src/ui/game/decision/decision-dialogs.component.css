@@ -132,3 +132,9 @@
 select[data-decision='choice']:focus {
   outline: auto 1px -webkit-focus-ring-color;
 }
+
+/* A sandbox's pile window while the table is edited (gd-game-piles): its open spots, on the rows as its cards are */
+.gd-game-pile > gd-open-spot {
+  position: relative;
+  top: calc(var(--gd-card-offset, 0px) + var(--gd-card-snap, 0px));
+}

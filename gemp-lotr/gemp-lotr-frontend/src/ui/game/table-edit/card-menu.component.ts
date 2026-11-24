@@ -5,7 +5,10 @@ import { cardMenu, modifyOp, nameOf, UNTIL_LABELS } from '../../../core/game/tab
 import { EditOp, ModifierUntil } from '../../../core/game/table-edit/edit-ops';
 import { Box, placeAtPoint, placeBeside, placeSubmenu, Size } from '../../../core/game/table-edit/popup-place';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
+import { siteMenu } from '../../../core/game/table-edit/edit-path';
+import { EditSeating } from '../../../core/game/table-edit/edit-seating.service';
 import { CardPicker } from './card-picker';
+import { PathPopups } from './path-popups';
 import { EditPopups } from './edit-popups';
 import { MenuKeysDirective } from './menu-keys.directive';
 import { PopupPlaceDirective } from './popup-place.directive';
@@ -38,6 +41,12 @@ const boxOf = (element: Element): Box => {
  * `select[data-field=what]`, `input[data-field=amount]` (not for a keyword without a number),
  * `select[data-field=until]`, `button[data-action=put]`, and a `.gd-edit-menu__modifier[data-modifier]` per modifier on
  * the card (its text, `data-until`, `button[data-action=unmodify]`), then `button[data-action=unmodify-all]`.
+ *
+ * A site laid on the path (or controlled) has edits of its own after Info: under the heading Marker a
+ * `button[data-site-action=marker][data-seat]` per seat (named by its player; `data-here`, disabled, where its marker
+ * is), under Control a `button[data-site-action=control][data-seat]` per seat (`data-here` for the controller) and
+ * `button[data-site-action=liberate]` while it is controlled, and `button[data-menu=replace]` (Replace…: the site
+ * chooser for its number).
  */
 @Component({
   selector: 'gd-edit-menu',
@@ -148,6 +157,68 @@ const boxOf = (element: Element): Box => {
               (pointerenter)="sub.set(null)"
             >
               Delete
+            </button>
+          }
+        }
+        @if (site(); as site) {
+          @if (site.markers.length > 0) {
+            <div class="gd-edit-menu__heading">Marker</div>
+            @for (seat of site.markers; track seat.seat) {
+              <button
+                type="button"
+                role="menuitem"
+                data-site-action="marker"
+                [attr.data-seat]="seat.seat"
+                [attr.data-here]="seat.here ? '' : null"
+                [disabled]="seat.here"
+                [title]="seat.here ? 'Its marker is here' : 'Put its marker here'"
+                (click)="send({ op: 'marker', seat: seat.seat, site: site.number })"
+                (pointerenter)="sub.set(null)"
+              >
+                {{ seat.label }} <span class="gd-edit-menu__count">{{ seat.here ? '✓' : '' }}</span>
+              </button>
+            }
+          }
+          @if (site.control.length > 0) {
+            <div class="gd-edit-menu__heading">Control</div>
+            @for (seat of site.control; track seat.seat) {
+              <button
+                type="button"
+                role="menuitem"
+                data-site-action="control"
+                [attr.data-seat]="seat.seat"
+                [attr.data-here]="seat.here ? '' : null"
+                [disabled]="seat.here"
+                [title]="seat.here ? 'It controls this site' : 'Give it this site'"
+                (click)="send({ op: 'control', site: site.number, seat: seat.seat })"
+                (pointerenter)="sub.set(null)"
+              >
+                {{ seat.label }} <span class="gd-edit-menu__count">{{ seat.here ? '✓' : '' }}</span>
+              </button>
+            }
+            @if (site.liberate) {
+              <button
+                type="button"
+                role="menuitem"
+                data-site-action="liberate"
+                title="Nobody controls it"
+                (click)="send({ op: 'liberate', site: site.number })"
+                (pointerenter)="sub.set(null)"
+              >
+                Liberate
+              </button>
+            }
+          }
+          @if (site.replace) {
+            <button
+              type="button"
+              role="menuitem"
+              data-menu="replace"
+              title="Another site here (this one goes back to its adventure deck)"
+              (click)="replaceSite(site.number)"
+              (pointerenter)="sub.set(null)"
+            >
+              Replace…
             </button>
           }
         }
@@ -514,5 +585,28 @@ export class CardMenuComponent {
     const open = this.open();
     if (!open) return null;
     return open.point ?? { x: open.anchor.left, y: open.anchor.bottom };
+  }
+
+  // (a page without the path's controls gets no site entries)
+  private readonly paths = inject(PathPopups, { optional: true });
+  private readonly seating = inject(EditSeating, { optional: true });
+  /** A site's own edits (a site on the path, or controlled): its markers, control, Replace…; null for other cards. */
+  protected readonly site = computed(() => {
+    const board = this.edit.board();
+    const card = this.card();
+    const seating = this.seating;
+    return board && card && seating
+      ? siteMenu(board, card, (tool) => this.edit.may(tool), seating.seats(), seating.names())
+      : null;
+  });
+
+  /** Replace…: the site chooser for the site's number, where the menu was. */
+  protected replaceSite(number: number): void {
+    const open = this.open();
+    this.close();
+    if (!open) return;
+    const at = open.point;
+    const anchor = at ? { left: at.x, top: at.y, right: at.x, bottom: at.y } : open.anchor;
+    this.paths?.openChooserAt(number, anchor, open.element, true);
   }
 }

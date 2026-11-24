@@ -34,6 +34,10 @@ const VERBOSE = process.argv.includes('--verbose');
 const SANDBOX = 'sandbox';
 const LEGOLAS = '1_50';
 const ARMOR = '1_92';
+const BOROMIR = '1_97';
+const RUNNER = '1_178';
+/** Where a player's own scenarios are kept (the tools check writes a sandbox of its own there, and deletes it). */
+const DATA = process.env.GEMP_SCENARIOS ?? '/etc/gemp-lotr/scenarios';
 
 /** The page's DOM contract for the edit controls (ui/game/table-edit, the game page, the scenario's menu). */
 const ui = {
@@ -74,6 +78,28 @@ const ui = {
   undoPoint: '[data-undo="point"]',
   undoLabel: '[data-undo="label"]',
   undoGo: 'button[data-undo="go"]',
+  // The piles, the path and the counters (u2)
+  stat: (name) => `gd-game-state [data-stat="${name}"]`,
+  statsToggle: (index) => `gd-game-state [data-stats-toggle="${index}"]`,
+  players: 'gd-game-state .gd-game-player',
+  pileWindow: (pile, seat) =>
+    `dialog[data-dialog="pile"][open] .gd-game-pile[data-pile="${pile}"]${seat ? `[data-seat="${seat}"]` : ''}`,
+  pileCards: (pile, seat) =>
+    `dialog[data-dialog="pile"][open] .gd-game-pile[data-pile="${pile}"][data-seat="${seat}"] button.gd-card`,
+  pileSpot: (pile, seat, zone) =>
+    `dialog[data-dialog="pile"][open] .gd-game-pile[data-pile="${pile}"][data-seat="${seat}"] gd-open-spot button[data-zone="${zone}"]`,
+  pileClose: (pile, seat) =>
+    `dialog[data-dialog="pile"][open]:has(.gd-game-pile[data-pile="${pile}"][data-seat="${seat}"]) .gd-dialog__close`,
+  pileCard: (cardId) => `dialog[data-dialog="pile"][open] button.gd-card[data-card-id="${cardId}"]`,
+  siteSpot: 'gd-game-path gd-site-spot button.gd-open-spot',
+  siteChooser: '.gd-edit-chooser[data-site-chooser]',
+  siteItem: (kind, extra = '') => `.gd-edit-chooser[data-site-chooser] [data-site-chooser="${kind}"]${extra}`,
+  pathCard: (cardId) => `gd-game-path [data-card-id="${cardId}"]`,
+  pathCards: 'gd-game-path button.gd-card',
+  siteAction: (action, seat) => `.gd-edit-menu:not([data-submenu]) [data-site-action="${action}"][data-seat="${seat}"]`,
+  editCounter: (name) => `gd-game-state button.gd-edit-counter[data-edit-counter="${name}"]`,
+  counterBox: (name) => `.gd-edit-counter__box[data-counter="${name}"]`,
+  burdens: 'gd-game-state [data-game="burdens"]',
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -102,6 +128,8 @@ class Seat {
     this.shots = 0;
     /** Sandbox edits the server is expected to refuse (a check that makes a refusal says so). */
     this.refusals = 0;
+    /** Answers of the game's old channel after such a refusal took the game back (the markers check says so). */
+    this.resyncs = 0;
     page.on('pageerror', (error) => this.errors.push(`page error: ${error.message.split('\n')[0]}`));
     page.on('console', (message) => {
       if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) {
@@ -113,6 +141,11 @@ class Seat {
       if (!pathname.includes('/gemp-lotr-server/') || response.status() < 400) return;
       if (pathname.endsWith('/scenarios/sandbox/edit') && response.status() === 400 && this.refusals > 0) {
         this.refusals--;
+        return;
+      }
+      // (an edit refused once the table had begun to change takes the game back: the page's old channel is gone)
+      if (pathname.includes('/game/') && response.status() === 409 && this.resyncs > 0) {
+        this.resyncs--;
         return;
       }
       this.errors.push(`HTTP ${response.status()} from ${pathname}`);
@@ -214,6 +247,113 @@ class Seat {
 /** The cards added by hand, as the server has them: alias → zone. */
 const addedZones = (state) =>
   Object.fromEntries(state.cards.filter((card) => card.added).map((card) => [card.alias, card.zone]));
+
+/** A seat's pile as the server has it, in its order (a pile's top first, a hand as it lies): the cards' ids. */
+const pileOf = (state, zone, seat) =>
+  state.cards
+    .filter((card) => card.zone === zone && card.owner === seat)
+    .sort((a, b) => (a.at ?? 1e9) - (b.at ?? 1e9))
+    .map((card) => String(card.cardId));
+
+/** The board's zone of each pile window (`data-pile`), and the state panel's counter of it (`data-stat`, less the index). */
+const PILES = [
+  { pile: 'deck', zone: 'deck' },
+  { pile: 'hand', zone: 'hand' },
+  { pile: 'discard', zone: 'discard' },
+  { pile: 'deadPile', zone: 'deadPile' },
+  { pile: 'removedPile', zone: 'removed' },
+  { pile: 'adventureDeck', zone: 'adventureDeck' },
+];
+
+/** Edits made straight through the server, to set a check's table up (not what it checks); the page is read again. */
+async function setUp(seat, ops) {
+  const answer = await (
+    await seat.who.post('/scenarios/sandbox/edit', { gameId: seat.gameId(), ops: JSON.stringify(ops) })
+  ).json();
+  if (!answer.ok) throw new Error(`setting the table up: ${JSON.stringify(answer)}`);
+  seat.log(`set up: ${ops.map((op) => `${op.op} ${op.blueprint ?? ''} ${op.to ?? ''}`.trim()).join(', ')}`);
+  await seat.page.reload();
+  await seat.editing('edit');
+}
+
+/** The state panel's row of each seat (the person plays freeps, the panel lists the players in the game's order). */
+async function seatRows(seat) {
+  const names = await seat.page.locator(ui.players).allTextContents();
+  const mine = names.findIndex((text) => text.includes(pairOf(0).player));
+  if (mine < 0) throw new Error(`no row of the state panel is the person's: ${names.join(' | ')}`);
+  return { freeps: mine, shadow: 1 - mine };
+}
+
+/** The ids of the cards a pile window shows, in its order. */
+const windowIds = (seat, pile, owner) =>
+  seat.page.locator(ui.pileCards(pile, owner)).evaluateAll((cards) => cards.map((card) => card.dataset.cardId));
+
+/** Waits until a pile window shows the pile as the server has it; says what it shows when it doesn't. */
+async function windowShows(seat, pile, owner, wanted, problems, what) {
+  await until(
+    async () => (await windowIds(seat, pile, owner)).join() === wanted.join(),
+    `${what}: the window showing ${wanted.join(',')}`,
+    8000,
+  ).catch(async () =>
+    problems.push(
+      `${what}: the ${owner} ${pile} window shows ${(await windowIds(seat, pile, owner)).join(',')}, not ${wanted.join(',')}`,
+    ),
+  );
+}
+
+/** Opens a pile's window from its counter in the state panel. */
+async function openPile(seat, rows, pile, owner) {
+  await seat.page.locator(ui.stat(`${pile}${rows[owner]}`)).click();
+  await seat.page.locator(ui.pileWindow(pile, owner)).waitFor({ timeout: 5000 });
+}
+
+/** Right-clicks a card (any locator) and waits for its menu, placed. */
+async function menuAt(seat, locator) {
+  await locator.click({ button: 'right' });
+  await seat.page.locator(ui.menu).waitFor();
+  await until(async () => (await seat.page.locator(ui.menu).getAttribute('data-placing')) === null, 'the menu placed');
+}
+
+/** The entries of the open card menu (its `data-menu` and `data-site-action seat`). */
+const menuEntries = (seat) =>
+  seat.page
+    .locator(`${ui.menu} > button`)
+    .evaluateAll((items) =>
+      items.map((item) =>
+        item.dataset.siteAction ? `${item.dataset.siteAction} ${item.dataset.seat}` : item.dataset.menu,
+      ),
+    );
+
+/** From an open spot (any locator): Search…, a name typed, and the card found clicked. */
+async function searchAt(seat, spot, name, blueprint) {
+  await spot.click();
+  await seat.page.locator(ui.chooserItem('search')).click();
+  await seat.page.locator(ui.search).waitFor();
+  const field = seat.page.locator(`${ui.search} .gd-field[data-field="name"] input`);
+  await field.fill(name);
+  await field.dispatchEvent('change');
+  await seat.page.locator(`${ui.search} .gd-edit-search__cards button.gd-card[data-blueprint="${blueprint}"]`).click();
+}
+
+/** The path's sites as the server has them: number → alias. */
+const pathOf = (state) => Object.fromEntries(state.path.map((site) => [site.number, site.alias]));
+
+/** The path's open spot: its chooser, From adventure deck…, a seat's deck, and one of its sites. */
+async function siteFromDeck(seat, seatKey, alias) {
+  await seat.page.locator(ui.siteItem('decks')).click();
+  await seat.page.locator(ui.siteItem('deck', `[data-seat="${seatKey}"]`)).click();
+  await seat.page.locator(ui.siteItem('site', `[data-alias="${alias}"]`)).click();
+}
+
+/** A counter's box: opened from its number, a number typed and set (or Enter). */
+async function setCounter(seat, name, value, how = 'set') {
+  const { page } = seat;
+  if ((await page.locator(ui.counterBox(name)).count()) === 0) await page.locator(ui.editCounter(name)).click();
+  const field = page.locator(`${ui.counterBox(name)} input[data-field="set"]`);
+  await field.fill(String(value));
+  if (how === 'enter') await field.press('Enter');
+  else await page.locator(`${ui.counterBox(name)} button[data-action="set"]`).click();
+}
 
 const CHECKS = {
   /** Edit mode as the sandbox opens: no decision, the bar, an open spot in every row, the card menu by the keyboard. */
@@ -707,6 +847,420 @@ const CHECKS = {
     await page.locator(ui.panelButton('Reset')).click();
     await until(() => seat.gameId() !== before, 'a fresh game after Reset', 20000);
     await seat.editing('edit');
+  },
+  /** Every pile of both seats opens from its count (a link), showing what the server's table has, in its order. */
+  async piles(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    await seat.open();
+    await setUp(seat, [
+      { op: 'add', blueprint: LEGOLAS, to: 'freeps.deck.top' },
+      { op: 'add', blueprint: BOROMIR, to: 'freeps.deck.bottom' },
+      { op: 'add', blueprint: ARMOR, to: 'freeps.deck.top' },
+      { op: 'add', blueprint: ARMOR, to: 'freeps.hand' },
+      { op: 'add', blueprint: ARMOR, to: 'freeps.discard' },
+      { op: 'add', blueprint: LEGOLAS, to: 'freeps.discard' },
+      { op: 'add', blueprint: RUNNER, to: 'freeps.deadPile' },
+      { op: 'add', blueprint: LEGOLAS, to: 'freeps.removed' },
+      { op: 'add', blueprint: RUNNER, to: 'shadow.hand' },
+      { op: 'add', blueprint: LEGOLAS, to: 'shadow.hand' },
+      { op: 'add', blueprint: ARMOR, to: 'shadow.deck' },
+      { op: 'add', blueprint: BOROMIR, to: 'shadow.discard' },
+    ]);
+    const rows = await seatRows(seat);
+    for (const index of [0, 1]) await page.locator(ui.statsToggle(index)).click();
+    await page.locator(ui.stat(`removedPile${rows.shadow}`)).waitFor();
+    await seat.shot('links');
+    const state = await seat.state();
+    for (const owner of ['freeps', 'shadow']) {
+      for (const { pile, zone } of PILES) {
+        const counter = page.locator(ui.stat(`${pile}${rows[owner]}`));
+        if ((await counter.getAttribute('data-link')) === null)
+          problems.push(`the ${owner} ${pile}'s count is no link`);
+        const count = (await counter.textContent()).trim();
+        if (count !== String(state.piles[owner][zone]))
+          problems.push(`the ${owner} ${pile}'s count is ${count}, not the server's ${state.piles[owner][zone]}`);
+        await openPile(seat, rows, pile, owner);
+        await windowShows(seat, pile, owner, pileOf(state, zone, owner), problems, `the ${owner} ${pile}`);
+        if (`${owner} ${pile}` === 'freeps deck' || `${owner} ${pile}` === 'shadow hand')
+          await seat.shot(`${owner}-${pile}`);
+        await page.locator(ui.pileClose(pile, owner)).click();
+      }
+    }
+    // A window open stays right as the game moves: a card put on the deck from elsewhere shows once play goes on
+    await openPile(seat, rows, 'deck', 'freeps');
+    await seat.who.post('/scenarios/sandbox/edit', {
+      gameId: seat.gameId(),
+      ops: JSON.stringify([{ op: 'add', blueprint: RUNNER, to: 'freeps.deck.top' }]),
+    });
+    await page.locator(ui.barButton('start')).click();
+    await seat.editing('play');
+    const moved = pileOf(await seat.state(), 'deck', 'freeps');
+    if (moved.length !== 4) problems.push(`the freeps deck has ${moved.length} cards on the server, not 4`);
+    await windowShows(seat, 'deck', 'freeps', moved, problems, 'the deck after play went on');
+    if ((await page.locator(`${ui.pileWindow('deck', 'freeps')} gd-open-spot`).count()) > 0)
+      problems.push('a pile window has open spots in play mode');
+    await seat.shot('played');
+  },
+
+  /** A pile window's open spots: a draw deck's top and bottom, the other seat's hand, a discard pile. */
+  async pileadd(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    await seat.open();
+    const rows = await seatRows(seat);
+    await openPile(seat, rows, 'deck', 'freeps');
+    const spots = await page
+      .locator(`${ui.pileWindow('deck', 'freeps')} gd-open-spot button`)
+      .evaluateAll((buttons) => buttons.map((button) => button.dataset.zone));
+    if (spots.join() !== 'deck.top,deck.bottom') problems.push(`the deck window's spots are ${spots.join()}`);
+    await seat.shot('deck-spots');
+    let state = await seat.edit(
+      'Legolas on the deck, by the search',
+      () => searchAt(seat, page.locator(ui.pileSpot('deck', 'freeps', 'deck.top')), 'greenleaf', LEGOLAS),
+      (now) => addedZones(now).legolas === 'deck',
+    );
+    await until(async () => (await page.locator(ui.search).count()) === 0, 'the search window closed');
+    state = await seat.edit(
+      'Boromir at the bottom of the deck, by the search',
+      () => searchAt(seat, page.locator(ui.pileSpot('deck', 'freeps', 'deck.bottom')), 'boromir', BOROMIR),
+      (now) => addedZones(now).boromir === 'deck',
+    );
+    state = await seat.edit(
+      'Legolas on top of the deck, from Recent',
+      async () => {
+        await page.locator(ui.pileSpot('deck', 'freeps', 'deck.top')).click();
+        await page.locator(ui.chooserItem('recent', LEGOLAS)).click();
+      },
+      (now) => addedZones(now).legolas2 === 'deck',
+    );
+    const deck = pileOf(state, 'deck', 'freeps');
+    const alias = (id) => state.cards.find((card) => String(card.cardId) === id)?.alias;
+    if (deck.map(alias).join() !== 'legolas2,legolas,boromir') problems.push(`the deck is ${deck.map(alias).join()}`);
+    await windowShows(seat, 'deck', 'freeps', deck, problems, 'the deck after adding');
+    await seat.shot('deck-added');
+    await page.locator(ui.pileClose('deck', 'freeps')).click();
+    // The other seat's hand
+    await openPile(seat, rows, 'hand', 'shadow');
+    state = await seat.edit(
+      "Legolas into the other seat's hand, from Recent",
+      async () => {
+        await page.locator(ui.pileSpot('hand', 'shadow', 'hand')).click();
+        await page.locator(ui.chooserItem('recent', LEGOLAS)).click();
+      },
+      (now) => now.cards.some((card) => card.added && card.owner === 'shadow' && card.zone === 'hand'),
+    );
+    await windowShows(seat, 'hand', 'shadow', pileOf(state, 'hand', 'shadow'), problems, "the other seat's hand");
+    await seat.shot('other-hand');
+    await page.locator(ui.pileClose('hand', 'shadow')).click();
+    // A discard pile
+    await page.locator(ui.statsToggle(rows.freeps)).click();
+    await openPile(seat, rows, 'discard', 'freeps');
+    state = await seat.edit(
+      'Armor into the discard pile, by the search',
+      () => searchAt(seat, page.locator(ui.pileSpot('discard', 'freeps', 'discard')), 'armor', ARMOR),
+      (now) => addedZones(now).armor === 'discard',
+    );
+    await windowShows(seat, 'discard', 'freeps', pileOf(state, 'discard', 'freeps'), problems, 'the discard pile');
+  },
+
+  /** A pile card's menu: no wounds or tokens; Send to the hand, Copy, Delete, each seen in the window. */
+  async pilemenu(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    await seat.open();
+    await setUp(seat, [
+      { op: 'add', blueprint: LEGOLAS, to: 'freeps.deck.top' },
+      { op: 'add', blueprint: BOROMIR, to: 'freeps.deck.bottom' },
+    ]);
+    const rows = await seatRows(seat);
+    await openPile(seat, rows, 'deck', 'freeps');
+    let state = await seat.state();
+    const id = (alias) => String(state.cards.find((card) => card.alias === alias).cardId);
+    await menuAt(seat, page.locator(ui.pileCard(id('legolas'))));
+    const entries = await menuEntries(seat);
+    if (entries.join() !== 'info,send,stack,copy,delete') problems.push(`a deck card's menu is ${entries.join()}`);
+    const send = await seat.submenu('send');
+    const places = await send.locator('[data-zone]').evaluateAll((items) => items.map((item) => item.dataset.zone));
+    if (!places.includes('deck.top') || !places.includes('hand')) problems.push(`Send to offers ${places.join()}`);
+    await seat.shot('menu');
+    state = await seat.edit(
+      'Legolas sent from the deck to the hand',
+      () => send.locator('[data-zone="hand"]').click(),
+      (now) => addedZones(now).legolas === 'hand',
+    );
+    await windowShows(seat, 'deck', 'freeps', pileOf(state, 'deck', 'freeps'), problems, 'the deck after Send to');
+    await until(async () => (await page.locator(ui.card(id('legolas'))).count()) === 1, 'Legolas in the hand row');
+    await menuAt(seat, page.locator(ui.pileCard(id('boromir'))));
+    state = await seat.edit(
+      'Boromir copied in the deck',
+      () => page.locator(ui.menuEntry('copy')).click(),
+      (now) => addedZones(now).boromir2 === 'deck',
+    );
+    await windowShows(seat, 'deck', 'freeps', pileOf(state, 'deck', 'freeps'), problems, 'the deck after Copy');
+    await menuAt(seat, page.locator(ui.pileCard(id('boromir2'))));
+    state = await seat.edit(
+      'the copy deleted',
+      () => page.locator(ui.menuEntry('delete')).click(),
+      (now) => !now.cards.some((card) => card.alias === 'boromir2'),
+    );
+    await windowShows(seat, 'deck', 'freeps', pileOf(state, 'deck', 'freeps'), problems, 'the deck after Delete');
+    await seat.shot('deck-after');
+  },
+
+  /** The path's +: a site by the search (held to its number), from each seat's adventure deck; a site replaced. */
+  async path(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    await seat.open();
+    const spotAt = async () => page.locator(ui.siteSpot).getAttribute('data-site');
+    if ((await spotAt()) !== '2') problems.push(`the path's + is for site ${await spotAt()}, not 2`);
+    await page.locator(ui.siteSpot).click();
+    await page.locator(ui.siteChooser).waitFor();
+    await seat.shot('chooser');
+    await page.locator(ui.siteItem('search')).click();
+    await page.locator(ui.search).waitFor();
+    const bound = (await page.locator(`${ui.search} .gd-edit-search__bound`).textContent()).trim();
+    if (bound !== 'Site 2') problems.push(`the site search is bound by "${bound}"`);
+    const field = page.locator(`${ui.search} .gd-field[data-field="name"] input`);
+    await field.fill('ettenmoors');
+    await field.dispatchEvent('change');
+    await seat.shot('search');
+    let state = await seat.edit(
+      'Ettenmoors by the search at site 2',
+      () => page.locator(`${ui.search} .gd-edit-search__cards button.gd-card[data-blueprint="1_331"]`).click(),
+      (now) => now.path.find((site) => site.number === 2)?.blueprintId === '1_331',
+    );
+    const searched = pathOf(state)[2];
+    if (searched === 'site2') problems.push('the search laid the deck’s own site, not a new card');
+    await until(async () => (await page.locator(ui.search).count()) === 0, 'the search window closed');
+    await until(async () => (await spotAt()) === '3', "the path's + at site 3");
+    await page.locator(ui.siteSpot).click();
+    await page.locator(ui.siteItem('decks')).click();
+    await page.locator(ui.siteItem('deck', '[data-seat="shadow"]')).click();
+    await seat.shot('shadow-deck');
+    state = await seat.edit(
+      "the other seat's site 3 from its adventure deck",
+      () => page.locator(ui.siteItem('site', '[data-alias="site3opp"]')).click(),
+      (now) => pathOf(now)[3] === 'site3opp',
+    );
+    await until(async () => (await spotAt()) === '4', "the path's + at site 4");
+    await page.locator(ui.siteSpot).click();
+    state = await seat.edit(
+      'the own site 4 from the adventure deck',
+      () => siteFromDeck(seat, 'freeps', 'site4'),
+      (now) => pathOf(now)[4] === 'site4',
+    );
+    const shown = async () =>
+      page.locator(ui.pathCards).evaluateAll((cards) => cards.map((card) => card.dataset.blueprintId));
+    await until(async () => (await shown()).join() === '1_319,1_331,1_341,1_343', 'four sites on the page').catch(
+      async () => problems.push(`the page's path is ${(await shown()).join()}`),
+    );
+    await seat.shot('laid');
+    // Replace site 2 (the card the search made) with the person's own Ettenmoors, from the site's menu
+    const laid = state.cards.find((card) => card.alias === searched);
+    await menuAt(seat, page.locator(ui.pathCard(laid.cardId)));
+    await page.locator(ui.menuEntry('replace')).click();
+    await page.locator(ui.siteChooser).waitFor();
+    const heading = (await page.locator(`${ui.siteChooser} .gd-edit-chooser__heading`).textContent()).trim();
+    if (heading !== 'Replace site 2') problems.push(`Replace… opens "${heading}"`);
+    state = await seat.edit(
+      'site 2 replaced from the adventure deck',
+      () => siteFromDeck(seat, 'freeps', 'site2'),
+      (now) => pathOf(now)[2] === 'site2',
+    );
+    if (state.cards.find((card) => card.alias === searched)?.zone !== 'adventureDeck')
+      problems.push('the site replaced did not go back to its adventure deck');
+    await until(async () => (await page.locator(ui.pathCard(laid.cardId)).count()) === 0, 'the replaced site gone');
+  },
+
+  /** A site's menu: a marker moved, control refused in the server's words, control given, liberated. */
+  async markers(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    await seat.open();
+    let state = await seat.state();
+    const site1 = String(state.cards.find((card) => card.alias === 'site1').cardId);
+    await menuAt(seat, page.locator(ui.pathCard(site1)));
+    const entries = await menuEntries(seat);
+    const wanted = 'info,marker freeps,marker shadow,control freeps,control shadow,replace';
+    if (entries.join() !== wanted) problems.push(`a site's menu is ${entries.join()}`);
+    if (!(await page.locator(ui.siteAction('marker', 'freeps')).isDisabled()))
+      problems.push('the marker already at the site is offered');
+    await seat.shot('menu');
+    // Control while the markers are at it: refused, in the server's words
+    seat.refusals++;
+    seat.resyncs++;
+    await page.locator(ui.siteAction('control', 'shadow')).click();
+    const said = await until(async () => (await page.locator(ui.problem).textContent())?.trim(), 'the refusal');
+    if (!/cannot be controlled/.test(said)) problems.push(`the refusal says "${said}"`);
+    await seat.shot('refused');
+    // Site 2 laid, both markers moved onto it
+    await page.locator(ui.siteSpot).click();
+    state = await seat.edit(
+      'site 2 laid',
+      () => siteFromDeck(seat, 'freeps', 'site2'),
+      (now) => pathOf(now)[2] === 'site2',
+    );
+    const site2 = String(state.cards.find((card) => card.alias === 'site2').cardId);
+    for (const who of ['freeps', 'shadow']) {
+      await menuAt(seat, page.locator(ui.pathCard(site2)));
+      state = await seat.edit(
+        `the ${who} marker to site 2`,
+        () => page.locator(ui.siteAction('marker', who)).click(),
+        (now) => now.markers[who] === 2,
+      );
+    }
+    await menuAt(seat, page.locator(ui.pathCard(site1)));
+    state = await seat.edit(
+      'site 1 given to the shadow seat',
+      () => page.locator(ui.siteAction('control', 'shadow')).click(),
+      (now) => now.path[0].controlledBy === 'shadow',
+    );
+    // (a controlled site lies in its controller's support area)
+    await page
+      .locator(ui.card(site1))
+      .waitFor({ timeout: 8000 })
+      .catch(() => problems.push('the controlled site is not in the support area'));
+    await seat.shot('controlled');
+    await menuAt(seat, page.locator(ui.card(site1)));
+    state = await seat.edit(
+      'site 1 liberated',
+      () => page.locator(`${ui.menu} [data-site-action="liberate"]`).click(),
+      (now) => now.path[0].controlledBy === null,
+    );
+    await until(async () => (await page.locator(ui.pathCard(site1)).count()) === 1, 'site 1 back on the path');
+  },
+
+  /** The twilight pool, the burdens and the threats: set (Set, Enter) and stepped where they are shown. */
+  async counters(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    await seat.open();
+    const rows = await seatRows(seat);
+    const text = async (selector) => (await page.locator(selector).textContent()).trim();
+    await seat.edit(
+      'twilight set to 5',
+      () => setCounter(seat, 'twilight', 5),
+      (now) => now.twilight === 5,
+    );
+    await until(async () => (await text(ui.editCounter('twilight'))) === '5', 'the pool showing 5').catch(async () =>
+      problems.push(`the pool shows ${await text(ui.editCounter('twilight'))}`),
+    );
+    await seat.shot('twilight');
+    await seat.edit(
+      'twilight one up',
+      () => page.locator(`${ui.counterBox('twilight')} [data-step="up"]`).click(),
+      (now) => now.twilight === 6,
+    );
+    await seat.edit(
+      'twilight one down',
+      () => page.locator(`${ui.counterBox('twilight')} [data-step="down"]`).click(),
+      (now) => now.twilight === 5,
+    );
+    await page.keyboard.press('Escape');
+    await until(async () => (await page.locator(ui.counterBox('twilight')).count()) === 0, 'the box closed');
+    await seat.edit(
+      'burdens set to 2',
+      () => setCounter(seat, 'burdens', 2, 'enter'),
+      (now) => now.burdens === 2,
+    );
+    await seat.edit(
+      'a burden off',
+      () => page.locator(`${ui.counterBox('burdens')} [data-step="down"]`).click(),
+      (now) => now.burdens === 1,
+    );
+    await until(async () => (await text(ui.editCounter('burdens'))) === '1', 'the burdens showing 1');
+    await page.keyboard.press('Escape');
+    await seat.edit(
+      'threats set to 1',
+      () => setCounter(seat, 'threats', 1),
+      (now) => now.threats === 1,
+    );
+    await until(async () => (await text(ui.editCounter('threats'))).startsWith('1'), 'the threats showing 1');
+    await seat.shot('threats');
+    await seat.edit(
+      'a threat off',
+      () => page.locator(`${ui.counterBox('threats')} [data-step="down"]`).click(),
+      (now) => now.threats === 0,
+    );
+    await page.keyboard.press('Escape');
+    // In play mode the counters are as they always were
+    await page.locator(ui.barButton('start')).click();
+    await seat.editing('play');
+    if ((await page.locator('gd-edit-counter').count()) > 0) problems.push('a counter is editable in play mode');
+    if ((await page.locator(ui.burdens).count()) > 0) problems.push('the burdens line shows in play mode');
+  },
+
+  /** A sandbox whose tools leave out piles, sites, counters and markers offers none of them (a sandbox of its own). */
+  async tools(table, problems) {
+    const { seat } = table;
+    const { page } = seat;
+    const player = pairOf(0).player;
+    const id = `check-u2-tools-${Date.now().toString(36)}`;
+    const folder = path.join(DATA, 'users', player, 'sandboxes');
+    const file = path.join(folder, `${id}.hjson`);
+    const made = !fs.existsSync(folder);
+    const source = fs
+      .readFileSync(
+        path.join(HERE, '../../../gemp-lotr-cards/src/main/resources/scenarios/sandboxes/sandbox.hjson'),
+        'utf8',
+      )
+      .replace(/^\tid: sandbox$/m, `\tid: ${id}`)
+      .replace(/^\tformat: scenario$/m, '\tformat: scenario\n\toptions: {\n\t\ttools: add, move, copy, delete\n\t}');
+    fs.mkdirSync(folder, { recursive: true });
+    fs.writeFileSync(file, source);
+    try {
+      // (the server's library looks at the folder again only every so often)
+      const started = await until(
+        async () => (await seat.who.post('/scenarios/start', { id: `${player}/${id}` })).json(),
+        `the server finding ${player}/${id}`,
+        20000,
+      );
+      if (!started.gameId) throw new Error(`scenarios/start ${player}/${id} answered ${JSON.stringify(started)}`);
+      seat.log(`started ${player}/${id}: game ${started.gameId}`);
+      await page.goto(`${server}${ui.path}?gameId=${started.gameId}`);
+      await seat.editing('edit');
+      const state = await seat.state();
+      if (state.tools.join() !== 'add,copy,delete,move') problems.push(`its tools are ${state.tools.join()}`);
+      const rows = await seatRows(seat);
+      for (const index of [0, 1]) await page.locator(ui.statsToggle(index)).click();
+      await page.locator(ui.stat(`removedPile${rows.shadow}`)).waitFor();
+      const links = await page
+        .locator('gd-game-state [data-link]')
+        .evaluateAll((counters) => counters.map((counter) => counter.dataset.stat));
+      const wanted = [
+        ...['hand', 'discard', 'deadPile', 'adventureDeck', 'removedPile'].map((pile) => `${pile}${rows.freeps}`),
+        ...['discard', 'deadPile', 'removedPile'].map((pile) => `${pile}${rows.shadow}`),
+      ];
+      if ([...links].sort().join() !== [...wanted].sort().join()) problems.push(`the links are ${links.join()}`);
+      for (const stat of [
+        `deck${rows.freeps}`,
+        `deck${rows.shadow}`,
+        `hand${rows.shadow}`,
+        `adventureDeck${rows.shadow}`,
+      ]) {
+        if ((await page.locator(ui.stat(stat)).getAttribute('data-clickable')) !== null)
+          problems.push(`the hidden pile ${stat} opens`);
+      }
+      if ((await page.locator(ui.siteSpot).count()) > 0) problems.push("the path has a + without 'sites'");
+      if ((await page.locator('gd-edit-counter').count()) > 0)
+        problems.push("a counter is editable without 'counters'");
+      if ((await page.locator(ui.burdens).count()) > 0) problems.push("the burdens show without 'counters'");
+      const site1 = String(state.cards.find((card) => card.alias === 'site1').cardId);
+      await menuAt(seat, page.locator(ui.pathCard(site1)));
+      const entries = await menuEntries(seat);
+      if (entries.join() !== 'info') problems.push(`a site's menu without markers or sites is ${entries.join()}`);
+      await page.keyboard.press('Escape');
+      // What it allows still works: its own discard pile's window has its open spot
+      await openPile(seat, rows, 'discard', 'freeps');
+      if ((await page.locator(ui.pileSpot('discard', 'freeps', 'discard')).count()) !== 1)
+        problems.push('the discard window has no open spot');
+      await seat.shot('tools');
+    } finally {
+      fs.rmSync(file, { force: true });
+      if (made && fs.readdirSync(folder).length === 0) fs.rmdirSync(folder);
+    }
   },
 };
 

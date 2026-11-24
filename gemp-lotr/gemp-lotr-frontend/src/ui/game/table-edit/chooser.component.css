@@ -69,3 +69,12 @@
   padding-top: 6px;
   font-weight: bold;
 }
+
+/* The site chooser (gd-site-chooser, which shares this stylesheet): a site of its number stands out; Back is plain */
+.gd-edit-chooser__item[data-match] {
+  font-weight: bold;
+}
+
+.gd-edit-chooser__item[data-site-chooser='back'] {
+  font-weight: normal;
+}
