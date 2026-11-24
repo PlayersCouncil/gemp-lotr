@@ -163,13 +163,10 @@ public class PcAccountService {
             return new View(mode, playerName, null, null, false, linked, List.of(), null);
 
         List<Alias> aliases = new ArrayList<>();
-        String blockedBy = null;
-        for (Player alias : aliasesOf(pcAccount.sub())) {
-            boolean busy = _busy.test(alias.getName());
-            if (busy && blockedBy == null)
-                blockedBy = alias.getName();
-            aliases.add(new Alias(alias.getId(), alias.getName(), alias.getName().equals(playerName), busy));
-        }
+        for (Player alias : aliasesOf(pcAccount.sub()))
+            aliases.add(new Alias(alias.getId(), alias.getName(), alias.getName().equals(playerName), _busy.test(alias.getName())));
+        // The gate is this browser's own: the alias it plays, while that alias is in the middle of something.
+        String blockedBy = playerName != null && _busy.test(playerName) ? playerName : null;
         return new View(mode, playerName, pcAccount.name(), _config.issuer() + "/", pcAccount.isFresh(_clock.getAsLong()),
                 linked, aliases, blockedBy);
     }
@@ -322,12 +319,23 @@ public class PcAccountService {
         if (!owner.sub().equals(pcAccount.sub()))
             throw new Refusal(403, "not-linked");
 
-        for (Player alias : aliasesOf(pcAccount.sub())) {
-            if (alias.getId() != playerId && _busy.test(alias.getName()))
-                throw new Refusal(409, "busy");
-        }
+        leavingIsAllowed(session, player.getName());
         play(session, player, remoteIp);
         return view(session);
+    }
+
+    /**
+     * The switching gate (Ketura, 2026-11-23): a browser does not leave the alias it is playing for another while
+     * that alias sits at a table, in a queue, in a running tournament or in a game. It is this browser's alone:
+     * what the PC account's other aliases are doing elsewhere does not come into it, since playing oneself with two
+     * of one's own accounts, in two browsers, is a thing people do. Logging out is never gated.
+     *
+     * @param to the alias being entered, or null for one about to be created
+     */
+    private void leavingIsAllowed(Session session, String to) throws Refusal {
+        String playing = session.getPlayer();
+        if (playing != null && !playing.equals(to) && _busy.test(playing))
+            throw new Refusal(409, "busy");
     }
 
     /** The checks a password login makes, and then the session plays as this player. */
@@ -341,10 +349,7 @@ public class PcAccountService {
     public View create(Session session, String name, String remoteIp) throws Refusal, SQLException {
         PcAccount pcAccount = freshPcAccountOf(session);
         // A new alias is entered at once, which is a switch like any other.
-        for (Player alias : aliasesOf(pcAccount.sub())) {
-            if (_busy.test(alias.getName()))
-                throw new Refusal(409, "busy");
-        }
+        leavingIsAllowed(session, null);
         long now = _clock.getAsLong();
         Deque<Long> created = _created.computeIfAbsent(pcAccount.sub(), sub -> new ArrayDeque<>());
         synchronized (created) {

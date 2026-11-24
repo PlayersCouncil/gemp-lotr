@@ -90,9 +90,12 @@ and on the profile page (My Account), which also has a link to manage the PC acc
 Gemp and Log Out, and on the profile page a **Connect PC Account** button, which links the
 account they are logged in as.
 
-**Switching is gated.** An alias cannot be entered while a *different* alias of the same PC
-account sits at a table, in a queue, in a running tournament or in a game. Leagues do not
-count. The busy alias itself can always be entered again. Log Out is always allowed.
+**Switching is gated, per browser.** A browser does not leave the alias it is playing for another one, entered
+or newly created, while that alias sits at a table, in a queue, in a running tournament or in a game. Leagues do
+not count. The busy alias itself can always be entered again, and Log Out is always allowed. The gate is that
+browser's alone: what the PC account's other aliases are doing in other browsers does not come into it, because
+people do play themselves with two of their own accounts (Ketura, 2026-11-23). So it keeps someone from walking
+off a table by mistake; it is not a limit of one alias at a time.
 
 **Two log-outs.**
 
@@ -145,8 +148,8 @@ Where the callback lands:
 
 | Outcome | Lands on |
 |---|---|
-| One alias, nothing asked by `then`, not gated | `return`, or `/gemp-lotr/ng/hall` |
-| Several aliases, none, or gated | `/gemp-lotr/ng/login` |
+| One alias, nothing asked by `then` | `return`, or `/gemp-lotr/ng/hall` |
+| Several aliases, or none | `/gemp-lotr/ng/login` |
 | `then=link` or `then=create` | `/gemp-lotr/ng/login?open=link` or `?open=create` |
 | `then=connect`, linked | `/gemp-lotr/ng/account?pc=connected` |
 | `then=connect`, the alias belongs to another PC account | `/gemp-lotr/ng/account?pc=linked-elsewhere`. The browser stays a password login |
@@ -177,8 +180,8 @@ Where the callback lands:
 | `player` | The alias this session plays as, or null |
 | `pcAccount` | Null for a password login and for nobody. `name` is the display name. `fresh` is false once Argonauth's token has lapsed: create and link then start with `GET /login?then=...` |
 | `linked` | Whether `player` is linked to a PC account, by Gemp's copy. Null with no player. For a password login this decides whether "Connect PC Account" is offered |
-| `aliases` | Every alias of the signed-in PC account, by name. Empty without one. `busy`: sits at a table, in a queue, in a running tournament or in a game |
-| `blockedBy` | The name of a busy alias, the one being played included, or null. While set, only that alias can be entered, and no alias can be created |
+| `aliases` | Every alias of the signed-in PC account, by name. Empty without one. `busy`: sits at a table, in a queue, in a running tournament or in a game, in whatever browser. Shown, and gates nothing by itself |
+| `blockedBy` | `player`, when a PC account is signed in and that alias is busy; otherwise null. While set, this browser can enter only that alias, and can create none |
 
 The actions answer 200 with the session as above, or an error as `{"error": "..."}`:
 

@@ -527,26 +527,59 @@ public class PcAccountServiceTest {
     }
 
     @Test
-    public void anAliasCannotBeEnteredWhileAnotherIsInTheMiddleOfSomething() throws Exception {
+    public void aBrowserDoesNotLeaveAnAliasThatIsInTheMiddleOfSomething() throws Exception {
         alias(FRODO, 101, "Frodo");
         alias(FRODO, 102, "Underhill");
-        alias(SAM, 301, "SamGamgee");
-        Session frodo = signedIn(FRODO);
-        _service.enter(frodo, 101, IP);
+        Session browser = signedIn(FRODO);
+        _service.enter(browser, 101, IP);
         _busy.add("Frodo");
-        _busy.add("SamGamgee");
 
-        assertRefused(409, "busy", () -> _service.enter(frodo, 102, IP));
-        assertEquals("Frodo", frodo.getPlayer());
-        // the busy one itself can always be gone back to, from another browser too
-        assertEquals("Frodo", _service.enter(signedIn(FRODO), 101, IP).player());
-        View view = _service.view(frodo);
+        assertRefused(409, "busy", () -> _service.enter(browser, 102, IP));
+        assertEquals("Frodo", browser.getPlayer());
+        // the busy one itself can always be entered again
+        assertEquals("Frodo", _service.enter(browser, 101, IP).player());
+        View view = _service.view(browser);
         assertEquals("Frodo", view.blockedBy());
         assertEquals(List.of(new Alias(101, "Frodo", true, true), new Alias(102, "Underhill", false, false)), view.aliases());
 
         _busy.remove("Frodo");
-        assertEquals("Underhill", _service.enter(frodo, 102, IP).player());
-        assertNull(_service.view(frodo).blockedBy());
+        assertEquals("Underhill", _service.enter(browser, 102, IP).player());
+        assertNull(_service.view(browser).blockedBy());
+    }
+
+    @Test
+    public void theGateIsEachBrowsersOwn() throws Exception {
+        // Playing oneself: two browsers, two aliases of one PC account, one table (Ketura, 2026-11-23).
+        alias(FRODO, 101, "Frodo");
+        alias(FRODO, 102, "Underhill");
+        Session one = signedIn(FRODO);
+        _service.enter(one, 101, IP);
+        _busy.add("Frodo");
+
+        Session other = signedIn(FRODO);
+        View view = _service.enter(other, 102, IP);
+        assertEquals("Underhill", view.player());
+        // the other alias is seen to be busy, and holds nothing up here
+        assertEquals(List.of(new Alias(101, "Frodo", false, true), new Alias(102, "Underhill", true, false)), view.aliases());
+        assertNull(view.blockedBy());
+
+        _busy.add("Underhill");
+        assertEquals("Frodo", _service.view(one).blockedBy());
+        assertEquals("Underhill", _service.view(other).blockedBy());
+        assertRefused(409, "busy", () -> _service.enter(other, 101, IP));
+    }
+
+    @Test
+    public void loggingOutIsNeverGatedAndABrowserPlayingNothingEntersAnything() throws Exception {
+        alias(FRODO, 101, "Frodo");
+        alias(FRODO, 102, "Underhill");
+        Session browser = signedIn(FRODO);
+        _service.enter(browser, 101, IP);
+        _busy.add("Frodo");
+
+        assertEquals("/gemp-lotr/ng/login", _service.logOut(browser, "alias"));
+        assertNull(_service.view(browser).blockedBy());
+        assertEquals("Underhill", _service.enter(browser, 102, IP).player());
     }
 
     @Test
@@ -631,13 +664,20 @@ public class PcAccountServiceTest {
     }
 
     @Test
-    public void noAliasIsCreatedWhileOneIsInTheMiddleOfSomething() throws Exception {
+    public void noAliasIsCreatedFromABrowserWhoseAliasIsInTheMiddleOfSomething() throws Exception {
         alias(FRODO, 101, "Frodo");
-        Session frodo = signedIn(FRODO);
-        // even the one this browser is playing: a new alias is entered at once
+        alias(FRODO, 102, "Underhill");
+        Session browser = signedIn(FRODO);
+        _service.enter(browser, 101, IP);
+        // a new alias is entered at once, which would be leaving this one
         _busy.add("Frodo");
-        assertRefused(409, "busy", () -> _service.create(frodo, "Underhill", IP));
-        assertNull(byName("Underhill"));
+        assertRefused(409, "busy", () -> _service.create(browser, "Ringbearer", IP));
+        assertNull(byName("Ringbearer"));
+
+        // another alias being busy elsewhere holds nothing up
+        _busy.remove("Frodo");
+        _busy.add("Underhill");
+        assertEquals("Ringbearer", _service.create(browser, "Ringbearer", IP).player());
     }
 
     @Test
