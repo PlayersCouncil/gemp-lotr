@@ -14,7 +14,7 @@ this replaces where they differ. What Gemp asks of Argonauth is in
 | Word | Means |
 |---|---|
 | PC account | The person: an Argonauth account, known to Gemp by its permanent `sub` |
-| Alias | A Gemp account (`player` row). A PC account may have any number |
+| Alias | A Gemp account (`player` row). A PC account may have any number. **On screen it is a "profile"** (Ketura, 2026-11-24); this document, the code and the wire say alias |
 | Link | Argonauth's record that an alias belongs to a PC account. Argonauth is the authority; Gemp keeps a copy (`player_argonauth`) |
 | Session | Gemp's own, in memory: which PC account is signed in (if any) and which alias is being played (if any). The two are separate |
 
@@ -73,17 +73,18 @@ Going back is `ARGONAUTH_MODE=test` and a restart. Aliases created through a PC 
 ## What A Person Does
 
 **The login page** in `optional` (Ketura, 2026-11-24) is two columns with a vertical rule between
-them. Left, "Legacy Login": name, password, Login. Right, "PC SSO": two buttons, **Sign in with PC
-Account** and **Register PC Account**. Both go to Argonauth and come back signed in; Register asks
+them, on a panel that blurs the page's picture behind it. Left, "Legacy Login": name, password,
+Login. Right, "PC SSO": two buttons, **Sign in with PC Account** and **Register PC Account**. In
+`test` the page is the legacy one, untouched, which the hall check holds it to. Both go to Argonauth and come back signed in; Register asks
 Argonauth for its sign-up page.
 
 **Coming back.** With one alias the person lands in the hall. With none (a PC account just
-registered, most of all) they land on the login page with Create New Gemp Alias already open, and
+registered, most of all) they land on the login page with Create New Gemp Profile already open, and
 linking an old account beside it. With several they land on the login page, which shows their
 aliases:
 
 - each alias with **Enter Gemp**;
-- **Create New Gemp Alias**: asks for a name, creates the account, enters the hall as it;
+- **Create New Gemp Profile**: asks for a name, creates the account, enters the hall as it;
 - **Link Existing Gemp Account**: asks for an old username and password, and adds that account;
 - **Log Out**.
 
@@ -118,7 +119,7 @@ off a table by mistake; it is not a limit of one alias at a time.
 
 For a password login both simply log out.
 
-**Registration** in `optional` is Register PC Account, then Create New Gemp Alias. The
+**Registration** in `optional` is Register PC Account, then Create New Gemp Profile. The
 old registration form is gone there. An alias made this way has no Gemp password.
 
 **A lost or leaked Gemp password.** Admins no longer reset passwords. An admin checks the player is
