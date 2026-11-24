@@ -365,7 +365,8 @@ public class LotroGameMediator {
             _journal = watched.journal;
             _ledger = watched.ledger;
             _restorePoints = watched.restorePoints;
-            _undoPolicy = UndoPolicy.SOLO;
+            //(unless the scenario says the person may not: options.undo, off by default in a puzzle)
+            _undoPolicy = scenario.Definition().undoAllowed() ? UndoPolicy.SOLO : UndoPolicy.OFF;
         }
         scenario.SetHost(this::scenarioOpponentAnswered);
         listenForTheEnd();

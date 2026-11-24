@@ -45,6 +45,8 @@ public class ScenarioRandom implements GameRandom {
 
     @Override
     public void shuffleDeck(String playerId, List<? extends PhysicalCard> deck) {
+        //(a puzzle can forbid it: rules.forbid: shuffle)
+        _table.Shuffled(playerId);
         RngEntry entry = next(RngKind.SHUFFLE, playerId, "deck");
         if (entry == null) {
             if (_trulyRandom)

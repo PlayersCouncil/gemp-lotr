@@ -84,7 +84,7 @@ public final class ScenarioValidator {
                 ScenarioDefinition.Message message = step.messages.get(i);
                 //(said as the parser says where a message is, so that whatever reads the two can find it)
                 String context = step.context() + ".messages[" + (i + 1) + "]";
-                if (message.zoom != null) {
+                if (message.zoom != null && !(message.zoom.card() != null && isCardSlot(def, message.zoom.card()))) {
                     String problem = CardFaces.check(def, message.zoom, library);
                     if (problem != null)
                         problems.add(context + ".zoom: " + problem);
@@ -94,7 +94,7 @@ public final class ScenarioValidator {
                 anchors.addAll(message.anchor);
                 for (String anchor : anchors) {
                     String part = Anchors.printedPart(anchor);
-                    String problem = part == null ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);
+                    String problem = part == null || isCardSlot(def, Anchors.cardAlias(anchor)) ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);
                     if (problem != null)
                         problems.add(context + ": " + anchor + ": " + problem);
                 }
@@ -121,8 +121,48 @@ public final class ScenarioValidator {
             requirements(def.orders.get(i).when().require, "opponent.orders[" + (i + 1) + "].when.require", problems);
         requirements(def.outcome.win, "outcome.win", problems);
         requirements(def.outcome.lose, "outcome.lose", problems);
+        puzzle(def, library, problems);
 
         return problems;
+    }
+
+    /**
+     * A puzzle's parts: its judge's requirements, its score's value, its slots and solutions (see SlotBounds), and the
+     * places a card's face is looked at before the game, which a slot's card does not have until it is picked.
+     */
+    private static void puzzle(ScenarioDefinition def, LotroCardBlueprintLibrary library, List<String> problems) {
+        if (def.outcome.judge != null)
+            requirements(def.outcome.judge.win(), "outcome.judge.win", problems);
+        if (def.outcome.score != null && def.outcome.score.valueJson() != null) {
+            try {
+                ScenarioTable.checkValue(def.outcome.score.valueJson());
+            } catch (IllegalArgumentException exp) {
+                problems.add("outcome.score.value: " + exp.getMessage());
+            }
+        }
+        problems.addAll(SlotBounds.validate(def, library));
+        if (def.slots.isEmpty())
+            return;
+        for (Step step : def.allSteps())
+            for (int i = 0; i < step.messages.size(); i++) {
+                ScenarioDefinition.Message message = step.messages.get(i);
+                String context = step.context() + ".messages[" + (i + 1) + "]";
+                if (message.zoom != null && message.zoom.card() != null && isCardSlot(def, message.zoom.card()))
+                    problems.add(context + ".zoom: '" + message.zoom.card() + "' is a slot, whose card is not known until the solver picks it, so it "
+                            + "cannot be shown large; point at it on the table instead (anchor: card:" + message.zoom.card() + ")");
+                List<String> anchors = new ArrayList<>(message.highlight);
+                anchors.addAll(message.avoid);
+                anchors.addAll(message.anchor);
+                for (String anchor : anchors)
+                    if (Anchors.printedPart(anchor) != null && isCardSlot(def, Anchors.cardAlias(anchor)))
+                        problems.add(context + ": " + anchor + ": '" + Anchors.cardAlias(anchor) + "' is a slot, and where a printed part is on its card "
+                                + "depends on what card is picked; point at the card itself (card:" + Anchors.cardAlias(anchor) + ")");
+            }
+    }
+
+    /** Whether a name is a slot's card (not a slot for a site, which is one of the scenario's sites). */
+    private static boolean isCardSlot(ScenarioDefinition def, String alias) {
+        return alias != null && def.slots.containsKey(alias) && def.slots.get(alias).zone() != ScenarioDefinition.SlotZone.SITE;
     }
 
     /**

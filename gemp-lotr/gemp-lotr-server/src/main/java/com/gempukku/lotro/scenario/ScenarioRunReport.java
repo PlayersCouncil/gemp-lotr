@@ -55,6 +55,11 @@ public class ScenarioRunReport {
 
     /** Where this run could have gone another way (only a run that follows the script records them). */
     public final List<OffScriptPoint> offScriptPoints = new ArrayList<>();
+    /**
+     * Each of the scenario's solutions, by name, and what became of it when it was played (see ScenarioRunner's
+     * 'solution' level): null for one that solved the puzzle, otherwise why it did not.  Empty for a scenario with none.
+     */
+    public final Map<String, String> solutions = new LinkedHashMap<>();
     /** The refusals (a step's 'refuses') this run has shown to hold, by the step's label: "12 2: choose(boromir)". */
     public final java.util.Set<String> refusalsShown = new java.util.LinkedHashSet<>();
 

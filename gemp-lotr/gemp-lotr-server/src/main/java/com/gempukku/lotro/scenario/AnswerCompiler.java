@@ -633,4 +633,67 @@ public final class AnswerCompiler {
     private static String stripHtml(String text) {
         return text.replaceAll("<[^>]*>", "").trim();
     }
+
+    /**
+     * What the eager opponent (opponent.fallback: eager) answers: it takes every optional action and response it is
+     * offered, and makes every choice it is forced to the plainest way, the same every time:
+     *     an action or response on offer      the first the game offers (in the game's own order) that does something;
+     *                                         never Pass while there is one
+     *     which of several to do first        the first
+     *     cards to choose                     the first ones offered: as many as it has to, and one where it need not
+     *                                         choose any (an optional choice is taken), unless it may choose none at most
+     *     a yes-or-no question                yes, where yes is offered; otherwise the first option
+     *     a number                            the most it may say
+     *     assigning minions                   (its leftovers, given to the Ring-bearer: see ScenarioDirector.leftovers)
+     * A game in which taking an action can always be done again (a free repeatable ability) has the eager opponent
+     * take it again and again: the runner stops such a game at its decision limit.
+     */
+    public static String eagerAnswer(AwaitingDecision decision) {
+        Map<String, String[]> params = decision.getDecisionParameters();
+        switch (decision.getDecisionType()) {
+            case CARD_ACTION_CHOICE: {
+                //(not one that would do nothing, nor one the game bars after a loop: those it could take for ever)
+                String[] actions = params.get("actionId");
+                String[] noEffect = params.get("noEffect");
+                String[] banned = params.get("loopBanned");
+                for (int i = 0; actions != null && i < actions.length; i++)
+                    if ((noEffect == null || i >= noEffect.length || noEffect[i].equals("false"))
+                            && (banned == null || i >= banned.length || !banned[i].equals("true")))
+                        return actions[i];
+                return leastAnswer(decision);
+            }
+            case ACTION_CHOICE:
+                return "0";
+            case CARD_SELECTION: {
+                int min = Integer.parseInt(params.get("min")[0]), max = Integer.parseInt(params.get("max")[0]);
+                String[] ids = params.get("cardId");
+                int count = Math.min(ids.length, Math.max(min, Math.min(1, max)));
+                return String.join(",", Arrays.copyOf(ids, count));
+            }
+            case ARBITRARY_CARDS: {
+                int min = Integer.parseInt(params.get("min")[0]), max = Integer.parseInt(params.get("max")[0]);
+                int count = Math.max(min, Math.min(1, max));
+                StringJoiner ids = new StringJoiner(",");
+                String[] tempIds = params.get("cardId");
+                String[] selectable = params.get("selectable");
+                for (int i = 0, picked = 0; i < tempIds.length && picked < count; i++)
+                    if (selectable[i].equals("true")) {
+                        ids.add(tempIds[i]);
+                        picked++;
+                    }
+                return ids.toString();
+            }
+            case MULTIPLE_CHOICE: {
+                String[] results = params.get("results");
+                for (int i = 0; i < results.length; i++)
+                    if (results[i].equalsIgnoreCase("Yes"))
+                        return String.valueOf(i);
+                return "0";
+            }
+            case INTEGER:
+                return params.containsKey("max") ? params.get("max")[0] : leastAnswer(decision);
+            default:
+                return leastAnswer(decision);
+        }
+    }
 }

@@ -37,17 +37,22 @@ import java.util.Map;
  * {@code authoring: {gameId, id, title, over, test}|null}, the draft they have open):
  * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified, path, owner, mine,
  * campaign:{id, title, position, count, next:{id, title}|null}|null,
- * progress:{status, attempts, version, firstCompleted, lastPlayed}|null}], current:{gameId, id}|null}}.
+ * progress:{status, attempts, version, firstCompleted, lastPlayed, bestScore}|null}], current:{gameId, id}|null}}.
  * {@code campaign} is the campaign the scenario is part of: a game of it ends by offering {@code next}.
  * {@code progress.status} is "started" or "complete" ("visited" for a sandbox, which is never complete).
  * {@code verified} is false for a scenario that does not play through headless; only its owner and the admins are
  * offered one of those.  {@code current} is the scenario game the player is in the middle of, if any.<br>
- * POST /scenarios/start (form: id, optionally from=checkpoint) - starts a game of the scenario against its scripted
+ * POST /scenarios/start (form: id, optionally from=checkpoint, picks={slot: blueprint} or picks=same) - starts a game of the scenario against its scripted
  * opponent and answers {@code {gameId, resumedAt}}; the client then opens game.html?gameId=...  A scenario the player
  * was already in the middle of is given up.  With from=checkpoint, and if that scenario was this same one and had
  * reached a checkpoint, the new game picks up there and resumedAt is the checkpoint step's number; otherwise the game
  * starts at the beginning and resumedAt is null.  An unknown id, or one the player is not offered, is a 404 with an
- * {@code {error}} body.<br>
+ * {@code {error}} body.  A puzzle with slots started without picks is held, waiting for them (mode "edit" in the answer and
+ * in its info); with picks that do not all fit, it is a 400 {@code {error, refused: {slot: why}}}.<br>
+ * POST /scenarios/picks (form: id, picks, all) - whether cards fit a puzzle's slots: {@code {ok, picks: {slot: {fits, why, name}}}}.<br>
+ * GET /scenarios/mine/unlisted?id=, /scenarios/admin/unlisted?id= - the games that solved a puzzle (the player's own, or any
+ * for an admin) with picks none of its solutions lists: {@code {runs: [{run, player, version, started, ended, picks, score,
+ * recordingId, replayId}]}}.<br>
  * GET /scenarios/errors - admins only: every scenario file, with what is wrong with it and the report of its
  * headless run: {@code {files:[{path, owner, id, playable, verified, errors, warnings, report}]}}.
  * <p>
@@ -120,6 +125,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             list(request, responseWriter);
         } else if (uri.equals("/start") && request.method() == HttpMethod.POST) {
             start(request, responseWriter);
+        } else if (uri.equals("/picks") && request.method() == HttpMethod.POST) {
+            picks(request, responseWriter);
         } else if (uri.equals("/errors") && request.method() == HttpMethod.GET) {
             errors(request, responseWriter);
         } else if (uri.startsWith("/author/")) {
@@ -175,6 +182,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                 progressJson.put("version", played.version);
                 progressJson.put("firstCompleted", played.first_completed == null ? null : played.first_completed.toString());
                 progressJson.put("lastPlayed", played.last_played == null ? null : played.last_played.toString());
+                //(a scored puzzle's: the best score of the player's complete games, null for none)
+                progressJson.put("bestScore", played.best_score);
                 json.put("progress", progressJson);
             }
             scenarios.add(json);
@@ -237,11 +246,37 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                 return;
             }
 
+            //A puzzle's picks (slot id -> blueprint): every slot filled, each with a card it takes; "same" for the picks
+            // of the player's last game of it (Start again).  None, for a puzzle with slots: its game is held, waiting.
+            String picksText = getFormParameterSafely(postDecoder, "picks");
+            boolean samePicks = "same".equals(picksText);
+            Map<String, String> picks = null;
+            if (!samePicks && picksText != null && !picksText.isBlank()) {
+                picks = picksOf(picksText);
+                if (picks == null) {
+                    writeError(responseWriter, 400, "The picks are written as {\"slot\": \"blueprint\"}.");
+                    return;
+                }
+                Map<String, String> checked = com.gempukku.lotro.scenario.SlotBounds.check(entry.def(), picks, true, _scenarios.library());
+                if (!com.gempukku.lotro.scenario.SlotBounds.allFit(checked)) {
+                    Map<String, Object> error = new LinkedHashMap<>();
+                    error.put("error", "Not every slot has a card it takes.");
+                    Map<String, String> refused = new LinkedHashMap<>();
+                    checked.forEach((slot, why) -> {
+                        if (why != null)
+                            refused.put(slot, why);
+                    });
+                    error.put("refused", refused);
+                    responseWriter.writeJsonResponse(400, JsonUtils.SerializeWithNulls(error));
+                    return;
+                }
+            }
+
             LotroGameMediator mediator;
             try {
                 mediator = _lotroServer.createScenarioGame(player, entry.def(), entry.format(), _scenarios.textFor(entry),
                         "checkpoint".equals(getFormParameterSafely(postDecoder, "from")),
-                        _scenarios.campaignInfo(entry.id(), player.getName(), player.hasType(Player.Type.ADMIN)));
+                        _scenarios.campaignInfo(entry.id(), player.getName(), player.hasType(Player.Type.ADMIN)), picks, samePicks);
             } catch (RuntimeException exp) {
                 _log.error("Scenario " + id + " could not be started for " + player.getName(), exp);
                 writeError(responseWriter, 500, "The scenario could not be started.");
@@ -252,6 +287,63 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             result.put("gameId", mediator.getGameId());
             //Where the game picks up: the number of the checkpoint step, or null for the beginning
             result.put("resumedAt", mediator.getScenario().ResumedAt());
+            //(a puzzle waiting for its picks: the page opens it in edit mode, as its info says)
+            result.put("mode", mediator.getScenario().Holding() ? "edit" : "play");
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /** {slot: blueprint} as the page sends it; null if it is not that. */
+    private static Map<String, String> picksOf(String text) {
+        try {
+            Map<String, String> picks = new LinkedHashMap<>();
+            com.alibaba.fastjson2.JSONObject json = com.alibaba.fastjson2.JSON.parseObject(text);
+            if (json == null)
+                return null;
+            for (Map.Entry<String, Object> pick : json.entrySet())
+                if (pick.getValue() != null && !pick.getValue().toString().isBlank())
+                    picks.put(pick.getKey(), pick.getValue().toString().trim());
+            return picks;
+        } catch (RuntimeException exp) {
+            return null;
+        }
+    }
+
+    /**
+     * Whether cards fit a puzzle's slots, before it is submitted (form: id, picks: {slot: blueprint}, all=true to have
+     * every slot filled): {ok, picks: {slot: {fits, why, name}}}.  'why' says plainly why a card is refused; 'name' is
+     * the card's.  A slot that is not in picks is not looked at unless all is asked for.
+     */
+    private void picks(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            Player player = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
+            String id = getFormParameterSafely(postDecoder, "id");
+            ScenarioLibrary.Entry entry = _scenarios.get(id);
+            if (entry == null || !_scenarios.startableBy(entry, player.getName(), player.hasType(Player.Type.ADMIN))) {
+                writeError(responseWriter, 404, "There is no scenario called '" + id + "'.");
+                return;
+            }
+            Map<String, String> picks = picksOf(getFormParameterSafely(postDecoder, "picks"));
+            if (picks == null) {
+                writeError(responseWriter, 400, "The picks are written as {\"slot\": \"blueprint\"}.");
+                return;
+            }
+            Map<String, String> checked = com.gempukku.lotro.scenario.SlotBounds.check(entry.def(), picks,
+                    "true".equals(getFormParameterSafely(postDecoder, "all")), _scenarios.library());
+            Map<String, Object> each = new LinkedHashMap<>();
+            checked.forEach((slot, why) -> {
+                Map<String, Object> one = new LinkedHashMap<>();
+                one.put("fits", why == null);
+                one.put("why", why);
+                one.put("name", picks.get(slot) == null ? null : com.gempukku.lotro.scenario.SlotBounds.nameOf(picks.get(slot), _scenarios.library()));
+                each.put(slot, one);
+            });
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("ok", com.gempukku.lotro.scenario.SlotBounds.allFit(checked));
+            result.put("picks", each);
             responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
         } finally {
             postDecoder.destroy();
@@ -306,6 +398,14 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                         result.put("authoring", _authoring.currentForHall(player));
                     }
                     case "public" -> result.put("scenarios", _shelf.publicOnes(name, admin));
+                    case "mine/unlisted" -> {
+                        //(the games that solved one of the player's own puzzles in a way it does not list)
+                        String id = getQueryParameterSafely(new QueryStringDecoder(request.uri()), "id");
+                        ScenarioLibrary.Entry entry = id == null ? null : _scenarios.get(id);
+                        if (entry == null || entry.owner() == null || !entry.owner().equals(name))
+                            throw new HttpProcessingException(404);
+                        result.put("runs", _runLog.unlistedRuns(entry.id(), 100));
+                    }
                     default -> throw new HttpProcessingException(404);
                 }
                 responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
@@ -357,6 +457,14 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
         String name = player.getName();
         try {
             Map<String, Object> result = new LinkedHashMap<>();
+            if (request.method() == HttpMethod.GET && what.equals("admin/unlisted")) {
+                String id = getQueryParameterSafely(new QueryStringDecoder(request.uri()), "id");
+                if (id == null || id.isBlank())
+                    throw new HttpProcessingException(404);
+                result.put("runs", _runLog.unlistedRuns(id, 100));
+                responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
+                return;
+            }
             if (request.method() == HttpMethod.GET) {
                 if (!what.equals("admin"))
                     throw new HttpProcessingException(404);
@@ -496,6 +604,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                         result.put("ok", true);
                     }
                     case "check" -> result = _authoring.check(player);
+                    case "solution" -> result = _authoring.solution(player, getFormParameterSafely(form, "op"), getFormParameterSafely(form, "name"),
+                            getFormParameterSafely(form, "picks"));
                     case "offscript" -> result = _authoring.offScript(player);
                     case "test" -> {
                         Integer step = number(form, "step");

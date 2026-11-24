@@ -66,9 +66,13 @@ public class DbScenarioDAO implements ScenarioDAO {
                 conn.createQuery("""
                                 UPDATE gemp_db.scenario_run
                                 SET ended = :ended, result = :result, last_step = :last_step, step_report = :step_report,
-                                    problems = :problems, recording_id = :recording_id, journal = :journal
+                                    problems = :problems, recording_id = :recording_id, journal = :journal,
+                                    picks = :picks, score = :score, unlisted = :unlisted
                                 WHERE id = :id;
                                 """)
+                        .addParameter("picks", run.picks)
+                        .addParameter("score", run.score)
+                        .addParameter("unlisted", run.unlisted)
                         .addParameter("ended", now)
                         .addParameter("result", run.result)
                         .addParameter("last_step", run.last_step)
@@ -115,6 +119,51 @@ public class DbScenarioDAO implements ScenarioDAO {
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to look up the scenario run with recording " + recordingId, ex);
+        }
+    }
+
+    @Override
+    public void recordBestScore(int runId, int score, boolean higherIsBetter) {
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                conn.createQuery("""
+                                UPDATE gemp_db.scenario_progress p
+                                JOIN gemp_db.scenario_run r ON r.player_id = p.player_id AND r.scenario_id = p.scenario_id
+                                SET p.best_score = :score
+                                WHERE r.id = :id AND (p.best_score IS NULL OR (CASE WHEN :higher THEN :score > p.best_score ELSE :score < p.best_score END));
+                                """)
+                        .addParameter("score", score)
+                        .addParameter("higher", higherIsBetter)
+                        .addParameter("id", runId)
+                        .executeUpdate();
+                conn.commit();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to record the best score of scenario run " + runId, ex);
+        }
+    }
+
+    @Override
+    public List<DBDefs.ScenarioRun> getUnlistedRuns(String scenarioId, int limit) {
+        try {
+            var db = _dbAccess.openDB();
+            try (org.sql2o.Connection conn = db.open()) {
+                return conn.createQuery("""
+                                SELECT r.id, r.player_id, r.scenario_id, r.version, r.started, r.ended, r.result, r.resumed_at, r.last_step,
+                                       r.recording_id, r.picks, r.score, r.unlisted, p.name AS player_name
+                                FROM gemp_db.scenario_run r
+                                JOIN gemp_db.player p ON p.id = r.player_id
+                                WHERE r.scenario_id = :scenario_id AND r.unlisted = 1
+                                ORDER BY r.id DESC
+                                LIMIT :limit;
+                                """)
+                        .addParameter("scenario_id", scenarioId)
+                        .addParameter("limit", limit)
+                        .executeAndFetch(DBDefs.ScenarioRun.class);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to list the unlisted solutions of scenario " + scenarioId, ex);
         }
     }
 

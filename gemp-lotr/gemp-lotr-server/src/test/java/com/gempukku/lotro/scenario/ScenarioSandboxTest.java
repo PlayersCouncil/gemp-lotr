@@ -326,14 +326,14 @@ public class ScenarioSandboxTest {
     public void AModifierPutOnByHandIsTakenBackWithTheRest() throws Exception {
         Game game = begin(sandbox());
         int strength = game.scenario().Table().GetStrength(game.scenario().Table().Card("frodo"));
-        game.edit("[{op: 'modify', card: 'frodo', what: 'strength', amount: 3}, {op: 'modify', card: 'frodo', what: 'fierce', until: 'turn'}]");
+        game.edit("[{op: 'modify', card: 'frodo', what: 'strength', amount: 3}, {op: 'modify', card: 'frodo', what: 'damage', until: 'turn'}]");
         List<Map<String, Object>> modifiers = (List<Map<String, Object>>) game.card("frodo").get("modifiers");
         assertEquals(2, modifiers.size());
         assertEquals("strength", modifiers.get(0).get("what"));
         assertEquals(strength + 3, game.scenario().Table().GetStrength(game.scenario().Table().Card("frodo")));
 
         //One kind taken off again, in a list of edits of its own: a place to go back to
-        game.edit("{op: 'unmodify', card: 'frodo', what: 'fierce'}");
+        game.edit("{op: 'unmodify', card: 'frodo', what: 'damage'}");
         assertEquals(1, ((List<Map<String, Object>>) game.card("frodo").get("modifiers")).size());
         assertNull(game.mediator().sandboxStart(HUMAN));
         assertNotNull(game.waiting());

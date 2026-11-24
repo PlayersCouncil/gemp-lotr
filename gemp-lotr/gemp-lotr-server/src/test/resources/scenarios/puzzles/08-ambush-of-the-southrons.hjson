@@ -1,0 +1,137 @@
+{
+	id: decipher-08-ambush-of-the-southrons
+	version: 1
+	kind: puzzle
+	title: Ambush of the Southrons
+	summary: Which Free Peoples support area card, and which single card in hand, will keep Frodo alive?
+	author: Decipher (Playmat Puzzle, 7 July 2003)
+	note: Transcribed from the Wayback Machine capture; the published key's two solutions are 'trap-and-be-back-soon' and 'trap-and-defend-it'.
+	format: scenario
+	human: freeps
+	opponent: {
+		fallback: eager
+	}
+	coverage: guided
+	options: {
+		autoPass: true
+		opponentDelayMs: 0
+	}
+	cards: {
+		freeps: {
+			frodo: 5_111
+			ring: 4_1
+			faramir: 6_121
+			ranger: 4_130
+			sam: 5_115
+			smeagol: 5_28
+			damrod: 4_114
+			mablung: 4_127
+		}
+		shadow: {
+			oppFrodo: 5_111
+			commander: 4_249
+			lancers: 4_217
+			legion: 4_218
+			menOfHarad: 4_238
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+	}
+	sites: {
+		freeps: 4_326, 4_330, 4_339, 4_343, 4_349, 4_352, 4_355
+		shadow: 4_326, 4_330, 4_339, 4_343, 4_349, 4_352, 4_355
+	}
+	rules: {
+		oneSided: true
+		markers: together
+		forbid: shuffle
+	}
+	pool: set:1-6
+	slots: {
+		support: {
+			zone: support
+			filter: side:FREE_PEOPLE
+			tokens: 3
+			label: a Free Peoples card
+		}
+		hand: {
+			zone: hand
+			label: a card
+		}
+	}
+	setup: {
+		startAt: {
+			phase: maneuver
+			site: 7
+		}
+		freeps: {
+			characters: faramir, ranger, sam, smeagol, damrod, mablung
+		}
+		shadow: {
+			minions: commander, lancers, legion
+			support: menOfHarad
+		}
+		controlled: {
+			shadow: 3
+		}
+	}
+	outcome: {
+		judge: {
+			at: startOf(regroup)
+			win: {
+				type: canSpot
+				filter: alias(frodo)
+			}
+		}
+		lose: {
+			type: cantSpot
+			filter: alias(frodo)
+		}
+		winMessages: Frodo lives, and the Southrons march on.
+		loseMessages: The Southron Commander found Frodo.
+	}
+	steps: [
+	]
+	solutions: [
+		{
+			name: trap-and-be-back-soon
+			note: Ithilien Trap with three tokens exerts each minion once; Be Back Soon discards Sméagol to discard the Commander, and no minion can exert twice to prevent it.
+			picks: {
+				support: 4_126
+				hand: 5_21
+			}
+			answers: [
+				use(support)
+				choose(commander)
+				choose(lancers)
+				choose(legion)
+				play(hand)
+				choose(commander)
+				assign(faramir: lancers, ranger: legion)
+			]
+		}
+		{
+			name: trap-and-defend-it
+			note: Ithilien Trap exerts the Commander twice; Defend It and Hope exerts a Gondor Man to wound it, and it dies.
+			picks: {
+				support: 4_126
+				hand: 4_115
+			}
+			answers: [
+				use(support)
+				choose(commander)
+				choose(commander)
+				choose(lancers)
+				play(hand)
+				choose(faramir)
+				choose(commander)
+				assign(faramir: lancers, ranger: legion)
+			]
+		}
+	]
+}

@@ -1,0 +1,534 @@
+{
+	id: decipher-03-like-this-would-happen-2b
+	version: 1
+	kind: puzzle
+	title: Like This Would Happen! (Part II-B)
+	summary: How large can Sméagol get?  Eight cards in hand and a site on the Two Towers path.
+	author: Geoffrey Snider (Decipher, 7 May 2003)
+	note: Transcribed from the Wayback Machine capture.  Scored: Sméagol's strength as his skirmish is resolved.  The published key, played step by step as its 41-step walkthrough has it, is the solution 'published', and reaches 1160 in Gemp.
+	format: scenario
+	human: freeps
+	opponent: {
+		fallback: pass
+	}
+	coverage: guided
+	options: {
+		autoPass: true
+		opponentDelayMs: 0
+	}
+	cards: {
+		freeps: {
+			frodo: 5_111
+			ring: 4_1
+			sting: 5_116
+			tale: 1_317
+			phial: 3_24
+			smeagol: 5_29
+			wretch1: 5_27
+			wretch2: 5_27
+			wretch3: 5_27
+			wretch4: 5_27
+			trolls: 1_314
+			gimli: 4_49
+			endurance1: 2_4
+			endurance2: 2_4
+			endurance3: 2_4
+			endurance4: 2_4
+			merry: 1_302
+			escape: 4_300
+			sword: 4_306
+			boromir: 1_97
+			saga: 1_114
+			gandalf: 4_90
+			staff: 4_91
+			arwen: 3_8
+			legolas: 1_51
+			bilbo: 1_284
+			countryside1: 3_113
+			countryside2: 3_113
+			countryside3: 3_113
+			countryside4: 3_113
+			songs1: 1_61
+			songs2: 1_61
+			songs3: 1_61
+			songs4: 1_61
+			trust1: 3_35
+			trust2: 3_35
+			trust3: 3_35
+			trust4: 3_35
+			stout: 4_57
+		}
+		shadow: {
+			oppFrodo: 5_111
+			troll: 1_165
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+	}
+	sites: {
+		freeps: 4_326, 4_330
+		shadow: 4_326, 4_330
+	}
+	rules: {
+		oneSided: true
+		freeps: [
+			{
+				type: modifier
+				modifier: {
+					type: cantTakeCardsIntoHandFromDeckOrDiscardPile
+					player: you
+				}
+			}
+		]
+	}
+	pool: set:1-5
+	slots: {
+		site2: {
+			zone: site
+			filter: set:4 cardtype:SITE
+			label: a Two Towers site 2
+		}
+		hand1: hand
+		hand2: hand
+		hand3: hand
+		hand4: hand
+		hand5: hand
+		hand6: hand
+		hand7: hand
+		hand8: hand
+	}
+	setup: {
+		startAt: {
+			phase: maneuver
+			site: 2
+		}
+		freeps: {
+			characters: smeagol, gimli, merry, boromir, gandalf, arwen, legolas
+			support: bilbo, countryside1, countryside2, countryside3, countryside4, songs1, songs2, songs3, songs4, trust1, trust2, trust3, trust4, stout
+		}
+		shadow: {
+			minions: troll
+		}
+		attach: {
+			sting: frodo
+			tale: frodo
+			phial: frodo
+			wretch1: smeagol
+			wretch2: smeagol
+			wretch3: smeagol
+			wretch4: smeagol
+			trolls: smeagol
+			endurance1: gimli
+			endurance2: gimli
+			endurance3: gimli
+			endurance4: gimli
+			escape: merry
+			sword: merry
+			saga: boromir
+			staff: gandalf
+		}
+		tokens: {
+			stout: 3
+		}
+	}
+	steps: [
+		{
+			note: Guideline 5: the Cave Troll of Moria must skirmish Sméagol.
+			when: human, assign
+			allow: assign(smeagol: troll)
+		}
+	]
+	outcome: {
+		judge: skirmishResolution
+		score: {
+			value: strength:smeagol
+			label: Sméagol's strength
+		}
+	}
+	solutions: [
+		{
+			name: published
+			note: 4 Voice of Nimrodel, 2 Extraordinary Resilience, 2 Stout and Sturdy, at Derndingle (Fangorn Forest does as well: both are forests).  The answers follow the walkthrough's steps 1 to 40 in order; every Songs of the Blessed Realm and Shire Countryside trigger is taken, the heals going to Merry (4), Gimli (6), Boromir (3) and Frodo (3) each time.
+			picks: {
+				site2: 4_330
+				hand1: 3_28
+				hand2: 3_28
+				hand3: 3_28
+				hand4: 3_28
+				hand5: 1_287
+				hand6: 1_287
+				hand7: 1_315
+				hand8: 1_315
+			}
+			answers: [
+				use(tale)
+				pass
+				choose(smeagol)
+				use(sting)
+				use(sting)
+				use(sting)
+				use(sting)
+				use(sting)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(trust1)
+				choose(merry)
+				use(trust2)
+				choose(merry)
+				use(trust3)
+				choose(merry)
+				use(trust4)
+				choose(merry)
+				use(stout)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				play(hand1)
+				choose(legolas)
+				use(songs1)
+				use(countryside1)
+				choose(merry)
+				use(countryside2)
+				choose(merry)
+				use(countryside3)
+				choose(merry)
+				use(countryside4)
+				choose(merry)
+				use(songs2)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(gimli)
+				use(countryside4)
+				choose(gimli)
+				use(songs3)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(boromir)
+				use(countryside4)
+				choose(boromir)
+				use(songs4)
+				use(countryside1)
+				choose(boromir)
+				use(countryside2)
+				choose(frodo)
+				pass
+				use(countryside3)
+				choose(frodo)
+				pass
+				use(countryside4)
+				choose(frodo)
+				pass
+				use(sting)
+				use(sting)
+				use(sting)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				play(hand2)
+				choose(legolas)
+				use(songs1)
+				use(countryside1)
+				choose(merry)
+				use(countryside2)
+				choose(merry)
+				use(countryside3)
+				choose(merry)
+				use(countryside4)
+				choose(merry)
+				use(songs2)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(gimli)
+				use(countryside4)
+				choose(gimli)
+				use(songs3)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(boromir)
+				use(countryside4)
+				choose(boromir)
+				use(songs4)
+				use(countryside1)
+				choose(boromir)
+				use(countryside2)
+				choose(frodo)
+				pass
+				use(countryside3)
+				choose(frodo)
+				pass
+				use(countryside4)
+				choose(frodo)
+				pass
+				use(sting)
+				use(sting)
+				use(sting)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				play(hand3)
+				use(songs1)
+				use(countryside1)
+				choose(merry)
+				use(countryside2)
+				choose(merry)
+				use(countryside3)
+				choose(merry)
+				use(countryside4)
+				choose(merry)
+				use(songs2)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(gimli)
+				use(countryside4)
+				choose(gimli)
+				use(songs3)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(boromir)
+				use(countryside4)
+				choose(boromir)
+				use(songs4)
+				use(countryside1)
+				choose(boromir)
+				use(countryside2)
+				choose(frodo)
+				pass
+				use(countryside3)
+				choose(frodo)
+				pass
+				use(countryside4)
+				choose(frodo)
+				pass
+				use(sting)
+				use(sting)
+				use(sting)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				play(hand4)
+				use(songs1)
+				use(countryside1)
+				choose(merry)
+				use(countryside2)
+				choose(merry)
+				use(countryside3)
+				choose(merry)
+				use(countryside4)
+				choose(merry)
+				use(songs2)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(gimli)
+				use(countryside4)
+				choose(gimli)
+				use(songs3)
+				use(countryside1)
+				choose(gimli)
+				use(countryside2)
+				choose(gimli)
+				use(countryside3)
+				choose(boromir)
+				use(countryside4)
+				choose(boromir)
+				use(songs4)
+				use(countryside1)
+				choose(boromir)
+				use(countryside2)
+				choose(frodo)
+				pass
+				use(countryside3)
+				choose(frodo)
+				pass
+				use(countryside4)
+				choose(frodo)
+				pass
+				use(sting)
+				use(sting)
+				use(sting)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(smeagol)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(gimli)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(boromir)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				play(hand7)
+				choose(frodo)
+				play(hand5)
+				use(countryside1)
+				choose(merry)
+				use(countryside2)
+				choose(merry)
+				use(countryside3)
+				choose(merry)
+				use(countryside4)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				play(hand8)
+				choose(frodo)
+				play(hand6)
+				use(countryside1)
+				choose(merry)
+				use(countryside2)
+				choose(merry)
+				use(countryside3)
+				choose(merry)
+				use(countryside4)
+				choose(merry)
+				use(merry)
+				choose(smeagol)
+				use(merry)
+				choose(smeagol)
+				use(smeagol)
+				use(smeagol)
+				pass
+			]
+		}
+	]
+}

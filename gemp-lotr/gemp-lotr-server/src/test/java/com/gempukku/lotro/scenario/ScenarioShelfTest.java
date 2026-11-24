@@ -271,9 +271,22 @@ public class ScenarioShelfTest {
         assertNull(library.at("ketura", "mine.hjson"));
     }
 
+    /** A puzzle is submitted with a solution that solves it (here, the script's own pass: nothing is left open). */
+    private static final String SOLVED = "\n\tkind: puzzle\n\tsolutions: [\n\t\t{\n\t\t\tname: key\n\t\t}\n\t]";
+
+    @Test
+    public void APuzzleIsSubmittedOnlyWithASolutionThatSolvesIt() throws Exception {
+        write(own("ketura"), "puzzles/riddle.hjson", working("riddle", "Riddle").replace("title: Riddle", "title: Riddle\n\tkind: puzzle"));
+        refused(() -> shelf.submit("ketura", "puzzles/riddle.hjson"), "lists none");
+        write(own("ketura"), "puzzles/riddle.hjson", working("riddle", "Riddle").replace("title: Riddle", "title: Riddle" + SOLVED));
+        shelf.submit("ketura", "puzzles/riddle.hjson");
+        assertTrue(shelf.locked("ketura", "puzzles/riddle.hjson"));
+    }
+
     @Test
     public void AnApprovedSubmissionBecomesPublicAndItsAuthorsCopyIsMarked() throws Exception {
-        write(own("ketura"), "puzzles/riddle.hjson", working("riddle", "Riddle").replace("title: Riddle", "title: Riddle\n\tkind: puzzle"));
+        //(a puzzle: since November 2026 it needs a solution that solves it to be submitted, see the test above)
+        write(own("ketura"), "puzzles/riddle.hjson", working("riddle", "Riddle").replace("title: Riddle", "title: Riddle" + SOLVED));
         shelf.submit("ketura", "puzzles/riddle.hjson");
         assertEquals(1, ((List<?>) shelf.adminState(10).get("submissions")).size());
 
@@ -293,7 +306,7 @@ public class ScenarioShelfTest {
         assertEquals(0, ((List<?>) shelf.adminState(10).get("submissions")).size());
 
         //Changed since: still linked, and submitting it again replaces the public one
-        write(own("ketura"), "puzzles/riddle.hjson", working("riddle", "Riddle, better").replace("title: Riddle, better", "title: Riddle, better\n\tkind: puzzle"));
+        write(own("ketura"), "puzzles/riddle.hjson", working("riddle", "Riddle, better").replace("title: Riddle, better", "title: Riddle, better" + SOLVED));
         assertEquals("changed", mine("ketura", "puzzles/riddle.hjson").get("published"));
         shelf.submit("ketura", "puzzles/riddle.hjson");
         @SuppressWarnings("unchecked")
