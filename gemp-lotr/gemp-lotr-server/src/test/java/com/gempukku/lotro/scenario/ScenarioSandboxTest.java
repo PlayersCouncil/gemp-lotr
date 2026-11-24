@@ -142,6 +142,13 @@ public class ScenarioSandboxTest {
         assertTrue(game.client().info.getBooleanValue("canStart"));
         assertFalse(game.client().info.getBooleanValue("canStop"));
         assertEquals(ScenarioSandbox.TOOLS, game.client().info.getList("tools", String.class));
+        //Every pile is open in the default sandbox: the sites in the adventure decks too, with their printed numbers
+        assertEquals("path", game.zoneOf("site1"));
+        assertEquals(1, game.card("site1").get("site"));
+        assertEquals("adventureDeck", game.zoneOf("site2"));
+        assertNull(game.card("site2").get("site"));
+        assertEquals(2, game.card("site2").get("printed"));
+        assertNull(game.card("frodo").get("printed"));
 
         //The fellowship phase's prompt is there, and an answer to it is refused while stopped
         AwaitingDecision waiting = game.waiting();

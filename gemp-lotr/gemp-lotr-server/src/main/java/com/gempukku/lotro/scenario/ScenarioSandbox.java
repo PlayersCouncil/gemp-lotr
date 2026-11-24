@@ -361,8 +361,8 @@ public class ScenarioSandbox {
                 Seat owner = _table.SeatOf(card.getOwner());
                 ZoneTarget target = zoneTarget(string(op, "to"), owner);
                 if (target.seat() != owner)
-                    throw new Refused(GameUtils.getFullName(card) + " belongs to the " + owner.key() + " seat, so it goes to the "
-                            + owner.key() + " seat's " + zoneWords(target.zone()) + " (or to a zone of the table its owner has)");
+                    throw new Refused(GameUtils.getFullName(card) + " belongs to the " + owner.key() + " seat, so it can go only to the "
+                            + owner.key() + " seat's " + zoneWords(target.zone()) + ", not the " + target.seat().key() + " seat's");
                 fits(card.getBlueprint(), target.zone());
                 _changed = true;
                 if (!onTable(target.zone()) || !onTable(card.getZone()))
@@ -903,7 +903,9 @@ public class ScenarioSandbox {
                     tokens.put(token.getKey().name().toLowerCase(Locale.ROOT), token.getValue());
             json.put("cultureTokens", tokens);
             json.put("culture", card.getBlueprint().getCulture() == null ? null : card.getBlueprint().getCulture().name().toLowerCase(Locale.ROOT));
-            json.put("site", isSite(card) ? card.getSiteNumber() : null);
+            //(a site's number on the path, a controlled one's too, null in an adventure deck; and the number printed on it, 0 for one with none)
+            json.put("site", isSite(card) && card.getZone() != Zone.ADVENTURE_DECK ? card.getSiteNumber() : null);
+            json.put("printed", isSite(card) ? card.getBlueprint().getSiteNumber() : null);
             json.put("added", !_def.cards.containsKey(named.getKey()) && !_def.siteCards.containsKey(named.getKey()));
             cards.add(json);
         }
