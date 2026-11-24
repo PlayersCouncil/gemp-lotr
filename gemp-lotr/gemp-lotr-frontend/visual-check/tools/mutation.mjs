@@ -131,6 +131,10 @@ export const TARGETS = [
   'src/core/game/authoring/puzzle-slots.ts',
   'src/core/game/authoring/puzzle-solutions.ts',
   'src/core/game/authoring/board-modifiers.ts',
+  'src/core/game/table-edit/slot-filter.ts',
+  'src/core/game/table-edit/puzzle-slots.ts',
+  'src/core/game/table-edit/puzzle-backend.ts',
+  'src/core/game/scenario/scenario-score.ts',
 ];
 
 /**

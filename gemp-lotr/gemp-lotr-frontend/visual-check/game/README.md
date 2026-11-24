@@ -328,6 +328,52 @@ Every check runs in both themes at 1366×768 (`--theme classic` or `--theme mode
 `--verbose`). The report is `report-sandbox/` (`--out`): screenshots of the steps worth seeing and a text file per
 check with every move.
 
+## The puzzle checks
+
+`npm run check:game:puzzle` (`puzzle.mjs`, against a game check server kept up, as the sandbox check) plays copies of
+Decipher's puzzles 10, 08 and 03 (the engine's fixtures, `gemp-lotr-server/src/test/resources/scenarios/puzzles/`)
+on the Angular game page as `GamePlayer3` (`GEMP_PUZZLE_PLAYER`): each copy is written into the player's own
+scenarios folder (`GEMP_SCENARIOS`, default `/etc/gemp-lotr/scenarios`) under an id starting `check-puzzle-` and
+deleted when its check is done. What a check changes is asserted on the page and in what the server says (the info
+event's slots and picks, `POST /scenarios/picks`, `GET /scenarios`, the authoring state).
+
+- **held**: puzzle 10 opened without picks: the page in edit mode, the bar says Choosing with Submit off (its title
+  names both empty slots), both slots in the support row labelled as the file calls them, no sandbox open spots, no
+  slots strip, no decision text or buttons, no card offered, no bubble, no Start again; no Undo button and no Revert;
+  right-click on a card is its details (no card menu); the server's info says `mode: edit`, `level: puzzle`, 2 slots.
+- **bound**: the condition slot's search window: its bound labelled "a Rohan condition" with the filter
+  `set:1-6 culture:ROHAN cardtype:CONDITION` in its title; no Card Type, Set or Block field and no culture buttons
+  (they could only widen it); Aldor (a Rohan ally) is not found; the same pick sent anyway (the page's own request
+  carrying Aldor) is refused in the server's own words, shown in the window, and nothing is put in; with Aldor and
+  Parapet in Recent, the condition slot's chooser offers Parapet only (the server's word on each).
+- **fill**: Aldor from the search into the ally slot (Submit still off, its title names the condition); Armory, then
+  Parapet over it, from the search; the ally slot emptied (Submit off again) and filled from Recent (only Aldor
+  offered); a filled slot's card shows its details on right-click; Submit: a fresh game with Parapet and Aldor on the
+  table, no slots, the info's picks are theirs, Change cards offered, no mode word, no Undo button.
+- **solve**: puzzle 10 with the published key played through on the page (Parapet, "Make the minion archery total -3",
+  two arrows on Aldor): Complete with the puzzle's own words, no score, not unlisted, buttons Play it again, Change
+  cards, Back to the Game Hall; Play it again keeps both cards; Change cards (menu) asks in the page's own dialog, then
+  the puzzle is held again with both slots empty.
+- **fail**: Armory and Aldor, played on (pass, wounds to the first offered): failed (the game ends on Frodo's death
+  before the judge, so the stock words), with Start again, Change cards, Back to the Game Hall; Start again keeps
+  Armory.
+- **unlisted**: puzzle 08 with its second solution left out of the copy: the support slot says "3 tokens", the hand
+  slot is in the hand's row; Ithilien Trap and Defend It and Hope from the search, Submit, the left-out solution's
+  answers clicked on the page (no Undo button after the first choices): Complete, and the panel says "You found a
+  solution the author did not list."
+- **score**: puzzle 03: eight slots in the hand's row and the site slot in the strip ("Site 2"); the site's search is
+  `set:4 cardtype:SITE sitenumber:2` (the seven site 2s of set 4, Derndingle and Fangorn Forest among them);
+  Derndingle and eight Stout and Sturdy, Submit, then a short line (the troll assigned to Sméagol as the step asks,
+  passes to the first skirmish's resolution) instead of the 362 answers of the published walkthrough: Sméagol's
+  strength with its value, "Best" the same and "New best", titled "Higher is better"; Play it again: the same score,
+  the best kept, no New best; `GET /scenarios` gives the best.
+- **undo**: a copy of puzzle 10 with `undo: on`: Revert is offered, and after the first answers its list has places.
+- **author**: a new puzzle draft with a slot and a pool: the Board tab's Find… opens the card search over the page,
+  Card Type Allies and Gondor chosen, "Use as bound" sends that filter as the slot's bound (on the server's draft);
+  the Scenario tab's Find… sends one as the pool.
+
+Every check runs in both themes at 1366×768 (`--theme`, `--only`, `--verbose`, `--out`; report `report-puzzle/`).
+
 ## The table check
 
 `npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:
