@@ -174,6 +174,9 @@ export function answeringLine(answering: OpponentAnswering): RuleLine {
     return { text: 'Leftovers', title: 'No order answers it: the minions left go to the leftovers character' };
   }
   if (answering.rule === 'sandbox') return { text: 'Sandbox', title: 'No order answers it: its sandbox fallback does' };
+  if (answering.rule === 'eager') {
+    return { text: 'Eager', title: 'No order answers it: its eager fallback takes everything it can' };
+  }
   return { text: 'Nothing', title: 'No step, order or rule answers it: its fallback is all there is' };
 }
 
@@ -188,13 +191,26 @@ export function placeForAnswering(answering: OpponentAnswering | null): number |
 export const FALLBACK_LABELS: Readonly<Record<string, string>> = {
   fail: 'fail: off the script',
   pass: 'pass: does least',
-  bot: 'bot: plays as a bot',
+  bot: 'bot: Gemp’s bot',
   sandbox: 'sandbox: plays minions',
+  eager: 'eager: takes all',
+};
+
+/** What each fallback does, in a sentence (each option's tooltip). */
+export const FALLBACK_TITLES: Readonly<Record<string, string>> = {
+  fail: 'The decision is left to nobody: the game has left its script.',
+  pass: 'It does as little as it can: passes, and the least of every choice.',
+  bot: "Gemp's bot answers it, as in an ordinary game against the bot (it plays weakly).",
+  sandbox: 'It plays the minions it can afford, and assigns those left to the leftovers character.',
+  eager:
+    'It takes every action and response it is offered, and makes every forced choice the plainest way (the first offered, yes, the most allowed).',
 };
 
 /** The fallbacks to choose from (the server's list; before it says, the two the file always had). */
-export function fallbackOptions(opponent: OpponentState | undefined): (readonly [string, string])[] {
-  return (opponent?.fallbacks ?? ['fail', 'pass']).map((name) => [name, FALLBACK_LABELS[name] ?? name] as const);
+export function fallbackOptions(opponent: OpponentState | undefined): (readonly [string, string, string])[] {
+  return (opponent?.fallbacks ?? ['fail', 'pass']).map(
+    (name) => [name, FALLBACK_LABELS[name] ?? name, FALLBACK_TITLES[name] ?? ''] as const,
+  );
 }
 
 /**

@@ -221,7 +221,12 @@ export function rebuild(known: SeatRules): Effect[] {
 
 /** What the rules part is with nothing left in it: taken out. */
 function rulesOrNull(rules: { -readonly [K in keyof Rules]: Rules[K] }): Rules | null {
-  const empty = !rules.oneSided && (rules.freeps ?? []).length === 0 && (rules.shadow ?? []).length === 0;
+  const empty =
+    !rules.oneSided &&
+    (rules.freeps ?? []).length === 0 &&
+    (rules.shadow ?? []).length === 0 &&
+    // (what the person may not do is a rule of its own: kept with nothing else in the rules)
+    rules.forbid === undefined;
   return empty ? null : rules;
 }
 

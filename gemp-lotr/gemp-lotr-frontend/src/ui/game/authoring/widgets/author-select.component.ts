@@ -1,13 +1,14 @@
 import { Component, computed, input, output } from '@angular/core';
 
-/** An option: its value, shown as itself, or [value, what is shown]. */
-export type AuthorOption = string | readonly [value: string, label: string];
+/** An option: its value, shown as itself, or [value, what is shown], or [value, what is shown, its tooltip]. */
+export type AuthorOption =
+  string | readonly [value: string, label: string] | readonly [value: string, label: string, title: string];
 
 /**
  * A native select of the panel's, from a list of options; says the value chosen. A value that isn't one of the
  * options shows the first.
  *
- * DOM contract: `select.gd-author-input` (`aria-label`, `title`) with an `option` per option.
+ * DOM contract: `select.gd-author-input` (`aria-label`, `title`) with an `option` per option (`title` where it has one).
  */
 @Component({
   selector: 'gd-author-select',
@@ -21,7 +22,12 @@ export type AuthorOption = string | readonly [value: string, label: string];
       (change)="changed.emit($any($event.target).value)"
     >
       @for (option of choices(); track option.value) {
-        <option [value]="option.value" [selected]="option.value === value()">{{ option.label }}</option>
+        <option
+          [value]="option.value"
+          [selected]="option.value === value()"
+          [attr.title]="option.title || null"
+          [textContent]="option.label"
+        ></option>
       }
     </select>
   `,
@@ -38,7 +44,9 @@ export class AuthorSelectComponent {
 
   protected readonly choices = computed(() =>
     this.options().map((option) =>
-      typeof option === 'string' ? { value: option, label: option } : { value: option[0], label: option[1] },
+      typeof option === 'string'
+        ? { value: option, label: option, title: '' }
+        : { value: option[0], label: option[1], title: option[2] ?? '' },
     ),
   );
 }

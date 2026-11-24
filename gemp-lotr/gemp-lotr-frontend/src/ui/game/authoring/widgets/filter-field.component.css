@@ -1,0 +1,41 @@
+/* A filter typed as text, and what the server says of it beside it */
+
+:host {
+  display: contents;
+}
+
+.gd-author-filter {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.gd-author-filter .gd-author-input {
+  flex: 1 1 auto;
+  width: 0;
+  min-width: 0;
+}
+
+.gd-author-filter__verdict {
+  flex: 0 0 auto;
+  color: var(--theme-game-author-quiet);
+  font-size: 11px;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.gd-author-filter__verdict[data-tone='good'] {
+  color: var(--theme-game-author-matched);
+}
+
+.gd-author-filter__verdict[data-tone='error'] {
+  color: var(--theme-game-author-tag-mistake);
+}
+
+.gd-author-filter__why {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-tag-mistake);
+  font-size: 11px;
+}

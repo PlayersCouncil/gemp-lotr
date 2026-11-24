@@ -1,0 +1,38 @@
+/* The Board tab's slots: the list, and the line that adds one */
+
+:host {
+  display: block;
+  margin: 8px 0;
+}
+
+.gd-author-slots__add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 4px;
+  margin: 4px 0;
+}
+
+.gd-author-slots__add select.gd-author-input {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 1px 2px;
+}
+
+.gd-author-input.gd-author-slots__id {
+  flex: 0 1 110px;
+}
+
+.gd-author-slots__add .gd-author-button {
+  margin: 0;
+}
+
+.gd-author-slots__problem {
+  flex: 1 1 100%;
+  color: var(--theme-game-author-tag-mistake);
+  font-size: 11px;
+}
+
+gd-author-card-search {
+  flex: 1 1 100%;
+}

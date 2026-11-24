@@ -2,6 +2,7 @@
 // is read back from the server's draft and file, and what a person ending the game is told is seen on the table.
 
 import { closeDraft, newDraft, sleep, ui, until } from './lib.mjs';
+import { changed, reloaded } from './puzzles.mjs';
 
 /** Frodo, three wounds on him, alone against a Goblin Runner the opponent plays and assigns to him. */
 const DEATH = {
@@ -137,6 +138,115 @@ export const checks = {
         problems.push(`outcome.${part} changed: ${JSON.stringify(after?.[part])}`);
     }
     await sleep(200);
+    await closeDraft(seat);
+  },
+
+  /**
+   * Judged at a moment (end of archery, turn 2) with its requirements typed, then scored by a card's strength, lower
+   * being better, with a label, then by a custom value: on the server, in the file, and in the tab after a reload.
+   */
+  async 'scenario-judge-score'({ seat }, problems) {
+    await newDraft(seat, { title: 'Judge check', top: { kind: 'puzzle', outcome: { winMessages: ['Won.'] } } });
+    const page = seat.page;
+    await seat.showTab('scenario');
+    const judging = `${ui.scenario} gd-game-author-scenario-judging`;
+    await page.locator(judging).scrollIntoViewIfNeeded();
+    await changed(
+      seat,
+      'a moment chosen',
+      () => page.locator(`${judging} [data-part="judge-moment"] select`).selectOption('endOf'),
+      (now) => now.draft.outcome?.judge === 'endOf(fellowship)',
+    );
+    await changed(
+      seat,
+      'its phase',
+      () => page.locator(`${judging} [data-part="judge-phase"] select`).selectOption('archery'),
+      (now) => now.draft.outcome?.judge === 'endOf(archery)',
+    );
+    await changed(
+      seat,
+      'its turn',
+      async () => {
+        await page.locator(`${judging} input[data-part="judge-turn"]`).fill('2');
+        await page.locator(`${judging} input[data-part="judge-turn"]`).press('Enter');
+      },
+      (now) => now.draft.outcome?.judge === 'endOf(archery), turn(2)',
+    );
+    let state = await changed(
+      seat,
+      'its requirements',
+      async () => {
+        const win = page.locator(`${judging} textarea[data-part="judge-win"]`);
+        await win.fill('{\n\ttype: canSpot\n\tfilter: alias(frodo)\n}');
+        await win.blur();
+      },
+      (now) => now.puzzle?.judge?.win !== null && now.puzzle?.judge?.win !== undefined,
+    );
+    if (
+      !same(state.draft.outcome?.judge, {
+        at: 'endOf(archery), turn(2)',
+        win: { type: 'canSpot', filter: 'alias(frodo)' },
+      })
+    ) {
+      problems.push(`the judge is ${JSON.stringify(state.draft.outcome?.judge)}`);
+    }
+    if (!same(state.draft.outcome?.winMessages, ['Won.'])) problems.push('the closing message went');
+    await page.locator(`${judging} [data-part="score-value"] select`).selectOption('strength');
+    await sleep(300);
+    if ((await seat.state()).draft.outcome?.score !== undefined) problems.push("a card's value with no card was sent");
+    await changed(
+      seat,
+      'scored by its card',
+      () => page.locator(`${judging} [data-part="score-of"] select`).selectOption('frodo'),
+      (now) => now.draft.outcome?.score?.value === 'strength:frodo',
+    );
+    await changed(
+      seat,
+      'lower is better',
+      () => page.locator(`${judging} [data-part="score-better"] select`).selectOption('lower'),
+      (now) => now.draft.outcome?.score?.better === 'lower',
+    );
+    state = await changed(
+      seat,
+      'its label',
+      async () => {
+        await page.locator(`${judging} input[data-part="score-label"]`).fill("Frodo's strength");
+        await page.locator(`${judging} input[data-part="score-label"]`).press('Enter');
+      },
+      (now) => now.draft.outcome?.score?.label === "Frodo's strength",
+    );
+    if (!same(state.draft.outcome.score, { value: 'strength:frodo', better: 'lower', label: "Frodo's strength" })) {
+      problems.push(`the score is ${JSON.stringify(state.draft.outcome.score)}`);
+    }
+    const text = await source(seat);
+    if (!/at: endOf\(archery\), turn\(2\)/.test(text) || !/value: strength:frodo/.test(text)) {
+      problems.push("the file's text lacks the judge or the score");
+    }
+    await seat.shot('judged');
+    await reloaded(seat, 'scenario');
+    if ((await page.locator(`${judging} [data-part="judge-phase"] select`).inputValue()) !== 'archery') {
+      problems.push('the judge is not shown after a reload');
+    }
+    if ((await page.locator(`${judging} [data-part="score-of"] select`).inputValue()) !== 'frodo') {
+      problems.push('the score is not shown after a reload');
+    }
+    await page.locator(`${judging} [data-part="score-value"] select`).selectOption('custom');
+    state = await changed(
+      seat,
+      'a custom value',
+      async () => {
+        const value = page.locator(`${judging} textarea[data-part="score-text"]`);
+        await value.fill('{\n\ttype: forEachWound\n\tfilter: companion\n}');
+        await value.blur();
+      },
+      (now) => now.puzzle?.score?.value === null,
+    );
+    if (!same(state.draft.outcome.score?.value, { type: 'forEachWound', filter: 'companion' })) {
+      problems.push(`the custom value is ${JSON.stringify(state.draft.outcome.score?.value)}`);
+    }
+    if (state.draft.outcome.judge?.at !== 'endOf(archery), turn(2)')
+      problems.push('the judge went with the custom value');
+    await seat.shot('custom');
     await closeDraft(seat);
   },
 };

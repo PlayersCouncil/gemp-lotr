@@ -1,0 +1,44 @@
+/* A puzzle's slots, a line each with the card picked for it */
+
+:host {
+  display: block;
+}
+
+.gd-author-picks {
+  margin: 2px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.gd-author-picks__slot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  padding: 1px 0;
+  font-size: 12px;
+}
+
+.gd-author-picks__id {
+  flex: 0 0 auto;
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+  cursor: help;
+}
+
+.gd-author-picks__card {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.gd-author-picks__card[data-empty] {
+  color: var(--theme-game-author-quiet);
+  cursor: default;
+}
+
+gd-author-card-search {
+  flex: 1 1 100%;
+}

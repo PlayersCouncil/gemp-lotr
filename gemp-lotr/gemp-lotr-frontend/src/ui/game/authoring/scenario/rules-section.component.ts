@@ -23,6 +23,7 @@ import { AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorSendDirective } from '../widgets/author-send.directive';
 import { sendTop } from './top';
+import { PuzzleRulesComponent } from './puzzle-rules.component';
 
 const SEATS: readonly (readonly [DraftSeat, string])[] = [
   ['freeps', 'Free Peoples'],
@@ -35,18 +36,25 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
  * of two sides: the markers no longer keep together, and leftovers to a character the opponent then cannot give them
  * to go, after the page's own question; and then whether
  * the Shadow seat's marker keeps level with the fellowship's), and per seat its hand size, the phases it skips, The One Ring's text switched off, and its minions'
- * roaming penalty. Each change sends the whole of `rules` (taken out when nothing is left in it); a seat's other
+ * roaming penalty; what the player may not do and a puzzle's pool (puzzle-rules.component). Each change sends the whole of `rules` (taken out when nothing is left in it); a seat's other
  * effects are kept as they are, and counted.
  *
  * DOM contract: `section.gd-author-scenario__section[data-section=rules]` with `gd-author-select[data-part=format]`,
- * `gd-author-check[data-part=one-sided]`, `gd-author-check[data-part=markers]`
+ * `gd-author-check[data-part=one-sided]`, `gd-author-check[data-part=markers]`,
+ * `gd-game-author-scenario-puzzle-rules` (what the player may not do; a puzzle's pool)
  * and a `.gd-author-scenario__seat[data-seat]` per seat (`.gd-author-scenario__seathead`, `input[data-part]` hand,
  * roaming; `.gd-author-scenario__ticks[data-part=skip]` with a `gd-author-check[data-phase]` per phase,
  * `gd-author-check[data-part=ring]`, and `.gd-author-note[data-part=others]` when it has other effects).
  */
 @Component({
   selector: 'gd-game-author-scenario-rules',
-  imports: [AuthorCheckComponent, AuthorFieldComponent, AuthorSelectComponent, AuthorSendDirective],
+  imports: [
+    AuthorCheckComponent,
+    AuthorFieldComponent,
+    AuthorSelectComponent,
+    AuthorSendDirective,
+    PuzzleRulesComponent,
+  ],
   template: `
     <section class="gd-author-scenario__section" data-section="rules">
       <h3 class="gd-author-scenario__heading">Rules</h3>
@@ -78,6 +86,7 @@ const SEATS: readonly (readonly [DraftSeat, string])[] = [
           (changed)="markers($event)"
         />
       </div>
+      <gd-game-author-scenario-puzzle-rules [state]="state()" />
       @for (seat of seats(); track seat.seat) {
         <div class="gd-author-scenario__seat" [attr.data-seat]="seat.seat">
           <div class="gd-author-scenario__seathead">{{ seat.name }}</div>

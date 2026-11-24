@@ -6,6 +6,7 @@ import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { CardHoverDirective } from '../widgets/card-hover.directive';
 import { CardSearchComponent } from '../widgets/card-search.component';
 import { BoardRenameComponent } from './board-rename.component';
+import { BoardModifiersComponent } from './board-modifiers.component';
 
 /** An option of a select: its value, and what it says. */
 type Option = readonly [value: string, label: string];
@@ -14,19 +15,26 @@ type Option = readonly [value: string, label: string];
  * A card of the Board tab's lists: its name in the scenario (the card shown large under the mouse; a click opens its
  * information), its name, whether it is new or to be taken out, ✎ to rename it and Change to put another card in its
  * place (at once); then what can be gathered for it: Keep it (one to be taken out), ↑ ↓ ⤒ in a hand or pile, a move,
- * wounds − +, +token, put on another card, and × (not added after all, or taken out). To the setup of a game that
+ * wounds − +, +token, its modifiers and mod… (board-modifiers), put on
+ * another card, and × (not added after all, or taken out). To the setup of a game that
  * plays its own opening, only a deck's order and a move into a deck are offered.
  *
  * DOM contract: `gd-author-board-card` holding `.gd-author-board-card` (`data-alias`, `data-changed`, `data-added`,
  * `data-removing`) with `.gd-author-board-card__name` (`span.gd-author-board-card__alias.cardHint[value]`, the name,
  * `.gd-author-board-card__tag`, `button[data-action]`: rename, change; or `gd-author-board-rename`, or
  * `gd-author-card-search`), then `.gd-author-board-card__controls` (`button[data-action]`: keep, up, down, top, heal,
- * wound, token, drop; `.gd-author-board-card__count`; `select[data-control]`: move, put).
+ * wound, token, drop; `.gd-author-board-card__count`; `select[data-control]`: move, put; `gd-author-board-modifiers`).
  */
 @Component({
   selector: 'gd-author-board-card',
   styleUrl: './board-card.component.css',
-  imports: [AuthorButtonDirective, BoardRenameComponent, CardHoverDirective, CardSearchComponent],
+  imports: [
+    AuthorButtonDirective,
+    BoardModifiersComponent,
+    BoardRenameComponent,
+    CardHoverDirective,
+    CardSearchComponent,
+  ],
   template: `
     @let card = entry().card;
     <div
@@ -165,6 +173,7 @@ type Option = readonly [value: string, label: string];
               +token{{ card.tokens > 0 ? ' (' + card.tokens + ')' : '' }}
             </button>
           }
+          <gd-author-board-modifiers [card]="card" />
           @if (!changes.deckOnly() && hosts().length > 1) {
             <select
               class="gd-author-input"

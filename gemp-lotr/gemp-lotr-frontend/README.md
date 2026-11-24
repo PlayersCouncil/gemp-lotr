@@ -341,6 +341,15 @@ and replays (G4). The hall opens games on it (`hallUi.js`), and the game history
   fresh game (`sessionStorage["gemp-author-keep"]`). The When composer (`step/when-pickers.component.ts`: seat, the role in a two-sided
   draft, kind, what is asked, phase, turn) works on a `WhenHost` (`step/when-host.ts`): the Step tab's form
   (StepEditor) or an opponent's order (`opponent/order-when-host.ts`, sent with Apply).
+  What puzzles and sandboxes brought (the state's `puzzle`, `kinds`, `sandboxTools`, `modify`; models in
+  `core/game/authoring/puzzle-*.ts` and `board-modifiers.ts`): the Scenario tab's kind with a sandbox's tools,
+  take-backs, the judge and the score in "How it ends" (`scenario/judging.component.ts`), what is forbidden and the
+  pool in "Rules", and the Solutions section after "How it ends" (record, play, use, rename, delete; Check's verdict
+  on each; the recording also said above the tabs); the Board tab's modifiers on each card (`board/board-modifiers`,
+  gathered as `modify(...)` / `unmodify(...)`) and a puzzle's slots (`board/board-slot*`); the Opponent tab's eager
+  and bot fallbacks. A filter (the pool, a slot's bound) is typed with the server's count beside it
+  (`widgets/filter-field.component.ts`); `Authoring.offerSlotBound(slot, filter)` hands a bound to its slot's form
+  from outside the panel.
 - **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
   layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
   status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's

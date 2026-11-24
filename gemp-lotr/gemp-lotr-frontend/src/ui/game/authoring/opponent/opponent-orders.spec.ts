@@ -479,4 +479,31 @@ describe('OpponentTabComponent: standing orders and rules', () => {
     await click('[data-new] [data-author=answer-rest]');
     expect(find<HTMLInputElement>('[data-new] [data-part=answer]').value).toBe('assign(ringBearer: rest)');
   });
+
+  it('offers the eager and bot fallbacks, each saying what it does, and sets them by the opponent patch', async () => {
+    await open(withOpponent({ fallbacks: ['fail', 'pass', 'bot', 'sandbox', 'eager'] }));
+    const fallback = 'section[data-part=how] gd-author-select[data-part=fallback] select';
+    const options = [...el.querySelectorAll<HTMLOptionElement>(`${fallback} option`)];
+    expect(options.map((one) => [one.value, one.textContent?.trim()])).toEqual([
+      ['fail', 'fail: off the script'],
+      ['pass', 'pass: does least'],
+      ['bot', 'bot: Gemp’s bot'],
+      ['sandbox', 'sandbox: plays minions'],
+      ['eager', 'eager: takes all'],
+    ]);
+    expect(options.every((one) => (one.getAttribute('title') ?? '').length > 20)).toBe(true);
+    await choose(fallback, 'eager');
+    expect(patch()).toEqual({ opponent: { set: { fallback: 'eager' }, unset: ['plays'] } });
+    await choose(fallback, 'bot');
+    expect(patch()).toEqual({ opponent: { set: { fallback: 'bot' }, unset: ['plays'] } });
+    await authoring.setState(
+      withOpponent({
+        fallback: 'eager',
+        fallbacks: ['fail', 'pass', 'bot', 'sandbox', 'eager'],
+        answering: { order: null, id: null, answer: null, gives: null, rule: 'eager', when: 'shadow, action' },
+      }),
+    );
+    await render();
+    expect(find<HTMLSelectElement>(fallback).value).toBe('eager');
+  });
 });

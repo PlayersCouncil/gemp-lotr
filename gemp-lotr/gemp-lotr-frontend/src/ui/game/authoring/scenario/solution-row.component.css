@@ -1,0 +1,69 @@
+/* One of a puzzle's solutions: its head (name, buttons), what it is, what the runner said, and what it is made of */
+
+.gd-author-solution {
+  padding: 3px 0 4px;
+  border-bottom: 1px solid var(--theme-game-author-row-rule);
+  font-size: 12px;
+}
+
+.gd-author-solution[data-playing] {
+  padding-left: 4px;
+  border-left: 3px solid var(--theme-game-author-current-mark);
+}
+
+.gd-author-solution__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+}
+
+.gd-author-solution__name {
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+}
+
+.gd-author-solution__head .gd-author-input {
+  flex: 0 1 160px;
+}
+
+.gd-author-solution__tag {
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--theme-game-author-tag-bg);
+  color: var(--theme-game-author-tag-text);
+  font-size: 10px;
+}
+
+.gd-author-solution__actions {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.gd-author-solution__actions .gd-author-button {
+  margin: 0;
+  padding: 0 5px;
+}
+
+.gd-author-solution__picks,
+.gd-author-solution__answers {
+  overflow: hidden;
+  color: var(--theme-game-author-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-author-solution__verdict {
+  color: var(--theme-game-author-tag-mistake);
+}
+
+.gd-author-solution[data-solved='yes'] .gd-author-solution__verdict {
+  color: var(--theme-game-author-matched);
+}
+
+.gd-author-solution__details textarea.gd-author-input {
+  width: 100%;
+  margin: 2px 0;
+  resize: vertical;
+}

@@ -13,6 +13,7 @@ import {
   OpponentOrder,
   OpponentState,
 } from '../core/game/authoring/authoring-state';
+import { ModifyVocabulary, PuzzleSlot, PuzzleState } from '../core/game/authoring/puzzle-state';
 
 /** Steps 1 (the player's, in turn 1's fellowship), 2 (the opponent's, shadow) and 3 (a block with two steps). */
 export const STEPS: DraftStep[] = [
@@ -236,3 +237,82 @@ export function opponentOrder(index: number, extra: Partial<OpponentOrder> = {})
     ...extra,
   };
 }
+
+/** A puzzle's slot as the state lists it (puzzle 10's Rohan condition, Parapet in it). */
+export function puzzleSlot(id: string, extra: Partial<PuzzleSlot> = {}): PuzzleSlot {
+  return {
+    id,
+    label: 'a Rohan condition',
+    zone: 'support',
+    seat: 'human',
+    on: null,
+    position: null,
+    bound: 'set:1-6 culture:ROHAN cardtype:CONDITION',
+    pool: 'set:1-6',
+    filter: 'culture:ROHAN cardtype:CONDITION',
+    overlap: [],
+    comes: { tokens: 0, wounds: 0 },
+    pick: '5_87',
+    pickName: 'Parapet',
+    ...extra,
+  };
+}
+
+/** `state.puzzle` as describe gives it: nothing said (no judge, score, slots or solutions), the server's choices. */
+export function puzzleState(extra: Partial<PuzzleState> = {}): PuzzleState {
+  return {
+    undo: true,
+    undoSaid: null,
+    judge: null,
+    moments: {
+      moments: ['startOf', 'endOf', 'endOfTurn', 'skirmishResolution'],
+      phases: ['fellowship', 'shadow', 'maneuver', 'archery', 'assignment', 'skirmish', 'regroup'],
+    },
+    score: null,
+    scoreValues: {
+      totals: ['twilight', 'burdens', 'threats', 'site', 'turn', 'hand'],
+      perCard: ['strength', 'vitality', 'resistance', 'wounds', 'tokens', 'cost', 'playCost'],
+    },
+    forbid: [],
+    forbidChoices: ['shuffle', 'reveal'],
+    pool: null,
+    slots: [],
+    slotZones: [
+      'characters',
+      'support',
+      'minions',
+      'hand',
+      'deck',
+      'discard',
+      'deadPile',
+      'attached',
+      'stacked',
+      'site',
+    ],
+    solutions: [],
+    picks: {},
+    playingWith: null,
+    recording: null,
+    verdict: null,
+    ...extra,
+  };
+}
+
+/** `state.modify`, the Modify… vocabulary: three stats and three keywords (one of each kind of number). */
+export const MODIFY_WORDS: ModifyVocabulary = {
+  words: [
+    { what: 'strength', label: 'Strength', kind: 'stat', number: 'signed', types: ['COMPANION', 'ALLY', 'MINION'] },
+    { what: 'resistance', label: 'Resistance', kind: 'stat', number: 'signed', types: ['COMPANION'] },
+    {
+      what: 'cost',
+      label: 'Twilight cost',
+      kind: 'stat',
+      number: 'signed',
+      types: ['COMPANION', 'ALLY', 'MINION', 'POSSESSION', 'EVENT', 'CONDITION'],
+    },
+    { what: 'damage', label: 'Damage', kind: 'keyword', number: 'positive', types: ['COMPANION', 'ALLY', 'MINION'] },
+    { what: 'archer', label: 'Archer', kind: 'keyword', number: 'none', types: ['COMPANION', 'ALLY', 'MINION'] },
+    { what: 'fierce', label: 'Fierce', kind: 'keyword', number: 'none', types: ['MINION'] },
+  ],
+  until: ['phase', 'turn', 'removed'],
+};

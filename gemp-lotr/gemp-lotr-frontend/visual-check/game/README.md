@@ -638,6 +638,26 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   "+ refuses 2: pass", written with its number.
 - **opponent-let-go**: "it plays by its orders" chosen while the opponent's decision is held for the author: the
   opponent answers by itself at once, in the same game.
+- **scenario-kind-undo** (`author/scenario.mjs`): the kind made a sandbox, a tool unticked (the file's
+  `options.tools` lists the rest) and ticked again (every tool: the field left out), take-backs off (`options.undo`);
+  on the server, in the file, and in the tab after a reload.
+- **scenario-judge-score** (`author/endings.mjs`): judged at the end of archery of turn 2 with requirements typed as
+  HJSON, scored by Frodo's strength (nothing sent until the card is chosen), lower being better, with a label, then
+  by a custom value as HJSON (the outcome sent as text); on the server, in the file, after a reload.
+- **opponent-eager-bot** (`author/opponent.mjs`): the eager and bot fallbacks offered, each option's tooltip saying
+  what it does; chosen in the Opponent tab, on the server, in the file, after a reload.
+- **board-modifiers** (`author/board.mjs`): mod… on Frodo (Strength +2 for the turn) to the board as it stands: in
+  force at once and carried by a step; Archer to the setup: `setup.modifiers` in the file, its chip after a reload,
+  and its × taking it out again.
+- **puzzle-rules** (`author/puzzles.mjs`, Decipher's puzzle 10 as the draft): "no revealing" ticked (`rules.forbid`)
+  and a pool typed, with its count beside it; a pool the server refuses: its words beside the field, what was typed
+  kept, the draft as it was; after a reload.
+- **puzzle-slots**: a slot's label, bound (its count) and tokens changed in the Board tab; a slot added with the
+  solution's card for it found by name, the file's text with all of it, the same after a reload; the slot taken out
+  of the slots and the solution after the page's question.
+- **puzzle-solutions**: a solution recorded with the game's cards (the panel says it is recording; Stop), the
+  published one played, Check's verdict on each in the list, one renamed, its answers written, its cards used (marked
+  after a reload) and deleted after the page's question.
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up

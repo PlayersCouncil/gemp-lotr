@@ -1,0 +1,68 @@
+/* One of a puzzle's slots in the Board tab: its head, then a row per part */
+
+:host {
+  display: block;
+}
+
+.gd-author-slot {
+  padding: 3px 0 5px;
+  border-bottom: 1px solid var(--theme-game-author-row-rule);
+}
+
+.gd-author-slot__head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.gd-author-slot__id {
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
+
+.gd-author-slot__pick {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  color: var(--theme-game-author-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+}
+
+.gd-author-slot__pick[data-empty] {
+  color: var(--theme-game-author-quiet);
+  cursor: default;
+}
+
+.gd-author-slot__head .gd-author-button {
+  margin: 0;
+  padding: 0 5px;
+}
+
+.gd-author-slot__where {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 4px;
+  min-width: 0;
+}
+
+.gd-author-slot__where select.gd-author-input {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 1px 2px;
+}
+
+.gd-author-input.gd-author-slot__number {
+  flex: 0 0 44px;
+  width: 44px;
+}
+
+.gd-author-slot__where .gd-author-note {
+  margin: 0;
+}

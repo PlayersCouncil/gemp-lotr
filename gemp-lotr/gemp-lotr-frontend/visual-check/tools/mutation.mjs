@@ -127,6 +127,10 @@ export const TARGETS = [
   'src/core/game/table-edit/card-search.ts',
   'src/core/game/table-edit/sandbox-backend.ts',
   'src/core/game/table-edit/table-edit.service.ts',
+  'src/core/game/authoring/puzzle-settings.ts',
+  'src/core/game/authoring/puzzle-slots.ts',
+  'src/core/game/authoring/puzzle-solutions.ts',
+  'src/core/game/authoring/board-modifiers.ts',
 ];
 
 /**
