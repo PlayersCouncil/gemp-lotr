@@ -188,8 +188,9 @@ export class TableEdit implements DecisionGate {
         error: (error: unknown) => {
           this.busy.set(false);
           this.refuse(error, at);
-          // (a list refused part way was taken back whole: the page is told so, and reads the game again)
-          this.moved();
+          // (a list refused part way was taken back whole: the page is told so by the undo notices and reads the game
+          // again then; asking the old channel for the game's news first would be refused as if by another window)
+          this.undo.refresh();
           resolve(false);
         },
       });
