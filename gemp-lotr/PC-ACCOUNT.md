@@ -235,6 +235,20 @@ why one address alone cannot reach it. A request's address is the one nginx saw:
 - `Secure` on the cookie goes by `X-Forwarded-Proto`, which the new nginx layout sends
   (`snippets/proxy.conf`) and the old production `nginx.conf` did not.
 
+## How It Was Checked
+
+- **Unit tests** beside each part. The server's run against `FakeArgonauth`, which answers Argonauth's wire in
+  the test's own process, with a switch for each way a real one could fail or be imitated.
+- **An independent review** (2026-11-23) by an instance that had not seen the code written; what it found is in
+  the commit "what an independent review found, fixed".
+- **`npm run check:account`**: the client in a real browser against a stand-in for the server.
+- **A whole run, once, by hand** (2026-11-23): this server in `optional` mode on a real MariaDB with
+  `database_script.sql`, `FakeArgonauth` with its two browser pages, and the built client driven in Chrome
+  through signing in, creating, linking, entering, both log-outs, connecting, an alias unlinked meanwhile, and a
+  second tab. The same server in `test` mode: only `session` and `logout` answer, registration works. That
+  harness is not in the repository (it needs a database in the build).
+- **Not yet:** anything against the real Argonauth.
+
 ## Later
 
 - **Turning a password off.** With resets gone, nothing changes a Gemp password. One that has leaked or been
