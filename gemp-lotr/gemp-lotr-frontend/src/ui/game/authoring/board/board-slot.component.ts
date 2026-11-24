@@ -1,9 +1,19 @@
-import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  input,
+  signal,
+  untracked,
+} from '@angular/core';
 import { DraftState } from '../../../../core/game/authoring/authoring-state';
 import { Authoring } from '../../../../core/game/authoring/authoring.service';
 import { BoardChanges } from '../../../../core/game/authoring/board-changes.service';
 import {
-  boundQuery,
   onACard,
   removeSlotPatch,
   SLOT_ZONE_LABELS,
@@ -34,7 +44,8 @@ import { FindBoundComponent } from './find-bound.component';
  * the game in hand has in it; × takes it out (from every solution too, after the page's own question).
  *
  * A bound handed to the panel from outside (Authoring.offerSlotBound: the table's search window) fills the Bound
- * field and is sent, as if typed there.
+ * field and is sent, as if typed there. A slot opened on the table (or its Slot… there: AuthoringUi.showSlot) has its
+ * form scrolled to, the focus in its label.
  *
  * DOM contract: `.gd-author-slot` (`data-slot`, `data-zone`) holding `.gd-author-slot__head`
  * (`.gd-author-slot__id`, `button[data-action]` rename, remove; or `gd-author-board-rename`;
@@ -155,8 +166,7 @@ import { FindBoundComponent } from './find-bound.component';
           hint="A deck builder filter: set:4 cardtype:SITE, culture:ROHAN cardtype:ALLY, side:FREE_PEOPLE…"
           placeholder="anything the pool allows"
           [value]="offered() ?? row.slot.filter ?? ''"
-          [count]="query().filter"
-          [exact]="query().exact"
+          [pool]="state().puzzle?.pool ?? ''"
           [refused]="refused()"
           (sent)="bound($event)"
         />
@@ -222,17 +232,26 @@ export class BoardSlotComponent {
     if (on && !cards.includes(on)) cards.push(on);
     return [['', 'which?'], ...cards.map((alias): AuthorOption => [alias, alias])];
   });
-  protected readonly query = computed(() => {
-    const row = this.slot();
-    const offered = this.offered();
-    return boundQuery(
-      offered === null ? row.slot : { ...row.slot, filter: offered },
-      row.info,
-      this.state().puzzle?.pool ?? null,
-    );
-  });
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly injector = inject(Injector);
 
   constructor() {
+    // (a slot opened on the table, or its Slot… there: its form is shown, its label to be typed)
+    effect(() => {
+      if (this.authoring.ui().showSlot !== this.slot().id) return;
+      untracked(() => {
+        this.authoring.remember({ showSlot: null });
+        // (once the form is drawn: its fields are not bound yet when this first runs)
+        afterNextRender(
+          () => {
+            (this.host as Partial<HTMLElement>).scrollIntoView?.({ block: 'center' });
+            this.host.querySelector<HTMLInputElement>('input[data-part=slot-label]')?.focus();
+          },
+          { injector: this.injector },
+        );
+      });
+    });
     // (a bound handed from outside, for this slot: filled in and sent)
     effect(() => {
       const offer = this.authoring.slotBoundOffer();

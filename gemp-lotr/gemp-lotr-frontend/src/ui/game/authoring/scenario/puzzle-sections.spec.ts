@@ -17,6 +17,7 @@ import { draftState, puzzleSlot, puzzleState, result } from '../../../../testing
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { AuthoringNoticesComponent } from '../authoring-notices.component';
 import { SEARCH_MS } from '../widgets/card-search.component';
+import { solutionVerdicts } from '../../../../core/game/authoring/puzzle-solutions';
 import { AboutSectionComponent } from './about-section.component';
 import { JudgingComponent } from './judging.component';
 import { PlaysSectionComponent } from './plays-section.component';
@@ -24,7 +25,7 @@ import { PuzzleRulesComponent } from './puzzle-rules.component';
 import { SolutionsSectionComponent } from './solutions-section.component';
 
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
-const SEARCH = '/gemp-lotr-server/scenarios/search';
+const BOUND = '/gemp-lotr-server/scenarios/author/bound';
 
 const WIN = [{ type: 'canSpot', filter: 'alias(frodo)' }];
 
@@ -207,11 +208,14 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
 
   /** Answers the searches asked (the filter field's count), each with this total. */
   async function searched(total: number): Promise<string[]> {
-    const requests = backend.match((r) => r.url === SEARCH);
-    for (const request of requests) request.flush(JSON.stringify({ total, start: 0, cards: [] }));
+    const requests = backend.match((r) => r.url === BOUND);
+    for (const request of requests) request.flush(JSON.stringify({ ok: true, why: null, total }));
     await settle();
     await render();
-    return requests.map((request: TestRequest) => request.request.params.get('filter') ?? '');
+    // (a slot's bound is counted with the pool, each searched by itself: `filter | pool`)
+    return requests.map((request: TestRequest) =>
+      [request.request.params.get('filter') ?? '', request.request.params.get('pool')].filter(Boolean).join(' | '),
+    );
   }
 
   /* ---------------------------------------------------------------- kind and tools (es 4) */
@@ -252,6 +256,36 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
     expect(patch()).toEqual({ top: { options: null } });
     await show(AboutSectionComponent, draftState({ sandboxTools: tools }));
     expect(el.querySelector('[data-part=tools]')).toBeNull();
+  });
+
+  it("offers who plays a sandbox's other seat from the server's choices, sending the whole options", async () => {
+    const state = draftState({
+      sandboxTools: { names: ['add'], notBuilt: [], said: false, allowed: ['add'] },
+      sandboxOtherSeat: { choices: ['script', 'bot', 'person'], said: false, value: 'script' },
+      draft: { id: 'test', kind: 'sandbox', steps: [], options: { autoPass: 'fellowship' } },
+    });
+    await show(AboutSectionComponent, state);
+    expect(all('gd-author-select[data-part=other-seat] option').map((one) => one.textContent)).toEqual([
+      'script',
+      'bot',
+      'you',
+    ]);
+    expect(find('[data-part=seat-unsaid]').textContent?.trim()).toBe('(script)');
+    await choose('gd-author-select[data-part=other-seat] select', 'person');
+    expect(patch()).toEqual({ top: { options: { autoPass: 'fellowship', otherSeat: 'person' } } });
+    const said = draftState({
+      ...state,
+      sandboxOtherSeat: { choices: ['script', 'person'], said: true, value: 'person' },
+      draft: { ...state.draft, options: { otherSeat: 'person' } },
+    });
+    await show(AboutSectionComponent, said);
+    expect(find<HTMLSelectElement>('gd-author-select[data-part=other-seat] select').value).toBe('person');
+    expect(el.querySelector('[data-part=seat-unsaid]')).toBeNull();
+    await choose('gd-author-select[data-part=other-seat] select', 'script');
+    expect(patch()).toEqual({ top: { options: null } });
+    // (only a sandbox's)
+    await show(AboutSectionComponent, draftState({ ...said, draft: { ...said.draft, kind: 'tutorial' } }));
+    expect(el.querySelector('[data-part=other-seat]')).toBeNull();
   });
 
   /* ---------------------------------------------------------------- take-backs (P6) */
@@ -473,7 +507,7 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
   /* ---------------------------------------------------------------- solutions (P4) */
 
   it('lists the solutions: the one in play, its picks by name, its answers, what the last Check said', async () => {
-    authoring.report.set(' Solution published: solved (judged at endOf(archery): won)\n');
+    authoring.solutionVerdicts.set(solutionVerdicts({ published: null }));
     await show(SolutionsSectionComponent, puzzle());
     const row = find('.gd-author-solution[data-name=published]');
     expect(row.hasAttribute('data-playing')).toBe(true);
@@ -483,7 +517,7 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
       'condition: Parapet, ally: Aldor, Soldier of Edoras',
     );
     expect(find('.gd-author-solution__answers').textContent?.trim()).toBe('2 answers');
-    expect(find('.gd-author-solution__verdict').textContent?.trim()).toBe('solved (judged at endOf(archery): won)');
+    expect(find('.gd-author-solution__verdict').textContent?.trim()).toBe('solved');
     expect(find<HTMLButtonElement>('[data-author=use]').disabled).toBe(true);
     expect(find<HTMLInputElement>('[data-part=solution-name]').value).toBe('solution2');
   });

@@ -150,6 +150,8 @@ export interface DraftOptions {
   undo?: 'on' | 'off';
   /** A sandbox's tools: "add, move", or false for none (absent: every tool). */
   tools?: string | false;
+  /** Who plays a sandbox's other seat: bot, person (absent: the script). */
+  otherSeat?: string;
 }
 
 /** Where the story starts (setup.startAt), each part left out at its default. */
@@ -398,6 +400,9 @@ export interface BoardCard {
   on: string | null;
   /** What has been put on it by hand and is still in force (em: a server before it sends none). */
   modifiers?: readonly CardModifier[];
+  /** Its seat's Ring-bearer, its seat's One Ring (ef-notes.md 6; a server before it sends neither). */
+  ringBearer?: boolean;
+  ring?: boolean;
 }
 
 export interface BoardSite {
@@ -539,6 +544,11 @@ export interface DraftState {
   leftOut: readonly LeftOutPart[];
   /** "Write down what I do". */
   recording: boolean;
+  /**
+   * Whether the author has said "Write down what I do" (else it follows the draft's kind: off in a puzzle, on in any
+   * other; ef-notes.md 2). Optional: a server before it sends none.
+   */
+  recordingSaid?: boolean;
   /** "Ask me for the opponent". */
   askOpponent: boolean;
   /** The forks' choices taken when the script plays itself. */
@@ -593,6 +603,15 @@ export interface DraftState {
   modify?: ModifyVocabulary;
   /** A puzzle's parts. */
   puzzle?: PuzzleState;
+  /** Who plays a sandbox's other seat (options.otherSeat, ef-notes.md A). */
+  sandboxOtherSeat?: SandboxOtherSeat;
+}
+
+/** `state.sandboxOtherSeat`: the choices, whether the file says one, and the one in force. */
+export interface SandboxOtherSeat {
+  choices: readonly string[];
+  said: boolean;
+  value: string;
 }
 
 /** options.autoPass as the server reads it (describeAutoPass). */
@@ -622,6 +641,8 @@ export interface SaveReport {
   report: string | null;
   /** A plain save that moved the file to where its kind is kept. */
   movedFrom?: string;
+  /** What the runner said of each of a puzzle's solutions: null, it solves it; else why not (ef-notes.md 3). */
+  solutions?: Readonly<Record<string, string | null>>;
 }
 
 /**
@@ -657,6 +678,8 @@ export interface CheckReport {
   passed: boolean;
   report: string | null;
   warnings: readonly string[];
+  /** What the runner said of each of a puzzle's solutions: null, it solves it; else why not (ef-notes.md 3). */
+  solutions?: Readonly<Record<string, string | null>>;
 }
 
 export interface OffScriptReport {

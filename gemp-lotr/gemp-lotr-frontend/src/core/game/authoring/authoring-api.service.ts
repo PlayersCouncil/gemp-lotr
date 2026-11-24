@@ -200,6 +200,14 @@ export class AuthoringApi {
   search(filter: string, count = 1): Observable<CardSearchAnswer> {
     return this.http.getJson<CardSearchAnswer>('/scenarios/search', { filter, start: 0, count }, OWN);
   }
+
+  /**
+   * Whether a filter is a bound the server takes (as strictly as saving a slot), and how many cards it finds; with
+   * `pool`, the cards both find, each searched with by itself (ef-notes.md 4: `GET /scenarios/author/bound`).
+   */
+  bound(filter: string, pool: string | null = null): Observable<unknown> {
+    return this.get('bound', { filter, pool: pool !== null && pool.trim() !== '' ? pool : null });
+  }
 }
 
 /** What the authoring tool does with a puzzle's solution. */

@@ -22,6 +22,8 @@ describe("the authoring panel's remembered view", () => {
         sitesApart: null,
         newFights: [],
         carried: null,
+        editTable: false,
+        showSlot: null,
       });
     }
   });
@@ -45,6 +47,8 @@ describe("the authoring panel's remembered view", () => {
         sitesApart: true,
         newFights: ['frodo', 3],
         carried: 'It went wrong.',
+        editTable: true,
+        showSlot: 'slot1',
       }),
     ).toEqual({
       tab: 'board',
@@ -62,6 +66,8 @@ describe("the authoring panel's remembered view", () => {
       sitesApart: true,
       newFights: ['frodo'],
       carried: 'It went wrong.',
+      editTable: true,
+      showSlot: 'slot1',
     });
     expect(recallUi({ tab: 'nowhere', selected: Number.NaN, where: 'there', newFights: 'x' })).toMatchObject({
       tab: 'timeline',

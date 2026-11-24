@@ -69,13 +69,17 @@ export class TableEdit implements DecisionGate {
   );
 
   /** Who may change the table: nobody, a puzzle's solver, a sandbox's player (an author: later). */
-  readonly level = computed<EditLevel>(() => this.info()?.level ?? 'none');
+  readonly level = computed<EditLevel>(() => this.claimant()?.level ?? this.info()?.level ?? 'none');
   /** The backend of the level, if the page has one. */
-  private readonly backend = computed(() => this.backends.find((backend) => backend.level === this.level()) ?? null);
-  readonly mode = computed<EditMode>(() =>
-    this.level() === 'none' ? 'play' : (this.said()?.mode ?? this.info()?.mode ?? 'play'),
+  private readonly backend = computed(
+    () => this.claimant() ?? this.backends.find((backend) => backend.level === this.level()) ?? null,
   );
-  readonly tools = computed<readonly EditTool[]>(() => this.said()?.tools ?? this.info()?.tools ?? []);
+  readonly mode = computed<EditMode>(() =>
+    this.level() === 'none' ? 'play' : (this.claimed()?.mode ?? this.said()?.mode ?? this.info()?.mode ?? 'play'),
+  );
+  readonly tools = computed<readonly EditTool[]>(
+    () => this.claimed()?.tools ?? this.said()?.tools ?? this.info()?.tools ?? [],
+  );
   readonly canStop = computed(
     () => this.level() !== 'none' && !this.over() && (this.said()?.canStop ?? this.info()?.canStop ?? false),
   );
@@ -93,6 +97,9 @@ export class TableEdit implements DecisionGate {
 
   constructor() {
     inject(DecisionGates).add(this);
+    // (and while the table is edited, the waiting decision is not shown at all: an author's Edit table, which the
+    // scenario's info does not say)
+    inject(DecisionGates).hide(this.editing);
 
     // The scenario has said it again: its info is the truth from now on
     effect(() => {
@@ -107,6 +114,12 @@ export class TableEdit implements DecisionGate {
       untracked(() => {
         if (editing) this.refresh();
       });
+    });
+
+    // A backend that knows its table as it changes (the author's): the board follows it while edited
+    effect(() => {
+      const known = this.backend()?.liveBoard?.() ?? null;
+      if (known !== null && this.editing()) untracked(() => this.board.set(known));
     });
   }
 
@@ -199,6 +212,8 @@ export class TableEdit implements DecisionGate {
 
   /** The game has changed: its events are asked for at once (a decision waits, so nothing else asks), and undo's list. */
   private moved(): void {
+    // (a change that brought a fresh game: the page is on its way to it, and asks this one nothing more)
+    if (this.guide.leaving()) return;
     this.session.refresh();
     this.undo.refresh();
   }
@@ -232,4 +247,13 @@ export class TableEdit implements DecisionGate {
       },
     });
   }
+
+  /**
+   * The backend that claims the page for its level (TableEditBackend.claim: the author's, while a draft is written),
+   * and what it says of the mode and the tools: over what the scenario's info and the last answer said.
+   */
+  private readonly claimant = computed(
+    () => this.backends.find((backend) => (backend.claim?.() ?? null) !== null) ?? null,
+  );
+  private readonly claimed = computed(() => this.claimant()?.claim?.() ?? null);
 }

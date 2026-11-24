@@ -331,4 +331,17 @@ describe('AuthoringPanelComponent', () => {
     fixture.detectChanges();
     expect(text('.gd-author__title')).toBe('plain');
   });
+
+  it('turns the table’s own edit controls on and off with Edit table, remembered with the panel', async () => {
+    await open();
+    const toggle = () => el.querySelector<HTMLButtonElement>('button[data-author=edit-table]')!;
+    expect(toggle().getAttribute('aria-pressed')).toBe('false');
+    expect(toggle().textContent?.trim()).toBe('Edit table');
+    await click('button[data-author=edit-table]');
+    expect(authoring.ui().editTable).toBe(true);
+    expect(toggle().getAttribute('aria-pressed')).toBe('true');
+    expect(toggle().getAttribute('data-tone')).toBe('primary');
+    await click('button[data-author=edit-table]');
+    expect(authoring.ui().editTable).toBe(false);
+  });
 });

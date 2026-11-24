@@ -47,6 +47,7 @@ import { UndoBannerComponent } from './undo/undo-banner.component';
 import { UndoListComponent } from './undo/undo-list.component';
 import { UndoRequestComponent } from './undo/undo-request.component';
 import { TableEdit } from '../../core/game/table-edit/table-edit.service';
+import { AuthorBackend } from '../../core/game/table-edit/author-backend';
 import { nextSite } from '../../core/game/table-edit/edit-path';
 import { EditPlace, otherSeat } from '../../core/game/table-edit/edit-ops';
 import { provideTableEditUi } from './table-edit/provide-table-edit-ui';
@@ -312,6 +313,8 @@ export class GamePageComponent {
   /** The site the adventure path's open spot lays, while sites can be laid by hand: the next one not laid. */
   protected readonly siteSpot = computed(() => (this.edit.may('sites') ? nextSite(this.edit.board()) : null));
   private readonly puzzle = inject(PuzzleBackend);
+  /** The author's table: a puzzle's slots with no card in the game are drawn in their rows while it is edited. */
+  private readonly author = inject(AuthorBackend);
   /** A puzzle's slots in each row of the table, while they are being filled (the others: the slots strip). */
   protected readonly slots = computed<Readonly<Record<TableRow, readonly FilledSlot[]>>>(() => {
     const rows: Record<TableRow, FilledSlot[]> = {
@@ -322,8 +325,9 @@ export class GamePageComponent {
       supportPlayer: [],
       hand: [],
     };
-    if (this.edit.level() !== 'puzzle' || !this.edit.editing() || this.phone()) return rows;
-    for (const filled of this.puzzle.filled()) {
+    const author = this.edit.level() === 'author';
+    if ((this.edit.level() !== 'puzzle' && !author) || !this.edit.editing() || this.phone()) return rows;
+    for (const filled of author ? this.author.emptySlots() : this.puzzle.filled()) {
       const row = slotRow(filled.slot);
       if (row) rows[row].push(filled);
     }

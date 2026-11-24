@@ -20,6 +20,8 @@ import {
   undoByKind,
   undoOptions,
   verdictText,
+  optionsWithOtherSeat,
+  otherSeatOptions,
 } from './puzzle-settings';
 import { SandboxTools } from './puzzle-state';
 import { rulesWithSeat } from './scenario-settings';
@@ -251,5 +253,18 @@ describe('puzzle-settings: forbid and the pool (ep P10, P2)', () => {
     expect(verdictText({ kind: 'refused', why: 'no' })).toEqual({ text: 'refused', tone: 'error' });
     expect(verdictText({ kind: 'busy' })).toEqual({ text: 'looking…', tone: 'quiet' });
     expect(verdictText({ kind: 'none' })).toBeNull();
+  });
+
+  it("sets who plays a sandbox's other seat: the script is the key left out (ef-notes.md A)", () => {
+    const draft: Draft = { ...draftState().draft, kind: 'sandbox', options: { tools: 'add', otherSeat: 'bot' } };
+    expect(optionsWithOtherSeat(draft, 'person')).toEqual({ tools: 'add', otherSeat: 'person' });
+    expect(optionsWithOtherSeat(draft, 'script')).toEqual({ tools: 'add' });
+    expect(optionsWithOtherSeat({ ...draft, options: { otherSeat: 'bot' } }, 'script')).toBeNull();
+    expect(otherSeatOptions(['script', 'bot', 'person', 'odd']).map((one) => one.slice(0, 2))).toEqual([
+      ['script', 'script'],
+      ['bot', 'bot'],
+      ['person', 'you'],
+      ['odd', 'odd'],
+    ]);
   });
 });

@@ -1,3 +1,4 @@
+import { signal } from '@angular/core';
 import { DecisionGate, DecisionGates, DecisionGesture } from './decision-gate';
 
 describe('DecisionGates', () => {
@@ -37,5 +38,18 @@ describe('DecisionGates', () => {
     expect(gates.allows(card)).toBe(true);
     gates.after({ kind: 'escape' });
     expect(heard).toEqual([card]);
+  });
+
+  it('hides the waiting decision while any say in it hides it, until that say is taken away', () => {
+    const gates = new DecisionGates();
+    const editing = signal(false);
+    expect(gates.hiding()).toBe(false);
+    const remove = gates.hide(editing);
+    gates.hide(signal(false));
+    expect(gates.hiding()).toBe(false);
+    editing.set(true);
+    expect(gates.hiding()).toBe(true);
+    remove();
+    expect(gates.hiding()).toBe(false);
   });
 });

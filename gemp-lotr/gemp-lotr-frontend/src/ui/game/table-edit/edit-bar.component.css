@@ -69,3 +69,43 @@
   font-size: 13px;
   line-height: 1.35;
 }
+
+/* The author's bar (gd-author-edit-bar): nothing while the table is played; while edited, which board changes go to */
+:host([data-idle]) {
+  display: none;
+}
+
+.gd-edit-bar__where {
+  display: inline-flex;
+  border: 1px solid var(--theme-game-edit-button-edge);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gd-edit-bar__where-button {
+  padding: 1px 9px;
+  border: 0;
+  background: var(--theme-game-edit-button-bg);
+  color: var(--theme-game-edit-button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-edit-bar__where-button + .gd-edit-bar__where-button {
+  border-inline-start: 1px solid var(--theme-game-edit-button-edge);
+}
+
+.gd-edit-bar__where-button[aria-pressed='true'] {
+  background: var(--theme-game-edit-main-bg);
+  color: var(--theme-game-edit-main-text);
+  font-weight: bold;
+}
+
+.gd-edit-bar__where-button:hover:not(:disabled, [aria-pressed='true']) {
+  color: var(--theme-game-edit-glow);
+}
+
+.gd-edit-bar__where-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

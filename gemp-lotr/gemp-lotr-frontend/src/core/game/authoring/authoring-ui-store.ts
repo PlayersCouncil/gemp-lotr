@@ -63,6 +63,10 @@ export interface AuthoringUi extends Selection {
   newFights: readonly string[];
   /** Something that went wrong, carried to the page of the next game (said there as the panel's problem). */
   carried: string | null;
+  /** The table's own edit controls are on for the author (the panel's Edit table). Optional: absent is off. */
+  editTable?: boolean;
+  /** A slot whose form the Board tab is to show (one just opened on the table), until it has. Optional. */
+  showSlot?: string | null;
 }
 
 const TABS: readonly AuthoringTab[] = ['timeline', 'step', 'opponent', 'board', 'scenario'];
@@ -93,6 +97,8 @@ export function recallUi(value: unknown): AuthoringUi {
       ? (saved['newFights'] as unknown[]).filter((one): one is string => typeof one === 'string')
       : [],
     carried: text(saved['carried']),
+    editTable: saved['editTable'] === true,
+    showSlot: text(saved['showSlot']),
   };
 }
 

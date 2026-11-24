@@ -1,4 +1,5 @@
-import { Component, computed, effect, inject, input, output, signal, untracked } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, input, output, signal, untracked } from '@angular/core';
+import { BOUND_TYPING_MS, boundVerdict } from '../../../../core/game/authoring/bound-check';
 import { AuthoringApi } from '../../../../core/game/authoring/authoring-api.service';
 import { Authoring } from '../../../../core/game/authoring/authoring.service';
 import { FilterVerdict, verdictText } from '../../../../core/game/authoring/puzzle-settings';
@@ -7,7 +8,8 @@ import { AuthorSendDirective } from './author-send.directive';
 
 /**
  * A deck builder filter typed as text (a puzzle's pool, a slot's bound), with the server's word beside it: how many
- * cards the filter as the draft has it finds (`GET /scenarios/search`, looked at whenever that changes), or, when
+ * cards the filter as the draft has it finds, or why it will not do (`GET /scenarios/author/bound`, looked at whenever
+ * that changes, and as the author types, once the typing rests; a slot's counted with the pool, `pool`), or, when
  * what was sent was refused, why (`refused`, the server's words, set by the form that sent it; the field keeps what
  * was typed). It sends what is typed when it is left or Enter is pressed, and keeps it across a fresh game (`key`).
  * `count` is what to count, when it is not the field's own text (a bound counted with the pool); `exact` false says
@@ -35,6 +37,7 @@ import { AuthorSendDirective } from './author-send.directive';
         [gdAuthorKeep]="key()"
         gdAuthorSend
         (sent)="sent.emit($event)"
+        (input)="typing($any($event.target).value)"
       />
       @if (shown(); as said) {
         <span class="gd-author-filter__verdict" [attr.data-tone]="said.tone" [title]="verdictHint()">{{
@@ -42,7 +45,7 @@ import { AuthorSendDirective } from './author-send.directive';
         }}</span>
       }
     </span>
-    @if (refused(); as why) {
+    @if (why(); as why) {
       <p class="gd-author-filter__why">{{ why }}</p>
     }
   `,
@@ -74,6 +77,9 @@ export class FilterFieldComponent {
   protected readonly verdictHint = computed(() => {
     const refused = this.refused();
     if (refused !== null) return refused;
+    const verdict = this.verdict();
+    if (verdict.kind === 'refused') return verdict.why;
+    if (this.pool() !== null) return 'How many cards the server finds with it and the pool, each searched by itself';
     return this.exact()
       ? 'How many cards the server finds with it (alternate printings not counted)'
       : 'How many cards the filter alone finds: the pool says the same key, so the server checks the two apart';
@@ -82,6 +88,7 @@ export class FilterFieldComponent {
   constructor() {
     effect(() => {
       const filter = (this.count() ?? this.value()).trim();
+      this.pool();
       untracked(() => void this.look(filter));
     });
   }
@@ -96,8 +103,35 @@ export class FilterFieldComponent {
       return;
     }
     this.verdict.set({ kind: 'busy' });
-    const found = await this.authoring.send(this.api.search(filter, 1), false);
+    const answer = await this.authoring.send(this.api.bound(filter, this.pool()), false);
     if (asked !== this.serial) return;
-    this.verdict.set(found === null ? { kind: 'none' } : { kind: 'count', total: found.total });
+    this.verdict.set(boundVerdict(answer));
   }
+
+  /**
+   * A slot's bound: the puzzle's pool, which the server counts it with (each searched by itself). Null for a field
+   * that is checked by itself (the pool's own).
+   */
+  readonly pool = input<string | null>(null);
+  /** Why the filter will not do: what was sent was refused, or the server's check of what is typed says so. */
+  protected readonly why = computed(() => {
+    const refused = this.refused();
+    if (refused !== null) return refused;
+    const verdict = this.verdict();
+    return verdict.kind === 'refused' ? verdict.why : null;
+  });
+  private typingTimer: ReturnType<typeof setTimeout> | null = null;
+
+  /** What is being typed is checked once the typing rests (the field's own text stays as typed). */
+  protected typing(typed: string): void {
+    if (this.typingTimer !== null) clearTimeout(this.typingTimer);
+    this.typingTimer = setTimeout(() => {
+      this.typingTimer = null;
+      void this.look(typed.trim());
+    }, BOUND_TYPING_MS);
+  }
+
+  private readonly stopTyping = inject(DestroyRef).onDestroy(() => {
+    if (this.typingTimer !== null) clearTimeout(this.typingTimer);
+  });
 }

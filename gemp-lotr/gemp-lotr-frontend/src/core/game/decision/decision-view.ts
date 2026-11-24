@@ -92,6 +92,8 @@ export interface DecisionSettings {
   alwaysDropDown: boolean;
   /** A replay shows each decision, without anything to answer it with. */
   replay?: boolean;
+  /** The table is being changed by hand (TableEdit.editing): nobody is asked anything. */
+  editing?: boolean;
 }
 
 export const NO_DECISION: DecisionView = {
@@ -184,7 +186,7 @@ function cardChoice(
 
 export function decisionView(model: GameModel, settings: DecisionSettings): DecisionView {
   // A scripted game's table being changed by hand (a sandbox stopped, a puzzle before Submit): nobody is asked anything
-  if (model.scenario?.info?.mode === 'edit') return NO_DECISION;
+  if (model.scenario?.info?.mode === 'edit' || settings.editing === true) return NO_DECISION;
   const view = askedView(model, settings);
   if (!settings.replay) return view;
   // A replay: the same, with no buttons; once the alert box asked, its frame stays wide (the legacy page only put the
