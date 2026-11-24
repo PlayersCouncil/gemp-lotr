@@ -53,6 +53,8 @@ export class CollectionBrowser {
   readonly nextDisabled = signal(true);
   /** The page size slider is enabled once the first page has arrived. */
   readonly sliderDisabled = signal(true);
+  /** The page size slider's range and where it starts (CardFilterPager). */
+  readonly pageSizes = { min: PAGE_SIZE_MIN, max: PAGE_SIZE_MAX, start: PAGE_SIZE_SLIDER_START } as const;
 
   private filter = '';
   private readonly requests = new Subject<CollectionRequest>();

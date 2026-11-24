@@ -47,27 +47,27 @@
   </label>
 </ng-template>
 
-@if (part() !== 'menu') {
+@if (part() !== 'menu' ? browser : null; as pager) {
   <div class="gd-pager">
     <button
       type="button"
       class="gd-pager__previous gd-button"
       data-icon="previous"
       aria-label="Previous page"
-      [disabled]="browser.previousDisabled()"
-      (click)="browser.previousPage()"
+      [disabled]="pager.previousDisabled()"
+      (click)="pager.previousPage()"
     ></button>
     <div class="gd-pager__track">
-      @if (part() === 'pane') {
+      @if (part() === 'pane' ? cardSize : null; as size) {
         <input
           class="gd-pager__size gd-slider"
           type="range"
           aria-label="Card size"
           data-sets="card-size"
-          [min]="cardSizes.min"
-          [max]="cardSizes.max"
-          [step]="cardSizes.step"
-          [value]="cardSize.percent()"
+          [min]="size.limits.min"
+          [max]="size.limits.max"
+          [step]="size.limits.step"
+          [value]="size.percent()"
           (input)="setCardSize($event)"
         />
       } @else {
@@ -75,10 +75,10 @@
           class="gd-pager__size gd-slider"
           type="range"
           aria-label="Cards per page"
-          [min]="pageSize.min"
-          [max]="pageSize.max"
-          [value]="pageSize.start"
-          [disabled]="browser.sliderDisabled()"
+          [min]="pager.pageSizes.min"
+          [max]="pager.pageSizes.max"
+          [value]="pager.pageSizes.start"
+          [disabled]="pager.sliderDisabled()"
           (input)="setPageSize($event)"
         />
       }
@@ -88,8 +88,8 @@
       class="gd-pager__next gd-button"
       data-icon="next"
       aria-label="Next page"
-      [disabled]="browser.nextDisabled()"
-      (click)="browser.nextPage()"
+      [disabled]="pager.nextDisabled()"
+      (click)="pager.nextPage()"
     ></button>
   </div>
 }
@@ -116,7 +116,7 @@
   </div>
 </div>
 
-@if (part() !== 'pane') {
+@if (part() !== 'pane' && resets()) {
   <div class="gd-filter__resets">
     <button type="button" class="gd-button" data-action="reset-advanced" (click)="query.resetAdvanced()">
       <span class="gd-button__text">Reset advanced filters only</span>
@@ -154,7 +154,7 @@
   </div>
 }
 
-@if (part() === 'menu') {
+@if (part() === 'menu' ? pins : null; as pins) {
   <fieldset class="gd-filter__pins">
     <legend>Always show</legend>
     @for (pin of pinOptions; track pin.name) {

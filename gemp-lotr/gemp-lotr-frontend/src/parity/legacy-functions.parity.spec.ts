@@ -1,6 +1,6 @@
-import { EMPTY_FILTER, FilterFields } from '../core/collection/filter-fields';
-import { buildFilterString } from '../core/collection/filter-string';
-import { blockOptions, setOptions } from '../core/collection/filter-block-sets';
+import { EMPTY_FILTER, FilterFields } from '../core/card-filter/filter-fields';
+import { buildFilterString } from '../core/card-filter/filter-string';
+import { blockOptions, setOptions } from '../core/card-filter/filter-block-sets';
 import { BlockFilter } from '../core/api/models';
 import { formatDecklist } from '../core/deck/deck-import';
 import { parseDeckStats, StatsTone } from '../core/deck/deck-stats';

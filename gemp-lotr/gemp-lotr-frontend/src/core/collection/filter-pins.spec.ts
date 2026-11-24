@@ -5,7 +5,7 @@ import { provideGempHttp } from '../api/gemp-interceptors';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { provideDeckbuilderState } from '../deckbuilder-state';
 import { CollectionQuery } from './collection-query.service';
-import { EMPTY_FILTER } from './filter-fields';
+import { EMPTY_FILTER } from '../card-filter/filter-fields';
 import { FILTER_PINS_COOKIE, FilterPins, filterIsSet, parseFilterPins } from './filter-pins';
 
 describe('filter pins', () => {
