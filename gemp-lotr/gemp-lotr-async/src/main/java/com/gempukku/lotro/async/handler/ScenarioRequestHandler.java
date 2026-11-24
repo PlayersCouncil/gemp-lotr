@@ -34,7 +34,7 @@ import java.util.Map;
  * {@code authoring: {gameId, id, title, over, test}|null}, the draft they have open):
  * {@code {scenarios:[{id, kind, title, summary, author, tags, version, canonical, verified, path, owner, mine,
  * campaign:{id, title, position, count, next:{id, title}|null}|null,
- * progress:{status, attempts, version, firstCompleted, lastPlayed}|null}], current:{gameId, id}|null}}.
+ * progress:{status, attempts, version, firstCompleted, lastPlayed, bestScore}|null}], current:{gameId, id}|null}}.
  * {@code campaign} is the campaign the scenario is part of: a game of it ends by offering {@code next}.
  * {@code progress.status} is "started" or "complete".
  * {@code verified} is false for a scenario that does not play through headless; only its owner and the admins are
@@ -161,6 +161,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                 progressJson.put("version", played.version);
                 progressJson.put("firstCompleted", played.first_completed == null ? null : played.first_completed.toString());
                 progressJson.put("lastPlayed", played.last_played == null ? null : played.last_played.toString());
+                //(a scored puzzle's: the best score of the player's complete games, null for none)
+                progressJson.put("bestScore", played.best_score);
                 json.put("progress", progressJson);
             }
             scenarios.add(json);
