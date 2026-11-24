@@ -244,9 +244,14 @@ why one address alone cannot reach it. A request's address is the one nginx saw:
   decide: it is what was removed, in a form that cannot be used to take an account.
 - **A PC account disabled at Argonauth** cannot sign in again, but a Gemp session it already has goes on for
   its month: the lookup still says its aliases are linked.
-- **The SQL of `player_argonauth`, `registerAlias` and `removeUnusedAlias` has run against no database.** The
-  tests stand a map in for the tables. First thing to watch on a real one.
-
+- **The new SQL has no test in the repository.** The tests stand a map in for the tables. It was run once by
+  hand (2026-11-23) against an embedded MariaDB 10.11 (production is 10.5), with the tables as
+  `database_script.sql` makes them and the DAOs as they are: `player_argonauth` (the upsert keeping `linked_at`
+  for the same PC account and renewing it for another, `replaceLinks`, the foreign key, 320 concurrent
+  `replaceLinks` without a deadlock), `registerAlias`, `removeUnusedAlias` (leaves alone an account with a
+  password or one that has been entered), and that `'Frodo '` matches the row `Frodo` in the column but no longer
+  logs in. A test that does this on every build needs a database in the build (MariaDB4j is an 80 MB test
+  dependency): Ketura's call.
 - **Bans that follow the PC account.** A ban is per alias today, and a new alias is one
   click. Ketura is settling with the moderators how it should behave; until then dodgers are
   dealt with by IP.
