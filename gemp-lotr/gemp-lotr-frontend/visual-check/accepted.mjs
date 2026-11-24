@@ -555,6 +555,17 @@ const within = (scenarios, step, maxPixels, reason) => ({
 const SUB_PIXEL = 'Text a fraction of a pixel from the legacy page here and there (under 1% of the screen).';
 
 export const HALL_ACCEPTED = [
+  // ---- what the legacy hall has nothing like ----
+  {
+    scenarios: [/./],
+    selector: '.gd-hall__logout',
+    margin: 2,
+    reason:
+      'Log Out, right after the connection readout: the legacy hall has no log out. Asked for by Ketura on ' +
+      '2026-11-23 ("in the hall somewhere we need a prominent log out button, probably next to the connection ' +
+      'status"). Shown whenever an alias is played; nothing else in the bar moves for it.',
+  },
+
   // ---- where the legacy page's own place depends on timing ----
   {
     scenarios: ['events-tournament-link', 'events-league-link'],
