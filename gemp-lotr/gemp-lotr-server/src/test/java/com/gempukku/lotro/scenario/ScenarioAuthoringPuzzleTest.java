@@ -312,6 +312,80 @@ public class ScenarioAuthoringPuzzleTest {
         }
     }
 
+    /** Decipher's puzzle 10, as the fixtures have it, opened in the authoring tool. */
+    private void openKeep() throws Exception {
+        Files.createDirectories(new File(canon, "puzzles").toPath());
+        Files.writeString(new File(canon, "puzzles/keep.hjson").toPath(),
+                Files.readString(new File("src/test/resources/scenarios/puzzles/10-defending-the-keep.hjson").toPath(), StandardCharsets.UTF_8),
+                StandardCharsets.UTF_8);
+        authoring.open(player, "decipher-10-defending-the-keep", true);
+    }
+
+    @Test
+    public void playingASolutionGoesAsFarAsTheRunnerDoes() throws Exception {
+        //(the eager opponent answers by rule past the end of the script; that is not where a solution's play stops)
+        openKeep();
+        authoring.solution(player, "play", "published", null);
+        long deadline = System.currentTimeMillis() + 10_000;
+        while (live().Result() == null && System.currentTimeMillis() < deadline)
+            Thread.sleep(5);
+        assertEquals(state().getString("notice"), LiveScenario.Result.COMPLETE, live().Result());
+        assertTrue(state().getString("notice"), state().getString("notice").contains("Played solution 'published': 4 of its 4 answers."));
+        assertTrue(puzzle().getJSONObject("verdict").getBooleanValue("won"));
+    }
+
+    @Test
+    public void aPuzzlesDraftWritesNoStepsByItselfAndCheckSaysWhenAStepTakesASolutionsDecision() throws Exception {
+        openKeep();
+        //"Write down what I do" is off in a puzzle's draft until the author says otherwise
+        assertFalse(state().getBooleanValue("recording"));
+        assertFalse(state().getBooleanValue("recordingSaid"));
+        String steps = state().getJSONObject("draft").getJSONArray("steps").toString();
+        JSONObject check = JSON.parseObject(JSON.toJSONString(authoring.check(player)));
+        assertTrue(check.getString("report"), check.getBooleanValue("passed"));
+        //(null for a solution that solves it: the map as the page is sent it, nulls and all)
+        Map<?, ?> verdicts = (Map<?, ?>) authoring.check(player).get("solutions");
+        assertTrue(verdicts.toString(), verdicts.containsKey("published"));
+        assertNull(verdicts.get("published"));
+        //The author passes in the maneuver phase: nothing is written
+        Client client = new Client(games.getLast());
+        client.await();
+        client.answer("");
+        Thread.sleep(50);
+        assertEquals(steps, state().getJSONObject("draft").getJSONArray("steps").toString());
+
+        //Turned on, and played again from the start: the pass is written as a step, and that step takes the decision
+        // the published solution's first answer was for
+        authoring.settings(player, true, null, null);
+        assertTrue(state().getBooleanValue("recording"));
+        assertTrue(state().getBooleanValue("recordingSaid"));
+        authoring.solution(player, "use", "published", null);
+        client = new Client(games.getLast());
+        client.await();
+        client.answer("");
+        Thread.sleep(50);
+        assertNotEquals(steps, state().getJSONObject("draft").getJSONArray("steps").toString());
+        check = JSON.parseObject(JSON.toJSONString(authoring.check(player)));
+        assertFalse(check.getBooleanValue("passed"));
+        String verdict = check.getJSONObject("solutions").getString("published");
+        assertNotNull(verdict);
+        assertTrue(verdict, verdict.startsWith("does not solve it: "));
+        assertTrue(verdict, verdict.contains("where the solution's answer 1, use(condition), would have gone"));
+    }
+
+    @Test
+    public void aSingleValuePartGivenAsTextStaysTheText() throws Exception {
+        open(PUZZLE);
+        //(HJSON would read set:1-6 by itself as the object {set: "1-6"})
+        authoring.edit(player, "{\"topText\": {\"pool\": \"set:1-6\", \"title\": \"Archery: the hard way\"}}", null);
+        assertEquals("set:1-6", puzzle().getString("pool"));
+        assertEquals("Archery: the hard way", state().getJSONObject("draft").getString("title"));
+        //...with its name in front, the same; and a part that is an object is still read as one, braces or not
+        authoring.edit(player, "{\"topText\": {\"pool\": \"pool: set:1-2\", \"options\": \"opponentDelayMs: 0\\nautoPass: true\\nundo: on\"}}", null);
+        assertEquals("set:1-2", puzzle().getString("pool"));
+        assertTrue(puzzle().getBooleanValue("undo"));
+    }
+
     @Test
     public void aSlotIsRenamedAsACardIsEverywhere() throws Exception {
         open(PUZZLE + """

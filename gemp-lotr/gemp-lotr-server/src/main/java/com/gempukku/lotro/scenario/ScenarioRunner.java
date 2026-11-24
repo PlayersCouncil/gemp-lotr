@@ -120,6 +120,9 @@ public final class ScenarioRunner {
             boolean solved = run.completed && run.failures.isEmpty();
             String verdict = solved ? "solved (" + run.stopped + ")"
                     : run.failures.isEmpty() ? "does not solve it: " + run.stopped : "does not solve it: " + run.failures.getFirst();
+            //(the likeliest reason a recorded solution stops fitting: the script came to answer one of its decisions)
+            if (!solved && run.stepTookSolutionsDecision != null)
+                verdict += ".  Probably because " + run.stepTookSolutionsDecision;
             report.solutions.put(solution.name(), solved ? null : verdict);
             report.decisions.add(new ScenarioRunReport.Decision(-1, "Solution " + solution.name() + ": " + verdict, null, null, null));
             report.decisions.addAll(run.decisions);
@@ -129,6 +132,8 @@ public final class ScenarioRunner {
                     report.failures.add("solution '" + solution.name() + "' does not reach the scenario's win: " + run.stopped);
                 for (String failure : run.failures)
                     report.failures.add("solution '" + solution.name() + "': " + failure);
+                if (run.stepTookSolutionsDecision != null)
+                    report.failures.add("solution '" + solution.name() + "': " + run.stepTookSolutionsDecision);
             }
         }
         if (all && report.failures.isEmpty() && report.reached.compareTo(RunnerLevel.SOLUTION) < 0)
@@ -657,6 +662,24 @@ public final class ScenarioRunner {
                 report.failures.add((step == null ? "" : "step " + step.label() + ": ") + exp.getMessage());
                 report.stopped = "the script does not fit the game";
                 return false;
+            }
+
+            //A solution's run, at a decision of the person's that a step answers: the solution's next answer goes to
+            // a later decision, which is worth saying if it then fails (see ScenarioRunReport.stepTookSolutionsDecision)
+            if (solution != null && human && step != null && answer != null && taped < solution.answers().size()
+                    && report.stepTookSolutionsDecision == null) {
+                ScenarioDefinition.Answer next = solution.answers().get(taped);
+                try {
+                    String instead = AnswerCompiler.compile(table, decision, next);
+                    if (!instead.equals(answer))
+                        report.stepTookSolutionsDecision = step.describe() + " answered " + said(table, decision, answer)
+                                + " to \"" + decision.getText() + "\" by itself, where the solution's answer " + (taped + 1) + ", " + next.source()
+                                + ", would have gone.  A solution's answers go only to the decisions the script leaves open, so a step with "
+                                + "one allowed answer takes its decision first (\"Write down what I do\" writes such a step for every pass): "
+                                + "take the step out, or let it allow more than that one answer";
+                } catch (ScenarioScriptException | RuntimeException exp) {
+                    //(the solution's answer would not have fitted here either: nothing taken from it)
+                }
             }
 
             //The player's scripted answer is held to what the page would let them do, and what the step refuses is

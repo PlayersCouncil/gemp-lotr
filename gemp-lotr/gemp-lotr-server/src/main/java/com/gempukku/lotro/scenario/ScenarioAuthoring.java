@@ -154,8 +154,11 @@ public class ScenarioAuthoring {
          */
         final Map<String, String[]> places = new java.util.concurrent.ConcurrentHashMap<>();
         volatile boolean dirty;
-        /** Whether what is done where the script has nothing to say is written into the script. */
-        volatile boolean recording = true;
+        /**
+         * Whether what is done where the script has nothing to say is written into the script ("Write down what I
+         * do"); null until the author says, for what the draft's kind has it (see recording(def)).
+         */
+        volatile Boolean recording;
         /** Whether the opponent's decisions that the script does not answer are left for the author. */
         volatile boolean askOpponent = true;
         /** The choices to take at the script's forks when it plays itself: the names in here, where a fork offers one. */
@@ -199,6 +202,16 @@ public class ScenarioAuthoring {
             if (stopNotice != null && stopNotice.equals(notice))
                 notice = null;
             stopNotice = null;
+        }
+
+        /**
+         * Whether "Write down what I do" is on: as the author set it, or else on, except in a puzzle's draft.  A
+         * puzzle is played by its solutions, whose answers go to the person's decisions the script leaves open; a
+         * step written for each pass would take those decisions first (Ketura's authors found Check failing a
+         * published solution for it), so a puzzle's author turns it on only to write steps on purpose.
+         */
+        boolean recording(ScenarioDefinition def) {
+            return recording != null ? recording : def.kind != ScenarioDefinition.Kind.PUZZLE;
         }
 
         String choice(Step step) {
@@ -307,7 +320,7 @@ public class ScenarioAuthoring {
         @Override
         public void passedByItself(String player, Phase phase, Step used, boolean frontier) {
             //(while a solution is being recorded, nothing is written into the script)
-            if (!frontier || !session.recording || session.recordingSolution != null)
+            if (!frontier || !session.recording(def) || session.recordingSolution != null)
                 return;
             ScenarioDirector director = live.Session().Director();
             if (director.end() != null)
@@ -340,7 +353,7 @@ public class ScenarioAuthoring {
             //(only the script's last step, which is the one being written, or one waiting for its answer: a repeating
             // step further back is played by what it says, so that what it allows can be tried while "Write down
             // what I do" is on)
-            return session.recording && step.until != null && step.parent == null && !step.pause && !step.block
+            return session.recording(def) && step.until != null && step.parent == null && !step.pause && !step.block
                     && ((!def.steps.isEmpty() && def.steps.getLast() == step) || awaiting.contains(step));
         }
 
@@ -414,7 +427,7 @@ public class ScenarioAuthoring {
                             json.set("answer", term);
                         copyInto(step, reparsed(step, json));
                         changed = true;
-                    } else if (human && session.recording && step.until != null && step.parent == null && !step.pause
+                    } else if (human && session.recording(def) && step.until != null && step.parent == null && !step.pause
                             && unrecorded != ruling.decision() && repeated(step, ruling, answer)) {
                         changed = true;
                     }
@@ -422,7 +435,7 @@ public class ScenarioAuthoring {
                         session.changed();
                     return;
                 }
-                if (!session.recording || unrecorded == ruling.decision() || live.Session().Director().end() != null)
+                if (!session.recording(def) || unrecorded == ruling.decision() || live.Session().Director().end() != null)
                     return;
                 //What the opponent does by itself where the script is silent (its orders, its fallback) is what it
                 // will do again without being told.  Only what the author has it do is written.
@@ -1585,6 +1598,10 @@ public class ScenarioAuthoring {
      *                  'before'.
      * @param goTo See change.
      */
+    /** The top-level parts of a file that are a single value, not an object or a list (see topText in edit). */
+    private static final Set<String> SCALAR_PARTS = Set.of("id", "version", "kind", "title", "summary", "author", "note", "format",
+            "human", "coverage", "pool");
+
     public Map<String, Object> edit(Player player, String patchJson, Integer goTo) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
@@ -1629,6 +1646,10 @@ public class ScenarioAuthoring {
                         if (value.isObject() && value.asObject().size() == 1 && value.asObject().names().getFirst().equals(name)
                                 && text.stripLeading().replaceAll("(?m)^\\s*(#|//).*\\n", "").stripLeading().startsWith(name))
                             value = value.asObject().get(name);
+                        //(a part that is a single value: "set:1-6" as the pool is the text, not HJSON's braceless
+                        // object {set: "1-6"}, and nor is a title that has a colon in it)
+                        else if (SCALAR_PARTS.contains(name) && (value.isObject() || value.isArray()))
+                            value = org.hjson.JsonValue.valueOf(text.strip());
                         json.set(name, value);
                     }
                 }
@@ -2662,6 +2683,8 @@ public class ScenarioAuthoring {
         saved.put("errors", entry.errors());
         saved.put("warnings", entry.warnings());
         saved.put("report", entry.report() == null ? null : entry.report().toString());
+        //(as check gives them: each solution's verdict, null where it solves the puzzle)
+        saved.put("solutions", entry.report() == null ? null : new LinkedHashMap<>(entry.report().solutions));
         Map<String, Object> result = result(session, false, false);
         result.put("saved", saved);
         return result;
@@ -2714,6 +2737,8 @@ public class ScenarioAuthoring {
             result.put("passed", report.passed());
             result.put("report", report.toString());
             result.put("warnings", warnings);
+            //Each solution's verdict: null where it solves the puzzle, otherwise why not (the runner's words)
+            result.put("solutions", new LinkedHashMap<>(report.solutions));
             return result;
         }
     }
@@ -2855,7 +2880,9 @@ public class ScenarioAuthoring {
                 leftOut.add(json);
             }
             state.put("leftOut", leftOut);
-            state.put("recording", session.recording);
+            state.put("recording", session.recording(def));
+            //(whether the author has said; until then a puzzle's draft has it off and any other draft on)
+            state.put("recordingSaid", session.recording != null);
             state.put("askOpponent", session.askOpponent);
             state.put("way", new ArrayList<>(session.way));
             state.put("flags", new ArrayList<>(def.flags));

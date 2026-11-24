@@ -60,6 +60,15 @@ public class ScenarioRunReport {
      * 'solution' level): null for one that solved the puzzle, otherwise why it did not.  Empty for a scenario with none.
      */
     public final Map<String, String> solutions = new LinkedHashMap<>();
+    /**
+     * In a run of one solution: the first of the person's decisions that a step of the script answered by itself
+     * while the solution still had answers to give, where the solution's next answer would have fitted it too, said
+     * for the author ("step 4 [when: ...] answered ... where the solution's answer 2, choose(ally), would have gone").
+     * Null if there was none.  A solution's answers go only where the script gives none, so such a step (an 'allow'
+     * with one entry, which the authoring tool's "Write down what I do" writes for every pass) takes the decision
+     * first, and the answers after it land on the wrong decisions: worth saying when the solution fails.
+     */
+    public String stepTookSolutionsDecision;
     /** The refusals (a step's 'refuses') this run has shown to hold, by the step's label: "12 2: choose(boromir)". */
     public final java.util.Set<String> refusalsShown = new java.util.LinkedHashSet<>();
 

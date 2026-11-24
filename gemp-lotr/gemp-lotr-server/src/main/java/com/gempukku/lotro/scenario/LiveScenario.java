@@ -454,13 +454,20 @@ public class LiveScenario implements ScenarioSession.Listener {
                     _runProblem = "the step before " + reached.describe() + " ended the scenario";
                 return;
             }
+            //(the judging moment has come, or the puzzle's rules were broken: the scenario ends at its next rest, AfterActions)
+            if (_table.Verdict() != null || _table.Breach() != null)
+                return;
             Ruling ruling = _session.Ruling(_human) != null ? _session.Ruling(_human) : _session.Ruling(_opponent);
             if (ruling == null)
                 return;
             Step step = ruling.step();
             if (step != null && (step.number > _runTo || (step.number == _runTo && farEnough(step, director))))
                 return;
-            if (step == null && director.atFrontier() && !onTape(ruling))
+            //Past the end of the script is where an author writes, so the script stops there.  Not for the opponent
+            // while a solution is played, though: the solution is the person's answers only, and the opponent
+            // answers past the script as it would in a player's game (its orders, its fallback), as the headless
+            // runner has it do.  The play stops at the person's first decision its answers do not reach.
+            if (step == null && director.atFrontier() && !onTape(ruling) && (_tape.isEmpty() || ruling.player().equals(_human)))
                 return;
             //(sent so far into a block, to a decision that none of the block's steps covers: that is where it is)
             Step at = director.currentStep();

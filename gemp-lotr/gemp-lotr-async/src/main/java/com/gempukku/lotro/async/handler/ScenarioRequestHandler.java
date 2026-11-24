@@ -98,6 +98,11 @@ import java.util.Map;
  * as to any fresh game of a scenario.  Allowed once the game is over too.<br>
  * GET /scenarios/search?filter=&start=&count= - for any logged-in player: cards found with the deck builder's filter
  * (ScenarioCardSearch): {total, start, cards: [{blueprintId, name, type, side, culture, site, siteNumber, twilight}]}.
+ * Optionally pool= and bound= (a puzzle's pool, a slot's filter): only the cards each of them finds as well, each
+ * searched with by itself, so that what is typed can narrow a slot's bound and never widen it; and strict=true: a key
+ * the search does not know is refused (400 {error}) rather than ignored.  pool and bound are always read strictly.<br>
+ * GET /scenarios/author/bound?filter=&pool= - whether a filter is a bound a slot can be given (as strictly as saving
+ * the slot is) and how many cards it finds, with the pool if one is given: {ok, why, total}.
  */
 public class ScenarioRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private static final Logger _log = LogManager.getLogger(ScenarioRequestHandler.class);
@@ -536,6 +541,8 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
                     case "cards" -> result.put("cards", _authoring.findCards(getQueryParameterSafely(query, "q"),
                             "true".equals(getQueryParameterSafely(query, "sites"))));
                     case "images" -> result.put("images", _authoring.images());
+                    //(whether a filter is a bound a slot can be given, as strictly as saving it: {ok, why, total})
+                    case "bound" -> result = _search.bound(getQueryParameterSafely(query, "filter"), getQueryParameterSafely(query, "pool"));
                     default -> throw new HttpProcessingException(404);
                 }
                 responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));
@@ -730,7 +737,19 @@ public class ScenarioRequestHandler extends LotroServerRequestHandler implements
             writeError(responseWriter, 400, "start and count are numbers");
             return;
         }
-        responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), start, count)));
+        String pool = getQueryParameterSafely(query, "pool");
+        String bound = getQueryParameterSafely(query, "bound");
+        boolean strict = "true".equals(getQueryParameterSafely(query, "strict"));
+        if (pool == null && bound == null && !strict) {
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), start, count)));
+            return;
+        }
+        //Kept inside a bound that cannot be widened: the pool, the bound and the typed filter each searched with by itself
+        try {
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(_search.search(getQueryParameterSafely(query, "filter"), pool, bound, strict, start, count)));
+        } catch (ScenarioCardSearch.Refused exp) {
+            writeError(responseWriter, 400, exp.getMessage());
+        }
     }
 
     private Integer number(HttpPostRequestDecoder form, String name) throws Exception {
