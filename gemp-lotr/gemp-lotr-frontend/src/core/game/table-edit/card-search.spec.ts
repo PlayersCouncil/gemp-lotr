@@ -9,6 +9,7 @@ import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import {
   allBlocks,
   boundFields,
+  boundOmits,
   CardSearch,
   CardSearchApi,
   readFields,
@@ -77,6 +78,37 @@ describe('card search', () => {
     expect(searchFilter(fields, { filter: 'cardType:COMPANION', label: 'Companions' })).toBe(
       'side:SHADOW sort:name name:son name:of cardType:COMPANION',
     );
+  });
+
+  it("leaves every field a bound sets to the bound, whatever case it writes its keys in (a puzzle slot's)", () => {
+    const bound = { filter: 'set:1-6 Culture:ROHAN cardtype:ALLY KEYWORD:VALIANT strength:5', label: 'a Rohan ally' };
+    expect(boundFields(bound)).toEqual(['cardType', 'set', 'block', 'keyword', 'strengthCompare', 'strengthValue']);
+    expect(boundOmits(bound)).toEqual([
+      'cardType',
+      'set',
+      'block',
+      'keyword',
+      'strengthCompare',
+      'strengthValue',
+      'strength',
+      'cultures',
+    ]);
+    expect(boundOmits(null)).toEqual([]);
+    // The person's own values for those fields are never sent beside the bound's: they could only widen it
+    const fields = {
+      ...readFields(null),
+      cultures: ['GONDOR'],
+      keyword: 'ARCHER',
+      strengthCompare: 'GREATER_THAN',
+      strengthValue: '7',
+      name: 'aldor',
+    };
+    expect(searchFilter(fields, bound)).toBe(
+      'sort:name name:aldor set:1-6 Culture:ROHAN cardtype:ALLY KEYWORD:VALIANT strength:5',
+    );
+    for (const key of ['name', 'gametext', 'phase', 'race', 'itemclass', 'signet', 'sitenumbercompare']) {
+      expect(boundFields({ filter: `${key}:X`, label: '' }).length).toBeGreaterThan(0);
+    }
   });
 
   it('reads a page of cards found, leaving out what is not a card', () => {

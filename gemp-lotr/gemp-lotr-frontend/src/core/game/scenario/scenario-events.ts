@@ -8,6 +8,8 @@
 import { legacyRelativeImages } from '../../platform/app-paths';
 import { editLevel, EditLevel, editMode, EditMode, editTools } from '../table-edit/edit-board';
 import { EditTool } from '../table-edit/edit-ops';
+import { PuzzleSlot, readPuzzleSlots } from '../table-edit/puzzle-slots';
+import { readScenarioScore, ScenarioScore } from './scenario-score';
 
 export type ScenarioKind = 'tutorial' | 'puzzle' | 'sandbox';
 export type ScenarioSeat = 'freeps' | 'shadow';
@@ -69,6 +71,10 @@ export interface ScenarioInfo {
   canStop: boolean;
   canStart: boolean;
   // (a puzzle's `slots` and `undo` come here too: the puzzle page reads them)
+  /** A puzzle's slots (empty for a scenario without), each with the card in it as the game was built. */
+  slots?: readonly PuzzleSlot[];
+  /** Whether the game can be taken back (the scenario's `options.undo`); null where the server does not say. */
+  undo?: boolean | null;
 }
 
 export type MessageSide = 'auto' | 'above' | 'below' | 'left' | 'right';
@@ -183,6 +189,10 @@ export interface ScenarioEnd {
   reason: string | null;
   /** The page offers Reset: a fresh game of the sandbox as it opened. */
   reset: boolean;
+  /** A scored puzzle's score (null: unscored). */
+  score?: ScenarioScore | null;
+  /** The puzzle was solved with cards no solution of its author's lists. */
+  unlisted?: boolean;
 }
 
 export type ScenarioEvent = ScenarioInfo | ScenarioStep | ScenarioOffScript | ScenarioEnd;
@@ -327,6 +337,8 @@ function info(value: Json): ScenarioInfo | null {
     tools: editTools(value['tools']),
     canStop: boolean(value['canStop']) ?? false,
     canStart: boolean(value['canStart']) ?? false,
+    slots: readPuzzleSlots(value['slots']),
+    undo: boolean(value['undo']),
   };
 }
 
@@ -377,6 +389,8 @@ function end(value: Json): ScenarioEnd {
     winner: value['winner'] === 'human' || value['winner'] === 'opponent' ? value['winner'] : null,
     reason: string(value['reason']),
     reset: boolean(value['reset']) ?? false,
+    score: readScenarioScore(value['score']),
+    unlisted: boolean(value['unlisted']) ?? false,
   };
 }
 

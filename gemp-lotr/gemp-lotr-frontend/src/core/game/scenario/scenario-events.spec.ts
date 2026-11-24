@@ -92,6 +92,8 @@ describe('parseScenarioEvent', () => {
       tools: [],
       canStop: false,
       canStart: false,
+      slots: [],
+      undo: null,
     });
   });
 
@@ -117,6 +119,8 @@ describe('parseScenarioEvent', () => {
       tools: [],
       canStop: false,
       canStart: false,
+      slots: [],
+      undo: null,
     });
     expect(
       parse({
@@ -403,6 +407,8 @@ describe('parseScenarioEvent', () => {
       winner: null,
       reason: null,
       reset: false,
+      score: null,
+      unlisted: false,
     });
     expect(
       parse({ type: 'end', result: 'failed', messages: [MESSAGE], message: '<p>Again?</p>', checkpoint: 5 }),
@@ -465,6 +471,41 @@ describe('parseScenarioEvent', () => {
       reset: false,
     });
     expect(parse({ type: 'end', result: 'ended', winner: 'human' })).toMatchObject({ winner: 'human' });
+  });
+
+  it("reads a puzzle's info: its slots and whether it can be taken back (ep-notes.md P3, P6)", () => {
+    const info = parse({
+      type: 'info',
+      id: 'p10',
+      kind: 'puzzle',
+      mode: 'edit',
+      level: 'puzzle',
+      undo: false,
+      slots: [{ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }],
+    }) as ScenarioInfo;
+    expect(info.undo).toBe(false);
+    expect(info.slots).toEqual([
+      expect.objectContaining({ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }),
+    ]);
+    expect(parse({ type: 'info', id: 'p', undo: 'no' })).toMatchObject({ undo: null, slots: [] });
+  });
+
+  it("reads a puzzle's end: its score, and whether the solution is one its author did not list (P5, P7)", () => {
+    expect(
+      parse({
+        type: 'end',
+        result: 'complete',
+        score: { value: 1160, label: "Sméagol's strength", better: 'higher', best: 1160, newBest: true },
+        unlisted: true,
+      }),
+    ).toMatchObject({
+      score: { value: 1160, label: "Sméagol's strength", better: 'higher', best: 1160, newBest: true },
+      unlisted: true,
+    });
+    expect(parse({ type: 'end', result: 'complete', score: 'high', unlisted: 'yes' })).toMatchObject({
+      score: null,
+      unlisted: false,
+    });
   });
 
   it('reads nothing from what is not a scenario event', () => {

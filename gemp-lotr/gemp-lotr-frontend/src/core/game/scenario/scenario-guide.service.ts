@@ -55,6 +55,9 @@ export const STOCK_OFF_SCRIPT = '<p>You have left the script.</p>';
 /** How long a hint stays up (ms), and how long a failed "I have read it" waits before it is said again. */
 export const HINT_MS = 7000;
 export const ACKNOWLEDGE_RETRY_MS = 2000;
+/** Asked before "Change cards" in the middle of a puzzle's game. */
+export const CHANGE_QUESTION = 'Start this puzzle again with its slots empty? This game is given up.';
+export const CHANGE_WORDS = { title: 'Change cards', ok: 'Change cards', cancel: 'Keep playing' } as const;
 /** Conceding is given this long to reach the server before the page leaves for the hall (ms). */
 const LEAVE_MS = 300;
 
@@ -499,7 +502,8 @@ export class ScenarioGuide implements DecisionGate {
   restart(fromCheckpoint = false): void {
     if (this.author()?.restart(fromCheckpoint)) return;
     const info = this.info();
-    if (info) this.start(info.id, fromCheckpoint);
+    // (a puzzle's game again keeps its cards: from a checkpoint the server keeps them by itself)
+    if (info) this.start(info.id, fromCheckpoint, info.level === 'puzzle' && !fromCheckpoint ? 'same' : null);
   }
 
   /** The scenario that follows this one in its campaign. */
@@ -508,10 +512,10 @@ export class ScenarioGuide implements DecisionGate {
     if (next) this.start(next.id, false);
   }
 
-  private start(id: string, fromCheckpoint: boolean): void {
+  private start(id: string, fromCheckpoint: boolean, picks: 'same' | null = null): void {
     if (this.leaving()) return;
     this.leaving.set(true);
-    this.lifetime.write(this.api.start(id, fromCheckpoint), {
+    this.lifetime.write(this.api.start(id, fromCheckpoint, picks), {
       next: (started) => this.cues.go(gamePageUrl(started.gameId, this.acting.participantId)),
       error: () => {
         this.leaving.set(false);
@@ -549,6 +553,17 @@ export class ScenarioGuide implements DecisionGate {
     this.leaving.set(true);
     this.session.concede();
     this.lifetime.later(() => this.backToHall(), LEAVE_MS);
+  }
+
+  /**
+   * "Change cards" (a puzzle): the puzzle again from its beginning with its slots empty, to fill them afresh (asked about
+   * first while the game is on). Not for a draft's game: its author changes its cards in the authoring panel.
+   */
+  async changeCards(): Promise<void> {
+    const info = this.info();
+    if (info?.level !== 'puzzle' || info.author || info.draftTest) return;
+    const over = this.phase() === 'ended' || this.session.model().ended;
+    if (over || (await this.notifier.confirm(CHANGE_QUESTION, CHANGE_WORDS))) this.start(info.id, false);
   }
 
   /** Back to the Game Hall (to `hash`, a place in it); an author with unsaved changes is asked about them first. */

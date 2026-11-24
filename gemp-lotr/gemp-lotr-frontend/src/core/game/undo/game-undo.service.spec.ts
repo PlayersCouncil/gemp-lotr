@@ -122,6 +122,17 @@ describe('GameUndo', () => {
     expect(undo.allowed()).toBe(false);
   });
 
+  it("has no Undo button in a game that allows no taking back (a puzzle's), whatever its last place", () => {
+    start();
+    undo.refresh();
+    points().flush({
+      ...answer([{ ...green, unavailable: 'Taking back is off in this game' }]),
+      policy: { ...policy, green: false, yellow: false, red: false },
+    });
+    expect(undo.latest()?.label).toBe('Played Gimli');
+    expect(undo.button()).toBeNull();
+  });
+
   it('asks again whenever the game moves; asked while an answer is on its way, once more when it has come', () => {
     start();
     undo.refresh();

@@ -20,6 +20,7 @@ import {
   HINT_MS,
   ScenarioAuthorHooks,
   ScenarioGuide,
+  CHANGE_QUESTION,
   STOCK_NOT_NOW,
   STOCK_OFF_SCRIPT,
 } from './scenario-guide.service';
@@ -1034,5 +1035,51 @@ describe('ScenarioGuide', () => {
     TestBed.tick();
     expect(header()).toBe('Then these');
     expect(acknowledged()).toBeNull();
+  });
+
+  it('plays a puzzle again with the same cards, and changes its cards (asked first while the game is on)', async () => {
+    const start = () => backend.expectOne((r) => r.url === START && r.method === 'POST');
+    const PUZZLE = { ...INFO, id: 'GamePlayer3/p10', kind: 'puzzle', level: 'puzzle', campaign: null };
+    open(S(PUZZLE) + CARD_ACTIONS);
+    guide.restart();
+    let asked = start();
+    expect(asked.request.body?.get('picks')).toBe('same');
+    asked.flush('{"gameId":50}');
+    // (from a checkpoint the server keeps the cards itself)
+    TestBed.resetTestingModule();
+    setUp();
+    open(S(PUZZLE) + CARD_ACTIONS);
+    guide.restart(true);
+    asked = start();
+    expect(asked.request.body?.has('picks')).toBe(false);
+    expect(asked.request.body?.get('from')).toBe('checkpoint');
+
+    TestBed.resetTestingModule();
+    setUp();
+    open(S(PUZZLE) + CARD_ACTIONS);
+    notifier.answers.push(false);
+    await guide.changeCards();
+    expect(notifier.dialogs).toEqual([`confirm: ${CHANGE_QUESTION}`]);
+    expect(backend.match((r) => r.url === START)).toEqual([]);
+    notifier.answers.push(true);
+    await guide.changeCards();
+    asked = start();
+    expect(asked.request.body?.get('id')).toBe('GamePlayer3/p10');
+    expect(asked.request.body?.has('picks')).toBe(false);
+
+    // Over: no question; not for a draft's game, nor a scenario that is no puzzle
+    TestBed.resetTestingModule();
+    setUp();
+    open(S(PUZZLE) + '<ge type="EG"/>');
+    await guide.changeCards();
+    expect(notifier.dialogs).toEqual([]);
+    start();
+    for (const other of [{ ...PUZZLE, author: true }, { ...PUZZLE, draftTest: true }, INFO]) {
+      TestBed.resetTestingModule();
+      setUp();
+      open(S(other) + CARD_ACTIONS);
+      await guide.changeCards();
+      expect(backend.match((r) => r.url === START)).toEqual([]);
+    }
   });
 });
