@@ -21,6 +21,8 @@ describe('AccountOverviewComponent', () => {
       Array.from(price?.querySelectorAll('[data-coin]') ?? []).map((coin) => coin.getAttribute('data-coin')),
     ).toEqual(['gold', 'silver']);
     expect(host.querySelector('.gd-account-overview__migrate')).toBeNull();
+    // The PC Account block, before the ignored players (empty in test mode)
+    expect(host.querySelector('gd-pc-account-block + .gd-account-overview__ignores')).not.toBeNull();
     expect(host.querySelector('.gd-account-overview__empty')?.textContent).toBe('You are not ignoring anyone.');
 
     const field = host.querySelector('#gd-account-ignore-name') as HTMLInputElement;

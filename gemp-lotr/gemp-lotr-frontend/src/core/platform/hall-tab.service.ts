@@ -102,3 +102,42 @@ export class HallChannel {
     this.channel = null;
   }
 }
+
+/** The message telling every other tab that this browser's session changed (an alias entered, a log-out). */
+export const SESSION_CHANGED = 'session-changed';
+
+/**
+ * "The session changed", between the app's tabs, on the hall's channel: after an enter, a create that enters, or a
+ * log-out, the tab that did it announces it (`{type: 'session-changed'}`), and every other tab of the app reloads, so
+ * none goes on acting as the old alias (one that finds itself logged out then goes to the login page, as any page
+ * does). One channel for both, so a tab doesn't hear its own announcement. The app's root listens (app.config.ts);
+ * the legacy pages (hall-legacy.html, game.html) don't. Nothing in a browser without channels.
+ */
+@Injectable({ providedIn: 'root' })
+export class SessionChannel {
+  private readonly view = inject(DOCUMENT).defaultView;
+  private channel: BroadcastChannel | null = null;
+  private listening = false;
+
+  /** Every other tab: reload. */
+  announce(): void {
+    this.open()?.postMessage({ type: SESSION_CHANGED });
+  }
+
+  /** This tab reloads when another announces a change. */
+  reloadOnChange(): void {
+    const channel = this.open();
+    if (channel === null || this.listening) return;
+    this.listening = true;
+    channel.onmessage = (event: MessageEvent) => {
+      if ((event.data as { type?: unknown } | null)?.type === SESSION_CHANGED) this.view?.location.reload();
+    };
+  }
+
+  private open(): BroadcastChannel | null {
+    if (this.channel === null && typeof this.view?.BroadcastChannel === 'function') {
+      this.channel = new this.view.BroadcastChannel(CHANNEL);
+    }
+    return this.channel;
+  }
+}

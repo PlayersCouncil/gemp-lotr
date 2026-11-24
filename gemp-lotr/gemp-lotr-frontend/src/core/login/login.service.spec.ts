@@ -15,11 +15,10 @@ import {
   INVALID_NEW_LOGIN,
   LOGIN_TAKEN,
   MAINTENANCE,
-  PASSWORD_RESET_PROMPT,
-  PASSWORD_UPDATED,
   PASSWORDS_DIFFER,
   PERMANENTLY_BANNED,
   TEMPORARILY_BANNED,
+  TOO_MANY_ATTEMPTS,
 } from './login-messages';
 import { LOGIN_SERVICES } from './login-services';
 import { LoginService, registrationError } from './login.service';
@@ -216,26 +215,29 @@ describe('LoginService', () => {
     expect(service.busy()).toBe(false);
   });
 
-  it('asks for a new password after a reset (202), then sets it through register', async () => {
+  it('says to wait after too many attempts (429), keeping the form', async () => {
+    setUp();
+    fillLogin();
+    const done = service.logIn();
+    fail(expectPost('/login'), 429);
+    await done;
+    expect(service.error()).toBe(TOO_MANY_ATTEMPTS);
+    expect(service.formShown()).toBe(true);
+    expect(service.login()).toBe('frodo');
+    expect(navigation.visited).toEqual([]);
+  });
+
+  it('has no password reset: a 202 is a login like any other success', async () => {
     setUp();
     fillLogin('frodo', '');
     const done = service.logIn();
-    expectPost('/login').flush('', { status: 202, statusText: 'Accepted' });
+    const request = expectPost('/login');
+    request.flush('', { status: 202, statusText: 'Accepted' });
+    await settle();
+    backend.expectOne((r) => r.url === '/gemp-lotr-server/player').flush('{"name":"frodo","type":"u"}');
     await done;
-    expect(service.mode()).toBe('register');
-    expect(service.passwordReset()).toBe(true);
-    expect(service.submitLabel()).toBe('Update Password');
-    expect(service.login()).toBe('frodo');
-    expect(service.password()).toBe('');
-    expect(service.error()).toBe(PASSWORD_RESET_PROMPT);
-    expect(navigation.visited).toEqual([]);
-
-    service.setPassword('new');
-    service.setPasswordRepeated('new');
-    const registered = service.submit();
-    const request = expectPost('/register');
-    expect(request.request.body.toString()).toBe('login=frodo&password=new');
-    await succeed(request, registered);
+    expect(service.mode()).toBe('login');
+    expect(service.submitLabel()).toBe('Login');
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
   });
 
@@ -295,16 +297,6 @@ describe('LoginService', () => {
     expect(service.error()).toBe(message);
     expect(service.login()).toBe('x');
     expect(service.formShown()).toBe(true);
-    expect(navigation.visited).toEqual([]);
-  });
-
-  it('says the password was updated when registering answers 202', async () => {
-    setUp();
-    service.showRegister();
-    const done = service.register();
-    expectPost('/register').flush('', { status: 202, statusText: 'Accepted' });
-    await done;
-    expect(service.error()).toBe(PASSWORD_UPDATED);
     expect(navigation.visited).toEqual([]);
   });
 });

@@ -15,17 +15,15 @@ import {
   LOGIN_TAKEN,
   LoginMessage,
   MAINTENANCE,
-  PASSWORD_RESET_PROMPT,
-  PASSWORD_UPDATED,
   PASSWORDS_DIFFER,
   PERMANENTLY_BANNED,
   REGISTER_BUTTON,
   TEMPORARILY_BANNED,
-  UPDATE_PASSWORD_BUTTON,
+  TOO_MANY_ATTEMPTS,
 } from './login-messages';
 import { loginTarget } from './return-link';
 
-/** Which form is shown: log in, or register (also used to set a new password after a reset). */
+/** Which form is shown: log in, or register. */
 export type LoginMode = 'login' | 'register';
 
 /** The register form's check (the only one the legacy page makes): the passwords must match. */
@@ -47,7 +45,6 @@ export class LoginService {
   private readonly target = loginTarget(inject(PAGE_QUERY_STRING));
 
   private readonly mode_ = signal<LoginMode>('login');
-  private readonly passwordReset_ = signal(false);
   private readonly login_ = signal('');
   private readonly password_ = signal('');
   private readonly passwordRepeated_ = signal('');
@@ -58,8 +55,6 @@ export class LoginService {
   private readonly redirectTarget_ = signal<string | null>(null);
 
   readonly mode = this.mode_.asReadonly();
-  /** The register form is setting a reset account's new password (its button reads "Update Password"). */
-  readonly passwordReset = this.passwordReset_.asReadonly();
   readonly login = this.login_.asReadonly();
   readonly password = this.password_.asReadonly();
   readonly passwordRepeated = this.passwordRepeated_.asReadonly();
@@ -74,9 +69,7 @@ export class LoginService {
   /** Where the page goes once logged in; set just before leaving. */
   readonly redirectTarget = this.redirectTarget_.asReadonly();
 
-  readonly submitLabel = computed(() =>
-    this.mode_() === 'login' ? LOGIN_BUTTON : this.passwordReset_() ? UPDATE_PASSWORD_BUTTON : REGISTER_BUTTON,
-  );
+  readonly submitLabel = computed(() => (this.mode_() === 'login' ? LOGIN_BUTTON : REGISTER_BUTTON));
 
   /** Loads the server's status line (once the page is shown). */
   async loadStatus(): Promise<void> {
@@ -120,18 +113,10 @@ export class LoginService {
     if (this.busy_()) {
       return;
     }
-    const login = this.login_();
     this.busy_.set(true);
     try {
-      const outcome = await firstValueFrom(this.api.login(login, this.password_()));
-      if (outcome === 'passwordReset') {
-        this.showForm('register');
-        this.passwordReset_.set(true);
-        this.login_.set(login);
-        this.error_.set(PASSWORD_RESET_PROMPT);
-      } else {
-        await this.leave();
-      }
+      await firstValueFrom(this.api.login(this.login_(), this.password_()));
+      await this.leave();
     } catch (error) {
       await this.loginFailed(error);
     } finally {
@@ -150,12 +135,8 @@ export class LoginService {
     }
     this.busy_.set(true);
     try {
-      const outcome = await firstValueFrom(this.api.register(this.login_(), this.password_()));
-      if (outcome === 'passwordUpdated') {
-        this.error_.set(PASSWORD_UPDATED);
-      } else {
-        await this.leave();
-      }
+      await firstValueFrom(this.api.register(this.login_(), this.password_()));
+      await this.leave();
     } catch (error) {
       await this.registerFailed(error);
     } finally {
@@ -165,7 +146,6 @@ export class LoginService {
 
   private showForm(mode: LoginMode): void {
     this.mode_.set(mode);
-    this.passwordReset_.set(false);
     this.formShown_.set(true);
     this.login_.set('');
     this.password_.set('');
@@ -196,6 +176,9 @@ export class LoginService {
       case 409:
         this.error_.set(TEMPORARILY_BANNED);
         this.formShown_.set(false);
+        return;
+      case 429:
+        this.error_.set(TOO_MANY_ATTEMPTS);
         return;
       default:
         return this.commonFailure(error);

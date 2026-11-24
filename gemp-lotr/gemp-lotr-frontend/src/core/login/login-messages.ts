@@ -33,15 +33,13 @@ export const TEMPORARILY_BANNED: LoginMessage = [
   '.',
 ];
 export const MAINTENANCE: LoginMessage = ['Server is down for maintenance. Please come at a later time.'];
-export const PASSWORD_RESET_PROMPT: LoginMessage = ['Your password has been reset.  Please enter a new password.'];
 export const PASSWORDS_DIFFER: LoginMessage = ['Password and Password repeated are different! Try again'];
-export const PASSWORD_UPDATED: LoginMessage = [
-  'Your password has successfully been reset!  Please refresh the page and log in.',
-];
 export const INVALID_NEW_LOGIN: LoginMessage = [
   'Login is invalid. Login must be between 2-10 characters long, and contain only\n' +
     ' english letters, numbers or _ (underscore) and - (dash) characters.',
 ];
+/** POST /login answers 429 after too many attempts (new; no legacy wording). */
+export const TOO_MANY_ATTEMPTS: LoginMessage = ['Too many login attempts. Wait a few minutes, then try again.'];
 export const LOGIN_TAKEN: LoginMessage = ['User with this login already exists in the system. Try a different one.'];
 
 /** The link under the login form. */
@@ -50,10 +48,9 @@ export const FORGOT_PASSWORD: MessageLink = {
   url: PC_DISCORD_URL,
 };
 
-/** Button labels: the register form's button reads "Update Password" after a password reset. */
+/** Button labels. */
 export const LOGIN_BUTTON = 'Login';
 export const REGISTER_BUTTON = 'Register';
-export const UPDATE_PASSWORD_BUTTON = 'Update Password';
 
 /** The hall's counts, as GET /status answers them (StatusRequestHandler). */
 export interface ServerStatus {

@@ -11,6 +11,8 @@ import { HallChannel } from '../../core/platform/hall-tab.service';
 import { LocalSettings } from '../../core/platform/local-settings.service';
 import { loginPageAddress } from '../../core/platform/login-page.service';
 import { SettingCookies } from '../../core/platform/setting-cookies';
+import { LOG_OUT } from '../../core/session/pc-account-messages';
+import { PcSessionService } from '../../core/session/pc-session.service';
 import { PlayerInfo } from '../../core/session/player-info.service';
 import { ChatComponent } from '../shared/chat/chat.component';
 import { DialogComponent } from '../shared/dialog/dialog.component';
@@ -51,6 +53,10 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
  * (`gd-play-overlay`, part 4.2); the chat's "Invite to table" opens its Casual form for that player. The Join dialog and
  * the Game Hall's dialogs (ready checks, ready prompts, messages, deliveries) are here too, so they show over every tab.
  *
+ * Log Out (PC-ACCOUNT.md "Two log-outs"; in every mode, while an alias is played) ends the alias, keeping a PC
+ * account signed in, and goes where the server says: the alias list on the login page, or for a password login the
+ * login page. Other tabs are told (PcSessionService).
+ *
  * The chat's height is set by dragging its resize bar or with Up and Down on it (hallUi.js HallChatResizer): 100 px
  * to the window's height less 160, 300 by default, kept in the legacy chatResize cookie.
  *
@@ -58,7 +64,8 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
  * `--gd-chat-height` in px) holding `nav.gd-hall__tabs` (`aria-label`) with an `a.gd-hall__tab` per tab shown
  * (`data-tab` = its legacy slug, for its icon; `aria-current=page` on the tab shown; router links, Admin a plain link
  * to the legacy hall); `main.gd-hall__panel` (`data-tab`) holding the route's component; `div.gd-hall__bar` with
- * `gd-hall-connection`, `div.gd-hall__actions` (`a.gd-hall__action[data-action=deckbuilder]` (`target=_blank`),
+ * `div.gd-hall__presence` (`gd-hall-connection`, then `button.gd-hall__logout[data-action=logout]` while an alias is
+ * played), `div.gd-hall__actions` (`a.gd-hall__action[data-action=deckbuilder]` (`target=_blank`),
  * `button.gd-hall__action[data-action=play]`, each with a `span.gd-hall__action-label`) and `p.gd-hall__clock` (the
  * date and time on two lines, empty before the first update); `div.gd-hall__resizer` (`role=separator`,
  * `aria-valuenow` the chat's height, `data-dragging` while dragged); `gd-chat`; `p.gd-hall__disclaimer`;
@@ -107,7 +114,20 @@ export const ADMIN_TAB_HREF = `${LEGACY_HALL_URL}#admin`;
       <router-outlet />
     </main>
     <div class="gd-hall__bar">
-      <gd-hall-connection [loginUrl]="loginUrl()" />
+      <div class="gd-hall__presence">
+        <gd-hall-connection [loginUrl]="loginUrl()" />
+        @if (logoutShown()) {
+          <button
+            type="button"
+            class="gd-hall__logout"
+            data-action="logout"
+            [disabled]="loggingOut()"
+            (click)="logout()"
+          >
+            {{ logoutLabel }}
+          </button>
+        }
+      </div>
       <div class="gd-hall__actions">
         <a class="gd-hall__action" data-action="deckbuilder" [href]="deckbuilder" target="_blank"
           ><span class="gd-hall__action-label">Deck-builder</span></a
@@ -188,6 +208,12 @@ export class HallShellComponent {
   protected readonly loginRequiredTitle = LOGIN_REQUIRED_TITLE;
   protected readonly loginRequired = LOGIN_REQUIRED;
   protected readonly minHeight = CHAT_MIN_HEIGHT;
+  protected readonly logoutLabel = LOG_OUT;
+
+  private readonly pc = inject(PcSessionService);
+  /** Log Out: while an alias is played (POST /argonauth/logout answers in every mode). */
+  protected readonly logoutShown = computed(() => (this.pc.session()?.player ?? null) !== null);
+  protected readonly loggingOut = signal(false);
 
   protected readonly tabs = computed(() => visibleHallTabs(this.session.adminTabShown()));
   /** The address shown (the router's), for the login page to come back to. */
@@ -220,6 +246,7 @@ export class HallShellComponent {
     const first = this.tabOfRoute(route.snapshot.firstChild?.routeConfig?.path ?? null);
     this.show(first, this.addressOf(route), false);
     void this.session.begin(first?.login ?? true);
+    void this.pc.load();
 
     this.router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -249,6 +276,12 @@ export class HallShellComponent {
     });
 
     this.chatHeight.set(this.clampChat(Number(this.cookies.read(CHAT_HEIGHT_COOKIE)) || CHAT_DEFAULT_HEIGHT));
+  }
+
+  /** Log Out: the alias only. */
+  protected async logout(): Promise<void> {
+    this.loggingOut.set(true);
+    await this.pc.logout('alias');
   }
 
   /** Play: the Play dialog for a player; a visitor is asked to log in instead (hallUi.js #open-table-button). */

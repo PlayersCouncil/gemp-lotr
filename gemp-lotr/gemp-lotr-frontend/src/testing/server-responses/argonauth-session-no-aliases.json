@@ -1,0 +1,8 @@
+{
+  "mode": "optional",
+  "player": null,
+  "pcAccount": { "name": "Peregrin Took", "manageUrl": "https://auth.lotrtcgpc.net/", "fresh": true },
+  "linked": null,
+  "aliases": [],
+  "blockedBy": null
+}

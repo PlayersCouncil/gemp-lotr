@@ -52,11 +52,13 @@
 
 .gd-login__status,
 .gd-login__error,
+.gd-login__notice,
 .gd-login__form {
   margin: 0 auto;
 }
 
 .gd-login__status,
+.gd-login__notice,
 .gd-login__form {
   color: var(--theme-text);
 }
@@ -134,4 +136,24 @@ a:visited {
 /* The legacy page had no way back from the register form */
 .gd-login__actions > [data-action='login'] {
   display: none;
+}
+
+/* "Sign in with PC Account" (optional mode): a link drawn as the buttons are */
+a.gd-button,
+a.gd-button:visited {
+  display: inline-block;
+  color: var(--theme-widget-text);
+  text-decoration: none;
+}
+
+a.gd-button:hover,
+a.gd-button:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+/* The new players' line, where "Login below, or Register" was: as wide as the form's fields allow */
+.gd-login__intro[data-pc] {
+  max-width: 22em;
 }

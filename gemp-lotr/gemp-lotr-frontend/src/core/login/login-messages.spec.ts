@@ -13,8 +13,10 @@ describe('login messages', () => {
   // Read as text only, to check the wording; the legacy script is not run.
   const loginJs = readLegacyWebFile('src/Login/login.js').replace(/"\s*\+\s*"/g, '');
 
+  /** Wording the legacy page never had: POST /login's 429 is new. */
+  const NEW_WORDING = ['TOO_MANY_ATTEMPTS'];
   const htmlMessages: [string, LoginMessage][] = Object.entries(messages).filter(
-    (entry): entry is [string, LoginMessage] => Array.isArray(entry[1]),
+    (entry): entry is [string, LoginMessage] => Array.isArray(entry[1]) && !NEW_WORDING.includes(entry[0]),
   );
 
   it.each(htmlMessages)('%s has the wording of login.js', (_, message) => {
@@ -25,7 +27,6 @@ describe('login messages', () => {
     ['CANNOT_CONTACT', messages.CANNOT_CONTACT],
     ['CANNOT_CONNECT', messages.CANNOT_CONNECT],
     ['FORGOT_PASSWORD', messages.FORGOT_PASSWORD.text],
-    ['UPDATE_PASSWORD_BUTTON', messages.UPDATE_PASSWORD_BUTTON],
   ])('%s has the wording of login.js', (_, text) => {
     expect(loginJs.replace(/<\/?span[^>]*>/g, '')).toContain(text);
   });

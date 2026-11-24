@@ -2,6 +2,7 @@ import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalE
 import { provideRouter } from '@angular/router';
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { Notifier } from '../../core/notifier/notifier';
+import { SessionChannel } from '../../core/platform/hall-tab.service';
 import { SecondTapGuard } from '../../core/platform/second-tap-guard';
 import { ThemeService } from '../../core/platform/theme.service';
 import { WindowNotifier } from '../shared/notifier/window-notifier';
@@ -21,5 +22,8 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => inject(ThemeService).init()),
     // A double tap's second tap doesn't press what a menu or dialog the first one closed or opened uncovered
     provideAppInitializer(() => inject(SecondTapGuard).start()),
+    // Every page (hall, game, deck builder, login) reloads when another tab enters an alias or logs out, so none goes
+    // on acting as the old alias
+    provideAppInitializer(() => inject(SessionChannel).reloadOnChange()),
   ],
 };

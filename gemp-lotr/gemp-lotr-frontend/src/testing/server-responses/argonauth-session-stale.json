@@ -1,0 +1,8 @@
+{
+  "mode": "optional",
+  "player": null,
+  "pcAccount": { "name": "Frodo Baggins", "manageUrl": "https://auth.lotrtcgpc.net/", "fresh": false },
+  "linked": null,
+  "aliases": [{ "id": 900001, "name": "Frodo", "current": false, "busy": false }],
+  "blockedBy": null
+}

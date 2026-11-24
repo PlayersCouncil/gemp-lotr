@@ -38,7 +38,7 @@ describe('LoginApi', () => {
       'login=a%2Bb%26c&password=p%20w%2B%25%3D%C3%A9&participantId=bob',
     );
     request.flush(readServerResponse('login-ok.xml'));
-    await expect(result).resolves.toBe('loggedIn');
+    await expect(result).resolves.toBeUndefined();
   });
 
   it('leaves out the participantId when the page has none', async () => {
@@ -47,20 +47,10 @@ describe('LoginApi', () => {
     const request = expectPost('/register');
     expect((request.request.body as HttpParams).toString()).toBe('login=newbie&password=secret');
     request.flush(readServerResponse('login-ok.xml'));
-    await expect(result).resolves.toBe('registered');
+    await expect(result).resolves.toBeUndefined();
   });
 
-  it('reads 202 as a password reset', async () => {
-    setUp();
-    const login = firstValueFrom(api.login('reset', 'x'));
-    expectPost('/login').flush('', { status: 202, statusText: 'Accepted' });
-    await expect(login).resolves.toBe('passwordReset');
-    const register = firstValueFrom(api.register('reset', 'x'));
-    expectPost('/register').flush('', { status: 202, statusText: 'Accepted' });
-    await expect(register).resolves.toBe('passwordUpdated');
-  });
-
-  it.each([401, 403, 409, 503, 400, 500])('turns HTTP %i into an ApiError with that status', async (status) => {
+  it.each([401, 403, 409, 429, 503, 400, 500])('turns HTTP %i into an ApiError with that status', async (status) => {
     setUp();
     const result = firstValueFrom(api.login('x', 'y'));
     expectPost('/login').flush('', { status, statusText: 'Error' });
