@@ -120,4 +120,22 @@ public class LoggedUserHolderTest {
         assertNull(_sessions.getSession(b));
         assertNull(_sessions.getSession(c));
     }
+
+    @Test
+    public void aSessionThatIsNobodysIsNotKeptLong() {
+        // anyone can have one made by asking to sign in: it carries the sign-in to Argonauth and back, no more
+        LoggedUserHolder.Session nobody = _sessions.newSession();
+        LoggedUserHolder.Session player = _sessions.getSession(_sessions.logUser("Frodo"));
+        LoggedUserHolder.Session pcAccount = _sessions.newSession();
+        pcAccount.setPcAccount(new LoggedUserHolder.PcAccount("sub", "Frodo Baggins", "token", 0, "id.token"));
+        long now = System.currentTimeMillis();
+
+        _sessions.removeIdle(now + LoggedUserHolder.NOBODYS_SESSION_IDLE_MILLIS - 60_000);
+        assertNotNull(_sessions.getSession(nobody.getId()));
+
+        _sessions.removeIdle(System.currentTimeMillis() + LoggedUserHolder.NOBODYS_SESSION_IDLE_MILLIS + 60_000);
+        assertNull(_sessions.getSession(nobody.getId()));
+        assertNotNull(_sessions.getSession(player.getId()));
+        assertNotNull(_sessions.getSession(pcAccount.getId()));
+    }
 }

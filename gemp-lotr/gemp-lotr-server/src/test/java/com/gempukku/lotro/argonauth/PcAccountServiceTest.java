@@ -122,7 +122,8 @@ public class PcAccountServiceTest {
         Mockito.when(dao.getPlayer(Mockito.anyString())).thenAnswer(call -> byName(call.getArgument(0)));
         Mockito.when(dao.loginUser(Mockito.anyString(), Mockito.anyString())).thenAnswer(call -> {
             Player player = byName(call.getArgument(0));
-            // as the real one until the blank-password fix is merged: a blank password matches anything
+            // more lenient than the real one, which never answers an account with a blank password: the service
+            // must not rely on that
             return player != null && (player.getPassword().isEmpty() || player.getPassword().equals(call.getArgument(1))) ? player : null;
         });
         Mockito.when(dao.registerAlias(Mockito.anyString(), Mockito.anyString())).thenAnswer(call -> {

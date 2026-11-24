@@ -3,6 +3,9 @@ package com.gempukku.lotro.builder;
 import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.collection.CollectionSerializer;
+import com.gempukku.lotro.argonauth.ArgonauthClient;
+import com.gempukku.lotro.argonauth.ArgonauthConfig;
+import com.gempukku.lotro.argonauth.PcAccountService;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.collection.TransferDAO;
@@ -43,6 +46,8 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 public class ServerBuilder {
+    private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ServerBuilder.class);
+
     public static void CreatePrerequisites(Map<Type, Object> objectMap) {
         final LotroCardBlueprintLibrary library = new LotroCardBlueprintLibrary();
         objectMap.put(LotroCardBlueprintLibrary.class, library);
@@ -270,6 +275,39 @@ public class ServerBuilder {
                         extract(objectMap, AdminService.class),
                         extract(objectMap, LeagueScheduleService.class)
                 ));
+
+        // The PC account (PC-ACCOUNT.md). In test mode, the default, there is none, and Argonauth is never reached for.
+        ArgonauthConfig argonauth = ArgonauthConfig.read(AppConfig::getProperty, System::getenv);
+        LOGGER.info("PC accounts: argonauth.mode is " + argonauth.mode().name().toLowerCase()
+                + (argonauth.enabled() ? ", at " + argonauth.issuer() + " as " + argonauth.clientId() : ""));
+        objectMap.put(ArgonauthConfig.class, argonauth);
+        LoginThrottle loginThrottle = extract(objectMap, LoginThrottle.class);
+        objectMap.put(PcAccountService.class,
+                new PcAccountService(
+                        argonauth,
+                        argonauth.enabled() ? new ArgonauthClient(argonauth) : null,
+                        extract(objectMap, PlayerDAO.class),
+                        extract(objectMap, PlayerArgonauthDAO.class),
+                        extract(objectMap, LoggedUserHolder.class),
+                        extract(objectMap, HallServer.class)::isPlayerBusy,
+                        // a Gemp password guessed while linking counts with the ones guessed at the login form
+                        new PcAccountService.Attempts() {
+                            @Override
+                            public boolean isBlocked(String name, String ip, long now) {
+                                return loginThrottle.isBlocked(name, ip, now);
+                            }
+
+                            @Override
+                            public void failed(String name, String ip, long now) {
+                                loginThrottle.failed(name, ip, now);
+                            }
+
+                            @Override
+                            public void succeeded(String name, long now) {
+                                loginThrottle.succeeded(name, now);
+                            }
+                        },
+                        System::currentTimeMillis));
     }
 
     private static <T> T extract(Map<Type, Object> objectMap, Class<T> clazz) {

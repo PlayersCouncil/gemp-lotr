@@ -22,6 +22,8 @@ public class LoggedUserHolder {
     static final long SESSION_IDLE_MILLIS = 1000L * 60 * 60 * 24 * 30;
     /** How long Argonauth's answer to a sign-in is waited for. */
     static final long PENDING_SIGN_IN_MILLIS = 1000L * 60 * 5;
+    /** How long a session that is nobody's is kept unused: twice the time a sign-in may take. */
+    static final long NOBODYS_SESSION_IDLE_MILLIS = PENDING_SIGN_IN_MILLIS * 2;
     private static final long SWEEP_INTERVAL_MILLIS = 1000L * 60;
 
     private static final char[] ID_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
@@ -129,9 +131,14 @@ public class LoggedUserHolder {
         sweeper.start();
     }
 
-    /** Ends every session not used for SESSION_IDLE_MILLIS. */
+    /**
+     * Ends every session not used for SESSION_IDLE_MILLIS, and much sooner the ones that are nobody's: a session
+     * with neither a player nor a PC account exists only to carry a sign-in to Argonauth and back, and anyone can
+     * have one made by asking to sign in.
+     */
     void removeIdle(long now) {
-        _sessions.values().removeIf(session -> now > session._lastAccess + SESSION_IDLE_MILLIS);
+        _sessions.values().removeIf(session -> now > session._lastAccess
+                + (session.getPlayer() == null && session.getPcAccount() == null ? NOBODYS_SESSION_IDLE_MILLIS : SESSION_IDLE_MILLIS));
     }
 
     /** The session of a cookie value, counted as used now; null if there is none. */

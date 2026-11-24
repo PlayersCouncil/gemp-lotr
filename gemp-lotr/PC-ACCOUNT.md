@@ -24,7 +24,7 @@ this replaces where they differ. What Gemp asks of Argonauth is in
 
 | Mode | PC account | Password login | Registration | Where |
 |---|---|---|---|---|
-| `test` (default) | Nowhere to be seen; the `argonauth` addresses answer 404 | Yes | Local, as it always was | Local development, test servers |
+| `test` (default) | Nowhere to be seen; the `argonauth` addresses answer 404, but for `session` and `logout` | Yes | Local, as it always was | Local development, test servers |
 | `optional` | "Sign in with PC Account" beside the form | Yes, for accounts that have a password | Through a PC account only | Production, from Yuletide 2026 |
 | `pester`, `required`, `argonauth_only` | | | | Named in `05`; not built. The server refuses to start in them |
 
@@ -40,6 +40,35 @@ this replaces where they differ. What Gemp asks of Argonauth is in
 A test Gemp is never registered at production Argonauth: links are keyed by `player.id`, and
 a test server's ids are production's ids for other people. Test servers that try the
 integration use the dev Argonauth, which has its own database.
+
+### Turning It On
+
+1. **The table.** Run `db/2026-11-23_player-argonauth.sql` on the database. It is empty until someone signs in
+   with a PC account and never read in `test` mode, so it can go in ahead of time. (A new database gets it from
+   `database_script.sql`.)
+2. **The registration at Argonauth.** `python manage.py client save ...` there, with this Gemp's two addresses
+   exactly as they will be set here (Argonauth's `docs/INTEGRATING.md`). A local Argonauth already has `gemp-dev`
+   for a Gemp on port 17001.
+3. **The settings.** Each `argonauth.x.y` can be given as the environment variable `ARGONAUTH_X_Y`, which wins
+   over the properties file; `docker/.env` reaches the app's container, so the secret goes there and not in the
+   repository. For a local Gemp against a local Argonauth, both in Docker:
+
+       ARGONAUTH_MODE=optional
+       ARGONAUTH_ISSUER=http://localhost:1630
+       ARGONAUTH_CLIENT_ID=gemp-dev
+       ARGONAUTH_CLIENT_SECRET=gemp-dev-secret
+       ARGONAUTH_REDIRECT_URI=http://localhost:17001/gemp-lotr-server/argonauth/callback
+       ARGONAUTH_POSTLOGOUT_URI=http://localhost:17001/gemp-lotr/ng/login
+       ARGONAUTH_BACKCHANNEL_URL=http://host.docker.internal:1630
+
+   On Linux Docker the app's service also needs `extra_hosts: ["host.docker.internal:host-gateway"]`. On the
+   droplets there is no back channel: leave it unset and the server uses the public https address.
+4. **Restart.** The log says `PC accounts: argonauth.mode is optional, at <issuer> as <client id>`. A setting
+   that is missing or malformed stops the server and names itself. Argonauth is first reached for when someone
+   signs in, not at start: a Gemp can start while Argonauth is down.
+
+Going back is `ARGONAUTH_MODE=test` and a restart. Aliases created through a PC account have no password, so in
+`test` mode nobody can log in to them; they are there again when the mode is.
 
 ## What A Person Does
 
@@ -102,7 +131,8 @@ finds the alias in their list. The Gemp admin page shows the player's id for thi
 
 ## The Server's Addresses
 
-All under `/gemp-lotr-server/argonauth`. In `test` mode all but `session` answer 404.
+All under `/gemp-lotr-server/argonauth`. In `test` mode all but `session` and `logout` answer 404: logging out
+is for every mode.
 
 ### Pages (the browser is sent to these)
 
@@ -119,9 +149,9 @@ Where the callback lands:
 | Several aliases, none, or gated | `/gemp-lotr/ng/login` |
 | `then=link` or `then=create` | `/gemp-lotr/ng/login?open=link` or `?open=create` |
 | `then=connect`, linked | `/gemp-lotr/ng/account?pc=connected` |
-| `then=connect`, the alias belongs to another PC account | `/gemp-lotr/ng/account?pc=linked-elsewhere` |
-| The person cancelled at Argonauth | `/gemp-lotr/ng/login?pc=cancelled` |
-| Anything else went wrong | `/gemp-lotr/ng/login?pc=failed` |
+| `then=connect`, the alias belongs to another PC account | `/gemp-lotr/ng/account?pc=linked-elsewhere`. The browser stays a password login |
+| The person cancelled at Argonauth | `/gemp-lotr/ng/login?pc=cancelled`; for `then=connect`, `/gemp-lotr/ng/account?pc=cancelled` |
+| Anything else went wrong | `/gemp-lotr/ng/login?pc=failed`; for `then=connect`, `/gemp-lotr/ng/account?pc=failed` |
 
 ### Data (JSON)
 
@@ -130,12 +160,12 @@ Where the callback lands:
 ```json
 {
   "mode": "optional",
-  "player": "Frodo",
+  "player": "Underhill",
   "pcAccount": { "name": "Frodo Baggins", "manageUrl": "https://auth.lotrtcgpc.net/", "fresh": true },
   "linked": true,
   "aliases": [
-    { "id": 900001, "name": "Frodo", "current": true, "busy": false },
-    { "id": 900002, "name": "Underhill", "current": false, "busy": true }
+    { "id": 900001, "name": "Frodo", "current": false, "busy": false },
+    { "id": 900002, "name": "Underhill", "current": true, "busy": true }
   ],
   "blockedBy": "Underhill"
 }
@@ -148,7 +178,7 @@ Where the callback lands:
 | `pcAccount` | Null for a password login and for nobody. `name` is the display name. `fresh` is false once Argonauth's token has lapsed: create and link then start with `GET /login?then=...` |
 | `linked` | Whether `player` is linked to a PC account, by Gemp's copy. Null with no player. For a password login this decides whether "Connect PC Account" is offered |
 | `aliases` | Every alias of the signed-in PC account, by name. Empty without one. `busy`: sits at a table, in a queue, in a running tournament or in a game |
-| `blockedBy` | The name of a busy alias other than `player`, or null. While set, only that alias can be entered, and no alias can be created |
+| `blockedBy` | The name of a busy alias, the one being played included, or null. While set, only that alias can be entered, and no alias can be created |
 
 The actions answer 200 with the session as above, or an error as `{"error": "..."}`:
 
@@ -157,15 +187,20 @@ The actions answer 200 with the session as above, or an error as `{"error": "...
 | `POST /enter` | `playerId` | `401 no-pc-account`; `403 not-linked` (the list has been corrected; ask for the session again); `403 banned`; `409 busy`; `503 unavailable` (Argonauth did not answer) |
 | `POST /create` | `name` | `401 no-pc-account`; `401 reauth`; `400 invalid-name`; `409 name-taken`; `409 busy`; `429 slow-down`; `503 unavailable` |
 | `POST /link` | `login`, `password` | `401 no-pc-account`; `401 reauth`; `401 bad-credentials` (also for an account that cannot be linked with a password); `409 linked-elsewhere`; `429 slow-down`; `503 unavailable` |
-| `POST /logout` | `scope` = `alias` or `all` | None. Answers `{"next": "<address>"}`: where to send the browser |
+| `POST /logout` | `scope` = `alias` or `all` | None. Answers `{"next": "<address>"}`: where to send the browser, which for `all` with a PC account is Argonauth's own address. Sets no cookie: the session is ended here, and its cookie names nothing |
 
-`create` enters the new alias. `link` does not enter the linked one.
+`create` enters the new alias. `link` does not enter the linked one. A PC account creates at most 10 aliases an
+hour (Argonauth takes 20 links an hour from one person, creating and linking together); an alias that could not
+be recorded at Argonauth is taken back, and its name with it.
+
+`POST /gemp-lotr-server/register` answers 403 in any mode but `test`.
 
 ## Sessions And The Cookie
 
 - One cookie, `loggedUser`, as before: now `HttpOnly`, `SameSite=Lax`, and `Secure` when the
   request came over https. Its value is 32 characters from `SecureRandom`.
-- A session lasts a month without use, and is lost on a restart. The code used to say ten
+- A session lasts a month without use, and is lost on a restart. One that is nobody's (made to carry a sign-in to
+  Argonauth and back, which anyone can ask for) lasts ten minutes. The code used to say ten
   minutes, but its sweep looked at one session a minute, so in practice sessions already
   lasted until a restart. That is now what the code says.
 - A sign-in in progress (its `state`, `nonce` and PKCE verifier) is kept in the session that

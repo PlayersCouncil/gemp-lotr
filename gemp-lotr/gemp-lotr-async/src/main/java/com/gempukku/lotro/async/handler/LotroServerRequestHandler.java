@@ -99,12 +99,21 @@ public class LotroServerRequestHandler {
      * came over it (nginx says so in X-Forwarded-Proto; plain http stays possible for local development).
      */
     protected final String sessionCookie(HttpRequest request, String sessionId) {
+        return sessionCookie(cameOverHttps(request), sessionId);
+    }
+
+    /** As above, for an answer written after the request is gone: `secure` is {@link #cameOverHttps} of it. */
+    protected final String sessionCookie(boolean secure, String sessionId) {
         DefaultCookie cookie = new DefaultCookie(SESSION_COOKIE, sessionId);
         cookie.setPath(SESSION_COOKIE_PATH);
         cookie.setHttpOnly(true);
         cookie.setSameSite(CookieHeaderNames.SameSite.Lax);
-        cookie.setSecure("https".equalsIgnoreCase(request.headers().get("X-Forwarded-Proto")));
+        cookie.setSecure(secure);
         return ServerCookieEncoder.STRICT.encode(cookie);
+    }
+
+    protected final boolean cameOverHttps(HttpRequest request) {
+        return "https".equalsIgnoreCase(request.headers().get("X-Forwarded-Proto"));
     }
 
     /** The Set-Cookie value that takes the session cookie away. */
