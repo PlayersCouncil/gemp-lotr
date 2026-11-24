@@ -66,13 +66,13 @@ describe('AliasListComponent', () => {
     const button = (action: string) =>
       query<HTMLButtonElement>(`.gd-alias-list__actions [data-action="${action}"], form [data-action="${action}"]`)!;
     const type = async (field: string, value: string) => {
-      const input = query<HTMLInputElement>(`.gd-alias-list__field[data-field="${field}"] input`)!;
+      const input = query<HTMLInputElement>(`.gd-pc-form__field[data-field="${field}"] input`)!;
       input.value = value;
       input.dispatchEvent(new Event('input'));
       await fixture.whenStable();
     };
     const submit = async () => {
-      query<HTMLFormElement>('form.gd-alias-list__form')!.requestSubmit();
+      query<HTMLFormElement>('form.gd-pc-form__form')!.requestSubmit();
       await stable();
     };
     return { fixture, el, query, all, names, row, enterOf, button, type, submit, stable };
@@ -173,17 +173,17 @@ describe('AliasListComponent', () => {
     button('create').click();
     await stable();
     expect(button('create').getAttribute('aria-expanded')).toBe('true');
-    const form = query('form.gd-alias-list__form')!;
+    const form = query('form.gd-pc-form__form')!;
     expect(form.dataset['form']).toBe('create');
     expect(form.getAttribute('aria-label')).toBe('Create New Gemp Alias');
-    const name = query<HTMLInputElement>('.gd-alias-list__field[data-field="name"] input')!;
+    const name = query<HTMLInputElement>('.gd-pc-form__field[data-field="name"] input')!;
     expect(name.maxLength).toBe(30);
-    expect(query('.gd-alias-list__field[data-field="name"] .gd-alias-list__label')!.textContent).toBe('Name');
+    expect(query('.gd-pc-form__field[data-field="name"] .gd-pc-form__label')!.textContent).toBe('Name');
     expect(button('submit').textContent!.trim()).toBe('Create');
 
     await type('name', 'bad name!');
     await submit();
-    expect(form.querySelector('.gd-alias-list__error')!.textContent).toBe('A name is 2 to 30 letters, digits, _ or -.');
+    expect(form.querySelector('.gd-pc-form__error')!.textContent).toBe('A name is 2 to 30 letters, digits, _ or -.');
 
     await type('name', 'Frodo');
     await submit();
@@ -191,7 +191,7 @@ describe('AliasListComponent', () => {
     await stable();
     expectSession().flush(readServerResponse('argonauth-session-aliases.json'));
     await stable();
-    expect(form.querySelector('.gd-alias-list__error')!.textContent).toBe('That name is taken.');
+    expect(form.querySelector('.gd-pc-form__error')!.textContent).toBe('That name is taken.');
 
     await type('name', 'Merry');
     await submit();
@@ -240,9 +240,9 @@ describe('AliasListComponent', () => {
     button('link').click();
     await stable();
     expect(query('form')!.dataset['form']).toBe('link');
-    expect(
-      Array.from(query('form')!.querySelectorAll('.gd-alias-list__label')).map((label) => label.textContent),
-    ).toEqual(['Username', 'Password']);
+    expect(Array.from(query('form')!.querySelectorAll('.gd-pc-form__label')).map((label) => label.textContent)).toEqual(
+      ['Username', 'Password'],
+    );
     expect(query<HTMLInputElement>('input[name="password"]')!.type).toBe('password');
     await type('login', 'Sam');
     await type('password', 'wrong');
@@ -251,7 +251,7 @@ describe('AliasListComponent', () => {
     await stable();
     expectSession().flush(readServerResponse('argonauth-session-no-aliases.json'));
     await stable();
-    expect(query('form .gd-alias-list__error')!.textContent).toBe(
+    expect(query('form .gd-pc-form__error')!.textContent).toBe(
       'Wrong username or password, or that account cannot be linked with a password.',
     );
 
@@ -261,7 +261,7 @@ describe('AliasListComponent', () => {
     await stable();
     expectSession().flush(readServerResponse('argonauth-session-no-aliases.json'));
     await stable();
-    expect(query('form .gd-alias-list__error')!.textContent).toBe('That account belongs to another PC Account.');
+    expect(query('form .gd-pc-form__error')!.textContent).toBe('That account belongs to another PC Account.');
 
     await type('password', 'right');
     await submit();

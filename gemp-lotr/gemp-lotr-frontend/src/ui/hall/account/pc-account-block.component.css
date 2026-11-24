@@ -21,12 +21,10 @@ h2 {
   font-size: 90%;
 }
 
-.gd-pc-account-block__manage,
-.gd-pc-account-block__connect {
+.gd-pc-account-block__manage {
   color: var(--theme-hall-link);
 }
 
-.gd-pc-account-block__manage:hover,
-.gd-pc-account-block__connect:hover {
+.gd-pc-account-block__manage:hover {
   color: var(--theme-hall-link-hover);
 }

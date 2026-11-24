@@ -101,7 +101,7 @@ describe('isAliasName', () => {
 describe('pcSignInAddress', () => {
   it("is the server's sign-in, with what it is for and where to come back to", () => {
     expect(pcSignInAddress()).toBe('/gemp-lotr-server/argonauth/login');
-    expect(pcSignInAddress('connect')).toBe('/gemp-lotr-server/argonauth/login?then=connect');
+    expect(pcSignInAddress('link')).toBe('/gemp-lotr-server/argonauth/login?then=link');
     expect(pcSignInAddress(null, '/events/leagues')).toBe(
       '/gemp-lotr-server/argonauth/login?return=%2Fevents%2Fleagues',
     );

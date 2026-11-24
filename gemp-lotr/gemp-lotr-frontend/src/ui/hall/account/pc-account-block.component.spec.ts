@@ -2,6 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../../core/api/gemp-interceptors';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
+import { PageNavigation } from '../../../core/platform/page-navigation';
 import { settle } from '../../../testing/fake-notifier';
 import { readServerResponse } from '../../../testing/files';
 import { PcAccountBlockComponent } from './pc-account-block.component';
@@ -21,7 +22,11 @@ describe('PcAccountBlockComponent', () => {
     await settle();
     await component.whenStable();
     const el = component.nativeElement as HTMLElement;
-    return { el, query: (selector: string) => el.querySelector<HTMLElement>(selector) };
+    const stable = async () => {
+      await settle();
+      await component.whenStable();
+    };
+    return { el, stable, query: (selector: string) => el.querySelector<HTMLElement>(selector) };
   }
 
   afterEach(() => backend.verify());
@@ -54,11 +59,62 @@ describe('PcAccountBlockComponent', () => {
     const { el, query } = await render('argonauth-session-password.json');
     expect(el.dataset['kind']).toBe('password');
     expect(query('.gd-pc-account-block__about')!.textContent).toContain('A PC Account is one sign-in');
-    const connect = query('a.gd-pc-account-block__connect')!;
+    const connect = query('button.gd-pc-account-block__connect')!;
     expect(connect.textContent!.trim()).toBe('Connect PC Account');
-    expect(connect.getAttribute('href')).toBe('/gemp-lotr-server/argonauth/login?then=connect');
+    expect(connect.classList).toContain('gd-button');
+    expect(query('gd-pc-form')).toBeNull();
     expect(query('gd-alias-list')).toBeNull();
     expect(query('.gd-pc-account-block__connected')).toBeNull();
+  });
+
+  it("connects with the account's password: refused, it says why; accepted, the page leaves for the sign-in", async () => {
+    const { query, stable } = await render('argonauth-session-password.json');
+    const visited: string[] = [];
+    vi.spyOn(TestBed.inject(PageNavigation), 'go').mockImplementation((url) => void visited.push(url));
+    (query('button.gd-pc-account-block__connect') as HTMLButtonElement).click();
+    await stable();
+    const form = query('gd-pc-form form')!;
+    expect([form.dataset['form'], form.getAttribute('aria-label')]).toEqual(['connect', 'Connect PC Account']);
+    expect(query('.gd-pc-form__label')!.textContent).toBe('Password');
+    expect(query('[data-action="submit"]')!.textContent!.trim()).toBe('Connect');
+    expect(query('button.gd-pc-account-block__connect')).toBeNull();
+    const type = async (value: string) => {
+      const input = query('input[name="password"]') as HTMLInputElement;
+      expect(input.type).toBe('password');
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+      (query('gd-pc-form form') as HTMLFormElement).requestSubmit();
+      await stable();
+    };
+
+    await type('wrong');
+    const refused = backend.expectOne((r) => r.url === '/gemp-lotr-server/argonauth/connect' && r.method === 'POST');
+    expect(refused.request.body.toString()).toBe('password=wrong');
+    refused.flush('{"error":"bad-credentials"}', { status: 401, statusText: 'Unauthorized' });
+    await stable();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/session')
+      .flush(readServerResponse('argonauth-session-password.json'));
+    await stable();
+    expect(query('.gd-pc-form__error')!.textContent).toBe('Wrong password.');
+    expect((query('input[name="password"]') as HTMLInputElement).value).toBe('');
+
+    await type('right');
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/connect')
+      .flush(readServerResponse('argonauth-connect.json'));
+    await stable();
+    expect(visited).toEqual([JSON.parse(readServerResponse('argonauth-connect.json')).next]);
+  });
+
+  it('closes the Connect form with Cancel', async () => {
+    const { query, stable } = await render('argonauth-session-password.json');
+    (query('button.gd-pc-account-block__connect') as HTMLButtonElement).click();
+    await stable();
+    (query('[data-action="cancel"]') as HTMLButtonElement).click();
+    await stable();
+    expect(query('gd-pc-form')).toBeNull();
+    expect(query('button.gd-pc-account-block__connect')).not.toBeNull();
   });
 
   it('tells a password login that is linked where its other aliases are', async () => {

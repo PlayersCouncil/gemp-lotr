@@ -118,8 +118,8 @@ function tools(context, page, server) {
 const ALIAS = (name) => `.gd-alias-list__alias[data-alias="${name}"]`;
 const ENTER = (name) => `${ALIAS(name)} [data-action="enter"]`;
 const ACTION = (action) => `.gd-alias-list__actions [data-action="${action}"]`;
-const FORM = 'form.gd-alias-list__form';
-const FORM_ERROR = `${FORM} .gd-alias-list__error`;
+const FORM = 'form.gd-pc-form__form';
+const FORM_ERROR = `${FORM} .gd-pc-form__error`;
 const NAMES = '.gd-alias-list__name';
 
 /** Opens the create form and submits `name`. */
@@ -430,20 +430,53 @@ const SCENARIOS = [
   },
   {
     name: 'account-password',
-    note: 'My Account, a password login not linked: Connect PC Account',
+    note: 'My Account, a password login not linked: Connect PC Account, and the lines a Connect comes back to',
     server: { session: 'argonauth-session-password.json' },
     run: async (t) => {
       await t.open(`${NG}account`);
       await t.visible('.gd-pc-account-block__about');
-      await t.text('.gd-pc-account-block__connect', 'Connect PC Account');
-      await t.attribute('.gd-pc-account-block__connect', 'href', `${SIGN_IN}?then=connect`);
+      await t.text('button.gd-pc-account-block__connect', 'Connect PC Account');
       await t.absent('gd-pc-account-block gd-alias-list *');
-      await t.open(`${NG}account?pc=linked-elsewhere`);
-      await t.text('.gd-pc-account-block__notice', 'This account already belongs to another PC Account.');
-      await t.open(`${NG}account?pc=failed`);
-      await t.text('.gd-pc-account-block__notice', 'PC Account sign-in failed. Try again.');
-      await t.open(`${NG}account?pc=cancelled`);
-      await t.text('.gd-pc-account-block__notice', 'PC Account sign-in was cancelled.');
+      await t.absent('gd-pc-account-block gd-pc-form');
+      for (const [pc, line] of [
+        ['linked-elsewhere', 'This account already belongs to another PC Account.'],
+        ['failed', 'PC Account sign-in failed. Try again.'],
+        ['cancelled', 'PC Account sign-in was cancelled.'],
+      ]) {
+        await t.open(`${NG}account?pc=${pc}`);
+        await t.text('.gd-pc-account-block__notice', line);
+      }
+    },
+  },
+  {
+    name: 'connect-good',
+    note: "Connect PC Account: the account's password, then the PC sign-in the server names",
+    server: { session: 'argonauth-session-password.json' },
+    run: async (t) => {
+      await t.open(`${NG}account`);
+      await t.click('button.gd-pc-account-block__connect');
+      await t.attribute(FORM, 'data-form', 'connect');
+      await t.fill(`${FORM} input[name="password"]`, 'secret');
+      await t.click(`${FORM} [data-action="submit"]`);
+      await t.arrives(read('argonauth-connect.json').next.split('?')[0]);
+      t.sent(['/connect password=secret']);
+    },
+  },
+  {
+    name: 'connect-bad',
+    note: 'Connect with a wrong password: said under the form, nothing else happens; Cancel closes it',
+    server: { session: 'argonauth-session-password.json', refuse: { connect: [401, 'bad-credentials'] } },
+    run: async (t) => {
+      await t.open(`${NG}account`);
+      await t.click('button.gd-pc-account-block__connect');
+      await t.fill(`${FORM} input[name="password"]`, 'wrong');
+      await t.click(`${FORM} [data-action="submit"]`);
+      await t.text(FORM_ERROR, 'Wrong password.');
+      await t.value(`${FORM} input[name="password"]`, '');
+      await t.arrives(`${NG}account`);
+      await t.click(`${FORM} [data-action="cancel"]`);
+      await t.visible('button.gd-pc-account-block__connect');
+      t.sent(['/connect password=wrong']);
     },
   },
   {

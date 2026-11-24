@@ -82,6 +82,7 @@ serverTimeMs>` with `add` queue, tournament and table rows and a `<newGame>`; at
   account not linked and linked), `argonauth-session-aliases.json` (a PC account with three aliases and none played),
   `argonauth-session-no-aliases.json` (a PC account with none) and `argonauth-session-stale.json` (`fresh` false);
   what POST /argonauth/enter, /create and /link answer on success is a session as these. POST /argonauth/logout as
-  `argonauth-logout-alias.json` and `argonauth-logout-all.json` (`next`). `argonauth-errors.json` lists every refusal
+  `argonauth-logout-alias.json` and `argonauth-logout-all.json` (`next`). POST /argonauth/connect as `argonauth-connect.json`
+  (`next`: the PC sign-in that links the account). `argonauth-errors.json` lists every refusal
   of the document's table, by action, as `[status, code]`: each is answered with the body `{"error": "<code>"}`.
   Replace them with captured answers once the server has the addresses.

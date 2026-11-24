@@ -83,6 +83,7 @@ export class FakePcServer {
       this.session = { ...this.session, aliases: [...this.session.aliases, this.linked] };
       return { json: this.session };
     }
+    if (action === 'connect') return { json: read('argonauth-connect.json') };
     if (action === 'logout') {
       const all = body.scope === 'all';
       this.session = { ...this.session, player: null, linked: null, ...(all ? { pcAccount: null, aliases: [] } : {}) };

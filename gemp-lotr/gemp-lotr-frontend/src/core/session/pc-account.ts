@@ -111,8 +111,11 @@ export function isAliasName(name: string): boolean {
 /** Where the PC Account's pages are on the Gemp server. */
 export const ARGONAUTH_URL = `${SERVER_URL}/argonauth`;
 
-/** What a PC sign-in is for, besides signing in: open the link or create form, or connect the alias logged in. */
-export type PcSignInPurpose = 'link' | 'create' | 'connect';
+/**
+ * What a PC sign-in is for, besides signing in: open the link or create form. (Connecting a password login is POST
+ * /argonauth/connect, with the account's password.)
+ */
+export type PcSignInPurpose = 'link' | 'create';
 
 /** GET /argonauth/login: starts a PC sign-in, for `then`, coming back (after entering) to `returnTo` if given. */
 export function pcSignInAddress(then: PcSignInPurpose | null = null, returnTo = ''): string {

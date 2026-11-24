@@ -427,6 +427,6 @@ describe('LoginPageComponent and the PC account', () => {
   it('opens the form a PC sign-in came back for', async () => {
     setUp('?open=link');
     const { query } = await render('argonauth-session-aliases.json');
-    expect(query('.gd-alias-list__form')!.dataset['form']).toBe('link');
+    expect(query('.gd-pc-form__form')!.dataset['form']).toBe('link');
   });
 });

@@ -36,10 +36,23 @@ export class PcAccountApi {
     return this.post('/argonauth/link', { login, password });
   }
 
+  /**
+   * POST /argonauth/connect: connects the account this browser is logged in to, by its password. The answer is where
+   * to send the browser: the PC sign-in that links it.
+   */
+  connect(password: string): Observable<string> {
+    return this.next('/argonauth/connect', { password });
+  }
+
   /** POST /argonauth/logout: where to send the browser next. */
   logout(scope: LogoutScope): Observable<string> {
+    return this.next('/argonauth/logout', { scope });
+  }
+
+  /** A POST answered `{"next": "<address>"}`: the address, or '' without one. */
+  private next(path: string, data: Record<string, string>): Observable<string> {
     return this.http
-      .postJson<{ next?: unknown } | null>('/argonauth/logout', { scope }, this.options)
+      .postJson<{ next?: unknown } | null>(path, data, this.options)
       .pipe(map((answer) => (typeof answer?.next === 'string' ? answer.next : '')));
   }
 
