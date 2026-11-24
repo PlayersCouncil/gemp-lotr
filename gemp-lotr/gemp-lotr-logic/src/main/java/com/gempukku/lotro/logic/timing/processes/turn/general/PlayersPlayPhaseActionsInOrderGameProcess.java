@@ -10,6 +10,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.loops.LoopNegotiation;
 import com.gempukku.lotro.logic.timing.loops.LoopRun;
 import com.gempukku.lotro.logic.timing.loops.LoopTracker;
+import com.gempukku.lotro.logic.timing.processes.AsksAgain;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
  * (CR 4.2 "loops", LoopTracker) included, and with it the run of a loop the players have settled (LoopRun), which
  * is carried out before anybody is asked anything.
  */
-public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
+public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess, AsksAgain {
     private final PlayOrder _playOrder;
     private int _consecutivePasses;
     private final GameProcess _followingGameProcess;
@@ -30,6 +31,9 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
     private final String _playerToAsk;
 
     private GameProcess _nextProcess;
+    // The player this step asked, and whether that choice of actions is still waiting for an answer (AsksAgain)
+    private String _asked;
+    private boolean _asking;
 
     public PlayersPlayPhaseActionsInOrderGameProcess(PlayOrder playOrder, int consecutivePasses, GameProcess followingGameProcess) {
         this(playOrder, consecutivePasses, followingGameProcess, new LoopTracker(playOrder.getPlayerCount()), null);
@@ -46,10 +50,7 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
 
     @Override
     public void process(final LotroGame game) {
-        Skirmish skirmish = game.getGameState().getSkirmish();
-        if (game.getGameState().getCurrentPhase() == Phase.SKIRMISH
-                && (game.getGameState().getSkirmish().isCancelled()
-                || skirmish.getFellowshipCharacter() == null || skirmish.getShadowCharacters().size() == 0)) {
+        if (skirmishIsOver(game)) {
             // If the skirmish is cancelled or one side of the skirmish is missing, no more phase actions can be played
             if (_loopTracker.getRun() != null)
                 _loopTracker.getRun().stop(game, "the skirmish is over");
@@ -94,25 +95,68 @@ public class PlayersPlayPhaseActionsInOrderGameProcess implements GameProcess {
                 return;
             }
 
-            if (countUsable(game, playableActions) == 0 && game.shouldAutoPass(playerId, game.getGameState().getCurrentPhase())) {
-                playerPassed(playerId);
-            } else {
-                game.getUserFeedback().sendAwaitingDecision(playerId,
-                        new CardActionSelectionDecision(game, 1, "Play " + game.getGameState().getCurrentPhase().getHumanReadable() + " action or Pass", playableActions) {
-                            @Override
-                            public void decisionMade(String result) throws DecisionResultInvalidException {
-                                Action action = getSelectedAction(result);
-                                if (action != null) {
-                                    _loopTracker.chose(game, playerId, action);
-                                    _nextProcess = new PlayersPlayPhaseActionsInOrderGameProcess(_playOrder, 0, _followingGameProcess, _loopTracker, null);
-                                    game.getActionsEnvironment().addActionToStack(action);
-                                } else {
-                                    playerPassed(playerId);
-                                }
-                            }
-                        });
-            }
+            offer(game, playerId, playableActions);
         }
+    }
+
+    // If the skirmish is cancelled or one side of the skirmish is missing, no more phase actions can be played
+    private static boolean skirmishIsOver(LotroGame game) {
+        Skirmish skirmish = game.getGameState().getSkirmish();
+        return game.getGameState().getCurrentPhase() == Phase.SKIRMISH
+                && (game.getGameState().getSkirmish().isCancelled()
+                || skirmish.getFellowshipCharacter() == null || skirmish.getShadowCharacters().size() == 0);
+    }
+
+    // The player passes by himself if he has nothing to play in a phase he is passed through; otherwise he is asked.
+    private void offer(final LotroGame game, final String playerId, List<Action> playableActions) {
+        if (countUsable(game, playableActions) == 0 && game.shouldAutoPass(playerId, game.getGameState().getCurrentPhase())) {
+            playerPassed(playerId);
+        } else {
+            _asked = playerId;
+            _asking = true;
+            game.getUserFeedback().sendAwaitingDecision(playerId,
+                    new CardActionSelectionDecision(game, 1, "Play " + game.getGameState().getCurrentPhase().getHumanReadable() + " action or Pass", playableActions) {
+                        @Override
+                        public void decisionMade(String result) throws DecisionResultInvalidException {
+                            Action action = getSelectedAction(result);
+                            _asking = false;
+                            if (action != null) {
+                                _loopTracker.chose(game, playerId, action);
+                                _nextProcess = new PlayersPlayPhaseActionsInOrderGameProcess(_playOrder, 0, _followingGameProcess, _loopTracker, null);
+                                game.getActionsEnvironment().addActionToStack(action);
+                            } else {
+                                playerPassed(playerId);
+                            }
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public boolean isAsking() {
+        return _asking;
+    }
+
+    @Override
+    public String askedPlayer() {
+        return _asked;
+    }
+
+    /**
+     * Asks the same player again, the actions on offer worked out afresh (AsksAgain): the order is not moved on and
+     * the count of passes in a row is kept, since nobody chose or passed.  In a skirmish, one that has lost a side
+     * meanwhile (a character an edit left with no vitality died before this is called) takes no more actions, as on
+     * a first asking.  The loop step (CR 4.2) is told nothing and not looked at, for the reasons the one-player
+     * window gives (PlayerPlaysPhaseActionsUntilPassesGameProcess.askAgain).
+     */
+    @Override
+    public void askAgain(LotroGame game) {
+        _asking = false;
+        if (skirmishIsOver(game)) {
+            _nextProcess = _followingGameProcess;
+            return;
+        }
+        offer(game, _asked, game.getActionsEnvironment().getPhaseActions(_asked));
     }
 
     // The player to act after a loop's run, the order brought up to him: the next player of the order is the one

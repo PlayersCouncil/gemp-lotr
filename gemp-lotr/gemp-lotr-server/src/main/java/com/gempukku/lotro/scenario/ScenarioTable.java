@@ -82,7 +82,7 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
     /** Feeds this game the journal it follows; shared with everything else that follows a journal. */
     private final JournalFollower _follower = new JournalFollower();
     private String _followProblem;
-    private java.util.function.Consumer<GameJournal.Entry> _noteFollower;
+    private final List<java.util.function.Consumer<GameJournal.Entry>> _noteFollowers = new ArrayList<>();
     private java.util.function.BiPredicate<String, Phase> _askToPass;
     private java.util.function.BiConsumer<String, Phase> _autoPassed;
 
@@ -204,10 +204,12 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
 
     /**
      * Has somebody handed each note of a journal this game follows, at the point where it was written.  Notes are
-     * about whatever runs the game, so it is for whatever runs the game to act on them.
+     * about whatever runs the game, so it is for whatever runs the game to act on them.  More than one may be told
+     * (the session, which reads pauses again; a sandbox, which makes its edits again): each is handed every note,
+     * in the order they asked, and acts on the notes that are its own.
      */
     public void OnNote(java.util.function.Consumer<GameJournal.Entry> follower) {
-        _noteFollower = follower;
+        _noteFollowers.add(follower);
     }
 
     /**
@@ -370,9 +372,10 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
 
             @Override
             public boolean note(GameJournal.Entry note) {
-                if (_noteFollower == null)
+                if (_noteFollowers.isEmpty())
                     return false;
-                _noteFollower.accept(note);
+                for (java.util.function.Consumer<GameJournal.Entry> follower : _noteFollowers)
+                    follower.accept(note);
                 return true;
             }
 
@@ -1079,4 +1082,27 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
             throw new IllegalArgumentException(exp.getMessage(), exp);
         }
     }
+
+    /* ---- for a sandbox, whose player changes the board by hand (ScenarioSandbox) ---- */
+
+    /** Every card the scenario has a name for, by name, in the order they were named: its own, then any added since. */
+    Map<String, PhysicalCardImpl> Named() {
+        return java.util.Collections.unmodifiableMap(_aliases);
+    }
+
+    /** Gives a card that has just been made (a sandbox's added card) a name in the scenario, as the scenario's own have. */
+    void Name(Seat seat, String alias, PhysicalCardImpl card) {
+        if (_aliases.containsKey(alias))
+            throw new IllegalStateException("There is a card called '" + alias + "' already");
+        bind(Player(seat), alias, card);
+    }
+
+    /** Puts a card in one of a seat's zones, as setup and do: move put it there. */
+    void Place(PhysicalCardImpl card, Seat seat, SetupZone zone, boolean bottom) {
+        place(card, seat, zone, bottom);
+    }
+
+    LotroCardBlueprintLibrary Library() { return _library; }
+
+    LotroFormat Format() { return _format; }
 }

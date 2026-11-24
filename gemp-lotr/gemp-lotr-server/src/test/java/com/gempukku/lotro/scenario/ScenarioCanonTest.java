@@ -36,6 +36,8 @@ public class ScenarioCanonTest {
         //The ones kept with the tests as fixtures.  (Not the scenarios that ship with the game: they are changing too
         // much to hold the build to yet.  The server plays each through as it reads it, and says what fails.)
         List<File> roots = new ArrayList<>(List.of(new File("src/test/resources/scenarios")));
+        //The sandboxes that ship are held to it, though: they have no script to change, only a board to lay out
+        roots.add(new File("../gemp-lotr-cards/src/main/resources/scenarios/sandboxes"));
         //-Dscenario.folder=<folder>[:<folder>...] plays every scenario under those folders as well (drafts, an author's
         // own folder), each named by its place under the folder it was found in
         String more = System.getProperty("scenario.folder", "");

@@ -61,7 +61,12 @@ public class LiveScenario implements ScenarioSession.Listener {
         /** The person left: conceded, or stopped answering. */
         ABANDONED,
         /** The game broke and was called off. */
-        ERROR
+        ERROR,
+        /**
+         * A sandbox's game ended (by its own rules, or by its script): there is nothing in a sandbox to complete or
+         * to fail, so a sandbox never ends COMPLETE or FAILED, and a person's progress in one is never "complete".
+         */
+        ENDED
     }
 
     /** The part of a live game that a scenario needs: a way to answer for the opponent. */
@@ -159,6 +164,11 @@ public class LiveScenario implements ScenarioSession.Listener {
     private int _runToTimes;
     private java.util.function.Function<Step, String> _runChoices;
     private String _runProblem;
+    /** A sandbox's stopping, editing and starting (kind: sandbox, and no author at the table); null otherwise. */
+    private ScenarioSandbox _sandbox;
+    /** What the info event last said of the sandbox's mode, to send it again when that changes. */
+    private String _sandboxShown;
+    private String _endReason;
 
     private static final class Move {
         final AwaitingDecision decision;
@@ -200,9 +210,23 @@ public class LiveScenario implements ScenarioSession.Listener {
         _table = new ScenarioTable(def, library, format, humanPlayer, OPPONENT_PLAYER);
         _session = new ScenarioSession(_table);
         _session.Listen(this);
+        if (def.kind == ScenarioDefinition.Kind.SANDBOX)
+            _sandbox = new ScenarioSandbox(def, _table, humanPlayer);
         if (earlier != null)
             _table.Follow(earlier);
         _table.Prepare();
+        //(an ended sandbox says why its game ended: the game itself keeps no reason once it has said it)
+        if (_sandbox != null)
+            _table.game().addGameResultListener(new com.gempukku.lotro.logic.timing.GameResultListener() {
+                @Override
+                public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                    _endReason = loserPlayerIdsWithReasons.values().stream().filter(reason -> !reason.equals("Other player won"))
+                            .findFirst().orElse(winReason);
+                }
+
+                @Override
+                public void gameCancelled() { }
+            });
     }
 
     public ScenarioDefinition Definition() { return _def; }
@@ -213,6 +237,12 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     /** How the scenario ended; null while it is still going. */
     public Result Result() { return _result; }
+
+    /** The sandbox's controls (Stop, edits, Start); null for a scenario that is not a sandbox, or has an author. */
+    public ScenarioSandbox Sandbox() { return _sandbox; }
+
+    /** Whether the game is stopped for the person to change its board: nobody's answer is taken meanwhile. */
+    public boolean Stopped() { return _sandbox != null && _sandbox.Stopped(); }
 
     /**
      * Everything that went wrong with the script during this run.  A scenario that passes the headless runner
@@ -263,6 +293,8 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public void SetAuthor(Author author) {
         _author = author;
+        //(the authoring tool changes a sandbox's board its own way, writing what it does into the file)
+        _sandbox = null;
         _session.WritingInto(author::writesInto);
     }
 
@@ -436,6 +468,9 @@ public class LiveScenario implements ScenarioSession.Listener {
         if (_runTo != null)
             runScript();
         _begun = true;
+        //A sandbox opens stopped, in edit mode, at its first decision that can be asked again
+        if (_sandbox != null)
+            _sandbox.Opened();
         //(a game taken back did not start anywhere new: it is still the game that started where the first one did)
         if (!_takenBack && _table.FollowedAnything() && _session.Director().currentStep() != null)
             _resumedAt = _session.Director().currentStep().number;
@@ -497,7 +532,7 @@ public class LiveScenario implements ScenarioSession.Listener {
             } else {
                 clearStep();
                 //(with an author at the table, this is not the end of anything: it is where the writing happens)
-                if (_def.coverage == Coverage.STRICT && _author == null)
+                if (_def.coverageInForce() == Coverage.STRICT && _author == null)
                     offScript("no step covers the player's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
             }
             return;
@@ -523,12 +558,12 @@ public class LiveScenario implements ScenarioSession.Listener {
             return;
         }
         if (answer == null) {
-            if (step == null && _def.fallback == Fallback.FAIL && _author != null) {
+            if (step == null && _def.fallbackInForce() == Fallback.FAIL && _author != null) {
                 //An author who is not answering for the opponent has it do the least it can, and is told that a
                 // player's game would have stopped here
                 problem("no step covers the opponent's decision (" + _session.Director().describe(ruling.player(), ruling.decision())
                         + "), and opponent.fallback is 'fail': a player's game leaves its script here.  The opponent has done as little as it can.");
-            } else if (step == null && _def.fallback == Fallback.FAIL) {
+            } else if (step == null && _def.fallbackInForce() == Fallback.FAIL) {
                 offScript("no step covers the opponent's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
                 if (!carriesOnOffScript())
                     return;
@@ -690,6 +725,22 @@ public class LiveScenario implements ScenarioSession.Listener {
         } else if (_def.outcome.win != null && _table.Holds(_def.outcome.win, _human)) {
             finish(Result.COMPLETE, closing(_def.outcome.winMessages), null, false, true);
         }
+        if (_result == null)
+            sandboxShown();
+    }
+
+    /**
+     * Sends the info event again if what it says of the sandbox's mode has changed since it was last sent: whether
+     * the game is stopped, and whether Stop or Start would be taken (which changes with each decision).
+     */
+    public void sandboxShown() {
+        if (_sandbox == null || !_begun)
+            return;
+        String now = _sandbox.Stopped() + "|" + _sandbox.CanStop() + "|" + _sandbox.CanStart();
+        if (now.equals(_sandboxShown))
+            return;
+        _sandboxShown = now;
+        _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.SerializeWithNulls(infoEvent()));
     }
 
     /**
@@ -705,6 +756,11 @@ public class LiveScenario implements ScenarioSession.Listener {
             return;
         }
         boolean won = _human.equals(_table.game().getWinnerPlayerId());
+        if (_sandbox != null) {
+            //Nothing in a sandbox is won or lost: it is over, and the person may set it up again (Reset)
+            finish(Result.ENDED, closing(won ? _def.outcome.winMessages : _def.outcome.loseMessages), null, false, false);
+            return;
+        }
         ScenarioDefinition.End ending = won ? _def.outcome.gameWon : _def.outcome.gameLost;
         Result result = ending != null ? (ending.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED)
                 : won ? Result.COMPLETE : Result.FAILED;
@@ -783,6 +839,9 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void finish(Result result, List<Map<String, Object>> messages, String message, boolean restart, boolean endGame) {
+        //(a sandbox's script can end it too, but a sandbox is never complete or failed: see Result.ENDED)
+        if (_sandbox != null && (result == Result.COMPLETE || result == Result.FAILED))
+            result = Result.ENDED;
         _move = null;
         clearStep();
 
@@ -794,11 +853,20 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("restart", restart);
         //Whether there is a checkpoint to go back to, and if so which step it is
         event.put("checkpoint", _lastCheckpoint == 0 ? null : _lastCheckpoint);
+        if (result == Result.ENDED) {
+            //An ended sandbox: who won the game, if the game itself ended ("human", "opponent", or null), and why
+            String winner = _table.game().getWinnerPlayerId();
+            event.put("winner", winner == null ? null : winner.equals(_human) ? "human" : "opponent");
+            event.put("reason", _endReason);
+            event.put("reset", true);
+        }
         show(END, event);
         settled(result);
 
         if (endGame) {
-            if (result == Result.COMPLETE)
+            if (result == Result.ENDED)
+                _table.game().playerWon(_human, "The sandbox ended");
+            else if (result == Result.COMPLETE)
                 _table.game().playerWon(_human, "Scenario complete");
             else
                 _table.game().playerWon(_opponent, result == Result.OFF_SCRIPT ? "Scenario left its script" : "Scenario failed");
@@ -832,7 +900,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("version", _def.version);
         event.put("kind", _def.kind.name().toLowerCase());
         event.put("title", _def.title);
-        event.put("coverage", _def.coverage.name().toLowerCase());
+        event.put("coverage", _def.coverageInForce().name().toLowerCase());
         event.put("human", _human);
         event.put("humanSeat", _def.human.key());
         //Whether the seats take turns (each playing both roles), or the person's seat keeps its role all game
@@ -854,6 +922,13 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("author", _author != null);
         //...or playing a draft of it as a player would, to see what they will see
         event.put("draftTest", _draftTest);
+        //Edit mode and play mode (a sandbox): what the person may change in edit mode, and whether Stop or Start
+        // would be taken now.  Sent again whenever one of these changes (see AfterActions).
+        event.put("mode", Stopped() ? "edit" : "play");
+        event.put("level", _sandbox != null ? _def.level() : "none");
+        event.put("tools", _sandbox != null ? _sandbox.Tools() : List.of());
+        event.put("canStop", _sandbox != null && _sandbox.CanStop());
+        event.put("canStart", _sandbox != null && _sandbox.CanStart());
         return event;
     }
 

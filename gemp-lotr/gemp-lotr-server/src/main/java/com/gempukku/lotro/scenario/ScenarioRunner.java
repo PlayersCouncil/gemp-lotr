@@ -273,7 +273,7 @@ public final class ScenarioRunner {
                                          Deviation deviation) {
         ScenarioRunReport report = new ScenarioRunReport(def.id);
         report.required = def.runnerLevel != null ? def.runnerLevel
-                : def.coverage == Coverage.STRICT ? RunnerLevel.FULL : RunnerLevel.PREFIX;
+                : def.coverageInForce() == Coverage.STRICT ? RunnerLevel.FULL : RunnerLevel.PREFIX;
 
         List<String> invalid = ScenarioValidator.validate(def, library);
         if (!invalid.isEmpty()) {
@@ -326,7 +326,8 @@ public final class ScenarioRunner {
                                 Deviation deviation) {
         ScenarioTable table = session.Table();
         ScenarioDirector director = session.Director();
-        boolean strict = def.coverage == Coverage.STRICT;
+        //(a sandbox is always guided: see ScenarioDefinition.coverageInForce)
+        boolean strict = def.coverageInForce() == Coverage.STRICT;
         int unscripted = 0;
 
         for (int number = 1; number <= DECISION_LIMIT; number++) {
@@ -509,7 +510,7 @@ public final class ScenarioRunner {
                     else
                         report.reached = RunnerLevel.PREFIX;
                     return false;
-                } else if (def.fallback == Fallback.PASS || def.fallback == Fallback.SANDBOX) {
+                } else if (def.fallbackInForce() == Fallback.PASS || def.fallbackInForce() == Fallback.SANDBOX) {
                     answer = AnswerCompiler.leastAnswer(decision);
                     note = "(opponent fallback: " + (def.fallback == Fallback.PASS ? "pass" : "sandbox, with no rule for this: as little as it can") + ")";
                 } else {

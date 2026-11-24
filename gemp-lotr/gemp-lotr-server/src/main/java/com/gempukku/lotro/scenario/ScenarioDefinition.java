@@ -662,4 +662,41 @@ public final class ScenarioDefinition {
         }
         return all;
     }
+
+    /* ---- sandboxes ---- */
+
+    /**
+     * options.tools: what the person playing a sandbox may change while it is stopped, by the names of
+     * ScenarioSandbox.TOOLS.  Null for all of them.
+     */
+    public List<String> tools;
+
+    /**
+     * What the person playing may change in edit mode, as the page is told it: "sandbox" for a sandbox, "none"
+     * otherwise.  (A puzzle's level is the puzzle's own.)
+     */
+    public String level() {
+        return kind == Kind.SANDBOX ? "sandbox" : "none";
+    }
+
+    /** The tools in force: options.tools, or all of them. */
+    public List<String> toolsInForce() {
+        return tools != null ? tools : ScenarioSandbox.TOOLS;
+    }
+
+    /**
+     * The coverage the scenario is played with.  Nothing a person does in a sandbox is off its script, however few
+     * steps it has: a sandbox is always guided, whatever its file says.
+     */
+    public Coverage coverageInForce() {
+        return kind == Kind.SANDBOX ? Coverage.GUIDED : coverage;
+    }
+
+    /**
+     * The opponent's fallback in force.  A sandbox's opponent never leaves the script by being asked something no
+     * step covers: 'fail' (the default) is taken as 'pass' there.
+     */
+    public Fallback fallbackInForce() {
+        return kind == Kind.SANDBOX && fallback == Fallback.FAIL ? Fallback.PASS : fallback;
+    }
 }

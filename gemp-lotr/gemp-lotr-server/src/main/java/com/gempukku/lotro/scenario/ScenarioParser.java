@@ -55,6 +55,15 @@ import java.util.regex.Pattern;
  *     autoPass: { freeps: fellowship, regroup  shadow: shadow, maneuver }      (each on a line of its own)
  * (written as one list, it holds in whichever role they are playing, as it always has).
  *
+ * A sandbox (kind: sandbox) is a table the person playing may stop, rearrange and start again (ScenarioSandbox).
+ * It needs no steps; nothing in it is off its script (it is always guided, and its opponent's fallback 'fail' is
+ * taken as 'pass'); its game opens stopped; and when its game ends it is over ('ended'), never complete or failed.
+ * What the person may change is narrowed by
+ *     options: { tools: add, move, wounds, counters }      (default: every tool)
+ * the tools being add, copy, delete, move, attach, stack, wounds, tokens, modify, counters (twilight, burdens,
+ * threats), markers (a seat's marker, who controls a site), sites (a site put on the path) and piles (looking in
+ * both draw decks, the other seat's hand and adventure deck).
+ *
  * The game's own opening can be played instead of the board being laid out:
  *     setup: { opening: game }       the bid, the choice of going first, the starting fellowships, the opening draw
  *                                    and the mulligans are decisions the script answers (when: bid, goFirst,
@@ -103,7 +112,8 @@ public final class ScenarioParser {
         def.note = optionalString(object, "note", null, "scenario");
         def.format = requireString(object, "format", "scenario");
         def.human = parseAbsoluteSeat(optionalString(object, "human", "freeps", "scenario"), "human");
-        def.coverage = optionalEnum(object, "coverage", Coverage.class, Coverage.STRICT, "scenario");
+        //(a sandbox is guided whatever it says: see ScenarioDefinition.coverageInForce)
+        def.coverage = optionalEnum(object, "coverage", Coverage.class, def.kind == Kind.SANDBOX ? Coverage.GUIDED : Coverage.STRICT, "scenario");
 
         JsonObject opponent = optionalObject(object, "opponent", "scenario");
         if (opponent != null) {
@@ -117,7 +127,8 @@ public final class ScenarioParser {
 
         JsonObject options = optionalObject(object, "options", "scenario");
         if (options != null) {
-            checkFields(options, "options", "autoPass", "autoAccept", "autoDismissDeckReveal", "animationSpeed", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap");
+            checkFields(options, "options", "autoPass", "autoAccept", "autoDismissDeckReveal", "animationSpeed", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap",
+                    "tools");
             JsonValue autoPass = get(options, "autoPass");
             if (autoPass != null && autoPass.isObject()) {
                 //For each role the person can play: { freeps: fellowship, regroup  shadow: shadow, maneuver }
@@ -143,6 +154,8 @@ public final class ScenarioParser {
             def.opponentDelayMs = optionalInt(options, "opponentDelayMs", 900, "options");
             def.runnerLevel = optionalEnum(options, "runnerLevel", RunnerLevel.class, null, "options");
             def.bubbleGap = gap(optionalString(options, "bubbleGap", null, "options"), "options.bubbleGap");
+            if (get(options, "tools") != null)
+                def.tools = tools(get(options, "tools"));
         }
 
         parseCards(def, requireObject(object, "cards", "scenario"));
@@ -236,6 +249,29 @@ public final class ScenarioParser {
     }
 
     /** Phases the person is passed through: a list of them, true (an ordinary table's), or false (none). */
+    /**
+     * options.tools: what the person playing a sandbox may change while it is stopped, by ScenarioSandbox.TOOLS's
+     * names, as a list ("add, move, counters") or a [list]; an empty one (or false) for none.  In the order of
+     * ScenarioSandbox.TOOLS, whatever order they are written in.
+     */
+    private static List<String> tools(JsonValue value) throws ScenarioFormatException {
+        String context = "options.tools";
+        if (!value.isArray() && scalar(value, context).equalsIgnoreCase("false"))
+            return List.of();
+        List<String> named = new ArrayList<>();
+        for (String name : list(value, context)) {
+            String tool = name.trim().toLowerCase(Locale.ROOT);
+            if (!ScenarioSandbox.TOOLS.contains(tool))
+                throw new ScenarioFormatException(context + ": '" + name.trim() + "' is not a tool.  The tools are "
+                        + String.join(", ", ScenarioSandbox.TOOLS) + " (leave tools out for all of them)");
+            if (!named.contains(tool))
+                named.add(tool);
+        }
+        List<String> tools = new ArrayList<>(ScenarioSandbox.TOOLS);
+        tools.retainAll(named);
+        return tools;
+    }
+
     private static Set<Phase> autoPassPhases(JsonValue value, String context) throws ScenarioFormatException {
         String written = value.isArray() ? "" : scalar(value, context);
         //The same phases a player gets by default at an ordinary table

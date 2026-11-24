@@ -316,6 +316,9 @@ public class LotroGameMediator {
         restorePoints.setGame(game);
         scenario.Table().WatchRandom(ledger::watching);
         game.addGameStateListener(InformationLedger.LISTENER_NAME, ledger);
+        //A sandbox's Stops, edits and Starts are places to go back to as well
+        if (scenario.Sandbox() != null)
+            scenario.Sandbox().OnPoint((entryCount, label) -> restorePoints.note(entryCount, scenario.HumanPlayer(), label));
         return new Built(feedback, game, journal, ledger, restorePoints);
     }
 
@@ -1338,6 +1341,9 @@ public class LotroGameMediator {
                     if (awaitingDecision != null && _pendingUndo != null) {
                         //The game stands still while a request to take it back is waiting for an answer
                         _lotroGame.getGameState().sendWarning(playerName, "Waiting on a revert request");
+                    } else if (awaitingDecision != null && _scenario != null && _scenario.Stopped()) {
+                        //A stopped sandbox takes no answers: its decision is asked again, afresh, at Start
+                        _lotroGame.getGameState().sendWarning(playerName, "The game is stopped: press Start to play on");
                     } else if (awaitingDecision != null) {
                         if (awaitingDecision.getAwaitingDecisionId() == decisionId && !_lotroGame.isFinished()) {
                             long startedAt = System.currentTimeMillis();
@@ -1460,7 +1466,8 @@ public class LotroGameMediator {
         //(synchronized first and the lock second, the same order botAnswered and playerAnswered take them in)
         _writeLock.lock();
         try {
-            if (_scenario.Result() == null && _userFeedback.getAwaitingDecision(opponent) == decision)
+            //(nor while a sandbox is stopped: its decision will be asked again, and answered then)
+            if (_scenario.Result() == null && !_scenario.Stopped() && _userFeedback.getAwaitingDecision(opponent) == decision)
                 botAnswered(opponent, decision.getAwaitingDecisionId(), answer);
         } finally {
             _writeLock.unlock();
@@ -1511,6 +1518,90 @@ public class LotroGameMediator {
 
     public void scenarioAcknowledged(Player player, int stepNumber) {
         scenarioAcknowledged(player, stepNumber, null);
+    }
+
+    /* ---- a sandbox (ScenarioSandbox): Stop, edits, Start, and what the person may see ---- */
+
+    /**
+     * @return The sandbox of this game, if the player is the person playing it; null otherwise.  To be called with
+     * the write lock held.
+     */
+    private com.gempukku.lotro.scenario.ScenarioSandbox sandboxOf(String player) {
+        if (_scenario == null || _scenario.Sandbox() == null || !_scenario.HumanPlayer().equals(player))
+            return null;
+        return _scenario.Sandbox();
+    }
+
+    private static final String NOT_A_SANDBOX = "This is not a sandbox you are playing";
+
+    /**
+     * The person playing a sandbox stops it, to change its board.
+     * @return Null if it was stopped; otherwise why not.
+     */
+    public String sandboxStop(String player) {
+        return sandbox(player, sandbox -> sandbox.Stop());
+    }
+
+    /**
+     * The person playing a sandbox starts it again: the decision it was stopped at is asked afresh.
+     * @return Null if it was started; otherwise why not.
+     */
+    public String sandboxStart(String player) {
+        return sandbox(player, sandbox -> sandbox.Start());
+    }
+
+    /**
+     * The person playing a stopped sandbox changes its board (ScenarioSandbox.Edit): a list of edits, made whole
+     * or not at all.  An edit that fails after others of its list were made has the game taken back to before the
+     * list (where it can be: a game that cannot be built again keeps what was made, and says so).
+     * @return Null if every edit was made; otherwise why not.
+     */
+    public String sandboxEdit(String player, String opsJson) {
+        return sandbox(player, sandbox -> {
+            int before = _journal == null ? -1 : _journal.entries().size();
+            com.gempukku.lotro.scenario.ScenarioSandbox.Outcome outcome = sandbox.Edit(opsJson);
+            if (outcome.problem() == null || !outcome.partlyMade())
+                return outcome.problem();
+            String undone = before < 0 ? "not taken back" : revertTo(before, "The edits were not made", player, "GREEN", "");
+            return outcome.problem() + (undone == null ? " (nothing in the list was made)"
+                    : ".  The edits before it were made and could not be taken back: " + undone);
+        });
+    }
+
+    /** @return What the person playing a sandbox may see of it (ScenarioSandbox.State); null if they are not. */
+    public Map<String, Object> sandboxState(String player) {
+        _writeLock.lock();
+        try {
+            com.gempukku.lotro.scenario.ScenarioSandbox sandbox = sandboxOf(player);
+            return sandbox == null ? null : sandbox.State();
+        } finally {
+            _writeLock.unlock();
+        }
+    }
+
+    private String sandbox(String player, java.util.function.Function<com.gempukku.lotro.scenario.ScenarioSandbox, String> action) {
+        _writeLock.lock();
+        try {
+            com.gempukku.lotro.scenario.ScenarioSandbox sandbox = sandboxOf(player);
+            if (sandbox == null)
+                return NOT_A_SANDBOX;
+            if (_lotroGame.isFinished())
+                return "The game is over";
+            String problem;
+            try {
+                problem = action.apply(sandbox);
+            } catch (RuntimeException exp) {
+                LOG.error("Sandbox " + _scenario.Definition().id + ", game " + _gameId + ": could not do what was asked", exp);
+                _lotroGame.cancelGame();
+                _scenario.Broke("the sandbox threw " + exp);
+                return "That broke the game: " + exp;
+            }
+            //(the person's clock starts afresh with each thing they do: a sandbox being set up is not a person gone away)
+            scenarioAfterActions();
+            return problem;
+        } finally {
+            _writeLock.unlock();
+        }
     }
 
     public GameState getGameState() {

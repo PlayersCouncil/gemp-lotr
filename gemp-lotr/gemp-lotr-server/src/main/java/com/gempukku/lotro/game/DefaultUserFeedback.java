@@ -76,6 +76,23 @@ public class DefaultUserFeedback implements UserFeedback {
     }
 
     /**
+     * The decision a player is being asked (or that is held back for them) is taken back unanswered (see
+     * UserFeedback.withdrawAwaitingDecision).  The observers are told, and so is the game's state, which keeps the
+     * decisions it gives to whoever connects; nobody watching is sent anything for it: the decision asked in its
+     * place replaces it on their screens.
+     */
+    @Override
+    public void withdrawAwaitingDecision(String playerId) {
+        AwaitingDecision decision = _awaitingDecisionMap.remove(playerId);
+        _held.remove(playerId);
+        if (decision == null)
+            return;
+        for (DecisionObserver observer : _observers)
+            observer.decisionWithdrawn(playerId, decision);
+        _game.getGameState().playerDecisionFinished(playerId);
+    }
+
+    /**
      * With an arbiter, this is when decisions reach their players.  The game calls it whenever it stops working.
      * Anybody who asks a decision again outside the game's own working (its answer was rejected) has to call it too.
      */

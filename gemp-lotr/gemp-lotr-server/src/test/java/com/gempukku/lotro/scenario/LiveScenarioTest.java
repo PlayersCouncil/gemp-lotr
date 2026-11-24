@@ -34,16 +34,16 @@ import static org.junit.Assert.fail;
  * client here is the least a real one does: it connects, polls for events, and answers decisions.
  */
 public class LiveScenarioTest {
-    private static final ScheduledExecutorService TIMER = Executors.newScheduledThreadPool(2);
-    private static final String HUMAN = "Tester";
+    static final ScheduledExecutorService TIMER = Executors.newScheduledThreadPool(2);
+    static final String HUMAN = "Tester";
 
     @AfterClass
     public static void stopTimer() {
         TIMER.shutdownNow();
     }
 
-    /** A person's browser, as far as the server can tell. */
-    private static class Client implements ParticipantCommunicationVisitor {
+    /** A person's browser, as far as the server can tell.  (Other scenario tests play with it too.) */
+    static class Client implements ParticipantCommunicationVisitor {
         final LotroGameMediator mediator;
         final Player player = new Player(1, HUMAN, "", "u", null, null, null, null, false);
         int channel;
@@ -146,7 +146,7 @@ public class LiveScenarioTest {
         return live(def, null);
     }
 
-    private static LiveScenario live(ScenarioDefinition def, GameJournal earlier) throws Exception {
+    static LiveScenario live(ScenarioDefinition def, GameJournal earlier) throws Exception {
         return new LiveScenario(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), HUMAN,
                 new ScenarioText(def, ScenarioTesting.library(), ScenarioTesting.format(def.format), null), TIMER, earlier);
     }
@@ -166,7 +166,7 @@ public class LiveScenarioTest {
         fail("Step " + stepNumber + " never came");
     }
 
-    private static LotroGameMediator start(LiveScenario scenario) {
+    static LotroGameMediator start(LiveScenario scenario) {
         LotroGameMediator mediator = new LotroGameMediator("1", scenario, LotroServer.SCENARIO_TIMER, false);
         mediator.startGame();
         return mediator;

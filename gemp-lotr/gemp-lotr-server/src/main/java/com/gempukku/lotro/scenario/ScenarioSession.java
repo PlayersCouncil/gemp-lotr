@@ -390,6 +390,18 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
     @Override
     public void decisionIssued(String player, AwaitingDecision decision) { }
 
+    /**
+     * A decision taken back unanswered (a sandbox's Start asks it again: TurnProcedure.askAgain) is no longer ruled
+     * on: the one asked in its place is ruled on afresh when the game comes to rest.  Nothing the script counted is
+     * undone, because nothing was answered.
+     */
+    @Override
+    public void decisionWithdrawn(String player, AwaitingDecision decision) {
+        Ruling ruling = _rulings.get(player);
+        if (ruling != null && ruling.decision() == decision)
+            _rulings.remove(player);
+    }
+
     @Override
     public void decisionAnswered(String player, AwaitingDecision decision, String answer) {
         //(an order of the opponent's that is good for one decision is used up by it)
