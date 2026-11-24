@@ -453,6 +453,18 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   a laid site's menu has each seat's marker, control, Liberate and Replace…. The twilight pool, the threats and the
   burdens (a line of their own in edit mode) change where they are shown (`gd-edit-counter`, its box
   `gd-edit-counter-box`: −, +, Set).
+  Flip table and who plays the other seat (`table-seat.ts`, `TableFlip`; `ui/game/table-edit/seat-*`,
+  `flip-button`): the scenario's info says the seat the page looks from (`seat`), who plays the seat the person does
+  not sit in (`otherSeat`: the script, the bot or the person, from `otherSeats`), the seat waited on (`waitingOn`) and
+  `canFlip`. The edit bar's `gd-seat-controls` has the other seat's choice (`POST /scenarios/sandbox/otherSeat`), "As
+  Shadow" while flipped, and Flip (`POST /scenarios/sandbox/flip`): the server makes the page the other seat's
+  player's and sends a resync notice with reason `flip`, on which the page reads the game again from nothing (as after
+  a take-back, without a banner) and, from the game's first event, draws the table for that player. Everything that
+  means "the seat at the bottom" follows `seat` (the open spots, `EditSeating`, the scenario's anchors); an edit always
+  names its seat. Flipped onto a seat the script or the bot plays, no decision is shown or answered (`answersHere`).
+  When the game waits on the seat out of sight and the person plays it, the alert box says so ("Shadow to choose",
+  `gd-seat-waiting`) with Flip beside it; the page never turns by itself. The authoring panel has its own Flip in its
+  header (`gd-author-flip`). A take-back keeps the flip (the server does), Reset starts unflipped.
 
 - **A puzzle's slots (puzzle player's page)** (`PuzzleBackend`, `puzzle-slots.ts`, `slot-filter.ts`;
   `ui/game/table-edit/puzzle-*`): a puzzle with slots opens held (`mode: edit`, `level: puzzle`) with its slots

@@ -14,6 +14,7 @@ import { GameSession } from '../session/game-session.service';
 import { GameSettings } from '../settings/game-settings';
 import { LocalChoices } from '../state/game-model';
 import { GameCardRef } from '../table/game-card-views';
+import { isFlipped } from '../table-edit/table-seat';
 import { ScenarioApi } from './scenario-api.service';
 import { MessageSide, messagePlace, ScenarioMessage, ScenarioSettings, ScenarioStep } from './scenario-events';
 import { characterComplete, openingMessages, planAllows, PlanContext, scenarioPlan } from './scenario-plan';
@@ -214,6 +215,8 @@ export class ScenarioGuide implements DecisionGate {
     const step = this.step();
     const decision = this.session.model().decision?.decision;
     if (!this.playing() || !step?.allow || step.seat !== 'human' || step.pause || !decision) return null;
+    // (a page flipped to the other seat is asked that seat's decisions: a step about the person's own is not about it)
+    if (isFlipped(this.info())) return null;
     return { decision, allow: step.allow, local: this.session.model().local, actions: this.decisions.view().actions };
   });
 

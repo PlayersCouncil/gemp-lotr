@@ -10,6 +10,7 @@ import { editLevel, EditLevel, editMode, EditMode, editTools } from '../table-ed
 import { EditTool } from '../table-edit/edit-ops';
 import { PuzzleSlot, readPuzzleSlots } from '../table-edit/puzzle-slots';
 import { readScenarioScore, ScenarioScore } from './scenario-score';
+import { OtherSeat, readOtherSeat, readOtherSeats, readSeat } from '../table-edit/table-seat';
 
 export type ScenarioKind = 'tutorial' | 'puzzle' | 'sandbox';
 export type ScenarioSeat = 'freeps' | 'shadow';
@@ -75,6 +76,19 @@ export interface ScenarioInfo {
   slots?: readonly PuzzleSlot[];
   /** Whether the game can be taken back (the scenario's `options.undo`); null where the server does not say. */
   undo?: boolean | null;
+  // (flip table, ef-notes Part 2 E: always filled by the parser; optional so other specs' literals stay valid)
+  /** The person's name as the server knows them (the logged-in player), whichever seat the page looks from. */
+  human?: string | null;
+  /** The seat this page shows the table from: the person's own (`humanSeat`) unless flipped. */
+  seat?: ScenarioSeat;
+  /** Who plays the seat the person does not sit in (a sandbox's); null for a scenario that is not a sandbox. */
+  otherSeat?: OtherSeat | null;
+  /** The choices of `otherSeat` on offer, in order (no `bot` on a server without one); empty outside a sandbox. */
+  otherSeats?: readonly OtherSeat[];
+  /** The seat whose decision the game waits on (the person's if both), or null; said while stopped too. */
+  waitingOn?: ScenarioSeat | null;
+  /** Whether the table can be flipped (a sandbox, or an author at the table). */
+  canFlip?: boolean;
 }
 
 export type MessageSide = 'auto' | 'above' | 'below' | 'left' | 'right';
@@ -339,6 +353,12 @@ function info(value: Json): ScenarioInfo | null {
     canStart: boolean(value['canStart']) ?? false,
     slots: readPuzzleSlots(value['slots']),
     undo: boolean(value['undo']),
+    human: string(value['human']),
+    seat: readSeat(value['seat']) ?? oneOf<ScenarioSeat>(value['humanSeat'], ['freeps', 'shadow'], 'freeps'),
+    otherSeat: readOtherSeat(value['otherSeat']),
+    otherSeats: readOtherSeats(value['otherSeats']),
+    waitingOn: readSeat(value['waitingOn']),
+    canFlip: boolean(value['canFlip']) ?? false,
   };
 }
 

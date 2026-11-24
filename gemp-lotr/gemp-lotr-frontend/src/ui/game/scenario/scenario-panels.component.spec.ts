@@ -11,6 +11,8 @@ import { HallTab } from '../../../core/platform/hall-tab.service';
 import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
+import { TableFlip } from '../../../core/game/table-edit/table-flip.service';
+import { fakeTableFlip } from '../../../testing/table-flip';
 import { CardPicker } from '../table-edit/card-picker';
 import { BUG_REPORT_URL, endBody, MIN_HEIGHT, MIN_WIDTH, ScenarioPanelsComponent } from './scenario-panels.component';
 import { UNLISTED_TEXT } from './scenario-panels.component';
@@ -124,6 +126,7 @@ describe('ScenarioPanelsComponent', () => {
         { provide: CompactLayout, useValue: { gameActive: phone } },
         { provide: TableEdit, useValue: edit },
         { provide: CardPicker, useValue: { told: signal(null) } },
+        { provide: TableFlip, useValue: fakeTableFlip() },
       ],
     });
   });

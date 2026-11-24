@@ -94,6 +94,12 @@ describe('parseScenarioEvent', () => {
       canStart: false,
       slots: [],
       undo: null,
+      human: 'asdf',
+      seat: 'freeps',
+      otherSeat: null,
+      otherSeats: [],
+      waitingOn: null,
+      canFlip: false,
     });
   });
 
@@ -121,6 +127,12 @@ describe('parseScenarioEvent', () => {
       canStart: false,
       slots: [],
       undo: null,
+      human: null,
+      seat: 'freeps',
+      otherSeat: null,
+      otherSeats: [],
+      waitingOn: null,
+      canFlip: false,
     });
     expect(
       parse({
@@ -488,6 +500,29 @@ describe('parseScenarioEvent', () => {
       expect.objectContaining({ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }),
     ]);
     expect(parse({ type: 'info', id: 'p', undo: 'no' })).toMatchObject({ undo: null, slots: [] });
+    // Flip table (ef-notes Part 2 E): the seat looked from, who plays the other seat, what is waited on
+    expect(
+      parse({
+        type: 'info',
+        id: 'sandbox',
+        human: 'Tester',
+        humanSeat: 'freeps',
+        seat: 'shadow',
+        otherSeat: 'Person',
+        otherSeats: ['script', 'person', 'nobody', 'person'],
+        waitingOn: 'shadow',
+        canFlip: true,
+      }),
+    ).toMatchObject({
+      human: 'Tester',
+      seat: 'shadow',
+      otherSeat: 'person',
+      otherSeats: ['script', 'person'],
+      waitingOn: 'shadow',
+      canFlip: true,
+    });
+    // (a seat not said is the person's own)
+    expect(parse({ type: 'info', id: 'p', humanSeat: 'shadow', seat: 'up' })).toMatchObject({ seat: 'shadow' });
   });
 
   it("reads a puzzle's end: its score, and whether the solution is one its author did not list (P5, P7)", () => {

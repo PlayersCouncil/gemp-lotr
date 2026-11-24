@@ -29,6 +29,15 @@ describe('decisionView', () => {
     expect(decisionView(playing, SETTINGS).alert).toBe('Do it');
   });
 
+  it('shows nothing on a table flipped onto a seat that plays itself: the page watches (flip table)', () => {
+    const asked = waiting(decision('CARD_ACTION_CHOICE', { actionId: ['1'], cardId: ['5'], actionText: ['Play'] }));
+    const info = { mode: 'play', humanSeat: 'freeps', seat: 'shadow', otherSeat: 'script' };
+    const watching = { ...asked, scenario: { info } } as unknown as GameModel;
+    expect(decisionView(watching, SETTINGS)).toEqual(NO_DECISION);
+    const playing = { ...asked, scenario: { info: { ...info, otherSeat: 'person' } } } as unknown as GameModel;
+    expect(decisionView(playing, SETTINGS).alert).toBe('Do it');
+  });
+
   it('keeps the alert frame when the game ended while the alert box asked, as the legacy page did', () => {
     const ended = { ...emptyGame(), ended: true };
     expect(decisionView({ ...ended, closedByEnd: 'CARD_SELECTION' }, SETTINGS).frame).toBe('ended');

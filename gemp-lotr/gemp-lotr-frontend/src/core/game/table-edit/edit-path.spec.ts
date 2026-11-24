@@ -51,6 +51,11 @@ describe('edit path', () => {
     const closed: EditBoard = { ...board, hiddenPilesOpen: false };
     expect(deckSites(closed, 'shadow', 'freeps')).toBeNull();
     expect(deckSites(closed, 'freeps', 'freeps')).toHaveLength(1);
+    // (flipped, the board lists the deck of the seat looked from too)
+    expect(deckSites(closed, 'shadow', 'freeps', 'shadow')?.map((card) => card.alias)).toEqual([
+      'site3opp',
+      'site4opp',
+    ]);
     expect(deckSites(null, 'freeps', 'freeps')).toBeNull();
     const same: EditBoard = {
       ...board,
@@ -66,6 +71,12 @@ describe('edit path', () => {
     expect(siteFromDeck(3, cardByAlias(board, 'site3opp')!)).toEqual({ op: 'site', number: 3, card: 'site3opp' });
     expect(siteFromSeat(4, 'shadow')).toEqual({ op: 'site', number: 4, from: 'shadow' });
     expect(siteOfBlueprint(5, '1_350')).toEqual({ op: 'site', number: 5, blueprint: '1_350' });
+    expect(siteOfBlueprint(5, '1_350', 'shadow')).toEqual({
+      op: 'site',
+      number: 5,
+      blueprint: '1_350',
+      seat: 'shadow',
+    });
   });
 
   it("gives a laid site its markers, control and Replace…, each seat by its player's name", () => {

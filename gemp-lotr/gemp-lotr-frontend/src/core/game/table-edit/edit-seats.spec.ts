@@ -18,4 +18,11 @@ describe('edit seats', () => {
     expect(unknown.players).toEqual({ freeps: '', shadow: '' });
     expect(seatOf(unknown, '')).toBeNull();
   });
+
+  it("seats the page's player where the page looks from: a flipped page is the other seat's player's", () => {
+    // (flipped: the first event names the other seat's player as the page's participant)
+    const seats = editSeats({ participantId: '~Scenario', players: ['alice', '~Scenario'] }, 'freeps', 'shadow');
+    expect(seats).toEqual({ human: 'freeps', players: { freeps: 'alice', shadow: '~Scenario' } });
+    expect(bothSeats(seats)).toEqual(['freeps', 'shadow']);
+  });
 });

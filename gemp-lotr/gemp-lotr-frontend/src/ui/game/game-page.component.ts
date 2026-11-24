@@ -54,6 +54,7 @@ import { TableEditLayerComponent } from './table-edit/table-edit-layer.component
 import { FilledSlot, PuzzleBackend } from '../../core/game/table-edit/puzzle-backend';
 import { slotRow } from '../../core/game/table-edit/puzzle-slots';
 import { BoundFinderComponent } from './table-edit/bound-finder.component';
+import { lookedFrom } from '../../core/game/table-edit/table-seat';
 
 /** The rows of the table that can have an open spot. */
 type TableRow = 'supportOpponent' | 'charactersOpponent' | 'minions' | 'charactersPlayer' | 'supportPlayer' | 'hand';
@@ -298,7 +299,8 @@ export class GamePageComponent {
    */
   protected readonly spots = computed<Readonly<Record<TableRow, EditPlace>> | null>(() => {
     if (!this.edit.may('add')) return null;
-    const human = this.scenario.info()?.humanSeat ?? 'freeps';
+    // (the seat the page looks from is at the bottom: the person's own, or the other one when the table is flipped)
+    const human = lookedFrom(this.scenario.info());
     const other = otherSeat(human);
     return {
       supportOpponent: { seat: other, zone: 'support' },

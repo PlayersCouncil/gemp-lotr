@@ -4,6 +4,8 @@ import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
 import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
 import { CardPicker } from './card-picker';
 import { EditBarComponent } from './edit-bar.component';
+import { TableFlip } from '../../../core/game/table-edit/table-flip.service';
+import { fakeTableFlip } from '../../../testing/table-flip';
 
 describe('EditBarComponent', () => {
   let edit: FakeTableEdit;
@@ -16,6 +18,7 @@ describe('EditBarComponent', () => {
       providers: [
         { provide: TableEdit, useValue: edit },
         { provide: CardPicker, useValue: { told } },
+        { provide: TableFlip, useValue: fakeTableFlip() },
       ],
     });
     const fixture = TestBed.createComponent(EditBarComponent);

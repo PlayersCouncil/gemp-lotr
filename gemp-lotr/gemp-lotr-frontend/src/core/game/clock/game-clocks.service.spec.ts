@@ -155,6 +155,22 @@ describe('GameClocks and GameAttention', () => {
     expect(cues.setTitle).not.toHaveBeenCalledWith(DECISION_TITLE);
   });
 
+  it('flashes nothing on a table flipped onto a seat that plays itself: the page only watches it', () => {
+    const info = JSON.stringify({
+      type: 'info',
+      id: 'sandbox',
+      kind: 'sandbox',
+      mode: 'play',
+      level: 'sandbox',
+      humanSeat: 'freeps',
+      seat: 'shadow',
+      otherSeat: 'bot',
+    });
+    open(PLAYERS() + `<ge type="S" scenario="${info.replace(/"/g, '&quot;')}"/>` + DECISION());
+    vi.advanceTimersByTime(TITLE_FLASH_MS * 3);
+    expect(cues.setTitle).not.toHaveBeenCalledWith(DECISION_TITLE);
+  });
+
   it('plays the decision sound when the page is in the background, for the decisions that had it', () => {
     away = true;
     open(PLAYERS() + DECISION());

@@ -76,7 +76,14 @@ export class GameUndo {
     return !!policy && (policy.green || policy.yellow || policy.red);
   });
   /** The request waiting is this player's own (they may withdraw it). */
-  readonly mine = computed(() => this.playing() && this.pending()?.requester === this.model().participantId);
+  readonly mine = computed(() => {
+    const requester = this.pending()?.requester;
+    // (a page flipped to the other seat is that seat's player's: the person is still the scenario's `human`)
+    const person = this.model().scenario?.info?.human;
+    return (
+      this.playing() && requester !== undefined && (requester === this.model().participantId || requester === person)
+    );
+  });
   /** The request waiting asks this player. */
   readonly asked = computed(() => this.playing() && this.pending() !== null && !this.mine());
   /** While a request waits no decision may be answered: the server would refuse the answer. */
@@ -268,6 +275,10 @@ export class GameUndo {
           this.closeList();
           this.showBanner(fields['message'] ?? null, fields['tier'] ?? null);
           this.session.reopen(fields['message'] ?? null);
+        } else if (fields['reason'] === 'flip') {
+          // The table flipped (TableFlip): this page is now the other seat's player's, on a new channel; read from nothing
+          this.closeList();
+          this.session.reopen(null);
         } else {
           // Something the player must hear of while looking at a decision (the game ended): the game's news, once
           this.session.pollOnce();

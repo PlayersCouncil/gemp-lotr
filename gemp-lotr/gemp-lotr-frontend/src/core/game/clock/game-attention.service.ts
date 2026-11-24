@@ -1,4 +1,5 @@
 import { DestroyRef, effect, inject, Injectable, untracked } from '@angular/core';
+import { answersHere } from '../table-edit/table-seat';
 import { PageCues } from '../../platform/page-cues';
 import { Decision } from '../protocol/game-events';
 import { GameSession } from '../session/game-session.service';
@@ -46,7 +47,8 @@ export class GameAttention {
     effect(() => {
       const model = this.session.model();
       // (a scripted game's table being changed by hand asks nobody anything: TableEdit)
-      const waiting = model.scenario?.info?.mode === 'edit' ? null : model.decision;
+      const info = model.scenario?.info ?? null;
+      const waiting = info?.mode === 'edit' || !answersHere(info) ? null : model.decision;
       untracked(() => {
         // A replay shows decisions, it doesn't wait for one
         if (this.session.replaying()) return;

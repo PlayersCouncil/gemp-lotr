@@ -13,6 +13,7 @@ import { ScenarioTabComponent } from './scenario-tab.component';
 import { StepTabComponent } from './step-tab.component';
 import { TimelineTabComponent } from './timeline-tab.component';
 import { AuthorButtonDirective } from './widgets/author-button.directive';
+import { AuthorFlipComponent } from './author-flip.component';
 import { PickBoxComponent } from './pick-box.component';
 import { TablePicker } from './table-picker.service';
 import { TablePick } from '../table-edit/table-pick';
@@ -47,7 +48,8 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
  * `.gd-author__body` holding the tab shown (`gd-game-author-timeline`, `-step`, `-opponent`, `-board`, `-scenario`);
  * for a test `.gd-author__body` with `.gd-author-note` and `button[data-author=resume]`, `button[data-author=test-again]`;
  * elsewhere `.gd-author__body` with `.gd-author-note` and `button[data-author=go]` (the draft's game). The leave dialog
- * is `gd-game-author-leave`. After the section, `gd-game-author-pickbox` (picking on the table, TablePicker).
+ * is `gd-game-author-leave`. After the section, `gd-game-author-pickbox` (picking on the table, TablePicker). The
+ * header has `gd-author-flip` after the busy mark (flip table: the opponent's seat, while the table can be flipped).
  */
 @Component({
   selector: 'gd-game-author',
@@ -63,6 +65,7 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
     BoardTabComponent,
     ScenarioTabComponent,
     PickBoxComponent,
+    AuthorFlipComponent,
   ],
   providers: [TablePicker, { provide: TablePick, useExisting: TablePicker }],
   host: {
@@ -99,6 +102,7 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
         @if (authoring.busy() > 0) {
           <span class="gd-author__busy" role="status" aria-label="Working">…</span>
         }
+        <gd-author-flip />
         @if (authoring.view() === 'author') {
           <button
             gdAuthorButton

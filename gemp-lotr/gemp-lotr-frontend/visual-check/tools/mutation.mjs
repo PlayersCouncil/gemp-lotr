@@ -139,6 +139,8 @@ export const TARGETS = [
   'src/core/game/table-edit/puzzle-slots.ts',
   'src/core/game/table-edit/puzzle-backend.ts',
   'src/core/game/scenario/scenario-score.ts',
+  'src/core/game/table-edit/table-seat.ts',
+  'src/core/game/table-edit/table-flip.service.ts',
 ];
 
 /**

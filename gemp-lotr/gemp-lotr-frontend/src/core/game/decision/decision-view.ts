@@ -5,6 +5,7 @@
  * settings, so every state of every decision can be checked without a page.
  */
 import { Decision } from '../protocol/game-events';
+import { answersHere } from '../table-edit/table-seat';
 import { ALERT_DECISIONS, GameCard, GameModel } from '../state/game-model';
 import { assignmentOf } from '../state/local-choices';
 
@@ -185,6 +186,8 @@ function cardChoice(
 export function decisionView(model: GameModel, settings: DecisionSettings): DecisionView {
   // A scripted game's table being changed by hand (a sandbox stopped, a puzzle before Submit): nobody is asked anything
   if (model.scenario?.info?.mode === 'edit') return NO_DECISION;
+  // A table flipped onto a seat that plays itself (the script, the bot): the page watches, the server answers
+  if (!answersHere(model.scenario?.info ?? null)) return NO_DECISION;
   const view = askedView(model, settings);
   if (!settings.replay) return view;
   // A replay: the same, with no buttons; once the alert box asked, its frame stays wide (the legacy page only put the

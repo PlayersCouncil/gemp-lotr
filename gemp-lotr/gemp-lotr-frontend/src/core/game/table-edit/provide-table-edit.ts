@@ -7,6 +7,7 @@ import { RecentCards } from './recent-cards';
 import { SandboxBackend } from './sandbox-backend';
 import { TABLE_EDIT_BACKENDS } from './table-edit-backend';
 import { TableEdit } from './table-edit.service';
+import { TableFlip } from './table-flip.service';
 
 /**
  * The table changed by hand (TableEdit) with the sandbox's backend, the card search and the cards used lately, for the
@@ -25,5 +26,6 @@ export function provideTableEdit(): Provider[] {
     EditSeating,
     PuzzleBackend,
     { provide: TABLE_EDIT_BACKENDS, useExisting: PuzzleBackend, multi: true },
+    TableFlip,
   ];
 }

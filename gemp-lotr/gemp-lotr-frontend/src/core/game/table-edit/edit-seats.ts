@@ -12,14 +12,19 @@ export interface EditSeats {
   players: Readonly<Record<EditSeat, string>>;
 }
 
-/** The seats of a game: the person's from the scenario, the other player the game's other one. */
+/**
+ * The seats of a game: the person's from the scenario, the other player the game's other one. The page's own player
+ * (`participantId`) sits in the seat the page looks from (`looked`: the person's own, unless the table is flipped, when
+ * the page is the other seat's player's).
+ */
 export function editSeats(
   model: { participantId: string | null; players: readonly string[] },
   humanSeat: EditSeat,
+  looked: EditSeat = humanSeat,
 ): EditSeats {
-  const person = model.participantId ?? '';
-  const other = model.players.find((player) => player !== person) ?? '';
-  const players = { [humanSeat]: person, [otherSeat(humanSeat)]: other } as Record<EditSeat, string>;
+  const own = model.participantId ?? '';
+  const other = model.players.find((player) => player !== own) ?? '';
+  const players = { [looked]: own, [otherSeat(looked)]: other } as Record<EditSeat, string>;
   return { human: humanSeat, players };
 }
 

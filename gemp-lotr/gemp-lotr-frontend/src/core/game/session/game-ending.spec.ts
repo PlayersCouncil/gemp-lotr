@@ -67,4 +67,20 @@ describe('GameEnding', () => {
     ending.show();
     expect(ending.dialogOpen()).toBe(true);
   });
+
+  it("finds the person's replay for a page flipped to the other seat (the scenario's human, not the page's player)", () => {
+    const info = JSON.stringify({ type: 'info', id: 'sandbox', kind: 'sandbox', human: 'alice', seat: 'shadow' });
+    const flipped =
+      '<gameState cn="1"><ge type="P" participantId="bob" allParticipantIds="alice,bob" discardPublic="false"/>' +
+      `<ge type="S" scenario="${info.replace(/"/g, '&quot;')}"/>` +
+      '<ge type="D" id="3" decisionType="MULTIPLE_CHOICE" participantId="bob" text="Go on?">' +
+      '<parameter name="results" value="Yes"/><parameter name="results" value="No"/></ge></gameState>';
+    playToTheEnd(flipped);
+    ending.showReplay();
+    TestBed.tick();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/gameHistory')
+      .flush('<gameHistory><historyEntry opponent="bob" gameRecordingId="r1"/></gameHistory>');
+    expect(ending.replay()).toEqual({ state: 'found', replayId: 'alice$r1' });
+  });
 });

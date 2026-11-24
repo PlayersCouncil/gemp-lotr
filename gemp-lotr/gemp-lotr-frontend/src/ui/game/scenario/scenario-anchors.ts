@@ -28,6 +28,11 @@ export interface AnchorContext {
    * are.
    */
   humanRole: ScenarioSeat;
+  /**
+   * The page looks from the seat the person does not sit in (flip table): "self" is then the player at the top of the
+   * table, and the person's hand is not shown. Absent: not flipped.
+   */
+  flipped?: boolean;
 }
 
 /**
@@ -38,10 +43,12 @@ export interface AnchorContext {
 export function pageAnchorContext(
   root: ParentNode,
   model: GameModel,
-  named: Pick<AnchorContext, 'cards' | 'parts' | 'humanSeat' | 'humanRole'>,
+  named: Pick<AnchorContext, 'cards' | 'parts' | 'humanSeat' | 'humanRole' | 'flipped'>,
 ): AnchorContext {
-  const self = model.participantId === null ? -1 : model.players.indexOf(model.participantId);
-  const opponent = model.players.findIndex((player) => player !== model.participantId);
+  const own = model.participantId === null ? -1 : model.players.indexOf(model.participantId);
+  const other = model.players.findIndex((player) => player !== model.participantId);
+  // (flipped, the page's own player is the other seat's: the person is the other player of the game)
+  const [self, opponent] = named.flipped ? [other, own] : [own, other];
   return {
     root,
     ...named,
@@ -63,6 +70,13 @@ const ROWS: Readonly<Record<string, string>> = {
   'opp.support': 'support-opponent',
   minions: 'shadow',
 };
+
+/** A zone's name as seen from the other seat (flip table): the person's rows are the top ones, their hand not shown. */
+function flippedZone(zone: string): string {
+  if (zone === 'self.hand') return '';
+  if (zone.startsWith('self.')) return `opp.${zone.slice(5)}`;
+  return zone.startsWith('opp.') ? `self.${zone.slice(4)}` : zone;
+}
 
 const PILES: Readonly<Record<string, string>> = {
   deck: 'deck',
@@ -271,7 +285,8 @@ export function resolveAnchor(context: AnchorContext, anchor: string, onCards = 
       return cardId === undefined ? null : cardRect(cardElement(context.root, cardId));
     }
     case 'zone': {
-      const row = context.root.querySelector(`.gd-game__row[data-row="${ROWS[name.toLowerCase()] ?? ''}"]`);
+      const zone = context.flipped ? flippedZone(name.toLowerCase()) : name.toLowerCase();
+      const row = context.root.querySelector(`.gd-game__row[data-row="${ROWS[zone] ?? ''}"]`);
       if (!row) return null;
       return (onCards ? all(row, '[data-card-id]') : null) ?? rectOf(row);
     }

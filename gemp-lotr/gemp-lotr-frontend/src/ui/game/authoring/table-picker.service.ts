@@ -14,6 +14,7 @@ import {
 import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { AnchorContext, cardRect, pageAnchorContext, rectOf, resolveAnchor } from '../scenario/scenario-anchors';
+import { isFlipped } from '../../../core/game/table-edit/table-seat';
 import { TablePick } from '../table-edit/table-pick';
 
 /** How a pick is asked for: what the author is told meanwhile (the panel's notice). */
@@ -75,6 +76,7 @@ export class TablePicker extends TablePick {
       parts: {},
       humanSeat: this.guide.info()?.humanSeat ?? 'freeps',
       humanRole: this.guide.role(),
+      flipped: isFlipped(this.guide.info()),
     });
   }
 
