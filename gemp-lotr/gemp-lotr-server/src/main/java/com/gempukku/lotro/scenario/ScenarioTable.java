@@ -1190,23 +1190,38 @@ public class ScenarioTable extends VirtualTable implements PregameSetup {
      */
     private class JudgingMoment extends AbstractActionProxy {
         @Override
+        public List<? extends RequiredTriggerAction> getRequiredBeforeTriggers(LotroGame game, Effect effect) {
+            //(a skirmish about to be resolved: asked as the resolving is about to be played, as EndOfThePath is)
+            if (_def.outcome.judge.at() == ScenarioDefinition.JudgeMoment.SKIRMISH_RESOLUTION && effect.getType() == Effect.Type.BEFORE_SKIRMISH_RESOLVED)
+                judge(game);
+            return null;
+        }
+
+        @Override
         public List<? extends RequiredTriggerAction> getRequiredAfterTriggers(LotroGame game, EffectResult result) {
             ScenarioDefinition.Judge judge = _def.outcome.judge;
-            if (_verdict != null || !_arranged || game.getWinnerPlayerId() != null)
-                return null;
             boolean moment = switch (judge.at()) {
                 case START_OF -> result.getType() == EffectResult.Type.START_OF_PHASE
                         && ((com.gempukku.lotro.logic.timing.results.StartOfPhaseResult) result).getPhase() == judge.phase();
                 case END_OF -> result.getType() == EffectResult.Type.END_OF_PHASE
                         && ((com.gempukku.lotro.logic.timing.results.EndOfPhaseResult) result).getPhase() == judge.phase();
                 case END_OF_TURN -> result.getType() == EffectResult.Type.END_OF_TURN;
+                case SKIRMISH_RESOLUTION -> false;
             };
-            if (!moment || (judge.turn() != null && game.getGameState().getTurnNumber() != judge.turn()))
-                return null;
+            if (moment)
+                judge(game);
+            return null;
+        }
+
+        private void judge(LotroGame game) {
+            ScenarioDefinition.Judge judge = _def.outcome.judge;
+            if (_verdict != null || !_arranged || game.getWinnerPlayerId() != null)
+                return;
+            if (judge.turn() != null && game.getGameState().getTurnNumber() != judge.turn())
+                return;
             String human = HumanPlayer();
             boolean won = (judge.win() == null || Holds(judge.win(), human)) && (_def.outcome.lose == null || !Holds(_def.outcome.lose, human));
             _verdict = new Verdict(won, Score(), judge.source());
-            return null;
         }
     }
 

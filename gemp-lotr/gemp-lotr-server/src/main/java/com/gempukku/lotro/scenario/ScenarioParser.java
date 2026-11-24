@@ -74,8 +74,10 @@ import java.util.regex.Pattern;
  *                                     player: you } } ], each on a line of its own.)
  *     outcome: {
  *         judge: {                    the scenario is over at a moment of the game
- *             at: endOf(archery)      endOf(phase), startOf(phase) or endOfTurn; ", turn(2)" for that turn's only.
- *                                     (Each skirmish is a Skirmish phase of its own: endOf(skirmish) is the first's end.)
+ *             at: endOf(archery)      endOf(phase), startOf(phase), endOfTurn, or skirmishResolution (the first skirmish
+ *                                     being resolved: strengths compared, nobody yet wounded or overwhelmed for it);
+ *                                     ", turn(2)" for that turn's only.  (Each skirmish is a Skirmish phase of its own:
+ *                                     endOf(skirmish) is the first's end, after it is resolved.)
  *             win: { ... }            requirements: won if they hold then (and 'lose' does not), failed if not.  Left
  *                                     out, the moment coming is the end, and it is complete (a scored puzzle)
  *         }                           (judge: endOfTurn says the moment alone.)  'win' and 'lose' are still looked at
@@ -1631,8 +1633,8 @@ public final class ScenarioParser {
         JudgeMoment kind = null;
         Phase phase = null;
         Integer turn = null;
-        String expected = "Write endOf(phase), startOf(phase) or endOfTurn (a phase of a turn: fellowship, shadow, maneuver, archery, "
-                + "assignment, skirmish, regroup), and turn(n) after it for a moment of one turn only: endOf(archery), turn(2)";
+        String expected = "Write endOf(phase), startOf(phase), endOfTurn or skirmishResolution (a phase of a turn: fellowship, shadow, "
+                + "maneuver, archery, assignment, skirmish, regroup), and turn(n) after it for a moment of one turn only: endOf(archery), turn(2)";
         for (Terms.Term term : Terms.parse(written, context)) {
             if ((term.is("endOf") || term.is("startOf")) && term.args().size() == 1 && kind == null) {
                 kind = term.is("endOf") ? JudgeMoment.END_OF : JudgeMoment.START_OF;
@@ -1641,6 +1643,8 @@ public final class ScenarioParser {
                     throw new ScenarioFormatException(context + ": '" + term.raw() + "' is not a phase of a turn.  " + expected);
             } else if (term.is("endOfTurn") && term.args().isEmpty() && kind == null) {
                 kind = JudgeMoment.END_OF_TURN;
+            } else if (term.is("skirmishResolution") && term.args().isEmpty() && kind == null) {
+                kind = JudgeMoment.SKIRMISH_RESOLUTION;
             } else if (term.is("turn") && term.args().size() == 1 && turn == null) {
                 turn = parseInt(term.arg(0, context), context);
                 if (turn < 1)
@@ -1651,7 +1655,7 @@ public final class ScenarioParser {
         }
         if (kind == null)
             throw new ScenarioFormatException(context + ": says no moment.  " + expected);
-        String source = kind == JudgeMoment.END_OF_TURN ? "endOfTurn"
+        String source = kind == JudgeMoment.END_OF_TURN ? "endOfTurn" : kind == JudgeMoment.SKIRMISH_RESOLUTION ? "skirmishResolution"
                 : (kind == JudgeMoment.END_OF ? "endOf(" : "startOf(") + phase.name().toLowerCase(Locale.ROOT) + ")";
         return new Judge(kind, phase, turn, win, turn == null ? source : source + ", turn(" + turn + ")");
     }

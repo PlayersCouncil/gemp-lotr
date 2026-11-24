@@ -671,8 +671,11 @@ public final class ScenarioDefinition {
 
     /* ---- puzzles: judging at a moment, scores, undo, slots the solver fills, and the author's solutions ---- */
 
-    /** When outcome.judge looks at the game: the start of a phase, the end of one, or the end of the turn. */
-    public enum JudgeMoment { START_OF, END_OF, END_OF_TURN }
+    /**
+     * When outcome.judge looks at the game: the start of a phase, the end of one, the end of the turn, or a skirmish
+     * being resolved (its strengths compared, before anybody is wounded or overwhelmed for it).
+     */
+    public enum JudgeMoment { START_OF, END_OF, END_OF_TURN, SKIRMISH_RESOLUTION }
 
     /**
      * outcome.judge: the scenario is over at a moment of the game, won if 'win' holds then (and 'lose' does not), and

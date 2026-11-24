@@ -197,12 +197,15 @@ public class ScenarioPuzzleTest {
         assertNull(alone.outcome.judge.win());
         assertTrue(ScenarioWriter.toHjson(roundTrip(alone), null).contains("judge: startOf(regroup), turn(2)"));
         assertEquals(ScenarioDefinition.JudgeMoment.END_OF_TURN, ScenarioTesting.parse("outcome: {\n judge: endOfTurn\n}").outcome.judge.at());
+        ScenarioDefinition resolving = ScenarioTesting.parse("outcome: {\n judge: skirmishResolution\n}");
+        assertEquals(ScenarioDefinition.JudgeMoment.SKIRMISH_RESOLUTION, resolving.outcome.judge.at());
+        assertTrue(ScenarioWriter.toHjson(roundTrip(resolving), null).contains("judge: skirmishResolution"));
     }
 
     @Test
     public void aMomentThatIsNotOneIsRefusedWithWhatToWrite() {
         assertRejected("outcome: {\n judge: endOf(between_turns)\n}", "is not a phase of a turn");
-        assertRejected("outcome: {\n judge: afterArchery\n}", "Write endOf(phase), startOf(phase) or endOfTurn");
+        assertRejected("outcome: {\n judge: afterArchery\n}", "Write endOf(phase), startOf(phase), endOfTurn or skirmishResolution");
         assertRejected("outcome: {\n judge: {\n win: {\n type: canSpot\n filter: companion\n}\n}\n}", "outcome.judge.at");
     }
 

@@ -109,4 +109,16 @@ public class ScenarioDecipherPuzzlesTest {
         assertFalse(report.passed());
         assertNotNull(report.solutions.get("wrong"));
     }
+
+    @Test
+    public void likeThisWouldHappenIsScoredAndItsPublishedKeyStillReaches1160() throws Exception {
+        ScenarioRunReport report = run(file("03-like-this-would-happen-2b.hjson"));
+        assertTrue(report.toString(), report.passed());
+        assertNull(report.solutions.get("published"));
+        assertTrue(report.toString(), report.toString().contains("Solution published: solved (judged at skirmishResolution: won, scoring 1160)"));
+        //Fangorn Forest, the other answer for the site, is a site 2 its slot takes
+        ScenarioDefinition def = ScenarioParser.parse(file("03-like-this-would-happen-2b.hjson"));
+        assertNull(SlotBounds.why(def, "site2", "4_332", def.solution("published").picks(), ScenarioTesting.library()));
+        assertNotNull(SlotBounds.why(def, "site2", "4_339", def.solution("published").picks(), ScenarioTesting.library()));
+    }
 }

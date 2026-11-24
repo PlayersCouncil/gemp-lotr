@@ -3042,6 +3042,7 @@ public class ScenarioAuthoring {
                 case START_OF -> "startOf";
                 case END_OF -> "endOf";
                 case END_OF_TURN -> "endOfTurn";
+                case SKIRMISH_RESOLUTION -> "skirmishResolution";
             });
             one.put("phase", judge.phase() == null ? null : judge.phase().name().toLowerCase(Locale.ROOT));
             one.put("turn", judge.turn());
@@ -3049,7 +3050,7 @@ public class ScenarioAuthoring {
             json.put("judge", one);
         }
         Map<String, Object> moments = new LinkedHashMap<>();
-        moments.put("moments", List.of("startOf", "endOf", "endOfTurn"));
+        moments.put("moments", List.of("startOf", "endOf", "endOfTurn", "skirmishResolution"));
         moments.put("phases", List.of("fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"));
         json.put("moments", moments);
         ScenarioDefinition.Score score = def.outcome.score;

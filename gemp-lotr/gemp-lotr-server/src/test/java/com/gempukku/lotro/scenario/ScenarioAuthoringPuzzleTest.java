@@ -192,7 +192,7 @@ public class ScenarioAuthoringPuzzleTest {
         assertEquals("endOf", judge.getString("moment"));
         assertEquals("archery", judge.getString("phase"));
         assertTrue(judge.getString("win"), judge.getString("win").contains("type: cantSpot"));
-        assertEquals(List.of("startOf", "endOf", "endOfTurn"), puzzle.getJSONObject("moments").getJSONArray("moments").toJavaList(String.class));
+        assertEquals(List.of("startOf", "endOf", "endOfTurn", "skirmishResolution"), puzzle.getJSONObject("moments").getJSONArray("moments").toJavaList(String.class));
         assertNull(puzzle.get("score"));
         assertEquals("set:1", puzzle.getString("pool"));
         JSONArray slots = puzzle.getJSONArray("slots");
