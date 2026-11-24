@@ -3,7 +3,6 @@ package com.gempukku.lotro.async.handler;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.game.Player;
-import com.mysql.cj.util.StringUtils;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
@@ -31,10 +30,8 @@ public class LoginRequestHandler extends LotroServerRequestHandler implements Ur
 
             Player player = _playerDao.loginUser(login, password);
             if (player != null) {
+                // loginUser never answers an account with a blank password, so there is no "set your password" case
                 if (player.getType().contains(Player.Type.USER.getValue())) {
-                    if (StringUtils.isNullOrEmpty(player.getPassword())) {
-                        throw new HttpProcessingException(202);
-                    }
                     if (player.isTemporarilyBannedAt(new Date()))
                         throw new HttpProcessingException(409);
                     else
