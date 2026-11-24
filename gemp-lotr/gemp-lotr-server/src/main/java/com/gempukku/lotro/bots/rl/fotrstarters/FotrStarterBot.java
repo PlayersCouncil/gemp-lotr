@@ -88,7 +88,13 @@ public class FotrStarterBot extends RandomDecisionBot implements LearningBotPlay
     private final List<LearningStep> episodeSteps = new ArrayList<>();
 
     public FotrStarterBot(RLGameStateFeatures features, String playerId, ModelRegistry modelRegistry, ReplayBuffer replayBuffer) {
-        super(playerId);
+        this(features, playerId, modelRegistry, replayBuffer, new java.util.Random());
+    }
+
+    /** @param random Where the chance comes from in the decisions it has no model for (see RandomDecisionBot). */
+    public FotrStarterBot(RLGameStateFeatures features, String playerId, ModelRegistry modelRegistry, ReplayBuffer replayBuffer,
+                          java.util.Random random) {
+        super(playerId, random);
         this.features = features;
         this.modelRegistry = modelRegistry;
         this.replayBuffer = replayBuffer;

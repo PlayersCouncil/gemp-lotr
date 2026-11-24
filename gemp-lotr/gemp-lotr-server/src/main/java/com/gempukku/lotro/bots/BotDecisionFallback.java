@@ -76,7 +76,10 @@ public final class BotDecisionFallback {
             }
             case CARD_ACTION_CHOICE -> answers.add("");
             default -> {
-                RandomDecisionBot random = new RandomDecisionBot(botName);
+                //(its chance seeded from the decision, so that the same decision in the same place falls back the same
+                // way: a scenario's game built again from its journal has its opponent answer as it did)
+                RandomDecisionBot random = new RandomDecisionBot(botName, new java.util.Random(java.util.Objects.hash(botName,
+                        com.gempukku.lotro.game.GameJournal.fingerprint(decision), rejected, game.getGameState().getTurnNumber())));
                 for (int i = 0; i < RANDOM_ATTEMPTS; i++) {
                     try {
                         answers.add(random.chooseAction(game.getGameState(), decision, legality));

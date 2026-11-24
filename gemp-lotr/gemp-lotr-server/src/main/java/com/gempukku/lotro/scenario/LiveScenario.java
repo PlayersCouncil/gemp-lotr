@@ -74,6 +74,22 @@ public class LiveScenario implements ScenarioSession.Listener {
         void opponentAnswers(String player, AwaitingDecision decision, String answer);
     }
 
+    /**
+     * Gemp's bot, answering for the opponent's seat where no step, order or author does (opponent.fallback: bot).  See
+     * com.gempukku.lotro.bots.ScenarioBot.
+     */
+    public interface Bot {
+        /**
+         * Called inside the game's lock, on the thread running the game.
+         * @param player The seat's player, by its name in the game: the bot plays as that player, in whichever role
+         *               it has at the time.
+         * @param seed What the bot's chance is to come from.  It is worked out from the game (see botAnswer), so that
+         *             a game built again from its journal has the bot answer the same way in the same place.
+         * @return The bot's answer; null if it has none.
+         */
+        String answer(com.gempukku.lotro.game.state.LotroGame game, String player, AwaitingDecision decision, long seed);
+    }
+
     /** Turns a message's text (Markdown, card links) into what the client displays. */
     public interface TextRenderer {
         String render(String text);
@@ -128,6 +144,8 @@ public class LiveScenario implements ScenarioSession.Listener {
     /** Set once the game has left its script and been allowed to carry on: from then on it is an ordinary game. */
     private boolean _carryingOn;
     private boolean _botFallbackReported;
+    /** Plays the opponent where the script leaves it to the bot; null where there is none (a test, the headless runner). */
+    private Bot _bot;
     private int _lastCheckpoint;
     private Integer _resumedAt;
     /** Set for a game that took the place of another when that one was taken back (see Again). */
@@ -255,7 +273,40 @@ public class LiveScenario implements ScenarioSession.Listener {
         again._resumedAt = _resumedAt;
         again._takenBack = true;
         again._whenSettled.addAll(_whenSettled);
+        again._bot = _bot;
         return again;
+    }
+
+    /**
+     * Gives the game Gemp's bot, to answer for the opponent where the scenario says opponent.fallback: bot.  To be
+     * called before Begin.  Without one, such a scenario's opponent does as little as it can, and says so.
+     */
+    public void SetBot(Bot bot) {
+        _bot = bot;
+    }
+
+    /**
+     * The bot's answer to an opponent's decision no step or order answers; the least the opponent can do if there is
+     * no bot, or it has no answer.  Its chance is seeded from the scenario, how many answers the game has had, and
+     * the decision itself: all of them the same in a game built again from its journal, so that the bot answers the
+     * same way there.
+     */
+    private String botAnswer(Ruling ruling) {
+        if (_bot != null) {
+            try {
+                long seed = java.util.Objects.hash(_def.id, _table.Journal().answers().size(), GameJournal.fingerprint(ruling.decision()));
+                String answer = _bot.answer(_table.game(), ruling.player(), ruling.decision(), seed);
+                if (answer != null)
+                    return answer;
+            } catch (RuntimeException exp) {
+                LOG.error("Scenario " + _def.id + ": the bot could not answer \"" + ruling.decision().getText() + "\"", exp);
+                problem("the bot could not answer \"" + ruling.decision().getText() + "\" (" + exp + "); the opponent did as little as it can");
+            }
+        } else if (!_botFallbackReported) {
+            _botFallbackReported = true;
+            problem("opponent.fallback is 'bot', and this game has no bot to play the opponent; it does as little as it can instead");
+        }
+        return AnswerCompiler.leastAnswer(ruling.decision());
     }
 
     /**
@@ -381,7 +432,7 @@ public class LiveScenario implements ScenarioSession.Listener {
             }
             String answer = ruling.answer();
             if (answer == null && step == null && !ruling.player().equals(_human) && _def.fallback != Fallback.FAIL)
-                answer = AnswerCompiler.leastAnswer(ruling.decision());
+                answer = _def.fallback == Fallback.BOT ? botAnswer(ruling) : AnswerCompiler.leastAnswer(ruling.decision());
             if (answer == null) {
                 _runProblem = ruling.noAnswer() != null ? step.describe() + ": " + ruling.noAnswer()
                         : step != null ? step.describe() + " has no answer for the script to play"
@@ -533,11 +584,11 @@ public class LiveScenario implements ScenarioSession.Listener {
                 if (!carriesOnOffScript())
                     return;
             }
-            if (step == null && _def.fallback == Fallback.BOT && !_carryingOn && !_botFallbackReported) {
-                _botFallbackReported = true;
-                problem("opponent.fallback is 'bot', which a live game cannot do yet; the opponent does as little as it can instead");
-            }
-            answer = AnswerCompiler.leastAnswer(ruling.decision());
+            //(the bot plays on in a game that has left its script and carries on as well)
+            if (step == null && _def.fallback == Fallback.BOT)
+                answer = botAnswer(ruling);
+            else
+                answer = AnswerCompiler.leastAnswer(ruling.decision());
         }
 
         boolean hasMessages = step != null && !ruling.shown().messages().isEmpty();

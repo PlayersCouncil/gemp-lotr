@@ -360,6 +360,8 @@ public class LotroServer extends AbstractServer {
                 _lock.writeLock().unlock();
             }
 
+            if (_botService != null)
+                live.SetBot(_botService.scenarioBot());
             LotroGameMediator mediator = new LotroGameMediator(gameId, live, AUTHORING_TIMER, false);
             mediator.addGameResultListener(
                 new GameResultListener() {
@@ -400,6 +402,9 @@ public class LotroServer extends AbstractServer {
                                           LiveScenario.TextRenderer text, GameJournal checkpoint, Map<String, Object> campaign) {
         LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, player.getName(), text, _scenarioTimer, checkpoint);
         live.SetCampaign(campaign);
+        //(for a scenario whose opponent falls back on the bot: opponent.fallback: bot)
+        if (_botService != null)
+            live.SetBot(_botService.scenarioBot());
         LotroGameMediator mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
         GameRecorder.ScenarioRecording recording = _gameRecorder.recordScenarioGame(mediator, format, player.getName(), scenario.id, scenario.version);
         ScenarioRunLog.Watch watch = _scenarioRunLog == null ? null : _scenarioRunLog.watch(player, mediator, recording);

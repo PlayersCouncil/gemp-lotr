@@ -78,6 +78,11 @@ import java.util.regex.Pattern;
  * A modifier for a phase lasts to the end of the phase it is put on in (each skirmish is a phase of its own); one
  * for the turn to the end of the turn.  They are the game's own modifiers, as a card's text would give them.
  *
+ * Where no step and no standing order answers the opponent, opponent.fallback says what it does: fail (the game
+ * leaves its script; the default), pass (as little as it can), sandbox (plays its minions and assigns by rule), or
+ * bot (Gemp's bot plays it, in whichever role its seat has at the time; the headless runner cannot play the bot, and
+ * proves such a scenario only as far as the bot's first answer).
+ *
  * This checks the file's own shape only: that fields are known, values are of the right kind, and every card alias
  * that is used was declared.  Whether the blueprints and the format exist is for ScenarioValidator, and whether the
  * steps actually play out is for ScenarioRunner.

@@ -9,15 +9,13 @@ import java.nio.file.Paths;
 public class ModelIO {
     private static final String MODEL_DIR = "bot-models";
 
-    static {
+    public static void saveModel(Class<?> trainerClass, SoftClassifier<double[]> model) {
+        //(made when a model is first saved, not whenever this class is first used: reading models makes no folder)
         try {
             Files.createDirectories(Paths.get(MODEL_DIR));
         } catch (IOException e) {
             throw new RuntimeException("Failed to create model directory", e);
         }
-    }
-
-    public static void saveModel(Class<?> trainerClass, SoftClassifier<double[]> model) {
         File file = getModelFile(trainerClass);
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
             out.writeObject(model);
@@ -29,7 +27,12 @@ public class ModelIO {
     }
 
     public static SoftClassifier<double[]> loadModel(Class<?> trainerClass) {
-        File file = getModelFile(trainerClass);
+        return loadModel(new File(MODEL_DIR), trainerClass);
+    }
+
+    /** A model from a folder of them other than the server's own (a test's: the repository's bot-models). */
+    public static SoftClassifier<double[]> loadModel(File folder, Class<?> trainerClass) {
+        File file = new File(folder, trainerClass.getSimpleName() + ".model");
         if (!file.exists())
             return null;
 
