@@ -39,7 +39,10 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
  * `data-mode` the player's setting: button or space) and, opened (`data-under-open` on the slot), the cards under it
  * in `.gd-phone-slot__opened` (`button.gd-card[data-opened]`, as big as the card) instead of peeking;
  * `.gd-phone-cards__split` where the Shadow cards start; `.gd-phone-cards__empty` for
- * none; `button.gd-phone-cards__more` the badge; `button.gd-phone-cards__fold` (`data-fold` shrink or hide,
+ * none; `button.gd-phone-cards__more` the badge, beside the scrolled cards and never over one: while the decision
+ * offers cards of a row too long to show whole, its place is kept (`data-more` on the row), empty
+ * (`.gd-phone-cards__more-space`) once none is out of view, so the cards don't move under a finger (the owner,
+ * 2026-11-24: a card half in view under the badge couldn't be tapped); `button.gd-phone-cards__fold` (`data-fold` shrink or hide,
  * `aria-expanded`) the fold's button, `data-shrunk` on a shrunk card's slot; for `offers`, a
  * `.gd-phone-cards__host` (`data-host` = the card's id) with a small copy of the card they lie under, then a
  * `.gd-phone-slot[data-from-under]` per offered card, all before the row's own cards, and a split
@@ -49,7 +52,7 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
   selector: 'gd-phone-cards',
   styleUrl: './phone-cards.component.css',
   imports: [CardComponent, GameCardDirective, GameCardLayersComponent, ScrollSettledDirective, NgTemplateOutlet],
-  host: { '[attr.data-row]': 'key()' },
+  host: { '[attr.data-row]': 'key()', '[attr.data-more]': "reserved() ? '' : null" },
   template: `
     <div #scroller class="gd-phone-cards__scroll" (scroll)="measure()" (gdScrollSettled)="keepScroll()">
       <!-- First, before the row's own cards (the owner, 2026-11-17: an action such as putting on the Ring is seen first) -->
@@ -181,6 +184,8 @@ import { ScrollSettledDirective } from './scroll-settled.directive';
       <button type="button" class="gd-phone-cards__more" (click)="showMarked(scroller)">
         {{ hiddenMarks() }} more ›
       </button>
+    } @else if (reserved()) {
+      <span class="gd-phone-cards__more-space" aria-hidden="true"></span>
     }
   `,
 })
@@ -210,6 +215,8 @@ export class PhoneCardsComponent {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly scrollLeft = signal(0);
   private readonly width = signal(0);
+  /** Whether the row's cards are wider than it: it scrolls. */
+  private readonly overflowing = signal(false);
   /** Where each of the row's cards starts in it (px), as last measured: the badge counts from these. */
   private readonly lefts = signal<readonly { id: string; left: number }[]>([]);
 
@@ -219,6 +226,16 @@ export class PhoneCardsComponent {
     const marks = this.decisions.view().marks;
     const right = this.scrollLeft() + this.width();
     return this.lefts().filter(({ id, left }) => marks[id] === 'selectable' && left + 12 > right).length;
+  });
+
+  /**
+   * Whether the badge's place is kept beside the cards: the decision offers (or has chosen) cards of the row, and they
+   * don't all fit. Kept while the decision lasts, so the row doesn't widen under a finger as the last card comes into view.
+   */
+  protected readonly reserved = computed(() => {
+    if (!this.overflowing() && this.hiddenMarks() === 0) return false;
+    const marks = this.decisions.view().marks;
+    return this.lefts().some(({ id }) => marks[id] === 'selectable' || marks[id] === 'selected');
   });
 
   protected readonly folding = computed(() =>
@@ -345,6 +362,7 @@ export class PhoneCardsComponent {
     const scroller = this.scroller().nativeElement;
     this.scrollLeft.set(scroller.scrollLeft);
     this.width.set(scroller.clientWidth);
+    this.overflowing.set(scroller.scrollWidth > scroller.clientWidth + 1);
     const lefts = [...scroller.querySelectorAll<HTMLElement>('.gd-phone-slot > .gd-card')].map((card) => ({
       id: card.dataset['cardId'] ?? '',
       left: card.offsetLeft,
