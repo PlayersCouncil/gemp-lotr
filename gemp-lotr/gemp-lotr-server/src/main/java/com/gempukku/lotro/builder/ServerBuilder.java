@@ -31,6 +31,7 @@ import com.gempukku.lotro.scenario.ScenarioRunLog;
 import com.gempukku.lotro.scenario.ScenarioShelf;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
+import com.gempukku.lotro.service.LoginThrottle;
 import com.gempukku.lotro.bots.BotService;
 import com.gempukku.lotro.tournament.TournamentDAO;
 import com.gempukku.lotro.tournament.TournamentMatchDAO;
@@ -50,6 +51,8 @@ public class ServerBuilder {
         LoggedUserHolder loggedUserHolder = new LoggedUserHolder();
         loggedUserHolder.start();
         objectMap.put(LoggedUserHolder.class, loggedUserHolder);
+        // Password checks (POST /login, linking an old account to a PC account) share one count of failures
+        objectMap.put(LoginThrottle.class, new LoginThrottle());
 
         CollectionSerializer collectionSerializer = new CollectionSerializer();
         objectMap.put(CollectionSerializer.class, collectionSerializer);

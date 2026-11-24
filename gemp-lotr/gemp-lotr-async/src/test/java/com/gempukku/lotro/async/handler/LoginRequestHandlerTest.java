@@ -5,6 +5,7 @@ import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.db.PlayerDAO;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.service.LoggedUserHolder;
+import com.gempukku.lotro.service.LoginThrottle;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -27,8 +28,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 /**
- * POST /login: what each outcome answers.  The PlayerDAO is a stand-in; which stored passwords match is
- * DbPlayerDAOPasswordTest's.
+ * POST /login: what each outcome answers, and the limit on failed attempts (LoginThrottle, whose own counting is
+ * LoginThrottleTest's).  The PlayerDAO is a stand-in; which stored passwords match is DbPlayerDAOPasswordTest's.
  */
 public class LoginRequestHandlerTest {
     private static final String IP = "10.0.0.7";
@@ -36,6 +37,7 @@ public class LoginRequestHandlerTest {
     private Map<Type, Object> context;
     private PlayerDAO playerDao;
     private LoggedUserHolder loggedUserHolder;
+    private LoginThrottle throttle;
 
     @Before
     public void setUp() {
@@ -45,6 +47,8 @@ public class LoginRequestHandlerTest {
         context = new HashMap<>();
         context.put(PlayerDAO.class, playerDao);
         context.put(LoggedUserHolder.class, loggedUserHolder);
+        throttle = new LoginThrottle();
+        context.put(LoginThrottle.class, throttle);
     }
 
     static HttpRequest loginPost(String login, String password) {
@@ -114,5 +118,57 @@ public class LoginRequestHandlerTest {
     public void anAccountThatIsNotAUserIs403() throws Exception {
         when(playerDao.loginUser("Gollum", "x")).thenReturn(player("Gollum", "hash", "", null));
         assertEquals(403, attempt("Gollum", "x"));
+    }
+
+    // ---- the limit on failed attempts ----
+
+    @Test
+    public void tooManyFailuresForANameAre429WithoutCheckingThePassword() throws Exception {
+        when(playerDao.loginUser("Frodo", "ring")).thenReturn(player("Frodo", "hash", "u", null));
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_NAME; i++)
+            assertEquals(401, attempt("Frodo", "guess" + i));
+        assertEquals("even the right password", 429, attempt("Frodo", "ring"));
+        assertEquals("the name ignoring case", 429, attempt("FRODO", "ring"));
+        verify(playerDao, never()).loginUser("Frodo", "ring");
+        assertEquals("another name from the same address is still checked", 401, attempt("Sam", "x"));
+    }
+
+    @Test
+    public void aRefusedAttemptIsNotCountedAsAFailure() throws Exception {
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_NAME; i++)
+            attempt("Frodo", "guess" + i);
+        assertEquals(429, attempt("Frodo", "again"));
+        long later = System.currentTimeMillis() + LoginThrottle.WINDOW_MILLIS;
+        assertFalse("only the ten counted failures, all gone after the window", throttle.isBlocked("Frodo", IP, later));
+    }
+
+    @Test
+    public void tooManyFailuresFromAnAddressAre429ForEveryName() throws Exception {
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_ADDRESS; i++)
+            assertEquals(401, attempt("name" + i, "x"));
+        assertEquals(429, attempt("Frodo", "ring"));
+        verify(playerDao, never()).loginUser("Frodo", "ring");
+    }
+
+    @Test
+    public void theRightPasswordClearsTheNamesFailures() throws Exception {
+        when(playerDao.loginUser("Frodo", "ring")).thenReturn(player("Frodo", "hash", "u", null));
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_NAME - 1; i++)
+            attempt("Frodo", "guess" + i);
+        assertEquals(200, attempt("Frodo", "ring"));
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_NAME - 1; i++)
+            assertEquals(401, attempt("Frodo", "again" + i));
+        assertEquals("counting started again from the success", 200, attempt("Frodo", "ring"));
+    }
+
+    @Test
+    public void aRightPasswordOnABannedAccountStillCountsAsRight() throws Exception {
+        when(playerDao.loginUser("Merry", "x")).thenReturn(player("Merry", "hash", "un",
+                new Date(System.currentTimeMillis() + 60_000)));
+        for (int i = 0; i < LoginThrottle.MAX_FAILURES_PER_NAME - 1; i++)
+            attempt("Merry", "guess" + i);
+        assertEquals(409, attempt("Merry", "x"));
+        assertEquals(401, attempt("Merry", "guess"));
+        assertEquals("not blocked: the 409 cleared the count", 409, attempt("Merry", "x"));
     }
 }
