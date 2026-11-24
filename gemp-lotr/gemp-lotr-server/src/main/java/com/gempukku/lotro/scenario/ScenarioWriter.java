@@ -245,6 +245,13 @@ public final class ScenarioWriter {
         addMap(setup, "stack", from.stack);
         addCounts(setup, "wounds", from.wounds);
         addCounts(setup, "tokens", from.tokens);
+        if (!from.modifiers.isEmpty()) {
+            //(card: strength +2, fierce: as the setup's wounds and tokens are, one card to a line)
+            JsonObject modifiers = new JsonObject();
+            from.modifiers.forEach((card, on) -> modifiers.add(card,
+                    String.join(", ", on.stream().map(ScenarioDefinition.Modification::text).toList())));
+            setup.add("modifiers", modifiers);
+        }
         if (from.burdens != 0)
             setup.add("burdens", from.burdens);
         if (from.threats != 0)

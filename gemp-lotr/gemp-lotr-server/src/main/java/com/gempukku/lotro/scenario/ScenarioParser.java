@@ -62,6 +62,22 @@ import java.util.regex.Pattern;
  *                                    order (setup.<seat>.deck on top), so the opening draw is known.  Nothing else of
  *                                    the setup can be said, and the script has to have the Free Peoples seat go first.
  *
+ * A card's stats and keywords can be changed by hand, as a board change and in the board the game starts with (see
+ * CardModifiers): strength, vitality, resistance, cost (its twilight cost) by a signed amount; or a keyword given:
+ * damage, defender, hunter, ambush, toil (each with its number, 1 if none is written), archer, enduring, unhasty,
+ * muster, fierce, lurker, relentless, cunning.  Each lasts until it is taken off, or for the phase or the turn:
+ *     do: modify(aragorn, strength, +2, turn), modify(orc1, fierce, phase), modify(gimli, damage, +1)
+ *     do: unmodify(aragorn)                    every modifier put on aragorn by hand
+ *     do: unmodify(aragorn, strength)          those of one kind
+ *     setup: {
+ *         modifiers: {
+ *             aragorn: strength +2, damage +1      several to a card, with commas
+ *             orc1: fierce turn                    ("phase" in the setup is the phase the game starts in)
+ *         }
+ *     }
+ * A modifier for a phase lasts to the end of the phase it is put on in (each skirmish is a phase of its own); one
+ * for the turn to the end of the turn.  They are the game's own modifiers, as a card's text would give them.
+ *
  * This checks the file's own shape only: that fields are known, values are of the right kind, and every card alias
  * that is used was declared.  Whether the blueprints and the format exist is for ScenarioValidator, and whether the
  * steps actually play out is for ScenarioRunner.
@@ -354,6 +370,7 @@ public final class ScenarioParser {
                 case "stack" -> aliasMap(def, asObject(value, "setup.stack"), result.stack, "setup.stack");
                 case "wounds" -> countMap(def, asObject(value, "setup.wounds"), result.wounds, "setup.wounds");
                 case "tokens" -> countMap(def, asObject(value, "setup.tokens"), result.tokens, "setup.tokens");
+                case "modifiers" -> modifiers(def, asObject(value, "setup.modifiers"), result.modifiers);
                 case "opening" -> {
                     //(how the game opens: the board laid out as the setup says, or the game's own opening played)
                     String opening = scalar(value, "setup.opening").trim().toLowerCase(Locale.ROOT);
@@ -487,6 +504,33 @@ public final class ScenarioParser {
                 sites.add(written);
             }
             result.controlled.computeIfAbsent(seat, key -> new ArrayList<>()).addAll(sites);
+        }
+    }
+
+    /**
+     * setup.modifiers: { card: what amount how-long, ... }, as many to a card as are wanted, with commas between them:
+     * aragorn: strength +2, damage +1.  See CardModifiers.
+     */
+    private static void modifiers(ScenarioDefinition def, JsonObject modifiers, Map<String, List<Modification>> result)
+            throws ScenarioFormatException {
+        for (String name : modifiers.names()) {
+            String context = "setup.modifiers." + name;
+            CardDef card = card(def, name, "setup.modifiers");
+            List<Modification> on = new ArrayList<>();
+            for (String line : lines(modifiers.get(name), context))
+                for (String one : Terms.split(line, ',', context)) {
+                    if (one.isBlank())
+                        continue;
+                    List<String> parts = new ArrayList<>(Arrays.asList(one.trim().split("\\s+")));
+                    //("strength + 2", as somebody might write it, is "strength +2")
+                    for (int i = 1; i < parts.size() - 1; i++)
+                        if (parts.get(i).equals("+") || parts.get(i).equals("-"))
+                            parts.set(i, parts.get(i) + parts.remove(i + 1));
+                    on.add(CardModifiers.parse(parts.getFirst(), parts.subList(1, parts.size()), context + ": '" + one.trim() + "'"));
+                }
+            if (on.isEmpty())
+                throw new ScenarioFormatException(context + ": says no modifier (aragorn: strength +2, or orc1: fierce)");
+            result.put(card.alias(), on);
         }
     }
 
@@ -1186,10 +1230,36 @@ public final class ScenarioParser {
             Seat seat = parseSeat(def, term.arg(1, context), context);
             return new DoOp(DoKind.CONTROL, alias, seat.key(), number, false, term.raw());
         }
+        if (term.is("modify")) {
+            //modify(card, what, amount, how long): the amount where it takes one, how long only when not until taken off
+            CardDef card = card(def, term.arg(0, context), context);
+            if (term.args().size() < 2)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": says what is modified: modify(" + card.alias()
+                        + ", strength, +2), modify(" + card.alias() + ", fierce, turn)");
+            Modification modification = CardModifiers.parse(term.arg(1, context), term.args().subList(2, term.args().size()),
+                    context + ": " + term.raw());
+            return new DoOp(DoKind.MODIFY, card.alias(), modification.what(), modification.amount(), false, term.raw(), modification);
+        }
+        if (term.is("unmodify")) {
+            //unmodify(card): every modifier put on it by hand; unmodify(card, what): those of that kind
+            CardDef card = card(def, term.arg(0, context), context);
+            String what = null;
+            if (term.args().size() > 2)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": says the card, and what to take off if not everything: "
+                        + "unmodify(" + card.alias() + "), unmodify(" + card.alias() + ", strength)");
+            if (term.args().size() == 2) {
+                CardModifiers.Word word = CardModifiers.word(term.arg(1, context));
+                if (word == null)
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + term.arg(1, context).trim() + "' is not something a "
+                            + "card can be modified in (strength, vitality, resistance, cost, or a keyword such as fierce)");
+                what = word.word();
+            }
+            return new DoOp(DoKind.UNMODIFY, card.alias(), what, 0, false, term.raw());
+        }
         throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of "
                 + "move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), heal(card, n), tokens(card, n), "
                 + "draw(n) or draw(seat, n), order(seat.zone, card, card), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it), "
-                + "marker(seat, site), control(site, seat), liberate(site)");
+                + "marker(seat, site), control(site, seat), liberate(site), modify(card, what, +n, phase or turn), unmodify(card) or unmodify(card, what)");
     }
 
     /** The places whose cards come in an order that matters: a hand as it is shown, a pile from the top down. */

@@ -2167,6 +2167,15 @@ public class ScenarioAuthoring {
             case THREATS -> setup.threats = Math.max(0, op.relative() ? setup.threats + op.amount() : op.amount());
             case TWILIGHT -> setup.twilight = Math.max(0, op.relative() ? setup.twilight + op.amount() : op.amount());
             case MARKER, CONTROL, LIBERATE -> putStartInSetup(def, op);
+            case MODIFY -> setup.modifiers.computeIfAbsent(op.card(), card -> new ArrayList<>()).add(op.modification());
+            case UNMODIFY -> {
+                List<ScenarioDefinition.Modification> on = setup.modifiers.getOrDefault(op.card(), new ArrayList<>());
+                if (!on.removeIf(one -> op.target() == null || one.what().equals(op.target())))
+                    throw new AuthoringException("'" + op.card() + "' starts with no " + (op.target() == null ? "" : op.target() + " ")
+                            + "modifier put on it to take off.");
+                if (on.isEmpty())
+                    setup.modifiers.remove(op.card());
+            }
         }
     }
 
@@ -2950,6 +2959,8 @@ public class ScenarioAuthoring {
             state.put("board", table.CardsDealt() ? describeBoard(sitting) : null);
             state.put("start", describeStart(def));
             state.put("problems", live.Problems());
+            //(what a card can be modified in by hand, and for how long: the Board tab's Modify...)
+            state.put("modify", describeModify());
             return state;
         });
     }
@@ -3214,6 +3225,8 @@ public class ScenarioAuthoring {
             json.put("tokens", token == null ? 0 : table.gameState().getTokenCount(physical, token));
             json.put("on", physical.getAttachedTo() != null ? table.AliasOf(physical.getAttachedTo())
                     : physical.getStackedOn() != null ? table.AliasOf(physical.getStackedOn()) : null);
+            //(the modifiers put on it by hand that are in force: see CardModifiers)
+            json.put("modifiers", table.DescribeModifiers(physical));
             cards.add(json);
         }
         Map<String, Object> board = new LinkedHashMap<>();
@@ -3349,7 +3362,48 @@ public class ScenarioAuthoring {
         for (List<String> sites : def.sites.values())
             longest = Math.max(longest, sites.size());
         start.put("lastSite", Math.min(9, Math.max(longest, setup.path.size())));
+        //(setup.modifiers: card -> [{what, amount, until, written}], as the file has them)
+        Map<String, Object> modifiers = new LinkedHashMap<>();
+        setup.modifiers.forEach((card, on) -> {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (ScenarioDefinition.Modification one : on) {
+                Map<String, Object> json = new LinkedHashMap<>();
+                json.put("what", one.what());
+                json.put("amount", one.amount() == 0 ? null : one.amount());
+                json.put("until", one.until().name().toLowerCase(Locale.ROOT));
+                json.put("written", one.text());
+                list.add(json);
+            }
+            modifiers.put(card, list);
+        });
+        start.put("modifiers", modifiers);
         return start;
+    }
+
+    /**
+     * What a card can be modified in by hand, for the Modify... menu: each stat and keyword by its word in the file,
+     * what the page calls it, whether it takes a number (and whether that number has a sign: a stat's does, a
+     * keyword's is 1 or more), the card types it means something on; and the times it can last.
+     */
+    public static Map<String, Object> describeModify() {
+        List<Map<String, Object>> words = new ArrayList<>();
+        for (CardModifiers.Word word : CardModifiers.WORDS) {
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("what", word.word());
+            json.put("label", word.label());
+            json.put("kind", word.stat() ? "stat" : "keyword");
+            json.put("number", !word.numbered() ? "none" : word.stat() ? "signed" : "positive");
+            List<String> types = new ArrayList<>();
+            for (CardType type : CardType.values())
+                if (word.suits().contains(type))
+                    types.add(type.name());
+            json.put("types", types);
+            words.add(json);
+        }
+        Map<String, Object> modify = new LinkedHashMap<>();
+        modify.put("words", words);
+        modify.put("until", List.of("phase", "turn", "removed"));
+        return modify;
     }
 
     private static String zoneOf(PhysicalCard card) {

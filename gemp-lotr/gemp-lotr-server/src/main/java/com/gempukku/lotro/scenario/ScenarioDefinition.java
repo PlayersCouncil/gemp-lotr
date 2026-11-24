@@ -160,6 +160,11 @@ public final class ScenarioDefinition {
         public final Map<String, Integer> wounds = new LinkedHashMap<>();
         /** Culture tokens of the card's own culture. */
         public final Map<String, Integer> tokens = new LinkedHashMap<>();
+        /**
+         * setup.modifiers: card alias -> the modifiers put on it by hand when the board is laid out (see
+         * CardModifiers), in the order they are written.
+         */
+        public final Map<String, List<Modification>> modifiers = new LinkedHashMap<>();
         public int burdens = 0;
         public int threats = 0;
         /**
@@ -361,7 +366,11 @@ public final class ScenarioDefinition {
         /** A site controlled by a seat: card the site's name (or null), amount its number (or 0), target the seat. */
         CONTROL,
         /** A controlled site controlled by nobody again: card the site's name (or null), amount its number (or 0). */
-        LIBERATE }
+        LIBERATE,
+        /** A modifier put on a card by hand: card the card, modification what and for how long (see CardModifiers). */
+        MODIFY,
+        /** Modifiers put on by hand taken off a card again: card the card, target what (null for every one). */
+        UNMODIFY }
 
     /**
      * Something the director does to the board directly.
@@ -371,7 +380,31 @@ public final class ScenarioDefinition {
      *               seat that draws.  ORDER: the hand or pile, e.g. "freeps.hand".
      * @param amount How many.  For TWILIGHT, BURDENS and THREATS this is a new total unless relative is set.
      */
-    public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) { }
+    public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source, Modification modification) {
+        public DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) {
+            this(kind, card, target, amount, relative, source, null);
+        }
+    }
+
+    /** How long a modifier put on by hand lasts: to the end of the phase it is put on in, of the turn, or until it is taken off. */
+    public enum ModifierTime { PHASE, TURN, REMOVED }
+
+    /**
+     * A modifier put on one card by hand (do: modify(...), setup.modifiers): a stat changed or a keyword given.
+     * @param what Its word in the file: strength, vitality, resistance, cost, or a keyword (see CardModifiers.WORDS).
+     * @param amount A stat's change (never 0), a numbered keyword's number (1 or more); 0 for a keyword with no number.
+     */
+    public record Modification(String what, int amount, ModifierTime until) {
+        /** As the file writes it: "strength +2", "fierce", "damage +1 turn". */
+        public String text() {
+            StringBuilder text = new StringBuilder(what);
+            if (amount != 0)
+                text.append(' ').append(amount > 0 ? "+" : "").append(amount);
+            if (until != ModifierTime.REMOVED)
+                text.append(' ').append(until.name().toLowerCase(java.util.Locale.ROOT));
+            return text.toString();
+        }
+    }
 
     /** What takes a message off the screen and brings the next one. */
     public enum Advance {
