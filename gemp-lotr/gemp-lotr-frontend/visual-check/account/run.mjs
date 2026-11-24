@@ -172,6 +172,7 @@ const SCENARIOS = [
       await t.open(`${NG}login`);
       await t.visible('.gd-login__form .gd-button[data-action="register"]');
       await t.absent('[data-action="pc-login"]');
+      await t.absent('.gd-login__box');
       await t.absent('gd-alias-list *');
       await t.open(`${NG}login?pc=failed`);
       await t.visible('.gd-login__form');
@@ -262,6 +263,52 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'optional-alignment',
+    note: 'the box: Login and Password flush, each heading centred over its column, the SSO buttons one width under theirs; inside the window down to 360',
+    server: { session: 'argonauth-session-nobody.json' },
+    run: async (t) => {
+      const box = (selector) => t.page.locator(selector).first().boundingBox();
+      const centre = (b) => b.x + b.width / 2;
+      for (const [width, height] of [
+        [1366, 768],
+        [1024, 768],
+        [390, 800],
+        [360, 800],
+      ]) {
+        await t.page.setViewportSize({ width, height });
+        await t.open(`${NG}login`);
+        await t.visible('.gd-login__box .gd-login__columns');
+        const [login, password] = await Promise.all(
+          ['.gd-login__input[name="login"]', '.gd-login__input[name="password"]'].map(box),
+        );
+        if (Math.abs(login.x - password.x) > 0.5 || Math.abs(login.width - password.width) > 0.5) {
+          throw new Failed(
+            `${width}: the inputs are not flush (${login.x}/${login.width}, ${password.x}/${password.width})`,
+          );
+        }
+        for (const column of ['legacy', 'sso']) {
+          const [heading, body] = await Promise.all([
+            box(`[data-column="${column}"] .gd-login__heading`),
+            box(column === 'legacy' ? '[data-column="legacy"] .gd-login__form' : '.gd-login__sso'),
+          ]);
+          if (Math.abs(centre(heading) - centre(body)) > 1) {
+            throw new Failed(
+              `${width}: ${column}'s heading is not centred over it (${centre(heading)}, ${centre(body)})`,
+            );
+          }
+        }
+        const [signIn, register] = await Promise.all(
+          ['[data-action="pc-login"]', '[data-action="pc-register"]'].map(box),
+        );
+        if (Math.abs(signIn.width - register.width) > 0.5 || Math.abs(signIn.x - register.x) > 0.5) {
+          throw new Failed(`${width}: the SSO buttons differ in width or place`);
+        }
+        const panel = await box('.gd-login__box');
+        if (panel.x < 0 || panel.x + panel.width > width) throw new Failed(`${width}: the box overflows the window`);
+      }
+    },
+  },
+  {
     name: 'optional-notices',
     note: 'where a PC sign-in came back to: cancelled, failed',
     server: { session: 'argonauth-session-nobody.json' },
@@ -282,7 +329,7 @@ const SCENARIOS = [
       await t.texts(NAMES, ['Frodo', 'Underhill', 'Ringbearer']);
       await t.texts(`${ALIAS('Frodo')} [data-action="enter"]`, ['Enter Gemp']);
       await t.texts('.gd-alias-list__actions .gd-button', [
-        'Create New Gemp Alias',
+        'Create New Gemp Profile',
         'Link Existing Gemp Account',
         'Log Out',
       ]);
@@ -309,7 +356,7 @@ const SCENARIOS = [
       await t.open(`${NG}login`);
       await t.click(ENTER('Ringbearer'));
       await t.texts(NAMES, ['Frodo', 'Underhill']);
-      await t.text('.gd-alias-list__refusal', 'That alias is no longer linked to your PC Account.');
+      await t.text('.gd-alias-list__refusal', 'That profile is no longer linked to your PC Account.');
       await t.attribute('.gd-alias-list__refusal', 'role', 'alert');
       await t.arrives(`${NG}login`);
       t.sent(['/enter playerId=900003']);
@@ -377,7 +424,7 @@ const SCENARIOS = [
     run: async (t) => {
       await t.open(`${NG}login?open=create&return=%2Fevents%2Fleagues`);
       await t.attribute(FORM, 'data-form', 'create');
-      await t.text('.gd-alias-list__empty', 'No Gemp alias yet: create one, or link an account you had.');
+      await t.text('.gd-alias-list__empty', 'No Gemp profile yet: create one, or link an account you had.');
       await t.disabled(ACTION('link'), false);
       const [link, form] = await Promise.all(
         [ACTION('link'), FORM].map((selector) => t.page.locator(selector).first().boundingBox()),
@@ -392,7 +439,7 @@ const SCENARIOS = [
   },
   {
     name: 'create-good',
-    note: 'Create New Gemp Alias: made, entered, the hall opens',
+    note: 'Create New Gemp Profile: made, entered, the hall opens',
     server: { session: 'argonauth-session-aliases.json' },
     run: async (t) => {
       await t.open(`${NG}login`);
@@ -610,7 +657,7 @@ const SCENARIOS = [
       await t.text('.gd-pc-account-block__notice', 'This account is now connected to your PC Account.');
       await t.text(
         '.gd-pc-account-block__connected',
-        'This account is connected to a PC Account. Sign in with the PC Account to see all your aliases.',
+        'This account is connected to a PC Account. Sign in with the PC Account to see all your Gemp profiles.',
       );
       await t.absent('.gd-pc-account-block__connect');
     },

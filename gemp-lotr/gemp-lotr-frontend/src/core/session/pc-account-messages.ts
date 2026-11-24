@@ -3,14 +3,14 @@
  * (no legacy page had it). Players see "PC Account", never the service's name.
  */
 
-// Ketura's labels
+// Ketura's labels (on screen the thing is a "profile"; the code's word for it is alias)
 export const PC_SIGN_IN = 'Sign in with PC Account';
 export const PC_REGISTER = 'Register PC Account';
 /** The login page's two columns in `optional` mode, for nobody. */
 export const LEGACY_LOGIN_HEADING = 'Legacy Login';
 export const PC_SSO_HEADING = 'PC SSO';
 export const ENTER_GEMP = 'Enter Gemp';
-export const CREATE_ALIAS = 'Create New Gemp Alias';
+export const CREATE_ALIAS = 'Create New Gemp Profile';
 export const LINK_ACCOUNT = 'Link Existing Gemp Account';
 export const LOG_OUT = 'Log Out';
 export const CONNECT_PC_ACCOUNT = 'Connect PC Account';
@@ -21,8 +21,8 @@ export function signedInAs(name: string): string {
   return `Signed in as ${name}`;
 }
 
-export const ALIASES_HEADING = 'Your Gemp aliases';
-export const NO_ALIASES = 'No Gemp alias yet: create one, or link an account you had.';
+export const ALIASES_HEADING = 'Your Gemp profiles';
+export const NO_ALIASES = 'No Gemp profile yet: create one, or link an account you had.';
 export const ALIAS_CURRENT = 'current';
 export const ALIAS_PLAYING = 'playing';
 /** Why every Enter Gemp but the played alias's is disabled, and Create too (the alias is this browser's). */
@@ -53,9 +53,10 @@ export const CONNECT_NOTE =
 
 // The errors of PC-ACCOUNT.md's tables, by code
 export const NO_PC_ACCOUNT = 'Your PC Account sign-in has ended. Sign in again.';
-export const NOT_LINKED = 'That alias is no longer linked to your PC Account.';
-export const ALIAS_BANNED = 'That alias is banned.';
-export const ALIAS_BUSY = 'Your alias here is in a game, queue, table or tournament: finish or leave it to switch.';
+export const NOT_LINKED = 'That profile is no longer linked to your PC Account.';
+export const ALIAS_BANNED = 'That profile is banned.';
+export const ALIAS_BUSY =
+  'The profile this browser plays is in a game, queue, table or tournament: finish or leave it to switch.';
 export const UNAVAILABLE = 'The PC Account service is not answering. Try again shortly.';
 export const INVALID_ALIAS_NAME = 'A name is 2 to 30 letters, digits, _ or -.';
 export const NAME_TAKEN = 'That name is taken.';
@@ -77,9 +78,9 @@ export const PC_LINKED_ELSEWHERE = 'This account already belongs to another PC A
 // My Account's PC Account block
 export const PC_BLOCK_HEADING = 'PC Account';
 export const PC_ABOUT =
-  "A PC Account is one sign-in for the Player's Council's sites. Connected, it keeps all your Gemp aliases together.";
+  "A PC Account is one sign-in for the Player's Council's sites. Connected, it keeps all your Gemp profiles together.";
 export const PC_IS_CONNECTED =
-  'This account is connected to a PC Account. Sign in with the PC Account to see all your aliases.';
+  'This account is connected to a PC Account. Sign in with the PC Account to see all your Gemp profiles.';
 
 /** The server's error codes, by action (PC-ACCOUNT.md). */
 export type PcAction = 'enter' | 'create' | 'link' | 'connect';

@@ -84,7 +84,7 @@ describe('AliasListComponent', () => {
     expect(el.classList).toContain('gd-alias-list');
     expect([el.dataset['place'], el.dataset['kind']]).toEqual(['login', 'pc']);
     expect(query('.gd-alias-list__signed-in')!.textContent).toBe('Signed in as Frodo Baggins');
-    expect(query('.gd-alias-list__aliases')!.getAttribute('aria-label')).toBe('Your Gemp aliases');
+    expect(query('.gd-alias-list__aliases')!.getAttribute('aria-label')).toBe('Your Gemp profiles');
     expect(names()).toEqual(['Frodo', 'Underhill']);
     expect(row('Underhill').hasAttribute('data-current')).toBe(true);
     expect(row('Underhill').hasAttribute('data-busy')).toBe(true);
@@ -94,7 +94,7 @@ describe('AliasListComponent', () => {
     ]);
     expect(enterOf('Underhill').textContent!.trim()).toBe('Enter Gemp');
     expect(all('.gd-alias-list__actions .gd-button').map((b) => b.textContent!.trim())).toEqual([
-      'Create New Gemp Alias',
+      'Create New Gemp Profile',
       'Link Existing Gemp Account',
       'Log Out',
     ]);
@@ -142,7 +142,7 @@ describe('AliasListComponent', () => {
     await stable();
     expectSession().flush(readServerResponse('argonauth-session-aliases.json'));
     await stable();
-    expect(row('Ringbearer').querySelector('.gd-alias-list__error')!.textContent).toBe('That alias is banned.');
+    expect(row('Ringbearer').querySelector('.gd-alias-list__error')!.textContent).toBe('That profile is banned.');
     expect(row('Ringbearer').querySelector('.gd-alias-list__error')!.getAttribute('role')).toBe('alert');
     expect(all('.gd-alias-list__error').length).toBe(1);
     expect(navigation.visited).toEqual([]);
@@ -175,7 +175,7 @@ describe('AliasListComponent', () => {
     expect(button('create').getAttribute('aria-expanded')).toBe('true');
     const form = query('form.gd-pc-form__form')!;
     expect(form.dataset['form']).toBe('create');
-    expect(form.getAttribute('aria-label')).toBe('Create New Gemp Alias');
+    expect(form.getAttribute('aria-label')).toBe('Create New Gemp Profile');
     expect(form.querySelector('.gd-pc-form__note')).toBeNull();
     const name = query<HTMLInputElement>('.gd-pc-form__field[data-field="name"] input')!;
     expect(name.maxLength).toBe(30);
@@ -236,7 +236,7 @@ describe('AliasListComponent', () => {
       'account',
     );
     expect(query('.gd-alias-list__empty')!.textContent).toBe(
-      'No Gemp alias yet: create one, or link an account you had.',
+      'No Gemp profile yet: create one, or link an account you had.',
     );
     button('link').click();
     await stable();
@@ -343,7 +343,7 @@ describe('AliasListComponent', () => {
     expect(names()).toEqual(['Frodo', 'Underhill']);
     const refusal = query('.gd-alias-list__refusal')!;
     expect([refusal.textContent, refusal.getAttribute('role')]).toEqual([
-      'That alias is no longer linked to your PC Account.',
+      'That profile is no longer linked to your PC Account.',
       'alert',
     ]);
     button('link').click();
@@ -361,7 +361,7 @@ describe('AliasListComponent', () => {
     expect(button('create').getAttribute('aria-expanded')).toBe('true');
     // and the way to link an old account instead is there, above the form, not hidden by it
     expect(query('.gd-alias-list__empty')!.textContent).toBe(
-      'No Gemp alias yet: create one, or link an account you had.',
+      'No Gemp profile yet: create one, or link an account you had.',
     );
     const link = button('link');
     expect(link.disabled).toBe(false);

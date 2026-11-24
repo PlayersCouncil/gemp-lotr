@@ -70,7 +70,7 @@ export class PcSessionService {
     return this.act('enter', this.api.enter(alias.id), () => this.leaveForTarget());
   }
 
-  /** Create New Gemp Alias: the new alias is entered. */
+  /** Create New Gemp Profile: the new alias is entered. */
   create(name: string): Promise<Refusal | null> {
     return this.act('create', this.api.create(name), () => this.leaveForTarget());
   }

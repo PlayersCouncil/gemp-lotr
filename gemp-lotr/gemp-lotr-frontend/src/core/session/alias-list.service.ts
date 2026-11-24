@@ -91,7 +91,7 @@ export class AliasList {
     if (refusal) this.aliasError_.set({ id: alias.id, message: refusal.message });
   }
 
-  /** Create New Gemp Alias (Link Existing Gemp Account): its form, after a sign-in if the last one has lapsed. */
+  /** Create New Gemp Profile (Link Existing Gemp Account): its form, after a sign-in if the last one has lapsed. */
   open(form: AliasForm): void {
     this.aliasError_.set(null);
     if (form === 'create' && this.blockedBy() !== null) return;

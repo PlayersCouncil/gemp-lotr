@@ -123,7 +123,7 @@ describe('PcAccountBlockComponent', () => {
   it('tells a password login that is linked where its other aliases are', async () => {
     const { query } = await render('argonauth-session-password-linked.json');
     expect(query('.gd-pc-account-block__connected')!.textContent).toBe(
-      'This account is connected to a PC Account. Sign in with the PC Account to see all your aliases.',
+      'This account is connected to a PC Account. Sign in with the PC Account to see all your Gemp profiles.',
     );
     expect(query('.gd-pc-account-block__connect')).toBeNull();
   });

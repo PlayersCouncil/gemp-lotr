@@ -75,48 +75,58 @@ function segments(message: LoginMessage | null): Segment[] {
     <h1 class="gd-login__banner">GEMP: Play the Lord of the Rings TCG</h1>
     <div class="gd-login__content">
       <section class="gd-login__panel" aria-label="Log in">
-        <p class="gd-login__status">{{ login.serverStatus() }}</p>
-        <div class="gd-login__error" role="alert">
-          @for (segment of errorSegments(); track $index) {
-            @switch (segment.kind) {
-              @case ('link') {
-                <a [href]="segment.url">{{ segment.text }}</a>
-              }
-              @case ('break') {
-                <br />
-              }
-              @default {
-                <span>{{ segment.text }}</span>
+        @if (boxed()) {
+          <div class="gd-login__box">
+            <ng-container *ngTemplateOutlet="messages" />
+            @if (pc.kind() === 'pc' || pc.kind() === 'password') {
+              <gd-alias-list place="login" />
+            } @else if (pc.kind() === 'nobody' && login.formShown()) {
+              <div class="gd-login__columns">
+                <section class="gd-login__column" data-column="legacy" aria-labelledby="gd-login-legacy">
+                  <h2 class="gd-login__heading" id="gd-login-legacy">{{ text.legacy }}</h2>
+                  <ng-container *ngTemplateOutlet="passwordForm" />
+                </section>
+                <div class="gd-login__rule" aria-hidden="true"></div>
+                <section class="gd-login__column" data-column="sso" aria-labelledby="gd-login-sso">
+                  <h2 class="gd-login__heading" id="gd-login-sso">{{ text.sso }}</h2>
+                  <div class="gd-login__sso">
+                    <a class="gd-button" data-action="pc-login" [href]="pcSignIn">{{ text.signIn }}</a>
+                    <a class="gd-button" data-action="pc-register" [href]="pcRegister">{{ text.register }}</a>
+                  </div>
+                </section>
+              </div>
+            }
+          </div>
+        } @else {
+          <ng-container *ngTemplateOutlet="messages" />
+          @if (pc.kind() !== null && login.formShown()) {
+            <ng-container *ngTemplateOutlet="passwordForm" />
+          }
+        }
+        <ng-template #messages>
+          <p class="gd-login__status">{{ login.serverStatus() }}</p>
+          <div class="gd-login__error" role="alert">
+            @for (segment of errorSegments(); track $index) {
+              @switch (segment.kind) {
+                @case ('link') {
+                  <a [href]="segment.url">{{ segment.text }}</a>
+                }
+                @case ('break') {
+                  <br />
+                }
+                @default {
+                  <span>{{ segment.text }}</span>
+                }
               }
             }
-          }
-        </div>
-        @if (notice(); as notice) {
-          <p class="gd-login__notice" role="status">{{ notice }}</p>
-        }
-        @if (pc.strayRefusal(); as refusal) {
-          <p class="gd-login__refusal" role="alert">{{ refusal }}</p>
-        }
-        @if (pc.kind() === 'pc' || pc.kind() === 'password') {
-          <gd-alias-list place="login" />
-        } @else if (pc.kind() === 'nobody' && login.formShown()) {
-          <div class="gd-login__columns">
-            <section class="gd-login__column" data-column="legacy" aria-labelledby="gd-login-legacy">
-              <h2 class="gd-login__heading" id="gd-login-legacy">{{ text.legacy }}</h2>
-              <ng-container *ngTemplateOutlet="passwordForm" />
-            </section>
-            <div class="gd-login__rule" aria-hidden="true"></div>
-            <section class="gd-login__column" data-column="sso" aria-labelledby="gd-login-sso">
-              <h2 class="gd-login__heading" id="gd-login-sso">{{ text.sso }}</h2>
-              <div class="gd-login__sso">
-                <a class="gd-button" data-action="pc-login" [href]="pcSignIn">{{ text.signIn }}</a>
-                <a class="gd-button" data-action="pc-register" [href]="pcRegister">{{ text.register }}</a>
-              </div>
-            </section>
           </div>
-        } @else if (pc.kind() !== null && login.formShown()) {
-          <ng-container *ngTemplateOutlet="passwordForm" />
-        }
+          @if (notice(); as notice) {
+            <p class="gd-login__notice" role="status">{{ notice }}</p>
+          }
+          @if (pc.strayRefusal(); as refusal) {
+            <p class="gd-login__refusal" role="alert">{{ refusal }}</p>
+          }
+        </ng-template>
         <ng-template #passwordForm>
           <form
             class="gd-login__form"
@@ -233,6 +243,14 @@ export class LoginPageComponent {
     signIn: PC_SIGN_IN,
     register: PC_REGISTER,
   };
+  /**
+   * Outside `test` mode (once known) the page's messages and what is in the form's place sit in one box, the page's
+   * picture blurred behind it; `test` mode is the legacy page, without.
+   */
+  protected readonly boxed = computed(() => {
+    const kind = this.pc.kind();
+    return kind !== null && kind !== 'test';
+  });
   /** A PC sign-in's outcome (`?pc=`), outside `test` mode. */
   protected readonly notice = computed(() => {
     const kind = this.pc.kind();

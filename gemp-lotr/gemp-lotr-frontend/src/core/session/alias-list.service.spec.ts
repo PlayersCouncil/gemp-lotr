@@ -254,7 +254,7 @@ describe('AliasList', () => {
     refuse(expectPost('/enter'), 403, 'banned');
     await answerRefresh();
     await refused;
-    expect(list.aliasError()?.message).toBe('That alias is banned.');
+    expect(list.aliasError()?.message).toBe('That profile is banned.');
     expect(list.listError()).toBeNull();
     list.cancel();
     expect(list.aliasError()).toBeNull();
