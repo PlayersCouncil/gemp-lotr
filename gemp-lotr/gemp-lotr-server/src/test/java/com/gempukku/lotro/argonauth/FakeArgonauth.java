@@ -87,6 +87,12 @@ public class FakeArgonauth implements AutoCloseable {
     public final Map<String, Integer> statusFor = new ConcurrentHashMap<>();
     /** A body to go with a status above, by the same path prefix. */
     public final Map<String, String> bodyFor = new ConcurrentHashMap<>();
+    /**
+     * Who is signed in at Argonauth in the browser that comes to its pages: `/identity/o/authorize` sends that
+     * browser straight back signed in as them, and with nobody it comes back refused. Tests that play the
+     * browser's part themselves use {@link #signIn} and never set this.
+     */
+    public volatile Person browserPerson;
     /** How long every answer is held back. */
     public volatile long delayMillis;
     /** Run while a lookup is being answered: something that happens in Gemp meanwhile. */
@@ -95,7 +101,12 @@ public class FakeArgonauth implements AutoCloseable {
     public volatile boolean loseNextAssertAnswer;
 
     public FakeArgonauth() throws IOException {
-        _server = HttpServer.create(new InetSocketAddress("localhost", 0), 0);
+        this(0);
+    }
+
+    /** On a port of the caller's choosing, for a Gemp set up to find it there (a browser run of the whole thing). */
+    public FakeArgonauth(int port) throws IOException {
+        _server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
         _server.createContext("/", this::answer);
         _server.setExecutor(java.util.concurrent.Executors.newCachedThreadPool(runnable -> {
             Thread thread = new Thread(runnable, "fake-argonauth");
@@ -143,7 +154,10 @@ public class FakeArgonauth implements AutoCloseable {
         URI uri = URI.create(signInAddress);
         if (!signInAddress.startsWith(issuer + "/identity/o/authorize?"))
             throw new AssertionError("not Argonauth's authorize address: " + signInAddress);
-        Map<String, String> query = form(uri.getRawQuery());
+        return authorize(form(uri.getRawQuery()), person);
+    }
+
+    private Map<String, String> authorize(Map<String, String> query, Person person) {
         require(query, "response_type", "code");
         require(query, "client_id", CLIENT_ID);
         require(query, "redirect_uri", REDIRECT_URI);
@@ -186,6 +200,10 @@ public class FakeArgonauth implements AutoCloseable {
                 send(exchange, 200, discovery.apply(discoveryDocument()).toJSONString());
             else if (path.equals("/.well-known/jwks.json") && method.equals("GET"))
                 send(exchange, 200, published.toString());
+            else if (path.equals("/identity/o/authorize") && method.equals("GET"))
+                authorizePage(exchange);
+            else if (path.equals("/identity/o/logout") && method.equals("GET"))
+                logoutPage(exchange);
             else if (path.equals("/identity/o/api/token") && method.equals("POST"))
                 token(exchange, form(body));
             else if (path.equals("/identity/o/api/userinfo") && method.equals("GET"))
@@ -201,6 +219,39 @@ public class FakeArgonauth implements AutoCloseable {
         } catch (Exception exp) {
             send(exchange, 500, "{\"error\":\"" + exp + "\"}");
         }
+    }
+
+    /** The sign-in page, for a real browser: no page at all, as with a live Argonauth session. */
+    private void authorizePage(HttpExchange exchange) throws IOException {
+        Map<String, String> query = form(exchange.getRequestURI().getRawQuery());
+        Person person = browserPerson;
+        Map<String, String> back = new LinkedHashMap<>();
+        if (person == null) {
+            back.put("error", "access_denied");
+            back.put("state", query.getOrDefault("state", ""));
+        } else {
+            back.putAll(authorize(query, person));
+        }
+        StringBuilder location = new StringBuilder(REDIRECT_URI).append('?');
+        back.forEach((name, value) -> location.append(name).append('=')
+                .append(java.net.URLEncoder.encode(value, StandardCharsets.UTF_8)).append('&'));
+        exchange.getResponseHeaders().add("Location", location.substring(0, location.length() - 1));
+        exchange.sendResponseHeaders(302, -1);
+        exchange.close();
+    }
+
+    /** Sign-out started by an app: with the ID token no question is asked, and the browser goes straight back. */
+    private void logoutPage(HttpExchange exchange) throws IOException {
+        Map<String, String> query = form(exchange.getRequestURI().getRawQuery());
+        if (!CLIENT_ID.equals(query.get("client_id")) || !POST_LOGOUT_URI.equals(query.get("post_logout_redirect_uri"))
+                || query.getOrDefault("id_token_hint", "").isEmpty()) {
+            send(exchange, 400, "{\"error\":\"a sign-out Argonauth would not take, or would ask about\"}");
+            return;
+        }
+        browserPerson = null;
+        exchange.getResponseHeaders().add("Location", POST_LOGOUT_URI);
+        exchange.sendResponseHeaders(302, -1);
+        exchange.close();
     }
 
     private JSONObject discoveryDocument() {
