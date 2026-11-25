@@ -130,7 +130,8 @@ async function openAdminPage() {
   page = await context.newPage();
   // "Drop X from the tournament?" and the like: the admin says yes
   page.on('dialog', (dialog) => void dialog.accept());
-  await page.goto(`${SERVER}/gemp-lotr/hall.html`);
+  // the legacy hall, open for its Admin tab alone: hall.html itself now forwards to the Angular hall
+  await page.goto(`${SERVER}/gemp-lotr/hall-legacy.html?admin=1`);
   await page.locator('a[href="includes/admin.html"]').click();
   await page.locator('#tournamentTab').click();
   await page.locator('#tourney-save-button').waitFor({ state: 'visible', timeout: 30000 });
