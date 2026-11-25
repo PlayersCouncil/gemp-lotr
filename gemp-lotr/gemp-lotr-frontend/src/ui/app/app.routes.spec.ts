@@ -1,5 +1,6 @@
 import { provideGempHttp } from '../../core/api/gemp-interceptors';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { Location } from '@angular/common';
 import { createEnvironmentInjector, EnvironmentInjector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Notifier } from '../../core/notifier/notifier';
@@ -14,6 +15,8 @@ import { PAGE_QUERY_STRING } from '../../core/platform/page-location';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
 import { DeckbuilderPageComponent } from '../deckbuilder/deckbuilder-page.component';
 import { GamePageComponent } from '../game/game-page.component';
+import { HallShellComponent } from '../hall/hall-shell.component';
+import { HALL_SERVICES } from '../../core/hall/hall-services';
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
 
@@ -43,8 +46,9 @@ describe('app routes', () => {
   let harness: RouterTestingHarness;
   beforeEach(async () => (harness = await RouterTestingHarness.create()));
 
+  /** Opens an address as the browser gives it to the router: Location drops a trailing slash ("ng/deckbuilder/"). */
   async function open(url: string) {
-    const page = await harness.navigateByUrl(url);
+    const page = await harness.navigateByUrl(TestBed.inject(Location).normalize(url));
     return { page, url: TestBed.inject(Router).url };
   }
 
@@ -59,20 +63,34 @@ describe('app routes', () => {
     expect(url).toBe('/deckbuilder?theme=modern&participantId=bob');
   });
 
-  it('sends the app root and unknown addresses to the deck builder', async () => {
-    expect(await open('/')).toEqual({ page: expect.any(DeckbuilderPageComponent), url: '/deckbuilder' });
-    expect((await open('/no/such/page?theme=classic')).url).toBe('/deckbuilder?theme=classic');
+  it('opens the Game Hall at the app root and at unknown addresses, keeping the query string', async () => {
+    expect(await open('/')).toEqual({ page: expect.any(HallShellComponent), url: '/hall' });
+    expect(harness.fixture.nativeElement.querySelector('gd-hall-shell gd-game-hall-tab')).not.toBeNull();
+    expect((await open('/no/such/page?theme=classic')).url).toBe('/hall?theme=classic');
   });
 
-  it.each(['/deckbuilder', '/', '/no/such/page'])(
-    'sends a visitor who is not logged in from %s to the login page, without showing the deck builder',
-    async (address) => {
-      loginCheck = () => throwError(() => new ApiError(401, 'Not logged in'));
-      const toLogin = vi.spyOn(TestBed.inject(LoginPage), 'open').mockImplementation(() => undefined);
-      expect((await open(address)).page).toBeNull();
-      expect(toLogin).toHaveBeenCalledOnce();
-    },
-  );
+  it('sends a visitor who is not logged in from the deck builder to the login page, without showing it', async () => {
+    loginCheck = () => throwError(() => new ApiError(401, 'Not logged in'));
+    const toLogin = vi.spyOn(TestBed.inject(LoginPage), 'open').mockImplementation(() => undefined);
+    expect((await open('/deckbuilder')).page).toBeNull();
+    expect(toLogin).toHaveBeenCalledOnce();
+  });
+
+  it('shows a visitor the hall (whose own dialog asks them to log in), not the login page', async () => {
+    loginCheck = () => throwError(() => new ApiError(401, 'Not logged in'));
+    const toLogin = vi.spyOn(TestBed.inject(LoginPage), 'open').mockImplementation(() => undefined);
+    expect((await open('/help')).page).toBeInstanceOf(HallShellComponent);
+    expect(
+      harness.fixture.nativeElement.querySelector('gd-hall-shell gd-hall-tab-frame[data-tab="help"]'),
+    ).not.toBeNull();
+    expect(toLogin).not.toHaveBeenCalled();
+  });
+
+  it('gives the hall its own services, in its route', () => {
+    const hall = APP_ROUTES.find((route) => route.path === '' && route.children);
+    expect(hall?.providers).toEqual(HALL_SERVICES);
+    expect(APP_ROUTES.at(-1)).toBe(hall);
+  });
 
   it("loads the game page at game, with the page's own dialogs for its questions", async () => {
     const { page } = await open('/game');

@@ -215,8 +215,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     }
 
     @Override
-    public final String getPrizesDescription() {
-        return _tournamentInfo.Prizes.getPrizeDescription();
+    public final PrizeSummary getPrizeSummary() {
+        return _tournamentInfo.Prizes.getPrizeSummary();
     }
 
     protected void regeneratePlayerList() {

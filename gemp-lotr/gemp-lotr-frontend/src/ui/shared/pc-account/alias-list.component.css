@@ -1,0 +1,141 @@
+/*
+ * The alias list: on the login page where the login form is, in its text and buttons (login-page.component.css); on
+ * My Account as the rest of that page (account-overview.component.css). Classic theme values only, reused.
+ */
+
+:host {
+  display: block;
+  color: var(--theme-text);
+}
+
+:host([data-place='login']) {
+  justify-self: center;
+  min-width: min(20em, 100%);
+  max-width: 32em;
+}
+
+:host([data-place='account']) {
+  max-width: 40em;
+}
+
+.gd-alias-list__blocked,
+.gd-alias-list__refusal,
+.gd-alias-list__empty {
+  margin: 0 0 0.5em;
+}
+
+.gd-alias-list__blocked,
+.gd-alias-list__empty,
+.gd-alias-list__tag,
+.gd-alias-list__page {
+  color: var(--theme-account-help);
+}
+
+.gd-alias-list__blocked,
+.gd-alias-list__tag {
+  font-size: 90%;
+}
+
+.gd-alias-list__aliases {
+  margin: 0 0 0.5em;
+  padding: 0;
+  list-style: none;
+}
+
+.gd-alias-list__alias {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em 0.6em;
+  padding: 0.25em 0.4em;
+  border-bottom: 1px solid var(--theme-account-row-border);
+}
+
+.gd-alias-list__name {
+  font-weight: bold;
+}
+
+/* Enter Gemp at the row's end; its refusal on a line of its own under the row */
+.gd-alias-list__alias > [data-action='enter'] {
+  margin-left: auto;
+}
+
+.gd-alias-list__alias > .gd-alias-list__error {
+  flex-basis: 100%;
+}
+
+.gd-alias-list__error {
+  margin: 0.3em 0;
+}
+
+/* Refusals, red: the theme's error colour, as the row's form has it */
+:is(.gd-alias-list__error, .gd-alias-list__refusal) {
+  color: var(--theme-error);
+}
+
+/* The first line: who is signed in, and Log Out at its end */
+.gd-alias-list__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em 1em;
+  margin: 0 0 0.5em;
+}
+
+.gd-alias-list__signed-in {
+  margin: 0;
+}
+
+/* On the login page the sentence is centred on the box, Log Out at the right end: empty | sentence | Log Out */
+:host([data-place='login']) .gd-alias-list__head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+:host([data-place='login']) .gd-alias-list__signed-in {
+  grid-column: 2;
+  text-align: center;
+}
+
+:host([data-place='login']) .gd-alias-list__head > [data-action='logout'] {
+  grid-column: 3;
+  justify-self: end;
+}
+
+/* The row being added: as a profile's row, its form across it */
+.gd-alias-list__new {
+  padding: 0.25em 0.4em;
+  border-bottom: 1px solid var(--theme-account-row-border);
+}
+
+.gd-alias-list__pager,
+.gd-alias-list__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0.5em 0;
+}
+
+/* Create and Link: a line's height further from the list than the rest of the controls are from each other */
+.gd-alias-list__actions {
+  margin-top: 1.6em;
+}
+
+:host([data-place='login']) .gd-alias-list__actions {
+  justify-content: center;
+}
+
+/* A narrow window: the sentence and Log Out each on a line, centred */
+@media (max-width: 480px) {
+  :host([data-place='login']) .gd-alias-list__head {
+    grid-template-columns: auto;
+    justify-items: center;
+  }
+
+  :host([data-place='login']) .gd-alias-list__signed-in,
+  :host([data-place='login']) .gd-alias-list__head > [data-action='logout'] {
+    grid-column: 1;
+    justify-self: center;
+  }
+}

@@ -1,0 +1,342 @@
+/*
+ * A frame of the PC Errata viewer (pcErrata.css .pc-errata-frame and what it holds): the sizes FrameLayout chooses
+ * come in as custom properties (errata-frame-layout.ts).
+ */
+
+:host {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px 8px;
+  box-sizing: border-box;
+  background: var(--theme-errata-viewer-bg);
+}
+
+:host([data-layout='full']) {
+  padding: 10px 18px;
+}
+
+/* ---- the head: title, collector's number, culture and type, tags ---- */
+.gd-errata-frame__head {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  text-align: center;
+  gap: 0 0.6em;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:host([data-layout='full']) > .gd-errata-frame__head {
+  justify-content: flex-start;
+  margin-bottom: 6px;
+}
+
+/* drawn in the stage and in the readout: shown where the readout is (below the card, or beside it) */
+:host([data-layout='compact']:not([data-readout='side'])) .gd-errata-frame__note .gd-errata-frame__head,
+:host([data-readout='side']) .gd-errata-frame__stage .gd-errata-frame__head {
+  display: none;
+}
+
+.gd-errata-frame__name {
+  font-weight: bold;
+  font-size: 115%;
+  color: var(--theme-errata-name);
+}
+
+.gd-errata-frame__meta {
+  font-size: 85%;
+  color: var(--theme-errata-dim);
+}
+
+.gd-errata-frame__badge {
+  display: inline-block;
+  padding: 0 0.4em;
+  border-radius: 3px;
+  border: 1px solid var(--theme-errata-badge-border);
+  font-size: 72%;
+  line-height: 1.5;
+  color: var(--theme-errata-badge-text);
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+.gd-errata-frame__badge[data-badge='new'] {
+  border-color: var(--theme-errata-gold);
+  color: var(--theme-errata-new-text);
+}
+
+/* ---- compact: the stage (title and card, centred) above the readout, which keeps its own height ---- */
+.gd-errata-frame__body {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.gd-errata-frame__stage {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* a short viewer: the card on the left, the title and readout beside it */
+:host([data-readout='side']) .gd-errata-frame__body {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+:host([data-readout='side']) .gd-errata-frame__stage {
+  flex: 0 0 auto;
+}
+
+:host([data-readout='side']) .gd-errata-frame__note {
+  align-self: flex-start;
+}
+
+:host([data-readout='side']) .gd-errata-frame__note .gd-errata-frame__head {
+  justify-content: flex-start;
+  text-align: left;
+  margin-bottom: 6px;
+}
+
+/* ---- compact: the card that flips between PC errata and Original ---- */
+.gd-errata-frame__flip {
+  flex: 0 0 auto;
+  width: var(--gd-errata-flip-width, 0);
+}
+
+.gd-errata-frame__flip .gd-errata-frame__cardbox {
+  position: relative;
+  height: var(--gd-errata-flip-height, 0);
+  cursor: pointer;
+  transition: transform 90ms ease-out;
+}
+
+.gd-errata-frame__flip .gd-errata-frame__cardbox[data-turning] {
+  transform: scaleX(0.03);
+  transition: transform 90ms ease-in;
+}
+
+.gd-errata-frame__flip gd-errata-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.gd-errata-frame__cardbox[data-showing='after'] gd-errata-card[data-side='before'],
+.gd-errata-frame__cardbox[data-showing='before'] gd-errata-card[data-side='after'] {
+  visibility: hidden;
+}
+
+/* ---- what changed: the stats (one per line), then Old (plain) / New (additions highlighted) ---- */
+.gd-errata-frame__note {
+  flex: 0 0 auto;
+  min-width: 0;
+  width: var(--gd-errata-note-width, auto);
+  max-height: var(--gd-errata-note-max, 100%);
+  overflow: hidden;
+  font-size: var(--gd-errata-note-font, 13px);
+  line-height: 1.4;
+  position: relative;
+}
+
+.gd-errata-frame__note p {
+  margin: 0;
+}
+
+.gd-errata-frame__note ins {
+  border-radius: 2px;
+  padding: 0 1px;
+  text-decoration: none;
+  background: var(--theme-errata-ins-bg);
+  color: var(--theme-errata-ins-text);
+}
+
+.gd-errata-frame__stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gd-errata-frame__stats li {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.45em;
+}
+
+.gd-errata-frame__stat-name {
+  color: var(--theme-errata-dim);
+  min-width: 5.5em;
+}
+
+.gd-errata-frame__stat-arrow {
+  color: var(--theme-errata-dim);
+}
+
+.gd-errata-frame__texts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.gd-errata-frame__side {
+  border-left: 3px solid var(--theme-errata-side);
+  padding-left: 0.6em;
+}
+
+.gd-errata-frame__side[data-side='stats'] {
+  margin-bottom: 0.5em;
+  border-left-color: var(--theme-errata-stat);
+}
+
+.gd-errata-frame__side[data-side='old'] {
+  border-left-color: var(--theme-errata-old);
+}
+
+.gd-errata-frame__side[data-side='new'] {
+  border-left-color: var(--theme-errata-new);
+}
+
+/* run in at the start of the text: OLD ..., NEW ... */
+.gd-errata-frame__side-label {
+  font-size: 78%;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--theme-errata-dim);
+  margin-right: 0.6em;
+}
+
+[data-side='old'] .gd-errata-frame__side-label {
+  color: var(--theme-errata-old-label);
+}
+
+[data-side='new'] .gd-errata-frame__side-label {
+  color: var(--theme-errata-new-label);
+}
+
+.gd-errata-frame__note .gd-errata-frame__hint {
+  color: var(--theme-errata-hint);
+  font-size: 92%;
+  margin-top: 0.4em;
+}
+
+/* the text did not fit even small: fade it out (Enlarge shows it all) */
+.gd-errata-frame__more {
+  display: none;
+}
+
+:host([data-clipped]) .gd-errata-frame__more {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 1.6em;
+  font-size: 85%;
+  text-align: right;
+  white-space: pre;
+  color: var(--theme-errata-more-text);
+  background: var(--theme-errata-more-fade);
+}
+
+/* ---- enlarged: both versions side by side, the text below ---- */
+:host([data-layout='full']) .gd-errata-frame__body {
+  align-items: center;
+  gap: 12px;
+}
+
+.gd-errata-frame__pair {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 14px;
+}
+
+.gd-errata-frame__figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-errata-frame__figure figcaption {
+  font-size: 95%;
+  font-weight: bold;
+  color: var(--theme-errata-caption);
+}
+
+/* as tall as the cards, so the arrow sits at their middle */
+.gd-errata-frame__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: var(--gd-errata-arrow-height, auto);
+  color: var(--theme-errata-gold);
+  font-size: 200%;
+  flex: 0 0 auto;
+}
+
+.gd-errata-frame__arrow [data-arrow='column'],
+:host([data-column]) .gd-errata-frame__arrow [data-arrow='row'] {
+  display: none;
+}
+
+:host([data-column]) .gd-errata-frame__arrow [data-arrow='column'] {
+  display: inline;
+}
+
+:host([data-layout='full']) .gd-errata-frame__texts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6em 1.4em;
+}
+
+:host([data-layout='full']) .gd-errata-frame__texts > [data-side='same'] {
+  grid-column: 1 / -1;
+}
+
+/* sites that read bigger one above the other: the cards in a column, the text beside them */
+:host([data-column]) .gd-errata-frame__body {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+:host([data-column]) .gd-errata-frame__pair {
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: var(--gd-errata-pair-width, auto);
+}
+
+:host([data-column]) .gd-errata-frame__arrow {
+  width: auto;
+}
+
+:host([data-column]) .gd-errata-frame__texts {
+  grid-template-columns: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gd-errata-frame__flip .gd-errata-frame__cardbox,
+  .gd-errata-frame__flip .gd-errata-frame__cardbox[data-turning] {
+    transition: none;
+  }
+}

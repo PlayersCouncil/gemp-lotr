@@ -1,48 +1,22 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../api/gemp-interceptors';
-import { parseXml } from '../api/xml';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageLifetime } from '../platform/page-lifetime.service';
-import { ChatRoom, chatProblem, parseChat } from './chat-room.service';
+import { chatWarning } from './chat-messages';
+import { ChatRoom } from './chat-room.service';
 
 const ROOM = '/gemp-lotr-server/chat/Game7';
 const chat = (body: string) => `<chat>${body}</chat>`;
 
-describe('parseChat', () => {
-  it('reads messages and users, roles from the old marks too', () => {
-    expect(
-      parseChat(
-        parseXml(
-          chat(
-            '<message from="System" date="5">alice joined</message><message from="bob">hi &lt;b&gt;</message>' +
-              '<user role="admin" self="true">alice</user><user>* carol</user><user>+ dave</user><user incognito="true">eve</user>',
-          ),
-        ),
-      ),
-    ).toEqual({
-      messages: [
-        { from: 'System', html: 'alice joined', date: 5, system: true },
-        { from: 'bob', html: 'hi <b>', date: null, system: false },
-      ],
-      users: [
-        { name: 'alice', role: 'admin', self: true, incognito: false },
-        { name: 'carol', role: 'admin', self: false, incognito: false },
-        { name: 'dave', role: 'leagueAdmin', self: false, incognito: false },
-        { name: 'eve', role: null, self: false, incognito: true },
-      ],
-    });
-    expect(parseChat(parseXml('<update/>'))).toBeNull();
-    expect(parseChat(parseXml(chat('<message>no sender</message>')))?.messages[0]?.from).toBe('');
-  });
-
-  it("the legacy chat's warnings", () => {
-    expect(chatProblem(0)).toContain('internet connection');
-    expect(chatProblem(401)).toBe('You are not logged in. ');
-    expect(chatProblem(403)).toContain('no permission');
-    expect(chatProblem(404)).toBe('Chat room is closed.');
-    expect(chatProblem(410)).toContain('inactive');
-    expect(chatProblem(500)).toContain('(500)');
+describe("the game page's chat warnings", () => {
+  it("are the legacy chat's (chatErrorMap), shared with the hall", () => {
+    expect(chatWarning(0).text).toContain('internet connection');
+    expect(chatWarning(401).text).toBe('You are not logged in.');
+    expect(chatWarning(403).text).toContain('no permission');
+    expect(chatWarning(404).text).toBe('Chat room is closed.');
+    expect(chatWarning(410).text).toContain('inactive');
+    expect(chatWarning(500).text).toContain('(error=500)');
   });
 });
 

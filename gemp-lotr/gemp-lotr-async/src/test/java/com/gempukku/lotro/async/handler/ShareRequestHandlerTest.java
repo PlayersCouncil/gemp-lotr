@@ -95,19 +95,20 @@ public class ShareRequestHandlerTest {
         assertTrue(answer.html(), answer.html().contains("<meta property=\"og:title\" content=\"A friendlier Game Hall\">"));
         assertTrue(answer.html().contains("<meta property=\"og:url\" content=\"https://play.lotrtcgpc.net/gemp-lotr/share/patch-notes/2026-09-27-hall-overhaul\">"));
         assertTrue(answer.html().contains("<meta property=\"og:image\" content=\"https://play.lotrtcgpc.net/gemp-lotr/images/splash.jpg\">"));
-        assertTrue(answer.html().contains("<meta http-equiv=\"refresh\" content=\"0; url=/gemp-lotr/hall.html#patch-notes/2026-09-27-hall-overhaul\">"));
-        assertTrue(answer.html().contains("window.location.replace(\"/gemp-lotr/hall.html#patch-notes/2026-09-27-hall-overhaul\")"));
+        assertTrue(answer.html().contains("<meta http-equiv=\"refresh\" content=\"0; url=/gemp-lotr/ng/info/patch-notes/2026-09-27-hall-overhaul\">"));
+        assertTrue(answer.html().contains("window.location.replace(\"/gemp-lotr/ng/info/patch-notes/2026-09-27-hall-overhaul\")"));
     }
 
     @Test
     public void everyKindRoutes() throws Exception {
-        assertTrue(get("/gemp-lotr/share/patch-notes", "h", null).html().contains("url=/gemp-lotr/hall.html#patch-notes\""));
-        assertTrue(get("/gemp-lotr/share/patch-notes/", "h", null).html().contains("url=/gemp-lotr/hall.html#patch-notes\""));
+        assertTrue(get("/gemp-lotr/share/patch-notes", "h", null).html().contains("url=/gemp-lotr/ng/info/patch-notes\""));
+        assertTrue(get("/gemp-lotr/share/patch-notes/", "h", null).html().contains("url=/gemp-lotr/ng/info/patch-notes\""));
         assertTrue(get("/gemp-lotr/share/Patch-Notes/2026-09-27-HALL-overhaul", "h", null).html()
-                .contains("url=/gemp-lotr/hall.html#patch-notes/2026-09-27-hall-overhaul\""));
-        assertTrue(get("/gemp-lotr/share/errata/1_5", "h", null).html().contains("url=/gemp-lotr/hall.html#errata-1_5\""));
+                .contains("url=/gemp-lotr/ng/info/patch-notes/2026-09-27-hall-overhaul\""));
+        assertTrue(get("/gemp-lotr/share/errata/1_5", "h", null).html().contains("url=/gemp-lotr/ng/help/errata/1_5\""));
         assertTrue(get("/gemp-lotr/share/format/pc_movie", "h", null).html().contains("Movie Block (PC) — Format Definitions"));
-        assertTrue(get("/gemp-lotr/share/card/1_5", "h", null).html().contains("url=/gemp-lotr/hall.html#card-1_5\""));
+        assertTrue(get("/gemp-lotr/share/format/pc_movie", "h", null).html().contains("url=/gemp-lotr/ng/help/formats/pc_movie\""));
+        assertTrue(get("/gemp-lotr/share/card/1_5", "h", null).html().contains("url=/gemp-lotr/ng/help?card=1_5\""));
     }
 
     @Test

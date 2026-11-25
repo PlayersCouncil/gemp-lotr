@@ -1095,7 +1095,7 @@ describe('the game on a phone (G7)', () => {
     expect(el.querySelector('.gd-phone-sheet')).toBeNull();
     expect(ended()?.open).toBe(true);
     await click('[data-ended="hall"]');
-    expect(TestBed.inject(PageCues).go).toHaveBeenCalledWith('/gemp-lotr/hall.html');
+    expect(TestBed.inject(PageCues).go).toHaveBeenCalledWith('/gemp-lotr/ng/');
   });
 
   it('shows a replay before it plays: its controls in the divider, and plays it from there', async () => {

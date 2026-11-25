@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { HALL_PAGE_URL, HallTab } from './hall-tab.service';
+import { HALL_PAGE_URL, HallChannel, hallPageAddress, HallTab, SessionChannel } from './hall-tab.service';
 
 /** A BroadcastChannel that keeps what is posted on it; the test answers for the hall. */
 class FakeChannel {
@@ -93,22 +93,114 @@ describe('HallTab', () => {
 
   it('opens the hall here when no hall answers in time', () => {
     const tab = hall();
-    tab.go('#x');
+    tab.go('#help/formats');
     vi.advanceTimersByTime(349);
     expect(view.location.href).not.toContain('hall');
     vi.advanceTimersByTime(1);
     expect(FakeChannel.made[0]?.closed).toBe(true);
-    expect(view.location.href).toBe(`${HALL_PAGE_URL}#x`);
+    expect(view.location.href).toBe('/gemp-lotr/ng/help/formats');
     expect(tab.elsewhere()).toBeNull();
   });
 
   it('opens the hall here in a browser without channels, and does nothing without a window', () => {
-    hall(false).go('#y');
-    expect(view.location.href).toBe(`${HALL_PAGE_URL}#y`);
+    hall(false).go('#admin');
+    expect(view.location.href).toBe('/gemp-lotr/hall-legacy.html?admin=1#admin');
     TestBed.resetTestingModule();
     const nowhere = hall(true, false);
     nowhere.go();
     nowhere.openHere();
+    expect(FakeChannel.made).toEqual([]);
+  });
+});
+
+describe('hallPageAddress', () => {
+  it("is the Angular hall's route for a legacy hall link, the legacy hall for Admin, else the hall", () => {
+    expect(HALL_PAGE_URL).toBe('/gemp-lotr/ng/');
+    expect(hallPageAddress('')).toBe('/gemp-lotr/ng/');
+    expect(hallPageAddress('#account/scenarios')).toBe('/gemp-lotr/ng/account/scenarios');
+    expect(hallPageAddress('#format-pc_movie')).toBe('/gemp-lotr/ng/help/formats/pc_movie');
+    expect(hallPageAddress('#admin/scenarios')).toBe('/gemp-lotr/hall-legacy.html?admin=1#admin/scenarios');
+    expect(hallPageAddress('#nonsense')).toBe('/gemp-lotr/ng/');
+  });
+});
+
+describe('HallChannel', () => {
+  beforeEach(() => (FakeChannel.made = []));
+
+  function channel(withChannels = true): HallChannel {
+    TestBed.configureTestingModule({
+      providers: [
+        HallChannel,
+        { provide: DOCUMENT, useValue: { defaultView: withChannels ? { BroadcastChannel: FakeChannel } : {} } },
+      ],
+    });
+    return TestBed.inject(HallChannel);
+  }
+
+  it('answers a tab asking for a hall, and passes on where it asks the hall to go (hall links only)', () => {
+    const hall = channel();
+    const goes: string[] = [];
+    hall.goes$.subscribe((hash) => goes.push(hash));
+    hall.listen();
+    hall.listen();
+    expect(FakeChannel.made).toHaveLength(1);
+    const [fake] = FakeChannel.made;
+    expect(fake?.name).toBe('gemp-lotr-hall');
+    fake?.hear({ type: 'anyone' });
+    expect(fake?.posted).toEqual([{ type: 'here' }]);
+    fake?.hear({ type: 'go', hash: '#account/scenarios' });
+    fake?.hear({ type: 'go', hash: 'javascript:alert(1)' });
+    fake?.hear({ type: 'go', hash: '#a?b' });
+    fake?.hear({ type: 'go' });
+    fake?.hear(null);
+    expect(goes).toEqual(['#account/scenarios']);
+  });
+
+  it('stops listening when its page goes, and does nothing without channels', () => {
+    channel().listen();
+    TestBed.resetTestingModule();
+    expect(FakeChannel.made[0]?.closed).toBe(true);
+    channel(false).listen();
+    expect(FakeChannel.made).toHaveLength(1);
+  });
+});
+
+describe('SessionChannel', () => {
+  let reload: ReturnType<typeof vi.fn>;
+
+  function channel(withChannels = true): SessionChannel {
+    reload = vi.fn();
+    const view = { location: { reload }, ...(withChannels ? { BroadcastChannel: FakeChannel } : {}) };
+    TestBed.configureTestingModule({ providers: [{ provide: DOCUMENT, useValue: { defaultView: view } }] });
+    return TestBed.inject(SessionChannel);
+  }
+
+  beforeEach(() => (FakeChannel.made = []));
+
+  it("tells the other tabs on the hall's channel that the session changed", () => {
+    channel().announce();
+    expect(FakeChannel.made.map((made) => made.name)).toEqual(['gemp-lotr-hall']);
+    expect(FakeChannel.made[0].posted).toEqual([{ type: 'session-changed' }]);
+  });
+
+  it('reloads the page when another tab says so, and for nothing else; on one channel, so not for its own', () => {
+    const sessions = channel();
+    sessions.reloadOnChange();
+    sessions.reloadOnChange();
+    sessions.announce();
+    expect(FakeChannel.made.length).toBe(1);
+    const [made] = FakeChannel.made;
+    made.hear({ type: 'anyone' });
+    made.hear(null);
+    expect(reload).not.toHaveBeenCalled();
+    made.hear({ type: 'session-changed' });
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('does nothing in a browser without channels', () => {
+    const sessions = channel(false);
+    sessions.reloadOnChange();
+    sessions.announce();
     expect(FakeChannel.made).toEqual([]);
   });
 });

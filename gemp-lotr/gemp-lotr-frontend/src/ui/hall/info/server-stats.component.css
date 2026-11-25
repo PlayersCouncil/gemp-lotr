@@ -1,0 +1,94 @@
+/*
+ * Server Info › Server Stats (info.html #server-stats; hall.css #stats .period, .stats-caption, table.tables,
+ * table.gemp-table and its sort buttons; the hall's text fields, selects and input buttons).
+ */
+
+:host {
+  display: block;
+  padding-bottom: 3em;
+}
+
+.gd-stats__note {
+  margin: 0;
+}
+
+.gd-stats__start,
+.gd-stats__display {
+  margin: 2px;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+  background-color: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+}
+
+.gd-stats__period {
+  padding: 3px;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+  background-color: var(--theme-field-bg);
+  color: var(--theme-text);
+  font: inherit;
+}
+
+.gd-stats__period:hover {
+  background-color: var(--theme-field-hover-bg);
+}
+
+.gd-stats__period-title {
+  font-size: 200%;
+  font-weight: bolder;
+}
+
+.gd-stats__caption {
+  margin: 0.6em 10px 0.3em;
+  font-size: 110%;
+}
+
+.gd-stats__table {
+  width: calc(100% - 20px);
+  margin-right: 10px;
+  margin-left: 10px;
+  border-collapse: collapse;
+  background-color: var(--theme-hall-table-bg);
+}
+
+.gd-stats__table td {
+  padding: 2px;
+  border: 2px solid var(--theme-hall-table-border);
+}
+
+.gd-stats__table th {
+  padding: 4px;
+  background-color: var(--theme-hall-table-header-bg);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.gd-stats__sort {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-stats__sort:hover,
+.gd-stats__sort:focus-visible {
+  text-decoration: underline;
+}
+
+.gd-stats__sort-mark {
+  font-size: 75%;
+}
+
+.gd-stats__table td.gd-stats__empty {
+  padding: 0.6em;
+  color: var(--theme-hall-formats-thumb-name);
+  font-style: italic;
+  text-align: center;
+}

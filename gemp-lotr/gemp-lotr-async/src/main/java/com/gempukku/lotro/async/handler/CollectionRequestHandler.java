@@ -75,9 +75,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     private void migrateTrophies(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-
-            Player player = getResourceOwnerSafely(request, participantId);
+            Player player = getResourceOwnerSafely(request);
 
             if(!_collectionsManager.playerCollectionAvailableForMigration(player))
                 throw new HttpProcessingException(410);
@@ -92,10 +90,9 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     
     private void importCollection(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String rawDecklist = getQueryParameterSafely(queryDecoder, "decklist");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         List<CardCollection.Item> importResult = _importCards.process(rawDecklist, _library);
 
@@ -128,12 +125,11 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
 
     private void getCollection(HttpRequest request, String collectionType, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String filter = getQueryParameterSafely(queryDecoder, "filter");
         int start = Integer.parseInt(getQueryParameterSafely(queryDecoder, "start"));
         int count = Integer.parseInt(getQueryParameterSafely(queryDecoder, "count"));
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         CardCollection collection = constructCollection(resourceOwner, collectionType);
 
@@ -194,11 +190,10 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     private void openPack(HttpRequest request, String collectionType, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String selection = getFormParameterSafely(postDecoder, "selection");
             String packId = getFormParameterSafely(postDecoder, "pack");
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             CollectionType collectionTypeObj = createCollectionType(collectionType);
             CardCollection packContents = _collectionsManager.openPackInPlayerCollection(resourceOwner, collectionTypeObj, selection, _productLibrary, packId);
@@ -216,10 +211,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     }
 
     private void getCollectionTypes(HttpRequest request, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

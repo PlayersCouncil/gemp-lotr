@@ -4,6 +4,7 @@ import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.Player;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -110,30 +111,6 @@ public class DbPlayerDAO implements PlayerDAO {
     }
 
     @Override
-    public boolean resetUserPassword(String login) throws SQLException {
-        try {
-            var db = _dbAccess.openDB();
-
-            try (org.sql2o.Connection conn = db.beginTransaction()) {
-                String sql = """
-                                UPDATE player
-                                SET password = ''
-                                WHERE name = :login
-                            """;
-                conn.createQuery(sql)
-                        .addParameter("login", login)
-                        .executeUpdate();
-
-                conn.commit();
-
-                return conn.getResult() == 1;
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to reset password", ex);
-        }
-    }
-
-    @Override
     public boolean banPlayerPermanently(String login) throws SQLException {
         try (Connection conn = _dbAccess.getDataSource().getConnection()) {
             try (PreparedStatement statement = conn.prepareStatement("update player set type='', banned_until=null where name=?")) {
@@ -214,8 +191,15 @@ public class DbPlayerDAO implements PlayerDAO {
         }
     }
 
+    /**
+     * The player whose stored password is {@code password}, or null.  An account with a blank (or null) stored
+     * password never logs in with a password, whatever is typed or with nothing typed: that is a bot, an alias made
+     * through a PC account, or an old admin reset that was never completed.  (It used to log in with any password.)
+     */
     @Override
     public Player loginUser(String login, String password) throws SQLException {
+        if (login == null || password == null)
+            return null;
 
         try {
             var db = _dbAccess.openDB();
@@ -224,14 +208,17 @@ public class DbPlayerDAO implements PlayerDAO {
                 String sql = _selectPlayer +
                         """
                             WHERE name = :login
-                                AND (password = :password OR password = '')
                         """;
                 List<DBDefs.Player> result = conn.createQuery(sql)
                         .addParameter("login", login)
-                        .addParameter("password", encodePassword(password))
                         .executeAndFetch(DBDefs.Player.class);
 
-                var def = result.stream().findFirst().orElse(null);
+                String typedHash = encodePassword(password);
+                // The name exactly: the column's comparison ignores trailing spaces, and "Frodo " is not Frodo.
+                var def = result.stream()
+                        .filter(row -> login.equals(row.name))
+                        .filter(row -> storedPasswordMatches(row.password, typedHash))
+                        .findFirst().orElse(null);
                 if(def == null)
                     return null;
 
@@ -240,6 +227,17 @@ public class DbPlayerDAO implements PlayerDAO {
         } catch (Exception ex) {
             throw new RuntimeException("Unable to retrieve login entries", ex);
         }
+    }
+
+    /**
+     * Whether a stored password hash is a real one and equals {@code typedHash}.  Blank or null never matches.  The
+     * hex is compared ignoring case, as the database's comparison did when this was done in SQL.
+     */
+    static boolean storedPasswordMatches(String storedHash, String typedHash) {
+        if (storedHash == null || storedHash.isBlank() || typedHash == null)
+            return false;
+        return MessageDigest.isEqual(storedHash.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.US_ASCII),
+                typedHash.toLowerCase(Locale.ROOT).getBytes(StandardCharsets.US_ASCII));
     }
 
     private boolean doesPlayerHaveTrophies(int playerId) {
@@ -297,37 +295,17 @@ public class DbPlayerDAO implements PlayerDAO {
         }
     }
 
+    /**
+     * Creates a new account.  Never touches an existing one: a name already taken (ignoring case) is refused, whatever
+     * that account's password, blank included.  (A blank password used to let anyone who knew the name set it.)
+     */
     @Override
     public synchronized boolean registerUser(String login, String password, String remoteAddr) throws LoginInvalidException {
         if (!validLoginName(login))
             return false;
 
-        if(loginExists(login)) {
-            if(!needsPasswordReset(login))
-                return false;
-
-            //Login exists but has a blank/null password, meaning this user is actually performing a password reset
-            try {
-                var db = _dbAccess.openDB();
-
-                try (org.sql2o.Connection conn = db.beginTransaction()) {
-                    String sql = """
-                                UPDATE player
-                                SET password = :password
-                                WHERE name = :login
-                            """;
-                    conn.createQuery(sql)
-                            .addParameter("login", login)
-                            .addParameter("password", encodePassword(password))
-                            .executeUpdate();
-
-                    conn.commit();
-                    return conn.getResult() == 1;
-                }
-            } catch (Exception ex) {
-                throw new RuntimeException("Unable to update password", ex);
-            }
-        }
+        if (loginExists(login))
+            return false;
 
 
         try {
@@ -421,28 +399,6 @@ public class DbPlayerDAO implements PlayerDAO {
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to confirm that login exists", ex);
-        }
-    }
-
-    private boolean needsPasswordReset(String login){
-        try {
-            var db = _dbAccess.openDB();
-
-            try (org.sql2o.Connection conn = db.open()) {
-                String sql = _selectPlayer +
-                        """
-                            WHERE LOWER(name) = :login
-                                AND (password = '' OR password IS NULL)
-                        """;
-                List<DBDefs.Player> result = conn.createQuery(sql)
-                        .addParameter("login", login.toLowerCase())
-                        .executeAndFetch(DBDefs.Player.class);
-
-                var def = result.stream().findFirst().orElse(null);
-				return def != null && !def.type.contains(Player.Type.BOT.getValue());
-			}
-        } catch (Exception ex) {
-            throw new RuntimeException("Unable to retrieve password reset entries", ex);
         }
     }
 
@@ -553,6 +509,60 @@ public class DbPlayerDAO implements PlayerDAO {
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to search player names", ex);
+        }
+    }
+
+    @Override
+    public synchronized Player registerAlias(String login, String remoteAddr) throws SQLException, LoginInvalidException {
+        // A name that is refused outright (admin..., guest...) is no more to be had here than a malformed one.
+        if (!validLoginName(login))
+            throw new LoginInvalidException();
+        if (loginExists(login))
+            return null;
+
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                // No password: this account is entered through its PC account. A blank password logs nobody in.
+                String sql = """
+                                INSERT INTO player (name, password, type, create_ip)
+                                VALUES (:login, '', :type, :create_ip)
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("login", login)
+                        .addParameter("type", Player.Type.USER.toString())
+                        .addParameter("create_ip", remoteAddr)
+                        .executeUpdate();
+
+                conn.commit();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to insert new alias", ex);
+        }
+        return getPlayerFromDBByName(login);
+    }
+
+    @Override
+    public synchronized void removeUnusedAlias(int playerId) {
+        try {
+            var db = _dbAccess.openDB();
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                String sql = """
+                                DELETE FROM player
+                                WHERE id = :id AND password = '' AND type = :type
+                                    AND last_login_reward IS NULL AND last_ip IS NULL
+                            """;
+                conn.createQuery(sql)
+                        .addParameter("id", playerId)
+                        .addParameter("type", Player.Type.USER.toString())
+                        .executeUpdate();
+
+                conn.commit();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to remove unused alias", ex);
         }
     }
 }

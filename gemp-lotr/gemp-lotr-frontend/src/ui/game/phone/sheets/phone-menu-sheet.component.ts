@@ -3,11 +3,12 @@ import { GameSheets } from '../../../../core/game/phone/game-sheets';
 import { GameEnding } from '../../../../core/game/session/game-ending';
 import { GameSession } from '../../../../core/game/session/game-session.service';
 import { GameUndo } from '../../../../core/game/undo/game-undo.service';
+import { HALL_PAGE_URL } from '../../../../core/platform/hall-tab.service';
 import { PageCues } from '../../../../core/platform/page-cues';
 import { GAME_THEME_PICKER, THEME_LABELS, THEMES, ThemeService } from '../../../../core/platform/theme.service';
 
 /** The hall the menu goes back to. */
-const HALL = '/gemp-lotr/hall.html';
+const HALL = HALL_PAGE_URL;
 
 /**
  * The phone layout's menu: the theme (red, first, as in the deck builder), the game's result once it ended, the chat,

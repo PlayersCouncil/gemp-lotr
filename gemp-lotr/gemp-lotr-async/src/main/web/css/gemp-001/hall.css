@@ -2543,3 +2543,29 @@ textarea.share-link-copy-area {
 	opacity: 0;
 }
 /* ==== end share-links ==== */
+
+/*
+ * The page open for its Admin tab alone (hall-legacy.html?admin=1, GempHallSession.adminOnly): the hall itself is the
+ * Angular one, so only the Admin tab and the way back to the hall are drawn.
+ */
+#admin-back,
+#admin-back-elsewhere {
+	display: none;
+}
+
+#admin-back-elsewhere {
+	color: #ffffff;
+}
+
+body.admin-only #admin-back {
+	display: inline-block;
+	margin: 4px 8px;
+	color: #ffffff;
+}
+
+body.admin-only #tabs > ul > li:not(:nth-child(7)),
+body.admin-only #gameHall,
+body.admin-only #main > .buttons-gutter,
+body.admin-only #chat {
+	display: none !important;
+}

@@ -5,7 +5,8 @@ import { firstValueFrom } from 'rxjs';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { SERVER_URL } from '../platform/app-paths';
 import { ApiError } from './api-error';
-import { BYPASS_CACHE, OPENED_PACK_HEADER, provideGempHttp, SEND_PARTICIPANT } from './gemp-interceptors';
+import { BYPASS_CACHE, OPENED_PACK_HEADER, provideGempHttp } from './gemp-interceptors';
+import { DeliveryAnnouncements } from './delivery-announcements';
 import { OpenedPackAnnouncements } from './opened-pack-announcements';
 
 describe('the Gemp server interceptors', () => {
@@ -33,37 +34,27 @@ describe('the Gemp server interceptors', () => {
     await expect(answer).rejects.not.toBeInstanceOf(ApiError);
   });
 
-  it('adds the participant and a cache-buster to GETs', () => {
+  it('adds a cache-buster to GETs, and no participant even when the page names one', () => {
     setUp();
     http.get(url, { responseType: 'text' }).subscribe();
     const req = backend.expectOne((r) => r.url === url);
-    expect(req.request.params.get('participantId')).toBe('bob');
+    expect(req.request.params.has('participantId')).toBe(false);
     expect(req.request.params.has('_')).toBe(true);
     req.flush('');
   });
 
-  it('adds the participant to the body of POSTs, and no cache-buster', () => {
+  it('leaves the body of POSTs as it is, and adds no cache-buster', () => {
     setUp();
     http.post(url, new HttpParams().set('a', '1'), { responseType: 'text' }).subscribe();
     const req = backend.expectOne(url);
-    const body = req.request.body as HttpParams;
-    expect(body.get('participantId')).toBe('bob');
-    expect(body.get('a')).toBe('1');
+    expect((req.request.body as HttpParams).toString()).toBe('a=1');
     expect(req.request.params.has('_')).toBe(false);
     req.flush('');
   });
 
-  it('adds no participant when the page has none', () => {
-    setUp('');
-    http.get(url, { responseType: 'text' }).subscribe();
-    const req = backend.expectOne((r) => r.url === url);
-    expect(req.request.params.has('participantId')).toBe(false);
-    req.flush('');
-  });
-
-  it('can leave the participant and the cache-buster out, per request', () => {
+  it('can leave the cache-buster out, per request', () => {
     setUp();
-    const context = new HttpContext().set(SEND_PARTICIPANT, false).set(BYPASS_CACHE, false);
+    const context = new HttpContext().set(BYPASS_CACHE, false);
     http.get(url, { responseType: 'text', context }).subscribe();
     const req = backend.expectOne(url);
     expect(req.request.params.keys()).toEqual([]);
@@ -87,5 +78,25 @@ describe('the Gemp server interceptors', () => {
     http.get(url, { responseType: 'text' }).subscribe();
     backend.expectOne((r) => r.url === url).flush('', { headers: { [OPENED_PACK_HEADER]: 'true' } });
     expect(announced).toHaveBeenCalledOnce();
+  });
+
+  it("announces the hall's deliveries from their headers (deliveryCheck)", () => {
+    setUp();
+    const announced: string[] = [];
+    TestBed.inject(DeliveryAnnouncements).announced$.subscribe((kind) => announced.push(kind));
+    http.get(url, { responseType: 'text' }).subscribe();
+    backend.expectOne((r) => r.url === url).flush('', { headers: { 'Delivery-Service-Package': 'false' } });
+    expect(announced).toEqual([]);
+    http.get(url, { responseType: 'text' }).subscribe();
+    backend
+      .expectOne((r) => r.url === url)
+      .flush('', {
+        headers: {
+          'Delivery-Service-Package': 'true',
+          'Delivery-Service-Announcement': 'true',
+          'Delivery-Service-League': 'true',
+        },
+      });
+    expect(announced).toEqual(['package', 'announcement', 'league']);
   });
 });

@@ -112,7 +112,7 @@ public class SharePagesTest {
         assertEquals("A friendlier Game Hall", page.title());
         assertEquals("2026-09-27: New players can start a game in two clicks.", page.description());
         assertEquals("patchnotes/img/2026-09-27-hall.png", page.image());   // the first screenshot
-        assertEquals("hall.html#patch-notes/2026-09-27-hall-overhaul", page.target());
+        assertEquals("ng/info/patch-notes/2026-09-27-hall-overhaul", page.target());
         assertTrue(page.largeImage());
 
         Document doc = html(page, ORIGIN + "/gemp-lotr/share/patch-notes/2026-09-27-hall-overhaul");
@@ -122,11 +122,11 @@ public class SharePagesTest {
         assertEquals(ORIGIN + "/gemp-lotr/share/patch-notes/2026-09-27-hall-overhaul", meta(doc, "og:url"));
         assertEquals("summary_large_image", meta(doc, "twitter:card"));
         assertEquals("GEMP", meta(doc, "og:site_name"));
-        assertEquals("0; url=/gemp-lotr/hall.html#patch-notes/2026-09-27-hall-overhaul",
+        assertEquals("0; url=/gemp-lotr/ng/info/patch-notes/2026-09-27-hall-overhaul",
                 doc.selectFirst("meta[http-equiv=refresh]").attr("content"));
-        assertEquals("window.location.replace(\"/gemp-lotr/hall.html#patch-notes/2026-09-27-hall-overhaul\");",
+        assertEquals("window.location.replace(\"/gemp-lotr/ng/info/patch-notes/2026-09-27-hall-overhaul\");",
                 doc.selectFirst("script").data());
-        assertEquals("/gemp-lotr/hall.html#patch-notes/2026-09-27-hall-overhaul", doc.selectFirst("body a").attr("href"));
+        assertEquals("/gemp-lotr/ng/info/patch-notes/2026-09-27-hall-overhaul", doc.selectFirst("body a").attr("href"));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class SharePagesTest {
         assertEquals(SharePages.DEFAULT_IMAGE, page.image());
         assertEquals(ORIGIN + "/gemp-lotr/images/splash.jpg", meta(html(page, "u"), "og:image"));
         // names are case-insensitive, like the page's own links
-        assertEquals("hall.html#patch-notes/2023-12-09", _pages.page("patch-notes", "2023-12-09").target());
+        assertEquals("ng/info/patch-notes/2023-12-09", _pages.page("patch-notes", "2023-12-09").target());
     }
 
     @Test
@@ -145,15 +145,15 @@ public class SharePagesTest {
         SharePages.Page page = _pages.page("patch-notes", "Announcement-4");
         assertEquals("GEMP announcement of 2025-05-01", page.title());
         assertEquals("Servers restart tonight. Sorry!", page.description());
-        assertEquals("hall.html#patch-notes/announcement-4", page.target());
+        assertEquals("ng/info/patch-notes/announcement-4", page.target());
     }
 
     @Test
     public void theNewestNotesAndUnknownOnes() {
-        assertEquals("hall.html#patch-notes", _pages.page("patch-notes", "").target());
+        assertEquals("ng/info/patch-notes", _pages.page("patch-notes", "").target());
         SharePages.Page gone = _pages.page("patch-notes", "2001-01-01");
         assertEquals("GEMP patch notes", gone.title());
-        assertEquals("hall.html#patch-notes/2001-01-01", gone.target());   // the page says it is not there
+        assertEquals("ng/info/patch-notes/2001-01-01", gone.target());   // the page says it is not there
         assertNull(_pages.page("patch-notes", "not a slug"));
         assertNull(_pages.page("patch-notes", "../../etc/passwd"));
     }
@@ -185,7 +185,7 @@ public class SharePagesTest {
         assertEquals("PC Errata: Cleaving Blow", page.title());
         assertTrue(page.description(), page.description().startsWith("Errata of Cleaving Blow (1C5), old and new side by side. Now: "));
         assertTrue(page.description(), page.description().length() <= SharePages.DESCRIPTION_LENGTH + 1);
-        assertEquals("hall.html#errata-1_5", page.target());
+        assertEquals("ng/help/errata/1_5", page.target());
         if (WEB.isDirectory())
             assertEquals("https://i.lotrtcgpc.net/errata/LOTR-EN01E005.1_card.jpg", page.image());   // PC_Cards.js
         assertFalse(page.largeImage());
@@ -193,7 +193,7 @@ public class SharePagesTest {
 
         SharePages.Page errata = _pages.page("errata", "51_5");
         assertEquals("PC Errata: Cleaving Blow", errata.title());
-        assertEquals("hall.html#errata-51_5", errata.target());
+        assertEquals("ng/help/errata/51_5", errata.target());
         assertEquals(page.image(), errata.image());
 
         assertEquals("PC Errata", _pages.page("errata", "99_999").title());
@@ -204,9 +204,9 @@ public class SharePagesTest {
     public void formats() {
         SharePages.Page page = _pages.page("format", "pc_movie");
         assertEquals("Movie Block (PC) — Format Definitions", page.title());
-        assertEquals("hall.html#format-pc_movie", page.target());
+        assertEquals("ng/help/formats/pc_movie", page.target());
         assertEquals("Format Definitions", _pages.page("format", "nope").title());
-        assertEquals("hall.html#format-nope", _pages.page("format", "nope").target());
+        assertEquals("ng/help/formats/nope", _pages.page("format", "nope").target());
         assertNull(_pages.page("format", "a b"));
     }
 
@@ -216,7 +216,7 @@ public class SharePagesTest {
         assertEquals("Cleaving Blow", page.title());
         assertTrue(page.description(), page.description().startsWith("1C5. "));
         assertEquals("https://i.lotrtcgpc.net/decipher/LOTR01005.jpg", page.image());
-        assertEquals("hall.html#card-1_5", page.target());
+        assertEquals("ng/help?card=1_5", page.target());
         assertEquals("Aragorn, Ranger of the North", _pages.page("card", "1_89").title());
         // a card with no picture anywhere: the site's
         assertEquals("A GEMP card", _pages.page("card", "99_999").title());

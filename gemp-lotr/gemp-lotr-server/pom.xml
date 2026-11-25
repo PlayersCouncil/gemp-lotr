@@ -55,6 +55,13 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.14.0</version>
         </dependency>
+        <!-- Checks the signature and claims of the PC account sign-in's ID token (PC-ACCOUNT.md). It has no
+             dependencies of its own. The rest of that sign-in is java.net.http. -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>10.10</version>
+        </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-server</artifactId>

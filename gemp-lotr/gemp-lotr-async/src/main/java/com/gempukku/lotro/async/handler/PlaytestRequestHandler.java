@@ -49,7 +49,7 @@ public class PlaytestRequestHandler extends LotroServerRequestHandler implements
     private void addTesterFlag(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player player = getResourceOwnerSafely(request, null);
+            Player player = getResourceOwnerSafely(request);
 
             _playerDAO.addPlayerFlag(player.getName(), Player.Type.PLAY_TESTER);
 
@@ -63,7 +63,7 @@ public class PlaytestRequestHandler extends LotroServerRequestHandler implements
     private void removeTesterFlag(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player player = getResourceOwnerSafely(request, null);
+            Player player = getResourceOwnerSafely(request);
 
             _playerDAO.removePlayerFlag(player.getName(), Player.Type.PLAY_TESTER);
 
@@ -77,7 +77,7 @@ public class PlaytestRequestHandler extends LotroServerRequestHandler implements
     private void getTesterFlag(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player player = getResourceOwnerSafely(request, null);
+            Player player = getResourceOwnerSafely(request);
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

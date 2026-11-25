@@ -5,7 +5,9 @@ import {
   resolveTheme,
   THEME_ATTRIBUTE,
   THEME_BEHAVIOUR,
+  HALL_PAGE_THEME,
   PAGE_THEMES,
+  pageThemeOf,
   THEME_COOKIE,
   defaultViewport,
   THEME_VIEWPORT,
@@ -251,6 +253,41 @@ describe('ThemeService', () => {
     it('takes a fallback after the address and the cookie', () => {
       expect(resolveTheme(null, null, 'classic')).toBe('classic');
       expect(resolveTheme('modern', null, 'classic')).toBe('modern');
+    });
+  });
+
+  describe("the hall's pages (classic alone, until the hall has a modern look)", () => {
+    function hallService(path: string, queryString = ''): ThemeService {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PAGE_QUERY_STRING, useValue: queryString },
+          { provide: PAGE_PATH, useValue: path },
+        ],
+      });
+      return TestBed.inject(ThemeService);
+    }
+
+    it('tells the pages apart by the part of the address that names them', () => {
+      expect(pageThemeOf('/gemp-lotr/ng/deckbuilder/')).toBeNull();
+      expect(pageThemeOf('/gemp-lotr/ng/game')).toBe(PAGE_THEMES['game']);
+      for (const path of ['/gemp-lotr/ng/', '/gemp-lotr/ng', '/gemp-lotr/ng/hall', '/gemp-lotr/ng/help/formats/x']) {
+        expect(pageThemeOf(path)).toBe(HALL_PAGE_THEME);
+      }
+      expect(pageThemeOf('/gemp-lotr/ng/login')).toBe(HALL_PAGE_THEME);
+      // An address that names no page at all (the tests' own) is the app's
+      expect(pageThemeOf('/')).toBeNull();
+      expect(pageThemeOf('')).toBeNull();
+    });
+
+    it('shows them in classic whatever the player chose for the deck builder, and remembers nothing', () => {
+      const { written } = fakeCookies({ [THEME_COOKIE]: 'modern', [HALL_PAGE_THEME.cookie]: 'modern' });
+      const theme = hallService('/gemp-lotr/ng/help/formats', '?theme=modern');
+      theme.init();
+      expect(theme.theme()).toBe('classic');
+      expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('classic');
+      theme.select('modern');
+      expect(theme.theme()).toBe('classic');
+      expect(written).toEqual([]);
     });
   });
 });

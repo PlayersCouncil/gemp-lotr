@@ -27,9 +27,9 @@ describe('app paths', () => {
     }
   });
 
-  it("gives the game page's address for a game, for an admin acting as a player too", () => {
+  it("gives the game page's address for a game", () => {
     expect(gamePageUrl('42')).toBe('/gemp-lotr/ng/game?gameId=42');
-    expect(gamePageUrl('a&b', 'bob smith')).toBe('/gemp-lotr/ng/game?gameId=a%26b&participantId=bob%20smith');
+    expect(gamePageUrl('a&b')).toBe('/gemp-lotr/ng/game?gameId=a%26b');
   });
 
   it('knows where the server is', () => {

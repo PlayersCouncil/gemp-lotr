@@ -19,7 +19,7 @@ public interface TournamentQueue {
 
     String getTournamentQueueName();
 
-    String getPrizesDescription();
+    PrizeSummary getPrizeSummary();
 
     String getPairingDescription();
 

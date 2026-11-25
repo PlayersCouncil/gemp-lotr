@@ -2,6 +2,8 @@ package com.gempukku.lotro.hall;
 
 import com.gempukku.lotro.common.DateUtils;
 import com.gempukku.lotro.game.Player;
+import com.gempukku.lotro.tournament.PrizeSummary;
+import com.gempukku.util.JsonUtils;
 import com.gempukku.polling.LongPollableResource;
 import com.gempukku.polling.WaitingRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -117,7 +119,7 @@ public class HallCommunicationChannel implements LongPollableResource {
 
                     @Override
                     public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName,
-                                                     String tournamentPrizes, String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp,
+                                                     PrizeSummary tournamentPrizes, String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp,
                                                      boolean joinable, boolean startable, int readyCheckSecsRemaining, boolean confirmedReadyCheck, boolean wc, String draftCode,
                                                      boolean recurring, boolean scheduled, boolean displayInWaitingTables) {
                         Map<String, String> props = new HashMap<>();
@@ -128,7 +130,11 @@ public class HallCommunicationChannel implements LongPollableResource {
                         props.put("queue", tournamentQueueName);
                         props.put("playerCount", String.valueOf(playerCount));
                         props.put("playerList", playerList);
-                        props.put("prizes", tournamentPrizes);
+                        // "prizes" is the HTML the legacy hall reads; the new hall reads the same prizes as data:
+                        // the label, and the breakdown lines as a JSON array of strings ("[]" when there are none).
+                        props.put("prizes", tournamentPrizes.toLegacyHtml());
+                        props.put("prizesLabel", tournamentPrizes.label());
+                        props.put("prizesLines", JsonUtils.Serialize(tournamentPrizes.lines()));
                         props.put("system", pairingDescription);
                         props.put("start", startCondition);
                         props.put("signedUp", String.valueOf(playerSignedUp));

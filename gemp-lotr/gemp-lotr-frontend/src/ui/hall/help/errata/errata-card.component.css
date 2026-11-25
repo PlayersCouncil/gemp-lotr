@@ -1,0 +1,44 @@
+/* A card in the PC Errata viewer (pcErrata.css .pc-errata-card, the game's .card and .borderOverlay) */
+
+:host {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: var(--gd-errata-card-width, 0);
+  height: var(--gd-errata-card-height, 0);
+}
+
+.gd-errata-card__image,
+.gd-errata-card__border {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5%;
+}
+
+.gd-errata-card__image {
+  display: block;
+  -webkit-user-drag: none;
+}
+
+.gd-errata-card__border {
+  box-sizing: border-box;
+  border: var(--gd-errata-card-border, 0) solid var(--theme-errata-card-border);
+  pointer-events: none;
+}
+
+.gd-errata-card__missing {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  text-align: center;
+  font-size: 85%;
+  color: var(--theme-errata-missing-text);
+  border: 1px dashed var(--theme-errata-missing-border);
+  border-radius: 5%;
+}

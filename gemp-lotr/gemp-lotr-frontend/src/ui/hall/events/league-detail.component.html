@@ -1,0 +1,210 @@
+<div class="gd-league-detail__cost">
+  <b>{{ words.COST_LABEL }}</b
+  >{{ ' ' }}<gd-price [price]="league().cost" />
+</div>
+@switch (member().kind) {
+  @case ('member') {
+    <div class="gd-league-detail__membership" data-membership="member">
+      {{ words.ALREADY_MEMBER }}
+      @if (draftUrl(); as url) {
+        <button gdEventsButton data-action="draft" (click)="draft(url)">{{ words.GO_TO_DRAFT }}</button>
+      }
+    </div>
+  }
+  @case ('joinable') {
+    <div class="gd-league-detail__membership" data-membership="joinable">
+      {{ words.NOT_A_MEMBER
+      }}<button gdEventsButton data-action="join" (click)="join()">
+        {{ words.JOIN_LEAGUE }}
+      </button>
+    </div>
+  }
+  @case ('inviteOnly') {
+    <div class="gd-league-detail__membership" data-membership="inviteOnly">
+      <b>{{ words.INVITATION_ONLY }}</b>
+    </div>
+  }
+}
+@if (league().description.length > 0) {
+  <gd-markup class="gd-league-detail__description" [nodes]="league().description" />
+  <hr class="gd-league-detail__rule" />
+}
+@if (rtmd(); as path) {
+  <section class="gd-league-detail__rtmd">
+    <h3 class="gd-league-detail__rtmd-title">{{ words.RTMD_TITLE }}</h3>
+    <div class="gd-league-detail__muted gd-league-detail__intro">
+      @for (paragraph of words.RTMD_INTRO; track $index) {
+        <p>{{ paragraph }}</p>
+      }
+      <p>
+        {{ words.RTMD_NOTE_BEFORE_ITALIC }}<i>{{ words.RTMD_NOTE_ITALIC }}</i
+        >{{ words.RTMD_NOTE_AFTER_ITALIC }}
+      </p>
+    </div>
+    @if (path.playerPosition !== null) {
+      <div class="gd-league-detail__level">
+        {{ words.RTMD_LEVEL_BEFORE }}<b>{{ path.playerPosition }}</b
+        >{{ words.rtmdLevelAfter(path.pathLength) }}
+      </div>
+    }
+    @if (path.advance; as advance) {
+      <div class="gd-league-detail__muted gd-league-detail__advance">{{ advance }}</div>
+    }
+    <div class="gd-league-detail__path">
+      @for (card of path.cards; track card.site.position) {
+        <button
+          type="button"
+          class="gd-league-detail__site"
+          [attr.data-mark]="card.mark"
+          [attr.aria-label]="card.site.name ?? card.site.blueprintId"
+          (click)="showSite(card.site, $event)"
+          (contextmenu)="showSite(card.site, $event)"
+        >
+          <img
+            class="gd-league-detail__site-image"
+            [src]="imageOf(card.site.visualBlueprintId ?? card.site.blueprintId)"
+            alt=""
+            draggable="false"
+          />
+          @if (card.site.visualBlueprintId) {
+            <span class="gd-league-detail__site-overlay"
+              ><img [src]="imageOf(card.site.blueprintId)" alt="" draggable="false"
+            /></span>
+          }
+          <span class="gd-league-detail__site-number">{{ card.site.position }}</span>
+        </button>
+      }
+    </div>
+    @if (path.cumulative) {
+      <div class="gd-league-detail__muted gd-league-detail__cumulative">{{ words.RTMD_CUMULATIVE }}</div>
+    }
+    <hr class="gd-league-detail__rule" />
+  </section>
+}
+@for (item of series(); track $index) {
+  <div class="gd-league-detail__serie" [attr.data-serie]="$index + 1">
+    <div class="gd-league-detail__serie-name">{{ item.summary.heading }}</div>
+    <div>
+      <b>{{ words.FORMAT_LABEL }}</b
+      >{{ ' ' }}
+      @if (item.summary.formatCode; as code) {
+        <button type="button" class="gd-league-detail__format" (click)="formatCode.set(code)">
+          {{ item.summary.format }}
+        </button>
+      } @else {
+        <span>{{ item.summary.format }}</span>
+      }
+    </div>
+    <div>
+      <b>{{ words.COLLECTION_LABEL }}</b> {{ item.summary.collection }}
+    </div>
+  </div>
+}
+<div class="gd-league-detail__tabs">
+  <div class="gd-league-detail__tab-list" role="tablist">
+    <button
+      type="button"
+      role="tab"
+      class="gd-league-detail__tab"
+      data-tab="overall"
+      [attr.aria-selected]="tab() === 0"
+      (click)="choose(0)"
+    >
+      {{ words.OVERALL_RESULTS }}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="gd-league-detail__tab"
+      data-tab="matches"
+      [attr.aria-selected]="tab() === 1"
+      (click)="choose(1)"
+    >
+      {{ words.YOUR_MATCHES }}
+    </button>
+    @for (item of series(); track $index) {
+      <button
+        type="button"
+        role="tab"
+        class="gd-league-detail__tab"
+        [attr.data-tab]="'serie-' + ($index + 1)"
+        [attr.aria-selected]="tab() === $index + 2"
+        (click)="choose($index + 2)"
+      >
+        {{ words.serieTab($index) }}
+      </button>
+    }
+  </div>
+  <div class="gd-league-detail__panel" role="tabpanel">
+    @if (tab() === 0) {
+      @if (league().standings.length > 0) {
+        <ng-container
+          *ngTemplateOutlet="standingsTable; context: { $implicit: overall(), level: league().rtmd !== null }"
+        />
+      }
+    } @else if (tab() === 1) {
+      @for (item of series(); track $index) {
+        <div>{{ words.serieTab($index) }}</div>
+        <table class="gd-league-detail__standings">
+          <tr>
+            <th>{{ words.MATCH_HEADERS[0] }}</th>
+            <th>{{ words.MATCH_HEADERS[1] }}</th>
+          </tr>
+          @for (match of item.serie.matches; track $index) {
+            <tr>
+              <td>{{ match.winner }}</td>
+              <td>{{ match.loser }}</td>
+            </tr>
+          }
+        </table>
+      }
+    } @else {
+      @if (series()[tab() - 2]; as item) {
+        <div>{{ words.maxMatchesLine(item.serie.maxMatches) }}</div>
+        @if (item.serie.standings.length > 0) {
+          <ng-container
+            *ngTemplateOutlet="standingsTable; context: { $implicit: halves(item.serie.standings), level: false }"
+          />
+        }
+      }
+    }
+  </div>
+</div>
+<gd-format-description [code]="formatCode()" (closed)="formatCode.set(null)" />
+
+<ng-template #standingsTable let-rows let-level="level">
+  <table class="gd-league-detail__standings">
+    <tr>
+      @for (side of [0, 1]; track side) {
+        @if (side === 1) {
+          <th></th>
+        }
+        @for (header of words.LEAGUE_STANDING_HEADERS; track header) {
+          @if (header !== 'Level' || level) {
+            <th>{{ header }}</th>
+          }
+        }
+      }
+    </tr>
+    @for (row of rows; track $index) {
+      <tr>
+        <ng-container *ngTemplateOutlet="standingCells; context: { $implicit: row.left, level }" />
+        @if (row.right; as right) {
+          <td></td>
+          <ng-container *ngTemplateOutlet="standingCells; context: { $implicit: right, level }" />
+        }
+      </tr>
+    }
+  </table>
+</ng-template>
+
+<ng-template #standingCells let-standing let-level="level">
+  <td>{{ standing.standing }}</td>
+  @if (level) {
+    <td>{{ standing.level ?? words.NO_LEVEL }}</td>
+  }
+  <td>{{ standing.player }}</td>
+  <td>{{ standing.points }}</td>
+  <td>{{ standing.gamesPlayed }}</td>
+  <td>{{ standing.opponentWin }}</td>
+</ng-template>

@@ -112,8 +112,16 @@ function serverAnswer(url) {
   return null;
 }
 
-/** Answers everything the context's pages ask for; what can't be answered goes to `log`. */
-export async function routeToStub(context, log) {
+/** The folder of the saved server answers, for checks that add answers of their own (`answer` below). */
+export const RESPONSES_DIR = RESPONSES;
+
+/**
+ * Answers everything the context's pages ask for; what can't be answered goes to `log`. `answer(url, request)`, if
+ * given, is asked first (a check's own calls, e.g. the hall's: hall/stubs.mjs): it gives an answer as serverAnswer does
+ * (`status`, `json`, `xml`, `text` with `type`, or a saved `file`), optionally after `delay` ms (a long-poll), or null to
+ * leave the call to the shared answers.
+ */
+export async function routeToStub(context, log, { answer: checkAnswer = null } = {}) {
   await context.route(/.*/, async (route) => {
     const request = route.request();
     const url = new URL(request.url());
@@ -124,18 +132,28 @@ export async function routeToStub(context, log) {
       return route.fulfill({ status: 404, body: '' });
     }
     if (url.pathname.startsWith('/gemp-lotr-server/')) {
-      const answer = serverAnswer(url);
+      const answer = checkAnswer?.(url, request) ?? serverAnswer(url);
       if (!answer) {
         log.push(`unanswered ${request.method()} ${url.pathname}`);
         return route.fulfill({ status: 404, body: '' });
       }
-      if (answer.status) return route.fulfill({ status: answer.status, body: '' });
-      if (answer.json) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(answer.json) });
-      if (answer.xml) return route.fulfill({ contentType: 'application/xml', body: answer.xml });
-      return route.fulfill({
-        path: path.join(RESPONSES, answer.file),
-        contentType: answer.type ?? 'application/xml',
-      });
+      if (answer.delay) await new Promise((resolve) => setTimeout(resolve, answer.delay));
+      if (answer.status) return route.fulfill({ status: answer.status, body: answer.text ?? '' }).catch(() => {});
+      if (answer.text !== undefined) {
+        return route.fulfill({ contentType: answer.type ?? 'text/plain', body: answer.text }).catch(() => {});
+      }
+      // A delayed answer may come after the page was closed: nothing to answer then
+      const quietly = (promise) => promise.catch(() => {});
+      if (answer.json) {
+        return quietly(route.fulfill({ contentType: 'application/json', body: JSON.stringify(answer.json) }));
+      }
+      if (answer.xml) return quietly(route.fulfill({ contentType: 'application/xml', body: answer.xml }));
+      return quietly(
+        route.fulfill({
+          path: path.join(RESPONSES, answer.file),
+          contentType: answer.type ?? 'application/xml',
+        }),
+      );
     }
     let file;
     if (url.pathname.startsWith('/gemp-lotr/ng/')) {
@@ -145,6 +163,8 @@ export async function routeToStub(context, log) {
       if (route && (!fs.existsSync(file) || fs.statSync(file).isDirectory())) file = path.join(BUILD, 'index.html');
     } else {
       file = path.join(WEB, url.pathname.replace(/^\/gemp-lotr\//, ''));
+      // A folder's address serves its index.html, as the server does (the site's start page, /gemp-lotr/)
+      if (url.pathname.endsWith('/')) file = path.join(file, 'index.html');
     }
     if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) {
       if (/\.(jpe?g|png|gif)$/i.test(url.pathname)) {

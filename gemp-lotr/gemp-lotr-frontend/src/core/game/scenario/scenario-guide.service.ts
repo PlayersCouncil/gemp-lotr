@@ -5,7 +5,6 @@ import { gamePageUrl } from '../../platform/app-paths';
 import { HallTab } from '../../platform/hall-tab.service';
 import { PageCues } from '../../platform/page-cues';
 import { PageLifetime } from '../../platform/page-lifetime.service';
-import { SessionService } from '../../session/session.service';
 import { DecisionGate, DecisionGates, DecisionGesture } from '../decision/decision-gate';
 import { DecisionButton } from '../decision/decision-view';
 import { GameDecisions } from '../decision/game-decisions.service';
@@ -109,7 +108,6 @@ export class ScenarioGuide implements DecisionGate {
   private readonly cues = inject(PageCues);
   private readonly hall = inject(HallTab);
   private readonly notifier = inject(Notifier);
-  private readonly acting = inject(SessionService);
   private readonly cardInfo = inject(CardInfoService);
 
   private readonly scenario = computed(() => this.session.model().scenario);
@@ -512,7 +510,7 @@ export class ScenarioGuide implements DecisionGate {
     if (this.leaving()) return;
     this.leaving.set(true);
     this.lifetime.write(this.api.start(id, fromCheckpoint), {
-      next: (started) => this.cues.go(gamePageUrl(started.gameId, this.acting.participantId)),
+      next: (started) => this.cues.go(gamePageUrl(started.gameId)),
       error: () => {
         this.leaving.set(false);
         this.notifier.tell('The scenario could not be started. Go back to the Game Hall and try from there.');

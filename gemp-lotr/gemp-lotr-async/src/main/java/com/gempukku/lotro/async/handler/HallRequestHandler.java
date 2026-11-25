@@ -75,6 +75,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             getErrataInfo(request, responseWriter);
         } else if (uri.equals("/players") && request.method() == HttpMethod.GET) {
             searchPlayers(request, responseWriter);
+        } else if (isFormatJsonUri(uri) && request.method() == HttpMethod.GET) {
+            getFormatDefinition(uri.substring(8, uri.length() - 5), responseWriter);
         } else if (uri.startsWith("/format/") && request.method() == HttpMethod.GET) {
             getFormat(request, uri.substring(8), responseWriter);
         } else if (uri.startsWith("/queue/") && request.method() == HttpMethod.POST) {
@@ -124,8 +126,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void joinTable(HttpRequest request, String tableId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         String deckName = getFormParameterSafely(postDecoder, "deckName");
         Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
@@ -172,8 +173,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void leaveTable(HttpRequest request, String tableId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         _hallServer.leaveAwaitingTable(resourceOwner, tableId);
         responseWriter.writeXmlResponse(null);
@@ -185,7 +185,6 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void createTable(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String format = getFormParameterSafely(postDecoder, "format");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             String deckSource = getFormParameterSafely(postDecoder, "deckSource");
@@ -200,7 +199,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             // the participants and admins.  (The form sends the code "glacial"; the timer's name is "Glacial".)
             boolean isHidden = GameTimer.ResolveTimer(timer) == GameTimer.GLACIAL_TIMER;
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             Player deckOwner = resolveDeckOwner(deckSource, resourceOwner);
 
             if(isInviteOnly) {
@@ -298,7 +297,6 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void createSoloTable(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String format = getFormParameterSafely(postDecoder, "format");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
             String deckSource = getFormParameterSafely(postDecoder, "deckSource");
@@ -306,7 +304,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
             String botDeckName = getFormParameterSafely(postDecoder, "botDeckName");
             boolean isPrivate = Boolean.parseBoolean(isPrivateVal);
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             Player deckOwner = resolveDeckOwner(deckSource, resourceOwner);
 
             try {
@@ -351,8 +349,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void dropFromTournament(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             try {
                 String response = _hallServer.dropFromTournament(tournamentId, resourceOwner);
@@ -370,9 +367,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void joinTournamentLate(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
             try {
@@ -391,9 +387,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void registerLimitedTournamentDeck(HttpRequest request, String tournamentId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String deckName = getFormParameterSafely(postDecoder, "deckName");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
             try {
@@ -412,10 +407,9 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void joinQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
         String deckName = getFormParameterSafely(postDecoder, "deckName");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
         Player deckOwner = resolveDeckOwner(getFormParameterSafely(postDecoder, "deckSource"), resourceOwner);
 
         try {
@@ -434,9 +428,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void startQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             try {
                 _hallServer.startQueueEarly(queueId, resourceOwner);
@@ -455,9 +447,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void leaveQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         _hallServer.leaveQueue(queueId, resourceOwner);
 
@@ -470,8 +460,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void confirmReadyCheckQueue(HttpRequest request, String queueId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             _hallServer.confirmReadyCheck(queueId, resourceOwner);
             responseWriter.writeXmlResponse(null);
         } finally {
@@ -535,6 +524,29 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void getFormatDefinitions(ResponseWriter responseWriter) {
         responseWriter.writeJsonResponse(JsonUtils.Serialize(
                 FormatDefinitions.describeAll(_formatLibrary.getHallFormats().values(), _library)));
+    }
+
+    /**
+     * Whether the uri is /format/{code}/json: a non-empty code with no slash in it, so /format/{code} (the HTML,
+     * even for a code ending in "json") and /format/json (the HTML of a format coded "json") are never taken for it.
+     */
+    static boolean isFormatJsonUri(String uri) {
+        // "/format/" + at least one character + "/json"
+        if (uri.length() < 14 || !uri.startsWith("/format/") || !uri.endsWith("/json"))
+            return false;
+        String code = uri.substring(8, uri.length() - 5);
+        return !code.isEmpty() && !code.contains("/");
+    }
+
+    /**
+     * GET /hall/format/{code}/json: one format's entry, the same shape as an entry of /hall/formats/json, for any
+     * format the library knows (a league serie's format need not be a hall format).  404 for an unknown code.
+     */
+    private void getFormatDefinition(String code, ResponseWriter responseWriter) throws HttpProcessingException {
+        LotroFormat lotroFormat = _formatLibrary.getFormat(code);
+        if (lotroFormat == null)
+            throw new HttpProcessingException(404);
+        responseWriter.writeJsonResponse(JsonUtils.Serialize(FormatDefinitions.describe(lotroFormat, _library)));
     }
 
     private void appendFormat(StringBuilder result, LotroFormat lotroFormat) throws CardNotFoundException {
@@ -616,7 +628,7 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
      */
     private void searchPlayers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        Player resourceOwner = getResourceOwnerSafely(request, getQueryParameterSafely(queryDecoder, "participantId"));
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         String prefix = getQueryParameterSafely(queryDecoder, "prefix");
         int limit = PlayerNameSearch.clampLimit(getQueryParameterSafely(queryDecoder, "limit"));
@@ -651,12 +663,8 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     private void getHall(HttpRequest request, ResponseWriter responseWriter) {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
         try {
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -685,10 +693,9 @@ public class HallRequestHandler extends LotroServerRequestHandler implements Uri
     private void updateHall(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             int channelNumber = Integer.parseInt(getFormParameterSafely(postDecoder, "channelNumber"));
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             processLoginReward(resourceOwner.getName());
 
             try {

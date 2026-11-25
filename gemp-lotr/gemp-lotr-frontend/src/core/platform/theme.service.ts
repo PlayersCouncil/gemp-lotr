@@ -101,6 +101,11 @@ export interface PageTheme {
   cookie: string;
   fallback: ThemeName;
   /**
+   * The page has this look alone so far: whatever the address or the player's choice elsewhere says, it is shown in it,
+   * and nothing is remembered.
+   */
+  only?: ThemeName;
+  /**
    * Switching to a theme without a viewport tag (classic) loads the page again, when it has one: a phone gives a page
    * that has had a viewport tag no way back to having none (removing the tag leaves its layout), and imitating it
    * resets the player's zoom whenever the window changes size (the browser's bars sliding away). Opened again (with
@@ -108,6 +113,31 @@ export interface PageTheme {
    * page that comes back as it was (the game: D10).
    */
   reloadForNoViewport?: boolean;
+}
+
+/**
+ * The hall's pages (the hall with its tabs, and the login page): classic alone until the hall has a modern look of its
+ * own. Ketura, 2026-11-20: for now the hall looks the same in both themes, as it does today, and gets its modern look
+ * once the port works. Taking `only` away gives these pages a choice of their own (the cookie is already theirs).
+ */
+export const HALL_PAGE_THEME: PageTheme = { cookie: 'gempHallTheme', fallback: 'classic', only: 'classic' };
+
+/**
+ * The theme choice of the page at `path` (the browser's: "/gemp-lotr/ng/game"), by the part of the address that
+ * names the page: null for the deck builder (the app's own choice, THEME_COOKIE), the game's, and the hall's for every
+ * other page of the app (the hall is its start page, with a route per tab).
+ */
+export function pageThemeOf(path: string): PageTheme | null {
+  const parts = path.split('/').filter(Boolean);
+  const app = parts.indexOf('ng');
+  if (app < 0 && parts.length === 0) {
+    return null;
+  }
+  const page = parts[app + 1] ?? '';
+  if (page === 'deckbuilder') {
+    return null;
+  }
+  return PAGE_THEMES[page] ?? HALL_PAGE_THEME;
 }
 
 /** Set on <html>: it picks the theme's values in src/styles/themes.css. */
@@ -142,7 +172,7 @@ export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly queryString = inject(PAGE_QUERY_STRING);
   /** The page's own cookie and default, if it has them (PAGE_THEMES). */
-  private readonly page = PAGE_THEMES[inject(PAGE_PATH).split('/').filter(Boolean).at(-1) ?? ''] ?? null;
+  private readonly page = pageThemeOf(inject(PAGE_PATH));
   private readonly current = signal<ThemeName>(DEFAULT_THEME);
   private readonly cues = inject(PageCues);
 
@@ -153,6 +183,10 @@ export class ThemeService {
 
   /** Resolves the theme and applies it. A `?theme=` in the address is remembered, as a choice. */
   init(): void {
+    if (this.page?.only) {
+      this.apply(this.page.only);
+      return;
+    }
     const fromQuery = new URLSearchParams(this.queryString).get('theme');
     if (isThemeName(fromQuery)) {
       this.remember(fromQuery);
@@ -170,7 +204,7 @@ export class ThemeService {
 
   /** The player's choice: remembered and applied (or, see PageTheme.reloadForNoViewport, the page opened again). */
   select(theme: string): void {
-    if (!isThemeName(theme)) {
+    if (!isThemeName(theme) || this.page?.only) {
       return;
     }
     this.remember(theme);

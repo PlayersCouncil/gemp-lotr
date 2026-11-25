@@ -50,6 +50,237 @@
   /* The filled part of a slider */
   --theme-slider-fill: #757575;
 
+  /* The login page (src/Login/index.css): its picture, the bands across it, and its own link colours */
+  --theme-login-bg: #000 url('/gemp-lotr/ng/themes/classic/dwarrowdelf.jpg') center center / cover no-repeat;
+  --theme-login-band-bg: #222c;
+  --theme-login-banner: #d98e04;
+  --theme-login-error: #f00;
+  --theme-login-link: #bf6b04;
+  --theme-login-link-visited: #a63f03;
+  --theme-login-contact: orange;
+
+  /*
+   * The hall's frame (hall.css, icons.css; the hall's jQuery UI 1.13.2 "dark-hive" build, whose images differ from the
+   * deck builder's 1.8 ones and are in public/themes/classic/hall/). Icons are the site's own (images/icons)
+   */
+  --theme-hall-content-bg: #000 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_loop_25_000000_21x21.png') 50% 50% repeat;
+  --theme-hall-default-bg: #222 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_35_222222_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-hover-bg: #003147 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_33_003147_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-active-bg: #0972a5 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-hard_20_0972a5_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-header-bg: #444 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50%
+    repeat-x;
+  /* .ui-widget-content's border in the 1.13 build (the deck builder's 1.8 one is #555) */
+  --theme-hall-content-border: #444;
+  --theme-hall-panel-bg: linear-gradient(to top, #200902, #111 80%);
+  --theme-hall-info-bg: linear-gradient(to top, #333, #111 40%, #111);
+  --theme-hall-info-border: #bf8a4a;
+  --theme-hall-bar-bg: #333;
+  --theme-hall-bar-border: #aaa;
+  --theme-hall-play-bg: #540 linear-gradient(#845826, #1c1c1c);
+  --theme-hall-play-hover-bg: #540 linear-gradient(#bf8a4a, #1c1c1c);
+  --theme-hall-clock: #dd0;
+  --theme-hall-link: #e88104;
+  --theme-hall-link-hover: #ffa640;
+  --theme-hall-resizer: #777;
+  --theme-hall-resizer-grip: #999;
+  /* Black SVG icons drawn white; Play's drawn gold */
+  --theme-hall-icon-filter: brightness(0) invert(1);
+  --theme-hall-play-icon-filter: invert(74%) sepia(62%) saturate(1872%) hue-rotate(333deg) brightness(101%)
+    contrast(92%);
+  --theme-hall-icon-game-hall: url('/gemp-lotr/images/icons/swords.svg');
+  --theme-hall-icon-help: url('/gemp-lotr/images/icons/circle-question-solid.svg');
+  --theme-hall-icon-events: url('/gemp-lotr/images/icons/flag-solid.svg');
+  --theme-hall-icon-info: url('/gemp-lotr/images/icons/chart-line-solid.svg');
+  --theme-hall-icon-account: url('/gemp-lotr/images/icons/gear-solid.svg');
+  --theme-hall-icon-admin: url('/gemp-lotr/images/icons/toolbox-solid.svg');
+  --theme-hall-icon-bug: url('/gemp-lotr/images/icons/bug-solid.svg');
+  --theme-hall-icon-report: url('/gemp-lotr/images/icons/ban-solid.svg');
+  --theme-hall-icon-discord: url('/gemp-lotr/images/icons/discord-brands.svg');
+  --theme-hall-icon-wiki: url('/gemp-lotr/images/icons/book-open-solid.svg');
+  --theme-hall-icon-merchant: url('/gemp-lotr/images/icons/store-slash-solid.svg');
+  --theme-hall-icon-deckbuilder: url('/gemp-lotr/images/icons/hammer-solid.svg');
+  --theme-hall-icon-play: url('/gemp-lotr/images/icons/card-random.svg');
+  /* The connection readout and its popup (hallUi.js HallConnectionIndicator) */
+  --theme-hall-connection-text: #ccc;
+  --theme-hall-connection-hover-bg: #444;
+  --theme-hall-state-ring: #0006;
+  --theme-hall-state-connecting: #f08c28;
+  --theme-hall-state-connected: #3fbf5f;
+  --theme-hall-state-shutdown: #f5e030;
+  --theme-hall-state-shutdown-text: #f5e36a;
+  --theme-hall-state-disconnected: #e04040;
+  --theme-hall-state-disconnected-text: #ff8080;
+  --theme-hall-state-loggedout: #909090;
+  --theme-hall-popup-bg: #222;
+  --theme-hall-popup-border: #666;
+  --theme-hall-popup-shadow: #000a;
+
+  /* The hall's chat (hall.css #chat, #chatMessages, .message, #userList, .chatUser, .chatUserMenu) */
+  --theme-chat-bg: #121212;
+  --theme-chat-messages-border: #222;
+  --theme-chat-outline: #777;
+  --theme-chat-text: #ddd;
+  --theme-chat-system: #8a8a8a;
+  --theme-chat-time: #cfcfcf;
+  --theme-chat-mention-bg: #ff04;
+  --theme-chat-ping-bg: #f004;
+  --theme-chat-quote-border: #505050;
+  --theme-chat-input-bg: #1c1c1c;
+  --theme-chat-stopped-bg: #f99;
+  --theme-chat-column-border: #999;
+  --theme-chat-player-hover-bg: #333;
+  --theme-chat-ignored: #999;
+  --theme-chat-badge-border: #666;
+  --theme-chat-admin-border: #d4a93a;
+  --theme-chat-admin-text: #f0cf73;
+  --theme-chat-league-admin-border: #5e9bd6;
+  --theme-chat-league-admin-text: #9cc7ef;
+  --theme-chat-online-border: #4f8a4f;
+  --theme-chat-online-bg: #1e3a1e;
+  --theme-chat-online-text: #b6ecb6;
+  --theme-chat-incognito-border: #8a7a4f;
+  --theme-chat-incognito-bg: #3a3320;
+  --theme-chat-incognito-text: #f0dc9c;
+  --theme-chat-menu-bg: #262626;
+  --theme-chat-menu-shadow: #0009;
+
+  /*
+   * Help and Server Info (hall part 4.3): hall.css .article / .lemph / table.tables, formatDefinitions.css,
+   * patchNotes.css, tables.css (.info-toggle), hall.css (share-link buttons, Server Stats)
+   */
+  --theme-hall-emphasis: #009f9f;
+  --theme-hall-table-bg: #121212;
+  --theme-hall-table-border: #444;
+  --theme-hall-table-header-bg: #333;
+  --theme-hall-share-border: #444;
+  --theme-hall-share-text: #aaa;
+  --theme-hall-share-note: #9c9;
+  --theme-hall-share-field-bg: #1d1d1d;
+  --theme-hall-share-field-text: #ddd;
+  --theme-hall-share-icon-filter: invert(0.75);
+  --theme-hall-share-icon-hover-filter: invert(1);
+  --theme-hall-formats-accent: #8ab;
+  --theme-hall-formats-errata-hover: #bcd;
+  --theme-hall-formats-intro: #ddd;
+  --theme-hall-formats-soft: #ccc;
+  --theme-hall-formats-muted: #aaa;
+  --theme-hall-formats-faint: #999;
+  --theme-hall-formats-label: #9aa6b0;
+  --theme-hall-formats-permalink: #666;
+  --theme-hall-formats-thumb-name: #bbb;
+  --theme-hall-formats-info-font: Georgia, serif;
+  --theme-hall-formats-info-hover-text: #111;
+  --theme-hall-formats-help-border: #567;
+  --theme-hall-formats-line: #333;
+  --theme-hall-formats-side-bg: rgba(0, 0, 0, 0.35);
+  --theme-hall-formats-tools-bg: #140d0a;
+  --theme-hall-formats-field-bg: #111;
+  --theme-hall-formats-field-border: #555;
+  --theme-hall-formats-field-text: #eee;
+  --theme-hall-formats-nav: #cdd6e0;
+  --theme-hall-formats-nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --theme-hall-formats-nav-active-bg: rgba(255, 255, 255, 0.08);
+  --theme-hall-formats-card-bg: rgba(0, 0, 0, 0.28);
+  --theme-hall-formats-card-border: #3a3a3a;
+  --theme-hall-formats-highlight-bg: rgba(136, 170, 187, 0.18);
+  --theme-hall-formats-pc: #f0b35a;
+  --theme-hall-formats-pc-border: #8a5a14;
+  --theme-hall-formats-playtest: #c9a6ff;
+  --theme-hall-formats-playtest-border: #6a4b99;
+  --theme-hall-formats-count-bg: #3b4a5a;
+  --theme-hall-formats-count-banned-bg: #7a2a2a;
+  --theme-hall-formats-count-restricted-bg: #7a5a1a;
+  --theme-hall-formats-chip: #bfc6ff;
+  --theme-hall-formats-chip-bg: rgba(111, 111, 255, 0.08);
+  --theme-hall-formats-chip-hover-bg: rgba(111, 111, 255, 0.2);
+  --theme-hall-formats-chip-border: #3d4452;
+  --theme-hall-formats-hit-bg: rgba(232, 129, 4, 0.25);
+  --theme-hall-formats-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --theme-hall-notes-text: #ddd;
+  --theme-hall-notes-button-bg: #2b2b2b;
+  --theme-hall-notes-summary: #eee;
+  --theme-hall-notes-date: #9aa;
+  --theme-hall-notes-chip-bg: #1d1d1d;
+  --theme-hall-notes-chip-on-bg: #0972a5;
+  --theme-hall-notes-count-bg: rgba(255, 255, 255, 0.12);
+  --theme-hall-notes-tag-bg: rgba(38, 179, 247, 0.12);
+  --theme-hall-notes-tag-border: rgba(38, 179, 247, 0.35);
+  --theme-hall-notes-notice-bg: rgba(255, 255, 255, 0.05);
+  --theme-hall-notes-month-hover-bg: #3a3a3a;
+  --theme-hall-notes-target-glow: rgba(232, 129, 4, 0.25);
+  --theme-hall-notes-link-hover: #ffa53a;
+  --theme-hall-notes-code-bg: rgba(255, 255, 255, 0.08);
+  --theme-hall-notes-card: #8fb4ff;
+  --theme-hall-notes-card-hover: #c0d6ff;
+  --theme-hall-notes-card-underline: rgba(143, 180, 255, 0.7);
+  --theme-hall-notes-lightbox-bg: rgba(0, 0, 0, 0.62);
+  --theme-hall-notes-lightbox-font: Arial, Helvetica, sans-serif;
+  --theme-hall-notes-lightbox-shadow: rgba(0, 0, 0, 0.7);
+  --theme-hall-notes-close-bg: rgba(40, 40, 40, 0.9);
+  --theme-hall-load-error: #ffb0a0;
+
+  /* The hall's My Account tab (hall.css "tabs-account" and .pocket, .gameHistory, table.tables; scenarioShelf.css) */
+  --theme-account-help: #bbb;
+  --theme-account-label: #ccc;
+  --theme-account-row-border: #333;
+  --theme-account-pocket-bg: #000;
+  --theme-account-pocket-border: #fff;
+  --theme-account-cell-border: #fff;
+  --theme-account-empty: #bbb;
+  --theme-account-load-error: #ffb0a0;
+  --theme-account-win: #8fdc8f;
+  --theme-account-loss: #ff9a8a;
+  --theme-account-stats-bg: #121212;
+  --theme-account-stats-head-bg: #333;
+  --theme-account-stats-border: #444;
+  --theme-account-shelf-draft-border: #a8893a;
+  --theme-account-shelf-draft-bg: rgb(168 137 58 / 0.12);
+  --theme-account-shelf-picked-bg: rgb(212 175 55 / 0.14);
+  --theme-account-shelf-picked-mark: #d4af37;
+  --theme-account-shelf-error: #ff8a80;
+  --theme-account-shelf-success: #9ccc65;
+  --theme-account-shelf-pending: #bbb;
+  --theme-account-shelf-campaign: #ccb27a;
+  --theme-account-shelf-row-border: #3a3a3a;
+  --theme-account-shelf-row-hover: rgb(255 255 255 / 0.03);
+  --theme-account-shelf-dim: #999;
+  --theme-account-shelf-danger: #ef9a9a;
+  --theme-account-tag-border: #666;
+  --theme-account-tag-text: #ddd;
+  --theme-account-tag-review-border: #64b5f6;
+  --theme-account-tag-review-text: #90caf9;
+  --theme-account-tag-rejected-border: #ffb74d;
+  --theme-account-tag-rejected-text: #ffcc80;
+  --theme-account-tag-published-border: #d4af37;
+  --theme-account-tag-published-text: #f0d46b;
+  --theme-account-tag-published-bg: rgb(212 175 55 / 0.15);
+  --theme-account-tag-changed-border: #a8893a;
+  --theme-account-tag-changed-text: #ccb27a;
+  --theme-account-tag-broken-border: #e57373;
+  --theme-account-tag-broken-text: #ef9a9a;
+  --theme-account-tag-unverified-border: #888;
+  --theme-account-tag-unverified-text: #bbb;
+  --theme-account-feedback-border: #ffb74d;
+  --theme-account-feedback-bg: rgb(255 183 77 / 0.08);
+  /* The shelf's question box (scenarioSubmit.js, scenarioShelf.css): its own, not jQuery UI's */
+  --theme-account-box-shade: rgb(0 0 0 / 0.6);
+  --theme-account-box-bg: #1d1d1d;
+  --theme-account-box-text: #ddd;
+  --theme-account-box-border: #a8893a;
+  --theme-account-box-shadow: rgb(0 0 0 / 0.7);
+  --theme-account-box-title: #f0d46b;
+  --theme-account-box-font: Arial, Helvetica, sans-serif;
+  --theme-account-box-button-border: #777;
+  --theme-account-box-button-bg: #333;
+  --theme-account-box-button-text: #eee;
+  --theme-account-box-yes-border: #a8893a;
+  --theme-account-box-yes-bg: #5a4a1e;
+  --theme-account-box-danger-border: #b71c1c;
+  --theme-account-box-danger-bg: #5c1a1a;
+
   /* Selects and text fields (hall.css) */
   --theme-field-bg: #222;
   --theme-field-hover-bg: #444;
@@ -443,6 +674,192 @@
   --theme-game-ui-scrollbar-track: var(--theme-scrollbar-track);
   --theme-game-ui-scrollbar-button: var(--theme-scrollbar-button);
 
+  /* The Game Hall tab's sections and rows, its dialogs (hall.css .eventHeader, table.tables, .wc-queues, .prizeHint,
+     .table-age; part 4.2) */
+  --theme-hall-section-bg: #555;
+  --theme-hall-section-wc-bg: #840000;
+  --theme-hall-section-text: #fff;
+  --theme-hall-table-bg: #121212;
+  --theme-hall-table-border: #444;
+  --theme-hall-table-head-bg: #333;
+  --theme-hall-row-played-bg: #590902;
+  --theme-hall-row-invited-bg: #a63f03;
+  --theme-hall-age: #bbb;
+  --theme-hall-hint: #6f8cff;
+  --theme-hall-danger-text: #d44;
+  --theme-hall-rtmd-arrow: #c0a000;
+
+  /*
+   * The Events tab (hall.css "Event calendar", "Completed event browser", the drawers, .standings, .clickableFormat;
+   * leagueResultsUi.js's RTMD path; common.js formatPrice's coins)
+   */
+  --theme-events-weekday-bg: #222;
+  --theme-events-other-month-bg: rgb(0 0 0 / 0.35);
+  --theme-events-today-bg: #e8e5da;
+  --theme-events-today-other-month-bg: #a8a59b;
+  --theme-events-today-text: #111;
+  --theme-events-muted: #aaa;
+  --theme-events-soft: #bbb;
+  --theme-events-date: #ccc;
+  --theme-events-bar-text: #fff;
+  --theme-events-selected: #fff;
+  --theme-events-serie-divider: rgb(255 255 255 / 0.8);
+  --theme-events-league: #2f6b9a;
+  --theme-events-league-joined: #24567d;
+  --theme-events-tournament: #8a4b1f;
+  --theme-events-tournament-joined: #6e3c18;
+  --theme-events-projected: #3d7a3d;
+  --theme-events-projected-joined: #2f5f2f;
+  --theme-events-projected-border: #9fd49f;
+  --theme-events-joined: #9fd49f;
+  --theme-events-error-bar: #8a1f1f;
+  --theme-events-error: #f0a0a0;
+  --theme-events-loading: #d8d8a0;
+  --theme-events-placeholder-border: #4a4a4a;
+  --theme-events-placeholder-text: #a0a0a0;
+  --theme-events-drawer-bg: #2a2a2a;
+  --theme-events-drawer-border: #3a3a3a;
+  --theme-events-row-open-bg: #353535;
+  --theme-events-title-hover-bg: #333;
+  --theme-events-month-hover-bg: #3a3a3a;
+  --theme-events-dropdown-shadow: rgb(0 0 0 / 0.6);
+  --theme-events-admin-none: #777;
+  --theme-events-rule: #ddd;
+  --theme-events-standings-border: #fff;
+  --theme-events-standings-even: #442;
+  --theme-events-format-link: #6f8cff;
+  --theme-events-rtmd-muted: #888;
+  --theme-events-rtmd-current: gold;
+  --theme-events-rtmd-passed: rgb(255 215 0 / 0.4);
+  --theme-events-rtmd-shadow: #000;
+  --theme-events-coin-gold: url('/gemp-lotr/images/gold.png') no-repeat;
+  --theme-events-coin-silver: url('/gemp-lotr/images/silver.png') no-repeat;
+
+  /* Help › PC Errata (pcErrata.css; hall.css's share button and .load-error; tables.css's (i) toggle and its text) */
+  --theme-errata-current: #0972a5;
+  --theme-errata-gold: #c9a227;
+  --theme-errata-line: #3a3a3a;
+  --theme-errata-dim: #aaa;
+  --theme-errata-summary: #ddd;
+  --theme-errata-status-empty: #ffcf8a;
+  --theme-errata-load-error: #ffb0a0;
+  --theme-errata-chip-border: #555;
+  --theme-errata-chip-bg: #1d1d1d;
+  --theme-errata-chip-text: #ddd;
+  --theme-errata-chip-count-bg: rgb(255 255 255 / 0.12);
+  --theme-errata-head-bg: #1b1b1b;
+  --theme-errata-head-border: #555;
+  --theme-errata-row-hover: rgb(255 255 255 / 0.06);
+  --theme-errata-empty-text: #bbb;
+  --theme-errata-badge-border: #777;
+  --theme-errata-badge-text: #ddd;
+  --theme-errata-new-text: #ffe28a;
+  --theme-errata-viewer-bg: #0b0b0b;
+  --theme-errata-viewer-shadow: 0 0 0 1px #000, 0 6px 18px rgb(0 0 0 / 0.6), inset 0 0 24px rgb(0 0 0 / 0.9);
+  --theme-errata-viewer-focus-shadow: 0 0 0 2px #26b3f7, 0 6px 18px rgb(0 0 0 / 0.6);
+  --theme-errata-enlarged-shadow: 0 10px 30px rgb(0 0 0 / 0.8);
+  --theme-errata-backdrop: rgb(0 0 0 / 0.75);
+  --theme-errata-bar-bg: linear-gradient(#262626, #161616);
+  --theme-errata-bar-border: #000;
+  --theme-errata-button-text: #ddd;
+  --theme-errata-button-bg: #2b2b2b;
+  --theme-errata-button-border: #555;
+  --theme-errata-switch-bg: #1d1d1d;
+  --theme-errata-switch-text: #bbb;
+  --theme-errata-name: #fff;
+  --theme-errata-caption: #ddd;
+  --theme-errata-card-border: #000;
+  --theme-errata-missing-text: #888;
+  --theme-errata-missing-border: #555;
+  --theme-errata-ins-bg: #1f5c2b;
+  --theme-errata-ins-text: #d4f7d9;
+  --theme-errata-stat: #d9b531;
+  --theme-errata-side: #444;
+  --theme-errata-old: #8a8a8a;
+  --theme-errata-new: #2f7d3d;
+  --theme-errata-old-label: #c4c4c4;
+  --theme-errata-new-label: #9ad8a4;
+  --theme-errata-hint: #8f8f8f;
+  --theme-errata-more-text: #bbb;
+  --theme-errata-more-fade: linear-gradient(transparent, #0b0b0b 60%);
+  --theme-errata-info-toggle: #8ab;
+  --theme-errata-info-toggle-hover-text: #111;
+  --theme-errata-info-toggle-font: Georgia, serif;
+  --theme-errata-info-text: #aaa;
+  --theme-errata-info-border: #567;
+  --theme-errata-share-text: #aaa;
+  --theme-errata-share-border: #444;
+  --theme-errata-share-icon-filter: invert(0.75);
+  --theme-errata-share-icon-hover-filter: invert(1);
+  --theme-errata-share-note: #9c9;
+  --theme-errata-share-note-bg: #1d1d1d;
+
+  /* The Play overlay and the Join dialog (hall.html #create-table-popup, #join-table-popup; tables.css, hall.css
+     .table-form, .table-blurb, .result-box; part 4.2) */
+  --theme-play-blurb-bg: #333;
+  --theme-play-blurb-border: #fff;
+  --theme-play-info: #8ab;
+  --theme-play-info-font: georgia, serif;
+  --theme-play-info-hover-text: #111;
+  --theme-play-info-text: #aaa;
+  --theme-play-info-border: #567;
+  --theme-play-info-code: #ddd;
+  --theme-play-subtitle: #bbb;
+  --theme-play-result-bg: #333;
+  --theme-play-result-border: #555;
+  --theme-play-success-border: #5a7a4a;
+  --theme-play-error-border: #a55;
+  --theme-play-error-text: #f2c4c4;
+  --theme-play-panel-border: grey;
+  --theme-play-format-description: #ccc;
+  --theme-play-disabled-field-bg: #333;
+  --theme-play-disabled-field-text: #bbb;
+  --theme-play-disabled-field-border: #555;
+  --theme-play-disabled-placeholder: #858585;
+  --theme-play-placeholder: #9a9a9a;
+  --theme-play-icon-scenario: url('/gemp-lotr/images/icons/puzzle-piece.svg');
+  --theme-play-icon-bot: url('/gemp-lotr/images/icons/processor.svg');
+  --theme-play-icon-unranked: url('/gemp-lotr/images/icons/tabletop-players.svg');
+  --theme-play-icon-league: url('/gemp-lotr/images/icons/holy-grail.svg');
+  --theme-play-icon-tournament: url('/gemp-lotr/images/icons/family-tree.svg');
+  --theme-play-icon-bot-filter: invert(91%) sepia(43%) saturate(671%) hue-rotate(84deg) brightness(106%) contrast(104%);
+  --theme-play-icon-unranked-filter: invert(63%) sepia(9%) saturate(3388%) hue-rotate(70deg) brightness(93%)
+    contrast(76%);
+  --theme-play-icon-league-filter: invert(91%) sepia(19%) saturate(1241%) hue-rotate(13deg) brightness(106%)
+    contrast(103%);
+  --theme-play-icon-tournament-filter: invert(69%) sepia(31%) saturate(683%) hue-rotate(322deg) brightness(102%)
+    contrast(101%);
+  --theme-hall-picker-border: #666;
+  --theme-hall-picker-bg: #333;
+  --theme-hall-picker-text: #ddd;
+  --theme-hall-picker-hover-bg: #455;
+  --theme-hall-picker-heading: #9ab;
+  --theme-hall-picker-note: #aaa;
+  /* Play > Scenarios (tables.css .scenario-*) */
+  --theme-scenario-folders-border: #555;
+  --theme-scenario-folders-bg: #222;
+  --theme-scenario-folder-line: #3a3a3a;
+  --theme-scenario-folder-text: #ddd;
+  --theme-scenario-folder-hover-bg: #303030;
+  --theme-scenario-folder-selected-bg: #1f3d57;
+  --theme-scenario-folder-selected-text: #fff;
+  --theme-scenario-count: #9a9a9a;
+  --theme-scenario-row-bg: #2a2a2a;
+  --theme-scenario-row-border: #555;
+  --theme-scenario-current-border: #c9a227;
+  --theme-scenario-summary: #ccc;
+  --theme-scenario-notes: #aaa;
+  --theme-scenario-status-new: #b8b8b8;
+  --theme-scenario-status-progress: #8ab4e8;
+  --theme-scenario-status-complete: #7ecb7e;
+  --theme-scenario-status-updated: #e0c060;
+  --theme-scenario-status-next-text: #1c1608;
+  --theme-scenario-status-next-bg: #e8c14a;
+  --theme-scenario-author-border: #777;
+  --theme-scenario-note-border: #a8893a;
+  --theme-scenario-note-text: #e8d9a8;
+  --theme-scenario-code: #fff;
+
   /* Scrollbars (hall.css) */
   --theme-scrollbar-thumb: #8888;
   --theme-scrollbar-track: #6666;
@@ -485,6 +902,7 @@
   --theme-hover-border: #6e8bff;
   --theme-active-border: #869dff;
   --theme-content-border: #3c3e44;
+  --theme-hall-content-border: var(--theme-content-border);
   --theme-header-border: #3c3e44;
   --theme-content-bg: #28292d;
   --theme-default-bg: #303236;

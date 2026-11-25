@@ -79,7 +79,7 @@ describe('core boundary', () => {
     expect(uses).toEqual([]);
   });
 
-  it("keeps a page's state (the deck builder's, the game's) out of the app-wide injector (it belongs to the page)", () => {
+  it("keeps a page's state (the deck builder's, the game's, the hall's, the login page's) out of the app-wide injector (it belongs to the page)", () => {
     const pageFolders = [
       'core/deck/',
       'core/collection/',
@@ -89,6 +89,8 @@ describe('core boundary', () => {
       'core/formats/',
       'core/game/',
       'core/chat/',
+      'core/hall/',
+      'core/login/',
     ];
     const app = files
       .filter(({ name }) => pageFolders.some((folder) => name.startsWith(folder)))

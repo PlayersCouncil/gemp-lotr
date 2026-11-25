@@ -1,0 +1,30 @@
+/* The (i) toggle (tables.css and leagueAdmin.css .info-toggle) */
+
+.gd-errata-info-toggle {
+  display: inline-block;
+  box-sizing: content-box;
+  width: 1.1em;
+  height: 1.1em;
+  line-height: 1.1em;
+  margin: 0 0 0 0.35em;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--theme-errata-info-toggle);
+  color: var(--theme-errata-info-toggle);
+  background: transparent;
+  font-size: var(--gd-errata-info-size, 75%);
+  font-weight: bold;
+  font-style: italic;
+  font-family: var(--theme-errata-info-toggle-font);
+  text-align: center;
+  cursor: pointer;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.gd-errata-info-toggle:hover,
+.gd-errata-info-toggle:focus-visible {
+  background: var(--theme-errata-info-toggle);
+  color: var(--theme-errata-info-toggle-hover-text);
+  outline: none;
+}

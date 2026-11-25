@@ -19,18 +19,6 @@ public class AdminService {
         _loggedUserHolder = loggedUserHolder;
     }
 
-    public boolean resetUserPassword(String login) {
-        try {
-            final boolean success = _playerDAO.resetUserPassword(login);
-            if (!success)
-                return false;
-            _loggedUserHolder.forceLogoutUser(login);
-            return true;
-        } catch (SQLException exp) {
-            return false;
-        }
-    }
-
     public boolean banUser(String login) {
         try {
             final boolean success = _playerDAO.banPlayerPermanently(login);

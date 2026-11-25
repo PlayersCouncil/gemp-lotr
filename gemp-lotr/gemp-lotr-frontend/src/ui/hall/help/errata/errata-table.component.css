@@ -1,0 +1,174 @@
+/*
+ * The PC Errata table (pcErrata.css .pc-errata-table and table.pc-errata-list; hall.css table.gemp-table,
+ * .gemp-table-sort, td.gemp-table-empty, .load-error): only the rows scroll, under their sticky column headers.
+ */
+
+:host {
+  display: block;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  position: relative;
+}
+
+.gd-errata-table__loading {
+  margin: 1em 0;
+}
+
+.gd-errata-table__error {
+  margin: 1em 0;
+  color: var(--theme-errata-load-error);
+}
+
+/* (short of the pane's width by the current row's pointer towards the viewer) */
+.gd-errata-table__table {
+  width: calc(100% - 10px);
+  border-collapse: collapse;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 4px 6px;
+  text-align: left;
+  white-space: nowrap;
+  background: var(--theme-errata-head-bg);
+  border-bottom: 1px solid var(--theme-errata-head-border);
+}
+
+.gd-errata-table__sort {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: bold;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gd-errata-table__sort:hover,
+.gd-errata-table__sort:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.gd-errata-table__sort-mark {
+  font-size: 75%;
+}
+
+td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--theme-errata-line);
+  vertical-align: middle;
+}
+
+.gd-errata-table__row {
+  cursor: pointer;
+}
+
+.gd-errata-table__row:hover td {
+  background: var(--theme-errata-row-hover);
+}
+
+/* the row on show in the viewer: the hall's "active" blue, with a pointer towards the viewer */
+.gd-errata-table__row[aria-current='true'] td {
+  background: var(--theme-errata-current);
+  color: var(--theme-text);
+}
+
+.gd-errata-table__row[aria-current='true'] td:first-child {
+  box-shadow: inset 4px 0 0 var(--theme-errata-gold);
+}
+
+.gd-errata-table__row[aria-current='true'] td:last-child {
+  position: relative;
+}
+
+.gd-errata-table__row[aria-current='true'] td:last-child::after {
+  content: '';
+  position: absolute;
+  right: -9px;
+  top: 50%;
+  margin-top: -9px;
+  border: 9px solid transparent;
+  border-right: 0;
+  border-left-color: var(--theme-errata-current);
+}
+
+[data-column='num'],
+[data-column='rev'] {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-column='rev'] {
+  text-align: center;
+}
+
+/* the collector's number, then the New tag at the column's right edge (the same place on every row) */
+.gd-errata-table__num {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.gd-errata-table__num .gd-errata-table__badge {
+  margin-left: auto;
+}
+
+/* the culture as its icon, at the icon's own shape, drawn 18px high; the name is its tooltip */
+[data-column='culture'] {
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* (pcErrata.css asked for 2px above and below, but its table's 4px won) */
+td[data-column='culture'] {
+  width: 46px;
+}
+
+.gd-errata-table__culture-icon {
+  display: inline-block;
+  height: 18px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.gd-errata-table__culture-name {
+  font-size: 85%;
+}
+
+.gd-errata-table__badge {
+  display: inline-block;
+  margin-left: 0.45em;
+  padding: 0 0.4em;
+  border-radius: 3px;
+  border: 1px solid var(--theme-errata-badge-border);
+  font-size: 72%;
+  line-height: 1.5;
+  color: var(--theme-errata-badge-text);
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+.gd-errata-table__badge[data-badge='new'] {
+  border-color: var(--theme-errata-gold);
+  color: var(--theme-errata-new-text);
+}
+
+td.gd-errata-table__empty {
+  font-style: italic;
+  color: var(--theme-errata-empty-text);
+  text-align: center;
+  padding: 0.6em;
+}
+
+/* a narrower page: the columns that matter most */
+:host-context([data-width='compact']) [data-column='rev'],
+:host-context([data-width='narrow']) [data-column='rev'] {
+  display: none;
+}

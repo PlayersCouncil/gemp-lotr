@@ -59,10 +59,9 @@ public class MerchantRequestHandler extends LotroServerRequestHandler implements
     private void tradeInFoil(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String blueprintId = getFormParameterSafely(postDecoder, "blueprintId");
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             try {
                 _merchantService.tradeForFoil(resourceOwner, blueprintId);
                 responseWriter.writeHtmlResponse("OK");
@@ -78,7 +77,6 @@ public class MerchantRequestHandler extends LotroServerRequestHandler implements
     private void sell(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String blueprintId = getFormParameterSafely(postDecoder, "blueprintId");
             int price = Integer.parseInt(getFormParameterSafely(postDecoder, "price"));
 
@@ -87,7 +85,7 @@ public class MerchantRequestHandler extends LotroServerRequestHandler implements
 
             Document doc = documentBuilder.newDocument();
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             try {
                 _merchantService.merchantBuysCard(resourceOwner, blueprintId, price);
                 responseWriter.writeHtmlResponse("OK");
@@ -103,7 +101,6 @@ public class MerchantRequestHandler extends LotroServerRequestHandler implements
     private void buy(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String blueprintId = getFormParameterSafely(postDecoder, "blueprintId");
             int price = Integer.parseInt(getFormParameterSafely(postDecoder, "price"));
 
@@ -113,7 +110,7 @@ public class MerchantRequestHandler extends LotroServerRequestHandler implements
             Document doc = documentBuilder.newDocument();
 
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
             try {
                 _merchantService.merchantSellsCard(resourceOwner, blueprintId, price);
                 responseWriter.writeHtmlResponse("OK");
@@ -128,13 +125,12 @@ public class MerchantRequestHandler extends LotroServerRequestHandler implements
 
     private void getMerchantOffers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String filter = getQueryParameterSafely(queryDecoder, "filter");
         int ownedMin = Integer.parseInt(getQueryParameterSafely(queryDecoder, "ownedMin"));
         int start = Integer.parseInt(getQueryParameterSafely(queryDecoder, "start"));
         int count = Integer.parseInt(getQueryParameterSafely(queryDecoder, "count"));
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         CardCollection collection = _collectionsManager.getPlayerCollection(resourceOwner, CollectionType.MY_CARDS.getCode());
 

@@ -12,6 +12,8 @@ import com.gempukku.lotro.service.LoggedUserHolder;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.cookie.Cookie;
+import io.netty.handler.codec.http.cookie.CookieHeaderNames;
+import io.netty.handler.codec.http.cookie.DefaultCookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.cookie.ServerCookieEncoder;
 import io.netty.handler.codec.http.multipart.Attribute;
@@ -43,10 +45,6 @@ public class LotroServerRequestHandler {
         _collectionManager = extractObject(context, CollectionsManager.class);
     }
 
-    private boolean isTest() {
-        return Boolean.parseBoolean(System.getProperty("test"));
-    }
-
     protected final void processLoginReward(String loggedUser) throws Exception {
         if (loggedUser != null) {
             Player player = _playerDao.getPlayer(loggedUser);
@@ -68,21 +66,65 @@ public class LotroServerRequestHandler {
         }
     }
 
-    private String getLoggedUser(HttpRequest request) {
-        ServerCookieDecoder cookieDecoder = ServerCookieDecoder.STRICT;
+    /** The session cookie's name, and the path it is set for: every address of the server, and nothing else. */
+    protected static final String SESSION_COOKIE = "loggedUser";
+    private static final String SESSION_COOKIE_PATH = "/gemp-lotr-server";
+
+    /** The value of the request's session cookie, or null. */
+    protected final String getSessionId(HttpRequest request) {
         String cookieHeader = request.headers().get(COOKIE);
         if (cookieHeader != null) {
-            Set<Cookie> cookies = cookieDecoder.decode(cookieHeader);
-            for (Cookie cookie : cookies) {
-                if (cookie.name().equals("loggedUser")) {
-                    String value = cookie.value();
-                    if (value != null) {
-                        return _loggedUserHolder.getLoggedUser(value);
-                    }
-                }
+            for (Cookie cookie : ServerCookieDecoder.STRICT.decode(cookieHeader)) {
+                if (cookie.name().equals(SESSION_COOKIE) && cookie.value() != null)
+                    return cookie.value();
             }
         }
         return null;
+    }
+
+    /** The request's session (PC-ACCOUNT.md), or null. */
+    protected final LoggedUserHolder.Session getSession(HttpRequest request) {
+        String sessionId = getSessionId(request);
+        return sessionId == null ? null : _loggedUserHolder.getSession(sessionId);
+    }
+
+    private String getLoggedUser(HttpRequest request) {
+        LoggedUserHolder.Session session = getSession(request);
+        return session == null ? null : session.getPlayer();
+    }
+
+    /**
+     * The Set-Cookie value that names `sessionId` as the browser's session. Not readable by scripts, not sent with
+     * another site's requests (a link here from another site still carries it), and kept to https when the request
+     * came over it (nginx says so in X-Forwarded-Proto; plain http stays possible for local development).
+     */
+    protected final String sessionCookie(HttpRequest request, String sessionId) {
+        return sessionCookie(cameOverHttps(request), sessionId);
+    }
+
+    /** As above, for an answer written after the request is gone: `secure` is {@link #cameOverHttps} of it. */
+    protected final String sessionCookie(boolean secure, String sessionId) {
+        DefaultCookie cookie = new DefaultCookie(SESSION_COOKIE, sessionId);
+        cookie.setPath(SESSION_COOKIE_PATH);
+        cookie.setHttpOnly(true);
+        cookie.setSameSite(CookieHeaderNames.SameSite.Lax);
+        cookie.setSecure(secure);
+        return ServerCookieEncoder.STRICT.encode(cookie);
+    }
+
+    protected final boolean cameOverHttps(HttpRequest request) {
+        return "https".equalsIgnoreCase(request.headers().get("X-Forwarded-Proto"));
+    }
+
+    /** The Set-Cookie value that takes the session cookie away. */
+    protected final String noSessionCookie(HttpRequest request) {
+        DefaultCookie cookie = new DefaultCookie(SESSION_COOKIE, "");
+        cookie.setPath(SESSION_COOKIE_PATH);
+        cookie.setHttpOnly(true);
+        cookie.setSameSite(CookieHeaderNames.SameSite.Lax);
+        cookie.setSecure("https".equalsIgnoreCase(request.headers().get("X-Forwarded-Proto")));
+        cookie.setMaxAge(0);
+        return ServerCookieEncoder.STRICT.encode(cookie);
     }
 
     protected final void processDeliveryServiceNotification(Player player, Map<String, String> headersToAdd) {
@@ -106,24 +148,21 @@ public class LotroServerRequestHandler {
         }
     }
 
-    protected final Player getResourceOwnerSafely(HttpRequest request, String participantId) throws HttpProcessingException {
+    /**
+     * The player acting: the one the session cookie's session plays as, and nothing else (PC-ACCOUNT.md, "The player
+     * comes from the session cookie").  401 without a session, or one that plays as nobody.  A {@code participantId}
+     * parameter no longer names anyone: it used to let an admin act as any player, and with {@code -Dtest=true} let
+     * anyone act as anyone with no login at all (Ketura, 2026-11-23: "needs ripped out").  Clients may still send
+     * it; it is ignored.
+     */
+    protected final Player getResourceOwnerSafely(HttpRequest request) throws HttpProcessingException {
         String loggedUser = getLoggedUser(request);
-        if (isTest() && loggedUser == null)
-            loggedUser = participantId;
-
         if (loggedUser == null)
             throw new HttpProcessingException(401);
 
         Player resourceOwner = _playerDao.getPlayer(loggedUser);
-
         if (resourceOwner == null)
             throw new HttpProcessingException(401);
-
-        if (resourceOwner.hasType(Player.Type.ADMIN) && participantId != null && !participantId.equals("null") && !participantId.isEmpty()) {
-            resourceOwner = _playerDao.getPlayer(participantId);
-            if (resourceOwner == null)
-                throw new HttpProcessingException(401);
-        }
         return resourceOwner;
     }
 
@@ -190,11 +229,17 @@ public class LotroServerRequestHandler {
         return (T) value;
     }
 
-    protected Map<String, String> logUserReturningHeaders(String remoteIp, String login) throws SQLException {
+    /** A password login: a new session playing as `login`, and the header that gives the browser its cookie. */
+    protected Map<String, String> logUserReturningHeaders(HttpRequest request, String remoteIp, String login) throws SQLException {
+        return logUserReturningHeaders(cameOverHttps(request), remoteIp, login);
+    }
+
+    /** As above, for an answer written after the request is gone: `https` is {@link #cameOverHttps} of it. */
+    protected Map<String, String> logUserReturningHeaders(boolean https, String remoteIp, String login) throws SQLException {
         _playerDao.updateLastLoginIp(login, remoteIp);
 
         String sessionId = _loggedUserHolder.logUser(login);
-        return Collections.singletonMap(SET_COOKIE.toString(), ServerCookieEncoder.STRICT.encode("loggedUser", sessionId));
+        return Collections.singletonMap(SET_COOKIE.toString(), sessionCookie(https, sessionId));
     }
 
     /**
@@ -396,7 +441,7 @@ public class LotroServerRequestHandler {
      * @throws HttpProcessingException This function throws HTTP 403 (Forbidden) if the user is not a full admin.
      */
     protected void validateAdmin(HttpRequest request) throws HttpProcessingException {
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
 
         if (!player.hasType(Player.Type.ADMIN))
             throw new HttpProcessingException(403);
@@ -408,7 +453,7 @@ public class LotroServerRequestHandler {
      * @throws HttpProcessingException This function throws HTTP 403 (Forbidden) if the user is not a league admin.
      */
     protected void validateEventAdmin(HttpRequest request) throws HttpProcessingException {
-        Player player = getResourceOwnerSafely(request, null);
+        Player player = getResourceOwnerSafely(request);
 
         if (!player.hasType(Player.Type.ADMIN) && !player.hasType(Player.Type.LEAGUE_ADMIN))
             throw new HttpProcessingException(403);

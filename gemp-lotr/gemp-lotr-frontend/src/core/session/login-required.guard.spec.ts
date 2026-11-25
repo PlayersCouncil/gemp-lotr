@@ -23,7 +23,7 @@ describe('loginRequired', () => {
       ],
     });
     const result = runInInjectionContext(TestBed.inject(EnvironmentInjector), () =>
-      loginRequired({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+      loginRequired({} as ActivatedRouteSnapshot, { url: '/deckbuilder?theme=modern' } as RouterStateSnapshot),
     );
     return {
       allowed: firstValueFrom(result as Observable<boolean>),
@@ -42,7 +42,8 @@ describe('loginRequired', () => {
     const { allowed, http } = start();
     http.expectOne(isLoginCheck).flush('', { status: 401, statusText: 'Unauthorized' });
     expect(await allowed).toBe(false);
-    expect(toLogin).toHaveBeenCalledOnce();
+    // ... which comes back to the page they asked for
+    expect(toLogin).toHaveBeenCalledExactlyOnceWith('/deckbuilder?theme=modern');
   });
 
   it.each([
@@ -63,9 +64,9 @@ describe('loginRequired', () => {
     expect(toLogin).not.toHaveBeenCalled();
   });
 
-  it('asks about the player an admin acts for, like every other call of the page', () => {
+  it("asks about the session's player, whatever participantId the address names", () => {
     const { http } = start('?participantId=bob');
-    expect(http.expectOne(isLoginCheck).request.params.get('participantId')).toBe('bob');
+    expect(http.expectOne(isLoginCheck).request.params.has('participantId')).toBe(false);
   });
 });
 

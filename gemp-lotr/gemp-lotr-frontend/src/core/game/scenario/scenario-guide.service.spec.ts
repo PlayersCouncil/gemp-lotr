@@ -724,7 +724,7 @@ describe('ScenarioGuide', () => {
       const checkpoint = start();
       expect(checkpoint.request.body?.get('from')).toBe('checkpoint');
       checkpoint.flush('{"gameId":43}');
-      expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=43&participantId=bob');
+      expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=43');
     });
 
     it('starts the next scenario of the campaign, if there is one', () => {

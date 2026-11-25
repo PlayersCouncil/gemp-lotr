@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Everything that proves the deck builder, the game screen and their deployment, in order, on throwaway copies and
+// Everything that proves the deck builder, the game screen, the hall and their deployment, in order, on throwaway copies and
 // containers:
 //
 //   npm run check:all                 (about an hour)
@@ -77,6 +77,16 @@ const PARTS = [
     ? []
     : [['The modern theme on a phone', reported(npm(VISUAL_CHECK, 'run', 'check:phone'), 'report-phone')]]),
   ['Deploying with git pull', npm(VISUAL_CHECK, 'run', 'check:deploy')],
+  // The hall and the login page against hall-legacy.html and login-legacy.html, without a server (hall/README.md)
+  [
+    'Hall and login page: every scenario and the old addresses',
+    reported(npm(VISUAL_CHECK, 'run', 'check:hall'), 'report-hall'),
+  ],
+  // The PC account's behaviour on the login page, My Account and the hall, without a server (account/README.md)
+  [
+    'PC account: sign-in, aliases, log-outs and other tabs',
+    reported(npm(VISUAL_CHECK, 'run', 'check:account'), 'report-account'),
+  ],
   // The game screen (game/README.md): seeded games played on two pages
   // The Angular game page's table against game.html on the recorded games, without a server (the app as built in the web root)
   [

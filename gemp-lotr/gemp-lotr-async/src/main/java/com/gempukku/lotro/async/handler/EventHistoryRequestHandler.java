@@ -50,8 +50,7 @@ public class EventHistoryRequestHandler extends LotroServerRequestHandler implem
 
     private void getEventHistoryMonths(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-        getResourceOwnerSafely(request, participantId);
+        getResourceOwnerSafely(request);
 
         String kind = EventHistoryService.parseKind(getQueryParameterSafely(queryDecoder, "kind"));
         if (kind == null) {
@@ -67,8 +66,7 @@ public class EventHistoryRequestHandler extends LotroServerRequestHandler implem
 
     private void getEventHistory(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-        Player viewer = getResourceOwnerSafely(request, participantId);
+        Player viewer = getResourceOwnerSafely(request);
         boolean isAdmin = viewer.hasType(Player.Type.ADMIN) || viewer.hasType(Player.Type.LEAGUE_ADMIN);
 
         YearMonth month = EventHistoryService.parseMonth(getQueryParameterSafely(queryDecoder, "month"));

@@ -19,7 +19,7 @@ services:
         published: "${APP_PORT}"
         #These are the ports used for remote debugging the JRE
       - target: 8000
-        published: 8052
+        published: "${DEBUGGER_PORT:-8052}"
     volumes:
        - type: bind
          source: ../gemp-lotr-async/src/main/web

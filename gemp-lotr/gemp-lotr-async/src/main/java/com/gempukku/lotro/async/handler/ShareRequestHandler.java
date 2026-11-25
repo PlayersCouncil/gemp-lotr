@@ -29,12 +29,13 @@ import java.util.regex.Pattern;
 /**
  * Share links (public, GET/HEAD, no login): {@code /gemp-lotr/share/<kind>/<id>} answers with a small HTML page whose
  * Open Graph / Twitter tags make the link preview nicely where it is pasted, and which sends a person on to the real
- * page at once.  The kinds and where they go are {@link SharePages}':
+ * page at once: a route of the Angular hall (under /gemp-lotr/ng/, which replaces hall.html), or the deck page.  The
+ * kinds and where they go are {@link SharePages}':
  * <pre>
- *   /gemp-lotr/share/patch-notes[/&lt;slug&gt;]   -> /gemp-lotr/hall.html#patch-notes[/&lt;slug&gt;]
- *   /gemp-lotr/share/errata/&lt;card id&gt;        -> /gemp-lotr/hall.html#errata-&lt;card id&gt;
- *   /gemp-lotr/share/format/&lt;code&gt;           -> /gemp-lotr/hall.html#format-&lt;code&gt;
- *   /gemp-lotr/share/card/&lt;blueprint id&gt;     -> /gemp-lotr/hall.html#card-&lt;blueprint id&gt;
+ *   /gemp-lotr/share/patch-notes[/&lt;slug&gt;]   -> /gemp-lotr/ng/info/patch-notes[/&lt;slug&gt;]
+ *   /gemp-lotr/share/errata/&lt;card id&gt;        -> /gemp-lotr/ng/help/errata/&lt;card id&gt;
+ *   /gemp-lotr/share/format/&lt;code&gt;           -> /gemp-lotr/ng/help/formats/&lt;code&gt;
+ *   /gemp-lotr/share/card/&lt;blueprint id&gt;     -> /gemp-lotr/ng/help?card=&lt;blueprint id&gt;
  *   /gemp-lotr/share/deck/&lt;share code&gt;       -> /gemp-lotr-server/deck/html?id=&lt;share code&gt;
  *   /gemp-lotr/share/deck?id=&lt;share code&gt;    (the same; the form today's /share/deck?id= links take)
  * </pre>

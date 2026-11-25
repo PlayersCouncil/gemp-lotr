@@ -186,7 +186,7 @@ public class TournamentService {
             var queue = entry.getValue();
             visitor.visitTournamentQueue(queueID, queue.getCost(), queue.getCollectionType().getFullName(),
                     formatLibrary.getFormat(queue.getFormatCode()).getName(), queue.getInfo().Parameters().type.toString(), queue.getTournamentQueueName(),
-                    queue.getPrizesDescription(), queue.getPairingDescription(), queue.getStartCondition(),
+                    queue.getPrizeSummary(), queue.getPairingDescription(), queue.getStartCondition(),
                     queue.getPlayerCount(), queue.getPlayerList(), queue.isPlayerSignedUp(player.getName()), queue.isJoinable(), queue.isStartable(player.getName()),
                     queue.getSecondsRemainingForReadyCheck(), queue.hasConfirmedReadyCheck(player.getName()), queue.isWC(), queue.getDraftCode(),
                     queue instanceof RecurringScheduledQueue, queue instanceof ScheduledTournamentQueue, queue.shouldBeDisplayedAsWaiting());

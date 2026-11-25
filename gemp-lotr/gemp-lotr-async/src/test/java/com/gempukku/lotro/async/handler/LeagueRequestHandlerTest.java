@@ -20,9 +20,9 @@ import com.gempukku.lotro.league.RTMDLeague;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.LoggedUserHolder;
 import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpVersion;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -56,8 +56,8 @@ public class LeagueRequestHandlerTest {
     private static final String AnyBlock = "92_19";
     private static final String After = "92_24";
 
-    private String _previousTestProperty;
     private Map<Type, Object> _context;
+    private LoggedUserHolder _sessions;
     private LeagueService _leagueService;
     private PlayerDAO _playerDao;
     private ProductLibrary _productLibrary;
@@ -65,9 +65,6 @@ public class LeagueRequestHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-        // With -Dtest=true the participantId stands for the login
-        _previousTestProperty = System.setProperty("test", "true");
-
         _playerDao = mock(PlayerDAO.class);
         _leagueService = mock(LeagueService.class);
         _productLibrary = mock(ProductLibrary.class);
@@ -95,7 +92,8 @@ public class LeagueRequestHandlerTest {
 
         _context = new HashMap<>();
         _context.put(PlayerDAO.class, _playerDao);
-        _context.put(LoggedUserHolder.class, mock(LoggedUserHolder.class));
+        _sessions = new LoggedUserHolder();
+        _context.put(LoggedUserHolder.class, _sessions);
         _context.put(TransferDAO.class, mock(TransferDAO.class));
         _context.put(CollectionsManager.class, mock(CollectionsManager.class));
         _context.put(LotroCardBlueprintLibrary.class, library);
@@ -104,14 +102,6 @@ public class LeagueRequestHandlerTest {
         _context.put(LotroFormatLibrary.class, _formatLibrary);
         _context.put(ProductLibrary.class, _productLibrary);
         _context.put(MarkdownParser.class, markdown);
-    }
-
-    @After
-    public void tearDown() {
-        if (_previousTestProperty != null)
-            System.setProperty("test", _previousTestProperty);
-        else
-            System.clearProperty("test");
     }
 
     // A Race to Mount Doom league in PC Movie on the path of three, a place gained for each win, with one member
@@ -148,8 +138,9 @@ public class LeagueRequestHandlerTest {
 
     // The meta-sites GET /league gives that player for the league, in order
     private List<Element> MetaSitesGiven(String player) throws Exception {
-        var request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET,
-                "/gemp-lotr-server/league?participantId=" + player);
+        // The caller is the player the session plays as
+        var request = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.GET, "/gemp-lotr-server/league");
+        request.headers().set(HttpHeaderNames.COOKIE, "loggedUser=" + _sessions.logUser(player));
         ResponseWriter writer = mock(ResponseWriter.class);
         new LeagueRequestHandler(_context).handleRequest("", request, _context, writer, "127.0.0.1");
 

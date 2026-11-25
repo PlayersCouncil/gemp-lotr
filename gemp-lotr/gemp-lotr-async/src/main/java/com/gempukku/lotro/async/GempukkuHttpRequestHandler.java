@@ -61,6 +61,19 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         }
     }
 
+    /**
+     * The address a request came from. Behind nginx that is the LAST entry of X-Forwarded-For: nginx appends the
+     * address it saw to whatever the client sent ($proxy_add_x_forwarded_for), so everything before the last comma
+     * is the client's own say-so. Taking the whole header let anyone step round an IP ban, and the login limit per
+     * address, by sending a header of their own. With no proxy in front there is no header, and the socket says.
+     */
+    static String clientAddress(String forwardedFor, String socketAddress) {
+        if (forwardedFor == null)
+            return socketAddress;
+        String last = forwardedFor.substring(forwardedFor.lastIndexOf(',') + 1).trim();
+        return last.isEmpty() ? socketAddress : last;
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) {
         if (HttpUtil.is100ContinueExpected(httpRequest))
@@ -71,10 +84,8 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         if (uri.contains("?"))
             uri = uri.substring(0, uri.indexOf("?"));
 
-        String ip = httpRequest.headers().get("X-Forwarded-For");
-
-        if(ip == null)
-           ip = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+        String ip = clientAddress(httpRequest.headers().get("X-Forwarded-For"),
+                ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress());
 
         final RequestInformation requestInformation = new RequestInformation(httpRequest.uri(),
                 ip,

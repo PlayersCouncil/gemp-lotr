@@ -1,0 +1,398 @@
+/*
+ * Server Info › Patch Notes (patchNotes.css; the month navigation is the Events tab's: hall.css .calendar-header,
+ * .calendar-title, .event-history-*, with jQuery UI buttons for < and >). The page's text is 120% of the hall's.
+ */
+
+:host {
+  display: block;
+  box-sizing: border-box;
+  max-width: 60em;
+  padding: 0.6em 1.2em 4em;
+  color: var(--theme-hall-notes-text);
+  font-size: 120%;
+}
+
+.gd-notes__heading {
+  margin: 0.2em 0 0.1em;
+  font-size: 200%;
+  font-weight: bolder;
+}
+
+/* ---- the tag filter ---- */
+.gd-notes__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  margin: 0 0 0.3em;
+}
+
+.gd-notes__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.25em 0.7em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: 999px;
+  background: var(--theme-hall-notes-chip-bg);
+  color: var(--theme-hall-notes-text);
+  font: inherit;
+  font-size: 90%;
+  cursor: pointer;
+}
+
+.gd-notes__filter:hover,
+.gd-notes__filter:focus-visible {
+  border-color: var(--theme-active-border);
+  outline: none;
+}
+
+.gd-notes__filter[aria-checked='true'] {
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-notes-chip-on-bg);
+  color: var(--theme-text);
+}
+
+.gd-notes__filter-count {
+  padding: 0 0.45em;
+  border-radius: 999px;
+  background: var(--theme-hall-notes-count-bg);
+  font-size: 85%;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- the month navigation (back to the hall's size, as the Events tab's) ---- */
+.gd-notes__months {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.4em 0 0.6em;
+  font-size: 83.333%;
+}
+
+.gd-notes__month-step {
+  padding: 0.4em 1em;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-notes__month-step:enabled:hover,
+.gd-notes__month-step:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-notes__month-step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gd-notes__month-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.gd-notes__month-title {
+  display: inline-block;
+  min-width: 11em;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 130%;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gd-notes__month-title:hover,
+.gd-notes__month-title:focus,
+.gd-notes__month-title[aria-expanded='true'] {
+  background: var(--theme-hall-table-header-bg);
+  outline: none;
+}
+
+.gd-notes__month-title:focus-visible {
+  outline: 1px dotted var(--theme-hall-formats-muted);
+}
+
+.gd-notes__caret {
+  margin-left: 0.4em;
+  color: var(--theme-hall-formats-muted);
+  font-size: 70%;
+  vertical-align: middle;
+}
+
+.gd-notes__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 50;
+  min-width: 16em;
+  max-height: 20em;
+  margin-top: 0.2em;
+  padding: 0.4em;
+  overflow-y: auto;
+  transform: translateX(-50%);
+  border: 1px solid var(--theme-hall-popup-border);
+  border-radius: 4px;
+  background: var(--theme-hall-popup-bg);
+  box-shadow: 0 4px 12px var(--theme-hall-popup-shadow);
+  text-align: left;
+}
+
+.gd-notes__dropdown-status {
+  padding: 0.3em;
+}
+
+.gd-notes__dropdown-status[data-loading],
+.gd-notes__dropdown-status[data-empty] {
+  font-style: italic;
+}
+
+.gd-notes__year + .gd-notes__year {
+  margin-top: 0.3em;
+  padding-top: 0.3em;
+  border-top: 1px solid var(--theme-hall-table-border);
+}
+
+.gd-notes__year-label {
+  margin-bottom: 0.2em;
+  color: var(--theme-hall-formats-muted);
+  font-weight: bold;
+}
+
+.gd-notes__year-months {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.2em;
+}
+
+.gd-notes__month {
+  padding: 0.2em 0.4em;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-notes__month:hover,
+.gd-notes__month:focus {
+  border-color: var(--theme-hall-popup-border);
+  background: var(--theme-hall-notes-month-hover-bg);
+  outline: none;
+}
+
+.gd-notes__month[data-selected] {
+  border-color: var(--theme-hall-formats-muted);
+  font-weight: bold;
+}
+
+/* ---- the status line, notices ---- */
+.gd-notes__status {
+  margin: 0.6em 0;
+  color: var(--theme-hall-formats-muted);
+}
+
+.gd-notes__status[data-error] {
+  color: var(--theme-hall-load-error);
+}
+
+.gd-notes__status[hidden] {
+  display: none;
+}
+
+.gd-notes__notice,
+.gd-notes__empty {
+  margin: 0 0 1em;
+  padding: 0.5em 0.8em;
+  border-left: 3px solid var(--theme-hall-formats-pc-border);
+  background: var(--theme-hall-notes-notice-bg);
+  color: var(--theme-hall-formats-soft);
+}
+
+/* ---- buttons: the pager's and "Try again" (the share button draws its own) ---- */
+.gd-notes__pager button,
+.gd-notes__retry {
+  padding: 0.35em 0.9em;
+  border: 1px solid var(--theme-content-border);
+  border-radius: 4px;
+  background: var(--theme-hall-notes-button-bg);
+  color: var(--theme-hall-notes-text);
+  font: inherit;
+  font-size: 95%;
+  cursor: pointer;
+}
+
+.gd-notes__pager button:hover,
+.gd-notes__pager button:focus-visible,
+.gd-notes__retry:hover,
+.gd-notes__retry:focus-visible {
+  border-color: var(--theme-hall-link);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-notes__retry {
+  margin-left: 0.4em;
+}
+
+/* ---- one update: a clear gap between updates ---- */
+.gd-note {
+  margin: 0 0 4.5em;
+  padding: 0.6em 1.1em 0.9em;
+  border: 1px solid var(--theme-hall-formats-card-border);
+  border-radius: 6px;
+  background: var(--theme-hall-formats-card-bg);
+}
+
+.gd-note[data-target] {
+  border-color: var(--theme-hall-formats-pc-border);
+  box-shadow:
+    0 0 0 1px var(--theme-hall-formats-pc-border),
+    0 0 12px var(--theme-hall-notes-target-glow);
+}
+
+.gd-note__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2em 0.8em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--theme-hall-formats-line);
+}
+
+.gd-note__title {
+  margin: 0;
+  color: var(--theme-text);
+  font-size: 200%;
+  font-weight: bolder;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.gd-note__title time,
+.gd-note__date {
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-note__date {
+  color: var(--theme-hall-notes-date);
+  font-size: 184%;
+}
+
+.gd-note__tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-self: center;
+  gap: 0.3em;
+}
+
+.gd-note__tag {
+  padding: 0.05em 0.6em;
+  border: 1px solid var(--theme-hall-notes-tag-border);
+  border-radius: 999px;
+  background: var(--theme-hall-notes-tag-bg);
+  color: var(--theme-hall-formats-errata-hover);
+  font-size: 75%;
+  white-space: nowrap;
+}
+
+.gd-note__share {
+  align-self: center;
+  margin-left: auto;
+  font-size: 80%;
+}
+
+/* ---- the pager at the bottom ---- */
+.gd-notes__pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em 0.8em;
+  margin: 1.2em 0 0.8em;
+}
+
+.gd-notes__range {
+  color: var(--theme-hall-formats-faint);
+  font-size: 90%;
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-notes__pager .gd-notes__older {
+  padding: 0.5em 1.4em;
+  font-weight: bold;
+}
+
+/* ---- the lightbox: the screenshot over the dimmed hall ---- */
+.gd-notes__lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 2.5em;
+  background: var(--theme-hall-notes-lightbox-bg);
+  font-family: var(--theme-hall-notes-lightbox-font);
+  font-size: 13.2px;
+  cursor: zoom-out;
+}
+
+.gd-notes__lightbox-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+.gd-notes__lightbox-figure img {
+  max-width: 100%;
+  max-height: calc(100vh - 7em);
+  object-fit: contain;
+  border: 1px solid var(--theme-content-border);
+  border-radius: 4px;
+  background: var(--theme-hall-formats-field-bg);
+  box-shadow: 0 6px 30px var(--theme-hall-notes-lightbox-shadow);
+  cursor: default;
+}
+
+.gd-notes__lightbox-figure figcaption {
+  color: var(--theme-hall-notes-text);
+  text-align: center;
+}
+
+.gd-notes__lightbox-close {
+  position: absolute;
+  top: 0.5em;
+  right: 0.7em;
+  width: 2em;
+  height: 2em;
+  border: 1px solid var(--theme-hall-formats-permalink);
+  border-radius: 50%;
+  background: var(--theme-hall-notes-close-bg);
+  color: var(--theme-hall-notes-text);
+  font-size: 1.5em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gd-notes__lightbox-close:hover,
+.gd-notes__lightbox-close:focus-visible {
+  border-color: var(--theme-hall-link);
+  color: var(--theme-text);
+  outline: none;
+}

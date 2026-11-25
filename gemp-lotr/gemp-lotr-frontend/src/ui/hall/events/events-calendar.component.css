@@ -1,0 +1,264 @@
+/*
+ * Events › Calendar (hall.css "Event calendar": .calendar-header, .calendar-grid, .calendar-week, .calendar-bar,
+ * .calendar-chip; the details placeholder and the preview's room above it; hr.event-section-rule, .event-tab-intro).
+ */
+
+:host {
+  display: block;
+}
+
+.gd-events__intro {
+  margin: 0 0 0.4em;
+}
+
+.gd-events__rule {
+  margin: 36px 0 54px;
+}
+
+.gd-events-calendar__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.5em 0;
+}
+
+.gd-events-calendar__title {
+  min-width: 11em;
+  font-size: 130%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.gd-events-calendar__legend {
+  margin-left: auto;
+  font-size: 85%;
+}
+
+.gd-events-chip {
+  display: inline-block;
+  margin: 1px 0;
+  padding: 0 0.3em;
+  border-radius: 3px;
+  color: var(--theme-events-bar-text);
+  font-size: 75%;
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: default;
+}
+
+/* Each week is a 7-column grid: the day numbers in row 1, a lane of bars per following row */
+.gd-events-calendar__grid {
+  width: 100%;
+  border-top: 1px solid var(--theme-widget-border);
+  border-left: 1px solid var(--theme-widget-border);
+}
+
+.gd-events-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: var(--theme-events-weekday-bg);
+}
+
+.gd-events-calendar__weekday {
+  padding: 0.2em;
+  border-right: 1px solid var(--theme-widget-border);
+  border-bottom: 1px solid var(--theme-widget-border);
+  font-weight: bold;
+  text-align: center;
+}
+
+.gd-events-calendar__week {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: auto repeat(var(--gd-lanes), 1.25em);
+  grid-auto-rows: 1.25em;
+  row-gap: 2px;
+  align-content: start;
+  min-height: 5.5em;
+  padding-bottom: 0.3em;
+}
+
+.gd-events-calendar__week[data-lanes='0'] {
+  grid-template-rows: auto;
+}
+
+.gd-events-calendar__week-bg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  pointer-events: none;
+}
+
+.gd-events-calendar__day {
+  border-right: 1px solid var(--theme-widget-border);
+  border-bottom: 1px solid var(--theme-widget-border);
+}
+
+.gd-events-calendar__day[data-other-month] {
+  background: var(--theme-events-other-month-bg);
+}
+
+.gd-events-calendar__day[data-today] {
+  background: var(--theme-events-today-bg);
+}
+
+.gd-events-calendar__day[data-today][data-other-month] {
+  background: var(--theme-events-today-other-month-bg);
+}
+
+.gd-events-calendar__day-number {
+  position: relative;
+  grid-row: 1;
+  grid-column: var(--gd-column);
+  padding: 0.15em 0.35em 0.1em 0;
+  color: var(--theme-events-muted);
+  font-size: 80%;
+  text-align: right;
+}
+
+.gd-events-calendar__day-number[data-other-month] {
+  opacity: 0.45;
+}
+
+.gd-events-calendar__day-number[data-today] {
+  color: var(--theme-events-today-text);
+  font-weight: bold;
+  opacity: 1;
+}
+
+.gd-events-calendar__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  grid-row: var(--gd-lane);
+  grid-column: var(--gd-column) / span var(--gd-span);
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0 2px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 3px;
+  color: var(--theme-events-bar-text);
+  font: inherit;
+  font-size: 75%;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-events-chip[data-kind='league'],
+.gd-events-calendar__bar[data-kind='league'] {
+  background: var(--theme-events-league);
+}
+
+.gd-events-chip[data-kind='tournament'],
+.gd-events-calendar__bar[data-kind='tournament'] {
+  background: var(--theme-events-tournament);
+}
+
+.gd-events-chip[data-kind='projected'],
+.gd-events-calendar__bar[data-kind='projected'] {
+  border: 1px dashed var(--theme-events-projected-border);
+  background: var(--theme-events-projected);
+}
+
+.gd-events-calendar__bar[data-error] {
+  border-color: var(--theme-events-error);
+  background: var(--theme-events-error-bar);
+}
+
+.gd-events-calendar__bar:hover {
+  filter: brightness(1.2);
+}
+
+.gd-events-calendar__bar[data-continues-before] {
+  margin-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.gd-events-calendar__bar[data-continues-after] {
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Joined: bold, a deeper shade of the kind's colour */
+.gd-events-calendar__bar[data-joined] {
+  font-weight: bold;
+}
+
+.gd-events-calendar__bar[data-kind='league'][data-joined] {
+  background: var(--theme-events-league-joined);
+}
+
+.gd-events-calendar__bar[data-kind='tournament'][data-joined] {
+  background: var(--theme-events-tournament-joined);
+}
+
+.gd-events-calendar__bar[data-kind='projected'][data-joined] {
+  background: var(--theme-events-projected-joined);
+}
+
+.gd-events-calendar__bar[data-selected] {
+  outline: 2px solid var(--theme-events-selected);
+  outline-offset: -2px;
+}
+
+.gd-events-calendar__bar:focus-visible {
+  outline: 2px solid var(--theme-hover-border);
+  outline-offset: -2px;
+}
+
+.gd-events-calendar__part {
+  flex: 0 0 var(--gd-share);
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0 0.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-events-calendar__part[data-serie-start] {
+  border-left: 2px solid var(--theme-events-serie-divider);
+  font-style: italic;
+}
+
+/* Before any click: a quiet box about the preview header's height */
+.gd-events-calendar__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 6.1em;
+  padding: 0.5em 0.8em;
+  border: 1px dashed var(--theme-events-placeholder-border);
+  border-radius: 4px;
+  color: var(--theme-events-placeholder-text);
+  font-style: italic;
+  text-align: center;
+}
+
+.gd-events-calendar__details {
+  overflow-anchor: none;
+}
+
+.gd-events-calendar__extras {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.gd-events-calendar__signed-up {
+  color: var(--theme-events-joined);
+  font-weight: bold;
+}
+
+.gd-events-calendar__join-queue {
+  font-size: 80%;
+}

@@ -1,5 +1,7 @@
 package com.gempukku.lotro.hall;
 
+import com.gempukku.lotro.tournament.PrizeSummary;
+
 import java.util.List;
 
 public interface HallInfoVisitor {
@@ -24,7 +26,10 @@ public interface HallInfoVisitor {
     public void visitTable(String tableId, String gameId, boolean watchable, TableStatus status, String statusDescription, String formatName, String tournamentName, String userDesc, List<String> playerIds, boolean playing, boolean isPrivate, boolean isInviteOnly, String winner,
                            long createdAt, boolean invitedYou);
 
-    public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName, String tournamentPrizes,
+    /**
+     * @param tournamentPrizes what the queue's prizes are; sent both as the legacy HTML description and as data
+     */
+    public void visitTournamentQueue(String tournamentQueueKey, int cost, String collectionName, String formatName, String type, String tournamentQueueName, PrizeSummary tournamentPrizes,
                                      String pairingDescription, String startCondition, int playerCount, String playerList, boolean playerSignedUp, boolean joinable, boolean startable,
                                      int readyCheckSecsRemaining, boolean confirmedReadyCheck, boolean wc, String draftCode, boolean recurring, boolean scheduled,
                                      boolean displayInWaitingTables);

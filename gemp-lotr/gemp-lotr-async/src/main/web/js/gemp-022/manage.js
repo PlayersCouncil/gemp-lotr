@@ -1,18 +1,20 @@
 $("banMain").ready(
 	function () {
 		
-		$("#reset-button").button().click(
+		// Account recovery: admins no longer reset passwords; they link the player's id to the player's PC account
+		// in Argonauth's admin.  Uses the same lookup as the add-items form (POST /admin/resolvePlayers).
+		$("#playerid-button").button().click(
 			function () {
-				let execute = confirm("Are you sure you want to reset the password for '" + $("#reset-input").val() + "'?  This action cannot be undone.");
-					
-				if(!execute)
+				let resultdiv = $("#playerid-result");
+				let name = $.trim($("#playerid-input").val());
+				if (name == "") {
+					resultdiv.text("Enter a name.");
 					return;
-					
-				let resultdiv = $("#reset-result");
+				}
 				resultdiv.html("Processing...");
 				
-				hall.comm.resetUserPassword($("#reset-input").val(), function (string) {
-					resultdiv.html(string);
+				hall.comm.resolvePlayers(name, function (json) {
+					resultdiv.text(playerIdText(json));
 				}, banErrorMap(resultdiv));
 			});
 		
@@ -96,6 +98,20 @@ function susUserPopulate(xml) {
 		
 		$("#sus-result").html("OK");
 	}
+}
+
+// The line the player id lookup shows for the first name of a resolvePlayers answer.
+function playerIdText(json) {
+	let players = (json && json.players) || [];
+	if (players.length == 0)
+		return "Enter a name.";
+	let player = players[0];
+	if (player.name != null && player.id != null)
+		return player.name + ": id " + player.id;
+	let text = "No player named '" + player.input + "'.";
+	if (player.suggestions && player.suggestions.length > 0)
+		text += " Close names: " + player.suggestions.join(", ");
+	return text;
 }
 
 function banMultiple() {

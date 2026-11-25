@@ -1,0 +1,15 @@
+/* #discordChat and #widgetbot: the embed fills the room's place */
+
+:host {
+  display: block;
+  position: relative;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.gd-discord-embed__widget {
+  position: absolute;
+  inset: 0;
+}

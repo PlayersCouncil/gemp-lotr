@@ -91,7 +91,6 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     private void updateGameState(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
         int channelNumber = Integer.parseInt(getFormParameterSafely(postDecoder, "channelNumber"));
         Integer decisionId = null;
         String decisionIdStr = getFormParameterSafely(postDecoder, "decisionId");
@@ -99,7 +98,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             decisionId = Integer.parseInt(decisionIdStr);
         String decisionValue = getFormParameterSafely(postDecoder, "decisionValue");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -194,8 +193,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
      * how things stand with requests at this table.
      */
     private void getRestorePoints(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        Player resourceOwner = getResourceOwnerSafely(request, getQueryParameterSafely(queryDecoder, "participantId"));
+        Player resourceOwner = getResourceOwnerSafely(request);
         LotroGameMediator gameMediator = gameOf(gameId);
         String name = resourceOwner.getName();
 
@@ -234,12 +232,12 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     /**
-     * POST /game/{id}/undo: participantId, and entryCount for a restore point other than the player's last answer.
+     * POST /game/{id}/undo: entryCount for a restore point other than the player's last answer.
      */
     private void undo(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player resourceOwner = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
+            Player resourceOwner = getResourceOwnerSafely(request);
             String entryCount = getFormParameterSafely(postDecoder, "entryCount");
             LotroGameMediator gameMediator = gameOf(gameId);
             //ownOnly: the Undo button, which never asks anybody (see LotroGameMediator.requestUndo)
@@ -255,12 +253,12 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     /**
-     * POST /game/{id}/undoReply: participantId, requestId, and reply = approve, decline, declineAll or cancel.
+     * POST /game/{id}/undoReply: requestId, and reply = approve, decline, declineAll or cancel.
      */
     private void undoReply(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player resourceOwner = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
+            Player resourceOwner = getResourceOwnerSafely(request);
             int requestId = Integer.parseInt(getFormParameterSafely(postDecoder, "requestId"));
             String reply = getFormParameterSafely(postDecoder, "reply");
             LotroGameMediator gameMediator = gameOf(gameId);
@@ -274,12 +272,12 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     /**
-     * POST /game/{id}/autoDecline: participantId, and on = true or false.
+     * POST /game/{id}/autoDecline: on = true or false.
      */
     private void autoDecline(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            Player resourceOwner = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
+            Player resourceOwner = getResourceOwnerSafely(request);
             boolean on = "true".equals(getFormParameterSafely(postDecoder, "on"));
             LotroGameMediator gameMediator = gameOf(gameId);
             gameMediator.setAutoDecline(resourceOwner.getName(), on);
@@ -290,7 +288,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     /**
-     * POST /game/{id}/notices: participantId, and after = the number of the last notice the client has seen.  Held
+     * POST /game/{id}/notices: after = the number of the last notice the client has seen.  Held
      * until there is a later notice or the usual long-polling time has passed; a client asks again at once, whether
      * or not it is showing its player a decision.  A client that has only just arrived sends after = -1 and is told
      * at once, with no notices, which number to carry on from ("latest"): what was said before it came is not for it.
@@ -298,7 +296,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     private void notices(HttpRequest request, String gameId, final ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            final Player resourceOwner = getResourceOwnerSafely(request, getFormParameterSafely(postDecoder, "participantId"));
+            final Player resourceOwner = getResourceOwnerSafely(request);
             String afterText = getFormParameterSafely(postDecoder, "after");
             final int after = afterText == null || afterText.isEmpty() ? 0 : Integer.parseInt(afterText);
             final LotroGameMediator gameMediator = gameOf(gameId);
@@ -356,8 +354,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     private void cancel(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -380,10 +377,9 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     private void scenarioAcknowledge(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
         String step = getFormParameterSafely(postDecoder, "step");
         String choice = getFormParameterSafely(postDecoder, "choice");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -406,9 +402,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     private void concede(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -424,14 +418,13 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
 
     private void getCardInfo(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String cardIdStr = getQueryParameterSafely(queryDecoder, "cardId");
         if (cardIdStr.startsWith("extra") || cardIdStr.startsWith("anim")) {
             responseWriter.writeHtmlResponse("");
         } else {
             int cardId = Integer.parseInt(cardIdStr);
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
             if (gameMediator == null)
@@ -442,10 +435,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     private void getGameState(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
 

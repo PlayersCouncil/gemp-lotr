@@ -332,13 +332,13 @@ describe('the decisions on the game page', () => {
   it('leads to the main page or the hall', async () => {
     const first = await open('', 401);
     await first.click('[data-problem-action="mainPage"]');
-    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/');
+    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/start');
     first.fixture.destroy();
     backend.match(() => true);
     TestBed.resetTestingModule();
     const second = await open('', 403);
     await second.click('[data-problem-action="hall"]');
-    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/hall.html');
+    expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/');
   });
 });
 

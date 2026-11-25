@@ -1,0 +1,119 @@
+/* The connection readout (hall.css .hall-connection and its popup; hallUi.js HallConnectionIndicator) */
+
+:host {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.gd-hall-connection__readout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 3px;
+  background: none;
+  color: var(--theme-hall-connection-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-hall-connection__readout:hover,
+.gd-hall-connection__readout:focus-visible {
+  background-color: var(--theme-hall-connection-hover-bg);
+  color: var(--theme-text);
+}
+
+.gd-hall-connection__dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--theme-hall-state-connecting);
+  box-shadow: 0 0 0 1px var(--theme-hall-state-ring);
+}
+
+:host([data-state='connected']) .gd-hall-connection__dot {
+  background-color: var(--theme-hall-state-connected);
+}
+
+:host([data-state='shutdown']) .gd-hall-connection__dot {
+  background-color: var(--theme-hall-state-shutdown);
+}
+
+:host([data-state='shutdown']) .gd-hall-connection__label {
+  color: var(--theme-hall-state-shutdown-text);
+}
+
+:host([data-state='disconnected']) .gd-hall-connection__dot {
+  background-color: var(--theme-hall-state-disconnected);
+}
+
+:host([data-state='disconnected']) .gd-hall-connection__label {
+  color: var(--theme-hall-state-disconnected-text);
+}
+
+:host([data-state='loggedout']) .gd-hall-connection__dot {
+  background-color: var(--theme-hall-state-loggedout);
+}
+
+.gd-hall-connection__login {
+  margin-left: 4px;
+  padding: 2px 4px;
+  color: var(--theme-hall-link);
+  white-space: nowrap;
+}
+
+.gd-hall-connection__login:hover,
+.gd-hall-connection__login:focus-visible {
+  color: var(--theme-hall-link-hover);
+}
+
+.gd-hall-connection__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gd-hall-connection__popup {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  /* As wide as its text within its limits, whatever the readout's own box (Log Out sits beside it in the hall) */
+  width: max-content;
+  min-width: 16rem;
+  max-width: min(22rem, 90vw);
+  padding: 0.5em 0.7em;
+  border: 1px solid var(--theme-hall-popup-border);
+  border-radius: 4px;
+  background-color: var(--theme-hall-popup-bg);
+  box-shadow: 0 2px 8px var(--theme-hall-popup-shadow);
+  color: var(--theme-widget-text);
+  font-size: 90%;
+  white-space: normal;
+}
+
+.gd-hall-connection__popup[hidden] {
+  display: none;
+}
+
+.gd-hall-connection__popup > p {
+  margin: 0;
+}
+
+.gd-hall-connection__popup > p + p {
+  margin-top: 0.3em;
+}
+
+.gd-hall-connection__action {
+  color: var(--theme-hall-link);
+}

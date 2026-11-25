@@ -49,6 +49,7 @@ public class DaoBuilder {
         PlayerDAO dbPlayerDao = LoggingProxy.createLoggingProxy(PlayerDAO.class, new DbPlayerDAO(dbAccess, collectionDao));
         CachedPlayerDAO playerDao = new CachedPlayerDAO(dbPlayerDao);
         objectMap.put(PlayerDAO.class, playerDao);
+        objectMap.put(PlayerArgonauthDAO.class, LoggingProxy.createLoggingProxy(PlayerArgonauthDAO.class, new DbPlayerArgonauthDAO(dbAccess)));
 
         TransferDAO dbTransferDao = LoggingProxy.createLoggingProxy(TransferDAO.class, new DbTransferDAO(dbAccess));
         CachedTransferDAO transferDao = new CachedTransferDAO(dbTransferDao, extract(objectMap, MarkdownParser.class));

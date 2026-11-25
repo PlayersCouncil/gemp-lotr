@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
+import { HALL_SERVICES } from '../../core/hall/hall-services';
+import { legacyHallLink, startPage } from '../../core/hall/legacy-links.guard';
+import { LOGIN_SERVICES } from '../../core/login/login-services';
 import { Notifier } from '../../core/notifier/notifier';
 import { loginRequired, loginRequiredUnlessReplay } from '../../core/session/login-required.guard';
+import { HALL_ROUTES } from '../hall/hall.routes';
 import { DialogNotifier } from '../shared/notifier/dialog-notifier';
 
 /**
@@ -25,6 +29,24 @@ export const APP_ROUTES: Routes = [
     providers: [DialogNotifier, { provide: Notifier, useExisting: DialogNotifier }],
     loadComponent: () => import('../game/game-page.component').then((m) => m.GamePageComponent),
   },
-  { path: '', pathMatch: 'full', redirectTo: 'deckbuilder' },
-  { path: '**', redirectTo: 'deckbuilder' },
+  {
+    path: 'login',
+    // As index.html's title
+    title: 'GEMP: LotR-TCG - Login',
+    providers: [...LOGIN_SERVICES],
+    loadComponent: () => import('../login/login-page.component').then((m) => m.LoginPageComponent),
+  },
+  // The old addresses: hall.html and the site's start page send the browser here with the link's #fragment
+  { path: 'go', canActivate: [legacyHallLink], children: [] },
+  { path: 'start', canActivate: [startPage], children: [] },
+  {
+    // The Game Hall (hall.html): its frame around the tabs, each a route of its own (hall.routes.ts); last, so the
+    // pages above match first. Unknown addresses go to the Game Hall
+    path: '',
+    // As hall.html's title
+    title: 'GEMP: LotR-TCG - Main Hall',
+    providers: [...HALL_SERVICES],
+    loadComponent: () => import('../hall/hall-shell.component').then((m) => m.HallShellComponent),
+    children: HALL_ROUTES,
+  },
 ];

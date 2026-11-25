@@ -1,0 +1,304 @@
+/*
+ * The PC Errata viewer (pcErrata.css .pc-errata-viewer, its bar, reel and Enlarge; hall.css's share button in its
+ * bar): as tall as the page's view (--gd-errata-view-h, set by the page).
+ */
+
+:host {
+  position: relative;
+  height: var(--gd-errata-viewer-h, var(--gd-errata-view-h, 480px));
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 2px solid var(--theme-errata-gold);
+  border-radius: 10px;
+  background: var(--theme-errata-viewer-bg);
+  box-shadow: var(--theme-errata-viewer-shadow);
+  overflow: hidden;
+  outline: none;
+}
+
+:host(:focus-visible) {
+  box-shadow: var(--theme-errata-viewer-focus-shadow);
+}
+
+/* ---- Enlarge: the viewer over the hall ---- */
+:host([data-enlarged]) {
+  position: fixed;
+  top: 3vh;
+  bottom: 3vh;
+  left: max(3vw, calc(50vw - 700px));
+  right: max(3vw, calc(50vw - 700px));
+  height: auto;
+  z-index: 1000;
+  box-shadow: var(--theme-errata-enlarged-shadow);
+}
+
+/* ---- the bar ---- */
+.gd-errata-viewer__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 4px 8px;
+  background: var(--theme-errata-bar-bg);
+  border-bottom: 1px solid var(--theme-errata-bar-border);
+  flex: 0 0 auto;
+}
+
+/* ↑ / ↓ and Enlarge / Close: big targets */
+.gd-errata-viewer__step,
+.gd-errata-viewer__enlarge {
+  font: inherit;
+  font-size: 125%;
+  line-height: 1.2;
+  min-height: 34px;
+  color: var(--theme-errata-button-text);
+  background: var(--theme-errata-button-bg);
+  border: 1px solid var(--theme-errata-button-border);
+  border-radius: 6px;
+  padding: 4px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gd-errata-viewer__step {
+  min-width: 46px;
+}
+
+.gd-errata-viewer__bar button:hover:not(:disabled),
+.gd-errata-viewer__bar button:focus-visible {
+  border-color: var(--theme-active-border);
+  outline: none;
+}
+
+.gd-errata-viewer__bar button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.gd-errata-viewer__counter {
+  min-width: 5.5em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Original | PC errata */
+.gd-errata-viewer__flip-switch {
+  display: flex;
+  margin-left: auto;
+  border: 1px solid var(--theme-errata-button-border);
+  border-radius: 6px;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+/* Enlarge shows both versions */
+:host([data-enlarged]) .gd-errata-viewer__flip-switch {
+  display: none;
+}
+
+.gd-errata-viewer__flip-switch button {
+  flex: 1 1 auto;
+  font: inherit;
+  font-size: 95%;
+  line-height: 1.2;
+  min-height: 34px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 0;
+  background: var(--theme-errata-switch-bg);
+  color: var(--theme-errata-switch-text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gd-errata-viewer__flip-switch button + button {
+  border-left: 1px solid var(--theme-errata-button-border);
+}
+
+.gd-errata-viewer__flip-switch button[aria-pressed='true'] {
+  background: var(--theme-errata-current);
+  color: var(--theme-text);
+  font-weight: bold;
+}
+
+.gd-errata-viewer__flip-switch button:focus-visible {
+  outline: 1px solid var(--theme-active-border);
+  outline-offset: -2px;
+}
+
+/* pcErrata.css .pc-errata-viewer-bar > .info-toggle: the toggle keeps its size when the bar is too narrow (the host
+   is display: contents, so the rule goes on the button it draws) */
+gd-errata-info-toggle ::ng-deep .gd-errata-info-toggle {
+  flex: 0 0 auto;
+}
+
+/* Share (hall.css button.share-link-button, as in the viewer's bar) */
+.gd-errata-viewer__share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0 0 0 auto;
+  padding: 0.2em 0.6em;
+  font: inherit;
+  line-height: 1.2;
+  color: var(--theme-errata-share-text);
+  background: transparent;
+  border: 1px solid var(--theme-errata-share-border);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.gd-errata-viewer__share img {
+  width: 1em;
+  height: 1em;
+  filter: var(--theme-errata-share-icon-filter);
+}
+
+.gd-errata-viewer__bar .gd-errata-viewer__share:hover:not(:disabled),
+.gd-errata-viewer__bar .gd-errata-viewer__share:focus-visible {
+  color: var(--theme-text);
+  border-color: var(--theme-hall-link);
+}
+
+.gd-errata-viewer__share:hover:not(:disabled) img,
+.gd-errata-viewer__share:focus-visible img {
+  filter: var(--theme-errata-share-icon-hover-filter);
+}
+
+.gd-errata-viewer__bar[data-share='icon'] .gd-errata-viewer__share-label {
+  display: none;
+}
+
+.gd-errata-viewer__bar[data-share='hidden'] .gd-errata-viewer__share {
+  display: none;
+}
+
+.gd-errata-viewer__enlarge {
+  margin-left: 0;
+}
+
+/* with Share left out, Enlarge keeps to the right */
+.gd-errata-viewer__bar[data-share='hidden'] .gd-errata-viewer__enlarge {
+  margin-left: auto;
+}
+
+/* "Link copied" below the button, over the card, so the bar keeps its layout */
+.gd-errata-viewer__note {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 8px;
+  z-index: 3;
+  margin: 0;
+  padding: 2px 8px;
+  color: var(--theme-errata-share-note);
+  font-size: 90%;
+  white-space: nowrap;
+  background: var(--theme-errata-share-note-bg);
+  border: 1px solid var(--theme-errata-share-border);
+  border-radius: 4px;
+}
+
+.gd-errata-viewer__note input {
+  width: 24em;
+  max-width: 60vw;
+  font: inherit;
+  color: var(--theme-errata-button-text);
+  background: var(--theme-errata-share-note-bg);
+  border: 1px solid var(--theme-errata-button-border);
+}
+
+/* ---- the keys' help ---- */
+.gd-errata-viewer__keys {
+  margin: 4px 8px;
+  flex: 0 0 auto;
+  color: var(--theme-errata-info-text);
+  font-size: 85%;
+  padding: 0.3em 0.6em;
+  border-left: 2px solid var(--theme-errata-info-border);
+}
+
+.gd-errata-viewer__keys[hidden] {
+  display: none;
+}
+
+/* ---- the reel: frames stacked in one slot; the one arriving slides in, the one leaving slides out ---- */
+.gd-errata-viewer__reel {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+}
+
+/* the frame follows a swipe a little */
+.gd-errata-viewer__reel gd-errata-frame {
+  translate: 0 var(--gd-errata-drag, 0);
+}
+
+.gd-errata-viewer__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 10px 8px;
+  text-align: center;
+  color: var(--theme-errata-dim);
+}
+
+.gd-errata-viewer__empty p {
+  margin: 1em 0;
+}
+
+.gd-errata-viewer__empty .gd-errata-viewer__hint {
+  color: var(--theme-errata-hint);
+  font-size: 92%;
+  margin-top: 0.4em;
+}
+
+/* at either end: a nudge */
+:host([data-bump='end']) gd-errata-frame {
+  animation: gd-errata-bump-end 280ms ease-out;
+}
+
+:host([data-bump='start']) gd-errata-frame {
+  animation: gd-errata-bump-start 280ms ease-out;
+}
+
+@keyframes gd-errata-bump-end {
+  40% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes gd-errata-bump-start {
+  40% {
+    transform: translateY(14px);
+  }
+}
+
+/* ---- a narrower page: tighter bar ---- */
+:host-context([data-width='compact']) .gd-errata-viewer__bar,
+:host-context([data-width='narrow']) .gd-errata-viewer__bar {
+  gap: 0.35em;
+}
+
+:host-context([data-width='compact']) .gd-errata-viewer__bar button,
+:host-context([data-width='narrow']) .gd-errata-viewer__bar button {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+:host-context([data-width='compact']) .gd-errata-viewer__enlarge,
+:host-context([data-width='narrow']) .gd-errata-viewer__enlarge {
+  font-size: 110%;
+}
+
+:host-context([data-width='compact']) .gd-errata-viewer__counter,
+:host-context([data-width='narrow']) .gd-errata-viewer__counter {
+  min-width: 4.8em;
+}

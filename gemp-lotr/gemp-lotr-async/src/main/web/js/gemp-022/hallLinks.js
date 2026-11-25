@@ -483,6 +483,11 @@ var GempHallSession = {
 	chat: null,
 	started: false,
 	loggedOut: false,     // a request found the viewer not logged in
+	// This page is open for its Admin tab alone (hall-legacy.html?admin=1, where the Angular hall's Admin tab leads):
+	// the hall itself is the Angular one, in another tab.  The server gives a player one hall at a time (a second
+	// one ends the first with "Concurrent access error"), so this page asks for the player but starts neither the
+	// hall's poll nor the chat.
+	adminOnly: /[?&]admin=1(?:&|$)/.test(window.location.search),
 
 	begin: function (hall, chat) {
 		var that = this;
@@ -516,6 +521,11 @@ var GempHallSession = {
 		if (this.started)
 			return;
 		this.started = true;
+		if (this.adminOnly) {
+			if (this.hall)
+				this.hall.startForAdmin();
+			return;
+		}
 		if (this.chat)
 			this.chat.start();
 		if (this.hall)

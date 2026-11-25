@@ -1,0 +1,209 @@
+<div class="gd-formats__intro">
+  <p>
+    A 'format' is a shorthand for what cards are legal to use and what ruleset is being followed. Every format that can
+    be played in the Game Hall is listed below.
+    <button
+      type="button"
+      class="gd-formats__info"
+      title="What is this?"
+      aria-controls="gd-formats-help"
+      [attr.aria-expanded]="helpShown()"
+      (click)="toggleHelp($event)"
+    >
+      i
+    </button>
+  </p>
+  <div id="gd-formats-help" class="gd-formats__help" [hidden]="!helpShown()">
+    <ul>
+      <li><b>X-list</b>: cards that can't be used in the format.</li>
+      <li><b>R-list</b>: cards a deck may hold no more than 1 copy of.</li>
+      <li><b>Limit 2 / Limit 3</b>: cards a deck may hold at most two / three copies of.</li>
+      <li><b>Also legal</b>: cards from outside the format's sets that it allows.</li>
+      <li>
+        <b>PC errata</b>: the format plays the Player's Council's updated versions of some cards (see
+        <a class="gd-formats__errata-link" routerLink="/help/errata">Help › PC Errata</a>).
+      </li>
+    </ul>
+    Click (or right-click) a card to see it larger, or tick "Card images" to see the lists as pictures. The box above
+    the format list finds a format by name, or every format that lists a card.
+  </div>
+</div>
+<div class="gd-formats__layout">
+  @let load = service.load();
+  @if (load.kind === 'loading') {
+    <p class="gd-formats__status">{{ words.FORMATS_LOADING }}</p>
+  } @else if (load.kind === 'error') {
+    <p class="gd-formats__status" data-error>{{ load.message }}</p>
+  } @else {
+    <aside class="gd-formats__side">
+      <div class="gd-formats__tools">
+        <input
+          type="search"
+          class="gd-formats__filter"
+          autocomplete="off"
+          spellcheck="false"
+          [placeholder]="words.FILTER_PLACEHOLDER"
+          [attr.aria-label]="words.FILTER_LABEL"
+          [value]="service.query()"
+          (input)="filterInput($event)"
+        />
+        <label class="gd-formats__images"
+          ><input type="checkbox" [checked]="service.images()" (change)="imagesChange($event)" />
+          {{ words.IMAGES_LABEL }}</label
+        >
+        <div class="gd-formats__filter-status" aria-live="polite">{{ service.filter().status }}</div>
+      </div>
+      <ul class="gd-formats__nav">
+        @for (entry of entries(); track entry.format.code) {
+          <li
+            [hidden]="!visible(entry.format.code)"
+            [attr.data-active]="service.active() === entry.format.code ? '' : null"
+          >
+            <a [routerLink]="entry.route" [replaceUrl]="true" (click)="go(entry.format.code)">
+              <span class="gd-formats__nav-name">{{ entry.format.name }}</span>
+              @if (entry.meta; as meta) {
+                <span class="gd-formats__nav-meta" [title]="meta.title">{{ meta.text }}</span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+    </aside>
+    <div class="gd-formats__main">
+      @if (entries().length === 0) {
+        <p class="gd-formats__status">{{ words.NO_FORMATS }}</p>
+      }
+      @for (entry of entries(); track entry.format.code) {
+        <section
+          class="gd-format"
+          [id]="entry.format.anchor"
+          [attr.data-format]="entry.format.code"
+          [attr.data-highlight]="service.highlighted() === entry.format.code ? '' : null"
+          [hidden]="!visible(entry.format.code)"
+        >
+          <header class="gd-format__head">
+            <h2 class="gd-format__name">{{ entry.format.name }}</h2>
+            @if (entry.format.errata.pc) {
+              <span class="gd-format__badge" data-badge="pc" [title]="words.PC_ERRATA_BADGE_TITLE">{{
+                words.PC_ERRATA_BADGE
+              }}</span>
+            }
+            @if (entry.format.playtest) {
+              <span class="gd-format__badge" data-badge="playtest">{{ words.PLAYTEST_BADGE }}</span>
+            }
+            <a
+              class="gd-format__permalink"
+              [title]="words.PERMALINK_TITLE"
+              [routerLink]="entry.route"
+              [replaceUrl]="true"
+              (click)="go(entry.format.code)"
+              >{{ words.PERMALINK_TEXT }}</a
+            >
+            <gd-hall-share-button
+              class="gd-format__share"
+              kind="format"
+              [id]="entry.format.code"
+              [label]="words.SHARE_LABEL"
+              [ariaLabel]="words.shareAriaLabel(entry.format.name)"
+            />
+          </header>
+          @if (entry.format.description) {
+            <p class="gd-format__description">{{ entry.format.description }}</p>
+          }
+          <dl class="gd-format__facts">
+            @for (fact of entry.facts; track fact.label) {
+              <dt>{{ fact.label }}</dt>
+              <dd>
+                @if (fact.kind === 'text') {
+                  {{ fact.text }}
+                } @else if (fact.kind === 'errata') {
+                  @if (fact.link; as link) {
+                    <a
+                      class="gd-format__errata"
+                      [routerLink]="entry.errataLinks['path']"
+                      [queryParams]="entry.errataLinks['format'] ? { format: entry.errataLinks['format'] } : {}"
+                      >{{ link.text }}</a
+                    >
+                  }
+                  {{ fact.text }}
+                } @else {
+                  <ul class="gd-format__rules">
+                    @for (rule of fact.rules; track rule) {
+                      <li>{{ rule }}</li>
+                    }
+                  </ul>
+                }
+              </dd>
+            }
+          </dl>
+          @for (list of entry.lists; track list.key) {
+            <details
+              class="gd-format__list"
+              open
+              [attr.data-list]="list.key"
+              [attr.data-has-hits]="hasHits(entry.format.code, list.key) ? '' : null"
+            >
+              <summary>
+                <span class="gd-format__list-title">{{ list.title }}</span
+                ><span class="gd-format__count">{{ list.cards.length }}</span
+                ><span class="gd-format__list-note">{{ list.note }}</span>
+              </summary>
+              <div class="gd-format__list-body" [attr.data-images]="service.images() ? '' : null">
+                @if (service.images()) {
+                  @for (card of list.cards; track card.id) {
+                    <div
+                      class="gd-format__thumb"
+                      [attr.data-hit]="hit(entry.format.code, list.key, card) ? '' : null"
+                      [attr.data-orientation]="cardView(card).horizontal ? 'horizontal' : 'vertical'"
+                      [title]="tooltip(card)"
+                    >
+                      <button [gdCard]="cardView(card)"></button>
+                      <span class="gd-format__thumb-name">{{ card.name }}</span>
+                    </div>
+                  }
+                } @else {
+                  @for (row of list.sets; track row.label) {
+                    <div class="gd-format__set-row">
+                      <span class="gd-format__set" [title]="row.name ?? ''">{{ row.label }}</span>
+                      <div class="gd-format__chips">
+                        @for (card of row.cards; track card.id) {
+                          <button
+                            type="button"
+                            class="gd-format__chip"
+                            [title]="tooltip(card)"
+                            [attr.data-hit]="hit(entry.format.code, list.key, card) ? '' : null"
+                            (click)="showCard(card)"
+                            (contextmenu)="showCard(card, $event)"
+                          >
+                            {{ card.name }}
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </details>
+          }
+          @if (entry.format.restrictedNames.length > 0) {
+            <details class="gd-format__list" open data-list="restrictedNames">
+              <summary>
+                <span class="gd-format__list-title">{{ words.RESTRICTED_NAMES_TITLE }}</span
+                ><span class="gd-format__count">{{ entry.format.restrictedNames.length }}</span
+                ><span class="gd-format__list-note">{{ words.RESTRICTED_NAMES_NOTE }}</span>
+              </summary>
+              <div class="gd-format__list-body gd-format__chips">
+                @for (name of entry.format.restrictedNames; track name) {
+                  <span class="gd-format__name-chip">{{ name }}</span>
+                }
+              </div>
+            </details>
+          }
+          @if (entry.noLists) {
+            <p class="gd-format__no-lists">{{ words.NO_LISTS }}</p>
+          }
+        </section>
+      }
+    </div>
+  }
+</div>

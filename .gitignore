@@ -34,3 +34,6 @@ gemp-lotr/gemp-lotr-async/src/main/web/ng/
 # docker/frontend-watch.sh's staging folders next to it
 gemp-lotr/gemp-lotr-async/src/main/web/.ng-build/
 gemp-lotr/gemp-lotr-async/src/main/web/.ng-previous-files
+# A machine's own settings, passwords and the PC account's client secret among them: copied from the
+# .env.example beside it (gemp-lotr/docker/.env.example) and never committed
+.env
