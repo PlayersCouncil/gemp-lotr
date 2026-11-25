@@ -5,7 +5,6 @@ import {
   NO_RUNNING_TOURNAMENTS,
   TOURNAMENT_REPORT_TITLE,
 } from '../../../core/hall/events/events-messages';
-import { TournamentDetail } from '../../../core/hall/events/events-models';
 import { tournamentReportUrl } from '../../../core/hall/events/events-parsers';
 import { parseEventsRoute, TOURNAMENT_ID_PARAM } from '../../../core/hall/events/events-routes';
 import { EventsTab } from '../../../core/hall/events/events-tab.service';
@@ -54,7 +53,7 @@ import { TournamentDetailComponent } from './tournament-detail.component';
               }
               @if (row.drawer.content(); as content) {
                 @if (content.kind === 'data') {
-                  <gd-tournament-detail [tournament]="asTournament(content.data)" />
+                  <gd-tournament-detail [tournament]="content.data" />
                 }
               }
             </gd-event-row>
@@ -99,9 +98,5 @@ export class EventsTournamentsComponent {
 
   protected report(id: string): string {
     return tournamentReportUrl(id);
-  }
-
-  protected asTournament(data: unknown): TournamentDetail {
-    return data as TournamentDetail;
   }
 }

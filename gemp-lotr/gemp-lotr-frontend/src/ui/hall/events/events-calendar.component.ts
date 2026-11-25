@@ -54,11 +54,16 @@ export class EventsCalendarComponent {
     return state.kind === 'error' ? state.text : null;
   });
 
-  protected asLeague(data: unknown): LeagueDetail {
+  /**
+   * The drawer's details as the kind of the event selected. A league's preview is what gets a league's drawer and
+   * any other drawer is a tournament's (EventsCalendar.select), so the two cannot differ; the types alone do not
+   * say so.
+   */
+  protected asLeague(data: LeagueDetail | TournamentDetail): LeagueDetail {
     return data as LeagueDetail;
   }
 
-  protected asTournament(data: unknown): TournamentDetail {
+  protected asTournament(data: LeagueDetail | TournamentDetail): TournamentDetail {
     return data as TournamentDetail;
   }
 

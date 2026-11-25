@@ -1,7 +1,6 @@
 import { afterRenderEffect, Component, computed, DestroyRef, ElementRef, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LEAGUE_CODE_TITLE, LISTS_INTRO, NO_CURRENT_LEAGUES } from '../../../core/hall/events/events-messages';
-import { LeagueDetail } from '../../../core/hall/events/events-models';
 import { LEAGUE_CODE_PARAM, parseEventsRoute } from '../../../core/hall/events/events-routes';
 import { EventsTab } from '../../../core/hall/events/events-tab.service';
 import { hasPlayerType, PlayerType } from '../../../core/session/player';
@@ -40,7 +39,7 @@ import { revealRow } from './events-view';
               }
               @if (row.drawer.content(); as content) {
                 @if (content.kind === 'data') {
-                  <gd-league-detail [league]="asLeague(content.data)" />
+                  <gd-league-detail [league]="content.data" />
                 }
               }
             </gd-event-row>
@@ -78,9 +77,5 @@ export class EventsLeaguesComponent {
     });
     inject(DestroyRef).onDestroy(() => params.unsubscribe());
     afterRenderEffect(() => revealRow(this.host, this.leagues.revealed()));
-  }
-
-  protected asLeague(data: unknown): LeagueDetail {
-    return data as LeagueDetail;
   }
 }

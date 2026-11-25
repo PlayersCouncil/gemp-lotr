@@ -52,11 +52,15 @@ export class EventHistoryComponent {
       : orDash(event.startDate);
   }
 
-  protected asLeague(data: unknown): LeagueDetail {
+  /**
+   * A drawer's details as the kind this panel shows. The browser's kind is what made the drawer
+   * (EventHistoryBrowser.drawer), so the two cannot differ; the types alone do not say so.
+   */
+  protected asLeague(data: LeagueDetail | TournamentDetail): LeagueDetail {
     return data as LeagueDetail;
   }
 
-  protected asTournament(data: unknown): TournamentDetail {
+  protected asTournament(data: LeagueDetail | TournamentDetail): TournamentDetail {
     return data as TournamentDetail;
   }
 
