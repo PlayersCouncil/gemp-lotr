@@ -1,3 +1,4 @@
+import { listOf } from '../api/json';
 import { SERVER_URL } from '../platform/app-paths';
 
 /**
@@ -90,7 +91,9 @@ export function parsePcSession(json: unknown): PcSession {
     player: text(player),
     pcAccount: parseAccount(pcAccount),
     linked: typeof linked === 'boolean' ? linked : null,
-    aliases: Array.isArray(aliases) ? aliases.map(parseAlias).filter((alias) => alias !== null) : [],
+    aliases: listOf(aliases)
+      .map(parseAlias)
+      .filter((alias) => alias !== null),
     blockedBy: text(blockedBy),
   };
 }

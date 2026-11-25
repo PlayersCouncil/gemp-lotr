@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { FormData } from '../../api/form-codec';
 import { GempHttp } from '../../api/gemp-http.service';
+import { parseJson } from '../../api/json';
 import { parseXml } from '../../api/xml';
 import {
   GameHistoryFilterOptions,
@@ -100,7 +101,7 @@ export class AccountApi {
 
 function readJson(text: string): unknown {
   try {
-    return JSON.parse(text);
+    return parseJson(text);
   } catch (cause) {
     throw new ApiError(INVALID_RESPONSE_STATUS, 'The answer is not JSON', { cause });
   }

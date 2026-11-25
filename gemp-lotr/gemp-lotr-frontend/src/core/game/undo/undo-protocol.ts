@@ -3,6 +3,7 @@
  * requestUndo), typed. The answers are JSON; each is read defensively, so an answer the page doesn't understand reads as
  * "nothing can be taken back" rather than breaking the game.
  */
+import { listOf } from '../../api/json';
 
 /** How much going back to a place undoes: only the player's own choice, other players' choices, or something seen. */
 export type UndoTier = 'GREEN' | 'YELLOW' | 'RED';
@@ -87,7 +88,7 @@ const number = (value: unknown): number => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 const tier = (value: unknown): UndoTier => UNDO_TIERS.find((known) => known === value) ?? 'RED';
-const strings = (value: unknown): string[] => (Array.isArray(value) ? value.map(text) : []);
+const strings = (value: unknown): string[] => listOf(value).map(text);
 
 function point(value: unknown): RestorePoint {
   const json = object(value);
@@ -121,7 +122,7 @@ export function readRestorePoints(value: unknown): RestorePoints {
   const json = object(value);
   const policy = object(json['policy']);
   return {
-    points: Array.isArray(json['points']) ? json['points'].map(point) : [],
+    points: listOf(json['points']).map(point),
     policy: {
       green: policy['green'] === true,
       yellow: policy['yellow'] === true,
@@ -145,7 +146,7 @@ export function readUndoReply(value: unknown): UndoReply {
 
 export function readGameNotices(value: unknown): GameNotices {
   const json = object(value);
-  const notices = Array.isArray(json['notices']) ? json['notices'] : [];
+  const notices = listOf(json['notices']);
   return {
     notices: notices.map((entry) => {
       const fields = object(entry);

@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GempHttp } from '../../api/gemp-http.service';
+import { listOf, stringsOf } from '../../api/json';
 import { BlockFilter, GempFormat } from '../../api/models';
 import { CardFilterModel, CardFilterPager, FilterFieldName } from '../../card-filter/card-filter-model';
 import { blockOptions, setOptions } from '../../card-filter/filter-block-sets';
@@ -12,6 +13,7 @@ import { buildFilterString } from '../../card-filter/filter-string';
 import { FormatsService } from '../../formats/formats.service';
 import { LocalStore } from '../../platform/local-store';
 import { PageLifetime } from '../../platform/page-lifetime.service';
+import { storedList } from '../../platform/session-store';
 
 /** A card found (`GET scenarios/search`). */
 export interface FoundCard {
@@ -89,12 +91,11 @@ export function readFields(value: unknown): FilterFields {
   const json = object(value);
   // (every block and set at first: the search is over the whole library)
   const fields: Record<string, unknown> = { ...EMPTY_FILTER, block: '', set: '' };
-  for (const [name, start] of Object.entries(EMPTY_FILTER)) {
+  for (const [name, start] of Object.entries(EMPTY_FILTER) as [string, unknown][]) {
     const stored = json[name];
     if (typeof start === 'string' && typeof stored === 'string') fields[name] = stored;
-    if (Array.isArray(start) && Array.isArray(stored)) {
-      fields[name] = stored.filter((code): code is string => typeof code === 'string');
-    }
+    const codes = storedList(stored);
+    if (Array.isArray(start) && codes !== null) fields[name] = stringsOf(codes);
   }
   for (const name of SEARCH_OMITS) fields[name] = '';
   return fields as unknown as FilterFields;
@@ -168,7 +169,7 @@ export function searchFilter(fields: FilterFields, bound: SearchBound | null): s
 /** A page of cards found, read defensively. */
 export function readSearchPage(value: unknown): SearchPage {
   const json = object(value);
-  const cards = Array.isArray(json['cards']) ? json['cards'] : [];
+  const cards = listOf(json['cards']);
   return {
     total: typeof json['total'] === 'number' ? json['total'] : 0,
     start: typeof json['start'] === 'number' ? json['start'] : 0,

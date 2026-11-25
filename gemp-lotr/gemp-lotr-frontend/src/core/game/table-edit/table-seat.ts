@@ -10,6 +10,7 @@
  * the page must know beyond that: whether what it is asked is the person's to answer, and where the person's attention
  * is wanted when the game waits on the seat they are not looking from.
  */
+import { listOf } from '../../api/json';
 import { EditSeat, otherSeat } from './edit-ops';
 
 /** Who plays the seat the person does not sit in. */
@@ -48,8 +49,9 @@ export function readOtherSeat(value: unknown): OtherSeat | null {
 
 /** The choices on offer, in the server's order, each once. */
 export function readOtherSeats(value: unknown): OtherSeat[] {
-  if (!Array.isArray(value)) return [];
-  const seats = value.map(readOtherSeat).filter((seat): seat is OtherSeat => seat !== null);
+  const seats = listOf(value)
+    .map(readOtherSeat)
+    .filter((seat): seat is OtherSeat => seat !== null);
   return [...new Set(seats)];
 }
 

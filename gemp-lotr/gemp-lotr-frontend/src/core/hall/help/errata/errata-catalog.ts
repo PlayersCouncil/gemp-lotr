@@ -1,3 +1,4 @@
+import { listOf, stringsOf } from '../../../api/json';
 import { foldText } from '../format-definitions';
 import {
   ErrataCatalog,
@@ -85,9 +86,7 @@ function parseEntry(value: unknown): ErrataEntry | null {
     name = before.name;
   }
   const coll = errataCollectorLabel(text(json['collInfo']), set, cardNum);
-  const formats = Array.isArray(json['formats'])
-    ? json['formats'].filter((code): code is string => typeof code === 'string')
-    : [];
+  const formats = stringsOf(json['formats']);
   return {
     id,
     base: text(json['base']) ?? id,
@@ -135,11 +134,11 @@ function parseCounts(value: unknown, entries: readonly ErrataEntry[]): ErrataCou
 /** The answer of GET /hall/errata/json; anything missing reads as empty (setData's `json || {}`). */
 export function parseErrataCatalog(json: unknown): ErrataCatalog {
   const root = object(json);
-  const entries = Array.isArray(root['entries'])
-    ? root['entries'].map(parseEntry).filter((entry): entry is ErrataEntry => entry !== null)
-    : [];
-  const formats = Array.isArray(root['formats'])
-    ? root['formats'].map(parseFormat).filter((format): format is ErrataFormat => format !== null)
-    : [];
+  const entries = listOf(root['entries'])
+    .map(parseEntry)
+    .filter((entry): entry is ErrataEntry => entry !== null);
+  const formats = listOf(root['formats'])
+    .map(parseFormat)
+    .filter((format): format is ErrataFormat => format !== null);
   return { entries, formats, counts: parseCounts(root['counts'], entries) };
 }

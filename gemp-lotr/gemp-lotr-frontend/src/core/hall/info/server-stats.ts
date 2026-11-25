@@ -1,3 +1,4 @@
+import { listOf } from '../../api/json';
 import { sortRows, TableSort } from '../table-sort';
 import {
   CASUAL_CAPTION,
@@ -22,16 +23,14 @@ function numberOrNull(value: unknown): number | null {
 /** The answer of GET /stats (anything missing shows as empty, as loadedStats did). */
 export function parseServerStats(json: unknown): ServerStats {
   const data: Json = json !== null && typeof json === 'object' ? (json as Json) : {};
-  const formats: FormatGameCount[] = Array.isArray(data['Stats'])
-    ? data['Stats'].map((item: unknown) => {
-        const row: Json = item !== null && typeof item === 'object' ? (item as Json) : {};
-        return {
-          format: typeof row['Format'] === 'string' ? row['Format'] : '',
-          count: numberOrNull(row['Count']) ?? 0,
-          casual: row['Casual'] === true,
-        };
-      })
-    : [];
+  const formats: FormatGameCount[] = listOf(data['Stats']).map((item: unknown) => {
+    const row: Json = item !== null && typeof item === 'object' ? (item as Json) : {};
+    return {
+      format: typeof row['Format'] === 'string' ? row['Format'] : '',
+      count: numberOrNull(row['Count']) ?? 0,
+      casual: row['Casual'] === true,
+    };
+  });
   return {
     startDate: typeof data['StartDate'] === 'string' ? data['StartDate'] : '',
     endDate: typeof data['EndDate'] === 'string' ? data['EndDate'] : '',

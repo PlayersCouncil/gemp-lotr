@@ -107,7 +107,7 @@ const asMessage = (message: DraftMessageValue, require?: string): WorkMessage =>
   // (lists of things on the table are edited as the line of text a file usually has them as)
   for (const name of ['anchor', 'highlight', 'avoid']) {
     const value = work[name];
-    if (Array.isArray(value)) work[name] = value.join(', ');
+    if (Array.isArray(value)) work[name] = (value as readonly unknown[]).join(', ');
   }
   if (typeof work['gap'] === 'number') work['gap'] = String(work['gap']);
   return work as WorkMessage;

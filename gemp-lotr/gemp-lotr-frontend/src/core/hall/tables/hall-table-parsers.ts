@@ -1,3 +1,4 @@
+import { listOf } from '../../api/json';
 import { parseXml } from '../../api/xml';
 import { gamePageUrl } from '../../platform/app-paths';
 import { HallItemChange } from '../hall-models';
@@ -117,11 +118,12 @@ export function parseTableCallResult(body: string): TableCallResult {
 
 /** The server's timers (JSONDefs.TimerInfo); entries without a code are left out. */
 export function parseHallTimers(value: unknown): HallTimer[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-  return value.flatMap((entry: Record<string, unknown> | null) => {
-    if (entry === null || typeof entry !== 'object' || typeof entry['code'] !== 'string') {
+  return listOf(value).flatMap((item: unknown) => {
+    if (item === null || typeof item !== 'object') {
+      return [];
+    }
+    const entry = item as Record<string, unknown>;
+    if (typeof entry['code'] !== 'string') {
       return [];
     }
     return [

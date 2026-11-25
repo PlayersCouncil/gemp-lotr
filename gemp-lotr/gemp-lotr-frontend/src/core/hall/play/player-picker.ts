@@ -1,6 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { GempHttp } from '../../api/gemp-http.service';
+import { stringsOf } from '../../api/json';
 import { ChatService } from '../../chat/chat.service';
 import { PlayerInfo } from '../../session/player-info.service';
 import { bareName } from '../tables/hall-table-parsers';
@@ -158,9 +159,7 @@ export class PlayerSearch {
       const json = await firstValueFrom(
         this.http.getJson<{ players?: unknown }>('/hall/players', { prefix, limit: PICKER_LIMIT }),
       );
-      const names = Array.isArray(json.players)
-        ? json.players.filter((name): name is string => typeof name === 'string').slice(0, PICKER_LIMIT)
-        : [];
+      const names = stringsOf(json.players).slice(0, PICKER_LIMIT);
       this.cache.set(key, names);
       return names;
     } catch {

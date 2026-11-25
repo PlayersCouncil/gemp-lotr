@@ -5,6 +5,7 @@
  * attribute of a game event of type S, to the person playing only (LiveScenario.java builds them). Pure: read from
  * the JSON with every field checked, so the rest of the page can rely on the shapes.
  */
+import { listOf, parseJson, stringsOf } from '../../api/json';
 import { legacyRelativeImages } from '../../platform/app-paths';
 import { editLevel, EditLevel, editMode, EditMode, editTools } from '../table-edit/edit-board';
 import { EditTool } from '../table-edit/edit-ops';
@@ -218,8 +219,7 @@ const isObject = (value: unknown): value is Json =>
 const string = (value: unknown): string | null => (typeof value === 'string' ? value : null);
 const number = (value: unknown): number | null => (typeof value === 'number' && Number.isFinite(value) ? value : null);
 const boolean = (value: unknown): boolean | null => (typeof value === 'boolean' ? value : null);
-const strings = (value: unknown): string[] =>
-  Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+const strings = (value: unknown): string[] => stringsOf(value);
 const html = (value: unknown): string | null => {
   const text = string(value);
   return text === null ? null : legacyRelativeImages(text);
@@ -230,15 +230,16 @@ function oneOf<T extends string>(value: unknown, known: readonly T[], fallback: 
 }
 
 function partRect(value: unknown): PartRect | null {
-  if (!Array.isArray(value) || value.length !== 4) return null;
-  const [left, top, width, height] = value.map(number);
+  const list = listOf(value);
+  if (list.length !== 4) return null;
+  const [left, top, width, height] = list.map(number);
   if (left == null || top == null || width == null || height == null) return null;
   return [left, top, width, height];
 }
 
 function zoom(value: unknown): ScenarioZoom | null {
   if (!isObject(value)) return null;
-  const focus = Array.isArray(value['focus']) ? value['focus'] : [];
+  const focus = listOf(value['focus']);
   return {
     blueprint: string(value['blueprint']),
     image: string(value['image']),
@@ -255,7 +256,7 @@ function message(value: unknown): ScenarioMessage | null {
   const on = value['on'];
   const anchors = strings(value['anchors']);
   const anchor = string(value['anchor']);
-  const choices = Array.isArray(value['choices']) ? value['choices'] : [];
+  const choices = listOf(value['choices']);
   const index = number(value['index']);
   return {
     index: index !== null && Number.isInteger(index) && index >= 0 ? index : null,
@@ -285,7 +286,7 @@ function message(value: unknown): ScenarioMessage | null {
 }
 
 function messages(value: unknown): ScenarioMessage[] {
-  return (Array.isArray(value) ? value : []).flatMap((item: unknown) => {
+  return listOf(value).flatMap((item: unknown) => {
     const parsed = message(item);
     return parsed ? [parsed] : [];
   });
@@ -427,7 +428,7 @@ export function messagePlace(messages: readonly ScenarioMessage[], message: Scen
 export function parseScenarioEvent(json: string): ScenarioEvent | null {
   let value: unknown;
   try {
-    value = JSON.parse(json);
+    value = parseJson(json);
   } catch {
     return null;
   }

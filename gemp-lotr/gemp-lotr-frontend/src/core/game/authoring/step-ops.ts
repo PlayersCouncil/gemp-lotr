@@ -5,7 +5,7 @@
  */
 import { DraftState, DraftStep, UncoveredDecision } from './authoring-state';
 import { Diff, without, working, Written, written } from './step-model';
-import { isBlock, isOpening, kidsOf, stepsOf } from './steps';
+import { isBlock, isOpening, kidsOf, messagesOf, stepsOf } from './steps';
 import { nextUntil, splitTerms, untilFromNext, writtenInFull } from './terms';
 
 export type StepOp =
@@ -142,7 +142,7 @@ export function joinable(step: DraftStep | undefined): boolean {
     !step.pause &&
     !step.checkpoint &&
     step.end === undefined &&
-    (step.messages === undefined || (Array.isArray(step.messages) && step.messages.length === 0)) &&
+    messagesOf(step).length === 0 &&
     !filled(step.until) &&
     !step.if &&
     !step.unless &&

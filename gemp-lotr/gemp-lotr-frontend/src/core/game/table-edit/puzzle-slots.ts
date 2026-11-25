@@ -3,6 +3,7 @@
  * puzzle page works out from them: where on the table each one is shown, what it is called there, its search, and
  * which are still empty. Read defensively: a slot without an id or a zone is left out. Pure.
  */
+import { listOf, stringsOf } from '../../api/json';
 import { SearchBound } from './card-search';
 import { slotKinds } from './slot-filter';
 
@@ -67,9 +68,7 @@ function slot(value: unknown): PuzzleSlot | null {
     bound: text(json['bound']) ?? [pool, filter].filter((part) => part !== null).join(' '),
     pool,
     filter,
-    overlap: Array.isArray(json['overlap'])
-      ? json['overlap'].filter((key): key is string => typeof key === 'string')
-      : [],
+    overlap: stringsOf(json['overlap']),
     comes: { tokens: count(comes['tokens']), wounds: count(comes['wounds']) },
     pick: text(json['pick']),
     pickName: text(json['pickName']),
@@ -79,7 +78,7 @@ function slot(value: unknown): PuzzleSlot | null {
 
 /** The slots of an info event (its `slots`), in the scenario's order. */
 export function readPuzzleSlots(value: unknown): PuzzleSlot[] {
-  return (Array.isArray(value) ? value : []).flatMap((item: unknown) => {
+  return listOf(value).flatMap((item: unknown) => {
     const read = slot(item);
     return read ? [read] : [];
   });

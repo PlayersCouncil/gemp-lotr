@@ -56,7 +56,10 @@ export function isBlock(step: DraftStep | null | undefined): boolean {
   return step?.anyOrder !== undefined;
 }
 
-const isMessageList = (value: DraftStep['messages']): value is readonly DraftMessageValue[] => Array.isArray(value);
+/** Whether a step's or an ending's messages are a list (a file may give a single one). */
+export const isMessageList = (
+  value: readonly DraftMessageValue[] | DraftMessageValue | undefined,
+): value is readonly DraftMessageValue[] => Array.isArray(value);
 
 /** A step's messages, as a list (a file may give a single one). */
 export function messagesOf(step: DraftStep): readonly DraftMessageValue[] {

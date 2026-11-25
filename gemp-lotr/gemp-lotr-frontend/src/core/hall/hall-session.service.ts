@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ChatService } from '../chat/chat.service';
 import { PlayerInfo } from '../session/player-info.service';
-import { hasPlayerType, PlayerType } from '../session/player';
+import { hasPlayerType, Player, PlayerType } from '../session/player';
 import { HallComms } from './hall-comms.service';
 
 /**
@@ -34,7 +34,7 @@ export class HallSession {
       this.start();
       return;
     }
-    let player;
+    let player: Player | null;
     try {
       player = await this.player.whoAmI();
     } catch {

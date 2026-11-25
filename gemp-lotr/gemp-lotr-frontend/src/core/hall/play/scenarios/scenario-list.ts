@@ -1,3 +1,4 @@
+import { listOf, stringsOf } from '../../../api/json';
 import { asText, asTextOrNull, orIfEmpty } from '../../json-values';
 
 /** GET /scenarios as the Play overlay's scenario list reads it, and the pure rules it is drawn by (PlayScenario). */
@@ -70,7 +71,10 @@ const obj = (value: unknown): Record<string, unknown> | null =>
 
 export function parseScenarioListing(json: unknown): ScenarioListing {
   const data = obj(json) ?? {};
-  const list = (value: unknown) => (Array.isArray(value) ? value.map(obj).filter((e) => e !== null) : []);
+  const list = (value: unknown) =>
+    listOf(value)
+      .map(obj)
+      .filter((e) => e !== null);
   const scenarios = list(data['scenarios']).map((s): ScenarioEntry => {
     const campaign = obj(s['campaign']);
     const progress = obj(s['progress']);
@@ -123,7 +127,7 @@ export function parseScenarioListing(json: unknown): ScenarioListing {
       path: str(u['path']) ?? '',
       id: str(u['id']),
       title: str(u['title']),
-      errors: Array.isArray(u['errors']) ? u['errors'].filter((e): e is string => typeof e === 'string') : [],
+      errors: stringsOf(u['errors']),
       openable: u['openable'] === true,
     })),
   };

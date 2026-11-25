@@ -1,4 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
+import { listOf } from '../../api/json';
 import { LocalStore } from '../../platform/local-store';
 
 /** A card put on the table by hand lately. */
@@ -16,8 +17,7 @@ export const RECENT_KEY = 'gemp-edit-recent';
 
 /** The cards remembered, from what storage held (anything unreadable left out), most recent first. */
 export function readRecent(value: unknown): RecentCard[] {
-  if (!Array.isArray(value)) return [];
-  return value
+  return listOf(value)
     .flatMap((item: unknown) => {
       if (typeof item !== 'object' || item === null) return [];
       const { blueprintId, name, type } = item as Record<string, unknown>;

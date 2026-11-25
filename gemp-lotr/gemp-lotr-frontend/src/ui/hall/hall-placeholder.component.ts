@@ -47,7 +47,7 @@ export class HallPlaceholderComponent {
   private routeTab(): HallTab {
     let route: ActivatedRoute | null = inject(ActivatedRoute);
     while (route) {
-      const slug: unknown = route.snapshot.data[HALL_TAB_DATA];
+      const slug = route.snapshot.data[HALL_TAB_DATA] as unknown;
       const tab = typeof slug === 'string' ? findHallTab(slug) : null;
       if (tab) return tab;
       route = route.parent;

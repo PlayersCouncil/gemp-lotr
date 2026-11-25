@@ -1,3 +1,4 @@
+import { parseJson } from '../../api/json';
 import { HallDeckChoice, HallDeckOption } from './hall-table-models';
 
 /** How many keys a flow's memory keeps besides the last deck overall (SelectDeck.MAX_REMEMBERED). */
@@ -16,7 +17,7 @@ export function readDeckMemory(raw: string | null): DeckMemory {
     return {};
   }
   try {
-    const parsed: unknown = JSON.parse(raw);
+    const parsed = parseJson(raw);
     return parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as DeckMemory) : {};
   } catch {
     return {};

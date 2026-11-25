@@ -1,3 +1,4 @@
+import { listOf } from '../../api/json';
 import { attr, childElements, firstChild, rootElement } from '../../api/xml';
 import {
   AuthoringDraft,
@@ -34,8 +35,8 @@ function objectOrNull(value: unknown): Json | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Json) : null;
 }
 
-function array(value: unknown): unknown[] {
-  return Array.isArray(value) ? value : [];
+function array(value: unknown): readonly unknown[] {
+  return listOf(value);
 }
 
 function text(value: unknown): string | null {

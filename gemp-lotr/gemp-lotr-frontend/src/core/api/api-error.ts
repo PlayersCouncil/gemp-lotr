@@ -36,7 +36,7 @@ export class ApiError extends Error {
     if (error instanceof HttpErrorResponse) {
       return new ApiError(error.status, `Gemp server call failed (HTTP ${error.status}): ${error.url ?? ''}`, {
         cause: error,
-        said: saidIn(error.error),
+        said: saidIn(error.error as unknown),
       });
     }
     return new ApiError(INVALID_RESPONSE_STATUS, 'Unreadable response from the Gemp server', { cause: error });

@@ -2,6 +2,7 @@ import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { DeliveryAnnouncements, DeliveryKind } from '../../api/delivery-announcements';
 import { GempHttp } from '../../api/gemp-http.service';
+import { listOf } from '../../api/json';
 import { PackDelivery } from '../../api/models';
 import { parsePackDelivery } from '../../api/parsers';
 import { MarkupNode, parseServerMarkup, RICH_MARKUP } from '../../chat/chat-markup';
@@ -85,17 +86,13 @@ export class HallDeliveriesApi {
 
   /** GET /delivery/league: the Race to Mount Doom moves; consumes them. */
   leagueNotifications(): Observable<LeagueNotification[]> {
-    return this.http
-      .getJson<unknown>('/delivery/league')
-      .pipe(
-        map((json) =>
-          Array.isArray(json)
-            ? json
-                .filter((e): e is Record<string, unknown> => e !== null && typeof e === 'object')
-                .map(parseLeagueNotification)
-            : [],
-        ),
-      );
+    return this.http.getJson<unknown>('/delivery/league').pipe(
+      map((json) =>
+        listOf(json)
+          .filter((e): e is Record<string, unknown> => e !== null && typeof e === 'object')
+          .map(parseLeagueNotification),
+      ),
+    );
   }
 }
 

@@ -1,5 +1,6 @@
 import { catchError, map, Observable, of } from 'rxjs';
 import { ApiError } from '../../api/api-error';
+import { parseJson } from '../../api/json';
 import { RESULT_OK, statusMessage } from './hall-tables-messages';
 import { parseTableCallResult } from './hall-table-parsers';
 import { TableCallResult } from './hall-table-models';
@@ -56,7 +57,7 @@ export function errorDetail(error: ApiError): string | null {
   let body = (cause as { error?: unknown }).error;
   if (typeof body === 'string') {
     try {
-      body = JSON.parse(body);
+      body = parseJson(body);
     } catch {
       body = null;
     }

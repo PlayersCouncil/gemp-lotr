@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { GempHttp } from '../../api/gemp-http.service';
+import { parseJson } from '../../api/json';
 import {
   CalendarMonth,
   CompletedEventsMonth,
@@ -101,7 +102,7 @@ export class EventsApi {
 
 function readJson(text: string): unknown {
   try {
-    return JSON.parse(text);
+    return parseJson(text);
   } catch (cause) {
     throw new ApiError(INVALID_RESPONSE_STATUS, 'The answer is not JSON', { cause });
   }

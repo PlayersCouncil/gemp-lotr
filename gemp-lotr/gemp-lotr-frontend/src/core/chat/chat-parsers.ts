@@ -1,3 +1,4 @@
+import { stringsOf } from '../api/json';
 import { attr, childElements, rootElement } from '../api/xml';
 import { ChatMessage, ChatRole, ChatSnapshot, ChatUser, IgnoreResult } from './chat-models';
 
@@ -38,7 +39,7 @@ function toRole(value: string | null): ChatRole | null {
 /** GET /player/ignores: {ignored: [names]}; anything else is an empty list. */
 export function parseIgnored(json: unknown): string[] {
   const ignored = (json as { ignored?: unknown } | null)?.ignored;
-  return Array.isArray(ignored) ? ignored.filter((name): name is string => typeof name === 'string') : [];
+  return stringsOf(ignored);
 }
 
 /** POST /player/ignores/add or /remove: {outcome, changed, error, name, message, ignored}. */

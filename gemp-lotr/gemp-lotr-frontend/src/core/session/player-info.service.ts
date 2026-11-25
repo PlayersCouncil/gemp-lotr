@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom, Observable, shareReplay, tap } from 'rxjs';
 import { ApiError } from '../api/api-error';
 import { GempHttp } from '../api/gemp-http.service';
+import { parseJson } from '../api/json';
 import { parsePlayer, Player } from './player';
 
 /** What is known about who is logged in: not asked yet or waiting, a player, or nobody (not logged in). */
@@ -75,7 +76,7 @@ export class PlayerInfo {
 
 function jsonIn(text: string): unknown {
   try {
-    return JSON.parse(text);
+    return parseJson(text);
   } catch {
     return null;
   }

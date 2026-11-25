@@ -1,3 +1,4 @@
+import { listOf, stringsOf } from '../../api/json';
 import { parseServerMarkup, RICH_MARKUP } from '../../chat/chat-markup';
 import { PatchNote, PatchNoteFilter, PatchNotesMonth, PatchNotesPage } from './patch-notes-models';
 
@@ -36,7 +37,7 @@ function parseNote(value: unknown): PatchNote | null {
     date: text(json['date']) ?? '',
     title: text(json['title']) === '' ? null : text(json['title']),
     summary,
-    tags: Array.isArray(json['tags']) ? json['tags'].filter((tag): tag is string => typeof tag === 'string') : [],
+    tags: stringsOf(json['tags']),
     // summaryHtml: the summary with its culture icons, escaped by the server; else plain text
     summaryMarkup: summaryHtml
       ? parseServerMarkup(summaryHtml, RICH_MARKUP)
@@ -50,15 +51,13 @@ function parseNote(value: unknown): PatchNote | null {
 /** GET /patchnotes's answer. */
 export function parsePatchNotesPage(json: unknown): PatchNotesPage {
   const data = object(json);
-  const notes = Array.isArray(data['notes'])
-    ? data['notes'].map(parseNote).filter((note): note is PatchNote => note !== null)
-    : [];
-  const filters: PatchNoteFilter[] = Array.isArray(data['filters'])
-    ? data['filters'].map((entry: unknown) => {
-        const filter = object(entry);
-        return { tag: text(filter['tag']) ?? '', count: int(filter['count'], 0) };
-      })
-    : [];
+  const notes = listOf(data['notes'])
+    .map(parseNote)
+    .filter((note): note is PatchNote => note !== null);
+  const filters: PatchNoteFilter[] = listOf(data['filters']).map((entry: unknown) => {
+    const filter = object(entry);
+    return { tag: text(filter['tag']) ?? '', count: int(filter['count'], 0) };
+  });
   return {
     total: int(data['total'], notes.length),
     start: int(data['start'], 0),
@@ -72,19 +71,16 @@ export function parsePatchNotesPage(json: unknown): PatchNotesPage {
 
 /** GET /patchnotes/months's answer, newest first. */
 export function parsePatchNotesMonths(json: unknown): PatchNotesMonth[] {
-  const months = object(json)['months'];
-  return Array.isArray(months)
-    ? months
-        .map((entry: unknown) => {
-          const month = object(entry);
-          return {
-            month: text(month['month']) ?? '',
-            first: text(month['first']) ?? '',
-            count: int(month['count'], 0),
-          };
-        })
-        .filter((month) => month.month !== '' && month.first !== '')
-    : [];
+  return listOf(object(json)['months'])
+    .map((entry: unknown) => {
+      const month = object(entry);
+      return {
+        month: text(month['month']) ?? '',
+        first: text(month['first']) ?? '',
+        count: int(month['count'], 0),
+      };
+    })
+    .filter((month) => month.month !== '' && month.first !== '');
 }
 
 /** "#patch-notes" → newest; "#patch-notes/2023-12-09" → that note, in lower case; anything else null (parseHash). */

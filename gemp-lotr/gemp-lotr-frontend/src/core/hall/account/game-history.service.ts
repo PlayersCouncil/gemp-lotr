@@ -47,7 +47,7 @@ export interface EventSuggestion {
 }
 
 function hasFilters(filters: GameHistoryFilters): boolean {
-  return Object.values(filters).some((value) => value !== '');
+  return (Object.values(filters) as unknown[]).some((value) => value !== '');
 }
 
 /** The filters as the form has them, trimmed (GameHistoryUI.readFilters). */

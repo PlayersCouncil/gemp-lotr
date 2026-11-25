@@ -4,6 +4,7 @@
  * are open, a card's hand-put modifiers, the cultures a token can be, the Modify… menu's vocabulary). Read
  * defensively: anything unreadable is left out. Pure.
  */
+import { listOf } from '../../api/json';
 import { EDIT_TOOLS, EditSeat, EditTool, ModifierUntil } from './edit-ops';
 
 export type EditMode = 'play' | 'edit';
@@ -111,7 +112,7 @@ type Json = Record<string, unknown>;
 
 const object = (value: unknown): Json =>
   typeof value === 'object' && value !== null && !Array.isArray(value) ? (value as Json) : {};
-const list = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
+const list = (value: unknown): readonly unknown[] => listOf(value);
 const text = (value: unknown): string | null => (typeof value === 'string' ? value : null);
 const number = (value: unknown): number | null => (typeof value === 'number' && Number.isFinite(value) ? value : null);
 const strings = (value: unknown): string[] => list(value).filter((item): item is string => typeof item === 'string');

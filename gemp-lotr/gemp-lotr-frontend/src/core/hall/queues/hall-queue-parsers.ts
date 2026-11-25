@@ -1,3 +1,4 @@
+import { parseJson, stringsOf } from '../../api/json';
 import { SERVER_URL } from '../../platform/app-paths';
 import { HallItemChange } from '../hall-models';
 import {
@@ -27,12 +28,9 @@ const lower = (value: string | undefined): HallEventType => (value ?? '').toLowe
  * HTML: a breakdown there (markup) gives the label "Prize Breakdown" and no lines, plain text is the label itself.
  */
 export function parsePrizes(attributes: Readonly<Record<string, string>>): HallPrizes {
-  let lines: string[] = [];
+  let lines: string[];
   try {
-    const parsed: unknown = JSON.parse(attributes['prizesLines'] ?? '');
-    if (Array.isArray(parsed)) {
-      lines = parsed.filter((line): line is string => typeof line === 'string');
-    }
+    lines = stringsOf(parseJson(attributes['prizesLines'] ?? ''));
   } catch {
     lines = [];
   }

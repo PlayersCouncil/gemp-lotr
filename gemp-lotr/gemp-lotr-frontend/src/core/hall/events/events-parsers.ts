@@ -1,4 +1,5 @@
 import { parseServerMarkup, RICH_MARKUP } from '../../chat/chat-markup';
+import { listOf } from '../../api/json';
 import { attr, boolAttr, childElements, intAttr, parseXml, rootElement } from '../../api/xml';
 import { price } from '../price';
 import {
@@ -35,8 +36,8 @@ function object(value: unknown): Json {
   return value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Json) : {};
 }
 
-function array(value: unknown): unknown[] {
-  return Array.isArray(value) ? value : [];
+function array(value: unknown): readonly unknown[] {
+  return listOf(value);
 }
 
 /** A text field; numbers are taken as their text (ids may be either). */

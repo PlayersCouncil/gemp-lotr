@@ -7,6 +7,7 @@
  * and anything else in it are copied as they are. Pure.
  */
 import { Draft, DraftEnd, DraftMessage, DraftMessageValue } from './authoring-state';
+import { isMessageList } from './steps';
 
 type Outcome = NonNullable<Draft['outcome']>;
 type Result = DraftEnd['result'];
@@ -62,7 +63,7 @@ export function messageValue(message: DraftMessage): DraftMessageValue {
 }
 
 const listOf = (value: readonly DraftMessageValue[] | DraftMessageValue | undefined): DraftMessage[] =>
-  value === undefined ? [] : (Array.isArray(value) ? value : [value as DraftMessageValue]).map(messageObject);
+  value === undefined ? [] : (isMessageList(value) ? value : [value]).map(messageObject);
 
 /** The closing messages of an ending, as objects. */
 export function endingMessages(outcome: Outcome | undefined, kind: EndingKind): DraftMessage[] {

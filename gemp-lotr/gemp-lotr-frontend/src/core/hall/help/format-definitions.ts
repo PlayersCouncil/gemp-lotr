@@ -1,3 +1,4 @@
+import { listOf, stringsOf } from '../../api/json';
 import {
   CANCEL_FACT,
   ERRATA_FACT,
@@ -71,7 +72,9 @@ function parseCard(value: unknown): FormatCard | null {
 }
 
 function parseCards(value: unknown): FormatCard[] {
-  return Array.isArray(value) ? value.map(parseCard).filter((card): card is FormatCard => card !== null) : [];
+  return listOf(value)
+    .map(parseCard)
+    .filter((card): card is FormatCard => card !== null);
 }
 
 /** One format's entry (of /hall/formats/json, or GET /hall/format/{code}/json); null without a code. */
@@ -114,18 +117,15 @@ export function parseFormat(value: unknown): FormatDefinition | null {
       limit3: parseCards(lists['limit3']),
       valid: parseCards(lists['valid']),
     },
-    restrictedNames: Array.isArray(json['restrictedNames'])
-      ? json['restrictedNames'].filter((name): name is string => typeof name === 'string')
-      : [],
+    restrictedNames: stringsOf(json['restrictedNames']),
   };
 }
 
 /** The answer of GET /hall/formats/json; anything but a list of formats reads as none (GempFormatDefinitions.render). */
 export function parseFormatDefinitions(json: unknown): FormatDefinition[] {
-  const formats = object(json)['formats'];
-  return Array.isArray(formats)
-    ? formats.map(parseFormat).filter((format): format is FormatDefinition => format !== null)
-    : [];
+  return listOf(object(json)['formats'])
+    .map(parseFormat)
+    .filter((format): format is FormatDefinition => format !== null);
 }
 
 /** The format a link names, by its code or by its anchor's part (`#format-<x>`, where x is the code made safe). */

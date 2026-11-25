@@ -1,3 +1,4 @@
+import { listOf, stringsOf } from '../../api/json';
 import { asText, orIfEmpty } from '../json-values';
 
 /** Play ▸ Create Tournament's form as a pure state machine (CreateTournament), for the view to draw and change. */
@@ -58,24 +59,20 @@ export interface TournamentFormats {
 export function parseTournamentFormats(json: unknown): TournamentFormats {
   const data = (json ?? {}) as Record<string, unknown>;
   const list = (value: unknown): TournamentFormatOption[] =>
-    Array.isArray(value)
-      ? value
-          .filter((entry): entry is Record<string, unknown> => entry !== null && typeof entry === 'object')
-          .map((entry) => ({
-            code: asText(entry['code']),
-            name: asText(entry['name']),
-            maxPlayers: typeof entry['maxPlayers'] === 'number' ? entry['maxPlayers'] : null,
-            recommendedTimer: typeof entry['recommendedTimer'] === 'string' ? entry['recommendedTimer'] : null,
-          }))
-      : [];
+    listOf(value)
+      .filter((entry): entry is Record<string, unknown> => entry !== null && typeof entry === 'object')
+      .map((entry) => ({
+        code: asText(entry['code']),
+        name: asText(entry['name']),
+        maxPlayers: typeof entry['maxPlayers'] === 'number' ? entry['maxPlayers'] : null,
+        recommendedTimer: typeof entry['recommendedTimer'] === 'string' ? entry['recommendedTimer'] : null,
+      }));
   return {
     constructed: list(data['constructed']),
     sealed: list(data['sealed']),
     soloDrafts: list(data['soloDrafts']),
     tableDrafts: list(data['tableDrafts']),
-    draftTimerTypes: Array.isArray(data['draftTimerTypes'])
-      ? data['draftTimerTypes'].filter((t): t is string => typeof t === 'string')
-      : [],
+    draftTimerTypes: stringsOf(data['draftTimerTypes']),
   };
 }
 
