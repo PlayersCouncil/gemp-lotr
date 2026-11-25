@@ -337,6 +337,10 @@ $(document).ready(
 		var hasStarted = function () {
 			return state.current != null && (state.current.status == "live" || state.current.status == "finished");
 		};
+		// players can be removed from a running tournament, or from the queue of one that has not started
+		var hasPlayersToManage = function () {
+			return state.current != null && (state.current.status == "live" || state.current.status == "scheduled");
+		};
 
 		var renderFacts = function (json) {
 			var facts = $("#tourney-facts").empty();
@@ -389,6 +393,7 @@ $(document).ready(
 			$("#tourney-settings-block").toggle(showSettings);
 			$("#tourney-state-block").toggle(json != null);
 			$("#tourney-stage-block").toggle(hasStarted());
+			$("#tourney-players-block").toggle(hasPlayersToManage());
 			$("#tourney-tables-block").toggle(hasStarted());
 			// the id is the key of an existing tournament and cannot be changed
 			$("#tourney-id").prop("readonly", json != null);
@@ -427,7 +432,7 @@ $(document).ready(
 			selectType("CONSTRUCTED");
 			applyMode();
 			resultdiv.html("Ready.");
-			$("#tourney-state-block, #tourney-stage-block, #tourney-tables-block").hide();
+			$("#tourney-state-block, #tourney-stage-block, #tourney-players-block, #tourney-tables-block").hide();
 		};
 		$("#tourney-new-button").button().click(function () {
 			startOver();
@@ -450,6 +455,8 @@ $(document).ready(
 					prepareStage(json);
 					prepareTables(json);
 				}
+				if (hasPlayersToManage())
+					loadManagedPlayers("Ready.");
 				resultdiv.html("Loaded '" + esc(json.name) + "' (" + esc(json.tournamentId) + ").");
 				var form = $("#tourney-form-anchor")[0];
 				if (form && form.scrollIntoView)
@@ -586,6 +593,62 @@ $(document).ready(
 				}, {});
 			}, tourneyErrorMap(out));
 		});
+
+		// =====================================================================================
+		// Players (a running tournament, or the queue of one that has not started)
+		// =====================================================================================
+		var loadManagedPlayers = function (message) {
+			var json = state.current;
+			var list = $("#players-list").empty();
+			if (message != null)
+				$("#players-result").text(message);
+			if (json == null)
+				return;
+			var id = json.tournamentId;
+			hall.comm.getTournamentPlayersForAdmin(id, function (answer) {
+				if (state.current == null || state.current.tournamentId != id)
+					return;
+				list.empty();
+				var players = answer.players || [];
+				$("#players-count").text(players.length == 0 ? (answer.started ? "No players." : "Nobody has signed up yet.")
+					: players.length + (answer.started ? " in the tournament" : " signed up") + ":");
+				for (var i = 0; i < players.length; i++) {
+					(function (p) {
+						var row = $("<div class='flex-horiz field-row managed-player'></div>").data("player", p.name);
+						row.append($("<span class='flex-fill'></span>").text(p.name + (p.dropped ? " (dropped)" : "")));
+						if (!p.dropped)
+							row.append($("<button type='button' class='player-remove'>Remove</button>").button().click(function () {
+								removeManagedPlayer(p.name);
+							}));
+						list.append(row);
+					})(players[i]);
+				}
+			}, tourneyErrorMap($("#players-result")));
+		};
+
+		var removeManagedPlayer = function (name) {
+			var json = state.current;
+			if (json == null)
+				return;
+			var started = hasStarted();
+			if (!confirm(started
+					? "Drop '" + name + "' from '" + json.name + "'? They cannot join it again."
+					: "Remove '" + name + "' from the queue of '" + json.name + "'? They cannot sign up for it again."))
+				return;
+			var out = $("#players-result");
+			out.text("Processing...");
+			hall.comm.removeTournamentPlayer(json.tournamentId, name, function (answer) {
+				loadManagedPlayers(answer.message);
+				refreshLists();
+				hall.comm.getTournamentForAdmin(json.tournamentId, function (fresh) {
+					state.current = fresh;
+					renderFacts(fresh);
+					applyMode();
+				}, {});
+			}, tourneyErrorMap(out));
+		};
+
+		$("#players-refresh").button().click(function () { loadManagedPlayers("Ready."); });
 
 		// =====================================================================================
 		// Manual tables (started tournaments)
@@ -1295,6 +1358,26 @@ function tourneyErrorMap(outputControl, callback=null) {
 				<div class="flex-horiz result-label">
 					<div class="label"><b>Result:</b></div>
 					<div id="stage-result" class="flex-fill result-box">Ready.</div>
+				</div>
+			</div>
+
+			<!-- players: a running tournament, or the queue of one that has not started -->
+			<div id="tourney-players-block" class="form-section" style="display:none">
+				<div class="section-title">Players <span class="info-toggle" data-for="help-players">i</span></div>
+				<div id="help-players" class="info-text" hidden>
+					Removes someone who joined an event they should not be in. In a running tournament the player is dropped, as if
+					they had dropped themselves: they stay in the standings marked as dropped, and cannot join again. A player who is
+					in a game must finish or concede it first. In the queue of a tournament that has not started, the player is taken
+					out, gets the entry cost back, and cannot sign up for it again.
+				</div>
+				<div class="flex-horiz field-row">
+					<span id="players-count" class="flex-fill"></span>
+					<button type="button" id="players-refresh">Refresh</button>
+				</div>
+				<div id="players-list"></div>
+				<div class="flex-horiz result-label">
+					<div class="label"><b>Result:</b></div>
+					<div id="players-result" class="flex-fill result-box">Ready.</div>
 				</div>
 			</div>
 

@@ -37,28 +37,64 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
     private final GameProcess _followingGameProcess;
     private GameProcess _nextProcess;
 
+    /**
+     * The parameter that marks a decision as asking for nothing but to be confirmed: there is nothing in it to
+     * choose, and its one answer is the empty one.  A client whose player has said not to be asked such things may
+     * answer it itself.
+     */
+    public static final String CONFIRM_ONLY = "confirmOnly";
+
     /** Extra card types of which a zero-cost card has already gone down this way. */
     private final Set<CardType> _zeroCostTypesPlayed;
 
+    /** Whether the player has put a card into this starting fellowship yet. */
+    private final boolean _chosenAny;
+
     public PlayerPlaysStartingFellowshipGameProcess(String playerId, GameProcess followingGameProcess) {
-        this(playerId, followingGameProcess, EnumSet.noneOf(CardType.class));
+        this(playerId, followingGameProcess, EnumSet.noneOf(CardType.class), false);
     }
 
     private PlayerPlaysStartingFellowshipGameProcess(String playerId, GameProcess followingGameProcess,
-                                                     Set<CardType> zeroCostTypesPlayed) {
+                                                     Set<CardType> zeroCostTypesPlayed, boolean chosenAny) {
         _playerId = playerId;
         _followingGameProcess = followingGameProcess;
         _zeroCostTypesPlayed = zeroCostTypesPlayed;
+        _chosenAny = chosenAny;
     }
 
     @Override
     public void process(LotroGame game) {
         Collection<PhysicalCard> possibleCharacters = getPossibleCharacters(game, _playerId);
-        if (possibleCharacters.isEmpty()) {
-            game.getActionsEnvironment().emitEffectResult(new FinishedPlayingFellowshipResult(_playerId));
-            _nextProcess = _followingGameProcess;
-        } else
+        if (!possibleCharacters.isEmpty())
             game.getUserFeedback().sendAwaitingDecision(_playerId, createChooseNextCharacterDecision(game, _playerId, possibleCharacters));
+        else if (_chosenAny)
+            //The fellowship is not complete until its player says so, though nothing more can go into it: until
+            // then the last card chosen is the player's own business, and can be taken back without asking anybody
+            // (once it is complete the other player goes on, or the hands are dealt)
+            game.getUserFeedback().sendAwaitingDecision(_playerId, createNothingMoreDecision(game));
+        else
+            //...but a player who never had anything to choose is not asked to say so
+            finished(game);
+    }
+
+    private void finished(LotroGame game) {
+        game.getActionsEnvironment().emitEffectResult(new FinishedPlayingFellowshipResult(_playerId));
+        _nextProcess = _followingGameProcess;
+    }
+
+    private AwaitingDecision createNothingMoreDecision(final LotroGame game) {
+        return new ArbitraryCardsSelectionDecision(1, "Starting fellowship - Nothing more can be added: press DONE",
+                new LinkedList<PhysicalCard>(), 0, 0) {
+            {
+                setParam(CONFIRM_ONLY, "true");
+            }
+
+            @Override
+            public void decisionMade(String result) throws DecisionResultInvalidException {
+                getSelectedCardsByResponse(result);
+                finished(game);
+            }
+        };
     }
 
     private boolean allowsExtraCardTypes(LotroGame game, String playerId) {
@@ -96,8 +132,7 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
             public void decisionMade(String result) throws DecisionResultInvalidException {
                 List<PhysicalCard> selectedCharacters = getSelectedCardsByResponse(result);
                 if (selectedCharacters.size() == 0) {
-                    game.getActionsEnvironment().emitEffectResult(new FinishedPlayingFellowshipResult(_playerId));
-                    _nextProcess = _followingGameProcess;
+                    finished(game);
                 } else {
                     PhysicalCard selectedPhysicalCard = selectedCharacters.get(0);
                     Set<CardType> zeroCostTypesPlayed = EnumSet.copyOf(_zeroCostTypesPlayed);
@@ -107,7 +142,7 @@ public class PlayerPlaysStartingFellowshipGameProcess implements GameProcess {
                         zeroCostTypesPlayed.add(selectedType);
                     Action playCardAction = PlayUtils.getPlayCardAction(game, selectedPhysicalCard, 0, Filters.any, false);
                     game.getActionsEnvironment().addActionToStack(playCardAction);
-                    _nextProcess = new PlayerPlaysStartingFellowshipGameProcess(_playerId, _followingGameProcess, zeroCostTypesPlayed);
+                    _nextProcess = new PlayerPlaysStartingFellowshipGameProcess(_playerId, _followingGameProcess, zeroCostTypesPlayed, true);
                 }
             }
         };

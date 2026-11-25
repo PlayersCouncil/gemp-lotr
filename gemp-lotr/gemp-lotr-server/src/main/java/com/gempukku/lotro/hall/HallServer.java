@@ -20,6 +20,7 @@ import com.gempukku.lotro.game.state.GameExtraInfo;
 import com.gempukku.lotro.league.LeagueSerieInfo;
 import com.gempukku.lotro.league.LeagueScheduleService;
 import com.gempukku.lotro.league.LeagueService;
+import com.gempukku.lotro.logic.GameSeed;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
@@ -399,6 +400,11 @@ public class HallServer extends AbstractServer {
         LotroFormat format = _formatLibrary.getHallFormats().get(type);
         GameTimer gameTimer = GameTimer.ResolveTimer(timer);
 
+        // Seeded test servers (GameRandom) also play the formats the hall doesn't offer, such as Debug, whose small
+        // decks let a test start with exactly the cards it needs
+        if (format == null && GameSeed.isSeeded())
+            format = _formatLibrary.getFormat(type);
+
         if (format == null) {
             // Maybe it's a league format?
             league = _leagueService.getLeagueByType(type);
@@ -574,6 +580,37 @@ public class HallServer extends AbstractServer {
         }
     }
 
+    /**
+     * Admin: sets the stage of one started tournament (see {@link TournamentService#setTournamentStageByAdmin}).
+     * @return false when there is no started tournament with this id
+     */
+    public boolean setTournamentStageByAdmin(String tournamentId, Tournament.Stage stage) {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            boolean done = _tournamentService.setTournamentStageByAdmin(tournamentId, stage);
+            if (done)
+                hallChanged();
+            return done;
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Admin: removes a player from a running tournament or a queue (see {@link TournamentService#removePlayerByAdmin}).
+     * @throws IllegalStateException with a message for the admin when the player was not removed
+     */
+    public String removeTournamentPlayerByAdmin(String tournamentId, String playerName) {
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            String result = _tournamentService.removePlayerByAdmin(tournamentId, playerName);
+            hallChanged();
+            return result;
+        } finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
     public void confirmReadyCheck(String queueId, Player player) throws SQLException, IOException {
         _hallDataAccessLock.writeLock().lock();
         try {
@@ -588,6 +625,30 @@ public class HallServer extends AbstractServer {
             }
         } finally {
             _hallDataAccessLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Whether this player is in the middle of something: sits at a waiting table, is signed up in a queue, is still
+     * in a running tournament, or is in a game that is not over. Being in a league is not counted, a league game
+     * under way is. While one alias of a PC account is busy its other aliases cannot be entered (PC-ACCOUNT.md).
+     */
+    public boolean isPlayerBusy(String playerName) {
+        _hallDataAccessLock.readLock().lock();
+        try {
+            if (tableHolder.isPlayerSeated(playerName))
+                return true;
+            for (TournamentQueue tournamentQueue : _tournamentService.getAllTournamentQueues()) {
+                if (tournamentQueue.isPlayerSignedUp(playerName))
+                    return true;
+            }
+            for (Tournament tournament : _tournamentService.getLiveTournaments()) {
+                if (tournament.isPlayerInCompetition(playerName))
+                    return true;
+            }
+            return false;
+        } finally {
+            _hallDataAccessLock.readLock().unlock();
         }
     }
 
@@ -918,6 +979,10 @@ public class HallServer extends AbstractServer {
             players.add(new LotroGameParticipant(BotService.GENERAL_BOT_NAME, botDeck));
         }
         LotroGameParticipant[] participants = players.toArray(new LotroGameParticipant[0]);
+        if (GameSeed.isSeeded()) {
+            // Seeded test servers: the same players give the same game, so their order can't depend on object hashes
+            Arrays.sort(participants, Comparator.comparing(LotroGameParticipant::getPlayerId));
+        }
         final League league = gameTable.getGameSettings().league();
         final LeagueSerieInfo leagueSerie = gameTable.getGameSettings().leagueSerie();
 

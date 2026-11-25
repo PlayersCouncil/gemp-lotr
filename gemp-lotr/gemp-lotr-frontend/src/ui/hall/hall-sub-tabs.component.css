@@ -1,0 +1,73 @@
+/*
+ * The vertical sub-tabs (hall.css .sub-tabs and .ui-tabs-vertical, jQuery UI's .ui-tabs-nav): a header-coloured
+ * list at most 200px wide, sticky at the top of the tab, each sub-tab a full-width button-like link with its left
+ * corners rounded.
+ */
+
+:host {
+  position: sticky;
+  top: 5px;
+  /*
+   * stretched to the frame's height as legacy's .sub-tabs is: where the tab's page does not scroll, that leaves the
+   * sticky list no room to move, so it stays where it is instead of 1px lower (top: 5px is 1px below its place)
+   */
+  align-self: stretch;
+  /*
+   * The legacy list is a float in the frame's flex row: its width is its widest sub-tab, at most 200px, and it gives
+   * way (flex-shrink 1, in proportion to its width) with the page when the row is too narrow, down to its longest label
+   */
+  flex: 0 1 auto;
+  /* the list's 200px and its padding and border (it starts at its widest; a label is never wider) */
+  width: calc(200px + 0.4em + 2px);
+  /* hall.css .sub-tabs (the tab frame gives the jQuery UI widget's padding and the clearfix's 5px gap) */
+  margin: 4px;
+}
+
+.gd-hall-sub-tabs__list {
+  display: flex;
+  flex-direction: column;
+  box-sizing: content-box;
+  max-width: 200px;
+  margin: 0;
+  padding: 0.2em 0.2em 0;
+  border: 1px solid var(--theme-header-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-header-bg);
+}
+
+.gd-hall-sub-tabs__tab {
+  display: block;
+  margin: 0 -1px 0.2em 0;
+  /* jQuery UI's .ui-tabs-anchor padding and .ui-helper-reset's line-height */
+  padding: 0.5em 1em;
+  line-height: 1.3;
+  border: 1px solid var(--theme-widget-border);
+  border-right-width: 0;
+  border-radius: var(--theme-radius) 0 0 var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.gd-hall-sub-tabs__tab:hover,
+.gd-hall-sub-tabs__tab:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+.gd-hall-sub-tabs__tab[aria-selected='true'] {
+  /*
+   * jQuery UI's li.ui-tabs-active (margin-bottom -1px, padding-bottom 1px, which hall.css takes back to 0) and hall.css's
+   * padding-right .1em on the active li, which reaches .1em further right than the others
+   */
+  margin-right: calc(-1px - 0.1em);
+  margin-bottom: -1px;
+  padding-right: calc(1em + 0.1em);
+  border-color: var(--theme-active-border);
+  background: var(--theme-hall-active-bg);
+  color: var(--theme-text);
+  cursor: text;
+}

@@ -1,0 +1,24 @@
+/* Flip: one of the edit controls' buttons, wherever it is put */
+
+.gd-flip-button {
+  padding: 1px 10px;
+  border: 1px solid var(--theme-game-edit-button-edge);
+  border-radius: 10px;
+  background: var(--theme-game-edit-button-bg);
+  color: var(--theme-game-edit-button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-flip-button[data-flipped] {
+  border-color: var(--theme-game-edit-glow);
+}
+
+.gd-flip-button:hover:not(:disabled) {
+  border-color: var(--theme-game-edit-glow);
+}
+
+.gd-flip-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

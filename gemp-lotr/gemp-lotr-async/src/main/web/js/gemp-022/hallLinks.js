@@ -4,6 +4,7 @@
  * A hall URL's fragment names what is on screen, so the address bar is always a link to it:
  *
  *   #game-hall, #help, #events, #info, #account, #admin        a top-level tab
+ *   #account/scenarios, #admin/scenarios                       My Scenarios, Scenario Admin
  *   #help/formats, #events/leagues, #info/stats, ...            a sub-tab (slugs in GempLinks.TABS)
  *   #help/manual                                               How Do I Play?, scrolled to the Manual
  *   #format-<code>                                             Help › Format Definitions, that format (GempFormatHelp)
@@ -51,13 +52,15 @@ var GempLinks = {
 		{slug: "account", href: "includes/account.html", login: true, aliases: ["my-account"], panel: "#accountMain", subs: [
 			{slug: "overview", match: ["#account"]},
 			{slug: "history", match: ["gameHistory"]},
-			{slug: "stats", match: ["yourStats"]}
+			{slug: "stats", match: ["yourStats"]},
+			{slug: "scenarios", match: ["myScenarios"]}
 		]},
 		{slug: "admin", href: "includes/admin.html", login: true, panel: "#adminMain", subs: [
 			{slug: "general", match: ["generalAdmin"]},
 			{slug: "league", match: ["leagueAdmin"]},
 			{slug: "tournament", match: ["tournamentAdmin"]},
 			{slug: "prizes", match: ["prizeAdmin"]},
+			{slug: "scenarios", match: ["scenarioAdmin"]},
 			{slug: "users", match: ["userAdmin"]}
 		]}
 	],
@@ -480,6 +483,11 @@ var GempHallSession = {
 	chat: null,
 	started: false,
 	loggedOut: false,     // a request found the viewer not logged in
+	// This page is open for its Admin tab alone (hall-legacy.html?admin=1, where the Angular hall's Admin tab leads):
+	// the hall itself is the Angular one, in another tab.  The server gives a player one hall at a time (a second
+	// one ends the first with "Concurrent access error"), so this page asks for the player but starts neither the
+	// hall's poll nor the chat.
+	adminOnly: /[?&]admin=1(?:&|$)/.test(window.location.search),
 
 	begin: function (hall, chat) {
 		var that = this;
@@ -513,6 +521,11 @@ var GempHallSession = {
 		if (this.started)
 			return;
 		this.started = true;
+		if (this.adminOnly) {
+			if (this.hall)
+				this.hall.startForAdmin();
+			return;
+		}
 		if (this.chat)
 			this.chat.start();
 		if (this.hall)

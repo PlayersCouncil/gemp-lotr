@@ -65,9 +65,11 @@ public class AdminLookupService {
      *
      * @param input       what the admin typed
      * @param name        the real player name, or null when there is no such player
+     * @param id          the player's numeric id ({@code player.id}), or null when there is no such player.  An admin
+     *                    recovering an account links this id to the player's PC account in Argonauth
      * @param suggestions close names when {@code name} is null
      */
-    public record PlayerResolution(String input, String name, List<String> suggestions) {
+    public record PlayerResolution(String input, String name, Integer id, List<String> suggestions) {
     }
 
     /**
@@ -539,7 +541,8 @@ public class AdminLookupService {
 
     /**
      * Resolves every name of a pasted list to a real player (exact name first, then a case-insensitive match), or
-     * reports it as unknown with a few close names.  Duplicates (ignoring case) are reported once.
+     * reports it as unknown with a few close names.  Duplicates (ignoring case) are reported once.  Used by the
+     * add-items form's player list and by the User Admin tab's player id lookup (account recovery).
      */
     public List<PlayerResolution> resolvePlayers(Collection<String> inputs) {
         List<PlayerResolution> result = new ArrayList<>();
@@ -550,7 +553,7 @@ public class AdminLookupService {
                 continue;
             Player player = _playerDAO.getPlayer(input);
             if (player != null) {
-                result.add(new PlayerResolution(input, player.getName(), List.of()));
+                result.add(new PlayerResolution(input, player.getName(), player.getId(), List.of()));
                 continue;
             }
             List<String> close = rankPlayerNames(input, _playerDAO.findPlayerNames(input, PLAYER_CANDIDATES), MAX_LIMIT);
@@ -561,10 +564,11 @@ public class AdminLookupService {
                     break;
                 }
             }
-            if (caseInsensitive != null)
-                result.add(new PlayerResolution(input, caseInsensitive, List.of()));
+            Player found = caseInsensitive == null ? null : _playerDAO.getPlayer(caseInsensitive);
+            if (found != null)
+                result.add(new PlayerResolution(input, found.getName(), found.getId(), List.of()));
             else
-                result.add(new PlayerResolution(input, null, close.subList(0, Math.min(SUGGESTIONS, close.size()))));
+                result.add(new PlayerResolution(input, null, null, close.subList(0, Math.min(SUGGESTIONS, close.size()))));
         }
         return result;
     }

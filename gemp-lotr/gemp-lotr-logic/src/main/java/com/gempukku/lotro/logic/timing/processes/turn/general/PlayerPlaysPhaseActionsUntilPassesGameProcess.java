@@ -8,6 +8,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.loops.LoopRun;
 import com.gempukku.lotro.logic.timing.loops.OnePlayerLoopPrompt;
 import com.gempukku.lotro.logic.timing.loops.OnePlayerLoopTracker;
+import com.gempukku.lotro.logic.timing.processes.AsksAgain;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 
 import java.util.List;
@@ -18,12 +19,14 @@ import java.util.List;
  * OnePlayerLoopTracker) is carried through the constructor, and with it the run of a loop the player has settled
  * (LoopRun), which is carried out before he is asked anything.
  */
-public class PlayerPlaysPhaseActionsUntilPassesGameProcess implements GameProcess {
+public class PlayerPlaysPhaseActionsUntilPassesGameProcess implements GameProcess, AsksAgain {
     private final String _playerId;
     private final GameProcess _followingGameProcess;
     private final OnePlayerLoopTracker _loopTracker;
 
     private GameProcess _nextProcess;
+    // Whether the choice of actions this step put to the player is still waiting for an answer (AsksAgain)
+    private boolean _asking;
 
     public PlayerPlaysPhaseActionsUntilPassesGameProcess(String playerId, GameProcess followingGameProcess) {
         this(playerId, followingGameProcess, new OnePlayerLoopTracker());
@@ -63,14 +66,21 @@ public class PlayerPlaysPhaseActionsUntilPassesGameProcess implements GameProces
             return;
         }
 
+        offer(game, playableActions);
+    }
+
+    // The player passes by himself if he has nothing to play in a phase he is passed through; otherwise he is asked.
+    private void offer(final LotroGame game, List<Action> playableActions) {
         if (countUsable(game, playableActions) == 0 && game.shouldAutoPass(_playerId, game.getGameState().getCurrentPhase())) {
             playerPassed();
         } else {
+            _asking = true;
             game.getUserFeedback().sendAwaitingDecision(_playerId,
                     new CardActionSelectionDecision(game, 1, "Play " + game.getGameState().getCurrentPhase().getHumanReadable() + " action or Pass", playableActions) {
                         @Override
                         public void decisionMade(String result) throws DecisionResultInvalidException {
                             Action action = getSelectedAction(result);
+                            _asking = false;
                             if (action != null) {
                                 _loopTracker.chose(game, _playerId, action);
                                 _nextProcess = new PlayerPlaysPhaseActionsUntilPassesGameProcess(_playerId, _followingGameProcess, _loopTracker);
@@ -80,6 +90,29 @@ public class PlayerPlaysPhaseActionsUntilPassesGameProcess implements GameProces
                         }
                     });
         }
+    }
+
+    @Override
+    public boolean isAsking() {
+        return _asking;
+    }
+
+    @Override
+    public String askedPlayer() {
+        return _playerId;
+    }
+
+    /**
+     * Asks the player again, the actions on offer worked out afresh (AsksAgain).  The loop step (CR 4.2) is told
+     * nothing and not looked at: a decision is asked again only after the board was changed by hand (a scenario's
+     * sandbox), which chose nothing and passed nothing, and a loop's rounds are compared by the board each began on,
+     * so a changed board breaks any round in progress by itself.  The tracker is left as it was, so a game rebuilt
+     * from its journal, which asks again at the same points, tracks exactly as this one did.
+     */
+    @Override
+    public void askAgain(LotroGame game) {
+        _asking = false;
+        offer(game, game.getActionsEnvironment().getPhaseActions(_playerId));
     }
 
     // The actions the player can take: those not barred after a loop (they are offered, and refused if taken).

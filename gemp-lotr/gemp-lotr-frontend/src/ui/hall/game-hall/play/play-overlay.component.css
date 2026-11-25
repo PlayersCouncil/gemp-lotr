@@ -1,0 +1,835 @@
+/*
+ * The Play overlay and the Join dialog (hall.html #create-table-popup, #join-table-popup): hall.css .table-form,
+ * .inner-table-form, .label-column, .table-blurb, .result-box, .table-create-button, #create-table-selection,
+ * .flex-horiz; tables.css; icons.css .bigger-icon and .icon-*. Not scoped (see the component): every rule starts at
+ * gd-play-overlay, gd-join-dialog or .gd-play-form.
+ */
+
+/* ---------------------------------------------------------------- the dialogs */
+
+/* One size for the menu and every form: 900 x 800, kept 16px inside the window; a taller form scrolls */
+gd-play-overlay .gd-dialog[data-dialog='play'] {
+  --dialog-width: min(900px, calc(100vw - 32px - 0.4em - 2px));
+  --dialog-height: min(800px, calc(100vh - 32px - 0.4em - 2px));
+  height: var(--dialog-height);
+  min-width: 320px;
+}
+
+gd-join-dialog .gd-dialog[data-dialog='join'] {
+  --dialog-width: min(900px, calc(100vw - 32px - 0.4em - 2px));
+  --dialog-height: 300px;
+  min-width: 320px;
+}
+
+/*
+ * jQuery UI 1.13 centred them at half the free space around the unrounded outer width (900px + .4em + 2px), which
+ * the page then snaps to 1/64 px; margin: auto halves the snapped width instead, a fraction of a pixel off
+ */
+:is(gd-play-overlay .gd-dialog[data-dialog='play'], gd-join-dialog .gd-dialog[data-dialog='join']):not([data-placed]) {
+  right: auto;
+  left: calc((100vw - var(--gd-page-right, 0px) - (max(320px, var(--dialog-width)) + 0.4em + 2px)) / 2);
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* centred for the height it has with its form (jQuery UI positioned it after it was filled) */
+gd-join-dialog .gd-dialog[data-dialog='join']:not([data-placed]) {
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* the join form is the dialog's whole content (.inner-table-form.table-form): no space above it */
+gd-join-dialog .gd-play-form.gd-join {
+  margin-top: 0;
+}
+
+/* #join-table-popup is a .play-flow as the Play popup is: the same padding around the form */
+gd-join-dialog .gd-dialog[data-dialog='join'] .gd-dialog__body {
+  padding: 0.5em 1.5em 2em;
+}
+
+/* resizable, as the legacy popups, but with no grip drawn (the hall's jQuery UI theme drew none) */
+:is(gd-play-overlay, gd-join-dialog) .gd-dialog::-webkit-resizer {
+  background: none;
+}
+
+gd-play-overlay .gd-dialog[data-dialog='play'] .gd-dialog__body {
+  padding: 0.5em 1.5em 2em;
+  overflow-y: auto;
+}
+
+/* the close button: a jQuery UI 1.13 button, with its box */
+:is(gd-play-overlay, gd-join-dialog) .gd-dialog__close {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  padding: 1px;
+  border: 1px solid var(--theme-widget-border);
+  background: var(--theme-hall-default-bg);
+}
+
+:is(gd-play-overlay, gd-join-dialog) .gd-dialog__close:hover,
+:is(gd-play-overlay, gd-join-dialog) .gd-dialog__close:focus {
+  margin-top: -12px;
+}
+
+gd-play-overlay .gd-play-overlay {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* "< Back" stays at the upper left while a long form scrolls */
+gd-play-overlay .gd-play-overlay__back {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  align-self: flex-start;
+}
+
+gd-play-overlay .gd-play-overlay__error {
+  box-sizing: border-box;
+  width: 90%;
+  margin: 0.4em auto;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--theme-play-error-border);
+  color: var(--theme-play-error-text);
+}
+
+/* ---------------------------------------------------------------- the choice (#create-table-selection) */
+
+gd-play-overlay .gd-play-overlay__choices {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.6rem;
+  margin: 2rem 4rem;
+}
+
+gd-play-overlay .gd-play-overlay__choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+gd-play-overlay .gd-play-overlay__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .bigger-icon: 35px, 50px of the line, white unless the icon has a colour of its own */
+gd-play-overlay .gd-play-overlay__icon {
+  flex: 0 0 auto;
+  box-sizing: content-box;
+  width: 0;
+  height: 27px;
+  padding-top: 10px;
+  padding-left: 50px;
+  background: transparent no-repeat 0 0 / 35px;
+  vertical-align: middle;
+}
+
+gd-play-overlay .gd-play-overlay__icon[data-icon='scenario'] {
+  background-image: var(--theme-play-icon-scenario);
+}
+
+gd-play-overlay .gd-play-overlay__icon[data-icon='bot'] {
+  background-image: var(--theme-play-icon-bot);
+  filter: var(--theme-play-icon-bot-filter);
+}
+
+gd-play-overlay .gd-play-overlay__icon[data-icon='unranked'] {
+  background-image: var(--theme-play-icon-unranked);
+  filter: var(--theme-play-icon-unranked-filter);
+}
+
+gd-play-overlay .gd-play-overlay__icon[data-icon='league'] {
+  background-image: var(--theme-play-icon-league);
+  filter: var(--theme-play-icon-league-filter);
+}
+
+gd-play-overlay .gd-play-overlay__icon[data-icon='tournament'] {
+  background-image: var(--theme-play-icon-tournament);
+  filter: var(--theme-play-icon-tournament-filter);
+}
+
+gd-play-overlay .gd-play-overlay__subtitle {
+  color: var(--theme-play-subtitle);
+  font-size: 55%;
+  font-weight: normal;
+}
+
+/* ---------------------------------------------------------------- the buttons (jQuery UI 1.13, the hall's theme) */
+
+:is(gd-play-overlay, gd-join-dialog)
+  :is(
+    .gd-play-overlay__back,
+    .gd-play-overlay__choice,
+    .gd-play-form__button,
+    .gd-play-form__create,
+    .gd-play-form__unlock,
+    .gd-play-form__advanced-toggle
+  ) {
+  box-sizing: border-box;
+  margin-right: 0.1em;
+  padding: 0.4em 1em;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hall-default-bg);
+  color: var(--theme-widget-text);
+  font-family: var(--theme-font-widget);
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* .ui-widget button's font-size 1em (the choices have their own) */
+:is(gd-play-overlay, gd-join-dialog)
+  :is(
+    .gd-play-overlay__back,
+    .gd-play-form__button,
+    .gd-play-form__create,
+    .gd-play-form__unlock,
+    .gd-play-form__advanced-toggle
+  ) {
+  font-size: 1em;
+}
+
+:is(gd-play-overlay, gd-join-dialog)
+  :is(
+    .gd-play-overlay__back,
+    .gd-play-overlay__choice,
+    .gd-play-form__button,
+    .gd-play-form__unlock,
+    .gd-play-form__advanced-toggle
+  ):is(:enabled:hover, :focus-visible, a:hover) {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  color: var(--theme-text);
+  outline: none;
+}
+
+:is(gd-play-overlay, gd-join-dialog) :is(.gd-play-overlay__back, .gd-play-overlay__choice):focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hall-hover-bg);
+  outline: none;
+}
+
+:is(gd-play-overlay, gd-join-dialog) :is(button):disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* .table-create-button */
+gd-play-overlay .gd-play-form__create {
+  width: 100%;
+  background: var(--theme-hall-play-bg);
+}
+
+gd-play-overlay .gd-play-form__create:enabled:is(:hover, :focus-visible) {
+  background: var(--theme-hall-play-hover-bg);
+  outline: none;
+}
+
+/* ---------------------------------------------------------------- the forms (.table-form, .inner-table-form) */
+
+.gd-play-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6em;
+  box-sizing: border-box;
+  width: 90%;
+  min-width: min(300px, 100%);
+  margin: 1rem auto 0;
+}
+
+.gd-play-form h1 {
+  margin: 0.67em 0;
+  text-align: center;
+}
+
+/* Bot and Scenarios: the heading above the form (.table-form > h1), 1rem from the top */
+.gd-play-form[data-heading='outer'] > h1:first-child {
+  /* legacy's 0.67em below collapses with the form's 1rem; here the form's gap (0.6em of 13.2px = 0.3em of the
+     heading) makes up the rest */
+  margin: 0 0 0.37em;
+}
+
+/* League and Tournament: the form in its own padded box (#league-table-options, #tournament-table-options) */
+.gd-play-form__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6em;
+  box-sizing: content-box;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* hall.css .flex-vert.table-blurb: the text and the list are flex items 2px apart */
+.gd-play-form__blurb {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 1rem 0.8rem;
+  padding: 1rem;
+  border: medium solid var(--theme-play-blurb-border);
+  background-color: var(--theme-play-blurb-bg);
+}
+
+.gd-play-form__blurb ul {
+  margin: 1em 0;
+}
+
+.gd-play-form__deck {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.gd-play-form__row {
+  display: flex;
+  gap: 2px;
+}
+
+.gd-play-form__row > input[type='checkbox'] {
+  align-self: center;
+}
+
+/* .label-column */
+.gd-play-form__label {
+  flex: 0 0 auto;
+  width: max(200px, 20%);
+}
+
+.gd-play-form__row > .gd-play-form__field,
+.gd-play-form__row > gd-player-picker {
+  flex: 1 1 70%;
+  min-width: 0;
+}
+
+/* hall.css's fields */
+.gd-play-form :is(input, select, textarea) {
+  background-color: var(--theme-field-bg);
+  color: var(--theme-text);
+  font-family: var(--theme-font-widget);
+  font-size: 1em;
+}
+
+.gd-play-form select {
+  padding: 3px;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+}
+
+.gd-play-form select:enabled:hover {
+  background-color: var(--theme-field-hover-bg);
+}
+
+.gd-play-form :is(input, textarea) {
+  margin: 2px;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+}
+
+.gd-play-form input:disabled {
+  background-color: var(--theme-field-disabled-bg);
+  color: var(--theme-field-disabled-text);
+}
+
+/* a disabled dropdown (the bot's format until unlocked): dimmed, as the legacy page drew it */
+.gd-play-form select:disabled {
+  opacity: 0.45;
+}
+
+.gd-play-form__unlock {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* disabled but still readable: the placeholder explains why the field is off */
+.gd-play-form :is(gd-player-picker input, input[data-field='description']):disabled {
+  border-color: var(--theme-play-disabled-field-border);
+  background-color: var(--theme-play-disabled-field-bg);
+  color: var(--theme-play-disabled-field-text);
+}
+
+.gd-play-form input:disabled::placeholder {
+  color: var(--theme-play-disabled-placeholder);
+  opacity: 1;
+}
+
+.gd-play-form input:not(:disabled)::placeholder {
+  color: var(--theme-play-placeholder);
+  opacity: 1;
+}
+
+/* the (i) toggles (tables.css .info-toggle) */
+.gd-play-form__info {
+  display: inline-block;
+  box-sizing: content-box;
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: 0.35em;
+  padding: 0;
+  border: 1px solid var(--theme-play-info);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--theme-play-info);
+  font-family: var(--theme-play-info-font);
+  font-size: 75%;
+  font-style: italic;
+  font-weight: bold;
+  line-height: 1.1em;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gd-play-form__info:hover,
+.gd-play-form__info:focus-visible {
+  background: var(--theme-play-info);
+  color: var(--theme-play-info-hover-text);
+  outline: none;
+}
+
+.gd-play-form h1 .gd-play-form__info {
+  font-size: 45%;
+}
+
+.gd-play-form__info-text {
+  display: block;
+  margin: -0.2em 0 0.3em;
+  padding: 0.3em 0.6em;
+  border-left: 2px solid var(--theme-play-info-border);
+  color: var(--theme-play-info-text);
+  font-size: 85%;
+}
+
+.gd-play-form__info-text code {
+  color: var(--theme-play-info-code);
+}
+
+.gd-play-form__format-description {
+  margin: 0.3em 0 0.2em;
+  color: var(--theme-play-format-description);
+}
+
+.gd-play-form__format-facts {
+  margin: 0.3em 0;
+  padding-left: 1.4em;
+}
+
+.gd-play-form__format-links {
+  margin-top: 0.2em;
+}
+
+.gd-play-form__format-link {
+  color: var(--theme-play-info);
+}
+
+/* the result (.result-label, .result-box) */
+.gd-play-form__result {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 0.4em;
+}
+
+.gd-play-form__result-label {
+  padding: 1em;
+}
+
+.gd-play-form__result-box {
+  flex-grow: 1;
+  margin: 0.5em;
+  padding: 0.5em;
+  border: 1px solid var(--theme-play-result-border);
+  background: var(--theme-play-result-bg);
+  text-wrap: balance;
+}
+
+.gd-play-form__result-box[data-kind='success'] {
+  border-color: var(--theme-play-success-border);
+}
+
+.gd-play-form__result-box[data-kind='error'] {
+  border-color: var(--theme-play-error-border);
+  color: var(--theme-play-error-text);
+}
+
+/* ---------------------------------------------------------------- League and Tournament */
+
+.gd-play-form__league-panel {
+  box-sizing: content-box;
+  width: 90%;
+  max-height: 45vh;
+  margin: 0 auto;
+  padding: 1rem;
+  overflow-y: auto;
+  border: 1px solid var(--theme-play-panel-border);
+}
+
+.gd-play-form__next-steps {
+  margin-bottom: 0.6em;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--theme-play-info-border);
+}
+
+.gd-play-form__next-steps[data-error] {
+  border-color: var(--theme-play-error-border);
+  color: var(--theme-play-error-text);
+}
+
+.gd-play-form__next-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 0.4em 0;
+}
+
+/* .page-hint: its stylesheet (leagueAdmin.css) is not the hall's, so it is plain text there */
+.gd-play-form__hint {
+  margin: 0;
+}
+
+.gd-play-form__league-error {
+  border: 1px solid var(--theme-play-error-border);
+  padding: 0.4em 0.8em;
+  color: var(--theme-play-error-text);
+}
+
+.gd-play-form__startup,
+.gd-play-form__advanced {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* League: the form's box, the heading and the panel (.table-form.flex-vert) */
+gd-league-form.gd-play-form {
+  gap: 2px;
+}
+
+.gd-play-form__draft-info {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--theme-hall-hint);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* the rule under the advanced settings: its auto margins leave it no width in the column, as in the legacy form */
+.gd-play-form hr {
+  margin: 0.5em auto;
+}
+
+/* ---------------------------------------------------------------- the Join dialog */
+
+.gd-join__heading {
+  font-size: 2em;
+}
+
+/* .play-flow .table-form > h1: 1rem above the heading */
+.gd-play-form.gd-join > .gd-join__heading {
+  margin-top: 1rem;
+}
+
+.gd-join__subtitle {
+  margin-top: -0.4em;
+  color: var(--theme-play-subtitle);
+  font-size: 95%;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- Scenarios (tables.css .scenario-*) */
+
+.gd-scenario__browser {
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
+}
+
+.gd-scenario__folders {
+  flex: 0 0 13em;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--theme-scenario-folders-border);
+  background: var(--theme-scenario-folders-bg);
+}
+
+.gd-scenario__folder {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  padding: 0.45em 0.6em 0.45em calc(0.6em + var(--gd-scenario-depth, 0) * 1.1em);
+  border: none;
+  border-bottom: 1px solid var(--theme-scenario-folder-line);
+  background: none;
+  color: var(--theme-scenario-folder-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-scenario__folder:last-child {
+  border-bottom: none;
+}
+
+.gd-scenario__folder:hover,
+.gd-scenario__folder:focus-visible {
+  background: var(--theme-scenario-folder-hover-bg);
+}
+
+.gd-scenario__folder[aria-selected='true'] {
+  background: var(--theme-scenario-folder-selected-bg);
+  color: var(--theme-scenario-folder-selected-text);
+}
+
+.gd-scenario__folder-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.gd-scenario__folder-count {
+  flex: 0 0 auto;
+  color: var(--theme-scenario-count);
+  font-size: 85%;
+}
+
+.gd-scenario__list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  min-width: 0;
+}
+
+.gd-scenario__kind {
+  margin: 0.6em 0 0;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--theme-scenario-row-border);
+  font-size: 110%;
+}
+
+.gd-scenario__list > .gd-scenario__kind:first-child {
+  margin-top: 0;
+}
+
+.gd-scenario__row,
+.gd-scenario__current {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.6em 0.8em;
+  border: 1px solid var(--theme-scenario-row-border);
+  background: var(--theme-scenario-row-bg);
+}
+
+.gd-scenario__current {
+  border-color: var(--theme-scenario-current-border);
+}
+
+.gd-scenario__text,
+.gd-scenario__current-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.gd-scenario__title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.gd-scenario__status {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  min-width: 7.6em;
+  padding: 0.1em 0.5em;
+  border: 1px solid currentColor;
+  border-radius: 0.8em;
+  font-size: 70%;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.gd-scenario__title-text {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.gd-scenario__status[data-status='new'] {
+  color: var(--theme-scenario-status-new);
+}
+
+.gd-scenario__status[data-status='progress'] {
+  color: var(--theme-scenario-status-progress);
+}
+
+.gd-scenario__status[data-status='complete'] {
+  color: var(--theme-scenario-status-complete);
+}
+
+.gd-scenario__status[data-status='updated'] {
+  color: var(--theme-scenario-status-updated);
+}
+
+.gd-scenario__status[data-status='next'] {
+  border-color: var(--theme-scenario-status-next-bg);
+  background: var(--theme-scenario-status-next-bg);
+  color: var(--theme-scenario-status-next-text);
+  font-weight: bold;
+}
+
+.gd-scenario__summary {
+  margin-top: 0.2em;
+  color: var(--theme-scenario-summary);
+}
+
+.gd-scenario__notes {
+  margin-top: 0.3em;
+  color: var(--theme-scenario-notes);
+  font-size: 85%;
+}
+
+.gd-scenario :is(.gd-scenario__row, .gd-scenario__current) > .gd-play-form__button {
+  flex: 0 0 auto;
+  min-width: 7em;
+}
+
+.gd-scenario__author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6em;
+  margin-top: 1.4em;
+  padding: 0.5em 0.8em;
+  border: 1px dashed var(--theme-scenario-author-border);
+  color: var(--theme-scenario-summary);
+}
+
+.gd-scenario__author-note {
+  flex: 1 1 auto;
+  font-style: italic;
+}
+
+.gd-scenario__author a {
+  color: inherit;
+}
+
+.gd-scenario__note {
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--theme-scenario-note-border);
+  color: var(--theme-scenario-note-text);
+}
+
+.gd-scenario__unreadable {
+  max-height: 14em;
+  padding: 0.4em 0.8em;
+  overflow-y: auto;
+  border: 1px solid var(--theme-play-error-border);
+  color: var(--theme-play-error-text);
+}
+
+.gd-scenario__unreadable-heading {
+  font-weight: bold;
+}
+
+.gd-scenario__unreadable-file {
+  display: flex;
+  align-items: flex-start;
+  gap: 1em;
+  margin-top: 0.4em;
+}
+
+.gd-scenario__unreadable-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.gd-scenario__unreadable-note {
+  margin-top: 0.15em;
+  font-style: italic;
+}
+
+.gd-scenario__unreadable-file code {
+  color: var(--theme-scenario-code);
+  overflow-wrap: anywhere;
+}
+
+.gd-scenario__unreadable-file ul {
+  margin: 0.15em 0 0;
+  padding-left: 1.4em;
+}
+
+.gd-scenario__empty {
+  padding: 1em;
+  color: var(--theme-play-info-text);
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- narrow windows */
+
+@media (max-width: 700px) {
+  gd-play-overlay .gd-play-overlay__choices {
+    margin: 1rem 0.5rem;
+  }
+
+  gd-play-overlay .gd-play-overlay__choice {
+    font-size: 1.3rem;
+  }
+
+  .gd-play-form,
+  .gd-play-form__league-panel {
+    width: 100%;
+  }
+
+  .gd-play-form__label {
+    flex: 0 1 40%;
+    width: auto;
+  }
+
+  .gd-play-form__blurb {
+    margin: 0;
+  }
+
+  .gd-scenario__browser {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gd-scenario__folders {
+    flex: 0 0 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .gd-scenario__folder {
+    padding-left: 0.6em;
+    border-right: 1px solid var(--theme-scenario-folder-line);
+    border-bottom: none;
+  }
+}

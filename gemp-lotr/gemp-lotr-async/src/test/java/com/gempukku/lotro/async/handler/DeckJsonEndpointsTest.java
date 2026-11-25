@@ -18,7 +18,6 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -42,16 +41,12 @@ public class DeckJsonEndpointsTest {
     private static final String SERVER = "/gemp-lotr-server";
     private static final String DECK = "1_290|1_2|1_319,1_323|1_50,1_50,1_178|";
 
-    private String previousTestProperty;
     private Map<Type, Object> context;
     private LotroFormat format;
     private DeckRequestHandler handler;
 
     @Before
     public void setUp() throws CardNotFoundException {
-        // getResourceOwnerSafely treats the participantId as the login when -Dtest=true; these requests are anonymous
-        previousTestProperty = System.clearProperty("test");
-
         format = mock(LotroFormat.class);
         when(format.getCode()).thenReturn("pc_fotr_block");
         when(format.getName()).thenReturn("Fellowship Block (PC)");
@@ -84,12 +79,6 @@ public class DeckJsonEndpointsTest {
         context.put(LotroServer.class, lotroServer);
         context.put(LotroCardBlueprintLibrary.class, library);
         handler = new DeckRequestHandler(context);
-    }
-
-    @After
-    public void tearDown() {
-        if (previousTestProperty != null)
-            System.setProperty("test", previousTestProperty);
     }
 
     private static HttpRequest post(String uri, Map<String, String> form) {

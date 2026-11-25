@@ -1,0 +1,48 @@
+/* A search for a card by name (the legacy .sa-sitefinder with its .sa-results) */
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.gd-author-search__bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-author-search__bar .gd-author-input {
+  max-width: 220px;
+}
+
+.gd-author-search__bar .gd-author-button {
+  margin-bottom: 0;
+}
+
+.gd-author-search__results {
+  max-height: 190px;
+  overflow-y: auto;
+  margin-top: 2px;
+}
+
+.gd-author-search__result {
+  display: block;
+  width: 100%;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-author-search__result:hover,
+.gd-author-search__result:focus-visible {
+  background: var(--theme-game-author-row-selected-bg);
+}
+
+.gd-author-search__result[data-current] {
+  color: var(--theme-game-author-current-mark);
+}

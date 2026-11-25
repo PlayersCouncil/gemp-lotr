@@ -46,6 +46,33 @@ public interface Choices extends Decisions {
 	}
 
 	/**
+	 * Causes the Free Peoples player to confirm (press DONE) at a decision that asks only for that, and fails,
+	 * saying what is being asked, at any other decision: it is the answer to what
+	 * {@link Decisions#FreepsIsAskedOnlyToConfirm()} reads.  So it shows, as it answers, that the player was asked
+	 * nothing but to confirm ("Starting fellowship - Nothing more can be added: press DONE"), where
+	 * FreepsDeclineChoosing() would as readily choose no card at a choice that still offered some.
+	 */
+	default void FreepsConfirm() { Confirm(P1()); }
+	/**
+	 * Causes the Shadow player to confirm (press DONE) at a decision that asks only for that, and fails, saying
+	 * what is being asked, at any other decision: it is the answer to what
+	 * {@link Decisions#ShadowIsAskedOnlyToConfirm()} reads.  So it shows, as it answers, that the player was asked
+	 * nothing but to confirm ("Starting fellowship - Nothing more can be added: press DONE"), where
+	 * ShadowDeclineChoosing() would as readily choose no card at a choice that still offered some.
+	 */
+	default void ShadowConfirm() { Confirm(P2()); }
+	/**
+	 * Causes the given player to confirm at a decision that asks only for that (see {@link #FreepsConfirm()}).
+	 * @param player The player to answer for.  Fails, and answers nothing, if that player is being asked anything
+	 * else, or nothing.
+	 */
+	default void Confirm(String player) {
+		Verify(IsAskedOnlyToConfirm(player), player + " was to confirm, but is not being asked only to confirm.  "
+				+ DecisionGuard.askedOf(this, player));
+		PlayerDecided(player, "");
+	}
+
+	/**
 	 * Declines every sanctuary heal the Free Peoples player (player 1) has still to choose: while that player is
 	 * being asked "Sanctuary healing - Choose companion to heal", no companion is chosen, and it stops at the
 	 * first decision that is anything else, which it leaves unanswered.  So it declines all the heals of a

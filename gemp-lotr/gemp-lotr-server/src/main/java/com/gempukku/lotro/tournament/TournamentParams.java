@@ -26,6 +26,9 @@ public class TournamentParams {
     /** Extra prizes handed out when the tournament finishes, on top of the automatic {@link #prizes}. */
     public ArrayList<PrizeTier> prizeTiers = new ArrayList<>();
 
+    /** Players an admin removed from the tournament's queue before it started; they cannot join the tournament late. */
+    public ArrayList<String> removedPlayers = new ArrayList<>();
+
     public Tournament.Stage getInitialStage() {
         if(manualKickoff)
             return Tournament.Stage.AWAITING_KICKOFF;

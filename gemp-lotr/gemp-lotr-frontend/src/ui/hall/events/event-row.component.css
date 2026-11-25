@@ -1,0 +1,76 @@
+/*
+ * hall.css .event-row, .event-row-header, .event-row-title (the old lists' 200% bold name), .event-row-date and the
+ * inset drawer (.event-drawer) hanging from the header, which takes a subtle background while its drawer is open.
+ */
+
+:host {
+  display: block;
+  margin: 0 0 0.3em;
+}
+
+.gd-event-row__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3em 0.7em;
+  padding: 0.3em 0.5em;
+  border-bottom: 1px solid var(--theme-events-drawer-border);
+  border-radius: 4px 4px 0 0;
+  transition: background-color 0.15s ease;
+}
+
+.gd-event-row__header[data-expanded] {
+  border-bottom-color: var(--theme-widget-border);
+  background: var(--theme-events-row-open-bg);
+}
+
+.gd-event-row__toggle,
+.gd-event-row__go {
+  flex: none;
+}
+
+.gd-event-row__title {
+  min-width: 0;
+  font-size: 200%;
+  font-weight: bolder;
+  overflow-wrap: anywhere;
+}
+
+.gd-event-row__extras {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.gd-event-row__extras:empty {
+  display: none;
+}
+
+.gd-event-row__date {
+  margin-left: auto;
+  color: var(--theme-events-date);
+  white-space: nowrap;
+}
+
+.gd-event-row__drawer {
+  margin: 0 1.2em 0.6em;
+  padding: 0.5em 0.8em 0.8em;
+  border: 1px solid var(--theme-events-drawer-border);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  background: var(--theme-events-drawer-bg);
+}
+
+.gd-event-row__drawer[hidden] {
+  display: none;
+}
+
+.gd-event-row__loading {
+  color: var(--theme-events-loading);
+  font-style: italic;
+}
+
+.gd-event-row__error {
+  color: var(--theme-events-error);
+  font-weight: bold;
+}

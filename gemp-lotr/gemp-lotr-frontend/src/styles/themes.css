@@ -1,0 +1,1234 @@
+/*
+ * The themes: values only (colours, fonts, backgrounds, borders, radii, images). The components draw everything with
+ * these; ThemeService sets `data-theme` on <html>. Sizes and layout belong to the components, the same in every theme.
+ *
+ * classic: the legacy deck builder's look (deckBuild.html with the jQuery UI 1.8.16 "dark-hive" theme). Its images are
+ * in public/themes/classic/ (served next to the app, so referenced by their absolute address): the dark-hive images
+ * (MIT licensed, like the legacy copy in css/dark-hive) and hall.css's scroll buttons.
+ */
+:root {
+  /* Generic names, as the legacy page used the browser's defaults: each browser picks its own (Chromium Times New Roman
+   * and Arial, Firefox its serif and sans-serif); jQuery UI named Verdana for its widgets */
+  --theme-font-text: serif;
+  --theme-font-widget: Verdana, Arial, sans-serif;
+  --theme-font-control: sans-serif;
+
+  --theme-page-bg: #000;
+  --theme-text: #fff;
+  --theme-pane-border: #bbb;
+  --theme-separator: #ddd;
+  --theme-separator-toggle: #aaa;
+
+  /* jQuery UI widgets: buttons, dialogs, the slider, the boxes cards are drawn in */
+  --theme-widget-text: #eee;
+  --theme-widget-border: #444;
+  --theme-hover-border: #0b93d5;
+  --theme-active-border: #26b3f7;
+  --theme-content-border: #555;
+  --theme-header-border: #333;
+  --theme-content-bg: #000 url('/gemp-lotr/ng/themes/classic/ui-bg_loop_25_000000_21x21.png') 50% 50% repeat;
+  --theme-default-bg: #222 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_35_222222_1x100.png') 50% 50% repeat-x;
+  --theme-hover-bg: #003147 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_33_003147_1x100.png') 50% 50%
+    repeat-x;
+  --theme-active-bg: #0972a5 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-hard_20_0972a5_1x100.png') 50% 50%
+    repeat-x;
+  --theme-header-bg: #444 url('/gemp-lotr/ng/themes/classic/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50% repeat-x;
+  --theme-backdrop: rgb(92 92 92 / 0.8);
+  --theme-radius: 6px;
+  --theme-radius-box: 7px;
+  /* A box's frame drawn inside its border (box-shadow); none in classic */
+  --theme-frame-shadow: none;
+
+  /* The icon sprite (jQuery UI's 256 x 240 grid of 16px icons) in three colours */
+  --theme-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png');
+  --theme-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+  --theme-icons-active: url('/gemp-lotr/ng/themes/classic/ui-icons_222222_256x240.png');
+
+  /* The slider handle's keyboard focus ring, which Chrome drew around the legacy handle: dark, then light */
+  --theme-focus-ring-inner: #101010;
+  --theme-focus-ring-outer: #fff;
+  /* The filled part of a slider */
+  --theme-slider-fill: #757575;
+
+  /* The login page (src/Login/index.css): its picture, the bands across it, and its own link colours */
+  --theme-login-bg: #000 url('/gemp-lotr/ng/themes/classic/dwarrowdelf.jpg') center center / cover no-repeat;
+  --theme-login-band-bg: #222c;
+  --theme-login-banner: #d98e04;
+  --theme-login-error: #f00;
+  --theme-login-link: #bf6b04;
+  --theme-login-link-visited: #a63f03;
+  --theme-login-contact: orange;
+
+  /*
+   * The hall's frame (hall.css, icons.css; the hall's jQuery UI 1.13.2 "dark-hive" build, whose images differ from the
+   * deck builder's 1.8 ones and are in public/themes/classic/hall/). Icons are the site's own (images/icons)
+   */
+  --theme-hall-content-bg: #000 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_loop_25_000000_21x21.png') 50% 50% repeat;
+  --theme-hall-default-bg: #222 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_35_222222_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-hover-bg: #003147 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_33_003147_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-active-bg: #0972a5 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-hard_20_0972a5_1x100.png') 50%
+    50% repeat-x;
+  --theme-hall-header-bg: #444 url('/gemp-lotr/ng/themes/classic/hall/ui-bg_highlight-soft_44_444444_1x100.png') 50% 50%
+    repeat-x;
+  /* .ui-widget-content's border in the 1.13 build (the deck builder's 1.8 one is #555) */
+  --theme-hall-content-border: #444;
+  --theme-hall-panel-bg: linear-gradient(to top, #200902, #111 80%);
+  --theme-hall-info-bg: linear-gradient(to top, #333, #111 40%, #111);
+  --theme-hall-info-border: #bf8a4a;
+  --theme-hall-bar-bg: #333;
+  --theme-hall-bar-border: #aaa;
+  --theme-hall-play-bg: #540 linear-gradient(#845826, #1c1c1c);
+  --theme-hall-play-hover-bg: #540 linear-gradient(#bf8a4a, #1c1c1c);
+  --theme-hall-clock: #dd0;
+  --theme-hall-link: #e88104;
+  --theme-hall-link-hover: #ffa640;
+  --theme-hall-resizer: #777;
+  --theme-hall-resizer-grip: #999;
+  /* Black SVG icons drawn white; Play's drawn gold */
+  --theme-hall-icon-filter: brightness(0) invert(1);
+  --theme-hall-play-icon-filter: invert(74%) sepia(62%) saturate(1872%) hue-rotate(333deg) brightness(101%)
+    contrast(92%);
+  --theme-hall-icon-game-hall: url('/gemp-lotr/images/icons/swords.svg');
+  --theme-hall-icon-help: url('/gemp-lotr/images/icons/circle-question-solid.svg');
+  --theme-hall-icon-events: url('/gemp-lotr/images/icons/flag-solid.svg');
+  --theme-hall-icon-info: url('/gemp-lotr/images/icons/chart-line-solid.svg');
+  --theme-hall-icon-account: url('/gemp-lotr/images/icons/gear-solid.svg');
+  --theme-hall-icon-admin: url('/gemp-lotr/images/icons/toolbox-solid.svg');
+  --theme-hall-icon-bug: url('/gemp-lotr/images/icons/bug-solid.svg');
+  --theme-hall-icon-report: url('/gemp-lotr/images/icons/ban-solid.svg');
+  --theme-hall-icon-discord: url('/gemp-lotr/images/icons/discord-brands.svg');
+  --theme-hall-icon-wiki: url('/gemp-lotr/images/icons/book-open-solid.svg');
+  --theme-hall-icon-merchant: url('/gemp-lotr/images/icons/store-slash-solid.svg');
+  --theme-hall-icon-deckbuilder: url('/gemp-lotr/images/icons/hammer-solid.svg');
+  --theme-hall-icon-play: url('/gemp-lotr/images/icons/card-random.svg');
+  /* The connection readout and its popup (hallUi.js HallConnectionIndicator) */
+  --theme-hall-connection-text: #ccc;
+  --theme-hall-connection-hover-bg: #444;
+  --theme-hall-state-ring: #0006;
+  --theme-hall-state-connecting: #f08c28;
+  --theme-hall-state-connected: #3fbf5f;
+  --theme-hall-state-shutdown: #f5e030;
+  --theme-hall-state-shutdown-text: #f5e36a;
+  --theme-hall-state-disconnected: #e04040;
+  --theme-hall-state-disconnected-text: #ff8080;
+  --theme-hall-state-loggedout: #909090;
+  --theme-hall-popup-bg: #222;
+  --theme-hall-popup-border: #666;
+  --theme-hall-popup-shadow: #000a;
+
+  /* The hall's chat (hall.css #chat, #chatMessages, .message, #userList, .chatUser, .chatUserMenu) */
+  --theme-chat-bg: #121212;
+  --theme-chat-messages-border: #222;
+  --theme-chat-outline: #777;
+  --theme-chat-text: #ddd;
+  --theme-chat-system: #8a8a8a;
+  --theme-chat-time: #cfcfcf;
+  --theme-chat-mention-bg: #ff04;
+  --theme-chat-ping-bg: #f004;
+  --theme-chat-quote-border: #505050;
+  --theme-chat-input-bg: #1c1c1c;
+  --theme-chat-stopped-bg: #f99;
+  --theme-chat-column-border: #999;
+  --theme-chat-player-hover-bg: #333;
+  --theme-chat-ignored: #999;
+  --theme-chat-badge-border: #666;
+  --theme-chat-admin-border: #d4a93a;
+  --theme-chat-admin-text: #f0cf73;
+  --theme-chat-league-admin-border: #5e9bd6;
+  --theme-chat-league-admin-text: #9cc7ef;
+  --theme-chat-online-border: #4f8a4f;
+  --theme-chat-online-bg: #1e3a1e;
+  --theme-chat-online-text: #b6ecb6;
+  --theme-chat-incognito-border: #8a7a4f;
+  --theme-chat-incognito-bg: #3a3320;
+  --theme-chat-incognito-text: #f0dc9c;
+  --theme-chat-menu-bg: #262626;
+  --theme-chat-menu-shadow: #0009;
+
+  /*
+   * Help and Server Info (hall part 4.3): hall.css .article / .lemph / table.tables, formatDefinitions.css,
+   * patchNotes.css, tables.css (.info-toggle), hall.css (share-link buttons, Server Stats)
+   */
+  --theme-hall-emphasis: #009f9f;
+  --theme-hall-table-bg: #121212;
+  --theme-hall-table-border: #444;
+  --theme-hall-table-header-bg: #333;
+  --theme-hall-share-border: #444;
+  --theme-hall-share-text: #aaa;
+  --theme-hall-share-note: #9c9;
+  --theme-hall-share-field-bg: #1d1d1d;
+  --theme-hall-share-field-text: #ddd;
+  --theme-hall-share-icon-filter: invert(0.75);
+  --theme-hall-share-icon-hover-filter: invert(1);
+  --theme-hall-formats-accent: #8ab;
+  --theme-hall-formats-errata-hover: #bcd;
+  --theme-hall-formats-intro: #ddd;
+  --theme-hall-formats-soft: #ccc;
+  --theme-hall-formats-muted: #aaa;
+  --theme-hall-formats-faint: #999;
+  --theme-hall-formats-label: #9aa6b0;
+  --theme-hall-formats-permalink: #666;
+  --theme-hall-formats-thumb-name: #bbb;
+  --theme-hall-formats-info-font: Georgia, serif;
+  --theme-hall-formats-info-hover-text: #111;
+  --theme-hall-formats-help-border: #567;
+  --theme-hall-formats-line: #333;
+  --theme-hall-formats-side-bg: rgba(0, 0, 0, 0.35);
+  --theme-hall-formats-tools-bg: #140d0a;
+  --theme-hall-formats-field-bg: #111;
+  --theme-hall-formats-field-border: #555;
+  --theme-hall-formats-field-text: #eee;
+  --theme-hall-formats-nav: #cdd6e0;
+  --theme-hall-formats-nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --theme-hall-formats-nav-active-bg: rgba(255, 255, 255, 0.08);
+  --theme-hall-formats-card-bg: rgba(0, 0, 0, 0.28);
+  --theme-hall-formats-card-border: #3a3a3a;
+  --theme-hall-formats-highlight-bg: rgba(136, 170, 187, 0.18);
+  --theme-hall-formats-pc: #f0b35a;
+  --theme-hall-formats-pc-border: #8a5a14;
+  --theme-hall-formats-playtest: #c9a6ff;
+  --theme-hall-formats-playtest-border: #6a4b99;
+  --theme-hall-formats-count-bg: #3b4a5a;
+  --theme-hall-formats-count-banned-bg: #7a2a2a;
+  --theme-hall-formats-count-restricted-bg: #7a5a1a;
+  --theme-hall-formats-chip: #bfc6ff;
+  --theme-hall-formats-chip-bg: rgba(111, 111, 255, 0.08);
+  --theme-hall-formats-chip-hover-bg: rgba(111, 111, 255, 0.2);
+  --theme-hall-formats-chip-border: #3d4452;
+  --theme-hall-formats-hit-bg: rgba(232, 129, 4, 0.25);
+  --theme-hall-formats-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --theme-hall-notes-text: #ddd;
+  --theme-hall-notes-button-bg: #2b2b2b;
+  --theme-hall-notes-summary: #eee;
+  --theme-hall-notes-date: #9aa;
+  --theme-hall-notes-chip-bg: #1d1d1d;
+  --theme-hall-notes-chip-on-bg: #0972a5;
+  --theme-hall-notes-count-bg: rgba(255, 255, 255, 0.12);
+  --theme-hall-notes-tag-bg: rgba(38, 179, 247, 0.12);
+  --theme-hall-notes-tag-border: rgba(38, 179, 247, 0.35);
+  --theme-hall-notes-notice-bg: rgba(255, 255, 255, 0.05);
+  --theme-hall-notes-month-hover-bg: #3a3a3a;
+  --theme-hall-notes-target-glow: rgba(232, 129, 4, 0.25);
+  --theme-hall-notes-link-hover: #ffa53a;
+  --theme-hall-notes-code-bg: rgba(255, 255, 255, 0.08);
+  --theme-hall-notes-card: #8fb4ff;
+  --theme-hall-notes-card-hover: #c0d6ff;
+  --theme-hall-notes-card-underline: rgba(143, 180, 255, 0.7);
+  --theme-hall-notes-lightbox-bg: rgba(0, 0, 0, 0.62);
+  --theme-hall-notes-lightbox-font: Arial, Helvetica, sans-serif;
+  --theme-hall-notes-lightbox-shadow: rgba(0, 0, 0, 0.7);
+  --theme-hall-notes-close-bg: rgba(40, 40, 40, 0.9);
+  --theme-hall-load-error: #ffb0a0;
+
+  /* The hall's My Account tab (hall.css "tabs-account" and .pocket, .gameHistory, table.tables; scenarioShelf.css) */
+  --theme-account-help: #bbb;
+  --theme-account-label: #ccc;
+  --theme-account-row-border: #333;
+  --theme-account-pocket-bg: #000;
+  --theme-account-pocket-border: #fff;
+  --theme-account-cell-border: #fff;
+  --theme-account-empty: #bbb;
+  --theme-account-load-error: #ffb0a0;
+  --theme-account-win: #8fdc8f;
+  --theme-account-loss: #ff9a8a;
+  --theme-account-stats-bg: #121212;
+  --theme-account-stats-head-bg: #333;
+  --theme-account-stats-border: #444;
+  --theme-account-shelf-draft-border: #a8893a;
+  --theme-account-shelf-draft-bg: rgb(168 137 58 / 0.12);
+  --theme-account-shelf-picked-bg: rgb(212 175 55 / 0.14);
+  --theme-account-shelf-picked-mark: #d4af37;
+  --theme-account-shelf-error: #ff8a80;
+  --theme-account-shelf-success: #9ccc65;
+  --theme-account-shelf-pending: #bbb;
+  --theme-account-shelf-campaign: #ccb27a;
+  --theme-account-shelf-row-border: #3a3a3a;
+  --theme-account-shelf-row-hover: rgb(255 255 255 / 0.03);
+  --theme-account-shelf-dim: #999;
+  --theme-account-shelf-danger: #ef9a9a;
+  --theme-account-tag-border: #666;
+  --theme-account-tag-text: #ddd;
+  --theme-account-tag-review-border: #64b5f6;
+  --theme-account-tag-review-text: #90caf9;
+  --theme-account-tag-rejected-border: #ffb74d;
+  --theme-account-tag-rejected-text: #ffcc80;
+  --theme-account-tag-published-border: #d4af37;
+  --theme-account-tag-published-text: #f0d46b;
+  --theme-account-tag-published-bg: rgb(212 175 55 / 0.15);
+  --theme-account-tag-changed-border: #a8893a;
+  --theme-account-tag-changed-text: #ccb27a;
+  --theme-account-tag-broken-border: #e57373;
+  --theme-account-tag-broken-text: #ef9a9a;
+  --theme-account-tag-unverified-border: #888;
+  --theme-account-tag-unverified-text: #bbb;
+  --theme-account-feedback-border: #ffb74d;
+  --theme-account-feedback-bg: rgb(255 183 77 / 0.08);
+  /* The shelf's question box (scenarioSubmit.js, scenarioShelf.css): its own, not jQuery UI's */
+  --theme-account-box-shade: rgb(0 0 0 / 0.6);
+  --theme-account-box-bg: #1d1d1d;
+  --theme-account-box-text: #ddd;
+  --theme-account-box-border: #a8893a;
+  --theme-account-box-shadow: rgb(0 0 0 / 0.7);
+  --theme-account-box-title: #f0d46b;
+  --theme-account-box-font: Arial, Helvetica, sans-serif;
+  --theme-account-box-button-border: #777;
+  --theme-account-box-button-bg: #333;
+  --theme-account-box-button-text: #eee;
+  --theme-account-box-yes-border: #a8893a;
+  --theme-account-box-yes-bg: #5a4a1e;
+  --theme-account-box-danger-border: #b71c1c;
+  --theme-account-box-danger-bg: #5c1a1a;
+
+  /* Selects and text fields (hall.css) */
+  --theme-field-bg: #222;
+  --theme-field-hover-bg: #444;
+  --theme-field-border-light: #888;
+  --theme-field-border-dark: #666;
+  --theme-field-disabled-text: #ddd;
+  --theme-field-disabled-bg: #888;
+  --theme-field-radius: 8px;
+
+  /*
+   * Font metrics: the sizes the legacy page's fonts gave some boxes. Classic leaves them to its fonts (auto, normal),
+   * as the legacy page did; a theme with other fonts pins them, so its font moves nothing on a computer
+   */
+  --theme-metrics-filter-label-1: auto;
+  --theme-metrics-filter-label-2: auto;
+  --theme-metrics-filter-label-size: 80%;
+  --theme-metrics-filter-label-gap: 6px;
+  --theme-metrics-filter-label-line: normal;
+  --theme-metrics-filter-title-line: normal;
+  --theme-metrics-stats-line: normal;
+  --theme-metrics-widget-line: normal;
+  --theme-metrics-hint-line: normal;
+  --theme-metrics-deck-name-size: 1em;
+
+  /* The theme button: bright red in every theme, so players notice it (owner, 2026-11-11) */
+  --theme-attention-bg: #e0161e;
+  --theme-attention-hover-bg: #b80f16;
+  --theme-attention-border: #ff5a5f;
+  --theme-attention-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+
+  --theme-link-visited: #bf6b04;
+  /* Links in a dialog's text (game.css .ui-widget-content a) */
+  --theme-dialog-link: #bf6b04;
+  --theme-dialog-link-visited: #a63f03;
+  --theme-modified: orange;
+  --theme-error: red;
+  --theme-valid: green;
+  --theme-warning: yellow;
+  /*
+   * Black SVGs drawn white (the legacy trick). The other icons are white already; a theme may set
+   * --theme-other-icon-filter for them (classic sets none: an unset value is ignored)
+   */
+  --theme-culture-icon-filter: invert(89%) sepia(64%) saturate(0%) hue-rotate(145deg) brightness(116%) contrast(101%);
+
+  /*
+   * The game page (game.css). Its pictures are the site's own (/gemp-lotr/images), as on the legacy page
+   */
+  --theme-game-current-bg: #fff;
+  --theme-game-current-text: #000;
+  --theme-game-link: #9f9fff;
+  --theme-game-text-link: #bf6b04;
+  --theme-game-text-link-visited: #a63f03;
+  --theme-game-clock-bg: #000;
+  --theme-game-clock-text: #fff;
+  --theme-game-clock-warn-bg: #d9760a;
+  --theme-game-clock-danger-bg: #c62828;
+  --theme-game-twilight-bg: #000;
+  --theme-game-twilight-text: #fff;
+  --theme-game-twilight-border: #fff;
+  --theme-game-stats-text: #077;
+  --theme-game-number-text: #fff;
+  --theme-game-number-inactive-text: #777;
+  --theme-game-inactive-border: #333;
+  /* A card offered by the waiting decision: to choose, to use; and one chosen */
+  --theme-game-selectable: #7faf7f;
+  --theme-game-actionable: #7f7fff;
+  --theme-game-selected: #009f9f;
+  /* An action that would do nothing (game.css .noEffectCard, the new master of 2026-11-17) */
+  --theme-game-no-effect: #e6d36f;
+  /* Taking a game back (game.css "Undo and revert"): the tiers' colours, the list's lines, the banner */
+  --theme-game-undo-own: #7ccf7c;
+  --theme-game-undo-replays: #f0d860;
+  --theme-game-undo-revealed: #ee7b7b;
+  --theme-game-undo-on-tier: #111;
+  --theme-game-undo-edge: rgb(0 0 0 / 0.5);
+  --theme-game-undo-radius: 0.3em;
+  --theme-game-undo-box-radius: 0.4em;
+  --theme-game-undo-line: rgb(128 128 128 / 0.6);
+  --theme-game-undo-rule: rgb(128 128 128 / 0.3);
+  --theme-game-undo-heading-bg: rgb(128 128 128 / 0.25);
+  --theme-game-undo-banner-bg: rgb(20 20 20 / 0.92);
+  --theme-game-undo-banner-text: #fff;
+  --theme-game-undo-banner-radius: 0.5em;
+  /* A card's frame, and the frame an activated card flashes (game.css .highlightBorderOverlay) */
+  --theme-game-card-frame: #000;
+  --theme-game-highlight: #fff;
+  /* An inactive card that is offered or chosen is only lightly dimmed */
+  --theme-game-inactive-offered-filter: grayscale(0.3) brightness(0.85);
+  /*
+   * A scripted game (a scenario: a tutorial, a puzzle): the bubble its messages are in and the buttons under them,
+   * the outlines it draws (what a message is about, in the colour the message asks for; what to click next), what it
+   * says of a click it doesn't take, its menu, and the panel it ends with.
+   */
+  --theme-game-scenario-font: 'Trebuchet MS', 'Segoe UI', Verdana, sans-serif;
+  --theme-game-scenario-bg: #1c1912;
+  --theme-game-scenario-text: #f3ead6;
+  --theme-game-scenario-border: #d8b24a;
+  --theme-game-scenario-quiet-border: #b9ad8e;
+  --theme-game-scenario-shadow: 0 6px 24px rgba(0, 0, 0, 0.75);
+  --theme-game-scenario-heading: #f0cf6a;
+  --theme-game-scenario-muted: #b9ad8e;
+  --theme-game-scenario-grip: #6e6347;
+  --theme-game-scenario-strong: #ffe9a8;
+  --theme-game-scenario-link: #9fc4ff;
+  --theme-game-scenario-button-bg: #3a3017;
+  --theme-game-scenario-main-bg: #d8b24a;
+  --theme-game-scenario-main-text: #1c1912;
+  --theme-game-scenario-outline: #f0cf6a;
+  --theme-game-scenario-outline-alarm: #ff6b5e;
+  --theme-game-scenario-outline-go: #7fdc7f;
+  --theme-game-scenario-outline-cool: #7fb4ff;
+  --theme-game-scenario-outline-next: #7fe0ff;
+  --theme-game-scenario-hint-bg: #2b2518;
+  --theme-game-scenario-menu-bg: rgba(28, 25, 18, 0.88);
+  --theme-game-scenario-menu-border: #6e5f33;
+  --theme-game-scenario-rule: #4a4230;
+  --theme-game-scenario-shade: rgba(0, 0, 0, 0.55);
+  --theme-game-scenario-zoom-shade: rgba(0, 0, 0, 0.72);
+  --theme-game-scenario-zoom-dim: rgba(0, 0, 0, 0.62);
+  --theme-game-scenario-pointer-edge: rgba(0, 0, 0, 0.75);
+  /*
+   * The scenario authoring panel (scenarioAuthor.css of the legacy page), docked at the window's right while a
+   * scenario is written as it is played: its head (red while the draft has changes in no file), its notices, its tabs
+   * and buttons, the timeline's rows with the colour of each phase down their edge, and what each row is marked with.
+   */
+  --theme-game-author-font: 'Trebuchet MS', 'Segoe UI', Verdana, sans-serif;
+  --theme-game-author-code-font: Consolas, 'Courier New', monospace;
+  --theme-game-author-bg: #17150f;
+  --theme-game-author-text: #e9e0cb;
+  --theme-game-author-edge: #8c7436;
+  --theme-game-author-head-bg: #231f15;
+  --theme-game-author-title: #f0cf6a;
+  --theme-game-author-muted: #b9ad8d;
+  --theme-game-author-quiet: #a99e80;
+  --theme-game-author-dim: #8f8468;
+  --theme-game-author-options-text: #cfc4a6;
+  --theme-game-author-float-shadow: 0 6px 24px rgba(0, 0, 0, 0.75);
+  --theme-game-author-unsaved-bg: #8a2a0e;
+  --theme-game-author-unsaved-mark: #ff9a4a;
+  --theme-game-author-unsaved-title: #fff;
+  --theme-game-author-unsaved-where-bg: #4a1a0c;
+  --theme-game-author-unsaved-where-text: #ffd9b8;
+  --theme-game-author-save-bg: #ffb347;
+  --theme-game-author-save-border: #fff;
+  --theme-game-author-save-text: #2a1400;
+  --theme-game-author-notice-rule: #000;
+  --theme-game-author-error-bg: #5a1d1a;
+  --theme-game-author-error-text: #ffe2dc;
+  --theme-game-author-error-rule: #7a3a34;
+  --theme-game-author-error-strong: #fff;
+  --theme-game-author-error-code: #ffd9d2;
+  --theme-game-author-code-bg: rgba(0, 0, 0, 0.35);
+  --theme-game-author-warning-bg: #4a3a12;
+  --theme-game-author-warning-text: #ffe9b0;
+  --theme-game-author-good-bg: #1d4a26;
+  --theme-game-author-good-text: #dcffdf;
+  --theme-game-author-told-bg: #1d3a4a;
+  --theme-game-author-told-text: #d8f0ff;
+  --theme-game-author-uncovered-bg: #33240f;
+  --theme-game-author-uncovered-text: #f3e6c8;
+  --theme-game-author-uncovered-mark: #ffb347;
+  --theme-game-author-uncovered-head: #ffcf8a;
+  --theme-game-author-tab-active-mark: #d8b24a;
+  --theme-game-author-attention-bg: #7a3a12;
+  --theme-game-author-attention-text: #fff;
+  --theme-game-author-button-bg: #3a3322;
+  --theme-game-author-button-hover-bg: #4d4430;
+  --theme-game-author-button-border: #6b5a2c;
+  --theme-game-author-primary-bg: #7a6220;
+  --theme-game-author-primary-border: #d8b24a;
+  --theme-game-author-primary-text: #fff;
+  --theme-game-author-danger-border: #8a3a30;
+  --theme-game-author-field-bg: #0d0c09;
+  --theme-game-author-field-border: #3a3322;
+  --theme-game-author-list-bg: #100f0b;
+  --theme-game-author-row-rule: #25221a;
+  --theme-game-author-row-hover-bg: #26221a;
+  --theme-game-author-row-selected-bg: #3a3220;
+  --theme-game-author-row-even-bg: #121417;
+  --theme-game-author-current-bg: #4d3f14;
+  --theme-game-author-current-mark: #f0cf6a;
+  --theme-game-author-current-text: #fff;
+  --theme-game-author-matched: #8fd08a;
+  --theme-game-author-who-you: #9cc7ff;
+  --theme-game-author-who-opp: #ff9a8a;
+  --theme-game-author-who-read: #f0cf6a;
+  --theme-game-author-who-block: #c9a6ff;
+  --theme-game-author-act: #fff;
+  --theme-game-author-tag-border: #5a4d2a;
+  --theme-game-author-tag-awaiting: #ffcf8a;
+  --theme-game-author-tag-awaiting-border: #a8742a;
+  --theme-game-author-tag-mistake: #ffb4a8;
+  --theme-game-author-tag-mistake-border: #b0483c;
+  --theme-game-author-substep-bg: #15130d;
+  --theme-game-author-substep-even-bg: #14161a;
+  --theme-game-author-substep-mark: #6d5a96;
+  --theme-game-author-group-text: #d9cfb4;
+  --theme-game-author-group-bg: #1d1a12;
+  --theme-game-author-group-even-bg: #17191c;
+  --theme-game-author-group-rule: #4a4130;
+  /* Each phase's colour down the timeline's edge: neighbours in a turn told apart by hue */
+  --theme-game-author-phase-opening: #9a9a9a;
+  --theme-game-author-phase-fellowship: #6fae63;
+  --theme-game-author-phase-shadow: #9a72c8;
+  --theme-game-author-phase-maneuver: #2fb5b0;
+  --theme-game-author-phase-archery: #e8a33d;
+  --theme-game-author-phase-assignment: #c9a6ff;
+  --theme-game-author-phase-skirmish: #d24b4b;
+  --theme-game-author-phase-regroup: #cdb184;
+  --theme-game-author-phase-between-turns: #7d7d7d;
+  --theme-game-author-phase-block: #4f8fc4;
+  --theme-game-author-phase-none: #4a4130;
+  /* The Step tab: its sticky head, the message cards, a block's sections, a name that will not do */
+  --theme-game-author-step-head-rule: #4d4226;
+  --theme-game-author-step-head-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.6);
+  --theme-game-author-message-bg: #211d14;
+  --theme-game-author-panel-bg: #1b1811;
+  --theme-game-author-panel-head-bg: #262117;
+  --theme-game-author-panel-hover-bg: #322b1c;
+  --theme-game-author-panel-mark: #6b5c36;
+  /* The authoring panel's Board tab (the legacy .sa-section, .sa-changed, .sa-tag, .sa-zonehead, .sa-alias, .sa-bad) */
+  --theme-game-author-section-rule: #3a3322;
+  --theme-game-author-changed-mark: #d8b24a;
+  --theme-game-author-tag-bg: #d8b24a;
+  --theme-game-author-tag-text: #17150f;
+  --theme-game-author-place-rule: #4d4226;
+  --theme-game-author-alias: #9cc7ff;
+  --theme-game-author-hint-rule: #5d7fa8;
+  --theme-game-author-pending-text: #ffe9b0;
+  --theme-game-author-bad-border: #e0584a;
+  /* The Opponent tab, picking on the table, the pictures to choose from */
+  --theme-game-author-section-rule: #3a3322;
+  --theme-game-author-asked: #fff;
+  --theme-game-author-alias: #9cc7ff;
+  --theme-game-author-pick-edge: #4fd0ff;
+  --theme-game-author-pick-label-bg: #0a2a3a;
+  --theme-game-author-pick-label-text: #d8f0ff;
+  --theme-game-author-pictures-bg: #100e09;
+  --theme-game-author-pictures-border: #4d4226;
+  --theme-game-author-picture-hover-bg: #231f15;
+  --theme-game-author-picture-hover-border: #d8b24a;
+  /* The menu of a card's actions (jquery.contextMenu.css) */
+  --theme-game-menu-bg: #eee;
+  --theme-game-menu-border: #ccc;
+  --theme-game-menu-text: #333;
+  --theme-game-menu-hover-bg: #39f;
+  --theme-game-menu-hover-text: #fff;
+  --theme-game-menu-no-effect-text: #6f6650;
+  --theme-game-menu-no-effect-bar: #c9b24a;
+  --theme-game-spinner-bg: #000;
+  --theme-game-muted-mark: #ff3b3b;
+  --theme-game-muted-mark-edge: #000;
+  --theme-game-dialog-actions-bg: #000;
+  --theme-game-spinner-border: #000;
+  --theme-game-spinner-buttons: url('/gemp-lotr/ng/themes/classic/spinnerbuttons.png');
+  --theme-game-inactive-filter: grayscale(0.7) contrast(0.5) brightness(0.6);
+  --theme-game-fight-border: #f00;
+  --theme-game-strength-bg: #fff;
+  --theme-game-strength-overwhelmed-bg: #f33;
+  --theme-game-damage-bg: #ccc;
+  --theme-game-strength-text: #000;
+  --theme-game-chat-text: #3fafff;
+  --theme-game-chat-system-text: #5f5f5f;
+  --theme-game-chat-mention-bg: #ff02;
+  --theme-game-chat-quote: #505050;
+  --theme-game-card-hint: #6f6fff;
+  --theme-game-chat-ping-bg: #f004;
+  --theme-game-extra-bg: rgb(0 0 0 / 0.55);
+  --theme-game-icon-deck: url('/gemp-lotr/images/deck-42.png');
+  --theme-game-icon-hand: url('/gemp-lotr/images/hand-42.png');
+  --theme-game-icon-threats: url('/gemp-lotr/images/threats-42.png');
+  --theme-game-icon-discard: url('/gemp-lotr/images/discard-42.png');
+  --theme-game-icon-dead: url('/gemp-lotr/images/deadPile-42.png');
+  --theme-game-icon-adventure-deck: url('/gemp-lotr/images/adventureDeck-42.png');
+  --theme-game-icon-removed: url('/gemp-lotr/images/exiled-42.png');
+  --theme-game-icon-fp-archery: url('/gemp-lotr/images/fpArchery.png');
+  --theme-game-icon-shadow-archery: url('/gemp-lotr/images/shadowArchery.png');
+  --theme-game-icon-move: url('/gemp-lotr/images/move.png');
+
+  /* The game page's document under its frame: unset, as game.html's (see base.css) */
+  --theme-game-document-bg: transparent;
+
+  /* The phone layout (G7): only the modern theme shows it; classic has values so every name is defined */
+  --theme-game-phone-muted: #aaa;
+  --theme-game-phone-dim: #777;
+  --theme-game-phone-path-bg: #111;
+  --theme-game-phone-hand-bg: #111;
+  --theme-game-phone-offer-bg: #112;
+  --theme-game-phone-them: #f44;
+  --theme-game-phone-mine: #4c4;
+  --theme-game-phone-minions: #fc4;
+  --theme-game-phone-player-1: #c43c3c;
+  --theme-game-phone-player-2: #4459d6;
+  --theme-game-phone-fp-archery-bg: #cfe3a8;
+  --theme-game-phone-on-fp-archery: #1f2a12;
+  --theme-game-phone-shadow-archery-bg: #a8261c;
+  --theme-game-phone-on-shadow-archery: #fff;
+  --theme-game-phone-on-accent: #000;
+  --theme-game-phone-accent: #39f;
+  --theme-game-phone-on-dark: #fff;
+  --theme-game-phone-on-choose: #000;
+  --theme-game-phone-shade: rgb(0 0 0 / 0.65);
+  --theme-game-phone-danger-text: #f88;
+  --theme-game-phone-font-display: var(--theme-font-text);
+  --theme-game-phone-font-text: var(--theme-font-text);
+  --theme-game-phone-sheet-bg: #222;
+  /* The decision's strip while the player waits, the rows' quiet line, the table's grain (the layout review, 2026-11-19) */
+  --theme-game-phone-wait-bg: #1a1a1a;
+  --theme-game-phone-on-wait: #bbb;
+  --theme-game-phone-wait-line: #444;
+  --theme-game-phone-rule-quiet: #333;
+  --theme-game-phone-table-grain: none;
+  --theme-game-phone-on-sheet: #fff;
+  --theme-game-phone-sheet-chip: #333;
+  --theme-game-phone-sheet-line: #666;
+  --theme-game-phone-card-shadow: none;
+  --theme-game-phone-seal-bg: var(--theme-attention-bg);
+
+  /* The decision's main button (Done, Pass, OK) and the boxes' inner frame line: in classic as every other button and
+   * box (no change from the legacy page) */
+  --theme-game-main-bg: var(--theme-default-bg);
+  --theme-game-main-edge: var(--theme-widget-border);
+  --theme-game-main-text: var(--theme-widget-text);
+  --theme-game-main-radius: var(--theme-radius);
+  --theme-game-main-shadow: none;
+  --theme-game-main-font: var(--theme-font-widget);
+  --theme-game-main-weight: normal;
+  --theme-game-main-spacing: normal;
+  --theme-game-main-case: none;
+  --theme-game-main-hover-bg: var(--theme-hover-bg);
+  --theme-game-main-hover-edge: var(--theme-hover-border);
+  --theme-game-main-hover-text: var(--theme-text);
+  --theme-game-main-active-bg: var(--theme-active-bg);
+  --theme-game-main-active-edge: var(--theme-active-border);
+  --theme-game-ui-frame-shadow: var(--theme-frame-shadow);
+  /* The computer layout's player numbers ("1. name") and twilight box: plain text and box in classic */
+  --theme-game-badge-display: inline;
+  --theme-game-badge-width: auto;
+  --theme-game-badge-height: auto;
+  --theme-game-badge-clip: none;
+  --theme-game-badge-edge: transparent;
+  --theme-game-badge-pad: 0;
+  --theme-game-badge-text: inherit;
+  --theme-game-badge-font: inherit;
+  --theme-game-badge-size: inherit;
+  --theme-game-badge-weight: inherit;
+  --theme-game-badge-align: baseline;
+  --theme-game-badge-gap: 0;
+  --theme-game-badge-inner: none;
+  --theme-game-badge-dot: inline;
+  --theme-game-gem: none;
+  --theme-game-phone-frame: #666;
+  --theme-game-phone-frame-inner: #444;
+  --theme-game-phone-ring: #666;
+  --theme-game-phone-rule: #666;
+  --theme-game-phone-curl-left: none;
+  --theme-game-phone-curl-right: none;
+  --theme-game-phone-curl-left-small: none;
+  --theme-game-phone-curl-right-small: none;
+  --theme-game-phone-gem: #5b4a9e;
+  --theme-game-phone-gem-edge: #d9d0ff;
+  --theme-game-phone-gem-facet: #d9d0ff;
+
+  /*
+   * The game page's own colours for the shared slots (the game page maps each --theme-X to --theme-game-ui-X): the
+   * same as everywhere in classic; the modern theme gives the game its Middle-earth look, the deck builder keeps its own
+   */
+  --theme-game-ui-text: var(--theme-text);
+  --theme-game-ui-widget-text: var(--theme-widget-text);
+  --theme-game-ui-page-bg: var(--theme-page-bg);
+  --theme-game-ui-content-bg: var(--theme-content-bg);
+  --theme-game-ui-default-bg: var(--theme-default-bg);
+  --theme-game-ui-hover-bg: var(--theme-hover-bg);
+  --theme-game-ui-header-bg: var(--theme-header-bg);
+  --theme-game-ui-content-border: var(--theme-content-border);
+  --theme-game-ui-header-border: var(--theme-header-border);
+  --theme-game-ui-separator: var(--theme-separator);
+  --theme-game-ui-widget-border: var(--theme-widget-border);
+  --theme-game-ui-hover-border: var(--theme-hover-border);
+  --theme-game-ui-active-border: var(--theme-active-border);
+  --theme-game-ui-active-bg: var(--theme-active-bg);
+  --theme-game-ui-focus-ring-inner: var(--theme-focus-ring-inner);
+  --theme-game-ui-focus-ring-outer: var(--theme-focus-ring-outer);
+  --theme-game-ui-backdrop: var(--theme-backdrop);
+  --theme-game-ui-field-bg: var(--theme-field-bg);
+  --theme-game-ui-field-border-light: var(--theme-field-border-light);
+  --theme-game-ui-field-border-dark: var(--theme-field-border-dark);
+  --theme-game-ui-link-visited: var(--theme-link-visited);
+  --theme-game-ui-slider-fill: var(--theme-slider-fill);
+  --theme-game-ui-scrollbar-thumb: var(--theme-scrollbar-thumb);
+  --theme-game-ui-scrollbar-track: var(--theme-scrollbar-track);
+  --theme-game-ui-scrollbar-button: var(--theme-scrollbar-button);
+
+  /* The Game Hall tab's sections and rows, its dialogs (hall.css .eventHeader, table.tables, .wc-queues, .prizeHint,
+     .table-age; part 4.2) */
+  --theme-hall-section-bg: #555;
+  --theme-hall-section-wc-bg: #840000;
+  --theme-hall-section-text: #fff;
+  --theme-hall-table-bg: #121212;
+  --theme-hall-table-border: #444;
+  --theme-hall-table-head-bg: #333;
+  --theme-hall-row-played-bg: #590902;
+  --theme-hall-row-invited-bg: #a63f03;
+  --theme-hall-age: #bbb;
+  --theme-hall-hint: #6f8cff;
+  --theme-hall-danger-text: #d44;
+  --theme-hall-rtmd-arrow: #c0a000;
+
+  /*
+   * The Events tab (hall.css "Event calendar", "Completed event browser", the drawers, .standings, .clickableFormat;
+   * leagueResultsUi.js's RTMD path; common.js formatPrice's coins)
+   */
+  --theme-events-weekday-bg: #222;
+  --theme-events-other-month-bg: rgb(0 0 0 / 0.35);
+  --theme-events-today-bg: #e8e5da;
+  --theme-events-today-other-month-bg: #a8a59b;
+  --theme-events-today-text: #111;
+  --theme-events-muted: #aaa;
+  --theme-events-soft: #bbb;
+  --theme-events-date: #ccc;
+  --theme-events-bar-text: #fff;
+  --theme-events-selected: #fff;
+  --theme-events-serie-divider: rgb(255 255 255 / 0.8);
+  --theme-events-league: #2f6b9a;
+  --theme-events-league-joined: #24567d;
+  --theme-events-tournament: #8a4b1f;
+  --theme-events-tournament-joined: #6e3c18;
+  --theme-events-projected: #3d7a3d;
+  --theme-events-projected-joined: #2f5f2f;
+  --theme-events-projected-border: #9fd49f;
+  --theme-events-joined: #9fd49f;
+  --theme-events-error-bar: #8a1f1f;
+  --theme-events-error: #f0a0a0;
+  --theme-events-loading: #d8d8a0;
+  --theme-events-placeholder-border: #4a4a4a;
+  --theme-events-placeholder-text: #a0a0a0;
+  --theme-events-drawer-bg: #2a2a2a;
+  --theme-events-drawer-border: #3a3a3a;
+  --theme-events-row-open-bg: #353535;
+  --theme-events-title-hover-bg: #333;
+  --theme-events-month-hover-bg: #3a3a3a;
+  --theme-events-dropdown-shadow: rgb(0 0 0 / 0.6);
+  --theme-events-admin-none: #777;
+  --theme-events-rule: #ddd;
+  --theme-events-standings-border: #fff;
+  --theme-events-standings-even: #442;
+  --theme-events-format-link: #6f8cff;
+  --theme-events-rtmd-muted: #888;
+  --theme-events-rtmd-current: gold;
+  --theme-events-rtmd-passed: rgb(255 215 0 / 0.4);
+  --theme-events-rtmd-shadow: #000;
+  --theme-events-coin-gold: url('/gemp-lotr/images/gold.png') no-repeat;
+  --theme-events-coin-silver: url('/gemp-lotr/images/silver.png') no-repeat;
+
+  /* Help › PC Errata (pcErrata.css; hall.css's share button and .load-error; tables.css's (i) toggle and its text) */
+  --theme-errata-current: #0972a5;
+  --theme-errata-gold: #c9a227;
+  --theme-errata-line: #3a3a3a;
+  --theme-errata-dim: #aaa;
+  --theme-errata-summary: #ddd;
+  --theme-errata-status-empty: #ffcf8a;
+  --theme-errata-load-error: #ffb0a0;
+  --theme-errata-chip-border: #555;
+  --theme-errata-chip-bg: #1d1d1d;
+  --theme-errata-chip-text: #ddd;
+  --theme-errata-chip-count-bg: rgb(255 255 255 / 0.12);
+  --theme-errata-head-bg: #1b1b1b;
+  --theme-errata-head-border: #555;
+  --theme-errata-row-hover: rgb(255 255 255 / 0.06);
+  --theme-errata-empty-text: #bbb;
+  --theme-errata-badge-border: #777;
+  --theme-errata-badge-text: #ddd;
+  --theme-errata-new-text: #ffe28a;
+  --theme-errata-viewer-bg: #0b0b0b;
+  --theme-errata-viewer-shadow: 0 0 0 1px #000, 0 6px 18px rgb(0 0 0 / 0.6), inset 0 0 24px rgb(0 0 0 / 0.9);
+  --theme-errata-viewer-focus-shadow: 0 0 0 2px #26b3f7, 0 6px 18px rgb(0 0 0 / 0.6);
+  --theme-errata-enlarged-shadow: 0 10px 30px rgb(0 0 0 / 0.8);
+  --theme-errata-backdrop: rgb(0 0 0 / 0.75);
+  --theme-errata-bar-bg: linear-gradient(#262626, #161616);
+  --theme-errata-bar-border: #000;
+  --theme-errata-button-text: #ddd;
+  --theme-errata-button-bg: #2b2b2b;
+  --theme-errata-button-border: #555;
+  --theme-errata-switch-bg: #1d1d1d;
+  --theme-errata-switch-text: #bbb;
+  --theme-errata-name: #fff;
+  --theme-errata-caption: #ddd;
+  --theme-errata-card-border: #000;
+  --theme-errata-missing-text: #888;
+  --theme-errata-missing-border: #555;
+  --theme-errata-ins-bg: #1f5c2b;
+  --theme-errata-ins-text: #d4f7d9;
+  --theme-errata-stat: #d9b531;
+  --theme-errata-side: #444;
+  --theme-errata-old: #8a8a8a;
+  --theme-errata-new: #2f7d3d;
+  --theme-errata-old-label: #c4c4c4;
+  --theme-errata-new-label: #9ad8a4;
+  --theme-errata-hint: #8f8f8f;
+  --theme-errata-more-text: #bbb;
+  --theme-errata-more-fade: linear-gradient(transparent, #0b0b0b 60%);
+  --theme-errata-info-toggle: #8ab;
+  --theme-errata-info-toggle-hover-text: #111;
+  --theme-errata-info-toggle-font: Georgia, serif;
+  --theme-errata-info-text: #aaa;
+  --theme-errata-info-border: #567;
+  --theme-errata-share-text: #aaa;
+  --theme-errata-share-border: #444;
+  --theme-errata-share-icon-filter: invert(0.75);
+  --theme-errata-share-icon-hover-filter: invert(1);
+  --theme-errata-share-note: #9c9;
+  --theme-errata-share-note-bg: #1d1d1d;
+
+  /* The Play overlay and the Join dialog (hall.html #create-table-popup, #join-table-popup; tables.css, hall.css
+     .table-form, .table-blurb, .result-box; part 4.2) */
+  --theme-play-blurb-bg: #333;
+  --theme-play-blurb-border: #fff;
+  --theme-play-info: #8ab;
+  --theme-play-info-font: georgia, serif;
+  --theme-play-info-hover-text: #111;
+  --theme-play-info-text: #aaa;
+  --theme-play-info-border: #567;
+  --theme-play-info-code: #ddd;
+  --theme-play-subtitle: #bbb;
+  --theme-play-result-bg: #333;
+  --theme-play-result-border: #555;
+  --theme-play-success-border: #5a7a4a;
+  --theme-play-error-border: #a55;
+  --theme-play-error-text: #f2c4c4;
+  --theme-play-panel-border: grey;
+  --theme-play-format-description: #ccc;
+  --theme-play-disabled-field-bg: #333;
+  --theme-play-disabled-field-text: #bbb;
+  --theme-play-disabled-field-border: #555;
+  --theme-play-disabled-placeholder: #858585;
+  --theme-play-placeholder: #9a9a9a;
+  --theme-play-icon-scenario: url('/gemp-lotr/images/icons/puzzle-piece.svg');
+  --theme-play-icon-bot: url('/gemp-lotr/images/icons/processor.svg');
+  --theme-play-icon-unranked: url('/gemp-lotr/images/icons/tabletop-players.svg');
+  --theme-play-icon-league: url('/gemp-lotr/images/icons/holy-grail.svg');
+  --theme-play-icon-tournament: url('/gemp-lotr/images/icons/family-tree.svg');
+  --theme-play-icon-bot-filter: invert(91%) sepia(43%) saturate(671%) hue-rotate(84deg) brightness(106%) contrast(104%);
+  --theme-play-icon-unranked-filter: invert(63%) sepia(9%) saturate(3388%) hue-rotate(70deg) brightness(93%)
+    contrast(76%);
+  --theme-play-icon-league-filter: invert(91%) sepia(19%) saturate(1241%) hue-rotate(13deg) brightness(106%)
+    contrast(103%);
+  --theme-play-icon-tournament-filter: invert(69%) sepia(31%) saturate(683%) hue-rotate(322deg) brightness(102%)
+    contrast(101%);
+  --theme-hall-picker-border: #666;
+  --theme-hall-picker-bg: #333;
+  --theme-hall-picker-text: #ddd;
+  --theme-hall-picker-hover-bg: #455;
+  --theme-hall-picker-heading: #9ab;
+  --theme-hall-picker-note: #aaa;
+  /* Play > Scenarios (tables.css .scenario-*) */
+  --theme-scenario-folders-border: #555;
+  --theme-scenario-folders-bg: #222;
+  --theme-scenario-folder-line: #3a3a3a;
+  --theme-scenario-folder-text: #ddd;
+  --theme-scenario-folder-hover-bg: #303030;
+  --theme-scenario-folder-selected-bg: #1f3d57;
+  --theme-scenario-folder-selected-text: #fff;
+  --theme-scenario-count: #9a9a9a;
+  --theme-scenario-row-bg: #2a2a2a;
+  --theme-scenario-row-border: #555;
+  --theme-scenario-current-border: #c9a227;
+  --theme-scenario-summary: #ccc;
+  --theme-scenario-notes: #aaa;
+  --theme-scenario-status-new: #b8b8b8;
+  --theme-scenario-status-progress: #8ab4e8;
+  --theme-scenario-status-complete: #7ecb7e;
+  --theme-scenario-status-updated: #e0c060;
+  --theme-scenario-status-next-text: #1c1608;
+  --theme-scenario-status-next-bg: #e8c14a;
+  --theme-scenario-author-border: #777;
+  --theme-scenario-note-border: #a8893a;
+  --theme-scenario-note-text: #e8d9a8;
+  --theme-scenario-code: #fff;
+
+  /* Scrollbars (hall.css) */
+  --theme-scrollbar-thumb: #8888;
+  --theme-scrollbar-track: #6666;
+  --theme-scrollbar-button: #222a;
+  --theme-scroll-up: url('/gemp-lotr/ng/themes/classic/scroll-button-up.png');
+  --theme-scroll-down: url('/gemp-lotr/ng/themes/classic/scroll-button-down.png');
+  --theme-scroll-left: url('/gemp-lotr/ng/themes/classic/scroll-button-left.png');
+  --theme-scroll-right: url('/gemp-lotr/ng/themes/classic/scroll-button-right.png');
+
+  /* The table changed by hand (ui/game/table-edit): the open spots' blue glow, the menus, the edit bar, a refusal */
+  --theme-game-edit-font: var(--theme-game-scenario-font);
+  --theme-game-edit-glow: #3fa9ff;
+  --theme-game-edit-spot-bg: rgb(40 110 190 / 0.22);
+  --theme-game-edit-spot-edge: #7cc8ff;
+  --theme-game-edit-spot-plus: #d6eeff;
+  --theme-game-edit-menu-bg: #18212b;
+  --theme-game-edit-menu-text: #e6eef7;
+  --theme-game-edit-menu-edge: #45627f;
+  --theme-game-edit-menu-rule: #2e4053;
+  --theme-game-edit-menu-hover-bg: #2b5d93;
+  --theme-game-edit-menu-hover-text: #fff;
+  --theme-game-edit-menu-muted: #93a8bf;
+  --theme-game-edit-menu-danger: #ff8f80;
+  --theme-game-edit-menu-shadow: 0 6px 20px rgb(0 0 0 / 0.6);
+  --theme-game-edit-field-bg: #0e141b;
+  --theme-game-edit-field-edge: #45627f;
+  --theme-game-edit-mode-edit: #8fd0ff;
+  --theme-game-edit-mode-play: #a5dc94;
+  --theme-game-edit-button-bg: transparent;
+  --theme-game-edit-button-text: #e6eef7;
+  --theme-game-edit-button-edge: #6e5f33;
+  --theme-game-edit-main-bg: #3fa9ff;
+  --theme-game-edit-main-text: #0b1a28;
+  --theme-game-edit-problem-bg: #3a1714;
+  --theme-game-edit-problem-text: #ffe4de;
+  --theme-game-edit-problem-edge: #e0584a;
+  /* A puzzle's slots (ui/game/table-edit/puzzle-*): the label on a slot; a scored ending's new best */
+  --theme-game-edit-slot-label-bg: rgb(8 20 34 / 0.82);
+  --theme-game-edit-slot-label-text: #e6f3ff;
+  --theme-game-scenario-new-best-bg: #f0cf6a;
+  --theme-game-scenario-new-best-text: #2a1f05;
+}
+
+/* modern: flat colours and the system font, dark gray on every device (owner, 2026-11-11); the game page Middle-earth */
+:root[data-theme='modern'] {
+  color-scheme: dark;
+  --theme-font-text: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --theme-font-page: var(--theme-font-text);
+  --theme-font-widget: var(--theme-font-text);
+  --theme-font-control: var(--theme-font-text);
+
+  /* The legacy page's sizes in Chromium (its filter's label columns, its lines), which this font would change */
+  --theme-metrics-filter-label-1: 91.39px;
+  --theme-metrics-filter-label-2: 62.16px;
+  --theme-metrics-filter-label-size: 74%;
+  --theme-metrics-filter-label-gap: 1px;
+  --theme-metrics-filter-label-line: 11px;
+  --theme-metrics-filter-title-line: 12px;
+  --theme-metrics-stats-line: 15px;
+  --theme-metrics-widget-line: 15px;
+  --theme-metrics-hint-line: 1.15;
+  /* The deck's name: this font is about 12% wider than the legacy Times New Roman, so a long name took more room */
+  --theme-metrics-deck-name-size: 0.89em;
+
+  --theme-page-bg: #202124;
+  --theme-text: #e7e9ee;
+  --theme-pane-border: #3c3e44;
+  --theme-separator: #4b4e55;
+  --theme-separator-toggle: #7c7f87;
+
+  --theme-widget-text: #e7e9ee;
+  --theme-widget-border: #4b4e55;
+  --theme-hover-border: #6e8bff;
+  --theme-active-border: #869dff;
+  --theme-content-border: #3c3e44;
+  --theme-hall-content-border: var(--theme-content-border);
+  --theme-header-border: #3c3e44;
+  --theme-content-bg: #28292d;
+  --theme-default-bg: #303236;
+  --theme-hover-bg: #3a3c41;
+  --theme-active-bg: rgb(110 139 255 / 0.16);
+  --theme-header-bg: #303236;
+  --theme-backdrop: rgb(12 12 14 / 0.6);
+  --theme-radius: 6px;
+  --theme-radius-box: 10px;
+
+  --theme-icons: url('/gemp-lotr/ng/themes/classic/ui-icons_cccccc_256x240.png');
+  --theme-icons-hover: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+  --theme-icons-active: url('/gemp-lotr/ng/themes/classic/ui-icons_ffffff_256x240.png');
+
+  --theme-focus-ring-inner: #202124;
+  --theme-focus-ring-outer: #8fa6ff;
+  --theme-slider-fill: #6e8bff;
+
+  --theme-field-bg: #1a1b1e;
+  --theme-field-hover-bg: #3a3c41;
+  --theme-field-border-light: #4b4e55;
+  --theme-field-border-dark: #4b4e55;
+  --theme-field-disabled-text: #7c7f87;
+  --theme-field-disabled-bg: #3a3c41;
+  --theme-field-radius: 6px;
+
+  --theme-link-visited: #869dff;
+  --theme-modified: #f5a524;
+  --theme-error: #ff6b6b;
+  --theme-valid: #3ecf8e;
+  --theme-warning: #f2c14e;
+  --theme-culture-icon-filter: invert(1) brightness(0.95);
+
+  /* The game page (G6 of trymarz/gemp-lotr-private#27): the same dark gray, its marks in the theme's accents */
+  --theme-game-current-bg: #2e251a;
+  --theme-game-current-text: #ece2cc;
+  --theme-game-link: #e2c271;
+  --theme-game-text-link: #d9b866;
+  --theme-game-text-link-visited: #b8913c;
+  --theme-game-clock-bg: #110e0a;
+  --theme-game-clock-text: #ece2cc;
+  --theme-game-clock-warn-bg: #b4740f;
+  --theme-game-clock-danger-bg: #c43c3c;
+  --theme-game-twilight-bg: #110e0a;
+  --theme-game-twilight-text: #ece2cc;
+  --theme-game-twilight-border: #9b85d0;
+  --theme-game-stats-text: #c9a24a;
+  --theme-game-number-text: #fff;
+  --theme-game-number-inactive-text: #8f8163;
+  --theme-game-inactive-border: #3a2f20;
+  --theme-game-selectable: #8fc77a;
+  --theme-game-actionable: #8f9cff;
+  --theme-game-selected: #36b7ae;
+  --theme-game-card-frame: #0d0b08;
+  --theme-game-highlight: #f4ead2;
+  --theme-game-scenario-font: var(--theme-font-text);
+  --theme-game-scenario-bg: #241d15;
+  --theme-game-scenario-text: #ece2cc;
+  --theme-game-scenario-border: #c9a24a;
+  --theme-game-scenario-button-bg: #3a2f20;
+  --theme-game-scenario-main-bg: #c9a24a;
+  --theme-game-scenario-main-text: #1a140c;
+  --theme-game-scenario-hint-bg: #2e2519;
+  --theme-game-scenario-menu-bg: rgba(36, 29, 21, 0.9);
+  --theme-game-scenario-menu-border: #5a4a2c;
+  /* The authoring panel in the game's leather and night (its marks and phase colours as classic's) */
+  --theme-game-author-font: var(--theme-font-text);
+  --theme-game-author-bg: #1a150f;
+  --theme-game-author-text: #ece2cc;
+  --theme-game-author-edge: #5a4a2c;
+  --theme-game-author-head-bg: #241d15;
+  --theme-game-author-title: #e2c271;
+  --theme-game-author-muted: #a89a7c;
+  --theme-game-author-quiet: #a89a7c;
+  --theme-game-author-dim: #8f8163;
+  --theme-game-author-button-bg: #3a2f20;
+  --theme-game-author-button-hover-bg: #4a3c28;
+  --theme-game-author-button-border: #5a4a2c;
+  --theme-game-author-primary-bg: #c9a24a;
+  --theme-game-author-primary-border: #c9a24a;
+  --theme-game-author-primary-text: #1a140c;
+  --theme-game-author-tab-active-mark: #c9a24a;
+  --theme-game-author-field-bg: #110e0a;
+  --theme-game-author-field-border: #3a2f20;
+  --theme-game-author-list-bg: #110e0a;
+  --theme-game-author-row-rule: #241d15;
+  --theme-game-author-row-hover-bg: #2e251a;
+  --theme-game-author-row-selected-bg: #3a2f20;
+  --theme-game-author-current-bg: #4a3a17;
+  --theme-game-author-current-mark: #e2c271;
+  --theme-game-author-who-read: #e2c271;
+  --theme-game-author-group-bg: #1f1912;
+  --theme-game-author-group-rule: #3a2f20;
+  --theme-game-author-step-head-rule: #3a2f20;
+  --theme-game-author-message-bg: #201a13;
+  --theme-game-author-panel-bg: #1d1711;
+  --theme-game-author-panel-head-bg: #2a2219;
+  --theme-game-author-panel-hover-bg: #342a1d;
+  --theme-game-author-panel-mark: #5a4a2c;
+  --theme-game-author-section-rule: #3a2f20;
+  --theme-game-author-changed-mark: #c9a24a;
+  --theme-game-author-tag-bg: #c9a24a;
+  --theme-game-author-tag-text: #1a140c;
+  --theme-game-author-place-rule: #3a2f20;
+  --theme-game-author-section-rule: #3a2f20;
+  --theme-game-author-pictures-bg: #110e0a;
+  --theme-game-author-pictures-border: #3a2f20;
+  --theme-game-author-picture-hover-bg: #241d15;
+  --theme-game-author-picture-hover-border: #c9a24a;
+  --theme-game-menu-bg: #241d15;
+  --theme-game-menu-border: #5a4a2c;
+  --theme-game-menu-text: #ece2cc;
+  --theme-game-menu-hover-bg: #c9a24a;
+  --theme-game-menu-hover-text: #1a140c;
+  /* The meanings of game.html's borders kept (the new master, 2026-11-17): green to choose, blue for an action, teal
+     chosen, pale yellow double for an action that would do nothing; tones for the night and leather surfaces */
+  --theme-game-no-effect: #e6d36f;
+  /* Taking a game back: the tiers in Middle-earth tones, the list's lines bronze, the banner leather */
+  --theme-game-undo-own: #8fc77a;
+  --theme-game-undo-replays: #e6d36f;
+  --theme-game-undo-revealed: #d8735f;
+  --theme-game-undo-on-tier: #1a140c;
+  --theme-game-undo-edge: #13100c;
+  --theme-game-undo-line: #5a4a2c;
+  --theme-game-undo-rule: #3a2f20;
+  --theme-game-undo-heading-bg: #241d15;
+  --theme-game-undo-banner-bg: rgb(28 23 18 / 0.96);
+  --theme-game-undo-banner-text: #ece2cc;
+  --theme-game-menu-no-effect-text: #a89a7c;
+  --theme-game-menu-no-effect-bar: #c9b24a;
+  --theme-game-spinner-bg: #110e0a;
+  --theme-game-spinner-border: #5a4a2c;
+  --theme-game-muted-mark: #c0503c;
+  --theme-game-muted-mark-edge: #13100c;
+  --theme-game-dialog-actions-bg: #1c1712;
+  --theme-game-fight-border: #c0503c;
+  --theme-game-strength-bg: #ecdfc0;
+  --theme-game-strength-overwhelmed-bg: #c0503c;
+  --theme-game-damage-bg: #a89a7c;
+  --theme-game-strength-text: #2b2115;
+  --theme-game-chat-text: #d9b866;
+  --theme-game-chat-system-text: #a89a7c;
+  --theme-game-chat-mention-bg: rgb(201 162 74 / 0.18);
+  --theme-game-chat-quote: #a89a7c;
+  --theme-game-card-hint: #e2c271;
+  --theme-game-chat-ping-bg: rgb(192 80 60 / 0.25);
+
+  --theme-game-document-bg: #13100c;
+
+  /* The phone layout (G7): the prototype's colours, the deck builder's modern accents */
+  --theme-game-phone-muted: #b3a483;
+  --theme-game-phone-dim: #8f8163;
+  --theme-game-phone-path-bg: #16120d;
+  --theme-game-phone-hand-bg: #1c1712;
+  --theme-game-phone-offer-bg: #241d15;
+  --theme-game-phone-them: #c0503c;
+  --theme-game-phone-mine: #7fae57;
+  --theme-game-phone-minions: #c98a2e;
+  --theme-game-phone-player-1: #a8322a;
+  --theme-game-phone-player-2: #3b5a9a;
+  /* The archery pills: a light Shire green for the Free Peoples, red for the Shadow (as the private mobile page) */
+  --theme-game-phone-fp-archery-bg: #cfe3a8;
+  --theme-game-phone-on-fp-archery: #1f2a12;
+  --theme-game-phone-shadow-archery-bg: #a8261c;
+  --theme-game-phone-on-shadow-archery: #fff;
+  --theme-game-phone-on-accent: #1a140c;
+  --theme-game-phone-accent: #c9a24a;
+  --theme-game-phone-on-dark: #fff;
+  --theme-game-phone-on-choose: #1a140c;
+  --theme-game-phone-shade: rgb(0 0 0 / 0.65);
+  --theme-game-phone-danger-text: #ffb4a8;
+  --theme-game-phone-font-display: Cinzel, 'EB Garamond', Georgia, serif;
+  --theme-game-phone-font-text: 'EB Garamond', Georgia, serif;
+  --theme-game-phone-sheet-bg: #ecdfc0;
+  /* The decision's strip while the player waits: dark and quiet, so "Your move" stands out when it comes */
+  --theme-game-phone-wait-bg: #221b13;
+  --theme-game-phone-on-wait: #c9b88e;
+  --theme-game-phone-wait-line: #4a3d26;
+  /* Between ordinary rows a hairline; the gold rule with curls only beside the minions and the fights */
+  --theme-game-phone-rule-quiet: rgb(201 162 74 / 0.16);
+  /* A faint wood grain under the table, in its own browns */
+  --theme-game-phone-table-grain:
+    repeating-linear-gradient(
+      93deg,
+      rgb(255 236 200 / 0.018) 0 2px,
+      transparent 2px 7px,
+      rgb(0 0 0 / 0.05) 7px 8px,
+      transparent 8px 19px
+    ),
+    linear-gradient(180deg, rgb(255 220 160 / 0.025), transparent 40%);
+  --theme-game-phone-on-sheet: #2b2115;
+  --theme-game-phone-sheet-chip: #d9c99f;
+  --theme-game-phone-sheet-line: #6b5a36;
+  --theme-game-phone-card-shadow: 0 3px 8px rgb(0 0 0 / 0.55);
+  --theme-game-phone-seal-bg: #7d1f1a;
+  --theme-game-main-bg: #c9a24a;
+  --theme-game-main-edge: #8c6a24;
+  --theme-game-main-text: #1a140c;
+  --theme-game-main-radius: 999px;
+  --theme-game-main-shadow: inset 0 1px 0 #f0d58a, 0 2px 4px rgb(0 0 0 / 0.5);
+  --theme-game-main-font: Cinzel, 'EB Garamond', Georgia, serif;
+  --theme-game-main-weight: 700;
+  --theme-game-main-spacing: 0.08em;
+  --theme-game-main-case: uppercase;
+  --theme-game-main-hover-bg: #e0b44c;
+  --theme-game-main-hover-edge: #8c6a24;
+  --theme-game-main-hover-text: #1a140c;
+  --theme-game-main-active-bg: #b8913c;
+  --theme-game-main-active-edge: #8c6a24;
+  /* The double bronze frame: a bronze border, then a fine line inside it */
+  --theme-game-ui-frame-shadow: inset 0 0 0 2px #1c1712, inset 0 0 0 3px #5a4a2c;
+  /* Player numbers on heraldic shields (no dot), the twilight box's gem */
+  --theme-game-badge-display: inline-grid;
+  --theme-game-badge-width: 16px;
+  --theme-game-badge-height: 19px;
+  --theme-game-badge-clip: path('M0 0H16V8C16 13.5 11.5 17 8 19C4.5 17 0 13.5 0 8Z');
+  --theme-game-badge-edge: #c9a24a;
+  --theme-game-badge-pad: 0 0 3px;
+  --theme-game-badge-text: #fff;
+  --theme-game-badge-font: 'EB Garamond', Georgia, serif;
+  --theme-game-badge-size: 12px;
+  --theme-game-badge-weight: 700;
+  --theme-game-badge-align: middle;
+  --theme-game-badge-gap: 4px;
+  --theme-game-badge-inner: '';
+  --theme-game-badge-dot: none;
+  --theme-game-gem: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='20' viewBox='0 0 18 20'%3E%3Cpath d='M9 1l7 6-7 12L2 7z' fill='%234a3576' stroke='%239b85d0' stroke-linejoin='round'/%3E%3Cpath d='M2 7h14M9 1L6 7l3 12 3-12z' fill='none' stroke='%23cbbcf0' stroke-width='0.7'/%3E%3C/svg%3E");
+  /* The owner's picks of 2026-11-17: a gold pill for the main answer, flourished lines, double bronze frames, gold
+   * rings round counts, heraldic shields for the players, the twilight a cut gem */
+  --theme-game-phone-frame: #8c7442;
+  --theme-game-phone-frame-inner: #5a4a2c;
+  --theme-game-phone-ring: #c9a24a;
+  --theme-game-phone-rule: rgb(201 162 74 / 0.55);
+  --theme-game-phone-curl-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='14' viewBox='0 0 46 14'%3E%3Cpath d='M46 7H22c-6 0-8-6-13-6S1 4 1 7s4 6 8 6 6-3 6-6' fill='none' stroke='%23c9a24a' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --theme-game-phone-curl-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='14' viewBox='0 0 46 14'%3E%3Cpath d='M0 7h24c6 0 8-6 13-6s8 3 8 6-4 6-8 6-6-3-6-6' fill='none' stroke='%23c9a24a' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  /* The same curls drawn at the row lines' size (a shrunk picture was blended differently at each paint) */
+  --theme-game-phone-curl-left-small: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='9' viewBox='0 0 46 14'%3E%3Cpath d='M46 7H22c-6 0-8-6-13-6S1 4 1 7s4 6 8 6 6-3 6-6' fill='none' stroke='%23c9a24a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --theme-game-phone-curl-right-small: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='9' viewBox='0 0 46 14'%3E%3Cpath d='M0 7h24c6 0 8-6 13-6s8 3 8 6-4 6-8 6-6-3-6-6' fill='none' stroke='%23c9a24a' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --theme-game-phone-gem: #4a3576;
+  --theme-game-phone-gem-edge: #9b85d0;
+  --theme-game-phone-gem-facet: #cbbcf0;
+
+  /*
+   * The game page in Middle-earth colours (the owner, 2026-11-17): night and leather surfaces, bronze lines, gold for
+   * what matters, parchment for the decision; the phone's text in EB Garamond, its titles in Cinzel (both SIL OFL, in
+   * themes/modern/fonts). Only the game: the deck builder keeps the values above.
+   */
+  --theme-game-ui-text: #ece2cc;
+  --theme-game-ui-widget-text: #ece2cc;
+  --theme-game-ui-page-bg: #13100c;
+  --theme-game-ui-content-bg: #1c1712;
+  --theme-game-ui-default-bg: #241d15;
+  --theme-game-ui-hover-bg: #2e251a;
+  --theme-game-ui-header-bg: #241d15;
+  --theme-game-ui-content-border: #8c7442;
+  --theme-game-ui-header-border: #3a2f20;
+  --theme-game-ui-separator: #5a4a2c;
+  --theme-game-ui-widget-border: #5a4a2c;
+  --theme-game-ui-hover-border: #c9a24a;
+  --theme-game-ui-active-border: #e2c271;
+  --theme-game-ui-active-bg: rgb(201 162 74 / 0.16);
+  --theme-game-ui-focus-ring-inner: #13100c;
+  --theme-game-ui-focus-ring-outer: #e2c271;
+  --theme-game-ui-backdrop: rgb(8 6 4 / 0.65);
+  --theme-game-ui-field-bg: #110e0a;
+  --theme-game-ui-field-border-light: #5a4a2c;
+  --theme-game-ui-field-border-dark: #5a4a2c;
+  --theme-game-ui-link-visited: #d9b866;
+  --theme-game-ui-slider-fill: #c9a24a;
+  --theme-game-ui-scrollbar-thumb: #5a4a2c;
+  --theme-game-ui-scrollbar-track: #1c1712;
+  --theme-game-ui-scrollbar-button: #1c1712;
+
+  --theme-scrollbar-thumb: #4b4e55;
+  --theme-scrollbar-track: #28292d;
+  --theme-scrollbar-button: #28292d;
+  --theme-scroll-up: none;
+  --theme-scroll-down: none;
+  --theme-scroll-left: none;
+  --theme-scroll-right: none;
+
+  /* The table changed by hand: the menus in the game's browns and golds; the open spots stay blue */
+  --theme-game-edit-menu-bg: #241d15;
+  --theme-game-edit-menu-text: #ece2cc;
+  --theme-game-edit-menu-edge: #8c7442;
+  --theme-game-edit-menu-rule: #3a2f20;
+  --theme-game-edit-menu-hover-bg: #5a4a2c;
+  --theme-game-edit-menu-hover-text: #fff4dc;
+  --theme-game-edit-menu-muted: #b9a57e;
+  --theme-game-edit-field-bg: #110e0a;
+  --theme-game-edit-field-edge: #5a4a2c;
+  --theme-game-edit-button-text: #ece2cc;
+  --theme-game-edit-button-edge: #5a4a2c;
+  --theme-game-edit-slot-label-bg: rgb(30 22 12 / 0.85);
+  --theme-game-edit-slot-label-text: #f3e7cc;
+}

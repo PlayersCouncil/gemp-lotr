@@ -43,6 +43,7 @@ public class FormatDefinitionsTest extends LoadedLibraries {
             var facts = format.Serialize();
             assertEquals(facts.setSummary, entry.get("setSummary"));
             assertEquals(facts.sites, entry.get("sites"));
+            assertEquals("the readable site block, beside the code", format.getSiteBlock().getHumanReadable(), entry.get("sitesName"));
             assertEquals(facts.cancelRingBearerSkirmish, entry.get("cancelRingBearerSkirmish"));
             assertEquals(facts.minimumDeckSize, entry.get("minimumDeckSize"));
             assertEquals(facts.maximumSameName, entry.get("maximumSameName"));

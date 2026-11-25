@@ -1,0 +1,135 @@
+/* One of the opponent's standing orders: a line (what it answers, with what; its tags; ↑ ↓ ✕), and open, its form. */
+
+.gd-author-order {
+  margin: 0 0 3px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  background: var(--theme-game-author-list-bg);
+}
+
+.gd-author-order[data-open] {
+  background: var(--theme-game-author-row-selected-bg);
+}
+
+.gd-author-order__head {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 3px;
+}
+
+.gd-author-order__head .gd-author-button {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 1px 5px;
+}
+
+.gd-author-order__summary {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 6px;
+  min-width: 0;
+  padding: 1px 2px;
+  border: 0;
+  background: none;
+  color: var(--theme-game-author-text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.gd-author-order__summary[data-new] {
+  color: var(--theme-game-author-title);
+  cursor: default;
+}
+
+.gd-author-order__number {
+  color: var(--theme-game-author-who-opp);
+  font-weight: bold;
+}
+
+.gd-author-order__when,
+.gd-author-order__answer {
+  min-width: 0;
+  font-family: var(--theme-game-author-code-font);
+  overflow-wrap: anywhere;
+}
+
+.gd-author-order__when {
+  color: var(--theme-game-author-muted);
+}
+
+.gd-author-order__answer {
+  color: var(--theme-game-author-alias);
+}
+
+.gd-author-order__answer::before {
+  content: '→ ';
+  color: var(--theme-game-author-dim);
+}
+
+.gd-author-order__tag {
+  flex: 0 0 auto;
+  max-width: 90px;
+  overflow: hidden;
+  padding: 0 4px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 8px;
+  color: var(--theme-game-author-quiet);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-author-order__tag[data-tag='spent'] {
+  border-color: var(--theme-game-author-tag-awaiting-border);
+  color: var(--theme-game-author-tag-awaiting);
+}
+
+.gd-author-order[data-spent] .gd-author-order__summary {
+  opacity: 0.7;
+}
+
+.gd-author-order__form {
+  padding: 3px 5px 2px;
+  border-top: 1px solid var(--theme-game-author-row-rule);
+}
+
+.gd-author-order__code {
+  font-family: var(--theme-game-author-code-font);
+}
+
+.gd-author-order__line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.gd-author-order__named {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.gd-author-order__named .gd-author-field__label {
+  flex: 0 0 auto;
+}
+
+.gd-author-order__name {
+  font-family: var(--theme-game-author-code-font);
+}
+
+.gd-author-order__refusal {
+  margin: 3px 0;
+  padding: 3px 5px;
+  border-radius: 3px;
+  background: var(--theme-game-author-error-bg);
+  color: var(--theme-game-author-error-text);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}

@@ -31,14 +31,6 @@ public class CachedPlayerDAO implements PlayerDAO, Cached {
     }
 
     @Override
-    public boolean resetUserPassword(String login) throws SQLException {
-        final boolean success = _delegate.resetUserPassword(login);
-        if (success)
-            clearCache();
-        return success;
-    }
-
-    @Override
     public boolean banPlayerPermanently(String login) throws SQLException {
         final boolean success = _delegate.banPlayerPermanently(login);
         if (success)
@@ -167,5 +159,19 @@ public class CachedPlayerDAO implements PlayerDAO, Cached {
             _playerByName.remove(player.getName());
         }
         return updated;
+    }
+
+    @Override
+    public Player registerAlias(String login, String remoteAddr) throws SQLException, LoginInvalidException {
+        Player player = _delegate.registerAlias(login, remoteAddr);
+        if (player != null)
+            _playerByName.remove(login);
+        return player;
+    }
+
+    @Override
+    public void removeUnusedAlias(int playerId) throws SQLException {
+        _delegate.removeUnusedAlias(playerId);
+        clearCache();
     }
 }

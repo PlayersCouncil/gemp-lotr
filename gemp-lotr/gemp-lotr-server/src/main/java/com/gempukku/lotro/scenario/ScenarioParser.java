@@ -1,0 +1,2231 @@
+package com.gempukku.lotro.scenario;
+
+import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.logic.decisions.AwaitingDecisionType;
+import com.gempukku.lotro.scenario.ScenarioDefinition.*;
+import org.hjson.JsonArray;
+import org.hjson.JsonObject;
+import org.hjson.JsonValue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+/**
+ * Reads a scenario file (HJSON) into a ScenarioDefinition.
+ *
+ * Scenario files are written the way card definitions are: one key per line, no quotes needed, and lists written on
+ * one line with commas (see Terms).  Note what that implies in HJSON: an unquoted value runs to the end of its line,
+ * so a comment has to go on a line of its own, and an object or a [list] cannot be closed on the line it was opened
+ * on unless its values are quoted.
+ *
+ * Where the story has got to when the game begins is part of the setup, and everything in it is optional:
+ *     setup: {
+ *         startAt: {
+ *             site: 4            the Free Peoples seat's fellowship (whose turn it is) is at site 4; default 1
+ *             opponentSite: 2    the Shadow seat's marker; default 1 (level with site under rules.markers: together)
+ *             phase: maneuver    a phase of a turn; default fellowship.  (startAt: maneuver says just this.)
+ *             turn: 3            what the game's turn counter says, and what turn(n) means; default 1
+ *             twilight: 4        the pool; default 0.  (setup.twilight says the same, where nothing else is said.)
+ *             moves: 1           moves made this turn; default 1 past the Fellowship phase, else 0
+ *         }
+ *         skirmishes: { frodo: runner1, aragorn: bowman + archer }    already assigned
+ *         controlled: { shadow: site1, 2 }                              by name or by number
+ *         path: site1, site2opp, site3      whose site is laid where; past its end, the Free Peoples seat's own
+ *     }
+ * A game whose start is anything but turn 1, site 1, the Fellowship phase, an empty pool and nothing assigned is
+ * carried on from there (see ScenarioTable.carryOn): nothing that already happened happens again (no start of
+ * turn, so no sanctuary healing; no moving to the site the fellowship is at).  rules.markers: together has the
+ * Shadow seat's marker in a one-sided game keep level with the fellowship's.  A step's do can say marker(seat, n),
+ * control(site, seat) and liberate(site), a site by its name or its number.
+ *
+ * Two-sided games (rules.oneSided absent): the seats take turns, so each plays both roles, the Free Peoples player on
+ * its own turns and the Shadow player on the other's.  freeps and shadow in a 'when' are seats (chairs); as(freeps)
+ * and as(shadow) are the role the seat being asked is playing at that moment:
+ *     when: human, action, phase(maneuver), as(shadow)       the person's Maneuver action, on the opponent's turn
+ * options.autoPass can be said for each role the person plays:
+ *     autoPass: { freeps: fellowship, regroup  shadow: shadow, maneuver }      (each on a line of its own)
+ * (written as one list, it holds in whichever role they are playing, as it always has).
+ *
+ * A sandbox (kind: sandbox) is a table the person playing may stop, rearrange and start again (ScenarioSandbox).
+ * It needs no steps; nothing in it is off its script (it is always guided, and its opponent's fallback 'fail' is
+ * taken as 'pass'); its game opens stopped; and when its game ends it is over ('ended'), never complete or failed.
+ * What the person may change is narrowed by
+ *     options: { tools: add, move, wounds, counters }      (default: every tool)
+ * the tools being add, copy, delete, move, attach, stack, wounds, tokens, modify, counters (twilight, burdens,
+ * threats), markers (a seat's marker, who controls a site), sites (a site put on the path) and piles (looking in
+ * both draw decks, the other seat's hand and adventure deck).
+ * Who plays the other seat when the sandbox begins (the person changes it as it runs):
+ *     options: { otherSeat: bot }       script (default): the file's opponent, its steps, orders and fallback;
+ *                                       bot: Gemp's bot, wherever steps and orders leave it (as fallback: bot);
+ *                                       person: nobody; its decisions wait for the person, who answers them from
+ *                                       the table seen from that seat (the flip).  A sandbox's only.
+ *
+ * The game's own opening can be played instead of the board being laid out:
+ *     setup: { opening: game }       the bid, the choice of going first, the starting fellowships, the opening draw
+ *                                    and the mulligans are decisions the script answers (when: bid, goFirst,
+ *                                    startingFellowship, mulligan); the decks are the declared cards in the declared
+ *                                    order (setup.<seat>.deck on top), so the opening draw is known.  Nothing else of
+ *                                    the setup can be said, and the script has to have the Free Peoples seat go first.
+ *
+ * A card's stats and keywords can be changed by hand, as a board change and in the board the game starts with (see
+ * CardModifiers): strength, vitality, resistance, cost (its twilight cost) by a signed amount; or a keyword given:
+ * damage, defender, hunter, ambush, toil (each with its number, 1 if none is written), archer, enduring, unhasty,
+ * muster, fierce, lurker, relentless, cunning.  Each lasts until it is taken off, or for the phase or the turn:
+ *     do: modify(aragorn, strength, +2, turn), modify(orc1, fierce, phase), modify(gimli, damage, +1)
+ *     do: unmodify(aragorn)                    every modifier put on aragorn by hand
+ *     do: unmodify(aragorn, strength)          those of one kind
+ *     setup: {
+ *         modifiers: {
+ *             aragorn: strength +2, damage +1      several to a card, with commas
+ *             orc1: fierce turn                    ("phase" in the setup is the phase the game starts in)
+ *         }
+ *     }
+ * A modifier for a phase lasts to the end of the phase it is put on in (each skirmish is a phase of its own); one
+ * for the turn to the end of the turn.  They are the game's own modifiers, as a card's text would give them.
+ *
+ * Where no step and no standing order answers the opponent, opponent.fallback says what it does: fail (the game
+ * leaves its script; the default), pass (as little as it can), sandbox (plays its minions and assigns by rule), or
+ * bot (Gemp's bot plays it, in whichever role its seat has at the time; the headless runner cannot play the bot, and
+ * proves such a scenario only as far as the bot's first answer).
+ * Puzzles (any scenario can say these; a puzzle is what they are for):
+ *     options: { undo: off }          whether the person may take back what they have done: on or off; left out, off in
+ *                                     a puzzle (kind: puzzle) and on in anything else
+ *     opponent: { fallback: eager }   the opponent takes every optional action and response it is offered, and makes
+ *                                     every choice it is forced to the plainest way (see AnswerCompiler.eagerAnswer)
+ *     rules: { forbid: shuffle, reveal }   what the person may not do that no card definition can say: have their draw
+ *                                     deck shuffled, or reveal a card by a card of theirs.  Doing it ends the scenario,
+ *                                     failed, with the rule said.  ("You may not draw cards" is a rule cards can say:
+ *                                     freeps: [ { type: modifier, modifier: { type: cantTakeCardsIntoHandFromDeckOrDiscardPile,
+ *                                     player: you } } ], each on a line of its own.)
+ *     outcome: {
+ *         judge: {                    the scenario is over at a moment of the game
+ *             at: endOf(archery)      endOf(phase), startOf(phase), endOfTurn, or skirmishResolution (the first skirmish
+ *                                     being resolved: strengths compared, nobody yet wounded or overwhelmed for it);
+ *                                     ", turn(2)" for that turn's only.  (Each skirmish is a Skirmish phase of its own:
+ *                                     endOf(skirmish) is the first's end, after it is resolved.)
+ *             win: { ... }            requirements: won if they hold then (and 'lose' does not), failed if not.  Left
+ *                                     out, the moment coming is the end, and it is complete (a scored puzzle)
+ *         }                           (judge: endOfTurn says the moment alone.)  'win' and 'lose' are still looked at
+ *                                     whenever the game is at rest, before the moment as well
+ *         score: {                    a number read from the game as the scenario ends (at the judging moment, or as
+ *             value: strength:smeagol 'win' comes true, or as the game ends): what message text quotes, without its
+ *                                     braces (strength:x, vitality:x, wounds:x, tokens:x, burdens, twilight, hand:human...),
+ *                                     or a value as card definitions write one: { type: forEachWound, filter: companion }
+ *             better: higher          higher (the default) or lower
+ *             label: Sméagol's strength
+ *         }                           A scored puzzle with no 'win' (and none in its judge) is complete once played to its end.
+ *     }
+ *     pool: set:1-6                   a deck builder filter (the collection's filter text) every slot's card has to pass
+ *     slots: {                        cards the solver chooses before the game begins; each slot's id is the name its
+ *         trap: {                     card goes by everywhere a card's name can be written (steps, requirements,
+ *             zone: support           solutions, message text).  zone: characters, support, minions, hand, deck,
+ *                                     discard, deadPile, attached, stacked (on: the declared card), or site (the slot
+ *                                     is one of the scenario's sites by its name, and the board shows that site until
+ *                                     one is picked: a site of the same number)
+ *             seat: freeps            whose card it is; default the person's
+ *             on: frodo               attached or stacked: to which declared card
+ *             position: 3             deck: its place from the top (1, the default, is the top)
+ *             filter: culture:GONDOR cardtype:CONDITION    the deck builder's filter text; pool and filter both have to pass
+ *             tokens: 3               culture tokens of its own culture it comes with; wounds: likewise
+ *             label: a Gondor condition
+ *         }                           (trap: hand says just where.)  Nothing in setup can name a slot: its slot places it.
+ *     }
+ *     solutions: [                    the author's solutions: what fills the slots, and what the person does where the
+ *         {                           script leaves the choice to them
+ *             name: published
+ *             picks: {                every slot, by blueprint, each on a line of its own: trap: 7_47
+ *             }
+ *             answers: [              written as a step's answer is, one or more to a line: each is the person's answer
+ *                 use(trap)           to their next decision that no step gives the runner an answer for, in order;
+ *                 pass                once they run out the person does as little as can be (passes)
+ *             ]
+ *         }
+ *     ]
+ * A puzzle with slots that is started without picks is laid out with its slots empty and held: nobody is asked
+ * anything until the picks are made (see LiveScenario).  The runner level 'solution' proves that every solution
+ * reaches the scenario's win (or its scored end); a puzzle with solutions is required to reach it.
+ *
+ * This checks the file's own shape only: that fields are known, values are of the right kind, and every card alias
+ * that is used was declared.  Whether the blueprints and the format exist is for ScenarioValidator, and whether the
+ * steps actually play out is for ScenarioRunner.
+ */
+public final class ScenarioParser {
+    /** The outlines a client knows how to draw. */
+    private static final List<String> HIGHLIGHT_STYLES = List.of("gold", "red", "green", "blue");
+    private static final Pattern OPPONENT_NAME = Pattern.compile("[\\p{L}\\p{N} '.,\\-]{1,30}");
+
+    private ScenarioParser() { }
+
+    public static ScenarioDefinition parse(String hjson) throws ScenarioFormatException {
+        JsonValue root;
+        try {
+            root = JsonValue.readHjson(hjson);
+        } catch (RuntimeException exp) {
+            throw new ScenarioFormatException("Not valid HJSON: " + exp.getMessage()
+                    + ".  (Things that commonly cause this: an unquoted value that starts with [ or {, such as text opening with a [[card link]]; "
+                    + "a comment on the same line as an unquoted value; an { object } or [list] opened and closed on one line.)", exp);
+        }
+        if (!root.isObject())
+            throw new ScenarioFormatException("A scenario file has to be one { object }");
+        JsonObject object = root.asObject();
+
+        checkFields(object, "scenario", "id", "version", "kind", "title", "summary", "author", "tags", "note", "format",
+                "human", "opponent", "coverage", "options", "cards", "ringBearer", "ring", "sites", "rules", "setup",
+                "rng", "steps", "outcome", "slots", "pool", "solutions");
+
+        ScenarioDefinition def = new ScenarioDefinition();
+        def.id = requireString(object, "id", "scenario");
+        if (!def.id.matches("[a-z0-9][a-z0-9-]*"))
+            throw new ScenarioFormatException("id: '" + def.id + "' may only contain lowercase letters, digits and dashes");
+        def.version = optionalInt(object, "version", 1, "scenario");
+        def.kind = optionalEnum(object, "kind", Kind.class, Kind.TUTORIAL, "scenario");
+        def.title = requireString(object, "title", "scenario");
+        def.summary = optionalString(object, "summary", null, "scenario");
+        def.author = optionalString(object, "author", null, "scenario");
+        def.tags = list(object.get("tags"), "tags");
+        def.note = optionalString(object, "note", null, "scenario");
+        def.format = requireString(object, "format", "scenario");
+        def.human = parseAbsoluteSeat(optionalString(object, "human", "freeps", "scenario"), "human");
+        //(a sandbox is guided whatever it says: see ScenarioDefinition.coverageInForce)
+        def.coverage = optionalEnum(object, "coverage", Coverage.class, def.kind == Kind.SANDBOX ? Coverage.GUIDED : Coverage.STRICT, "scenario");
+
+        JsonObject opponent = optionalObject(object, "opponent", "scenario");
+        if (opponent != null) {
+            checkFields(opponent, "opponent", "name", "fallback", "orders", "leftovers", "plays");
+            def.opponentName = optionalString(opponent, "name", null, "opponent");
+            //It is shown wherever a player's name is, the game log among them, so it is held to what a name may be
+            if (def.opponentName != null && !OPPONENT_NAME.matcher(def.opponentName).matches())
+                throw new ScenarioFormatException("opponent.name: has to be 1 to 30 letters, digits, spaces or any of ' . , -");
+            def.fallback = optionalEnum(opponent, "fallback", Fallback.class, Fallback.FAIL, "opponent");
+        }
+
+        JsonObject options = optionalObject(object, "options", "scenario");
+        if (options != null) {
+            checkFields(options, "options", "autoPass", "autoAccept", "autoDismissDeckReveal", "animationSpeed", "rngDefault", "opponentDelayMs", "runnerLevel", "bubbleGap",
+                    "tools", "undo", "otherSeat");
+            JsonValue autoPass = get(options, "autoPass");
+            if (autoPass != null && autoPass.isObject()) {
+                //For each role the person can play: { freeps: fellowship, regroup  shadow: shadow, maneuver }
+                checkFields(autoPass.asObject(), "options.autoPass", "freeps", "shadow");
+                def.autoPassByRole = new EnumMap<>(com.gempukku.lotro.common.Side.class);
+                for (String name : List.of("freeps", "shadow")) {
+                    JsonValue phases = get(autoPass.asObject(), name);
+                    def.autoPassByRole.put(name.equals("freeps") ? com.gempukku.lotro.common.Side.FREE_PEOPLE : com.gempukku.lotro.common.Side.SHADOW,
+                            phases == null ? EnumSet.noneOf(Phase.class) : autoPassPhases(phases, "options.autoPass." + name));
+                }
+            } else if (autoPass != null) {
+                def.autoPass = autoPassPhases(autoPass, "options.autoPass");
+            }
+            def.autoAccept = optionalBoolean(options, "autoAccept", true, "options");
+            if (get(options, "autoDismissDeckReveal") != null)
+                def.autoDismissDeckReveal = optionalBoolean(options, "autoDismissDeckReveal", true, "options");
+            if (get(options, "animationSpeed") != null) {
+                def.animationSpeed = optionalInt(options, "animationSpeed", 0, "options");
+                if (def.animationSpeed < -4 || def.animationSpeed > 4)
+                    throw new ScenarioFormatException("options.animationSpeed: has to be from -4 (slowest) to 4 (fastest); 0 is the game's own speed");
+            }
+            def.rngDefault = optionalEnum(options, "rngDefault", RngDefault.class, RngDefault.IDENTITY, "options");
+            def.opponentDelayMs = optionalInt(options, "opponentDelayMs", 900, "options");
+            def.runnerLevel = optionalEnum(options, "runnerLevel", RunnerLevel.class, null, "options");
+            def.bubbleGap = gap(optionalString(options, "bubbleGap", null, "options"), "options.bubbleGap");
+            if (get(options, "tools") != null)
+                def.tools = tools(get(options, "tools"));
+            def.undo = undo(optionalString(options, "undo", null, "options"));
+            def.otherSeat = optionalEnum(options, "otherSeat", ScenarioDefinition.OtherSeat.class, null, "options");
+        }
+
+        parseCards(def, requireObject(object, "cards", "scenario"));
+        parsePerSeatAlias(def, optionalObject(object, "ringBearer", "scenario"), def.ringBearer, "ringBearer");
+        parsePerSeatAlias(def, optionalObject(object, "ring", "scenario"), def.ring, "ring");
+        for (Seat seat : Seat.values())
+            if (!def.ringBearer.containsKey(seat))
+                throw new ScenarioFormatException("ringBearer: the " + seat.key() + " seat needs a Ring-bearer (the game puts one on the table for each player)");
+        //(sites are named as cards are, and can be wherever a card can)
+        parseSites(def, requireObject(object, "sites", "scenario"));
+        //(the cards the solver chooses are named as cards are, so they come before anything that names a card)
+        parseSlots(def, optionalObject(object, "slots", "scenario"), optionalString(object, "pool", null, "scenario"));
+        //(after the cards and sites, because orders name them)
+        if (opponent != null && get(opponent, "orders") != null)
+            parseOrders(def, get(opponent, "orders"));
+        if (opponent != null)
+            parseOpponentRules(def, opponent);
+
+
+        JsonObject rules = optionalObject(object, "rules", "scenario");
+        if (rules != null) {
+            for (String name : rules.names()) {
+                if (name.equalsIgnoreCase("oneSided")) {
+                    def.oneSided = optionalBoolean(rules, name, false, "rules");
+                } else if (name.equalsIgnoreCase("markers")) {
+                    def.markersTogether = parseMarkers(scalar(rules.get(name), "rules.markers"));
+                } else if (name.equalsIgnoreCase("forbid")) {
+                    //(what a puzzle's rules forbid that no card definition can say: "you may not shuffle your draw deck")
+                    for (String what : list(rules.get(name), "rules.forbid")) {
+                        try {
+                            def.forbid.add(Forbid.valueOf(what.trim().toUpperCase(Locale.ROOT)));
+                        } catch (IllegalArgumentException exp) {
+                            throw new ScenarioFormatException("rules.forbid: '" + what.trim() + "' is not something a puzzle's rules can forbid here: shuffle "
+                                    + "(the person's draw deck being shuffled) or reveal (a card of theirs revealing one).  For \"you may not draw\", give "
+                                    + "the person's seat the rule { type: modifier, modifier: { type: cantTakeCardsIntoHandFromDeckOrDiscardPile, player: you } }");
+                        }
+                    }
+                } else {
+                    def.rules.put(parseSeat(def, name, "rules"), jsonArrayText(rules.get(name), "rules." + name));
+                }
+            }
+        }
+
+        //(after the rules: whose characters the leftovers can be depends on whether the game is one-sided)
+        if (def.leftovers != null && !def.leftovers.equals(ScenarioDefinition.RING_BEARER)
+                && card(def, def.leftovers, "opponent.leftovers").owner() != def.leftoversSeat())
+            throw new ScenarioFormatException("opponent.leftovers: '" + def.leftovers + "' is " + (def.leftoversSeat() == Seat.FREEPS
+                    ? "a Shadow card; minions are assigned to Free Peoples characters (a companion or an ally by its name, or ringBearer)"
+                    : "the opponent's own; in a two-sided game the opponent assigns its leftovers as the Shadow player, on the player's "
+                    + "turns, to the player's characters (one of the player's companions or allies by its name, or ringBearer)"));
+
+        parseSetup(def, optionalObject(object, "setup", "scenario"));
+        slotsNotInSetup(def);
+
+        JsonValue rng = object.get("rng");
+        if (rng != null)
+            for (String line : lines(rng, "rng"))
+                for (Terms.Term term : Terms.parse(line, "rng"))
+                    def.rng.add(parseRng(def, term));
+
+        JsonValue steps = object.get("steps");
+        if (steps != null) {
+            if (!steps.isArray())
+                throw new ScenarioFormatException("steps: has to be a [list] of steps");
+            Set<String> ids = new HashSet<>();
+            int index = 0;
+            for (JsonValue stepValue : steps.asArray()) {
+                index++;
+                Step step = parseStep(def, stepValue, index);
+                if (step.id != null && !ids.add(step.id))
+                    throw new ScenarioFormatException("steps: there are two steps called '" + step.id + "'");
+                for (Step child : step.children)
+                    if (child.id != null && !ids.add(child.id))
+                        throw new ScenarioFormatException("steps: there are two steps called '" + child.id + "'");
+                for (Message message : step.messages)
+                    for (String name : message.choices.keySet())
+                        if (!def.flags.contains(name))
+                            def.flags.add(name);
+                def.steps.add(step);
+            }
+        }
+
+        JsonObject outcome = optionalObject(object, "outcome", "scenario");
+        if (outcome != null) {
+            checkFields(outcome, "outcome", "win", "lose", "loseMessage", "offScript", "winMessages", "loseMessages", "gameWon", "gameLost",
+                    "judge", "score");
+            if (get(outcome, "judge") != null)
+                def.outcome.judge = parseJudge(get(outcome, "judge"));
+            if (get(outcome, "score") != null)
+                def.outcome.score = parseScore(def, get(outcome, "score"));
+            parseEndings(def, outcome);
+            def.outcome.loseMessage = optionalString(outcome, "loseMessage", null, "outcome");
+            if (def.outcome.loseMessage != null)
+                Templates.check(def, def.outcome.loseMessage, "outcome.loseMessage");
+            if (outcome.get("win") != null)
+                def.outcome.win = jsonArrayText(outcome.get("win"), "outcome.win");
+            if (outcome.get("lose") != null)
+                def.outcome.lose = jsonArrayText(outcome.get("lose"), "outcome.lose");
+            JsonObject offScript = optionalObject(outcome, "offScript", "outcome");
+            if (offScript != null) {
+                checkFields(offScript, "outcome.offScript", "message", "result");
+                def.outcome.offScriptMessage = optionalString(offScript, "message", null, "outcome.offScript");
+                if (def.outcome.offScriptMessage != null)
+                    Templates.check(def, def.outcome.offScriptMessage, "outcome.offScript.message");
+                def.outcome.offScriptResult = optionalEnum(offScript, "result", OffScriptResult.class, OffScriptResult.RESTART, "outcome.offScript");
+            }
+        }
+
+        //(last: a solution's answers name cards, and its picks name slots)
+        if (get(object, "solutions") != null)
+            parseSolutions(def, get(object, "solutions"));
+        return def;
+    }
+
+    /** Phases the person is passed through: a list of them, true (an ordinary table's), or false (none). */
+    /**
+     * options.tools: what the person playing a sandbox may change while it is stopped, by ScenarioSandbox.TOOLS's
+     * names, as a list ("add, move, counters") or a [list]; an empty one (or false) for none.  In the order of
+     * ScenarioSandbox.TOOLS, whatever order they are written in.
+     */
+    private static List<String> tools(JsonValue value) throws ScenarioFormatException {
+        String context = "options.tools";
+        if (!value.isArray() && scalar(value, context).equalsIgnoreCase("false"))
+            return List.of();
+        List<String> named = new ArrayList<>();
+        for (String name : list(value, context)) {
+            String tool = name.trim().toLowerCase(Locale.ROOT);
+            if (!ScenarioSandbox.TOOLS.contains(tool))
+                throw new ScenarioFormatException(context + ": '" + name.trim() + "' is not a tool.  The tools are "
+                        + String.join(", ", ScenarioSandbox.TOOLS) + " (leave tools out for all of them)");
+            if (!named.contains(tool))
+                named.add(tool);
+        }
+        List<String> tools = new ArrayList<>(ScenarioSandbox.TOOLS);
+        tools.retainAll(named);
+        return tools;
+    }
+
+    private static Set<Phase> autoPassPhases(JsonValue value, String context) throws ScenarioFormatException {
+        String written = value.isArray() ? "" : scalar(value, context);
+        //The same phases a player gets by default at an ordinary table
+        if (written.equalsIgnoreCase("true"))
+            return EnumSet.of(Phase.FELLOWSHIP, Phase.MANEUVER, Phase.ARCHERY, Phase.ASSIGNMENT, Phase.REGROUP);
+        Set<Phase> phases = EnumSet.noneOf(Phase.class);
+        if (!written.equalsIgnoreCase("false"))
+            for (String phase : list(value, context))
+                phases.add(parsePhase(phase, context));
+        return phases;
+    }
+
+    /**
+     * What is said, and what it counts as, when the scenario ends other than by a step's 'end': winMessages and
+     * loseMessages for 'win' and 'lose' coming true; gameWon and gameLost ({ result, messages }, or just the result)
+     * for the game itself ending, the person having won or lost it.
+     */
+    private static void parseEndings(ScenarioDefinition def, JsonObject outcome) throws ScenarioFormatException {
+        if (get(outcome, "winMessages") != null)
+            def.outcome.winMessages = closingMessages(def, get(outcome, "winMessages"), "outcome.winMessages");
+        if (get(outcome, "loseMessages") != null)
+            def.outcome.loseMessages = closingMessages(def, get(outcome, "loseMessages"), "outcome.loseMessages");
+        if (get(outcome, "gameWon") != null)
+            def.outcome.gameWon = ending(def, get(outcome, "gameWon"), "outcome.gameWon");
+        if (get(outcome, "gameLost") != null)
+            def.outcome.gameLost = ending(def, get(outcome, "gameLost"), "outcome.gameLost");
+    }
+
+    /** An ending: { result, messages }, or the result by itself (complete, fail). */
+    private static End ending(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        End end = new End();
+        if (value.isObject()) {
+            checkFields(value.asObject(), context, "result", "messages");
+            end.result = optionalEnum(value.asObject(), "result", EndResult.class, EndResult.COMPLETE, context);
+            if (value.asObject().get("messages") != null)
+                end.messages = closingMessages(def, value.asObject().get("messages"), context + ".messages");
+        } else {
+            end.result = parseEnum(scalar(value, context), EndResult.class, context);
+        }
+        return end;
+    }
+
+    /** Messages said on the panel that closes the scenario, all together: they wait for nothing and offer nothing. */
+    private static List<Message> closingMessages(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        List<Message> messages = parseMessages(def, value, context);
+        for (Message message : messages)
+            if (!message.choices.isEmpty() || message.on != null || message.advance == Advance.INSPECT || message.advance == Advance.CLOSE)
+                throw new ScenarioFormatException(context + ": closing messages are shown all together when the scenario is over; they cannot offer 'choices' or wait for anything ('on', 'advance')");
+        return messages;
+    }
+
+    private static void parseCards(ScenarioDefinition def, JsonObject cards) throws ScenarioFormatException {
+        for (String seatName : cards.names()) {
+            Seat seat = parseSeat(def, seatName, "cards");
+            JsonValue seatCards = cards.get(seatName);
+            if (!seatCards.isObject())
+                throw new ScenarioFormatException("cards." + seatName + ": has to be an { object } of alias: blueprint");
+            for (String alias : seatCards.asObject().names()) {
+                if (!alias.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                    throw new ScenarioFormatException("cards." + seatName + ": '" + alias + "' is not usable as a card alias (letters, digits, dashes and underscores; starting with a letter)");
+                if (def.cards.containsKey(alias))
+                    throw new ScenarioFormatException("cards: the alias '" + alias + "' is used twice");
+                def.cards.put(alias, new CardDef(alias, scalar(seatCards.asObject().get(alias), "cards." + seatName + "." + alias), seat));
+            }
+        }
+    }
+
+    private static void parsePerSeatAlias(ScenarioDefinition def, JsonObject object, Map<Seat, String> target, String context) throws ScenarioFormatException {
+        if (object == null)
+            return;
+        for (String seatName : object.names()) {
+            Seat seat = parseSeat(def, seatName, context);
+            String alias = scalar(object.get(seatName), context + "." + seatName);
+            if (alias.equalsIgnoreCase("none"))
+                continue;
+            CardDef card = card(def, alias, context + "." + seatName);
+            if (card.owner() != seat)
+                throw new ScenarioFormatException(context + "." + seatName + ": '" + alias + "' belongs to the other seat");
+            target.put(seat, alias);
+        }
+    }
+
+    private static void parseSetup(ScenarioDefinition def, JsonObject setup) throws ScenarioFormatException {
+        if (setup == null)
+            return;
+        Setup result = def.setup;
+        Set<String> placed = new HashSet<>();
+        boolean twilightGiven = false;
+        JsonValue startAtValue = get(setup, "startAt");
+        if (startAtValue != null && startAtValue.isObject() && get(startAtValue.asObject(), "twilight") != null)
+            twilightGiven = true;
+        for (String name : setup.names()) {
+            JsonValue value = setup.get(name);
+            switch (name.toLowerCase(Locale.ROOT)) {
+                case "startat" -> parseStartAt(result, value);
+                case "twilight" -> {
+                    //(the same as startAt.twilight, for a game that is at the start of turn 1 but for its pool)
+                    if (twilightGiven)
+                        throw new ScenarioFormatException("setup.twilight: the twilight pool is given in setup.startAt as well; say it once");
+                    result.twilight = asInt(value, "setup.twilight");
+                    twilightGiven = true;
+                }
+                case "skirmishes" -> parseSkirmishes(def, value, result);
+                case "controlled" -> parseControlled(def, asObject(value, "setup.controlled"), result);
+                case "path" -> {
+                    for (String alias : list(value, "setup.path")) {
+                        if (!def.siteCards.containsKey(alias.trim()))
+                            throw new ScenarioFormatException("setup.path: '" + alias.trim() + "' is not one of the scenario's sites "
+                                    + "(the path is said by the sites' names, site 1 first: site1, site2opp, site3)");
+                        if (result.path.contains(alias.trim()))
+                            throw new ScenarioFormatException("setup.path: '" + alias.trim() + "' is there twice");
+                        result.path.add(alias.trim());
+                    }
+                }
+                case "attach" -> aliasMap(def, asObject(value, "setup.attach"), result.attach, "setup.attach");
+                case "stack" -> aliasMap(def, asObject(value, "setup.stack"), result.stack, "setup.stack");
+                case "wounds" -> countMap(def, asObject(value, "setup.wounds"), result.wounds, "setup.wounds");
+                case "tokens" -> countMap(def, asObject(value, "setup.tokens"), result.tokens, "setup.tokens");
+                case "modifiers" -> modifiers(def, asObject(value, "setup.modifiers"), result.modifiers);
+                case "opening" -> {
+                    //(how the game opens: the board laid out as the setup says, or the game's own opening played)
+                    String opening = scalar(value, "setup.opening").trim().toLowerCase(Locale.ROOT);
+                    if (!opening.equals("board") && !opening.equals("game"))
+                        throw new ScenarioFormatException("setup.opening: has to be board (the board is laid out as the setup says; the default) "
+                                + "or game (the game's own opening is played: the bid, going first, the starting fellowships, the opening draw)");
+                    result.realOpening = opening.equals("game");
+                }
+                case "burdens" -> result.burdens = asInt(value, "setup.burdens");
+                case "threats" -> result.threats = asInt(value, "setup.threats");
+                default -> {
+                    Seat seat = parseSeat(def, name, "setup");
+                    JsonObject zones = asObject(value, "setup." + name);
+                    Map<SetupZone, List<String>> seatZones = new EnumMap<>(SetupZone.class);
+                    for (String zoneName : zones.names()) {
+                        String context = "setup." + name + "." + zoneName;
+                        SetupZone zone = parseSetupZone(zoneName, context);
+                        List<String> aliases = list(zones.get(zoneName), context);
+                        for (String alias : aliases) {
+                            CardDef card = card(def, alias, context);
+                            if (card.owner() != seat)
+                                throw new ScenarioFormatException(context + ": '" + alias + "' belongs to the other seat");
+                            if (!placed.add(alias))
+                                throw new ScenarioFormatException(context + ": '" + alias + "' is placed in more than one zone");
+                        }
+                        seatZones.put(zone, aliases);
+                    }
+                    result.zones.put(seat, seatZones);
+                }
+            }
+        }
+        for (String alias : result.attach.keySet())
+            if (!placed.add(alias))
+                throw new ScenarioFormatException("setup.attach: '" + alias + "' is also placed in a zone");
+        for (String alias : result.stack.keySet())
+            if (!placed.add(alias))
+                throw new ScenarioFormatException("setup.stack: '" + alias + "' is also placed in a zone or attached");
+    }
+
+    /**
+     * setup.startAt: where the story has got to when the game begins.  { site, opponentSite, phase, turn, twilight,
+     * moves }, each optional; or just a phase.  See ScenarioDefinition.Setup.
+     */
+    private static void parseStartAt(Setup result, JsonValue value) throws ScenarioFormatException {
+        if (value != null && !value.isObject() && !value.isArray()) {
+            //(a phase by itself: "startAt: maneuver")
+            result.phase = startPhase(scalar(value, "setup.startAt"), "setup.startAt");
+            return;
+        }
+        JsonObject startAt = asObject(value, "setup.startAt");
+        checkFields(startAt, "setup.startAt", "turn", "phase", "site", "opponentSite", "twilight", "moves");
+        result.turn = optionalInt(startAt, "turn", 1, "setup.startAt");
+        if (result.turn < 1)
+            throw new ScenarioFormatException("setup.startAt.turn: turns are counted from 1");
+        result.phase = startPhase(optionalString(startAt, "phase", "fellowship", "setup.startAt"), "setup.startAt.phase");
+        result.site = optionalInt(startAt, "site", 1, "setup.startAt");
+        if (get(startAt, "opponentSite") != null)
+            result.opponentSite = optionalInt(startAt, "opponentSite", 1, "setup.startAt");
+        for (int at : result.opponentSite == null ? new int[] {result.site} : new int[] {result.site, result.opponentSite})
+            if (at < 1 || at > 9)
+                throw new ScenarioFormatException("setup.startAt: there is no site " + at + " on any adventure path (sites 1 to 9)");
+        result.twilight = optionalInt(startAt, "twilight", 0, "setup.startAt");
+        if (result.twilight < 0)
+            throw new ScenarioFormatException("setup.startAt.twilight: the pool cannot hold less than nothing");
+        if (get(startAt, "moves") != null) {
+            int moves = optionalInt(startAt, "moves", 0, "setup.startAt");
+            if (moves < 0)
+                throw new ScenarioFormatException("setup.startAt.moves: a number of moves, 0 or more");
+            //(what it would be anyway is not kept, so that the file written back says only what matters)
+            result.moves = moves == result.defaultMoves() ? null : moves;
+        }
+    }
+
+    /** A phase a game can begin in: one of a turn's. */
+    private static Phase startPhase(String name, String context) throws ScenarioFormatException {
+        Phase phase = parsePhase(name, context);
+        if (!com.gempukku.lotro.logic.timing.processes.pregame.MidTurnStartGameProcess.PHASES.contains(phase))
+            throw new ScenarioFormatException(context + ": a game cannot begin in the " + name.trim() + " phase.  It begins in one of "
+                    + "a turn's: fellowship, shadow, maneuver, archery, assignment, skirmish or regroup");
+        return phase;
+    }
+
+    /**
+     * setup.skirmishes: { character: minion + minion, ... }, the skirmishes already assigned when the game begins.
+     */
+    private static void parseSkirmishes(ScenarioDefinition def, JsonValue value, Setup result) throws ScenarioFormatException {
+        JsonObject skirmishes = asObject(value, "setup.skirmishes");
+        Set<String> minionsAssigned = new HashSet<>();
+        for (String name : skirmishes.names()) {
+            String context = "setup.skirmishes." + name;
+            CardDef character = card(def, name, "setup.skirmishes");
+            if (character.owner() != Seat.FREEPS)
+                throw new ScenarioFormatException("setup.skirmishes: '" + name + "' is the Shadow seat's: a skirmish is said by the "
+                        + "Free Peoples character in it (frodo: runner1 + runner2)");
+            List<String> minions = new ArrayList<>();
+            for (String line : lines(skirmishes.get(name), context))
+                for (String part : Terms.split(line, ',', context))
+                    for (String minion : part.split("\\+")) {
+                        if (minion.isBlank())
+                            continue;
+                        CardDef card = card(def, minion, context);
+                        if (card.owner() != Seat.SHADOW)
+                            throw new ScenarioFormatException(context + ": '" + card.alias() + "' is the Free Peoples seat's; what a character skirmishes is minions");
+                        if (!minionsAssigned.add(card.alias()))
+                            throw new ScenarioFormatException(context + ": '" + card.alias() + "' is assigned to two skirmishes");
+                        minions.add(card.alias());
+                    }
+            if (minions.isEmpty())
+                throw new ScenarioFormatException(context + ": names no minion (frodo: runner1, or frodo: runner1 + runner2)");
+            if (result.skirmishes.containsKey(character.alias()))
+                throw new ScenarioFormatException("setup.skirmishes: '" + name + "' is there twice");
+            result.skirmishes.put(character.alias(), minions);
+        }
+    }
+
+    /**
+     * setup.controlled: { seat: site, site }, each site by its number on the path or by its name.
+     */
+    private static void parseControlled(ScenarioDefinition def, JsonObject controlled, Setup result) throws ScenarioFormatException {
+        Set<String> seen = new HashSet<>();
+        for (String name : controlled.names()) {
+            Seat seat = parseSeat(def, name, "setup.controlled");
+            String context = "setup.controlled." + name;
+            List<String> sites = new ArrayList<>();
+            for (String site : list(controlled.get(name), context)) {
+                String written = site.trim();
+                if (!written.matches("[1-9]") && !def.siteCards.containsKey(written))
+                    throw new ScenarioFormatException(context + ": '" + written + "' is neither a site's number (1 to 9) nor the name of one of the scenario's sites");
+                if (!seen.add(written))
+                    throw new ScenarioFormatException(context + ": '" + written + "' is controlled twice");
+                sites.add(written);
+            }
+            result.controlled.computeIfAbsent(seat, key -> new ArrayList<>()).addAll(sites);
+        }
+    }
+
+    /**
+     * setup.modifiers: { card: what amount how-long, ... }, as many to a card as are wanted, with commas between them:
+     * aragorn: strength +2, damage +1.  See CardModifiers.
+     */
+    private static void modifiers(ScenarioDefinition def, JsonObject modifiers, Map<String, List<Modification>> result)
+            throws ScenarioFormatException {
+        for (String name : modifiers.names()) {
+            String context = "setup.modifiers." + name;
+            CardDef card = card(def, name, "setup.modifiers");
+            List<Modification> on = new ArrayList<>();
+            for (String line : lines(modifiers.get(name), context))
+                for (String one : Terms.split(line, ',', context)) {
+                    if (one.isBlank())
+                        continue;
+                    List<String> parts = new ArrayList<>(Arrays.asList(one.trim().split("\\s+")));
+                    //("strength + 2", as somebody might write it, is "strength +2")
+                    for (int i = 1; i < parts.size() - 1; i++)
+                        if (parts.get(i).equals("+") || parts.get(i).equals("-"))
+                            parts.set(i, parts.get(i) + parts.remove(i + 1));
+                    on.add(CardModifiers.parse(parts.getFirst(), parts.subList(1, parts.size()), context + ": '" + one.trim() + "'"));
+                }
+            if (on.isEmpty())
+                throw new ScenarioFormatException(context + ": says no modifier (aragorn: strength +2, or orc1: fierce)");
+            result.put(card.alias(), on);
+        }
+    }
+
+    /** rules.markers: together, or apart (the default). */
+    private static boolean parseMarkers(String written) throws ScenarioFormatException {
+        return switch (written.trim().toLowerCase(Locale.ROOT)) {
+            case "together" -> true;
+            case "apart" -> false;
+            default -> throw new ScenarioFormatException("rules.markers: has to be together (in a one-sided game, the Shadow seat's marker "
+                    + "keeps level with the fellowship's) or apart (it stays where it is put; the default)");
+        };
+    }
+
+    /**
+     * opponent.orders: a [list] of { when, answer }.  See ScenarioDefinition.Order.
+     */
+    private static void parseOrders(ScenarioDefinition def, JsonValue value) throws ScenarioFormatException {
+        if (!value.isArray())
+            throw new ScenarioFormatException("opponent.orders: has to be a [list] of { when, answer }");
+        int index = 0;
+        for (JsonValue entry : value.asArray()) {
+            index++;
+            String context = "opponent.orders[" + index + "]";
+            JsonObject order = asObject(entry, context);
+            checkFields(order, context, "when", "answer", "once", "note", "id");
+            if (order.get("when") == null || order.get("answer") == null)
+                throw new ScenarioFormatException(context + ": needs both a 'when' and an 'answer'");
+            When when = parseWhen(def, order.get("when"), context + ".when");
+            if (when.seat == def.human)
+                throw new ScenarioFormatException(context + ".when: orders are the opponent's; this one is about the player's seat");
+            when.seat = def.human.other();
+            List<Answer> answers = new ArrayList<>();
+            for (String line : lines(order.get("answer"), context + ".answer"))
+                for (Terms.Term term : Terms.parse(line, context + ".answer"))
+                    answers.add(parseAnswer(def, term, context + ".answer"));
+            if (answers.isEmpty())
+                throw new ScenarioFormatException(context + ".answer: is empty");
+            //An order can have a name (for the authoring tool to say which it means), a note (for whoever reads the
+            // file), and be good for one decision only ('once': after it has answered one, it is done with)
+            String id = optionalString(order, "id", null, context);
+            if (id != null && !id.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                throw new ScenarioFormatException(context + ".id: '" + id + "' is not usable as an order's name (letters, digits, dashes and underscores; starting with a letter)");
+            for (Order other : def.orders)
+                if (id != null && id.equals(other.id()))
+                    throw new ScenarioFormatException(context + ".id: there are two orders called '" + id + "'");
+            boolean once = optionalBoolean(order, "once", false, context);
+            def.orders.add(new Order(when, answers, when.source, once, optionalString(order, "note", null, context), id));
+        }
+    }
+
+    private static RngEntry parseRng(ScenarioDefinition def, Terms.Term term) throws ScenarioFormatException {
+        RngKind kind;
+        if (term.is("shuffle"))
+            kind = RngKind.SHUFFLE;
+        else if (term.is("pick"))
+            kind = RngKind.PICK;
+        else
+            throw new ScenarioFormatException("rng: '" + term.raw() + "' is neither shuffle(...) nor pick(...)");
+
+        String whole = term.wholeArg();
+        int colon = whole.indexOf(':');
+        if (colon < 0)
+            throw new ScenarioFormatException("rng: '" + term.raw() + "' should read " + term.name() + "(seat.zone: card, card)");
+        String[] pile = whole.substring(0, colon).trim().split("\\.");
+        if (pile.length != 2)
+            throw new ScenarioFormatException("rng: '" + term.raw() + "' needs a pile such as freeps.deck");
+        Seat seat = parseSeat(def, pile[0], "rng");
+        String zone = pile[1].trim();
+        if (!List.of("deck", "hand", "adventureDeck").contains(zone))
+            throw new ScenarioFormatException("rng: '" + term.raw() + "' names a pile that is never random (deck, hand and adventureDeck are)");
+        List<String> result = Terms.split(whole.substring(colon + 1), ',', "rng");
+        result.removeIf(String::isEmpty);
+        for (String alias : result)
+            card(def, alias, "rng");
+        return new RngEntry(kind, seat, zone, result);
+    }
+
+    static Step parseStep(ScenarioDefinition def, JsonValue value, int number) throws ScenarioFormatException {
+        return parseStep(def, value, number, null, 0);
+    }
+
+    /**
+     * @param parent The block the step is in, with the place it has there (from 1); null and 0 for a step of the
+     *               script itself.
+     */
+    static Step parseStep(ScenarioDefinition def, JsonValue value, int number, Step parent, int sub) throws ScenarioFormatException {
+        //(a block's steps are said as the parts of the file they are, so that whatever reads a complaint can find them)
+        String place = parent == null ? "step " + number : "step " + number + ".anyOrder[" + sub + "]";
+        JsonObject object = asObject(value, place);
+        Step step = new Step();
+        //Steps are known by where they come in the list.  A step can be given a name as well, which shows up beside
+        // its number in reports; nothing else uses it.
+        step.number = number;
+        step.parent = parent;
+        step.sub = sub;
+        step.id = optionalString(object, "id", null, place);
+        if (step.id != null && !step.id.matches("[A-Za-z][A-Za-z0-9_-]*"))
+            throw new ScenarioFormatException(place + ": '" + step.id + "' is not usable as a step's name (letters, digits, dashes and underscores; starting with a letter)");
+        String context = parent == null ? "step " + step.label() : place;
+        checkFields(object, context, "id", "note", "when", "until", "skipWhen", "checkpoint", "pause", "if", "unless", "do",
+                "messages", "allow", "answer", "end", "anyOrder", "once", "skirmishes", "refuses");
+        step.note = optionalString(object, "note", null, context);
+        step.once = optionalBoolean(object, "once", false, context);
+        if (step.once && parent == null)
+            throw new ScenarioFormatException(context + ": 'once' is for a step in an 'anyOrder' block (a step of the script itself applies once anyway, unless it has an 'until')");
+
+        if (object.get("when") != null)
+            step.when = parseWhen(def, object.get("when"), context + ".when");
+        if (object.get("until") != null)
+            step.until = parseWhen(def, object.get("until"), context + ".until");
+        if (object.get("skipWhen") != null)
+            step.skipWhen = parseWhen(def, object.get("skipWhen"), context + ".skipWhen");
+        step.checkpoint = optionalBoolean(object, "checkpoint", false, context);
+        step.pause = optionalBoolean(object, "pause", false, context);
+        //A pause about a skirmish that is over was once written for the choice of the next skirmish only
+        // ("freeps, cards, after(x), text(next skirmish)"), which there is not after the last one.  It is for the first
+        // decision after that skirmish, whatever it is.
+        if (step.pause && step.when.after != null && ((step.when.text != null && step.when.text.trim().equalsIgnoreCase("next skirmish"))
+                || (step.when.text == null && step.when.kinds.equals(List.of(DecisionKinds.Kind.NEXT_SKIRMISH))))
+                && step.when.require == null && !step.when.source.startsWith("{")) {
+            step.when.text = null;
+            step.when.kinds = new ArrayList<>();
+            if (step.when.decision == AwaitingDecisionType.CARD_SELECTION)
+                step.when.decision = null;
+            step.when.source = ScenarioWriter.terms(step.when);
+        }
+        step.onlyIf = list(object.get("if"), context + ".if");
+        step.unless = list(object.get("unless"), context + ".unless");
+        for (String name : step.onlyIf)
+            if (!def.flags.contains(name))
+                throw new ScenarioFormatException(context + ".if: no earlier step offers a choice called '" + name + "'");
+        for (String name : step.unless)
+            if (!def.flags.contains(name))
+                throw new ScenarioFormatException(context + ".unless: no earlier step offers a choice called '" + name + "'");
+
+        if (object.get("do") != null)
+            for (String line : lines(object.get("do"), context + ".do"))
+                for (Terms.Term term : Terms.parse(line, context + ".do"))
+                    step.doOps.add(parseDo(def, term, context + ".do"));
+
+        if (object.get("messages") != null)
+            step.messages = parseMessages(def, object.get("messages"), context + ".messages");
+
+        if (object.get("allow") != null)
+            step.allow = parseAllow(def, object.get("allow"), context + ".allow");
+
+        if (object.get("answer") != null)
+            for (String line : lines(object.get("answer"), context + ".answer"))
+                for (Terms.Term term : Terms.parse(line, context + ".answer"))
+                    step.answers.add(parseAnswer(def, term, context + ".answer"));
+
+        if (object.get("refuses") != null)
+            step.refuses = parseRefusals(def, step, object.get("refuses"), context + ".refuses");
+
+        JsonValue end = object.get("end");
+        if (end != null) {
+            step.end = new End();
+            if (end.isObject()) {
+                checkFields(end.asObject(), context + ".end", "result", "messages");
+                step.end.result = optionalEnum(end.asObject(), "result", EndResult.class, EndResult.COMPLETE, context + ".end");
+                if (end.asObject().get("messages") != null)
+                    step.end.messages = parseMessages(def, end.asObject().get("messages"), context + ".end.messages");
+                //These are shown together on the panel that closes the scenario: there is no game left behind them
+                for (Message message : step.end.messages)
+                    if (!message.choices.isEmpty() || message.on != null || message.advance == Advance.INSPECT || message.advance == Advance.CLOSE)
+                        throw new ScenarioFormatException(context + ".end.messages: closing messages are shown all together when the scenario is over; they cannot offer 'choices' or wait for anything ('on', 'advance')");
+            } else {
+                step.end.result = parseEnum(scalar(end, context + ".end"), EndResult.class, context + ".end");
+            }
+        }
+
+        JsonValue anyOrder = object.get("anyOrder");
+        if (anyOrder == null && object.get("skirmishes") != null)
+            throw new ScenarioFormatException(context + ": 'skirmishes' is said of an 'anyOrder' block");
+        if (anyOrder != null) {
+            //A block: steps for a stretch of the game whose decisions come in no order the script can know
+            if (parent != null)
+                throw new ScenarioFormatException(context + ": a block cannot have another block in it");
+            if (!anyOrder.isArray())
+                throw new ScenarioFormatException(context + ".anyOrder: has to be a [list] of steps");
+            if (step.until == null)
+                throw new ScenarioFormatException(context + ": an 'anyOrder' block needs an 'until': the decision at which it is over (the next phase, say: until: phase(regroup))");
+            if (step.pause || step.allow != null || !step.answers.isEmpty() || !step.messages.isEmpty() || !step.doOps.isEmpty() || step.end != null)
+                throw new ScenarioFormatException(context + ": an 'anyOrder' block has no decision of its own, so it has no 'pause', 'messages', 'allow', 'answer', 'do' or 'end': those belong to the steps in it");
+            if (step.when.opening)
+                throw new ScenarioFormatException(context + ": the opening is one moment, and is a step by itself");
+            step.block = true;
+            step.skirmishes = optionalBoolean(object, "skirmishes", false, context);
+            int place2 = 0;
+            for (JsonValue child : anyOrder.asArray()) {
+                place2++;
+                step.children.add(parseStep(def, child, number, step, place2));
+                //(a choice one of them offers is one the steps after it, in the block and out of it, can depend on)
+                for (Message message : step.children.getLast().messages)
+                    for (String name : message.choices.keySet())
+                        if (!def.flags.contains(name))
+                            def.flags.add(name);
+            }
+        }
+        if (parent != null) {
+            if (step.until != null || step.skipWhen != null)
+                throw new ScenarioFormatException(context + ": a step in a block applies whenever a decision fits it, for as long as the block lasts: it has no 'until' or 'skipWhen' of its own (the block has)");
+            if (step.checkpoint)
+                throw new ScenarioFormatException(context + ": a checkpoint is a place the script always comes to; a step in a block is not.  Put it on the block.");
+            if (step.when.opening)
+                throw new ScenarioFormatException(context + ": the opening is one moment, and is a step by itself");
+            if (step.once && step.answers.size() > 1)
+                throw new ScenarioFormatException(context + ": is 'once' and has several answers");
+        }
+
+        if (!step.recurs() && step.answers.size() > 1)
+            throw new ScenarioFormatException(context + ": has several answers but answers only one decision (give it an 'until' to make it repeat)");
+        if ((step.until != null && step.until.opening) || (step.skipWhen != null && step.skipWhen.opening))
+            throw new ScenarioFormatException(context + ": 'opening' is something only a 'when' can wait for");
+
+        if (step.when.opening) {
+            //The board as it is laid out, before the first turn.  It is read; then its 'do' happens; then the game begins.
+            if (step.pause)
+                throw new ScenarioFormatException(context + ": the opening is read as it is: it needs no 'pause'");
+            if (step.allow != null || !step.answers.isEmpty())
+                throw new ScenarioFormatException(context + ": the opening is read, not answered, so it has no 'allow' and no 'answer'");
+            if (step.until != null || step.skipWhen != null || !step.onlyIf.isEmpty() || !step.unless.isEmpty() || step.end != null)
+                throw new ScenarioFormatException(context + ": the opening happens once, at the start of every game: it has no 'until', 'skipWhen', 'if', 'unless' or 'end'");
+            if (step.messages.isEmpty() && step.doOps.isEmpty())
+                throw new ScenarioFormatException(context + ": an opening with no messages and no 'do' does nothing");
+            for (Message message : step.messages)
+                if (message.on != null || message.advance == Advance.DECISION || !message.choices.isEmpty())
+                    throw new ScenarioFormatException(context + ".messages: the opening's messages are read one after another; they cannot wait for a decision ('advance: decision', 'on') or offer 'choices'");
+            step.when.seat = def.human.other();
+        }
+
+        if (step.pause) {
+            //It is there to be read.  The decision it is read over belongs to the step after it.
+            if (step.allow != null || !step.answers.isEmpty())
+                throw new ScenarioFormatException(context + ": a pause is read, not answered, so it has no 'allow' and no 'answer' (those belong to the step after it)");
+            if (step.until != null)
+                throw new ScenarioFormatException(context + ": a pause is read once, so it has no 'until'");
+            if (step.messages.isEmpty())
+                throw new ScenarioFormatException(context + ": a pause with no messages has nothing to be read");
+            if (step.when.seat == def.human.other())
+                throw new ScenarioFormatException(context + ": a pause is over one of the player's own decisions (an opponent's step already waits for its messages to be read)");
+            step.when.seat = def.human;
+        }
+        for (int i = 0; i < step.messages.size(); i++) {
+            Message message = step.messages.get(i);
+            String where = context + ".messages[" + (i + 1) + "]";
+            if (!message.choices.isEmpty()) {
+                if (!step.pause)
+                    throw new ScenarioFormatException(where + ".choices: only a step with 'pause: true' can offer a choice (the decision in front of the player belongs to the step after it)");
+                if (i != step.messages.size() - 1)
+                    throw new ScenarioFormatException(where + ".choices: a choice has to be a pause's last message");
+            }
+            if (step.pause && (message.on != null || message.advance == Advance.DECISION))
+                throw new ScenarioFormatException(where + ": a pause's messages are read one after another; they cannot wait for the decision ('advance: decision') or for a moment in answering it ('on')");
+        }
+        return step;
+    }
+
+    /**
+     * refuses: answers the step's 'allow' must refuse, written as an 'answer' is, one line or a [list] of them.  A
+     * line can begin with the number of the step's decision it is about ("2: choose(boromir)"); without one it is
+     * about every decision of the step.
+     */
+    private static List<Refusal> parseRefusals(ScenarioDefinition def, Step step, JsonValue value, String context) throws ScenarioFormatException {
+        if (step.allow == null)
+            throw new ScenarioFormatException(context + ": a step without an 'allow' lets the player give any answer, so it refuses nothing.  Give it an 'allow', or take 'refuses' out");
+        List<Refusal> refusals = new ArrayList<>();
+        for (String line : lines(value, context)) {
+            java.util.regex.Matcher numbered = java.util.regex.Pattern.compile("^(\\d+)\\s*:\\s*(.*)$", java.util.regex.Pattern.DOTALL).matcher(line.trim());
+            int at = 0;
+            String terms = line.trim();
+            if (numbered.matches()) {
+                at = Integer.parseInt(numbered.group(1));
+                terms = numbered.group(2);
+                if (at < 1)
+                    throw new ScenarioFormatException(context + ": '" + line + "': the step's decisions count from 1");
+                if (at > 1 && !step.recurs())
+                    throw new ScenarioFormatException(context + ": '" + line + "': this step answers one decision, so there is no decision " + at
+                            + " of it (a step with an 'until' repeats)");
+            }
+            for (Terms.Term term : Terms.parse(terms, context)) {
+                Answer answer = parseAnswer(def, term, context);
+                refusals.add(new Refusal(at, answer, at == 0 ? term.raw() : at + ": " + term.raw()));
+            }
+        }
+        if (refusals.isEmpty())
+            throw new ScenarioFormatException(context + ": is empty");
+        return refusals;
+    }
+
+    private static When parseWhen(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        When when = new When();
+        if (value.isObject()) {
+            JsonObject object = value.asObject();
+            checkFields(object, context, "terms", "seat", "as", "decision", "text", "phase", "turn", "skirmish", "offers", "inSkirmish", "fighting", "after", "require", "kind");
+            //(what can be said as terms can be, in 'terms': the rest of the object adds to it, its requirements above all)
+            if (object.get("terms") != null) {
+                When said = parseWhen(def, JsonValue.valueOf(scalar(object.get("terms"), context + ".terms")), context + ".terms");
+                when.seat = said.seat;
+                when.role = said.role;
+                when.decision = said.decision;
+                when.text = said.text;
+                when.phase = said.phase;
+                when.turn = said.turn;
+                when.skirmish = said.skirmish;
+                when.offers = said.offers;
+                when.fighting = said.fighting;
+                when.after = said.after;
+                when.kinds = said.kinds;
+                when.notKinds = said.notKinds;
+                if (said.opening)
+                    throw new ScenarioFormatException(context + ": 'opening' stands by itself");
+            }
+            when.source = object.toString();
+            if (object.get("seat") != null)
+                when.seat = parseSeat(def, scalar(object.get("seat"), context + ".seat"), context + ".seat");
+            if (object.get("as") != null)
+                when.role = parseRole(scalar(object.get("as"), context + ".as"), context + ".as");
+            if (object.get("decision") != null)
+                when.decision = parseDecisionType(scalar(object.get("decision"), context + ".decision"), context + ".decision");
+            if (object.get("text") != null)
+                when.text = optionalString(object, "text", null, context);
+            if (object.get("phase") != null)
+                when.phase = parsePhase(scalar(object.get("phase"), context + ".phase"), context + ".phase");
+            if (object.get("turn") != null)
+                when.turn = asInt(object.get("turn"), context + ".turn");
+            if (object.get("skirmish") != null)
+                when.skirmish = asInt(object.get("skirmish"), context + ".skirmish");
+            if (object.get("offers") != null)
+                when.offers = card(def, scalar(object.get("offers"), context + ".offers"), context + ".offers").alias();
+            for (String key : List.of("inSkirmish", "fighting"))
+                if (object.get(key) != null)
+                    when.fighting = card(def, scalar(object.get(key), context + "." + key), context + "." + key).alias();
+            if (object.get("after") != null)
+                when.after = card(def, scalar(object.get("after"), context + ".after"), context + ".after").alias();
+            if (object.get("require") != null)
+                when.require = jsonArrayText(object.get("require"), context + ".require");
+            if (object.get("kind") != null)
+                kinds(when, scalar(object.get("kind"), context + ".kind"), context + ".kind");
+            return when;
+        }
+
+        when.source = scalar(value, context);
+        //(how each term is written from now on: fighting(x) is inSkirmish(x))
+        List<String> written = new ArrayList<>();
+        boolean renamed = false;
+        for (Terms.Term term : Terms.parse(when.source, context)) {
+            written.add(term.raw());
+            Seat seat = tryParseSeat(def, term.name());
+            AwaitingDecisionType decisionType = tryParseDecisionType(term.name());
+            if (term.args().isEmpty() && seat != null)
+                when.seat = seat;
+            else if (term.args().isEmpty() && decisionType != null)
+                when.decision = decisionType;
+            else if (term.is("phase"))
+                when.phase = parsePhase(term.arg(0, context), context);
+            else if (term.is("turn"))
+                when.turn = parseInt(term.arg(0, context), context);
+            else if (term.is("as"))
+                when.role = parseRole(term.arg(0, context), context);
+            else if (term.is("skirmish"))
+                when.skirmish = parseInt(term.arg(0, context), context);
+            else if (term.is("offers"))
+                when.offers = card(def, term.arg(0, context), context).alias();
+            else if (term.is("inSkirmish"))
+                when.fighting = card(def, term.arg(0, context), context).alias();
+            else if (term.is("fighting")) {
+                when.fighting = card(def, term.arg(0, context), context).alias();
+                written.set(written.size() - 1, "inSkirmish(" + term.arg(0, context) + ")");
+                renamed = true;
+            }
+            else if (term.is("after"))
+                when.after = card(def, term.arg(0, context), context).alias();
+            else if (term.is("text"))
+                when.text = term.wholeArg();
+            else if (term.args().isEmpty() && term.is("opening"))
+                when.opening = true;
+            else if (kind(when, term))
+                continue;
+            else
+                throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected a seat "
+                        + "(freeps, shadow, human, opponent), a kind of decision (action, actionChoice, cards, arbitrary, choice, "
+                        + "number, assign), what it is for (" + String.join(", ", DecisionKinds.terms()) + ", or not(one of those)), "
+                        + "or one of phase(...), turn(...), as(freeps) or as(shadow), skirmish(n), inSkirmish(card), after(card), offers(card), text(...)");
+        }
+        if (renamed)
+            when.source = String.join(", ", written);
+        if (when.opening && (when.seat != null || when.decision != null || when.text != null || when.phase != null || when.turn != null || when.role != null
+                || when.skirmish != null || when.offers != null || when.fighting != null || when.after != null || !when.kinds.isEmpty() || !when.notKinds.isEmpty()))
+            throw new ScenarioFormatException(context + ": 'opening' is the moment before the first turn, and stands by itself");
+        return when;
+    }
+
+    /**
+     * A term of a 'when' that says what the decision is for: one of DecisionKinds' names (nextSkirmish), or
+     * not(one of them).
+     * @return Whether it was one.
+     */
+    private static boolean kind(When when, Terms.Term term) {
+        if (term.args().isEmpty() && DecisionKinds.named(term.name()) != null) {
+            DecisionKinds.Kind kind = DecisionKinds.named(term.name());
+            if (!when.kinds.contains(kind))
+                when.kinds.add(kind);
+            return true;
+        }
+        if (term.is("not") && term.args().size() == 1 && DecisionKinds.named(term.args().getFirst()) != null) {
+            DecisionKinds.Kind kind = DecisionKinds.named(term.args().getFirst());
+            if (!when.notKinds.contains(kind))
+                when.notKinds.add(kind);
+            return true;
+        }
+        return false;
+    }
+
+    /** A 'when' object's 'kind': what the decision is for, as its terms say it ("nextSkirmish", "not(reconcile)"). */
+    private static void kinds(When when, String text, String context) throws ScenarioFormatException {
+        for (Terms.Term term : Terms.parse(text, context))
+            if (!kind(when, term))
+                throw new ScenarioFormatException(context + ": '" + term.raw() + "' is not what a decision can be for ("
+                        + String.join(", ", DecisionKinds.terms()) + ", or not(one of those))");
+    }
+
+    static Answer parseAnswer(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
+        if (term.is("pass"))
+            return new Answer(AnswerKind.PASS, List.of(), null, 0, Map.of(), term.raw());
+        if (term.is("play"))
+            return new Answer(AnswerKind.PLAY, List.of(card(def, term.arg(0, context), context).alias()), null, 0, Map.of(), term.raw());
+        if (term.is("use")) {
+            String text = term.args().size() > 1 ? String.join(", ", term.args().subList(1, term.args().size())) : null;
+            return new Answer(AnswerKind.USE, List.of(card(def, term.arg(0, context), context).alias()), text, 0, Map.of(), term.raw());
+        }
+        if (term.is("choose")) {
+            List<Pick> picks = parsePicks(def, term, context);
+            List<String> cards = new ArrayList<>();
+            for (Pick pick : picks)
+                if (pick.alias() != null)
+                    cards.add(pick.alias());
+            return new Answer(AnswerKind.CHOOSE, cards, null, 0, Map.of(), term.raw(), picks);
+        }
+        if (term.is("option"))
+            return new Answer(AnswerKind.OPTION, List.of(), term.wholeArg(), 0, Map.of(), term.raw());
+        if (term.is("number"))
+            return new Answer(AnswerKind.NUMBER, List.of(), null, parseInt(term.arg(0, context), context), Map.of(), term.raw());
+        if (term.is("raw"))
+            return new Answer(AnswerKind.RAW, List.of(), term.wholeArg(), 0, Map.of(), term.raw());
+        if (term.is("assign")) {
+            Map<String, List<String>> assignments = new LinkedHashMap<>();
+            for (String pairing : term.args()) {
+                if (pairing.isEmpty())
+                    continue;
+                int colon = pairing.indexOf(':');
+                String character = (colon < 0 ? pairing : pairing.substring(0, colon)).trim();
+                List<String> minions = new ArrayList<>();
+                if (colon >= 0)
+                    for (String minion : pairing.substring(colon + 1).split("\\+"))
+                        if (!minion.trim().isEmpty())
+                            minions.add(assignedMinion(def, minion.trim(), term, context));
+                String assignee = assignedCharacter(def, character, context);
+                if (assignments.containsKey(assignee))
+                    throw new ScenarioFormatException(context + ": in '" + term.raw() + "', " + character + " is given minions twice: say them all in one pairing ("
+                            + character + ": a + b)");
+                assignments.put(assignee, minions);
+            }
+            return new Answer(AnswerKind.ASSIGN, List.of(), null, 0, assignments, term.raw());
+        }
+        throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of pass, "
+                + "play(card), use(card) or use(card, action text), choose(card, card), option(text) or option(#n), number(n), "
+                + "assign(character: minion + minion, character: minion) (a character may be ringBearer, and its minions rest), raw(text)");
+    }
+
+    /**
+     * The character of one of assign(...)'s pairings: a card by its name in the scenario, or ringBearer for whichever
+     * character is the Free Peoples player's Ring-bearer when the answer is given.  (A card that is called ringBearer
+     * is that card.)
+     */
+    private static String assignedCharacter(ScenarioDefinition def, String word, String context) throws ScenarioFormatException {
+        if (!isAlias(def, word) && word.equalsIgnoreCase("ringBearer"))
+            return ScenarioDefinition.RING_BEARER;
+        return card(def, word, context).alias();
+    }
+
+    /**
+     * One of the minions of an assign(...) pairing: a card by its name in the scenario, or rest (or all) for every
+     * minion that is still unassigned once the minions the answer names have been given out (see
+     * AnswerCompiler.compile).  (A card that is called rest or all is that card.)
+     */
+    private static String assignedMinion(ScenarioDefinition def, String word, Terms.Term term, String context) throws ScenarioFormatException {
+        if (!isAlias(def, word) && (word.equalsIgnoreCase("rest") || word.equalsIgnoreCase("all")))
+            return ScenarioDefinition.REST;
+        return card(def, word, context).alias();
+    }
+
+    /**
+     * What the opponent does by rule where nothing in the script says: opponent.leftovers (a character, or
+     * ringBearer), which takes every minion it has left unassigned; and opponent.plays, the cards the sandbox
+     * fallback may play (see ScenarioDirector.sandbox).
+     */
+    private static void parseOpponentRules(ScenarioDefinition def, JsonObject opponent) throws ScenarioFormatException {
+        String leftovers = optionalString(opponent, "leftovers", null, "opponent");
+        if (leftovers != null && !leftovers.isBlank() && !leftovers.equalsIgnoreCase("none")) {
+            def.leftovers = assignedCharacter(def, leftovers.trim(), "opponent.leftovers");
+        }
+        for (String alias : list(get(opponent, "plays"), "opponent.plays")) {
+            CardDef card = card(def, alias, "opponent.plays");
+            if (card.owner() == def.human)
+                throw new ScenarioFormatException("opponent.plays: '" + alias + "' is one of the player's own cards; the opponent plays its own");
+            if (def.sandboxPlays.contains(card.alias()))
+                throw new ScenarioFormatException("opponent.plays: '" + alias + "' is there twice");
+            def.sandboxPlays.add(card.alias());
+        }
+        if (!def.sandboxPlays.isEmpty() && def.fallback != Fallback.SANDBOX)
+            throw new ScenarioFormatException("opponent.plays: is the cards the sandbox opponent may play; it goes with 'fallback: sandbox'");
+    }
+
+    /**
+     * Each seat's adventure path: a list of blueprints, site 1 first ("1_319, 1_327"), the sites then being called
+     * site1, site2... (the opponent's site1opp...); or { name: blueprint } in the same order, for sites given names
+     * of their own.
+     */
+    private static void parseSites(ScenarioDefinition def, JsonObject sites) throws ScenarioFormatException {
+        for (String name : sites.names()) {
+            Seat seat = parseSeat(def, name, "sites");
+            String context = "sites." + name;
+            List<String> blueprints = new ArrayList<>();
+            List<String> aliases = new ArrayList<>();
+            JsonValue value = sites.get(name);
+            if (value.isObject()) {
+                for (JsonObject.Member member : value.asObject()) {
+                    aliases.add(member.getName().trim());
+                    blueprints.add(scalar(member.getValue(), context + "." + member.getName()).trim());
+                }
+            } else {
+                blueprints.addAll(list(value, context));
+                for (int number = 1; number <= blueprints.size(); number++)
+                    aliases.add(def.defaultSiteAlias(seat, number));
+            }
+            for (int at = 0; at < aliases.size(); at++) {
+                String alias = aliases.get(at);
+                if (!alias.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                    throw new ScenarioFormatException(context + ": '" + alias + "' is not usable as a site's name (letters, digits, dashes and underscores; starting with a letter)");
+                if (def.cards.containsKey(alias) || def.siteCards.containsKey(alias))
+                    throw new ScenarioFormatException(context + ": '" + alias + "' is already the name of another card or site");
+                def.siteCards.put(alias, new CardDef(alias, blueprints.get(at), seat));
+            }
+            def.sites.put(seat, blueprints);
+            def.siteAliases.put(seat, aliases);
+        }
+        for (Seat seat : Seat.values())
+            if (def.sites.getOrDefault(seat, List.of()).isEmpty())
+                throw new ScenarioFormatException("sites: the " + seat.key() + " seat needs at least site 1");
+    }
+
+    /**
+     * The cards a choose(...) picks.  Each of its parameters that names a card ("aragorn"), or picks one by its
+     * skirmish ("skirmishing", "skirmishing(aragorn)"), begins another pick; a number says which of the cards it could
+     * be (counting from 1), and anything else is a card filter that narrows the pick before it (or, first of all, is
+     * the pick: choose(or(helm, shield, armor))):
+     * choose(skirmishing(aragorn), title(Orthanc Warrior), 2), choose(aragorn, not(exhausted)), choose(frodo, sam).
+     */
+    static List<Pick> parsePicks(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
+        List<Pick> picks = new ArrayList<>();
+        String alias = null, against = null, source = null;
+        boolean skirmishing = false, open = false;
+        List<String> filters = new ArrayList<>();
+        int ordinal = 0;
+        for (String arg : term.args()) {
+            if (arg.isEmpty())
+                continue;
+            Terms.Term part = Terms.parse(arg, context).getFirst();
+            boolean starts = part.is("skirmishing") || (part.args().isEmpty() && isAlias(def, arg));
+            if (starts) {
+                if (open)
+                    picks.add(pick(alias, skirmishing, against, filters, ordinal, source, context));
+                open = true;
+                alias = null; against = null; skirmishing = false; filters = new ArrayList<>(); ordinal = 0; source = arg;
+                if (part.is("skirmishing")) {
+                    skirmishing = true;
+                    if (!part.args().isEmpty() && !part.args().getFirst().isEmpty())
+                        against = card(def, part.args().getFirst(), context).alias();
+                } else {
+                    alias = card(def, arg, context).alias();
+                }
+                continue;
+            }
+            if (!open) {
+                //(a pick can be nothing but card filters: choose(or(helm, shield, armor)) is whichever such card is on offer)
+                if (arg.matches("\\d+"))
+                    throw new ScenarioFormatException(context + ": in '" + term.raw() + "', '" + arg + "' comes before any card: "
+                            + "begin with a card's name in the scenario, skirmishing / skirmishing(character), or a card filter");
+                open = true;
+                alias = null; against = null; skirmishing = false; filters = new ArrayList<>(); ordinal = 0; source = arg;
+            } else {
+                source += ", " + arg;
+            }
+            if (arg.matches("\\d+")) {
+                ordinal = Integer.parseInt(arg);
+                if (ordinal < 1)
+                    throw new ScenarioFormatException(context + ": in '" + term.raw() + "', which card it is counts from 1");
+                continue;
+            }
+            String filter = ScenarioTable.cardFilter(def, arg);
+            try {
+                ScenarioTable.checkFilter(filter);
+            } catch (IllegalArgumentException exp) {
+                throw new ScenarioFormatException(context + ": in '" + term.raw() + "', '" + arg + "' is neither a card of the "
+                        + "scenario nor a card filter (" + exp.getMessage() + ")");
+            }
+            filters.add(filter);
+        }
+        if (open)
+            picks.add(pick(alias, skirmishing, against, filters, ordinal, source, context));
+        return picks;
+    }
+
+    private static Pick pick(String alias, boolean skirmishing, String against, List<String> filters, int ordinal, String source,
+                             String context) {
+        return new Pick(alias, skirmishing, against, filters.isEmpty() ? null : String.join(",", filters), ordinal, source);
+    }
+
+    /** Whether a word is the name of one of the scenario's cards (or sites). */
+    static boolean isAlias(ScenarioDefinition def, String word) {
+        return def.cards.containsKey(word.trim()) || def.siteCards.containsKey(word.trim()) || def.slots.containsKey(word.trim());
+    }
+
+    static DoOp parseDo(ScenarioDefinition def, Terms.Term term, String context) throws ScenarioFormatException {
+        if (term.is("move")) {
+            String target = term.arg(1, context);
+            parseZoneRef(def, target, context);
+            return new DoOp(DoKind.MOVE, card(def, term.arg(0, context), context).alias(), target, 0, false, term.raw());
+        }
+        if (term.is("attach") || term.is("stack"))
+            return new DoOp(term.is("attach") ? DoKind.ATTACH : DoKind.STACK,
+                    card(def, term.arg(0, context), context).alias(), card(def, term.arg(1, context), context).alias(), 0, false, term.raw());
+        if (term.is("wound") || term.is("heal") || term.is("tokens")) {
+            int amount = term.args().size() > 1 ? parseInt(term.arg(1, context), context) : 1;
+            DoKind kind = term.is("wound") ? DoKind.WOUND : term.is("heal") ? DoKind.HEAL : DoKind.TOKENS;
+            return new DoOp(kind, card(def, term.arg(0, context), context).alias(), null, amount, false, term.raw());
+        }
+        if (term.is("twilight") || term.is("burdens") || term.is("threats")) {
+            String amount = term.arg(0, context);
+            boolean relative = amount.startsWith("+") || amount.startsWith("-");
+            DoKind kind = term.is("twilight") ? DoKind.TWILIGHT : term.is("burdens") ? DoKind.BURDENS : DoKind.THREATS;
+            return new DoOp(kind, null, null, parseInt(amount.startsWith("+") ? amount.substring(1) : amount, context), relative, term.raw());
+        }
+        if (term.is("draw")) {
+            //draw(n) is the person's own seat; draw(seat, n) says whose
+            boolean seated = term.args().size() > 1;
+            Seat seat = seated ? parseSeat(def, term.arg(0, context), context) : def.human;
+            int amount = parseInt(term.arg(seated ? 1 : 0, context), context);
+            if (amount < 1 || amount > 60)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": a number of cards from 1 to 60");
+            return new DoOp(DoKind.DRAW, null, seat.key(), amount, false, term.raw());
+        }
+        if (term.is("order")) {
+            //order(freeps.hand, a, b, c): those cards first (topmost, in a pile), in that order; the rest after them
+            String target = term.arg(0, context).trim();
+            ZoneRef ref = parseZoneRef(def, target, context);
+            if (target.split("\\.").length != 2 || !ORDERED.contains(ref.zone()))
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": what has an order is a hand, a deck, a discard pile or a dead pile (freeps.hand, shadow.deck)");
+            List<String> cards = new ArrayList<>();
+            for (int i = 1; i < term.args().size(); i++) {
+                CardDef card = card(def, term.arg(i, context), context);
+                if (card.owner() != ref.seat())
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + card.alias() + "' belongs to the other seat");
+                if (cards.contains(card.alias()))
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + card.alias() + "' is there twice");
+                cards.add(card.alias());
+            }
+            if (cards.isEmpty())
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": needs the cards, in the order they are to come");
+            return new DoOp(DoKind.ORDER, String.join(", ", cards), target, 0, false, term.raw());
+        }
+        if (term.is("marker")) {
+            //marker(seat, n): that seat's marker on site n, the sites up to it laid on the path as needed
+            Seat seat = parseSeat(def, term.arg(0, context), context);
+            int site = parseInt(term.arg(1, context), context);
+            if (site < 1 || site > 9)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": a site from 1 to 9");
+            return new DoOp(DoKind.MARKER, null, seat.key(), site, false, term.raw());
+        }
+        if (term.is("control") || term.is("liberate")) {
+            //control(site, seat) and liberate(site): a site by its number on the path or by its name
+            String site = term.arg(0, context).trim();
+            String alias = null;
+            int number = 0;
+            if (site.matches("[1-9]"))
+                number = Integer.parseInt(site);
+            else if (def.siteCards.containsKey(site))
+                alias = site;
+            else
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + site + "' is neither a site's number (1 to 9) nor the name of one of the scenario's sites");
+            if (term.is("liberate")) {
+                if (term.args().size() > 1)
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": liberating a site says only which site (liberate(site2), liberate(2))");
+                return new DoOp(DoKind.LIBERATE, alias, null, number, false, term.raw());
+            }
+            Seat seat = parseSeat(def, term.arg(1, context), context);
+            return new DoOp(DoKind.CONTROL, alias, seat.key(), number, false, term.raw());
+        }
+        if (term.is("modify")) {
+            //modify(card, what, amount, how long): the amount where it takes one, how long only when not until taken off
+            CardDef card = card(def, term.arg(0, context), context);
+            if (term.args().size() < 2)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": says what is modified: modify(" + card.alias()
+                        + ", strength, +2), modify(" + card.alias() + ", fierce, turn)");
+            Modification modification = CardModifiers.parse(term.arg(1, context), term.args().subList(2, term.args().size()),
+                    context + ": " + term.raw());
+            return new DoOp(DoKind.MODIFY, card.alias(), modification.what(), modification.amount(), false, term.raw(), modification);
+        }
+        if (term.is("unmodify")) {
+            //unmodify(card): every modifier put on it by hand; unmodify(card, what): those of that kind
+            CardDef card = card(def, term.arg(0, context), context);
+            String what = null;
+            if (term.args().size() > 2)
+                throw new ScenarioFormatException(context + ": " + term.raw() + ": says the card, and what to take off if not everything: "
+                        + "unmodify(" + card.alias() + "), unmodify(" + card.alias() + ", strength)");
+            if (term.args().size() == 2) {
+                CardModifiers.Word word = CardModifiers.word(term.arg(1, context));
+                if (word == null)
+                    throw new ScenarioFormatException(context + ": " + term.raw() + ": '" + term.arg(1, context).trim() + "' is not something a "
+                            + "card can be modified in (strength, vitality, resistance, cost, or a keyword such as fierce)");
+                what = word.word();
+            }
+            return new DoOp(DoKind.UNMODIFY, card.alias(), what, 0, false, term.raw());
+        }
+        throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  Expected one of "
+                + "move(card, seat.zone), attach(card, bearer), stack(card, host), wound(card, n), heal(card, n), tokens(card, n), "
+                + "draw(n) or draw(seat, n), order(seat.zone, card, card), twilight(n), burdens(n), threats(n) (write +n or -n to change a total rather than set it), "
+                + "marker(seat, site), control(site, seat), liberate(site), modify(card, what, +n, phase or turn), unmodify(card) or unmodify(card, what)");
+    }
+
+    /** The places whose cards come in an order that matters: a hand as it is shown, a pile from the top down. */
+    public static final Set<SetupZone> ORDERED = EnumSet.of(SetupZone.HAND, SetupZone.DECK, SetupZone.DISCARD, SetupZone.DEAD_PILE);
+
+    /**
+     * A place on the board a card can be moved to mid-game: "freeps.hand", "shadow.deck.top", and so on.
+     */
+    public record ZoneRef(Seat seat, SetupZone zone, boolean bottom) { }
+
+    public static ZoneRef parseZoneRef(ScenarioDefinition def, String text, String context) throws ScenarioFormatException {
+        String[] parts = text.trim().split("\\.");
+        if (parts.length < 2 || parts.length > 3)
+            throw new ScenarioFormatException(context + ": '" + text + "' should name a seat and a zone, e.g. freeps.hand or shadow.deck.bottom");
+        Seat seat = parseSeat(def, parts[0], context);
+        SetupZone zone = parseSetupZone(parts[1], context);
+        boolean bottom = false;
+        if (parts.length == 3) {
+            if (zone != SetupZone.DECK || !(parts[2].equalsIgnoreCase("top") || parts[2].equalsIgnoreCase("bottom")))
+                throw new ScenarioFormatException(context + ": '" + text + "': only the deck has a .top and a .bottom");
+            bottom = parts[2].equalsIgnoreCase("bottom");
+        }
+        return new ZoneRef(seat, zone, bottom);
+    }
+
+    private static List<Message> parseMessages(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        List<Message> result = new ArrayList<>();
+        List<JsonValue> entries = new ArrayList<>();
+        if (value.isArray())
+            value.asArray().forEach(entries::add);
+        else
+            entries.add(value);
+
+        int index = 0;
+        for (JsonValue entry : entries) {
+            index++;
+            String entryContext = context + "[" + index + "]";
+            Message message = new Message();
+            if (entry.isObject()) {
+                JsonObject object = entry.asObject();
+                if (object.get("title") != null)
+                    throw new ScenarioFormatException(entryContext + ": a message's heading is called 'header', not 'title' (and most messages want none)");
+                checkFields(object, entryContext, "note", "header", "text", "anchor", "highlight", "highlightStyle", "avoid", "side", "gap", "advance", "on",
+                        "zoom", "focus", "magnify", "choices", "once", "require");
+                message.note = optionalString(object, "note", null, entryContext);
+                message.once = optionalBoolean(object, "once", true, entryContext);
+                message.header = sidesNamed(def, optionalString(object, "header", null, entryContext));
+                message.text = sidesNamed(def, requireString(object, "text", entryContext));
+                message.anchor = sidesNamed(def, list(object.get("anchor"), entryContext + ".anchor"));
+                message.gap = gap(optionalString(object, "gap", null, entryContext), entryContext + ".gap");
+                message.highlight = sidesNamed(def, list(object.get("highlight"), entryContext + ".highlight"));
+                message.highlightStyle = optionalString(object, "highlightStyle", "gold", entryContext).toLowerCase(Locale.ROOT);
+                if (!HIGHLIGHT_STYLES.contains(message.highlightStyle))
+                    throw new ScenarioFormatException(entryContext + ".highlightStyle: has to be one of " + String.join(", ", HIGHLIGHT_STYLES));
+                message.avoid = sidesNamed(def, list(object.get("avoid"), entryContext + ".avoid"));
+                message.side = optionalString(object, "side", "auto", entryContext).toLowerCase(Locale.ROOT);
+                if (!List.of("auto", "above", "below", "left", "right").contains(message.side))
+                    throw new ScenarioFormatException(entryContext + ".side: has to be auto, above, below, left or right");
+                String advance = optionalString(object, "advance", null, entryContext);
+                if (advance != null)
+                    parseAdvance(def, message, advance, entryContext + ".advance");
+                JsonObject choices = optionalObject(object, "choices", entryContext);
+                if (choices != null) {
+                    for (String name : choices.names()) {
+                        if (!name.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                            throw new ScenarioFormatException(entryContext + ".choices: '" + name + "' is not usable as a choice's name (letters, digits, dashes and underscores; starting with a letter)");
+                        message.choices.put(name, scalar(choices.get(name), entryContext + ".choices." + name));
+                    }
+                    if (message.choices.size() < 2)
+                        throw new ScenarioFormatException(entryContext + ".choices: a choice needs at least two buttons");
+                    if (message.advance != null && message.advance != Advance.NEXT)
+                        throw new ScenarioFormatException(entryContext + ": a message with 'choices' is left by pressing one of them, so it has no 'advance'");
+                }
+                String on = optionalString(object, "on", null, entryContext);
+                if (on != null)
+                    message.on = parseMoment(def, on, entryContext + ".on");
+                //"start" is what a message with no moment already means, and everything downstream tells the two
+                // kinds of message apart by whether there is a moment at all
+                if (message.on != null && message.on.kind() == MomentKind.START)
+                    message.on = null;
+                if (object.get("require") != null) {
+                    message.require = jsonArrayText(object.get("require"), entryContext + ".require");
+                    //(a choice is what the steps after it go by, and has to be made: it is always offered)
+                    if (!message.choices.isEmpty())
+                        throw new ScenarioFormatException(entryContext + ".require: a message that offers 'choices' is always said; put the condition on the step ('if', 'unless', or its when's 'require')");
+                }
+                message.zoom = parseZoom(def, object, entryContext);
+                if (message.zoom != null) {
+                    //A card shown large is in the way of the table, so it is read and then put away
+                    if (message.on != null)
+                        throw new ScenarioFormatException(entryContext + ": a message with 'zoom' cannot also wait for a moment ('on')");
+                    if (message.advance != null && message.advance != Advance.NEXT)
+                        throw new ScenarioFormatException(entryContext + ".advance: a message with 'zoom' always waits for Next");
+                    message.advance = Advance.NEXT;
+                }
+                if (message.on != null && (message.advance == Advance.INSPECT || message.advance == Advance.CLOSE))
+                    throw new ScenarioFormatException(entryContext + ".advance: a message tied to a moment ('on') stays until the next moment or the answer");
+            } else {
+                message.text = sidesNamed(def, scalar(entry, entryContext));
+            }
+
+            for (String anchor : message.anchor)
+                Anchors.check(def, anchor, entryContext + ".anchor");
+            for (String anchor : message.highlight)
+                Anchors.check(def, anchor, entryContext + ".highlight");
+            for (String anchor : message.avoid)
+                Anchors.check(def, anchor, entryContext + ".avoid");
+            Templates.check(def, message.text, entryContext + ".text");
+            if (message.header != null)
+                Templates.check(def, message.header, entryContext + ".header");
+            result.add(message);
+        }
+        return result;
+    }
+
+    /**
+     * The skirmish box's totals were once named for the sides of the game (fpStrength, shadowStrength); they are
+     * named for the person's side and the other (selfStrength, oppStrength), and what is written the old way is read
+     * the new.
+     */
+    static String sidesNamed(ScenarioDefinition def, String text) {
+        //(in a two-sided game the person is the Free Peoples player on their turns and the Shadow player on the
+        // other's, so the old names keep their meaning there: the Free Peoples side and the Shadow side, whoever's)
+        if (text == null || !def.oneSided)
+            return text;
+        boolean freeps = def.human == Seat.FREEPS;
+        return text.replaceAll("(?i)(ui:skirmish:)fpStrength\\b", "$1" + (freeps ? "selfStrength" : "oppStrength"))
+                .replaceAll("(?i)(ui:skirmish:)shadowStrength\\b", "$1" + (freeps ? "oppStrength" : "selfStrength"))
+                .replaceAll("(?i)\\{fpStrength}", freeps ? "{selfStrength}" : "{oppStrength}")
+                .replaceAll("(?i)\\{shadowStrength}", freeps ? "{oppStrength}" : "{selfStrength}");
+    }
+
+    static List<String> sidesNamed(ScenarioDefinition def, List<String> anchors) {
+        List<String> named = new ArrayList<>();
+        for (String anchor : anchors)
+            named.add(sidesNamed(def, anchor));
+        return named;
+    }
+
+    /**
+     * zoom: card:<alias> | site:<n> | blueprint:<id>, with optional focus (region names or rect(l, t, w, h) in
+     * percent of the card) and magnify.
+     */
+    private static Zoom parseZoom(ScenarioDefinition def, JsonObject object, String context) throws ScenarioFormatException {
+        String zoom = optionalString(object, "zoom", null, context);
+        if (zoom == null) {
+            if (object.get("focus") != null || object.get("magnify") != null)
+                throw new ScenarioFormatException(context + ": 'focus' and 'magnify' belong to a 'zoom'");
+            return null;
+        }
+        String[] parts = zoom.trim().split(":", 2);
+        if (parts.length != 2 || parts[1].isBlank())
+            throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number>, blueprint:<id> or image:<file>");
+        String what = parts[1].trim();
+        String alias = null;
+        Integer site = null;
+        String blueprint = null;
+        String image = null;
+        switch (parts[0].trim().toLowerCase(Locale.ROOT)) {
+            case "image" -> {
+                if (!what.matches(Zoom.IMAGE_NAME))
+                    throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not the name of a picture: letters, digits, spaces, dots, "
+                            + "dashes and underscores, ending in .png, .jpg, .gif or .webp (a file in the web folder's images/scenarios)");
+                image = what;
+            }
+            case "card" -> alias = card(def, what, context + ".zoom").alias();
+            case "site" -> {
+                if (!what.matches("[1-9]"))
+                    throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not a site number");
+                site = Integer.parseInt(what);
+            }
+            case "blueprint" -> {
+                if (!what.matches("\\d+_\\d+[*T]?"))
+                    throw new ScenarioFormatException(context + ".zoom: '" + what + "' is not a blueprint ID");
+                blueprint = what;
+            }
+            default -> throw new ScenarioFormatException(context + ".zoom: '" + zoom + "' has to be card:<alias>, site:<number>, blueprint:<id> or image:<file>");
+        }
+
+        List<Focus> focus = new ArrayList<>();
+        JsonValue focusValue = object.get("focus");
+        if (focusValue != null && !focusValue.isNull()) {
+            for (String line : lines(focusValue, context + ".focus")) {
+                for (Terms.Term term : Terms.parse(line, context + ".focus")) {
+                    if (term.is("rect")) {
+                        if (term.args().size() != 4)
+                            throw new ScenarioFormatException(context + ".focus: rect needs left, top, width and height, in percent of the card");
+                        double[] rect = new double[4];
+                        for (int i = 0; i < 4; i++) {
+                            try {
+                                rect[i] = Double.parseDouble(term.args().get(i).trim());
+                            } catch (NumberFormatException exp) {
+                                throw new ScenarioFormatException(context + ".focus: '" + term.args().get(i) + "' is not a number");
+                            }
+                        }
+                        if (rect[0] < 0 || rect[1] < 0 || rect[2] <= 0 || rect[3] <= 0 || rect[0] + rect[2] > 100 || rect[1] + rect[3] > 100)
+                            throw new ScenarioFormatException(context + ".focus: " + term.raw() + " does not lie on the card (everything is in percent, 0 to 100)");
+                        focus.add(new Focus(null, rect));
+                    } else if (term.args().isEmpty() && CardFaces.known(term.name())) {
+                        focus.add(new Focus(term.name(), null));
+                    } else {
+                        throw new ScenarioFormatException(context + ".focus: don't know what '" + term.raw() + "' means.  Expected rect(left, top, width, height) or one of "
+                                + String.join(", ", CardFaces.names()));
+                    }
+                }
+            }
+        }
+
+        double magnify = 1;
+        String magnifyText = optionalString(object, "magnify", null, context);
+        if (magnifyText != null) {
+            try {
+                magnify = Double.parseDouble(magnifyText.trim());
+            } catch (NumberFormatException exp) {
+                throw new ScenarioFormatException(context + ".magnify: '" + magnifyText + "' is not a number");
+            }
+            if (magnify < 1 || magnify > 6)
+                throw new ScenarioFormatException(context + ".magnify: has to be from 1 (the whole card) to 6");
+        }
+        if (image != null)
+            for (Focus part : focus)
+                if (part.name() != null)
+                    throw new ScenarioFormatException(context + ".focus: a picture has no named parts ('" + part.name() + "'): say where with rect(left, top, width, height), in percent of the picture");
+        return new Zoom(alias, site, blueprint, image, focus, magnify);
+    }
+
+    /**
+     * A distance between a bubble and what it points at: "2.5" (hundredths of the window's shorter side) or "24px".
+     * It may be less than nothing, for a bubble that is to sit over the edge of a large thing.
+     */
+    private static String gap(String text, String context) throws ScenarioFormatException {
+        if (text == null || text.isBlank())
+            return null;
+        String written = text.trim().toLowerCase(Locale.ROOT);
+        if (!written.matches("-?\\d+(\\.\\d+)?(px)?"))
+            throw new ScenarioFormatException(context + ": '" + text + "' is not a distance.  Write a number (hundredths of the window's shorter side: "
+                    + "2 is a little, 10 is a lot) or a number of pixels as 24px");
+        double amount = Double.parseDouble(written.replace("px", ""));
+        if (written.endsWith("px") ? Math.abs(amount) > 1000 : Math.abs(amount) > 60)
+            throw new ScenarioFormatException(context + ": " + text + " is further than any screen is wide");
+        return written;
+    }
+
+    /**
+     * advance: next | decision | inspect | inspect(card) | close
+     */
+    private static void parseAdvance(ScenarioDefinition def, Message message, String text, String context) throws ScenarioFormatException {
+        List<Terms.Term> terms = Terms.parse(text, context);
+        if (terms.size() == 1) {
+            Terms.Term term = terms.getFirst();
+            if (term.is("next") && term.args().isEmpty()) {
+                message.advance = Advance.NEXT;
+                return;
+            }
+            if (term.is("decision") && term.args().isEmpty()) {
+                message.advance = Advance.DECISION;
+                return;
+            }
+            if (term.is("close") && term.args().isEmpty()) {
+                message.advance = Advance.CLOSE;
+                return;
+            }
+            if (term.is("inspect") && term.args().size() <= 1) {
+                message.advance = Advance.INSPECT;
+                if (!term.args().isEmpty() && !term.args().getFirst().isEmpty())
+                    message.advanceCard = card(def, term.args().getFirst(), context).alias();
+                return;
+            }
+        }
+        throw new ScenarioFormatException(context + ": don't know what '" + text + "' means.  Expected one of next, decision, "
+                + "inspect (the player opens a card's information window), inspect(card), close (the player closes it again)");
+    }
+
+    private static Moment parseMoment(ScenarioDefinition def, String text, String context) throws ScenarioFormatException {
+        List<Terms.Term> terms = Terms.parse(text, context);
+        if (terms.size() == 1) {
+            Terms.Term term = terms.getFirst();
+            if (term.is("start") && term.args().isEmpty())
+                return new Moment(MomentKind.START, null);
+            if (term.is("ready") && term.args().isEmpty())
+                return new Moment(MomentKind.READY, null);
+            if (term.is("picked"))
+                return new Moment(MomentKind.PICKED, card(def, term.arg(0, context), context).alias());
+            if (term.is("assigned"))
+                return new Moment(MomentKind.ASSIGNED, card(def, term.arg(0, context), context).alias());
+        }
+        throw new ScenarioFormatException(context + ": don't know what '" + text + "' means.  Expected one of start, "
+                + "picked(card), assigned(character), ready");
+    }
+
+    private static Allow parseAllow(ScenarioDefinition def, JsonValue value, String context) throws ScenarioFormatException {
+        Allow allow = new Allow();
+        JsonValue answers = value;
+        if (value.isObject()) {
+            JsonObject object = value.asObject();
+            checkFields(object, context, "answers", "passWhen", "otherwise", "hints");
+            answers = object.get("answers");
+            if (object.get("passWhen") != null)
+                allow.passWhen = jsonArrayText(object.get("passWhen"), context + ".passWhen");
+            allow.otherwise = optionalString(object, "otherwise", null, context);
+            if (allow.otherwise != null)
+                Templates.check(def, allow.otherwise, context + ".otherwise");
+            JsonObject hints = optionalObject(object, "hints", context);
+            if (hints != null)
+                for (String alias : hints.names()) {
+                    String hint = scalar(hints.get(alias), context + ".hints." + alias);
+                    Templates.check(def, hint, context + ".hints." + alias);
+                    allow.hints.put(card(def, alias, context + ".hints").alias(), hint);
+                }
+        }
+        if (answers != null)
+            for (String line : lines(answers, context))
+                for (String part : Terms.split(line, ',', context)) {
+                    //(every answer is allowed if it is on offer and no mistake if it is not: the ? that used to say so
+                    // for one answer is still read, and means nothing more)
+                    String written = part.endsWith("?") ? part.substring(0, part.length() - 1).trim() : part;
+                    for (Terms.Term term : Terms.parse(written, context))
+                        allow.answers.add(parseAnswer(def, term, context));
+                }
+        if (allow.answers.isEmpty() && allow.passWhen == null)
+            throw new ScenarioFormatException(context + ": allows nothing at all");
+        return allow;
+    }
+
+    /* ---- puzzles: judging at a moment, scores, undo, slots and solutions ---- */
+
+    /** options.undo: on, off, or (left out) as the scenario's kind has it. */
+    private static Boolean undo(String written) throws ScenarioFormatException {
+        if (written == null)
+            return null;
+        return switch (written.trim().toLowerCase(Locale.ROOT)) {
+            case "on", "true" -> true;
+            case "off", "false" -> false;
+            default -> throw new ScenarioFormatException("options.undo: has to be on (the person may take back what they have done) or off "
+                    + "(they may not); left out, it is off in a puzzle and on in anything else");
+        };
+    }
+
+    /**
+     * outcome.judge: { at: endOf(archery), win: { ... } }, or the moment by itself (the scenario is over then, and
+     * complete: for a scored puzzle).
+     */
+    private static Judge parseJudge(JsonValue value) throws ScenarioFormatException {
+        String context = "outcome.judge";
+        String at;
+        String win = null;
+        if (value.isObject()) {
+            checkFields(value.asObject(), context, "at", "win");
+            at = requireString(value.asObject(), "at", context);
+            if (get(value.asObject(), "win") != null)
+                win = jsonArrayText(get(value.asObject(), "win"), context + ".win");
+        } else {
+            at = scalar(value, context);
+        }
+        return moment(at, win, context + ".at");
+    }
+
+    /** The moment of a judge: endOf(phase), startOf(phase) or endOfTurn, and turn(n) if it is only on that turn. */
+    static Judge moment(String written, String win, String context) throws ScenarioFormatException {
+        JudgeMoment kind = null;
+        Phase phase = null;
+        Integer turn = null;
+        String expected = "Write endOf(phase), startOf(phase), endOfTurn or skirmishResolution (a phase of a turn: fellowship, shadow, "
+                + "maneuver, archery, assignment, skirmish, regroup), and turn(n) after it for a moment of one turn only: endOf(archery), turn(2)";
+        for (Terms.Term term : Terms.parse(written, context)) {
+            if ((term.is("endOf") || term.is("startOf")) && term.args().size() == 1 && kind == null) {
+                kind = term.is("endOf") ? JudgeMoment.END_OF : JudgeMoment.START_OF;
+                phase = parsePhase(term.arg(0, context), context);
+                if (!com.gempukku.lotro.logic.timing.processes.pregame.MidTurnStartGameProcess.PHASES.contains(phase))
+                    throw new ScenarioFormatException(context + ": '" + term.raw() + "' is not a phase of a turn.  " + expected);
+            } else if (term.is("endOfTurn") && term.args().isEmpty() && kind == null) {
+                kind = JudgeMoment.END_OF_TURN;
+            } else if (term.is("skirmishResolution") && term.args().isEmpty() && kind == null) {
+                kind = JudgeMoment.SKIRMISH_RESOLUTION;
+            } else if (term.is("turn") && term.args().size() == 1 && turn == null) {
+                turn = parseInt(term.arg(0, context), context);
+                if (turn < 1)
+                    throw new ScenarioFormatException(context + ": turns are counted from 1");
+            } else {
+                throw new ScenarioFormatException(context + ": don't know what '" + term.raw() + "' means.  " + expected);
+            }
+        }
+        if (kind == null)
+            throw new ScenarioFormatException(context + ": says no moment.  " + expected);
+        String source = kind == JudgeMoment.END_OF_TURN ? "endOfTurn" : kind == JudgeMoment.SKIRMISH_RESOLUTION ? "skirmishResolution"
+                : (kind == JudgeMoment.END_OF ? "endOf(" : "startOf(") + phase.name().toLowerCase(Locale.ROOT) + ")";
+        return new Judge(kind, phase, turn, win, turn == null ? source : source + ", turn(" + turn + ")");
+    }
+
+    /**
+     * outcome.score: { value: strength:smeagol, better: higher, label: Sméagol's strength }, the value being what a
+     * message's text quotes from the game ({strength:smeagol}, written with or without its braces), or a value as card
+     * definitions write one ({ type: forEachWound, filter: companion }).
+     */
+    private static Score parseScore(ScenarioDefinition def, JsonValue value) throws ScenarioFormatException {
+        String context = "outcome.score";
+        JsonObject score = asObject(value, context);
+        checkFields(score, context, "value", "better", "label");
+        JsonValue said = get(score, "value");
+        if (said == null)
+            throw new ScenarioFormatException(context + ": needs a 'value': what number to read from the game (strength:smeagol, burdens, twilight...)");
+        String template = null;
+        String json = null;
+        if (said.isObject()) {
+            json = said.toString();
+        } else {
+            template = scoreTemplate(def, scalar(said, context + ".value"), context + ".value");
+        }
+        String better = optionalString(score, "better", "higher", context).trim().toLowerCase(Locale.ROOT);
+        if (!better.equals("higher") && !better.equals("lower"))
+            throw new ScenarioFormatException(context + ".better: has to be higher (a higher score is better; the default) or lower");
+        return new Score(template, json, better.equals("higher"), optionalString(score, "label", null, context));
+    }
+
+    /** A score read as message text reads the game: "strength:smeagol" (or "{strength:smeagol}"), a number. */
+    static String scoreTemplate(ScenarioDefinition def, String written, String context) throws ScenarioFormatException {
+        String inner = written.trim();
+        if (inner.startsWith("{") && inner.endsWith("}"))
+            inner = inner.substring(1, inner.length() - 1).trim();
+        if (inner.toLowerCase(Locale.ROOT).startsWith("title"))
+            throw new ScenarioFormatException(context + ": a card's title is not a number; a score is one (strength:x, vitality:x, wounds:x, burdens, twilight...)");
+        if (!inner.matches("[A-Za-z]+(:[A-Za-z0-9_ -]+)?"))
+            throw new ScenarioFormatException(context + ": '" + written + "' is not something to read from the game.  Write it as message text quotes "
+                    + "the game, without the braces: strength:smeagol, burdens, twilight, hand:human");
+        Templates.check(def, "{" + inner + "}", context);
+        return inner;
+    }
+
+    /** The places a slot's card can be, as the file says them. */
+    private static SlotZone slotZone(String name, String context) throws ScenarioFormatException {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "characters" -> SlotZone.CHARACTERS;
+            case "support" -> SlotZone.SUPPORT;
+            case "minions" -> SlotZone.MINIONS;
+            case "hand" -> SlotZone.HAND;
+            case "deck" -> SlotZone.DECK;
+            case "discard" -> SlotZone.DISCARD;
+            case "deadpile" -> SlotZone.DEAD_PILE;
+            case "attached" -> SlotZone.ATTACHED;
+            case "stacked" -> SlotZone.STACKED;
+            case "site" -> SlotZone.SITE;
+            default -> throw new ScenarioFormatException(context + ": '" + name + "' is not a place for a slot's card (characters, support, minions, "
+                    + "hand, deck, discard, deadPile, attached, stacked, site)");
+        };
+    }
+
+    /** How a slot's zone is written. */
+    public static String slotZoneName(SlotZone zone) {
+        return switch (zone) {
+            case DEAD_PILE -> "deadPile";
+            default -> zone.name().toLowerCase(Locale.ROOT);
+        };
+    }
+
+    /**
+     * slots: { id: { zone, seat, on, position, filter, tokens, wounds, label } }, or { id: zone } for a slot that says
+     * nothing else; and pool, the filter every slot's card passes.  A slot of zone 'site' is one of the scenario's sites,
+     * by its name (the site the board shows until one is picked); every other slot's id is a name of its own.
+     */
+    private static void parseSlots(ScenarioDefinition def, JsonObject slots, String pool) throws ScenarioFormatException {
+        def.pool = pool == null || pool.isBlank() ? null : pool.trim();
+        if (slots == null)
+            return;
+        for (String id : slots.names()) {
+            String context = "slots." + id;
+            if (!id.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                throw new ScenarioFormatException(context + ": '" + id + "' is not usable as a slot's name (letters, digits, dashes and underscores; starting with a letter)");
+            JsonValue value = slots.get(id);
+            JsonObject slot;
+            if (value.isObject()) {
+                slot = value.asObject();
+            } else {
+                slot = new JsonObject();
+                slot.add("zone", scalar(value, context));
+            }
+            checkFields(slot, context, "zone", "seat", "on", "position", "filter", "tokens", "wounds", "label");
+            SlotZone zone = slotZone(requireString(slot, "zone", context), context + ".zone");
+            Seat seat = get(slot, "seat") == null ? def.human : parseSeat(def, scalar(get(slot, "seat"), context + ".seat"), context + ".seat");
+            if (zone == SlotZone.SITE) {
+                //(a site the solver chooses is one of the path's sites, which the board shows until it is chosen)
+                CardDef site = def.siteCards.get(id);
+                if (site == null)
+                    throw new ScenarioFormatException(context + ": a slot for a site is one of the scenario's sites, by its name (site2, or the name "
+                            + "sites gives it): the board shows that site until the solver picks another.  There is no site called '" + id + "'");
+                if (get(slot, "seat") != null && seat != site.owner())
+                    throw new ScenarioFormatException(context + ".seat: '" + id + "' is the " + site.owner().key() + " seat's site");
+                seat = site.owner();
+            } else if (def.cards.containsKey(id) || def.siteCards.containsKey(id)) {
+                throw new ScenarioFormatException(context + ": '" + id + "' is already the name of one of the scenario's cards or sites; a slot's "
+                        + "card has a name of its own (a slot for a site is the one exception: zone: site)");
+            }
+            String on = optionalString(slot, "on", null, context);
+            if (zone == SlotZone.ATTACHED || zone == SlotZone.STACKED) {
+                if (on == null)
+                    throw new ScenarioFormatException(context + ".on: a card " + slotZoneName(zone) + " to another says which (on: frodo)");
+                if (!def.cards.containsKey(on.trim()))
+                    throw new ScenarioFormatException(context + ".on: there is no card called '" + on.trim() + "' among the scenario's cards (a slot's "
+                            + "card can be " + slotZoneName(zone) + " to one of them, not to another slot's)");
+                on = on.trim();
+            } else if (on != null) {
+                throw new ScenarioFormatException(context + ".on: only a card that is attached or stacked is on another (zone: attached, zone: stacked)");
+            }
+            Integer position = null;
+            if (get(slot, "position") != null) {
+                if (zone != SlotZone.DECK)
+                    throw new ScenarioFormatException(context + ".position: only a card in the draw deck has a place in it (zone: deck)");
+                position = optionalInt(slot, "position", 1, context);
+                if (position < 1)
+                    throw new ScenarioFormatException(context + ".position: counts from the top of the draw deck, which is 1");
+            }
+            String filter = optionalString(slot, "filter", null, context);
+            int tokens = optionalInt(slot, "tokens", 0, context);
+            int wounds = optionalInt(slot, "wounds", 0, context);
+            if (tokens < 0 || wounds < 0)
+                throw new ScenarioFormatException(context + ": a card cannot come with less than no tokens or wounds");
+            if (zone == SlotZone.SITE && (tokens > 0 || wounds > 0))
+                throw new ScenarioFormatException(context + ": a site comes with no tokens or wounds");
+            def.slots.put(id, new Slot(id, seat, zone, on, position, filter == null || filter.isBlank() ? null : filter.trim(), tokens, wounds,
+                    optionalString(slot, "label", null, context)));
+        }
+    }
+
+    /**
+     * A slot's card is put where its slot says, by the slot: nothing in the setup can name it, since a puzzle waiting
+     * for its picks is laid out with its slots empty.
+     */
+    private static void slotsNotInSetup(ScenarioDefinition def) throws ScenarioFormatException {
+        Setup setup = def.setup;
+        Map<String, java.util.Collection<String>> named = new LinkedHashMap<>();
+        for (Map.Entry<Seat, Map<SetupZone, List<String>>> seat : setup.zones.entrySet())
+            for (Map.Entry<SetupZone, List<String>> zone : seat.getValue().entrySet())
+                named.put("setup." + seat.getKey().key() + "." + ScenarioWriter.zoneName(zone.getKey()), zone.getValue());
+        named.put("setup.attach", new ArrayList<>(setup.attach.keySet()));
+        named.get("setup.attach").addAll(setup.attach.values());
+        named.put("setup.stack", new ArrayList<>(setup.stack.keySet()));
+        named.get("setup.stack").addAll(setup.stack.values());
+        named.put("setup.wounds", setup.wounds.keySet());
+        named.put("setup.tokens", setup.tokens.keySet());
+        List<String> skirmishing = new ArrayList<>(setup.skirmishes.keySet());
+        setup.skirmishes.values().forEach(skirmishing::addAll);
+        named.put("setup.skirmishes", skirmishing);
+        for (Map.Entry<String, java.util.Collection<String>> part : named.entrySet())
+            for (String alias : part.getValue())
+                if (def.slots.containsKey(alias) && def.slots.get(alias).zone() != SlotZone.SITE)
+                    throw new ScenarioFormatException(part.getKey() + ": '" + alias + "' is a slot: its card is put where the slot says "
+                            + "(slots." + alias + ".zone, .on, .tokens, .wounds), not by the setup");
+    }
+
+    /**
+     * solutions: [ { name, note, picks: { slot: blueprint }, answers: [ ... ] } ].  Every slot is picked; the answers
+     * are written as a step's answer is, one or more to a line.
+     */
+    private static void parseSolutions(ScenarioDefinition def, JsonValue value) throws ScenarioFormatException {
+        if (!value.isArray())
+            throw new ScenarioFormatException("solutions: has to be a [list] of { name, picks, answers }");
+        int index = 0;
+        for (JsonValue entry : value.asArray()) {
+            index++;
+            String context = "solutions[" + index + "]";
+            JsonObject solution = asObject(entry, context);
+            checkFields(solution, context, "name", "note", "picks", "answers");
+            String name = optionalString(solution, "name", "solution" + index, context).trim();
+            if (!name.matches("[A-Za-z][A-Za-z0-9_-]*"))
+                throw new ScenarioFormatException(context + ".name: '" + name + "' is not usable as a solution's name (letters, digits, dashes and underscores; starting with a letter)");
+            if (def.solution(name) != null)
+                throw new ScenarioFormatException(context + ".name: there are two solutions called '" + name + "'");
+            Map<String, String> picks = new LinkedHashMap<>();
+            JsonObject picked = optionalObject(solution, "picks", context);
+            if (picked != null)
+                for (String slot : picked.names()) {
+                    if (!def.slots.containsKey(slot))
+                        throw new ScenarioFormatException(context + ".picks: there is no slot called '" + slot + "'");
+                    String blueprint = scalar(picked.get(slot), context + ".picks." + slot).trim();
+                    if (!blueprint.matches("\\d+_\\d+[*T]?"))
+                        throw new ScenarioFormatException(context + ".picks." + slot + ": '" + blueprint + "' is not a card's blueprint (1_2, 4_277)");
+                    picks.put(slot, blueprint);
+                }
+            for (String slot : def.slots.keySet())
+                if (!picks.containsKey(slot))
+                    throw new ScenarioFormatException(context + ".picks: says nothing for the slot '" + slot + "' (a solution fills every slot)");
+            List<Answer> answers = new ArrayList<>();
+            if (get(solution, "answers") != null)
+                for (String line : lines(get(solution, "answers"), context + ".answers"))
+                    for (Terms.Term term : Terms.parse(line, context + ".answers"))
+                        answers.add(parseAnswer(def, term, context + ".answers"));
+            def.solutions.add(new Solution(name, picks, answers, optionalString(solution, "note", null, context)));
+        }
+    }
+
+    /* ---- small readers ---- */
+
+    static CardDef card(ScenarioDefinition def, String alias, String context) throws ScenarioFormatException {
+        CardDef card = def.cards.get(alias.trim());
+        if (card == null)
+            card = def.siteCards.get(alias.trim());
+        //(a slot's card is named as any card is, before anybody knows what it is: its blueprint is unknown)
+        if (card == null && def.slots.containsKey(alias.trim()))
+            card = new CardDef(alias.trim(), null, def.slots.get(alias.trim()).seat());
+        if (card == null)
+            throw new ScenarioFormatException(context + ": there is no card called '" + alias.trim() + "' (card aliases are declared under 'cards' and are case-sensitive)");
+        return card;
+    }
+
+    private static void aliasMap(ScenarioDefinition def, JsonObject object, Map<String, String> target, String context) throws ScenarioFormatException {
+        for (String alias : object.names())
+            target.put(card(def, alias, context).alias(), card(def, scalar(object.get(alias), context + "." + alias), context + "." + alias).alias());
+    }
+
+    private static void countMap(ScenarioDefinition def, JsonObject object, Map<String, Integer> target, String context) throws ScenarioFormatException {
+        for (String alias : object.names())
+            target.put(card(def, alias, context).alias(), asInt(object.get(alias), context + "." + alias));
+    }
+
+    static Seat parseSeat(ScenarioDefinition def, String name, String context) throws ScenarioFormatException {
+        Seat seat = tryParseSeat(def, name);
+        if (seat == null)
+            throw new ScenarioFormatException(context + ": '" + name + "' is not a seat (freeps, shadow, human, opponent)");
+        return seat;
+    }
+
+    private static Seat tryParseSeat(ScenarioDefinition def, String name) {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "freeps" -> Seat.FREEPS;
+            case "shadow" -> Seat.SHADOW;
+            case "human" -> def.human;
+            case "opponent" -> def.human.other();
+            default -> null;
+        };
+    }
+
+    /**
+     * as(...) in a 'when': the role the seat being asked is playing at that moment, the Free Peoples player (whose turn
+     * it is) or the Shadow player.  Only the two roles: who sits where is the seat's to say (freeps, human...).
+     */
+    static com.gempukku.lotro.common.Side parseRole(String name, String context) throws ScenarioFormatException {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "freeps" -> com.gempukku.lotro.common.Side.FREE_PEOPLE;
+            case "shadow" -> com.gempukku.lotro.common.Side.SHADOW;
+            default -> throw new ScenarioFormatException(context + ": as(" + name.trim() + ") is not a role: as(freeps) is the Free Peoples "
+                    + "player (whose turn it is), as(shadow) the Shadow player");
+        };
+    }
+
+    /** A role as a 'when' writes it: freeps, shadow. */
+    static String roleName(com.gempukku.lotro.common.Side role) {
+        return role == com.gempukku.lotro.common.Side.FREE_PEOPLE ? "freeps" : "shadow";
+    }
+
+    private static Seat parseAbsoluteSeat(String name, String context) throws ScenarioFormatException {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "freeps" -> Seat.FREEPS;
+            case "shadow" -> Seat.SHADOW;
+            default -> throw new ScenarioFormatException(context + ": has to be freeps or shadow");
+        };
+    }
+
+    private static AwaitingDecisionType parseDecisionType(String name, String context) throws ScenarioFormatException {
+        AwaitingDecisionType type = tryParseDecisionType(name);
+        if (type == null)
+            throw new ScenarioFormatException(context + ": '" + name + "' is not a kind of decision (action, actionChoice, cards, arbitrary, choice, number, assign)");
+        return type;
+    }
+
+    private static AwaitingDecisionType tryParseDecisionType(String name) {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "action", "card_action_choice" -> AwaitingDecisionType.CARD_ACTION_CHOICE;
+            case "actionchoice", "action_choice" -> AwaitingDecisionType.ACTION_CHOICE;
+            case "cards", "card_selection" -> AwaitingDecisionType.CARD_SELECTION;
+            case "arbitrary", "arbitrary_cards" -> AwaitingDecisionType.ARBITRARY_CARDS;
+            case "choice", "multiple_choice" -> AwaitingDecisionType.MULTIPLE_CHOICE;
+            case "number", "integer" -> AwaitingDecisionType.INTEGER;
+            case "assign", "assign_minions" -> AwaitingDecisionType.ASSIGN_MINIONS;
+            default -> null;
+        };
+    }
+
+    private static Phase parsePhase(String name, String context) throws ScenarioFormatException {
+        Phase phase = Phase.findPhase(name);
+        if (phase == null)
+            throw new ScenarioFormatException(context + ": '" + name + "' is not a phase");
+        return phase;
+    }
+
+    private static SetupZone parseSetupZone(String name, String context) throws ScenarioFormatException {
+        return switch (name.trim().toLowerCase(Locale.ROOT)) {
+            case "characters" -> SetupZone.CHARACTERS;
+            case "support" -> SetupZone.SUPPORT;
+            case "minions" -> SetupZone.MINIONS;
+            case "hand" -> SetupZone.HAND;
+            case "deck" -> SetupZone.DECK;
+            case "discard" -> SetupZone.DISCARD;
+            case "deadpile" -> SetupZone.DEAD_PILE;
+            case "removed" -> SetupZone.REMOVED;
+            default -> throw new ScenarioFormatException(context + ": '" + name + "' is not a zone (characters, support, minions, hand, deck, discard, deadPile, removed)");
+        };
+    }
+
+    private static <E extends Enum<E>> E parseEnum(String name, Class<E> type, String context) throws ScenarioFormatException {
+        for (E value : type.getEnumConstants())
+            if (value.name().equalsIgnoreCase(name.trim()))
+                return value;
+        throw new ScenarioFormatException(context + ": '" + name + "' is not one of "
+                + Arrays.toString(type.getEnumConstants()).toLowerCase(Locale.ROOT));
+    }
+
+    private static int parseInt(String text, String context) throws ScenarioFormatException {
+        try {
+            return Integer.parseInt(text.trim());
+        } catch (NumberFormatException exp) {
+            throw new ScenarioFormatException(context + ": '" + text + "' is not a whole number");
+        }
+    }
+
+    private static void checkFields(JsonObject object, String context, String... allowed) throws ScenarioFormatException {
+        for (String name : object.names()) {
+            boolean known = false;
+            for (String candidate : allowed)
+                if (candidate.equalsIgnoreCase(name)) {
+                    known = true;
+                    break;
+                }
+            if (!known)
+                throw new ScenarioFormatException(context + ": unrecognized field '" + name + "' (known fields: " + String.join(", ", allowed) + ")");
+        }
+    }
+
+    /** Any single value as text, the way it was written. */
+    private static String scalar(JsonValue value, String context) throws ScenarioFormatException {
+        if (value == null || value.isNull())
+            throw new ScenarioFormatException(context + ": is missing");
+        if (value.isString())
+            return value.asString().trim();
+        if (value.isNumber() || value.isBoolean())
+            return value.toString();
+        throw new ScenarioFormatException(context + ": has to be a single value, not a list or an object");
+    }
+
+    private static int asInt(JsonValue value, String context) throws ScenarioFormatException {
+        return parseInt(scalar(value, context), context);
+    }
+
+    private static JsonObject asObject(JsonValue value, String context) throws ScenarioFormatException {
+        if (value == null || !value.isObject())
+            throw new ScenarioFormatException(context + ": has to be an { object }");
+        return value.asObject();
+    }
+
+    private static String requireString(JsonObject object, String name, String context) throws ScenarioFormatException {
+        return scalar(get(object, name), context + "." + name);
+    }
+
+    private static String optionalString(JsonObject object, String name, String fallback, String context) throws ScenarioFormatException {
+        JsonValue value = get(object, name);
+        return value == null ? fallback : scalar(value, context + "." + name);
+    }
+
+    private static int optionalInt(JsonObject object, String name, int fallback, String context) throws ScenarioFormatException {
+        JsonValue value = get(object, name);
+        return value == null ? fallback : asInt(value, context + "." + name);
+    }
+
+    private static boolean optionalBoolean(JsonObject object, String name, boolean fallback, String context) throws ScenarioFormatException {
+        JsonValue value = get(object, name);
+        if (value == null)
+            return fallback;
+        String text = scalar(value, context + "." + name);
+        if (text.equalsIgnoreCase("true"))
+            return true;
+        if (text.equalsIgnoreCase("false"))
+            return false;
+        throw new ScenarioFormatException(context + "." + name + ": has to be true or false");
+    }
+
+    private static <E extends Enum<E>> E optionalEnum(JsonObject object, String name, Class<E> type, E fallback, String context) throws ScenarioFormatException {
+        JsonValue value = get(object, name);
+        return value == null ? fallback : parseEnum(scalar(value, context + "." + name), type, context + "." + name);
+    }
+
+    private static JsonObject requireObject(JsonObject object, String name, String context) throws ScenarioFormatException {
+        return asObject(get(object, name), context + "." + name);
+    }
+
+    private static JsonObject optionalObject(JsonObject object, String name, String context) throws ScenarioFormatException {
+        JsonValue value = get(object, name);
+        return value == null ? null : asObject(value, context + "." + name);
+    }
+
+    /** Field names are not case-sensitive, the same as in card definitions. */
+    private static JsonValue get(JsonObject object, String name) {
+        for (String candidate : object.names())
+            if (candidate.equalsIgnoreCase(name))
+                return object.get(candidate);
+        return null;
+    }
+
+    /**
+     * A list of plain values, written either as a [list] or on one line with commas.  Missing means empty.
+     */
+    private static List<String> list(JsonValue value, String context) throws ScenarioFormatException {
+        List<String> result = new ArrayList<>();
+        if (value == null || value.isNull())
+            return result;
+        for (String line : lines(value, context))
+            for (String part : Terms.split(line, ',', context))
+                if (!part.isEmpty())
+                    result.add(part);
+        return result;
+    }
+
+    /**
+     * The lines of something that can be written either as one value or as a [list] of them.
+     */
+    private static List<String> lines(JsonValue value, String context) throws ScenarioFormatException {
+        List<String> result = new ArrayList<>();
+        if (value.isArray()) {
+            for (JsonValue entry : value.asArray())
+                result.add(scalar(entry, context));
+        } else {
+            result.add(scalar(value, context));
+        }
+        return result;
+    }
+
+    /**
+     * Card-definition JSON (requirements, effects), kept as text for the card builder to parse.  One { object } is
+     * accepted as a list of one, the same as in card definitions.
+     */
+    private static String jsonArrayText(JsonValue value, String context) throws ScenarioFormatException {
+        if (value.isObject()) {
+            JsonArray array = new JsonArray();
+            array.add(value);
+            return array.toString();
+        }
+        if (value.isArray()) {
+            for (JsonValue entry : value.asArray())
+                if (!entry.isObject())
+                    throw new ScenarioFormatException(context + ": every entry has to be an { object }, as in a card definition");
+            return value.toString();
+        }
+        throw new ScenarioFormatException(context + ": has to be an { object } or a [list] of them, as in a card definition");
+    }
+}

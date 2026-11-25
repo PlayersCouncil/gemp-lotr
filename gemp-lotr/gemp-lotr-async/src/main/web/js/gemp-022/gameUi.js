@@ -79,6 +79,7 @@ var GempLotrGameUI = Class.extend({
     settingsAutoAccept: false,
     settingsAutoDismissDeckReveal: false,
     settingsAlwaysDropDown: false,
+    settingsSkipConfirmations: false,
 
     windowWidth: null,
     windowHeight: null,
@@ -104,6 +105,9 @@ var GempLotrGameUI = Class.extend({
     timerLastTickSeconds: null,
     
     escFunction: null,
+
+    // True while a decision waits for the player: the page then doesn't poll (processGameEventsXml)
+    waitingForPlayer: false,
 
     init: function (url, replayMode) {
         this.replayMode = replayMode;
@@ -560,6 +564,9 @@ var GempLotrGameUI = Class.extend({
     processGameEnd: function() {
         var that = this;
         this.gameEnded = true;
+        // A decision still open can't be answered any more (the game ended while it waited, e.g. by conceding)
+        if (!this.replayMode)
+            this.cleanupDecision();
         this.stopTimerTick();
         this.markExpiredTimers();
         if(this.allPlayerIds == null)
@@ -676,9 +683,30 @@ var GempLotrGameUI = Class.extend({
             $.cookie("alwaysDropDown", "" + selected, {expires: 365});
         });
 
+        // Off unless the player turns it on: see confirmsItself
+        if ($.cookie("skipConfirmations") == "true") {
+            $("#skipConfirmations").prop("checked", true);
+            this.settingsSkipConfirmations = true;
+        }
+
+        $("#skipConfirmations").bind("change", function () {
+            var selected = $("#skipConfirmations").prop("checked");
+            that.settingsSkipConfirmations = selected;
+            $.cookie("skipConfirmations", "" + selected, {expires: 365});
+        });
+
+        // The server reads autoPassPhases, but a cookie written from this page has the path /gemp-lotr and never
+        // reaches /gemp-lotr-server; a copy with the server's path is what the server receives.
+        var saveAutoPassPhases = function (value) {
+            $.cookie("autoPassPhases", value, {expires: 365});
+            $.cookie("autoPassPhases", value, {expires: 365, path: "/gemp-lotr-server"});
+        };
+
         var autoPassPhases = $.cookie("autoPassPhases");
         if (autoPassPhases == null)
             autoPassPhases = "FELLOWSHIP0MANEUVER0ARCHERY0ASSIGNMENT0REGROUP";
+        else
+            saveAutoPassPhases(autoPassPhases);
 
         var passPhasesArr = autoPassPhases.split("0");
         for (var i = 0; i < passPhasesArr.length; i++) {
@@ -704,7 +732,7 @@ var GempLotrGameUI = Class.extend({
 
             if (newAutoPassPhases.length > 0)
                 newAutoPassPhases = newAutoPassPhases.substr(1);
-            $.cookie("autoPassPhases", newAutoPassPhases, {expires: 365});
+            saveAutoPassPhases(newAutoPassPhases);
         });
 
         var playerListener = function (players) {
@@ -730,10 +758,18 @@ var GempLotrGameUI = Class.extend({
         this.chatBox = new ChatBoxUI(chatRoomName, $("#chatBox"), this.communication.url, false, playerListener, false, displayChatListener);
         this.chatBox.chatUpdateInterval = 3000;
 
+        this.undo = new GempLotrUndo(this);
         if (!this.spectatorMode && !this.replayMode) {
             $("#concedeGame").button().click(
                 function () {
-                    that.communication.concede();
+                    that.communication.concede(undefined, function () {
+                        // The page doesn't ask for news while a decision waits for the player (waitingForPlayer), so
+                        // it would never learn that conceding ended the game: it asks once now
+                        if (that.waitingForPlayer) {
+                            that.waitingForPlayer = false;
+                            that.updateGameState();
+                        }
+                    });
                 });
             $("#cancelGame").button().click(
                 function () {
@@ -779,6 +815,11 @@ var GempLotrGameUI = Class.extend({
                     }
                     this.lastSelectedCardId = clickedCardId;
                     this.lastSelectionTime = now;
+                    // while a revert request waits, nothing in the game is answered (see undo.js)
+                    if (this.undo != null && this.undo.frozen) {
+                        event.stopPropagation();
+                        return false;
+                    }
                     this.selectionFunction(clickedCardId, event);
                 }
                 event.stopPropagation();
@@ -1205,6 +1246,10 @@ var GempLotrGameUI = Class.extend({
             function (xml) {
                 that.processXml(xml, false);
                 that.chatBox.beginGameChat();
+                // requests to take the game back, and anything else that must reach a player who is looking at a
+                // decision (see undo.js)
+                if (that.undo != null)
+                    that.undo.start();
             }, this.gameErrorMap());
     },
 
@@ -1217,8 +1262,44 @@ var GempLotrGameUI = Class.extend({
             }, this.gameErrorMap());
     },
 
+    // Asks for news once, while a decision is waiting to be answered here, which is when nothing else asks: the
+    // server has just been made to send something (a request to take the game back was settled: see undo.js).
+    // With no decision waiting the usual asking is already going on and nothing needs doing.
+    pollOnce: function () {
+        var that = this;
+        if (!this.decisionPending || this.pollingOnce)
+            return;
+        this.pollingOnce = true;
+        // (should the asking fail, it is not held against the next one for ever)
+        setTimeout(function () {
+            that.pollingOnce = false;
+        }, 20000);
+        this.communication.updateGameState(
+            this.channelNumber,
+            function (xml) {
+                that.pollingOnce = false;
+                that.answeringOnce = true;
+                try {
+                    that.processXml(xml, true);
+                } finally {
+                    that.answeringOnce = false;
+                }
+            }, this.gameErrorMap());
+    },
+
+    // A decision that asks for nothing but to be confirmed (the server marks it confirmOnly: DONE on a starting
+    // fellowship nothing more fits into) is answered for a player who has "Skip extra confirmations" on.
+    confirmsItself: function (decision) {
+        if (!this.settingsSkipConfirmations || this.replayMode || this.getDecisionParameter(decision, "confirmOnly") != "true")
+            return false;
+        this.decisionFunction(decision.getAttribute("id"), "");
+        return true;
+    },
+
     decisionFunction: function (decisionId, result) {
         var that = this;
+        this.decisionPending = false;
+        this.waitingForPlayer = false;
         this.stopAnimatingTitle();
         this.stopTimerTick();
         this.communication.gameDecisionMade(decisionId, result,
@@ -1241,6 +1322,10 @@ var GempLotrGameUI = Class.extend({
                 that.showErrorDialog("Game access forbidden", "This game is private and does not allow spectators.", false, false, true);
             },
             "409": function () {
+                // The game was taken back and this page is on its way to being loaded again: the channel it was
+                // using is gone, which is what is meant to happen (see undo.js)
+                if (that.undo != null && that.undo.reloading)
+                    return;
                 that.showErrorDialog("Concurrent access error", "You are observing this Game Hall from another browser or window. Close this window or if you wish to observe it here, click \"Refresh page\".", true, false, false);
             },
             "410": function () {
@@ -1299,7 +1384,14 @@ var GempLotrGameUI = Class.extend({
         var root = xml.documentElement;
         if (root.tagName == 'gameReplay') {
             this.replayGameEvents = root.getElementsByTagName("ge");
-            this.replayGameEventNextIndex = 0;
+            // A replay of a game that was taken back holds the table sent again from nothing at that point.  The
+            // page is loaded again there (playNextReplayEvent) and carries on from that event.
+            var replayFrom = parseInt(getUrlParam("replayFrom"));
+            this.replayGameEventNextIndex = isNaN(replayFrom) ? 0 : Math.max(0, Math.min(replayFrom, this.replayGameEvents.length));
+            this.replayTableLaid = false;
+            // Carrying on from a table sent again: it is laid out at once, not card by card, up to the mark that
+            // says the game was taken back
+            this.replayLayingTable = !isNaN(replayFrom) && replayFrom > 0;
 
             $("#replayButton").click(
                 function () {
@@ -1331,7 +1423,21 @@ var GempLotrGameUI = Class.extend({
                         next();
                     });
                 var gameEvent = this.replayGameEvents[this.replayGameEventNextIndex];
-                this.processGameEvent(gameEvent, true);
+                if (gameEvent.getAttribute("type") == "P" && !this.replayTableLaid) {
+                    this.replayTableLaid = true;
+                } else if (gameEvent.getAttribute("type") == "P") {
+                    // The game was taken back here and the table is laid out again from nothing: this page cannot
+                    // lay a table out twice, so it is loaded again to carry on from this event
+                    var search = window.location.search.replace(/[?&]replayFrom=[^&]*/, "");
+                    search += (search.indexOf("?") == -1 ? "?" : "&") + "replayFrom=" + this.replayGameEventNextIndex;
+                    if (search.charAt(0) == "&")
+                        search = "?" + search.substring(1);
+                    window.location.search = search;
+                    return;
+                }
+                this.processGameEvent(gameEvent, !this.replayLayingTable);
+                if (gameEvent.getAttribute("type") == "GR")
+                    this.replayLayingTable = false;
 
                 this.replayGameEventNextIndex++;
 
@@ -1398,6 +1504,10 @@ var GempLotrGameUI = Class.extend({
             this.processGameEnd();
         } else if (eventType == "PGS") {
             this.preGameSetup(gameEvent);
+        } else if (eventType == "GR") {
+            // the game was taken back to an earlier point, and the table has just been sent again: see undo.js
+            if (this.undo != null)
+                this.undo.gameReverted(gameEvent);
         }
     },
 
@@ -1456,11 +1566,21 @@ var GempLotrGameUI = Class.extend({
                     this.markExpiredTimers();
             }
 
-            if (!hasDecision) {
-                this.animations.updateGameState(animate);
-            } else {
+            if (hasDecision) {
+                // With a decision for the player the page stops asking for news until it is answered
+                this.decisionPending = true;
+                this.waitingForPlayer = true;
                 this.startAnimatingTitle();
+            } else if (!this.answeringOnce && !this.decisionPending) {
+                this.waitingForPlayer = false;
+                // (news asked for once, over a waiting decision, never starts the asking up; and nor does anything
+                // that arrives while a decision is waiting, which can now happen: the once-asked-for news may be
+                // what brings the next decision, with the reply to the last answer coming in empty behind it)
+                this.animations.updateGameState(animate);
             }
+            // What the player may undo changes as the game moves on (see undo.js)
+            if (gameEvents.length > 0 && this.undo != null && !this.replayMode)
+                this.undo.refresh();
         } catch (e) {
             this.showErrorDialog("Game error", "There was an error while processing game events in your browser. Reload the game to continue", true, false, false);
             console.log(e);
@@ -1809,7 +1929,7 @@ var GempLotrGameUI = Class.extend({
                     var group = that.revealedHandGroups[playerId];
                     if (ownHand)
                         that.syncOwnRevealedHand(true);
-                    openSizeDialog(dialog);
+                    that.capCards(group, that.openCompactCardDialog(dialog, $(".card", dialog)));
                     that.dialogResize(dialog, group);
                     group.layoutCards();
                 });
@@ -2327,7 +2447,7 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        openSizeDialog(this.cardActionDialog);
+        this.capCards(this.specialGroup, this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card")));
         this.arbitraryDialogResize(false);
         $('.ui-dialog :button').blur();
     },
@@ -2961,8 +3081,10 @@ var GempLotrGameUI = Class.extend({
             this.PlaySound("awaitAction");
         }
 
-        openSizeDialog(this.cardActionDialog);
-        this.arbitraryDialogResize(false);
+        //(each card has its action's text under it)
+        this.capCards(this.specialGroup, this.openCompactCardDialog(this.cardActionDialog, $("#arbitraryChoice .card"), 36));
+        this.specialGroup.setBounds(this.padding, this.padding, this.cardActionDialog.width() + 10 - 2 * this.padding,
+            this.cardActionDialog.height() + 10 - 36 - 2 * this.padding);
         $('.ui-dialog :button').blur();
     },
 
@@ -3180,6 +3302,109 @@ var GempLotrGameUI = Class.extend({
         $(".noEffectCard").removeClass("noEffectCard");
         $(".selectedCard").removeClass("selectedCard");
         this.selectionFunction = null;
+    },
+
+    // Opens a dialog that shows cards sized to those cards rather than to most of the window: the cards at a
+    // comfortable height in as few rows as fit, never beyond 90% of the window (cards then shrink to fit).
+    // cardElems are the card divs the dialog's group will lay out.
+    /**
+     * Opens a dialog of cards at a size that suits them: as large as a comfortable card (up to 500px tall), in as
+     * few rows as fit, and no larger than 90% of the window.  Cards are made smaller only where that many would not
+     * otherwise fit.  (Ketura's change of October 2026; it also keeps the page's own controls, the Undo button among
+     * them, in reach beside a window of cards: see undo.js.)
+     * @param labelHeight Room to leave under each row of cards for a line of text (the action's, in a choice of
+     *                    actions); 0 for none.
+     */
+    openCompactCardDialog: function (dialog, cardElems, labelHeight) {
+        var padding = this.padding;
+        var minContentWidth = 340;
+        var label = labelHeight || 0;
+        // jQuery UI lays the dialog out inside a bit of padding, and the group's bounds are trimmed by 6 px
+        var slack = 16;
+
+        // each card's width for a height of 100, to scale by
+        var ratios = new Array();
+        cardElems.each(function () {
+            ratios.push($(this).data("card").getWidthForMaxDimension(100) / 100);
+        });
+
+        dialog.dialog("open");
+
+        // What the dialog adds around its content (title bar, buttons, padding), measured now that it is laid out
+        var widget = dialog.dialog("widget");
+        var chromeWidth = dialog.dialog("option", "width") - dialog.width();
+        var chromeHeight = dialog.dialog("option", "height") - dialog.height();
+        if (!this.replayMode && widget.find(".ui-dialog-buttonpane").length == 0)
+            chromeHeight += 56;
+
+        var roomWidth = $(window).width();
+        var roomHeight = $(window).height();
+        var maxGroupWidth = Math.floor(roomWidth * 0.9) - chromeWidth - slack;
+        var maxGroupHeight = Math.floor(roomHeight * 0.9) - chromeHeight - slack;
+
+        var layout = function (cardHeight) {
+            var widths = $.map(ratios, function (ratio) {
+                return Math.ceil(ratio * cardHeight);
+            });
+            var total = 0, widest = 0;
+            $.each(widths, function (i, width) {
+                total += width;
+                widest = Math.max(widest, width);
+            });
+            total += padding * Math.max(0, widths.length - 1);
+            var rowsNeeded = function (groupWidth) {
+                var rows = 1, x = 0;
+                for (var i = 0; i < widths.length; i++) {
+                    if (x > 0 && x + widths[i] > groupWidth) {
+                        rows++;
+                        x = 0;
+                    }
+                    x += widths[i] + padding;
+                }
+                return rows;
+            };
+            for (var rows = 1; rows <= widths.length; rows++) {
+                // as wide as the widest row, the cards shared out evenly between the rows
+                var perRow = Math.ceil(widths.length / rows);
+                var widestRow = 0;
+                for (var first = 0; first < widths.length; first += perRow) {
+                    var row = 0;
+                    for (var i = first; i < Math.min(widths.length, first + perRow); i++)
+                        row += widths[i] + (i > first ? padding : 0);
+                    widestRow = Math.max(widestRow, row);
+                }
+                var width = Math.max(minContentWidth - slack, widestRow);
+                var height = rows * (cardHeight + label) + (rows - 1) * padding;
+                if (width <= maxGroupWidth && height <= maxGroupHeight && rowsNeeded(width) <= rows)
+                    return {width: width, height: height, cardHeight: cardHeight};
+            }
+            return null;
+        };
+
+        var size = null;
+        if (ratios.length == 0)
+            size = {width: minContentWidth - slack, height: Math.min(maxGroupHeight, 150), cardHeight: null};
+        for (var cardHeight = 500; size == null && cardHeight >= 80; cardHeight -= 20)
+            size = layout(cardHeight);
+        if (size == null)
+            size = {width: maxGroupWidth, height: maxGroupHeight, cardHeight: null};
+
+        var width = size.width + slack + chromeWidth;
+        var height = size.height + slack + chromeHeight;
+        dialog.dialog({width: width, height: height});
+        dialog.dialog("option", "position", [Math.max(0, Math.floor((roomWidth - width) / 2)), Math.max(0, Math.floor((roomHeight - height) / 2))]);
+        // (jQuery UI shows a dialog it finds not visible to place it, and hides it again: so it does to an open one on
+        // a page that has no layout, which is how the frontend's parity tests run this page)
+        widget.show();
+        return size.cardHeight;
+    },
+
+    /**
+     * Lays a dialog's cards out at the height openCompactCardDialog planned them for: the group would otherwise fill
+     * its height with fewer, larger rows than the width was planned for, and fall back to more, smaller ones.
+     */
+    capCards: function (group, cardHeight) {
+        group.maxCardHeight = cardHeight != null ? cardHeight : CardGroup.prototype.maxCardHeight;
     },
 
     dialogResize: function (dialog, group) {

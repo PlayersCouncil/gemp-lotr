@@ -112,9 +112,13 @@ public class Card_04_116_Tests
 
 		scn.FreepsChooseCard(ranger);
 
-		// 3 + 1 is the 4: the Knight's 1 no longer fits, and this player is asked nothing more.
+		// 3 + 1 is the 4: the Knight's 1 no longer fits, nothing more is offered, and this player is asked only to
+		// press DONE.
 		assertInZone(Zone.FREE_CHARACTERS, ranger);
 		assertInZone(Zone.DECK, knight);
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 
 		// The other player's [gondor] Men are no business of this Faramir: his Knight costs him the printed 2.

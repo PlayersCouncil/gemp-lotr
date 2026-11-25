@@ -74,6 +74,8 @@ public class GameState {
     private final Map<String, List<PhysicalCard>> _metaSites = new HashMap<>();
 
     private final Map<String, AwaitingDecision> _playerDecisions = new HashMap<>();
+    /** Scenario games: what the scenario is showing each player at the moment, by player and then by kind. */
+    private final Map<String, Map<String, String>> _scenarioEvents = new HashMap<>();
     private boolean _finished = false;
 
     private LotroGame _lotroGame;
@@ -88,6 +90,9 @@ public class GameState {
     // The events printed with several phases that are being played, each with the phase it is being played in
     private final Map<PhysicalCard, Timeword> _phaseOfEventBeingPlayed = new HashMap<>();
     private Skirmish _skirmish = null;
+    private PhysicalCard _lastSkirmishCharacter;
+    private List<PhysicalCard> _lastSkirmishMinions = List.of();
+    private int _lastSkirmishTurn = -1;
 
     private final Set<GameStateListener> _gameStateListeners = new HashSet<>();
     // While events are held back (holdBackEvents): what would have been sent, in order, and each listener as the
@@ -103,8 +108,11 @@ public class GameState {
 
     private int _nextCardId = 0;
 
-    private GameRandom _random = GameRandom.DEFAULT;
+    // The default, or a seeded one on a test server started with a seed (GameSeed)
+    private GameRandom _random = com.gempukku.lotro.logic.GameSeed.newGameRandom();
     private String _fixedFreePeoplePlayer;
+    private PregameSetup _pregameSetup;
+    private final Map<String, PhysicalCard> _cardLabels = new HashMap<>();
 
     private GameStats _mostRecentGameStats = null;
     private boolean _isInit = false;
@@ -507,6 +515,9 @@ public class GameState {
             listener.initializePregameBoard(_preGameInfo);
         }
 
+        for (String json : _scenarioEvents.getOrDefault(playerId, Map.of()).values())
+            listener.scenarioEvent(playerId, json);
+
         // Someone joining or refreshing after the end must see the game as over, not be handed the decision that was
         // pending when it ended (a decision that timed out is never "finished" and would otherwise be re-sent)
         if (_finished) {
@@ -516,6 +527,13 @@ public class GameState {
             if (awaitingDecision != null)
                 listener.decisionRequired(playerId, awaitingDecision);
         }
+    }
+
+    /**
+     * Drops the messages kept for players who connect later.  Anybody already connected has had them.
+     */
+    public void forgetMessages() {
+        _lastMessages.clear();
     }
 
     /**
@@ -556,6 +574,31 @@ public class GameState {
 
     public void playerDecisionFinished(String playerId) {
         _playerDecisions.remove(playerId);
+    }
+
+    /**
+     * Shows a player something on a scenario's behalf, and keeps it so that it is shown again if the player
+     * reconnects.  Each player has one thing of each kind on show at a time: a later one replaces an earlier one.
+     * @param kind What sort of thing it is ("info", "step", "end").
+     * @param json What the client is to be sent.
+     */
+    public void showScenarioEvent(String playerId, String kind, String json) {
+        Map<String, String> events = _scenarioEvents.computeIfAbsent(playerId, x -> new LinkedHashMap<>());
+        //Taken out first so that the newest is always the last one sent to somebody reconnecting
+        events.remove(kind);
+        events.put(kind, json);
+        for (GameStateListener listener : getAllGameStateListeners())
+            listener.scenarioEvent(playerId, json);
+    }
+
+    /**
+     * Stops showing a player something on reconnecting.  The player is not told: whatever replaced it on their
+     * screen has already told them.
+     */
+    public void clearScenarioEvent(String playerId, String kind) {
+        Map<String, String> events = _scenarioEvents.get(playerId);
+        if (events != null)
+            events.remove(kind);
     }
 
     public void transferCard(PhysicalCard card, PhysicalCard transferTo) {
@@ -1264,8 +1307,22 @@ public class GameState {
         return _skirmish;
     }
 
+    /** The Free Peoples character of the last skirmish this turn that has been fought to its end; null if none has. */
+    public PhysicalCard getLastSkirmishCharacter() {
+        return _lastSkirmishTurn == getTurnNumber() ? _lastSkirmishCharacter : null;
+    }
+
+    /** The Shadow characters of the last skirmish finished this turn; empty if none has been. */
+    public List<PhysicalCard> getLastSkirmishMinions() {
+        return _lastSkirmishTurn == getTurnNumber() ? _lastSkirmishMinions : List.of();
+    }
+
     public void finishSkirmish() {
         if (_skirmish != null) {
+            _lastSkirmishCharacter = _skirmish.getFellowshipCharacter() != null ? _skirmish.getFellowshipCharacter() : _skirmish.getInvolvedFellowshipCharacter();
+            //(every minion that was in it, killed or not: a skirmish's losers are gone from it by the time it finishes)
+            _lastSkirmishMinions = List.copyOf(_skirmish.getInvolvedShadowCharacters());
+            _lastSkirmishTurn = getTurnNumber();
             _skirmish = null;
             for (GameStateListener listener : getAllGameStateListeners())
                 listener.finishSkirmish();
@@ -1796,6 +1853,59 @@ public class GameState {
     }
 
     /**
+     * @return What will arrange the board in place of the usual opening procedure, or null if the game opens as usual.
+     */
+    public PregameSetup getPregameSetup() {
+        return _pregameSetup;
+    }
+
+    /**
+     * Has this game begin with a prepared position.  Only do this before the game has started.
+     */
+    public void setPregameSetup(PregameSetup pregameSetup) {
+        _pregameSetup = pregameSetup;
+    }
+
+    /**
+     * Gives one particular card in this game a name of its own, so that it can be picked out later no matter where
+     * it has gone or what its card ID has become (see the "alias" filter).
+     * @param label The name; labelling a second card with the same name replaces the first.
+     */
+    public void labelCard(String label, PhysicalCard card) {
+        //(names are told apart without regard to case: the card builder lowercases what it reads in a filter)
+        _cardLabels.put(label.toLowerCase(java.util.Locale.ROOT), card);
+    }
+
+    /**
+     * @return The card that was given this name with labelCard, or null if there is none.
+     */
+    public PhysicalCard getLabeledCard(String label) {
+        return label == null ? null : _cardLabels.get(label.toLowerCase(java.util.Locale.ROOT));
+    }
+
+    /**
+     * @return The name a card was given with labelCard, or null if it has none.
+     */
+    public String getCardLabel(PhysicalCard card) {
+        for (Map.Entry<String, PhysicalCard> entry : _cardLabels.entrySet())
+            if (entry.getValue() == card)
+                return entry.getKey();
+        return null;
+    }
+
+    /**
+     * Creates a card that is in no deck and no zone, from a blueprint that need not be in the card library.  It is not
+     * shown to the players.  This is how a game gets a card whose only purpose is to carry rules (see
+     * PhysicalCardImpl.startAffectingGame).
+     */
+    public PhysicalCardImpl createLooseCard(String ownerPlayerId, String blueprintId, LotroCardBlueprint blueprint) {
+        int cardId = nextCardId();
+        PhysicalCardImpl result = new PhysicalCardImpl(cardId, blueprintId, ownerPlayerId, blueprint);
+        _allCards.put(cardId, result);
+        return result;
+    }
+
+    /**
      * @return The player who takes every turn as the Free Peoples player, or null if turns pass around the table as
      * usual.
      */
@@ -1825,6 +1935,15 @@ public class GameState {
         for (var listener : getAllGameStateListeners()) {
             listener.setCurrentPlayerId(_currentPlayerId, getInactiveCards());
         }
+    }
+
+    /**
+     * Begins a turn with the turn counter at the given number rather than at the next one.  For a game that begins
+     * part of the way through its story (see MidTurnStartGameProcess): its first turn is whichever turn it says.
+     */
+    public void startNumberedPlayerTurn(String playerId, int number) {
+        turnNumber = number - 1;
+        startPlayerTurn(playerId, true);
     }
 
     public Set<PhysicalCard> getInactiveCards() {

@@ -163,6 +163,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             processScheduledTournament(request, responseWriter, false);
         } else if (uri.equals("/setTournamentStage") && request.method() == HttpMethod.POST) {
             setTournamentStage(request, responseWriter);
+        } else if (uri.equals("/removeTournamentPlayer") && request.method() == HttpMethod.POST) {
+            removeTournamentPlayer(request, responseWriter);
         } else if (uri.equals("/addTables") && request.method() == HttpMethod.POST) {
             addTables(request, responseWriter);
         } else if (uri.equals("/previewSoloDraftLeague") && request.method() == HttpMethod.POST) {
@@ -193,8 +195,6 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         // ---- end t4-admin-load-from-event ----
         } else if (uri.equals("/banUser") && request.method() == HttpMethod.POST) {
             banUser(request, responseWriter);
-        } else if (uri.equals("/resetUserPassword") && request.method() == HttpMethod.POST) {
-            resetUserPassword(request, responseWriter);
         } else if (uri.equals("/banMultiple") && request.method() == HttpMethod.POST) {
             banMultiple(request, responseWriter);
         } else if (uri.equals("/banUserTemp") && request.method() == HttpMethod.POST) {
@@ -251,10 +251,39 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         var stage = Tournament.Stage.parseStage(stageStr);
         Throw400IfValidationFails("stage", stageStr, stage != null);
 
-        _tournamentService.recordTournamentStage(tournamentId, stage);
+        // Only this tournament is rebuilt at its new stage; queues and other tournaments are left alone.
+        if (!_hallServer.setTournamentStageByAdmin(tournamentId.trim(), stage))
+            throw new HttpProcessingException(404, "There is no started tournament '" + tournamentId + "'.");
 
-        clearCacheInternal();
         responseWriter.sendOK();
+    }
+
+    /**
+     * POST /admin/removeTournamentPlayer (tournamentId, player) - takes a player out of a running tournament (they
+     * are dropped) or out of a tournament queue (entry cost returned); either way they cannot join it again.
+     * Answers {message}; 400 with the reason when the player was not removed.
+     */
+    private void removeTournamentPlayer(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateEventAdmin(request);
+        var postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String tournamentId = getFormParameterSafely(postDecoder, "tournamentId");
+            String player = getFormParameterSafely(postDecoder, "player");
+            Throw400IfStringNull("tournamentId", tournamentId);
+            Throw400IfStringNull("player", player);
+
+            String message;
+            try {
+                message = _hallServer.removeTournamentPlayerByAdmin(tournamentId.trim(), player.trim());
+            } catch (IllegalStateException exp) {
+                throw new HttpProcessingException(400, exp.getMessage());
+            }
+            var result = new LinkedHashMap<String, Object>();
+            result.put("message", message);
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(result));
+        } finally {
+            postDecoder.destroy();
+        }
     }
 
     private void addPlayersToLeague(HttpRequest request, ResponseWriter responseWriter, String remoteIp) throws Exception {
@@ -331,25 +360,6 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         if (similarPlayer.hasType(Player.Type.UNBANNED))
             return "Unbanned";
         return "OK";
-    }
-
-    private void resetUserPassword(HttpRequest request, ResponseWriter responseWriter) throws Exception {
-        validateAdmin(request);
-
-        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
-        try {
-            String login = getFormParameterSafely(postDecoder, "login");
-
-            if (login==null)
-                throw new HttpProcessingException(400);
-
-            if (!_adminService.resetUserPassword(login))
-                throw new HttpProcessingException(404);
-
-            responseWriter.writeHtmlResponse("OK");
-        } finally {
-            postDecoder.destroy();
-        }
     }
 
     private void banUser(HttpRequest request, ResponseWriter responseWriter) throws Exception {
@@ -644,7 +654,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
     /**
      * POST /resolvePlayers {players: names separated by newlines, commas, semicolons or spaces} :
-     * {players:[{input, name (null when unknown), suggestions:[...]}]}
+     * {players:[{input, name (null when unknown), id (player.id, null when unknown), suggestions:[...]}]}.
+     * The add-items form reads the names; the User Admin tab's account recovery lookup reads the id.
      */
     private void resolvePlayers(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateAdmin(request);
@@ -657,6 +668,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
                 var p = new LinkedHashMap<String, Object>();
                 p.put("input", resolution.input());
                 p.put("name", resolution.name());
+                p.put("id", resolution.id());
                 p.put("suggestions", resolution.suggestions());
                 list.add(p);
             }
@@ -1383,7 +1395,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
      */
     private void resolvePrize(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateEventAdmin(request);
-        Player admin = getResourceOwnerSafely(request, null);
+        Player admin = getResourceOwnerSafely(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
         try {
@@ -1417,7 +1429,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
      */
     private void addPromise(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         validateEventAdmin(request);
-        Player admin = getResourceOwnerSafely(request, null);
+        Player admin = getResourceOwnerSafely(request);
 
         var postDecoder = new HttpPostRequestDecoder(request);
         try {
@@ -2319,6 +2331,16 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             result.put("format", view.scheduled() != null ? view.scheduled().format : null);
             result.put("formatName", formatNameOrCode(view.scheduled() != null ? view.scheduled().format : null));
             result.put("started", false);
+            // not started yet: the players waiting in its queue, so that an admin can take one out
+            if (view.queue() instanceof com.gempukku.lotro.tournament.AbstractTournamentQueue queue) {
+                for (String name : queue.getSignedUpPlayers()) {
+                    var obj = new LinkedHashMap<String, Object>();
+                    obj.put("name", name);
+                    obj.put("dropped", false);
+                    obj.put("hasDeck", queue.isRequiresDeck());
+                    players.add(obj);
+                }
+            }
         }
         result.put("players", players);
         responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(result));

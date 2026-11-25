@@ -32,6 +32,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     private final int readyCheckTimeSecs;
     private long timerStartTime = 0;
     private final List<String> confirmedPlayers = Collections.synchronizedList(new ArrayList<>());
+    /** Players an admin took out of this queue; they cannot sign up again until the queue's tournament starts. */
+    private final Set<String> _removedByAdmin = new HashSet<>();
 
     private final boolean startableEarly;
 
@@ -103,13 +105,20 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
 
 
 
-        for (String player : _players) {
-            _tournamentService.recordTournamentPlayer(tournamentInfo._params.tournamentId, player, _playerDecks.get(player));
+        Tournament tournament;
+        try {
+            for (String player : _players) {
+                _tournamentService.recordTournamentPlayer(tournamentInfo._params.tournamentId, player, _playerDecks.get(player));
+            }
+            tournament = _tournamentService.addTournament(tournamentInfo);
+        } catch (RuntimeException exp) {
+            // The queue keeps its players and is tried again on its next pass.  The players recorded so far are
+            // taken back out, or every attempt would leave another copy of them in the database.
+            _tournamentService.discardFailedTournamentStart(tournamentInfo._params.tournamentId);
+            throw exp;
         }
         clearPlayersInternal();
 
-
-        var tournament = _tournamentService.addTournament(tournamentInfo);
         tournamentQueueCallback.createTournament(tournament);
 
         shouldDestroy = destroyWhenTournamentStarts;
@@ -184,7 +193,9 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         tbr.format = getFormatCode();
         tbr.startTime = DateUtils.Now().toLocalDateTime();
         tbr.playoff = _tournamentInfo._params.playoff;
-        tbr.manualKickoff = false;
+        tbr.manualKickoff = _tournamentInfo._params.manualKickoff;
+        tbr.tiebreaker = _tournamentInfo._params.tiebreaker;
+        tbr.customCollection = _tournamentInfo._params.customCollection;
         tbr.cost = getCost();
         tbr.prizes = _tournamentInfo._params.prizes;
         tbr.minimumPlayers = _tournamentInfo._params.minimumPlayers;
@@ -195,6 +206,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         tbr.prizeTiers = new java.util.ArrayList<>();
         if (_tournamentInfo._params.prizeTiers != null)
             tbr.prizeTiers.addAll(_tournamentInfo._params.prizeTiers);
+        // whoever an admin took out of the queue stays out of the tournament too
+        tbr.removedPlayers = new java.util.ArrayList<>(_removedByAdmin);
 
         return tbr;
     }
@@ -215,8 +228,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     }
 
     @Override
-    public final String getPrizesDescription() {
-        return _tournamentInfo.Prizes.getPrizeDescription();
+    public final PrizeSummary getPrizeSummary() {
+        return _tournamentInfo.Prizes.getPrizeSummary();
     }
 
     protected void regeneratePlayerList() {
@@ -241,6 +254,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     private void signUp(Player player) throws SQLException, IOException, HallException {
         if (_players.contains(player.getName()))
             throw new HallException("You have already joined that queue");
+        if (_removedByAdmin.contains(player.getName()))
+            throw new HallException("An administrator removed you from " + getTournamentQueueName() + ", so you cannot join it again.");
         if (!isJoinable())
             throw new HallException(getJoinRefusal());
         int cost = _tournamentInfo._params.cost;
@@ -293,6 +308,19 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         }
     }
 
+    /**
+     * Takes a signed-up player out of the queue on an admin's say-so: the entry cost is returned as when the player
+     * leaves, and the player cannot sign up again for this queue's next tournament.
+     * @return false when the player was not signed up
+     */
+    public final synchronized boolean removePlayerByAdmin(String player) throws SQLException, IOException {
+        if (!_players.contains(player))
+            return false;
+        leavePlayer(player);
+        _removedByAdmin.add(player);
+        return true;
+    }
+
     @Override
     public final synchronized void leaveAllPlayers() throws SQLException, IOException {
         if (_tournamentInfo._params.cost > 0) {
@@ -308,6 +336,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         _playerDecks.clear();
 
         confirmedPlayers.clear();
+        // a recurring queue starts over with its next tournament
+        _removedByAdmin.clear();
     }
 
     @Override

@@ -1,0 +1,5 @@
+/* The Events tab: the hall's tab frame (shared/hall-tab-frame) lays it out; its page is the sub-tabs' .article */
+
+.gd-events__join-question {
+  margin: 0.3em 0;
+}

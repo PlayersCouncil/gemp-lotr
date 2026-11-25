@@ -1,0 +1,80 @@
+/* The shelf's question box (scenarioShelf.css .scenario-submit, .scenario-submit-shade, .scenario-submit-buttons) */
+
+.gd-shelf-question {
+  box-sizing: border-box;
+  width: min(38em, calc(100vw - 2em));
+  max-height: calc(100vh - 2em);
+  overflow-y: auto;
+  padding: 1em 1.4em;
+  border: 1px solid var(--theme-account-box-border);
+  border-radius: 4px;
+  background: var(--theme-account-box-bg);
+  box-shadow: 0 6px 30px var(--theme-account-box-shadow);
+  color: var(--theme-account-box-text);
+  font-family: var(--theme-account-box-font);
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.gd-shelf-question::backdrop {
+  background: var(--theme-account-box-shade);
+}
+
+.gd-shelf-question h2 {
+  margin: 0 0 0.6em;
+  font-size: 1.25em;
+  color: var(--theme-account-box-title);
+}
+
+.gd-shelf-question h3 {
+  margin: 0.8em 0 0.3em;
+  font-size: 1em;
+}
+
+.gd-shelf-question ul {
+  margin: 0;
+  padding-left: 1.3em;
+}
+
+.gd-shelf-question li {
+  margin: 0.25em 0;
+}
+
+.gd-shelf-question p {
+  margin: 0.4em 0;
+}
+
+.gd-shelf-question__ask {
+  font-weight: bold;
+}
+
+.gd-shelf-question p.gd-shelf-question__ask {
+  margin: 1em 0 0.6em;
+}
+
+.gd-shelf-question__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6em;
+}
+
+.gd-shelf-question__buttons button {
+  padding: 0.4em 1em;
+  border: 1px solid var(--theme-account-box-button-border);
+  border-radius: 3px;
+  background: var(--theme-account-box-button-bg);
+  color: var(--theme-account-box-button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-shelf-question__buttons button[data-action='yes'] {
+  border-color: var(--theme-account-box-yes-border);
+  background: var(--theme-account-box-yes-bg);
+}
+
+.gd-shelf-question__buttons button[data-action='yes'][data-danger] {
+  border-color: var(--theme-account-box-danger-border);
+  background: var(--theme-account-box-danger-bg);
+}

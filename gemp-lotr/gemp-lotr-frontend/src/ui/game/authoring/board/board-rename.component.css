@@ -1,0 +1,20 @@
+/* A name changed where it stands (the legacy renameCard's field) */
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-author-input {
+  flex: 0 0 110px;
+  width: 110px;
+}
+
+.gd-author-input[data-bad] {
+  border-color: var(--theme-game-author-bad-border);
+}
+
+.gd-author-button {
+  margin-bottom: 0;
+}

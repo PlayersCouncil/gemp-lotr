@@ -1,0 +1,161 @@
+<div class="gd-event-history__heading">{{ words.historyHeading(browser().kind) }}</div>
+<div class="gd-event-history__header">
+  <button
+    gdEventsButton
+    data-action="previous"
+    [title]="words.PREVIOUS_MONTH_WITH_EVENTS"
+    [disabled]="browser().previousDisabled()"
+    (click)="browser().jump(-1)"
+  >
+    {{ words.CALENDAR_PREVIOUS }}
+  </button>
+  <span #month class="gd-event-history__month">
+    <button
+      #title
+      type="button"
+      class="gd-event-history__title"
+      aria-haspopup="true"
+      [attr.aria-expanded]="browser().dropdownOpen()"
+      [title]="words.CHOOSE_A_MONTH"
+      (click)="browser().toggleDropdown()"
+    >
+      {{ browser().title() }}<span class="gd-event-history__caret" aria-hidden="true">&#9662;</span>
+    </button>
+    @if (browser().dropdownOpen()) {
+      <div class="gd-event-history__dropdown">
+        @let dropdown = browser().dropdown();
+        @switch (dropdown.state) {
+          @case ('loading') {
+            <div class="gd-event-history__dd-status" data-state="loading">{{ words.MONTHS_LOADING }}</div>
+          }
+          @case ('error') {
+            <div class="gd-event-history__dd-status" data-state="error">
+              {{ words.monthsFailed(dropdown.text) }}
+            </div>
+            <button gdEventsButton data-action="retry-months" (click)="browser().retryMonths()">
+              {{ words.RETRY }}
+            </button>
+          }
+          @case ('ready') {
+            @for (group of dropdown.groups; track group.year) {
+              <div class="gd-event-history__year">
+                <div class="gd-event-history__year-label">{{ group.year }}</div>
+                <div class="gd-event-history__months">
+                  @for (month of group.months; track month.key) {
+                    <button
+                      type="button"
+                      class="gd-event-history__dd-month"
+                      [attr.data-month]="month.key"
+                      [attr.aria-current]="month.key === dropdown.current ? 'true' : null"
+                      [title]="month.title"
+                      (click)="pick(month.key, title)"
+                    >
+                      {{ month.name }}
+                    </button>
+                  }
+                </div>
+              </div>
+            } @empty {
+              <div class="gd-event-history__dd-status" data-state="empty">{{ dropdown.emptyText }}</div>
+            }
+          }
+        }
+      </div>
+    }
+  </span>
+  <button
+    gdEventsButton
+    data-action="next"
+    [title]="words.NEXT_MONTH_WITH_EVENTS"
+    [disabled]="browser().nextDisabled()"
+    (click)="browser().jump(1)"
+  >
+    {{ words.CALENDAR_NEXT }}
+  </button>
+</div>
+<div class="gd-event-history__status" [attr.data-state]="browser().status().state">
+  {{ browser().status().text }}
+  @if (browser().status().retry) {
+    <button gdEventsButton data-action="retry" (click)="browser().retry()">{{ words.RETRY }}</button>
+  }
+</div>
+@if (browser().shown(); as month) {
+  <table class="gd-event-history__table">
+    <thead>
+      <tr>
+        @for (column of columns(); track $index) {
+          <th>{{ column }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of browser().rows(); track $index) {
+        <tr class="gd-event-history__row" [attr.data-expanded]="row.drawer?.isOpen() ? '' : null">
+          <td class="gd-event-history__detail-cell">
+            @if (row.drawer; as drawer) {
+              <button gdEventsButton [attr.aria-expanded]="drawer.isOpen()" (click)="drawer.toggle()">
+                {{ drawer.toggleLabel() }}
+              </button>
+            }
+          </td>
+          <td class="gd-event-history__name">{{ orDash(row.event.name) }}</td>
+          <td class="gd-event-history__dates">{{ dates(row.event) }}</td>
+          <td>{{ orDash(row.event.format) }}</td>
+          <td class="gd-event-history__number">{{ orDash(row.event.playerCount) }}</td>
+          @if (browser().kind === 'tournament') {
+            <td class="gd-event-history__number">{{ orDash(row.event.rounds) }}</td>
+          }
+          @if (month.isAdmin) {
+            <td class="gd-event-history__admin">
+              @for (link of row.event.adminLinks; track $index) {
+                <span class="gd-event-history__admin-item">
+                  @if (link.url; as url) {
+                    <a
+                      class="gd-event-history__admin-link"
+                      target="_blank"
+                      [href]="url"
+                      [title]="words.adminLinkTitle(link.label, url)"
+                      >{{ link.text }}</a
+                    >
+                  } @else {
+                    <span class="gd-event-history__admin-text" [title]="words.adminTextTitle(link.label)">{{
+                      link.text
+                    }}</span>
+                  }
+                </span>
+              } @empty {
+                <span class="gd-event-history__admin-none">{{ words.DASH }}</span>
+              }
+            </td>
+          }
+        </tr>
+        @if (row.drawer?.content(); as content) {
+          <tr class="gd-event-history__detail-row" [hidden]="!row.drawer!.isOpen()">
+            <td [attr.colspan]="columns().length">
+              <div class="gd-event-history__detail" [attr.data-state]="content.kind">
+                @switch (content.kind) {
+                  @case ('loading') {
+                    <div class="gd-event-history__loading">{{ content.text }}</div>
+                  }
+                  @case ('error') {
+                    <div class="gd-event-history__error">{{ content.text }}</div>
+                  }
+                  @case ('empty') {
+                    <i>{{ content.text }}</i>
+                  }
+                  @case ('data') {
+                    @if (browser().kind === 'league') {
+                      <gd-league-detail [league]="asLeague(content.data)" [membership]="false" />
+                    } @else {
+                      <gd-tournament-detail [tournament]="asTournament(content.data)" [showRounds]="false" />
+                    }
+                  }
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+}

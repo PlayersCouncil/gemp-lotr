@@ -128,8 +128,7 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     private void getAnnouncementDelivery(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             var delivery = _transferDAO.getUndeliveredAnnouncement(resourceOwner);
 
@@ -145,8 +144,7 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     private void dismissAnnouncement(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             _transferDAO.dismissAnnouncement(_transferDAO.getCurrentAnnouncement(), resourceOwner);
 
@@ -159,8 +157,7 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     private void snoozeAnnouncement(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             _transferDAO.snoozeAnnouncement(_transferDAO.getCurrentAnnouncement(), resourceOwner);
 
@@ -173,8 +170,7 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     private void getLeagueDelivery(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             var notifications = _transferDAO.consumeUndeliveredLeagueNotifications(resourceOwner);
 
@@ -190,8 +186,7 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     private void getPackContentDelivery(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             Map<String, ? extends CardCollection> delivery = _transferDAO.consumeUndeliveredPackContents(resourceOwner);
 
@@ -204,8 +199,7 @@ public class DeliveryRequestHandler extends LotroServerRequestHandler implements
     private void getNonPackNonAnnouncementDeliveries(HttpRequest request, ResponseWriter responseWriter) throws IOException, HttpProcessingException, ParserConfigurationException {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             Map<String, ? extends CardCollection> delivery = _transferDAO.consumeUndeliveredPackages(resourceOwner);
 

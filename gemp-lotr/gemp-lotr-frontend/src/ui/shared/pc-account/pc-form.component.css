@@ -1,0 +1,54 @@
+/*
+ * A PC account form in place, one line: the fields side by side, the buttons to their right (where a profile row's
+ * Enter Gemp is), the note and the refusal under; the buttons go under the fields on a narrow window. Theme values
+ * only, reused; the buttons' sizes are controls.css's.
+ */
+
+:host {
+  display: block;
+}
+
+.gd-pc-form__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.gd-pc-form__field {
+  display: block;
+  flex: 1 1 8em;
+  min-width: 0;
+}
+
+.gd-pc-form__input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+/* The login page's fields (login-page.component.css .gd-login__input) */
+:host([data-place='login']) .gd-pc-form__input {
+  font-size: 90%;
+}
+
+.gd-pc-form__actions {
+  display: flex;
+  gap: 0.4em;
+  margin-left: auto;
+}
+
+.gd-pc-form__note,
+.gd-pc-form__error {
+  margin: 0.3em 0 0;
+}
+
+.gd-pc-form__note {
+  color: var(--theme-account-help);
+  font-size: 90%;
+}
+
+/* A refusal, red: the theme's error colour, wherever the form is */
+.gd-pc-form__error {
+  color: var(--theme-error);
+}

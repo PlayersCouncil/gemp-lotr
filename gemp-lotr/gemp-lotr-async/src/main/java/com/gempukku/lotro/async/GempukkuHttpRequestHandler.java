@@ -9,7 +9,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;import org.w3c.dom.Document;
 
@@ -34,7 +33,7 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
     private final static long SIX_MONTHS = 1000L * 60L * 60L * 24L * 30L * 6L;
     private static final Logger _log = LogManager.getLogger(GempukkuHttpRequestHandler.class);
     private static final Logger _accesslog = LogManager.getLogger("access");
-    private final Map<String, byte[]> _fileCache = Collections.synchronizedMap(new HashMap<>());
+    private final ConnectionFileCache _fileCache = new ConnectionFileCache();
 
     private final Map<Type, Object> _objects;
     private final UriRequestHandler _uriRequestHandler;
@@ -62,6 +61,19 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         }
     }
 
+    /**
+     * The address a request came from. Behind nginx that is the LAST entry of X-Forwarded-For: nginx appends the
+     * address it saw to whatever the client sent ($proxy_add_x_forwarded_for), so everything before the last comma
+     * is the client's own say-so. Taking the whole header let anyone step round an IP ban, and the login limit per
+     * address, by sending a header of their own. With no proxy in front there is no header, and the socket says.
+     */
+    static String clientAddress(String forwardedFor, String socketAddress) {
+        if (forwardedFor == null)
+            return socketAddress;
+        String last = forwardedFor.substring(forwardedFor.lastIndexOf(',') + 1).trim();
+        return last.isEmpty() ? socketAddress : last;
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest httpRequest) {
         if (HttpUtil.is100ContinueExpected(httpRequest))
@@ -72,10 +84,8 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         if (uri.contains("?"))
             uri = uri.substring(0, uri.indexOf("?"));
 
-        String ip = httpRequest.headers().get("X-Forwarded-For");
-
-        if(ip == null)
-           ip = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+        String ip = clientAddress(httpRequest.headers().get("X-Forwarded-For"),
+                ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress());
 
         final RequestInformation requestInformation = new RequestInformation(httpRequest.uri(),
                 ip,
@@ -175,6 +185,29 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         else if (fileName.endsWith(".wav")) {
             cache = true;
             contentType = "audio/wav";
+        } else if (fileName.endsWith(".mjs")) {
+            contentType = "application/javascript; charset=UTF-8";
+        } else if (fileName.endsWith(".json") || fileName.endsWith(".map")) {
+            contentType = "application/json; charset=UTF-8";
+        } else if (fileName.endsWith(".webmanifest")) {
+            contentType = "application/manifest+json; charset=UTF-8";
+        } else if (fileName.endsWith(".txt")) {
+            contentType = "text/plain; charset=UTF-8";
+        } else if (fileName.endsWith(".webp")) {
+            cache = true;
+            contentType = "image/webp";
+        } else if (fileName.endsWith(".ico")) {
+            cache = true;
+            contentType = "image/x-icon";
+        } else if (fileName.endsWith(".woff2")) {
+            cache = true;
+            contentType = "font/woff2";
+        } else if (fileName.endsWith(".woff")) {
+            cache = true;
+            contentType = "font/woff";
+        } else if (fileName.endsWith(".ttf")) {
+            cache = true;
+            contentType = "font/ttf";
         } else {
             contentType = "application/octet-stream";
         }
@@ -342,27 +375,15 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
         @Override
         public void writeFile(File file, Map<String, String> headers) {
             try {
-                String canonicalPath = file.getCanonicalPath();
-                byte[] fileBytes = _fileCache.get(canonicalPath);
-                if (fileBytes == null) {
-                    if (!file.exists() || !file.isFile()) {
-                        byte[] content = new byte[0];
-                        // Build the response object.
-                        FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(404), Unpooled.wrappedBuffer(content), convertToHeaders(null), EmptyHttpHeaders.INSTANCE);
-                        sendResponse(ctx, request, response);
-                        return;
-                    }
-
-                    FileInputStream fis = new FileInputStream(file);
-                    try {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        IOUtils.copyLarge(fis, baos);
-                        fileBytes = baos.toByteArray();
-                        _fileCache.put(canonicalPath, fileBytes);
-                    } finally {
-                        IOUtils.closeQuietly(fis);
-                    }
+                if (!file.exists() || !file.isFile()) {
+                    byte[] content = new byte[0];
+                    // Build the response object.
+                    FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, HttpResponseStatus.valueOf(404), Unpooled.wrappedBuffer(content), convertToHeaders(null), EmptyHttpHeaders.INSTANCE);
+                    sendResponse(ctx, request, response);
+                    return;
                 }
+
+                byte[] fileBytes = _fileCache.read(file);
 
                 HttpHeaders headers1 = convertToHeaders(getHeadersForFile(headers, file));
 

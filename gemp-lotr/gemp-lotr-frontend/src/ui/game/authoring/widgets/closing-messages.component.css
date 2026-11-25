@@ -1,0 +1,35 @@
+/* A list of closing messages: a heading row with its buttons, then the text. */
+
+.gd-author-closing {
+  margin: 2px 0 3px;
+  padding: 0;
+  list-style: none;
+}
+
+.gd-author-closing__message {
+  margin: 0 0 4px;
+  padding: 3px 4px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  background: var(--theme-game-author-list-bg);
+}
+
+.gd-author-closing__head {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.gd-author-closing__head .gd-author-button {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 1px 5px;
+}
+
+.gd-author-closing__text {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+}

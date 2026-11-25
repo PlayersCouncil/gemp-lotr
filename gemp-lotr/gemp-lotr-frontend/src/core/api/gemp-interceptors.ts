@@ -1,0 +1,65 @@
+import {
+  HttpContextToken,
+  HttpInterceptorFn,
+  HttpResponse,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, tap, throwError } from 'rxjs';
+import { SERVER_URL } from '../platform/app-paths';
+import { ApiError } from './api-error';
+import { DELIVERY_HEADERS, DeliveryAnnouncements, DeliveryKind } from './delivery-announcements';
+import { OpenedPackAnnouncements } from './opened-pack-announcements';
+
+/** Response header the server sets when opened-pack contents are waiting to be shown. */
+export const OPENED_PACK_HEADER = 'Delivery-Service-Opened-Pack';
+
+/** GET only: add a cache-busting parameter to this request (the default). */
+export const BYPASS_CACHE = new HttpContextToken<boolean>(() => true);
+
+const toServer = (url: string) => url.startsWith(SERVER_URL);
+
+const noCacheInterceptor: HttpInterceptorFn = (request, next) =>
+  toServer(request.url) && request.method === 'GET' && request.context.get(BYPASS_CACHE)
+    ? next(request.clone({ params: request.params.set('_', String(Date.now())) }))
+    : next(request);
+
+const openedPackInterceptor: HttpInterceptorFn = (request, next) => {
+  const announcements = inject(OpenedPackAnnouncements);
+  return next(request).pipe(
+    tap((event) => {
+      if (toServer(request.url) && event instanceof HttpResponse && event.headers.get(OPENED_PACK_HEADER) === 'true') {
+        announcements.announce();
+      }
+    }),
+  );
+};
+
+/** The hall's deliveries (communication.js deliveryCheck): each header set to "true" is announced. */
+const deliveryInterceptor: HttpInterceptorFn = (request, next) => {
+  const announcements = inject(DeliveryAnnouncements);
+  return next(request).pipe(
+    tap((event) => {
+      if (toServer(request.url) && event instanceof HttpResponse) {
+        for (const kind of Object.keys(DELIVERY_HEADERS) as DeliveryKind[]) {
+          if (event.headers.get(DELIVERY_HEADERS[kind]) === 'true') {
+            announcements.announce(kind);
+          }
+        }
+      }
+    }),
+  );
+};
+
+const apiErrorInterceptor: HttpInterceptorFn = (request, next) =>
+  toServer(request.url)
+    ? next(request).pipe(catchError((error: unknown) => throwError(() => ApiError.from(error))))
+    : next(request);
+
+/** HttpClient, with what every call to the Gemp server needs. */
+export function provideGempHttp() {
+  return provideHttpClient(
+    withInterceptors([noCacheInterceptor, openedPackInterceptor, deliveryInterceptor, apiErrorInterceptor]),
+  );
+}

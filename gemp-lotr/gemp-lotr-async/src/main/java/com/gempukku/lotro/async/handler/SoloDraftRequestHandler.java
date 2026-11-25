@@ -22,7 +22,6 @@ import com.gempukku.lotro.tournament.Tournament;
 import com.gempukku.lotro.tournament.TournamentService;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,9 +67,6 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
     }
 
     private void getAvailablePicks(HttpRequest request, String eventId, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
         SoloDraft soloDraft;
         CollectionType collectionType;
 
@@ -98,7 +94,7 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
             throw new HttpProcessingException(404);
         }
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         CardCollection collection = _collectionsManager.getPlayerCollection(resourceOwner, collectionType.getCode());
 
@@ -152,7 +148,6 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
     private void makePick(HttpRequest request, String eventId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-            String participantId = getFormParameterSafely(postDecoder, "participantId");
             String selectedChoiceId = getFormParameterSafely(postDecoder, "choiceId");
 
             SoloDraft soloDraft;
@@ -183,7 +178,7 @@ public class SoloDraftRequestHandler extends LotroServerRequestHandler implement
                 throw new HttpProcessingException(404);
             }
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             CardCollection collection = _collectionsManager.getPlayerCollection(resourceOwner, collectionType.getCode());
             boolean finished = (Boolean) collection.getExtraInformation().get("finished");

@@ -461,15 +461,152 @@ var GempLotrCommunication = Class.extend({
             dataType:"xml"
         });
     },
-    concede:function (errorMap) {
+    concede:function (errorMap, callback) {
         $.ajax({
             type:"POST",
             url:this.url + "/game/" + getUrlParam("gameId") + "/concede",
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
+            success:callback,
             error:this.errorCheck(errorMap),
             dataType:"xml"
+        });
+    },
+    // Scenarios (tutorials, puzzles): see ScenarioRequestHandler on the server
+    getScenarios:function (callback, errorMap) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/scenarios",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+    startScenario:function (id, fromCheckpoint, callback, failure) {
+        var data = {
+            participantId:getUrlParam("participantId"),
+            id:id};
+        if (fromCheckpoint)
+            data.from = "checkpoint";
+        $.ajax({
+            type:"POST",
+            url:this.url + "/scenarios/start",
+            cache:false,
+            data:data,
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    // My Scenarios and Scenario Admin: see ScenarioRequestHandler (/scenarios/mine, /public, /admin) on the server
+    scenarioShelf:function (method, what, data, callback, failure) {
+        $.ajax({
+            type:method,
+            url:this.url + "/scenarios/" + what,
+            cache:false,
+            data:data || {},
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    // The scenario authoring tool: see ScenarioRequestHandler (/scenarios/author/...) on the server
+    scenarioAuthor:function (method, what, data, callback, failure) {
+        $.ajax({
+            type:method,
+            url:this.url + "/scenarios/author/" + what,
+            cache:false,
+            data:data || {},
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    scenarioAcknowledge:function (step, choice, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/scenarioAck",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                step:step,
+                choice:choice == null ? "" : choice},
+            success:callback,
+            error:failure,
+            dataType:"text"
+        });
+    },
+    // Taking a game back (see undo.js).  These answer in JSON, and fail quietly: the caller decides what to say.
+    getRestorePoints:function (callback, failure) {
+        $.ajax({
+            type:"GET",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/restorePoints",
+            cache:false,
+            data:{ participantId:getUrlParam("participantId") },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    requestUndo:function (entryCount, ownOnly, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/undo",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                entryCount:entryCount == null ? "" : entryCount,
+                ownOnly:ownOnly ? "true" : "false" },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    replyUndo:function (requestId, reply, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/undoReply",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                requestId:requestId,
+                reply:reply },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    setUndoAutoDecline:function (on, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/autoDecline",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                on:on ? "true" : "false" },
+            success:callback,
+            error:failure,
+            dataType:"json"
+        });
+    },
+    // A long poll: answered when there is a notice numbered above "after", or after a while with none.
+    // after = -1 asks only where to start from.
+    getGameNotices:function (after, callback, failure) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/game/" + getUrlParam("gameId") + "/notices",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId"),
+                after:after },
+            success:callback,
+            timeout: 60000,
+            error:failure,
+            dataType:"json"
         });
     },
     cancel:function (errorMap) {
@@ -1197,20 +1334,6 @@ var GempLotrCommunication = Class.extend({
                 collectionType:collectionType,
                 product:product,
                 players:players
-            },
-            success:callback,
-            error:this.errorCheck(errorMap),
-            dataType:"html"
-        });
-    },
-    
-    resetUserPassword:function (login, callback, errorMap) {
-        $.ajax({
-            type:"POST",
-            url:this.url + "/admin/resetUserPassword",
-            cache:false,
-            data:{
-                login:login
             },
             success:callback,
             error:this.errorCheck(errorMap),
@@ -1991,6 +2114,22 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    // POST /admin/removeTournamentPlayer -> {message}; 400 (reason in the "message" header) when not removed
+    removeTournamentPlayer:function(tournamentId, player, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/removeTournamentPlayer",
+            cache:false,
+            data:{
+                tournamentId:tournamentId,
+                player:player
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
     setTournamentStage:function(tournamentId, stage, callback, errorMap) {
         $.ajax({
             type:"POST",

@@ -158,8 +158,11 @@ public class Card_10_026_Tests
 
 		assertInZone(Zone.FREE_CHARACTERS, cursed);
 		assertEquals(2, scn.GetWoundsOn(cursed));
-		// No other companion of the deck fits beside his 3 under the total of 4: player 2 is choosing now, and
-		// GetThreats reads the current player's threats, so the threat is read once turn 1 has begun.
+		// No other companion of the deck fits beside his 3 under the total of 4: player 1 is asked only to press
+		// DONE, and once he has, player 2 is choosing.  GetThreats reads the current player's threats, so the
+		// threat is read once turn 1 has begun.
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 		scn.ShadowDeclineChoosing();
 		scn.StartGame(true, false);

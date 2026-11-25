@@ -1,0 +1,1 @@
+Tables count: 3, players in hall: 12, games played in last 24 hours: 57, active players in last week: 140

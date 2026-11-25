@@ -1,0 +1,9 @@
+{
+	id: basics
+	title: Learn to Play
+	order: 10
+	scenarios: [
+		basics-01
+		basics-02-items-damage
+	]
+}

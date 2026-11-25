@@ -1,0 +1,41 @@
+/* The stats bar (game.css .stats, .fpArchery, .shadowArchery, .move) */
+
+:host {
+  box-sizing: border-box;
+  padding: 2px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius-box);
+  box-shadow: var(--theme-frame-shadow);
+  background: var(--theme-content-bg);
+  font-family: var(--theme-font-text);
+}
+
+.gd-game-stats__item {
+  /* Table cells, as on the legacy page: one grows with a long number */
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  color: var(--theme-game-stats-text);
+  font-size: 200%;
+  font-weight: bolder;
+}
+
+.gd-game-stats__item[data-game='fp-archery'] {
+  background-image: var(--theme-game-icon-fp-archery);
+}
+
+.gd-game-stats__item[data-game='shadow-archery'] {
+  background-image: var(--theme-game-icon-shadow-archery);
+}
+
+.gd-game-stats__item[data-game='move'] {
+  background-image: var(--theme-game-icon-move);
+}
+
+/* The page may draw the stats bar smaller as a whole (--gd-panel-zoom: a low screen in the modern theme) */
+:host > * {
+  zoom: var(--gd-panel-zoom, 1);
+}

@@ -1,0 +1,111 @@
+/* The edit bar, in the scripted game's menu: the mode, then its buttons, set apart from the menu's own by rules */
+
+:host {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 10px;
+  border-inline: 1px solid var(--theme-game-scenario-menu-border);
+}
+
+.gd-edit-bar__mode {
+  font-weight: bold;
+  color: var(--theme-game-edit-mode-play);
+}
+
+:host([data-mode='edit']) .gd-edit-bar__mode {
+  color: var(--theme-game-edit-mode-edit);
+  text-shadow: 0 0 6px var(--theme-game-edit-glow);
+}
+
+.gd-edit-bar__mode[data-picking] {
+  color: var(--theme-game-edit-mode-edit);
+  font-weight: normal;
+}
+
+.gd-edit-bar__button {
+  padding: 1px 10px;
+  border: 1px solid var(--theme-game-edit-button-edge);
+  border-radius: 10px;
+  background: var(--theme-game-edit-button-bg);
+  color: var(--theme-game-edit-button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-edit-bar__button[data-main] {
+  border-color: var(--theme-game-edit-main-bg);
+  background: var(--theme-game-edit-main-bg);
+  color: var(--theme-game-edit-main-text);
+  font-weight: bold;
+}
+
+.gd-edit-bar__button:hover:not(:disabled) {
+  border-color: var(--theme-game-edit-glow);
+}
+
+.gd-edit-bar__button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+:host([data-busy]) {
+  cursor: progress;
+}
+
+/* A refusal of Stop, Start or Reset, under the bar */
+.gd-edit-bar__problem {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  max-width: 340px;
+  padding: 6px 10px;
+  border: 1px solid var(--theme-game-edit-problem-edge);
+  border-radius: 6px;
+  background: var(--theme-game-edit-problem-bg);
+  color: var(--theme-game-edit-problem-text);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* The author's bar (gd-author-edit-bar): nothing while the table is played; while edited, which board changes go to */
+:host([data-idle]) {
+  display: none;
+}
+
+.gd-edit-bar__where {
+  display: inline-flex;
+  border: 1px solid var(--theme-game-edit-button-edge);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.gd-edit-bar__where-button {
+  padding: 1px 9px;
+  border: 0;
+  background: var(--theme-game-edit-button-bg);
+  color: var(--theme-game-edit-button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-edit-bar__where-button + .gd-edit-bar__where-button {
+  border-inline-start: 1px solid var(--theme-game-edit-button-edge);
+}
+
+.gd-edit-bar__where-button[aria-pressed='true'] {
+  background: var(--theme-game-edit-main-bg);
+  color: var(--theme-game-edit-main-text);
+  font-weight: bold;
+}
+
+.gd-edit-bar__where-button:hover:not(:disabled, [aria-pressed='true']) {
+  color: var(--theme-game-edit-glow);
+}
+
+.gd-edit-bar__where-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

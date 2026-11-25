@@ -254,6 +254,9 @@ $(document).ready(function () {
 	chat.showTimestamps = true;
 
 	hall = new GempLotrHallUI("/gemp-lotr-server", chat, true);
+	// Open for the Admin tab alone: only that tab and the way back to the hall are drawn (hall.css .admin-only)
+	if (GempHallSession.adminOnly)
+		$("body").addClass("admin-only");
 	GempHallSession.begin(hall, chat);
 	GempLinks.start();
 

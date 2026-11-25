@@ -162,7 +162,7 @@ class Card {
         this.attachedCards = new Array();
         this.stackedCards = new Array();
         if (this.bareBlueprint == "rules") {
-            this.imageUrl = "/gemp-lotr/images/rules.png";
+            this.imageUrl = "/gemp-lotr/images/rules.jpg";
             return;
         }
 

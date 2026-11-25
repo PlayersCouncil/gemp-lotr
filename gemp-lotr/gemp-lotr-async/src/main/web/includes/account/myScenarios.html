@@ -1,0 +1,24 @@
+<script type="text/javascript">
+	$("#myScenarios").ready(
+		function () {
+			// build once, even if the sub-tab's content is fetched again
+			if ($("#myScenarios").data("myScenariosUI") == null)
+				$("#myScenarios").data("myScenariosUI", new MyScenariosUI($("#myScenarios")));
+		});
+</script>
+<div class="game-history-article shelf-article">
+	<h1>My Scenarios</h1>
+	<p class="account-help shelf-intro">
+		Scenarios are games of one player against a scripted opponent, set up and played out as their author wrote them:
+		tutorials that teach the game a step at a time, puzzles with a position to find the way out of, and sandboxes to
+		try things in. Everybody plays them from <b>Play &gt; Play Scenario or Tutorial</b>.
+	</p>
+	<p class="account-help shelf-intro">
+		You can write your own here. A new one opens in the authoring tool, where you set the table up and play it
+		through as you want the player to, and the tool writes the script. Your scenarios are offered to you alone.
+		When one is ready, submit it for review: an admin plays it, and either approves it, making it a public scenario
+		that every player is offered, or sends it back with the changes they would like. To improve a public scenario,
+		copy it with <b>Copy Public</b>: approved, your version replaces it.
+	</p>
+	<div id="myScenarios"></div>
+</div>

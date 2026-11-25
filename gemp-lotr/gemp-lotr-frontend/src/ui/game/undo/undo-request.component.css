@@ -1,0 +1,61 @@
+/* A request waiting (game.css .undoRequest, .undoTarget, .undoClock, .undoRequestDialog) */
+.gd-undo-request > * {
+  margin: 0.4em 0;
+}
+
+.gd-undo-request__head {
+  margin-bottom: 0.4em;
+}
+
+.gd-undo-request__label {
+  font-size: 115%;
+  font-weight: bold;
+}
+
+.gd-undo-request__when {
+  margin-left: 0.8em;
+  font-size: 85%;
+  opacity: 0.85;
+}
+
+.gd-undo-request__why {
+  margin-left: 1.8em;
+}
+
+.gd-undo-request__clock {
+  font-size: 90%;
+  opacity: 0.85;
+}
+
+/* The row of answers under the dialog (.ui-dialog-buttonpane): on the right, the "i" button on the left */
+.gd-undo-request__actions {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0.5em 0 0;
+  padding: 0.3em 1em 0.5em 0.4em;
+  border-top: 1px solid var(--theme-content-border);
+  background-color: var(--theme-game-dialog-actions-bg);
+}
+
+/* After the answers in the page (so not what the first Tab reaches), before them on the screen */
+.gd-undo-request__info {
+  order: -1;
+  margin: 0 auto 0 0.6em;
+}
+
+/* A jQuery UI text button */
+.gd-undo-request__button.gd-button {
+  box-sizing: content-box;
+  margin: 0.5em 0.4em 0.5em 0;
+  padding: 0.2em 0.3em;
+  font-size: 1em;
+  line-height: normal;
+}
+
+.gd-undo-request__button > span {
+  display: block;
+  padding: 0.2em 0.3em;
+  line-height: 1.4;
+}

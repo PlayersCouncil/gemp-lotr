@@ -1,0 +1,28 @@
+/* The bar of what can be done with the step as a whole, and what of it was left out when the file was opened */
+
+:host {
+  display: block;
+}
+
+.gd-author-step-actions__convert {
+  display: inline-flex;
+  margin: 0 4px 3px 0;
+}
+
+.gd-author-step-actions__left-out {
+  margin: 3px 0 6px;
+  padding: 4px 6px;
+  border-left: 3px solid var(--theme-game-author-tag-mistake-border);
+  color: var(--theme-game-author-tag-mistake);
+  font-size: 12px;
+}
+
+.gd-author-step-actions__left-out pre {
+  margin: 3px 0 0;
+  padding: 3px 5px;
+  overflow-x: auto;
+  background: var(--theme-game-author-code-bg);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 11px;
+  white-space: pre-wrap;
+}

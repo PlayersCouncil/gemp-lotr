@@ -6,6 +6,7 @@ import com.gempukku.lotro.SubscriptionExpiredException;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.common.Phase;
+import com.gempukku.lotro.game.GameNotices;
 import com.gempukku.lotro.game.LotroGameMediator;
 import com.gempukku.lotro.game.LotroServer;
 import com.gempukku.lotro.game.ParticipantCommunicationVisitor;
@@ -15,6 +16,7 @@ import com.gempukku.lotro.game.state.GameCommunicationChannel;
 import com.gempukku.lotro.game.state.GameEvent;
 import com.gempukku.polling.LongPollingResource;
 import com.gempukku.polling.LongPollingSystem;
+import com.gempukku.util.JsonUtils;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -30,7 +32,10 @@ import org.w3c.dom.Node;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -60,6 +65,18 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             getCardInfo(request, uri.substring(1, uri.length() - 9), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/concede") && request.method() == HttpMethod.POST) {
             concede(request, uri.substring(1, uri.length() - 8), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/scenarioAck") && request.method() == HttpMethod.POST) {
+            scenarioAcknowledge(request, uri.substring(1, uri.length() - 12), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/restorePoints") && request.method() == HttpMethod.GET) {
+            getRestorePoints(request, uri.substring(1, uri.length() - 14), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/undo") && request.method() == HttpMethod.POST) {
+            undo(request, uri.substring(1, uri.length() - 5), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/undoReply") && request.method() == HttpMethod.POST) {
+            undoReply(request, uri.substring(1, uri.length() - 10), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/autoDecline") && request.method() == HttpMethod.POST) {
+            autoDecline(request, uri.substring(1, uri.length() - 12), responseWriter);
+        } else if (uri.startsWith("/") && uri.endsWith("/notices") && request.method() == HttpMethod.POST) {
+            notices(request, uri.substring(1, uri.length() - 8), responseWriter);
         } else if (uri.startsWith("/") && uri.endsWith("/cancel") && request.method() == HttpMethod.POST) {
             cancel(request, uri.substring(1, uri.length() - 7), responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.GET) {
@@ -74,7 +91,6 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     private void updateGameState(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
         int channelNumber = Integer.parseInt(getFormParameterSafely(postDecoder, "channelNumber"));
         Integer decisionId = null;
         String decisionIdStr = getFormParameterSafely(postDecoder, "decisionId");
@@ -82,7 +98,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             decisionId = Integer.parseInt(decisionIdStr);
         String decisionValue = getFormParameterSafely(postDecoder, "decisionValue");
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -155,11 +171,190 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
 
     }
 
+    /* ---- taking a game back (see LotroGameMediator.requestUndo) ---- */
+
+    private LotroGameMediator gameOf(String gameId) throws HttpProcessingException {
+        LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
+        if (gameMediator == null)
+            throw new HttpProcessingException(404);
+        return gameMediator;
+    }
+
+    private static Map<String, Object> undoReplyJson(LotroGameMediator.UndoReply reply) {
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.put("status", reply.status());
+        json.put("message", reply.message());
+        json.put("requestId", reply.requestId());
+        return json;
+    }
+
+    /**
+     * GET /game/{id}/restorePoints: where the asking player may have the game taken back to, each with its tier, and
+     * how things stand with requests at this table.
+     */
+    private void getRestorePoints(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
+        Player resourceOwner = getResourceOwnerSafely(request);
+        LotroGameMediator gameMediator = gameOf(gameId);
+        String name = resourceOwner.getName();
+
+        List<Map<String, Object>> points = new ArrayList<>();
+        for (LotroGameMediator.RestorePointView point : gameMediator.getRestorePoints(name)) {
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("entryCount", point.entryCount());
+            json.put("label", point.label());
+            json.put("turn", point.turn());
+            json.put("phase", point.phase());
+            json.put("tier", point.tier());
+            json.put("reasons", point.reasons());
+            json.put("unavailable", point.unavailable());
+            points.add(json);
+        }
+        Map<String, Object> policy = new LinkedHashMap<>();
+        policy.put("green", gameMediator.getUndoPolicy().green());
+        policy.put("yellow", gameMediator.getUndoPolicy().yellow());
+        policy.put("red", gameMediator.getUndoPolicy().red());
+        //Whether anybody is asked before a yellow or red one is carried out (not against a bot or in a scenario)
+        policy.put("asks", !gameMediator.getUndoPolicy().othersAgreeAtOnce());
+        policy.put("timeoutSeconds", gameMediator.getUndoPolicy().timeoutSeconds());
+        policy.put("greenPerPhase", gameMediator.getUndoPolicy().greenPerPhase());
+        List<String> declining = new ArrayList<>();
+        for (String player : gameMediator.getPlayersPlaying())
+            if (gameMediator.isAutoDeclining(player))
+                declining.add(player);
+
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.put("points", points);
+        json.put("policy", policy);
+        json.put("autoDecline", gameMediator.isAutoDeclining(name));
+        json.put("declining", declining);
+        json.put("pending", gameMediator.getPendingUndo());
+        responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(json));
+    }
+
+    /**
+     * POST /game/{id}/undo: entryCount for a restore point other than the player's last answer.
+     */
+    private void undo(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            Player resourceOwner = getResourceOwnerSafely(request);
+            String entryCount = getFormParameterSafely(postDecoder, "entryCount");
+            LotroGameMediator gameMediator = gameOf(gameId);
+            //ownOnly: the Undo button, which never asks anybody (see LotroGameMediator.requestUndo)
+            boolean ownOnly = "true".equals(getFormParameterSafely(postDecoder, "ownOnly"));
+            LotroGameMediator.UndoReply reply = gameMediator.requestUndo(resourceOwner.getName(),
+                    entryCount == null || entryCount.isEmpty() ? null : Integer.valueOf(entryCount), ownOnly);
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(undoReplyJson(reply)));
+        } catch (NumberFormatException exp) {
+            throw new HttpProcessingException(400);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * POST /game/{id}/undoReply: requestId, and reply = approve, decline, declineAll or cancel.
+     */
+    private void undoReply(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            Player resourceOwner = getResourceOwnerSafely(request);
+            int requestId = Integer.parseInt(getFormParameterSafely(postDecoder, "requestId"));
+            String reply = getFormParameterSafely(postDecoder, "reply");
+            LotroGameMediator gameMediator = gameOf(gameId);
+            responseWriter.writeJsonResponse(JsonUtils.SerializeWithNulls(undoReplyJson(
+                    gameMediator.replyUndo(resourceOwner.getName(), requestId, reply == null ? "" : reply))));
+        } catch (NumberFormatException exp) {
+            throw new HttpProcessingException(400);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * POST /game/{id}/autoDecline: on = true or false.
+     */
+    private void autoDecline(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            Player resourceOwner = getResourceOwnerSafely(request);
+            boolean on = "true".equals(getFormParameterSafely(postDecoder, "on"));
+            LotroGameMediator gameMediator = gameOf(gameId);
+            gameMediator.setAutoDecline(resourceOwner.getName(), on);
+            responseWriter.writeJsonResponse(JsonUtils.Serialize(Map.of("autoDecline", gameMediator.isAutoDeclining(resourceOwner.getName()))));
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
+    /**
+     * POST /game/{id}/notices: after = the number of the last notice the client has seen.  Held
+     * until there is a later notice or the usual long-polling time has passed; a client asks again at once, whether
+     * or not it is showing its player a decision.  A client that has only just arrived sends after = -1 and is told
+     * at once, with no notices, which number to carry on from ("latest"): what was said before it came is not for it.
+     */
+    private void notices(HttpRequest request, String gameId, final ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            final Player resourceOwner = getResourceOwnerSafely(request);
+            String afterText = getFormParameterSafely(postDecoder, "after");
+            final int after = afterText == null || afterText.isEmpty() ? 0 : Integer.parseInt(afterText);
+            final LotroGameMediator gameMediator = gameOf(gameId);
+            if (!gameMediator.isAllowSpectators() && !gameMediator.getPlayersPlaying().contains(resourceOwner.getName())
+                    && !resourceOwner.hasType(Player.Type.ADMIN))
+                throw new HttpProcessingException(403);
+            final GameNotices gameNotices = gameMediator.getNotices();
+            gameNotices.know(resourceOwner.getName());
+            if (after < 0) {
+                Map<String, Object> json = new LinkedHashMap<>();
+                json.put("notices", new ArrayList<>());
+                json.put("latest", gameNotices.latest(resourceOwner.getName()));
+                responseWriter.writeJsonResponse(JsonUtils.Serialize(json));
+                return;
+            }
+
+            longPollingSystem.processLongPollingResource(new LongPollingResource() {
+                private boolean _processed;
+
+                @Override
+                public synchronized boolean wasProcessed() {
+                    return _processed;
+                }
+
+                @Override
+                public synchronized void processIfNotProcessed() {
+                    if (_processed)
+                        return;
+                    _processed = true;
+                    try {
+                        List<Map<String, Object>> notices = new ArrayList<>();
+                        for (GameNotices.Notice notice : gameNotices.after(resourceOwner.getName(), after)) {
+                            Map<String, Object> json = new LinkedHashMap<>(notice.fields());
+                            json.put("number", notice.number());
+                            json.put("type", notice.type());
+                            notices.add(json);
+                        }
+                        Map<String, Object> json = new LinkedHashMap<>();
+                        json.put("notices", notices);
+                        json.put("latest", gameNotices.latest(resourceOwner.getName()));
+                        responseWriter.writeJsonResponse(JsonUtils.Serialize(json));
+                    } catch (Exception e) {
+                        logHttpError(_log, 500, "game notices poller", e);
+                        responseWriter.writeError(500);
+                    }
+                }
+            }, gameNotices.waitingAfter(resourceOwner.getName(), after));
+        } catch (NumberFormatException exp) {
+            throw new HttpProcessingException(400);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
     private void cancel(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -173,12 +368,41 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
         }
     }
 
+    /**
+     * POST /game/&lt;id&gt;/scenarioAck (form: step, choice) - in a scenario's game, the person has read a step that
+     * waits to be read: what one of the opponent's steps had to say (the opponent may now act), or a pause over a
+     * decision of their own.  step is the number the step event carried; choice, if the step ended in a choice, is
+     * the name of the button they pressed.
+     */
+    private void scenarioAcknowledge(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+        String step = getFormParameterSafely(postDecoder, "step");
+        String choice = getFormParameterSafely(postDecoder, "choice");
+        Player resourceOwner = getResourceOwnerSafely(request);
+
+        LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
+        if (gameMediator == null)
+            throw new HttpProcessingException(404);
+
+        int stepNumber;
+        try {
+            stepNumber = Integer.parseInt(step);
+        } catch (NumberFormatException exp) {
+            throw new HttpProcessingException(400);
+        }
+        gameMediator.scenarioAcknowledged(resourceOwner, stepNumber, choice == null || choice.isEmpty() ? null : choice);
+
+        responseWriter.writeXmlResponse(null);
+        } finally {
+            postDecoder.destroy();
+        }
+    }
+
     private void concede(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
         try {
-        String participantId = getFormParameterSafely(postDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
         if (gameMediator == null)
@@ -194,14 +418,13 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
 
     private void getCardInfo(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         String cardIdStr = getQueryParameterSafely(queryDecoder, "cardId");
         if (cardIdStr.startsWith("extra") || cardIdStr.startsWith("anim")) {
             responseWriter.writeHtmlResponse("");
         } else {
             int cardId = Integer.parseInt(cardIdStr);
 
-            Player resourceOwner = getResourceOwnerSafely(request, participantId);
+            Player resourceOwner = getResourceOwnerSafely(request);
 
             LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
             if (gameMediator == null)
@@ -212,10 +435,7 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
     }
 
     private void getGameState(HttpRequest request, String gameId, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
-
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         LotroGameMediator gameMediator = _lotroServer.getGameById(gameId);
 
@@ -246,13 +466,8 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
         if (cookieHeader != null) {
             Set<Cookie> cookies = cookieDecoder.decode(cookieHeader);
             for (Cookie cookie : cookies) {
-                if (cookie.name().equals("autoPassPhases")) {
-                    final String[] phases = cookie.value().split("0");
-                    Set<Phase> result = new HashSet<>();
-                    for (String phase : phases)
-                        result.add(Phase.valueOf(phase));
-                    return result;
-                }
+                if (cookie.name().equals("autoPassPhases"))
+                    return parseAutoPassPhases(cookie.value());
             }
             for (Cookie cookie : cookies) {
                 if (cookie.name().equals("autoPass") && cookie.value().equals("false"))
@@ -260,6 +475,19 @@ public class GameRequestHandler extends LotroServerRequestHandler implements Uri
             }
         }
         return _autoPassDefault;
+    }
+
+    /** The phases in the page's cookie, joined with "0"; empty when the player passes in none, unknown names skipped. */
+    static Set<Phase> parseAutoPassPhases(String value) {
+        Set<Phase> result = new HashSet<>();
+        for (String phase : value.split("0")) {
+            try {
+                result.add(Phase.valueOf(phase));
+            } catch (IllegalArgumentException exp) {
+                // Not a phase (the empty value of no phase at all, or a name the server no longer has)
+            }
+        }
+        return result;
     }
 
     private class SerializationVisitor implements ParticipantCommunicationVisitor {

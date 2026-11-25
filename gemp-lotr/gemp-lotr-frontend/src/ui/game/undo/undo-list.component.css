@@ -1,0 +1,72 @@
+/* The list of places to go back to (game.css "Undo and revert": .undoList, .undoPoints, .undoPoint, .undoGo) */
+.gd-undo-list__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4em;
+}
+
+.gd-undo-list__note {
+  margin: 0.25em 0 0;
+  font-size: 90%;
+  opacity: 0.85;
+}
+
+/* It reads as a list: one bordered box, a heading for each turn and phase, a line between the rows */
+.gd-undo-list__points {
+  max-height: 22em;
+  overflow-y: auto;
+  border: 1px solid var(--theme-game-undo-line);
+  border-radius: var(--theme-game-undo-box-radius);
+}
+
+.gd-undo-list__when {
+  padding: 0.25em 0.6em;
+  background: var(--theme-game-undo-heading-bg);
+  font-size: 85%;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.gd-undo-list__point {
+  padding: 0.4em 0.6em;
+  border-top: 1px solid var(--theme-game-undo-rule);
+}
+
+.gd-undo-list__go {
+  min-width: 6.5em;
+  margin-right: 0.8em;
+  padding: 0.25em 0.6em;
+  border: 1px solid var(--theme-game-undo-edge);
+  border-radius: var(--theme-game-undo-radius);
+  background: var(--theme-game-undo-own);
+  color: var(--theme-game-undo-on-tier);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gd-undo-list__go[data-look='replays'] {
+  background: var(--theme-game-undo-replays);
+}
+
+.gd-undo-list__go[data-look='revealed'] {
+  background: var(--theme-game-undo-revealed);
+}
+
+.gd-undo-list__go:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Under the label, lined up with it (past the button) */
+.gd-undo-list__why,
+.gd-undo-list__off {
+  margin-left: 7.3em;
+}
+
+.gd-undo-list__off {
+  margin-top: 0.25em;
+  font-size: 90%;
+  opacity: 0.85;
+}

@@ -1,0 +1,91 @@
+{
+	id: real-opening
+	title: How a game is set up
+	note: The game's own opening, played: the bid, the choice of going first, the starting fellowship, the opening draw and the mulligan.
+	format: scenario
+	cards: {
+		freeps: {
+			frodo: 10_121
+			aragorn: 4_109
+			gandalf: 0_64
+			servant1: 1_83
+			swordarm: 1_116
+			boromir: 0_65
+		}
+		shadow: {
+			oppFrodo: 10_121
+			runner1: 1_178
+			runner2: 1_178
+			bowman: 2_60
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	sites: {
+		freeps: 1_323, 1_331, 1_340, 2_118
+		shadow: 1_323, 1_331, 1_340, 2_118
+	}
+	options: {
+		autoPass: true
+	}
+	opponent: {
+		fallback: pass
+	}
+	setup: {
+		opening: game
+		freeps: {
+			deck: boromir
+		}
+	}
+	steps: [
+		{
+			id: bid
+			when: human, bid
+			messages: [
+				Each player bids burdens for the right to choose who goes first.  Bid one.
+			]
+			allow: number(1)
+		}
+		{
+			when: opponent, bid
+			answer: number(0)
+		}
+		{
+			id: first
+			when: human, goFirst
+			messages: [
+				You bid more, so you choose: go first.
+			]
+			allow: option(Go first)
+		}
+		{
+			id: fellowship
+			when: human, startingFellowship
+			until: human, mulligan
+			messages: [
+				Your starting fellowship: up to 4 twilight of companions.  Start with Aragorn.
+			]
+			allow: choose(aragorn), pass
+			answer: choose(aragorn), pass
+		}
+		{
+			id: mulligan
+			checkpoint: true
+			when: human, mulligan
+			messages: [
+				Your opening hand is drawn: {hand} cards, as the deck is small.  Keep them.
+			]
+			allow: option(No)
+		}
+		{
+			when: human, action, phase(fellowship), turn(1)
+			messages: [
+				The first turn: yours.  You start with {burdens} burden(s): the one you bid.
+			]
+			allow: pass
+			end: complete
+		}
+	]
+}

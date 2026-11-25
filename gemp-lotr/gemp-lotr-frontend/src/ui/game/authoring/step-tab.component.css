@@ -1,0 +1,71 @@
+/*
+ * The Step tab (the legacy .sa-tab-step forms): not scoped, so that the parts of the step's form (step/) share these.
+ * Every rule starts at gd-game-author-step.
+ */
+
+gd-game-author-step {
+  display: block;
+}
+
+gd-game-author-step .gd-author-step__section {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-field-border);
+}
+
+gd-game-author-step .gd-author-panel__body .gd-author-step__section:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+gd-game-author-step .gd-author-step__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+gd-game-author-step .gd-author-step__heading[data-kids] {
+  margin-top: 9px;
+}
+
+gd-game-author-step .gd-author-step__block {
+  display: block;
+  margin: 3px 0;
+}
+
+gd-game-author-step .gd-author-input.gd-author-step__short {
+  flex: 0 0 76px;
+  width: 76px;
+}
+
+gd-game-author-step select.gd-author-input {
+  flex: 0 1 auto;
+  padding: 1px 2px;
+}
+
+gd-game-author-step textarea.gd-author-input {
+  resize: vertical;
+}
+
+/* a field written as the file has it wraps a long line (it grows to show it) rather than scrolling sideways */
+gd-game-author-step textarea.gd-author-code {
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: hidden;
+}
+
+/* the flags in a line: the name field takes what is left of it */
+gd-game-author-step .gd-author-when__flags .gd-author-field {
+  flex: 1;
+  min-width: 140px;
+  margin: 0;
+}
+
+gd-game-author-step .gd-author-when__flags .gd-author-field__label {
+  flex: 0 0 auto;
+}
+
+gd-game-author-step .gd-author-field__control > :is(select, .gd-author-input.gd-author-step__short) {
+  flex: 0 0 auto;
+}

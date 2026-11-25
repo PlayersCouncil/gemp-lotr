@@ -21,7 +21,8 @@ public class SortAndFilterCards {
 
         var formats = params.getOrDefault("format", new ArrayList<>());
         LotroFormat currentFormat = null;
-        if(formats.size() == 1) {
+        //(a caller with no formats to hand, such as a puzzle's slot being checked, passes none: format names then mean nothing)
+        if(formats.size() == 1 && formatLibrary != null) {
             currentFormat = formatLibrary.getFormat(formats.getFirst());
         }
         var blocks = params.getOrDefault("block", new ArrayList<>());
@@ -318,7 +319,7 @@ public class SortAndFilterCards {
             if(isJSInvalidString(set))
                 continue;
 
-            LotroFormat format = formatLibrary.getFormat(set);
+            LotroFormat format = formatLibrary == null ? null : formatLibrary.getFormat(set);
 
             if (format != null) {
                 String invalid = "";

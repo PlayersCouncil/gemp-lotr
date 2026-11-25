@@ -143,12 +143,23 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
 
     @Override
     public void cardCreated(PhysicalCard card, boolean overrideOwnerVisibility, boolean forceVisible) {
-        boolean publicDiscard = card.getZone() == Zone.DISCARD && _format.discardPileIsPublic();
-        if (forceVisible
+        if (showsCard(_self, card, _format, overrideOwnerVisibility, forceVisible))
+            appendEvent(new GameEvent(PUT_CARD_INTO_PLAY).card(card));
+    }
+
+    /**
+     * The one reading of whether a player is shown a card where it now lies: in a zone everybody sees, in a discard
+     * pile where those are public, or in a zone of the player's own that its owner sees.  What a client is sent goes
+     * by this, and so does anything that keeps count of what a player has been shown (InformationLedger).
+     * @param overrideOwnerVisibility The card's owner is shown it whatever zone it is in.
+     * @param forceVisible Everybody is shown it whatever zone it is in.
+     */
+    public static boolean showsCard(String viewer, PhysicalCard card, LotroFormat format, boolean overrideOwnerVisibility, boolean forceVisible) {
+        boolean publicDiscard = card.getZone() == Zone.DISCARD && format.discardPileIsPublic();
+        return forceVisible
                 || card.getZone().isPublic()
                 || publicDiscard
-                || ((overrideOwnerVisibility || card.getZone().isVisibleByOwner()) && card.getOwner().equals(_self)))
-            appendEvent(new GameEvent(PUT_CARD_INTO_PLAY).card(card));
+                || ((overrideOwnerVisibility || card.getZone().isVisibleByOwner()) && card.getOwner().equals(viewer));
     }
 
     @Override
@@ -169,11 +180,7 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     public void cardsRemoved(String playerPerforming, Collection<PhysicalCard> cards, boolean forceVisible) {
         Set<PhysicalCard> removedCardsVisibleByPlayer = new HashSet<>();
         for (PhysicalCard card : cards) {
-            boolean publicDiscard = card.getZone() == Zone.DISCARD && _format.discardPileIsPublic();
-            if (forceVisible
-                    || card.getZone().isPublic()
-                    || publicDiscard
-                    || (card.getZone().isVisibleByOwner() && card.getOwner().equals(_self)))
+            if (showsCard(_self, card, _format, false, forceVisible))
                 removedCardsVisibleByPlayer.add(card);
         }
         if (removedCardsVisibleByPlayer.size() > 0)
@@ -245,6 +252,22 @@ public class GameCommunicationChannel implements GameStateListener, LongPollable
     public void decisionRequired(String playerId, AwaitingDecision decision) {
         if (playerId.equals(_self))
             appendEvent(new GameEvent(DECISION).awaitingDecision(decision).participantId(playerId));
+    }
+
+    @Override
+    public void gameReverted(String requester, String tier, String message, int skipFrom) {
+        appendEvent(new GameEvent(GAME_REVERTED).participantId(requester).tier(tier).message(message).index(skipFrom));
+    }
+
+    /** How many events are waiting to be taken.  For a channel nobody takes from (a recording), all it was ever sent. */
+    public synchronized int eventCount() {
+        return _events.size();
+    }
+
+    @Override
+    public void scenarioEvent(String playerId, String json) {
+        if (playerId.equals(_self))
+            appendEvent(new GameEvent(SCENARIO).participantId(playerId).scenario(json));
     }
 
     @Override

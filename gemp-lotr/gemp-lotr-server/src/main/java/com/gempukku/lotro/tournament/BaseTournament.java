@@ -552,7 +552,7 @@ public abstract class BaseTournament implements Tournament {
                         }
 
                         String label = "Round " + i;
-                        String url = "https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=" +
+                        String url = "https://play.lotrtcgpc.net/gemp-lotr/ng/game?replayId=" +
                                 playerName.replace("_", "%5F") + "$" + replayId;
 
                         rounds.add(createEntry(label, url));
@@ -593,6 +593,10 @@ public abstract class BaseTournament implements Tournament {
 
             if (_players.contains(playerName)) {
                 return false;
+            }
+            var removed = _tournamentInfo._params.removedPlayers;
+            if (removed != null && removed.contains(playerName)) {
+                return false; // an admin took this player out of the tournament's queue
             }
             _tournamentService.recordTournamentPlayer(_tournamentId, playerName, lotroDeck);
             issuePlayerMaterial(playerName);

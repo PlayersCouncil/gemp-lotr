@@ -1,0 +1,353 @@
+// The table check: the Angular game page's table against game.html, without a server. Each recorded game of
+// ../../src/testing/game-recordings is shown on both pages as it stood after each step, and the pages are compared:
+// the screen (pixels) and the game as shown (controls.mjs readGameState).
+//
+// Both pages are served from disk (../stub-server.mjs) and get the game as the recording's server sent it up to that
+// step, answer by answer, without the decisions (so each page asks for the next answer at once). So
+// no dialog is open and no card is offered: what is compared is the table itself (G2 of trymarz/gemp-lotr-private#27). The decisions are compared by the game check
+// (run.mjs), which plays real games.
+//
+//   node game/table.mjs [--only <recording,...>] [--sizes 1366x768,...] [--steps last|all] [--out report-game-table]
+//                       [--tolerance 60] [--theme classic] [--step <n>: only that step of each recording]
+//                       [--generated <count> [--generated-seed <first>]: games made up from a seed instead]
+//
+// To look into a difference: `--eval "<expression>"` prints what the expression gives in both pages instead of
+// comparing them (at the last step of each chosen recording), e.g.
+//   node game/table.mjs --only opening --sizes 1366x768 --eval "document.querySelector('.phase, [data-game=phase]').getBoundingClientRect().toJSON()"
+// and `--boxes "<legacy selector> | <angular selector>"` prints the box of every match of each selector side by side.
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseArgs } from 'node:util';
+import { BROWSER_NAME, launchBrowser } from '../browser.mjs';
+import { compareScreens } from '../compare.mjs';
+import { routeToStub, STUB_ORIGIN } from '../stub-server.mjs';
+import { compareBoxes } from '../compare.mjs';
+import { acceptedGameProblem } from '../accepted.mjs';
+import { ANGULAR_CONTRACT, cardPoint, LEGACY, readGameBoxes, readGameState } from './controls.mjs';
+import { makeGesture, pointTarget } from './matrix.mjs';
+import { GAME_ID, inPage, routeGame, settled } from './stub-game.mjs';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const RECORDINGS = path.resolve(HERE, '../../src/testing/game-recordings');
+
+const { values: options } = parseArgs({
+  options: {
+    only: { type: 'string' },
+    sizes: { type: 'string', default: '1280x800,1366x768,1920x1080' },
+    steps: { type: 'string', default: 'all' },
+    out: { type: 'string', default: 'report-game-table' },
+    tolerance: { type: 'string', default: '60' },
+    theme: { type: 'string', default: 'classic' },
+    // One page at a time in Firefox, as the game check (its one mouse for the whole browser)
+    workers: { type: 'string', default: BROWSER_NAME === 'firefox' ? '1' : '4' },
+    step: { type: 'string' },
+    'no-decisions': { type: 'boolean', default: false },
+    // A setting's cookie for both pages, e.g. --cookie alwaysDropDown=true (may be given several times)
+    cookie: { type: 'string', multiple: true, default: [] },
+    eval: { type: 'string' },
+    boxes: { type: 'string' },
+    // A gesture of the matrix (matrix.mjs) made on both pages before they are read, in order (may be given several
+    // times): "shiftClick@card:25" (a card by its id), "press@point:5,5" or "press@<legacy selector>|<angular selector>"
+    gesture: { type: 'string', multiple: true, default: [] },
+    // Games made up from a seed (../../src/testing/game/generated-game.ts) instead of the recordings: how many, and
+    // the first seed (generated-<seed> in the report)
+    generated: { type: 'string' },
+    'generated-seed': { type: 'string', default: '1' },
+    // Where the parts are instead of the pixels (a theme laid out as the legacy page): every card and the panels around
+    // the table, each within --margin px (controls.mjs readGameBoxes)
+    geometry: { type: 'boolean', default: false },
+    margin: { type: 'string', default: '2' },
+  },
+});
+const OUT = path.resolve(HERE, '..', options.out);
+const TOLERANCE = Number(options.tolerance);
+/** Opens one page on the game as it stood after `count` exchanges; `snapshot()` reads it once it stands still. */
+async function open(browser, kind, recording, count, size) {
+  const [width, height] = size.split('x').map(Number);
+  const context = await browser.newContext({ viewport: { width, height } });
+  const log = [];
+  const errors = [];
+  await routeToStub(context, log);
+  let waiting = await routeGame(context, recording, count, log, { decisions: !options['no-decisions'] });
+  // The same settings on both pages (cookies of the stub's origin)
+  await context.addCookies(
+    [['animation-speed', '4'], ['gempGameTheme', options.theme], ...options.cookie.map((pair) => pair.split('='))].map(
+      ([name, value]) => ({ name, value, domain: new URL(STUB_ORIGIN).hostname, path: '/gemp-lotr' }),
+    ),
+  );
+  const page = await context.newPage();
+  page.on('pageerror', (error) => errors.push(String(error)));
+  page.on('console', (message) => {
+    if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) errors.push(message.text());
+  });
+  const pagePath = kind === 'legacy' ? '/gemp-lotr/game.html' : '/gemp-lotr/ng/game';
+  await page.goto(`${STUB_ORIGIN}${pagePath}?gameId=${GAME_ID}`);
+  await page.mouse.move(1, 1);
+  const select = kind === 'legacy' ? LEGACY : ANGULAR_CONTRACT;
+  return {
+    page,
+    select,
+    async snapshot(keepMouse = false) {
+      if (!keepMouse) await page.mouse.move(1, 1);
+      await settled(page, waiting);
+      return {
+        screen: await page.screenshot({
+          mask: select.masks.map((selector) => page.locator(selector)),
+          maskColor: '#ff00ff',
+          style: select.screenshotStyle,
+        }),
+        state: await inPage(page, readGameState, { kind }),
+        boxes: options.geometry ? await inPage(page, readGameBoxes, { kind }) : null,
+        problems: [
+          ...errors.splice(0),
+          ...log.splice(0).filter((line) => !/favicon|site\.webmanifest|apple-touch/.test(line)),
+        ],
+      };
+    },
+    /** The page loaded again: the server gives it the same game from the start. */
+    async reload() {
+      await context.unroute(`${STUB_ORIGIN}/gemp-lotr-server/**`);
+      waiting = await routeGame(context, recording, count, log, { decisions: !options['no-decisions'] });
+      await page.reload();
+    },
+    close: () => context.close(),
+  };
+}
+
+/** The gestures of --gesture, made one after the other on a page that stands still. */
+async function makeGestures(shown, kind) {
+  if (options.gesture.length === 0) return;
+  await settled(shown.page);
+  for (const spec of options.gesture) {
+    const at = spec.indexOf('@');
+    const [gesture, where] = [spec.slice(0, at), spec.slice(at + 1)];
+    let target;
+    if (where.startsWith('point:')) {
+      const [x, y] = where.slice('point:'.length).split(',').map(Number);
+      target = pointTarget({ x, y });
+    } else if (where.startsWith('card:')) {
+      const point = await inPage(shown.page, cardPoint, { kind, id: where.slice('card:'.length) });
+      if (!point?.x) throw new Error(`${spec}: the card can't be reached on the ${kind} page`);
+      target = pointTarget(point);
+    } else {
+      const [legacySelector, angularSelector] = where.split('|').map((part) => part.trim());
+      target = shown.page.locator(kind === 'legacy' ? legacySelector : (angularSelector ?? legacySelector)).first();
+    }
+    await makeGesture(shown.page, gesture, target);
+  }
+}
+
+/** Opens one page on the game and reads it (or, with `expression`, what the expression gives in it). */
+async function show(browser, kind, recording, count, size, expression = null) {
+  const shown = await open(browser, kind, recording, count, size);
+  await makeGestures(shown, kind);
+  let result;
+  if (expression !== null) {
+    await settled(shown.page);
+    result = await shown.page.evaluate(expression).catch((error) => `failed: ${error.message.split('\n')[0]}`);
+  } else {
+    result = await shown.snapshot(options.gesture.length > 0);
+  }
+  await shown.close();
+  return result;
+}
+
+/**
+ * What the table itself doesn't show, on the game's last state: each tab of the tab box, and each player's other
+ * piles opened. One gesture after the other on a page; the same on both.
+ */
+const VIEWS = [
+  { name: 'settings tab', act: (shown) => shown.page.locator(shown.select.tab('settings')).click() },
+  { name: 'options tab', act: (shown) => shown.page.locator(shown.select.tab('options')).click() },
+  { name: 'players tab', act: (shown) => shown.page.locator(shown.select.tab('players')).click() },
+  { name: 'chat tab again', act: (shown) => shown.page.locator(shown.select.tab('chat')).click() },
+  { name: "the first player's other piles", act: (shown) => shown.page.locator(shown.select.statsToggle(0)).click() },
+  { name: "the second player's other piles", act: (shown) => shown.page.locator(shown.select.statsToggle(1)).click() },
+  { name: 'settings tab, piles open', act: (shown) => shown.page.locator(shown.select.tab('settings')).click() },
+];
+
+/** The recordings whose last state is also compared view by view (VIEWS) and, on the Angular page, after a reload. */
+const WITH_VIEWS = ['fellowship-play', 'spectator'];
+
+function stateDifferences(a, b) {
+  const differences = [];
+  for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
+    const [left, right] = [JSON.stringify(a[key]), JSON.stringify(b[key])];
+    if (left !== right) differences.push(`${key}: legacy ${left} / angular ${right}`);
+  }
+  return differences;
+}
+
+/** The generated games (--generated), by name: the generator is TypeScript, built here with esbuild. */
+async function generatedGames(count, first) {
+  const { build } = await import('esbuild');
+  const built = await build({
+    entryPoints: [path.resolve(HERE, '../../src/testing/game/generated-game.ts')],
+    bundle: true,
+    format: 'esm',
+    platform: 'node',
+    write: false,
+    logLevel: 'silent',
+  });
+  const code = Buffer.from(built.outputFiles[0].text).toString('base64');
+  const { generatedGame } = await import(`data:text/javascript;base64,${code}`);
+  return new Map(Array.from({ length: count }, (_, i) => [`generated-${first + i}`, generatedGame(first + i)]));
+}
+
+const generated = options.generated
+  ? await generatedGames(Number(options.generated), Number(options['generated-seed']))
+  : new Map();
+const names = (
+  options.generated
+    ? [...generated.keys()]
+    : fs
+        .readdirSync(RECORDINGS)
+        .filter((file) => file.endsWith('.json'))
+        .map((file) => file.replace(/\.json$/, ''))
+        .sort()
+).filter((name) => !options.only || options.only.split(',').includes(name));
+
+const jobs = [];
+for (const name of names) {
+  const recording = generated.get(name) ?? JSON.parse(fs.readFileSync(path.join(RECORDINGS, `${name}.json`), 'utf8'));
+  // Steps that sent nothing since the one before show the same table: once is enough
+  const steps = recording.steps.filter((step, i, all) => i === 0 || step.exchanges !== all[i - 1].exchanges);
+  const chosen = options.step
+    ? [recording.steps[Number(options.step)]].filter(Boolean)
+    : options.steps === 'last'
+      ? steps.slice(-1)
+      : steps;
+  for (const size of options.sizes.split(',')) {
+    for (const step of chosen) {
+      const views = WITH_VIEWS.includes(name) && step === steps.at(-1) && !options.eval && !options.boxes;
+      jobs.push({ name, recording, step, size, views });
+    }
+  }
+}
+
+if (options.eval || options.boxes) {
+  const boxesOf = (selector) =>
+    `Array.from(document.querySelectorAll(${JSON.stringify(selector)})).map((el) => { const b = el.getBoundingClientRect(); return [b.left, b.top, b.width, b.height].map((n) => Math.round(n * 100) / 100).join(' ') + ' ' + el.textContent.trim().slice(0, 20); })`;
+  const [legacySelector, angularSelector] = (options.boxes ?? '').split('|').map((part) => part.trim());
+  const browser = await launchBrowser();
+  for (const job of jobs.filter((j, i, all) => all[i + 1]?.name !== j.name || all[i + 1]?.size !== j.size)) {
+    for (const kind of ['legacy', 'angular']) {
+      const expression =
+        options.eval ?? boxesOf(kind === 'legacy' ? legacySelector : (angularSelector ?? legacySelector));
+      const value = await show(browser, kind, job.recording, job.step.exchanges, job.size, expression);
+      console.log(`${job.name} ${job.size} ${kind}:`, JSON.stringify(value, null, 1));
+    }
+  }
+  await browser.close();
+  process.exit(0);
+}
+
+fs.rmSync(OUT, { recursive: true, force: true });
+fs.mkdirSync(OUT, { recursive: true });
+const browser = await launchBrowser();
+const results = [];
+let next = 0;
+async function worker() {
+  while (next < jobs.length) {
+    const job = jobs[next++];
+    const { name, recording, step, size } = job;
+    const legacy = await show(browser, 'legacy', recording, step.exchanges, size);
+    const angular = await show(browser, 'angular', recording, step.exchanges, size);
+    const base = `${name}-${size}-${String(recording.steps.indexOf(step)).padStart(2, '0')}`;
+    record(name, size, step.name, base, legacy, angular);
+    if (job.views) await compareViews(job);
+  }
+}
+
+/** Compares two snapshots and keeps the result, with their pictures. */
+function record(name, size, step, base, legacy, angular, labels = ['legacy', 'angular']) {
+  const screens = compareScreens(legacy.screen, angular.screen, [], true);
+  const differences = [
+    ...(options.geometry
+      ? compareBoxes(legacy.boxes ?? {}, angular.boxes ?? {}, Number(options.margin))
+      : screens.outside > TOLERANCE
+        ? [`screen: ${screens.outside} pixels differ`]
+        : []),
+    ...stateDifferences(legacy.state, angular.state),
+    ...legacy.problems.map((problem) => `${labels[0]}: ${problem}`),
+    ...angular.problems.map((problem) => `${labels[1]}: ${problem}`),
+  ].filter(
+    // What the owner accepted (accepted.mjs GAME_ACCEPTED) doesn't count: asked as the game check (run.mjs) words a
+    // problem, "<step>: screen: <n> px differ", so one entry serves both checks (only the legacy and the Angular page
+    // are compared against it, not the Angular page with itself after a reload)
+    (problem) =>
+      labels[0] !== 'legacy' ||
+      !acceptedGameProblem(
+        name,
+        size,
+        `${step}: ${problem.replace(/^screen: (\d+) pixels differ$/, 'screen: $1 px differ')}`,
+      ),
+  );
+  fs.writeFileSync(path.join(OUT, `${base}-legacy.png`), legacy.screen);
+  fs.writeFileSync(path.join(OUT, `${base}-angular.png`), angular.screen);
+  if (screens.image) fs.writeFileSync(path.join(OUT, `${base}-diff.png`), screens.image);
+  results.push({ name, size, step, base, pixels: screens.outside, differences });
+  console.log(
+    `${differences.length ? 'DIFFER' : 'same  '} ${name} ${size} "${step}"${differences.length ? `: ${differences[0]}` : ''}`,
+  );
+}
+
+/**
+ * The views of VIEWS on both pages, one after the other; then the Angular page loaded again, which must show what it
+ * showed before (the open tab and piles are the page's own: D10 of trymarz/gemp-lotr-private#27).
+ */
+async function compareViews({ name, recording, step, size }) {
+  const legacy = await open(browser, 'legacy', recording, step.exchanges, size);
+  const angular = await open(browser, 'angular', recording, step.exchanges, size);
+  await legacy.snapshot();
+  await angular.snapshot();
+  // A dialog over the page (the end of the game's) is closed first
+  for (const shown of [legacy, angular]) {
+    const close = shown.page.locator('.ui-dialog-titlebar-close, .gd-dialog__close').filter({ visible: true });
+    for (let n = await close.count(); n > 0; n--) await close.last().click();
+  }
+  let before = null;
+  for (const [index, view] of VIEWS.entries()) {
+    await view.act(legacy);
+    await view.act(angular);
+    before = await angular.snapshot();
+    record(name, size, view.name, `${name}-${size}-view${index}`, await legacy.snapshot(), before);
+  }
+  await angular.reload();
+  const after = await angular.snapshot();
+  record(name, size, 'the Angular page before and after a reload', `${name}-${size}-reload`, before, after, [
+    'before',
+    'after',
+  ]);
+  await legacy.close();
+  await angular.close();
+}
+
+await Promise.all(Array.from({ length: Math.min(Number(options.workers), jobs.length) }, worker));
+await browser.close();
+
+results.sort((a, b) => a.base.localeCompare(b.base));
+const escape = (text) => String(text).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+fs.writeFileSync(
+  path.join(OUT, 'index.html'),
+  `<!doctype html><meta charset="utf-8"><title>Game table check</title>
+<style>body{font:14px sans-serif;background:#222;color:#eee}img{max-width:32%;border:1px solid #555}
+.differ{color:#f88}.same{color:#8f8}li{white-space:pre-wrap}</style>
+<h1>Game table check: ${results.filter((r) => !r.differences.length).length} of ${results.length} the same</h1>
+${results
+  .map(
+    (r) => `<h3 class="${r.differences.length ? 'differ' : 'same'}">${escape(r.name)} ${r.size} "${escape(r.step)}": ${
+      r.differences.length ? 'DIFFERS' : 'same'
+    } (${r.pixels} px)</h3>
+<ul>${r.differences.map((d) => `<li>${escape(d)}</li>`).join('')}</ul>
+${r.differences.length ? `<img src="${r.base}-legacy.png" title="legacy"><img src="${r.base}-angular.png" title="angular"><img src="${r.base}-diff.png" title="difference">` : ''}`,
+  )
+  .join('\n')}`,
+);
+fs.writeFileSync(path.join(OUT, 'results.json'), JSON.stringify(results, null, 1));
+const differing = results.filter((r) => r.differences.length);
+console.log(
+  `\n${results.length - differing.length} of ${results.length} the same; report: ${path.join(OUT, 'index.html')}`,
+);
+process.exit(differing.length ? 1 : 0);

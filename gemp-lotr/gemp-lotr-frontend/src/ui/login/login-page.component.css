@@ -1,0 +1,267 @@
+/*
+ * The login page: the legacy index.html (src/Login/index.css, with jQuery UI's "dark-hive" buttons). The legacy page
+ * was laid out in normal flow on a 16px body that didn't scroll, its picture behind everything; the host is that body
+ * here (the document's own is the deck builder's: 12px, see styles/base.css).
+ */
+
+/* body and .centerContainer */
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+  height: 100%;
+  padding-top: 150px;
+  overflow: hidden;
+  background: var(--theme-login-bg);
+  font-family: var(--theme-font-text);
+  font-size: medium;
+}
+
+/* Outside test mode the page scrolls up and down, so a narrow window reaches the stacked PC SSO column */
+:host(:is([data-pc='nobody'], [data-pc='pc'], [data-pc='password'])) {
+  overflow: hidden auto;
+}
+
+/* For a theme that draws a logo; classic has none */
+.gd-login__brand {
+  display: none;
+}
+
+.gd-login__banner {
+  display: block;
+  width: 105vw;
+  margin: -5px 0 0;
+  padding: 10px;
+  background: var(--theme-login-band-bg);
+  color: var(--theme-login-banner);
+  font-size: 500%;
+  text-align: center;
+}
+
+.gd-login__content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+
+/* .login: one row each for the status, the message and the form, each as wide as its text and centred */
+.gd-login__panel {
+  display: grid;
+  row-gap: 10px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 125%;
+}
+
+.gd-login__status,
+.gd-login__error,
+.gd-login__notice,
+.gd-login__refusal,
+.gd-login__form {
+  margin: 0 auto;
+}
+
+.gd-login__status,
+.gd-login__notice,
+.gd-login__form {
+  color: var(--theme-text);
+}
+
+.gd-login__error,
+.gd-login__refusal {
+  color: var(--theme-login-error);
+}
+
+/* .interaction: the legacy form was a run of text, fields and buttons separated by <br/>: one line each */
+.gd-login__intro,
+.gd-login__field,
+.gd-login__actions {
+  display: block;
+  margin: 0;
+}
+
+.gd-login__input {
+  font-size: 90%;
+}
+
+/*
+ * A jQuery UI text button (.ui-button.ui-widget > .ui-button-text, with index.css's 70% text): 1.1em of the form's
+ * 20px, the text at 70% of that (15.4px), line-height 1.4, padding .2em .3em on the button plus .2em .3em on the text,
+ * each rounded down to the browser's 1/64px as it laid them out (4.390625 + 3.078125, 6.59375 + 4.609375)
+ */
+.gd-button {
+  margin: 0 2.2px 0 0;
+  padding: 7.46875px 11.203125px;
+  font-size: 15.4px;
+  font-weight: normal;
+  line-height: 1.4;
+  vertical-align: baseline;
+}
+
+.gd-login__forgot {
+  display: inline-block;
+  max-width: 300px;
+  margin: 0;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+.gd-login__contact {
+  color: var(--theme-login-contact);
+}
+
+a {
+  color: var(--theme-login-link);
+}
+
+a:visited {
+  color: var(--theme-login-link-visited);
+}
+
+/* .info: the full window's width, whatever the page's */
+.gd-login__info {
+  width: 100vw;
+  margin: 0 0 150px calc(-50vw + 50%);
+  background: var(--theme-login-band-bg);
+  color: var(--theme-text);
+  text-align: center;
+}
+
+.gd-login__shoutout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.gd-login__force {
+  height: 20px;
+}
+
+/* The legacy page had no way back from the register form */
+.gd-login__actions > [data-action='login'] {
+  display: none;
+}
+
+/* Sign in with PC Account and Register PC Account (optional mode): links drawn as the buttons are */
+a.gd-button,
+a.gd-button:visited {
+  display: inline-block;
+  color: var(--theme-widget-text);
+  text-decoration: none;
+}
+
+a.gd-button:hover,
+a.gd-button:focus-visible {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+/*
+ * `optional` mode, nobody: two columns, Legacy Login | PC SSO, with a rule between them as tall as the taller one;
+ * their tops and headings level. Stacked, the rule across, on a narrow window.
+ */
+.gd-login__columns {
+  display: grid;
+  grid-template-columns: auto 1px auto;
+  column-gap: 2em;
+  align-items: stretch;
+  margin: 0 auto;
+  color: var(--theme-text);
+}
+
+.gd-login__column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.gd-login__heading {
+  margin: 0 0 0.5em;
+  color: var(--theme-login-banner);
+  font-size: 125%;
+}
+
+/*
+ * Legacy Login's form: the labels in a column of their own and the two inputs flush (same left edge, same width); Login
+ * and the forgotten-password line centred under them, as the heading is over them
+ */
+.gd-login__column > .gd-login__form {
+  display: grid;
+  grid-template-columns: auto minmax(0, 14em);
+  align-items: center;
+  gap: 0.4em 0.5em;
+  margin: 0;
+}
+
+.gd-login__column .gd-login__field {
+  display: contents;
+}
+
+.gd-login__column .gd-login__input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.gd-login__column :is(.gd-login__actions, .gd-login__forgot) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  text-align: center;
+}
+
+.gd-login__rule {
+  width: 1px;
+  background: var(--theme-widget-border);
+}
+
+/* The two PC buttons, stacked, one width, centred under their heading */
+.gd-login__sso {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6em;
+}
+
+.gd-login__sso > .gd-button {
+  margin: 0;
+  text-align: center;
+}
+
+/*
+ * Outside test mode: the messages and the columns (or the profile list) in one box, the page's picture blurred
+ * through it and the bands' dark fill under the text where the browser can't blur
+ */
+.gd-login__box {
+  display: grid;
+  row-gap: 10px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1em 2em;
+  border-radius: var(--theme-radius);
+  background: var(--theme-login-band-bg);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 720px) {
+  .gd-login__columns {
+    grid-template-columns: auto;
+    row-gap: 1.2em;
+  }
+
+  .gd-login__rule {
+    width: auto;
+    height: 1px;
+  }
+
+  .gd-login__box {
+    padding: 1em;
+  }
+}

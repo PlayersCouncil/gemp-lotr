@@ -2,6 +2,7 @@ package com.gempukku.lotro.logic.decisions;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.gempukku.lotro.game.PhysicalCard;
+import com.gempukku.lotro.logic.GameSeed;
 
 import java.util.*;
 
@@ -10,11 +11,21 @@ public abstract class PlayerAssignMinionsDecision extends AbstractAwaitingDecisi
     private final List<PhysicalCard> _minions;
 
     public PlayerAssignMinionsDecision(int id, String text, Collection<PhysicalCard> freeCharacters, Collection<PhysicalCard> minions) {
+        this(id, text, freeCharacters, minions, null);
+    }
+
+    /**
+     * @param maxAssignable The most minions that can legally be assigned, which lets the client warn only when fewer
+     *                      than that are assigned; null if it is not known.
+     */
+    public PlayerAssignMinionsDecision(int id, String text, Collection<PhysicalCard> freeCharacters, Collection<PhysicalCard> minions, Integer maxAssignable) {
         super(id, text, AwaitingDecisionType.ASSIGN_MINIONS);
-        _freeCharacters = new LinkedList<>(freeCharacters);
-        _minions = new LinkedList<>(minions);
+        _freeCharacters = GameSeed.stableOrder(freeCharacters);
+        _minions = GameSeed.stableOrder(minions);
         setParam("freeCharacters", getCardIds(_freeCharacters));
         setParam("minions", getCardIds(_minions));
+        if (maxAssignable != null)
+            setParam("maxAssignable", String.valueOf(maxAssignable));
     }
 
     public PlayerAssignMinionsDecision(int id, String text, List<String> freeCharacterIds, List<String> minionIds) {
@@ -81,11 +92,13 @@ public abstract class PlayerAssignMinionsDecision extends AbstractAwaitingDecisi
         obj.put("text", getText());
         obj.put("freeCharacters", getDecisionParameters().get("freeCharacters"));
         obj.put("minions", getDecisionParameters().get("minions"));
+        if (getDecisionParameters().containsKey("maxAssignable"))
+            obj.put("maxAssignable", getDecisionParameters().get("maxAssignable"));
         return obj;
     }
 
     public static PlayerAssignMinionsDecision fromJson(JSONObject obj) {
-        return new PlayerAssignMinionsDecision(
+        PlayerAssignMinionsDecision decision = new PlayerAssignMinionsDecision(
                 obj.getInteger("id"),
                 obj.getString("text"),
                 Arrays.asList(obj.getObject("freeCharacters", String[].class)),
@@ -95,5 +108,9 @@ public abstract class PlayerAssignMinionsDecision extends AbstractAwaitingDecisi
                 throw new UnsupportedOperationException("Not implemented in training context");
             }
         };
+        String[] maxAssignable = obj.getObject("maxAssignable", String[].class);
+        if (maxAssignable != null)
+            decision.setParam("maxAssignable", maxAssignable);
+        return decision;
     }
 }

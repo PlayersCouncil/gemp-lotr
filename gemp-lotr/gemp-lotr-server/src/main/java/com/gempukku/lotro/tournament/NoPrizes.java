@@ -20,7 +20,7 @@ public class NoPrizes implements TournamentPrizes{
     }
 
     @Override
-    public String getPrizeDescription() {
-        return "No prizes";
+    public PrizeSummary getPrizeSummary() {
+        return PrizeSummary.of("No prizes");
     }
 }

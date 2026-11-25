@@ -1,0 +1,78 @@
+/* The search window: the filter panel on the left, the cards found on the right, scrolling */
+
+.gd-edit-search {
+  display: grid;
+  /* (the filter as wide as its two columns of fields; its cultures wrap under them) */
+  grid-template-columns: minmax(0, 480px) minmax(300px, 1fr);
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gd-edit-search__filters {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.gd-edit-search__results {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gd-edit-search__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.gd-edit-search__bound {
+  padding: 1px 8px;
+  border: 1px solid var(--theme-game-edit-spot-edge);
+  border-radius: 10px;
+  color: var(--theme-game-edit-mode-edit);
+}
+
+.gd-edit-search__count {
+  flex-grow: 1;
+}
+
+.gd-edit-search__clear {
+  font: inherit;
+}
+
+.gd-edit-search__problem {
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--theme-game-edit-problem-edge);
+  border-radius: 4px;
+  background: var(--theme-game-edit-problem-bg);
+  color: var(--theme-game-edit-problem-text);
+  font-size: 13px;
+}
+
+/* The cards found, as large as the theme's largest and scrolling */
+.gd-edit-search__cards {
+  --gd-card-fit: none;
+  --gd-card-max-height: 150px;
+  --gd-card-gap: 6px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gd-card-gap);
+  overflow-y: auto;
+}
+
+.gd-edit-search__cards > .gd-card {
+  cursor: pointer;
+}
+
+.gd-edit-search[data-loading] .gd-edit-search__cards {
+  opacity: 0.6;
+}

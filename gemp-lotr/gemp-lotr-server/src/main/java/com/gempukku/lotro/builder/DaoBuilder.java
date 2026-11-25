@@ -49,6 +49,7 @@ public class DaoBuilder {
         PlayerDAO dbPlayerDao = LoggingProxy.createLoggingProxy(PlayerDAO.class, new DbPlayerDAO(dbAccess, collectionDao));
         CachedPlayerDAO playerDao = new CachedPlayerDAO(dbPlayerDao);
         objectMap.put(PlayerDAO.class, playerDao);
+        objectMap.put(PlayerArgonauthDAO.class, LoggingProxy.createLoggingProxy(PlayerArgonauthDAO.class, new DbPlayerArgonauthDAO(dbAccess)));
 
         TransferDAO dbTransferDao = LoggingProxy.createLoggingProxy(TransferDAO.class, new DbTransferDAO(dbAccess));
         CachedTransferDAO transferDao = new CachedTransferDAO(dbTransferDao, extract(objectMap, MarkdownParser.class));
@@ -57,6 +58,8 @@ public class DaoBuilder {
         IpBanDAO dbIpBanDao = LoggingProxy.createLoggingProxy(IpBanDAO.class, new DbIpBanDAO(dbAccess));
         CachedIpBanDAO ipBanDao = new CachedIpBanDAO(dbIpBanDao);
         objectMap.put(IpBanDAO.class, ipBanDao);
+
+        objectMap.put(ScenarioDAO.class, LoggingProxy.createLoggingProxy(ScenarioDAO.class, new DbScenarioDAO(dbAccess)));
 
         objectMap.put(RtmdFeedbackDAO.class, LoggingProxy.createLoggingProxy(RtmdFeedbackDAO.class, new DbRtmdFeedbackDAO(dbAccess)));
 

@@ -12,17 +12,20 @@ import com.gempukku.lotro.logic.actions.SystemQueueAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.decisions.PlayerAssignMinionsDecision;
 import com.gempukku.lotro.logic.effects.AssignmentPhaseEffect;
+import com.gempukku.lotro.logic.timing.processes.AsksAgain;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class ShadowPlayerAssignsHisMinionsGameProcess implements GameProcess {
+public class ShadowPlayerAssignsHisMinionsGameProcess implements GameProcess, AsksAgain {
     private final PlayOrder _shadowOrder;
     private final String _playerId;
     private final Set<PhysicalCard> _leftoverMinions;
     private final GameProcess _followingGameProcess;
+    // Whether the assignment put to the player is still waiting for an answer (AsksAgain)
+    private boolean _asking;
 
     public ShadowPlayerAssignsHisMinionsGameProcess(PlayOrder shadowOrder, String playerId, Set<PhysicalCard> leftoverMinions, GameProcess followingGameProcess) {
         _shadowOrder = shadowOrder;
@@ -45,8 +48,11 @@ public class ShadowPlayerAssignsHisMinionsGameProcess implements GameProcess {
                                             CardType.COMPANION, CardType.ALLY),
                                     Filters.assignableToSkirmish(Side.SHADOW, true, true, false)));
 
+            Integer maxAssignable = MaximumAssignment.compute(game, Side.SHADOW, freePeopleTargets, minions);
+
+            _asking = true;
             game.getUserFeedback().sendAwaitingDecision(_playerId,
-                    new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions) {
+                    new PlayerAssignMinionsDecision(1, "Assign minions to companions or allies at home", freePeopleTargets, minions, maxAssignable) {
                         @Override
                         public void decisionMade(String result) throws DecisionResultInvalidException {
                             Map<PhysicalCard, Set<PhysicalCard>> assignments = getAssignmentsBasedOnResponse(result);
@@ -58,10 +64,31 @@ public class ShadowPlayerAssignsHisMinionsGameProcess implements GameProcess {
                             if (!game.getModifiersQuerying().isValidAssignments(game, Side.SHADOW, assignments))
                                 throw new DecisionResultInvalidException("Assignments are not valid for the effects affecting the cards");
 
+                            _asking = false;
                             game.getActionsEnvironment().addActionToStack(action);
                         }
                     });
         }
+    }
+
+    @Override
+    public boolean isAsking() {
+        return _asking;
+    }
+
+    @Override
+    public String askedPlayer() {
+        return _playerId;
+    }
+
+    /**
+     * Asked again, the minions and characters on offer are worked out afresh, as on the first asking; with no
+     * minion left to assign the player is not asked and the game carries on.
+     */
+    @Override
+    public void askAgain(LotroGame game) {
+        _asking = false;
+        process(game);
     }
 
     @Override

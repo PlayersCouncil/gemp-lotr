@@ -1,0 +1,5 @@
+/* The reasons, under the place they are of (game.css .undoWhy) */
+:host {
+  display: block;
+  margin: 0.25em 0 0;
+}

@@ -1,0 +1,34 @@
+# Scenarios
+
+Scripted games: tutorials, puzzles and sandboxes. One `.hjson` file per scenario, in whatever subfolders are
+convenient; campaign files (ordered lists of scenarios) go in `campaigns/`.
+
+Every scenario file in this folder is played through headless by `ScenarioCanonTest` as part of the ordinary test
+run, so a scenario that has fallen out of step with the cards or the rules fails the build.
+
+The file format is described at the top of `ScenarioParser` (gemp-lotr-server, package `com.gempukku.lotro.scenario`).
+The fullest worked example is `tutorials/basics-01-into-the-wild.hjson` here: three turns, a choice of two ways
+through its last one, and a `note` on everything that is not obvious. A short one is
+`gemp-lotr-server/src/test/resources/scenarios/into-the-wild-opening.hjson`.
+
+Scenarios can be written and changed in the game itself: Play > Scenarios, then Edit (admins). What that saves is
+the scenario written out afresh (`ScenarioWriter`), so anything said in a comment is lost; say it in a `note`
+(on the scenario, a step or a message), which is part of the scenario and is kept. Files in this folder are in the
+form the writer gives them, so that a save changes only what was changed.
+
+To see what a scenario's messages say with the game's numbers filled in, and every decision the game asks around
+them: `mvn test -pl gemp-lotr-server -Dtest=ScenarioCanonTest -DargLine="-Dscenario.explore=<part of the file name>"`.
+
+A message can show a picture that is not a card (`zoom: image:<file>`). Those are files in the web folder's
+`images/scenarios/` (`gemp-lotr-async/src/main/web/images/scenarios`), which has a card-shaped `placeholder.png` and
+a note of its own.
+
+A file with a mistake in it (a card it names and does not declare, a field nothing knows) cannot be played, and is
+not in the list of scenarios. Play > Scenarios says so underneath, with everything that is wrong with it, to admins
+and to whoever owns the file. Edit there opens it in the authoring tool with the mistaken parts left out; the tool
+shows what they were, and saving writes the file without them. A file that is not HJSON at all, or has no id, title,
+format, cards, sites or Ring-bearers, has to be put right by hand.
+
+A scenario is kept under the folder of its kind: `tutorials/`, `puzzles/` or `sandboxes/`, with whatever folders its
+author likes below that. The authoring tool puts a new one there, and moves a file that is somewhere else when it is
+saved (a scenario whose kind was changed, say). The same goes for an author's own folder.

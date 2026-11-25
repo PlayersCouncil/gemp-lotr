@@ -13,10 +13,17 @@ import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.bots.BotPlayer;
 import com.gempukku.lotro.bots.BotService;
+import com.gempukku.lotro.hall.GameTimer;
+import com.gempukku.lotro.scenario.LiveScenario;
+import com.gempukku.lotro.scenario.ScenarioDefinition;
+import com.gempukku.lotro.scenario.ScenarioRunLog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -45,6 +52,24 @@ public class LotroServer extends AbstractServer {
 
     private final ReadWriteLock _lock = new ReentrantReadWriteLock();
 
+    /**
+     * A scenario's player is given a day to finish and half an hour over any one decision.  The clock is only there
+     * to notice that somebody has gone, never to hurry anybody who is still reading.
+     */
+    public static final GameTimer SCENARIO_TIMER = new GameTimer(false, "Scenario", 60 * 60 * 24, 60 * 30);
+
+    /** The scenario each player is in the middle of, by player name.  A player has one at a time. */
+    private final Map<String, String> _scenarioGames = new HashMap<>();
+    private final Map<String, Object> _scenarioStartLocks = new ConcurrentHashMap<>();
+    /** Gives the scenarios' scripted opponents their answers, each after its pause. */
+    private final ScheduledExecutorService _scenarioTimer;
+    /** Keeps the record of scenario games.  Set once the services it needs exist; until then nothing is recorded. */
+    private ScenarioRunLog _scenarioRunLog;
+
+    public void setScenarioRunLog(ScenarioRunLog scenarioRunLog) {
+        _scenarioRunLog = scenarioRunLog;
+    }
+
     public LotroServer(DeckDAO deckDao, LotroCardBlueprintLibrary library, ChatServer chatServer,
             GameRecorder gameRecorder, MarkdownParser parser, BotService botService,
             PackOpener packOpener) {
@@ -55,6 +80,13 @@ public class LotroServer extends AbstractServer {
         _markdownParser = parser;
         _botService = botService;
         _packOpener = packOpener;
+
+        AtomicInteger threadNumber = new AtomicInteger();
+        _scenarioTimer = Executors.newScheduledThreadPool(2, runnable -> {
+            Thread thread = new Thread(runnable, "scenario-opponent-" + threadNumber.incrementAndGet());
+            thread.setDaemon(true);
+            return thread;
+        });
     }
 
     protected void cleanup() {
@@ -147,6 +179,10 @@ public class LotroServer extends AbstractServer {
                     _lotroCardBlueprintLibrary, gameSettings.timeSettings(), spectate, !gameSettings.competitive(),
                     gameSettings.hiddenGame(), tournamentName, _markdownParser, _botService, gameSettings.isSolo(),
                     extraInfo, _packOpener);
+            //What may be taken back: against a bot anything (the mediator sees to that); in a league whatever a casual
+            // game allows, until leagues have a setting of their own; in a tournament only one's own choices
+            if (!gameSettings.isSolo())
+                lotroGameMediator.setUndoPolicy(gameSettings.competitive() && gameSettings.league() == null ? UndoPolicy.TOURNAMENT : UndoPolicy.CASUAL);
             lotroGameMediator.addGameResultListener(
                 new GameResultListener() {
                     @Override
@@ -212,6 +248,221 @@ public class LotroServer extends AbstractServer {
             return lotroGameMediator;
         } finally {
             _lock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Starts a scenario for a player: a game against the scenario's scripted opponent, on the board and with the
+     * decks its file describes.  The game is not listed in the hall and nobody else can watch it.  If the player was
+     * in the middle of another scenario, that one is given up.
+     * @param format The scenario's format, already looked up.
+     * @param text Turns the text of the scenario's messages into what the client shows.
+     * @param fromCheckpoint Whether to pick up at the last checkpoint the player reached in their previous game of
+     *                       this same scenario, if that game is still known and reached one.  Otherwise, and if that
+     *                       cannot be done after all (the scenario has changed since), the game starts at the
+     *                       beginning.
+     * @return The game, set going and waiting on its first decision.
+     * @throws RuntimeException if the scenario's board cannot be laid out.  A scenario that passes the headless
+     * runner never does this.
+     */
+    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
+                                                LiveScenario.TextRenderer text, boolean fromCheckpoint) {
+        return createScenarioGame(player, scenario, format, text, fromCheckpoint, null);
+    }
+
+    /**
+     * @param campaign Where the scenario stands in its campaign, for the person's screen (see
+     *                 ScenarioLibrary.campaignInfo); null if it is in none.
+     */
+    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
+                                                LiveScenario.TextRenderer text, boolean fromCheckpoint, Map<String, Object> campaign) {
+        return createScenarioGame(player, scenario, format, text, fromCheckpoint, campaign, null, false);
+    }
+
+    /**
+     * @param picks For a puzzle with slots: the cards the solver picked (slot id -> blueprint), already checked (see
+     *              SlotBounds).  Null or empty for none: the puzzle is then laid out with its slots empty and held,
+     *              waiting for them (see LiveScenario.Holding), and nothing about that game is recorded.
+     * @param samePicks Whether to build the game with the picks of the player's previous game of this same scenario
+     *                  (Start again), if there was one; picks is then not looked at.  Picking up at a checkpoint does
+     *                  this by itself: a checkpoint belongs to the cards its game was built with.
+     */
+    public LotroGameMediator createScenarioGame(Player player, ScenarioDefinition scenario, LotroFormat format,
+                                                LiveScenario.TextRenderer text, boolean fromCheckpoint, Map<String, Object> campaign,
+                                                Map<String, String> picks, boolean samePicks) {
+        final String playerName = player.getName();
+        //One at a time for each player.  A second request waits for the first to finish, and then gives up the game
+        // the first one started, like any other request to start a scenario while in the middle of one.
+        synchronized (_scenarioStartLocks.computeIfAbsent(playerName, name -> new Object())) {
+            final String gameId;
+            final LotroGameMediator previous;
+
+            _lock.writeLock().lock();
+            try {
+                String previousId = _scenarioGames.get(playerName);
+                previous = previousId == null ? null : _runningGames.get(previousId);
+                gameId = String.valueOf(_nextGameId);
+                _nextGameId++;
+            } finally {
+                _lock.writeLock().unlock();
+            }
+
+            //Everything from here to the next lock is outside the server-wide one: it takes games' own locks, and
+            // laying out and replaying a game is real work.  Nobody else can reach the new game until it is registered.
+            GameJournal checkpoint = null;
+            Map<String, String> chosen = picks == null ? Map.of() : picks;
+            if (previous != null) {
+                //The previous game is either still going or finished within the last few minutes
+                boolean same = previous.getScenario() != null && previous.getScenario().Definition() == scenario;
+                //(the picks go with the game: Start again keeps them, and so does a checkpoint, which is a point in a
+                // game built with them)
+                if (same && (samePicks || (fromCheckpoint && chosen.isEmpty())))
+                    chosen = previous.getScenario().Picks();
+                if (fromCheckpoint && same && chosen.equals(previous.getScenario().Picks()))
+                    checkpoint = previous.checkpointJournal();
+                if (!previous.isFinished())
+                    previous.concede(player);
+            }
+
+            StartedScenario started = null;
+            if (checkpoint != null) {
+                started = startScenario(gameId, player, scenario, format, text, checkpoint, campaign, chosen);
+                String problem = started.mediator.getScenario().Table().FollowProblem();
+                if (problem != null) {
+                    log.warn("Scenario " + scenario.id + " v" + scenario.version + " could not be picked up at its checkpoint for "
+                            + playerName + " and was started from the beginning: " + problem);
+                    started.mediator.discardScenario();
+                    started = null;
+                }
+            }
+            if (started == null)
+                started = startScenario(gameId, player, scenario, format, text, null, campaign, chosen);
+            if (started.watch != null)
+                started.watch.keep();
+
+            _lock.writeLock().lock();
+            try {
+                _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
+                _runningGames.put(gameId, started.mediator);
+                _scenarioGames.put(playerName, gameId);
+            } finally {
+                _lock.writeLock().unlock();
+            }
+            return started.mediator;
+        }
+    }
+
+    /**
+     * Somebody writing a scenario sits over a decision for as long as it takes to write what is said about it.  The
+     * clock is still only there to notice that they have gone.
+     */
+    public static final GameTimer AUTHORING_TIMER = new GameTimer(false, "Authoring", 60 * 60 * 24 * 3, 60 * 60 * 12);
+
+    /**
+     * Seats somebody at a game of a scenario they are writing (see ScenarioAuthoring, which builds the game).  It
+     * takes the place of whatever scenario they were in the middle of, like any other scenario's game, but nothing
+     * about it is recorded: it is not a play of anything.  The new game is set going before the old one is given up,
+     * so that a draft which cannot be laid out leaves its author where they were.
+     * @throws RuntimeException if the scenario's board cannot be laid out.
+     */
+    public LotroGameMediator seatAuthoringGame(Player player, LiveScenario live) {
+        final String playerName = player.getName();
+        synchronized (_scenarioStartLocks.computeIfAbsent(playerName, name -> new Object())) {
+            final String gameId;
+            final LotroGameMediator previous;
+            _lock.writeLock().lock();
+            try {
+                String previousId = _scenarioGames.get(playerName);
+                previous = previousId == null ? null : _runningGames.get(previousId);
+                gameId = String.valueOf(_nextGameId);
+                _nextGameId++;
+            } finally {
+                _lock.writeLock().unlock();
+            }
+
+            if (_botService != null)
+                live.SetBot(_botService.scenarioBot());
+            LotroGameMediator mediator = new LotroGameMediator(gameId, live, AUTHORING_TIMER, false);
+            mediator.addGameResultListener(
+                new GameResultListener() {
+                    @Override
+                    public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                        _finishedGamesTime.put(gameId, new Date());
+                    }
+
+                    @Override
+                    public void gameCancelled() {
+                        _finishedGamesTime.put(gameId, new Date());
+                    }
+                });
+            mediator.startGame();
+
+            if (previous != null && !previous.isFinished())
+                previous.concede(player);
+
+            _lock.writeLock().lock();
+            try {
+                _chatServer.createPrivateChatRoom(getChatRoomName(gameId), false, new HashSet<>(Set.of(playerName)), 30);
+                _runningGames.put(gameId, mediator);
+                _scenarioGames.put(playerName, gameId);
+            } finally {
+                _lock.writeLock().unlock();
+            }
+            return mediator;
+        }
+    }
+
+    private record StartedScenario(LotroGameMediator mediator, ScenarioRunLog.Watch watch) { }
+
+    /**
+     * Builds a scenario's game and sets it going.  Everything that has to hear how the game ends is listening before
+     * it starts: the scripted opponent can act, and in principle end the game, the moment it does.
+     */
+    private StartedScenario startScenario(String gameId, Player player, ScenarioDefinition scenario, LotroFormat format,
+                                          LiveScenario.TextRenderer text, GameJournal checkpoint, Map<String, Object> campaign,
+                                          Map<String, String> picks) {
+        LiveScenario live = new LiveScenario(scenario, _lotroCardBlueprintLibrary, format, player.getName(), text, _scenarioTimer, checkpoint, picks);
+        live.SetCampaign(campaign);
+        //(for a scenario whose opponent falls back on the bot: opponent.fallback: bot)
+        if (_botService != null)
+            live.SetBot(_botService.scenarioBot());
+        //(the best so far, for the end of a scored game to say whether this one beat it)
+        if (scenario.outcome.score != null && _scenarioRunLog != null) {
+            var progress = _scenarioRunLog.progressOf(player).get(scenario.id);
+            live.SetPreviousBest(progress == null ? null : progress.best_score);
+        }
+        LotroGameMediator mediator = new LotroGameMediator(gameId, live, SCENARIO_TIMER, false);
+        //A puzzle waiting for its picks is not a game anybody plays: it is not recorded, and it is no attempt
+        boolean held = live.Holding();
+        GameRecorder.ScenarioRecording recording = held ? null : _gameRecorder.recordScenarioGame(mediator, format, player.getName(), scenario.id, scenario.version);
+        ScenarioRunLog.Watch watch = _scenarioRunLog == null || held ? null : _scenarioRunLog.watch(player, mediator, recording);
+        mediator.addGameResultListener(
+            new GameResultListener() {
+                @Override
+                public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                    _finishedGamesTime.put(gameId, new Date());
+                }
+
+                @Override
+                public void gameCancelled() {
+                    _finishedGamesTime.put(gameId, new Date());
+                }
+            });
+        mediator.startGame();
+        return new StartedScenario(mediator, watch);
+    }
+
+    /**
+     * @return The scenario game a player is in the middle of, or null if they are not in one.
+     */
+    public LotroGameMediator getScenarioGame(String playerName) {
+        _lock.readLock().lock();
+        try {
+            String gameId = _scenarioGames.get(playerName);
+            LotroGameMediator mediator = gameId == null ? null : _runningGames.get(gameId);
+            return mediator == null || mediator.isFinished() ? null : mediator;
+        } finally {
+            _lock.readLock().unlock();
         }
     }
 

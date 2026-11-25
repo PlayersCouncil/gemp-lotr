@@ -59,7 +59,6 @@ public class GameHistoryRequestHandler extends LotroServerRequestHandler impleme
      */
     private void getGameHistory(HttpRequest request, ResponseWriter responseWriter) throws Exception {
         QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        String participantId = getQueryParameterSafely(queryDecoder, "participantId");
         int start = parseInt(getQueryParameterSafely(queryDecoder, "start"), 0);
         int count = parseInt(getQueryParameterSafely(queryDecoder, "count"), GameHistoryService.DEFAULT_HISTORY_PAGE_SIZE);
         if (start < 0 || count < 1)
@@ -76,7 +75,7 @@ public class GameHistoryRequestHandler extends LotroServerRequestHandler impleme
         if (problem != null)
             throw new HttpProcessingException(400, problem);
 
-        Player resourceOwner = getResourceOwnerSafely(request, participantId);
+        Player resourceOwner = getResourceOwnerSafely(request);
         String me = resourceOwner.getName();
 
         GameHistoryService.HistoryPage page = _gameHistoryService.getGameHistoryPage(resourceOwner, filter, start, count);
@@ -135,8 +134,7 @@ public class GameHistoryRequestHandler extends LotroServerRequestHandler impleme
 
     /** GET /gameHistory/filters -> {"formats": [...most played first], "events": [...most recent first, max 100]} */
     private void getFilterOptions(HttpRequest request, ResponseWriter responseWriter) throws Exception {
-        QueryStringDecoder queryDecoder = new QueryStringDecoder(request.uri());
-        Player resourceOwner = getResourceOwnerSafely(request, getQueryParameterSafely(queryDecoder, "participantId"));
+        Player resourceOwner = getResourceOwnerSafely(request);
 
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("formats", _gameHistoryService.getGameHistoryFormats(resourceOwner));

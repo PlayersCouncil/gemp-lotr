@@ -409,6 +409,27 @@ var GempLotrHallUI = Class.extend({
 		var deckManager = new DeckManager(this.comm);
 		var formatManager = new FormatManager(this.comm);
 		this.tableCreator = new CreateTable(this, this.comm, $("#create-table-popup"), formatManager, deckManager);
+
+		// A game tab that wants to come back here asks whether a hall is open before opening another one (two halls
+		// at once get a 409).  Answering lets it close itself instead: see HallTab in the Angular game page
+		// (gemp-lotr-frontend/src/core/platform/hall-tab.service.ts).
+		// Open for the Admin tab alone, this page is not the hall: it neither answers for it nor follows its links.
+		if (!(window.GempHallSession && GempHallSession.adminOnly)) try {
+			this.hallChannel = new BroadcastChannel("gemp-lotr-hall");
+			this.hallChannel.onmessage = function (event) {
+				if (event.data != null && event.data.type == "anyone")
+					that.hallChannel.postMessage({type: "here"});
+				// a game tab that is closing itself asks for something to be shown here (My Scenarios, after a
+				// scenario was submitted from the authoring tool): only hall links, and the lists are fetched again
+				if (event.data != null && event.data.type == "go" && /^#[A-Za-z0-9\/_-]+$/.test(String(event.data.hash || ""))) {
+					if (window.GempLinks)
+						GempLinks.go(event.data.hash);
+					$(document).trigger("gemp:scenarios-changed");
+				}
+			};
+		} catch (e) {
+			// no such thing in this browser: the game tab opens the hall itself, as it always did
+		}
 		this.tableJoiner = new JoinTable(this, this.comm, $("#join-table-popup"), formatManager, deckManager);
 		$("#open-table-button").button().click(
 			function() {
@@ -492,6 +513,74 @@ var GempLotrHallUI = Class.extend({
 		});
 
 		this.getHall();
+	},
+
+	// The page is open for its Admin tab alone (GempHallSession.adminOnly): the player info, so the Admin tab shows
+	// for an admin, and whatever waited for the hall; no hall poll, which would end the Angular hall's.
+	/*
+	 * Back to the Game Hall from the page open for its Admin tab alone. The hall opened this page in a tab of its
+	 * own and is normally still open: this tab is then closed rather than a second hall opened (two halls at once
+	 * get a 409). A tab the browser won't close says where the hall is; with no hall about, it opens here. The same
+	 * question the game page asks: HallTab in gemp-lotr-frontend/src/core/platform/hall-tab.service.ts.
+	 */
+	backToHall: function (link) {
+		var hallUrl = link.attr("href");
+		var channel = null;
+		try {
+			channel = new BroadcastChannel("gemp-lotr-hall");
+		} catch (e) {
+			window.location.href = hallUrl;
+			return;
+		}
+		var answered = false;
+		channel.onmessage = function (event) {
+			if (answered || event.data == null || event.data.type != "here")
+				return;
+			answered = true;
+			channel.close();
+			window.close();
+			setTimeout(function () {
+				$("#admin-back-elsewhere").show();
+			}, 400);
+		};
+		channel.postMessage({type: "anyone"});
+		setTimeout(function () {
+			if (answered)
+				return;
+			channel.close();
+			window.location.href = hallUrl;
+		}, 350);
+	},
+
+	startForAdmin: function () {
+		var that = this;
+		if (this.started)
+			return;
+		this.started = true;
+		$("#admin-back").click(function (event) {
+			event.preventDefault();
+			that.backToHall($(this));
+		});
+		var queued = this.startQueue || [];
+		this.startQueue = null;
+		for (var i = 0; i < queued.length; i++) {
+			try {
+				queued[i]();
+			} catch (e) {
+				if (window.console)
+					console.error("Starting the hall failed", e);
+			}
+		}
+		this.comm.getPlayerInfoShared(function(json) {
+			that.userInfo = json;
+			if (that.userInfo.type.includes("a") || that.userInfo.type.includes("l")) {
+				that.adminTab.show();
+				if (typeof GempLinks !== "undefined")
+					GempLinks.poke();
+			} else {
+				that.adminTab.hide();
+			}
+		});
 	},
 
 	setPendingTournament: function(value) {
@@ -1102,7 +1191,7 @@ var GempLotrHallUI = Class.extend({
 				continue;
 			this.offeredGames[gameId] = true;
 			started = true;
-			this.openOrOffer("game:" + gameId, "/gemp-lotr/game.html?gameId=" + encodeURIComponent(gameId) + this.participantIdParam(),
+			this.openOrOffer("game:" + gameId, "/gemp-lotr/ng/game?gameId=" + encodeURIComponent(gameId) + this.participantIdParam(),
 				"Your game is ready", "Your game has started, but your browser blocked the new window.", "Open game");
 		}
 		if (started) {
@@ -1652,7 +1741,7 @@ var GempLotrHallUI = Class.extend({
 		} else if (status == "PLAYING") {
 			if (playing == "true" || watchable == "true") {
 				lastField.append($("<a class='hall-row-link' target='_blank'></a>")
-					.attr("href", "game.html?gameId=" + encodeURIComponent(gameId) + this.participantIdParam())
+					.attr("href", "/gemp-lotr/ng/game?gameId=" + encodeURIComponent(gameId) + this.participantIdParam())
 					.text(playing == "true" ? "Play Match" : "Spectate")
 					.button());
 			}

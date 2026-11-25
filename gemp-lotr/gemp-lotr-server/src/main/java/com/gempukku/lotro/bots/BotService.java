@@ -69,41 +69,7 @@ public class BotService {
             System.out.println("Loading bot models");
 
             // List of all trainer instances
-            List<Trainer> trainers = List.of(
-                    new GoFirstTrainer(),
-                    new MulliganTrainer(),
-                    new AnotherMoveTrainer(),
-                    new BurdenTrainer(),
-                    new ReconcileTrainer(),
-                    new SanctuaryTrainer(),
-                    new ArcheryWoundTrainer(),
-                    new AttachItemTrainer(),
-                    new SkirmishOrderTrainer(),
-                    new HealTrainer(),
-                    new DiscardFromHandTrainer(),
-                    new ExertTrainer(),
-                    new DiscardFromPlayTrainer(),
-                    new PlayFromHandTrainer(),
-                    new FallBackCardSelectionTrainer(),
-                    new CardFromDiscardTrainer(),
-                    new StartingFellowshipTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipPlayCardTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipUseCardTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipHealTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipTransferTrainer(),
-                    new ShadowCardActionAnswerer.ShadowPlayCardTrainer(),
-                    new ShadowCardActionAnswerer.ShadowUseCardTrainer(),
-                    new ManeuverCardActionAnswerer.ManeuverPlayCardTrainer(),
-                    new ManeuverCardActionAnswerer.ManeuverUseCardTrainer(),
-                    new SkirmishFpCardActionAnswerer.SkirmishFpPlayCardTrainer(),
-                    new SkirmishFpCardActionAnswerer.SkirmishFpUseCardTrainer(),
-                    new SkirmishShadowCardActionAnswerer.SkirmishShadowPlayCardTrainer(),
-                    new SkirmishShadowCardActionAnswerer.SkirmishShadowUseCardTrainer(),
-                    new RegroupCardActionAnswerer.RegroupPlayCardTrainer(),
-                    new OptionalResponsesCardActionTrainer(),
-                    new ShadowAssignmentTrainer(),
-                    new FpAssignmentTrainer()
-            );
+            List<Trainer> trainers = trainers();
 
             FotrStartersLearningStepsPersistence persistence = new FotrStartersLearningStepsPersistence();
 
@@ -123,6 +89,53 @@ public class BotService {
 
             System.out.println("Bot decision models ready");
         }
+    }
+
+    /** Every model the starter bot decides with, one trainer for each (the one list for loading and for training them). */
+    public static List<Trainer> trainers() {
+        return List.of(
+                new GoFirstTrainer(),
+                new MulliganTrainer(),
+                new AnotherMoveTrainer(),
+                new BurdenTrainer(),
+                new ReconcileTrainer(),
+                new SanctuaryTrainer(),
+                new ArcheryWoundTrainer(),
+                new AttachItemTrainer(),
+                new SkirmishOrderTrainer(),
+                new HealTrainer(),
+                new DiscardFromHandTrainer(),
+                new ExertTrainer(),
+                new DiscardFromPlayTrainer(),
+                new PlayFromHandTrainer(),
+                new FallBackCardSelectionTrainer(),
+                new CardFromDiscardTrainer(),
+                new StartingFellowshipTrainer(),
+                new FellowshipCardActionAnswerer.FellowshipPlayCardTrainer(),
+                new FellowshipCardActionAnswerer.FellowshipUseCardTrainer(),
+                new FellowshipCardActionAnswerer.FellowshipHealTrainer(),
+                new FellowshipCardActionAnswerer.FellowshipTransferTrainer(),
+                new ShadowCardActionAnswerer.ShadowPlayCardTrainer(),
+                new ShadowCardActionAnswerer.ShadowUseCardTrainer(),
+                new ManeuverCardActionAnswerer.ManeuverPlayCardTrainer(),
+                new ManeuverCardActionAnswerer.ManeuverUseCardTrainer(),
+                new SkirmishFpCardActionAnswerer.SkirmishFpPlayCardTrainer(),
+                new SkirmishFpCardActionAnswerer.SkirmishFpUseCardTrainer(),
+                new SkirmishShadowCardActionAnswerer.SkirmishShadowPlayCardTrainer(),
+                new SkirmishShadowCardActionAnswerer.SkirmishShadowUseCardTrainer(),
+                new RegroupCardActionAnswerer.RegroupPlayCardTrainer(),
+                new OptionalResponsesCardActionTrainer(),
+                new ShadowAssignmentTrainer(),
+                new FpAssignmentTrainer()
+        );
+    }
+
+    /**
+     * Gemp's bot, to answer for a scenario's opponent seat by whatever name that seat has (see ScenarioBot).  The
+     * same models as the bot of an ordinary game.
+     */
+    public ScenarioBot scenarioBot() {
+        return new ScenarioBot(modelRegistry);
     }
 
     private void startFotrStartersSimulation(BotPlayer b1, BotPlayer b2, int games) {
@@ -175,41 +188,7 @@ public class BotService {
 
             // Step 3: Aggregate all historical data and retrain
             // List of all trainer instances
-            List<Trainer> trainers = List.of(
-                    new GoFirstTrainer(),
-                    new MulliganTrainer(),
-                    new AnotherMoveTrainer(),
-                    new BurdenTrainer(),
-                    new ReconcileTrainer(),
-                    new SanctuaryTrainer(),
-                    new ArcheryWoundTrainer(),
-                    new AttachItemTrainer(),
-                    new SkirmishOrderTrainer(),
-                    new HealTrainer(),
-                    new DiscardFromHandTrainer(),
-                    new ExertTrainer(),
-                    new DiscardFromPlayTrainer(),
-                    new PlayFromHandTrainer(),
-                    new FallBackCardSelectionTrainer(),
-                    new CardFromDiscardTrainer(),
-                    new StartingFellowshipTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipPlayCardTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipUseCardTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipHealTrainer(),
-                    new FellowshipCardActionAnswerer.FellowshipTransferTrainer(),
-                    new ShadowCardActionAnswerer.ShadowPlayCardTrainer(),
-                    new ShadowCardActionAnswerer.ShadowUseCardTrainer(),
-                    new ManeuverCardActionAnswerer.ManeuverPlayCardTrainer(),
-                    new ManeuverCardActionAnswerer.ManeuverUseCardTrainer(),
-                    new SkirmishFpCardActionAnswerer.SkirmishFpPlayCardTrainer(),
-                    new SkirmishFpCardActionAnswerer.SkirmishFpUseCardTrainer(),
-                    new SkirmishShadowCardActionAnswerer.SkirmishShadowPlayCardTrainer(),
-                    new SkirmishShadowCardActionAnswerer.SkirmishShadowUseCardTrainer(),
-                    new RegroupCardActionAnswerer.RegroupPlayCardTrainer(),
-                    new OptionalResponsesCardActionTrainer(),
-                    new ShadowAssignmentTrainer(),
-                    new FpAssignmentTrainer()
-            );
+            List<Trainer> trainers = trainers();
 
             ZonedDateTime start = DateUtils.Now();
             for (Trainer trainer : trainers) {

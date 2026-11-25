@@ -1,0 +1,8 @@
+{
+  "401": "a wrong name or password",
+  "403": "permanently banned",
+  "409": "temporarily banned",
+  "423": "the account is linked to a PC account (the password is not looked at)",
+  "429": "too many attempts",
+  "503": "down for maintenance"
+}

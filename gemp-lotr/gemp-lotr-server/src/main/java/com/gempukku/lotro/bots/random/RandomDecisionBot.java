@@ -11,10 +11,19 @@ import java.util.*;
 
 public class RandomDecisionBot implements BotPlayer {
     private final String botName;
-    private final Random random = new Random();
+    private final Random random;
 
     public RandomDecisionBot(String botName) {
+        this(botName, new Random());
+    }
+
+    /**
+     * @param random Where its chance comes from: given one seeded from the game, the bot answers the same way each
+     *               time the game is in the same place (a scenario's opponent, see ScenarioBot).
+     */
+    public RandomDecisionBot(String botName, Random random) {
         this.botName = botName;
+        this.random = random;
     }
 
     @Override

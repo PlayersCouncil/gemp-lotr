@@ -1,0 +1,73 @@
+/** A link inside a message (the legacy page put <a> tags in some of them). */
+export interface MessageLink {
+  readonly text: string;
+  readonly url: string;
+}
+
+/** A message of the login page: text and links, in order. Line breaks are "\n" (the legacy <br/>). */
+export type LoginMessage = readonly (string | MessageLink)[];
+
+/** The message as plain text (links as their text). */
+export function messageText(message: LoginMessage): string {
+  return message.map((part) => (typeof part === 'string' ? part : part.text)).join('');
+}
+
+export const PC_DISCORD_URL = 'https://lotrtcgpc.net/discord';
+
+const PC_DISCORD: MessageLink = { text: 'the PC Discord', url: PC_DISCORD_URL };
+
+// The wording of src/Login/login.js, unchanged (double spaces included).
+export const CANNOT_CONTACT = 'Unable to contact the server';
+export const CANNOT_CONNECT =
+  'Unable to connect to server, either server is down or there is a problem with your internet connection';
+export const INVALID_LOGIN: LoginMessage = ['Invalid username or password. Try again.'];
+export const PERMANENTLY_BANNED: LoginMessage = [
+  'You have been permanently banned. If you think it was a mistake please appeal with dmaz or ketura on ',
+  PC_DISCORD,
+  '.',
+];
+export const TEMPORARILY_BANNED: LoginMessage = [
+  'You have been temporarily banned. You can try logging in at a later time. If you think it was a mistake please ' +
+    'appeal with dmaz or ketura on ',
+  PC_DISCORD,
+  '.',
+];
+export const MAINTENANCE: LoginMessage = ['Server is down for maintenance. Please come at a later time.'];
+export const PASSWORDS_DIFFER: LoginMessage = ['Password and Password repeated are different! Try again'];
+export const INVALID_NEW_LOGIN: LoginMessage = [
+  'Login is invalid. Login must be between 2-10 characters long, and contain only\n' +
+    ' english letters, numbers or _ (underscore) and - (dash) characters.',
+];
+/** POST /login answers 429 after too many attempts (new; no legacy wording). */
+export const TOO_MANY_ATTEMPTS: LoginMessage = ['Too many login attempts. Wait a few minutes, then try again.'];
+/** POST /login answers 423 for an account a PC account has claimed, whatever the password (Ketura's words). */
+export const LINKED_TO_PC: LoginMessage = ['That account is linked to a PC Account, please use that to log in.'];
+export const LOGIN_TAKEN: LoginMessage = ['User with this login already exists in the system. Try a different one.'];
+
+/** The link under the login form. */
+export const FORGOT_PASSWORD: MessageLink = {
+  text: 'Forgot your password?  Contact ketura on the PC Discord.',
+  url: PC_DISCORD_URL,
+};
+
+/** Button labels. */
+export const LOGIN_BUTTON = 'Login';
+export const REGISTER_BUTTON = 'Register';
+
+/** The hall's counts, as GET /status answers them (StatusRequestHandler). */
+export interface ServerStatus {
+  tables: number;
+  playersInHall: number;
+  gamesLast24Hours: number;
+  activePlayersLastWeek: number;
+}
+
+/** The line above the form, worded as the legacy page's (which the server wrote out: GET /). */
+export function serverStatusLine(status: Partial<ServerStatus>): string {
+  const count = (value: number | undefined) => (typeof value === 'number' ? String(value) : '?');
+  return (
+    `Tables count: ${count(status.tables)}, players in hall: ${count(status.playersInHall)}, ` +
+    `games played in last 24 hours: ${count(status.gamesLast24Hours)}, ` +
+    `active players in last week: ${count(status.activePlayersLastWeek)}`
+  );
+}

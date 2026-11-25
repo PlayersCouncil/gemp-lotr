@@ -212,7 +212,10 @@ public class Card_V1_019_Tests
 		scn.FreepsChooseCard(aragorn);
 
 		assertInZone(Zone.FREE_CHARACTERS, aragorn);
-		// Nothing is offered: with Aragorn's 4 spent, the game goes on to the other player's fellowship.
+		// Nothing is offered: with Aragorn's 4 spent, all he is asked is to press DONE, and once he has, the game
+		// goes on to the other player's fellowship.
+		assertTrue(scn.FreepsIsAskedOnlyToConfirm());
+		scn.FreepsConfirm();
 		assertFalse(scn.FreepsAnyDecisionsAvailable());
 		assertTrue(scn.ShadowDecisionAvailable("Starting fellowship"));
 		assertEquals(deck - 1, scn.GetFreepsDeckCount());

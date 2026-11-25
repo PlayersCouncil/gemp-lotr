@@ -36,6 +36,8 @@ public class GameRecorder {
     private static final String _possibleChars = "abcdefghijklmnopqrstuvwxyz0123456789";
     private static final int _charsCount = _possibleChars.length();
 
+    private static final org.apache.logging.log4j.Logger LOG = org.apache.logging.log4j.LogManager.getLogger(GameRecorder.class);
+
     private final GameHistoryService _gameHistoryService;
     private final PlayerDAO _playerDAO;
 
@@ -43,6 +45,91 @@ public class GameRecorder {
         _gameHistoryService = gameHistoryService;
         _playerDAO = playerDAO;
     }
+
+    /**
+     * Scenario games are not in the game history, so their replays have to be found some other way.
+     * @param startOfScenarioRun Given a recording id, when the scenario game it is the replay of began; null if it
+     *                           is not the replay of a scenario game.
+     */
+    public void setScenarioRunLookup(java.util.function.Function<String, ZonedDateTime> startOfScenarioRun) {
+        _startOfScenarioRun = startOfScenarioRun;
+    }
+
+    private java.util.function.Function<String, ZonedDateTime> _startOfScenarioRun = recordingId -> null;
+
+    /** The replay of a scenario's game, as it is being made. */
+    public interface ScenarioRecording {
+        /**
+         * Writes the replay out.  To be called once, when the game is over.
+         * @return The replay's id, or null if it could not be written.
+         */
+        String save();
+
+        /** When the game began; the replay is filed under this. */
+        ZonedDateTime started();
+    }
+
+    /**
+     * Records a scenario's game as its one human player sees it.  A scenario game gets a replay like any other, but
+     * no entry in the game history and no summary: nobody won or lost anything that should count.  To be called
+     * before the game starts.
+     */
+    public ScenarioRecording recordScenarioGame(LotroGameMediator lotroGame, LotroFormat format, String playerName, String scenarioId, int scenarioVersion) {
+        final ZonedDateTime startDate = ZonedDateTime.now(ZoneOffset.UTC);
+        final GameCommunicationChannel channel = new GameCommunicationChannel(playerName, 0, false, format);
+        lotroGame.addGameStateListener(playerName, channel);
+
+        return new ScenarioRecording() {
+            @Override
+            public ZonedDateTime started() {
+                return startDate;
+            }
+
+            @Override
+            public String save() {
+                String recordingId = getNewRecordingID();
+                try {
+                    DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    Document doc = documentBuilder.newDocument();
+                    Element gameReplay = doc.createElement("gameReplay");
+                    EventSerializer serializer = new EventSerializer();
+
+                    Element info = doc.createElement("info");
+                    info.setAttribute("replay_version", "1");
+                    info.setAttribute("scenario", scenarioId);
+                    info.setAttribute("scenario_version", String.valueOf(scenarioVersion));
+                    info.setAttribute("player", playerName);
+                    info.setAttribute("start_date", startDate.toLocalDateTime().toString());
+                    info.setAttribute("end_date", ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime().toString());
+                    info.setAttribute("format", format.getName());
+                    gameReplay.appendChild(info);
+
+                    for (GameEvent gameEvent : channel.consumeGameEvents())
+                        gameReplay.appendChild(serializer.serializeEvent(doc, gameEvent));
+                    doc.appendChild(gameReplay);
+
+                    try (OutputStream replayStream = getRecordingWriteStream(playerName, recordingId, startDate)) {
+                        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(replayStream));
+                    }
+                    return recordingId;
+                } catch (Exception exp) {
+                    LOG.error("Could not save the replay of scenario " + scenarioId + " for " + playerName, exp);
+                    return null;
+                } finally {
+                    lotroGame.removeGameStateListener(channel);
+                }
+            }
+        };
+    }
+
+    /**
+     * @return The address of a replay, as the end-of-game bug report form wants it.
+     */
+    public static String replayUrl(String playerName, String recordingId) {
+        return "https://play.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + playerName + "$" + recordingId;
+    }
+
+    public static final String BUG_REPORT_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSdKJrCmjoyUqDTusDcpNoWAmvkGdzQqTxWGpdNIFX9biCee-A/viewform?usp=pp_url&entry.1592109986=";
 
 
     public GameRecordingInProgress recordGame(LotroGameMediator lotroGame, LotroFormat format, final String tournamentName, final Map<String, LotroDeck> decks) {
@@ -96,14 +183,14 @@ public class GameRecorder {
                 replay_version = 1;
             }};
 
-            var playerRecordingId = saveRecordedChannels(recordingChannels, gameInfo, decks);
+            var playerRecordingId = saveRecordedChannels(recordingChannels, gameInfo, decks, lotroGame);
             gameInfo.id = _gameHistoryService.addGameHistory(gameInfo);
 
 //            if(format.isPlaytest())
 //            {
                 String url = "https://docs.google.com/forms/d/e/1FAIpQLSdKJrCmjoyUqDTusDcpNoWAmvkGdzQqTxWGpdNIFX9biCee-A/viewform?usp=pp_url&entry.1592109986=";
-                String winnerURL = "https://play.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + winnerName + "$" + playerRecordingId.get(winnerName);
-                String loserURL = "https://play.lotrtcgpc.net/gemp-lotr/game.html%3FreplayId%3D" + loserName + "$" + playerRecordingId.get(loserName);
+                String winnerURL = "https://play.lotrtcgpc.net/gemp-lotr/ng/game%3FreplayId%3D" + winnerName + "$" + playerRecordingId.get(winnerName);
+                String loserURL = "https://play.lotrtcgpc.net/gemp-lotr/ng/game%3FreplayId%3D" + loserName + "$" + playerRecordingId.get(loserName);
                 url += winnerURL + "%20" + loserURL;
                 lotroGame.sendMessageToPlayers("Thank you for playing!  Please report any bugs or other feedback <a href= '" + url + "' target='_blank'>using this form.</a><br><br>The above link will fill in the replay for you automatically.</a>");
 //            }
@@ -153,9 +240,44 @@ public class GameRecorder {
         return new DeflaterOutputStream(new FileOutputStream(recordingFile), deflater);
     }
 
-    private Map<String, String> saveRecordedChannels(Map<String, GameCommunicationChannel> gameProgress, DBDefs.GameHistory gameInfo, Map<String, LotroDeck> decks) {
+    /**
+     * Everything that steered the game (LotroGameMediator.getAuditJournal), kept beside the summaries so that a game
+     * somebody reports can be built again and stepped through.  It holds every shuffle and every answer of both
+     * players, so it is not for the players to fetch.
+     * @return The file's name, or null if the game kept no journal or it could not be written.
+     */
+    private String saveJournal(DBDefs.GameHistory history, String journal) {
+        if (journal == null)
+            return null;
+        try {
+            var summary = getSummaryFile(history);
+            var folder = new File(new File(new File(new File(AppConfig.getProperty("application.root"), "replay"), "journals"),
+                    summary.getParentFile().getParentFile().getName()), summary.getParentFile().getName());
+            folder.mkdirs();
+            var file = new File(folder, summary.getName().replaceAll("\\.json$", "") + ".journal.gz");
+            try (var out = new java.util.zip.GZIPOutputStream(new FileOutputStream(file))) {
+                out.write(journal.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }
+            return file.getName();
+        } catch (Exception exp) {
+            LOG.error("Could not save the journal of game " + history.gameId, exp);
+            return null;
+        }
+    }
+
+    private Map<String, String> saveRecordedChannels(Map<String, GameCommunicationChannel> gameProgress, DBDefs.GameHistory gameInfo, Map<String, LotroDeck> decks,
+                                                     LotroGameMediator lotroGame) {
         Map<String, String> result = new HashMap<>();
         var metadata = new ReplayMetadata(gameInfo, decks);
+        metadata.JournalFile = saveJournal(gameInfo, lotroGame.getAuditJournal());
+        for (LotroGameMediator.Revert revert : lotroGame.getReverts()) {
+            var reverted = metadata.new RevertMetadata();
+            reverted.Requester = revert.requester();
+            reverted.Tier = revert.tier();
+            reverted.Label = revert.label();
+            reverted.Turn = revert.turn();
+            metadata.Reverts.add(reverted);
+        }
 
         for (Map.Entry<String, GameCommunicationChannel> playerRecordings : gameProgress.entrySet()) {
             String playerId = playerRecordings.getKey();
@@ -255,8 +377,16 @@ public class GameRecorder {
     public InputStream getRecordedGame(String playerId, String recordId) throws IOException {
         var history = _gameHistoryService.getGameHistory(recordId);
 
-        if(history == null)
-            return null;
+        if(history == null) {
+            //Not in the game history: it may be the replay of a scenario game
+            ZonedDateTime scenarioStart = _startOfScenarioRun.apply(recordId);
+            if (scenarioStart == null)
+                return null;
+            File scenarioRecording = getRecordingFileVersion1(playerId, recordId, scenarioStart);
+            if (!scenarioRecording.exists() || !scenarioRecording.isFile())
+                return null;
+            return new InflaterInputStream(new FileInputStream(scenarioRecording));
+        }
 
         File recordingFile = null;
 

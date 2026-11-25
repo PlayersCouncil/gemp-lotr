@@ -45,6 +45,7 @@ public class DefaultLotroGame implements LotroGame {
     private final Set<String> _allPlayers;
     private final Map<String, Set<Phase>> _autoPassConfiguration = new HashMap<>();
     private java.util.function.BiPredicate<String, Phase> _askToPass;
+    private java.util.function.BiConsumer<String, Phase> _autoPassed;
 
     private String _winnerPlayerId;
     private final Map<String, String> _losers = new HashMap<>();
@@ -178,9 +179,12 @@ public class DefaultLotroGame implements LotroGame {
         if (_askToPass != null && _askToPass.test(playerId, phase))
             return false;
         final Set<Phase> passablePhases = _autoPassConfiguration.get(playerId);
-        if (passablePhases == null)
+        if (passablePhases == null || !passablePhases.contains(phase))
             return false;
-        return passablePhases.contains(phase);
+        //(asked only when the player has nothing to play: the answer is the pass itself)
+        if (_autoPassed != null)
+            _autoPassed.accept(playerId, phase);
+        return true;
     }
 
     @Override
@@ -221,6 +225,26 @@ public class DefaultLotroGame implements LotroGame {
             } while (_userFeedback.answerHeldDecision());
             _userFeedback.atRest();
         }
+    }
+
+    /**
+     * @return Whether the decision the game is waiting on can be asked again (TurnProcedure.canAskAgain).
+     */
+    public boolean canAskAgain() {
+        return !_cancelled && !_finished && _turnProcedure.canAskAgain();
+    }
+
+    /**
+     * Withdraws the decision the game is waiting on and carries the game on until the process that asked it has
+     * asked again, of the board as it now stands (TurnProcedure.askAgain), or until something else stops it.  For a
+     * scenario's sandbox, whose board is changed by hand while the game waits; nothing in an ordinary game does it.
+     * @throws IllegalStateException unless canAskAgain.
+     */
+    public void askAgain() {
+        if (!canAskAgain())
+            throw new IllegalStateException("The game is not waiting on a decision that can be asked again");
+        _turnProcedure.askAgain();
+        carryOutPendingActionsUntilDecisionNeeded();
     }
 
     @Override
@@ -397,6 +421,16 @@ public class DefaultLotroGame implements LotroGame {
         }
     }
 
+    /**
+     * Sends the players the game's figures (strengths, vitalities and the rest) again if they have changed, for a change
+     * made to the game from outside its own procedure while it waits on a decision: a scenario's board changed by
+     * hand.  The game's own procedure sends them as it goes; no ordinary game calls this.
+     */
+    public void refreshGameStats() {
+        if (_turnProcedure.getGameStats().updateGameStats(this))
+            _gameState.sendGameStats(_turnProcedure.getGameStats());
+    }
+
     public void addGameStateListener(String playerId, GameStateListener gameStateListener) {
         _gameState.addGameStateListener(playerId, gameStateListener, _turnProcedure.getGameStats());
     }
@@ -415,5 +449,13 @@ public class DefaultLotroGame implements LotroGame {
      */
     public void setAskToPass(java.util.function.BiPredicate<String, Phase> askToPass) {
         _askToPass = askToPass;
+    }
+
+    /**
+     * Is told each time a player passes in a phase without being asked: they had nothing to play, and their settings
+     * pass that phase for them.  It is told just before the pass is made.
+     */
+    public void setAutoPassed(java.util.function.BiConsumer<String, Phase> autoPassed) {
+        _autoPassed = autoPassed;
     }
 }

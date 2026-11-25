@@ -1,0 +1,44 @@
+/* A tournament's detail (tournamentResultsUi.js loadedTournament; hall.css table.standings) */
+
+:host {
+  display: block;
+}
+
+.gd-tournament-detail__standings {
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 0.5em;
+}
+
+.gd-tournament-detail__standings td,
+.gd-tournament-detail__standings th {
+  padding: 2px;
+  border: 1px solid var(--theme-events-standings-border);
+}
+
+.gd-tournament-detail__standings td {
+  text-align: center;
+}
+
+.gd-tournament-detail__standings tr:nth-child(even) {
+  background-color: var(--theme-events-standings-even);
+}
+
+.gd-tournament-detail__deck {
+  color: inherit;
+}
+
+/* In Completed tournaments the detail sits in the month's table, whose cell rules it took on */
+:host([data-context='history']) .gd-tournament-detail__standings th,
+:host([data-context='history']) .gd-tournament-detail__standings td {
+  padding: 0.25em 0.6em 0.25em 0;
+  border-bottom-color: var(--theme-widget-border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+:host([data-context='history']) .gd-tournament-detail__standings th {
+  color: var(--theme-events-muted);
+  font-weight: normal;
+  white-space: nowrap;
+}

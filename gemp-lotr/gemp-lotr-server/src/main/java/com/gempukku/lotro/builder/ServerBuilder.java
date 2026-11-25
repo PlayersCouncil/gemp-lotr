@@ -3,6 +3,9 @@ package com.gempukku.lotro.builder;
 import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.chat.MarkdownParser;
 import com.gempukku.lotro.collection.CollectionSerializer;
+import com.gempukku.lotro.argonauth.ArgonauthClient;
+import com.gempukku.lotro.argonauth.ArgonauthConfig;
+import com.gempukku.lotro.argonauth.PcAccountService;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.collection.TransferDAO;
@@ -25,8 +28,13 @@ import com.gempukku.lotro.patchnotes.LibraryCardLookup;
 import com.gempukku.lotro.patchnotes.PatchNoteAnnouncer;
 import com.gempukku.lotro.patchnotes.PatchNotesLibrary;
 import com.gempukku.lotro.prizes.PrizeService;
+import com.gempukku.lotro.scenario.ScenarioAuthoring;
+import com.gempukku.lotro.scenario.ScenarioLibrary;
+import com.gempukku.lotro.scenario.ScenarioRunLog;
+import com.gempukku.lotro.scenario.ScenarioShelf;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.service.LoggedUserHolder;
+import com.gempukku.lotro.service.LoginThrottle;
 import com.gempukku.lotro.bots.BotService;
 import com.gempukku.lotro.tournament.TournamentDAO;
 import com.gempukku.lotro.tournament.TournamentMatchDAO;
@@ -38,6 +46,8 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 public class ServerBuilder {
+    private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(ServerBuilder.class);
+
     public static void CreatePrerequisites(Map<Type, Object> objectMap) {
         final LotroCardBlueprintLibrary library = new LotroCardBlueprintLibrary();
         objectMap.put(LotroCardBlueprintLibrary.class, library);
@@ -46,6 +56,8 @@ public class ServerBuilder {
         LoggedUserHolder loggedUserHolder = new LoggedUserHolder();
         loggedUserHolder.start();
         objectMap.put(LoggedUserHolder.class, loggedUserHolder);
+        // Password checks (POST /login, linking an old account to a PC account) share one count of failures
+        objectMap.put(LoginThrottle.class, new LoginThrottle());
 
         CollectionSerializer collectionSerializer = new CollectionSerializer();
         objectMap.put(CollectionSerializer.class, collectionSerializer);
@@ -167,6 +179,22 @@ public class ServerBuilder {
         objectMap.put(PatchNoteAnnouncer.class, patchNoteAnnouncer);
         patchNoteAnnouncer.start(PatchNoteAnnouncer.DEFAULT_FIRST_CHECK_DELAY_MS, PatchNoteAnnouncer.DEFAULT_CHECK_INTERVAL_MS);
 
+        // Scenarios (tutorials, puzzles, sandboxes): the public ones and the ones players have written, which live in
+        // a data folder of their own outside the repository (scenarios.user.path); the ones that ship in the cards
+        // module's scenarios/ folder are brought into its public/ folder without undoing what was done on the server.
+        // They are read on first use and again whenever a file changes, so a scenario can be edited in place on a
+        // running server.
+        String userScenarios = AppConfig.getProperty("scenarios.user.path");
+        ScenarioLibrary scenarios = new ScenarioLibrary(AppConfig.getResourceFile("scenarios"),
+                userScenarios == null || userScenarios.isBlank() ? null : new File(userScenarios),
+                extract(objectMap, LotroCardBlueprintLibrary.class),
+                extract(objectMap, LotroFormatLibrary.class)::getFormat,
+                patchNoteCards);
+        objectMap.put(ScenarioLibrary.class, scenarios);
+        extract(objectMap, CacheManager.class).addCache(scenarios);
+        // a scenario is checked against the cards, so it is checked again when they change
+        extract(objectMap, LotroCardBlueprintLibrary.class).subscribeToRefreshes(scenarios::clearCache);
+
         objectMap.put(AdminService.class,
                 new AdminService(
                         extract(objectMap, PlayerDAO.class),
@@ -216,6 +244,24 @@ public class ServerBuilder {
                         extract(objectMap, BotService.class),
                         new ProductLibraryPackOpener(extract(objectMap, ProductLibrary.class))));
 
+        ScenarioRunLog scenarioRunLog = new ScenarioRunLog(extract(objectMap, ScenarioDAO.class), extract(objectMap, GameRecorder.class));
+        objectMap.put(ScenarioRunLog.class, scenarioRunLog);
+        extract(objectMap, LotroServer.class).setScenarioRunLog(scenarioRunLog);
+        // Writing scenarios by playing them: each author's draft, and the game it is being written in
+        ScenarioAuthoring authoring = new ScenarioAuthoring(
+                extract(objectMap, ScenarioLibrary.class),
+                extract(objectMap, LotroCardBlueprintLibrary.class),
+                extract(objectMap, LotroFormatLibrary.class)::getFormat,
+                patchNoteCards,
+                extract(objectMap, LotroServer.class)::seatAuthoringGame,
+                new File(AppConfig.getWebPath(), "images/scenarios"));
+        objectMap.put(ScenarioAuthoring.class, authoring);
+        // My Scenarios and Scenario Admin: copying, submitting for review, approving, the archive
+        ScenarioShelf shelf = new ScenarioShelf(scenarios, extract(objectMap, LotroCardBlueprintLibrary.class));
+        // (a scenario submitted for review is not to be changed: a draft of it open in the authoring tool is closed)
+        shelf.onLocked(authoring::closeOn);
+        objectMap.put(ScenarioShelf.class, shelf);
+
         objectMap.put(HallServer.class,
                 new HallServer(
                         extract(objectMap, IgnoreDAO.class),
@@ -229,6 +275,39 @@ public class ServerBuilder {
                         extract(objectMap, AdminService.class),
                         extract(objectMap, LeagueScheduleService.class)
                 ));
+
+        // The PC account (PC-ACCOUNT.md). In test mode, the default, there is none, and Argonauth is never reached for.
+        ArgonauthConfig argonauth = ArgonauthConfig.read(AppConfig::getProperty);
+        LOGGER.info("PC accounts: sso.mode is " + argonauth.mode().name().toLowerCase()
+                + (argonauth.enabled() ? ", at " + argonauth.issuer() + " as " + argonauth.clientId() : ""));
+        objectMap.put(ArgonauthConfig.class, argonauth);
+        LoginThrottle loginThrottle = extract(objectMap, LoginThrottle.class);
+        objectMap.put(PcAccountService.class,
+                new PcAccountService(
+                        argonauth,
+                        argonauth.enabled() ? new ArgonauthClient(argonauth) : null,
+                        extract(objectMap, PlayerDAO.class),
+                        extract(objectMap, PlayerArgonauthDAO.class),
+                        extract(objectMap, LoggedUserHolder.class),
+                        extract(objectMap, HallServer.class)::isPlayerBusy,
+                        // a Gemp password guessed while linking counts with the ones guessed at the login form
+                        new PcAccountService.Attempts() {
+                            @Override
+                            public boolean isBlocked(String name, String ip, long now) {
+                                return loginThrottle.isBlocked(name, ip, now);
+                            }
+
+                            @Override
+                            public void failed(String name, String ip, long now) {
+                                loginThrottle.failed(name, ip, now);
+                            }
+
+                            @Override
+                            public void succeeded(String name, String ip, long now) {
+                                loginThrottle.succeeded(name, ip, now);
+                            }
+                        },
+                        System::currentTimeMillis));
     }
 
     private static <T> T extract(Map<Type, Object> objectMap, Class<T> clazz) {
@@ -242,6 +321,7 @@ public class ServerBuilder {
         extract(objectMap, HallServer.class).startServer();
         extract(objectMap, LotroServer.class).startServer();
         extract(objectMap, ChatServer.class).startServer();
+        extract(objectMap, PcAccountService.class).start();
     }
 
     public static void StopServers(Map<Type, Object> objectMap) {

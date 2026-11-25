@@ -1,0 +1,249 @@
+{
+	id: into-the-wild-opening
+	version: 1
+	kind: tutorial
+	title: Into the Wild (opening)
+	summary: Frodo sets out alone. Learn to move, take a hit, and call for help.
+	author: ketura
+	tags: movement, twilight, archery, skirmish, reconcile
+	format: scenario
+	human: freeps
+	opponent: {
+		name: The Shadow
+		fallback: pass
+	}
+	coverage: strict
+	options: {
+		autoPass: archery, assignment, regroup
+	}
+
+	cards: {
+		freeps: {
+			# Frodo, Resolute Hobbit
+			frodo: 10_121
+			# The One Ring, The Great Ring.  It changes neither strength nor vitality, and its text is switched off below.
+			ring: 19_1
+			# Gandalf, Stormcrow
+			gandalf: 0_64
+			# Servant of the Secret Fire
+			servant1: 1_83
+			servant2: 1_83
+			# Swordarm of the White Tower
+			swordarm1: 1_116
+			# Aragorn, Heir of Elendil
+			aragorn: 4_109
+			# Boromir, Steward's Heir
+			boromir: 0_65
+			# Noble Intentions
+			noble: 1_304
+			swordarm2: 1_116
+		}
+		shadow: {
+			# The opponent's own Ring-bearer.  The game puts one on the table for each player; this one never takes a turn.
+			oppFrodo: 10_121
+			# Goblin Bowman
+			bowman: 2_60
+			# Mordor Soldier
+			soldier: 7_290
+			# Goblin Marksman
+			marksman1: 1_176
+			# Goblin Runner
+			runner1: 1_178
+			runner2: 1_178
+			# Host of Moria
+			host: 9_41
+			marksman2: 1_176
+			# Moria Scout
+			scout: 1_191
+		}
+	}
+	ringBearer: {
+		freeps: frodo
+		shadow: oppFrodo
+	}
+	ring: {
+		freeps: ring
+	}
+
+	# Green Hill Country, Ettenmoors, Rivendell Terrace, Great Chasm
+	sites: {
+		freeps: 1_323, 1_331, 1_340, 2_118
+		shadow: 1_323, 1_331, 1_340, 2_118
+	}
+
+	rules: {
+		oneSided: true
+		freeps: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyHandSize
+					amount: -4
+				}
+			}
+			# The Ring is on the table from the first lesson, but what it does is a later one
+			{
+				type: modifier
+				modifier: {
+					type: disableGameText
+					filter: name(The One Ring)
+				}
+			}
+			# Maneuver is introduced in a later lesson
+			{
+				type: modifier
+				modifier: {
+					type: skipPhase
+					phase: maneuver
+				}
+			}
+		]
+		shadow: [
+			{
+				type: modifier
+				modifier: {
+					type: modifyRoamingPenalty
+					filter: culture(moria)
+					amount: -2
+				}
+			}
+		]
+	}
+
+	setup: {
+		shadow: {
+			hand: bowman
+		}
+	}
+
+	steps: [
+		{
+			when: freeps, action, phase(fellowship), turn(1)
+			messages: [
+				{
+					header: The road goes ever on
+					text: This is [[Frodo]]. He has to cross four sites alive. Right now he is alone, at site {site}.
+					anchor: card:frodo
+					highlight: card:frodo
+					side: right
+				}
+				{
+					text: This is the **adventure path**. Each turn you move along it, one site at a time.
+					anchor: ui:advPath
+					highlight: ui:advPath
+					side: right
+				}
+				{
+					text: Every turn starts with your **Fellowship phase**, when you play cards from your hand. Your hand is empty, so there's nothing to play. Click **Pass** to set out.
+					anchor: ui:button:pass
+				}
+			]
+			allow: pass
+		}
+		{
+			when: opponent, action, phase(shadow), turn(1)
+			messages: [
+				{
+					text: Moving has a price. The twilight pool now holds {twilight}: the site's shadow number, plus 1 for each companion. Your opponent spends twilight to play **minions**.
+					anchor: ui:twilightPool
+					highlight: ui:twilightPool
+				}
+			]
+			answer: play(bowman)
+		}
+		{
+			when: freeps, assign, turn(1)
+			messages: [
+				{
+					text: The [[Goblin Bowman]] is an **archer**. Before any fighting, each archer shoots: Frodo now has {wounds:frodo} wound, and can take {vitality:frodo} more before he dies.
+					anchor: card:bowman
+					highlight: card:bowman, card:frodo
+				}
+				{
+					text: Next you choose who fights each minion. Start by clicking the Bowman.
+					anchor: card:bowman
+					highlight: card:bowman
+				}
+				{
+					text: Now click Frodo to send the Bowman against him.
+					anchor: card:frodo
+					highlight: card:frodo
+					on: picked(bowman)
+				}
+				{
+					text: Every minion has an opponent. Click **Done** to confirm.
+					anchor: ui:button:done
+					on: ready
+				}
+			]
+			allow: assign(frodo: bowman)
+		}
+		{
+			when: freeps, cards, text(next skirmish)
+			messages: [
+				{
+					text: Skirmishes are fought one at a time, in the order you choose. There is only one this turn: click Frodo to begin it.
+					anchor: card:frodo
+					highlight: card:frodo
+				}
+			]
+			allow: choose(frodo)
+		}
+		{
+			when: freeps, action, phase(skirmish), skirmish(1)
+			messages: [
+				{
+					text: Strength decides a skirmish. Frodo has {strength:frodo}; the Bowman has {strength:bowman}. Frodo will lose and take another wound. Pass to let it happen.
+					anchor: ui:skirmish
+					highlight: ui:skirmish:fpStrength, ui:skirmish:shadowStrength
+				}
+			]
+			allow: {
+				answers: pass
+				otherwise: Ettenmoors would let Frodo exert himself for more strength. You could do that in a real game, but it would cost him a wound he can't spare. Let's hold off.
+			}
+		}
+		{
+			when: freeps, choice, text(another move)
+			messages: [
+				{
+					text: Frodo survived, with {wounds:frodo} wounds. You could move again this turn, but he's in no shape for it. Choose **No** to rest here.
+					anchor: ui:dialog
+					avoid: card:frodo
+				}
+			]
+			allow: option(No)
+		}
+		{
+			checkpoint: true
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: At the end of your turn you **reconcile**: you draw back up to a full hand. You now hold four cards.
+					anchor: zone:self.hand
+					highlight: zone:self.hand
+					side: above
+				}
+				{
+					text: "[[Gandalf]] is a **companion**. Playing him costs {cost:gandalf} twilight, which your opponent gets to spend. Click Gandalf to play him."
+					anchor: card:gandalf
+					highlight: card:gandalf
+					avoid: zone:self.characters
+				}
+			]
+			allow: play(gandalf)
+		}
+		{
+			when: freeps, action, phase(fellowship), turn(2)
+			messages: [
+				{
+					text: The other three cards are **events**. They're played during skirmishes, so hold on to them. Pass to move on to site 3.
+					anchor: zone:self.hand
+					highlight: card:servant1, card:servant2, card:swordarm1
+				}
+			]
+			allow: pass
+			end: complete
+		}
+	]
+}

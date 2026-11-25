@@ -1067,9 +1067,13 @@ Card_01_252_Tests): neither `GameIsFinished()` nor who lost tells a corruption f
 
 **A starting fellowship.** `StartGame()` skips it. To test "(except in your starting fellowship)": the scenario
 constructor returns with player 1's "Starting fellowship" choice pending; `FreepsChooseCard(card)` plays a
-companion into it, and player 2's choice is pending only once player 1 has no companion left in the deck that
-fits under the total of 4; while one fits, player 1 chooses on (Merry 1_303 at 1 after Pippin 1_307 at 1:
-`FreepsDecisionAvailable("Starting fellowship")` still true, Card_01_307_Tests). End the test there: going on deals opening hands.
+companion into it; while a companion left in the deck fits under the total of 4, player 1 chooses on (Merry
+1_303 at 1 after Pippin 1_307 at 1: `FreepsDecisionAvailable("Starting fellowship")` still true,
+Card_01_307_Tests). Once none fits, the choice does not end by itself: a player who has put a card in is asked
+only to press DONE ("Starting fellowship - Nothing more can be added: press DONE", no card offered), which
+`FreepsIsAskedOnlyToConfirm()` reads and `FreepsConfirm()` answers (G-0066), and player 2's choice is pending only
+after that answer. A player who never had a companion that fits is not asked (mechanics/game/StartingFellowshipTests).
+End the test there: going on deals opening hands.
 To play on instead, answer player 2's choice too (`ShadowDeclineChoosing()` takes nobody; `FreepsDeclineChoosing()`
 ends player 1's early, never `FreepsChoose("")`) and then call
 `StartGame(true, false)`, which leaves the starting fellowships alone; called while either choice is still
@@ -1084,8 +1088,8 @@ choice; both 0 once it is answered: probe, dec-b8_34), so a reveal count read wh
 of a reveal (Faramir 8_34). Read "no tokens for a starting fellowship" in the first fellowship phase, with player 2 having
 played somebody too (mechanics/game/StartingFellowshipTests). Every rig table gives both players the same deck, so a
 directive's "the game goes on to the mulligan question" is: player 1 asked nothing
-(`FreepsAnyDecisionsAvailable()` false), player 2's "Starting fellowship" pending, and the mulligan question
-only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
+(`FreepsAnyDecisionsAvailable()` false, after `FreepsConfirm()` where his fellowship was full), player 2's
+"Starting fellowship" pending, and the mulligan question only after his answer. While a player chooses, only HIS cards on the table are in force, and `GetBurdens()` is
 his: Éomer 4_267 reads 2 with his own player's Elite Rider 4_265 down and 3 again once the other player is
 choosing. Read a cost, a spot or a resistance while its player is the one being asked. A starting companion's
 "To play, add a threat" is paid there, as its "When you play" is used (Q-0305), but `GetThreats()` reads 0 once

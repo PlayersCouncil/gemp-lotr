@@ -1,0 +1,15 @@
+/* The coins are the site's 9 x 9 images (images/gold.png, silver.png), inline after their numbers */
+
+.gd-price__coin {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+}
+
+.gd-price__coin[data-coin='gold'] {
+  background: var(--theme-events-coin-gold);
+}
+
+.gd-price__coin[data-coin='silver'] {
+  background: var(--theme-events-coin-silver);
+}

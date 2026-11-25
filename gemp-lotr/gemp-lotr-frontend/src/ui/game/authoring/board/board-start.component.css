@@ -1,0 +1,131 @@
+/* The Board tab's "Where the story starts": a row per part, as the totals have theirs */
+
+:host {
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--theme-game-author-section-rule);
+}
+
+.gd-author-board__heading {
+  margin: 2px 0 4px;
+  color: var(--theme-game-author-title);
+  font-weight: bold;
+}
+
+.gd-author-board-start__late {
+  margin-left: 6px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--theme-game-author-tag-bg);
+  color: var(--theme-game-author-tag-text);
+  font-size: 10px;
+  font-weight: normal;
+  cursor: help;
+}
+
+.gd-author-board-start__row,
+.gd-author-board-start__seat,
+.gd-author-board-start__fight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 5px;
+  margin: 3px 0;
+}
+
+.gd-author-board-start__row[data-changed],
+.gd-author-board-start__seat[data-changed],
+summary[data-changed] {
+  padding-left: 4px;
+  border-left: 3px solid var(--theme-game-author-changed-mark);
+}
+
+.gd-author-board-start__row .gd-author-label {
+  flex: 0 0 96px;
+  font-size: 12px;
+}
+
+.gd-author-board-start__pick {
+  display: flex;
+  flex: 0 0 130px;
+}
+
+.gd-author-board-start__row[data-part='path'] .gd-author-board-start__pick {
+  flex: 0 1 290px;
+  min-width: 0;
+}
+
+.gd-author-board-start__row input.gd-author-input {
+  flex: 0 0 130px;
+  width: 130px;
+}
+
+.gd-author-board-start__fights,
+.gd-author-board-start__held {
+  margin: 5px 0 3px;
+}
+
+.gd-author-board-start__fights > .gd-author-label,
+.gd-author-board-start__held > .gd-author-label {
+  display: block;
+  font-size: 12px;
+}
+
+.gd-author-board-start__fight,
+.gd-author-board-start__seat {
+  margin-left: 10px;
+}
+
+.gd-author-board-start__name {
+  flex: 0 0 86px;
+  overflow: hidden;
+  color: var(--theme-game-author-alias);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-author-board-start__minion {
+  padding: 0 0 0 4px;
+  border: 1px solid var(--theme-game-author-tag-border);
+  border-radius: 3px;
+  background: var(--theme-game-author-tag-bg);
+  color: var(--theme-game-author-tag-text);
+  font-family: var(--theme-game-author-code-font);
+  font-size: 12px;
+}
+
+.gd-author-board-start__minion .gd-author-button {
+  margin: 0 0 0 2px;
+  padding: 0 3px;
+  font-size: 11px;
+}
+
+.gd-author-board-start__fight select.gd-author-input {
+  flex: 0 0 auto;
+  width: auto;
+  font-size: 12px;
+}
+
+.gd-author-board-start__seat gd-author-check {
+  display: contents;
+}
+
+.gd-author-board-start__fold {
+  margin: 5px 0 2px;
+}
+
+.gd-author-board-start__fold summary {
+  color: var(--theme-game-author-quiet);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.gd-author-board-start__problem {
+  margin: 4px 0 0;
+  padding-left: 6px;
+  border-left: 3px solid var(--theme-game-author-bad-border);
+  color: var(--theme-game-author-tag-mistake);
+}
