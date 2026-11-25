@@ -140,10 +140,10 @@ describe('DialogComponent', () => {
   it('focuses the dialog itself, not its close button, when it has no control', async () => {
     const fixture = TestBed.createComponent(EmptyHostComponent);
     await fixture.whenStable();
-    document.body.appendChild(fixture.nativeElement);
+    document.body.appendChild(fixture.nativeElement as HTMLElement);
     fixture.componentInstance.open.set(true);
     await fixture.whenStable();
-    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('dialog'));
+    expect(document.activeElement).toBe((fixture.nativeElement as HTMLElement).querySelector('dialog'));
     (fixture.nativeElement as HTMLElement).remove();
   });
 

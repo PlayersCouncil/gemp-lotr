@@ -54,6 +54,6 @@ export function loadLegacyCardScripts(): LegacyCardScripts {
   const source = files.map(readLegacyWebFile).join('\n;\n');
   const tableNames = LEGACY_CARD_DATA_FILES.map((f) => f.table);
   const jQueryStub = { inArray: (value: unknown, array: unknown[]) => array.indexOf(value) };
-  const result = new Function('$', `${source}\n;return { Card, tables: { ${tableNames.join(', ')} } };`)(jQueryStub);
-  return result as LegacyCardScripts;
+  const load = new Function('$', `${source}\n;return { Card, tables: { ${tableNames.join(', ')} } };`);
+  return load(jQueryStub) as LegacyCardScripts;
 }

@@ -16,8 +16,8 @@
     "prelint": "npm run card-data",
     "lint": "ng lint",
     "pretypecheck": "npm run card-data",
-    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
-    "format:check": "prettier --check \"src/core/**/*.ts\" \"src/ui/**/*.ts\" \"src/testing/**/*.ts\" \"src/parity/**/*.ts\" \"src/styles/*.css\" \"src/ui/**/*.css\" \"visual-check/**/*.mjs\" README.md visual-check/README.md",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.spec.json --noEmit && node scripts/find-any.mjs",
+    "format:check": "prettier --check \"src/core/**/*.ts\" \"src/ui/**/*.ts\" \"src/testing/**/*.ts\" \"src/parity/**/*.ts\" \"src/styles/*.css\" \"src/ui/**/*.css\" \"visual-check/**/*.mjs\" scripts/find-any.mjs README.md visual-check/README.md",
     "verify": "npm run lint && npm run typecheck && npm run format:check && npm test -- --watch=false"
   },
   "private": true,

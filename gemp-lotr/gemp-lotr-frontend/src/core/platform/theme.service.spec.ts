@@ -13,6 +13,7 @@ import {
   THEME_VIEWPORT,
   ThemeService,
 } from './theme.service';
+import type { Mock } from 'vitest';
 
 /** document.cookie, kept in memory: the tests' page isn't under /gemp-lotr, where the cookie is written. */
 function fakeCookies(initial: Record<string, string> = {}) {
@@ -178,9 +179,9 @@ describe('ThemeService', () => {
   });
 
   describe('a page with a theme choice of its own (the game)', () => {
-    let replace: ReturnType<typeof vi.fn>;
+    let replace: Mock<PageCues['replace']>;
     function gameService(queryString = '', path = '/gemp-lotr/ng/game'): ThemeService {
-      replace = vi.fn();
+      replace = vi.fn<PageCues['replace']>();
       TestBed.configureTestingModule({
         providers: [
           { provide: PAGE_QUERY_STRING, useValue: queryString },

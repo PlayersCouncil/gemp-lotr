@@ -13,6 +13,7 @@ import { provideFakeNotifier } from '../../testing/fake-notifier';
 import { PUZZLE_SLOTS } from '../../testing/table-edit';
 import { GamePageComponent } from './game-page.component';
 import { mentionOf } from './tabs/game-chat.component';
+import { sentForm } from '../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const CHAT = '/gemp-lotr-server/chat/Game7';
@@ -356,7 +357,7 @@ describe('GamePageComponent', () => {
     field.value = 'hello';
     field.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
     const sent = backend.expectOne((r) => r.url === CHAT && r.method === 'POST');
-    expect(sent.request.body?.get('message')).toBe('hello');
+    expect(sentForm(sent.request).get('message')).toBe('hello');
     expect(field.value).toBe('');
     // Nothing typed: nothing sent
     field.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));

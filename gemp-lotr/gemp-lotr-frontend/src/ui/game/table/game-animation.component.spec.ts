@@ -4,10 +4,11 @@ import { CardViews } from '../../../core/cards/card-views.service';
 import { GameAnimation } from '../../../core/game/session/event-pacing';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { GameAnimationComponent } from './game-animation.component';
+import type { Mock } from 'vitest';
 
 describe('GameAnimationComponent', () => {
   const animation = signal<{ animation: GameAnimation; duration: number } | null>(null);
-  let animate: ReturnType<typeof vi.fn>;
+  let animate: Mock<Element['animate']>;
   let page: HTMLElement;
   let saved: { animate: unknown; frame: typeof window.requestAnimationFrame };
 
@@ -22,7 +23,7 @@ describe('GameAnimationComponent', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
-    animate = vi.fn();
+    animate = vi.fn<Element['animate']>();
     saved = { animate: (Element.prototype as { animate?: unknown }).animate, frame: window.requestAnimationFrame };
     (Element.prototype as { animate?: unknown }).animate = animate;
     window.requestAnimationFrame = (callback) => {

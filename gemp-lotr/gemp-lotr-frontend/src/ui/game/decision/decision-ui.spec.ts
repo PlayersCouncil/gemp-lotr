@@ -7,6 +7,7 @@ import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { GamePageComponent } from '../game-page.component';
 import { choiceLabel } from './decision-dialogs.component';
+import { sentDecision } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const param = (name: string, ...values: string[]) =>
@@ -52,10 +53,7 @@ describe('the decisions on the game page', () => {
       el.querySelector<HTMLElement>(selector)!.click();
       await stable();
     };
-    const answer = () =>
-      backend
-        .match((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'))[0]
-        ?.request.body?.get('decisionValue') ?? null;
+    const answer = () => sentDecision(backend, GAME);
     return { fixture, el, stable, click, answer };
   }
 

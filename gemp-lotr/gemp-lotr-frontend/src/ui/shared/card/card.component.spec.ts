@@ -7,6 +7,8 @@ import { CardHover } from '../../../core/cards/card-hover.service';
 import { provideTestCardInteractions } from '../../../testing/card-interactions';
 import { CardComponent, DRAG_UP_FOR_INFO, LONG_PRESS_MS } from './card.component';
 import { CardGestures, CardGesturePlace } from './card-gestures';
+import { instanceOf } from '../../../testing/matchers';
+import type { Mock, MockInstance } from 'vitest';
 
 const CARD: CardView = {
   blueprintId: '1_2',
@@ -47,13 +49,13 @@ let hook: ((card: CardView, place: CardGesturePlace) => boolean) | null = null;
 
 describe('CardComponent', () => {
   let actions: {
-    activate: ReturnType<typeof vi.fn>;
-    showInfo: ReturnType<typeof vi.spyOn>;
-    showDraggedInfo: ReturnType<typeof vi.spyOn>;
+    activate: Mock<CardActions['activate']>;
+    showInfo: MockInstance<CardInfoService['show']>;
+    showDraggedInfo: MockInstance<CardInfoService['showDragged']>;
   };
 
   beforeEach(() => {
-    const activate = vi.fn();
+    const activate = vi.fn<CardActions['activate']>();
     TestBed.configureTestingModule({
       providers: [
         ...provideTestCardInteractions(),
@@ -128,7 +130,7 @@ describe('CardComponent', () => {
     it('click (or Enter/Space, which click a button) activates the card', async () => {
       const { el } = await render();
       el.click();
-      expect(actions.activate).toHaveBeenCalledWith(CARD.ref, expect.any(MouseEvent));
+      expect(actions.activate).toHaveBeenCalledWith(CARD.ref, instanceOf(MouseEvent));
       expect(actions.showInfo).not.toHaveBeenCalled();
     });
 

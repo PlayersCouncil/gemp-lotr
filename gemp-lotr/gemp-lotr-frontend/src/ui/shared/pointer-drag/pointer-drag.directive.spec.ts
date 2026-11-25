@@ -28,7 +28,11 @@ describe('PointerDragDirective', () => {
     await fixture.whenStable();
     const host = fixture.componentInstance;
     const target = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.target')!;
-    const handlers = { move: vi.fn(), end: vi.fn(), cancel: vi.fn() };
+    const handlers = {
+      move: vi.fn<DragHandlers['move']>(),
+      end: vi.fn<DragHandlers['end']>(),
+      cancel: vi.fn<(event: PointerEvent) => void>(),
+    };
     host.handlers = handlers;
     return { fixture, host, target, handlers };
   }

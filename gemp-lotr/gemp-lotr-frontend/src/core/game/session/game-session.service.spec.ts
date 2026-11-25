@@ -5,6 +5,7 @@ import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { GameApi } from '../api/game-api.service';
 import { provideGameState } from '../game-state';
 import { GameSession, POLL_DELAY_MS, problemFor } from './game-session.service';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const decision = (
@@ -36,7 +37,11 @@ describe('GameSession', () => {
   const expectPoll = (cn: string) => {
     vi.advanceTimersByTime(POLL_DELAY_MS);
     return backend.expectOne(
-      (r) => r.url === GAME && r.method === 'POST' && r.body?.get('channelNumber') === cn && !r.body?.has('decisionId'),
+      (r) =>
+        r.url === GAME &&
+        r.method === 'POST' &&
+        sentForm(r).get('channelNumber') === cn &&
+        !sentForm(r).has('decisionId'),
     );
   };
 
@@ -49,7 +54,7 @@ describe('GameSession', () => {
   afterEach(() => {
     vi.advanceTimersByTime(POLL_DELAY_MS);
     // A question for news may be open (the page asks while nothing waits for the player, also after the end)
-    backend.match((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'));
+    backend.match((r) => r.url === GAME && r.method === 'POST' && !sentForm(r).has('decisionId'));
     backend.verify();
     vi.useRealTimers();
   });
@@ -71,9 +76,9 @@ describe('GameSession', () => {
     session.answer('10 20');
     expect(session.model().decision).toBeNull();
     const answer = backend.expectOne((r) => r.url === GAME && r.method === 'POST');
-    expect(answer.request.body?.get('channelNumber')).toBe('1');
-    expect(answer.request.body?.get('decisionId')).toBe('1');
-    expect(answer.request.body?.get('decisionValue')).toBe('10 20');
+    expect(sentForm(answer.request).get('channelNumber')).toBe('1');
+    expect(sentForm(answer.request).get('decisionId')).toBe('1');
+    expect(sentForm(answer.request).get('decisionValue')).toBe('10 20');
     answer.flush(update('2', '<ge type="GPC" phase="Skirmish"/>'));
     expect(session.model().phase).toBe('Skirmish');
     expectPoll('2').flush(update('3', '<ge type="EG"/>'));

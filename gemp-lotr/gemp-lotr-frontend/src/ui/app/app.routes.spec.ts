@@ -19,6 +19,7 @@ import { HallShellComponent } from '../hall/hall-shell.component';
 import { HALL_SERVICES } from '../../core/hall/hall-services';
 import { AppComponent } from './app.component';
 import { APP_ROUTES } from './app.routes';
+import { instanceOf } from '../../testing/matchers';
 
 describe('app routes', () => {
   let loginCheck: () => Observable<string>;
@@ -48,7 +49,7 @@ describe('app routes', () => {
 
   /** Opens an address as the browser gives it to the router: Location drops a trailing slash ("ng/deckbuilder/"). */
   async function open(url: string) {
-    const page = await harness.navigateByUrl(TestBed.inject(Location).normalize(url));
+    const page = (await harness.navigateByUrl(TestBed.inject(Location).normalize(url))) as unknown;
     return { page, url: TestBed.inject(Router).url };
   }
 
@@ -64,7 +65,7 @@ describe('app routes', () => {
   });
 
   it('opens the Game Hall at the app root and at unknown addresses, keeping the query string', async () => {
-    expect(await open('/')).toEqual({ page: expect.any(HallShellComponent), url: '/hall' });
+    expect(await open('/')).toEqual({ page: instanceOf(HallShellComponent), url: '/hall' });
     expect(harness.fixture.nativeElement.querySelector('gd-hall-shell gd-game-hall-tab')).not.toBeNull();
     expect((await open('/no/such/page?theme=classic')).url).toBe('/hall?theme=classic');
   });

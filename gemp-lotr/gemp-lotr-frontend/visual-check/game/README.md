@@ -94,7 +94,11 @@ of each card (`data-card-id`: its zone, `data-hindered`, its picture, numbers an
 - **threats**: threats and the Shadow's initiative in the status;
 - **revealedHand**: the opponent's hand revealed (`handRevealed`): its cards in the opponent's piles;
 - **metaSite**: an RTMD meta-site in support, drawn as game.html draws it (the visual card's picture with the
-  modifier's bottom over it, `Card.CreateSplitCardDiv`), against the same card with no pre-game setup naming it.
+  modifier's bottom over it, `Card.CreateSplitCardDiv`), against the same card with no pre-game setup naming it;
+- **supportDrag** (on a computer only: a mouse gesture, as in game.html): the player's support row of a possession and
+  three conditions (state `supportRow`), its first card dragged two card widths to the right: it moves two places, as
+  game.html moves it (`gameUi.js` `dragContinuesCardFunction`; the owner, 2026-11-23), and keeps its place after a
+  reload.
 
 It also checks that its list is whole, from the server's code: every attribute of a game event and of the game's stats
 (`EventSerializer.java`) is a mechanic here, shown by another check, or not shown by game.html either (`FIELDS`, each

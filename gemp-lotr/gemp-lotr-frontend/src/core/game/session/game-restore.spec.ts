@@ -10,7 +10,7 @@ class FakeStore {
     return this.values.get(key) ?? null;
   }
   write(key: string, value: unknown): void {
-    this.values.set(key, JSON.parse(JSON.stringify(value)));
+    this.values.set(key, JSON.parse(JSON.stringify(value)) as unknown);
   }
   remove(key: string): void {
     this.values.delete(key);
