@@ -1,0 +1,227 @@
+/*
+ * A replay's controls (gameUi.js init in replay mode): two jQuery UI icon buttons, 2.4em wide, and under them the
+ * play picture made a jQuery UI button (.2em .3em around it). The picture is wider than the box and sticks out of it,
+ * and out of the window at its bottom, as on the legacy page.
+ */
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+}
+
+.gd-game-replay__speed {
+  /* a button centres its content; the icon keeps to its place */
+  display: flex;
+  align-items: flex-start;
+  /* 2.4em and the legacy line's height, at the widgets' 13.2px (a button has a font size of its own) */
+  width: 31.67px;
+  height: 52.27px;
+  margin-right: 1.32px;
+  padding: 0;
+}
+
+/* The icon where jQuery UI put it in these buttons: near the top left corner, as on the legacy page */
+.gd-game-replay__speed::before {
+  margin: 0.6px 0 0 -3.2px;
+}
+
+.gd-game-replay__play {
+  box-sizing: content-box;
+  padding: 2.64px 3.96px;
+  line-height: 0;
+}
+
+.gd-game-replay__play > img {
+  display: block;
+}
+
+/* jQuery UI's triangles pointing left and right */
+.gd-game-replay__speed[data-icon='slower']::before {
+  background-position: -96px -16px;
+}
+
+.gd-game-replay__speed[data-icon='faster']::before {
+  background-position: -32px -16px;
+}
+
+/* A jQuery UI button that has the focus looks as under the mouse, also after a click (ui-state-focus) */
+.gd-button:focus {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+}
+
+.gd-button[data-icon]:focus::before {
+  background-image: var(--theme-icons-hover);
+}
+
+/*
+ * The modern theme (data-words), on a phone and a computer: one row, Slower left, the play button in the middle with
+ * the speed above it, Faster right; the play button in the main button's colours, the others the secondary ones' (the
+ * owner, 2026-11-20)
+ */
+:host([data-words]) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 14px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.gd-game-replay__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.gd-game-replay__middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.gd-game-replay__side {
+  min-height: 44px;
+  min-width: 92px;
+  padding: 4px 16px;
+  border: 1px solid var(--theme-separator);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--theme-text);
+  font: inherit;
+  line-height: 1.2;
+}
+
+.gd-game-replay__side[data-replay='slower'] {
+  justify-self: end;
+}
+
+.gd-game-replay__side[data-replay='faster'] {
+  justify-self: start;
+}
+
+.gd-game-replay__side:disabled {
+  opacity: 0.4;
+}
+
+.gd-game-replay__main {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: 1px solid var(--theme-game-main-edge);
+  border-radius: 50%;
+  background: var(--theme-game-main-bg);
+  box-shadow: var(--theme-game-main-shadow);
+  color: var(--theme-game-main-text);
+}
+
+.gd-game-replay__main > svg {
+  fill: currentColor;
+}
+
+/* Pressed shows at once, as the divider's buttons */
+:is(.gd-game-replay__side, .gd-game-replay__main):active:not(:disabled) {
+  transform: translateY(1px);
+  filter: brightness(0.92);
+}
+
+/*
+ * In the phone layout's divider (data-compact): as low as they go, so the divider covers less of the table (the owner,
+ * 2026-11-20): a smaller play button, the speed tight above it, lower pills
+ */
+:host([data-compact]) {
+  --fold: 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 10px;
+  font-size: 14px;
+  /* The fold moves the columns: Faster's slides out of the box, not out of the page */
+  overflow: clip;
+  transition:
+    grid-template-columns var(--fold),
+    gap var(--fold),
+    margin-top var(--fold);
+}
+
+:host([data-compact]) .gd-game-replay__middle {
+  gap: 1px;
+}
+
+:host([data-compact]) .gd-game-replay__value {
+  max-height: 14px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  transition:
+    max-height var(--fold),
+    opacity var(--fold);
+}
+
+:host([data-compact]) .gd-game-replay__side {
+  min-height: 34px;
+  min-width: 80px;
+  padding: 2px 12px;
+  transition:
+    opacity var(--fold),
+    visibility var(--fold);
+}
+
+:host([data-compact]) .gd-game-replay__main {
+  width: 42px;
+  height: 42px;
+  transition:
+    width var(--fold),
+    height var(--fold);
+}
+
+:host([data-compact]) .gd-game-replay__main > svg {
+  width: 16px;
+  height: 16px;
+  transition:
+    width var(--fold),
+    height var(--fold);
+}
+
+/*
+ * Playing (data-playing): folded away. The middle column slides to the row's right (Faster's column closes), Slower,
+ * Faster and the speed fade, and the play button shrinks to a small pause button; paused, all of it comes back
+ */
+:host([data-compact][data-playing]) {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 0fr);
+  gap: 0;
+  /* Up beside the divider's line of text (its 8px gap and most of the button's height): no row of its own */
+  margin-top: -33px;
+}
+
+:host([data-compact][data-playing]) .gd-game-replay__side {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+:host([data-compact][data-playing]) .gd-game-replay__value {
+  max-height: 0;
+  opacity: 0;
+}
+
+:host([data-compact][data-playing]) .gd-game-replay__main {
+  width: 28px;
+  height: 28px;
+}
+
+:host([data-compact][data-playing]) .gd-game-replay__main > svg {
+  width: 11px;
+  height: 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([data-compact]),
+  :host([data-compact]) * {
+    transition: none;
+  }
+}

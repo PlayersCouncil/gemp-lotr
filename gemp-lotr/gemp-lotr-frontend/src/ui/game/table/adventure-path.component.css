@@ -1,0 +1,76 @@
+/*
+ * AdvPathCardGroup: the sites at the column's full width, one under the other, 5px apart or squeezed together so the
+ * last one ends at the bottom. Each where the legacy group put it, rounded down to a whole pixel.
+ */
+
+:host {
+  --gd-card-height: 100cqw;
+  --site-h: round(down, calc(100cqw * 350 / 490), 1px);
+  --n: var(--gd-path-count, 1);
+  --gap: round(down, min(5px, (100cqh - var(--n) * var(--site-h)) / max(var(--n) - 1, 1)), 0.015625px);
+  display: block;
+  position: relative;
+  container-type: size;
+}
+
+.gd-card {
+  position: absolute;
+  left: 0;
+  /* Where the page measured it (--gd-path-top: as the legacy group added the sites up), else computed here */
+  top: var(--gd-path-top, round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px));
+}
+
+/*
+ * A low screen in the modern theme (the page's narrow path column, which scrolls): the sites one under the other 5px
+ * apart at the column's width, never squeezed, the path as high as they are
+ */
+@media (max-height: 520px) {
+  :host-context(html[data-theme='modern']) {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  :host-context(html[data-theme='modern']) .gd-card {
+    position: relative;
+    top: 0;
+    flex: none;
+  }
+}
+
+/* A card that isn't active this turn: dimmed, in a dark frame */
+.gd-card[data-inactive] {
+  --gd-card-image-filter: var(--theme-game-inactive-filter);
+  --gd-card-frame: var(--theme-game-inactive-border);
+}
+
+/* A card the waiting decision offers, or one chosen for it: framed in the choice's colour */
+.gd-card[data-mark] {
+  --gd-card-frame: var(--theme-game-selected);
+}
+
+.gd-card[data-mark='selectable'] {
+  --gd-card-frame: var(--theme-game-selectable);
+  cursor: pointer;
+}
+
+.gd-card[data-mark='actionable'] {
+  --gd-card-frame: var(--theme-game-actionable);
+  cursor: pointer;
+}
+
+/* An action that would do nothing (the new master's noEffect): pale yellow and doubled (game.css .noEffectCard) */
+.gd-card[data-mark='actionable'][data-no-effect] {
+  --gd-card-frame: var(--theme-game-no-effect);
+  --gd-card-frame-style: double;
+}
+
+.gd-card[data-inactive][data-mark] {
+  --gd-card-image-filter: var(--theme-game-inactive-offered-filter);
+}
+
+/* A card that isn't on the table but has an action: see-through, in the hand's row */
+.gd-card[data-zone='EXTRA'] {
+  opacity: 0.7;
+}

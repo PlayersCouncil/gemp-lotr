@@ -1,0 +1,167 @@
+@let hidden = query.hiddenCultureGroups();
+
+<ng-template #fieldTemplate gdFieldRow let-field>
+  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -- it wraps the control, inside the @switch -->
+  <label
+    class="gd-field"
+    [attr.data-field]="fieldName(field)"
+    [attr.data-kind]="field.kind"
+    [attr.data-wide]="isWide(field) ? '' : null"
+  >
+    <span class="gd-field__label">{{ labelOf(field) }}</span>
+    <span class="gd-field__control">
+      @switch (field.kind) {
+        @case ('select') {
+          <select [formField]="control(field.field)" (change)="set(field.field, $event)">
+            @for (option of field.options(); track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        }
+        @case ('text') {
+          <input
+            type="text"
+            [formField]="control(field.field)"
+            [attr.placeholder]="part() === 'pane' && field.field === 'name' ? 'Card name' : null"
+            (change)="set(field.field, $event)"
+          />
+        }
+        @case ('numeric') {
+          <select [formField]="control(compareField(field.stat))" (change)="set(compareField(field.stat), $event)">
+            @for (option of compareOptions; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <input
+            type="number"
+            min="0"
+            max="12"
+            [attr.aria-label]="field.label + ' value'"
+            [hidden]="value(compareField(field.stat)) === ''"
+            [value]="value(valueField(field.stat))"
+            (change)="set(valueField(field.stat), $event)"
+          />
+        }
+      }
+    </span>
+  </label>
+</ng-template>
+
+@if (part() !== 'menu') {
+  <div class="gd-pager">
+    <button
+      type="button"
+      class="gd-pager__previous gd-button"
+      data-icon="previous"
+      aria-label="Previous page"
+      [disabled]="browser.previousDisabled()"
+      (click)="browser.previousPage()"
+    ></button>
+    <div class="gd-pager__track">
+      @if (part() === 'pane') {
+        <input
+          class="gd-pager__size gd-slider"
+          type="range"
+          aria-label="Card size"
+          data-sets="card-size"
+          [min]="cardSizes.min"
+          [max]="cardSizes.max"
+          [step]="cardSizes.step"
+          [value]="cardSize.percent()"
+          (input)="setCardSize($event)"
+        />
+      } @else {
+        <input
+          class="gd-pager__size gd-slider"
+          type="range"
+          aria-label="Cards per page"
+          [min]="pageSize.min"
+          [max]="pageSize.max"
+          [value]="pageSize.start"
+          [disabled]="browser.sliderDisabled()"
+          (input)="setPageSize($event)"
+        />
+      }
+    </div>
+    <button
+      type="button"
+      class="gd-pager__next gd-button"
+      data-icon="next"
+      aria-label="Next page"
+      [disabled]="browser.nextDisabled()"
+      (click)="browser.nextPage()"
+    ></button>
+  </div>
+}
+
+<div class="gd-filter__fields">
+  <div class="gd-filter__basic">
+    @for (field of basicFields; track fieldName(field)) {
+      @if (shows(fieldName(field))) {
+        <ng-container *ngTemplateOutlet="fieldTemplate; context: { $implicit: field }" />
+      }
+    }
+  </div>
+  <div class="gd-filter__advanced">
+    @if (part() !== 'pane') {
+      <p class="gd-filter__advanced-title">
+        Advanced filters (<a [href]="wikiSearch" target="_blank" rel="noopener noreferrer">See more on the Wiki.</a>)
+      </p>
+    }
+    @for (field of advancedFields; track fieldName(field)) {
+      @if (shows(fieldName(field))) {
+        <ng-container *ngTemplateOutlet="fieldTemplate; context: { $implicit: field }" />
+      }
+    }
+  </div>
+</div>
+
+@if (part() !== 'pane') {
+  <div class="gd-filter__resets">
+    <button type="button" class="gd-button" data-action="reset-advanced" (click)="query.resetAdvanced()">
+      <span class="gd-button__text">Reset advanced filters only</span>
+    </button>
+    <button type="button" class="gd-button" data-action="reset-all" (click)="query.resetAll()">
+      <span class="gd-button__text">Reset all filters</span>
+    </button>
+  </div>
+}
+
+@if (shows('cultures')) {
+  <div class="gd-cultures" role="group" aria-label="Cultures">
+    @for (group of cultureGroups; track group.id) {
+      <div class="gd-cultures__group" [attr.data-group]="group.id" [hidden]="hidden.has(group.id)">
+        @for (culture of group.cultures; track culture.code) {
+          @let active = isCultureActive(culture.code);
+          <label
+            class="gd-culture"
+            [attr.data-culture]="culture.code"
+            [attr.data-active]="active ? '' : null"
+            [attr.data-icon-kind]="culture.cultureClass ? 'culture' : 'other'"
+          >
+            <input
+              class="gd-culture__input"
+              type="checkbox"
+              [checked]="active"
+              [attr.aria-label]="culture.code"
+              (change)="query.toggleCulture(culture.code)"
+            />
+            <span class="gd-culture__face"><img class="gd-culture__icon" [src]="culture.image" alt="" /></span>
+          </label>
+        }
+      </div>
+    }
+  </div>
+}
+
+@if (part() === 'menu') {
+  <fieldset class="gd-filter__pins">
+    <legend>Always show</legend>
+    @for (pin of pinOptions; track pin.name) {
+      <label class="gd-pin" [attr.data-pin]="pin.name">
+        <input type="checkbox" [checked]="pins.isPinned(pin.name)" (change)="pins.toggle(pin.name)" />
+        {{ pin.label }}
+      </label>
+    }
+  </fieldset>
+}

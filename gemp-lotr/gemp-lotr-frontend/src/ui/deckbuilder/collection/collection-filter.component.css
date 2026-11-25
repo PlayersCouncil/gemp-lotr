@@ -1,0 +1,477 @@
+/* The collection filter (CardFilter.buildUi) */
+
+:host {
+  /* The fields and the reset buttons are as wide as the legacy filter table; the pager and cultures span the pane */
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.gd-pager,
+.gd-cultures {
+  grid-column: 1 / -1;
+}
+
+.gd-pager {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/*
+ * The bar is drawn here, and the range input lies over it. The handle stays inside the bar, so that it never covers the
+ * arrow buttons (the legacy handle reached past both ends and did); the slider's starting value stays where it was.
+ */
+.gd-pager__track {
+  position: relative;
+  flex-grow: 1;
+  height: 10.56px;
+  border: 1px solid var(--theme-content-border);
+  border-radius: var(--theme-radius);
+  background: var(--theme-content-bg);
+}
+
+.gd-pager__track:has(.gd-pager__size:disabled) {
+  opacity: 0.35;
+}
+
+.gd-pager__size {
+  position: absolute;
+  left: -1px;
+  top: -3.95px;
+  width: 100%;
+  height: 17.84px;
+}
+
+.gd-pager__size::-webkit-slider-runnable-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-pager__size::-moz-range-track {
+  height: 17.84px;
+  border: 0;
+  background: none;
+}
+
+.gd-pager__size::-webkit-slider-thumb {
+  width: 17.84px;
+  height: 17.84px;
+  margin-top: 0;
+}
+
+.gd-pager__size::-moz-range-thumb {
+  width: 17.84px;
+  height: 17.84px;
+}
+
+.gd-pager__size:enabled:hover::-webkit-slider-thumb {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
+.gd-pager__size:enabled:hover::-moz-range-thumb {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
+.gd-pager__size:enabled:active::-webkit-slider-thumb {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-pager__size:enabled:active::-moz-range-thumb {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-pager__size:focus::-webkit-slider-thumb {
+  border-color: var(--theme-focus-ring-inner);
+  background: var(--theme-hover-bg);
+  box-shadow:
+    0 0 0 1px var(--theme-focus-ring-inner),
+    0 0 0 2px var(--theme-focus-ring-outer);
+}
+
+.gd-pager__size:focus::-moz-range-thumb {
+  border-color: var(--theme-focus-ring-inner);
+  background: var(--theme-hover-bg);
+  box-shadow:
+    0 0 0 1px var(--theme-focus-ring-inner),
+    0 0 0 2px var(--theme-focus-ring-outer);
+}
+
+/* Pressing the handle didn't draw the ring yet */
+.gd-pager__size:active::-webkit-slider-thumb {
+  box-shadow: none;
+}
+
+.gd-pager__size:active::-moz-range-thumb {
+  box-shadow: none;
+}
+
+/* jQuery UI's button: a right margin of 0.1em at 13.2px */
+.gd-pager .gd-button {
+  width: 25px;
+  height: 31.19px;
+  margin-right: 1.32px;
+  padding: 0;
+}
+
+/* Where jQuery UI's padding left the icon */
+.gd-pager .gd-button::before {
+  margin-left: 2.59px;
+}
+
+/* The legacy filter table: label, control, label, control; 2px cell spacing and 1px cell padding */
+.gd-filter__fields {
+  display: grid;
+  /*
+   * Each column as wide as its widest content, as the legacy table sized them; where the pane is too narrow for that,
+   * the columns shrink and their labels wrap, as in the table
+   */
+  /* The label columns as wide as their labels, unless the theme pins them (font metrics) */
+  grid-template-columns: var(--theme-metrics-filter-label-1) auto var(--theme-metrics-filter-label-2) auto;
+  align-items: center;
+  column-gap: 2px;
+  row-gap: 2px;
+  padding: 2px;
+  justify-content: start;
+}
+
+.gd-filter__basic,
+.gd-filter__advanced,
+.gd-field {
+  display: contents;
+}
+
+.gd-field__label {
+  /* The cell's 1px padding on both sides, and .filterLabel's 5px on the right */
+  padding: 1px var(--theme-metrics-filter-label-gap) 1px 1px;
+  color: var(--theme-text);
+  font-weight: bolder;
+  font-size: var(--theme-metrics-filter-label-size);
+  line-height: var(--theme-metrics-filter-label-line);
+}
+
+.gd-field__control {
+  display: flex;
+  align-items: center;
+  padding: 1px;
+}
+
+.gd-field[data-wide] .gd-field__control {
+  grid-column: span 3;
+}
+
+.gd-field select,
+.gd-field input {
+  font-size: 80%;
+  padding-right: 5px;
+  color: var(--theme-text);
+  background-color: var(--theme-field-bg);
+}
+
+.gd-field select {
+  max-width: 100px;
+  padding: 3px 5px 3px 3px;
+  border-color: var(--theme-field-border-light) var(--theme-field-border-dark) var(--theme-field-border-dark)
+    var(--theme-field-border-light);
+  border-radius: var(--theme-field-radius);
+}
+
+.gd-field select:hover {
+  background-color: var(--theme-field-hover-bg);
+}
+
+.gd-field input {
+  margin: 2px;
+  border-color: var(--theme-field-border-dark) var(--theme-field-border-light) var(--theme-field-border-light)
+    var(--theme-field-border-dark);
+}
+
+.gd-field input[type='text'] {
+  width: 250px;
+  max-width: 230px;
+}
+
+.gd-field input[type='number'] {
+  width: 35px;
+}
+
+.gd-field select:disabled,
+.gd-field input:disabled {
+  color: var(--theme-field-disabled-text);
+  background-color: var(--theme-field-disabled-bg);
+}
+
+.gd-filter__advanced-title {
+  grid-column: 1 / -1;
+  margin: 0;
+  /* .cardFilterText's 5px on top, and the table cell's 1px */
+  padding: 6px 0 1px;
+  color: var(--theme-text);
+  text-align: center;
+  font-size: 90%;
+  line-height: var(--theme-metrics-filter-title-line);
+}
+
+.gd-filter__resets {
+  grid-column: 1;
+  display: grid;
+  /*
+   * The legacy row: a table cell (2px spacing, 1px padding) holding a flex row (2px gap) of two buttons that share its
+   * width, each with 3px on the left and jQuery UI's .1em of the button's font (95% of this one) on the right. The
+   * table's width, which the browser's fonts set, decides theirs.
+   */
+  grid-template-columns: 1fr 1fr;
+  gap: calc(5px + 0.095em);
+  margin: 0 calc(3px + 0.095em) 0 6px;
+  padding-top: 9px;
+  /* The table text: 90% of the page's 12px */
+  font-size: 90%;
+}
+
+/* The legacy reset buttons looked the same under the mouse and with the focus, which only added the browser's ring */
+.gd-filter__resets .gd-button:is(:enabled:hover, :focus-visible) {
+  border-color: var(--theme-widget-border);
+  background: var(--theme-default-bg);
+  color: var(--theme-widget-text);
+}
+
+.gd-filter__resets .gd-button {
+  height: 19px;
+  padding: 0;
+  /*
+   * 95% of the table text, then jQuery UI's 70% for the text inside: in steps, as on the legacy page, since the browser
+   * rounds each (Firefox to 1/64px)
+   */
+  font-size: 95%;
+}
+
+/* .ui-button-text: a block, so the line is only as high as its own font's */
+.gd-button__text {
+  display: block;
+  font-size: 70%;
+  line-height: 1.4;
+}
+
+/* The culture toggles: a jQuery UI buttonset */
+.gd-cultures {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  margin-right: 7px;
+  font-family: var(--theme-font-widget);
+  font-size: 13.2px;
+}
+
+.gd-cultures__group {
+  display: flex;
+}
+
+.gd-culture {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.2em;
+  margin-right: -0.2em;
+  border: 1px solid var(--theme-widget-border);
+  background: var(--theme-default-bg);
+  cursor: pointer;
+}
+
+/* .ui-button-text: 70% of the button's font, which the browser rounds (Firefox to 9.25px), and its padding in that */
+.gd-culture__face {
+  display: flex;
+  padding: 0.2em 0.3em;
+  font-size: 70%;
+  line-height: 1.4;
+}
+
+.gd-cultures__group:first-child .gd-culture:first-child {
+  border-radius: var(--theme-radius) 0 0 var(--theme-radius);
+}
+
+.gd-cultures__group:last-child .gd-culture:last-child {
+  border-radius: 0 var(--theme-radius) var(--theme-radius) 0;
+}
+
+.gd-culture:hover,
+.gd-culture:has(.gd-culture__input:focus-visible) {
+  border-color: var(--theme-hover-border);
+  background: var(--theme-hover-bg);
+}
+
+.gd-culture[data-active] {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+/* A selected culture keeps its look with the keyboard focus */
+.gd-culture[data-active]:has(.gd-culture__input:focus-visible) {
+  border-color: var(--theme-active-border);
+  background: var(--theme-active-bg);
+}
+
+.gd-culture__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.gd-culture__icon {
+  height: 20px;
+}
+
+.gd-culture[data-icon-kind='culture'] .gd-culture__icon {
+  filter: var(--theme-culture-icon-filter);
+}
+
+.gd-culture[data-icon-kind='other'] .gd-culture__icon {
+  filter: var(--theme-other-icon-filter);
+}
+
+/*
+ * The compact layout's parts (data-part): each field a row, its name then its control at the full width, and the
+ * controls large enough for a finger (16px text, which phones don't zoom into)
+ */
+:host([data-part]) .gd-filter__fields {
+  display: contents;
+}
+
+:host([data-part]) .gd-field {
+  display: grid;
+  grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+:host([data-part]) .gd-field__label {
+  padding: 0;
+  font-size: 13px;
+  line-height: normal;
+}
+
+:host([data-part]) .gd-field__control,
+:host([data-part]) .gd-field[data-wide] .gd-field__control {
+  grid-column: auto;
+  gap: 6px;
+  padding: 0;
+}
+
+:host([data-part]) .gd-field :is(select, input) {
+  box-sizing: border-box;
+  height: 36px;
+  margin: 0;
+  font-size: 16px;
+}
+
+:host([data-part]) .gd-field :is(select, input[type='text']) {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
+}
+
+:host([data-part]) .gd-field input[type='number'] {
+  flex: none;
+  width: 64px;
+}
+
+/* The pane part: in the collection's bar (a grid), the card name beside the menu's button, the rest under them */
+:host([data-part='pane']) {
+  display: contents;
+}
+
+:host([data-part='pane']) :is(.gd-field, .gd-pager, .gd-cultures) {
+  grid-column: 1 / -1;
+}
+
+:host([data-part='pane']) .gd-field[data-field='name'] {
+  grid-area: 1 / 2;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Named by its placeholder and, for assistive technology, by its label */
+:host([data-part='pane']) .gd-field[data-field='name'] .gd-field__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:host([data-part='pane']) .gd-pager .gd-button {
+  width: 36px;
+  height: 36px;
+}
+
+:host([data-part='pane']) .gd-pager .gd-button::before {
+  margin: auto;
+}
+
+/* The menu part: in the menu, one under the other */
+:host([data-part='menu']) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+:host([data-part='menu']) .gd-filter__advanced-title {
+  padding: 8px 0 0;
+  text-align: left;
+  font-size: 13px;
+  line-height: normal;
+}
+
+:host([data-part='menu']) .gd-filter__resets {
+  margin: 4px 0 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+:host([data-part='menu']) .gd-filter__resets .gd-button {
+  height: 36px;
+}
+
+:host([data-part='menu']) .gd-filter__resets .gd-button__text {
+  font-size: 100%;
+}
+
+:host([data-part]) .gd-cultures {
+  margin: 0;
+}
+
+.gd-filter__pins {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+  margin: 8px 0 0;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--theme-widget-border);
+  border-radius: var(--theme-radius);
+  font-size: 14px;
+}
+
+.gd-filter__pins legend {
+  padding: 0 4px;
+  font-size: 13px;
+}
+
+.gd-pin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.gd-pin input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}

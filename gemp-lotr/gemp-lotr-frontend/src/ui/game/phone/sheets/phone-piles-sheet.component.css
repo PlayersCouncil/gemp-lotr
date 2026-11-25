@@ -1,0 +1,6 @@
+@import './phone-sheet-parts.css';
+
+/* A pile's section holds to the sheet's width (its row scrolls) */
+section {
+  min-width: 0;
+}

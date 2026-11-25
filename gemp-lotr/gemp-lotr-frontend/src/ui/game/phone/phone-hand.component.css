@@ -1,0 +1,90 @@
+/* The hand under the divider, or the cards a decision offers from off the table in its place (G7) */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--theme-game-phone-hand-bg);
+}
+
+:host([data-place='choices']) {
+  background: var(--theme-game-phone-offer-bg);
+  box-shadow: inset 0 2px 0 var(--theme-game-phone-accent);
+}
+
+.gd-phone-hand__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 0;
+  min-height: 26px;
+}
+
+.gd-phone-hand__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--theme-game-phone-font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--theme-game-phone-muted);
+}
+
+.gd-phone-hand__count {
+  min-width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  display: inline-grid;
+  place-items: center;
+  /* A gold ring */
+  border: 1px solid var(--theme-game-phone-ring);
+  box-shadow:
+    inset 0 0 0 1px var(--theme-page-bg),
+    inset 0 0 0 2px var(--theme-game-phone-frame-inner);
+  border-radius: 9px;
+  color: var(--theme-text);
+  font-family: var(--theme-game-phone-font-text);
+  letter-spacing: 0;
+}
+
+.gd-phone-hand__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gd-phone-hand__x {
+  flex: none;
+  width: 36px;
+  height: 30px;
+  border: 1px solid var(--theme-separator);
+  border-radius: var(--theme-radius);
+  background: var(--theme-hover-bg);
+  color: var(--theme-text);
+  font: inherit;
+}
+
+.gd-phone-hand__show {
+  margin-left: auto;
+  padding: 3px 10px;
+  border: 1px solid var(--theme-game-phone-accent);
+  border-radius: 99px;
+  background: var(--theme-game-phone-accent);
+  color: var(--theme-game-phone-on-accent);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* The cards as high as the hand's place lets them */
+:host > gd-phone-cards {
+  flex: 1;
+  min-height: 0;
+  --gd-phone-card: var(--gd-phone-hand-card, 120px);
+}

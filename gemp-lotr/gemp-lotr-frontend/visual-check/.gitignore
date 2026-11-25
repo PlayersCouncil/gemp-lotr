@@ -1,0 +1,5 @@
+/node_modules
+/.local-server
+# Every report folder (run.mjs --out): report, report-local, report-phone, ...
+/report
+/report-*

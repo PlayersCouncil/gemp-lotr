@@ -57,6 +57,7 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 9. Navigate to the folder that Docker binds to your code base (by default `etc/gemp-lotr` unless you updated volume bindings in `docker-compose.yml`)
 	* Navigate to the gemp codebase  `cd etc/gemp-lotr`
 	* Use Maven to compile the application	`mvn install`
+	* This also builds the Angular frontend (see `gemp-lotr-frontend/README.md`); the first run downloads Node.  If your `gemp_app` image was built before this was added, rebuild it so it includes `libstdc++`.
 	* This process will take upwards of 5-10 minutes.  
 	* You should see a green "BUILD SUCCESS" when it is successfully done.  In portainer.io or another rich command line context, you should see lots of red text if it failed.
 10. Uncomment [this line](https://github.com/PlayersCouncil/gemp-lotr/blob/master/gemp-lotr/docker/docker-compose.yml#L52) in `docker-compose.yml` to ensure the GEMP server is run on every container statrt
@@ -69,6 +70,8 @@ gemp_app is slightly more complicated.  Gemp is a Java server, is built using Ma
 13. If you're presented with the home page, register a new user and log in. It's possible for the login page to present but login itself to fail if configured incorrectly, so don't celebrate until you see the (empty) lobby.  If you get that far, then congrats, you now have a working local version of Gemp.
 
 At this point, editing the code is a matter of changing the files on your local machine and either re-running step 9, or re-compiling the code base in your IDE of choice.  
+
+Web page changes need neither: the server reads the pages from `gemp-lotr-async/src/main/web` on disk.  For the Angular pages, the `frontend` container (started by `docker-compose up -d` along with the others) rebuilds them into that folder within a few seconds of their sources changing, e.g. after a `git pull`.  It builds next to the live copy and swaps the result in only when the build succeeds.  Follow it with `docker logs -f gemp_frontend_1`.  
 
 Run the following commands to ensure that you don't have local configuration showing up in your commits:
 
