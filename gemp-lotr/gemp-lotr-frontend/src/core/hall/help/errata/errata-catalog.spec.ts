@@ -1,8 +1,9 @@
 import { readServerResponse } from '../../../../testing/files';
 import { errataCollectorLabel, parseErrataCatalog } from './errata-catalog';
+import { parseJson } from '../../../api/json';
 
 describe('parseErrataCatalog', () => {
-  const catalog = parseErrataCatalog(JSON.parse(readServerResponse('errata.json')));
+  const catalog = parseErrataCatalog(parseJson(readServerResponse('errata.json')));
 
   it('reads the entries, formats and counts, leaving the old maps unread', () => {
     expect(catalog.entries.map((entry) => entry.id)).toEqual([

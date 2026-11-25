@@ -6,6 +6,7 @@ import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
 import { providePathTesting, SANDBOX_PILES_STATE } from '../../../testing/table-edit-piles';
 import { PathPopups } from './path-popups';
 import { SiteChooserComponent } from './site-chooser.component';
+import { instanceOf } from '../../../testing/matchers';
 
 describe('SiteChooserComponent', () => {
   let edit: FakeTableEdit;
@@ -66,11 +67,11 @@ describe('SiteChooserComponent', () => {
     edit.apply.mockResolvedValueOnce(false);
     item('site', '[data-alias="site4opp"]').click();
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 3, card: 'site4opp' }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 3, card: 'site4opp' }], instanceOf(Object));
     expect(popups.chooser()).not.toBeNull();
     item('site', '[data-alias="site3opp"]').click();
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 3, card: 'site3opp' }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 3, card: 'site3opp' }], instanceOf(Object));
     expect(popups.chooser()).toBeNull();
   });
 
@@ -82,14 +83,14 @@ describe('SiteChooserComponent', () => {
     expect(items()).toEqual(['Site 3', '‹ Back']);
     item('from').click();
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 3, from: 'shadow' }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'site', number: 3, from: 'shadow' }], instanceOf(Object));
     popups.openChooser(3, spot);
     fixture.detectChanges();
     edit.board.update((board) => board && { ...board, cards: [] });
     go('decks');
     go('deck', '[data-seat="freeps"]');
     expect(items()).toEqual(['‹ Back']);
-    expect(fixture.nativeElement.textContent).toContain('No sites');
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('No sites');
   });
 
   it('goes back a step with Back or Left; Escape or a press outside closes it', () => {
@@ -111,12 +112,12 @@ describe('SiteChooserComponent', () => {
     fixture.detectChanges();
     expect(menu().dataset['step']).toBe('start');
     const press = new MouseEvent('contextmenu', { cancelable: true });
-    fixture.nativeElement.querySelector('.gd-edit-backdrop').dispatchEvent(press);
+    (fixture.nativeElement as HTMLElement).querySelector('.gd-edit-backdrop')!.dispatchEvent(press);
     expect(press.defaultPrevented).toBe(true);
     expect(popups.chooser()).toBeNull();
     popups.openChooser(3, spot);
     fixture.detectChanges();
-    fixture.nativeElement.querySelector('.gd-edit-backdrop').dispatchEvent(new Event('pointerdown'));
+    (fixture.nativeElement as HTMLElement).querySelector('.gd-edit-backdrop')!.dispatchEvent(new Event('pointerdown'));
     expect(popups.chooser()).toBeNull();
   });
 });

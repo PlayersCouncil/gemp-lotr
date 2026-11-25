@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -16,6 +17,8 @@ import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake
 import { STEP_CARRY_KEY } from './step/step-editor';
 import { CATCH_UP_MS, StepTabComponent } from './step-tab.component';
 import { TablePicker } from './table-picker.service';
+import { sentForm } from '../../../testing/sent-form';
+import { textContaining } from '../../../testing/matchers';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -148,7 +151,7 @@ describe('StepTabComponent', () => {
   /** The edits on their way. */
   const edits = (): TestRequest[] => backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
   const patchOf = (request: TestRequest) =>
-    JSON.parse(request.request.body.get('patch') as string) as { steps: Record<string, unknown>[] };
+    JSON.parse(sentForm(request.request).get('patch') as string) as { steps: Record<string, unknown>[] };
   /** The one edit on its way: its ops. */
   function sentOps(): Record<string, unknown>[] {
     const requests = edits();
@@ -177,10 +180,11 @@ describe('StepTabComponent', () => {
   };
 
   /** The one call of `what` on its way. */
-  function sent(what: string): TestRequest['request']['body'] {
+  function sent(what: string): HttpParams | undefined {
     const requests = backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
     expect(requests).toHaveLength(1);
-    return requests[0]!.request.body;
+    const body = requests[0]!.request.body as unknown;
+    return body instanceof HttpParams ? body : undefined;
   }
 
   describe('its head', () => {
@@ -556,7 +560,7 @@ describe('StepTabComponent', () => {
       await click('[data-act=pass-once]');
       await wait(0);
       expect(sentOps()[0]).toMatchObject({
-        set: { allow: { answers: 'play(sword)', passWhen: expect.stringContaining('alias(sword)') } },
+        set: { allow: { answers: 'play(sword)', passWhen: textContaining('alias(sword)') } },
       });
       expect(find<HTMLDetailsElement>('.gd-author-allow__more').open).toBe(true);
       await answer(
@@ -565,7 +569,7 @@ describe('StepTabComponent', () => {
       expect(el.querySelector('[data-act=pass-once]')).toBeNull();
       await click('[data-act=until-in-play]');
       await wait(0);
-      expect(sentOps()[0]).toMatchObject({ set: { until: expect.stringContaining('decision: action') } });
+      expect(sentOps()[0]).toMatchObject({ set: { until: textContaining('decision: action') } });
       await answer(withFirst({ until: { seat: 'freeps' } }));
       await tick('[data-flag=repeat]', false);
       await wait(0);

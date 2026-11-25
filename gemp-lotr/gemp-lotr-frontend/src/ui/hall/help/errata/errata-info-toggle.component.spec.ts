@@ -14,7 +14,7 @@ describe('ErrataInfoToggleComponent', () => {
   it('toggles its text, saying so (TableFlow.bindInfoToggles)', () => {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();
-    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const button = (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
     expect([button.textContent?.trim(), button.title, button.getAttribute('aria-controls')]).toEqual([
       'i',
       'What is this?',

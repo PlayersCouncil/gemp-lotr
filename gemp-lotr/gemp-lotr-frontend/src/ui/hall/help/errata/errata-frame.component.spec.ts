@@ -6,8 +6,9 @@ import { ErrataEntry } from '../../../../core/hall/help/errata/errata-models';
 import { FakeResizeObservers, installFakeResizeObserver } from '../../../../testing/fake-resize-observer';
 import { readServerResponse } from '../../../../testing/files';
 import { ErrataFrameComponent, ErrataPreviewRequest } from './errata-frame.component';
+import { parseJson } from '../../../../core/api/json';
 
-const { entries } = parseErrataCatalog(JSON.parse(readServerResponse('errata.json')));
+const { entries } = parseErrataCatalog(parseJson(readServerResponse('errata.json')));
 
 @Component({
   imports: [ErrataFrameComponent],
@@ -39,7 +40,7 @@ describe('ErrataFrameComponent', () => {
   function render() {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();
-    return { fixture, frame: fixture.nativeElement.querySelector('gd-errata-frame') as HTMLElement };
+    return { fixture, frame: (fixture.nativeElement as HTMLElement).querySelector('gd-errata-frame') as HTMLElement };
   }
   const texts = (root: Element, selector: string) =>
     Array.from(root.querySelectorAll(selector)).map((element) => element.textContent?.trim().replace(/\s+/g, ' '));

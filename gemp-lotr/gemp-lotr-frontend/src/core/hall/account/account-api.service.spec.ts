@@ -5,6 +5,8 @@ import { ApiError, INVALID_RESPONSE_STATUS } from '../../api/api-error';
 import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { AccountApi } from './account-api.service';
 import { NO_GAME_HISTORY_FILTERS } from './account-models';
+import { sentForm } from '../../../testing/sent-form';
+import { containing } from '../../../testing/matchers';
 
 describe('AccountApi', () => {
   let backend: ReturnType<typeof setUpAccount>['backend'];
@@ -48,7 +50,7 @@ describe('AccountApi', () => {
 
     const copy = firstValueFrom(api.copy('a.hjson'));
     const post = accountRequest(backend, '/scenarios/mine/copy', 'POST');
-    expect(String(post.request.body)).toBe('path=a.hjson');
+    expect(sentForm(post.request).toString()).toBe('path=a.hjson');
     post.flush('{"ok":true,"id":"x","path":"b.hjson"}');
     expect(await copy).toEqual({ id: 'x', path: 'b.hjson' });
 
@@ -63,7 +65,7 @@ describe('AccountApi', () => {
   it('turns an unreadable answer into an ApiError', async () => {
     const mine = firstValueFrom(api.myScenarios());
     accountRequest(backend, '/scenarios/mine').flush('<html>');
-    await expect(mine).rejects.toEqual(expect.objectContaining({ status: INVALID_RESPONSE_STATUS }));
+    await expect(mine).rejects.toEqual(containing({ status: INVALID_RESPONSE_STATUS }));
     const history = firstValueFrom(api.gameHistory(0, 20, NO_GAME_HISTORY_FILTERS));
     accountRequest(backend, '/gameHistory').flush('not xml <');
     await expect(history).rejects.toBeInstanceOf(ApiError);

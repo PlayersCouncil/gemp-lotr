@@ -1,6 +1,7 @@
 import { parseXml } from '../api/xml';
 import { readServerResponse, readServerXml } from '../../testing/files';
 import { parseChat, parseIgnored, parseIgnoreResult, parseIncognito } from './chat-parsers';
+import { parseJson } from '../api/json';
 
 describe('chat parsers', () => {
   it('reads the messages (server markup as text) and the user list', () => {
@@ -61,15 +62,15 @@ describe('chat parsers', () => {
   });
 
   it('reads the ignore list and the answers of ignoring and going incognito', () => {
-    expect(parseIgnored(JSON.parse(readServerResponse('ignores.json')))).toEqual(['Carol']);
+    expect(parseIgnored(parseJson(readServerResponse('ignores.json')))).toEqual(['Carol']);
     expect(parseIgnored(null)).toEqual([]);
-    expect(parseIgnoreResult(JSON.parse(readServerResponse('ignore-added.json')))).toEqual({
+    expect(parseIgnoreResult(parseJson(readServerResponse('ignore-added.json')))).toEqual({
       message: 'erin is now ignored.',
       ignored: ['Carol', 'erin'],
       changed: true,
       error: false,
     });
-    expect(parseIgnoreResult(JSON.parse(readServerResponse('ignore-refused.json')))).toEqual({
+    expect(parseIgnoreResult(parseJson(readServerResponse('ignore-refused.json')))).toEqual({
       message: "There is no player called 'nobody'.",
       ignored: ['Carol', 'erin'],
       changed: false,

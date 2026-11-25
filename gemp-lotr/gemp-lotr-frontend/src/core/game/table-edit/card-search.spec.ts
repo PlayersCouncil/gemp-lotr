@@ -239,7 +239,7 @@ describe('card search', () => {
       fresh.request.flush(PAGE);
       stale.request.flush({ total: 0, start: 0, cards: [] });
       expect(search.page()?.total).toBe(30);
-      expect(JSON.parse(localStorage.getItem(SEARCH_KEY)!).cardType).toBe('MINION');
+      expect((JSON.parse(localStorage.getItem(SEARCH_KEY)!) as { cardType: unknown }).cardType).toBe('MINION');
 
       search.toggleCulture('ELVEN');
       expect(asked().params.get('filter')).toContain('culture:ELVEN');

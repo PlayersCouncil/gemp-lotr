@@ -1,4 +1,5 @@
 import { draftState } from '../../../testing/authoring';
+import { parseJson } from '../../api/json';
 import { DraftState, DraftStep, StepTexts } from './authoring-state';
 import { carriedOf, StepForm, StepTransport } from './send-queue';
 import { withValue, WorkStep } from './step-model';
@@ -113,7 +114,7 @@ describe('the Step form and its sends', () => {
     expect(carried?.parts).toEqual(['answer']);
     // The next page's form, from the server's step (which has what was sent), takes back what was typed since
     const next = new StepForm('s1', { ...step, messages: [{ text: 'Hi' }] }, {}, { index: 0, sub: -1 }, server);
-    expect(next.restore(carriedOf(JSON.parse(JSON.stringify(carried)))!)).toBe(true);
+    expect(next.restore(carriedOf(parseJson(JSON.stringify(carried)))!)).toBe(true);
     expect(next.work().answer).toBe('pass');
     expect(next.dirty().set).toEqual({ answer: 'pass' });
     expect(next.restore({ ...carried!, uid: 's2' })).toBe(false);

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AUTHOR_UI_KEY, AuthoringUiStore, recallUi } from './authoring-ui-store';
+import { parseJson } from '../../api/json';
 
 describe("the authoring panel's remembered view", () => {
   afterEach(() => sessionStorage.clear());
@@ -84,7 +85,7 @@ describe("the authoring panel's remembered view", () => {
     expect(store.ui()).toMatchObject({ tab: 'step', selected: 2 });
     store.update({ folded: true });
     expect(store.ui().folded).toBe(true);
-    expect(JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({
+    expect(parseJson(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({
       tab: 'step',
       selected: 2,
       folded: true,

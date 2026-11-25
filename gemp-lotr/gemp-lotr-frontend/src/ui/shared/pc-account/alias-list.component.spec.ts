@@ -357,7 +357,7 @@ describe('AliasListComponent', () => {
     enterOf('Ringbearer').click();
     refuse(expectPost('/enter'), 403, 'not-linked');
     await stable();
-    const session = JSON.parse(readServerResponse('argonauth-session-aliases.json'));
+    const session = JSON.parse(readServerResponse('argonauth-session-aliases.json')) as { aliases: unknown[] };
     expectSession().flush(JSON.stringify({ ...session, aliases: session.aliases.slice(0, 2) }));
     await stable();
     expect(names()).toEqual(['Frodo', 'Underhill']);

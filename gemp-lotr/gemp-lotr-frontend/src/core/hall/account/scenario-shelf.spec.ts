@@ -11,8 +11,9 @@ import {
   shelfError,
   shelfWhen,
 } from './scenario-shelf';
+import { parseJson } from '../../api/json';
 
-const mine = parseMyScenarios(JSON.parse(readServerResponse('scenarios-mine.json'))).scenarios;
+const mine = parseMyScenarios(parseJson(readServerResponse('scenarios-mine.json'))).scenarios;
 const [inReview, sentBack, published, broken] = mine;
 
 describe('the scenario shelf', () => {
@@ -107,7 +108,7 @@ describe('the scenario shelf', () => {
   });
 
   it('shows the public scenarios to copy', () => {
-    const [first, sandbox] = parsePublicScenarios(JSON.parse(readServerResponse('scenarios-public.json'))).map(
+    const [first, sandbox] = parsePublicScenarios(parseJson(readServerResponse('scenarios-public.json'))).map(
       publicScenarioRow,
     );
     expect(first).toMatchObject({ title: 'The First Game', notes: 'first · by Ketura · Your first game' });

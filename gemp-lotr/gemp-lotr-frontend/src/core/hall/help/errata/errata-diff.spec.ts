@@ -2,6 +2,7 @@ import { readServerResponse } from '../../../../testing/files';
 import { parseErrataCatalog } from './errata-catalog';
 import { diffSides, diffTexts, errataReadout, plainText, statChanges, statText, tokens } from './errata-diff';
 import { ErrataSide } from './errata-models';
+import { parseJson } from '../../../api/json';
 
 const side = (stats: ErrataSide['stats'], extra: Partial<ErrataSide> = {}): ErrataSide => ({
   name: 'A',
@@ -12,7 +13,7 @@ const side = (stats: ErrataSide['stats'], extra: Partial<ErrataSide> = {}): Erra
 });
 
 describe('errata diff', () => {
-  const { entries } = parseErrataCatalog(JSON.parse(readServerResponse('errata.json')));
+  const { entries } = parseErrataCatalog(parseJson(readServerResponse('errata.json')));
 
   it('splits a text into words, spaces and marks, without tags (tokens)', () => {
     expect(tokens('Exert <b>Gandalf</b>’s pipe, twice.')).toEqual([

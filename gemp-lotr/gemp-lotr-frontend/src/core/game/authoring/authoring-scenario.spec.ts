@@ -14,6 +14,7 @@ import { ScenarioGuide } from '../scenario/scenario-guide.service';
 import { GameSession } from '../session/game-session.service';
 import { DraftState, SaveReport } from './authoring-state';
 import { Authoring } from './authoring.service';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -82,7 +83,7 @@ describe('Authoring, for the Scenario tab', () => {
     return requests[0]!;
   }
 
-  const form = (request: TestRequest, name: string) => request.request.body?.get(name) ?? null;
+  const form = (request: TestRequest, name: string) => sentForm(request.request).get(name);
 
   /** The Step tab's step was refused (what a save says of it). */
   function refusedStep() {

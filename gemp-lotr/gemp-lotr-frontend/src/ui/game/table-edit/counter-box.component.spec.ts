@@ -6,6 +6,7 @@ import { fakeTableEdit, FakeTableEdit } from '../../../testing/table-edit';
 import { SANDBOX_PILES_STATE } from '../../../testing/table-edit-piles';
 import { CounterBoxComponent } from './counter-box.component';
 import { CounterPopups } from './counter-popups';
+import { instanceOf } from '../../../testing/matchers';
 
 describe('CounterBoxComponent', () => {
   let edit: FakeTableEdit;
@@ -51,10 +52,10 @@ describe('CounterBoxComponent', () => {
     const { fixture, box, button } = await render('burdens');
     button('[data-step="up"]').click();
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'burdens', amount: 1 }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'burdens', amount: 1 }], instanceOf(Object));
     button('[data-step="down"]').click();
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'burdens', amount: -1 }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'burdens', amount: -1 }], instanceOf(Object));
     fixture.detectChanges();
     expect(box()).not.toBeNull();
   });
@@ -70,7 +71,7 @@ describe('CounterBoxComponent', () => {
     edit.apply.mockResolvedValueOnce(false);
     button('[data-action="set"]').click();
     await fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'threats', set: 2 }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'threats', set: 2 }], instanceOf(Object));
     fixture.detectChanges();
     expect(field().value).toBe('2');
     field().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));

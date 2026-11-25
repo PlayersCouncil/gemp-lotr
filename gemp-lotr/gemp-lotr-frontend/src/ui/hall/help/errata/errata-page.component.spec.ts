@@ -170,7 +170,7 @@ describe('ErrataPageComponent', () => {
     const errata = harness.routeDebugElement?.injector.get(PcErrataService) as PcErrataService;
     const listen = vi.spyOn(errata, 'step');
     await harness.navigateByUrl('/help/other');
-    expect(harness.fixture.nativeElement.querySelector('gd-errata-page')).toBeNull();
+    expect((harness.fixture.nativeElement as HTMLElement).querySelector('gd-errata-page')).toBeNull();
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'j' }));
     expect(listen).not.toHaveBeenCalled();
   });

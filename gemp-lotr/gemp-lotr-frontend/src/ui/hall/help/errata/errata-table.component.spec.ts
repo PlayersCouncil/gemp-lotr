@@ -5,12 +5,13 @@ import { ERRATA_SERVICES } from '../../../../core/hall/help/errata/errata-servic
 import { PcErrataService } from '../../../../core/hall/help/errata/errata.service';
 import { readServerResponse } from '../../../../testing/files';
 import { ErrataTableComponent } from './errata-table.component';
+import type { Mock } from 'vitest';
 
 /**
  * The rows laid out as a browser would, which jsdom doesn't: 7 rows 25px apart under a 30px header, in a box 100px
  * high that scrolls 105px.
  */
-function layOut(table: HTMLElement): { box: HTMLElement; scrollTo: ReturnType<typeof vi.fn> } {
+function layOut(table: HTMLElement): { box: HTMLElement; scrollTo: Mock<(options: ScrollToOptions) => number> } {
   const box = table;
   let scrollTop = 0;
   Object.defineProperty(box, 'scrollTop', {

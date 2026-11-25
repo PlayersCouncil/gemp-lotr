@@ -26,6 +26,7 @@ import {
   whenParts,
 } from './terms';
 import { passesByItself, placeOf, stepRole, timelineEnd, timelineItems, turnOwner } from './timeline';
+import { listContaining } from '../../../testing/matchers';
 
 /** A two-sided draft (the person in the Free Peoples seat unless said), its steps those given. */
 function twoSided(steps: DraftStep[], extra: Partial<DraftState> = {}): DraftState {
@@ -227,7 +228,7 @@ describe('the loose ends', () => {
     expect(movesFor('shadow', true, true)).toEqual(['deck.top', 'deck.bottom']);
     expect(addPlacesFor('freeps', false, false).map(([zone]) => zone)).not.toContain('minions');
     expect(addPlacesFor('shadow', false, true).map(([zone]) => zone)).toEqual(
-      expect.arrayContaining(['minions', 'attach', 'stack']),
+      listContaining(['minions', 'attach', 'stack']),
     );
     expect(addPlacesFor('shadow', true, true)).toEqual([['', 'deck (bottom)']]);
   });

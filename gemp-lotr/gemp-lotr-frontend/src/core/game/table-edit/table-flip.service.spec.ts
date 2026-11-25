@@ -120,7 +120,7 @@ describe('TableFlip', () => {
     const request = posted('/scenarios/sandbox/flip');
     expect(FLIP_PATH).toBe('/scenarios/sandbox/flip');
     expect(request.request.method).toBe('POST');
-    expect(form(request.request.body)).toEqual({ gameId: '12' });
+    expect(form(request.request.body as unknown)).toEqual({ gameId: '12' });
     request.flush({ ok: true, seat: 'shadow', state: null });
     expect(await done).toBe(true);
     expect(flip.busy()).toBe(false);
@@ -139,7 +139,7 @@ describe('TableFlip', () => {
     const done = flip.setOtherSeat('person');
     const request = posted('/scenarios/sandbox/otherSeat');
     expect(OTHER_SEAT_PATH).toBe('/scenarios/sandbox/otherSeat');
-    expect(form(request.request.body)).toEqual({ gameId: '12', to: 'person' });
+    expect(form(request.request.body as unknown)).toEqual({ gameId: '12', to: 'person' });
     request.flush({ ok: true, state: {} });
     expect(await done).toBe(true);
     expect(refresh).toHaveBeenCalled();

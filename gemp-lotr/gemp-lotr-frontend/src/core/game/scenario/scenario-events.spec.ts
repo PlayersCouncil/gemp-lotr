@@ -1,3 +1,4 @@
+import { containing } from '../../../testing/matchers';
 import { messagePlace, parseScenarioEvent, ScenarioInfo, ScenarioMessage, ScenarioStep } from './scenario-events';
 
 /** An info event as the server sends it for the first tutorial. */
@@ -497,7 +498,7 @@ describe('parseScenarioEvent', () => {
     }) as ScenarioInfo;
     expect(info.undo).toBe(false);
     expect(info.slots).toEqual([
-      expect.objectContaining({ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }),
+      containing({ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }),
     ]);
     expect(parse({ type: 'info', id: 'p', undo: 'no' })).toMatchObject({ undo: null, slots: [] });
     // Flip table (ef-notes Part 2 E): the seat looked from, who plays the other seat, what is waited on

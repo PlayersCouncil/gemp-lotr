@@ -16,6 +16,8 @@ import { AUTHOR_UI_KEY, GatheredBoard } from './authoring-ui-store';
 import { Authoring, StepFlushResult } from './authoring.service';
 import { BoardChanges, PART_MADE, WHERE_REFUSED } from './board-changes.service';
 import { START_DEFAULT } from './board-start';
+import { sentForm } from '../../../testing/sent-form';
+import { parseJson } from '../../api/json';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -104,8 +106,8 @@ describe('BoardChanges', () => {
     return request;
   }
 
-  const form = (request: TestRequest, name: string) => request.request.body?.get(name) ?? null;
-  const patchOf = (request: TestRequest) => JSON.parse(form(request, 'patch')) as { top: Record<string, unknown> };
+  const form = (request: TestRequest, name: string) => sentForm(request.request).get(name);
+  const patchOf = (request: TestRequest) => JSON.parse(form(request, 'patch')!) as { top: Record<string, unknown> };
   const stored = () => (JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!) as { board: GatheredBoard | null }).board;
   const ops = () => changes.gathered()!.ops.map((op) => `${op.name}(${op.args.join(', ')})`);
   const rebuilt = (gameId: string) => result(withBoard({ gameId }), { gameId, rebuilt: true });
@@ -282,7 +284,7 @@ describe('BoardChanges', () => {
     expect(stored()).toMatchObject({ ops: [], removed: [] });
     // (carried to the fresh game the cards brought)
     expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=9');
-    expect(JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ carried: said });
+    expect(parseJson(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ carried: said });
   });
 
   it('keeps the changes to the setup when one is refused (none was made), the problem said here when no game came', async () => {
@@ -450,7 +452,7 @@ describe('BoardChanges', () => {
       const going = changes.setOpening('game');
       await settle();
       const request = await answer('edit', rebuilt('8'));
-      expect(JSON.parse(form(request, 'patch'))).toEqual({
+      expect(parseJson(form(request, 'patch')!)).toEqual({
         top: { setup: { opening: 'game', freeps: { deck: 'merry' } } },
         steps: [{ op: 'delete', uid: 's1' }],
       });

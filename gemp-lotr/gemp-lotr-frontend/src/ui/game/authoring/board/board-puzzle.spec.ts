@@ -27,6 +27,8 @@ import {
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { BoardTabComponent } from '../board-tab.component';
 import { SEARCH_MS } from '../widgets/card-search.component';
+import { parseJson } from '../../../../core/api/json';
+import { sentForm } from '../../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -188,7 +190,7 @@ describe('Board tab: modifiers and slots', () => {
   function patch(): Record<string, unknown> {
     const requests = asked('edit');
     expect(requests).toHaveLength(1);
-    return JSON.parse(requests[0]!.request.body.get('patch') as string) as Record<string, unknown>;
+    return JSON.parse(sentForm(requests[0]!.request).get('patch') as string) as Record<string, unknown>;
   }
 
   /** The one board change sent (POST do): what it says, and to which board. */
@@ -378,7 +380,7 @@ describe('Board tab: modifiers and slots', () => {
     await searched(11);
     await type(`${slot('hand1')} input[data-part=slot-filter]`, 'culture:GONDOR');
     const sent = asked('edit');
-    expect(JSON.parse(sent[0]!.request.body.get('patch') as string)).toEqual({
+    expect(parseJson(sentForm(sent[0]!.request).get('patch') as string)).toEqual({
       top: { slots: { condition: DRAFT.slots!['condition'], hand1: { zone: 'hand', filter: 'culture:GONDOR' } } },
     });
     sent[0]!.flush(JSON.stringify({ error: "slots.hand1.filter: 'culture:gondor': in capitals" }), {
@@ -399,7 +401,7 @@ describe('Board tab: modifiers and slots', () => {
       'culture:ROHAN cardtype:CONDITION side:FREE_PEOPLE',
     );
     const offered = asked('edit');
-    expect(JSON.parse(offered[0]!.request.body.get('patch') as string)).toEqual({
+    expect(parseJson(sentForm(offered[0]!.request).get('patch') as string)).toEqual({
       top: {
         slots: {
           condition: {
@@ -517,8 +519,8 @@ describe('Board tab: modifiers and slots', () => {
     await redraw();
     const renamed = asked('alias');
     expect(renamed).toHaveLength(1);
-    expect(renamed[0]!.request.body.get('from')).toBe('hand1');
-    expect(renamed[0]!.request.body.get('to')).toBe('trick');
+    expect(sentForm(renamed[0]!.request).get('from')).toBe('hand1');
+    expect(sentForm(renamed[0]!.request).get('to')).toBe('trick');
   });
 
   it('shows no slots in a draft that is no puzzle, and says when a puzzle has none', async () => {
@@ -593,7 +595,7 @@ describe('Board tab: modifiers and slots', () => {
     await type('[data-part=new-slot-id]', 'trick', ['input']);
     await click('[data-action=add-slot]');
     const sent = asked('edit');
-    expect(JSON.parse(sent[0]!.request.body.get('patch') as string)).toEqual({
+    expect(parseJson(sentForm(sent[0]!.request).get('patch') as string)).toEqual({
       top: { slots: { ...DRAFT.slots, trick: 'hand' } },
     });
     sent[0]!.flush(JSON.stringify({ error: 'No.' }), { status: 400, statusText: 'No' });

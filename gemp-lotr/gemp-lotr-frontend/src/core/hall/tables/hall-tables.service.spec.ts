@@ -1,3 +1,4 @@
+import { parseJson } from '../../api/json';
 import { HallTablesApi } from './hall-tables-api.service';
 import { ChatApi } from '../../chat/chat-api.service';
 import { HallApi } from '../hall-api.service';
@@ -301,7 +302,7 @@ describe('HallTablesService', () => {
     expect(tables.busy()).toBe(false);
     expect(cookies.read(CASUAL_FORMAT_COOKIE)).toBe('movie');
     expect(cookies.read(CASUAL_TIMER_COOKIE)).toBe('blitz');
-    expect(JSON.parse(cookies.read('unranked-table-decks')!)).toEqual({
+    expect(parseJson(cookies.read('unranked-table-decks')!)).toEqual({
       movie: ['Elves', 'player'],
       _: ['Elves', 'player'],
     });
@@ -358,7 +359,10 @@ describe('HallTablesService', () => {
     });
     req.flush('<result>OK</result>');
     expect(await creating).toBe(true);
-    expect(JSON.parse(cookies.read('bot-table-decks')!).fotr_block).toEqual(['FotR Starter - Gandalf', 'library']);
+    expect((JSON.parse(cookies.read('bot-table-decks')!) as { fotr_block: unknown }).fotr_block).toEqual([
+      'FotR Starter - Gandalf',
+      'library',
+    ]);
   });
 
   it('leaves a waiting table', async () => {

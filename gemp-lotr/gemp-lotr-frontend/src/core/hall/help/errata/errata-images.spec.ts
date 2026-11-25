@@ -2,6 +2,7 @@ import { CardImageTables } from '../../../cards/card-blueprint';
 import { readServerResponse } from '../../../../testing/files';
 import { parseErrataCatalog } from './errata-catalog';
 import { aspectOf, errataImages, errataPreview, LANDSCAPE, PORTRAIT } from './errata-images';
+import { parseJson } from '../../../api/json';
 
 const tables: CardImageTables = {
   fixedImages: {},
@@ -16,7 +17,7 @@ const tables: CardImageTables = {
 };
 
 describe('errata images', () => {
-  const { entries } = parseErrataCatalog(JSON.parse(readServerResponse('errata.json')));
+  const { entries } = parseErrataCatalog(parseJson(readServerResponse('errata.json')));
   const [gandalf, , , site, , wraith, pipe] = entries;
 
   it("shows an errata beside its original's own image (imageUrls)", () => {

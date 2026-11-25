@@ -21,7 +21,7 @@ describe('ErrataCardComponent', () => {
   it('draws the image in its border, and reads its shape once it loads', () => {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();
-    const card = fixture.nativeElement.querySelector('gd-errata-card') as HTMLElement;
+    const card = (fixture.nativeElement as HTMLElement).querySelector('gd-errata-card') as HTMLElement;
     const image = card.querySelector('img.gd-errata-card__image') as HTMLImageElement;
     expect([image.getAttribute('src'), image.alt, image.getAttribute('draggable')]).toEqual([
       'a.jpg',
@@ -40,7 +40,7 @@ describe('ErrataCardComponent', () => {
   it('says so without an image, or when it fails, until another comes', () => {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();
-    const card = fixture.nativeElement.querySelector('gd-errata-card') as HTMLElement;
+    const card = (fixture.nativeElement as HTMLElement).querySelector('gd-errata-card') as HTMLElement;
     card.querySelector('img')?.dispatchEvent(new Event('error'));
     fixture.detectChanges();
     expect(card.hasAttribute('data-missing')).toBe(true);

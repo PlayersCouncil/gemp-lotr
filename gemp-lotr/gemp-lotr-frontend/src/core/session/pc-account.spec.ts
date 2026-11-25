@@ -8,8 +8,9 @@ import {
   pcSignInAddress,
   sessionKind,
 } from './pc-account';
+import { parseJson } from '../api/json';
 
-const session = (name: string) => parsePcSession(JSON.parse(readServerResponse(name)));
+const session = (name: string) => parsePcSession(parseJson(readServerResponse(name)));
 
 describe('parsePcSession', () => {
   it("reads PC-ACCOUNT.md's example", () => {

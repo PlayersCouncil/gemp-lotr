@@ -46,7 +46,10 @@ describe('LeagueTableFlow', () => {
     req.flush('<result>OK</result>');
     expect(await creating).toBe(true);
     expect(hall.cookies.read(LEAGUE_COOKIE)).toBe('1700000001');
-    expect(JSON.parse(hall.cookies.read('league-table-decks')!)['1700000001']).toEqual(['Elves', 'player']);
+    expect((JSON.parse(hall.cookies.read('league-table-decks')!) as Record<string, unknown>)['1700000001']).toEqual([
+      'Elves',
+      'player',
+    ]);
   });
 
   it('offers the next steps after a join', async () => {

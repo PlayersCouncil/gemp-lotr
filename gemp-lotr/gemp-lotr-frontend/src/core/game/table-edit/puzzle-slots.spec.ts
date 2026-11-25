@@ -1,3 +1,4 @@
+import { containing } from '../../../testing/matchers';
 import {
   comesText,
   emptySlots,
@@ -58,7 +59,7 @@ describe('readPuzzleSlots', () => {
       'junk',
     ]);
     expect(read).toEqual(
-      expect.objectContaining({
+      containing({
         id: 'x',
         label: null,
         seat: 'opponent',

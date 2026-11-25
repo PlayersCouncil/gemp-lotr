@@ -6,6 +6,7 @@ import { provideGempHttp } from '../api/gemp-interceptors';
 import { PageNavigation } from '../platform/page-navigation';
 import { SLOW_DOWN } from './pc-account-messages';
 import { PcConnect } from './pc-connect.service';
+import { sentForm } from '../../testing/sent-form';
 
 describe('PcConnect', () => {
   let backend: HttpTestingController;
@@ -58,10 +59,10 @@ describe('PcConnect', () => {
     const accepted = connect.submit();
     expect(connect.error()).toBeNull();
     const request = expectConnect();
-    expect(request.request.body.toString()).toBe('password=secret');
+    expect(sentForm(request.request).toString()).toBe('password=secret');
     request.flush(readServerResponse('argonauth-connect.json'));
     await accepted;
-    expect(visited).toEqual([JSON.parse(readServerResponse('argonauth-connect.json')).next]);
+    expect(visited).toEqual([(JSON.parse(readServerResponse('argonauth-connect.json')) as { next: unknown }).next]);
     expect(connect.error()).toBeNull();
   });
 });

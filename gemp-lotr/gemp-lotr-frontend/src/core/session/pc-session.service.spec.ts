@@ -9,6 +9,7 @@ import { PageNavigation } from '../platform/page-navigation';
 import { NO_PC_SESSION } from './pc-account';
 import { NAME_TAKEN, NO_PC_ACCOUNT, NOT_ALLOWED, NOT_LINKED, UNAVAILABLE, WRONG_PASSWORD } from './pc-account-messages';
 import { PcSessionService } from './pc-session.service';
+import { sentForm } from '../../testing/sent-form';
 
 class FakeNavigation {
   readonly visited: string[] = [];
@@ -97,7 +98,7 @@ describe('PcSessionService', () => {
     await loaded();
     const result = pc.enter(pc.session()!.aliases[1]);
     const request = expectPost('/enter');
-    expect(request.request.body.toString()).toBe('playerId=900002');
+    expect(sentForm(request.request).toString()).toBe('playerId=900002');
     request.flush(readServerResponse('argonauth-session.json'));
     expect(await result).toBeNull();
     expect(channel.announced).toBe(1);
@@ -173,10 +174,12 @@ describe('PcSessionService', () => {
     await loaded('argonauth-session-password.json');
     const result = pc.connect('secret');
     const request = expectPost('/connect');
-    expect(request.request.body.toString()).toBe('password=secret');
+    expect(sentForm(request.request).toString()).toBe('password=secret');
     request.flush(readServerResponse('argonauth-connect.json'));
     expect(await result).toBeNull();
-    expect(navigation.visited).toEqual([JSON.parse(readServerResponse('argonauth-connect.json')).next]);
+    expect(navigation.visited).toEqual([
+      (JSON.parse(readServerResponse('argonauth-connect.json')) as { next: unknown }).next,
+    ]);
     expect(channel.announced).toBe(0);
   });
 
@@ -216,7 +219,7 @@ describe('PcSessionService', () => {
     setUp();
     const all = pc.logout('all');
     const request = expectPost('/logout');
-    expect(request.request.body.toString()).toBe('scope=all');
+    expect(sentForm(request.request).toString()).toBe('scope=all');
     request.flush(readServerResponse('argonauth-logout-all.json'));
     await all;
     const alias = pc.logout('alias');

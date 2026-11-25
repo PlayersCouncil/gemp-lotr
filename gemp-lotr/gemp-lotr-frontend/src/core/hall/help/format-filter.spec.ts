@@ -1,8 +1,9 @@
 import { readServerResponse } from '../../../testing/files';
 import { parseFormatDefinitions } from './format-definitions';
 import { filterFormats, isHit } from './format-filter';
+import { parseJson } from '../../api/json';
 
-const formats = parseFormatDefinitions(JSON.parse(readServerResponse('format-definitions.json')));
+const formats = parseFormatDefinitions(parseJson(readServerResponse('format-definitions.json')));
 
 describe('filterFormats (applyFilter)', () => {
   it('shows every format with no text', () => {

@@ -5,6 +5,7 @@ import { provideGempHttp } from '../api/gemp-interceptors';
 import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { ChatConnection, ChatConnectionHandler } from './chat-connection';
 import { ChatSnapshot } from './chat-models';
+import { sentForm } from '../../testing/sent-form';
 
 const ROOM = '/gemp-lotr-server/chat/Game%20Hall';
 /** A request to the room (the interceptors add a cache-buster to GETs). */
@@ -75,11 +76,11 @@ describe('ChatConnection', () => {
     backend.expectOne((r) => r.method === 'GET').flush(chat());
     connection.send('one');
     connection.send('two');
-    const one = backend.expectOne((r) => r.body?.get('message') === 'one');
-    backend.expectNone((r) => r.body?.get('message') === 'two');
+    const one = backend.expectOne((r) => sentForm(r).get('message') === 'one');
+    backend.expectNone((r) => sentForm(r).get('message') === 'two');
     one.flush('', { status: 400, statusText: 'Bad command' });
     expect(failures).toEqual([{ status: 400, polling: false }]);
-    backend.expectOne((r) => r.body?.get('message') === 'two').flush('');
+    backend.expectOne((r) => sentForm(r).get('message') === 'two').flush('');
     expect(connection.open).toBe(true);
     connection.close();
   });
@@ -88,7 +89,7 @@ describe('ChatConnection', () => {
     connection.connect('Game Hall', 100, handler);
     backend.expectOne(toRoom).flush(chat());
     connection.send('bye');
-    const sent = backend.expectOne((r) => r.body?.get('message') === 'bye');
+    const sent = backend.expectOne((r) => sentForm(r).get('message') === 'bye');
     injector.destroy();
     expect(sent.cancelled).toBe(false);
     sent.flush('', { status: 500, statusText: 'x' });

@@ -19,7 +19,7 @@ import {
 // 20 rows of 25px under a 30px header
 const geom: RowGeometry = {
   tops: Array.from({ length: 20 }, (_, i) => 30 + i * 25),
-  heights: Array(20).fill(25),
+  heights: Array<number>(20).fill(25),
   headH: 30,
 };
 const box = (scrollTop: number) => ({ scrollTop, scrollHeight: 530, clientHeight: 230 });

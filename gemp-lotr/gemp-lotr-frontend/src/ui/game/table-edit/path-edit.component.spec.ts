@@ -61,7 +61,9 @@ describe('PathEditComponent', () => {
     fixture.detectChanges();
     expect(el.querySelector('dialog[data-dialog="edit-search"]')?.textContent).toContain('Site 3');
     expect(open).toHaveBeenLastCalledWith({ filter: 'cardType:SITE siteNumber:3', label: 'Site 3' });
-    const window = fixture.debugElement.query((node) => node.componentInstance instanceof SearchWindowComponent);
+    const window = fixture.debugElement.query(
+      (node) => (node.componentInstance as unknown) instanceof SearchWindowComponent,
+    );
     (window.componentInstance as SearchWindowComponent).closed.emit();
     expect(popups.search()).toBeNull();
     fixture.detectChanges();
@@ -75,7 +77,9 @@ describe('PathEditComponent', () => {
     popups.openSearch();
     fixture.detectChanges();
     expect(open).toHaveBeenLastCalledWith({ filter: 'cardType:SITE', label: 'Sites' });
-    const window = fixture.debugElement.query((node) => node.componentInstance instanceof SearchWindowComponent);
+    const window = fixture.debugElement.query(
+      (node) => (node.componentInstance as unknown) instanceof SearchWindowComponent,
+    );
     const found = { blueprintId: '1_350', name: 'Mount Doom', type: 'site', culture: null, site: true };
     edit.apply.mockResolvedValueOnce(false);
     (window.componentInstance as SearchWindowComponent).chosen.emit(found);

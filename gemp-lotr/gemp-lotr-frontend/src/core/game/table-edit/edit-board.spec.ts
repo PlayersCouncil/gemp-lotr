@@ -1,6 +1,7 @@
 import { cardByAlias, cardById, editLevel, editMode, editTools, onTable, readEditBoard } from './edit-board';
 import { SANDBOX_STATE } from '../../../testing/table-edit';
 import { SANDBOX_PILES_STATE } from '../../../testing/table-edit-piles';
+import { containing } from '../../../testing/matchers';
 
 describe('readEditBoard', () => {
   it('reads the state the sandbox sends', () => {
@@ -50,7 +51,7 @@ describe('readEditBoard', () => {
   it('reads anything else as an empty table in play mode, leaving out what it cannot read', () => {
     const board = readEditBoard('nonsense');
     expect(board).toEqual(
-      expect.objectContaining({ mode: 'play', level: 'none', tools: [], canStop: false, canStart: false, cards: [] }),
+      containing({ mode: 'play', level: 'none', tools: [], canStop: false, canStart: false, cards: [] }),
     );
     expect(board.modify.until).toEqual(['phase', 'turn', 'removed']);
     const odd = readEditBoard({

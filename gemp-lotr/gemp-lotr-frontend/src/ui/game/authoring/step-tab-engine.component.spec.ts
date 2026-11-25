@@ -17,6 +17,8 @@ import { START_DEFAULT } from '../../../core/game/authoring/board-start';
 import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
 import { StepTabComponent } from './step-tab.component';
 import { TablePicker } from './table-picker.service';
+import { sentForm } from '../../../testing/sent-form';
+import { listContaining } from '../../../testing/matchers';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -163,7 +165,7 @@ describe('StepTabComponent and the engine’s newer parts', () => {
   /** The edits on their way. */
   const edits = (): TestRequest[] => backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
   const patchOf = (request: TestRequest) =>
-    JSON.parse(request.request.body.get('patch') as string) as { steps: Record<string, unknown>[] };
+    JSON.parse(sentForm(request.request).get('patch') as string) as { steps: Record<string, unknown>[] };
   /** The one edit on its way: its ops. */
   function sentOps(): Record<string, unknown>[] {
     const requests = edits();
@@ -580,7 +582,7 @@ describe('StepTabComponent and the engine’s newer parts', () => {
       await update(
         withSteps([{ when: 'human, number', allow: 'number(1)' }], { start: { ...START_DEFAULT, opening: 'game' } }),
       );
-      expect(offered()).toEqual(expect.arrayContaining(['bid', 'goFirst', 'startingFellowship', 'mulligan']));
+      expect(offered()).toEqual(listContaining(['bid', 'goFirst', 'startingFellowship', 'mulligan']));
       await choose('gd-author-when [data-picker=asked]', 'bid');
       await wait(0);
       expect(sentOps()[0]).toMatchObject({ set: { when: 'human, number, bid' } });

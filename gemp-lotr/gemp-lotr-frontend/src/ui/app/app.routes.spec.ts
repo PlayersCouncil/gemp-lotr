@@ -66,7 +66,9 @@ describe('app routes', () => {
 
   it('opens the Game Hall at the app root and at unknown addresses, keeping the query string', async () => {
     expect(await open('/')).toEqual({ page: instanceOf(HallShellComponent), url: '/hall' });
-    expect(harness.fixture.nativeElement.querySelector('gd-hall-shell gd-game-hall-tab')).not.toBeNull();
+    expect(
+      (harness.fixture.nativeElement as HTMLElement).querySelector('gd-hall-shell gd-game-hall-tab'),
+    ).not.toBeNull();
     expect((await open('/no/such/page?theme=classic')).url).toBe('/hall?theme=classic');
   });
 
@@ -82,7 +84,7 @@ describe('app routes', () => {
     const toLogin = vi.spyOn(TestBed.inject(LoginPage), 'open').mockImplementation(() => undefined);
     expect((await open('/help')).page).toBeInstanceOf(HallShellComponent);
     expect(
-      harness.fixture.nativeElement.querySelector('gd-hall-shell gd-hall-tab-frame[data-tab="help"]'),
+      (harness.fixture.nativeElement as HTMLElement).querySelector('gd-hall-shell gd-hall-tab-frame[data-tab="help"]'),
     ).not.toBeNull();
     expect(toLogin).not.toHaveBeenCalled();
   });

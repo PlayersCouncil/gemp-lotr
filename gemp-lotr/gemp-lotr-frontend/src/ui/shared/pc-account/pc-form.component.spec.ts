@@ -40,7 +40,7 @@ describe('PcFormComponent', () => {
   async function render() {
     const fixture = TestBed.createComponent(HostComponent);
     await fixture.whenStable();
-    const el = fixture.nativeElement.querySelector('gd-pc-form') as HTMLElement;
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-pc-form') as HTMLElement;
     return { fixture, host: fixture.componentInstance, el };
   }
 

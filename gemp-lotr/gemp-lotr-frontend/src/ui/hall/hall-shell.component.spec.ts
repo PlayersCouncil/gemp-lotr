@@ -18,6 +18,8 @@ import { readServerResponse } from '../../testing/files';
 import { APP_ROUTES } from '../app/app.routes';
 import { CHAT_HEIGHT_COOKIE, CHAT_RESIZE_STEP, HallShellComponent } from './hall-shell.component';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
+import { sentForm } from '../../testing/sent-form';
+import { textContaining } from '../../testing/matchers';
 
 const SERVER = '/gemp-lotr-server';
 /** A request's path on the server, without the cache-buster the interceptors add. */
@@ -71,7 +73,7 @@ describe('HallShellComponent', () => {
   }
 
   function el(): HTMLElement {
-    return harness.fixture.nativeElement.querySelector('.gd-hall') as HTMLElement;
+    return (harness.fixture.nativeElement as HTMLElement).querySelector('.gd-hall') as HTMLElement;
   }
 
   async function update() {
@@ -238,7 +240,7 @@ describe('HallShellComponent', () => {
   it('goes where another tab of the site asks it to (a legacy hall link)', async () => {
     await open('/hall');
     const channel = harness.fixture.debugElement
-      .query((node) => node.componentInstance instanceof HallShellComponent)
+      .query((node) => (node.componentInstance as unknown) instanceof HallShellComponent)
       .injector.get(HallChannel) as unknown as { goes: Subject<string> };
     channel.goes.next('#account/scenarios');
     await update();
@@ -269,14 +271,16 @@ describe('HallShellComponent', () => {
     const chat = harness.fixture.debugElement.query(By.css('gd-chat'));
     chat.triggerEventHandler('send', 'hello all');
     await update();
-    const sent = backend.match((r) => CHAT(r) && r.method === 'POST' && r.body?.toString().includes('message='));
-    expect(sent.map((r) => r.request.body?.toString())).toEqual([expect.stringContaining('message=hello%20all')]);
+    const sent = backend.match((r) => CHAT(r) && r.method === 'POST' && sentForm(r).toString().includes('message='));
+    expect(sent.map((r) => sentForm(r.request).toString())).toEqual([textContaining('message=hello%20all')]);
     chat.triggerEventHandler('ignoreToggle', 'bob');
     await update();
-    expect(backend.match(at('/player/ignores/add')).map((r) => r.request.body?.toString())).toEqual(['name=bob']);
+    expect(backend.match(at('/player/ignores/add')).map((r) => sentForm(r.request).toString())).toEqual(['name=bob']);
     chat.triggerEventHandler('incognitoChange', true);
     await update();
-    expect(backend.match(at('/player/incognito')).map((r) => r.request.body?.toString())).toEqual(['incognito=true']);
+    expect(backend.match(at('/player/incognito')).map((r) => sentForm(r.request).toString())).toEqual([
+      'incognito=true',
+    ]);
     chat.triggerEventHandler('discordChange', true);
     await update();
     expect(settings.read(CHAT_CHOICE_KEY)).toBe('discord');
@@ -365,7 +369,7 @@ describe('HallShellComponent', () => {
       await update();
       expect(logout.disabled).toBe(true);
       const request = backend.expectOne((r) => at('/argonauth/logout')(r) && r.method === 'POST');
-      expect(request.request.body.toString()).toBe('scope=alias');
+      expect(sentForm(request.request).toString()).toBe('scope=alias');
       request.flush(readServerResponse('argonauth-logout-alias.json'));
       await update();
       expect(announce).toHaveBeenCalledTimes(1);

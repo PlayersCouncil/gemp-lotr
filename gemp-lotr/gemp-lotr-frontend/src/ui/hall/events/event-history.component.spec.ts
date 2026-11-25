@@ -18,12 +18,9 @@ import { provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { readServerResponse } from '../../../testing/files';
 import { EventHistoryComponent } from './event-history.component';
 import { EVENTS_AUTO_ZOOM_COOKIE, EventsCardActions } from './events-tab.component';
+import { parseJson } from '../../../core/api/json';
 
-const LEAGUE_MONTH = parseEventHistory(
-  JSON.parse(readServerResponse('event-history-league.json')),
-  '2026-10',
-  'league',
-);
+const LEAGUE_MONTH = parseEventHistory(parseJson(readServerResponse('event-history-league.json')), '2026-10', 'league');
 const LEAGUE = parseLeagueDetail(readServerResponse('league-detail.xml'))!;
 const failure = (status = 500) => new HttpErrorResponse({ status, statusText: 'Server Error', error: '' });
 
@@ -236,7 +233,7 @@ describe('EventHistoryComponent', () => {
     answer(months, ['2026-10']);
     await update();
     answer(month, {
-      ...parseEventHistory(JSON.parse(readServerResponse('event-history-tournament.json')), '2026-10', 'tournament'),
+      ...parseEventHistory(parseJson(readServerResponse('event-history-tournament.json')), '2026-10', 'tournament'),
       events: [
         {
           id: null,

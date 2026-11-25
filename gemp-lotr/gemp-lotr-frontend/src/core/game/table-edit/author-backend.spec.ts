@@ -12,6 +12,8 @@ import {
   result,
 } from '../../../testing/authoring';
 import { provideFakeNotifier, settle } from '../../../testing/fake-notifier';
+import { sentForm } from '../../../testing/sent-form';
+import { parseJson } from '../../api/json';
 import { ApiError } from '../../api/api-error';
 import { provideGempHttp } from '../../api/gemp-interceptors';
 import { CardInfoService } from '../../cards/card-info.service';
@@ -30,6 +32,7 @@ import { AuthorBackend, NOT_AN_AUTHORS } from './author-backend';
 import { AUTHOR_REFUSALS } from './author-ops';
 import { EditOp } from './edit-ops';
 import { TableEdit } from './table-edit.service';
+import { textContaining } from '../../../testing/matchers';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -305,7 +308,7 @@ describe("AuthorBackend: the author's table", () => {
     await settle();
     const request = backend.expectOne((r) => r.url === `${AUTHOR}do`);
     request.flush(JSON.stringify({ error: 'Frodo cannot take it.' }), { status: 400, statusText: 'No' });
-    await expect(asking).rejects.toMatchObject({ said: expect.stringContaining('Frodo cannot take it.') });
+    await expect(asking).rejects.toMatchObject({ said: textContaining('Frodo cannot take it.') });
     expect(changes.count()).toBe(0);
   });
 
@@ -317,7 +320,7 @@ describe("AuthorBackend: the author's table", () => {
     const opened = author.openSlot({ seat: 'shadow', zone: 'support' });
     await settle();
     const request = backend.expectOne((r) => r.url === `${AUTHOR}edit`);
-    expect(JSON.parse(request.request.body.get('patch'))).toEqual(
+    expect(parseJson(sentForm(request.request).get('patch')!)).toEqual(
       addSlotPatch(puzzle.draft, 'slot1', { zone: 'support', seat: 'shadow' }, null),
     );
     expect(authoring.ui()).toMatchObject({ tab: 'board', showSlot: 'slot1' });
@@ -328,7 +331,7 @@ describe("AuthorBackend: the author's table", () => {
     const top = author.openSlot({ seat: 'freeps', zone: 'deck.top' });
     await settle();
     const refused = backend.expectOne((r) => r.url === `${AUTHOR}edit`);
-    expect(JSON.parse(refused.request.body.get('patch'))).toEqual(
+    expect(parseJson(sentForm(refused.request).get('patch')!)).toEqual(
       addSlotPatch(puzzle.draft, 'slot1', { zone: 'deck' }, null),
     );
     refused.flush(JSON.stringify({ error: 'No.' }), { status: 400, statusText: 'No' });
@@ -366,7 +369,9 @@ describe("AuthorBackend: the author's table", () => {
     backend.expectOne((r) => r.url === `${AUTHOR}cards`).flush('{}', { status: 500, statusText: 'No' });
     await settle();
     const edited = backend.expectOne((r) => r.url === `${AUTHOR}edit`);
-    expect(JSON.parse(edited.request.body.get('patch')).top.cards.freeps).toMatchObject({ c999: '9_99' });
+    expect(
+      (parseJson(sentForm(edited.request).get('patch')!) as { top: { cards: { freeps: unknown } } }).top.cards.freeps,
+    ).toMatchObject({ c999: '9_99' });
     edited.flush(JSON.stringify(result(tokened)));
     await adding;
     const sent = await sentBy(() => firstValueFrom(author.apply('7', [{ op: 'tokens', cardId: 25, amount: -2 }])));

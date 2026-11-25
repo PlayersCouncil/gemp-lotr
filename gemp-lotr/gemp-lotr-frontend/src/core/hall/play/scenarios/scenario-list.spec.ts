@@ -11,8 +11,9 @@ import {
   statusOf,
   windowTooSmallForTutorial,
 } from './scenario-list';
+import { parseJson } from '../../../api/json';
 
-const listing = parseScenarioListing(JSON.parse(readServerResponse('scenarios.json')));
+const listing = parseScenarioListing(parseJson(readServerResponse('scenarios.json')));
 const byId = (id: string) => listing.scenarios.find((s) => s.id === id)!;
 
 describe('the scenario list', () => {

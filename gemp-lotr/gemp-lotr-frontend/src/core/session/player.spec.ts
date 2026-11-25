@@ -1,9 +1,10 @@
 import { readServerResponse } from '../../testing/files';
 import { hasPlayerType, parsePlayer, PlayerType } from './player';
+import { parseJson } from '../api/json';
 
 describe('parsePlayer', () => {
   it('reads the answer of GET /player', () => {
-    const player = parsePlayer(JSON.parse(readServerResponse('player.json')));
+    const player = parsePlayer(parseJson(readServerResponse('player.json')));
     expect(player).toEqual({ name: 'Visual tester', type: 'un', hasTrophies: true });
     expect(hasPlayerType(player, PlayerType.user)).toBe(true);
     expect(hasPlayerType(player, PlayerType.admin)).toBe(false);

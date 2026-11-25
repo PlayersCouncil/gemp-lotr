@@ -3,6 +3,9 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { PUZZLE_SLOTS } from '../../../testing/table-edit';
+import { sentForm } from '../../../testing/sent-form';
+import { containing } from '../../../testing/matchers';
+import { parseJson } from '../../api/json';
 import { ApiError } from '../../api/api-error';
 import { provideGempHttp } from '../../api/gemp-interceptors';
 import { ScenarioGuide } from '../scenario/scenario-guide.service';
@@ -43,15 +46,15 @@ describe('PuzzleBackend', () => {
     ]);
     expect(puzzle.missing()).toEqual(['a Rohan condition', 'a Rohan ally']);
     const board = await firstValueFrom(puzzle.state());
-    expect(board).toEqual(expect.objectContaining({ mode: 'edit', level: 'puzzle', tools: [], cards: [] }));
+    expect(board).toEqual(containing({ mode: 'edit', level: 'puzzle', tools: [], cards: [] }));
   });
 
   it('checks a pick with the server beside the other slots, and holds it once it fits', () => {
     const boards: EditBoard[] = [];
     puzzle.apply('12', [{ op: 'pick', slot: 'condition', blueprint: '5_87' }]).subscribe((board) => boards.push(board));
     const asked = backend.expectOne((r) => r.url === PICKS && r.method === 'POST');
-    expect(asked.request.body?.get('id')).toBe('GamePlayer3/check-p10');
-    expect(JSON.parse(asked.request.body?.get('picks') ?? '')).toEqual({ condition: '5_87' });
+    expect(sentForm(asked.request).get('id')).toBe('GamePlayer3/check-p10');
+    expect(parseJson(sentForm(asked.request).get('picks') ?? '')).toEqual({ condition: '5_87' });
     asked.flush(answer('condition', { fits: true, why: null, name: 'Parapet' }));
     expect(boards.length).toBe(1);
     expect(puzzle.picks()).toEqual({ condition: { blueprintId: '5_87', name: 'Parapet' } });
@@ -60,7 +63,7 @@ describe('PuzzleBackend', () => {
     // The next is checked with the first beside it (uniqueness counts it)
     puzzle.apply('12', [{ op: 'pick', slot: 'ally', blueprint: '4_262' }]).subscribe();
     const next = backend.expectOne(PICKS);
-    expect(JSON.parse(next.request.body?.get('picks') ?? '')).toEqual({ condition: '5_87', ally: '4_262' });
+    expect(parseJson(sentForm(next.request).get('picks') ?? '')).toEqual({ condition: '5_87', ally: '4_262' });
     next.flush(answer('ally', { fits: true, why: null, name: null }));
     expect(puzzle.picks()['ally']).toEqual({ blueprintId: '4_262', name: '4_262' });
     expect(puzzle.filled().map((filled) => filled.card?.blueprintId)).toEqual(['5_87', '4_262']);
@@ -70,7 +73,7 @@ describe('PuzzleBackend', () => {
     let refusal: ApiError | null = null;
     puzzle
       .apply('12', [{ op: 'pick', slot: 'condition', blueprint: '4_262' }])
-      .subscribe({ error: (error) => (refusal = ApiError.from(error)) });
+      .subscribe({ error: (error: unknown) => (refusal = ApiError.from(error)) });
     backend
       .expectOne(PICKS)
       .flush(answer('condition', { fits: false, why: 'Aldor is not a Rohan condition.', name: 'Aldor' }));
@@ -79,12 +82,12 @@ describe('PuzzleBackend', () => {
 
     // An answer that says nothing of the slot, or nothing at all of why
     puzzle.apply('12', [{ op: 'pick', slot: 'condition', blueprint: '4_262' }]).subscribe({
-      error: (error) => (refusal = ApiError.from(error)),
+      error: (error: unknown) => (refusal = ApiError.from(error)),
     });
     backend.expectOne(PICKS).flush({ ok: false, picks: {} });
     expect(refusal!.said).toBe(NO_VERDICT);
     puzzle.apply('12', [{ op: 'pick', slot: 'condition', blueprint: '4_262' }]).subscribe({
-      error: (error) => (refusal = ApiError.from(error)),
+      error: (error: unknown) => (refusal = ApiError.from(error)),
     });
     backend.expectOne(PICKS).flush(answer('condition', { fits: false, why: null, name: null }));
     expect(refusal!.said).toBe(NO_VERDICT);
@@ -110,7 +113,7 @@ describe('PuzzleBackend', () => {
     puzzle.stop().subscribe(refused);
     puzzle.start().subscribe(refused);
     puzzle.reset().subscribe(refused);
-    expect(said).toEqual(Array(6).fill(NOT_A_SANDBOX));
+    expect(said).toEqual(Array<string>(6).fill(NOT_A_SANDBOX));
   });
 
   it('submits the picks as a fresh game of the puzzle', () => {
@@ -121,14 +124,14 @@ describe('PuzzleBackend', () => {
     let fresh = '';
     puzzle.submit().subscribe((gameId) => (fresh = gameId));
     const sent = backend.expectOne((r) => r.url === '/gemp-lotr-server/scenarios/start' && r.method === 'POST');
-    expect(sent.request.body?.get('id')).toBe('GamePlayer3/check-p10');
-    expect(JSON.parse(sent.request.body?.get('picks') ?? '')).toEqual({ condition: '5_87', ally: '4_262' });
+    expect(sentForm(sent.request).get('id')).toBe('GamePlayer3/check-p10');
+    expect(parseJson(sentForm(sent.request).get('picks') ?? '')).toEqual({ condition: '5_87', ally: '4_262' });
     sent.flush({ gameId: 124, resumedAt: null, mode: 'play' });
     expect(fresh).toBe('124');
 
     info.set(null);
     let said: string | null = null;
-    puzzle.submit().subscribe({ error: (error) => (said = ApiError.from(error).said) });
+    puzzle.submit().subscribe({ error: (error: unknown) => (said = ApiError.from(error).said) });
     expect(said).toBe(NOT_A_SANDBOX);
   });
 
@@ -149,7 +152,7 @@ describe('PuzzleBackend', () => {
     puzzle.picks.set({ ally: { blueprintId: '4_262', name: 'Aldor' } });
     const first = firstValueFrom(puzzle.verdict('condition', '5_87'));
     const asked = backend.expectOne(PICKS);
-    expect(JSON.parse(asked.request.body?.get('picks') ?? '')).toEqual({ ally: '4_262', condition: '5_87' });
+    expect(parseJson(sentForm(asked.request).get('picks') ?? '')).toEqual({ ally: '4_262', condition: '5_87' });
     asked.flush(answer('condition', { fits: true, why: null, name: 'Parapet' }));
     expect(await first).toEqual({ fits: true, why: null, name: 'Parapet' });
     // (asked again: known)

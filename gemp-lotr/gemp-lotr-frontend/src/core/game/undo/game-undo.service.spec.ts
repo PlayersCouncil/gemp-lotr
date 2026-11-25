@@ -1,5 +1,6 @@
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { sentForm } from '../../../testing/sent-form';
 import { provideGempHttp } from '../../api/gemp-interceptors';
 import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { provideGameState } from '../game-state';
@@ -64,11 +65,11 @@ describe('GameUndo', () => {
     undo.start('7');
     undo.start('7');
     const first_ = notices();
-    expect(first_.request.body?.get('after')).toBe('-1');
+    expect(sentForm(first_.request).get('after')).toBe('-1');
     first_.flush({ notices: [], latest: 3 });
     points().flush(answer(first));
     const poll = notices();
-    expect(poll.request.body?.get('after')).toBe('3');
+    expect(sentForm(poll.request).get('after')).toBe('3');
     return poll;
   }
 
@@ -145,7 +146,7 @@ describe('GameUndo', () => {
     // The game moves: asked again
     session.answer('4');
     backend
-      .expectOne((r) => r.url === GAME && r.body?.has('decisionId'))
+      .expectOne((r) => r.url === GAME && sentForm(r).has('decisionId'))
       .flush('<update cn="2"><ge type="TP" count="1"/></update>');
     TestBed.tick();
     points().flush(answer([green]));
@@ -155,8 +156,8 @@ describe('GameUndo', () => {
     start();
     undo.undoLatest();
     const sent = backend.expectOne((r) => r.url === `${GAME}/undo`);
-    expect(sent.request.body?.get('entryCount')).toBe('11');
-    expect(sent.request.body?.get('ownOnly')).toBe('true');
+    expect(sentForm(sent.request).get('entryCount')).toBe('11');
+    expect(sentForm(sent.request).get('ownOnly')).toBe('true');
     expect(undo.button()?.enabled).toBe(false);
     undo.undoLatest();
     backend.expectNone((r) => r.url === `${GAME}/undo`);
@@ -190,8 +191,8 @@ describe('GameUndo', () => {
     expect(undo.list()?.points.map((p) => p.entryCount)).toEqual([12, 11]);
     undo.ask(12);
     const asked = backend.expectOne((r) => r.url === `${GAME}/undo`);
-    expect(asked.request.body?.get('entryCount')).toBe('12');
-    expect(asked.request.body?.get('ownOnly')).toBe('false');
+    expect(sentForm(asked.request).get('entryCount')).toBe('12');
+    expect(sentForm(asked.request).get('ownOnly')).toBe('false');
     asked.flush({ status: 'pending', message: null, requestId: 4 });
     expect(undo.list()).toBeNull();
 
@@ -241,7 +242,7 @@ describe('GameUndo', () => {
     expect(undo.secondsLeft()).toBe(60);
     vi.advanceTimersByTime(3000);
     expect(undo.secondsLeft()).toBe(57);
-    expect(notices().request.body?.get('after')).toBe('4');
+    expect(sentForm(notices().request).get('after')).toBe('4');
   });
 
   it('answers the request; an approval the server refuses is said', () => {
@@ -249,8 +250,8 @@ describe('GameUndo', () => {
     poll.flush(notice(4, 'undoRequested', { requestId: '9', requester: 'bob', tier: 'RED', seconds: '60' }));
     undo.reply('decline');
     const reply = backend.expectOne((r) => r.url === `${GAME}/undoReply`);
-    expect(reply.request.body?.get('requestId')).toBe('9');
-    expect(reply.request.body?.get('reply')).toBe('decline');
+    expect(sentForm(reply.request).get('requestId')).toBe('9');
+    expect(sentForm(reply.request).get('reply')).toBe('decline');
     reply.flush({ status: 'refused', message: 'Not now', requestId: 9 });
     expect(undo.banner()).toBeNull();
     undo.reply('approve');
@@ -314,14 +315,14 @@ describe('GameUndo', () => {
   it("the game's end while the player's decision waits: the game's news, once", () => {
     const poll = start();
     poll.flush(notice(4, 'resync', { reason: 'ended' }));
-    backend.expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'));
+    backend.expectOne((r) => r.url === GAME && r.method === 'POST' && !sentForm(r).has('decisionId'));
   });
 
   it('declines every request without being asked, or stops', () => {
     start();
     undo.setAutoDecline(true);
     expect(undo.autoDeclining()).toBe(true);
-    expect(backend.expectOne((r) => r.url === `${GAME}/autoDecline`).request.body?.get('on')).toBe('true');
+    expect(sentForm(backend.expectOne((r) => r.url === `${GAME}/autoDecline`).request).get('on')).toBe('true');
   });
 
   it('a request waiting since before the page opened is shown', () => {
@@ -349,7 +350,7 @@ describe('GameUndo', () => {
     poll.flush('', { status: 502, statusText: 'x' });
     backend.expectNone((r) => r.url === `${GAME}/notices`);
     vi.advanceTimersByTime(NOTICES_RETRY_MS);
-    expect(notices().request.body?.get('after')).toBe('3');
+    expect(sentForm(notices().request).get('after')).toBe('3');
   });
 
   it('the banner stays ten seconds, fades for one, and goes; pressed, it goes at once', () => {

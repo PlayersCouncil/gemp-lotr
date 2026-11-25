@@ -26,7 +26,7 @@ describe('TournamentFormComponent (Play ▸ Create Tournament, CreateTournament.
     await play.click('.gd-play-form__advanced-toggle');
     expect(play.text('.gd-play-form__advanced-toggle')).toBe(w.HIDE_ADVANCED);
     const infos = () => Array.from(play.el.querySelectorAll<HTMLButtonElement>('.gd-play-form__info'));
-    expect(infos().map((b) => b.title)).toEqual(Array(7).fill(w.INFO_TOGGLE_TITLE));
+    expect(infos().map((b) => b.title)).toEqual(Array<string>(7).fill(w.INFO_TOGGLE_TITLE));
     const helps = [
       w.HELP_PLAYERS,
       w.HELP_PAIRING,

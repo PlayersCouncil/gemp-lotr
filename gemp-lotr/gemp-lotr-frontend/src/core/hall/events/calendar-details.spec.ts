@@ -1,8 +1,9 @@
 import { readServerResponse } from '../../../testing/files';
 import { calendarFacts, calendarPreview, previewDate } from './calendar-details';
 import { parseCalendar } from './events-parsers';
+import { parseJson } from '../../api/json';
 
-const events = parseCalendar(JSON.parse(readServerResponse('events-calendar.json'))).events;
+const events = parseCalendar(parseJson(readServerResponse('events-calendar.json'))).events;
 const byId = (id: string) => events.find((event) => event.id === id)!;
 
 describe('calendar details', () => {

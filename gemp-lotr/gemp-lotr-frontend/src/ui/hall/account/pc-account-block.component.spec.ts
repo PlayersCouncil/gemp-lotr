@@ -6,6 +6,7 @@ import { PageNavigation } from '../../../core/platform/page-navigation';
 import { settle } from '../../../testing/fake-notifier';
 import { readServerResponse } from '../../../testing/files';
 import { PcAccountBlockComponent } from './pc-account-block.component';
+import { sentForm } from '../../../testing/sent-form';
 
 describe('PcAccountBlockComponent', () => {
   let backend: HttpTestingController;
@@ -94,7 +95,7 @@ describe('PcAccountBlockComponent', () => {
 
     await type('wrong');
     const refused = backend.expectOne((r) => r.url === '/gemp-lotr-server/argonauth/connect' && r.method === 'POST');
-    expect(refused.request.body.toString()).toBe('password=wrong');
+    expect(sentForm(refused.request).toString()).toBe('password=wrong');
     refused.flush('{"error":"bad-credentials"}', { status: 401, statusText: 'Unauthorized' });
     await stable();
     backend
@@ -109,7 +110,7 @@ describe('PcAccountBlockComponent', () => {
       .expectOne((r) => r.url === '/gemp-lotr-server/argonauth/connect')
       .flush(readServerResponse('argonauth-connect.json'));
     await stable();
-    expect(visited).toEqual([JSON.parse(readServerResponse('argonauth-connect.json')).next]);
+    expect(visited).toEqual([(JSON.parse(readServerResponse('argonauth-connect.json')) as { next: string }).next]);
   });
 
   it('closes the Connect form with Cancel', async () => {

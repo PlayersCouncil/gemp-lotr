@@ -129,7 +129,7 @@ describe('GameSession', () => {
     backend.expectOne((r) => r.url === GAME).flush(state('1', decision()));
     session.refresh();
     const news = backend.expectOne((r) => r.url === GAME && r.method === 'POST');
-    expect(news.request.body?.get('channelNumber')).toBe('1');
+    expect(sentForm(news.request).get('channelNumber')).toBe('1');
     // Already asking: not asked twice
     session.refresh();
     news.flush(update('2', '<ge type="TP" count="5"/>'));
@@ -155,7 +155,7 @@ describe('GameSession', () => {
     expect(session.model().scenario?.step?.step).toBe(1);
     session.answer('10 20');
     expect(session.model().scenario?.step).toBeNull();
-    backend.expectOne((r) => r.url === GAME && r.body?.has('decisionId')).flush(update('2', step('opponent')));
+    backend.expectOne((r) => r.url === GAME && sentForm(r).has('decisionId')).flush(update('2', step('opponent')));
     expect(session.model().scenario?.step?.seat).toBe('opponent');
     session.stepRead();
     expect(session.model().scenario?.step).toBeNull();
@@ -338,7 +338,9 @@ describe('GameSession', () => {
     // The new channel is the one answered on
     session.answer('10 20');
     expect(
-      backend.expectOne((r) => r.method === 'POST' && r.body?.has('decisionId')).request.body?.get('channelNumber'),
+      sentForm(backend.expectOne((r) => r.method === 'POST' && sentForm(r).has('decisionId')).request).get(
+        'channelNumber',
+      ),
     ).toBe('5');
   });
 
@@ -411,13 +413,13 @@ describe('GameSession', () => {
     session.pollOnce();
     // Something else happened, not the end: the decision still waits, and nothing more is asked
     backend
-      .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+      .expectOne((r) => r.url === GAME && r.method === 'POST' && !sentForm(r).has('decisionId'))
       .flush(update('2', '<ge type="M" message="hm"/>'));
     vi.advanceTimersByTime(POLL_DELAY_MS);
     backend.expectNone((r) => r.url === GAME && r.method === 'POST');
     session.pollOnce();
     backend
-      .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+      .expectOne((r) => r.url === GAME && r.method === 'POST' && !sentForm(r).has('decisionId'))
       .flush(update('3', '<ge type="EG"/>'));
     expect(session.model()).toMatchObject({ ended: true, decision: null });
     // With no decision waiting the page asks for news as usual (afterEach)

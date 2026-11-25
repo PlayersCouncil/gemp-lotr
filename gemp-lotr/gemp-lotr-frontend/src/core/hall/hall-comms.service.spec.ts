@@ -7,6 +7,7 @@ import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { HallComms, NEXT_POLL_DELAY_MS } from './hall-comms.service';
 import { NOT_LOGGED_IN, OPENED_ELSEWHERE, RESUBSCRIBED } from './hall-messages';
 import { HallUpdate } from './hall-models';
+import { sentForm } from '../../testing/sent-form';
 
 const HALL = '/gemp-lotr-server/hall';
 const UPDATE = '/gemp-lotr-server/hall/update';
@@ -75,7 +76,7 @@ describe('HallComms', () => {
     backend.expectNone(UPDATE);
     vi.advanceTimersByTime(1);
     const poll = update();
-    expect(poll.request.body.get('channelNumber')).toBe('7');
+    expect(sentForm(poll.request).get('channelNumber')).toBe('7');
     poll.flush(readServerResponse('hall-update.xml'));
 
     expect(state()).toBe('shutdown');

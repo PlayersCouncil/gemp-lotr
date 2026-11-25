@@ -1,3 +1,4 @@
+import { parseJson } from '../../api/json';
 import { TestBed } from '@angular/core/testing';
 import { settle } from '../../../testing/fake-notifier';
 import { HallTestBed, setUpHall } from '../../../testing/hall';
@@ -46,7 +47,7 @@ describe('JoinDialog', () => {
     await joining;
     expect(join.state()).toBeNull();
     expect(titles()).toEqual([]);
-    expect(JSON.parse(hall.cookies.read('join-table-decks')!)).toEqual({ _: ['Elves', 'player'] });
+    expect(parseJson(hall.cookies.read('join-table-decks')!)).toEqual({ _: ['Elves', 'player'] });
 
     join.openTable('13');
     decks();
@@ -91,7 +92,9 @@ describe('JoinDialog', () => {
     await joining;
     expect(join.state()).toBeNull();
     expect(titles()).toEqual(['Joined Tournament']);
-    expect(JSON.parse(hall.cookies.read('join-queue-decks')!)['Fellowship Block']).toEqual(['Elves', 'player']);
+    expect((JSON.parse(hall.cookies.read('join-queue-decks')!) as Record<string, unknown>)['Fellowship Block']).toEqual(
+      ['Elves', 'player'],
+    );
   });
 
   it('joins a limited queue at once, and shows a refusal in a dialog of its own', async () => {
@@ -145,7 +148,10 @@ describe('JoinDialog', () => {
     await joining;
     expect(join.state()).toBeNull();
     expect(titles()).toEqual(['Joined Tournament']);
-    expect(JSON.parse(hall.cookies.read('late-join-decks')!)['Movie Block']).toEqual(['Elves', 'player']);
+    expect((JSON.parse(hall.cookies.read('late-join-decks')!) as Record<string, unknown>)['Movie Block']).toEqual([
+      'Elves',
+      'player',
+    ]);
   });
 
   it('joins a limited tournament late at once, with no deck', async () => {

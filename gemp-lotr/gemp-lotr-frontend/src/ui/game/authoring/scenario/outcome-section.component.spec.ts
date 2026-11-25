@@ -13,6 +13,8 @@ import { draftState } from '../../../../testing/authoring';
 import { provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { KEEP_KEY } from '../widgets/author-keep.directive';
 import { OutcomeSectionComponent } from './outcome-section.component';
+import { parseJson } from '../../../../core/api/json';
+import { sentForm } from '../../../../testing/sent-form';
 
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
@@ -95,7 +97,7 @@ describe('OutcomeSectionComponent: endings', () => {
   function outcome(): unknown {
     const requests: TestRequest[] = backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
     expect(requests).toHaveLength(1);
-    const patch = JSON.parse(requests[0]!.request.body.get('patch') as string) as { top: { outcome: unknown } };
+    const patch = JSON.parse(sentForm(requests[0]!.request).get('patch') as string) as { top: { outcome: unknown } };
     expect(Object.keys(patch)).toEqual(['top']);
     return patch.top.outcome;
   }
@@ -180,7 +182,7 @@ describe('OutcomeSectionComponent: endings', () => {
     const field = find<HTMLTextAreaElement>(`${ending('gameWon')} li[data-index="0"] textarea`);
     expect(field.value).toBe('Hurrah!!');
     // (still being typed in: kept for the next fresh game too)
-    expect(JSON.parse(sessionStorage.getItem(KEEP_KEY)!)).toMatchObject({ value: 'Hurrah!!' });
+    expect(parseJson(sessionStorage.getItem(KEEP_KEY)!)).toMatchObject({ value: 'Hurrah!!' });
     field.dispatchEvent(new Event('blur'));
     await settle();
     expect(outcome()).toEqual({
@@ -189,7 +191,7 @@ describe('OutcomeSectionComponent: endings', () => {
     });
     // Typing keeps it; leaving forgets it
     field.dispatchEvent(new Event('focus'));
-    expect(JSON.parse(sessionStorage.getItem(KEEP_KEY)!)).toMatchObject({
+    expect(parseJson(sessionStorage.getItem(KEEP_KEY)!)).toMatchObject({
       key: 'outcome.gameWon.0.text',
       value: 'Hurrah!!',
     });

@@ -23,6 +23,8 @@ import { JudgingComponent } from './judging.component';
 import { PlaysSectionComponent } from './plays-section.component';
 import { PuzzleRulesComponent } from './puzzle-rules.component';
 import { SolutionsSectionComponent } from './solutions-section.component';
+import { parseJson } from '../../../../core/api/json';
+import { sentForm } from '../../../../testing/sent-form';
 
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 const BOUND = '/gemp-lotr-server/scenarios/author/bound';
@@ -195,7 +197,7 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
   function patch(): Record<string, unknown> {
     const requests = posted('edit');
     expect(requests).toHaveLength(1);
-    return JSON.parse(requests[0]!.request.body.get('patch') as string) as Record<string, unknown>;
+    return JSON.parse(sentForm(requests[0]!.request).get('patch') as string) as Record<string, unknown>;
   }
 
   /** The one call of /author/solution: its form. */
@@ -478,7 +480,7 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
     await type('input[data-part=pool]', ' set:1-3 ');
     const sent = posted('edit');
     expect(sent).toHaveLength(1);
-    expect(JSON.parse(sent[0]!.request.body.get('patch') as string)).toEqual({ top: { pool: 'set:1-3' } });
+    expect(parseJson(sentForm(sent[0]!.request).get('patch') as string)).toEqual({ top: { pool: 'set:1-3' } });
     sent[0]!.flush(JSON.stringify({ error: "pool: 'colour:red': the deck builder's search has no 'colour'" }), {
       status: 400,
       statusText: 'No',
@@ -489,7 +491,7 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
     expect(find('.gd-author-filter__why').textContent).toMatch(/has no 'colour'/);
     await type('input[data-part=pool]', '');
     const blank = posted('edit');
-    expect(JSON.parse(blank[0]!.request.body.get('patch') as string)).toEqual({ top: { pool: null } });
+    expect(parseJson(sentForm(blank[0]!.request).get('patch') as string)).toEqual({ top: { pool: null } });
     blank[0]!.flush(JSON.stringify(result(puzzle())));
     await settle();
     await render();

@@ -67,8 +67,8 @@ describe('ChatComponent', () => {
     const fixture = TestBed.createComponent(Host);
     const host = fixture.componentInstance;
     await fixture.whenStable();
-    const el = fixture.nativeElement.querySelector('gd-chat') as HTMLElement;
-    const update = () => fixture.whenStable();
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-chat') as HTMLElement;
+    const update = () => fixture.whenStable() as Promise<void>;
     const all = (selector: string) => Array.from(el.querySelectorAll<HTMLElement>(selector));
     const text = (selector: string) => all(selector).map((e) => e.textContent!.replace(/\s+/g, ' ').trim());
     return { fixture, host, el, update, all, text };
@@ -391,8 +391,8 @@ describe('ChatComponent, the user list width', () => {
   async function render() {
     const fixture = TestBed.createComponent(WidthHost);
     const host = fixture.componentInstance;
-    const el = fixture.nativeElement.querySelector('gd-chat') as HTMLElement;
-    const update = () => fixture.whenStable();
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-chat') as HTMLElement;
+    const update = () => fixture.whenStable() as Promise<void>;
     const width = () =>
       el.hasAttribute('data-people-width') ? parseFloat(el.style.getPropertyValue('--gd-chat-people-width')) : null;
     await update();

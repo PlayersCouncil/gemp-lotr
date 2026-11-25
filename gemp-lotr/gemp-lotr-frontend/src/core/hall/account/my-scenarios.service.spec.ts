@@ -8,6 +8,8 @@ import { HallReadyOffers } from '../ready/hall-ready-offers.service';
 import { MyScenarios } from './my-scenarios.service';
 import { Subject } from 'rxjs';
 import { HallChannel } from '../../platform/hall-tab.service';
+import { sentForm } from '../../../testing/sent-form';
+import { containing } from '../../../testing/matchers';
 
 const MINE = JSON.parse(readServerResponse('scenarios-mine.json')) as { scenarios: unknown[]; authoring: unknown };
 const [inReview, sentBack] = parseMyScenarios(MINE).scenarios as OwnScenario[];
@@ -69,7 +71,7 @@ describe('MyScenarios', () => {
     expect(navigation.tabs).toHaveLength(1);
     expect(shelf.saying()).toEqual({ text: 'Setting up the table...', kind: 'pending' });
     const request = accountRequest(backend, '/scenarios/start', 'POST');
-    expect(String(request.request.body)).toBe('id=alice%2Ftutorial-1');
+    expect(sentForm(request.request).toString()).toBe('id=alice%2Ftutorial-1');
     request.flush({ gameId: 'g1', resumedAt: null });
     await played;
     expect(navigation.tabs[0]?.url).toBe('/gemp-lotr/ng/game?gameId=g1');
@@ -89,7 +91,7 @@ describe('MyScenarios', () => {
     accountRequest(backend, '/scenarios/start', 'POST').flush({ gameId: 'g2' });
     await played;
     expect(TestBed.inject(HallReadyOffers).offers()).toEqual([
-      expect.objectContaining({ key: 'game:g2', kind: 'game', url: '/gemp-lotr/ng/game?gameId=g2' }),
+      containing({ key: 'game:g2', kind: 'game', url: '/gemp-lotr/ng/game?gameId=g2' }),
     ]);
   });
 
@@ -106,7 +108,7 @@ describe('MyScenarios', () => {
     expect(navigation.tabs).toHaveLength(1);
     expect(shelf.saying().text).toBe('Opening the authoring tool...');
     const request = accountRequest(backend, '/scenarios/author/open', 'POST');
-    expect(String(request.request.body)).toBe('id=alice%2Ftutorial-1');
+    expect(sentForm(request.request).toString()).toBe('id=alice%2Ftutorial-1');
     request.flush({ ok: true, gameId: 9, events: false, rebuilt: true, state: {} });
     await settle();
     accountRequest(backend, '/scenarios/mine').flush(MINE);
@@ -121,7 +123,7 @@ describe('MyScenarios', () => {
     expect(shelf.saying()).toEqual({ text: 'Give the new scenario a title (or an id).', kind: 'error' });
     const created = shelf.create(' My Puzzle! ', '');
     const request = accountRequest(backend, '/scenarios/author/open', 'POST');
-    expect(String(request.request.body)).toBe('id=my-puzzle&new=true&title=My%20Puzzle!&canonical=false');
+    expect(sentForm(request.request).toString()).toBe('id=my-puzzle&new=true&title=My%20Puzzle!&canonical=false');
     request.flush('{"error":"You have 100 scenarios."}', { status: 400, statusText: 'Error' });
     expect(await created).toBe(false);
     expect(navigation.tabs[0]?.closed).toBe(true);

@@ -18,6 +18,7 @@ import { PAGE_QUERY_STRING } from '../../../../core/platform/page-location';
 import { boardCard, draftBoard, draftGameXml, draftState, result } from '../../../../testing/authoring';
 import { provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { BoardTabComponent } from '../board-tab.component';
+import { sentForm } from '../../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -195,7 +196,7 @@ describe('the Board tab: where the story starts, the markers, sites without numb
   const stored = () => (JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!) as { board: GatheredBoard | null }).board;
   const asked = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
   const patch = (request: TestRequest) =>
-    JSON.parse(request.request.body!.get('patch')!) as { top: Record<string, unknown> };
+    JSON.parse(sentForm(request.request).get('patch')!) as { top: Record<string, unknown> };
 
   async function answer(what: string, body: unknown, error: string | null = null): Promise<TestRequest> {
     const requests = asked(what);
@@ -371,7 +372,7 @@ describe('the Board tab: where the story starts, the markers, sites without numb
       });
       expect(stored()!.start).toBeUndefined();
       const ops = await answer('do', result(withStart(), { gameId: '9', rebuilt: true }));
-      expect(ops.request.body!.get('op')).toBe('marker(shadow, 3)');
+      expect(sentForm(ops.request).get('op')).toBe('marker(shadow, 3)');
       expect(gathered()).toEqual([]);
     });
 
@@ -467,8 +468,8 @@ describe('the Board tab: where the story starts, the markers, sites without numb
       expect(gathered()).toEqual(['marker(shadow, 4)', 'control(2, shadow)', 'liberate(1)']);
       await click('[data-action=submit]');
       const sent = await answer('do', result(withStart(), { events: true }));
-      expect(sent.request.body!.get('op')).toBe('marker(shadow, 4), control(2, shadow), liberate(1)');
-      expect(sent.request.body!.get('setup')).toBe('false');
+      expect(sentForm(sent.request).get('op')).toBe('marker(shadow, 4), control(2, shadow), liberate(1)');
+      expect(sentForm(sent.request).get('setup')).toBe('false');
     });
   });
 

@@ -15,8 +15,9 @@ import {
   setsText,
 } from './format-definitions';
 import { FormatCard, FormatDefinition } from './format-definitions-models';
+import { parseJson } from '../../api/json';
 
-const formats = parseFormatDefinitions(JSON.parse(readServerResponse('format-definitions.json')));
+const formats = parseFormatDefinitions(parseJson(readServerResponse('format-definitions.json')));
 
 function format(code: string): FormatDefinition {
   const found = formats.find((entry) => entry.code === code);

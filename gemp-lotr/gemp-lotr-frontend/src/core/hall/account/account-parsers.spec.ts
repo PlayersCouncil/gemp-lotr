@@ -1,3 +1,4 @@
+import { parseJson } from '../../api/json';
 import { readServerResponse, readServerXml } from '../../../testing/files';
 import {
   parseAuthoringDraft,
@@ -9,7 +10,7 @@ import {
   parseScenarioCopy,
 } from './account-parsers';
 
-const json = (name: string): unknown => JSON.parse(readServerResponse(name));
+const json = (name: string): unknown => parseJson(readServerResponse(name));
 const xml = (text: string) => new DOMParser().parseFromString(text, 'application/xml');
 
 describe('account parsers', () => {

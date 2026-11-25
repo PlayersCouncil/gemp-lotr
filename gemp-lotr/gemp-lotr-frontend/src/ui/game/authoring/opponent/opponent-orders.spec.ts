@@ -23,6 +23,8 @@ import {
 } from '../../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { OpponentTabComponent } from '../opponent-tab.component';
+import { parseJson } from '../../../../core/api/json';
+import { sentForm } from '../../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -138,7 +140,7 @@ describe('OpponentTabComponent: standing orders and rules', () => {
   function patch(): unknown {
     const requests = edits();
     expect(requests).toHaveLength(1);
-    return JSON.parse(requests[0]!.request.body.get('patch') as string);
+    return parseJson(sentForm(requests[0]!.request).get('patch') as string);
   }
   const text = (selector: string) => el.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim() ?? null;
   const card = (index: number) => `li.gd-author-order[data-index="${index}"]`;
@@ -373,7 +375,7 @@ describe('OpponentTabComponent: standing orders and rules', () => {
     await click('[data-author=assign]');
     const answers = backend
       .match((r) => r.url === `${AUTHOR}answer`)
-      .map((request) => request.request.body.get('term') as string);
+      .map((request) => sentForm(request.request).get('term') as string);
     expect(answers).toEqual(['assign(sam: orc2, frodo: rest)']);
   });
 

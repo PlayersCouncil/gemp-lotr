@@ -33,6 +33,7 @@ import { EVENTS_AUTO_ZOOM_COOKIE, EventsCardActions } from './events-tab.compone
 import { LeagueDetailComponent } from './league-detail.component';
 import { PriceComponent } from '../shared/price.component';
 import { TournamentDetailComponent } from './tournament-detail.component';
+import { parseJson } from '../../../core/api/json';
 
 const LEAGUE = parseLeagueDetail(readServerResponse('league-detail.xml'))!;
 const RTMD = parseLeagueDetail(readServerResponse('league-detail-rtmd.xml'))!;
@@ -236,7 +237,7 @@ describe('the Events tab parts', () => {
   });
 
   it("draws a calendar event's facts", () => {
-    const events = parseCalendar(JSON.parse(readServerResponse('events-calendar.json'))).events;
+    const events = parseCalendar(parseJson(readServerResponse('events-calendar.json'))).events;
     const fixture = TestBed.createComponent(CalendarFactsComponent);
     fixture.componentRef.setInput('facts', calendarFacts(events[0]!));
     fixture.detectChanges();
@@ -252,7 +253,7 @@ describe('the Events tab parts', () => {
 
   it('draws a completed-events panel: header, dropdown, status, table and details', async () => {
     const month = parseEventHistory(
-      JSON.parse(readServerResponse('event-history-tournament.json')),
+      parseJson(readServerResponse('event-history-tournament.json')),
       '2026-10',
       'tournament',
     );

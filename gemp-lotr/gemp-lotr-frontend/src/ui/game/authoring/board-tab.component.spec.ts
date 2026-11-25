@@ -20,6 +20,8 @@ import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake
 import { START_DEFAULT } from '../../../core/game/authoring/board-start';
 import { BoardTabComponent } from './board-tab.component';
 import { foundText, SEARCH_MS } from './widgets/card-search.component';
+import { parseJson } from '../../../core/api/json';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -184,7 +186,7 @@ describe('BoardTabComponent', () => {
   const gathered = () => all('.gd-author-board-gathered__text').map((line) => line.textContent?.trim());
   const card = (alias: string) => `.gd-author-board-card[data-alias="${alias}"]`;
   const patch = (request: TestRequest) =>
-    JSON.parse(request.request.body!.get('patch')!) as { top: Record<string, unknown> };
+    JSON.parse(sentForm(request.request).get('patch')!) as { top: Record<string, unknown> };
   const stored = () => (JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!) as { board: GatheredBoard | null }).board;
 
   it('says when the board has not been laid out', async () => {
@@ -359,7 +361,7 @@ describe('BoardTabComponent', () => {
     await click(`${card('frodo')} [data-action=wound]`);
     await click('[data-action=submit]');
     const sent = await answer('do', result(withBoard(), { events: true }));
-    expect(sent.request.body!.get('op')).toBe('wound(frodo, 1)');
+    expect(sentForm(sent.request).get('op')).toBe('wound(frodo, 1)');
     expect(gathered()).toEqual([]);
   });
 
@@ -390,7 +392,7 @@ describe('BoardTabComponent', () => {
     await key(`${card('sam')} gd-author-board-rename input`, 'Escape');
     await key(`${card('sam')} gd-author-board-rename input`, 'Enter');
     const sent = await answer('alias', result(withBoard({ gameId: '9' }), { gameId: '9', rebuilt: true }));
-    expect([sent.request.body!.get('from'), sent.request.body!.get('to')]).toEqual(['sam', 'samwise']);
+    expect([sentForm(sent.request).get('from'), sentForm(sent.request).get('to')]).toEqual(['sam', 'samwise']);
     expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=9');
     await click(`${card('merry')} [data-action=rename]`);
     await click(`${card('merry')} gd-author-board-rename [data-action=cancel]`);
@@ -489,7 +491,7 @@ describe('BoardTabComponent', () => {
     await type('gd-author-board-path gd-author-board-rename input', 'bagEnd');
     await key('gd-author-board-path gd-author-board-rename input', 'Enter');
     const sent = await answer('alias', result(withBoard()));
-    expect([sent.request.body!.get('from'), sent.request.body!.get('to')]).toEqual(['site1opp', 'bagEnd']);
+    expect([sentForm(sent.request).get('from'), sentForm(sent.request).get('to')]).toEqual(['site1opp', 'bagEnd']);
     expect(el.querySelector('gd-author-board-path gd-author-board-rename')).toBeNull();
   });
 
@@ -637,7 +639,7 @@ describe('BoardTabComponent', () => {
         "confirm: Its setup keeps only each deck's order. Lost: Free Peoples hand: sam, merry; Shadow hand: orc.",
       );
       const request = await answer('edit', result(withBoard()));
-      expect(JSON.parse(request.request.body.get('patch'))).toEqual({ top: { setup: { opening: 'game' } } });
+      expect(parseJson(sentForm(request.request).get('patch')!)).toEqual({ top: { setup: { opening: 'game' } } });
     });
 
     it('puts the select back when the author keeps the board', async () => {

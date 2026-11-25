@@ -119,7 +119,9 @@ describe('hall table parsers', () => {
   });
 
   it('reads the timers and labels them', () => {
-    const timers = parseHallTimers(JSON.parse(readServerResponse('hall-formats.json')).HallTimers);
+    const timers = parseHallTimers(
+      (JSON.parse(readServerResponse('hall-formats.json')) as { HallTimers: unknown }).HallTimers,
+    );
     expect(timers.map(timerLabel)).toEqual([
       'Default (45m/6m)',
       'Blitz! (25m/3m)',

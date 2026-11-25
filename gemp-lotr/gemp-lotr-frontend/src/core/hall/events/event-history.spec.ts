@@ -5,9 +5,10 @@ import { readServerResponse } from '../../../testing/files';
 import { EventHistoryBrowser, EventHistorySource } from './event-history';
 import { CompletedEventsMonth, EventKind } from './events-models';
 import { parseEventHistory } from './events-parsers';
+import { parseJson } from '../../api/json';
 
 const TOURNAMENTS = parseEventHistory(
-  JSON.parse(readServerResponse('event-history-tournament.json')),
+  parseJson(readServerResponse('event-history-tournament.json')),
   '2026-10',
   'tournament',
 );

@@ -16,6 +16,7 @@ import { decision, draftGameXml, draftState, position, result } from '../../../t
 import { provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { PAGE_RIGHT_PROPERTY } from '../../shared/page-room';
 import { AuthoringPanelComponent } from './authoring-panel.component';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -149,7 +150,7 @@ describe('AuthoringPanelComponent', () => {
     await click('[data-author=resume]');
     expect(posted('resume')).toHaveLength(1);
     await click('[data-author=test-again]');
-    expect(posted('test')[0]?.request.body?.get('step')).toBe('3');
+    expect(sentForm(posted('test')[0]!.request).get('step')).toBe('3');
     await update(draftState({ mode: 'test' }));
     expect(text('.gd-author__where')).toBe("A player's game of the draft, from step 1");
   });
@@ -206,7 +207,7 @@ describe('AuthoringPanelComponent', () => {
       await click('[data-notice=left-out] [data-author=show]');
       expect(authoring.ui()).toMatchObject({ tab: 'step', selected: 2 });
       await click('[data-notice=left-out] .gd-author-notice__dismiss');
-      expect(posted('settings')[0]?.request.body?.get('seenLeftOut')).toBe('true');
+      expect(sentForm(posted('settings')[0]!.request).get('seenLeftOut')).toBe('true');
     });
 
     it('says what no step covers, and writes the step for it; or why it cannot', async () => {

@@ -14,6 +14,7 @@ import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { draftGameXml, draftState, result } from '../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { ScenarioTabComponent } from './scenario-tab.component';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -120,7 +121,7 @@ describe('ScenarioTabComponent', () => {
   function patch(): { top?: Record<string, unknown>; topText?: Record<string, string>; opponent?: unknown } {
     const requests = posted('edit');
     expect(requests).toHaveLength(1);
-    return JSON.parse(requests[0]!.request.body.get('patch')) as { top?: Record<string, unknown> };
+    return JSON.parse(sentForm(requests[0]!.request).get('patch')!) as { top?: Record<string, unknown> };
   }
 
   const top = () => patch().top;
@@ -203,8 +204,11 @@ describe('ScenarioTabComponent', () => {
       path.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
       await redraw();
       const [request] = posted('save') as TestRequest[];
-      expect([request!.request.body.get('as'), request!.request.body.get('path')]).toEqual(['copy', 'My Copy.hjson']);
-      expect(request!.request.body.get('canonical')).toBe('false');
+      expect([sentForm(request!.request).get('as'), sentForm(request!.request).get('path')]).toEqual([
+        'copy',
+        'My Copy.hjson',
+      ]);
+      expect(sentForm(request!.request).get('canonical')).toBe('false');
       // (while it is on its way, it is not sent again)
       await click('button[data-author=file]');
       expect(posted('save')).toEqual([]);

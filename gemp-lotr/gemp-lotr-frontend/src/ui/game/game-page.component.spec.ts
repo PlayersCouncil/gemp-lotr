@@ -912,12 +912,12 @@ describe('GamePageComponent in a scripted game', () => {
     card('6')?.click();
     await stable();
     expect(el.querySelector('.gd-scenario-hint')?.innerHTML).toBe('<p>Not that one.</p>');
-    backend.expectNone((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'));
+    backend.expectNone((r) => r.url === GAME && r.method === 'POST' && sentForm(r).has('decisionId'));
     await new Promise((resolve) => setTimeout(resolve, 250));
     card('1')?.click();
     await stable();
-    const answer = backend.expectOne((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'));
-    expect(answer.request.body?.get('decisionValue')).toBe('10');
+    const answer = backend.expectOne((r) => r.url === GAME && r.method === 'POST' && sentForm(r).has('decisionId'));
+    expect(sentForm(answer.request).get('decisionValue')).toBe('10');
   });
 
   it('names a pile of the scripted opponent by its shown name, and has no feedback dialog at the end', async () => {

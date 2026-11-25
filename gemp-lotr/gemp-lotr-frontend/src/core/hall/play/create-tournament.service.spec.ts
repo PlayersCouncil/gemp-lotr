@@ -61,7 +61,10 @@ describe('CreateTournament', () => {
           'you press its Start button.',
       },
     ]);
-    expect(JSON.parse(hall.cookies.read('tournament-decks')!).fotr_block).toEqual(['Elves', 'player']);
+    expect((JSON.parse(hall.cookies.read('tournament-decks')!) as { fotr_block: unknown }).fotr_block).toEqual([
+      'Elves',
+      'player',
+    ]);
   });
 
   it('shows the server refusal, and a formats load failure', async () => {

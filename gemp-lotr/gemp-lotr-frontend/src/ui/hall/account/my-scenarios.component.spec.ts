@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { accountRequest, answerAccount, drawn, setUpAccountPages } from '../../../testing/account-server';
 import { readServerResponse } from '../../../testing/files';
 import { HallReadyOffers } from '../../../core/hall/ready/hall-ready-offers.service';
+import { sentForm } from '../../../testing/sent-form';
 
 describe('MyScenariosComponent', () => {
   async function shown() {
@@ -9,7 +10,9 @@ describe('MyScenariosComponent', () => {
     await setup.harness.navigateByUrl('/account/scenarios');
     answerAccount(setup.backend, '/scenarios/mine', 'scenarios-mine.json');
     await drawn(setup.harness);
-    const host = setup.harness.fixture.nativeElement.querySelector('gd-account-scenarios') as HTMLElement;
+    const host = (setup.harness.fixture.nativeElement as HTMLElement).querySelector(
+      'gd-account-scenarios',
+    ) as HTMLElement;
     return { ...setup, host };
   }
 
@@ -128,7 +131,7 @@ describe('MyScenariosComponent', () => {
     expect(box.querySelector('h2')?.textContent).toBe('You have a draft open with unsaved changes');
     (box.querySelector('[data-action=yes]') as HTMLButtonElement).click();
     const open = accountRequest(backend, '/scenarios/author/open', 'POST');
-    expect(String(open.request.body)).toContain('id=my-puzzle&new=true');
+    expect(sentForm(open.request).toString()).toContain('id=my-puzzle&new=true');
     open.flush({ ok: true, gameId: 12 });
     await drawn(harness);
     answerAccount(backend, '/scenarios/mine', 'scenarios-mine.json');
@@ -173,7 +176,9 @@ describe('MyScenariosComponent', () => {
     await setup.harness.navigateByUrl('/account/scenarios');
     accountRequest(setup.backend, '/scenarios/mine').flush(mine);
     await drawn(setup.harness);
-    const host = setup.harness.fixture.nativeElement.querySelector('gd-account-scenarios') as HTMLElement;
+    const host = (setup.harness.fixture.nativeElement as HTMLElement).querySelector(
+      'gd-account-scenarios',
+    ) as HTMLElement;
     const submit = Array.from(host.querySelectorAll<HTMLButtonElement>('[data-action=submit]')).find(
       (b) => !b.disabled,
     )!;
@@ -209,14 +214,16 @@ describe('MyScenariosComponent', () => {
     await setup.harness.navigateByUrl('/account/scenarios');
     accountRequest(setup.backend, '/scenarios/mine').flush({ ...mine, authoring: null });
     await drawn(setup.harness);
-    const host = setup.harness.fixture.nativeElement.querySelector('gd-account-scenarios') as HTMLElement;
+    const host = (setup.harness.fixture.nativeElement as HTMLElement).querySelector(
+      'gd-account-scenarios',
+    ) as HTMLElement;
     const id = host.querySelector('input[name=id]') as HTMLInputElement;
     id.value = 'puzzle-2';
     id.dispatchEvent(new Event('input'));
     await drawn(setup.harness);
     (host.querySelector('[data-action=create]') as HTMLButtonElement).click();
     const open = accountRequest(setup.backend, '/scenarios/author/open', 'POST');
-    expect(String(open.request.body)).toContain('id=puzzle-2&new=true');
+    expect(sentForm(open.request).toString()).toContain('id=puzzle-2&new=true');
     open.flush({ ok: true, gameId: 4 });
     await drawn(setup.harness);
     accountRequest(setup.backend, '/scenarios/mine').flush({ ...mine, authoring: null });

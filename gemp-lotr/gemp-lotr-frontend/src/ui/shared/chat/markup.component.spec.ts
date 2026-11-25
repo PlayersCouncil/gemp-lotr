@@ -24,7 +24,7 @@ describe('MarkupComponent', () => {
       parseServerMarkup('<p>hi <b>@bob</b>, see <a href="https://x.test">x</a><br/>&lt;img src=x&gt;</p>'),
     );
     await fixture.whenStable();
-    const el = fixture.nativeElement.querySelector('gd-markup') as HTMLElement;
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-markup') as HTMLElement;
     expect(markupOf(el)).toBe(
       '<p>hi <b>@bob</b>, see <a class="gd-markup__link" href="https://x.test" target="_blank" ' +
         'rel="noopener noreferrer">x</a><br>&lt;img src=x&gt;</p>',
@@ -52,7 +52,7 @@ describe('MarkupComponent', () => {
     ];
     fixture.componentInstance.nodes.set(nodes);
     await fixture.whenStable();
-    const el = fixture.nativeElement.querySelector('gd-markup') as HTMLElement;
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-markup') as HTMLElement;
 
     const [icon, picture] = Array.from(el.querySelectorAll<HTMLImageElement>('img.gd-markup__image'));
     expect(icon?.getAttribute('src')).toBe('/gemp-lotr/images/cultures/gondor.png');
@@ -98,7 +98,7 @@ describe('MarkupComponent', () => {
       parseServerMarkup('<table><tr><td colspan="2">a</td></tr></table><a href="#patch-notes">notes</a>', RICH_MARKUP),
     );
     await fixture.whenStable();
-    const el = fixture.nativeElement.querySelector('gd-markup') as HTMLElement;
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-markup') as HTMLElement;
     expect(el.querySelector('td')?.getAttribute('colspan')).toBe('2');
     expect(el.querySelector('a.gd-markup__hall-link')?.textContent).toBe('notes');
   });

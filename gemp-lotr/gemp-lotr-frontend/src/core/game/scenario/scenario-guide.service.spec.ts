@@ -2,6 +2,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
+import { containing } from '../../../testing/matchers';
+import { sentDecision, sentForm } from '../../../testing/sent-form';
 import { provideGempHttp } from '../../api/gemp-interceptors';
 import { CardInfoService } from '../../cards/card-info.service';
 import { CardView } from '../../cards/card-view';
@@ -187,8 +189,7 @@ describe('ScenarioGuide', () => {
 
   /** The answer sent to the decision, or null if none. */
   function answer(): string | null {
-    const sent = backend.match((r) => r.url === GAME && r.method === 'POST' && r.body?.has('decisionId'));
-    return sent.length ? (sent[0]!.request.body?.get('decisionValue') ?? null) : null;
+    return sentDecision(backend, GAME);
   }
 
   /** The "I have read it" sent, or null. */
@@ -201,7 +202,7 @@ describe('ScenarioGuide', () => {
   /** The poll that asks for news, answered with these events. */
   function news(events: string) {
     backend
-      .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+      .expectOne((r) => r.url === GAME && r.method === 'POST' && !sentForm(r).has('decisionId'))
       .flush(`<update cn="2">${events}</update>`);
     TestBed.tick();
   }
@@ -455,8 +456,8 @@ describe('ScenarioGuide', () => {
     guide.next();
     guide.next();
     const read = acknowledged();
-    expect(read?.request.body?.get('step')).toBe('1');
-    expect(read?.request.body?.get('choice')).toBe('');
+    expect(sentForm(read!.request).get('step')).toBe('1');
+    expect(sentForm(read!.request).get('choice')).toBe('');
     read?.flush('');
     TestBed.tick();
     expect(guide.step()).toBeNull();
@@ -482,7 +483,7 @@ describe('ScenarioGuide', () => {
     ]);
     expect(guide.nextLabel()).toBeNull();
     guide.choose('yes');
-    expect(acknowledged()?.request.body?.get('choice')).toBe('yes');
+    expect(sentForm(acknowledged()!.request).get('choice')).toBe('yes');
   });
 
   it('offers to try again when telling the server failed, and stops offering once it worked', () => {
@@ -719,8 +720,8 @@ describe('ScenarioGuide', () => {
       guide.restart();
       expect(guide.leaving()).toBe(true);
       const asked = start();
-      expect(asked.request.body?.get('id')).toBe('basics-01');
-      expect(asked.request.body?.has('from')).toBe(false);
+      expect(sentForm(asked.request).get('id')).toBe('basics-01');
+      expect(sentForm(asked.request).has('from')).toBe(false);
       asked.flush('{"gameId":42}');
       expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=42');
     });
@@ -731,7 +732,7 @@ describe('ScenarioGuide', () => {
       open(S(INFO) + CARD_ACTIONS);
       guide.restart(true);
       const checkpoint = start();
-      expect(checkpoint.request.body?.get('from')).toBe('checkpoint');
+      expect(sentForm(checkpoint.request).get('from')).toBe('checkpoint');
       checkpoint.flush('{"gameId":43}');
       expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=43');
     });
@@ -739,7 +740,7 @@ describe('ScenarioGuide', () => {
     it('starts the next scenario of the campaign, if there is one', () => {
       open(S(INFO) + CARD_ACTIONS);
       guide.startNext();
-      expect(start().request.body?.get('id')).toBe('basics-02-items-damage');
+      expect(sentForm(start().request).get('id')).toBe('basics-02-items-damage');
       TestBed.resetTestingModule();
       setUp();
       open(S({ ...INFO, campaign: null }) + CARD_ACTIONS);
@@ -817,7 +818,7 @@ describe('ScenarioGuide', () => {
       expect(backend.match((r) => r.url === START)).toEqual([]);
       notifier.answers.push(true);
       await guide.askCheckpoint();
-      expect(start().request.body?.get('from')).toBe('checkpoint');
+      expect(sentForm(start().request).get('from')).toBe('checkpoint');
     });
 
     it('offers a checkpoint a game was brought back to, but none once it is over or in a test of a draft', () => {
@@ -931,7 +932,7 @@ describe('ScenarioGuide', () => {
       const author = hooks();
       guide.attachAuthor(author);
       open(S({ ...INFO, author: true }) + S(step({ messages: [message('One')] })) + CARD_ACTIONS);
-      expect(author.stepShown).toHaveBeenCalledWith(expect.objectContaining({ step: 1, sub: 0 }));
+      expect(author.stepShown).toHaveBeenCalledWith(containing({ step: 1, sub: 0 }));
     });
 
     it('puts a message of the step on the screen up for its author, the decision answerable meanwhile', () => {
@@ -954,7 +955,7 @@ describe('ScenarioGuide', () => {
       // (the step put up again: from the first, to be read)
       session.refresh();
       backend
-        .expectOne((r) => r.url === GAME && r.method === 'POST' && !r.body?.has('decisionId'))
+        .expectOne((r) => r.url === GAME && r.method === 'POST' && !sentForm(r).has('decisionId'))
         .flush(`<update cn="2">${S(step({ step: 4, sub: 2, messages, allow: allow(['12']) }))}</update>`);
       TestBed.tick();
       expect(guide.phase()).toBe('reading');
@@ -1051,7 +1052,7 @@ describe('ScenarioGuide', () => {
     open(S(PUZZLE) + CARD_ACTIONS);
     guide.restart();
     let asked = start();
-    expect(asked.request.body?.get('picks')).toBe('same');
+    expect(sentForm(asked.request).get('picks')).toBe('same');
     asked.flush('{"gameId":50}');
     // (from a checkpoint the server keeps the cards itself)
     TestBed.resetTestingModule();
@@ -1059,8 +1060,8 @@ describe('ScenarioGuide', () => {
     open(S(PUZZLE) + CARD_ACTIONS);
     guide.restart(true);
     asked = start();
-    expect(asked.request.body?.has('picks')).toBe(false);
-    expect(asked.request.body?.get('from')).toBe('checkpoint');
+    expect(sentForm(asked.request).has('picks')).toBe(false);
+    expect(sentForm(asked.request).get('from')).toBe('checkpoint');
 
     TestBed.resetTestingModule();
     setUp();
@@ -1072,8 +1073,8 @@ describe('ScenarioGuide', () => {
     notifier.answers.push(true);
     await guide.changeCards();
     asked = start();
-    expect(asked.request.body?.get('id')).toBe('GamePlayer3/p10');
-    expect(asked.request.body?.has('picks')).toBe(false);
+    expect(sentForm(asked.request).get('id')).toBe('GamePlayer3/p10');
+    expect(sentForm(asked.request).has('picks')).toBe(false);
 
     // Over: no question; not for a draft's game, nor a scenario that is no puzzle
     TestBed.resetTestingModule();

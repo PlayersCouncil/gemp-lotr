@@ -3,7 +3,9 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { decision, draftState, position, result } from '../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
+import { sentForm } from '../../../testing/sent-form';
 import { provideGempHttp } from '../../api/gemp-interceptors';
+import { parseJson } from '../../api/json';
 import { CardInfoService } from '../../cards/card-info.service';
 import { HallTab } from '../../platform/hall-tab.service';
 import { PageCues } from '../../platform/page-cues';
@@ -144,7 +146,7 @@ describe('Authoring', () => {
     return request;
   }
 
-  const form = (request: TestRequest, name: string) => request.request.body?.get(name) ?? null;
+  const form = (request: TestRequest, name: string) => sentForm(request.request).get(name);
 
   /** Open, with the draft's state taken. */
   async function ready(state: DraftState = draftState(), info: Partial<typeof INFO> = {}) {
@@ -177,7 +179,7 @@ describe('Authoring', () => {
     expect(authoring.steps()).toHaveLength(3);
     // (the step the game is at is selected)
     expect(authoring.ui()).toMatchObject({ selected: 1, selectedUid: 's1', atUid: 's1' });
-    expect(JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ selected: 1 });
+    expect(parseJson(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ selected: 1 });
     authoring.fold();
     expect(authoring.dock()).toEqual({ width: FOLDED_WIDTH, folded: true, floating: false });
     authoring.fold(false);
@@ -275,7 +277,7 @@ describe('Authoring', () => {
     expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=9');
     expect(authoring.gone()).toBe(true);
     expect(guide.leaving()).toBe(true);
-    expect(JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ tab: 'board' });
+    expect(parseJson(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ tab: 'board' });
     // (nothing more is asked once gone)
     authoring.refresh();
     expect(asked('state', 'GET')).toEqual([]);
@@ -368,7 +370,7 @@ describe('Authoring', () => {
       void authoring.insertStep(1, { pause: true });
       await settle();
       const request = await answer('edit', result(draftState()));
-      expect(JSON.parse(form(request, 'patch')!)).toEqual({
+      expect(parseJson(form(request, 'patch')!)).toEqual({
         steps: [{ op: 'insert', before: 's2', step: { pause: true } }],
       });
       expect(form(request, 'goto')).toBe('2');
@@ -377,7 +379,10 @@ describe('Authoring', () => {
       await settle();
       const live = await answer('edit', result(draftState()));
       expect(form(live, 'goto')).toBeNull();
-      expect(JSON.parse(form(live, 'patch')!).steps[0]).toMatchObject({ before: null, awaiting: true });
+      expect((parseJson(form(live, 'patch')!) as { steps: unknown[] }).steps[0]).toMatchObject({
+        before: null,
+        awaiting: true,
+      });
     });
 
     it('puts the selection back when the server refuses the change', async () => {
@@ -417,7 +422,7 @@ describe('Authoring', () => {
       void authoring.rewriteFromHere();
       await settle();
       const request = await answer('edit', result(draftState()));
-      expect(JSON.parse(form(request, 'patch')!)).toEqual({
+      expect(parseJson(form(request, 'patch')!)).toEqual({
         steps: [
           { op: 'delete', uid: 's3' },
           { op: 'delete', uid: 's2' },
@@ -763,7 +768,7 @@ describe('Authoring', () => {
       expect(cues.go).not.toHaveBeenCalled();
       expect(authoring.releaseArrivals('The rest were not made.')).toBe(true);
       expect(cues.go).toHaveBeenCalledWith('/gemp-lotr/ng/game?gameId=9');
-      expect(JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ carried: 'The rest were not made.' });
+      expect(parseJson(sessionStorage.getItem(AUTHOR_UI_KEY)!)).toMatchObject({ carried: 'The rest were not made.' });
       authoring.holdArrivals();
       expect(authoring.releaseArrivals()).toBe(false);
     });

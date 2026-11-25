@@ -205,7 +205,7 @@ describe('CardWindowDirective', () => {
     host.cards.set(upright(3));
     await fixture.whenStable();
     expect(dialog.hasAttribute(CARD_WINDOW_ATTRIBUTE)).toBe(true);
-    fixture.nativeElement.querySelector('.layout').setAttribute('data-layout', 'compact');
+    (fixture.nativeElement as HTMLElement).querySelector('.layout')!.setAttribute('data-layout', 'compact');
     host.cards.set(upright(4));
     await fixture.whenStable();
     expect(dialog.hasAttribute(CARD_WINDOW_ATTRIBUTE)).toBe(false);

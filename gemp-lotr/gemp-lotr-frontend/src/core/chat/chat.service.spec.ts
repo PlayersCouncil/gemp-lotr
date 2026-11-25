@@ -21,6 +21,7 @@ import {
 } from './chat-messages';
 import { TournamentAnnouncement } from './chat-models';
 import { CHAT_POLL_DELAY_MS, ChatService, MAX_CHAT_LINES, USER_LIST_STATUS_MS } from './chat.service';
+import { sentForm } from '../../testing/sent-form';
 
 const ROOM = '/gemp-lotr-server/chat/Game%20Hall';
 const IGNORES = '/gemp-lotr-server/player/ignores';
@@ -70,9 +71,9 @@ describe('ChatService', () => {
 
   const join = (): TestRequest => backend.expectOne((r) => r.url === ROOM && r.method === 'GET');
   const poll = (): TestRequest =>
-    backend.expectOne((r) => r.url === ROOM && r.method === 'POST' && !r.body.has('message'));
+    backend.expectOne((r) => r.url === ROOM && r.method === 'POST' && !sentForm(r).has('message'));
   const sent = (): TestRequest[] =>
-    backend.match((r) => r.url === ROOM && r.method === 'POST' && r.body.has('message'));
+    backend.match((r) => r.url === ROOM && r.method === 'POST' && sentForm(r).has('message'));
   const ignores = (): TestRequest => backend.expectOne((r) => r.url === IGNORES);
 
   /** Starts, answers the join and the ignore list, and waits for the first poll. */
@@ -139,10 +140,10 @@ describe('ChatService', () => {
     chat.send('   ');
     chat.send('second\nline');
     let out = sent();
-    expect(out.map((r) => r.request.body.get('message'))).toEqual(['first']);
+    expect(out.map((r) => sentForm(r.request).get('message'))).toEqual(['first']);
     out[0].flush('');
     out = sent();
-    expect(out.map((r) => r.request.body.get('message'))).toEqual(['second\nline']);
+    expect(out.map((r) => sentForm(r.request).get('message'))).toEqual(['second\nline']);
     out[0].flush('');
     poll();
     chat.stop();
@@ -210,7 +211,7 @@ describe('ChatService', () => {
     joined();
     const done = chat.toggleIgnore('erin');
     const req = backend.expectOne((r) => r.url === '/gemp-lotr-server/player/ignores/add');
-    expect(req.request.body.get('name')).toBe('erin');
+    expect(sentForm(req.request).get('name')).toBe('erin');
     req.flush(readServerResponse('ignore-added.json'));
     await done;
     expect(chat.ignored()).toEqual(['Carol', 'erin']);
@@ -231,7 +232,7 @@ describe('ChatService', () => {
     joined();
     let done = chat.setIncognito(true);
     const req = backend.expectOne((r) => r.url === '/gemp-lotr-server/player/incognito');
-    expect(req.request.body.get('incognito')).toBe('true');
+    expect(sentForm(req.request).get('incognito')).toBe('true');
     req.flush('{"inRoom":true,"incognito":true}');
     await done;
     expect(chat.users()[0]).toMatchObject({ name: 'alice', incognito: true });

@@ -6,7 +6,7 @@ describe('PlayerStatsComponent', () => {
     await harness.navigateByUrl('/account/stats');
     answerAccount(backend, '/playerStats', 'player-stats.xml');
     await drawn(harness);
-    const host = harness.fixture.nativeElement.querySelector('gd-account-stats') as HTMLElement;
+    const host = (harness.fixture.nativeElement as HTMLElement).querySelector('gd-account-stats') as HTMLElement;
     expect(host.dataset['state']).toBe('loaded');
     expect(host.querySelector('.gd-account-stats__intro')?.textContent).toBe('All times are GMT based.');
     expect(Array.from(host.querySelectorAll('.gd-account-stats__heading')).map((h) => h.textContent)).toEqual([
@@ -26,7 +26,7 @@ describe('PlayerStatsComponent', () => {
     await harness.navigateByUrl('/account/stats');
     failAccount(backend, '/playerStats', 500);
     await drawn(harness);
-    expect(harness.fixture.nativeElement.querySelector('.gd-account-stats__failed')?.textContent).toBe(
+    expect((harness.fixture.nativeElement as HTMLElement).querySelector('.gd-account-stats__failed')?.textContent).toBe(
       'Could not load your stats. Please try again later.',
     );
     backend.match(() => true);

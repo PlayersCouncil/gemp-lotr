@@ -12,7 +12,7 @@ import { PageCues } from '../../../core/platform/page-cues';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { GamePageComponent } from '../game-page.component';
-import { sentDecision } from '../../../testing/sent-form';
+import { sentDecision, sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const param = (name: string, ...values: string[]) =>
@@ -318,7 +318,7 @@ describe('the game on a phone (G7)', () => {
     decline.checked = true;
     decline.dispatchEvent(new Event('change'));
     await stable();
-    expect(backend.expectOne((r) => r.url === `${GAME}/autoDecline`).request.body?.get('on')).toBe('true');
+    expect(sentForm(backend.expectOne((r) => r.url === `${GAME}/autoDecline`).request).get('on')).toBe('true');
 
     // Revert...: the sheets go, the list opens over the table
     await click('[data-phone="sheet-close"]');

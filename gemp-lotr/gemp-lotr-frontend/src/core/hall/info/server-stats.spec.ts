@@ -1,7 +1,8 @@
 import { readServerResponse } from '../../../testing/files';
 import { defaultStartDay, parseServerStats, percentage, statsTables } from './server-stats';
+import { parseJson } from '../../api/json';
 
-const stats = parseServerStats(JSON.parse(readServerResponse('server-stats.json')));
+const stats = parseServerStats(parseJson(readServerResponse('server-stats.json')));
 
 describe('server stats (statsUi.js)', () => {
   it('reads the answer, anything missing as empty', () => {

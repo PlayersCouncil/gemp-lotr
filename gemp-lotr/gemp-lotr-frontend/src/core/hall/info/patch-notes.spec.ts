@@ -1,8 +1,9 @@
 import { readServerResponse } from '../../../testing/files';
 import { parsePatchNotesMonths, parsePatchNotesPage, parsePatchNotesSlug } from './patch-notes';
+import { parseJson } from '../../api/json';
 
 describe('patch notes (GET /patchnotes, /patchnotes/months)', () => {
-  const page = parsePatchNotesPage(JSON.parse(readServerResponse('patch-notes-page.json')));
+  const page = parsePatchNotesPage(parseJson(readServerResponse('patch-notes-page.json')));
 
   it('reads a page: its place in the feed, the filters and the updates', () => {
     expect(page).toMatchObject({ total: 7, start: 5, count: 5, tag: null, all: 7 });
@@ -70,7 +71,7 @@ describe('patch notes (GET /patchnotes, /patchnotes/months)', () => {
   });
 
   it('reads the months, newest first', () => {
-    expect(parsePatchNotesMonths(JSON.parse(readServerResponse('patch-notes-months.json')))).toEqual([
+    expect(parsePatchNotesMonths(parseJson(readServerResponse('patch-notes-months.json')))).toEqual([
       { month: '2026-11', first: '2026-11-18', count: 1 },
       { month: '2026-09', first: '2026-09-30', count: 4 },
       { month: '2023-12', first: 'announcement-12', count: 2 },

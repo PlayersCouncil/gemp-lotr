@@ -7,7 +7,7 @@ describe('GameHistoryComponent', () => {
     answerAccount(backend, '/gameHistory/filters', 'game-history-filters.json');
     answerAccount(backend, '/gameHistory', 'game-history.xml');
     await drawn(harness);
-    const host = harness.fixture.nativeElement.querySelector('gd-account-history') as HTMLElement;
+    const host = (harness.fixture.nativeElement as HTMLElement).querySelector('gd-account-history') as HTMLElement;
     expect(Array.from(host.querySelectorAll('select option')).map((o) => o.textContent)).toEqual([
       'Any format',
       'Fellowship Block',
@@ -63,7 +63,7 @@ describe('GameHistoryComponent', () => {
       '</gameHistory>';
     accountRequest(backend, '/gameHistory').flush(page(0));
     await drawn(harness);
-    const host = harness.fixture.nativeElement.querySelector('gd-account-history') as HTMLElement;
+    const host = (harness.fixture.nativeElement as HTMLElement).querySelector('gd-account-history') as HTMLElement;
     const set = (name: string, value: string, event: string) => {
       const field = host.querySelector<HTMLInputElement | HTMLSelectElement>(`[name=${name}]`)!;
       field.value = value;

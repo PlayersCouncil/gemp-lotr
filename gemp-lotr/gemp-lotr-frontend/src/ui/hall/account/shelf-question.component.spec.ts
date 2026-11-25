@@ -17,7 +17,7 @@ describe('ShelfQuestionComponent', () => {
     const fixture = TestBed.createComponent(Host);
     fixture.componentInstance.question.set(question);
     await fixture.whenStable();
-    return { fixture, box: fixture.nativeElement.querySelector('dialog') as HTMLDialogElement };
+    return { fixture, box: (fixture.nativeElement as HTMLElement).querySelector('dialog') as HTMLDialogElement };
   }
 
   it('asks a question in the shelf’s box, yes first and drawn as dangerous', async () => {

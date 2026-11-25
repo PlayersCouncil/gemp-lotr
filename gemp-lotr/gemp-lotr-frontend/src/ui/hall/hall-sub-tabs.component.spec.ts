@@ -30,12 +30,14 @@ describe('HallSubTabsComponent', () => {
   async function open(url: string) {
     await harness.navigateByUrl(url);
     await harness.fixture.whenStable();
-    return Array.from(harness.fixture.nativeElement.querySelectorAll('.gd-hall-sub-tabs__tab')) as HTMLAnchorElement[];
+    return Array.from(
+      (harness.fixture.nativeElement as HTMLElement).querySelectorAll('.gd-hall-sub-tabs__tab'),
+    ) as HTMLAnchorElement[];
   }
 
   it('draws a tab list of router links, the one at the address (or above it) selected', async () => {
     let tabs = await open('/account');
-    const list = harness.fixture.nativeElement.querySelector('.gd-hall-sub-tabs__list') as HTMLElement;
+    const list = (harness.fixture.nativeElement as HTMLElement).querySelector('.gd-hall-sub-tabs__list') as HTMLElement;
     expect([list.getAttribute('role'), list.getAttribute('aria-label'), list.getAttribute('aria-orientation')]).toEqual(
       ['tablist', 'My Account', 'vertical'],
     );
@@ -59,7 +61,7 @@ describe('HallSubTabsComponent', () => {
 
   it('opens a sub-tab when clicked, and moves the focus with the arrow keys, Home and End', async () => {
     const tabs = await open('/account');
-    document.body.appendChild(harness.fixture.nativeElement);
+    document.body.appendChild(harness.fixture.nativeElement as HTMLElement);
     tabs[2]?.click();
     await harness.fixture.whenStable();
     expect(TestBed.inject(Router).url).toBe('/account/stats');
@@ -80,6 +82,6 @@ describe('HallSubTabsComponent', () => {
     key(tabs[0], 'End');
     expect(document.activeElement).toBe(tabs[2]);
     expect(key(tabs[2], 'a')).toBe(true);
-    harness.fixture.nativeElement.remove();
+    (harness.fixture.nativeElement as HTMLElement).remove();
   });
 });

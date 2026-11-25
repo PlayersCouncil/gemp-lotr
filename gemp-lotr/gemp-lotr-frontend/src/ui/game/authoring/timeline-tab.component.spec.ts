@@ -1,4 +1,5 @@
-import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
+import { HttpParams } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../../core/api/gemp-interceptors';
@@ -76,10 +77,11 @@ describe('TimelineTabComponent', () => {
   }
 
   /** The one call to `what` sent: its form. */
-  function sent(what: string): TestRequest['request']['body'] {
+  function sent(what: string): HttpParams | undefined {
     const requests = backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
     expect(requests).toHaveLength(1);
-    return requests[0]!.request.body;
+    const body = requests[0]!.request.body as unknown;
+    return body instanceof HttpParams ? body : undefined;
   }
 
   const patch = () => JSON.parse(sent('edit')!.get('patch')!) as { steps: unknown[] };

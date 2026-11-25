@@ -5,9 +5,10 @@ import { parsePatchNotesMonths, parsePatchNotesPage } from './patch-notes';
 import { PATCH_NOTES_CACHE_MS, PatchNotesApi } from './patch-notes-api.service';
 import { PatchNotesMonth, PatchNotesPage, PatchNotesWindow } from './patch-notes-models';
 import { LOADING_DELAY_MS, PatchNotesService } from './patch-notes.service';
+import { parseJson } from '../../api/json';
 
-const SECOND_PAGE = parsePatchNotesPage(JSON.parse(readServerResponse('patch-notes-page.json')));
-const MONTHS = parsePatchNotesMonths(JSON.parse(readServerResponse('patch-notes-months.json')));
+const SECOND_PAGE = parsePatchNotesPage(parseJson(readServerResponse('patch-notes-page.json')));
+const MONTHS = parsePatchNotesMonths(parseJson(readServerResponse('patch-notes-months.json')));
 
 function newest(total = 7): PatchNotesPage {
   const notes = [

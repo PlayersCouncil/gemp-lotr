@@ -100,7 +100,7 @@ describe('PatchNotesComponent', () => {
     el.querySelector<HTMLButtonElement>('.gd-notes__newer')!.click();
     const request = backend.expectOne((req) => req.url.endsWith('/patchnotes'));
     expect(request.request.params.get('start')).toBe('0');
-    const newest = JSON.parse(readServerResponse('patch-notes-page.json'));
+    const newest = JSON.parse(readServerResponse('patch-notes-page.json')) as { start: number };
     newest.start = 0;
     request.flush(newest);
     await harness.fixture.whenStable();
@@ -123,7 +123,10 @@ describe('PatchNotesComponent', () => {
 
   describe('the filter, the months and the states', () => {
     const page = (changes: Record<string, unknown> = {}) =>
-      JSON.stringify({ ...JSON.parse(readServerResponse('patch-notes-page.json')), ...changes });
+      JSON.stringify({
+        ...(JSON.parse(readServerResponse('patch-notes-page.json')) as Record<string, unknown>),
+        ...changes,
+      });
 
     async function settle(harness: RouterTestingHarness): Promise<void> {
       await harness.fixture.whenStable();

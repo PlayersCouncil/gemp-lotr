@@ -8,6 +8,7 @@ import { PlayerInfo } from '../../session/player-info.service';
 import { HallComms } from '../hall-comms.service';
 import { HallSession } from '../hall-session.service';
 import { AccountOverview } from './account-overview.service';
+import { sentForm } from '../../../testing/sent-form';
 
 describe('AccountOverview', () => {
   let backend: ReturnType<typeof setUpAccount>['backend'];
@@ -49,11 +50,11 @@ describe('AccountOverview', () => {
 
     const added = overview.add(' erin ');
     const request = accountRequest(backend, '/player/ignores/add', 'POST');
-    expect(String(request.request.body)).toBe('name=erin');
+    expect(sentForm(request.request).toString()).toBe('name=erin');
     request.flush(
       JSON.parse(
         '{"outcome":"ADDED","changed":true,"error":false,"name":"erin","message":"erin added to your ignore list.","ignored":["Carol","erin"]}',
-      ),
+      ) as object,
     );
     expect(await added).toBe(true);
     expect(overview.status()).toBe('erin added to your ignore list.');

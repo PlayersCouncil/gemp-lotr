@@ -66,8 +66,9 @@ describe('TableEditLayerComponent', () => {
     const { fixture } = render();
     popups.openSearch({ seat: 'shadow', zone: 'minions' });
     fixture.detectChanges();
-    const search = fixture.debugElement.query((node) => node.componentInstance instanceof SearchWindowComponent)
-      .componentInstance as SearchWindowComponent;
+    const search = fixture.debugElement.query(
+      (node) => (node.componentInstance as unknown) instanceof SearchWindowComponent,
+    ).componentInstance as SearchWindowComponent;
     expect(search.bound()).toEqual({ filter: 'cardType:MINION', label: 'Minions' });
     expect(search.heading()).toBe('Add to Minions');
     search.chosen.emit({ blueprintId: '1_178', name: 'Goblin Runner', type: 'MINION', culture: 'moria', site: false });

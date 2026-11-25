@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { parseJson } from '../../api/json';
 import { LocalStore } from '../../platform/local-store';
 import { readRecent, RECENT_KEY, RECENT_MAX, RecentCards, used } from './recent-cards';
 
@@ -30,7 +31,7 @@ describe('RecentCards', () => {
     recent.use(legolas);
     recent.use(gimli);
     expect(recent.list()).toEqual([gimli, legolas]);
-    expect(JSON.parse(localStorage.getItem(RECENT_KEY)!)).toEqual([gimli, legolas]);
+    expect(parseJson(localStorage.getItem(RECENT_KEY)!)).toEqual([gimli, legolas]);
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({

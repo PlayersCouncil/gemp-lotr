@@ -6,6 +6,7 @@ import { PageCues } from '../../../core/platform/page-cues';
 import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { provideFakeNotifier } from '../../../testing/fake-notifier';
 import { GamePageComponent } from '../game-page.component';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const P = '<ge type="P" participantId="alice" allParticipantIds="alice,bob" discardPublic="false"/>';
@@ -116,7 +117,7 @@ describe('taking a game back on the game page', () => {
       target.click();
       await stable();
     };
-    const sent = (end: string) => backend.match((r) => r.url === `${GAME}/${end}`).map((r) => r.request.body);
+    const sent = (end: string) => backend.match((r) => r.url === `${GAME}/${end}`).map((r) => sentForm(r.request));
     return { fixture, el, stable, click, notices, sent };
   }
 

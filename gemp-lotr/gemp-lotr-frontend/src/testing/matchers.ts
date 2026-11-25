@@ -12,3 +12,13 @@ export function instanceOf(type: abstract new (...args: never[]) => unknown): un
 export function containing(fields: Record<string, unknown>): unknown {
   return expect.objectContaining(fields) as unknown;
 }
+
+/** A string with this text somewhere in it (expect.stringContaining). */
+export function textContaining(text: string): unknown {
+  return expect.stringContaining(text) as unknown;
+}
+
+/** A list holding at least these items, in any order (expect.arrayContaining). */
+export function listContaining(items: readonly unknown[]): unknown {
+  return expect.arrayContaining([...items]) as unknown;
+}

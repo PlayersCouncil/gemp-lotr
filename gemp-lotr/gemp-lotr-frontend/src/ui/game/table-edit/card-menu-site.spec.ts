@@ -10,6 +10,7 @@ import { CardMenuComponent } from './card-menu.component';
 import { CardPicker } from './card-picker';
 import { EditPopups } from './edit-popups';
 import { PathPopups } from './path-popups';
+import { instanceOf } from '../../../testing/matchers';
 
 /** The card menu of a site laid on the path (Bag End, card 24) or controlled (Ettenmoors, card 14, the shadow seat's). */
 describe('CardMenuComponent: a site', () => {
@@ -95,7 +96,7 @@ describe('CardMenuComponent: a site', () => {
     controlled.fixture.detectChanges();
     controlled.entry('[data-site-action="liberate"]').click();
     await controlled.fixture.whenStable();
-    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'liberate', site: 2 }], expect.any(Object));
+    expect(edit.apply).toHaveBeenLastCalledWith([{ op: 'liberate', site: 2 }], instanceOf(Object));
   });
 
   it('Replace… opens the site chooser for its number where the menu was (by the card from the keyboard)', () => {

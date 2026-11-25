@@ -19,14 +19,15 @@ import {
   withChosen,
 } from './errata-filter';
 import { ErrataFilters } from './errata-models';
+import { parseJson } from '../../../api/json';
 
 describe('errata filters and sorts', () => {
-  const { entries, formats } = parseErrataCatalog(JSON.parse(readServerResponse('errata.json')));
+  const { entries, formats } = parseErrataCatalog(parseJson(readServerResponse('errata.json')));
   const ids = (filters: Partial<ErrataFilters>) =>
     filterEntries(entries, { ...EMPTY_FILTERS, ...filters }).map((e) => e.id);
 
   it('reads a card number typed in any of the ways players write it (searchedNumber)', () => {
-    expect(['1.45', '1_45', '1-45', '1 45', ' 01 . 045 '].map(searchedNumber)).toEqual(Array(5).fill('1_45'));
+    expect(['1.45', '1_45', '1-45', '1 45', ' 01 . 045 '].map(searchedNumber)).toEqual(Array<string>(5).fill('1_45'));
     expect(searchedNumber('1R45')).toBeNull();
     expect(searchedNumber('gandalf')).toBeNull();
   });

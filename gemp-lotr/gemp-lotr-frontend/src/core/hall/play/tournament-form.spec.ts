@@ -10,8 +10,9 @@ import {
   withPlayers,
   withType,
 } from './tournament-form';
+import { parseJson } from '../../api/json';
 
-const formats = parseTournamentFormats(JSON.parse(readServerResponse('tournament-formats.json')));
+const formats = parseTournamentFormats(parseJson(readServerResponse('tournament-formats.json')));
 
 describe('the Create Tournament form', () => {
   it('reads the formats each type offers', () => {

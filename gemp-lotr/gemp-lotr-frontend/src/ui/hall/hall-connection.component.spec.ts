@@ -20,13 +20,13 @@ describe('HallConnectionComponent', () => {
   async function render() {
     TestBed.configureTestingModule({ providers: [{ provide: HallComms, useValue: { connection, spoken } }] });
     const fixture = TestBed.createComponent(Host);
-    document.body.appendChild(fixture.nativeElement);
+    document.body.appendChild(fixture.nativeElement as HTMLElement);
     await fixture.whenStable();
-    const el = fixture.nativeElement.querySelector('gd-hall-connection') as HTMLElement;
+    const el = (fixture.nativeElement as HTMLElement).querySelector('gd-hall-connection') as HTMLElement;
     const readout = el.querySelector<HTMLButtonElement>('.gd-hall-connection__readout')!;
     const popup = el.querySelector<HTMLElement>('.gd-hall-connection__popup')!;
     const text = (selector: string) => el.querySelector(selector)?.textContent!.replace(/\s+/g, ' ').trim() ?? null;
-    return { fixture, el, readout, popup, text, update: () => fixture.whenStable() };
+    return { fixture, el, readout, popup, text, update: () => fixture.whenStable() as Promise<void> };
   }
 
   afterEach(() => connection.set({ state: 'connecting', detail: null, lastUpdate: null }));

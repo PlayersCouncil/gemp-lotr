@@ -24,6 +24,7 @@ import {
 } from './login-messages';
 import { LOGIN_SERVICES } from './login-services';
 import { LoginService, registrationError } from './login.service';
+import { sentForm } from '../../testing/sent-form';
 
 class FakeNavigation {
   readonly visited: string[] = [];
@@ -123,7 +124,7 @@ describe('LoginService', () => {
     const done = service.submit();
     expect(service.busy()).toBe(true);
     const request = expectPost('/login');
-    expect(request.request.body.toString()).toBe('login=frodo&password=ring');
+    expect(sentForm(request.request).toString()).toBe('login=frodo&password=ring');
     await succeed(request, done);
     expect(players.player()?.name).toBe('frodo');
     expect(service.redirectTarget()).toBe('/gemp-lotr/ng/');
@@ -242,7 +243,7 @@ describe('LoginService', () => {
   });
 
   it('words every refusal POST /login answers with', async () => {
-    const statuses = Object.keys(JSON.parse(readServerResponse('login-refusals.json'))).map(Number);
+    const statuses = Object.keys(JSON.parse(readServerResponse('login-refusals.json')) as object).map(Number);
     setUp();
     const worded: unknown[] = [];
     for (const status of statuses) {
@@ -297,7 +298,7 @@ describe('LoginService', () => {
     service.setPasswordRepeated('pw&1');
     const done = service.submit();
     const request = expectPost('/register');
-    expect(request.request.body.toString()).toBe('login=new%2Buser&password=pw%261');
+    expect(sentForm(request.request).toString()).toBe('login=new%2Buser&password=pw%261');
     await succeed(request, done);
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
   });

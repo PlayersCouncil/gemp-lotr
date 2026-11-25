@@ -9,6 +9,7 @@ import { PAGE_QUERY_STRING } from '../platform/page-location';
 import { PageNavigation } from '../platform/page-navigation';
 import { ALIAS_PAGE_SIZE, AliasList } from './alias-list.service';
 import { BAD_CREDENTIALS, INVALID_ALIAS_NAME, NAME_TAKEN, NOT_LINKED } from './pc-account-messages';
+import { sentForm } from '../../testing/sent-form';
 
 class FakeNavigation {
   readonly visited: string[] = [];
@@ -140,7 +141,7 @@ describe('AliasList', () => {
     list.setName('  Merry ');
     const created = list.submit();
     const request = expectPost('/create');
-    expect(request.request.body.toString()).toBe('name=Merry');
+    expect(sentForm(request.request).toString()).toBe('name=Merry');
     request.flush(readServerResponse('argonauth-session.json'));
     await created;
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/']);
@@ -193,7 +194,7 @@ describe('AliasList', () => {
     list.setPassword('right');
     const linked = list.submit();
     const request = expectPost('/link');
-    expect(request.request.body.toString()).toBe('login=Old&password=right');
+    expect(sentForm(request.request).toString()).toBe('login=Old&password=right');
     request.flush(sessionWithAliases(11));
     await linked;
     expect([list.form(), list.formError(), list.login()]).toEqual([null, null, '']);
@@ -220,7 +221,7 @@ describe('AliasList', () => {
     expect(list.busy()).toBe(true);
     await list.logout();
     const request = expectPost('/logout');
-    expect(request.request.body.toString()).toBe('scope=all');
+    expect(sentForm(request.request).toString()).toBe('scope=all');
     request.flush(readServerResponse('argonauth-logout-alias.json'));
     await out;
     expect(navigation.visited).toEqual(['/gemp-lotr/ng/', '/gemp-lotr/ng/login']);
@@ -235,8 +236,10 @@ describe('AliasList', () => {
     // Asked again, the session no longer has it
     await answerRefresh(
       JSON.stringify({
-        ...JSON.parse(readServerResponse('argonauth-session-aliases.json')),
-        aliases: JSON.parse(readServerResponse('argonauth-session-aliases.json')).aliases.slice(0, 2),
+        ...(JSON.parse(readServerResponse('argonauth-session-aliases.json')) as object),
+        aliases: (
+          JSON.parse(readServerResponse('argonauth-session-aliases.json')) as { aliases: unknown[] }
+        ).aliases.slice(0, 2),
       }),
     );
     await refused;

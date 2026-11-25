@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, Observable } from 'rxjs';
 import { ApiError } from '../../api/api-error';
 import { provideGempHttp } from '../../api/gemp-interceptors';
+import { sentForm } from '../../../testing/sent-form';
 import { PageExit } from '../../platform/page-exit';
 import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { AuthoringApi } from './authoring-api.service';
@@ -37,7 +38,7 @@ describe('AuthoringApi', () => {
     const answer = firstValueFrom(call);
     const [request] = backend.match((r) => r.url.startsWith(AUTHOR));
     expect(request).toBeDefined();
-    const { method, url, params, body } = request!.request;
+    const { method, url, params } = request!.request;
     request!.flush('{"ok":true}');
     expect(await answer).toEqual({ ok: true });
     const form =
@@ -47,7 +48,7 @@ describe('AuthoringApi', () => {
             .filter((key) => key !== '_')
             .map((key) => `${key}=${params.get(key)}`)
             .join('&')
-        : (body?.toString() ?? '');
+        : sentForm(request!.request).toString();
     expect(form).not.toContain('participantId');
     return [method, url.substring(AUTHOR.length), form];
   }

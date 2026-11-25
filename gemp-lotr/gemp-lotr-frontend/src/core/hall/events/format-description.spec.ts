@@ -1,8 +1,9 @@
 import { readServerResponse } from '../../../testing/files';
 import { parseFormat } from '../help/format-definitions';
 import { formatDescriptionLines } from './format-description';
+import { parseJson } from '../../api/json';
 
-const FORMAT = parseFormat(JSON.parse(readServerResponse('hall-format-definition.json')))!;
+const FORMAT = parseFormat(parseJson(readServerResponse('hall-format-definition.json')))!;
 
 describe('format description', () => {
   it('words the description as the server page did, the sites by their readable name', () => {

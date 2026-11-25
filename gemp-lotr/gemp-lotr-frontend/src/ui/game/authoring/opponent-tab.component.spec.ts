@@ -1,4 +1,5 @@
-import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
+import { HttpParams } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../../core/api/gemp-interceptors';
@@ -14,6 +15,7 @@ import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { decision, draftGameXml, draftState } from '../../../testing/authoring';
 import { provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { OpponentTabComponent } from './opponent-tab.component';
+import { sentForm } from '../../../testing/sent-form';
 
 const GAME = '/gemp-lotr-server/game/7';
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
@@ -96,8 +98,8 @@ describe('OpponentTabComponent', () => {
   }
 
   /** The calls to `what` sent: their forms. */
-  function sent(what: string): TestRequest['request']['body'][] {
-    return backend.match((r) => r.url === AUTHOR + what && r.method === 'POST').map((r) => r.request.body);
+  function sent(what: string): HttpParams[] {
+    return backend.match((r) => r.url === AUTHOR + what && r.method === 'POST').map((r) => sentForm(r.request));
   }
   const answers = () => sent('answer').map((body) => `${body.get('term')}|${body.get('record')}`);
   const text = (selector: string) => el.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim() ?? null;

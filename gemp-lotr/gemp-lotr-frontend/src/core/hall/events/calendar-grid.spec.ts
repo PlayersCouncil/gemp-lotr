@@ -10,8 +10,9 @@ import {
 } from './calendar-grid';
 import { CalendarEvent, CalendarLeague, CalendarTournament } from './events-models';
 import { parseCalendar } from './events-parsers';
+import { parseJson } from '../../api/json';
 
-const events = parseCalendar(JSON.parse(readServerResponse('events-calendar.json'))).events;
+const events = parseCalendar(parseJson(readServerResponse('events-calendar.json'))).events;
 const byId = (id: string) => events.find((event) => event.id === id)!;
 
 function league(id: string, start: string, end: string, series: CalendarLeague['series'] = []): CalendarLeague {

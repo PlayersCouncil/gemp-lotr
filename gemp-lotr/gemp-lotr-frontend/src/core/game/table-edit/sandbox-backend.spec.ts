@@ -1,6 +1,8 @@
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { SANDBOX_STATE } from '../../../testing/table-edit';
+import { sentForm } from '../../../testing/sent-form';
+import { parseJson } from '../../api/json';
 import { ApiError } from '../../api/api-error';
 import { provideGempHttp } from '../../api/gemp-interceptors';
 import { PAGE_QUERY_STRING } from '../../platform/page-location';
@@ -50,12 +52,12 @@ describe('SandboxBackend', () => {
       ])
       .subscribe((board) => boards.push(board));
     const sent = backend.expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/edit' && r.method === 'POST');
-    expect(sent.request.body?.get('gameId')).toBe('12');
-    expect(JSON.parse(sent.request.body?.get('ops') ?? '')).toEqual([
+    expect(sentForm(sent.request).get('gameId')).toBe('12');
+    expect(parseJson(sentForm(sent.request).get('ops') ?? '')).toEqual([
       { op: 'add', blueprint: '1_50', to: 'freeps.hand' },
       { op: 'twilight', set: 3 },
     ]);
-    expect(sent.request.body?.has('participantId')).toBe(false);
+    expect(sentForm(sent.request).has('participantId')).toBe(false);
     sent.flush({ ok: true, state: SANDBOX_STATE });
     expect(boards[0]?.mode).toBe('edit');
   });
@@ -64,7 +66,7 @@ describe('SandboxBackend', () => {
     let refusal: ApiError | null = null;
     sandbox
       .apply('12', [{ op: 'delete', card: 'frodo' }])
-      .subscribe({ error: (error) => (refusal = ApiError.from(error)) });
+      .subscribe({ error: (error: unknown) => (refusal = ApiError.from(error)) });
     backend
       .expectOne('/gemp-lotr-server/scenarios/sandbox/edit')
       .flush({ error: 'Frodo cannot be deleted' }, { status: 400, statusText: 'Bad Request' });
@@ -83,7 +85,7 @@ describe('SandboxBackend', () => {
     let fresh = '';
     sandbox.reset('12').subscribe((gameId) => (fresh = gameId));
     const reset = backend.expectOne('/gemp-lotr-server/scenarios/sandbox/reset');
-    expect(reset.request.body?.get('gameId')).toBe('12');
+    expect(sentForm(reset.request).get('gameId')).toBe('12');
     reset.flush({ gameId: 13 });
     expect(fresh).toBe('13');
   });

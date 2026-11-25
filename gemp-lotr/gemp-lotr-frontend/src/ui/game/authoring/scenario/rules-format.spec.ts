@@ -14,6 +14,7 @@ import { PAGE_QUERY_STRING } from '../../../../core/platform/page-location';
 import { draftGameXml, draftState } from '../../../../testing/authoring';
 import { provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { ScenarioTabComponent } from '../scenario-tab.component';
+import { sentForm } from '../../../../testing/sent-form';
 
 const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
@@ -75,7 +76,7 @@ describe('the Scenario tab: format and markers', () => {
   const sent = () =>
     backend
       .match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST')
-      .map((request) => (JSON.parse(request.request.body.get('patch')) as { top: unknown }).top);
+      .map((request) => (JSON.parse(sentForm(request.request).get('patch')!) as { top: unknown }).top);
 
   async function tick(selector: string, on: boolean) {
     const box = find<HTMLInputElement>(`${selector} input`);
