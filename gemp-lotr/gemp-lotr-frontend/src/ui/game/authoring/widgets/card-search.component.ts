@@ -51,7 +51,7 @@ export function foundText(card: FoundCard, sites: boolean, current: string | nul
         [attr.aria-label]="placeholder()"
         [placeholder]="placeholder()"
         [value]="query()"
-        (input)="typed($any($event.target).value)"
+        (input)="typed(field.value)"
         (keydown.escape)="cancel()"
       />
       @if (cancellable()) {

@@ -26,6 +26,7 @@ import { AuthorSendDirective } from './author-send.directive';
   template: `
     <span class="gd-author-filter">
       <input
+        #box
         type="text"
         class="gd-author-input gd-author-code"
         spellcheck="false"
@@ -37,7 +38,7 @@ import { AuthorSendDirective } from './author-send.directive';
         [gdAuthorKeep]="key()"
         gdAuthorSend
         (sent)="sent.emit($event)"
-        (input)="typing($any($event.target).value)"
+        (input)="typing(box.value)"
       />
       @if (shown(); as said) {
         <span class="gd-author-filter__verdict" [attr.data-tone]="said.tone" [title]="verdictHint()">{{

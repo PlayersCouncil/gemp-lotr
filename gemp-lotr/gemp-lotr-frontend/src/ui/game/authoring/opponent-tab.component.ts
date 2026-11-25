@@ -121,9 +121,10 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
                 @for (option of asked.options; track keyOf(option, $index)) {
                   <label class="gd-author-check gd-author-opponent__card" [attr.data-key]="keyOf(option, $index)">
                     <input
+                      #tickBox
                       type="checkbox"
                       [checked]="chosen().has(keyOf(option, $index))"
-                      (change)="tick(keyOf(option, $index), $any($event.target).checked)"
+                      (change)="tick(keyOf(option, $index), tickBox.checked)"
                     />
                     {{ labelOf(option) }}
                   </label>
@@ -139,10 +140,11 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
                       >the rest</span
                     >
                     <select
+                      #restPick
                       class="gd-author-input"
                       data-rest
                       aria-label="Who the rest fight"
-                      (change)="rest.set($any($event.target).value)"
+                      (change)="rest.set(restPick.value)"
                     >
                       @for (choice of restChoices(asked.characters ?? []); track choice[0]) {
                         <option [value]="choice[0]" [selected]="rest() === choice[0]">{{ choice[1] }}</option>
@@ -155,10 +157,11 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
                   <div class="gd-author-opponent__fight">
                     <span class="gd-author-opponent__minion">{{ minion.alias || minion.label }}</span>
                     <select
+                      #fightPick
                       class="gd-author-input"
                       [attr.data-minion]="minionKey"
                       [attr.aria-label]="'Who ' + (minion.alias || minion.label) + ' fights'"
-                      (change)="fight(minionKey, $any($event.target).value)"
+                      (change)="fight(minionKey, fightPick.value)"
                     >
                       <option value="" [selected]="!fights()[minionKey]">{{ rest() ? 'the rest' : 'nobody' }}</option>
                       @for (character of asked.characters ?? []; track keyOf(character, $index)) {
@@ -176,13 +179,14 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
               } @else if (asked.type === 'number') {
                 <div class="gd-author-bar">
                   <input
+                    #numberBox
                     type="number"
                     class="gd-author-input gd-author-opponent__number"
                     aria-label="The number"
                     [attr.min]="asked.min ?? null"
                     [attr.max]="asked.max ?? null"
                     [value]="number()"
-                    (input)="number.set($any($event.target).value)"
+                    (input)="number.set(numberBox.value)"
                   />
                   <button
                     gdAuthorButton="primary"
@@ -215,13 +219,14 @@ import { AuthorCheckComponent } from './widgets/author-check.component';
             />
             <div class="gd-author-opponent__raw gd-author-bar">
               <input
+                #rawBox
                 type="text"
                 class="gd-author-input"
                 spellcheck="false"
                 aria-label="An answer in the script's words"
                 placeholder="or in the script's words: play(runner1)"
                 [value]="raw()"
-                (input)="raw.set($any($event.target).value)"
+                (input)="raw.set(rawBox.value)"
                 (keydown.enter)="sendRaw()"
               />
               <button gdAuthorButton data-author="send" (click)="sendRaw()">Send</button>

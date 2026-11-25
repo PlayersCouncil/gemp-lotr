@@ -15,11 +15,12 @@ export type AuthorOption =
   host: { style: 'display: contents' },
   template: `
     <select
+      #pick
       class="gd-author-input"
       [attr.aria-label]="label() || null"
       [attr.title]="hint() || null"
       [disabled]="disabled()"
-      (change)="changed.emit($any($event.target).value)"
+      (change)="changed.emit(pick.value)"
     >
       @for (option of choices(); track option.value) {
         <option

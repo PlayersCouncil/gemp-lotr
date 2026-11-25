@@ -45,11 +45,12 @@ const HINT =
         />
         <label class="gd-author-check" title="Any decision but this one">
           <input
+            #notBox
             type="checkbox"
             data-picker="not"
             [checked]="picked.not"
             [disabled]="picked.asked === ''"
-            (change)="pick(picked.asked, $any($event.target).checked)"
+            (change)="pick(picked.asked, notBox.checked)"
           />
           not
         </label>

@@ -289,12 +289,13 @@ const boxOf = (element: Element): Box => {
                     −
                   </button>
                   <input
+                    #amountBox
                     type="number"
                     min="1"
                     [max]="amountMax"
                     aria-label="Amount"
                     [value]="amount()"
-                    (change)="setAmount($any($event.target).value)"
+                    (change)="setAmount(amountBox.value)"
                   />
                   <button
                     type="button"
@@ -377,7 +378,7 @@ const boxOf = (element: Element): Box => {
                 @if (modify.words.length > 0) {
                   <label class="gd-edit-menu__field">
                     <span>What</span>
-                    <select data-field="what" (change)="setWhat($any($event.target).value)">
+                    <select #whatPick data-field="what" (change)="setWhat(whatPick.value)">
                       @for (word of modify.words; track word.what) {
                         <option [value]="word.what" [selected]="word.what === what()?.what">{{ word.label }}</option>
                       }
@@ -388,19 +389,20 @@ const boxOf = (element: Element): Box => {
                       <label class="gd-edit-menu__field">
                         <span>{{ word.number === 'signed' ? 'By' : 'Count' }}</span>
                         <input
+                          #byBox
                           type="number"
                           data-field="amount"
                           [min]="word.number === 'positive' ? 1 : -amountMax"
                           [max]="amountMax"
                           [value]="modifyAmount()"
-                          (change)="modifyAmount.set(+$any($event.target).value)"
+                          (change)="modifyAmount.set(+byBox.value)"
                         />
                       </label>
                     }
                   }
                   <label class="gd-edit-menu__field">
                     <span>How long</span>
-                    <select data-field="until" (change)="until.set($any($event.target).value)">
+                    <select #untilPick data-field="until" (change)="setUntil(untilPick.value)">
                       @for (time of modify.until; track time) {
                         <option [value]="time" [selected]="time === until()">{{ untilLabels[time] }}</option>
                       }
@@ -566,6 +568,11 @@ export class CardMenuComponent {
 
   protected setWhat(what: string): void {
     this.what.set(this.menu()?.modify?.words.find((word) => word.what === what) ?? null);
+  }
+
+  protected setUntil(value: string): void {
+    const until = this.menu()?.modify?.until.find((time) => time === value);
+    if (until !== undefined) this.until.set(until);
   }
 
   protected tokens(culture: string, amount: number): void {

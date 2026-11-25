@@ -23,41 +23,40 @@
     </button>
     @if (browser().dropdownOpen()) {
       <div class="gd-event-history__dropdown">
-        @switch (browser().dropdown().state) {
+        @let dropdown = browser().dropdown();
+        @switch (dropdown.state) {
           @case ('loading') {
             <div class="gd-event-history__dd-status" data-state="loading">{{ words.MONTHS_LOADING }}</div>
           }
           @case ('error') {
             <div class="gd-event-history__dd-status" data-state="error">
-              {{ words.monthsFailed($any(browser().dropdown()).text) }}
+              {{ words.monthsFailed(dropdown.text) }}
             </div>
             <button gdEventsButton data-action="retry-months" (click)="browser().retryMonths()">
               {{ words.RETRY }}
             </button>
           }
           @case ('ready') {
-            @if ($any(browser().dropdown()); as ready) {
-              @for (group of ready.groups; track group.year) {
-                <div class="gd-event-history__year">
-                  <div class="gd-event-history__year-label">{{ group.year }}</div>
-                  <div class="gd-event-history__months">
-                    @for (month of group.months; track month.key) {
-                      <button
-                        type="button"
-                        class="gd-event-history__dd-month"
-                        [attr.data-month]="month.key"
-                        [attr.aria-current]="month.key === ready.current ? 'true' : null"
-                        [title]="month.title"
-                        (click)="pick(month.key, title)"
-                      >
-                        {{ month.name }}
-                      </button>
-                    }
-                  </div>
+            @for (group of dropdown.groups; track group.year) {
+              <div class="gd-event-history__year">
+                <div class="gd-event-history__year-label">{{ group.year }}</div>
+                <div class="gd-event-history__months">
+                  @for (month of group.months; track month.key) {
+                    <button
+                      type="button"
+                      class="gd-event-history__dd-month"
+                      [attr.data-month]="month.key"
+                      [attr.aria-current]="month.key === dropdown.current ? 'true' : null"
+                      [title]="month.title"
+                      (click)="pick(month.key, title)"
+                    >
+                      {{ month.name }}
+                    </button>
+                  }
                 </div>
-              } @empty {
-                <div class="gd-event-history__dd-status" data-state="empty">{{ ready.emptyText }}</div>
-              }
+              </div>
+            } @empty {
+              <div class="gd-event-history__dd-status" data-state="empty">{{ dropdown.emptyText }}</div>
             }
           }
         }
@@ -136,19 +135,19 @@
               <div class="gd-event-history__detail" [attr.data-state]="content.kind">
                 @switch (content.kind) {
                   @case ('loading') {
-                    <div class="gd-event-history__loading">{{ $any(content).text }}</div>
+                    <div class="gd-event-history__loading">{{ content.text }}</div>
                   }
                   @case ('error') {
-                    <div class="gd-event-history__error">{{ $any(content).text }}</div>
+                    <div class="gd-event-history__error">{{ content.text }}</div>
                   }
                   @case ('empty') {
-                    <i>{{ $any(content).text }}</i>
+                    <i>{{ content.text }}</i>
                   }
                   @case ('data') {
                     @if (browser().kind === 'league') {
-                      <gd-league-detail [league]="asLeague($any(content).data)" [membership]="false" />
+                      <gd-league-detail [league]="asLeague(content.data)" [membership]="false" />
                     } @else {
-                      <gd-tournament-detail [tournament]="asTournament($any(content).data)" [showRounds]="false" />
+                      <gd-tournament-detail [tournament]="asTournament(content.data)" [showRounds]="false" />
                     }
                   }
                 }

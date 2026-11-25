@@ -33,12 +33,13 @@ const COUNTERS: readonly { name: Counter; label: string }[] = [
         >
           <span class="gd-author-label">{{ counter.label }}</span>
           <input
+            #counterBox
             class="gd-author-input"
             type="number"
             min="0"
             [attr.aria-label]="counter.label"
             [value]="typed()[counter.name] ?? view[counter.name]"
-            (input)="type(counter.name, $any($event.target).value)"
+            (input)="type(counter.name, counterBox.value)"
           />
           <button
             gdAuthorButton

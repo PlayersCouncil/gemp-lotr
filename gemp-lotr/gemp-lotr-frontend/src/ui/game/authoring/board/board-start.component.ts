@@ -97,13 +97,14 @@ const SEAT_NAMES: Readonly<Record<DraftSeat, string>> = { freeps: 'Free Peoples'
           <div class="gd-author-board-start__row" [attr.data-part]="field.part" [attr.data-changed]="mark(field.part)">
             <span class="gd-author-label">{{ field.label }}</span>
             <input
+              #fieldBox
               class="gd-author-input"
               type="number"
               [min]="field.min"
               [attr.aria-label]="field.label"
               [title]="field.hint"
               [value]="typed()[field.part] ?? view[field.part]"
-              (input)="type(field.part, $any($event.target).value)"
+              (input)="type(field.part, fieldBox.value)"
               (change)="put(field.part)"
               (keydown.enter)="put(field.part)"
             />
@@ -177,7 +178,7 @@ const SEAT_NAMES: Readonly<Record<DraftSeat, string>> = { freeps: 'Free Peoples'
             }
           </div>
         }
-        <details class="gd-author-board-start__fold" [open]="open()" (toggle)="open.set($any($event.target).open)">
+        <details #fold class="gd-author-board-start__fold" [open]="open()" (toggle)="open.set(fold.open)">
           <summary title="Which seat's site is laid at each place (setup.path)" [attr.data-changed]="mark('path')">
             Whose sites
           </summary>

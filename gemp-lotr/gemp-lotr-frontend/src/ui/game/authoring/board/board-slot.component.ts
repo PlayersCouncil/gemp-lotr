@@ -127,7 +127,7 @@ import { FindBoundComponent } from './find-bound.component';
               hint="Whose card it is"
               [options]="seats()"
               [value]="row.slot.seat && row.slot.seat !== human() ? row.slot.seat : ''"
-              (changed)="change({ seat: $event === '' ? undefined : $any($event) })"
+              (changed)="change({ seat: $event === 'freeps' || $event === 'shadow' ? $event : undefined })"
             />
           }
           @if (onCard()) {

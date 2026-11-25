@@ -32,10 +32,11 @@ import { FlipButtonComponent } from './flip-button.component';
       <label class="gd-seat-controls__other" [title]="'Who plays the ' + otherName() + ' seat'">
         {{ otherName() }}:
         <select
+          #other
           class="gd-seat-controls__select"
           data-seat-control="other"
           [disabled]="flip.busy()"
-          (change)="choose($any($event.target).value)"
+          (change)="choose(other.value)"
         >
           @for (choice of flip.otherSeats(); track choice) {
             <option [value]="choice" [selected]="choice === flip.otherSeat()" [title]="titles[choice]">

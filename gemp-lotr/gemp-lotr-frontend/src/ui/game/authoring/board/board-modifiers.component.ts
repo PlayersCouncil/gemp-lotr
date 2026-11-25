@@ -81,13 +81,14 @@ import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.co
           />
           @if (word()?.number !== 'none') {
             <input
+              #amountBox
               type="text"
               class="gd-author-input gd-author-mods__amount"
               data-control="amount"
               aria-label="By"
               [title]="word()?.number === 'signed' ? 'Its change, with its sign: +2, -1' : 'Its number: 1 or more'"
               [value]="amount()"
-              (input)="amount.set($any($event.target).value)"
+              (input)="amount.set(amountBox.value)"
               (keydown.enter)="add()"
             />
           }

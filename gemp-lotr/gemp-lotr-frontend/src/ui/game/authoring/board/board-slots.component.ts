@@ -52,6 +52,7 @@ import { BoardSlotComponent } from './board-slot.component';
           />
         } @else {
           <input
+            #idBox
             type="text"
             class="gd-author-input gd-author-slots__id"
             data-part="new-slot-id"
@@ -59,7 +60,7 @@ import { BoardSlotComponent } from './board-slot.component';
             placeholder="id"
             title="The name its card goes by everywhere in the scenario"
             [value]="id()"
-            (input)="id.set($any($event.target).value)"
+            (input)="id.set(idBox.value)"
             (keydown.enter)="add()"
           />
         }

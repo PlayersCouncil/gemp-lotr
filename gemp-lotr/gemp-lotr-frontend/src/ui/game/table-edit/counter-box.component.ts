@@ -59,13 +59,14 @@ import { PopupPlaceDirective } from './popup-place.directive';
           −
         </button>
         <input
+          #setBox
           type="number"
           min="0"
           [max]="max"
           data-field="set"
           aria-label="Set to"
           [value]="text()"
-          (input)="draft.set($any($event.target).value)"
+          (input)="draft.set(setBox.value)"
           (keydown.enter)="send(setOp(), open.anchor)"
         />
         <button

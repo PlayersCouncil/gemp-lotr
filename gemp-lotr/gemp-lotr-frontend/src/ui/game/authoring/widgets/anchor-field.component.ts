@@ -96,10 +96,11 @@ interface Either {
       }
       @if (card(); as card) {
         <select
+          #partPick
           class="gd-author-input gd-author-anchor__part"
           aria-label="Which part of the card"
           title="Which part of the card"
-          (change)="choosePart($any($event.target).value)"
+          (change)="choosePart(partPick.value)"
         >
           <option value="" [selected]="card.part === ''">the whole card</option>
           @for (part of parts; track part) {

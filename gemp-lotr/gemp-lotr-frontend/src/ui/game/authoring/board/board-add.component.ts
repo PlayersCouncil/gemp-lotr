@@ -44,14 +44,14 @@ interface Offer {
             data-field="alias"
             aria-label="Its name in the scenario"
             [value]="offer.alias"
-            (input)="choose({ alias: $any($event.target).value })"
+            (input)="choose({ alias: alias.value })"
           />
           <gd-author-select
             data-field="seat"
             label="Seat"
             [options]="seatOptions"
             [value]="offer.seat"
-            (changed)="choose({ seat: $any($event) })"
+            (changed)="chooseSeat($event)"
           />
           <gd-author-select
             data-field="zone"
@@ -116,6 +116,10 @@ export class BoardAddComponent {
         ? next
         : { ...next, zone: '' };
     });
+  }
+
+  protected chooseSeat(seat: string): void {
+    if (seat === 'freeps' || seat === 'shadow') this.choose({ seat });
   }
 
   protected async add(offer: Offer): Promise<void> {

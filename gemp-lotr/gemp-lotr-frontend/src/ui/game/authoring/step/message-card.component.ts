@@ -189,6 +189,7 @@ const PARTS =
             </span>
             <span class="gd-author-message__label" data-inline title="How far from what it points at">gap</span>
             <input
+              #gapBox
               class="gd-author-input gd-author-step__short"
               aria-label="Gap"
               [gdStepField]="base() + '.gap'"
@@ -199,7 +200,7 @@ const PARTS =
                 view.stockGap +
                 '). Up and down arrows change it a little at a time.'
               "
-              (input)="gapTyped($any($event.target).value)"
+              (input)="gapTyped(gapBox.value)"
               (keydown.arrowup)="nudge($event, 1)"
               (keydown.arrowdown)="nudge($event, -1)"
             />
@@ -353,13 +354,14 @@ const PARTS =
                 }
                 <div class="gd-author-message__row">
                   <input
+                    #choiceBox
                     class="gd-author-input gd-author-step__short"
                     placeholder="name"
                     aria-label="New button's name"
                     data-choice-name
                     [attr.data-bad]="badName() ? '' : null"
                     [value]="newChoice()"
-                    (input)="newChoice.set($any($event.target).value)"
+                    (input)="newChoice.set(choiceBox.value)"
                     (keydown.enter)="addChoice(view.message)"
                   />
                   <button

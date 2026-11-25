@@ -11,10 +11,11 @@ import { Component, input, output } from '@angular/core';
   template: `
     <label class="gd-author-check" [title]="hint()">
       <input
+        #tick
         type="checkbox"
         [checked]="checked()"
         [disabled]="disabled()"
-        (change)="changed.emit($any($event.target).checked)"
+        (change)="changed.emit(tick.checked)"
       />
       {{ label() }}
     </label>

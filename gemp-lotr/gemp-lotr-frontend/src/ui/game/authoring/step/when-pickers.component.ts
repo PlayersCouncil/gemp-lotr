@@ -56,6 +56,7 @@ import { WhenHost } from './when-host';
           />
         </span>
         <input
+          #turnBox
           type="number"
           min="1"
           class="gd-author-input gd-author-step__short gd-author-when__turn"
@@ -63,7 +64,7 @@ import { WhenHost } from './when-host';
           placeholder="turn"
           aria-label="Turn"
           [value]="pickers.turn"
-          (change)="pick('turn', $any($event.target).value)"
+          (change)="pick('turn', turnBox.value)"
         />
       </div>
     }

@@ -141,11 +141,12 @@ type Option = readonly [value: string, label: string];
             </button>
           }
           <select
+            #moveTo
             class="gd-author-input"
             data-control="move"
             aria-label="Move it"
             title="Move it"
-            (change)="move($any($event.target))"
+            (change)="move(moveTo)"
           >
             @for (option of moves(); track option[0]) {
               <option [value]="option[0]">{{ option[1] }}</option>
@@ -184,11 +185,12 @@ type Option = readonly [value: string, label: string];
           <gd-author-board-modifiers [card]="card" />
           @if (!changes.deckOnly() && hosts().length > 1) {
             <select
+              #putTo
               class="gd-author-input"
               data-control="put"
               aria-label="Put it on another card"
               title="Attach it to another card, or stack it on one"
-              (change)="putOn($any($event.target))"
+              (change)="putOn(putTo)"
             >
               @for (option of hosts(); track option[0]) {
                 <option [value]="option[0]">{{ option[1] }}</option>
