@@ -28,6 +28,7 @@ import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorOption, AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorSendDirective } from '../widgets/author-send.directive';
 import { sendTop } from './top';
+import { optionsWithUndo, undoOptions } from '../../../../core/game/authoring/puzzle-settings';
 import { FallbackControlComponent } from '../opponent/fallback-control.component';
 
 /**
@@ -36,13 +37,13 @@ import { FallbackControlComponent } from '../opponent/fallback-control.component
  * the player's every decision needs a step, the player's seat, the phases the player is passed through (in a game of
  * two sides, or a file that says so, for each role the player takes: two rows of ticks), the player's
  * own settings the scenario fixes for its game (auto-accept; auto-dismissing a deck reveal, on for a tutorial unless
- * set otherwise; the animation speed, the player's own unless one is chosen), and the bubbles' gap. The ticks show the
+ * set otherwise; take-backs, off for a puzzle unless set otherwise; the animation speed, the player's own unless one is chosen), and the bubbles' gap. The ticks show the
  * settings as the game has them (settingsOf), which is also what the table plays by while the draft is written (the
  * scenario guide fixes them from the draft as it changes).
  *
  * DOM contract: `section.gd-author-scenario__section[data-section=plays]` with `input[data-part=opponent-name]`,
  * `gd-author-fallback` (the fallback and the sandbox's cards: opponent/fallback-control),
- * `gd-author-select[data-part]` (coverage, human, animation-speed), `.gd-author-scenario__ticks[data-part=
+ * `gd-author-select[data-part]` (coverage, human, undo, animation-speed), `.gd-author-scenario__ticks[data-part=
  * auto-pass]` with a `gd-author-check[data-phase]` per phase (`data-role` freeps, shadow on each row of a list for each
  * role, then a row each) and `gd-author-check[data-part=by-role]`, `gd-author-check[data-part]` (auto-accept,
  * auto-dismiss-deck-reveal), and `input[data-part=bubble-gap]`.
@@ -170,6 +171,18 @@ import { FallbackControlComponent } from '../opponent/fallback-control.component
         />
       </div>
       <gd-author-field
+        label="Take-backs"
+        hint="Whether the player may take back what they have done (the game page's undo): off by default in a puzzle, on otherwise"
+      >
+        <gd-author-select
+          data-part="undo"
+          label="Take-backs"
+          [options]="undoChoices()"
+          [value]="state().draft.options?.undo ?? ''"
+          (changed)="undoOf($event)"
+        />
+      </gd-author-field>
+      <gd-author-field
         label="Animation speed"
         hint="The speed the game's animations play at, whatever the player's own setting is (the Settings tab's slider, in steps): +2 is 4× as fast, 0 the game's usual speed"
       >
@@ -222,6 +235,7 @@ export class PlaysSectionComponent {
   private readonly draft = computed(() => this.state().draft);
   protected readonly passed = computed(() => autoPassView(this.draft().options));
   protected readonly settings = computed(() => settingsOf(this.draft()));
+  protected readonly undoChoices = computed(() => undoOptions(this.draft().kind));
   protected readonly speed = computed(() => {
     const speed = this.draft().options?.animationSpeed;
     return speed === undefined ? '' : String(speed);
@@ -275,6 +289,11 @@ export class PlaysSectionComponent {
 
   protected speedOf(chosen: string): void {
     this.option('animationSpeed', () => speedValue(chosen));
+  }
+
+  /** Take-backs: on, off, or ('') as the kind has it. */
+  protected undoOf(chosen: string): void {
+    this.put('options', (draft) => optionsWithUndo(draft, chosen));
   }
 
   protected gapOf(typed: string): void {

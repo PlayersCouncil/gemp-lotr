@@ -885,13 +885,33 @@ public class ScenarioDirector {
      * assigns leftovers only as the Shadow player (on the person's turns): on its own turns it is the Free Peoples
      * player, whose assigning is of its own characters, and it does as its orders and its fallback say.
      */
+    /**
+     * The opponent's fallback as the rules below read it: the file's (opponent.fallback), unless something has said
+     * otherwise for the game in hand (FallbackInstead).
+     */
+    private ScenarioDefinition.Fallback fallback() {
+        return _fallbackInstead != null ? _fallbackInstead : _def.fallback;
+    }
+
+    private ScenarioDefinition.Fallback _fallbackInstead;
+
+    /**
+     * Has the opponent's rules read another fallback than the file's from now on: a sandbox whose other seat the
+     * person has given to the bot (options.otherSeat: bot, LiveScenario.SetOtherSeat) is played as fallback: bot
+     * is, with none of the sandbox's or the eager opponent's rules.  Null for the file's again.
+     */
+    public void FallbackInstead(ScenarioDefinition.Fallback fallback) {
+        _fallbackInstead = fallback;
+    }
+
     public String leftovers() {
         com.gempukku.lotro.common.Side role = _table.RoleOf(_table.OpponentPlayer());
         if (!_def.oneSided && role != com.gempukku.lotro.common.Side.SHADOW)
             return null;
         if (_def.leftovers != null)
             return _def.leftovers;
-        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX && role == com.gempukku.lotro.common.Side.SHADOW)
+        if ((fallback() == ScenarioDefinition.Fallback.SANDBOX || fallback() == ScenarioDefinition.Fallback.EAGER)
+                && role == com.gempukku.lotro.common.Side.SHADOW)
             return ScenarioDefinition.RING_BEARER;
         return null;
     }
@@ -939,8 +959,11 @@ public class ScenarioDirector {
                 return null;
             }
         }
-        if (_def.fallback == ScenarioDefinition.Fallback.SANDBOX)
+        if (fallback() == ScenarioDefinition.Fallback.SANDBOX)
             return sandbox(player, decision);
+        //(the eager opponent has an answer for everything: see AnswerCompiler.eagerAnswer)
+        if (fallback() == ScenarioDefinition.Fallback.EAGER)
+            return AnswerCompiler.eagerAnswer(decision);
         return null;
     }
 

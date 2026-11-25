@@ -6,6 +6,7 @@ import { CollectionCounts } from './collection/collection-counts.service';
 import { CollectionQuery } from './collection/collection-query.service';
 import { FilterPins } from './collection/filter-pins';
 import { CardSize } from './collection/card-size';
+import { CardFilterModel, CardFilterPager, CardFilterPins, CardFilterSize } from './card-filter/card-filter-model';
 import { DeckChanges } from './deck/deck-changes.service';
 import { DeckDraft } from './deck/deck-draft.service';
 import { DeckEditing } from './deck/deck-editing.service';
@@ -44,6 +45,11 @@ export function provideDeckbuilderState(): Provider[] {
     CollectionCounts,
     FilterPins,
     CardSize,
+    // The shared filter panel (ui/shared/card-filter) works with these
+    { provide: CardFilterModel, useExisting: CollectionQuery },
+    { provide: CardFilterPager, useExisting: CollectionBrowser },
+    { provide: CardFilterPins, useExisting: FilterPins },
+    { provide: CardFilterSize, useExisting: CardSize },
     FormatsService,
     PackDeliveryService,
     PacksService,

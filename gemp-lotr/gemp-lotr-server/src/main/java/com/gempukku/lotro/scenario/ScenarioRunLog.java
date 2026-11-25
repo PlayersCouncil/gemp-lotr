@@ -153,6 +153,10 @@ public class ScenarioRunLog {
                 allProblems = allProblems.substring(0, PROBLEMS_LIMIT) + "\n...";
             run.problems = problems.isEmpty() ? null : allProblems;
             run.journal = scenario.Table().Journal().write();
+            //A puzzle's: the cards it was built with, its score, and whether it was solved in a way the author did not list
+            run.picks = scenario.Picks().isEmpty() ? null : JsonUtils.Serialize(new LinkedHashMap<>(scenario.Picks()));
+            run.score = scenario.Score();
+            run.unlisted = scenario.Unlisted();
 
             if (recording != null) {
                 run.recording_id = recording.save();
@@ -164,9 +168,40 @@ public class ScenarioRunLog {
                 }
             }
             _dao.finishRun(run);
+            //(the best score counts the games that were complete: a scored puzzle with no 'win' is complete when played out)
+            if (run.score != null && def.outcome.score != null && scenario.Result() == LiveScenario.Result.COMPLETE)
+                _dao.recordBestScore(runId, run.score, def.outcome.score.higherBetter());
         } catch (RuntimeException exp) {
             LOG.error("Could not record the end of scenario run " + runId + " (" + def.id + ", " + player.getName() + ")", exp);
         }
+    }
+
+    /**
+     * The games of a scenario that solved it with picks none of its solutions lists, the latest first, for its author
+     * and the admins to look at: [{run, player, version, started, ended, picks: {slot: blueprint}, score, recordingId,
+     * replayId}], 'replayId' being what game.html?replayId= takes (null without a replay).  Empty if there are none,
+     * or if they could not be read.
+     */
+    public List<Map<String, Object>> unlistedRuns(String scenarioId, int limit) {
+        List<Map<String, Object>> runs = new java.util.ArrayList<>();
+        try {
+            for (DBDefs.ScenarioRun run : _dao.getUnlistedRuns(scenarioId, limit)) {
+                Map<String, Object> json = new LinkedHashMap<>();
+                json.put("run", run.id);
+                json.put("player", run.player_name);
+                json.put("version", run.version);
+                json.put("started", run.started == null ? null : run.started.toString());
+                json.put("ended", run.ended == null ? null : run.ended.toString());
+                json.put("picks", run.picks == null ? null : com.alibaba.fastjson2.JSON.parseObject(run.picks));
+                json.put("score", run.score);
+                json.put("recordingId", run.recording_id);
+                json.put("replayId", run.recording_id == null || run.player_name == null ? null : run.player_name + "$" + run.recording_id);
+                runs.add(json);
+            }
+        } catch (RuntimeException exp) {
+            LOG.error("Could not list the unlisted solutions of scenario " + scenarioId, exp);
+        }
+        return runs;
     }
 
     /**

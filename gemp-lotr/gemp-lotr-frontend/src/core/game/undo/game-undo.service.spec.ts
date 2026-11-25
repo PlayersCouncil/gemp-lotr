@@ -54,11 +54,11 @@ describe('GameUndo', () => {
   });
 
   /** The game opened for `me` (a decision waiting for alice), undo started, its first answers given. */
-  function start(me = 'alice', first: unknown[] = [green]): TestRequest {
+  function start(me = 'alice', first: unknown[] = [green], more = ''): TestRequest {
     session.open('7');
     backend
       .expectOne((r) => r.url === GAME && r.method === 'GET')
-      .flush(`<gameState cn="1">${P(me)}${DECISION}</gameState>`);
+      .flush(`<gameState cn="1">${P(me)}${more}${DECISION}</gameState>`);
     if (me !== 'alice') backend.match((r) => r.url === GAME && r.method === 'POST');
     TestBed.tick();
     undo.start('7');
@@ -120,6 +120,17 @@ describe('GameUndo', () => {
     undo.refresh();
     points().flush({ ...answer([]), policy: { ...policy, green: false, yellow: false, red: false } });
     expect(undo.allowed()).toBe(false);
+  });
+
+  it("has no Undo button in a game that allows no taking back (a puzzle's), whatever its last place", () => {
+    start();
+    undo.refresh();
+    points().flush({
+      ...answer([{ ...green, unavailable: 'Taking back is off in this game' }]),
+      policy: { ...policy, green: false, yellow: false, red: false },
+    });
+    expect(undo.latest()?.label).toBe('Played Gimli');
+    expect(undo.button()).toBeNull();
   });
 
   it('asks again whenever the game moves; asked while an answer is on its way, once more when it has come', () => {
@@ -280,6 +291,24 @@ describe('GameUndo', () => {
     // ...and what can be taken back is asked again
     TestBed.tick();
     points().flush(answer([]));
+  });
+
+  it("a flipped page: the person's request is still theirs, and the flip reads the game again with no banner", () => {
+    // (flipped, the page is the other seat's player's, bob's; the scenario's info names the person, alice)
+    const info = JSON.stringify({ type: 'info', id: 'sandbox', human: 'alice', humanSeat: 'freeps', seat: 'shadow' });
+    const poll = start('bob', [green], `<ge type="S" scenario="${info.replace(/"/g, '&quot;')}"/>`);
+    poll.flush(notice(4, 'undoRequested', { requestId: '9', requester: 'alice', tier: 'YELLOW', seconds: '60' }));
+    expect(undo.mine()).toBe(true);
+    expect(undo.asked()).toBe(false);
+    undo.openList();
+    points().flush(answer([red]));
+    notices().flush(notice(5, 'resync', { reason: 'flip', channelNumber: '2', seat: 'freeps' }));
+    expect(undo.list()).toBeNull();
+    expect(undo.banner()).toBeNull();
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'GET')
+      .flush(`<gameState cn="2">${P()}${DECISION}</gameState>`);
+    expect(session.reopened()).toBe(1);
   });
 
   it("the game's end while the player's decision waits: the game's news, once", () => {

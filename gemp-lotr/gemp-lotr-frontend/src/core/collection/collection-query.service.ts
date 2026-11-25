@@ -4,17 +4,24 @@ import { CardImageService } from '../cards/card-image.service';
 import { DeckDraft } from '../deck/deck-draft.service';
 import { shownDeckBlueprints } from '../deck/deck-model';
 import { CollectionBrowser } from './collection-browser.service';
-import { blockOptions, setOptions } from './filter-block-sets';
-import { CultureGroupId, hiddenCultureGroups, visibleCultures } from './filter-cultures';
-import { EMPTY_FILTER, FilterFields, NUMERIC_FILTERS, NumericFilter, resetAdvanced, resetAll } from './filter-fields';
-import { INITIAL_BLOCK_OPTION, INITIAL_SET_OPTION, SelectOption } from './filter-options';
-import { buildFilterString } from './filter-string';
+import { blockOptions, setOptions } from '../card-filter/filter-block-sets';
+import { CultureGroupId, hiddenCultureGroups, visibleCultures } from '../card-filter/filter-cultures';
+import {
+  EMPTY_FILTER,
+  FilterFields,
+  NUMERIC_FILTERS,
+  NumericFilter,
+  resetAdvanced,
+  resetAll,
+} from '../card-filter/filter-fields';
+import { INITIAL_BLOCK_OPTION, INITIAL_SET_OPTION, SelectOption } from '../card-filter/filter-options';
+import { buildFilterString } from '../card-filter/filter-string';
+import { CardFilterModel, FilterFieldName } from '../card-filter/card-filter-model';
 
 /** What the deck builder shows by default: everything except The One Ring. */
 export const DEFAULT_FILTER_OVERRIDE = 'cardType:-THE_ONE_RING';
 
-/** A filter field holding text (every field but the cultures). */
-export type FilterFieldName = Exclude<keyof FilterFields, 'cultures'>;
+export type { FilterFieldName } from '../card-filter/card-filter-model';
 
 /** Like a native select: a value with no matching option selects the first one. */
 function valueOrFirst(value: string, options: readonly SelectOption[]): string {
@@ -26,7 +33,7 @@ function valueOrFirst(value: string, options: readonly SelectOption[]): string {
  * shows, comparisons, the predefined filters), turned into the filter string the browser loads.
  */
 @Injectable()
-export class CollectionQuery {
+export class CollectionQuery implements CardFilterModel {
   private readonly browser = inject(CollectionBrowser);
   private readonly draft = inject(DeckDraft);
   private readonly images = inject(CardImageService);

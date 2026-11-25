@@ -1,0 +1,74 @@
+/* A counter's box (gd-edit-counter-box): − and +, and the number to set it to, by the number it opened from */
+
+.gd-edit-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1089;
+}
+
+.gd-edit-counter__box {
+  position: fixed;
+  left: var(--gd-left, 0px);
+  top: var(--gd-top, 0px);
+  z-index: 1090;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid var(--theme-game-edit-menu-edge);
+  border-radius: 6px;
+  background: var(--theme-game-edit-menu-bg);
+  box-shadow: var(--theme-game-edit-menu-shadow);
+  color: var(--theme-game-edit-menu-text);
+  font: 13px/1.3 var(--theme-game-edit-font);
+  white-space: nowrap;
+}
+
+.gd-edit-counter__box[data-placing] {
+  visibility: hidden;
+}
+
+.gd-edit-counter__label {
+  margin-right: 4px;
+  color: var(--theme-game-edit-menu-muted);
+}
+
+.gd-edit-counter__box button {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid var(--theme-game-edit-field-edge);
+  border-radius: 4px;
+  background: var(--theme-game-edit-button-bg);
+  color: var(--theme-game-edit-button-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.gd-edit-counter__box button:is(:hover, :focus-visible):not(:disabled) {
+  background: var(--theme-game-edit-menu-hover-bg);
+  color: var(--theme-game-edit-menu-hover-text);
+  outline: none;
+}
+
+.gd-edit-counter__box button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.gd-edit-counter__box input {
+  box-sizing: border-box;
+  width: 4em;
+  height: 24px;
+  border: 1px solid var(--theme-game-edit-field-edge);
+  border-radius: 3px;
+  background: var(--theme-game-edit-field-bg);
+  color: var(--theme-game-edit-menu-text);
+  font: inherit;
+  text-align: center;
+}
+
+.gd-edit-counter__box button[data-action='set'] {
+  margin-left: 4px;
+}

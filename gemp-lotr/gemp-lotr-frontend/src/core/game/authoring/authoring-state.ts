@@ -8,6 +8,8 @@
  * message a string or an object, and so on. Each such part is typed as the union it is.
  */
 
+import { CardModifier, ModifyVocabulary, PuzzleState, SandboxTools, StartModifier } from './puzzle-state';
+
 /** A seat as the draft names it. */
 export type DraftSeat = 'freeps' | 'shadow';
 export type ScenarioKind = 'tutorial' | 'puzzle' | 'sandbox';
@@ -144,6 +146,12 @@ export interface DraftOptions {
   opponentDelayMs?: number;
   runnerLevel?: unknown;
   bubbleGap?: string;
+  /** Take-backs: on or off (absent: off for a puzzle, on otherwise). */
+  undo?: 'on' | 'off';
+  /** A sandbox's tools: "add, move", or false for none (absent: every tool). */
+  tools?: string | false;
+  /** Who plays a sandbox's other seat: bot, person (absent: the script). */
+  otherSeat?: string;
 }
 
 /** Where the story starts (setup.startAt), each part left out at its default. */
@@ -191,6 +199,8 @@ export interface Draft {
     shadow?: readonly DraftRequirement[];
     /** One-sided games only: the Shadow seat's marker is put level with the fellowship's at each move. */
     markers?: 'together' | 'apart';
+    /** What the person may not do: "shuffle, reveal". */
+    forbid?: string;
   };
   setup?: {
     /** How the game opens (B10): `game` plays its own opening (bid, seats, starting fellowships, draw); absent: board. */
@@ -212,6 +222,8 @@ export interface Draft {
     controlled?: Partial<Record<DraftSeat, string>>;
     /** Whose site is laid where, site 1 first: "site1, site2opp". */
     path?: string;
+    /** Modifiers put on by hand at the start (em T5): a card's alias to "strength +2, damage +1 turn". */
+    modifiers?: Readonly<Record<string, string>>;
   };
   rng?: string | readonly string[];
   outcome?: {
@@ -225,9 +237,38 @@ export interface Draft {
     /** The game ending by itself, the person having won or lost it: the result it counts as, and what is said. */
     gameWon?: DraftEnd['result'] | DraftEnd;
     gameLost?: DraftEnd['result'] | DraftEnd;
+    /** Judged at a moment: the moment alone, or it and its requirements. */
+    judge?: string | { at: string; win?: DraftRequirement | readonly DraftRequirement[] | string };
+    /** A number read from the game: a template ("strength:smeagol") or a card definition's value object. */
+    score?: { value: string | Readonly<Record<string, unknown>>; better?: 'higher' | 'lower'; label?: string };
   };
   /** The server always sends it; the panel treats a missing one as none. */
   steps?: readonly DraftStep[];
+  /** A puzzle's filter every slot's card passes (the deck builder's filter text). */
+  pool?: string;
+  /** A puzzle's slots: id to the slot, or to its zone alone. */
+  slots?: Readonly<Record<string, DraftSlot | string>>;
+  solutions?: readonly DraftSolution[];
+}
+
+/** A puzzle's slot as the file has it (each part left out at its default). */
+export interface DraftSlot {
+  zone: string;
+  seat?: DraftSeat;
+  on?: string;
+  position?: number;
+  filter?: string;
+  tokens?: number;
+  wounds?: number;
+  label?: string;
+}
+
+/** One of a puzzle's solutions as the file has it. */
+export interface DraftSolution {
+  name: string;
+  note?: string;
+  picks?: Readonly<Record<string, string>>;
+  answers?: readonly string[];
 }
 
 /* ------------------------------------------------------------------ the state (describe) */
@@ -357,6 +398,11 @@ export interface BoardCard {
   tokens: number;
   /** The card it is attached to or stacked on, by alias. */
   on: string | null;
+  /** What has been put on it by hand and is still in force (em: a server before it sends none). */
+  modifiers?: readonly CardModifier[];
+  /** Its seat's Ring-bearer, its seat's One Ring (ef-notes.md 6; a server before it sends neither). */
+  ringBearer?: boolean;
+  ring?: boolean;
 }
 
 export interface BoardSite {
@@ -428,6 +474,8 @@ export interface DraftStart {
   /** How the game opens (B10): laid out as the setup says (board), or its own opening played (game). */
   opening?: 'board' | 'game';
   openings?: readonly ('board' | 'game')[];
+  /** setup.modifiers, by card. */
+  modifiers?: Readonly<Record<string, readonly StartModifier[]>>;
 }
 
 /** A part of the file that was left out so that it could be opened at all. */
@@ -496,6 +544,11 @@ export interface DraftState {
   leftOut: readonly LeftOutPart[];
   /** "Write down what I do". */
   recording: boolean;
+  /**
+   * Whether the author has said "Write down what I do" (else it follows the draft's kind: off in a puzzle, on in any
+   * other; ef-notes.md 2). Optional: a server before it sends none.
+   */
+  recordingSaid?: boolean;
   /** "Ask me for the opponent". */
   askOpponent: boolean;
   /** The forks' choices taken when the script plays itself. */
@@ -542,6 +595,23 @@ export interface DraftState {
   autoPass?: AuthoringAutoPass;
   /** The conditions of the outcome's closing messages, as the file has them: "winMessages.0.require", ... */
   outcomeTexts?: Readonly<Record<string, string>>;
+  /** The kinds a scenario can be. */
+  kinds?: readonly ScenarioKind[];
+  /** What a sandbox's player may change. */
+  sandboxTools?: SandboxTools;
+  /** The Modify… vocabulary. */
+  modify?: ModifyVocabulary;
+  /** A puzzle's parts. */
+  puzzle?: PuzzleState;
+  /** Who plays a sandbox's other seat (options.otherSeat, ef-notes.md A). */
+  sandboxOtherSeat?: SandboxOtherSeat;
+}
+
+/** `state.sandboxOtherSeat`: the choices, whether the file says one, and the one in force. */
+export interface SandboxOtherSeat {
+  choices: readonly string[];
+  said: boolean;
+  value: string;
 }
 
 /** options.autoPass as the server reads it (describeAutoPass). */
@@ -571,6 +641,8 @@ export interface SaveReport {
   report: string | null;
   /** A plain save that moved the file to where its kind is kept. */
   movedFrom?: string;
+  /** What the runner said of each of a puzzle's solutions: null, it solves it; else why not (ef-notes.md 3). */
+  solutions?: Readonly<Record<string, string | null>>;
 }
 
 /**
@@ -606,6 +678,8 @@ export interface CheckReport {
   passed: boolean;
   report: string | null;
   warnings: readonly string[];
+  /** What the runner said of each of a puzzle's solutions: null, it solves it; else why not (ef-notes.md 3). */
+  solutions?: Readonly<Record<string, string | null>>;
 }
 
 export interface OffScriptReport {
@@ -648,7 +722,7 @@ export interface OpponentAnswering {
   /** What that comes to now, in the scenario's words. */
   gives: string | null;
   /** Answered by rule when no order does. */
-  rule: 'leftovers' | 'sandbox' | null;
+  rule: 'leftovers' | 'sandbox' | 'eager' | null;
   /** A When for a new order that would take it. */
   when: string;
 }

@@ -172,3 +172,42 @@
   opacity: 0.55;
   cursor: default;
 }
+
+/* A scored puzzle's ending: the score, the best and a new best; and an unlisted solution, said in one line */
+.gd-scenario-panel__score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border: 1px solid var(--theme-game-scenario-border);
+  border-radius: 8px;
+}
+
+.gd-scenario-panel__score-label {
+  color: var(--theme-game-scenario-muted);
+}
+
+.gd-scenario-panel__score-value {
+  color: var(--theme-game-scenario-heading);
+  font-size: 22px;
+}
+
+.gd-scenario-panel__best {
+  color: var(--theme-game-scenario-muted);
+}
+
+.gd-scenario-panel__new-best {
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: var(--theme-game-scenario-new-best-bg);
+  color: var(--theme-game-scenario-new-best-text);
+  font-weight: bold;
+}
+
+.gd-scenario-panel__unlisted {
+  margin: 10px 0 0;
+  color: var(--theme-game-scenario-strong);
+  font-style: italic;
+}

@@ -81,7 +81,63 @@ public final class ScenarioRunner {
         //(a step no way reaches is a failure, and a scenario with a failure in it has not been proved)
         if (!report.failures.isEmpty() && report.reached == RunnerLevel.FULL)
             report.reached = RunnerLevel.SETUP;
+        solutions(def, library, format, report);
         return report;
+    }
+
+    /**
+     * What a run is played with: the cards in a puzzle's slots, and, for a run of one of its solutions, that solution,
+     * whose answers are the person's wherever the script gives the runner none.  The scenario's own run is played with
+     * its first solution's picks (and none of its answers): it is the script that it proves.
+     */
+    private record Playing(Map<String, String> picks, ScenarioDefinition.Solution solution) {
+        static Playing script(ScenarioDefinition def) {
+            return new Playing(def.solutions.isEmpty() ? Map.of() : def.solutions.getFirst().picks(), null);
+        }
+    }
+
+    /**
+     * The runner level 'solution': each of the scenario's solutions is played, its picks in the slots and its answers
+     * given wherever the script leaves the person's decision open, and has to reach the scenario's win (or, for a
+     * scored puzzle with no win, its end).  Each one's verdict goes in the report (solutions), its failures among the
+     * report's, and its decisions after the scenario's own.  A puzzle with solutions is required to reach this level
+     * (unless its options say otherwise), and reaches it once every solution does.
+     */
+    private static void solutions(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, ScenarioRunReport report) {
+        if (def.solutions.isEmpty()) {
+            if (!def.slots.isEmpty())
+                report.failures.add("The puzzle has slots and no solution, so it was played with its slots empty.  List a solution (solutions: "
+                        + "its picks, and the answers the script leaves to the person) for the runner to play it with");
+            if (def.runnerLevel == RunnerLevel.SOLUTION)
+                report.failures.add("options.runnerLevel is 'solution', and the scenario lists no solution to prove");
+            return;
+        }
+        if (def.runnerLevel == null && def.kind == ScenarioDefinition.Kind.PUZZLE && report.required.compareTo(RunnerLevel.SOLUTION) < 0)
+            report.required = RunnerLevel.SOLUTION;
+        boolean all = true;
+        for (ScenarioDefinition.Solution solution : def.solutions) {
+            ScenarioRunReport run = run(def, library, format, false, List.of(), null, new Playing(solution.picks(), solution));
+            boolean solved = run.completed && run.failures.isEmpty();
+            String verdict = solved ? "solved (" + run.stopped + ")"
+                    : run.failures.isEmpty() ? "does not solve it: " + run.stopped : "does not solve it: " + run.failures.getFirst();
+            //(the likeliest reason a recorded solution stops fitting: the script came to answer one of its decisions)
+            if (!solved && run.stepTookSolutionsDecision != null)
+                verdict += ".  Probably because " + run.stepTookSolutionsDecision;
+            report.solutions.put(solution.name(), solved ? null : verdict);
+            report.decisions.add(new ScenarioRunReport.Decision(-1, "Solution " + solution.name() + ": " + verdict, null, null, null));
+            report.decisions.addAll(run.decisions);
+            if (!solved) {
+                all = false;
+                if (run.failures.isEmpty())
+                    report.failures.add("solution '" + solution.name() + "' does not reach the scenario's win: " + run.stopped);
+                for (String failure : run.failures)
+                    report.failures.add("solution '" + solution.name() + "': " + failure);
+                if (run.stepTookSolutionsDecision != null)
+                    report.failures.add("solution '" + solution.name() + "': " + run.stepTookSolutionsDecision);
+            }
+        }
+        if (all && report.failures.isEmpty() && report.reached.compareTo(RunnerLevel.SOLUTION) < 0)
+            report.reached = RunnerLevel.SOLUTION;
     }
 
     /**
@@ -178,7 +234,8 @@ public final class ScenarioRunner {
                         return result.with(faults);
                     }
                     result.tries++;
-                    ScenarioRunReport run = run(def, library, format, false, way.taken, new Deviation(point.number(), other[0], point.top(), point.decision()));
+                    ScenarioRunReport run = run(def, library, format, false, way.taken, new Deviation(point.number(), other[0], point.top(), point.decision()),
+                            Playing.script(def));
                     //(nor is what goes wrong on the way through as the script plays it: that is said by Check)
                     if (run.failures.isEmpty() || way.failures.contains(run.failures.getFirst()))
                         continue;
@@ -256,7 +313,7 @@ public final class ScenarioRunner {
     private static final int EXPLORE_LIMIT = 60;
 
     private static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, boolean explore, List<String> choices) {
-        return run(def, library, format, explore, choices, null);
+        return run(def, library, format, explore, choices, null, Playing.script(def));
     }
 
     /**
@@ -270,10 +327,10 @@ public final class ScenarioRunner {
     private record Deviation(int at, String answer, int top, String decision) { }
 
     private static ScenarioRunReport run(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, boolean explore, List<String> choices,
-                                         Deviation deviation) {
+                                         Deviation deviation, Playing playing) {
         ScenarioRunReport report = new ScenarioRunReport(def.id);
         report.required = def.runnerLevel != null ? def.runnerLevel
-                : def.coverage == Coverage.STRICT ? RunnerLevel.FULL : RunnerLevel.PREFIX;
+                : def.coverageInForce() == Coverage.STRICT ? RunnerLevel.FULL : RunnerLevel.PREFIX;
 
         List<String> invalid = ScenarioValidator.validate(def, library);
         if (!invalid.isEmpty()) {
@@ -285,6 +342,10 @@ public final class ScenarioRunner {
         ScenarioTable table = new ScenarioTable(def, library, format, HUMAN, OPPONENT);
         ScenarioSession session = new ScenarioSession(table);
         ScenarioDirector director = session.Director();
+        //(a sandbox whose other seat begins with the bot is played as fallback: bot is: see the opponent's decisions below)
+        if (def.kind == ScenarioDefinition.Kind.SANDBOX && def.otherSeatInForce() == ScenarioDefinition.OtherSeat.BOT)
+            director.FallbackInstead(Fallback.BOT);
+        table.Picks(playing.picks());
         try {
             table.Start();
         } catch (RuntimeException exp) {
@@ -295,7 +356,7 @@ public final class ScenarioRunner {
 
         boolean completed = false;
         try {
-            completed = play(def, session, report, explore, choices, deviation);
+            completed = play(def, session, report, explore, choices, deviation, playing);
         } catch (RuntimeException exp) {
             report.failures.add("The game threw " + exp + rootCause(exp));
             report.stopped = "the game threw an exception";
@@ -308,7 +369,7 @@ public final class ScenarioRunner {
         for (String problem : table.Problems())
             report.failures.add(problem);
 
-        if (deviation == null && !explore && report.failures.isEmpty())
+        if (deviation == null && !explore && playing.solution() == null && report.failures.isEmpty())
             refusalsNotShown(def, report);
         if (completed && deviation == null)
             for (RngEntry entry : table.Random().remaining())
@@ -323,11 +384,15 @@ public final class ScenarioRunner {
      * @return Whether the scenario reached its end.
      */
     private static boolean play(ScenarioDefinition def, ScenarioSession session, ScenarioRunReport report, boolean explore, List<String> choices,
-                                Deviation deviation) {
+                                Deviation deviation, Playing playing) {
         ScenarioTable table = session.Table();
         ScenarioDirector director = session.Director();
-        boolean strict = def.coverage == Coverage.STRICT;
+        //(a sandbox is always guided: see ScenarioDefinition.coverageInForce)
+        boolean strict = def.coverageInForce() == Coverage.STRICT;
         int unscripted = 0;
+        //(a solution's answers, the next of which is the person's next open decision's)
+        ScenarioDefinition.Solution solution = playing.solution();
+        int taped = 0;
 
         for (int number = 1; number <= DECISION_LIMIT; number++) {
             if (table.GameIsFinished() && table.PathEnded() != null) {
@@ -346,6 +411,23 @@ public final class ScenarioRunner {
                         + table.SeatingProblem());
                 return false;
             }
+            if (table.Breach() != null) {
+                report.stopped = "the person broke the puzzle's rules: " + table.Breach();
+                if (deviation != null)
+                    return true;
+                report.failures.add("The path breaks the puzzle's rules: " + table.Breach());
+                return false;
+            }
+            if (table.Verdict() != null) {
+                //The judging moment came (outcome.judge): that is the end, whatever the game did after it
+                ScenarioTable.Verdict verdict = table.Verdict();
+                report.stopped = "judged at " + verdict.moment() + ": " + (verdict.won() ? "won" : "failed")
+                        + (verdict.score() == null ? "" : ", scoring " + verdict.score());
+                if (verdict.won() || deviation != null)
+                    return true;
+                report.failures.add("The scripted path is judged failed at " + verdict.moment());
+                return false;
+            }
             if (table.GameIsFinished()) {
                 String winner = table.game().getWinnerPlayerId();
                 report.stopped = "the game ended" + (winner == null ? " with no winner" : ": the " + table.SeatOf(winner).key() + " seat won");
@@ -361,6 +443,12 @@ public final class ScenarioRunner {
                         report.failures.add("The scripted path ends in failure (" + report.stopped + ")");
                         return false;
                     }
+                    return true;
+                }
+                //(a scored puzzle with no 'win' is complete once it has been played to its end, however that went)
+                if (LiveScenario.scoredToTheEnd(def) && director.end() == null) {
+                    Integer score = table.Score();
+                    report.stopped += score == null ? " (a scored end)" : " (a scored end: " + score + ")";
                     return true;
                 }
                 if (def.outcome.win == null && director.end() == null) {
@@ -449,6 +537,55 @@ public final class ScenarioRunner {
                 continue;
             }
 
+            //A solution's run: the person's decision that the script gives no answer for takes the solution's next answer
+            if (solution != null && human && ruling.problem() == null && (ruling.answer() == null || ruling.noAnswer() != null)) {
+                if (taped < solution.answers().size()) {
+                    ScenarioDefinition.Answer next = solution.answers().get(taped++);
+                    try {
+                        answer = AnswerCompiler.compile(table, decision, next);
+                    } catch (ScenarioScriptException exp) {
+                        report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.label(), null, null));
+                        report.failures.add("its answer " + taped + ", " + next.source() + ", does not fit the decision: " + exp.getMessage());
+                        report.stopped = "the solution does not fit the game";
+                        return false;
+                    }
+                    note = "(the solution's answer " + taped + ": " + next.source() + ")";
+                } else {
+                    answer = AnswerCompiler.leastAnswer(decision);
+                    note = "(the solution's answers have run out: as little as can be done)";
+                }
+                if (step != null && ruling.shown() != null && !ScenarioDirector.allowsAnswer(ruling.shown(), decision, answer)) {
+                    report.decisions.add(new ScenarioRunReport.Decision(number, description, step.label(), null, null));
+                    report.failures.add("step " + step.label() + ": the solution's " + (note.contains("answer " + taped + ":")
+                            ? "answer " + taped + " (" + solution.answers().get(taped - 1).source() + ")" : "pass") + " is not one the step allows, "
+                            + "so the player's page would refuse it.  The step allows " + allowedSaid(table, decision, ruling.shown()));
+                    report.stopped = "the solution does not fit the script";
+                    return false;
+                }
+                report.decisions.add(new ScenarioRunReport.Decision(number, description, step == null ? null : step.label(), answer, note));
+                try {
+                    table.PlayerDecided(player, answer);
+                } catch (RuntimeException exp) {
+                    report.failures.add("the game rejected the answer \"" + answer + "\" (" + note + ") to: " + description);
+                    report.stopped = "the game rejected an answer";
+                    return false;
+                }
+                if (table.Breach() != null)
+                    continue;
+                if (endedHere(def, table, director, report, deviation))
+                    return director.end() == null || director.end().result != EndResult.FAIL;
+                if (def.outcome.lose != null && table.Holds(def.outcome.lose, table.HumanPlayer())) {
+                    report.stopped = "the scenario's lose condition came true";
+                    report.failures.add("The solution meets the scenario's lose condition");
+                    return false;
+                }
+                if (def.outcome.win != null && table.Holds(def.outcome.win, table.HumanPlayer())) {
+                    report.stopped = "the scenario's win condition came true";
+                    return true;
+                }
+                continue;
+            }
+
             try {
                 if (ruling.problem() != null)
                     throw new ScenarioScriptException(ruling.problem());
@@ -491,7 +628,7 @@ public final class ScenarioRunner {
                     ScenarioDirector.OrderMatch order = director.standingOrder(player, decision);
                     note = order != null ? "(no step covers this; one of the opponent's standing orders does: " + order.order().label(order.index() + 1) + ")"
                             : "(no step covers this; the opponent does it by rule: " + (decision.getDecisionType() == com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS
-                            ? "its leftovers" : "the sandbox") + ")";
+                            ? "its leftovers" : def.fallback == Fallback.EAGER ? "eager, taking all it can" : "the sandbox") + ")";
                 } else if (explore) {
                     if (++unscripted > EXPLORE_LIMIT) {
                         report.stopped = "explored " + EXPLORE_LIMIT + " decisions beyond the script";
@@ -509,13 +646,16 @@ public final class ScenarioRunner {
                     else
                         report.reached = RunnerLevel.PREFIX;
                     return false;
-                } else if (def.fallback == Fallback.PASS || def.fallback == Fallback.SANDBOX) {
+                } else if ((def.fallbackInForce() == Fallback.PASS || def.fallbackInForce() == Fallback.SANDBOX)
+                        && (def.kind != ScenarioDefinition.Kind.SANDBOX || def.otherSeatInForce() == ScenarioDefinition.OtherSeat.SCRIPT)) {
                     answer = AnswerCompiler.leastAnswer(decision);
                     note = "(opponent fallback: " + (def.fallback == Fallback.PASS ? "pass" : "sandbox, with no rule for this: as little as it can") + ")";
                 } else {
                     report.decisions.add(new ScenarioRunReport.Decision(number, description, null, null, null));
                     report.stopped = "a decision for the opponent that no step covers";
-                    if (def.fallback == Fallback.BOT && !strict)
+                    //(the bot, or a sandbox's person in the other seat, answers here: proved as far as the script can be)
+                    if ((def.fallback == Fallback.BOT || (def.kind == ScenarioDefinition.Kind.SANDBOX
+                            && def.otherSeatInForce() != ScenarioDefinition.OtherSeat.SCRIPT)) && !strict)
                         report.reached = RunnerLevel.PREFIX;
                     else
                         report.failures.add("No step covers this decision for the opponent (the script is waiting on "
@@ -528,6 +668,24 @@ public final class ScenarioRunner {
                 report.failures.add((step == null ? "" : "step " + step.label() + ": ") + exp.getMessage());
                 report.stopped = "the script does not fit the game";
                 return false;
+            }
+
+            //A solution's run, at a decision of the person's that a step answers: the solution's next answer goes to
+            // a later decision, which is worth saying if it then fails (see ScenarioRunReport.stepTookSolutionsDecision)
+            if (solution != null && human && step != null && answer != null && taped < solution.answers().size()
+                    && report.stepTookSolutionsDecision == null) {
+                ScenarioDefinition.Answer next = solution.answers().get(taped);
+                try {
+                    String instead = AnswerCompiler.compile(table, decision, next);
+                    if (!instead.equals(answer))
+                        report.stepTookSolutionsDecision = step.describe() + " answered " + said(table, decision, answer)
+                                + " to \"" + decision.getText() + "\" by itself, where the solution's answer " + (taped + 1) + ", " + next.source()
+                                + ", would have gone.  A solution's answers go only to the decisions the script leaves open, so a step with "
+                                + "one allowed answer takes its decision first (\"Write down what I do\" writes such a step for every pass): "
+                                + "take the step out, or let it allow more than that one answer";
+                } catch (ScenarioScriptException | RuntimeException exp) {
+                    //(the solution's answer would not have fitted here either: nothing taken from it)
+                }
             }
 
             //The player's scripted answer is held to what the page would let them do, and what the step refuses is
@@ -547,7 +705,7 @@ public final class ScenarioRunner {
             }
 
             //Where the player could have done otherwise, as the step has it: for trying those other ways (see offScript)
-            if (deviation == null && !explore && human && step != null && ruling.shown() != null && answer != null
+            if (deviation == null && !explore && solution == null && human && step != null && ruling.shown() != null && answer != null
                     && decision.getDecisionType() != com.gempukku.lotro.logic.decisions.AwaitingDecisionType.ASSIGN_MINIONS) {
                 ScenarioDirector.Presentation shown = ruling.shown();
                 List<String> others = new java.util.ArrayList<>();
@@ -596,6 +754,9 @@ public final class ScenarioRunner {
                 return false;
             }
 
+            //(what the puzzle's rules forbid comes before whatever else the answer led to: the loop's top says it)
+            if (table.Breach() != null)
+                continue;
             if (director.end() != null) {
                 report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
                 if (director.end().result == EndResult.FAIL && deviation == null) {
@@ -699,5 +860,18 @@ public final class ScenarioRunner {
             cause = cause.getCause();
         StackTraceElement[] trace = cause.getStackTrace();
         return (cause == exp ? "" : " (caused by " + cause + ")") + (trace.length > 0 ? " at " + trace[0] : "");
+    }
+
+    /**
+     * Whether the scenario ended with that answer by a step of its own ('end'), saying so in the report; a step that
+     * ends it in failure is a failure of the run.
+     */
+    private static boolean endedHere(ScenarioDefinition def, ScenarioTable table, ScenarioDirector director, ScenarioRunReport report, Deviation deviation) {
+        if (director.end() == null)
+            return false;
+        report.stopped = "the scenario ended (" + director.end().result.name().toLowerCase() + ")";
+        if (director.end().result == EndResult.FAIL && deviation == null)
+            report.failures.add("The path ends in failure");
+        return true;
     }
 }

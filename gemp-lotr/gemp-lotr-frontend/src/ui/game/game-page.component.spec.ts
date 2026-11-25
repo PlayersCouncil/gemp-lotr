@@ -10,6 +10,7 @@ import { By } from '@angular/platform-browser';
 import { AutoZoomComponent } from '../shared/auto-zoom/auto-zoom.component';
 import { PlayerInfo } from '../../core/session/player-info.service';
 import { provideFakeNotifier } from '../../testing/fake-notifier';
+import { PUZZLE_SLOTS } from '../../testing/table-edit';
 import { GamePageComponent } from './game-page.component';
 import { mentionOf } from './tabs/game-chat.component';
 
@@ -955,6 +956,132 @@ describe('GamePageComponent in a scripted game', () => {
   it('has no authoring panel in a scenario played as a player', async () => {
     const { el } = await open(TABLE + STATS + S(INFO));
     expect(el.querySelector('gd-game-author')).toBeNull();
+  });
+
+  it('shows a stopped sandbox in edit mode: no decision, the edit bar, an open spot in each row, the card menu', async () => {
+    const SANDBOX = {
+      ...INFO,
+      kind: 'sandbox',
+      mode: 'edit',
+      level: 'sandbox',
+      tools: ['add', 'delete'],
+      canStart: true,
+    };
+    const { el, stable } = await open(TABLE + STATS + S(SANDBOX) + ACTIONS);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/state')
+      .flush({ mode: 'edit', level: 'sandbox', tools: ['add', 'delete'], cards: [] });
+    await stable();
+    expect(el.getAttribute('data-edit')).toBe('edit');
+    expect(el.querySelector('[data-game="alert"]')?.textContent).toBe('');
+    expect(el.querySelectorAll('button[data-decision-button]')).toHaveLength(0);
+    expect(el.querySelector('nav.gd-scenario-menu gd-edit-bar')?.getAttribute('data-mode')).toBe('edit');
+    expect(el.querySelector('gd-table-edit')).not.toBeNull();
+    const spots = [...el.querySelectorAll<HTMLElement>('gd-open-spot button')].map(
+      (spot) => `${spot.dataset['seat']}.${spot.dataset['zone']}`,
+    );
+    // (the person plays the freeps seat; the minions' row is the other seat's on the person's own turn)
+    expect(spots).toEqual([
+      'shadow.support',
+      'shadow.characters',
+      'shadow.minions',
+      'freeps.characters',
+      'freeps.support',
+      'freeps.hand',
+    ]);
+    const card = el.querySelector<HTMLElement>('gd-game-cards [data-card-id="1"]')!;
+    card.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+    await stable();
+    expect(el.querySelector('.gd-edit-menu [data-menu="info"]')).not.toBeNull();
+    // Start: play mode, the bar and nothing else of the controls; the game's news asked for at once
+    el.querySelector<HTMLElement>('.gd-edit-backdrop')?.dispatchEvent(new Event('pointerdown'));
+    el.querySelector<HTMLButtonElement>('[data-edit-bar="start"]')?.click();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/start')
+      .flush({ ok: true, state: { mode: 'play', level: 'sandbox', tools: ['add'], canStop: true, cards: [] } });
+    await stable();
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush(update(S({ ...SANDBOX, mode: 'play', canStop: true })));
+    await stable();
+    expect(el.getAttribute('data-edit')).toBe('play');
+    expect(el.querySelectorAll('gd-open-spot')).toHaveLength(0);
+    expect(el.querySelector('[data-game="alert"]')?.textContent).not.toBe('');
+  });
+
+  it("flips a sandbox's table: the seat looked from below, its open spots its own; the other seat's to choose", async () => {
+    const FLIPPED = {
+      ...INFO,
+      kind: 'sandbox',
+      mode: 'edit',
+      level: 'sandbox',
+      tools: ['add'],
+      canStart: true,
+      seat: 'shadow',
+      otherSeat: 'person',
+      otherSeats: ['script', 'person'],
+      waitingOn: 'freeps',
+      canFlip: true,
+    };
+    const { el, stable } = await open(TABLE + STATS + S(FLIPPED) + ACTIONS);
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/state')
+      .flush({ mode: 'edit', level: 'sandbox', tools: ['add'], cards: [] });
+    await stable();
+    const spots = [...el.querySelectorAll<HTMLElement>('gd-open-spot button')].map(
+      (spot) => `${spot.dataset['seat']}.${spot.dataset['zone']}`,
+    );
+    // (looking from the shadow seat: its rows and hand at the bottom, the person's own seat at the top)
+    expect(spots).toEqual([
+      'freeps.support',
+      'freeps.characters',
+      'freeps.minions',
+      'shadow.characters',
+      'shadow.support',
+      'shadow.hand',
+    ]);
+    const bar = el.querySelector('gd-edit-bar gd-seat-controls');
+    expect(bar?.querySelector('.gd-seat-controls__looking')?.textContent?.trim()).toBe('As Shadow');
+    expect(bar?.querySelector<HTMLSelectElement>('select[data-seat-control="other"]')?.value).toBe('person');
+    // In play, the person's own seat waits: said where the decision would be, with Flip; nothing to answer here
+    el.querySelector<HTMLButtonElement>('[data-edit-bar="start"]')?.click();
+    backend
+      .expectOne((r) => r.url === '/gemp-lotr-server/scenarios/sandbox/start')
+      .flush({ ok: true, state: { mode: 'play', level: 'sandbox', tools: ['add'], canStop: true, cards: [] } });
+    await stable();
+    backend
+      .expectOne((r) => r.url === GAME && r.method === 'POST')
+      .flush(update(S({ ...FLIPPED, mode: 'play', canStop: true, otherSeat: 'script' })));
+    await stable();
+    expect(el.querySelector('gd-game-alert .gd-seat-waiting__text')?.textContent).toBe('Free Peoples to choose');
+    expect(el.querySelector('gd-game-alert gd-seat-waiting button[data-flip]')).not.toBeNull();
+    // (flipped onto a seat the script plays: its decision is not offered)
+    expect(el.querySelector('[data-game="alert"]')?.textContent).toBe('');
+    expect(el.querySelectorAll('button[data-decision-button]')).toHaveLength(0);
+  });
+
+  it('shows a puzzle held for its picks: no decision, its slots in their rows and the strip, Choosing and Submit', async () => {
+    const PUZZLE = {
+      ...INFO,
+      kind: 'puzzle',
+      mode: 'edit',
+      level: 'puzzle',
+      undo: false,
+      slots: [...PUZZLE_SLOTS, { id: 'tale', label: 'a tale', zone: 'deck', position: 2 }],
+    };
+    const { el, stable } = await open(TABLE + STATS + S(PUZZLE) + ACTIONS);
+    await stable();
+    expect(el.getAttribute('data-edit')).toBe('edit');
+    expect(el.querySelector('[data-game="alert"]')?.textContent).toBe('');
+    expect(el.querySelectorAll('button[data-decision-button]')).toHaveLength(0);
+    expect(el.querySelectorAll('gd-open-spot')).toHaveLength(0);
+    expect(el.querySelector('nav.gd-scenario-menu gd-puzzle-bar')?.getAttribute('data-mode')).toBe('edit');
+    const inRows = [...el.querySelectorAll<HTMLElement>('.gd-game__row .gd-puzzle-slot')].map(
+      (slot) => `${slot.closest<HTMLElement>('[data-row]')?.dataset['row']}:${slot.dataset['slot']}`,
+    );
+    expect(inRows).toEqual(['support-player:condition', 'support-player:ally']);
+    expect(el.querySelector('section.gd-puzzle-strip .gd-puzzle-slot')?.getAttribute('data-slot')).toBe('tale');
+    expect(el.querySelector('section.gd-puzzle-strip .gd-puzzle-slot__place')?.textContent).toBe('Deck, 2nd');
   });
 });
 

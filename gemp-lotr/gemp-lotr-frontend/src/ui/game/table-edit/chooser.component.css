@@ -1,0 +1,80 @@
+/* The chooser of an open spot: a dropdown by it (popup-place.ts), over the table and under the hover zoom */
+
+.gd-edit-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1089;
+}
+
+.gd-edit-chooser {
+  position: fixed;
+  left: var(--gd-left, 0px);
+  top: var(--gd-top, 0px);
+  z-index: 1090;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 180px;
+  max-width: 300px;
+  max-height: min(420px, calc(100vh - 16px));
+  overflow-y: auto;
+  padding: 4px 0;
+  border: 1px solid var(--theme-game-edit-menu-edge);
+  border-radius: 6px;
+  background: var(--theme-game-edit-menu-bg);
+  box-shadow: var(--theme-game-edit-menu-shadow);
+  color: var(--theme-game-edit-menu-text);
+  font: 13px/1.3 var(--theme-game-edit-font);
+}
+
+.gd-edit-chooser[data-placing] {
+  visibility: hidden;
+}
+
+.gd-edit-chooser__heading {
+  padding: 6px 12px 2px;
+  color: var(--theme-game-edit-menu-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gd-edit-chooser__item {
+  padding: 4px 12px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.gd-edit-chooser__item:is(:hover, :focus-visible):not(:disabled) {
+  background: var(--theme-game-edit-menu-hover-bg);
+  color: var(--theme-game-edit-menu-hover-text);
+  outline: none;
+}
+
+.gd-edit-chooser__item:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.gd-edit-chooser__search {
+  margin-top: 4px;
+  border-top: 1px solid var(--theme-game-edit-menu-rule);
+  padding-top: 6px;
+  font-weight: bold;
+}
+
+/* The site chooser (gd-site-chooser, which shares this stylesheet): a site of its number stands out; Back is plain */
+.gd-edit-chooser__item[data-match] {
+  font-weight: bold;
+}
+
+.gd-edit-chooser__item[data-site-chooser='back'] {
+  font-weight: normal;
+}

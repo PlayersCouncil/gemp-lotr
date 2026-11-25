@@ -4,6 +4,7 @@ import { CardActions } from '../../../core/cards/card-actions';
 import { CardView } from '../../../core/cards/card-view';
 import { CardHover } from '../../../core/cards/card-hover.service';
 import { CardInfoService } from '../../../core/cards/card-info.service';
+import { CardGestures } from './card-gestures';
 
 /** How long a touch must be held on a card to show its details. */
 export const LONG_PRESS_MS = 500;
@@ -17,7 +18,8 @@ export const DRAG_UP_FOR_INFO = 20;
  * for on the page (CardActions); asking for its details (shift-click, right-click or the context-menu key, a long press
  * on a touch screen, or dragging it upwards with the mouse) shows them (CardInfoService). The mouse coming onto it,
  * leaving it and pressing on it are reported to CardHover (for the hover zoom). The page provides these with
- * provideCardInteractions.
+ * provideCardInteractions. A page may take the right-click, the context-menu key and the long press for a menu of its
+ * own (CardGestures, optional); shift-click and dragging upwards always show the details.
  *
  * DOM contract: `button.gd-card` with `data-role` (card, pack, selection, placeholder), `data-orientation`
  * (vertical, horizontal), and `data-errata`, `data-foil`, `data-borderless` when they apply, `data-tap-once` on a pack
@@ -73,6 +75,7 @@ export class CardComponent {
   private readonly actions = inject(CardActions);
   private readonly info = inject(CardInfoService);
   private readonly hover = inject(CardHover);
+  private readonly gestures = inject(CardGestures, { optional: true });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private press: {
     x: number;
@@ -82,6 +85,8 @@ export class CardComponent {
   } | null = null;
   /** The details were just shown by a gesture: the click that ends it does nothing else. */
   private swallowClick = false;
+  /** A pointer is pressed on the card (a right-click's contextmenu comes between its press and its release). */
+  private pointerWasDown = false;
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -115,7 +120,15 @@ export class CardComponent {
       // The long press already showed the details (touch browsers also send contextmenu for it)
       return;
     }
+    // (the context-menu key sends it with no pointer: its point is 0, 0 or the card's own)
+    const keyboard = event.button !== 2 && !this.pointerWasDown;
+    if (this.takenByPage(keyboard ? null : { x: event.clientX, y: event.clientY })) return;
     this.info.show(this.card());
+  }
+
+  /** The page's own menu (CardGestures) takes the gesture, if it will. */
+  private takenByPage(point: { x: number; y: number } | null): boolean {
+    return this.gestures?.menu(this.card(), { element: this.host, point }) ?? false;
   }
 
   protected onPointerEnter(event: PointerEvent): void {
@@ -146,6 +159,7 @@ export class CardComponent {
   protected onPointerDown(event: PointerEvent): void {
     this.cancelPress();
     this.swallowClick = false;
+    this.pointerWasDown = true;
     if (event.pointerType === 'mouse') {
       this.hover.press();
     }
@@ -177,6 +191,7 @@ export class CardComponent {
   protected onPointerUp(event: PointerEvent): void {
     const press = this.press;
     this.cancelPress();
+    this.pointerWasDown = false;
     // Not when the card is being moved sideways in its row (an ancestor marks that with data-dragging)
     const sideways = (event.currentTarget as Element | null)?.closest('[data-dragging]') ?? null;
     if (press?.mouse && press.y - event.clientY >= DRAG_UP_FOR_INFO && sideways === null) {
@@ -198,8 +213,10 @@ export class CardComponent {
   }
 
   private longPress(): void {
+    const press = this.press;
     this.press = null;
     this.swallowClick = true;
+    if (this.takenByPage(press ? { x: press.x, y: press.y } : null)) return;
     // The click that ends the press may land on the dialog, which may now be over the card
     this.info.showDragged(this.card());
   }

@@ -6,6 +6,11 @@
  * the JSON with every field checked, so the rest of the page can rely on the shapes.
  */
 import { legacyRelativeImages } from '../../platform/app-paths';
+import { editLevel, EditLevel, editMode, EditMode, editTools } from '../table-edit/edit-board';
+import { EditTool } from '../table-edit/edit-ops';
+import { PuzzleSlot, readPuzzleSlots } from '../table-edit/puzzle-slots';
+import { readScenarioScore, ScenarioScore } from './scenario-score';
+import { OtherSeat, readOtherSeat, readOtherSeats, readSeat } from '../table-edit/table-seat';
 
 export type ScenarioKind = 'tutorial' | 'puzzle' | 'sandbox';
 export type ScenarioSeat = 'freeps' | 'shadow';
@@ -54,6 +59,36 @@ export interface ScenarioInfo {
   author: boolean;
   /** ...or playing a draft of it as a player would. */
   draftTest: boolean;
+  /**
+   * Whether the table is being changed by hand (`edit`: nobody is asked anything) or played (`play`). Sent again
+   * whenever it, `canStop` or `canStart` changes.
+   */
+  mode: EditMode;
+  /** What the person may change in edit mode: nothing (`none`), a puzzle's slots, a sandbox's everything. */
+  level: Exclude<EditLevel, 'author'>;
+  /** The kinds of change allowed (a sandbox's `options.tools`). */
+  tools: readonly EditTool[];
+  /** Play can be stopped for edit mode now (the game is at rest), or started again from it. */
+  canStop: boolean;
+  canStart: boolean;
+  // (a puzzle's `slots` and `undo` come here too: the puzzle page reads them)
+  /** A puzzle's slots (empty for a scenario without), each with the card in it as the game was built. */
+  slots?: readonly PuzzleSlot[];
+  /** Whether the game can be taken back (the scenario's `options.undo`); null where the server does not say. */
+  undo?: boolean | null;
+  // (flip table, ef-notes Part 2 E: always filled by the parser; optional so other specs' literals stay valid)
+  /** The person's name as the server knows them (the logged-in player), whichever seat the page looks from. */
+  human?: string | null;
+  /** The seat this page shows the table from: the person's own (`humanSeat`) unless flipped. */
+  seat?: ScenarioSeat;
+  /** Who plays the seat the person does not sit in (a sandbox's); null for a scenario that is not a sandbox. */
+  otherSeat?: OtherSeat | null;
+  /** The choices of `otherSeat` on offer, in order (no `bot` on a server without one); empty outside a sandbox. */
+  otherSeats?: readonly OtherSeat[];
+  /** The seat whose decision the game waits on (the person's if both), or null; said while stopped too. */
+  waitingOn?: ScenarioSeat | null;
+  /** Whether the table can be flipped (a sandbox, or an author at the table). */
+  canFlip?: boolean;
 }
 
 export type MessageSide = 'auto' | 'above' | 'below' | 'left' | 'right';
@@ -147,7 +182,8 @@ export interface ScenarioOffScript {
   message: string | null;
 }
 
-export type ScenarioResult = 'complete' | 'failed' | 'off_script' | 'abandoned' | 'error';
+/** `ended`: a sandbox's game came to its end (a sandbox is never complete or failed). */
+export type ScenarioResult = 'complete' | 'failed' | 'off_script' | 'abandoned' | 'error' | 'ended';
 
 export interface ScenarioEnd {
   type: 'end';
@@ -161,6 +197,16 @@ export interface ScenarioEnd {
    * rather than counting it a failure (`fail`). Only ever true with the result `off_script`.
    */
   restart: boolean;
+  /** Who won the game, where it was played to its end (a sandbox's): the person, the opponent; null: nobody said. */
+  winner: 'human' | 'opponent' | null;
+  /** Why the game ended, in the game's words ("The Ring-Bearer is dead"), or null. */
+  reason: string | null;
+  /** The page offers Reset: a fresh game of the sandbox as it opened. */
+  reset: boolean;
+  /** A scored puzzle's score (null: unscored). */
+  score?: ScenarioScore | null;
+  /** The puzzle was solved with cards no solution of its author's lists. */
+  unlisted?: boolean;
 }
 
 export type ScenarioEvent = ScenarioInfo | ScenarioStep | ScenarioOffScript | ScenarioEnd;
@@ -300,6 +346,19 @@ function info(value: Json): ScenarioInfo | null {
     campaign: campaign(value['campaign']),
     author: boolean(value['author']) ?? false,
     draftTest: boolean(value['draftTest']) ?? false,
+    mode: editMode(value['mode']),
+    level: ((level) => (level === 'author' ? 'none' : level))(editLevel(value['level'])),
+    tools: editTools(value['tools']),
+    canStop: boolean(value['canStop']) ?? false,
+    canStart: boolean(value['canStart']) ?? false,
+    slots: readPuzzleSlots(value['slots']),
+    undo: boolean(value['undo']),
+    human: string(value['human']),
+    seat: readSeat(value['seat']) ?? oneOf<ScenarioSeat>(value['humanSeat'], ['freeps', 'shadow'], 'freeps'),
+    otherSeat: readOtherSeat(value['otherSeat']),
+    otherSeats: readOtherSeats(value['otherSeats']),
+    waitingOn: readSeat(value['waitingOn']),
+    canFlip: boolean(value['canFlip']) ?? false,
   };
 }
 
@@ -338,11 +397,20 @@ function step(value: Json): ScenarioStep | null {
 function end(value: Json): ScenarioEnd {
   return {
     type: 'end',
-    result: oneOf<ScenarioResult>(value['result'], ['complete', 'failed', 'off_script', 'abandoned', 'error'], 'error'),
+    result: oneOf<ScenarioResult>(
+      value['result'],
+      ['complete', 'failed', 'off_script', 'abandoned', 'error', 'ended'],
+      'error',
+    ),
     messages: messages(value['messages']),
     message: html(value['message']),
     checkpoint: number(value['checkpoint']),
     restart: boolean(value['restart']) ?? false,
+    winner: value['winner'] === 'human' || value['winner'] === 'opponent' ? value['winner'] : null,
+    reason: string(value['reason']),
+    reset: boolean(value['reset']) ?? false,
+    score: readScenarioScore(value['score']),
+    unlisted: boolean(value['unlisted']) ?? false,
   };
 }
 

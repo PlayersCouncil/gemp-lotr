@@ -6,6 +6,7 @@ import { AuthorButtonDirective } from '../widgets/author-button.directive';
 import { CardHoverDirective } from '../widgets/card-hover.directive';
 import { CardSearchComponent } from '../widgets/card-search.component';
 import { BoardRenameComponent } from './board-rename.component';
+import { BoardModifiersComponent } from './board-modifiers.component';
 
 /** An option of a select: its value, and what it says. */
 type Option = readonly [value: string, label: string];
@@ -14,19 +15,27 @@ type Option = readonly [value: string, label: string];
  * A card of the Board tab's lists: its name in the scenario (the card shown large under the mouse; a click opens its
  * information), its name, whether it is new or to be taken out, ✎ to rename it and Change to put another card in its
  * place (at once); then what can be gathered for it: Keep it (one to be taken out), ↑ ↓ ⤒ in a hand or pile, a move,
- * wounds − +, +token, put on another card, and × (not added after all, or taken out). To the setup of a game that
+ * wounds − +, +token, its modifiers and mod… (board-modifiers), put on
+ * another card, and × (not added after all, or taken out). To the setup of a game that
  * plays its own opening, only a deck's order and a move into a deck are offered.
  *
  * DOM contract: `gd-author-board-card` holding `.gd-author-board-card` (`data-alias`, `data-changed`, `data-added`,
  * `data-removing`) with `.gd-author-board-card__name` (`span.gd-author-board-card__alias.cardHint[value]`, the name,
- * `.gd-author-board-card__tag`, `button[data-action]`: rename, change; or `gd-author-board-rename`, or
+ * `.gd-author-board-card__tag` (`data-tag` ring-bearer, ring: the seat's Ring-bearer and Ring, whose × says that the
+ * server takes them out only once another is chosen), `button[data-action]`: rename, change; or `gd-author-board-rename`, or
  * `gd-author-card-search`), then `.gd-author-board-card__controls` (`button[data-action]`: keep, up, down, top, heal,
- * wound, token, drop; `.gd-author-board-card__count`; `select[data-control]`: move, put).
+ * wound, token, drop; `.gd-author-board-card__count`; `select[data-control]`: move, put; `gd-author-board-modifiers`).
  */
 @Component({
   selector: 'gd-author-board-card',
   styleUrl: './board-card.component.css',
-  imports: [AuthorButtonDirective, BoardRenameComponent, CardHoverDirective, CardSearchComponent],
+  imports: [
+    AuthorButtonDirective,
+    BoardModifiersComponent,
+    BoardRenameComponent,
+    CardHoverDirective,
+    CardSearchComponent,
+  ],
   template: `
     @let card = entry().card;
     <div
@@ -49,6 +58,13 @@ type Option = readonly [value: string, label: string];
             >{{ card.alias }}</span
           >
           {{ card.name }}
+          @if (card.ringBearer) {
+            <span class="gd-author-board-card__tag" data-tag="ring-bearer" title="Its seat's Ring-bearer"
+              >Ring-bearer</span
+            >
+          } @else if (card.ring) {
+            <span class="gd-author-board-card__tag" data-tag="ring" title="Its seat's One Ring">Ring</span>
+          }
           @if (card.added) {
             <span class="gd-author-board-card__tag">new</span>
           } @else if (card.removing) {
@@ -165,6 +181,7 @@ type Option = readonly [value: string, label: string];
               +token{{ card.tokens > 0 ? ' (' + card.tokens + ')' : '' }}
             </button>
           }
+          <gd-author-board-modifiers [card]="card" />
           @if (!changes.deckOnly() && hosts().length > 1) {
             <select
               class="gd-author-input"
@@ -182,9 +199,13 @@ type Option = readonly [value: string, label: string];
             gdAuthorButton="danger"
             data-action="drop"
             [title]="
-              card.added
-                ? 'Do not add this card'
-                : 'Take this card out of the scenario (when the changes are submitted)'
+              card.ringBearer || card.ring
+                ? 'Its seat’s ' +
+                  (card.ring ? 'Ring' : 'Ring-bearer') +
+                  ': the server takes it out only once another is chosen (above)'
+                : card.added
+                  ? 'Do not add this card'
+                  : 'Take this card out of the scenario (when the changes are submitted)'
             "
             (click)="changes.drop(card)"
           >

@@ -1,13 +1,13 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { PickBoxComponent, PICKING_ATTRIBUTE } from './pick-box.component';
-import { PickHover, TablePicker } from './table-picker.service';
+import { TablePick, PickHover } from '../table-edit/table-pick';
 
 describe('PickBoxComponent', () => {
   it('draws the box and the label of what the pointer is on, and the crosshair while picking', async () => {
     const picking = signal(false);
     const hover = signal<PickHover | null>(null);
-    TestBed.configureTestingModule({ providers: [{ provide: TablePicker, useValue: { picking, hover } }] });
+    TestBed.configureTestingModule({ providers: [{ provide: TablePick, useValue: { picking, hover } }] });
     const fixture = TestBed.createComponent(PickBoxComponent);
     const el = fixture.nativeElement as HTMLElement;
     const root = document.documentElement;

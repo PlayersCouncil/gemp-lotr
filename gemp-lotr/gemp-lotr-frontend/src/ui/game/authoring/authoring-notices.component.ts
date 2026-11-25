@@ -17,12 +17,12 @@ import { AuthorButtonDirective } from './widgets/author-button.directive';
  * what the author is doing (picking something on the table). Each that can be put away has its ×.
  *
  * DOM contract: `gd-game-author-notices` holding `.gd-author-notices` (absent with nothing to say) with a
- * `.gd-author-notice` per notice (`data-notice`: problem, left-out, uncovered, notice, problems, saved, told; `data-tone`:
+ * `.gd-author-notice` per notice (`data-notice`: problem, left-out, uncovered, notice, problems, saved, told, recording; `data-tone`:
  * error, warning, good, told, uncovered), each with its `button.gd-author-notice__dismiss` where it can be put away;
  * the left-out notice's `.gd-author-notice__head` and a `.gd-author-notice__part` per part (`.gd-author-notice__where`,
  * `button[data-author=show]`, `pre.gd-author-notice__was`); the uncovered one's `.gd-author-notice__head`,
  * `.gd-author-notice__how` (`button[data-author=add-here]`) and `.gd-author-notice__or`; `button[data-author=retake]`;
- * `button[data-author=see-why]`.
+ * `button[data-author=see-why]`; the recording one's `button[data-author=stop-recording]`.
  */
 @Component({
   selector: 'gd-game-author-notices',
@@ -142,6 +142,23 @@ import { AuthorButtonDirective } from './widgets/author-button.directive';
             <span class="gd-author-notice__text">{{ told }}</span>
           </div>
         }
+        @if (recording(); as name) {
+          <div class="gd-author-notice" data-notice="recording" data-tone="told">
+            <span
+              class="gd-author-notice__text"
+              title="What you answer that the script leaves open goes into this puzzle solution, not into the script"
+              >Recording solution {{ name }}</span
+            >
+            <button
+              gdAuthorButton="inline"
+              data-author="stop-recording"
+              title="Stop recording (the solution stays)"
+              (click)="authoring.solution('stop', null)"
+            >
+              Stop
+            </button>
+          </div>
+        }
       </div>
     }
   `,
@@ -191,8 +208,11 @@ export class AuthoringNoticesComponent {
       this.notice() !== null ||
       this.problems() !== null ||
       this.authoring.saved() !== null ||
-      this.authoring.told() !== null,
+      this.authoring.told() !== null ||
+      this.recording() !== null,
   );
+  /** The puzzle solution being recorded, or null. */
+  protected readonly recording = computed(() => this.draft()?.puzzle?.recording ?? null);
 
   protected seeWhy(): void {
     this.authoring.dismissSaved();

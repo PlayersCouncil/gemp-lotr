@@ -99,6 +99,13 @@ public final class ScenarioWriter {
         if (def.runnerLevel != null)
             options.add("runnerLevel", lower(def.runnerLevel));
         addIfSet(options, "bubbleGap", def.bubbleGap);
+        //(none at all is written false, as an empty autoPass is)
+        if (def.tools != null)
+            options.add("tools", def.tools.isEmpty() ? org.hjson.JsonValue.valueOf(false) : org.hjson.JsonValue.valueOf(String.join(", ", def.tools)));
+        if (def.undo != null)
+            options.add("undo", def.undo ? "on" : "off");
+        if (def.otherSeat != null)
+            options.add("otherSeat", lower(def.otherSeat));
         if (!options.isEmpty())
             root.add("options", options);
 
@@ -134,12 +141,18 @@ public final class ScenarioWriter {
             }
         }
         root.add("sites", sites);
+        puzzleParts(def, root);
 
         JsonObject rules = new JsonObject();
         if (def.oneSided)
             rules.add("oneSided", true);
         if (def.markersTogether)
             rules.add("markers", "together");
+        if (!def.forbid.isEmpty()) {
+            StringJoiner forbid = new StringJoiner(", ");
+            def.forbid.forEach(what -> forbid.add(lower(what)));
+            rules.add("forbid", forbid.toString());
+        }
         for (Seat seat : Seat.values())
             if (def.rules.containsKey(seat))
                 rules.add(seat.key(), JsonValue.readHjson(def.rules.get(seat)));
@@ -170,6 +183,7 @@ public final class ScenarioWriter {
         if (!offScript.isEmpty())
             outcome.add("offScript", offScript);
         endings(def, outcome);
+        judging(def, outcome);
         if (!outcome.isEmpty())
             root.add("outcome", outcome);
 
@@ -177,7 +191,83 @@ public final class ScenarioWriter {
         for (Step step : def.steps)
             steps.add(step(step));
         root.add("steps", steps);
+        if (!def.solutions.isEmpty()) {
+            JsonArray solutions = new JsonArray();
+            for (Solution solution : def.solutions)
+                solutions.add(solution(solution));
+            root.add("solutions", solutions);
+        }
         return root;
+    }
+
+    /** The puzzle's pool and slots, as the file has them. */
+    private static void puzzleParts(ScenarioDefinition def, JsonObject root) {
+        addIfSet(root, "pool", def.pool);
+        if (def.slots.isEmpty())
+            return;
+        JsonObject slots = new JsonObject();
+        for (Slot slot : def.slots.values())
+            slots.add(slot.id(), slot(def, slot));
+        root.add("slots", slots);
+    }
+
+    /** One slot, as the file has it: only what is not as it would be if left out (a slot that says only where, as that). */
+    public static JsonValue slot(ScenarioDefinition def, Slot slot) {
+        JsonObject json = new JsonObject();
+        json.add("zone", ScenarioParser.slotZoneName(slot.zone()));
+        if (slot.zone() != SlotZone.SITE && slot.seat() != def.human)
+            json.add("seat", slot.seat().key());
+        addIfSet(json, "on", slot.on());
+        if (slot.position() != null)
+            json.add("position", slot.position().intValue());
+        addIfSet(json, "filter", slot.filter());
+        if (slot.tokens() != 0)
+            json.add("tokens", slot.tokens());
+        if (slot.wounds() != 0)
+            json.add("wounds", slot.wounds());
+        addIfSet(json, "label", slot.label());
+        return json.size() == 1 ? json.get("zone") : json;
+    }
+
+    /** One of the author's solutions, as the file has it: its answers one to a line. */
+    public static JsonObject solution(Solution solution) {
+        JsonObject json = new JsonObject();
+        json.add("name", solution.name());
+        addIfSet(json, "note", solution.note());
+        if (!solution.picks().isEmpty()) {
+            JsonObject picks = new JsonObject();
+            solution.picks().forEach(picks::add);
+            json.add("picks", picks);
+        }
+        JsonArray answers = new JsonArray();
+        for (Answer answer : solution.answers())
+            answers.add(answer.source());
+        json.add("answers", answers);
+        return json;
+    }
+
+    /** outcome.judge and outcome.score. */
+    private static void judging(ScenarioDefinition def, JsonObject outcome) {
+        Judge judge = def.outcome.judge;
+        if (judge != null) {
+            if (judge.win() == null) {
+                outcome.add("judge", judge.source());
+            } else {
+                JsonObject json = new JsonObject();
+                json.add("at", judge.source());
+                json.add("win", requirements(judge.win()));
+                outcome.add("judge", json);
+            }
+        }
+        Score score = def.outcome.score;
+        if (score != null) {
+            JsonObject json = new JsonObject();
+            json.add("value", score.value() != null ? JsonValue.valueOf(score.value()) : JsonValue.readHjson(score.valueJson()));
+            if (!score.higherBetter())
+                json.add("better", "lower");
+            addIfSet(json, "label", score.label());
+            outcome.add("score", json);
+        }
     }
 
     /** One of the opponent's standing orders, as the file has it. */
@@ -245,6 +335,13 @@ public final class ScenarioWriter {
         addMap(setup, "stack", from.stack);
         addCounts(setup, "wounds", from.wounds);
         addCounts(setup, "tokens", from.tokens);
+        if (!from.modifiers.isEmpty()) {
+            //(card: strength +2, fierce: as the setup's wounds and tokens are, one card to a line)
+            JsonObject modifiers = new JsonObject();
+            from.modifiers.forEach((card, on) -> modifiers.add(card,
+                    String.join(", ", on.stream().map(ScenarioDefinition.Modification::text).toList())));
+            setup.add("modifiers", modifiers);
+        }
         if (from.burdens != 0)
             setup.add("burdens", from.burdens);
         if (from.threats != 0)
@@ -585,6 +682,10 @@ public final class ScenarioWriter {
                 sites.add(nameOf(library, site));
             comments.put("sites", String.join(", ", sites));
         }
+        if (library != null)
+            for (int i = 0; i < def.solutions.size(); i++)
+                for (Map.Entry<String, String> pick : def.solutions.get(i).picks().entrySet())
+                    comments.put("solutions." + i + ".picks." + pick.getKey(), nameOf(library, pick.getValue()));
         for (Step step : def.steps) {
             comments.put("steps." + (step.number - 1), "---- " + step.number + (step.id == null ? "" : " (" + step.id + ")")
                     + (step.block ? ": these in whatever order the game asks for them" : ""));

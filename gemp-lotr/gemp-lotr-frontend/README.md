@@ -79,7 +79,8 @@ regular hall at `http://localhost:4200/gemp-lotr/` and then open the deck builde
 | `src/core/`                             | State, rules and server calls, with no view code: nothing in it imports from the view folders, and it has no templates or styles, and only `core/platform/` touches the browser (`DOCUMENT`, `window`, cookies); `core-boundary.spec.ts` checks all of this.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `src/core/api/`                         | `DeckbuilderApi`: every server call the deck builder makes, typed. `GempHttp` handles the request formats (strictly encoded forms, text, XML, JSON); the interceptors in `gemp-interceptors.ts` add what every call needs (participant, no caching, `ApiError`, the opened-pack header).                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `src/core/cards/`                       | Card images. `card-blueprint.ts` is a port of the legacy `Card.js` rules; the image tables come from `src/generated/card-data.json` via `card-data.ts` (see Card data below). `CardView` is what a card on a page shows, and `CardViews` builds it from a blueprint. `CardActions` is what using a card means (each page provides its own), `CardInfoService` holds the card shown in the card information and `CardHover` the card under the mouse. A page gets all of these with `provideCardInteractions`; nothing here knows about any one page, which `core-boundary.spec.ts` checks.                                                                                                                       |
-| `src/core/collection/`                  | The collection pane: `CollectionQuery` (the filter fields and their rules), `CollectionBrowser` (which collection and page, loading from `/collection/{type}`), `CollectionCounts` (copies left to add), and the `filter-*.ts` files (the lists, cultures, Block/Set lists and filter string).                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `src/core/collection/`                  | The collection pane: `CollectionQuery` (the filter fields and their rules), `CollectionBrowser` (which collection and page, loading from `/collection/{type}`), `CollectionCounts` (copies left to add), `FilterPins` and `CardSize` (the compact layout's); the filter itself is `core/card-filter/`.                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `src/core/card-filter/`                 | The card filter shared by the deck builder and the game page's card search: the `filter-*.ts` files (the fields, the lists, cultures, Block/Set lists and the filter string) and `CardFilterModel` / `CardFilterPager` / `CardFilterPins` / `CardFilterSize`, what the shared panel (`ui/shared/card-filter`) works with (each page provides its own).                                                                                                                                                                                                                                                                                                                                                           |
 | `src/core/formats/`                     | `FormatsService`: the formats from `/deck/formats`, fetched once.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `src/core/deck/`                        | The deck being edited: `DeckDraft` (its state), `DeckFormatSelection` (the format list), `DeckChanges` (what follows a change), `DeckStatsRefresher`, `DeckEditing` (cards, slots, notes), `DeckOpener` (open, import, convert), `DeckSaver` (New, Save, Rename, Copy, the save prompts), `DeckStartup` and `DeckLibraryService` (the deck list and library). `deck-model.ts` holds the pure deck rules.                                                                                                                                                                                                                                                                                                         |
 | `src/core/delivery/`, `src/core/packs/` | `PackDeliveryService`: the opened-pack "New items" contents. `PacksService`: opening packs, the selection-pack choice and the open "New items" dialogs; `shown-cards.ts` gives their cards.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -342,6 +343,21 @@ and replays (G4). The hall opens games on it (`hallUi.js`), and the game history
   fresh game (`sessionStorage["gemp-author-keep"]`). The When composer (`step/when-pickers.component.ts`: seat, the role in a two-sided
   draft, kind, what is asked, phase, turn) works on a `WhenHost` (`step/when-host.ts`): the Step tab's form
   (StepEditor) or an opponent's order (`opponent/order-when-host.ts`, sent with Apply).
+  What puzzles and sandboxes brought (the state's `puzzle`, `kinds`, `sandboxTools`, `modify`; models in
+  `core/game/authoring/puzzle-*.ts` and `board-modifiers.ts`): the Scenario tab's kind with a sandbox's tools,
+  take-backs, the judge and the score in "How it ends" (`scenario/judging.component.ts`), what is forbidden and the
+  pool in "Rules", and the Solutions section after "How it ends" (record, play, use, rename, delete; Check's verdict
+  on each; the recording also said above the tabs); the Board tab's modifiers on each card (`board/board-modifiers`,
+  gathered as `modify(...)` / `unmodify(...)`) and a puzzle's slots (`board/board-slot*`); the Opponent tab's eager
+  and bot fallbacks. A filter (the pool, a slot's bound) is typed with the server's count beside it
+  (`widgets/filter-field.component.ts`); `Authoring.offerSlotBound(slot, filter)` hands a bound to its slot's form
+  from outside the panel. The author has the
+  on-table edit controls too (`AuthorBackend`, level `author`, `core/game/table-edit/author-*.ts`): the panel's Edit
+  table (remembered in `gemp-author-ui`) puts the page in edit mode (no decision shown or answered), and each change on
+  the table is said as the Board tab says it (`author-ops.ts`) and sent through the tab's own service (`BoardChanges`),
+  to the board the tab's "Changes are made" names; the menu's `gd-author-edit-bar` says "Editing" and is also that
+  switch (Start / Now). A puzzle's draft offers Open slot in a spot's chooser, draws its empty slots on the table and
+  gives a slot's card a Slot… entry (its form in the Board tab).
 - **Phone layout** (G7, `ui/game/phone`, `core/game/phone`): the modern theme where the deck builder uses its compact
   layout (`CompactLayout`, `COMPACT_QUERY`; classic always shows the computer layout) shows the game for fingers: the
   status bar and the players' chips, the table scrolling up and down (the whole adventure path, then the opponent's
@@ -418,6 +434,62 @@ opens it on this page, which shows the script's messages over the game. `game.ht
   again plays it from the start); a test of a draft has no such item (the panel starts a test again from where it
   began). An ending's `restart` (outcome.offScript.result) is read: a game that left its script is "not how this one
   goes" when the scenario has it played again (the default), a failure when it says `fail`.
+
+- **A table changed by hand (sandbox)** (`core/game/table-edit`, `ui/game/table-edit`): the scenario's info says
+  the `mode` (play, edit), the `level` (none, puzzle, sandbox), the `tools` and whether Stop and Start can be pressed.
+  `TableEdit` (page-scoped) holds them, the table as the level knows it (`board`: names, owners, hand-put modifiers,
+  the Modify… vocabulary) and every change, which it sends to the level's `TableEditBackend` (`SandboxBackend`:
+  `/scenarios/sandbox/*`); the game's own events show each change. In edit mode nobody is asked anything: the decision
+  is not shown (`decisionView`), not answered (TableEdit is a decision gate) and the tab's title doesn't flash. The
+  view: the edit bar (`gd-edit-bar`, in the scenario's menu in place of Start again: Editing / Playing, Start, Stop,
+  Reset), an open spot (`gd-open-spot`, the glowing +) at the end of each row of the table and of the hand, its
+  chooser (Recent, In this scenario, Search…), the search window (`gd-edit-search`: the deck builder's own filter
+  panel, lifted into `ui/shared/card-filter` as `gd-collection-filter`, over `GET /scenarios/search`; it remembers its
+  filters and Recent its cards in the browser's local storage, `LocalStore`), and a card's menu on right-click, the
+  context-menu key or a long press (`gd-edit-menu`: Info, Send to, Attach, Stack, Add, Modify, Copy, Delete; the card
+  component lets the page take the gesture, `CardGestures`). Attach and Stack pick a card on the table with the
+  authoring panel's picking (`TablePick`, shared). A sandbox's end (`ended`) says who won and why, with Reset and
+  Leave. Checked by `npm run check:game:sandbox` (see `visual-check/game/README.md`).
+  The piles, the path and the counters (`edit-piles.ts`, `edit-path.ts`, `edit-counters.ts`, `edit-seats.ts`,
+  `EditSeating`): in a sandbox every pile of both seats opens from its count (a link), in both modes (the hidden ones,
+  the draw decks and the other seat's hand and adventure deck, with its `piles` tool), in the page's own pile window
+  (`gd-game-piles`, top first): a pile the page's game view isn't shown comes from `TableEdit.board`, read again when
+  its window opens and as the game moves; while edited, a window has its pile's open spots (a draw deck's top and
+  bottom) and its cards the card menu; the counts are the game's own stats (the server sends them after every edit).
+  The adventure path ends with a site-shaped open spot for the next site (`gd-site-spot`), whose chooser
+  (`gd-site-chooser`: Search… held to the site's number, From adventure deck… then a seat then its sites) lays a site;
+  a laid site's menu has each seat's marker, control, Liberate and Replace…. The twilight pool, the threats and the
+  burdens (a line of their own in edit mode) change where they are shown (`gd-edit-counter`, its box
+  `gd-edit-counter-box`: −, +, Set).
+  Flip table and who plays the other seat (`table-seat.ts`, `TableFlip`; `ui/game/table-edit/seat-*`,
+  `flip-button`): the scenario's info says the seat the page looks from (`seat`), who plays the seat the person does
+  not sit in (`otherSeat`: the script, the bot or the person, from `otherSeats`), the seat waited on (`waitingOn`) and
+  `canFlip`. The edit bar's `gd-seat-controls` has the other seat's choice (`POST /scenarios/sandbox/otherSeat`), "As
+  Shadow" while flipped, and Flip (`POST /scenarios/sandbox/flip`): the server makes the page the other seat's
+  player's and sends a resync notice with reason `flip`, on which the page reads the game again from nothing (as after
+  a take-back, without a banner) and, from the game's first event, draws the table for that player. Everything that
+  means "the seat at the bottom" follows `seat` (the open spots, `EditSeating`, the scenario's anchors); an edit always
+  names its seat. Flipped onto a seat the script or the bot plays, no decision is shown or answered (`answersHere`).
+  When the game waits on the seat out of sight and the person plays it, the alert box says so ("Shadow to choose",
+  `gd-seat-waiting`) with Flip beside it; the page never turns by itself. The authoring panel has its own Flip in its
+  header (`gd-author-flip`). A take-back keeps the flip (the server does), Reset starts unflipped.
+
+- **A puzzle's slots (puzzle player's page)** (`PuzzleBackend`, `puzzle-slots.ts`, `slot-filter.ts`;
+  `ui/game/table-edit/puzzle-*`): a puzzle with slots opens held (`mode: edit`, `level: puzzle`) with its slots
+  (`info.slots`) on the table: each one an open spot (or its card, once chosen) in its row, or, for a place the table
+  has no row for (a place in a draw deck, a pile, on a card, a site, the opponent's hand), in the slots strip under the
+  scenario's menu, labelled with where its card goes. Its chooser lists Recent and In this scenario held to what the
+  server says the slot takes (`POST /scenarios/picks`), and Search… opens the search window held to the slot's bound
+  (`GET /scenarios/search` with the puzzle's `pool=` and the slot's filter as `bound=`, which the server searches with
+  each by itself; the kinds of card the place takes are part of the person's filter, `slotKinds`: so the person's
+  filters can only narrow it). A sandbox zone's search sends its kinds of card as `bound=` the same way. A card chosen is checked with the server and held on the page (`{op: 'pick'}`
+  through TableEdit), refused in the server's words by the slot. The puzzle bar (`gd-puzzle-bar`, in the menu):
+  Choosing and Submit (`TableEdit.submit`: `POST /scenarios/start` with the picks; the page goes to the fresh game);
+  in play Start again (`picks=same`) and Change cards (the slots empty again, asked first). The end panel adds the
+  score, the best and "New best", and a line when the solution is one the author did not list; and Change cards.
+  Undo's button follows the game's policy (off in a puzzle unless its file says `undo: on`). The authoring panel's
+  Find… beside a slot's bound and the pool opens the same search window (`BoundFinder`), whose "Use as bound" hands its
+  filter on. Checked by `npm run check:game:puzzle`.
 
 ## Tests and the visual check
 

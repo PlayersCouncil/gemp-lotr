@@ -175,6 +175,11 @@ public class ScenarioLibrary implements Cached {
     /** Set when a file has been written, moved or deleted here: the folders are taken to have changed. */
     private boolean _reread;
     private final LotroCardBlueprintLibrary _library;
+
+    /** The card library the scenarios are read against (for checking a puzzle's picks, say). */
+    public LotroCardBlueprintLibrary library() {
+        return _library;
+    }
     private final Function<String, LotroFormat> _formats;
     private final CardLookup _cardLookup;
     private final long _checkIntervalMs;

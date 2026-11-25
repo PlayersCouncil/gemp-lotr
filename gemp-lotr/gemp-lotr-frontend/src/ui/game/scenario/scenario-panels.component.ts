@@ -2,11 +2,16 @@ import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { ScenarioEnd, ScenarioInfo } from '../../../core/game/scenario/scenario-events';
 import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
+import { ScoreLines, scoreLines } from '../../../core/game/scenario/scenario-score';
 import { ScenarioRoom } from '../../../core/game/scenario/scenario-room';
 import { GameLog } from '../../../core/game/session/game-log';
 import { GameSession } from '../../../core/game/session/game-session.service';
 import { CompactLayout } from '../../../core/platform/compact-layout.service';
 import { HallTab } from '../../../core/platform/hall-tab.service';
+import { TableEdit } from '../../../core/game/table-edit/table-edit.service';
+import { EditBarComponent } from '../table-edit/edit-bar.component';
+import { AuthorEditBarComponent } from '../table-edit/author-edit-bar.component';
+import { PuzzleBarComponent } from '../table-edit/puzzle-bar.component';
 import { CardHintsDirective } from '../table/card-hints.directive';
 
 /** Where players say what is wrong with a scenario, or with the game. */
@@ -32,7 +37,14 @@ interface Panel {
   /** HTML. */
   body: string;
   buttons: readonly PanelButton[];
+  /** A scored puzzle's score, its best and whether it is a new best. */
+  score?: ScoreLines | null;
+  /** Solved with cards no solution of the author's lists. */
+  unlisted?: boolean;
 }
+
+/** Said at a puzzle's end when it was solved with cards its author did not list (Ketura: the solver is told). */
+export const UNLISTED_TEXT = 'You found a solution the author did not list.';
 
 const HEADINGS: Readonly<Record<ScenarioEnd['result'], string>> = {
   complete: 'Complete',
@@ -40,6 +52,8 @@ const HEADINGS: Readonly<Record<ScenarioEnd['result'], string>> = {
   off_script: "That's not how this one goes",
   abandoned: 'This game has been closed',
   error: 'Something went wrong',
+  // (a sandbox's game played to its end: see endHeading for who won)
+  ended: 'Game over',
 };
 
 /** What is said of each ending when the scenario says nothing itself (`<b></b>`: the scenario's title). */
@@ -50,6 +64,7 @@ const STOCK: Readonly<Record<ScenarioEnd['result'], string>> = {
   abandoned:
     '<p>Your game of <b></b> is no longer running. That happens when a scenario is left alone for too long, or when you start another one.</p>',
   error: '<p>The scenario could not carry on. What happened has been recorded.</p>',
+  ended: '',
 };
 
 /**
@@ -58,6 +73,7 @@ const STOCK: Readonly<Record<ScenarioEnd['result'], string>> = {
  * a failure like any other.
  */
 export function endHeading(end: ScenarioEnd): string {
+  if (end.result === 'ended' && end.winner !== null) return end.winner === 'human' ? 'You won' : 'You lost';
   return end.result === 'off_script' && !end.restart ? HEADINGS.failed : HEADINGS[end.result];
 }
 
@@ -70,7 +86,9 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
       .map((message) => (message.header === null ? '' : `<h3>${escapeHtml(message.header)}</h3>`) + message.html)
       .join('') + (end.message ?? '');
   const title = escapeHtml(info?.title ?? 'this scenario');
-  return (said === '' ? STOCK[end.result] : said).split('<b></b>').join(`<b>${title}</b>`);
+  // A game played to its end (a sandbox's) says why it ended, in the game's words
+  const why = end.result === 'ended' && end.reason !== null ? `<p>${escapeHtml(end.reason)}</p>` : '';
+  return why + (said === '' ? STOCK[end.result] : said).split('<b></b>').join(`<b>${title}</b>`);
 }
 
 /**
@@ -78,8 +96,18 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
  * again, Back to checkpoint, Leave, Report a Bug), the panel it ends with, and the notices that it can't be played here (the phone
  * layout; a window too small for what a scenario points at) or that the Game Hall is open in another tab.
  *
+ * A table changed by hand (a sandbox) has its edit bar (`gd-edit-bar`) in the menu in place of Start again; its
+ * ending (`ended`: the game played to its end) says who won and why, with Reset and Leave.
+ *
+ * A draft written at the table keeps Start again, and has the author's bar (`gd-author-edit-bar`) beside it.
+ *
+ * A puzzle has its bar (`gd-puzzle-bar`: Choosing and Submit, then Start again and Change cards) in its place; its
+ * ending says, under the puzzle's own words, the score with its label, the best and "New best" when it is
+ * (`.gd-scenario-panel__score`), and that the solution is one the author did not list (`.gd-scenario-panel__unlisted`);
+ * and offers Change cards beside Start again.
+ *
  * DOM contract: `gd-game-scenario-panels` holding `nav.gd-scenario-menu` (`.gd-scenario-menu__title`,
- * `button[data-scenario-menu]`: restart, checkpoint (only while there is one to go back to), leave; `a[data-scenario-menu=report]`) and, when one is up,
+ * `button[data-scenario-menu]`: restart (not with an edit bar), checkpoint (only while there is one to go back to), leave; `a[data-scenario-menu=report]`; `gd-edit-bar`) and, when one is up,
  * `.gd-scenario-shade` with `section.gd-scenario-panel` (`data-panel`: end, small, phone, hall; an ending's
  * `data-result`) holding `h2`, `.gd-scenario-panel__body`, `.gd-scenario-panel__buttons` with
  * `button.gd-scenario-button[data-panel-button]` and, at an ending with a replay, `.gd-scenario-panel__report`.
@@ -90,7 +118,7 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
   // An ending's words are the server's HTML, which a scoped stylesheet wouldn't reach; and the buttons' look is
   // shared with the bubble's (gd-game-scenario). Every rule starts at a .gd-scenario class
   encapsulation: ViewEncapsulation.None,
-  imports: [CardHintsDirective],
+  imports: [CardHintsDirective, EditBarComponent, PuzzleBarComponent, AuthorEditBarComponent],
   host: {
     style: 'display: contents',
     '(window:resize)': 'measure()',
@@ -100,7 +128,19 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
       @if (!phone()) {
         <nav class="gd-scenario-menu" aria-label="Scenario" [style.--gd-reserved]="room.reservedRight() + 'px'">
           <span class="gd-scenario-menu__title">{{ guide.title() }}</span>
-          <button type="button" data-scenario-menu="restart" (click)="guide.askRestart()">Start again</button>
+          @if (edit.level() === 'puzzle') {
+            <!-- A puzzle: Choosing and Submit while its slots are filled; then Start again and Change cards -->
+            <gd-puzzle-bar />
+          } @else if (edit.level() === 'author') {
+            <!-- A draft written at the table: Start again, and while its table is edited which board changes go to -->
+            <button type="button" data-scenario-menu="restart" (click)="guide.askRestart()">Start again</button>
+            <gd-author-edit-bar />
+          } @else if (edit.level() !== 'none') {
+            <!-- A table changed by hand: its mode, Stop / Start and Reset (in place of Start again) -->
+            <gd-edit-bar />
+          } @else {
+            <button type="button" data-scenario-menu="restart" (click)="guide.askRestart()">Start again</button>
+          }
           @if (guide.checkpoint(); as checkpoint) {
             <button
               type="button"
@@ -133,6 +173,21 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
           >
             <h2>{{ panel.heading }}</h2>
             <div class="gd-scenario-panel__body" gdCardHints [innerHTML]="panel.body"></div>
+            @if (panel.score; as score) {
+              <p class="gd-scenario-panel__score" [title]="score.title">
+                <span class="gd-scenario-panel__score-label">{{ score.label }}</span>
+                <b class="gd-scenario-panel__score-value">{{ score.value }}</b>
+                @if (score.best !== null) {
+                  <span class="gd-scenario-panel__best">Best {{ score.best }}</span>
+                }
+                @if (score.newBest) {
+                  <span class="gd-scenario-panel__new-best">New best</span>
+                }
+              </p>
+            }
+            @if (panel.unlisted) {
+              <p class="gd-scenario-panel__unlisted">{{ unlistedText }}</p>
+            }
             <div class="gd-scenario-panel__buttons">
               @for (button of panel.buttons; track button.label) {
                 <button
@@ -163,12 +218,14 @@ export function endBody(end: ScenarioEnd, info: ScenarioInfo | null): string {
 })
 export class ScenarioPanelsComponent {
   protected readonly guide = inject(ScenarioGuide);
+  protected readonly edit = inject(TableEdit);
   protected readonly room = inject(ScenarioRoom);
   private readonly session = inject(GameSession);
   private readonly log = inject(GameLog);
   private readonly hall = inject(HallTab);
   protected readonly phone = inject(CompactLayout).gameActive;
   protected readonly bugReport = BUG_REPORT_URL;
+  protected readonly unlistedText = UNLISTED_TEXT;
 
   /** The window's size, for the notice that it is too small; and whether the player has said to carry on anyway. */
   private readonly document = inject(DOCUMENT);
@@ -208,7 +265,9 @@ export class ScenarioPanelsComponent {
         result: end.result,
         heading: endHeading(end),
         body: endBody(end, this.guide.info()) + this.lastOfCampaign(end),
-        buttons: this.endButtons(end),
+        buttons: this.withChangeCards(this.endButtons(end), end),
+        score: end.score ? scoreLines(end.score) : null,
+        unlisted: end.unlisted === true && end.result === 'complete',
       };
     }
     const { width, height } = this.window();
@@ -236,6 +295,13 @@ export class ScenarioPanelsComponent {
 
   private endButtons(end: ScenarioEnd): PanelButton[] {
     const back = () => this.guide.backToHall();
+    if (end.result === 'ended') {
+      // A sandbox's game played to its end: the table as it opened again, or away
+      return [
+        ...(end.reset ? [{ label: 'Reset', main: true, press: () => void this.edit.reset(false) }] : []),
+        { label: 'Leave', main: !end.reset, press: back },
+      ];
+    }
     const campaign = this.guide.info()?.campaign ?? null;
     if (campaign && end.result === 'complete') {
       // One of a campaign, finished: the ways back on the left, the way onward on the right
@@ -274,6 +340,23 @@ export class ScenarioPanelsComponent {
       press: back,
     });
     return buttons;
+  }
+
+  /**
+   * A puzzle's ending also offers Change cards (the puzzle again with its slots empty), before the way back to the
+   * Game Hall; not for a draft's game, nor an ending that cannot be played again.
+   */
+  private withChangeCards(buttons: PanelButton[], end: ScenarioEnd): PanelButton[] {
+    const info = this.guide.info();
+    if (info?.level !== 'puzzle' || info.author || info.draftTest || end.result === 'error') return buttons;
+    const change: PanelButton = {
+      label: 'Change cards',
+      title: 'Start over with the slots empty',
+      main: false,
+      press: () => void this.guide.changeCards(),
+    };
+    const hall = buttons.findIndex((button) => button.label === 'Back to the Game Hall');
+    return hall < 0 ? [...buttons, change] : [...buttons.slice(0, hall), change, ...buttons.slice(hall)];
   }
 
   protected measure(): void {

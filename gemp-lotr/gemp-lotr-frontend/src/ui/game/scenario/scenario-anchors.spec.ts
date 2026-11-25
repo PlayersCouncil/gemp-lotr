@@ -1,4 +1,13 @@
-import { AnchorContext, cardElement, cardRect, rectAround, rectOf, resolveAnchor } from './scenario-anchors';
+import { emptyGame } from '../../../core/game/state/game-model';
+import {
+  AnchorContext,
+  cardElement,
+  cardRect,
+  pageAnchorContext,
+  rectAround,
+  rectOf,
+  resolveAnchor,
+} from './scenario-anchors';
 
 /**
  * A piece of the game page by its DOM contract, each element on the screen where its `data-box` says
@@ -229,6 +238,21 @@ describe('scenario anchors', () => {
     expect(at('ui:skirmish:winner')).toBeNull();
     root.querySelector('[data-fight="skirmish"]')?.remove();
     expect(at('ui:skirmish')).toBeNull();
+  });
+
+  it("finds the person's rows and piles at the top of a page flipped to the other seat (flip table)", () => {
+    // (flipped: the person's characters and support are the top rows, their hand is not shown)
+    expect(at('zone:self.support', false, { flipped: true })).toEqual(box(100, 10, 800, 100));
+    expect(at('zone:opp.characters', true, { flipped: true })).toEqual(box(110, 410, 210, 140));
+    // (the hand shown at the bottom is the seat looked from's: the person's opponent's)
+    expect(at('zone:opp.hand', true, { flipped: true })).toEqual(box(110, 610, 130, 90));
+    expect(at('zone:self.hand', false, { flipped: true })).toBeNull();
+    expect(at('zone:minions', false, { flipped: true })).toBeNull();
+    // The person is the other player of the game: "self" counts their place among the players
+    const model = { ...emptyGame(), participantId: '~Scenario', players: ['alice', '~Scenario'] };
+    const named = { cards: {}, parts: {}, humanSeat: 'freeps' as const, humanRole: 'freeps' as const };
+    expect(pageAnchorContext(root, model, { ...named, flipped: true })).toMatchObject({ self: 0, opponent: 1 });
+    expect(pageAnchorContext(root, model, named)).toMatchObject({ self: 1, opponent: 0 });
   });
 
   it('finds nothing for a kind of anchor it does not know', () => {

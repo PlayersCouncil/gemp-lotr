@@ -28,6 +28,12 @@ public final class ScenarioValidator {
     public static List<String> validate(ScenarioDefinition def, LotroCardBlueprintLibrary library) {
         List<String> problems = new ArrayList<>();
 
+        //(only a sandbox's other seat is played by anything but the scenario's own opponent)
+        if (def.otherSeat != null && def.kind != ScenarioDefinition.Kind.SANDBOX)
+            problems.add("options.otherSeat: only a sandbox's other seat can be played by the bot or by the person, and this is a "
+                    + def.kind.name().toLowerCase(java.util.Locale.ROOT) + ".  Leave otherSeat out: its opponent is its script "
+                    + "(opponent.fallback: bot has the bot play wherever the script does not say)");
+
         for (CardDef card : def.cards.values()) {
             LotroCardBlueprint blueprint = blueprint(library, card.blueprintId(), "cards: '" + card.alias() + "'", problems);
             if (blueprint != null && blueprint.getCardType() == CardType.SITE)
@@ -65,6 +71,7 @@ public final class ScenarioValidator {
 
         start(def, library, problems);
         opening(def, problems);
+        modifiers(def, library, problems);
 
         for (Step step : def.allSteps()) {
             String context = step.context();
@@ -83,7 +90,7 @@ public final class ScenarioValidator {
                 ScenarioDefinition.Message message = step.messages.get(i);
                 //(said as the parser says where a message is, so that whatever reads the two can find it)
                 String context = step.context() + ".messages[" + (i + 1) + "]";
-                if (message.zoom != null) {
+                if (message.zoom != null && !(message.zoom.card() != null && isCardSlot(def, message.zoom.card()))) {
                     String problem = CardFaces.check(def, message.zoom, library);
                     if (problem != null)
                         problems.add(context + ".zoom: " + problem);
@@ -93,7 +100,7 @@ public final class ScenarioValidator {
                 anchors.addAll(message.anchor);
                 for (String anchor : anchors) {
                     String part = Anchors.printedPart(anchor);
-                    String problem = part == null ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);
+                    String problem = part == null || isCardSlot(def, Anchors.cardAlias(anchor)) ? null : CardFaces.checkPart(def, Anchors.cardAlias(anchor), part, library);
                     if (problem != null)
                         problems.add(context + ": " + anchor + ": " + problem);
                 }
@@ -120,8 +127,48 @@ public final class ScenarioValidator {
             requirements(def.orders.get(i).when().require, "opponent.orders[" + (i + 1) + "].when.require", problems);
         requirements(def.outcome.win, "outcome.win", problems);
         requirements(def.outcome.lose, "outcome.lose", problems);
+        puzzle(def, library, problems);
 
         return problems;
+    }
+
+    /**
+     * A puzzle's parts: its judge's requirements, its score's value, its slots and solutions (see SlotBounds), and the
+     * places a card's face is looked at before the game, which a slot's card does not have until it is picked.
+     */
+    private static void puzzle(ScenarioDefinition def, LotroCardBlueprintLibrary library, List<String> problems) {
+        if (def.outcome.judge != null)
+            requirements(def.outcome.judge.win(), "outcome.judge.win", problems);
+        if (def.outcome.score != null && def.outcome.score.valueJson() != null) {
+            try {
+                ScenarioTable.checkValue(def.outcome.score.valueJson());
+            } catch (IllegalArgumentException exp) {
+                problems.add("outcome.score.value: " + exp.getMessage());
+            }
+        }
+        problems.addAll(SlotBounds.validate(def, library));
+        if (def.slots.isEmpty())
+            return;
+        for (Step step : def.allSteps())
+            for (int i = 0; i < step.messages.size(); i++) {
+                ScenarioDefinition.Message message = step.messages.get(i);
+                String context = step.context() + ".messages[" + (i + 1) + "]";
+                if (message.zoom != null && message.zoom.card() != null && isCardSlot(def, message.zoom.card()))
+                    problems.add(context + ".zoom: '" + message.zoom.card() + "' is a slot, whose card is not known until the solver picks it, so it "
+                            + "cannot be shown large; point at it on the table instead (anchor: card:" + message.zoom.card() + ")");
+                List<String> anchors = new ArrayList<>(message.highlight);
+                anchors.addAll(message.avoid);
+                anchors.addAll(message.anchor);
+                for (String anchor : anchors)
+                    if (Anchors.printedPart(anchor) != null && isCardSlot(def, Anchors.cardAlias(anchor)))
+                        problems.add(context + ": " + anchor + ": '" + Anchors.cardAlias(anchor) + "' is a slot, and where a printed part is on its card "
+                                + "depends on what card is picked; point at the card itself (card:" + Anchors.cardAlias(anchor) + ")");
+            }
+    }
+
+    /** Whether a name is a slot's card (not a slot for a site, which is one of the scenario's sites). */
+    private static boolean isCardSlot(ScenarioDefinition def, String alias) {
+        return alias != null && def.slots.containsKey(alias) && def.slots.get(alias).zone() != ScenarioDefinition.SlotZone.SITE;
     }
 
     /**
@@ -150,6 +197,8 @@ public final class ScenarioValidator {
             said.add("wounds");
         if (!setup.tokens.isEmpty())
             said.add("tokens");
+        if (!setup.modifiers.isEmpty())
+            said.add("modifiers");
         if (setup.burdens != 0)
             said.add("burdens");
         if (setup.threats != 0)
@@ -169,6 +218,33 @@ public final class ScenarioValidator {
         if (!def.steps.isEmpty() && def.steps.getFirst().when.opening)
             problems.add("step 1: 'when: opening' waits for the board to be laid out before the first turn, and " + why
                     + "its first decision is the bid (when: bid)");
+    }
+
+    /**
+     * The modifiers put on by hand (setup.modifiers, do: modify(...)): each on a card it means something on, strength
+     * on a character and not on a condition (see CardModifiers.unsuited).
+     */
+    private static void modifiers(ScenarioDefinition def, LotroCardBlueprintLibrary library, List<String> problems) {
+        for (Map.Entry<String, List<ScenarioDefinition.Modification>> entry : def.setup.modifiers.entrySet())
+            for (ScenarioDefinition.Modification modification : entry.getValue()) {
+                String unsuited = unsuited(def, library, entry.getKey(), modification);
+                if (unsuited != null)
+                    problems.add("setup.modifiers." + entry.getKey() + ": '" + modification.text() + "': " + unsuited);
+            }
+        for (Step step : def.allSteps())
+            for (ScenarioDefinition.DoOp op : step.doOps)
+                if (op.kind() == ScenarioDefinition.DoKind.MODIFY) {
+                    String unsuited = unsuited(def, library, op.card(), op.modification());
+                    if (unsuited != null)
+                        problems.add(step.context() + ".do: " + op.source() + ": " + unsuited);
+                }
+    }
+
+    private static String unsuited(ScenarioDefinition def, LotroCardBlueprintLibrary library, String alias,
+                                   ScenarioDefinition.Modification modification) {
+        CardDef card = def.cards.containsKey(alias) ? def.cards.get(alias) : def.siteCards.get(alias);
+        LotroCardBlueprint blueprint = card == null ? null : blueprintOrNull(library, card.blueprintId());
+        return blueprint == null ? null : CardModifiers.unsuited(modification, blueprint.getCardType());
     }
 
     private static String zoneName(ScenarioDefinition.SetupZone zone) {

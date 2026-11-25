@@ -250,6 +250,16 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
     public ScenarioDirector Director() { return _director; }
     public ScenarioDefinition Definition() { return _table.Definition(); }
 
+    /** Whether the game is held: laid out, with nothing it asks put to anybody (a puzzle waiting for its picks). */
+    private boolean _held;
+
+    /** Holds the game, or lets it go on (see release).  To be called before the game is begun. */
+    public void Hold(boolean held) {
+        _held = held;
+    }
+
+    public boolean Holding() { return _held; }
+
     public void Listen(Listener listener) {
         _listener = listener;
     }
@@ -269,6 +279,9 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
         //The bid and the choice of seat come before the scenario's board exists, and the table answers them itself
         if (!_table.Arranged())
             return new ArrayList<>(waiting.keySet());
+        //A puzzle waiting for its picks: the board is there to be seen, and nobody is asked anything
+        if (_held)
+            return List.of();
         if (_listener != null)
             _listener.atRest();
         //Whatever a finished game was still going to ask no longer matters, and nor does anything a game asks after
@@ -389,6 +402,18 @@ public class ScenarioSession implements DecisionObserver, DecisionArbiter {
 
     @Override
     public void decisionIssued(String player, AwaitingDecision decision) { }
+
+    /**
+     * A decision taken back unanswered (a sandbox's Start asks it again: TurnProcedure.askAgain) is no longer ruled
+     * on: the one asked in its place is ruled on afresh when the game comes to rest.  Nothing the script counted is
+     * undone, because nothing was answered.
+     */
+    @Override
+    public void decisionWithdrawn(String player, AwaitingDecision decision) {
+        Ruling ruling = _rulings.get(player);
+        if (ruling != null && ruling.decision() == decision)
+            _rulings.remove(player);
+    }
 
     @Override
     public void decisionAnswered(String player, AwaitingDecision decision, String answer) {

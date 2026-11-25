@@ -14,6 +14,7 @@ import com.gempukku.lotro.logic.decisions.ActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.CardActionSelectionDecision;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
 import com.gempukku.lotro.logic.effects.ResolveSkirmishEffect;
+import com.gempukku.lotro.logic.timing.processes.AsksAgain;
 import com.gempukku.lotro.logic.timing.processes.GameProcess;
 import com.gempukku.lotro.logic.timing.results.DiscardCardsFromPlayResult;
 import com.gempukku.lotro.logic.timing.results.KilledResult;
@@ -33,6 +34,8 @@ public class TurnProcedure {
     private final CharacterDeathRule _characterDeathRule;
     private GameProcess _gameProcess;
     private boolean _playedGameProcess;
+    // Set by askAgain: once the stack is empty, the process that asked is to ask again instead of being moved past
+    private boolean _askingAgain;
     private final GameStats _gameStats;
     private final InitiativeChangeRule _initiativeChangeRule = new InitiativeChangeRule();
 
@@ -66,7 +69,12 @@ public class TurnProcedure {
                 _actionStack.stackAction(new PlayOutEffectResults(effectResults));
             } else {
                 if (_actionStack.isEmpty()) {
-                    if (_playedGameProcess) {
+                    if (_playedGameProcess && _askingAgain) {
+                        // The process's decision was withdrawn (askAgain), and whatever the state-based checks
+                        // stacked has been played out: it asks again, of the board as it now stands
+                        _askingAgain = false;
+                        ((AsksAgain) _gameProcess).askAgain(_game);
+                    } else if (_playedGameProcess) {
                         _gameProcess = _gameProcess.getNextProcess();
                         _playedGameProcess = false;
                     } else {
@@ -95,6 +103,33 @@ public class TurnProcedure {
 
             _game.checkRingBearerCorruption();
         }
+    }
+
+    /**
+     * @return Whether the game is at a point where its waiting decision can be asked again (askAgain): at rest, not
+     * over, nothing on the action stack, and the decision waiting the one the current game process asked directly,
+     * with a process that can ask it again (AsksAgain).  A decision asked from inside an action (a choice of
+     * target, an optional response) is never such a point.
+     */
+    public boolean canAskAgain() {
+        return _game.getWinnerPlayerId() == null && _playedGameProcess && !_askingAgain && _actionStack.isEmpty()
+                && _gameProcess instanceof AsksAgain asks && asks.isAsking() && _userFeedback.hasPendingDecisions();
+    }
+
+    /**
+     * Withdraws the decision the game is waiting on and has it asked again, against the board as it now stands
+     * (only where canAskAgain).  Nothing in an ordinary game does this: it is for a scenario's sandbox, whose board
+     * is changed by hand while the game waits.  The caller then carries the game on as after an answer
+     * (DefaultLotroGame.askAgain does both): the state-based checks are made first and whatever they stack is
+     * played out (a character an edit left with no vitality dies), and only then does the process ask again.  If it
+     * then passes by itself (nothing to play, and a phase its player is passed through), the game simply carries on.
+     * @throws IllegalStateException if the game is not at such a point.
+     */
+    public void askAgain() {
+        if (!canAskAgain())
+            throw new IllegalStateException("The game is not waiting on a decision that can be asked again");
+        _userFeedback.withdrawAwaitingDecision(((AsksAgain) _gameProcess).askedPlayer());
+        _askingAgain = true;
     }
 
     private class PlayOutEffect extends SystemQueueAction {

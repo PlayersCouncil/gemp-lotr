@@ -61,7 +61,12 @@ public class LiveScenario implements ScenarioSession.Listener {
         /** The person left: conceded, or stopped answering. */
         ABANDONED,
         /** The game broke and was called off. */
-        ERROR
+        ERROR,
+        /**
+         * A sandbox's game ended (by its own rules, or by its script): there is nothing in a sandbox to complete or
+         * to fail, so a sandbox never ends COMPLETE or FAILED, and a person's progress in one is never "complete".
+         */
+        ENDED
     }
 
     /** The part of a live game that a scenario needs: a way to answer for the opponent. */
@@ -72,6 +77,22 @@ public class LiveScenario implements ScenarioSession.Listener {
          *                 the answer is to be dropped.
          */
         void opponentAnswers(String player, AwaitingDecision decision, String answer);
+    }
+
+    /**
+     * Gemp's bot, answering for the opponent's seat where no step, order or author does (opponent.fallback: bot).  See
+     * com.gempukku.lotro.bots.ScenarioBot.
+     */
+    public interface Bot {
+        /**
+         * Called inside the game's lock, on the thread running the game.
+         * @param player The seat's player, by its name in the game: the bot plays as that player, in whichever role
+         *               it has at the time.
+         * @param seed What the bot's chance is to come from.  It is worked out from the game (see botAnswer), so that
+         *             a game built again from its journal has the bot answer the same way in the same place.
+         * @return The bot's answer; null if it has none.
+         */
+        String answer(com.gempukku.lotro.game.state.LotroGame game, String player, AwaitingDecision decision, long seed);
     }
 
     /** Turns a message's text (Markdown, card links) into what the client displays. */
@@ -128,6 +149,8 @@ public class LiveScenario implements ScenarioSession.Listener {
     /** Set once the game has left its script and been allowed to carry on: from then on it is an ordinary game. */
     private boolean _carryingOn;
     private boolean _botFallbackReported;
+    /** Plays the opponent where the script leaves it to the bot; null where there is none (a test, the headless runner). */
+    private Bot _bot;
     private int _lastCheckpoint;
     private Integer _resumedAt;
     /** Set for a game that took the place of another when that one was taken back (see Again). */
@@ -159,6 +182,11 @@ public class LiveScenario implements ScenarioSession.Listener {
     private int _runToTimes;
     private java.util.function.Function<Step, String> _runChoices;
     private String _runProblem;
+    /** A sandbox's stopping, editing and starting (kind: sandbox, and no author at the table); null otherwise. */
+    private ScenarioSandbox _sandbox;
+    /** What the info event last said of the sandbox's mode, to send it again when that changes. */
+    private String _sandboxShown;
+    private String _endReason;
 
     private static final class Move {
         final AwaitingDecision decision;
@@ -190,6 +218,17 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
                         TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier) {
+        this(def, library, format, humanPlayer, renderer, timer, earlier, Map.of());
+    }
+
+    /**
+     * @param picks For a puzzle with slots: the cards the solver picked, slot id -> blueprint (see SlotBounds, which
+     *              is to have checked them).  Empty for none: a puzzle with slots is then laid out with them empty and
+     *              held (see Holding) until a game with picks takes its place.
+     */
+    public LiveScenario(ScenarioDefinition def, LotroCardBlueprintLibrary library, LotroFormat format, String humanPlayer,
+                        TextRenderer renderer, ScheduledExecutorService timer, GameJournal earlier, Map<String, String> picks) {
+        _picks = picks == null ? Map.of() : Map.copyOf(picks);
         _def = def;
         _library = library;
         _format = format;
@@ -200,9 +239,29 @@ public class LiveScenario implements ScenarioSession.Listener {
         _table = new ScenarioTable(def, library, format, humanPlayer, OPPONENT_PLAYER);
         _session = new ScenarioSession(_table);
         _session.Listen(this);
+        if (def.kind == ScenarioDefinition.Kind.SANDBOX) {
+            _sandbox = new ScenarioSandbox(def, _table, humanPlayer);
+            //(what the person may see depends on the seat they look from as well as the one they sit in)
+            _sandbox.LookingFrom(this::Looking);
+            otherSeat(def.otherSeatInForce());
+            _table.OnNote(this::followOtherSeat);
+        }
         if (earlier != null)
             _table.Follow(earlier);
+        _table.Picks(_picks);
         _table.Prepare();
+        //(an ended sandbox says why its game ended: the game itself keeps no reason once it has said it)
+        if (_sandbox != null)
+            _table.game().addGameResultListener(new com.gempukku.lotro.logic.timing.GameResultListener() {
+                @Override
+                public void gameFinished(String winnerPlayerId, String winReason, Map<String, String> loserPlayerIdsWithReasons) {
+                    _endReason = loserPlayerIdsWithReasons.values().stream().filter(reason -> !reason.equals("Other player won"))
+                            .findFirst().orElse(winReason);
+                }
+
+                @Override
+                public void gameCancelled() { }
+            });
     }
 
     public ScenarioDefinition Definition() { return _def; }
@@ -213,6 +272,12 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     /** How the scenario ended; null while it is still going. */
     public Result Result() { return _result; }
+
+    /** The sandbox's controls (Stop, edits, Start); null for a scenario that is not a sandbox, or has an author. */
+    public ScenarioSandbox Sandbox() { return _sandbox; }
+
+    /** Whether the game is stopped for the person to change its board: nobody's answer is taken meanwhile. */
+    public boolean Stopped() { return _sandbox != null && _sandbox.Stopped(); }
 
     /**
      * Everything that went wrong with the script during this run.  A scenario that passes the headless runner
@@ -250,12 +315,49 @@ public class LiveScenario implements ScenarioSession.Listener {
     public LiveScenario Again(GameJournal earlier) {
         if (!CanBeBuiltAgain())
             throw new IllegalStateException("A scenario's game with an author is not built again");
-        LiveScenario again = new LiveScenario(_def, _library, _format, _human, _renderer, _timer, earlier);
+        LiveScenario again = new LiveScenario(_def, _library, _format, _human, _renderer, _timer, earlier, _picks);
         again._campaign = _campaign;
+        again._previousBest = _previousBest;
         again._resumedAt = _resumedAt;
         again._takenBack = true;
         again._whenSettled.addAll(_whenSettled);
+        again._bot = _bot;
+        //(a page looking from the other seat goes on looking from it: a take-back is not the page's doing.  Who
+        // plays the other seat is not carried: the rebuilt game has it as the journal had it at that point)
+        again._looking = _looking;
         return again;
+    }
+
+    /**
+     * Gives the game Gemp's bot, to answer for the opponent where the scenario says opponent.fallback: bot.  To be
+     * called before Begin.  Without one, such a scenario's opponent does as little as it can, and says so.
+     */
+    public void SetBot(Bot bot) {
+        _bot = bot;
+    }
+
+    /**
+     * The bot's answer to an opponent's decision no step or order answers; the least the opponent can do if there is
+     * no bot, or it has no answer.  Its chance is seeded from the scenario, how many answers the game has had, and
+     * the decision itself: all of them the same in a game built again from its journal, so that the bot answers the
+     * same way there.
+     */
+    private String botAnswer(Ruling ruling) {
+        if (_bot != null) {
+            try {
+                long seed = java.util.Objects.hash(_def.id, _table.Journal().answers().size(), GameJournal.fingerprint(ruling.decision()));
+                String answer = _bot.answer(_table.game(), ruling.player(), ruling.decision(), seed);
+                if (answer != null)
+                    return answer;
+            } catch (RuntimeException exp) {
+                LOG.error("Scenario " + _def.id + ": the bot could not answer \"" + ruling.decision().getText() + "\"", exp);
+                problem("the bot could not answer \"" + ruling.decision().getText() + "\" (" + exp + "); the opponent did as little as it can");
+            }
+        } else if (!_botFallbackReported) {
+            _botFallbackReported = true;
+            problem("opponent.fallback is 'bot', and this game has no bot to play the opponent; it does as little as it can instead");
+        }
+        return AnswerCompiler.leastAnswer(ruling.decision());
     }
 
     /**
@@ -263,6 +365,10 @@ public class LiveScenario implements ScenarioSession.Listener {
      */
     public void SetAuthor(Author author) {
         _author = author;
+        //(the authoring tool changes a sandbox's board its own way, writing what it does into the file; and the opponent
+        // there is the script's, with the author answering for it where the script does not)
+        _sandbox = null;
+        _session.Director().FallbackInstead(null);
         _session.WritingInto(author::writesInto);
     }
 
@@ -358,13 +464,20 @@ public class LiveScenario implements ScenarioSession.Listener {
                     _runProblem = "the step before " + reached.describe() + " ended the scenario";
                 return;
             }
+            //(the judging moment has come, or the puzzle's rules were broken: the scenario ends at its next rest, AfterActions)
+            if (_table.Verdict() != null || _table.Breach() != null)
+                return;
             Ruling ruling = _session.Ruling(_human) != null ? _session.Ruling(_human) : _session.Ruling(_opponent);
             if (ruling == null)
                 return;
             Step step = ruling.step();
             if (step != null && (step.number > _runTo || (step.number == _runTo && farEnough(step, director))))
                 return;
-            if (step == null && director.atFrontier())
+            //Past the end of the script is where an author writes, so the script stops there.  Not for the opponent
+            // while a solution is played, though: the solution is the person's answers only, and the opponent
+            // answers past the script as it would in a player's game (its orders, its fallback), as the headless
+            // runner has it do.  The play stops at the person's first decision its answers do not reach.
+            if (step == null && director.atFrontier() && !onTape(ruling) && (_tape.isEmpty() || ruling.player().equals(_human)))
                 return;
             //(sent so far into a block, to a decision that none of the block's steps covers: that is where it is)
             Step at = director.currentStep();
@@ -380,8 +493,18 @@ public class LiveScenario implements ScenarioSession.Listener {
                 continue;
             }
             String answer = ruling.answer();
+            //(a solution being played: its next answer, where the script has none for the person)
+            if (onTape(ruling)) {
+                ScenarioDefinition.Answer next = _tape.get(_taped++);
+                try {
+                    answer = AnswerCompiler.compile(_table, ruling.decision(), next);
+                } catch (ScenarioScriptException exp) {
+                    _runProblem = "the solution's answer " + _taped + ", " + next.source() + ", does not fit: " + exp.getMessage();
+                    return;
+                }
+            }
             if (answer == null && step == null && !ruling.player().equals(_human) && _def.fallback != Fallback.FAIL)
-                answer = AnswerCompiler.leastAnswer(ruling.decision());
+                answer = _def.fallback == Fallback.BOT ? botAnswer(ruling) : AnswerCompiler.leastAnswer(ruling.decision());
             if (answer == null) {
                 _runProblem = ruling.noAnswer() != null ? step.describe() + ": " + ruling.noAnswer()
                         : step != null ? step.describe() + " has no answer for the script to play"
@@ -430,16 +553,22 @@ public class LiveScenario implements ScenarioSession.Listener {
      * Sets the game going.  To be called once, inside the game's lock, before anybody has connected.
      */
     public void Begin() {
+        //A puzzle waiting for its picks is laid out and held: nobody is asked anything (see Holding)
+        _session.Hold(Holding());
         //Until the game has got to where the person comes in (the first decision, or the end of an earlier game it
         // is repeating), nothing is shown and the opponent does not act for itself
         _table.Begin();
         if (_runTo != null)
             runScript();
         _begun = true;
+        //A sandbox opens stopped, in edit mode, at its first decision that can be asked again
+        if (_sandbox != null)
+            _sandbox.Opened();
         //(a game taken back did not start anywhere new: it is still the game that started where the first one did)
         if (!_takenBack && _table.FollowedAnything() && _session.Director().currentStep() != null)
             _resumedAt = _session.Director().currentStep().number;
-        _table.gameState().showScenarioEvent(_human, INFO, JsonUtils.SerializeWithNulls(infoEvent()));
+        showEvent(INFO, JsonUtils.SerializeWithNulls(infoEvent()));
+        _flipShown = flipKey();
         for (String player : List.of(_opponent, _human)) {
             Ruling ruling = _session.Ruling(player);
             if (ruling != null)
@@ -484,8 +613,8 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     private void act(Ruling ruling) {
         //Once the scenario is over, or about to be ended (by its last step, or for leaving its script), nothing more
-        // is shown or played: the game is ended as soon as it has stopped working
-        if (_result != null || _session.Director().end() != null || (_offScript != null && !carriesOnOffScript()))
+        // is shown or played: the game is ended as soon as it has stopped working.  (Nor, while it is held, is anything.)
+        if (_session.Holding() || _result != null || _session.Director().end() != null || (_offScript != null && !carriesOnOffScript()))
             return;
         Step step = ruling.step();
         if (ruling.problem() != null)
@@ -497,7 +626,7 @@ public class LiveScenario implements ScenarioSession.Listener {
             } else {
                 clearStep();
                 //(with an author at the table, this is not the end of anything: it is where the writing happens)
-                if (_def.coverage == Coverage.STRICT && _author == null)
+                if (_def.coverageInForce() == Coverage.STRICT && _author == null)
                     offScript("no step covers the player's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
             }
             return;
@@ -514,6 +643,14 @@ public class LiveScenario implements ScenarioSession.Listener {
         //(ruled on again, a decision that was left for the author may no longer be)
         if (_held != null && _held.decision() == ruling.decision())
             _held = null;
+        if (!OpponentAnswersItself()) {
+            //The person plays the other seat (a sandbox's otherSeat: person): nothing answers for it, and its decision
+            // waits for the person, who answers it from the table seen from that seat.  Anything its step has to say
+            // is shown, with nothing waiting on its being read, as it is for an author answering for the opponent.
+            if (step != null && !ruling.shown().messages().isEmpty())
+                showStep(stepEvent(ruling, true), ruling.decision());
+            return;
+        }
         String answer = ruling.answer();
         if (answer == null && _author != null && _author.holds(ruling)) {
             //Left for the author.  Anything the step has to say is shown, with nothing waiting on its being read.
@@ -523,21 +660,22 @@ public class LiveScenario implements ScenarioSession.Listener {
             return;
         }
         if (answer == null) {
-            if (step == null && _def.fallback == Fallback.FAIL && _author != null) {
+            if (step == null && _def.fallbackInForce() == Fallback.FAIL && _author != null) {
                 //An author who is not answering for the opponent has it do the least it can, and is told that a
                 // player's game would have stopped here
                 problem("no step covers the opponent's decision (" + _session.Director().describe(ruling.player(), ruling.decision())
                         + "), and opponent.fallback is 'fail': a player's game leaves its script here.  The opponent has done as little as it can.");
-            } else if (step == null && _def.fallback == Fallback.FAIL) {
+            } else if (step == null && _def.fallbackInForce() == Fallback.FAIL) {
                 offScript("no step covers the opponent's decision: " + _session.Director().describe(ruling.player(), ruling.decision()));
                 if (!carriesOnOffScript())
                     return;
             }
-            if (step == null && _def.fallback == Fallback.BOT && !_carryingOn && !_botFallbackReported) {
-                _botFallbackReported = true;
-                problem("opponent.fallback is 'bot', which a live game cannot do yet; the opponent does as little as it can instead");
-            }
-            answer = AnswerCompiler.leastAnswer(ruling.decision());
+            //(the bot plays on in a game that has left its script and carries on as well; and a sandbox's other seat
+            // given to the bot is played as fallback: bot plays it)
+            if (step == null && (_def.fallback == Fallback.BOT || (_sandbox != null && _otherSeat == ScenarioDefinition.OtherSeat.BOT)))
+                answer = botAnswer(ruling);
+            else
+                answer = AnswerCompiler.leastAnswer(ruling.decision());
         }
 
         boolean hasMessages = step != null && !ruling.shown().messages().isEmpty();
@@ -555,6 +693,8 @@ public class LiveScenario implements ScenarioSession.Listener {
 
     private void clearStep() {
         _table.gameState().clearScenarioEvent(_human, STEP);
+        if (CanFlip())
+            _table.gameState().clearScenarioEvent(_opponent, STEP);
         _stepShownFor = null;
     }
 
@@ -645,7 +785,7 @@ public class LiveScenario implements ScenarioSession.Listener {
      * as the session.)
      */
     public void AfterActions() {
-        if (_result != null || !_begun)
+        if (_result != null || !_begun || _session.Holding())
             return;
 
         if (_table.SeatingProblem() != null) {
@@ -660,6 +800,17 @@ public class LiveScenario implements ScenarioSession.Listener {
             // which is the scenario's mistake and not the person's
             problem(_table.PathEnded());
             finish(Result.ERROR, List.of(), "This scenario's adventure path has run out: " + _table.PathEnded() + ".", false, false);
+            return;
+        }
+        //The person has done what the puzzle's rules forbid (rules.forbid): failed, with the rule said
+        if (_table.Breach() != null) {
+            finish(Result.FAILED, closing(_def.outcome.loseMessages), _renderer.render(_table.Breach()), false, true);
+            return;
+        }
+        //The judging moment has come (outcome.judge): the scenario is over, whatever else the game has done since
+        ScenarioTable.Verdict verdict = _table.Verdict();
+        if (verdict != null) {
+            judged(verdict);
             return;
         }
         if (_table.game().isFinished()) {
@@ -690,7 +841,40 @@ public class LiveScenario implements ScenarioSession.Listener {
         } else if (_def.outcome.win != null && _table.Holds(_def.outcome.win, _human)) {
             finish(Result.COMPLETE, closing(_def.outcome.winMessages), null, false, true);
         }
+        if (_result == null)
+            sandboxShown();
     }
+
+    /**
+     * Sends the info event again if what it says of the sandbox's mode has changed since it was last sent: whether
+     * the game is stopped, and whether Stop or Start would be taken (which changes with each decision).
+     */
+    public void sandboxShown() {
+        if (!_begun || _result != null)
+            return;
+        if (_sandbox != null) {
+            String now = _sandbox.Stopped() + "|" + _sandbox.CanStop() + "|" + _sandbox.CanStart() + "|" + flipKey();
+            if (now.equals(_sandboxShown))
+                return;
+            _sandboxShown = now;
+            _flipShown = flipKey();
+            showEvent(INFO, JsonUtils.SerializeWithNulls(infoEvent()));
+            return;
+        }
+        //(an author's game: the seat the page looks from.  Whose decision it waits on is in the authoring state)
+        if (!CanFlip() || Looking().key().equals(_flipShown))
+            return;
+        _flipShown = Looking().key();
+        showEvent(INFO, JsonUtils.SerializeWithNulls(infoEvent()));
+    }
+
+    /** What the info event says of the seats that, when it changes, has the info event sent again (see sandboxShown). */
+    private String flipKey() {
+        return _sandbox != null ? Looking().key() + "|" + _otherSeat + "|" + WaitingOn() : Looking().key();
+    }
+
+    /** What sandboxShown last sent of the seats. */
+    private String _flipShown;
 
     /**
      * The game has ended by its own rules: a Ring-bearer killed or corrupted, a fellowship surviving its last site.
@@ -705,9 +889,14 @@ public class LiveScenario implements ScenarioSession.Listener {
             return;
         }
         boolean won = _human.equals(_table.game().getWinnerPlayerId());
+        if (_sandbox != null) {
+            //Nothing in a sandbox is won or lost: it is over, and the person may set it up again (Reset)
+            finish(Result.ENDED, closing(won ? _def.outcome.winMessages : _def.outcome.loseMessages), null, false, false);
+            return;
+        }
         ScenarioDefinition.End ending = won ? _def.outcome.gameWon : _def.outcome.gameLost;
         Result result = ending != null ? (ending.result == EndResult.COMPLETE ? Result.COMPLETE : Result.FAILED)
-                : won ? Result.COMPLETE : Result.FAILED;
+                : won || scoredToTheEnd(_def) ? Result.COMPLETE : Result.FAILED;
         List<Message> said = ending != null ? ending.messages : List.of();
         if (said.isEmpty() && won && _def.outcome.win != null && _table.Holds(_def.outcome.win, _human))
             said = _def.outcome.winMessages;
@@ -783,6 +972,9 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void finish(Result result, List<Map<String, Object>> messages, String message, boolean restart, boolean endGame) {
+        //(a sandbox's script can end it too, but a sandbox is never complete or failed: see Result.ENDED)
+        if (_sandbox != null && (result == Result.COMPLETE || result == Result.FAILED))
+            result = Result.ENDED;
         _move = null;
         clearStep();
 
@@ -794,11 +986,21 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("restart", restart);
         //Whether there is a checkpoint to go back to, and if so which step it is
         event.put("checkpoint", _lastCheckpoint == 0 ? null : _lastCheckpoint);
+        if (result == Result.ENDED) {
+            //An ended sandbox: who won the game, if the game itself ended ("human", "opponent", or null), and why
+            String winner = _table.game().getWinnerPlayerId();
+            event.put("winner", winner == null ? null : winner.equals(_human) ? "human" : "opponent");
+            event.put("reason", _endReason);
+            event.put("reset", true);
+        }
+        puzzleEnd(result, event);
         show(END, event);
         settled(result);
 
         if (endGame) {
-            if (result == Result.COMPLETE)
+            if (result == Result.ENDED)
+                _table.game().playerWon(_human, "The sandbox ended");
+            else if (result == Result.COMPLETE)
                 _table.game().playerWon(_human, "Scenario complete");
             else
                 _table.game().playerWon(_opponent, result == Result.OFF_SCRIPT ? "Scenario left its script" : "Scenario failed");
@@ -818,7 +1020,18 @@ public class LiveScenario implements ScenarioSession.Listener {
     }
 
     private void show(String kind, Map<String, Object> event) {
-        _table.gameState().showScenarioEvent(_human, kind, JsonUtils.SerializeWithNulls(event));
+        showEvent(kind, JsonUtils.SerializeWithNulls(event));
+    }
+
+    /**
+     * Puts something on the person's screen.  In a game whose table can be seen from the other seat (CanFlip), it
+     * is shown to that seat's player as well: a page looking from there is that player's page (see Look), and is
+     * shown what the person is shown, and sent it again when it connects.
+     */
+    private void showEvent(String kind, String json) {
+        _table.gameState().showScenarioEvent(_human, kind, json);
+        if (CanFlip())
+            _table.gameState().showScenarioEvent(_opponent, kind, json);
     }
 
     private String text(String text) {
@@ -832,7 +1045,7 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("version", _def.version);
         event.put("kind", _def.kind.name().toLowerCase());
         event.put("title", _def.title);
-        event.put("coverage", _def.coverage.name().toLowerCase());
+        event.put("coverage", _def.coverageInForce().name().toLowerCase());
         event.put("human", _human);
         event.put("humanSeat", _def.human.key());
         //Whether the seats take turns (each playing both roles), or the person's seat keeps its role all game
@@ -854,6 +1067,16 @@ public class LiveScenario implements ScenarioSession.Listener {
         event.put("author", _author != null);
         //...or playing a draft of it as a player would, to see what they will see
         event.put("draftTest", _draftTest);
+        //Edit mode and play mode (a sandbox): what the person may change in edit mode, and whether Stop or Start
+        // would be taken now.  Sent again whenever one of these changes (see AfterActions).
+        event.put("mode", Stopped() ? "edit" : "play");
+        event.put("level", _sandbox != null ? _def.level() : "none");
+        event.put("tools", _sandbox != null ? _sandbox.Tools() : List.of());
+        event.put("canStop", _sandbox != null && _sandbox.CanStop());
+        event.put("canStart", _sandbox != null && _sandbox.CanStart());
+        puzzleInfo(event);
+        //The seats: which the person looks from, who plays the other one, and whose decision the game waits on
+        event.putAll(SeatState());
         return event;
     }
 
@@ -1011,5 +1234,336 @@ public class LiveScenario implements ScenarioSession.Listener {
             return;
         }
         cards.put(alias, card.getCardId());
+    }
+
+    /* ---- puzzles: the picks, holding, the judging moment, the score, unlisted solutions ---- */
+
+    /** The solver's picks this game was built with (slot id -> blueprint); empty if none. */
+    private final Map<String, String> _picks;
+    /** The person's best score before this game (scenario_progress.best_score); null if they have none. */
+    private Integer _previousBest;
+    private Integer _score;
+    private boolean _unlisted;
+
+    /** The picks this game was built with, slot id -> blueprint; empty for none. */
+    public Map<String, String> Picks() { return _picks; }
+
+    /**
+     * Whether this is a puzzle waiting for its picks: it has slots and none of them was filled.  Such a game is laid out
+     * with its slots empty and held: nobody is asked anything, the opponent does nothing, and the page is told it is
+     * in edit mode.  It is never played: a game built with the picks takes its place.  (A game with an author is not
+     * held: the author plays the draft with its slots as they are.)
+     */
+    public boolean Holding() {
+        return !_def.slots.isEmpty() && _picks.isEmpty() && _author == null;
+    }
+
+    /** The person's best score so far, for the end of the game to compare this one's with.  To be called before Begin. */
+    public void SetPreviousBest(Integer best) {
+        _previousBest = best;
+    }
+
+    /** The score this game ended with (outcome.score); null while it goes on, or for an unscored scenario. */
+    public Integer Score() { return _score; }
+
+    /**
+     * Whether this game solved its puzzle with picks that none of the author's solutions lists.  Never for a puzzle
+     * with no slots: there is nothing to compare.
+     */
+    public boolean Unlisted() { return _unlisted; }
+
+    /** A scored scenario whose own end is the end: no 'win' anywhere, so it is complete once it has been played out. */
+    static boolean scoredToTheEnd(ScenarioDefinition def) {
+        return def.outcome.score != null && def.outcome.win == null && (def.outcome.judge == null || def.outcome.judge.win() == null);
+    }
+
+    /** The judging moment has come: won or failed, as the judge found, with the scenario's usual closing words. */
+    private void judged(ScenarioTable.Verdict verdict) {
+        _score = verdict.score();
+        if (verdict.won())
+            finish(Result.COMPLETE, closing(_def.outcome.winMessages), null, false, true);
+        else
+            finish(Result.FAILED, closing(_def.outcome.loseMessages), text(_def.outcome.loseMessage), false, true);
+    }
+
+    /**
+     * What the end of a puzzle tells the page: its score ({value, label, better, best}, best counting this game's if it
+     * counts: a complete one), and whether it was solved with picks no listed solution has (unlisted).
+     */
+    private void puzzleEnd(Result result, Map<String, Object> event) {
+        ScenarioDefinition.Score scored = _def.outcome.score;
+        if (scored != null && _score == null && result != Result.ERROR && result != Result.ABANDONED)
+            _score = _table.Score();
+        if (scored == null) {
+            event.put("score", null);
+        } else {
+            Map<String, Object> score = new LinkedHashMap<>();
+            score.put("value", _score);
+            score.put("label", scored.label());
+            score.put("better", scored.higherBetter() ? "higher" : "lower");
+            Integer best = _previousBest;
+            if (result == Result.COMPLETE && _score != null)
+                best = better(scored, best, _score);
+            score.put("best", best);
+            //(whether this game's is the best so far: the page's "a new best")
+            score.put("newBest", result == Result.COMPLETE && _score != null && !_score.equals(_previousBest) && _score.equals(best));
+            event.put("score", score);
+        }
+        _unlisted = result == Result.COMPLETE && !_def.slots.isEmpty() && !_picks.isEmpty()
+                && _def.solutions.stream().noneMatch(solution -> SlotBounds.same(solution.picks(), _picks, _library));
+        event.put("unlisted", _unlisted);
+    }
+
+    /** The better of two scores, as the scenario counts better; the one that is there if the other is not. */
+    public static Integer better(ScenarioDefinition.Score scored, Integer one, Integer other) {
+        if (one == null)
+            return other;
+        if (other == null)
+            return one;
+        return scored.higherBetter() ? Math.max(one, other) : Math.min(one, other);
+    }
+
+    /**
+     * What the page is told of a puzzle in the info event: mode ("edit" while it waits for its picks, otherwise
+     * "play"), level ("puzzle" for a puzzle with slots, otherwise "none"), undo (whether taking back is allowed), and
+     * for a puzzle with slots, each slot (see slotInfo).
+     */
+    private void puzzleInfo(Map<String, Object> event) {
+        //(a sandbox has said its own mode and level: see infoEvent)
+        if (Holding())
+            event.put("mode", "edit");
+        if (!_def.slots.isEmpty())
+            event.put("level", "puzzle");
+        event.put("undo", _def.undoAllowed());
+        if (!_def.slots.isEmpty())
+            event.put("slots", slotInfo(_def, _picks, _library));
+    }
+
+    /**
+     * Each slot as the page shows it: [{id, label, zone, seat, on, position, bound, pool, filter, overlap, comes:
+     * {tokens, wounds}, pick, pickName}].  'bound' is the search that finds what it may hold (the pool and the slot's
+     * filter, as one text); where the two say the same key, 'overlap' lists it, and the page searches with 'pool' and
+     * 'filter' each (see SlotBounds).  'pick' is the blueprint in it, null while it is empty.
+     */
+    public static List<Map<String, Object>> slotInfo(ScenarioDefinition def, Map<String, String> picks, LotroCardBlueprintLibrary library) {
+        List<Map<String, Object>> slots = new ArrayList<>();
+        for (ScenarioDefinition.Slot slot : def.slots.values()) {
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("id", slot.id());
+            json.put("label", slot.label());
+            json.put("zone", ScenarioParser.slotZoneName(slot.zone()));
+            json.put("seat", slot.seat() == def.human ? "human" : "opponent");
+            json.put("on", slot.on());
+            json.put("position", slot.position());
+            json.put("bound", SlotBounds.bound(def, slot));
+            json.put("pool", def.pool);
+            json.put("filter", slot.filter());
+            json.put("overlap", SlotBounds.overlap(def, slot));
+            Map<String, Object> comes = new LinkedHashMap<>();
+            comes.put("tokens", slot.tokens());
+            comes.put("wounds", slot.wounds());
+            json.put("comes", comes);
+            String pick = picks.get(slot.id());
+            json.put("pick", pick);
+            json.put("pickName", pick == null ? null : SlotBounds.nameOf(pick, library));
+            slots.add(json);
+        }
+        return slots;
+    }
+
+    /** A solution's answers, for the script playing itself to give where it has none for the person (see PlayAnswers). */
+    private List<ScenarioDefinition.Answer> _tape = List.of();
+    private int _taped;
+
+    /**
+     * Has the script, as it plays itself (RunTo), give the person these answers, one after another, wherever it has
+     * no answer of its own for them: a solution played through.  To be called before Begin, with a RunTo past the
+     * last step.
+     */
+    public void PlayAnswers(List<ScenarioDefinition.Answer> answers) {
+        _tape = answers == null ? List.of() : List.copyOf(answers);
+        _taped = 0;
+    }
+
+    /** Whether a solution's answers have the next answer to this decision (the person's, with no answer of the script's). */
+    private boolean onTape(Ruling ruling) {
+        return _taped < _tape.size() && ruling.player().equals(_human) && ruling.problem() == null
+                && (ruling.answer() == null || ruling.noAnswer() != null) && (ruling.step() == null || !ruling.step().pause);
+    }
+
+    /** How many of a solution's answers the script gave as it played itself (see PlayAnswers). */
+    public int AnswersPlayed() { return _taped; }
+
+    /* ---- the other seat: who plays it (a sandbox's otherSeat), and the table seen from it (the flip) ---- */
+
+    /** A journal note: who plays a sandbox's other seat from here on; its value script, bot or person. */
+    static final String OTHER_SEAT_NOTE = "sandbox.otherSeat";
+
+    /** Who plays a sandbox's other seat now: options.otherSeat, then as the person sets it (SetOtherSeat). */
+    private ScenarioDefinition.OtherSeat _otherSeat = ScenarioDefinition.OtherSeat.SCRIPT;
+    /** The seat the person's page shows the table from (see Look); null for the seat they sit in. */
+    private Seat _looking;
+
+    /** Who plays a sandbox's other seat now; null for a scenario that is not a sandbox (or has an author). */
+    public ScenarioDefinition.OtherSeat OtherSeat() {
+        return _sandbox == null ? null : _otherSeat;
+    }
+
+    /** Who can be given a sandbox's other seat here, as the page offers it: script, bot (if this server has one), person. */
+    public List<String> OtherSeats() {
+        if (_sandbox == null)
+            return List.of();
+        List<String> choices = new ArrayList<>();
+        choices.add("script");
+        if (_bot != null)
+            choices.add("bot");
+        choices.add("person");
+        return choices;
+    }
+
+    /**
+     * Whether whoever plays the opponent's seat answers it by itself (its script, orders, fallback, the bot, or the
+     * author through AuthorAnswers): everywhere but a sandbox whose other seat the person plays.
+     */
+    public boolean OpponentAnswersItself() {
+        return _sandbox == null || _otherSeat != ScenarioDefinition.OtherSeat.PERSON;
+    }
+
+    /**
+     * Whether an answer of the person's to this player's decision is to be taken: their own, always; the other
+     * seat's, in a sandbox whose other seat they play, or when the authoring tool has left that decision for the
+     * author.  (Elsewhere the other seat answers for itself, and an answer of the person's would race it.)
+     */
+    public boolean PersonAnswersFor(String player) {
+        if (player.equals(_human))
+            return true;
+        if (!player.equals(_opponent))
+            return false;
+        if (_sandbox != null)
+            return _otherSeat == ScenarioDefinition.OtherSeat.PERSON;
+        return _author != null && _held != null && _held.player().equals(player);
+    }
+
+    /**
+     * The person gives a sandbox's other seat to the script, the bot or themselves.  Allowed whether the game is
+     * stopped or not.  It is written in the journal (a game taken back or built again has it as it was at that
+     * point), and is a place to go back to.  If the other seat is waiting on a decision, whoever now plays it is
+     * given it at once (and given to the person, it waits).  To be called inside the game's lock.
+     * @param to "script", "bot" or "person".
+     * @return Null if done; otherwise why not.
+     */
+    public String SetOtherSeat(String to) {
+        if (_sandbox == null)
+            return "Only a sandbox's other seat can be given to the bot or to you.";
+        if (_result != null || _table.GameIsFinished())
+            return "The game is over.";
+        ScenarioDefinition.OtherSeat seat;
+        try {
+            seat = ScenarioDefinition.OtherSeat.valueOf(to == null ? "" : to.trim().toUpperCase(java.util.Locale.ROOT));
+        } catch (IllegalArgumentException exp) {
+            return "'" + to + "' is not who can play the other seat: it is " + String.join(", ", OtherSeats()) + ".";
+        }
+        if (seat == ScenarioDefinition.OtherSeat.BOT && _bot == null)
+            return "This server has no bot to play the other seat.";
+        if (seat == _otherSeat)
+            return null;
+        _sandbox.Point(otherSeatLabel(seat));
+        _table.Journal().note(_human, OTHER_SEAT_NOTE, seat.name().toLowerCase(java.util.Locale.ROOT));
+        otherSeat(seat);
+        otherSeatChanged();
+        return null;
+    }
+
+    private String otherSeatLabel(ScenarioDefinition.OtherSeat seat) {
+        return "Gave the " + _def.human.other().key() + " seat to " + switch (seat) {
+            case SCRIPT -> "the script";
+            case BOT -> "the bot";
+            case PERSON -> "you";
+        };
+    }
+
+    private void otherSeat(ScenarioDefinition.OtherSeat seat) {
+        _otherSeat = seat;
+        //(played by the bot, the opponent's rules are fallback: bot's, with none of the sandbox's or the eager one's)
+        _session.Director().FallbackInstead(seat == ScenarioDefinition.OtherSeat.BOT ? Fallback.BOT : null);
+    }
+
+    /** A note of a journal this game follows: who plays the other seat from there on, written into this game's journal too. */
+    private void followOtherSeat(GameJournal.Entry note) {
+        if (!note.detail().equals(OTHER_SEAT_NOTE))
+            return;
+        ScenarioDefinition.OtherSeat seat = ScenarioDefinition.OtherSeat.valueOf(note.value().toUpperCase(java.util.Locale.ROOT));
+        _sandbox.Point(otherSeatLabel(seat));
+        _table.Journal().note(_human, OTHER_SEAT_NOTE, note.value());
+        otherSeat(seat);
+    }
+
+    /**
+     * Whoever now plays the other seat is given the decision it is waiting on, if any: the script or the bot answers
+     * it (ruled on afresh, where no step has it, for the orders and fallback now in force); the person is left to.
+     */
+    private void otherSeatChanged() {
+        if (!_begun)
+            return;
+        if (_otherSeat == ScenarioDefinition.OtherSeat.PERSON) {
+            //(an answer of the script's or the bot's that is on its way is dropped: see LotroGameMediator)
+            _move = null;
+            return;
+        }
+        Ruling ruling = _session.Ruling(_opponent);
+        if (ruling == null || _table.userFeedback().getAwaitingDecision(_opponent) != ruling.decision())
+            return;
+        if (ruling.step() == null)
+            _session.Reroute(_opponent);
+        else
+            act(ruling);
+    }
+
+    /**
+     * Whether the person may look at the table from the other seat (LotroGameMediator.sandboxFlip): in a sandbox,
+     * and for an author at the table, who answers for the opponent already.
+     */
+    public boolean CanFlip() {
+        return _sandbox != null || _author != null;
+    }
+
+    /** The seat the person's page shows the table from: the one they sit in, unless they have flipped it. */
+    public Seat Looking() {
+        return _looking != null ? _looking : _def.human;
+    }
+
+    /**
+     * The person's page now shows the table from this seat (LotroGameMediator.sandboxFlip, which gives the page its
+     * channel).  Not written in the journal: it changes what one page is shown, not the game.  The info event is sent
+     * again, saying so.  To be called inside the game's lock.
+     */
+    public void Look(Seat seat) {
+        _looking = seat == _def.human ? null : seat;
+        sandboxShown();
+    }
+
+    /** The seat whose decision the game is waiting on ("freeps" or "shadow"); the person's if both; null if neither, or the game is over. */
+    public String WaitingOn() {
+        if (_table.GameIsFinished() || _result != null)
+            return null;
+        if (_table.userFeedback().getAwaitingDecision(_human) != null)
+            return _def.human.key();
+        if (_table.userFeedback().getAwaitingDecision(_opponent) != null)
+            return _def.human.other().key();
+        return null;
+    }
+
+    /**
+     * What the info event and a sandbox's state say of the seats: {seat (looked from), otherSeat (null but in a
+     * sandbox), otherSeats, waitingOn, canFlip}.
+     */
+    public Map<String, Object> SeatState() {
+        Map<String, Object> seats = new LinkedHashMap<>();
+        seats.put("seat", Looking().key());
+        seats.put("otherSeat", OtherSeat() == null ? null : OtherSeat().name().toLowerCase(java.util.Locale.ROOT));
+        seats.put("otherSeats", OtherSeats());
+        seats.put("waitingOn", WaitingOn());
+        seats.put("canFlip", CanFlip());
+        return seats;
     }
 }

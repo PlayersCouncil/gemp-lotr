@@ -204,6 +204,43 @@ public class ScenarioAuthoringTwoSidedTest {
     }
 
     @Test
+    public void anAuthorFlipsTheTableAndAnswersTheHeldOpponentDecisionFromItsSeat() throws Exception {
+        open("two-sided", upToTheirAssignment());
+        authoring.goTo(player, 99);
+        Client client = new Client(games.getLast());
+        client.poll();
+        LiveScenario live = games.getLast().getScenario();
+        client.answer(compiled(live, live.HumanPlayer(), "assign(boromir: freca, oppFrodo: ravager)"));
+        awaitState(one -> one.getJSONObject("waiting").getJSONObject("opponent") != null
+                && one.getJSONObject("waiting").getJSONObject("opponent").getBooleanValue("held"));
+        assertTrue(live.CanFlip());
+        assertNull(live.OtherSeat());
+
+        //Flipped: the author's page is the opponent's, with its decision; the answer is the opponent's, and written
+        assertNull(games.getLast().sandboxFlip(AUTHOR, null));
+        assertEquals("shadow", live.Looking().key());
+        Client flipped = new Client(games.getLast());
+        flipped.poll();
+        assertNotNull(flipped.decision);
+        assertEquals(LiveScenario.OPPONENT_PLAYER, flipped.decision.getParticipantId());
+        flipped.answer(compiled(live, LiveScenario.OPPONENT_PLAYER, "choose(boromir)"));
+        JSONObject state = awaitState(one -> one.getJSONObject("draft").getJSONArray("steps").size() > 10);
+        JSONObject written = state.getJSONObject("draft").getJSONArray("steps").getJSONObject(10);
+        assertEquals("shadow, cards, nextSkirmish, phase(assignment), turn(2), as(freeps)", written.getString("when"));
+        assertEquals("choose(boromir)", written.getString("answer"));
+
+        //...and back
+        assertNull(games.getLast().sandboxFlip(AUTHOR, "human"));
+        assertEquals("freeps", live.Looking().key());
+    }
+
+    private static String compiled(LiveScenario live, String player, String term) throws Exception {
+        return live.Table().userFeedback().getAwaitingDecision(player) == null ? null
+                : AnswerCompiler.compile(live.Table(), live.Table().userFeedback().getAwaitingDecision(player),
+                        ScenarioParser.parseAnswer(live.Definition(), Terms.parse(term, "test").getFirst(), "test"));
+    }
+
+    @Test
     public void autoPassForEachRoleIsSetAndSurvivesBeingSaved() throws Exception {
         open("two-sided", upToTheirAssignment());
         authoring.edit(player, """

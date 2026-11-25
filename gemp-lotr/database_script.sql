@@ -438,7 +438,8 @@ CREATE TABLE `prize_award` (
 
 --
 -- Table structure for table `scenario_run`
--- (db/2026-10-01_scenario-tables.sql: a row for every game of a scenario; its replay is found through recording_id)
+-- (db/2026-10-01_scenario-tables.sql: a row for every game of a scenario; its replay is found through recording_id;
+-- picks, score and unlisted: db/2026-11-24_scenario-puzzles.sql)
 --
 
 DROP TABLE IF EXISTS `scenario_run`;
@@ -458,10 +459,14 @@ CREATE TABLE `scenario_run` (
   `problems` text DEFAULT NULL,
   `recording_id` varchar(64) DEFAULT NULL,
   `journal` mediumtext DEFAULT NULL,
+  `picks` text DEFAULT NULL,
+  `score` int(11) DEFAULT NULL,
+  `unlisted` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `scenario_run_player` (`player_id`,`scenario_id`),
   KEY `scenario_run_scenario` (`scenario_id`,`version`),
-  KEY `scenario_run_recording` (`recording_id`)
+  KEY `scenario_run_recording` (`recording_id`),
+  KEY `scenario_run_unlisted` (`scenario_id`,`unlisted`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

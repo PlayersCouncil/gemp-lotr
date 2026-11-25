@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, Signal, signal } from '@angular/core';
 import { DecisionButton } from './decision-view';
 
 /**
@@ -50,5 +50,15 @@ export class DecisionGates {
 
   after(gesture: DecisionGesture): void {
     for (const gate of this.gates) gate.after?.(gesture);
+  }
+
+  private readonly hiders = signal<readonly Signal<boolean>[]>([]);
+  /** Somebody hides the waiting decision altogether now (the table being changed by hand): nothing of it is shown. */
+  readonly hiding = computed(() => this.hiders().some((hides) => hides()));
+
+  /** Adds a say in whether the decision is shown at all (true: hidden); the function returned takes it away. */
+  hide(when: Signal<boolean>): () => void {
+    this.hiders.update((all) => [...all, when]);
+    return () => this.hiders.update((all) => all.filter((other) => other !== when));
   }
 }

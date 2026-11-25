@@ -20,6 +20,15 @@
   top: var(--gd-path-top, round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px));
 }
 
+/* The open spot for the next site (a sandbox stopped): where a site would be, as large */
+.gd-game-path__spot {
+  position: absolute;
+  left: 0;
+  top: var(--gd-path-top, round(down, var(--gd-path-index, 0) * (var(--site-h) + var(--gap)), 1px));
+  width: 100%;
+  height: var(--site-h);
+}
+
 /*
  * A low screen in the modern theme (the page's narrow path column, which scrolls): the sites one under the other 5px
  * apart at the column's width, never squeezed, the path as high as they are
@@ -32,7 +41,8 @@
     gap: 5px;
   }
 
-  :host-context(html[data-theme='modern']) .gd-card {
+  :host-context(html[data-theme='modern']) .gd-card,
+  :host-context(html[data-theme='modern']) .gd-game-path__spot {
     position: relative;
     top: 0;
     flex: none;

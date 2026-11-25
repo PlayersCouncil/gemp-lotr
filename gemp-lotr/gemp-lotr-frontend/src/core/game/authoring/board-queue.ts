@@ -71,7 +71,7 @@ const TOTALS = ['twilight', 'burdens', 'threats'] as const;
 type Total = (typeof TOTALS)[number];
 const isTotal = (name: string): name is Total => (TOTALS as readonly string[]).includes(name);
 /** The changes that are about one card, named first. */
-const OF_A_CARD = ['wound', 'heal', 'tokens', 'move'];
+const OF_A_CARD = ['wound', 'heal', 'tokens', 'move', 'modify', 'unmodify'];
 /** The changes that put a card (first) on another (second). */
 const ON_A_CARD = ['attach', 'stack'];
 /** The changes of who controls a site (named first, by its number). */

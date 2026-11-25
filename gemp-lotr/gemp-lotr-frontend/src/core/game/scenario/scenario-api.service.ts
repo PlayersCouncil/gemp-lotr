@@ -23,9 +23,14 @@ export class ScenarioApi {
   }
 
   /** Starts a game of a scenario (ending the one the player has, if any); from its last checkpoint if asked. */
-  start(id: string, fromCheckpoint = false): Observable<StartedScenario> {
+  start(id: string, fromCheckpoint = false, picks: 'same' | null = null): Observable<StartedScenario> {
     return this.http
-      .postJson<{ gameId?: unknown }>('/scenarios/start', { id, ...(fromCheckpoint ? { from: 'checkpoint' } : {}) })
+      .postJson<{ gameId?: unknown }>('/scenarios/start', {
+        id,
+        ...(fromCheckpoint ? { from: 'checkpoint' } : {}),
+        // (a puzzle's game again with the cards of the last one: `picks=same`)
+        ...(picks ? { picks } : {}),
+      })
       .pipe(map((answer) => ({ gameId: String(answer.gameId) })));
   }
 }

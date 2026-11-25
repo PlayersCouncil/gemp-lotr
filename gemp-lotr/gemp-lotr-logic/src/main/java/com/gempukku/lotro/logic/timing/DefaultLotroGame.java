@@ -227,6 +227,26 @@ public class DefaultLotroGame implements LotroGame {
         }
     }
 
+    /**
+     * @return Whether the decision the game is waiting on can be asked again (TurnProcedure.canAskAgain).
+     */
+    public boolean canAskAgain() {
+        return !_cancelled && !_finished && _turnProcedure.canAskAgain();
+    }
+
+    /**
+     * Withdraws the decision the game is waiting on and carries the game on until the process that asked it has
+     * asked again, of the board as it now stands (TurnProcedure.askAgain), or until something else stops it.  For a
+     * scenario's sandbox, whose board is changed by hand while the game waits; nothing in an ordinary game does it.
+     * @throws IllegalStateException unless canAskAgain.
+     */
+    public void askAgain() {
+        if (!canAskAgain())
+            throw new IllegalStateException("The game is not waiting on a decision that can be asked again");
+        _turnProcedure.askAgain();
+        carryOutPendingActionsUntilDecisionNeeded();
+    }
+
     @Override
     public String getWinnerPlayerId() {
         return _winnerPlayerId;
@@ -399,6 +419,16 @@ public class DefaultLotroGame implements LotroGame {
             if (zone == null || !zone.isInPlay())
                 playerLost(getGameState().getCurrentPlayerId(), "The Ring-Bearer is dead");
         }
+    }
+
+    /**
+     * Sends the players the game's figures (strengths, vitalities and the rest) again if they have changed, for a change
+     * made to the game from outside its own procedure while it waits on a decision: a scenario's board changed by
+     * hand.  The game's own procedure sends them as it goes; no ordinary game calls this.
+     */
+    public void refreshGameStats() {
+        if (_turnProcedure.getGameStats().updateGameStats(this))
+            _gameState.sendGameStats(_turnProcedure.getGameStats());
     }
 
     public void addGameStateListener(String playerId, GameStateListener gameStateListener) {

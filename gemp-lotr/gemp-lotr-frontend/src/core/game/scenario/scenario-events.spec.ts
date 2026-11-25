@@ -87,6 +87,19 @@ describe('parseScenarioEvent', () => {
       draftTest: false,
       twoSided: false,
       opening: 'board',
+      mode: 'play',
+      level: 'none',
+      tools: [],
+      canStop: false,
+      canStart: false,
+      slots: [],
+      undo: null,
+      human: 'asdf',
+      seat: 'freeps',
+      otherSeat: null,
+      otherSeats: [],
+      waitingOn: null,
+      canFlip: false,
     });
   });
 
@@ -107,6 +120,19 @@ describe('parseScenarioEvent', () => {
       draftTest: false,
       twoSided: false,
       opening: 'board',
+      mode: 'play',
+      level: 'none',
+      tools: [],
+      canStop: false,
+      canStart: false,
+      slots: [],
+      undo: null,
+      human: null,
+      seat: 'freeps',
+      otherSeat: null,
+      otherSeats: [],
+      waitingOn: null,
+      canFlip: false,
     });
     expect(
       parse({
@@ -383,7 +409,19 @@ describe('parseScenarioEvent', () => {
   it('reads how the scenario ended: the result, its messages and the last checkpoint', () => {
     expect(
       parse({ type: 'end', result: 'complete', messages: [], message: null, restart: false, checkpoint: null }),
-    ).toEqual({ type: 'end', result: 'complete', messages: [], message: null, checkpoint: null, restart: false });
+    ).toEqual({
+      type: 'end',
+      result: 'complete',
+      messages: [],
+      message: null,
+      checkpoint: null,
+      restart: false,
+      winner: null,
+      reason: null,
+      reset: false,
+      score: null,
+      unlisted: false,
+    });
     expect(
       parse({ type: 'end', result: 'failed', messages: [MESSAGE], message: '<p>Again?</p>', checkpoint: 5 }),
     ).toMatchObject({ result: 'failed', messages: [{ header: 'Welcome' }], message: '<p>Again?</p>', checkpoint: 5 });
@@ -395,6 +433,114 @@ describe('parseScenarioEvent', () => {
     expect(parse({ type: 'end', result: 'off_script', restart: 'yes' })).toMatchObject({ restart: false });
     // A result it doesn't know is an error
     expect(parse({ type: 'end', result: 'won' })).toMatchObject({ result: 'error', messages: [] });
+  });
+
+  it("reads a table changed by hand: the mode, the level, the tools, Stop and Start (a sandbox's, as the server sends it)", () => {
+    expect(
+      parse({
+        type: 'info',
+        id: 'sandbox',
+        kind: 'sandbox',
+        mode: 'edit',
+        level: 'sandbox',
+        tools: ['add', 'copy', 'paint', 'modify'],
+        canStop: false,
+        canStart: true,
+      }),
+    ).toMatchObject({
+      kind: 'sandbox',
+      mode: 'edit',
+      level: 'sandbox',
+      tools: ['add', 'copy', 'modify'],
+      canStart: true,
+    });
+    expect(parse({ type: 'info', id: 'p', mode: 'paused', level: 'puzzle', canStop: 'yes' })).toMatchObject({
+      mode: 'play',
+      level: 'puzzle',
+      canStop: false,
+    });
+    // (the author's level is the page's own, never the server's)
+    expect(parse({ type: 'info', id: 'p', level: 'author' })).toMatchObject({ level: 'none' });
+  });
+
+  it("reads a sandbox's end: who won and why, and that it can be reset", () => {
+    expect(
+      parse({
+        type: 'end',
+        result: 'ended',
+        messages: [],
+        message: null,
+        restart: false,
+        checkpoint: null,
+        winner: 'opponent',
+        reason: 'The Ring-Bearer is dead',
+        reset: true,
+      }),
+    ).toMatchObject({ result: 'ended', winner: 'opponent', reason: 'The Ring-Bearer is dead', reset: true });
+    expect(parse({ type: 'end', result: 'ended', winner: 'both', reason: 3, reset: 'yes' })).toMatchObject({
+      winner: null,
+      reason: null,
+      reset: false,
+    });
+    expect(parse({ type: 'end', result: 'ended', winner: 'human' })).toMatchObject({ winner: 'human' });
+  });
+
+  it("reads a puzzle's info: its slots and whether it can be taken back (ep-notes.md P3, P6)", () => {
+    const info = parse({
+      type: 'info',
+      id: 'p10',
+      kind: 'puzzle',
+      mode: 'edit',
+      level: 'puzzle',
+      undo: false,
+      slots: [{ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }],
+    }) as ScenarioInfo;
+    expect(info.undo).toBe(false);
+    expect(info.slots).toEqual([
+      expect.objectContaining({ id: 'ally', zone: 'support', label: 'a Rohan ally', comes: { tokens: 1, wounds: 0 } }),
+    ]);
+    expect(parse({ type: 'info', id: 'p', undo: 'no' })).toMatchObject({ undo: null, slots: [] });
+    // Flip table (ef-notes Part 2 E): the seat looked from, who plays the other seat, what is waited on
+    expect(
+      parse({
+        type: 'info',
+        id: 'sandbox',
+        human: 'Tester',
+        humanSeat: 'freeps',
+        seat: 'shadow',
+        otherSeat: 'Person',
+        otherSeats: ['script', 'person', 'nobody', 'person'],
+        waitingOn: 'shadow',
+        canFlip: true,
+      }),
+    ).toMatchObject({
+      human: 'Tester',
+      seat: 'shadow',
+      otherSeat: 'person',
+      otherSeats: ['script', 'person'],
+      waitingOn: 'shadow',
+      canFlip: true,
+    });
+    // (a seat not said is the person's own)
+    expect(parse({ type: 'info', id: 'p', humanSeat: 'shadow', seat: 'up' })).toMatchObject({ seat: 'shadow' });
+  });
+
+  it("reads a puzzle's end: its score, and whether the solution is one its author did not list (P5, P7)", () => {
+    expect(
+      parse({
+        type: 'end',
+        result: 'complete',
+        score: { value: 1160, label: "Sméagol's strength", better: 'higher', best: 1160, newBest: true },
+        unlisted: true,
+      }),
+    ).toMatchObject({
+      score: { value: 1160, label: "Sméagol's strength", better: 'higher', best: 1160, newBest: true },
+      unlisted: true,
+    });
+    expect(parse({ type: 'end', result: 'complete', score: 'high', unlisted: 'yes' })).toMatchObject({
+      score: null,
+      unlisted: false,
+    });
   });
 
   it('reads nothing from what is not a scenario event', () => {

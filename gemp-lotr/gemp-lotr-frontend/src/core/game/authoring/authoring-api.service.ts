@@ -177,4 +177,49 @@ export class AuthoringApi {
   left(): boolean {
     return this.exit.beacon(`${SERVER_URL}${AUTHOR}/left`, { left: 'true' });
   }
+
+  /**
+   * A puzzle's solution (ep P4): `record` (a fresh game with `picks`, or the game in hand's; what is answered that
+   * the script leaves open goes into the solution), `stop` recording, `play` it, `use` its picks for the draft's
+   * games, `delete` it.
+   */
+  solution(op: SolutionOp, name: string | null, picks: Readonly<Record<string, string>> | null = null) {
+    return this.post<AuthoringResult>('solution', {
+      op,
+      name,
+      picks: picks === null ? null : JSON.stringify(picks),
+    });
+  }
+
+  /** Cards the deck builder's filter text finds (any logged-in player; es: GET /scenarios/search): `count` of them. */
+  search(filter: string, count = 1): Observable<CardSearchAnswer> {
+    return this.http.getJson<CardSearchAnswer>('/scenarios/search', { filter, start: 0, count });
+  }
+
+  /**
+   * Whether a filter is a bound the server takes (as strictly as saving a slot), and how many cards it finds; with
+   * `pool`, the cards both find, each searched with by itself (ef-notes.md 4: `GET /scenarios/author/bound`).
+   */
+  bound(filter: string, pool: string | null = null): Observable<unknown> {
+    return this.get('bound', { filter, pool: pool !== null && pool.trim() !== '' ? pool : null });
+  }
+}
+
+/** What the authoring tool does with a puzzle's solution. */
+export type SolutionOp = 'record' | 'stop' | 'play' | 'use' | 'delete';
+
+/** What a card search answers (es-notes.md 7). */
+export interface CardSearchAnswer {
+  total: number;
+  start: number;
+  cards: readonly {
+    blueprintId: string;
+    name: string;
+    type: string;
+    side: string | null;
+    culture: string | null;
+    site: boolean;
+    siteNumber: number | null;
+    twilight: number | null;
+  }[];
 }

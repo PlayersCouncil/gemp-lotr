@@ -18,7 +18,9 @@ import java.util.Set;
 public final class ScenarioDefinition {
     public enum Kind { TUTORIAL, PUZZLE, SANDBOX }
     public enum Coverage { STRICT, GUIDED }
-    public enum Fallback { FAIL, PASS, BOT, SANDBOX }
+    public enum Fallback { FAIL, PASS, BOT, SANDBOX,
+        /** Takes every optional action and response it is offered, and makes every forced choice the plainest way (see ScenarioDirector.eager). */
+        EAGER }
     public enum RngDefault { IDENTITY, RANDOM }
     public enum RunnerLevel { SETUP, PREFIX, SOLUTION, FULL }
 
@@ -160,6 +162,11 @@ public final class ScenarioDefinition {
         public final Map<String, Integer> wounds = new LinkedHashMap<>();
         /** Culture tokens of the card's own culture. */
         public final Map<String, Integer> tokens = new LinkedHashMap<>();
+        /**
+         * setup.modifiers: card alias -> the modifiers put on it by hand when the board is laid out (see
+         * CardModifiers), in the order they are written.
+         */
+        public final Map<String, List<Modification>> modifiers = new LinkedHashMap<>();
         public int burdens = 0;
         public int threats = 0;
         /**
@@ -361,7 +368,11 @@ public final class ScenarioDefinition {
         /** A site controlled by a seat: card the site's name (or null), amount its number (or 0), target the seat. */
         CONTROL,
         /** A controlled site controlled by nobody again: card the site's name (or null), amount its number (or 0). */
-        LIBERATE }
+        LIBERATE,
+        /** A modifier put on a card by hand: card the card, modification what and for how long (see CardModifiers). */
+        MODIFY,
+        /** Modifiers put on by hand taken off a card again: card the card, target what (null for every one). */
+        UNMODIFY }
 
     /**
      * Something the director does to the board directly.
@@ -371,7 +382,31 @@ public final class ScenarioDefinition {
      *               seat that draws.  ORDER: the hand or pile, e.g. "freeps.hand".
      * @param amount How many.  For TWILIGHT, BURDENS and THREATS this is a new total unless relative is set.
      */
-    public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) { }
+    public record DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source, Modification modification) {
+        public DoOp(DoKind kind, String card, String target, int amount, boolean relative, String source) {
+            this(kind, card, target, amount, relative, source, null);
+        }
+    }
+
+    /** How long a modifier put on by hand lasts: to the end of the phase it is put on in, of the turn, or until it is taken off. */
+    public enum ModifierTime { PHASE, TURN, REMOVED }
+
+    /**
+     * A modifier put on one card by hand (do: modify(...), setup.modifiers): a stat changed or a keyword given.
+     * @param what Its word in the file: strength, vitality, resistance, cost, or a keyword (see CardModifiers.WORDS).
+     * @param amount A stat's change (never 0), a numbered keyword's number (1 or more); 0 for a keyword with no number.
+     */
+    public record Modification(String what, int amount, ModifierTime until) {
+        /** As the file writes it: "strength +2", "fierce", "damage +1 turn". */
+        public String text() {
+            StringBuilder text = new StringBuilder(what);
+            if (amount != 0)
+                text.append(' ').append(amount > 0 ? "+" : "").append(amount);
+            if (until != ModifierTime.REMOVED)
+                text.append(' ').append(until.name().toLowerCase(java.util.Locale.ROOT));
+            return text.toString();
+        }
+    }
 
     /** What takes a message off the screen and brings the next one. */
     public enum Advance {
@@ -619,6 +654,10 @@ public final class ScenarioDefinition {
          * fellowship surviving).  Null for as before: failed, with loseMessage.
          */
         public End gameLost;
+        /** outcome.judge: the moment at which the scenario is over, won or failed; null for none. */
+        public Judge judge;
+        /** outcome.score: a number read from the game as the scenario ends; null for an unscored scenario. */
+        public Score score;
     }
 
     /* ---- the opponent's answering by rule (assign by rule, leftovers, the sandbox) ---- */
@@ -661,5 +700,153 @@ public final class ScenarioDefinition {
             all.addAll(step.children);
         }
         return all;
+    }
+
+    /* ---- sandboxes ---- */
+
+    /**
+     * options.tools: what the person playing a sandbox may change while it is stopped, by the names of
+     * ScenarioSandbox.TOOLS.  Null for all of them.
+     */
+    public List<String> tools;
+
+    /**
+     * What the person playing may change in edit mode, as the page is told it: "sandbox" for a sandbox, "none"
+     * otherwise.  (A puzzle's level is the puzzle's own.)
+     */
+    public String level() {
+        return kind == Kind.SANDBOX ? "sandbox" : "none";
+    }
+
+    /**
+     * Who plays a sandbox's other seat (the seat the person does not sit in): the file's own opponent, its steps,
+     * orders and fallback (SCRIPT, as every scenario's opponent is played); Gemp's bot wherever steps and orders leave
+     * it (BOT: what opponent.fallback: bot does); or nobody but the person (PERSON: its decisions wait for the person,
+     * who answers them from the table seen from that seat: see LotroGameMediator.sandboxFlip).  The person changes
+     * it while the sandbox runs (LiveScenario.SetOtherSeat); the file says where it starts.
+     */
+    public enum OtherSeat { SCRIPT, BOT, PERSON }
+
+    /** options.otherSeat (a sandbox's only); null where the file does not say, which is SCRIPT. */
+    public OtherSeat otherSeat;
+
+    /** Who plays a sandbox's other seat when its game begins: options.otherSeat, or the script. */
+    public OtherSeat otherSeatInForce() {
+        return otherSeat != null ? otherSeat : OtherSeat.SCRIPT;
+    }
+
+    /** The tools in force: options.tools, or all of them. */
+    public List<String> toolsInForce() {
+        return tools != null ? tools : ScenarioSandbox.TOOLS;
+    }
+
+    /**
+     * The coverage the scenario is played with.  Nothing a person does in a sandbox is off its script, however few
+     * steps it has: a sandbox is always guided, whatever its file says.
+     */
+    public Coverage coverageInForce() {
+        return kind == Kind.SANDBOX ? Coverage.GUIDED : coverage;
+    }
+
+    /**
+     * The opponent's fallback in force.  A sandbox's opponent never leaves the script by being asked something no
+     * step covers: 'fail' (the default) is taken as 'pass' there.
+     */
+    public Fallback fallbackInForce() {
+        return kind == Kind.SANDBOX && fallback == Fallback.FAIL ? Fallback.PASS : fallback;
+    }
+
+    /* ---- puzzles: judging at a moment, scores, undo, slots the solver fills, and the author's solutions ---- */
+
+    /**
+     * When outcome.judge looks at the game: the start of a phase, the end of one, the end of the turn, or a skirmish
+     * being resolved (its strengths compared, before anybody is wounded or overwhelmed for it).
+     */
+    public enum JudgeMoment { START_OF, END_OF, END_OF_TURN, SKIRMISH_RESOLUTION }
+
+    /**
+     * outcome.judge: the scenario is over at a moment of the game, won if 'win' holds then (and 'lose' does not), and
+     * failed otherwise.
+     * @param phase START_OF and END_OF: the phase; null for END_OF_TURN.
+     * @param turn Only on this turn; null for the first time the moment comes.
+     * @param win Card-definition requirements (JSON array text) that have to hold at the moment; null for "the moment
+     *            came" (a scored puzzle that is complete once it has been played to its end).
+     * @param source The moment as it was written: "endOf(archery)", "startOf(regroup), turn(2)", "endOfTurn".
+     */
+    public record Judge(JudgeMoment at, Phase phase, Integer turn, String win, String source) { }
+
+    /**
+     * outcome.score: a number read from the game as the scenario ends.
+     * @param value What to read, as a message's text quotes the game, without its braces: "strength:smeagol",
+     *              "burdens" (see Templates).  Null if valueJson says it.
+     * @param valueJson Or a value as card definitions write one ({ type: forEachWound, filter: companion }), as JSON
+     *                  text; null if value says it.
+     * @param higherBetter Whether a higher score is the better one (better: higher), or a lower (better: lower).
+     * @param label What the score is called on the page ("Sméagol's strength"); null for "Score".
+     */
+    public record Score(String value, String valueJson, boolean higherBetter, String label) { }
+
+    /** options.undo: whether the person may take back what they have done.  Null: off in a puzzle, on otherwise. */
+    public Boolean undo;
+
+    /** Whether the person may take back what they have done in a game of this scenario. */
+    public boolean undoAllowed() {
+        return undo != null ? undo : kind != Kind.PUZZLE;
+    }
+
+    /** Where a slot's card sits when the game begins: any place setup can put a card, and a site of the path. */
+    public enum SlotZone { CHARACTERS, SUPPORT, MINIONS, HAND, DECK, DISCARD, DEAD_PILE, ATTACHED, STACKED, SITE }
+
+    /**
+     * A card the solver chooses (slots: { id: { ... } }).  Its id is the name the card goes by everywhere a card's
+     * name can be written: steps, requirements, solutions, message text.
+     * @param seat Whose card it is.
+     * @param on ATTACHED and STACKED: the declared card it is attached to or stacked on; null otherwise.
+     * @param position DECK: where it is in the draw deck, counting from the top (1); null for the top.
+     * @param filter What it may be, in the deck builder's filter language ("culture:ROHAN cardtype:CONDITION"); null
+     *               for anything the puzzle's pool allows.
+     * @param tokens Culture tokens of the card's own culture it comes with.
+     * @param wounds Wounds it comes with.
+     * @param label What the page calls the slot ("a Rohan condition"); null for none.
+     */
+    public record Slot(String id, Seat seat, SlotZone zone, String on, Integer position, String filter, int tokens, int wounds, String label) { }
+
+    /** Every slot, in the order the file declares them. */
+    public final Map<String, Slot> slots = new LinkedHashMap<>();
+
+    /** pool: a deck builder filter every slot's card has to pass ("set:1-6"); null for every card. */
+    public String pool;
+
+    /**
+     * One of the author's solutions: the cards it puts in the slots, and what the person does where the script leaves
+     * the choice to them, in order.
+     * @param name What it is called, unique among the solutions.
+     * @param picks Slot id -> the blueprint picked for it.
+     * @param answers The person's answers, in the scenario's answer words, one for each of their decisions that no step
+     *                gives the runner an answer for, in the order those decisions come.  Once they run out the person
+     *                does as little as can be done (passes).
+     * @param note Whatever its author wanted to keep with it.
+     */
+    public record Solution(String name, Map<String, String> picks, List<Answer> answers, String note) { }
+
+    public final List<Solution> solutions = new ArrayList<>();
+
+    /** What a puzzle's rules can forbid the person that no card definition can say (rules.forbid). */
+    public enum Forbid {
+        /** Having their draw deck shuffled (by anything after the board is laid out). */
+        SHUFFLE,
+        /** Revealing a card, from hand or from the draw deck, by a card of their own. */
+        REVEAL
+    }
+
+    /** rules.forbid: doing any of these ends the scenario, failed, with the rule said. */
+    public final Set<Forbid> forbid = EnumSet.noneOf(Forbid.class);
+
+    /** The solution called that; null if there is none. */
+    public Solution solution(String name) {
+        for (Solution solution : solutions)
+            if (solution.name().equals(name))
+                return solution;
+        return null;
     }
 }

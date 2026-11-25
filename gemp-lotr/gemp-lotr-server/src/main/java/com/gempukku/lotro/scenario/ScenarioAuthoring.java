@@ -154,8 +154,11 @@ public class ScenarioAuthoring {
          */
         final Map<String, String[]> places = new java.util.concurrent.ConcurrentHashMap<>();
         volatile boolean dirty;
-        /** Whether what is done where the script has nothing to say is written into the script. */
-        volatile boolean recording = true;
+        /**
+         * Whether what is done where the script has nothing to say is written into the script ("Write down what I
+         * do"); null until the author says, for what the draft's kind has it (see recording(def)).
+         */
+        volatile Boolean recording;
         /** Whether the opponent's decisions that the script does not answer are left for the author. */
         volatile boolean askOpponent = true;
         /** The choices to take at the script's forks when it plays itself: the names in here, where a fork offers one. */
@@ -178,6 +181,13 @@ public class ScenarioAuthoring {
         /** For each of those, the name of the step it was in (null if it was in none, or the whole step went). */
         volatile List<String> leftOutSteps = List.of();
 
+        /** The solution whose picks the draft's games are played with; null for the first listed. */
+        volatile String playingWith;
+        /** The solution the author's open decisions are being written into, as its answers; null while none is. */
+        volatile String recordingSolution;
+        /** The solution whose answers the next fresh game plays itself through (see solution: play); null for none. */
+        volatile String replaying;
+
         Session(Player player) {
             this.player = player;
         }
@@ -192,6 +202,16 @@ public class ScenarioAuthoring {
             if (stopNotice != null && stopNotice.equals(notice))
                 notice = null;
             stopNotice = null;
+        }
+
+        /**
+         * Whether "Write down what I do" is on: as the author set it, or else on, except in a puzzle's draft.  A
+         * puzzle is played by its solutions, whose answers go to the person's decisions the script leaves open; a
+         * step written for each pass would take those decisions first (Ketura's authors found Check failing a
+         * published solution for it), so a puzzle's author turns it on only to write steps on purpose.
+         */
+        boolean recording(ScenarioDefinition def) {
+            return recording != null ? recording : def.kind != ScenarioDefinition.Kind.PUZZLE;
         }
 
         String choice(Step step) {
@@ -299,7 +319,8 @@ public class ScenarioAuthoring {
          */
         @Override
         public void passedByItself(String player, Phase phase, Step used, boolean frontier) {
-            if (!frontier || !session.recording)
+            //(while a solution is being recorded, nothing is written into the script)
+            if (!frontier || !session.recording(def) || session.recordingSolution != null)
                 return;
             ScenarioDirector director = live.Session().Director();
             if (director.end() != null)
@@ -332,7 +353,7 @@ public class ScenarioAuthoring {
             //(only the script's last step, which is the one being written, or one waiting for its answer: a repeating
             // step further back is played by what it says, so that what it allows can be tried while "Write down
             // what I do" is on)
-            return session.recording && step.until != null && step.parent == null && !step.pause && !step.block
+            return session.recording(def) && step.until != null && step.parent == null && !step.pause && !step.block
                     && ((!def.steps.isEmpty() && def.steps.getLast() == step) || awaiting.contains(step));
         }
 
@@ -359,7 +380,8 @@ public class ScenarioAuthoring {
 
         @Override
         public boolean holds(Ruling ruling) {
-            if (!author || !session.askOpponent)
+            //(a solution is the person's answers: the opponent answers as it would in a player's game)
+            if (!author || !session.askOpponent || session.recordingSolution != null)
                 return false;
             left = ruling.decision();
             return true;
@@ -368,6 +390,8 @@ public class ScenarioAuthoring {
         @Override
         public void answered(Ruling ruling, String answer) {
             session.movedOn();
+            if (recordedAsSolution(ruling, answer))
+                return;
             try {
                 Step step = ruling.step();
                 boolean human = ruling.player().equals(live.HumanPlayer());
@@ -403,7 +427,7 @@ public class ScenarioAuthoring {
                             json.set("answer", term);
                         copyInto(step, reparsed(step, json));
                         changed = true;
-                    } else if (human && session.recording && step.until != null && step.parent == null && !step.pause
+                    } else if (human && session.recording(def) && step.until != null && step.parent == null && !step.pause
                             && unrecorded != ruling.decision() && repeated(step, ruling, answer)) {
                         changed = true;
                     }
@@ -411,7 +435,7 @@ public class ScenarioAuthoring {
                         session.changed();
                     return;
                 }
-                if (!session.recording || unrecorded == ruling.decision() || live.Session().Director().end() != null)
+                if (!session.recording(def) || unrecorded == ruling.decision() || live.Session().Director().end() != null)
                     return;
                 //What the opponent does by itself where the script is silent (its orders, its fallback) is what it
                 // will do again without being told.  Only what the author has it do is written.
@@ -452,6 +476,33 @@ public class ScenarioAuthoring {
                 if (unrecorded == ruling.decision())
                     unrecorded = null;
             }
+        }
+
+        /**
+         * Recording a solution ("record this play as a solution"): the person's answer to a decision the script gives
+         * the runner no answer for goes into the solution, as its next answer, and not into the script.
+         * @return Whether it did.
+         */
+        boolean recordedAsSolution(Ruling ruling, String answer) {
+            String name = session.recordingSolution;
+            if (name == null || !author || !ruling.player().equals(live.HumanPlayer()) || unrecorded == ruling.decision()
+                    || (ruling.answer() != null && ruling.noAnswer() == null) || (ruling.step() != null && ruling.step().pause))
+                return false;
+            for (int i = 0; i < def.solutions.size(); i++) {
+                ScenarioDefinition.Solution solution = def.solutions.get(i);
+                if (!solution.name().equals(name))
+                    continue;
+                try {
+                    List<Answer> answers = new ArrayList<>(solution.answers());
+                    answers.add(ScenarioParser.parseAnswer(def, Terms.parse(term(ruling.decision(), answer), "answer").getFirst(), "answer"));
+                    def.solutions.set(i, new ScenarioDefinition.Solution(solution.name(), solution.picks(), answers, solution.note()));
+                    session.changed();
+                } catch (ScenarioFormatException exp) {
+                    session.notice = "What was just done could not be written into the solution: " + exp.getMessage();
+                }
+                return true;
+            }
+            return false;
         }
 
         /**
@@ -1185,13 +1236,24 @@ public class ScenarioAuthoring {
                     named(sitting, step.children.get(k), under.get(k), carried.awaiting());
             }
         }
+        //A puzzle's draft is played with a solution's picks in its slots: the one the author chose, or the first
+        ScenarioDefinition.Solution with = session.playingWith != null && def.solution(session.playingWith) != null
+                ? def.solution(session.playingWith) : def.solutions.isEmpty() ? null : def.solutions.getFirst();
+        ScenarioDefinition.Solution replay = session.replaying == null ? null : def.solution(session.replaying);
+        session.replaying = null;
+        if (replay != null) {
+            with = replay;
+            runTo = def.steps.size() + 1;
+        }
         try {
             LiveScenario live = new LiveScenario(def, _library, format, session.player.getName(),
-                    new ScenarioText(def, _library, format, _cardLookup), _timer);
+                    new ScenarioText(def, _library, format, _cardLookup), _timer, null, with == null ? Map.of() : with.picks());
             if (author)
                 live.SetAuthor(sitting);
             else
                 live.SetDraftTest();
+            if (replay != null)
+                live.PlayAnswers(replay.answers());
             live.RunTo(runTo, carried.at().sub(), carried.at().times(), session::choice);
             sitting.live = live;
             sitting.mediator = _tables.seat(session.player, live);
@@ -1208,6 +1270,12 @@ public class ScenarioAuthoring {
         if (!carried.dropped().isEmpty())
             notice = (notice == null ? "" : notice + "\n") + "Changes to the board that no step carried yet are not in this game: "
                     + String.join(", ", carried.dropped());
+        if (!def.slots.isEmpty() && with == null)
+            notice = (notice == null ? "" : notice + "\n") + "This puzzle has no solution yet, so its slots are empty in this game.  "
+                    + "Record one (Solutions: Record) to play it with cards in them.";
+        if (replay != null)
+            notice = (notice == null ? "" : notice + "\n") + "Played solution '" + replay.name() + "': " + sitting.live.AnswersPlayed()
+                    + " of its " + replay.answers().size() + " answers" + (sitting.live.RunProblem() == null ? "." : ", then stopped.");
         session.notice = notice;
         session.revision.incrementAndGet();
     }
@@ -1530,6 +1598,10 @@ public class ScenarioAuthoring {
      *                  'before'.
      * @param goTo See change.
      */
+    /** The top-level parts of a file that are a single value, not an object or a list (see topText in edit). */
+    private static final Set<String> SCALAR_PARTS = Set.of("id", "version", "kind", "title", "summary", "author", "note", "format",
+            "human", "coverage", "pool");
+
     public Map<String, Object> edit(Player player, String patchJson, Integer goTo) throws AuthoringException {
         Session session = session(player);
         synchronized (session) {
@@ -1574,6 +1646,10 @@ public class ScenarioAuthoring {
                         if (value.isObject() && value.asObject().size() == 1 && value.asObject().names().getFirst().equals(name)
                                 && text.stripLeading().replaceAll("(?m)^\\s*(#|//).*\\n", "").stripLeading().startsWith(name))
                             value = value.asObject().get(name);
+                        //(a part that is a single value: "set:1-6" as the pool is the text, not HJSON's braceless
+                        // object {set: "1-6"}, and nor is a title that has a colon in it)
+                        else if (SCALAR_PARTS.contains(name) && (value.isObject() || value.isArray()))
+                            value = org.hjson.JsonValue.valueOf(text.strip());
                         json.set(name, value);
                     }
                 }
@@ -1840,6 +1916,13 @@ public class ScenarioAuthoring {
         if (!outcome.isObject())
             return outcome;
         JsonObject read = new JsonObject(outcome.asObject());
+        //(the judge's requirements can be typed in as the file has them)
+        org.hjson.JsonValue judge = read.get("judge");
+        if (judge != null && judge.isObject() && judge.asObject().get("win") != null) {
+            JsonObject one = new JsonObject(judge.asObject());
+            one.set("win", typed("win", one.get("win")));
+            read.set("judge", one);
+        }
         typedMessages(read, "winMessages");
         typedMessages(read, "loseMessages");
         for (String ending : List.of("gameWon", "gameLost")) {
@@ -2058,6 +2141,11 @@ public class ScenarioAuthoring {
                         sites.set(seatName, named);
                     }
                 }
+                //(a slot is named as its card is)
+                JsonObject slots = json.get("slots") != null && json.get("slots").isObject() ? json.get("slots").asObject() : new JsonObject();
+                if (slots.get(name) != null && !name.equals(from))
+                    throw new AuthoringException("The scenario already has a slot called '" + name + "'.");
+                known |= from != null && slots.get(from) != null;
                 if (!known)
                     throw new AuthoringException("The scenario has no card called '" + from + "'.");
                 if (!name.equals(from))
@@ -2167,6 +2255,15 @@ public class ScenarioAuthoring {
             case THREATS -> setup.threats = Math.max(0, op.relative() ? setup.threats + op.amount() : op.amount());
             case TWILIGHT -> setup.twilight = Math.max(0, op.relative() ? setup.twilight + op.amount() : op.amount());
             case MARKER, CONTROL, LIBERATE -> putStartInSetup(def, op);
+            case MODIFY -> setup.modifiers.computeIfAbsent(op.card(), card -> new ArrayList<>()).add(op.modification());
+            case UNMODIFY -> {
+                List<ScenarioDefinition.Modification> on = setup.modifiers.getOrDefault(op.card(), new ArrayList<>());
+                if (!on.removeIf(one -> op.target() == null || one.what().equals(op.target())))
+                    throw new AuthoringException("'" + op.card() + "' starts with no " + (op.target() == null ? "" : op.target() + " ")
+                            + "modifier put on it to take off.");
+                if (on.isEmpty())
+                    setup.modifiers.remove(op.card());
+            }
         }
     }
 
@@ -2586,6 +2683,8 @@ public class ScenarioAuthoring {
         saved.put("errors", entry.errors());
         saved.put("warnings", entry.warnings());
         saved.put("report", entry.report() == null ? null : entry.report().toString());
+        //(as check gives them: each solution's verdict, null where it solves the puzzle)
+        saved.put("solutions", entry.report() == null ? null : new LinkedHashMap<>(entry.report().solutions));
         Map<String, Object> result = result(session, false, false);
         result.put("saved", saved);
         return result;
@@ -2638,6 +2737,8 @@ public class ScenarioAuthoring {
             result.put("passed", report.passed());
             result.put("report", report.toString());
             result.put("warnings", warnings);
+            //Each solution's verdict: null where it solves the puzzle, otherwise why not (the runner's words)
+            result.put("solutions", new LinkedHashMap<>(report.solutions));
             return result;
         }
     }
@@ -2779,7 +2880,9 @@ public class ScenarioAuthoring {
                 leftOut.add(json);
             }
             state.put("leftOut", leftOut);
-            state.put("recording", session.recording);
+            state.put("recording", session.recording(def));
+            //(whether the author has said; until then a puzzle's draft has it off and any other draft on)
+            state.put("recordingSaid", session.recording != null);
             state.put("askOpponent", session.askOpponent);
             state.put("way", new ArrayList<>(session.way));
             state.put("flags", new ArrayList<>(def.flags));
@@ -2790,6 +2893,22 @@ public class ScenarioAuthoring {
             state.put("draft", JSON.parseObject(ScenarioWriter.toJson(def).toString()));
             //Each part of the file but its steps, as the file has it: what is copied between the file and the panel
             state.put("parts", ScenarioWriter.parts(def, _library));
+            //For the Scenario tab: the kinds a scenario can be, and what a sandbox's player may be allowed to change
+            // (options.tools, set with {top: {options: {..., tools: "add, move"}}}; left out for every tool)
+            state.put("kinds", List.of("tutorial", "puzzle", "sandbox"));
+            Map<String, Object> tools = new LinkedHashMap<>();
+            tools.put("names", ScenarioSandbox.TOOLS);
+            tools.put("notBuilt", new ArrayList<>(new java.util.TreeSet<>(ScenarioSandbox.NOT_BUILT)));
+            tools.put("said", def.tools != null);
+            tools.put("allowed", def.toolsInForce());
+            state.put("sandboxTools", tools);
+            //Who plays a sandbox's other seat when it begins (options.otherSeat, set with {top: {options: {...,
+            // otherSeat: "bot"}}}; left out for the script): the choices, whether the file says, and what is in force
+            Map<String, Object> otherSeat = new LinkedHashMap<>();
+            otherSeat.put("choices", List.of("script", "bot", "person"));
+            otherSeat.put("said", def.otherSeat != null);
+            otherSeat.put("value", def.otherSeatInForce().name().toLowerCase(Locale.ROOT));
+            state.put("sandboxOtherSeat", otherSeat);
 
             List<String> statuses = new ArrayList<>();
             for (Step step : def.steps)
@@ -2950,8 +3069,196 @@ public class ScenarioAuthoring {
             state.put("board", table.CardsDealt() ? describeBoard(sitting) : null);
             state.put("start", describeStart(def));
             state.put("problems", live.Problems());
+            //(what a card can be modified in by hand, and for how long: the Board tab's Modify...)
+            state.put("modify", describeModify());
+            state.put("puzzle", describePuzzle(session, sitting));
             return state;
         });
+    }
+
+    /**
+     * A puzzle's parts, for the Scenario tab's "How it ends" and the puzzle panel: {undo, undoSaid, judge, moments,
+     * score, scoreValues, pool, slots, slotZones, solutions, picks, playingWith, recording, verdict}.  See the notes
+     * for the puzzle engine (ep-notes.md) for each, and the patches that change them.
+     */
+    private Map<String, Object> describePuzzle(Session session, Sitting sitting) {
+        ScenarioDefinition def = sitting.def;
+        Map<String, Object> json = new LinkedHashMap<>();
+        json.put("undo", def.undoAllowed());
+        json.put("undoSaid", def.undo == null ? null : def.undo ? "on" : "off");
+        ScenarioDefinition.Judge judge = def.outcome.judge;
+        if (judge == null) {
+            json.put("judge", null);
+        } else {
+            Map<String, Object> one = new LinkedHashMap<>();
+            one.put("at", judge.source());
+            one.put("moment", switch (judge.at()) {
+                case START_OF -> "startOf";
+                case END_OF -> "endOf";
+                case END_OF_TURN -> "endOfTurn";
+                case SKIRMISH_RESOLUTION -> "skirmishResolution";
+            });
+            one.put("phase", judge.phase() == null ? null : judge.phase().name().toLowerCase(Locale.ROOT));
+            one.put("turn", judge.turn());
+            one.put("win", judge.win() == null ? null : ScenarioWriter.text(JsonValue.readHjson(judge.win())));
+            json.put("judge", one);
+        }
+        Map<String, Object> moments = new LinkedHashMap<>();
+        moments.put("moments", List.of("startOf", "endOf", "endOfTurn", "skirmishResolution"));
+        moments.put("phases", List.of("fellowship", "shadow", "maneuver", "archery", "assignment", "skirmish", "regroup"));
+        json.put("moments", moments);
+        ScenarioDefinition.Score score = def.outcome.score;
+        if (score == null) {
+            json.put("score", null);
+        } else {
+            Map<String, Object> one = new LinkedHashMap<>();
+            one.put("value", score.value());
+            one.put("valueText", score.valueJson() == null ? null : ScenarioWriter.text(JsonValue.readHjson(score.valueJson())));
+            one.put("better", score.higherBetter() ? "higher" : "lower");
+            one.put("label", score.label());
+            json.put("score", one);
+        }
+        //(what a score can read, as message text quotes the game: the totals, and per card)
+        Map<String, Object> values = new LinkedHashMap<>();
+        values.put("totals", List.of("twilight", "burdens", "threats", "site", "turn", "hand"));
+        values.put("perCard", List.of("strength", "vitality", "resistance", "wounds", "tokens", "cost", "playCost"));
+        json.put("scoreValues", values);
+        List<String> forbid = new ArrayList<>();
+        def.forbid.forEach(what -> forbid.add(what.name().toLowerCase(Locale.ROOT)));
+        json.put("forbid", forbid);
+        List<String> forbidChoices = new ArrayList<>();
+        for (ScenarioDefinition.Forbid what : ScenarioDefinition.Forbid.values())
+            forbidChoices.add(what.name().toLowerCase(Locale.ROOT));
+        json.put("forbidChoices", forbidChoices);
+        json.put("pool", def.pool);
+        Map<String, String> picks = sitting.live.Picks();
+        json.put("slots", LiveScenario.slotInfo(def, picks, _library));
+        List<String> zones = new ArrayList<>();
+        for (ScenarioDefinition.SlotZone zone : ScenarioDefinition.SlotZone.values())
+            zones.add(ScenarioParser.slotZoneName(zone));
+        json.put("slotZones", zones);
+        List<Map<String, Object>> solutions = new ArrayList<>();
+        for (ScenarioDefinition.Solution solution : def.solutions) {
+            Map<String, Object> one = new LinkedHashMap<>();
+            one.put("name", solution.name());
+            one.put("note", solution.note());
+            one.put("picks", solution.picks());
+            Map<String, String> names = new LinkedHashMap<>();
+            solution.picks().forEach((slot, blueprint) -> names.put(slot, SlotBounds.nameOf(blueprint, _library)));
+            one.put("pickNames", names);
+            List<String> answers = new ArrayList<>();
+            solution.answers().forEach(answer -> answers.add(answer.source()));
+            one.put("answers", answers);
+            one.put("text", ScenarioWriter.text(ScenarioWriter.solution(solution)));
+            solutions.add(one);
+        }
+        json.put("solutions", solutions);
+        json.put("picks", picks);
+        ScenarioDefinition.Solution with = session.playingWith != null && def.solution(session.playingWith) != null
+                ? def.solution(session.playingWith) : def.solutions.isEmpty() ? null : def.solutions.getFirst();
+        json.put("playingWith", with == null || !with.picks().equals(picks) ? null : with.name());
+        json.put("recording", session.recordingSolution);
+        ScenarioTable.Verdict verdict = sitting.live.Table().Verdict();
+        if (verdict == null) {
+            json.put("verdict", null);
+        } else {
+            Map<String, Object> one = new LinkedHashMap<>();
+            one.put("won", verdict.won());
+            one.put("score", verdict.score());
+            one.put("moment", verdict.moment());
+            json.put("verdict", one);
+        }
+        return json;
+    }
+
+    /**
+     * A puzzle's solutions, from the authoring panel ("record this play as a solution").
+     * @param op record: a fresh game from the start, built with 'picks' (slot id -> blueprint, as JSON; the game in
+     *           hand's if none are given), the person's answers that the script leaves open written into the solution
+     *           'name' (made, or emptied, for it) rather than into the script, until stop.  stop: no more of that.
+     *           play: a fresh game in which the script plays itself, both seats, and the solution's answers for the
+     *           person, as far as they go.  use: the draft's games are played with that solution's picks from now on,
+     *           in a fresh game at the step this one is at.  delete: the solution goes.
+     */
+    public Map<String, Object> solution(Player player, String op, String name, String picksJson) throws AuthoringException {
+        Session session = session(player);
+        synchronized (session) {
+            requireAuthor(session.sitting);
+            Sitting sitting = session.sitting;
+            String what = op == null ? "" : op.trim();
+            if (what.equals("stop")) {
+                session.recordingSolution = null;
+                session.revision.incrementAndGet();
+                return result(session, false, false);
+            }
+            if (name == null || !name.trim().matches("[A-Za-z][A-Za-z0-9_-]*"))
+                throw new AuthoringException("A solution's name is made of letters, digits, dashes and underscores, starting with a letter.");
+            String called = name.trim();
+            switch (what) {
+                case "record" -> {
+                    Map<String, String> picks = new LinkedHashMap<>();
+                    if (picksJson != null && !picksJson.isBlank()) {
+                        try {
+                            for (JsonObject.Member member : JsonValue.readHjson(picksJson).asObject())
+                                picks.put(member.getName(), member.getValue().asString().trim());
+                        } catch (RuntimeException exp) {
+                            throw new AuthoringException("The picks are written { slot: blueprint }: " + exp.getMessage());
+                        }
+                    } else {
+                        picks.putAll(sitting.live.Picks());
+                    }
+                    Carried carried = carry(sitting, At.step(1));
+                    ScenarioDefinition draft = carried.draft();
+                    Map<String, String> checked = SlotBounds.check(draft, picks, true, _library);
+                    if (!SlotBounds.allFit(checked)) {
+                        List<String> why = new ArrayList<>();
+                        checked.values().stream().filter(java.util.Objects::nonNull).forEach(why::add);
+                        throw new AuthoringException("Those picks do not fill the slots: " + String.join("  ", why));
+                    }
+                    ScenarioDefinition.Solution had = draft.solution(called);
+                    ScenarioDefinition.Solution fresh = new ScenarioDefinition.Solution(called, picks, List.of(), had == null ? null : had.note());
+                    if (had == null)
+                        draft.solutions.add(fresh);
+                    else
+                        draft.solutions.set(draft.solutions.indexOf(had), fresh);
+                    session.recordingSolution = called;
+                    session.playingWith = called;
+                    start(session, draft, true, carried);
+                    session.dirty = true;
+                    return result(session, false, true);
+                }
+                case "play", "use" -> {
+                    if (sitting.def.solution(called) == null)
+                        throw new AuthoringException("There is no solution called '" + called + "'.");
+                    session.recordingSolution = null;
+                    session.playingWith = called;
+                    if (what.equals("play"))
+                        session.replaying = called;
+                    Carried carried = carry(sitting, what.equals("play") ? At.step(1) : null);
+                    start(session, carried.draft(), true, carried);
+                    return result(session, false, true);
+                }
+                case "delete" -> {
+                    if (sitting.def.solution(called) == null)
+                        throw new AuthoringException("There is no solution called '" + called + "'.");
+                    if (called.equals(session.recordingSolution))
+                        session.recordingSolution = null;
+                    if (called.equals(session.playingWith))
+                        session.playingWith = null;
+                    return change(session, null, (json, names) -> {
+                        org.hjson.JsonArray kept = new org.hjson.JsonArray();
+                        for (JsonValue one : json.get("solutions").asArray())
+                            if (!one.isObject() || !called.equals(one.asObject().getString("name", "")))
+                                kept.add(one);
+                        if (kept.isEmpty())
+                            json.remove("solutions");
+                        else
+                            json.set("solutions", kept);
+                    });
+                }
+                default -> throw new AuthoringException("Say what to do with the solution: record, stop, play, use or delete.");
+            }
+        }
     }
 
     /**
@@ -3073,7 +3380,8 @@ public class ScenarioAuthoring {
             String compiled = match != null ? match.compiled() : rule;
             answering.put("gives", compiled == null ? null : sitting.term(decision, compiled));
             answering.put("rule", match != null || rule == null ? null
-                    : decision.getDecisionType() == AwaitingDecisionType.ASSIGN_MINIONS ? "leftovers" : "sandbox");
+                    : decision.getDecisionType() == AwaitingDecisionType.ASSIGN_MINIONS ? "leftovers"
+                    : def.fallback == ScenarioDefinition.Fallback.EAGER ? "eager" : "sandbox");
             //(a 'when' for a new order that would take this decision, as tightly as it can be said)
             answering.put("when", sitting.whenFor(opponent, decision, null));
         }
@@ -3189,33 +3497,11 @@ public class ScenarioAuthoring {
 
     private Map<String, Object> describeBoard(Sitting sitting) {
         ScenarioTable table = sitting.live.Table();
-        //Where each card comes in its hand or its pile (0 first: the top of a pile)
-        Map<PhysicalCard, Integer> places = new IdentityHashMap<>();
-        for (Seat seat : Seat.values())
-            for (SetupZone zone : ScenarioParser.ORDERED) {
-                List<? extends PhysicalCard> there = table.CardsIn(seat, zone);
-                for (int i = 0; i < there.size(); i++)
-                    places.put(there.get(i), i);
-            }
+        //(described as a sandbox's board is: BoardView)
+        Map<PhysicalCard, Integer> places = BoardView.places(table);
         List<Map<String, Object>> cards = new ArrayList<>();
-        for (CardDef card : sitting.def.cards.values()) {
-            PhysicalCardImpl physical = table.Card(card.alias());
-            Map<String, Object> json = new LinkedHashMap<>();
-            json.put("alias", card.alias());
-            json.put("blueprintId", physical.getBlueprintId());
-            json.put("name", GameUtils.getFullName(physical));
-            json.put("type", physical.getBlueprint().getCardType().name());
-            json.put("owner", card.owner().key());
-            json.put("cardId", physical.getCardId());
-            json.put("zone", zoneOf(physical));
-            json.put("at", places.get(physical));
-            json.put("wounds", table.gameState().getWounds(physical));
-            Token token = physical.getBlueprint().getCulture() == null ? null : Token.findTokenForCulture(physical.getBlueprint().getCulture());
-            json.put("tokens", token == null ? 0 : table.gameState().getTokenCount(physical, token));
-            json.put("on", physical.getAttachedTo() != null ? table.AliasOf(physical.getAttachedTo())
-                    : physical.getStackedOn() != null ? table.AliasOf(physical.getStackedOn()) : null);
-            cards.add(json);
-        }
+        for (CardDef card : sitting.def.cards.values())
+            cards.add(BoardView.card(table, card.alias(), table.Card(card.alias()), card.owner(), places));
         Map<String, Object> board = new LinkedHashMap<>();
         board.put("cards", cards);
         board.put("twilight", table.GetTwilight());
@@ -3257,36 +3543,7 @@ public class ScenarioAuthoring {
      * assigned.
      */
     private static void describeWhere(ScenarioTable table, Map<String, Object> board) {
-        Map<String, Object> markers = new LinkedHashMap<>();
-        for (Seat seat : Seat.values())
-            markers.put(seat.key(), table.gameState().getPlayerPosition(table.Player(seat)));
-        board.put("markers", markers);
-        board.put("currentSite", table.gameState().getCurrentSiteNumber());
-        board.put("moves", table.gameState().getMoveCount());
-        List<Map<String, Object>> path = new ArrayList<>();
-        for (int number = 1; number <= 9; number++) {
-            PhysicalCard site = table.gameState().getSite(number);
-            if (site == null)
-                continue;
-            Map<String, Object> json = new LinkedHashMap<>();
-            json.put("number", number);
-            json.put("alias", table.AliasOf(site));
-            json.put("blueprintId", site.getBlueprintId());
-            json.put("name", GameUtils.getFullName(site));
-            json.put("printed", site.getBlueprint().getSiteNumber());
-            json.put("owner", table.SeatOf(site.getOwner()).key());
-            json.put("controlledBy", site.getCardController() == null ? null : table.SeatOf(site.getCardController()).key());
-            path.add(json);
-        }
-        board.put("path", path);
-        Map<String, Object> skirmishes = new LinkedHashMap<>();
-        for (com.gempukku.lotro.game.state.Assignment assignment : table.gameState().getAssignments()) {
-            List<String> minions = new ArrayList<>();
-            for (PhysicalCard minion : assignment.getShadowCharacters())
-                minions.add(table.AliasOf(minion));
-            skirmishes.put(table.AliasOf(assignment.getFellowshipCharacter()), minions);
-        }
-        board.put("skirmishes", skirmishes);
+        BoardView.where(table, board);
     }
 
     /**
@@ -3349,25 +3606,52 @@ public class ScenarioAuthoring {
         for (List<String> sites : def.sites.values())
             longest = Math.max(longest, sites.size());
         start.put("lastSite", Math.min(9, Math.max(longest, setup.path.size())));
+        //(setup.modifiers: card -> [{what, amount, until, written}], as the file has them)
+        Map<String, Object> modifiers = new LinkedHashMap<>();
+        setup.modifiers.forEach((card, on) -> {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (ScenarioDefinition.Modification one : on) {
+                Map<String, Object> json = new LinkedHashMap<>();
+                json.put("what", one.what());
+                json.put("amount", one.amount() == 0 ? null : one.amount());
+                json.put("until", one.until().name().toLowerCase(Locale.ROOT));
+                json.put("written", one.text());
+                list.add(json);
+            }
+            modifiers.put(card, list);
+        });
+        start.put("modifiers", modifiers);
         return start;
     }
 
+    /**
+     * What a card can be modified in by hand, for the Modify... menu: each stat and keyword by its word in the file,
+     * what the page calls it, whether it takes a number (and whether that number has a sign: a stat's does, a
+     * keyword's is 1 or more), the card types it means something on; and the times it can last.
+     */
+    public static Map<String, Object> describeModify() {
+        List<Map<String, Object>> words = new ArrayList<>();
+        for (CardModifiers.Word word : CardModifiers.WORDS) {
+            Map<String, Object> json = new LinkedHashMap<>();
+            json.put("what", word.word());
+            json.put("label", word.label());
+            json.put("kind", word.stat() ? "stat" : "keyword");
+            json.put("number", !word.numbered() ? "none" : word.stat() ? "signed" : "positive");
+            List<String> types = new ArrayList<>();
+            for (CardType type : CardType.values())
+                if (word.suits().contains(type))
+                    types.add(type.name());
+            json.put("types", types);
+            words.add(json);
+        }
+        Map<String, Object> modify = new LinkedHashMap<>();
+        modify.put("words", words);
+        modify.put("until", List.of("phase", "turn", "removed"));
+        return modify;
+    }
+
     private static String zoneOf(PhysicalCard card) {
-        if (card.getZone() == null)
-            return "nowhere";
-        return switch (card.getZone()) {
-            case FREE_CHARACTERS -> "characters";
-            case SUPPORT -> "support";
-            case SHADOW_CHARACTERS -> "minions";
-            case HAND -> "hand";
-            case DECK -> "deck";
-            case DISCARD -> "discard";
-            case DEAD -> "deadPile";
-            case REMOVED -> "removed";
-            case ATTACHED -> "attached";
-            case STACKED -> "stacked";
-            default -> card.getZone().name().toLowerCase(Locale.ROOT);
-        };
+        return BoardView.zoneOf(card);
     }
 
     /** A decision, in enough detail for the author to answer it from a panel: what it offers, in the scenario's words. */

@@ -21,17 +21,19 @@ import { AuthorFieldComponent } from '../widgets/author-field.component';
 import { AuthorSelectComponent } from '../widgets/author-select.component';
 import { AuthorSendDirective } from '../widgets/author-send.directive';
 import { sendTop } from './top';
+import { JudgingComponent } from './judging.component';
 
 /**
  * The Scenario tab's "How it ends" (legacy renderOutcome): whether the player loses only as the game is lost, or
  * also when any companion is killed (a file that says something else shows that, and choosing it changes nothing),
- * and what they are told when they lose; then its endings: what is said when the win or lose condition comes true,
+ * and what they are told when they lose; when it is judged and how it is scored (judging.component); then its endings: what is said when the win or lose condition comes true,
  * and, for the game ending by itself won or lost, what that counts as (complete or fail) and what is said. Each
  * change sends the whole of `outcome` (taken out when nothing is left), every part it does not change copied from
  * the draft.
  *
  * DOM contract: `section.gd-author-scenario__section[data-section=outcome]` with `gd-author-select[data-part=lose]`,
- * `textarea[data-part=lose-message]`, then a `.gd-author-ending[data-ending]` per ending (winMessages, loseMessages,
+ * `textarea[data-part=lose-message]`, `gd-game-author-scenario-judging` (when it is judged, how it is scored), then
+ * a `.gd-author-ending[data-ending]` per ending (winMessages, loseMessages,
  * gameWon, gameLost) with `.gd-author-ending__label`, for the last two `gd-author-select[data-part=result]`, and
  * `gd-author-closing-messages`.
  */
@@ -44,6 +46,7 @@ import { sendTop } from './top';
     AuthorSelectComponent,
     AuthorSendDirective,
     ClosingMessagesComponent,
+    JudgingComponent,
   ],
   template: `
     <section class="gd-author-scenario__section" data-section="outcome">
@@ -74,6 +77,7 @@ import { sendTop } from './top';
           (sent)="message($event)"
         ></textarea>
       </gd-author-field>
+      <gd-game-author-scenario-judging [state]="state()" />
       @for (ending of endings; track ending.kind) {
         <div class="gd-author-ending" [attr.data-ending]="ending.kind">
           <div class="gd-author-ending__head">

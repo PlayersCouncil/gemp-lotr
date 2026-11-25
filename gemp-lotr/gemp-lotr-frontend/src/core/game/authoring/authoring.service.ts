@@ -11,7 +11,8 @@ import { ScenarioStep } from '../scenario/scenario-events';
 import { ScenarioGuide, TriedPlace } from '../scenario/scenario-guide.service';
 import { GameSession } from '../session/game-session.service';
 import { PendingDecision } from '../state/game-model';
-import { AuthoringApi, AuthoringSettings, DraftPatch } from './authoring-api.service';
+import { solutionVerdicts } from './puzzle-solutions';
+import { AuthoringApi, AuthoringSettings, DraftPatch, SolutionOp } from './authoring-api.service';
 import { AuthoringResult, AuthoringState, AuthoringTab, DraftState, DraftStep, hasDraft } from './authoring-state';
 import { AuthoringUi, AuthoringUiStore } from './authoring-ui-store';
 import { problemOf, SavedNotice, savedNotice } from './notices';
@@ -690,6 +691,7 @@ export class Authoring {
   /** What is said of a save that went through: at the top of the panel, and in full under Scenario. */
   afterSave(result: AuthoringResult, unsent: string | null): void {
     if (!result.saved) return;
+    if (result.saved.solutions !== undefined) this.solutionVerdicts.set(solutionVerdicts(result.saved.solutions));
     const { notice, report } = savedNotice(result.saved, unsent);
     this.report.set(notice.good && result.saved.warnings.length === 0 && this.ui().tab !== 'scenario' ? null : report);
     this.saved.set(notice);
@@ -849,6 +851,7 @@ export class Authoring {
   async check(): Promise<void> {
     const result = await this.call(this.api.check(), true);
     if (result) this.report.set(checkReport(result));
+    if (result) this.solutionVerdicts.set(solutionVerdicts(result.solutions));
   }
 
   /** Try other answers: every other answer the player could give, played up to the script's next step. Slow. */
@@ -863,4 +866,44 @@ export class Authoring {
     const result = await this.call(this.api.source(), false);
     if (result) this.report.set(result.source);
   }
+
+  /* ---------------------------------------------------------------- a puzzle's */
+
+  /**
+   * A filter for a slot's bound, handed to the panel from outside it (the table's search window, set to bound a
+   * slot): the Board tab's slot form of that slot fills its Bound field with it and sends it, as if typed there.
+   */
+  readonly slotBoundOffer = signal<SlotBoundOffer | null>(null);
+  private boundOffers = 0;
+
+  /** Hands a slot's bound to its form (see slotBoundOffer), the panel turning to the Board tab where it is. */
+  offerSlotBound(slot: string, filter: string): void {
+    this.slotBoundOffer.set({ slot, filter, serial: ++this.boundOffers });
+    this.showTab('board');
+  }
+
+  /** The slot form has taken the offer. */
+  tookSlotBound(serial: number): void {
+    if (this.slotBoundOffer()?.serial === serial) this.slotBoundOffer.set(null);
+  }
+
+  /** A puzzle's solution recorded, its recording stopped, played, used or deleted (AuthoringApi.solution). */
+  async solution(
+    op: SolutionOp,
+    name: string | null,
+    picks: Readonly<Record<string, string>> | null = null,
+  ): Promise<boolean> {
+    if (!(await this.flush()).went) return false;
+    return (await this.call(this.api.solution(op, name, picks), true)) !== null;
+  }
+
+  /** What the last Check (or save) said of each of a puzzle's solutions, by name (puzzle-solutions.ts). */
+  readonly solutionVerdicts = signal<ReadonlyMap<string, string>>(new Map());
+}
+
+/** A filter for a slot's bound, handed to its form from outside it; `serial` tells one offer from the next. */
+export interface SlotBoundOffer {
+  slot: string;
+  filter: string;
+  serial: number;
 }

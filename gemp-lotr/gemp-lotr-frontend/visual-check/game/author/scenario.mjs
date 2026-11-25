@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { closeDraft, newDraft, sleep, ui, until } from './lib.mjs';
+import { changed, reloaded, same, source } from './puzzles.mjs';
 
 /** Where the server keeps its scenarios, when it runs on this machine (files saved by a check are deleted there). */
 const DATA = process.env.GEMP_SCENARIOS ?? '/etc/gemp-lotr/scenarios';
@@ -324,5 +325,58 @@ export const checks = {
     await page.locator(tab.button('close')).click();
     await page.locator(ui.confirmButton('ok')).click();
     await until(async () => !(await seat.state()).draft, 'the draft closed');
+  },
+
+  /**
+   * The kind made a sandbox, one of its tools unticked and ticked again (every tool: the field left out), and
+   * take-backs off: on the server, in the file, and in the tab after a reload.
+   */
+  async 'scenario-kind-undo'({ seat }, problems) {
+    await newDraft(seat, { steps: TWO_STEPS });
+    const page = seat.page;
+    await openTab(seat);
+    let state = await changed(
+      seat,
+      'the kind made a sandbox',
+      () => page.locator(tab.select('kind')).selectOption('sandbox'),
+      (now) => now.draft.kind === 'sandbox',
+    );
+    const kinds = await page.locator(`${tab.select('kind')} option`).evaluateAll((all) => all.map((one) => one.value));
+    if (!same(kinds, state.kinds ?? [])) problems.push(`the kinds offered are ${kinds}`);
+    if ((await page.locator(`${ui.scenario} [data-part="all-tools"]`).count()) !== 1) {
+      problems.push('a sandbox saying no tools is not shown with all of them');
+    }
+    state = await changed(
+      seat,
+      'a tool unticked',
+      () => page.locator(`${ui.scenario} gd-author-check[data-tool="copy"] input`).uncheck(),
+      (now) => now.sandboxTools?.said === true,
+    );
+    const wanted = state.sandboxTools.names.filter((name) => name !== 'copy').join(', ');
+    if (state.draft.options?.tools !== wanted) problems.push(`the tools are "${state.draft.options?.tools}"`);
+    if (!(await source(seat)).includes(`tools: ${wanted}`)) problems.push("the file's text lacks the tools");
+    await seat.shot('tools');
+    state = await changed(
+      seat,
+      'take-backs off',
+      () => page.locator(tab.select('undo')).selectOption('off'),
+      (now) => now.draft.options?.undo === 'off',
+    );
+    if (state.puzzle?.undo !== false) problems.push('take-backs are not off in the state');
+    if (!(await source(seat)).includes('undo: off')) problems.push("the file's text lacks undo: off");
+    await reloaded(seat, 'scenario');
+    if ((await page.locator(tab.select('undo')).inputValue()) !== 'off')
+      problems.push('undo is not off after a reload');
+    if (await page.locator(`${ui.scenario} gd-author-check[data-tool="copy"] input`).isChecked()) {
+      problems.push('copy is ticked after a reload');
+    }
+    state = await changed(
+      seat,
+      'the tool ticked again',
+      () => page.locator(`${ui.scenario} gd-author-check[data-tool="copy"] input`).check(),
+      (now) => now.sandboxTools?.said === false,
+    );
+    if (state.draft.options?.tools !== undefined) problems.push('every tool ticked does not leave the field out');
+    await closeDraft(seat);
   },
 };

@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, computed, DestroyRef, effect, inject, ViewEncapsulation } from '@angular/core';
 import { AuthoringTab } from '../../../core/game/authoring/authoring-state';
 import { Authoring } from '../../../core/game/authoring/authoring.service';
+import { AuthorBackend } from '../../../core/game/table-edit/author-backend';
 import { whereLine } from '../../../core/game/authoring/notices';
 import { ScenarioRoom } from '../../../core/game/scenario/scenario-room';
 import { PAGE_RIGHT_PROPERTY } from '../../shared/page-room';
@@ -13,8 +14,10 @@ import { ScenarioTabComponent } from './scenario-tab.component';
 import { StepTabComponent } from './step-tab.component';
 import { TimelineTabComponent } from './timeline-tab.component';
 import { AuthorButtonDirective } from './widgets/author-button.directive';
+import { AuthorFlipComponent } from './author-flip.component';
 import { PickBoxComponent } from './pick-box.component';
 import { TablePicker } from './table-picker.service';
+import { TablePick } from '../table-edit/table-pick';
 
 /** The panel's tabs, in order, with what their buttons say. */
 export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
@@ -41,12 +44,14 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
  * DOM contract: `gd-game-author` holding `section.gd-author` (`data-own-keys`; `data-view`: none, elsewhere, test,
  * author; `data-folded`, `data-floating`, `data-unsaved`, `data-wanted` (the opponent is held for the author)) with
  * `header.gd-author__head` (`button.gd-author__fold`, `.gd-author__title`, `.gd-author__busy` while calls are on their
- * way, `button.gd-author__save` with `data-dirty`), `.gd-author__where`, `gd-game-author-notices`, then for the tabs
+ * way, `button.gd-author__edit-table[data-author=edit-table]` with `aria-pressed` (the table's own edit controls on:
+ * AuthorBackend), `button.gd-author__save` with `data-dirty`), `.gd-author__where`, `gd-game-author-notices`, then for the tabs
  * `nav.gd-author__tabs` with a `button.gd-author__tab` per tab (`data-tab`, `aria-selected`, `data-attention`) and
  * `.gd-author__body` holding the tab shown (`gd-game-author-timeline`, `-step`, `-opponent`, `-board`, `-scenario`);
  * for a test `.gd-author__body` with `.gd-author-note` and `button[data-author=resume]`, `button[data-author=test-again]`;
  * elsewhere `.gd-author__body` with `.gd-author-note` and `button[data-author=go]` (the draft's game). The leave dialog
- * is `gd-game-author-leave`. After the section, `gd-game-author-pickbox` (picking on the table, TablePicker).
+ * is `gd-game-author-leave`. After the section, `gd-game-author-pickbox` (picking on the table, TablePicker). The
+ * header has `gd-author-flip` after the busy mark (flip table: the opponent's seat, while the table can be flipped).
  */
 @Component({
   selector: 'gd-game-author',
@@ -62,8 +67,9 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
     BoardTabComponent,
     ScenarioTabComponent,
     PickBoxComponent,
+    AuthorFlipComponent,
   ],
-  providers: [TablePicker],
+  providers: [TablePicker, { provide: TablePick, useExisting: TablePicker }],
   host: {
     style: 'display: contents',
     // Typing in the panel is not for the page's shortcuts to hear (the scenario's skip [data-own-keys])
@@ -97,6 +103,23 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
         <span class="gd-author__title" [title]="unsaved() ? 'Changed since it was saved' : ''">{{ title() }}</span>
         @if (authoring.busy() > 0) {
           <span class="gd-author__busy" role="status" aria-label="Working">…</span>
+        }
+        <gd-author-flip />
+        @if (authoring.view() === 'author') {
+          <button
+            [gdAuthorButton]="author.editing() ? 'primary' : ''"
+            class="gd-author__edit-table"
+            data-author="edit-table"
+            [attr.aria-pressed]="author.editing()"
+            [title]="
+              author.editing()
+                ? 'Back to playing: the table answers decisions again'
+                : 'Change the board on the table itself (right-click a card, the + spots): nothing is answered meanwhile'
+            "
+            (click)="author.toggle()"
+          >
+            Edit table
+          </button>
         }
         @if (authoring.view() === 'author') {
           <button
@@ -203,6 +226,8 @@ export const AUTHOR_TABS: readonly (readonly [AuthoringTab, string])[] = [
 })
 export class AuthoringPanelComponent {
   protected readonly authoring = inject(Authoring);
+  /** Edit table: the on-table controls for the author. */
+  protected readonly author = inject(AuthorBackend);
   private readonly room = inject(ScenarioRoom);
   private readonly document = inject(DOCUMENT);
   protected readonly tabs = AUTHOR_TABS;

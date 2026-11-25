@@ -31,4 +31,17 @@ public interface ScenarioDAO {
 
     /** @return A player's progress in every scenario they have started. */
     List<DBDefs.ScenarioProgress> getProgress(int playerId);
+
+    /**
+     * Keeps a run's score as its player's best in that scenario, if it is better than the best they had (or they had
+     * none).  See db/2026-11-24_scenario-puzzles.sql.
+     * @param higherIsBetter Whether a higher score is the better one.
+     */
+    void recordBestScore(int runId, int score, boolean higherIsBetter);
+
+    /**
+     * @return The runs of a scenario that solved it with picks none of its listed solutions has, the latest first,
+     * with each one's player's name (player_name), without their journals; at most 'limit' of them.
+     */
+    List<DBDefs.ScenarioRun> getUnlistedRuns(String scenarioId, int limit);
 }

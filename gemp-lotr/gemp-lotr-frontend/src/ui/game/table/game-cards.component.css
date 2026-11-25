@@ -30,7 +30,8 @@
   height: var(--gd-card-height);
 }
 
-.gd-game-stack > .gd-card {
+.gd-game-stack > .gd-card,
+.gd-game-stack > gd-open-spot {
   pointer-events: auto;
 }
 

@@ -10,6 +10,7 @@ import { BoardPathComponent } from './board/board-path.component';
 import { BoardSeatComponent } from './board/board-seat.component';
 import { BoardStartComponent } from './board/board-start.component';
 import { BoardOpeningComponent } from './board/board-opening.component';
+import { BoardSlotsComponent } from './board/board-slots.component';
 
 /** Where the Board's changes go, as the radios offer it: its words, and a short note with the rest as its tooltip. */
 interface WhereChoice {
@@ -37,7 +38,8 @@ interface WhereChoice {
  * `label.gd-author-board__choice` per place, `data-where`: now, setup, with `input[type=radio]` and
  * `.gd-author-note`; `.gd-author-board__pending` with changes waiting for a step), `gd-author-board-counters` (not
  * where only a deck's order can be changed),
- * `gd-author-board-start`, `gd-author-board-path`, a `gd-author-board-seat` per seat and `gd-author-board-add`.
+ * `gd-author-board-start`, `gd-author-board-path`, a `gd-author-board-seat` per seat, `gd-author-board-slots` (a
+ * puzzle's) and `gd-author-board-add`.
  */
 @Component({
   selector: 'gd-game-author-board',
@@ -52,6 +54,7 @@ interface WhereChoice {
     BoardSeatComponent,
     BoardStartComponent,
     BoardOpeningComponent,
+    BoardSlotsComponent,
   ],
   template: `
     @if (authoring.draft(); as draft) {
@@ -96,6 +99,7 @@ interface WhereChoice {
           @for (seat of seats; track seat) {
             <gd-author-board-seat [seat]="seat" />
           }
+          <gd-author-board-slots />
           <gd-author-board-add />
         </div>
       }

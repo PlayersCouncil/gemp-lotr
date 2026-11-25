@@ -291,6 +291,141 @@ something, a card shown large, a choice, the page's dialogs, the end), a text fi
 every move it made, and `summary.txt`. `--page angular` (the default) is the only page in `PAGES`: game.html's
 overlay would need an entry of its own.
 
+## The sandbox checks
+
+`npm run check:game:sandbox` (`sandbox.mjs`, against a game check server kept up, as the tutorial check) plays the
+default sandbox (`sandbox`, which ships with the server) on the Angular game page as `GamePlayer0`: the table changed
+by hand (see "A table changed by hand" in the frontend's README). Each check starts a game of its own; every change is
+asserted on the page and in the server's own view of the table (`GET /scenarios/sandbox/state`), and a refusal the
+server is not meant to make fails the check.
+
+- **open**: the sandbox opens in edit mode: the bar says Editing with Start (and no Stop, and no Start again in the
+  menu), no decision text or buttons, an open spot in each of the six rows (each seat's characters and support, the
+  minions, the hand); the context-menu key on a focused card (Frodo) opens its menu at Info, Down goes to Add (the
+  Ring-bearer has no Send to), Right into its submenu, Left back, Escape closes it and gives the focus back to the card; Info shows the card's details.
+- **add**: Legolas found by the search window with a name filter (bound to "Companions" for the characters) put among
+  the characters; from Recent (Legolas first) into the hand; from In this scenario into the other seat's characters;
+  after a reload the search still has its filter (bound to "Support cards" for the support) and "Clear filters" clears
+  it; Recent is still there.
+- **menu**: every entry of the card menu: Attach (Armor onto Legolas, picked on the table: the bar says what to pick,
+  the box is round the card under the pointer), Add (two wounds by the stepper, a heal, three Elven tokens, two Sauron
+  tokens and one taken off; his own culture listed first), Modify (Strength +2 this turn, Archer with no number until
+  removed, both listed on him, one taken off by its ×), Copy, Send to (the copy to the discard pile), Stack (a Goblin
+  Runner on Legolas), Delete (Legolas out of the game, the Armor he bore in the discard pile).
+- **refuse**: the Ring-bearer's menu offers no Send to, Stack, Copy or Delete (the server's state calls him
+  `ringBearer`); Legolas deleted behind the page's back and then deleted from his menu is refused, and the page says
+  so by the card in the server's own words.
+- **play**: Legolas added to the hand, Start: the bar says Playing, no open spots, the fellowship prompt offers
+  Legolas, who is played; right-click is the card's details again; Stop (once the game can stop), an Armor added in
+  edit mode, Start again.
+- **undo**: after an edit, Start, a card played and Stop, the undo list reads "Stopped play", "Played Legolas,
+  Greenleaf", "Started play", "Added Legolas, Greenleaf"; going back to before the edit leaves the page stopped, the
+  card gone, the open spots back and no decision shown, and the controls work on the rebuilt game.
+- **reset**: Reset asks in the page's own dialog (Cancel changes nothing), then the page is on a fresh game in edit
+  mode without what was added.
+- **ended**: Frodo given four wounds with the stepper, then Start: the end panel (`data-result=ended`) says "You lost"
+  and "The Ring-Bearer is dead", with Reset and Leave; Reset goes to a fresh game.
+- **piles**: a table set up through the server (both draw decks, hands, discard piles, the dead and removed piles):
+  every pile of both seats opens from its count in the state panel (each count a link, `data-link`, and the number the
+  server's `piles` says while edited), and its window shows the server's cards in the server's order (a pile's top
+  first); a deck window left open shows a card put on the deck from elsewhere once Start lets the game move, and has
+  no open spots in play mode.
+- **pileadd**: the draw deck's window has its top spot first and its bottom spot last; Legolas by the search onto the
+  top, Boromir by the search at the bottom, Legolas again from Recent onto the top (the deck reads Legolas, Legolas,
+  Boromir on the server and in the window); Legolas from Recent into the other seat's hand from its window; Armor by
+  the search into the discard pile from its window.
+- **pilemenu**: a card in the deck window has Info, Send to, Stack, Copy and Delete (no wounds, tokens or Modify);
+  Send to offers the deck's top and the hand; Legolas sent to the hand (gone from the window, on the hand's row),
+  Boromir copied (the copy on the deck), the copy deleted, the window right after each.
+- **path**: the path's + is for site 2; its chooser's Search… is bound to "Site 2" and lays a new Ettenmoors there;
+  then From adventure deck… lays the other seat's site 3 and the person's own site 4 (the page's path shows the four
+  sites in order); a laid site's Replace… ("Replace site 2") puts the person's own Ettenmoors there, and the card it
+  replaced goes back to its adventure deck.
+- **markers**: a site's menu has Info, each seat's marker (the one already there disabled), control for each seat and
+  Replace…; control while the markers are at the site is refused in the server's words (and the page reads the game
+  taken back without a "Concurrent access" error); site 2 laid and both markers moved there from its menu, site 1
+  given to the other seat (it lies in its support area on the page), then liberated (back on the path).
+- **counters**: the twilight pool set to 5 (Set) and stepped up and down, the burdens set to 2 (Enter) and one taken
+  off, the threats set to 1 and one taken off, each where it is shown in the state panel, on the server and on the
+  page; in play mode none of them is a link.
+- **tools**: a sandbox of the check's own (`users/GamePlayer0/sandboxes/check-u2-tools-*.hjson` in the server's
+  scenario folder, `GEMP_SCENARIOS`, written and deleted by the check; tools add, move, copy, delete) offers no hidden
+  pile (the draw decks, the other seat's hand and adventure deck do not open), no path +, no counter to change and no
+  marker, control or Replace… in a site's menu, while its own discard pile's window still has its open spot.
+- **otherseat**: the edit bar's choice of who plays the other seat offers what the server's `otherSeats` does (the
+  bot only on a server that has one: the run says which); each choice set from it and read back on the server and in
+  the bar (the script's last, in play mode); the undo list has "Gave the shadow seat to you".
+- **flip**: the other seat given to the person, a Goblin Runner in its hand; Start, the fellowship passed: the server
+  waits on the Shadow seat and the alert box says "Shadow to choose" (no decision buttons, the runner not shown);
+  its Flip: the server says the page looks from Shadow, the bar says "As Shadow", the runner is in the hand at the
+  bottom and the alert box asks the Shadow action; the runner played from there (among the minions on the server);
+  "Free Peoples to choose"; the bar's Flip back, the person's own Pass offered and pressed, and play goes on.
+- **flipedit**: flipped in edit mode: the open spots are the Shadow seat's at the bottom and the person's at the top;
+  the runner by the bottom hand's spot lands in the Shadow hand, Legolas by the top characters' spot among the
+  person's characters, an Armor by the person's discard pile window in the person's discard pile, and Legolas sent to
+  the hand from his menu goes to his owner's hand, and a site laid on the path by the search is the Shadow seat's (all
+  on the server).
+- **flipback**: flipped, two cards added, then taken back to before the second: still flipped on the page and on the
+  server, the Shadow hand at the bottom; after a reload still flipped; Reset: a fresh game, unflipped (page and server).
+- **script**: the script plays the other seat (the default): with a runner in its hand it passes the Shadow phase by
+  itself (the runner stays in hand) and the page never says the other seat is to choose; flipped onto it, its hand is
+  at the bottom, no decision is offered and the alert box says "Free Peoples to choose".
+- **authorflip**: a new draft of the author's own (`check-uf-*`, never saved, closed afterwards): the authoring panel's
+  Flip turns the table to the opponent's seat ("As Shadow", the panel still docked, the draft still there, the
+  author's own decision not offered there) and back (the author's Pass offered again).
+
+Every check runs in both themes at 1366×768 (`--theme classic` or `--theme modern` for one; `--only menu,play`;
+`--verbose`). The report is `report-sandbox/` (`--out`): screenshots of the steps worth seeing and a text file per
+check with every move.
+
+## The puzzle checks
+
+`npm run check:game:puzzle` (`puzzle.mjs`, against a game check server kept up, as the sandbox check) plays copies of
+Decipher's puzzles 10, 08 and 03 (the engine's fixtures, `gemp-lotr-server/src/test/resources/scenarios/puzzles/`)
+on the Angular game page as `GamePlayer3` (`GEMP_PUZZLE_PLAYER`): each copy is written into the player's own
+scenarios folder (`GEMP_SCENARIOS`, default `/etc/gemp-lotr/scenarios`) under an id starting `check-puzzle-` and
+deleted when its check is done. What a check changes is asserted on the page and in what the server says (the info
+event's slots and picks, `POST /scenarios/picks`, `GET /scenarios`, the authoring state).
+
+- **held**: puzzle 10 opened without picks: the page in edit mode, the bar says Choosing with Submit off (its title
+  names both empty slots), both slots in the support row labelled as the file calls them, no sandbox open spots, no
+  slots strip, no decision text or buttons, no card offered, no bubble, no Start again; no Undo button and no Revert;
+  right-click on a card is its details (no card menu); the server's info says `mode: edit`, `level: puzzle`, 2 slots.
+- **bound**: the condition slot's search window: its bound labelled "a Rohan condition", its title a line each for
+  the pool (`set:1-6`), the bound (`culture:ROHAN cardtype:CONDITION`) and the place's kinds; no Card Type field
+  (the bound fixes it), the Set and Block fields offered (the server searches inside the pool and the bound, each by
+  itself, so they can only narrow it); Aldor (a Rohan ally) is not found; the same pick sent anyway (the page's own request
+  carrying Aldor) is refused in the server's own words, shown in the window, and nothing is put in; with Aldor and
+  Parapet in Recent, the condition slot's chooser offers Parapet only (the server's word on each).
+- **fill**: Aldor from the search into the ally slot (Submit still off, its title names the condition); Armory, then
+  Parapet over it, from the search; the ally slot emptied (Submit off again) and filled from Recent (only Aldor
+  offered); a filled slot's card shows its details on right-click; Submit: a fresh game with Parapet and Aldor on the
+  table, no slots, the info's picks are theirs, Change cards offered, no mode word, no Undo button.
+- **solve**: puzzle 10 with the published key played through on the page (Parapet, "Make the minion archery total -3",
+  two arrows on Aldor): Complete with the puzzle's own words, no score, not unlisted, buttons Play it again, Change
+  cards, Back to the Game Hall; Play it again keeps both cards; Change cards (menu) asks in the page's own dialog, then
+  the puzzle is held again with both slots empty.
+- **fail**: Armory and Aldor, played on (pass, wounds to the first offered): failed (the game ends on Frodo's death
+  before the judge, so the stock words), with Start again, Change cards, Back to the Game Hall; Start again keeps
+  Armory.
+- **unlisted**: puzzle 08 with its second solution left out of the copy: the support slot says "3 tokens", the hand
+  slot is in the hand's row; Ithilien Trap and Defend It and Hope from the search, Submit, the left-out solution's
+  answers clicked on the page (no Undo button after the first choices): Complete, and the panel says "You found a
+  solution the author did not list."
+- **score**: puzzle 03: eight slots in the hand's row and the site slot in the strip ("Site 2"); the site's search is
+  held to the pool `set:1-5`, the bound `set:4 cardtype:SITE` and the place `cardtype:SITE sitenumber:2` (the seven
+  site 2s of set 4, Derndingle and Fangorn Forest among them);
+  Derndingle and eight Stout and Sturdy, Submit, then a short line (the troll assigned to Sméagol as the step asks,
+  passes to the first skirmish's resolution) instead of the 362 answers of the published walkthrough: Sméagol's
+  strength with its value, "Best" the same and "New best", titled "Higher is better"; Play it again: the same score,
+  the best kept, no New best; `GET /scenarios` gives the best.
+- **undo**: a copy of puzzle 10 with `undo: on`: Revert is offered, and after the first answers its list has places.
+- **author**: a new puzzle draft with a slot and a pool: the Board tab's Find… opens the card search over the page,
+  Card Type Allies and Gondor chosen, "Use as bound" sends that filter as the slot's bound (on the server's draft);
+  the Scenario tab's Find… sends one as the pool.
+
+Every check runs in both themes at 1366×768 (`--theme`, `--only`, `--verbose`, `--out`; report `report-puzzle/`).
+
 ## The table check
 
 `npm run check:game:table` (`table.mjs`) compares the Angular game page's **table** with `game.html`, without a server:
@@ -601,6 +736,48 @@ panel's selectors, the author's page and the waiting helpers); `author.mjs` puts
   "+ refuses 2: pass", written with its number.
 - **opponent-let-go**: "it plays by its orders" chosen while the opponent's decision is held for the author: the
   opponent answers by itself at once, in the same game.
+- **scenario-kind-undo** (`author/scenario.mjs`): the kind made a sandbox, a tool unticked (the file's
+  `options.tools` lists the rest) and ticked again (every tool: the field left out), take-backs off (`options.undo`);
+  on the server, in the file, and in the tab after a reload.
+- **scenario-judge-score** (`author/endings.mjs`): judged at the end of archery of turn 2 with requirements typed as
+  HJSON, scored by Frodo's strength (nothing sent until the card is chosen), lower being better, with a label, then
+  by a custom value as HJSON (the outcome sent as text); on the server, in the file, after a reload.
+- **opponent-eager-bot** (`author/opponent.mjs`): the eager and bot fallbacks offered, each option's tooltip saying
+  what it does; chosen in the Opponent tab, on the server, in the file, after a reload.
+- **board-modifiers** (`author/board.mjs`): mod… on Frodo (Strength +2 for the turn) to the board as it stands: in
+  force at once and carried by a step; Archer to the setup: `setup.modifiers` in the file, its chip after a reload,
+  and its × taking it out again.
+- **puzzle-rules** (`author/puzzles.mjs`, Decipher's puzzle 10 as the draft): "no revealing" ticked (`rules.forbid`)
+  and a pool typed, with its count beside it; a pool the server refuses: its words beside the field, what was typed
+  kept, the draft as it was; after a reload.
+- **puzzle-slots**: a slot's label, bound (its count) and tokens changed in the Board tab; a slot added with the
+  solution's card for it found by name, the file's text with all of it, the same after a reload; the slot taken out
+  of the slots and the solution after the page's question.
+- **puzzle-solutions**: a solution recorded with the game's cards (the panel says it is recording; Stop), the
+  published one played, Check's verdict on each in the list, one renamed, its answers written, its cards used (marked
+  after a reload) and deleted after the page's question.
+- **table-toggle** (`author/table.mjs`, the author's own table): the panel's Edit table turns the page's edit mode on
+  (no decision shown, none answered by a key, the open spots, "Editing" and the Start / Now chip in the menu), the
+  draft and its file unchanged; still on after a reload; off, the decision back and the spots gone.
+- **table-cards**: at the start (the chip's Start, the Board tab's radio with it), Gandalf added to the hand by the
+  spot's search, again from its chooser (Recent), copied, the second one deleted; each in the draft's cards and setup
+  (`GET state`, `GET source`, after a reload) and the file's text the same, change by change, as the Board tab's Add a
+  card and × write it in a second draft.
+- **table-start**: at the start, a move (Send to), a token, an attach (Attach… and the card picked), a wound, a
+  modifier (Modify…) and the twilight (the state panel's counter), each in the setup exactly as the tab's forms write
+  it in a second draft; after a reload.
+- **table-now**: the same at the board as it stands, each in the `do` of the step in hand (none left waiting) exactly
+  as the tab writes it.
+- **table-site**: a site laid by the path's + refused at the board as it stands, said where it was asked; at the
+  start, site 2 replaced by the Shadow seat's (its menu's Replace…: `setup.path`) and the Free Peoples marker put on
+  it (`setup.startAt`), each as the tab's "Whose sites" and "On the table" write it.
+- **table-slot**: a puzzle's slot opened in the hand (the chooser's Open slot): in the draft as the tab's Add slot
+  writes it, its form shown with the focus in its label, drawn on the table as an open slot; a bound typed, the
+  server's count beside it while typing, sent; after a reload the slot's press shows its form; the file's text.
+- **table-loose**: "Write down what I do" off in a new puzzle with its note until ticked (remembered); Check's verdict
+  per solution from its `solutions`; a bound with an unknown key refused as it is typed, in the server's words; the
+  Ring-bearer's and the Ring's rows marked (their × says why); a sandbox's other seat set to "you" and back
+  (`options.otherSeat`, the file, after a reload).
 
 ```
 npm run check:game -- --only start --sizes 1366x768 --keep     the server, kept up
