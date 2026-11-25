@@ -76,6 +76,20 @@ public class DbTournamentPlayerDAO implements TournamentPlayerDAO {
     }
 
     @Override
+    public void removePlayers(String tournamentId) {
+        try {
+            try (Connection conn = _dbAccess.getDataSource().getConnection()) {
+                try (PreparedStatement statement = conn.prepareStatement("delete from tournament_player where tournament_id=?")) {
+                    statement.setString(1, tournamentId);
+                    statement.executeUpdate();
+                }
+            }
+        } catch (SQLException exp) {
+            throw new RuntimeException(exp);
+        }
+    }
+
+    @Override
     public Set<String> getPlayers(String tournamentId) {
         try {
             try (Connection connection = _dbAccess.getDataSource().getConnection()) {

@@ -37,6 +37,8 @@
     "check:account": "node account/run.mjs",
     "check:game:sandbox": "node game/sandbox.mjs",
     "check:game:puzzle": "node game/puzzle.mjs",
+    "check:tournament": "node tournament/local.mjs",
+    "check:tournament:down": "node tournament/local.mjs down",
     "check:game:matrix": "node game/local.mjs --matrix --pages legacy,angular --sizes 1366x768 --out report-game-matrix",
     "tunnel": "node tools/tunnel.mjs"
   },

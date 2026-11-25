@@ -12,6 +12,9 @@ public interface TournamentPlayerDAO {
 
     public void dropPlayer(String tournamentId, String playerName);
 
+    /** Deletes every player recorded for the tournament; only for undoing a tournament start that failed. */
+    public void removePlayers(String tournamentId);
+
     public Map<String, LotroDeck> getPlayerDecks(String tournamentId, String format);
 
     public Set<String> getDroppedPlayers(String tournamentId);

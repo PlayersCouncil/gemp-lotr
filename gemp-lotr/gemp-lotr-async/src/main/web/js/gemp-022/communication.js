@@ -2114,6 +2114,22 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    // POST /admin/removeTournamentPlayer -> {message}; 400 (reason in the "message" header) when not removed
+    removeTournamentPlayer:function(tournamentId, player, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/removeTournamentPlayer",
+            cache:false,
+            data:{
+                tournamentId:tournamentId,
+                player:player
+            },
+            success:callback,
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+
     setTournamentStage:function(tournamentId, stage, callback, errorMap) {
         $.ajax({
             type:"POST",
