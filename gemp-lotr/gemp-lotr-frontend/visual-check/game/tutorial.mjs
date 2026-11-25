@@ -41,6 +41,8 @@ const SCENARIO = argument('scenario', null);
 /** The tutorials the checks play (the server's `scenarios/tutorials/*.hjson`), by the id `scenarios/start` takes. */
 const TUTORIAL_1 = 'basics-01';
 const TUTORIAL_2 = 'basics-02-items-damage';
+// Where Leave and a way back lead: the hall, which is the Angular page now and was hall.html
+const HALL_PAGE = /\/gemp-lotr\/(ng\/hall|hall\.html)/;
 /** Tutorial 1's one choice: `help` is the guided path, `plan` leaves the player to it. */
 const GUIDED = 'help';
 /** Where the server keeps its scenarios, when it runs on this machine (a scenario a check brought is deleted there). */
@@ -1048,8 +1050,8 @@ const CHECKS = {
     await seat.shot('leave-asked');
     if (!/leave/i.test(leaving)) problems.push(`"Leave" asks: "${leaving}"`);
     await page.locator(ui.confirmButton('ok')).click();
-    await page.waitForURL(/\/gemp-lotr\/hall\.html/, { timeout: 15000 }).catch(() => undefined);
-    if (!/\/gemp-lotr\/hall\.html/.test(page.url())) problems.push(`after Leave the page is at ${page.url()}`);
+    await page.waitForURL(HALL_PAGE, { timeout: 15000 }).catch(() => undefined);
+    if (!HALL_PAGE.test(page.url())) problems.push(`after Leave the page is at ${page.url()}`);
     table.note = `game ${game.gameId} → ${newId}, then the hall`;
     // The hall's own errors are not the scripted game's
     seat.errors = seat.errors.filter((error) => !/hall/i.test(error));
@@ -1112,8 +1114,8 @@ const CHECKS = {
       problems.push('the panel has no way back to the Game Hall');
     } else {
       await back.tap();
-      await page.waitForURL(/\/gemp-lotr\/hall\.html/, { timeout: 15000 }).catch(() => undefined);
-      if (!/\/gemp-lotr\/hall\.html/.test(page.url())) problems.push(`its way back led to ${page.url()}`);
+      await page.waitForURL(HALL_PAGE, { timeout: 15000 }).catch(() => undefined);
+      if (!HALL_PAGE.test(page.url())) problems.push(`its way back led to ${page.url()}`);
     }
     seat.errors = seat.errors.filter((error) => !/hall/i.test(error));
     table.note = `"${st.heading}"`;
