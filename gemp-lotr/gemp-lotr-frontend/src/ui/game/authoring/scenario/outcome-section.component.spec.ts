@@ -1,4 +1,4 @@
-import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideGempHttp } from '../../../../core/api/gemp-interceptors';
@@ -14,9 +14,7 @@ import { provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { KEEP_KEY } from '../widgets/author-keep.directive';
 import { OutcomeSectionComponent } from './outcome-section.component';
 import { parseJson } from '../../../../core/api/json';
-import { sentForm } from '../../../../testing/sent-form';
-
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
+import { AUTHOR, authorCall, sentPatch } from '../../../../testing/authoring-requests';
 
 /** An outcome with every part set. */
 const FULL: NonNullable<Draft['outcome']> = {
@@ -95,9 +93,7 @@ describe('OutcomeSectionComponent: endings', () => {
 
   /** The one outcome sent (`top: {outcome}`). */
   function outcome(): unknown {
-    const requests: TestRequest[] = backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
-    expect(requests).toHaveLength(1);
-    const patch = JSON.parse(sentForm(requests[0]!.request).get('patch') as string) as { top: { outcome: unknown } };
+    const patch = sentPatch(authorCall(backend, 'edit')) as { top: { outcome: unknown } };
     expect(Object.keys(patch)).toEqual(['top']);
     return patch.top.outcome;
   }

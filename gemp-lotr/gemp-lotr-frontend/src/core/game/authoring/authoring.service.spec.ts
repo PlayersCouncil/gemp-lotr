@@ -30,9 +30,9 @@ import {
   SETTLE_TRIES,
   StepFlushResult,
 } from './authoring.service';
+import { AUTHOR, authorCall, authorCalls } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const INFO = {
   type: 'info',
@@ -124,7 +124,7 @@ describe('Authoring', () => {
     TestBed.tick();
   }
 
-  const asked = (what: string, method = 'POST') => backend.match((r) => r.url === AUTHOR + what && r.method === method);
+  const asked = (what: string, method = 'POST') => authorCalls(backend, what, method);
 
   /** The state asked for, answered with this one. */
   async function answerState(state: AuthoringState = draftState()) {
@@ -137,9 +137,7 @@ describe('Authoring', () => {
 
   /** The one call to `what`, answered; what it sent comes back. */
   async function answer(what: string, body: unknown, status = 200): Promise<TestRequest> {
-    const requests = asked(what);
-    expect(requests).toHaveLength(1);
-    const request = requests[0]!;
+    const request = authorCall(backend, what);
     request.flush(JSON.stringify(body), { status, statusText: status === 200 ? 'OK' : 'No' });
     await settle();
     TestBed.tick();

@@ -17,11 +17,10 @@ import { START_DEFAULT } from '../../../core/game/authoring/board-start';
 import { ScenarioGuide } from '../../../core/game/scenario/scenario-guide.service';
 import { StepTabComponent } from './step-tab.component';
 import { TablePicker } from './table-picker.service';
-import { sentForm } from '../../../testing/sent-form';
 import { listContaining } from '../../../testing/matchers';
+import { AUTHOR, authorCalls, sentPatch } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 /** A draft whose steps are these (named s1, s2, ...; a block's steps s3k1, ...). */
 const withSteps = (steps: DraftStep[], extra: Partial<DraftState> = {}) =>
@@ -163,9 +162,8 @@ describe('StepTabComponent and the engine’s newer parts', () => {
   }
 
   /** The edits on their way. */
-  const edits = (): TestRequest[] => backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
-  const patchOf = (request: TestRequest) =>
-    JSON.parse(sentForm(request.request).get('patch') as string) as { steps: Record<string, unknown>[] };
+  const edits = (): TestRequest[] => authorCalls(backend, 'edit');
+  const patchOf = (request: TestRequest) => sentPatch(request) as { steps: Record<string, unknown>[] };
   /** The one edit on its way: its ops. */
   function sentOps(): Record<string, unknown>[] {
     const requests = edits();

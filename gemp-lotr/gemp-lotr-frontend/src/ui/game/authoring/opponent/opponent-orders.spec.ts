@@ -23,11 +23,10 @@ import {
 } from '../../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { OpponentTabComponent } from '../opponent-tab.component';
-import { parseJson } from '../../../../core/api/json';
 import { sentForm } from '../../../../testing/sent-form';
+import { AUTHOR, authorCall, authorCalls, sentPatch } from '../../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const ORDERS = [
   opponentOrder(0, { id: 'first', note: 'Only once.', once: true, spent: true }),
@@ -135,12 +134,10 @@ describe('OpponentTabComponent: standing orders and rules', () => {
     await render();
   }
 
-  const edits = (): TestRequest[] => backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
+  const edits = (): TestRequest[] => authorCalls(backend, 'edit');
   /** The one edit sent: its patch. */
   function patch(): unknown {
-    const requests = edits();
-    expect(requests).toHaveLength(1);
-    return parseJson(sentForm(requests[0]!.request).get('patch') as string);
+    return sentPatch(authorCall(backend, 'edit'));
   }
   const text = (selector: string) => el.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim() ?? null;
   const card = (index: number) => `li.gd-author-order[data-index="${index}"]`;

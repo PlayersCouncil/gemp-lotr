@@ -15,9 +15,9 @@ import { draftGameXml, draftState, result } from '../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { ScenarioTabComponent } from './scenario-tab.component';
 import { sentForm } from '../../../testing/sent-form';
+import { AUTHOR, authorCall, authorCalls, sentPatch } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 describe('ScenarioTabComponent', () => {
   let fixture: ComponentFixture<ScenarioTabComponent>;
@@ -115,13 +115,11 @@ describe('ScenarioTabComponent', () => {
     await redraw();
   }
 
-  const posted = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
+  const posted = (what: string) => authorCalls(backend, what);
 
   /** The one edit sent: its patch. */
   function patch(): { top?: Record<string, unknown>; topText?: Record<string, string>; opponent?: unknown } {
-    const requests = posted('edit');
-    expect(requests).toHaveLength(1);
-    return JSON.parse(sentForm(requests[0]!.request).get('patch')!) as { top?: Record<string, unknown> };
+    return sentPatch(authorCall(backend, 'edit')) as { top?: Record<string, unknown> };
   }
 
   const top = () => patch().top;

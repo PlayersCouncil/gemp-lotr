@@ -7,8 +7,7 @@ import { sentForm } from '../../../testing/sent-form';
 import { PageExit } from '../../platform/page-exit';
 import { PAGE_QUERY_STRING } from '../../platform/page-location';
 import { AuthoringApi } from './authoring-api.service';
-
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
+import { AUTHOR } from '../../../testing/authoring-requests';
 
 describe('AuthoringApi', () => {
   let api: AuthoringApi;

@@ -15,9 +15,9 @@ import { GameSession } from '../session/game-session.service';
 import { DraftState, SaveReport } from './authoring-state';
 import { Authoring } from './authoring.service';
 import { sentForm } from '../../../testing/sent-form';
+import { authorCall, authorCalls } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const SAVED: SaveReport = {
   path: 'users/asdf/tutorials/test.hjson',
@@ -63,7 +63,7 @@ describe('Authoring, for the Scenario tab', () => {
     vi.useRealTimers();
   });
 
-  const asked = (what: string, method = 'POST') => backend.match((r) => r.url === AUTHOR + what && r.method === method);
+  const asked = (what: string, method = 'POST') => authorCalls(backend, what, method);
 
   async function ready(state: DraftState = draftState()) {
     TestBed.inject(GameSession).open('7');
@@ -75,12 +75,11 @@ describe('Authoring, for the Scenario tab', () => {
   }
 
   async function answer(what: string, body: unknown, status = 200, method = 'POST'): Promise<TestRequest> {
-    const requests = asked(what, method);
-    expect(requests).toHaveLength(1);
-    requests[0]!.flush(JSON.stringify(body), { status, statusText: status === 200 ? 'OK' : 'No' });
+    const request = authorCall(backend, what, method);
+    request.flush(JSON.stringify(body), { status, statusText: status === 200 ? 'OK' : 'No' });
     await settle();
     TestBed.tick();
-    return requests[0]!;
+    return request;
   }
 
   const form = (request: TestRequest, name: string) => sentForm(request.request).get(name);

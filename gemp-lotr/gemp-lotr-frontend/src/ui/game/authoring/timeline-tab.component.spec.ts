@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -15,9 +14,9 @@ import { PAGE_QUERY_STRING } from '../../../core/platform/page-location';
 import { decision, draftGameXml, draftState, position } from '../../../testing/authoring';
 import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { TimelineTabComponent } from './timeline-tab.component';
+import { AUTHOR, authorCall, authorForm, sentPatch } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 describe('TimelineTabComponent', () => {
   let fixture: ComponentFixture<TimelineTabComponent>;
@@ -77,14 +76,9 @@ describe('TimelineTabComponent', () => {
   }
 
   /** The one call to `what` sent: its form. */
-  function sent(what: string): HttpParams | undefined {
-    const requests = backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
-    expect(requests).toHaveLength(1);
-    const body = requests[0]!.request.body as unknown;
-    return body instanceof HttpParams ? body : undefined;
-  }
+  const sent = (what: string) => authorForm(backend, what);
 
-  const patch = () => JSON.parse(sent('edit')!.get('patch')!) as { steps: unknown[] };
+  const patch = () => sentPatch(authorCall(backend, 'edit')) as { steps: unknown[] };
   const text = (selector: string) => el.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim() ?? null;
   const rows = () =>
     [...el.querySelectorAll<HTMLElement>('.gd-author-timeline__row')].map((row) => ({
@@ -178,9 +172,9 @@ describe('TimelineTabComponent', () => {
   it("plays to a step, or to one of a block's", async () => {
     await open();
     await click('.gd-author-timeline__row[data-step="2"] .gd-author-timeline__go');
-    expect(sent('goto')?.toString()).toBe('step=2');
+    expect(sent('goto').toString()).toBe('step=2');
     await click('.gd-author-timeline__row[data-step="3.2"] .gd-author-timeline__go');
-    expect(sent('goto')?.toString()).toBe('step=3&sub=2');
+    expect(sent('goto').toString()).toBe('step=3&sub=2');
   });
 
   it('goes to the start, the last checkpoint, back one, this step and the end', async () => {
@@ -194,7 +188,7 @@ describe('TimelineTabComponent', () => {
       ['end', '5'],
     ]) {
       await click(`[data-go=${go}]`);
-      expect(sent('goto')?.get('step')).toBe(step);
+      expect(sent('goto').get('step')).toBe(step);
     }
   });
 
@@ -208,13 +202,13 @@ describe('TimelineTabComponent', () => {
       fixture.detectChanges();
     };
     await tick('[data-option=recording]', false);
-    expect(sent('settings')?.toString()).toBe('recording=false');
+    expect(sent('settings').toString()).toBe('recording=false');
     await tick('[data-option=ask-opponent]', false);
-    expect(sent('settings')?.toString()).toBe('askOpponent=false');
+    expect(sent('settings').toString()).toBe('askOpponent=false');
     await tick('[data-flag=help]', true);
-    expect(sent('settings')?.get('way')).toBe('plan,help');
+    expect(sent('settings').get('way')).toBe('plan,help');
     await tick('[data-flag=plan]', false);
-    expect(sent('settings')?.get('way')).toBe('');
+    expect(sent('settings').get('way')).toBe('');
     await tick('[data-option=follow]', false);
     expect(authoring.ui().follow).toBe(false);
   });
@@ -319,12 +313,12 @@ describe('TimelineTabComponent', () => {
     await open();
     authoring.select(2);
     await click('[data-author=test-here]');
-    expect(sent('test')?.get('step')).toBe('3');
+    expect(sent('test').get('step')).toBe('3');
     authoring.remember({ selected: null });
     await click('[data-author=test-here]');
-    expect(sent('test')?.get('step')).toBe('1');
+    expect(sent('test').get('step')).toBe('1');
     await click('[data-author=test-start]');
-    expect(sent('test')?.get('step')).toBe('1');
+    expect(sent('test').get('step')).toBe('1');
   });
 
   it('brings the list to where the game is when the game has moved, if it follows the game', async () => {
@@ -363,7 +357,7 @@ describe('TimelineTabComponent', () => {
     instance.addBlock(true);
     instance.choose('plan', true);
     expect(backend.match((r) => r.url === `${AUTHOR}edit`)).toEqual([]);
-    expect(sent('settings')?.get('way')).toBe('plan');
+    expect(sent('settings').get('way')).toBe('plan');
   });
 
   it('marks a row whose seat plays the role its name does not say, in a game of two sides', async () => {

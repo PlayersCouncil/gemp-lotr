@@ -22,9 +22,9 @@ import { BoardTabComponent } from './board-tab.component';
 import { foundText, SEARCH_MS } from './widgets/card-search.component';
 import { parseJson } from '../../../core/api/json';
 import { sentForm } from '../../../testing/sent-form';
+import { AUTHOR, answerCall, authorCall, authorCalls } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const DRAFT = {
   id: 'test',
@@ -159,17 +159,15 @@ describe('BoardTabComponent', () => {
     return select;
   }
 
-  const asked = (what: string, method = 'POST') => backend.match((r) => r.url === AUTHOR + what && r.method === method);
+  const asked = (what: string, method = 'POST') => authorCalls(backend, what, method);
 
   async function answer(what: string, body: unknown, error: string | null = null): Promise<TestRequest> {
-    const requests = asked(what);
-    expect(requests, what).toHaveLength(1);
-    if (error === null) requests[0]!.flush(JSON.stringify(body));
-    else requests[0]!.flush(JSON.stringify({ error }), { status: 400, statusText: 'No' });
+    const request = authorCall(backend, what);
+    answerCall(request, body, error);
     await settle();
     TestBed.tick();
     await redraw();
-    return requests[0]!;
+    return request;
   }
 
   /** The cards search sent (after typing stops), answered with these. */

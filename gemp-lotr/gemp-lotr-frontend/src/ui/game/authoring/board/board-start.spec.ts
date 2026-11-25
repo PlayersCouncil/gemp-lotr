@@ -19,9 +19,9 @@ import { boardCard, draftBoard, draftGameXml, draftState, result } from '../../.
 import { provideFakeNotifier, settle } from '../../../../testing/fake-notifier';
 import { BoardTabComponent } from '../board-tab.component';
 import { sentForm } from '../../../../testing/sent-form';
+import { AUTHOR, answerCall, authorCall, sentPatch } from '../../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const DRAFT = {
   id: 'test',
@@ -194,19 +194,15 @@ describe('the Board tab: where the story starts, the markers, sites without numb
 
   const gathered = () => all('.gd-author-board-gathered__text').map((line) => line.textContent?.trim());
   const stored = () => (JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!) as { board: GatheredBoard | null }).board;
-  const asked = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
-  const patch = (request: TestRequest) =>
-    JSON.parse(sentForm(request.request).get('patch')!) as { top: Record<string, unknown> };
+  const patch = (request: TestRequest) => sentPatch(request) as { top: Record<string, unknown> };
 
   async function answer(what: string, body: unknown, error: string | null = null): Promise<TestRequest> {
-    const requests = asked(what);
-    expect(requests, what).toHaveLength(1);
-    if (error === null) requests[0]!.flush(JSON.stringify(body));
-    else requests[0]!.flush(JSON.stringify({ error }), { status: 400, statusText: 'No' });
+    const request = authorCall(backend, what);
+    answerCall(request, body, error);
     await settle();
     TestBed.tick();
     await redraw();
-    return requests[0]!;
+    return request;
   }
 
   describe('where the story starts', () => {

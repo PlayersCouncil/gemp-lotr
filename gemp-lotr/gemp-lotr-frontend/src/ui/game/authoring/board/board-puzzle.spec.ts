@@ -29,9 +29,9 @@ import { BoardTabComponent } from '../board-tab.component';
 import { SEARCH_MS } from '../widgets/card-search.component';
 import { parseJson } from '../../../../core/api/json';
 import { sentForm } from '../../../../testing/sent-form';
+import { AUTHOR, authorCall, authorCalls, authorForm, sentPatch } from '../../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 const BOUND = '/gemp-lotr-server/scenarios/author/bound';
 
 const DRAFT: Draft = {
@@ -181,23 +181,19 @@ describe('Board tab: modifiers and slots', () => {
     await redraw();
   }
 
-  const asked = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
+  const asked = (what: string) => authorCalls(backend, what);
   const gathered = () => all('.gd-author-board-gathered__text').map((line) => line.textContent?.trim());
   const card = (alias: string) => `.gd-author-board-card[data-alias="${alias}"]`;
   const slot = (id: string) => `.gd-author-slot[data-slot="${id}"]`;
 
   /** The one edit sent: its patch. */
   function patch(): Record<string, unknown> {
-    const requests = asked('edit');
-    expect(requests).toHaveLength(1);
-    return JSON.parse(sentForm(requests[0]!.request).get('patch') as string) as Record<string, unknown>;
+    return sentPatch(authorCall(backend, 'edit')) as Record<string, unknown>;
   }
 
   /** The one board change sent (POST do): what it says, and to which board. */
   function done(): { op: string | null; setup: string | null } {
-    const requests = asked('do');
-    expect(requests).toHaveLength(1);
-    const body = requests[0]!.request.body as { get(name: string): string | null };
+    const body = authorForm(backend, 'do');
     return { op: body.get('op'), setup: body.get('setup') };
   }
 

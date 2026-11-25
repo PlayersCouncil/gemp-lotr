@@ -18,9 +18,9 @@ import { BoardChanges, PART_MADE, WHERE_REFUSED } from './board-changes.service'
 import { START_DEFAULT } from './board-start';
 import { sentForm } from '../../../testing/sent-form';
 import { parseJson } from '../../api/json';
+import { AUTHOR, answerCall, authorCall, authorCalls, sentPatch } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const DRAFT = {
   id: 'test',
@@ -92,22 +92,19 @@ describe('BoardChanges', () => {
     await settle();
   }
 
-  const asked = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
+  const asked = (what: string) => authorCalls(backend, what);
 
   /** The one call to `what` on its way, answered (or refused with `error`); what it sent. */
   async function answer(what: string, body: unknown, error: string | null = null): Promise<TestRequest> {
-    const requests = asked(what);
-    expect(requests, what).toHaveLength(1);
-    const request = requests[0]!;
-    if (error === null) request.flush(JSON.stringify(body));
-    else request.flush(JSON.stringify({ error }), { status: 400, statusText: 'No' });
+    const request = authorCall(backend, what);
+    answerCall(request, body, error);
     await settle();
     TestBed.tick();
     return request;
   }
 
   const form = (request: TestRequest, name: string) => sentForm(request.request).get(name);
-  const patchOf = (request: TestRequest) => JSON.parse(form(request, 'patch')!) as { top: Record<string, unknown> };
+  const patchOf = (request: TestRequest) => sentPatch(request) as { top: Record<string, unknown> };
   const stored = () => (JSON.parse(sessionStorage.getItem(AUTHOR_UI_KEY)!) as { board: GatheredBoard | null }).board;
   const ops = () => changes.gathered()!.ops.map((op) => `${op.name}(${op.args.join(', ')})`);
   const rebuilt = (gameId: string) => result(withBoard({ gameId }), { gameId, rebuilt: true });

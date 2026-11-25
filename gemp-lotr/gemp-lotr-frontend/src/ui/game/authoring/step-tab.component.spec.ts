@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting, TestRequest } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -17,11 +16,10 @@ import { FakeNotifier, provideFakeNotifier, settle } from '../../../testing/fake
 import { STEP_CARRY_KEY } from './step/step-editor';
 import { CATCH_UP_MS, StepTabComponent } from './step-tab.component';
 import { TablePicker } from './table-picker.service';
-import { sentForm } from '../../../testing/sent-form';
 import { textContaining } from '../../../testing/matchers';
+import { AUTHOR, authorCalls, authorForm, sentPatch } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 /** A draft whose steps are these (named s1, s2, ...; a block's steps s3k1, ...). */
 const withSteps = (steps: DraftStep[], extra: Partial<DraftState> = {}) =>
@@ -149,9 +147,8 @@ describe('StepTabComponent', () => {
   }
 
   /** The edits on their way. */
-  const edits = (): TestRequest[] => backend.match((r) => r.url === `${AUTHOR}edit` && r.method === 'POST');
-  const patchOf = (request: TestRequest) =>
-    JSON.parse(sentForm(request.request).get('patch') as string) as { steps: Record<string, unknown>[] };
+  const edits = (): TestRequest[] => authorCalls(backend, 'edit');
+  const patchOf = (request: TestRequest) => sentPatch(request) as { steps: Record<string, unknown>[] };
   /** The one edit on its way: its ops. */
   function sentOps(): Record<string, unknown>[] {
     const requests = edits();
@@ -180,12 +177,7 @@ describe('StepTabComponent', () => {
   };
 
   /** The one call of `what` on its way. */
-  function sent(what: string): HttpParams | undefined {
-    const requests = backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
-    expect(requests).toHaveLength(1);
-    const body = requests[0]!.request.body as unknown;
-    return body instanceof HttpParams ? body : undefined;
-  }
+  const sent = (what: string) => authorForm(backend, what);
 
   describe('its head', () => {
     it('says which step this is of how many, and what became of it; turns to the steps either side', async () => {
@@ -300,7 +292,7 @@ describe('StepTabComponent', () => {
       await render();
       expect(sentOps()[0]).toMatchObject({ set: { do: 'draw(1)' } });
       await answer(withFirst({ do: 'draw(1)' }));
-      expect(sent('goto')?.get('step')).toBe('2');
+      expect(sent('goto').get('step')).toBe('2');
       await type('do', 'draw(x)');
       void authoring.save();
       await render();
@@ -909,7 +901,7 @@ describe('StepTabComponent', () => {
     it('plays to it, moves it, puts a step in either side of it', async () => {
       await open(draftState({ position: position({ step: 3 }) }), { index: 1 });
       await click('[data-act=play]');
-      expect(sent('goto')?.get('step')).toBe('2');
+      expect(sent('goto').get('step')).toBe('2');
       await click('[data-act=earlier]');
       expect(sentOps()).toEqual([{ op: 'move', uid: 's2', before: 's1' }]);
       await answer(state);
@@ -1063,7 +1055,7 @@ describe('StepTabComponent', () => {
       const panel = '.gd-author-panel[data-sub="0"]';
       expect(find<HTMLButtonElement>(`${panel} [data-act=up]`).disabled).toBe(true);
       await click(`${panel} [data-act=play]`);
-      expect(sent('goto')?.toString()).toBe('step=3&sub=1');
+      expect(sent('goto').toString()).toBe('step=3&sub=1');
       await click(`${panel} [data-act=down]`);
       expect(sentOps()).toEqual([{ op: 'move', uid: 's3k1', into: 's3' }]);
       await answer(state);

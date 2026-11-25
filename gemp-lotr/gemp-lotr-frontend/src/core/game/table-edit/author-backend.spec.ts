@@ -33,9 +33,9 @@ import { AUTHOR_REFUSALS } from './author-ops';
 import { EditOp } from './edit-ops';
 import { TableEdit } from './table-edit.service';
 import { textContaining } from '../../../testing/matchers';
+import { AUTHOR } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 const DRAFT = {
   id: 'test',
@@ -118,9 +118,9 @@ describe("AuthorBackend: the author's table", () => {
   /** A request to the authoring service as a line: what, and what it sent. */
   const line = (request: TestRequest): string => {
     const what = request.request.url.slice(AUTHOR.length);
-    const body = request.request.body as { get(name: string): string | null } | null;
-    if (what === 'do') return `do ${body?.get('op')} setup=${body?.get('setup')}`;
-    if (what === 'edit') return `edit ${body?.get('patch')}`;
+    const body = sentForm(request.request);
+    if (what === 'do') return `do ${body.get('op')} setup=${body.get('setup')}`;
+    if (what === 'edit') return `edit ${body.get('patch')}`;
     return what;
   };
 

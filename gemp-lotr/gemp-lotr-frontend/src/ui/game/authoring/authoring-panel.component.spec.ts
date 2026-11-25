@@ -17,9 +17,9 @@ import { provideFakeNotifier, settle } from '../../../testing/fake-notifier';
 import { PAGE_RIGHT_PROPERTY } from '../../shared/page-room';
 import { AuthoringPanelComponent } from './authoring-panel.component';
 import { sentForm } from '../../../testing/sent-form';
+import { AUTHOR, authorCalls } from '../../../testing/authoring-requests';
 
 const GAME = '/gemp-lotr-server/game/7';
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 
 describe('AuthoringPanelComponent', () => {
   let fixture: ComponentFixture<AuthoringPanelComponent>;
@@ -87,7 +87,7 @@ describe('AuthoringPanelComponent', () => {
   const text = (selector: string) => el.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim() ?? null;
   const panel = () => el.querySelector<HTMLElement>('section.gd-author')!;
   const notices = () => [...el.querySelectorAll('.gd-author-notice')].map((n) => n.getAttribute('data-notice'));
-  const posted = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
+  const posted = (what: string) => authorCalls(backend, what);
 
   it('shows its head and the timeline for the draft being written, and takes its room at the right', async () => {
     await open();

@@ -25,8 +25,8 @@ import { PuzzleRulesComponent } from './puzzle-rules.component';
 import { SolutionsSectionComponent } from './solutions-section.component';
 import { parseJson } from '../../../../core/api/json';
 import { sentForm } from '../../../../testing/sent-form';
+import { AUTHOR, authorCall, authorCalls, authorForm, sentPatch } from '../../../../testing/authoring-requests';
 
-const AUTHOR = '/gemp-lotr-server/scenarios/author/';
 const BOUND = '/gemp-lotr-server/scenarios/author/bound';
 
 const WIN = [{ type: 'canSpot', filter: 'alias(frodo)' }];
@@ -191,20 +191,16 @@ describe('Scenario tab: what puzzles and sandboxes brought', () => {
     await render();
   }
 
-  const posted = (what: string) => backend.match((r) => r.url === AUTHOR + what && r.method === 'POST');
+  const posted = (what: string) => authorCalls(backend, what);
 
   /** The one edit sent: its patch. */
   function patch(): Record<string, unknown> {
-    const requests = posted('edit');
-    expect(requests).toHaveLength(1);
-    return JSON.parse(sentForm(requests[0]!.request).get('patch') as string) as Record<string, unknown>;
+    return sentPatch(authorCall(backend, 'edit')) as Record<string, unknown>;
   }
 
   /** The one call of /author/solution: its form. */
   function solutionCall(): Record<string, string | null> {
-    const requests = posted('solution');
-    expect(requests).toHaveLength(1);
-    const body = requests[0]!.request.body as { get(name: string): string | null };
+    const body = authorForm(backend, 'solution');
     return { op: body.get('op'), name: body.get('name'), picks: body.get('picks') };
   }
 
