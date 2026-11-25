@@ -1349,7 +1349,8 @@ const CHECKS = {
     await page.locator(ui.waiting).waitFor();
     const said = (await page.locator(`${ui.waiting} .gd-seat-waiting__text`).textContent()).trim();
     if (said !== 'Shadow to choose') problems.push(`the alert box says "${said}"`);
-    if ((await page.locator(ui.decisionButtons).count()) > 0) problems.push("the Shadow seat's decision is offered unflipped");
+    if ((await page.locator(ui.decisionButtons).count()) > 0)
+      problems.push("the Shadow seat's decision is offered unflipped");
     if ((await page.locator(ui.handCard(runner.cardId)).count()) > 0) problems.push("the Shadow seat's hand is shown");
     await seat.shot('shadow-to-choose');
     // Flip: the page reads the game again as the Shadow seat's player
@@ -1358,7 +1359,8 @@ const CHECKS = {
     await page.locator(ui.handCard(runner.cardId)).waitFor({ timeout: 15000 });
     state = await seat.state();
     if (state.seat !== 'shadow') problems.push(`the server says the page looks from ${state.seat}`);
-    if ((await page.locator(ui.looking).textContent()).trim() !== 'As Shadow') problems.push('the bar does not say As Shadow');
+    if ((await page.locator(ui.looking).textContent()).trim() !== 'As Shadow')
+      problems.push('the bar does not say As Shadow');
     const alert = (await page.locator(ui.alert).textContent()).trim();
     if (!/Shadow action/.test(alert)) problems.push(`flipped, the alert box says "${alert}"`);
     await seat.shot('flipped');
@@ -1411,13 +1413,15 @@ const CHECKS = {
     await seat.edit(
       "the runner into the hand at the bottom (the Shadow seat's)",
       () => page.locator(ui.searchCard(RUNNER)).click(),
-      (now) => now.cards.some((card) => card.alias === 'goblinrunner' && card.owner === 'shadow' && card.zone === 'hand'),
+      (now) =>
+        now.cards.some((card) => card.alias === 'goblinrunner' && card.owner === 'shadow' && card.zone === 'hand'),
     );
     await seat.searchFrom('freeps', 'characters', 'greenleaf', LEGOLAS);
     const state = await seat.edit(
       "Legolas into the characters at the top (the person's own)",
       () => page.locator(ui.searchCard(LEGOLAS)).click(),
-      (now) => now.cards.some((card) => card.alias === 'legolas' && card.owner === 'freeps' && card.zone === 'characters'),
+      (now) =>
+        now.cards.some((card) => card.alias === 'legolas' && card.owner === 'freeps' && card.zone === 'characters'),
     );
     const runner = state.cards.find((card) => card.alias === 'goblinrunner');
     await page
@@ -1440,7 +1444,8 @@ const CHECKS = {
     await seat.edit(
       "Legolas to the hand from his menu (his owner's)",
       () => page.locator(`${ui.submenu('send')} [data-zone="hand"]`).click(),
-      (now) => addedZones(now).legolas === 'hand' && now.cards.find((card) => card.alias === 'legolas').owner === 'freeps',
+      (now) =>
+        addedZones(now).legolas === 'hand' && now.cards.find((card) => card.alias === 'legolas').owner === 'freeps',
     );
     // The path: a site found by the search is the seat's the page looks from (said in the edit)
     await page.locator(ui.siteSpot).click();
@@ -1501,7 +1506,7 @@ const CHECKS = {
     await page.reload();
     await seat.editing('edit');
     if ((await page.locator(`${ui.seatControls}[data-flipped]`).count()) === 0) problems.push('reloaded, not flipped');
-    if ((await page.locator(ui.handCard(runner.cardId)).count()) === 0) problems.push("reloaded, not the Shadow hand");
+    if ((await page.locator(ui.handCard(runner.cardId)).count()) === 0) problems.push('reloaded, not the Shadow hand');
     // Reset: a fresh game, unflipped
     const old = seat.gameId();
     await page.locator(ui.barButton('reset')).click();
@@ -1531,7 +1536,8 @@ const CHECKS = {
     await page.locator(`${ui.decisionButtons}[data-decision-button="Pass"]`).click();
     // (the script passes the Shadow phase by itself, and the game is back with the person)
     await until(
-      async () => (await page.locator(ui.alert).textContent()).trim() !== '' && (await seat.state()).waitingOn === 'freeps',
+      async () =>
+        (await page.locator(ui.alert).textContent()).trim() !== '' && (await seat.state()).waitingOn === 'freeps',
       'the game back with the person, the Shadow phase answered by the script',
       20000,
     );
@@ -1543,7 +1549,8 @@ const CHECKS = {
     const runner = await seat.card('goblinrunner');
     await page.locator(ui.handCard(runner.cardId)).waitFor({ timeout: 15000 });
     await sleep(500);
-    if ((await page.locator(ui.decisionButtons).count()) > 0) problems.push('flipped onto the script, a decision is offered');
+    if ((await page.locator(ui.decisionButtons).count()) > 0)
+      problems.push('flipped onto the script, a decision is offered');
     const waiting = (await page.locator(`${ui.waiting} .gd-seat-waiting__text`).textContent())?.trim();
     if (waiting !== 'Free Peoples to choose') problems.push(`flipped, the alert box says "${waiting}"`);
     await seat.shot('watching');
@@ -1567,14 +1574,18 @@ const CHECKS = {
       if ((await page.locator(ui.authorFlip).textContent()).trim() !== 'Flip') problems.push('the panel has no Flip');
       await page.locator(ui.authorFlip).click();
       await page.locator(`${ui.authorFlip}[data-flipped]`).waitFor({ timeout: 15000 });
-      if ((await page.locator(ui.authorFlip).textContent()).trim() !== 'As Shadow') problems.push('flipped, it does not say As Shadow');
-      if ((await page.locator(ui.authorPanel).getAttribute('data-floating')) !== null) problems.push('the panel floats');
+      if ((await page.locator(ui.authorFlip).textContent()).trim() !== 'As Shadow')
+        problems.push('flipped, it does not say As Shadow');
+      if ((await page.locator(ui.authorPanel).getAttribute('data-floating')) !== null)
+        problems.push('the panel floats');
       // (the author's own decision is not this page's now: none offered; the panel still reads the draft)
       await sleep(500);
-      if ((await page.locator(ui.decisionButtons).count()) > 0) problems.push("flipped, the author's decision is offered");
+      if ((await page.locator(ui.decisionButtons).count()) > 0)
+        problems.push("flipped, the author's decision is offered");
       const after = await (await seat.who.get('/scenarios/author/state')).json();
       if (!after.draft) problems.push('flipped, the draft is gone');
-      if ((await page.locator('.gd-game__table [data-card-id]').count()) === 0) problems.push('flipped, the table is empty');
+      if ((await page.locator('.gd-game__table [data-card-id]').count()) === 0)
+        problems.push('flipped, the table is empty');
       await seat.shot('author-flipped');
       await page.locator(ui.authorFlip).click();
       await page.locator(`${ui.authorFlip}:not([data-flipped])`).waitFor({ timeout: 15000 });

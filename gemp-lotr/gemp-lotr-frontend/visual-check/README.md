@@ -24,7 +24,7 @@ and writes its report to a `report-*` folder here.
 check:game:sandbox`, against a game check server kept up. See [`game/README.md`](game/README.md#the-sandbox-checks).
 - **`game/puzzle.mjs`**: the puzzle player's page (a puzzle's slots, the bounded search, Submit, solved / failed /
   scored / unlisted endings, Start again and Change cards, Undo by the file, the author's Find…): `npm run
-  check:game:puzzle`, against a game check server kept up. See [`game/README.md`](game/README.md#the-puzzle-checks).
+check:game:puzzle`, against a game check server kept up. See [`game/README.md`](game/README.md#the-puzzle-checks).
 - **`tournament/`**: the basic life of a tournament on a real server, about four minutes: `npm run check:tournament`
   (`-- --keep` leaves its server up, `check:tournament:down` stops it). The admin's side goes through the Tournament
   Admin page in a browser, the players talk to the server over HTTP. It checks that a player-made sealed queue starts

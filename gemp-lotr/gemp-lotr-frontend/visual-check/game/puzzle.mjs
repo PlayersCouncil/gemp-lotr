@@ -330,7 +330,8 @@ class Seat {
         await this.page.mouse.move(2, 2);
         // (a card with several actions: the first; a card chosen in a choice that waits for Done: Done)
         await sleep(300);
-        if ((await this.page.locator(ui.actionMenu).count()) > 0) await this.page.locator(ui.actionMenu).first().click();
+        if ((await this.page.locator(ui.actionMenu).count()) > 0)
+          await this.page.locator(ui.actionMenu).first().click();
         if ((await this.page.locator(`${ui.card(blueprint)}[data-mark="selected"]`).count()) > 0) {
           await this.page.locator(ui.decisionButton('Done')).click();
         }
@@ -391,9 +392,11 @@ const CHECKS = {
       problems.push('the page is not in edit mode');
     if ((await page.locator(ui.barMode).textContent()).trim() !== 'Choosing')
       problems.push('the bar does not say Choosing');
-    const slots = await page.locator(ui.slots).evaluateAll((all) =>
-      all.map((slot) => `${slot.dataset.slot}:${slot.closest('[data-row]')?.getAttribute('data-row')}`),
-    );
+    const slots = await page
+      .locator(ui.slots)
+      .evaluateAll((all) =>
+        all.map((slot) => `${slot.dataset.slot}:${slot.closest('[data-row]')?.getAttribute('data-row')}`),
+      );
     if (slots.join() !== 'condition:support-player,ally:support-player')
       problems.push(`the slots are ${slots.join()}, not both in the support row`);
     const labels = await page.locator(`${ui.slots} .gd-puzzle-slot__label`).allTextContents();
@@ -409,7 +412,8 @@ const CHECKS = {
     const alert = (await page.locator(ui.alert).textContent()).trim();
     if (alert !== '') problems.push(`the held puzzle shows a decision: "${alert}"`);
     if ((await page.locator(ui.decisionButtons).count()) > 0) problems.push('the held puzzle shows decision buttons');
-    if ((await page.locator('.gd-game__table [data-mark]').count()) > 0) problems.push('cards are offered to be played');
+    if ((await page.locator('.gd-game__table [data-mark]').count()) > 0)
+      problems.push('cards are offered to be played');
     if ((await page.locator('.gd-scenario-bubble').count()) > 0) problems.push('a bubble is up');
     // Undo is off in a puzzle (as the file leaves it)
     if ((await page.locator(ui.undoButton).count()) > 0) problems.push('the Undo button shows');
@@ -439,7 +443,8 @@ const CHECKS = {
     const bound = page.locator(ui.searchBound);
     if ((await bound.textContent()).trim() !== 'a Rohan condition') problems.push('the bound is not labelled');
     const filter = await bound.getAttribute('title');
-    const titled = 'Pool: set:1-6\nBound: culture:ROHAN cardtype:CONDITION\nPlace: cardtype:CONDITION,POSSESSION,ARTIFACT,ALLY,FOLLOWER';
+    const titled =
+      'Pool: set:1-6\nBound: culture:ROHAN cardtype:CONDITION\nPlace: cardtype:CONDITION,POSSESSION,ARTIFACT,ALLY,FOLLOWER';
     if (filter !== titled) problems.push(`the search's bound is "${filter}"`);
     // The server searches inside the pool and the bound, so the person's fields can only narrow it: only the card
     // type the bound fixes is not offered (a select offering others would only confuse)
@@ -459,7 +464,8 @@ const CHECKS = {
       await seat.who.post('/scenarios/picks', { id, picks: JSON.stringify({ condition: ALDOR }) })
     ).json();
     const words = asked.picks?.condition?.why;
-    if (!words || asked.picks.condition.fits) problems.push(`the server took Aldor as a condition (${JSON.stringify(asked)})`);
+    if (!words || asked.picks.condition.fits)
+      problems.push(`the server took Aldor as a condition (${JSON.stringify(asked)})`);
     await page.locator(ui.searchName).fill('parapet');
     await page.locator(ui.searchName).dispatchEvent('change');
     await page.locator(ui.searchCard(PARAPET)).waitFor();
@@ -473,7 +479,8 @@ const CHECKS = {
     if (said !== words) problems.push(`the search says "${said}", not the server's "${words}"`);
     await seat.shot('refused');
     await page.unroute('**/scenarios/picks');
-    if ((await page.locator(`${ui.slot('condition')}[data-filled]`).count()) > 0) problems.push('the refused card was put in');
+    if ((await page.locator(`${ui.slot('condition')}[data-filled]`).count()) > 0)
+      problems.push('the refused card was put in');
     // The chooser's Recent holds only what the server says the slot takes (Aldor is remembered, not offered here)
     await page.locator(ui.searchClose).click();
     await page.evaluate(
@@ -490,9 +497,9 @@ const CHECKS = {
     await page.reload();
     await seat.mode('edit');
     await seat.chooser('condition');
-    const recent = await page.locator(`${ui.chooser} [data-chooser="recent"]`).evaluateAll((items) =>
-      items.map((item) => item.dataset.blueprint),
-    );
+    const recent = await page
+      .locator(`${ui.chooser} [data-chooser="recent"]`)
+      .evaluateAll((items) => items.map((item) => item.dataset.blueprint));
     if (recent.join() !== PARAPET) problems.push(`the condition slot's Recent offers ${recent.join() || 'nothing'}`);
     await seat.shot('recent-held');
     await page.keyboard.press('Escape');
@@ -519,9 +526,9 @@ const CHECKS = {
     await seat.filled('ally', null);
     if (!(await page.locator(ui.submit).isDisabled())) problems.push('Submit is enabled after emptying a slot');
     await seat.chooser('ally');
-    const recent = await page.locator(`${ui.chooser} [data-chooser="recent"]`).evaluateAll((items) =>
-      items.map((item) => item.dataset.blueprint),
-    );
+    const recent = await page
+      .locator(`${ui.chooser} [data-chooser="recent"]`)
+      .evaluateAll((items) => items.map((item) => item.dataset.blueprint));
     if (recent.join() !== ALDOR) problems.push(`the ally slot's Recent offers ${recent.join()}, only Aldor fits`);
     await page.locator(ui.chooserItem('recent', ALDOR)).click();
     await seat.filled('ally', ALDOR);
@@ -540,7 +547,8 @@ const CHECKS = {
     if ((await page.locator(ui.slots).count()) > 0) problems.push('the slots still show in play');
     const info = await seat.info();
     const picks = Object.fromEntries((info?.slots ?? []).map((slot) => [slot.id, slot.pick]));
-    if (picks.condition !== PARAPET || picks.ally !== ALDOR) problems.push(`the game was built with ${JSON.stringify(picks)}`);
+    if (picks.condition !== PARAPET || picks.ally !== ALDOR)
+      problems.push(`the game was built with ${JSON.stringify(picks)}`);
     if ((await page.locator(ui.barMode).count()) > 0) problems.push('the bar shows a mode in play');
     if (!(await page.locator(ui.change).isVisible())) problems.push('Change cards is not offered in play');
     // Undo stays off in play (the server's policy for a puzzle)
@@ -579,7 +587,8 @@ const CHECKS = {
     await page.locator(ui.confirmButton('ok')).click();
     await until(() => seat.gameId() !== before, 'a held game', 20000);
     await seat.mode('edit');
-    if ((await page.locator(`${ui.slots}[data-filled]`).count()) > 0) problems.push('Change cards kept a card in a slot');
+    if ((await page.locator(`${ui.slots}[data-filled]`).count()) > 0)
+      problems.push('Change cards kept a card in a slot');
     if ((await page.locator(ui.slots).count()) !== 2) problems.push('Change cards did not bring the slots back');
   },
 
@@ -651,7 +660,12 @@ const CHECKS = {
     const end = await seat.ending();
     await seat.shot('unlisted');
     if (end.result !== 'complete') problems.push(`the solution ended ${end.result}`);
-    const unlisted = (await page.locator(ui.panelUnlisted).textContent().catch(() => null))?.trim();
+    const unlisted = (
+      await page
+        .locator(ui.panelUnlisted)
+        .textContent()
+        .catch(() => null)
+    )?.trim();
     if (unlisted !== 'You found a solution the author did not list.')
       problems.push(`the panel does not say the solution is unlisted (${unlisted})`);
   },
@@ -663,7 +677,8 @@ const CHECKS = {
     const id = await bring(table, 3, 'score');
     await seat.open(id);
     // Nine slots: eight in the hand's row, the site in the strip, labelled with its place
-    if ((await page.locator(`[data-row="hand"] ${ui.slots}`).count()) !== 8) problems.push('the hand slots are not in the hand');
+    if ((await page.locator(`[data-row="hand"] ${ui.slots}`).count()) !== 8)
+      problems.push('the hand slots are not in the hand');
     const site = (await page.locator(`${ui.strip} ${ui.slot('site2')} .gd-puzzle-slot__place`).textContent())?.trim();
     if (site !== 'Site 2') problems.push(`the site slot's place says "${site}"`);
     // The site's search is held to site 2 of set 4
@@ -672,7 +687,9 @@ const CHECKS = {
     if (filter !== 'Pool: set:1-5\nBound: set:4 cardtype:SITE\nPlace: cardtype:SITE sitenumber:2')
       problems.push(`the site slot's search is "${filter}"`);
     // (every site 2 of set 4: Derndingle and Fangorn Forest, the published answers, among them)
-    const found = await page.locator(ui.searchCards).evaluateAll((cards) => cards.map((card) => card.dataset.blueprint));
+    const found = await page
+      .locator(ui.searchCards)
+      .evaluateAll((cards) => cards.map((card) => card.dataset.blueprint));
     if (found.length !== 7 || !found.includes('4_330') || !found.includes('4_332'))
       problems.push(`the site search finds ${found.join(', ')}`);
     await seat.shot('site-search');
@@ -706,10 +723,12 @@ const CHECKS = {
     if (label !== "Sméagol's strength") problems.push(`the score is labelled "${label}"`);
     const value = (await score.locator('.gd-scenario-panel__score-value').textContent())?.trim();
     if (!/^\d+$/.test(value ?? '')) problems.push(`the score is "${value}"`);
-    if ((await score.locator('.gd-scenario-panel__new-best').count()) !== 1) problems.push('the first score is not a new best');
+    if ((await score.locator('.gd-scenario-panel__new-best').count()) !== 1)
+      problems.push('the first score is not a new best');
     if ((await score.locator('.gd-scenario-panel__best').textContent())?.trim() !== `Best ${value}`)
       problems.push('the best is not this score');
-    if ((await score.getAttribute('title')) !== 'Higher is better') problems.push('the score does not say which way is better');
+    if ((await score.getAttribute('title')) !== 'Higher is better')
+      problems.push('the score does not say which way is better');
     // Again with the same cards: the same score, the best kept, no New best
     const before = seat.gameId();
     await page.locator(ui.panelButton('Play it again')).click();
@@ -718,11 +737,13 @@ const CHECKS = {
     await playOut();
     end = await seat.ending();
     await seat.shot('scored-again');
-    if ((await score.locator('.gd-scenario-panel__new-best').count()) > 0) problems.push('the same score is a new best');
+    if ((await score.locator('.gd-scenario-panel__new-best').count()) > 0)
+      problems.push('the same score is a new best');
     if ((await score.locator('.gd-scenario-panel__best').textContent())?.trim() !== `Best ${value}`)
       problems.push('the best is not kept');
     const listed = (await (await seat.who.get('/scenarios')).json()).scenarios.find((one) => one.id === id);
-    if (String(listed?.progress?.bestScore) !== value) problems.push(`GET scenarios says the best is ${listed?.progress?.bestScore}`);
+    if (String(listed?.progress?.bestScore) !== value)
+      problems.push(`GET scenarios says the best is ${listed?.progress?.bestScore}`);
     table.note = `score ${value}`;
   },
 
@@ -730,7 +751,9 @@ const CHECKS = {
   async undo(table, problems) {
     const { seat } = table;
     const { page } = seat;
-    const id = await bring(table, 10, 'undo', (text) => text.replace('\t\tautoPass: true\n', '\t\tautoPass: true\n\t\tundo: on\n'));
+    const id = await bring(table, 10, 'undo', (text) =>
+      text.replace('\t\tautoPass: true\n', '\t\tautoPass: true\n\t\tundo: on\n'),
+    );
     await seat.open(id, CARDS_10);
     await page.locator(ui.tab('options')).click();
     await page
@@ -787,7 +810,11 @@ const CHECKS = {
     await page.locator(ui.authorTab('scenario')).click();
     await page.locator(ui.find('pool')).click();
     await page.locator(ui.search).waitFor();
-    await page.locator(ui.searchField('set')).locator('select').selectOption({ index: 2 }).catch(() => undefined);
+    await page
+      .locator(ui.searchField('set'))
+      .locator('select')
+      .selectOption({ index: 2 })
+      .catch(() => undefined);
     const pool = await page.locator(ui.searchUse).getAttribute('title');
     await page.locator(ui.searchUse).click();
     await until(async () => {
@@ -831,7 +858,10 @@ async function run(name, theme) {
     if (gameId) await table.who.post(`/game/${gameId}/concede`, {}).catch(() => undefined);
     await table.seat.page.context().close();
   }
-  for (const clean of table.cleanup) await Promise.resolve().then(clean).catch(() => undefined);
+  for (const clean of table.cleanup)
+    await Promise.resolve()
+      .then(clean)
+      .catch(() => undefined);
   const seconds = Math.round((Date.now() - started) / 1000);
   const lines = [
     `${problems.length ? '  ✗' : '  ✓'} ${name} (${theme}, ${seconds}s)${table.note ? ` ${table.note}` : ''}`,
